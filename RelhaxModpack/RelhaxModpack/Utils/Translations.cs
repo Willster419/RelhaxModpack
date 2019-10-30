@@ -4394,7 +4394,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        Logging.Warning("Translation requested of window {0} but key for window title does not exist!");
+                        Logging.Warning("Translation requested of window {0} but key for window title does not exist in translations!");
                     }
                 }
                 else if (window is MainWindow)
