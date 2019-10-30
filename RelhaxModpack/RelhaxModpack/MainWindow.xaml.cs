@@ -21,6 +21,7 @@ using Timer = System.Timers.Timer;
 using Microsoft.Win32;
 using System.Text;
 using RelhaxModpack.InstallerComponents;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace RelhaxModpack
 {
@@ -43,7 +44,7 @@ namespace RelhaxModpack
         private bool databaseUpdateAvailableFromAutoSync = false;
         private bool autoInstallTimerRegistered = false;
         private CancellationTokenSource cancellationTokenSource;
-        private InstallerComponents.InstallEngine installEngine;
+        private InstallEngine installEngine;
         private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
         {
             AddExtension = true,
@@ -79,6 +80,9 @@ namespace RelhaxModpack
         private long remainingMilliseconds;
         //reference for downloading the package to keep track of the async download
         private DatabasePackage downloadingPackage = null;
+        private TaskbarManager taskbarInstance = null;
+        private TaskbarProgressBarState taskbarState = TaskbarProgressBarState.NoProgress;
+        private int taskbarValue = 0;
 
         /// <summary>
         /// The original width and height of the application before applying scaling
@@ -120,6 +124,13 @@ namespace RelhaxModpack
 
             //set loading flag
             loading = true;
+
+            //get taskbar instance for color change if supported
+            if (TaskbarManager.IsPlatformSupported && TaskbarManager.Instance != null)
+            {
+                taskbarInstance = TaskbarManager.Instance;
+                taskbarInstance.SetProgressState(taskbarState);
+            }
 
             //delete the updater scripts if they exist
 #pragma warning disable CS0618
@@ -1510,6 +1521,7 @@ namespace RelhaxModpack
             //after waiting for the installation...
             if (results.ExitCode == InstallerExitCodes.Success)
             {
+                taskbarInstance.SetProgressValue(100, 100);
                 if(ModpackSettings.VerboseLogging)
                     DisplayAndLogInstallErrors(results, false);
                 if (ModpackSettings.ShowInstallCompleteWindow)
@@ -1532,12 +1544,19 @@ namespace RelhaxModpack
             }
             else
             {
+                taskbarState = TaskbarProgressBarState.Error;
+                taskbarInstance.SetProgressState(taskbarState);
                 DisplayAndLogInstallErrors(results, true);
                 ToggleUIButtons(true);
             }
+
             //Run task to get backup text file size if a backup was done
             if(ModpackSettings.BackupModFolder)
                 GetBackupFilesizesAsync(true);
+
+            //set taskbar progress state back to normal
+            taskbarState = TaskbarProgressBarState.NoProgress;
+            taskbarInstance.SetProgressState(taskbarState);
         }
 
         private void DisplayAndLogInstallErrors(RelhaxInstallFinishedEventArgs results, bool addResultsExitCode)
@@ -1558,6 +1577,21 @@ namespace RelhaxModpack
 
         private void OnInstallProgressChanged(object sender, RelhaxInstallerProgress e)
         {
+            //set taskbar progress
+            if(taskbarInstance != null)
+            {
+                if (taskbarState != TaskbarProgressBarState.Normal)
+                {
+                    taskbarState = TaskbarProgressBarState.Normal;
+                    taskbarInstance.SetProgressState(taskbarState);
+                }
+                if(taskbarValue != e.TotalCurrent)
+                {
+                    taskbarValue = e.TotalCurrent;
+                    taskbarInstance.SetProgressValue(taskbarValue, e.TotalTotal);
+                }
+            }
+
             if (ModpackSettings.AdvancedInstalProgress)
             {
                 if (AdvancedProgressWindow == null)
