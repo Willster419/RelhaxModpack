@@ -26,7 +26,58 @@ namespace RelhaxModpack.Windows
 
         private void GcDownloadMainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //disable all tabItems but but selected
+            foreach(TabItem item in GcDownloadMainTabControl.Items)
+            {
+                if(!item.Equals(GcDownloadMainTabControl.SelectedItem as TabItem))
+                {
+                    item.IsEnabled = false;
+                }
+                else
+                {
+                    item.IsEnabled = true;
+                }
+            }
+        }
 
+        private void GcDownloadStep1Next_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep2;
+        }
+
+        private void GcDownloadStep2PreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep1;
+        }
+
+        private void GcDownloadStep2NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep3;
+        }
+
+        private void GcDownloadStep3PreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep2;
+        }
+
+        private void GcDownloadStep3NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep4;
+        }
+
+        private void GcDownloadStep4PreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep3;
+        }
+
+        private void GcDownloadStep4NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep5;
+        }
+
+        private void GcDownloadStep5CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
