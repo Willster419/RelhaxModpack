@@ -4566,39 +4566,39 @@ namespace RelhaxModpack
 
             //Component: GcDownloadStep2GcStatusOpened
             //Game Center is [Opened,Closed]
-            English.Add("GcDownloadStep2GcStatus", "Opened");
-            German.Add("GcDownloadStep2GcStatus", TranslationNeeded);
-            Polish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
-            French.Add("GcDownloadStep2GcStatus", TranslationNeeded);
-            Spanish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
-            Russian.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            English.Add("GcDownloadStep2GcStatusOpened", "Opened");
+            German.Add("GcDownloadStep2GcStatusOpened", TranslationNeeded);
+            Polish.Add("GcDownloadStep2GcStatusOpened", TranslationNeeded);
+            French.Add("GcDownloadStep2GcStatusOpened", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2GcStatusOpened", TranslationNeeded);
+            Russian.Add("GcDownloadStep2GcStatusOpened", TranslationNeeded);
 
             //Component: GcDownloadStep2GcStatusClosed
             //Game Center is [Opened,Closed]
-            English.Add("GcDownloadStep2GcStatus", "Closed");
-            German.Add("GcDownloadStep2GcStatus", TranslationNeeded);
-            Polish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
-            French.Add("GcDownloadStep2GcStatus", TranslationNeeded);
-            Spanish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
-            Russian.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            English.Add("GcDownloadStep2GcStatusClosed", "Closed");
+            German.Add("GcDownloadStep2GcStatusClosed", TranslationNeeded);
+            Polish.Add("GcDownloadStep2GcStatusClosed", TranslationNeeded);
+            French.Add("GcDownloadStep2GcStatusClosed", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2GcStatusClosed", TranslationNeeded);
+            Russian.Add("GcDownloadStep2GcStatusClosed", TranslationNeeded);
 
             //Component: GcDownloadStep2PreviousText
             //
-            English.Add("GcDownloadStep1NextText", English["next"]);
-            German.Add("GcDownloadStep1NextText", German["next"]);
-            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
-            French.Add("GcDownloadStep1NextText", French["next"]);
-            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
-            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+            English.Add("GcDownloadStep2PreviousText", English["previous"]);
+            German.Add("GcDownloadStep2PreviousText", German["previous"]);
+            Polish.Add("GcDownloadStep2PreviousText", Polish["previous"]);
+            French.Add("GcDownloadStep2PreviousText", French["previous"]);
+            Spanish.Add("GcDownloadStep2PreviousText", Spanish["previous"]);
+            Russian.Add("GcDownloadStep2PreviousText", Russian["previous"]);
 
             //Component: GcDownloadStep2NextText
             //
-            English.Add("GcDownloadStep1NextText", English["next"]);
-            German.Add("GcDownloadStep1NextText", German["next"]);
-            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
-            French.Add("GcDownloadStep1NextText", French["next"]);
-            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
-            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+            English.Add("GcDownloadStep2NextText", English["next"]);
+            German.Add("GcDownloadStep2NextText", German["next"]);
+            Polish.Add("GcDownloadStep2NextText", Polish["next"]);
+            French.Add("GcDownloadStep2NextText", French["next"]);
+            Spanish.Add("GcDownloadStep2NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep2NextText", Russian["next"]);
 
             //Component: GcDownloadStep3Header
             //
@@ -4611,30 +4611,30 @@ namespace RelhaxModpack
 
             //Component: GcDownloadStep3TabDescription
             //
-            English.Add("GameCenterUpdateDownloader", "Game");
-            German.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Polish.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            French.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            English.Add("GcDownloadStep3TabDescription", "Getting the list of patch files to download");
+            German.Add("GcDownloadStep3TabDescription", TranslationNeeded);
+            Polish.Add("GcDownloadStep3TabDescription", TranslationNeeded);
+            French.Add("GcDownloadStep3TabDescription", TranslationNeeded);
+            Spanish.Add("GcDownloadStep3TabDescription", TranslationNeeded);
+            Russian.Add("GcDownloadStep3TabDescription", TranslationNeeded);
 
             //Component: GcDownloadStep3PreviousText
             //
-            English.Add("GcDownloadStep1NextText", English["next"]);
-            German.Add("GcDownloadStep1NextText", German["next"]);
-            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
-            French.Add("GcDownloadStep1NextText", French["next"]);
-            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
-            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+            English.Add("GcDownloadStep3PreviousText", English["previous"]);
+            German.Add("GcDownloadStep3PreviousText", German["previous"]);
+            Polish.Add("GcDownloadStep3PreviousText", Polish["previous"]);
+            French.Add("GcDownloadStep3PreviousText", French["previous"]);
+            Spanish.Add("GcDownloadStep3PreviousText", Spanish["previous"]);
+            Russian.Add("GcDownloadStep3PreviousText", Russian["previous"]);
 
             //Component: GcDownloadStep3NextText
             //
-            English.Add("GcDownloadStep1NextText", English["next"]);
-            German.Add("GcDownloadStep1NextText", German["next"]);
-            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
-            French.Add("GcDownloadStep1NextText", French["next"]);
-            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
-            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+            English.Add("GcDownloadStep3NextText", English["next"]);
+            German.Add("GcDownloadStep3NextText", German["next"]);
+            Polish.Add("GcDownloadStep3NextText", Polish["next"]);
+            French.Add("GcDownloadStep3NextText", French["next"]);
+            Spanish.Add("GcDownloadStep3NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep3NextText", Russian["next"]);
 
             //Component: GcDownloadStep4Header
             //
@@ -4665,39 +4665,39 @@ namespace RelhaxModpack
 
             //Component: GcDownloadStep4Previous
             //
-            English.Add("GcDownloadStep1NextText", English["next"]);
-            German.Add("GcDownloadStep1NextText", German["next"]);
-            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
-            French.Add("GcDownloadStep1NextText", French["next"]);
-            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
-            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+            English.Add("GcDownloadStep4Previous", English["previous"]);
+            German.Add("GcDownloadStep4Previous", German["previous"]);
+            Polish.Add("GcDownloadStep4Previous", Polish["previous"]);
+            French.Add("GcDownloadStep4Previous", French["previous"]);
+            Spanish.Add("GcDownloadStep4Previous", Spanish["previous"]);
+            Russian.Add("GcDownloadStep4Previous", Russian["previous"]);
 
             //Component: GcDownloadStep4Next
             //
-            English.Add("GcDownloadStep1NextText", English["next"]);
-            German.Add("GcDownloadStep1NextText", German["next"]);
-            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
-            French.Add("GcDownloadStep1NextText", French["next"]);
-            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
-            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+            English.Add("GcDownloadStep4Next", English["next"]);
+            German.Add("GcDownloadStep4Next", German["next"]);
+            Polish.Add("GcDownloadStep4Next", Polish["next"]);
+            French.Add("GcDownloadStep4Next", French["next"]);
+            Spanish.Add("GcDownloadStep4Next", Spanish["next"]);
+            Russian.Add("GcDownloadStep4Next", Russian["next"]);
 
             //Component: GcDownloadStep5Header
             //
-            English.Add("GameCenterUpdateDownloader", "Complete!");
-            German.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Polish.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            French.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            English.Add("GcDownloadStep5Header", "Complete!");
+            German.Add("GcDownloadStep5Header", TranslationNeeded);
+            Polish.Add("GcDownloadStep5Header", TranslationNeeded);
+            French.Add("GcDownloadStep5Header", TranslationNeeded);
+            Spanish.Add("GcDownloadStep5Header", TranslationNeeded);
+            Russian.Add("GcDownloadStep5Header", TranslationNeeded);
 
             //Component: GcDownloadStep5TabDescription
             //
-            English.Add("GameCenterUpdateDownloader", "Game");
-            German.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Polish.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            French.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            English.Add("GcDownloadStep5TabDescription", "Game");
+            German.Add("GcDownloadStep5TabDescription", TranslationNeeded);
+            Polish.Add("GcDownloadStep5TabDescription", TranslationNeeded);
+            French.Add("GcDownloadStep5TabDescription", TranslationNeeded);
+            Spanish.Add("GcDownloadStep5TabDescription", TranslationNeeded);
+            Russian.Add("GcDownloadStep5TabDescription", TranslationNeeded);
 
             //Component: GcDownloadStep5Close
             //
@@ -4710,12 +4710,12 @@ namespace RelhaxModpack
 
             //Component: GcDownloadStep1ValueError
             //
-            English.Add("GameCenterUpdateDownloader", "Error");
-            German.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Polish.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            French.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            English.Add("GcDownloadStep1ValueError", "Error");
+            German.Add("GcDownloadStep1ValueError", TranslationNeeded);
+            Polish.Add("GcDownloadStep1ValueError", TranslationNeeded);
+            French.Add("GcDownloadStep1ValueError", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1ValueError", TranslationNeeded);
+            Russian.Add("GcDownloadStep1ValueError", TranslationNeeded);
             #endregion
 
             //apply the bool
