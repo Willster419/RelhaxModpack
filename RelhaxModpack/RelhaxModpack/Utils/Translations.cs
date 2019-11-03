@@ -4990,9 +4990,9 @@ namespace RelhaxModpack
 
             //Component: GcDownloadStep5TabDescription
             //
-            English.Add("GcDownloadStep5TabDescription", "Game");
+            English.Add("GcDownloadStep5TabDescription", "The process is complete! The game center should detect the files when opened.");
             German.Add("GcDownloadStep5TabDescription", TranslationNeeded);
-            Polish.Add("GcDownloadStep5TabDescription", "Graj"); // ASSUMED: "Game!" as "Play!", imperative.
+            Polish.Add("GcDownloadStep5TabDescription", TranslationNeeded); // ASSUMED: "Game!" as "Play!", imperative.
             French.Add("GcDownloadStep5TabDescription", TranslationNeeded);
             Spanish.Add("GcDownloadStep5TabDescription", TranslationNeeded);
             Russian.Add("GcDownloadStep5TabDescription", TranslationNeeded);
