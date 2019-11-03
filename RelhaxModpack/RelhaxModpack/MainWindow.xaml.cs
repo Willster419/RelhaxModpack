@@ -151,6 +151,7 @@ namespace RelhaxModpack
             //load the progress report window
             ProgressIndicator progressIndicator = new ProgressIndicator()
             {
+                LocalizeWindow = false,
                 Message = "Loading...",
                 ProgressMinimum = 0,
                 ProgressMaximum = 4
@@ -184,6 +185,7 @@ namespace RelhaxModpack
             //apply translation settings
             Translations.SetLanguage(ModpackSettings.Language);
             Translations.LocalizeWindow(this, true);
+            Translations.LocalizeWindow(progressIndicator, false);
             ApplyCustomUILocalizations(false);
 
             //create tray icons and menus
@@ -463,7 +465,7 @@ namespace RelhaxModpack
             }
             if (ModpackSettings.MinimizeToSystemTray)
             {
-                Logging.Debug("minimizing to system try");
+                Logging.Debug("minimizing to system tray");
                 Hide();
                 e.Cancel = true;
             }
