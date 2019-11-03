@@ -53,7 +53,6 @@ namespace RelhaxModpack
     /// </summary>
     public static class Translations
     {
-        //TODO: when write blacklist check, check if name is blank/null/whitespace!!
         private static readonly string[] TranslationComponentBlacklist = new string[]
         {
             "ApplicationVersionLabel",
@@ -273,6 +272,130 @@ namespace RelhaxModpack
                     break;
             }
             return DictToCheck.ContainsKey(componentName);
+        }
+        #endregion
+
+        #region Applying Window Translations
+        /// <summary>
+        /// Applies localized text translations for the passed in window
+        /// See the comments in the method for more information
+        /// </summary>
+        /// <param name="window">The window to apply translations to</param>
+        /// <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
+        public static void LocalizeWindow(Window window, bool applyToolTips, bool applyWindowTitle)
+        {
+            if (applyWindowTitle)
+            {
+                string typeName = window.GetType().Name;
+                if (window is RelhaxWindow)
+                {
+                    if (Exists(typeName))
+                    {
+                        window.Title = GetTranslatedString(typeName);
+                    }
+                    else
+                    {
+                        Logging.Warning("Translation requested of window {0} but key for window title does not exist in translations!");
+                    }
+                }
+                else if (window is MainWindow)
+                {
+                    Logging.Debug("MainWindow Title localization skipped");
+                }
+                else
+                {
+                    Logging.Warning("Window type {0} is not of RelhaxWindow but translation requested!", typeName);
+                }
+            }
+            //Get a list of all visual class controls curently presend and loaded in the window
+            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
+            foreach (FrameworkElement v in allWindowControls)
+            {
+                TranslateComponent(v, true);
+            }
+        }
+
+
+        private static void TranslateComponent(FrameworkElement frameworkElement, bool applyToolTips)
+        {
+            //TODO: pass in the object itself so now we can consider blacklist correcly and only apply when we should
+            //first check name is none or on blacklist
+            string componentName = frameworkElement.Name;
+            if (string.IsNullOrWhiteSpace(componentName))
+            {
+                //log debug translation component is blank null
+                //Logging.WriteToLog("Translation component name is blank", Logfiles.Application, LogLevel.Debug);
+                return;
+            }
+            if (TranslationComponentBlacklist.Contains(componentName))
+            {
+                Logging.WriteToLog(string.Format("Skipping translation of {0}, present in blacklist and consider=true", componentName), Logfiles.Application, LogLevel.Debug);
+                return;
+            }
+            //getting here means that the object is a framework UI element, has a name, and is not on te blacklist. it's safe to translate
+            //use the "is" keyword to be able to apply translations (text is under different properties for each type of visuals)
+            if (frameworkElement is Control control)
+            {
+                //Generic control
+                //headered content controls have a header and content object
+                if (control is HeaderedContentControl headeredContentControl)
+                {
+                    //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
+                    if (headeredContentControl.Header is string)
+                        headeredContentControl.Header = GetTranslatedString(headeredContentControl.Name + "Header");
+                    if (headeredContentControl.Content is string)
+                        headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name);
+                    if (applyToolTips)
+                    {
+                        if (Exists(headeredContentControl.Name + "Description"))
+                            headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description");
+                    }
+                }
+                //RelhaxHyperlink has text stored at the child textbox
+                else if (control is UIComponents.RelhaxHyperlink link)
+                {
+                    link.Text = GetTranslatedString(componentName);
+                    if (applyToolTips)
+                    {
+                        if (Exists(componentName + "Description"))
+                            link.ToolTip = GetTranslatedString(componentName + "Description");
+                    }
+                }
+                //content controls have only a heder
+                //NOTE: button is this type
+                else if (control is ContentControl contentControl)
+                {
+                    //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
+                    if (contentControl.Content is string)
+                        contentControl.Content = GetTranslatedString(contentControl.Name);
+                    if (applyToolTips)
+                    {
+                        if (Exists(contentControl.Name + "Description"))
+                            contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description");
+                    }
+                }
+                //textbox only has string text as input
+                else if (control is TextBox textBox)
+                {
+                    textBox.Text = GetTranslatedString(textBox.Name);
+                    if (applyToolTips)
+                    {
+                        if (Exists(textBox.Name + "Description"))
+                            textBox.ToolTip = GetTranslatedString(textBox.Name + "Description");
+                    }
+                }
+            }
+            else if (frameworkElement is TextBlock textBlock)
+            {
+                //lightweight block of text that only uses string as it's input. makes it not a control (no content of children property)
+                textBlock.Text = GetTranslatedString(textBlock.Name);
+                //apply tool tips?
+                if (applyToolTips)
+                {
+                    if (Exists(textBlock.Name + "Description"))
+                        textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description");
+                }
+            }
         }
         #endregion
 
@@ -4732,128 +4855,5 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Applying Window Translations
-        /// <summary>
-        /// Applies localized text translations for the passed in window
-        /// See the comments in the method for more information
-        /// </summary>
-        /// <param name="window">The window to apply translations to</param>
-        /// <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
-        public static void LocalizeWindow(Window window, bool applyToolTips, bool applyWindowTitle)
-        {
-            if (applyWindowTitle)
-            {
-                string typeName = window.GetType().Name;
-                if (window is RelhaxWindow)
-                {
-                    if (Exists(typeName))
-                    {
-                        window.Title = GetTranslatedString(typeName);
-                    }
-                    else
-                    {
-                        Logging.Warning("Translation requested of window {0} but key for window title does not exist in translations!");
-                    }
-                }
-                else if (window is MainWindow)
-                {
-                    Logging.Debug("MainWindow Title localization skipped");
-                }
-                else
-                {
-                    Logging.Warning("Window type {0} is not of RelhaxWindow but translation requested!", typeName);
-                }
-            }
-            //Get a list of all visual class controls curently presend and loaded in the window
-            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
-            foreach(FrameworkElement v in allWindowControls)
-            {
-                TranslateComponent(v, true);
-            }
-        }
-
-
-        private static void TranslateComponent(FrameworkElement frameworkElement, bool applyToolTips)
-        {
-            //TODO: pass in the object itself so now we can consider blacklist correcly and only apply when we should
-            //first check name is none or on blacklist
-            string componentName = frameworkElement.Name;
-            if (string.IsNullOrWhiteSpace(componentName))
-            {
-                //log debug translation component is blank null
-                //Logging.WriteToLog("Translation component name is blank", Logfiles.Application, LogLevel.Debug);
-                return;
-            }
-            if (TranslationComponentBlacklist.Contains(componentName))
-            {
-                Logging.WriteToLog(string.Format("Skipping translation of {0}, present in blacklist and consider=true", componentName), Logfiles.Application, LogLevel.Debug);
-                return;
-            }
-            //getting here means that the object is a framework UI element, has a name, and is not on te blacklist. it's safe to translate
-            //use the "is" keyword to be able to apply translations (text is under different properties for each type of visuals)
-            if (frameworkElement is Control control)
-            {
-                //Generic control
-                //headered content controls have a header and content object
-                if (control is HeaderedContentControl headeredContentControl)
-                {
-                    //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
-                    if (headeredContentControl.Header is string)
-                        headeredContentControl.Header = GetTranslatedString(headeredContentControl.Name + "Header");
-                    if (headeredContentControl.Content is string)
-                        headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name);
-                    if (applyToolTips)
-                    {
-                        if(Exists(headeredContentControl.Name + "Description"))
-                            headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description");
-                    }
-                }
-                //RelhaxHyperlink has text stored at the child textbox
-                else if (control is UIComponents.RelhaxHyperlink link)
-                {
-                    link.Text = GetTranslatedString(componentName);
-                    if (applyToolTips)
-                    {
-                        if (Exists(componentName + "Description"))
-                            link.ToolTip = GetTranslatedString(componentName + "Description");
-                    }
-                }
-                //content controls have only a heder
-                //NOTE: button is this type
-                else if (control is ContentControl contentControl)
-                {
-                    //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
-                    if (contentControl.Content is string)
-                        contentControl.Content = GetTranslatedString(contentControl.Name);
-                    if (applyToolTips)
-                    {
-                        if (Exists(contentControl.Name + "Description"))
-                            contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description");
-                    }
-                }
-                //textbox only has string text as input
-                else if (control is TextBox textBox)
-                {
-                    textBox.Text = GetTranslatedString(textBox.Name);
-                    if (applyToolTips)
-                    {
-                        if (Exists(textBox.Name + "Description"))
-                            textBox.ToolTip = GetTranslatedString(textBox.Name + "Description");
-                    }
-                }
-            }
-            else if (frameworkElement is TextBlock textBlock)
-            {
-                //lightweight block of text that only uses string as it's input. makes it not a control (no content of children property)
-                textBlock.Text = GetTranslatedString(textBlock.Name);
-                //apply tool tips?
-                if (applyToolTips)
-                {
-                    if (Exists(textBlock.Name + "Description"))
-                        textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description");
-                }
-            }
-        }
-        #endregion
     }
 }
