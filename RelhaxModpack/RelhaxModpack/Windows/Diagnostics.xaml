@@ -40,8 +40,8 @@
             </Button>
             <Button Tag="DownloadWGPatchFiles" x:Name="DownloadWGPatchFilesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"
                     Click="DownloadWGPatchFiles_Click" Grid.Row="3" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="0">
-                <TextBlock x:Name="DownloadWGPatchFiles" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
-                           Text="Download WG Patch files via HTTP for WoT"/>
+                <TextBlock x:Name="DownloadWGPatchFilesText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
+                           Text="Download WG Patch files for any WG client via HTTP"/>
             </Button>
         </Grid>
     </Grid>

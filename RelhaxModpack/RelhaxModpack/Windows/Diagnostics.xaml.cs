@@ -35,14 +35,14 @@ namespace RelhaxModpack.Windows
             if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
             {
                 CollectLogInfoButton.IsEnabled = false;
-                DownloadWGPatchFiles.IsEnabled = false;
+                DownloadWGPatchFilesText.IsEnabled = false;
                 SelectedInstallation.Text = string.Format("{0}\n{1}",
                     Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
             }
             else
             {
                 CollectLogInfoButton.IsEnabled = true;
-                DownloadWGPatchFiles.IsEnabled = false;
+                DownloadWGPatchFilesText.IsEnabled = false;
                 SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
             }
         }

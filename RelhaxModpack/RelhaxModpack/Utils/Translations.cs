@@ -3319,6 +3319,15 @@ namespace RelhaxModpack
             Spanish.Add("CollectLogInfo", "Recoge los archivos de registro en un archivo zip para informar de un problema");
             Russian.Add("CollectLogInfo", "Собрать log-файлы в ZIP-архив для отчёта об ошибке");
 
+            //Component: DownloadWGPatchFilesText
+            //
+            English.Add("DownloadWGPatchFilesText", "Download WG Patch files for any WG client via HTTP");
+            German.Add("DownloadWGPatchFilesText", TranslationNeeded);
+            Polish.Add("DownloadWGPatchFilesText", TranslationNeeded);
+            French.Add("DownloadWGPatchFilesText", TranslationNeeded);
+            Spanish.Add("DownloadWGPatchFilesText", TranslationNeeded);
+            Russian.Add("DownloadWGPatchFilesText", TranslationNeeded);
+
             //Component: SelectedInstallation
             //
             English.Add("SelectedInstallation", "Currently Selected Installation:");
