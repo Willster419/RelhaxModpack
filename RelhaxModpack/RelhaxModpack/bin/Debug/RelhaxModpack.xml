@@ -5167,7 +5167,7 @@
             <param name="componentName">The key value of the string phrase</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages)">
+        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages,System.Boolean)">
             <summary>
             Checks is a component (key value) exists in the given language (dictionary)
             </summary>
@@ -5175,18 +5175,18 @@
             <param name="languageToCheck">The language dictionary to check in</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Translations.LoadTranslations">
-            <summary>
-            Loads all translation dictionaries. Should only be done once (at application start)
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean,System.Boolean)">
+        <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
             <summary>
             Applies localized text translations for the passed in window
             See the comments in the method for more information
             </summary>
             <param name="window">The window to apply translations to</param>
             <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslations">
+            <summary>
+            Loads all translation dictionaries. Should only be done once (at application start)
+            </summary>
         </member>
         <member name="T:RelhaxModpack.ReplacementTypes">
             <summary>
