@@ -270,7 +270,6 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="componentName">The keyword phrase to check</param>
         /// <param name="languageToCheck">The language dictionary to check in</param>
-        /// <returns></returns>
         public static bool Exists(string componentName, Languages languageToCheck, bool logError)
         {
             Dictionary<string, string> DictToCheck = null;
@@ -307,9 +306,10 @@ namespace RelhaxModpack
         {
             //apply window title
             string typeName = window.GetType().Name;
-            if (window is RelhaxWindow && Exists(typeName,true))
+            if (window is RelhaxWindow)
             {
-                window.Title = GetTranslatedString(typeName);
+                if (Exists(typeName, true))
+                    window.Title = GetTranslatedString(typeName);
             }
             else if (window is MainWindow)
             {
