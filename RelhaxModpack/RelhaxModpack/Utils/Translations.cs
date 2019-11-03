@@ -435,6 +435,33 @@ namespace RelhaxModpack
             Polish.Add("minutes", "minut(y)");
             French.Add("minutes", "minutes");
             Russian.Add("minutes", "минут(ы)");
+
+            //Component: next
+            //
+            English.Add("next", "Next");
+            German.Add("next", "Weiter");
+            Polish.Add("next", "Dalej");
+            French.Add("next", "Suivant");
+            Spanish.Add("next", "Siguiente");
+            Russian.Add("next", "след");
+
+            //Component: previous
+            //
+            English.Add("previous", "Previous");
+            German.Add("previous", "Zurück");
+            Polish.Add("previous", "Wstecz");
+            French.Add("previous", "Précedent");
+            Spanish.Add("previous", "Anterior");
+            Russian.Add("previous", "пред");
+
+            //Component: close
+            //
+            English.Add("close", "Close");
+            German.Add("close", "Schließen");
+            Polish.Add("close", "Zamknij");
+            French.Add("close", "Fermer");
+            Spanish.Add("close", "Cerrar");
+            Russian.Add("close", "Закрыть");
             #endregion
 
             #region Application messages
@@ -478,12 +505,12 @@ namespace RelhaxModpack
 
             //Component: MenuItemAppClose
             //The menu item for restoring the application
-            English.Add("MenuItemAppClose", "Close");
-            German.Add("MenuItemAppClose", "Schließen");
-            Polish.Add("MenuItemAppClose", "Zamknij");
-            French.Add("MenuItemAppClose", "Fermer");
-            Spanish.Add("MenuItemAppClose", "Cerrar");
-            Russian.Add("MenuItemAppClose", "Закрыть");
+            English.Add("MenuItemAppClose", English["close"]);
+            German.Add("MenuItemAppClose", German["close"]);
+            Polish.Add("MenuItemAppClose", Polish["close"]);
+            French.Add("MenuItemAppClose", French["close"]);
+            Spanish.Add("MenuItemAppClose", Spanish["close"]);
+            Russian.Add("MenuItemAppClose", Russian["close"]);
 
             //Component: newDBApplied
             //MessageBox for when a new database version is applied
@@ -3604,12 +3631,12 @@ namespace RelhaxModpack
 
             //Component: PreviewNextPicButton
             //
-            English.Add("PreviewNextPicButton", "Next");
-            German.Add("PreviewNextPicButton", "Weiter");
-            Polish.Add("PreviewNextPicButton", "Dalej");
-            French.Add("PreviewNextPicButton", "Suivant");
-            Spanish.Add("PreviewNextPicButton", "Siguiente");
-            Russian.Add("PreviewNextPicButton", "след.");
+            English.Add("PreviewNextPicButton", English["next"]);
+            German.Add("PreviewNextPicButton", German["next"]);
+            Polish.Add("PreviewNextPicButton", Polish["next"]);
+            French.Add("PreviewNextPicButton", French["next"]);
+            Spanish.Add("PreviewNextPicButton", Spanish["next"]);
+            Russian.Add("PreviewNextPicButton", Russian["next"]);
 
             //Component: PreviewPreviousPicButton
             //
@@ -4366,7 +4393,329 @@ namespace RelhaxModpack
             #endregion
 
             #region Game Center download utility
+            //Component: GameCenterUpdateDownloader
+            //Application window title
+            English.Add("GameCenterUpdateDownloader", "Game Center Update Downloaded");
+            German.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Polish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            French.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
 
+            //Component: GcDownloadStep1Header
+            //
+            English.Add("GcDownloadStep1Header", "Select Game Client");
+            German.Add("GcDownloadStep1Header", TranslationNeeded);
+            Polish.Add("GcDownloadStep1Header", TranslationNeeded);
+            French.Add("GcDownloadStep1Header", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1Header", TranslationNeeded);
+            Russian.Add("GcDownloadStep1Header", TranslationNeeded);
+
+            //Component: GcDownloadStep1TabDescription
+            //
+            English.Add("GcDownloadStep1TabDescription", "Select the Wargaming client to collect data for (WoT, WoWs, WoWp)");
+            German.Add("GcDownloadStep1TabDescription", TranslationNeeded);
+            Polish.Add("GcDownloadStep1TabDescription", TranslationNeeded);
+            French.Add("GcDownloadStep1TabDescription", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1TabDescription", TranslationNeeded);
+            Russian.Add("GcDownloadStep1TabDescription", TranslationNeeded);
+
+            //Component: GcDownloadStep1SelectClientButton
+            //
+            English.Add("GcDownloadStep1SelectClientButton", "Select client");
+            German.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
+            Polish.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
+            French.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
+            Russian.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
+
+            //Component: GcDownloadStep1CurrentlySelectedClient
+            //
+            English.Add("GcDownloadStep1CurrentlySelectedClient", "Currently selected client: {0}");
+            German.Add("GcDownloadStep1CurrentlySelectedClient", TranslationNeeded);
+            Polish.Add("GcDownloadStep1CurrentlySelectedClient", TranslationNeeded);
+            French.Add("GcDownloadStep1CurrentlySelectedClient", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1CurrentlySelectedClient", TranslationNeeded);
+            Russian.Add("GcDownloadStep1CurrentlySelectedClient", TranslationNeeded);
+
+            //Component: GcDownloadStep1NextText
+            //
+            English.Add("GcDownloadStep1NextText", English["next"]);
+            German.Add("GcDownloadStep1NextText", German["next"]);
+            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
+            French.Add("GcDownloadStep1NextText", French["next"]);
+            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+
+            //Component: ClientTypeValue
+            //Initial value for the Component -> "None" (No current entry)
+            English.Add("ClientTypeValue", "None");
+            German.Add("ClientTypeValue", TranslationNeeded);
+            Polish.Add("ClientTypeValue", TranslationNeeded);
+            French.Add("ClientTypeValue", TranslationNeeded);
+            Spanish.Add("ClientTypeValue", TranslationNeeded);
+            Russian.Add("ClientTypeValue", TranslationNeeded);
+
+            //Component: LangValue
+            //
+            English.Add("LangValue", English["ClientTypeValue"]);
+            German.Add("LangValue", German["ClientTypeValue"]);
+            Polish.Add("LangValue", Polish["ClientTypeValue"]);
+            French.Add("LangValue", French["ClientTypeValue"]);
+            Spanish.Add("LangValue", Spanish["ClientTypeValue"]);
+            Russian.Add("LangValue", Russian["ClientTypeValue"]);
+
+            //Component: MetadataVersionValue
+            //
+            English.Add("MetadataVersionValue", English["ClientTypeValue"]);
+            German.Add("MetadataVersionValue", German["ClientTypeValue"]);
+            Polish.Add("MetadataVersionValue", Polish["ClientTypeValue"]);
+            French.Add("MetadataVersionValue", French["ClientTypeValue"]);
+            Spanish.Add("MetadataVersionValue", Spanish["ClientTypeValue"]);
+            Russian.Add("MetadataVersionValue", Russian["ClientTypeValue"]);
+
+            //Component: MetadataProtocolVersionValue
+            //
+            English.Add("MetadataProtocolVersionValue", English["ClientTypeValue"]);
+            German.Add("MetadataProtocolVersionValue", German["ClientTypeValue"]);
+            Polish.Add("MetadataProtocolVersionValue", Polish["ClientTypeValue"]);
+            French.Add("MetadataProtocolVersionValue", French["ClientTypeValue"]);
+            Spanish.Add("MetadataProtocolVersionValue", Spanish["ClientTypeValue"]);
+            Russian.Add("MetadataProtocolVersionValue", Russian["ClientTypeValue"]);
+
+            //Component: ChainIDValue
+            //
+            English.Add("ChainIDValue", English["ClientTypeValue"]);
+            German.Add("ChainIDValue", German["ClientTypeValue"]);
+            Polish.Add("ChainIDValue", Polish["ClientTypeValue"]);
+            French.Add("ChainIDValue", French["ClientTypeValue"]);
+            Spanish.Add("ChainIDValue", Spanish["ClientTypeValue"]);
+            Russian.Add("ChainIDValue", Russian["ClientTypeValue"]);
+
+            //Component: ClientCurrentVersionValue
+            //
+            English.Add("ClientCurrentVersionValue", English["ClientTypeValue"]);
+            German.Add("ClientCurrentVersionValue", German["ClientTypeValue"]);
+            Polish.Add("ClientCurrentVersionValue", Polish["ClientTypeValue"]);
+            French.Add("ClientCurrentVersionValue", French["ClientTypeValue"]);
+            Spanish.Add("ClientCurrentVersionValue", Spanish["ClientTypeValue"]);
+            Russian.Add("ClientCurrentVersionValue", Russian["ClientTypeValue"]);
+
+            //Component: LocaleCurrentVersionValue
+            //
+            English.Add("LocaleCurrentVersionValue", English["ClientTypeValue"]);
+            German.Add("LocaleCurrentVersionValue", German["ClientTypeValue"]);
+            Polish.Add("LocaleCurrentVersionValue", Polish["ClientTypeValue"]);
+            French.Add("LocaleCurrentVersionValue", French["ClientTypeValue"]);
+            Spanish.Add("LocaleCurrentVersionValue", Spanish["ClientTypeValue"]);
+            Russian.Add("LocaleCurrentVersionValue", Russian["ClientTypeValue"]);
+
+            //Component: SdContentCurrentVersionValue
+            //
+            English.Add("SdContentCurrentVersionValue", English["ClientTypeValue"]);
+            German.Add("SdContentCurrentVersionValue", German["ClientTypeValue"]);
+            Polish.Add("SdContentCurrentVersionValue", Polish["ClientTypeValue"]);
+            French.Add("SdContentCurrentVersionValue", French["ClientTypeValue"]);
+            Spanish.Add("SdContentCurrentVersionValue", Spanish["ClientTypeValue"]);
+            Russian.Add("SdContentCurrentVersionValue", Russian["ClientTypeValue"]);
+
+            //Component: HdContentCurrentVersionValue
+            //
+            English.Add("HdContentCurrentVersionValue", English["ClientTypeValue"]);
+            German.Add("HdContentCurrentVersionValue", German["ClientTypeValue"]);
+            Polish.Add("HdContentCurrentVersionValue", Polish["ClientTypeValue"]);
+            French.Add("HdContentCurrentVersionValue", French["ClientTypeValue"]);
+            Spanish.Add("HdContentCurrentVersionValue", Spanish["ClientTypeValue"]);
+            Russian.Add("HdContentCurrentVersionValue", Russian["ClientTypeValue"]);
+
+            //Component: GameIDValue
+            //
+            English.Add("GameIDValue", English["ClientTypeValue"]);
+            German.Add("GameIDValue", German["ClientTypeValue"]);
+            Polish.Add("GameIDValue", Polish["ClientTypeValue"]);
+            French.Add("GameIDValue", French["ClientTypeValue"]);
+            Spanish.Add("GameIDValue", Spanish["ClientTypeValue"]);
+            Russian.Add("GameIDValue", Russian["ClientTypeValue"]);
+
+            //Component: GcDownloadStep2Header
+            //
+            English.Add("GcDownloadStep2Header", "Close Game Center");
+            German.Add("GcDownloadStep2Header", TranslationNeeded);
+            Polish.Add("GcDownloadStep2Header", TranslationNeeded);
+            French.Add("GcDownloadStep2Header", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2Header", TranslationNeeded);
+            Russian.Add("GcDownloadStep2Header", TranslationNeeded);
+
+            //Component: GcDownloadStep2TabDescription
+            //
+            English.Add("GcDownloadStep2TabDescription", "Close the game center (application will detect closure)");
+            German.Add("GcDownloadStep2TabDescription", TranslationNeeded);
+            Polish.Add("GcDownloadStep2TabDescription", TranslationNeeded);
+            French.Add("GcDownloadStep2TabDescription", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2TabDescription", TranslationNeeded);
+            Russian.Add("GcDownloadStep2TabDescription", TranslationNeeded);
+
+            //Component: GcDownloadStep2GcStatus
+            //Game Center is [Opened,Closed]
+            English.Add("GcDownloadStep2GcStatus", "Game Center is {0}");
+            German.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            Polish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            French.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            Russian.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+
+            //Component: GcDownloadStep2GcStatusOpened
+            //Game Center is [Opened,Closed]
+            English.Add("GcDownloadStep2GcStatus", "Opened");
+            German.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            Polish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            French.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            Russian.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+
+            //Component: GcDownloadStep2GcStatusClosed
+            //Game Center is [Opened,Closed]
+            English.Add("GcDownloadStep2GcStatus", "Closed");
+            German.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            Polish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            French.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            Russian.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+
+            //Component: GcDownloadStep2PreviousText
+            //
+            English.Add("GcDownloadStep1NextText", English["next"]);
+            German.Add("GcDownloadStep1NextText", German["next"]);
+            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
+            French.Add("GcDownloadStep1NextText", French["next"]);
+            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+
+            //Component: GcDownloadStep2NextText
+            //
+            English.Add("GcDownloadStep1NextText", English["next"]);
+            German.Add("GcDownloadStep1NextText", German["next"]);
+            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
+            French.Add("GcDownloadStep1NextText", French["next"]);
+            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+
+            //Component: GcDownloadStep3Header
+            //
+            English.Add("GcDownloadStep3Header", "Get Update Information");
+            German.Add("GcDownloadStep3Header", TranslationNeeded);
+            Polish.Add("GcDownloadStep3Header", TranslationNeeded);
+            French.Add("GcDownloadStep3Header", TranslationNeeded);
+            Spanish.Add("GcDownloadStep3Header", TranslationNeeded);
+            Russian.Add("GcDownloadStep3Header", TranslationNeeded);
+
+            //Component: GcDownloadStep3TabDescription
+            //
+            English.Add("GameCenterUpdateDownloader", "Game");
+            German.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Polish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            French.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
+
+            //Component: GcDownloadStep3PreviousText
+            //
+            English.Add("GcDownloadStep1NextText", English["next"]);
+            German.Add("GcDownloadStep1NextText", German["next"]);
+            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
+            French.Add("GcDownloadStep1NextText", French["next"]);
+            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+
+            //Component: GcDownloadStep3NextText
+            //
+            English.Add("GcDownloadStep1NextText", English["next"]);
+            German.Add("GcDownloadStep1NextText", German["next"]);
+            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
+            French.Add("GcDownloadStep1NextText", French["next"]);
+            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+
+            //Component: GcDownloadStep4Header
+            //
+            English.Add("GcDownloadStep4Header", "Download Update Files");
+            German.Add("GcDownloadStep4Header", TranslationNeeded);
+            Polish.Add("GcDownloadStep4Header", TranslationNeeded);
+            French.Add("GcDownloadStep4Header", TranslationNeeded);
+            Spanish.Add("GcDownloadStep4Header", TranslationNeeded);
+            Russian.Add("GcDownloadStep4Header", TranslationNeeded);
+
+            //Component: GcDownloadStep4TabDescription
+            //
+            English.Add("GcDownloadStep4TabDescription", "Downloading the patch files...");
+            German.Add("GcDownloadStep4TabDescription", TranslationNeeded);
+            Polish.Add("GcDownloadStep4TabDescription", TranslationNeeded);
+            French.Add("GcDownloadStep4TabDescription", TranslationNeeded);
+            Spanish.Add("GcDownloadStep4TabDescription", TranslationNeeded);
+            Russian.Add("GcDownloadStep4TabDescription", TranslationNeeded);
+
+            //Component: GcDownloadStep4DownloadingText
+            //Downloading patch 1 of 2: wg_filename.wgpkg
+            English.Add("GcDownloadStep4DownloadingText", "Downloading patch {0} of {1}: {2}");
+            German.Add("GcDownloadStep4DownloadingText", TranslationNeeded);
+            Polish.Add("GcDownloadStep4DownloadingText", TranslationNeeded);
+            French.Add("GcDownloadStep4DownloadingText", TranslationNeeded);
+            Spanish.Add("GcDownloadStep4DownloadingText", TranslationNeeded);
+            Russian.Add("GcDownloadStep4DownloadingText", TranslationNeeded);
+
+            //Component: GcDownloadStep4Previous
+            //
+            English.Add("GcDownloadStep1NextText", English["next"]);
+            German.Add("GcDownloadStep1NextText", German["next"]);
+            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
+            French.Add("GcDownloadStep1NextText", French["next"]);
+            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+
+            //Component: GcDownloadStep4Next
+            //
+            English.Add("GcDownloadStep1NextText", English["next"]);
+            German.Add("GcDownloadStep1NextText", German["next"]);
+            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
+            French.Add("GcDownloadStep1NextText", French["next"]);
+            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+
+            //Component: GcDownloadStep5Header
+            //
+            English.Add("GameCenterUpdateDownloader", "Complete!");
+            German.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Polish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            French.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
+
+            //Component: GcDownloadStep5TabDescription
+            //
+            English.Add("GameCenterUpdateDownloader", "Game");
+            German.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Polish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            French.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
+
+            //Component: GcDownloadStep5Close
+            //
+            English.Add("GcDownloadStep5Close", English["close"]);
+            German.Add("GcDownloadStep5Close", German["close"]);
+            Polish.Add("GcDownloadStep5Close", Polish["close"]);
+            French.Add("GcDownloadStep5Close", French["close"]);
+            Spanish.Add("GcDownloadStep5Close", Spanish["close"]);
+            Russian.Add("GcDownloadStep5Close", Russian["close"]);
+
+            //Component: GcDownloadStep1ValueError
+            //
+            English.Add("GameCenterUpdateDownloader", "Error");
+            German.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Polish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            French.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
             #endregion
 
             //apply the bool

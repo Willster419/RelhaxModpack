@@ -5,62 +5,102 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="GameCenterUpdateDownloader" Height="350" Width="650">
+        Title="Game Center Update Downloader" Height="380" Width="650" MinWidth="650" MinHeight="380">
     <Grid>
-        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TabItem Header="Select WoT Client" IsEnabled="True" IsSelected="True" x:Name="GcDownloadStep1" >
+        <TabControl x:Name="GcDownloadMainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="GcDownloadMainTabControl_SelectionChanged">
+            <TabItem Header="Select Game Client" IsEnabled="True" IsSelected="True" x:Name="GcDownloadStep1" >
                 <Grid Background="#FFE5E5E5" Tag="GcDownloadStep1">
-                    <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75">
-                        <TextBlock Text="Cancel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Button x:Name="GcDownloadStep1Next" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Tag="GcDownloadStep1Next">
+                        <TextBlock x:Name="GcDownloadStep1NextText" Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
-                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75">
-                        <TextBlock Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    </Button>
-                    <TextBlock HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="GcDownloadStep1TabDescription" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Select the Wargaming client to collect data for (WoT, WoWs, WoWp)" VerticalAlignment="Top"/>
+                    <Button x:Name="GcDownloadStep1SelectClientButton" Content="Select client" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="148"/>
+                    <TextBlock x:Name="GcDownloadStep1CurrentlySelectedClient" HorizontalAlignment="Left" Margin="10,56,0,0" TextWrapping="Wrap" Text="Currently selected client: {0}" VerticalAlignment="Top" Foreground="Red"/>
+                    <Grid HorizontalAlignment="Stretch" Margin="10,77,10,35" VerticalAlignment="Top" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="0" TextWrapping="Wrap" Text="client_type" VerticalAlignment="Stretch"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="lang" VerticalAlignment="Stretch"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="metadata_version" VerticalAlignment="Stretch"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="metadata_protocol_version" VerticalAlignment="Stretch"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="chain_id" VerticalAlignment="Stretch"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" Text="client_current_version" VerticalAlignment="Stretch"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="locale_current_version" VerticalAlignment="Stretch"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="sdcontent_current_version" VerticalAlignment="Stretch"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="hdcontent_current_version" VerticalAlignment="Stretch"/>
+                        <TextBlock HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="game_id" VerticalAlignment="Top"/>
+                        <TextBlock x:Name="ClientTypeValue" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Text="None" VerticalAlignment="Stretch" Foreground="Red"/>
+                        <TextBlock x:Name="LangValue" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Text="None" VerticalAlignment="Stretch" Foreground="Red"/>
+                        <TextBlock x:Name="MetadataVersionValue" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" Text="None" VerticalAlignment="Stretch" Foreground="Red"/>
+                        <TextBlock x:Name="MetadataProtocolVersionValue" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" Text="None" VerticalAlignment="Stretch" Foreground="Red"/>
+                        <TextBlock x:Name="ChainIDValue" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" Text="None" VerticalAlignment="Stretch" Foreground="Red"/>
+                        <TextBlock x:Name="ClientCurrentVersionValue" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap" Text="None" VerticalAlignment="Stretch" Foreground="Red"/>
+                        <TextBlock x:Name="LocaleCurrentVersionValue" HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" Text="None" VerticalAlignment="Stretch" Foreground="Red"/>
+                        <TextBlock x:Name="SdContentCurrentVersionValue" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" Text="None" VerticalAlignment="Stretch" Foreground="Red"/>
+                        <TextBlock x:Name="HdContentCurrentVersionValue" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" TextWrapping="Wrap" Text="None" VerticalAlignment="Stretch" Foreground="Red"/>
+                        <TextBlock x:Name="GameIDValue" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" TextWrapping="Wrap" Text="None" VerticalAlignment="Stretch" Foreground="Red"/>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Close Game Center" IsEnabled="False" x:Name="GcDownloadStep2">
                 <Grid Background="#FFE5E5E5" Tag="GcDownloadStep2">
                     <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75">
-                        <TextBlock Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBlock x:Name="GcDownloadStep2PreviousText" Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
-                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75">
-                        <TextBlock Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" IsEnabled="False">
+                        <TextBlock x:Name="GcDownloadStep2NextText" Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
-                    <TextBlock HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="GcDownloadStep2TabDescription" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Close the game center (application will detect closure)" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="GcDownloadStep2GcStatus" HorizontalAlignment="Left" Margin="10,31,0,0" TextWrapping="Wrap" Text="Game Center is {0}" VerticalAlignment="Top" Foreground="Red"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Get Update Information" IsEnabled="False" x:Name="GcDownloadStep3">
                 <Grid Background="#FFE5E5E5" Tag="GcDownloadStep3">
                     <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75">
-                        <TextBlock Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBlock x:Name="GcDownloadStep3PreviousText" Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
-                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75">
-                        <TextBlock Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" IsEnabled="False">
+                        <TextBlock x:Name="GcDownloadStep3NextText" Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
-                    <TextBlock HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="GcDownloadStep3TabDescription" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Getting the list of patch files to download" VerticalAlignment="Top"/>
+                    <StackPanel x:Name="GcDownloadStep3StackPanel" HorizontalAlignment="Left" Height="225" Margin="10,31,0,0" VerticalAlignment="Top" Width="616"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Download Update Files" IsEnabled="False" x:Name="GcDownloadStep4">
                 <Grid Background="#FFE5E5E5" Tag="GcDownloadStep4">
                     <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75">
-                        <TextBlock Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBlock x:Name="GcDownloadStep4Previous" Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
-                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75">
-                        <TextBlock Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" IsEnabled="">
+                        <TextBlock x:Name="GcDownloadStep4Next" Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
-                    <TextBlock HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="GcDownloadStep4TabDescription" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Downloading the patch files..." VerticalAlignment="Top"/>
+                    <ProgressBar x:Name="GcDownloadStep4SingleFileProgress" HorizontalAlignment="Left" Height="15" Margin="10,83,0,0" VerticalAlignment="Top" Width="616"/>
+                    <ProgressBar x:Name="GcDownloadStep4TotalFileProgress" HorizontalAlignment="Left" Height="15" Margin="10,102,0,0" VerticalAlignment="Top" Width="616"/>
+                    <TextBlock x:Name="GcDownloadStep4DownloadingText" HorizontalAlignment="Left" Margin="10,62,0,0" TextWrapping="Wrap" Text="Downloading patch {0} of {1}: {2}" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Complete!" IsEnabled="False" x:Name="GcDownloadStep5">
                 <Grid Background="#FFE5E5E5" Tag="GcDownloadStep5">
-                    <Button HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75">
-                        <TextBlock Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    </Button>
+                    <TextBlock x:Name="GcDownloadStep5TabDescription" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top"
+                               Text="The process is complete! The game center should detect the files when opened."/>
                     <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75">
-                        <TextBlock Text="Close" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBlock x:Name="GcDownloadStep5Close" Text="Close" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
-                    <TextBlock HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>

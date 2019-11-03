@@ -23,5 +23,10 @@ namespace RelhaxModpack.Windows
         {
             InitializeComponent();
         }
+
+        private void GcDownloadMainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
