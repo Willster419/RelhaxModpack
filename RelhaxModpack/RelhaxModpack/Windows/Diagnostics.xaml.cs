@@ -263,7 +263,8 @@ namespace RelhaxModpack.Windows
 
         private void DownloadWGPatchFiles_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("placeholder");
+            GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader();
+            gameCenterUpdateDownloader.ShowDialog();
         }
     }
 }
