@@ -91,5 +91,38 @@ namespace RelhaxModpack.Windows
         {
             this.Close();
         }
+
+        private void GcDownloadStep1Init()
+        {
+            //if client selected, get params
+
+        }
+
+        private void GcDownloadStep2Init()
+        {
+            //start timer
+        }
+
+        private void GcDownloadStep3Init()
+        {
+            //get patch list info
+        }
+
+        private void GcDownloadStep4Init()
+        {
+            //create folder if not exist
+
+            //download patch files to correct location
+        }
+
+        private void GcDownloadStep5Init()
+        {
+            //stub
+        }
+
+        private void GcDownloadStep1SelectClientButton_Click(object sender, RoutedEventArgs e)
+        {
+            //if client selected, get params
+        }
     }
 }

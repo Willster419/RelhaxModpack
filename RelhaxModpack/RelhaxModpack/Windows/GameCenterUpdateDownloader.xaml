@@ -10,11 +10,12 @@
         <TabControl x:Name="GcDownloadMainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="GcDownloadMainTabControl_SelectionChanged">
             <TabItem Header="Select Game Client" IsEnabled="True" IsSelected="True" x:Name="GcDownloadStep1" >
                 <Grid Background="#FFE5E5E5" Tag="GcDownloadStep1">
-                    <Button x:Name="GcDownloadStep1Next" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Tag="GcDownloadStep1Next" Click="GcDownloadStep1Next_Click">
+                    <Button x:Name="GcDownloadStep1Next" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" IsEnabled="False"
+                            Tag="GcDownloadStep1Next" Click="GcDownloadStep1Next_Click">
                         <TextBlock x:Name="GcDownloadStep1NextText" Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
                     <TextBlock x:Name="GcDownloadStep1TabDescription" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Select the Wargaming client to collect data for (WoT, WoWs, WoWp)" VerticalAlignment="Top"/>
-                    <Button x:Name="GcDownloadStep1SelectClientButton" Content="Select client" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="148"/>
+                    <Button x:Name="GcDownloadStep1SelectClientButton" Content="Select client" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="148" Click="GcDownloadStep1SelectClientButton_Click"/>
                     <TextBlock x:Name="GcDownloadStep1CurrentlySelectedClient" HorizontalAlignment="Left" Margin="10,56,0,0" TextWrapping="Wrap" Text="Currently selected client: {0}" VerticalAlignment="Top" Foreground="Red"/>
                     <Grid HorizontalAlignment="Stretch" Margin="10,77,10,35" VerticalAlignment="Top" >
                         <Grid.ColumnDefinitions>
