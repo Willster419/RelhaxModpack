@@ -2052,6 +2052,15 @@ namespace RelhaxModpack
             #endregion
 
             #region ModSelectionList
+            //Component: ModSelectionList
+            //
+            English.Add("ModSelectionList", "Selection List");
+            German.Add("ModSelectionList", TranslationNeeded);
+            Polish.Add("ModSelectionList", TranslationNeeded);
+            French.Add("ModSelectionList", TranslationNeeded);
+            Spanish.Add("ModSelectionList", TranslationNeeded);
+            Russian.Add("ModSelectionList", TranslationNeeded);
+
             //Component: ContinueButtonLabel
             //
             English.Add("ContinueButtonLabel", "Install");
@@ -2418,6 +2427,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Application Update Window
+            //Component: VersionInfo
+            //
+            English.Add("VersionInfo", "Application Update");
+            German.Add("VersionInfo", TranslationNeeded);
+            Polish.Add("VersionInfo", TranslationNeeded);
+            French.Add("VersionInfo", TranslationNeeded);
+            Spanish.Add("VersionInfo", TranslationNeeded);
+            Russian.Add("VersionInfo", TranslationNeeded);
+
             //Component: VersionInfoYesButton
             //
             English.Add("VersionInfoYesButton", "Yes");
@@ -2429,7 +2447,7 @@ namespace RelhaxModpack
 
             //Component: VersionInfoNoButton
             //
-            English.Add("VersionInfoNoButton", "no");
+            English.Add("VersionInfoNoButton", "No");
             German.Add("VersionInfoNoButton", "nein");
             Polish.Add("VersionInfoNoButton", "Nie");
             French.Add("VersionInfoNoButton", "Non");
@@ -3353,6 +3371,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Install finished window
+            //Component: InstallFinished
+            //
+            English.Add("InstallFinished", "Install Finished");
+            German.Add("InstallFinished", TranslationNeeded);
+            Polish.Add("InstallFinished", TranslationNeeded);
+            French.Add("InstallFinished", TranslationNeeded);
+            Spanish.Add("InstallFinished", TranslationNeeded);
+            Russian.Add("InstallFinished", TranslationNeeded);
+
             //Component: InstallationCompleteText
             //
             English.Add("InstallationCompleteText", "The Installation is complete. Would you like to...");
@@ -3428,6 +3455,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Diagnostics
+            //Component: Diagnostics
+            //
+            English.Add("Diagnostics", "Diagnostics");
+            German.Add("Diagnostics", TranslationNeeded);
+            Polish.Add("Diagnostics", TranslationNeeded);
+            French.Add("Diagnostics", TranslationNeeded);
+            Spanish.Add("Diagnostics", TranslationNeeded);
+            Russian.Add("Diagnostics", TranslationNeeded);
+
             //Component: MainTextBox
             //
             English.Add("DiagnosticsMainTextBox", "You can use the options below to try to diagnose or solve the issues you are having.");
@@ -3700,6 +3736,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Add zip files Dialog
+            //Component: AddPicturesZip
+            //
+            English.Add("AddPicturesZip", "Add files to zip");
+            German.Add("AddPicturesZip", TranslationNeeded);
+            Polish.Add("AddPicturesZip", TranslationNeeded);
+            French.Add("AddPicturesZip", TranslationNeeded);
+            Spanish.Add("AddPicturesZip", TranslationNeeded);
+            Russian.Add("AddPicturesZip", TranslationNeeded);
+
             //Component: DiagnosticsAddSelectionsPicturesLabel
             //the message when the UISettings.xml file is parsed and the custom theme is loaded
             English.Add("DiagnosticsAddSelectionsPicturesLabel", "Add any additional files here (your selection file, picture, etc.)");
@@ -3747,6 +3792,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Preview Window
+            //Component: Preview
+            //
+            English.Add("Preview", "Preview");
+            German.Add("Preview", TranslationNeeded);
+            Polish.Add("Preview", TranslationNeeded);
+            French.Add("Preview", TranslationNeeded);
+            Spanish.Add("Preview", TranslationNeeded);
+            Russian.Add("Preview", TranslationNeeded);
+
             //Component: noDescription
             //
             English.Add("noDescription", "No description provided");
@@ -3895,6 +3949,42 @@ namespace RelhaxModpack
             #endregion
 
             #region Advanced Installer Window
+            //Component: AdvancedProgress
+            //
+            English.Add("AdvancedProgress", "Advanced Installer Progress");
+            German.Add("AdvancedProgress", TranslationNeeded);
+            Polish.Add("AdvancedProgress", TranslationNeeded);
+            French.Add("AdvancedProgress", TranslationNeeded);
+            Spanish.Add("AdvancedProgress", TranslationNeeded);
+            Russian.Add("AdvancedProgress", TranslationNeeded);
+
+            //Component: PreInstallTabHeader
+            //
+            English.Add("PreInstallTabHeader", "Pre-install tasks");
+            German.Add("PreInstallTabHeader", TranslationNeeded);
+            Polish.Add("PreInstallTabHeader", TranslationNeeded);
+            French.Add("PreInstallTabHeader", TranslationNeeded);
+            Spanish.Add("PreInstallTabHeader", TranslationNeeded);
+            Russian.Add("PreInstallTabHeader", TranslationNeeded);
+
+            //Component: ExtractionTabHeader
+            //
+            English.Add("ExtractionTabHeader", "Extraction");
+            German.Add("ExtractionTabHeader", TranslationNeeded);
+            Polish.Add("ExtractionTabHeader", TranslationNeeded);
+            French.Add("ExtractionTabHeader", TranslationNeeded);
+            Spanish.Add("ExtractionTabHeader", TranslationNeeded);
+            Russian.Add("ExtractionTabHeader", TranslationNeeded);
+
+            //Component: PostInstallTabHeader
+            //
+            English.Add("PostInstallTabHeader", "Post-install tasks");
+            German.Add("PostInstallTabHeader", TranslationNeeded);
+            Polish.Add("PostInstallTabHeader", TranslationNeeded);
+            French.Add("PostInstallTabHeader", TranslationNeeded);
+            Spanish.Add("PostInstallTabHeader", TranslationNeeded);
+            Russian.Add("PostInstallTabHeader", TranslationNeeded);
+
             //Component: AdvancedInstallBackupMods
             //
             English.Add("AdvancedInstallBackupMods", "Backup current installation");
@@ -4033,6 +4123,15 @@ namespace RelhaxModpack
             #endregion
 
             #region News Viewer
+            //Component: NewsViewer
+            //
+            English.Add("NewsViewer", "News Viewer");
+            German.Add("NewsViewer", TranslationNeeded);
+            Polish.Add("NewsViewer", TranslationNeeded);
+            French.Add("NewsViewer", TranslationNeeded);
+            Spanish.Add("NewsViewer", TranslationNeeded);
+            Russian.Add("NewsViewer", TranslationNeeded);
+
             //Component: application_Update_TabHeader
             //
             English.Add("application_Update_TabHeader", "Application");
@@ -4062,17 +4161,35 @@ namespace RelhaxModpack
             #endregion
 
             #region Loading Window
+            //Component: ProgressIndicator
+            //
+            English.Add("ProgressIndicator", "Loading");
+            German.Add("ProgressIndicator", TranslationNeeded);
+            Polish.Add("ProgressIndicator", TranslationNeeded);
+            French.Add("ProgressIndicator", TranslationNeeded);
+            Spanish.Add("ProgressIndicator", TranslationNeeded);
+            Russian.Add("ProgressIndicator", TranslationNeeded);
+
             //Component: LoadingHeader
             //
             English.Add("LoadingHeader", "Loading, please wait");
             German.Add("LoadingHeader", "Lade, bitte warten");
-            Polish.Add("LoadingHeader", "Wczytywanie, proszę czekać...");
+            Polish.Add("LoadingHeader", "Wczytywanie, proszę czekać");
             French.Add("LoadingHeader", "Chargement, veuillez patienter");
             Spanish.Add("LoadingHeader", "Cargando, por favor espere");
-            Russian.Add("LoadingHeader", "Загрузка, пожалуйста, подождите...");
+            Russian.Add("LoadingHeader", "Загрузка, пожалуйста, подождите");
             #endregion
 
             #region First Load acks (yes i wrote that to avoid spelling the whole thing cause I may not know how even enough for auto correct to fix it)
+            //Component: FirstLoadAcknowledgments
+            //
+            English.Add("FirstLoadAcknowledgments", "First Load Acknowledgements");
+            German.Add("FirstLoadAcknowledgments", TranslationNeeded);
+            Polish.Add("FirstLoadAcknowledgments", TranslationNeeded);
+            French.Add("FirstLoadAcknowledgments", TranslationNeeded);
+            Spanish.Add("FirstLoadAcknowledgments", TranslationNeeded);
+            Russian.Add("FirstLoadAcknowledgments", TranslationNeeded);
+
             //Component: AgreementLicense
             //
             English.Add("AgreementLicense", "I have read and agree to the ");
@@ -4179,6 +4296,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Export Mode
+            //Component: ExportModeSelect
+            //
+            English.Add("ExportModeSelect", "Select WoT client for export");
+            German.Add("ExportModeSelect", TranslationNeeded);
+            Polish.Add("ExportModeSelect", TranslationNeeded);
+            French.Add("ExportModeSelect", TranslationNeeded);
+            Spanish.Add("ExportModeSelect", TranslationNeeded);
+            Russian.Add("ExportModeSelect", TranslationNeeded);
+
             //Component: selectLocationToExport
             //
             English.Add("selectLocationToExport", "Select the folder to export the mod installation into");
@@ -4235,6 +4361,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Asking to close WoT
+            //Component: AskCloseWoT
+            //
+            English.Add("AskCloseWoT", "WoT is Running");
+            German.Add("AskCloseWoT", TranslationNeeded);
+            Polish.Add("AskCloseWoT", TranslationNeeded);
+            French.Add("AskCloseWoT", TranslationNeeded);
+            Spanish.Add("AskCloseWoT", TranslationNeeded);
+            Russian.Add("AskCloseWoT", TranslationNeeded);
+
             //Component: WoTRunningTitle
             //
             English.Add("WoTRunningTitle", "WoT is Running");
@@ -4282,6 +4417,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Scaling Confirmation
+            //Component: ScalingConfirmation
+            //
+            English.Add("ScalingConfirmation", "Scaling Confirmation");
+            German.Add("ScalingConfirmation", TranslationNeeded);
+            Polish.Add("ScalingConfirmation", TranslationNeeded);
+            French.Add("ScalingConfirmation", TranslationNeeded);
+            Spanish.Add("ScalingConfirmation", TranslationNeeded);
+            Russian.Add("ScalingConfirmation", TranslationNeeded);
+
             //Component: ScalingConfirmationHeader
             //
             English.Add("ScalingConfirmationHeader", "The scaling value has changed. Would you like to keep it?");
@@ -4320,6 +4464,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Color Picker
+            //Component: RelhaxColorPicker
+            //
+            English.Add("RelhaxColorPicker", "Color Picker");
+            German.Add("RelhaxColorPicker", TranslationNeeded);
+            Polish.Add("RelhaxColorPicker", TranslationNeeded);
+            French.Add("RelhaxColorPicker", TranslationNeeded);
+            Spanish.Add("RelhaxColorPicker", TranslationNeeded);
+            Russian.Add("RelhaxColorPicker", TranslationNeeded);
+
             //Component: ColorType
             //
             English.Add("ColorType", "Brush type");
@@ -4349,12 +4502,12 @@ namespace RelhaxModpack
 
             //Component: MainColorAlpha
             //
-            English.Add("MainColorAlpha", "Transparency");
-            German.Add("MainColorAlpha", "Transparenz");
-            Polish.Add("MainColorAlpha", "Widoczność");
+            English.Add("MainColorAlpha", "Alpha");
+            German.Add("MainColorAlpha", TranslationNeeded);
+            Polish.Add("MainColorAlpha", TranslationNeeded);
             French.Add("MainColorAlpha", TranslationNeeded);
-            Spanish.Add("MainColorAlpha", "Transparencia");
-            Russian.Add("MainColorAlpha", "Прозрачность");
+            Spanish.Add("MainColorAlpha", TranslationNeeded);
+            Russian.Add("MainColorAlpha", TranslationNeeded);
 
             //Component: MainColorRed
             //
@@ -4394,12 +4547,12 @@ namespace RelhaxModpack
 
             //Component: TextColorAlpha
             //
-            English.Add("TextColorAlpha", "Widoczność");
-            German.Add("TextColorAlpha", "Transparenz");
-            Polish.Add("TextColorAlpha", "Widoczność");
+            English.Add("TextColorAlpha", "Alpha");
+            German.Add("TextColorAlpha", TranslationNeeded);
+            Polish.Add("TextColorAlpha", TranslationNeeded);
             French.Add("TextColorAlpha", TranslationNeeded);
-            Spanish.Add("TextColorAlpha", "Transparencia");
-            Russian.Add("TextColorAlpha", "Прозрачность");
+            Spanish.Add("TextColorAlpha", TranslationNeeded);
+            Russian.Add("TextColorAlpha", TranslationNeeded);
 
             //Component: TextColorRed
             //
@@ -4439,12 +4592,12 @@ namespace RelhaxModpack
 
             //Component: SecondColorAlpha
             //
-            English.Add("SecondColorAlpha", "Transparency");
-            German.Add("SecondColorAlpha", "Transparenz");
-            Polish.Add("SecondColorAlpha", "Widoczność");
+            English.Add("SecondColorAlpha", "Alpha");
+            German.Add("SecondColorAlpha", TranslationNeeded);
+            Polish.Add("SecondColorAlpha", TranslationNeeded);
             French.Add("SecondColorAlpha", TranslationNeeded);
-            Spanish.Add("SecondColorAlpha", "Transparencia");
-            Russian.Add("SecondColorAlpha", "Прозрачность");
+            Spanish.Add("SecondColorAlpha", TranslationNeeded);
+            Russian.Add("SecondColorAlpha", TranslationNeeded);
 
             //Component: SecondColorRed
             //
@@ -4540,7 +4693,7 @@ namespace RelhaxModpack
             #region Game Center download utility
             //Component: GameCenterUpdateDownloader
             //Application window title
-            English.Add("GameCenterUpdateDownloader", "Game Center Update Downloaded");
+            English.Add("GameCenterUpdateDownloader", "Game Center Update Downloader");
             German.Add("GameCenterUpdateDownloader", TranslationNeeded);
             Polish.Add("GameCenterUpdateDownloader", TranslationNeeded);
             French.Add("GameCenterUpdateDownloader", TranslationNeeded);
