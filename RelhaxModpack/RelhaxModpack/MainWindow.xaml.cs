@@ -183,7 +183,7 @@ namespace RelhaxModpack
 
             //apply translation settings
             Translations.SetLanguage(ModpackSettings.Language);
-            Translations.LocalizeWindow(this, true, false);
+            Translations.LocalizeWindow(this, true);
             ApplyCustomUILocalizations(false);
 
             //create tray icons and menus
@@ -2537,7 +2537,7 @@ namespace RelhaxModpack
             }
             if (!loading)
             {
-                Translations.LocalizeWindow(this, true, false);
+                Translations.LocalizeWindow(this, true);
                 ApplyCustomUILocalizations(true);
             }
             else

@@ -32,8 +32,6 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool ApplyScaling { get; set; } = false;
 
-        public bool ApplyWindowTitle { get; set; } = false;
-
         /// <summary>
         /// The original Width and Height of the window before scaling
         /// </summary>
@@ -62,7 +60,7 @@ namespace RelhaxModpack.Windows
             //deal with the translations
             if (LocalizeWindow)
             {
-                Translations.LocalizeWindow(this, ApplyToolTips, ApplyWindowTitle);
+                Translations.LocalizeWindow(this, ApplyToolTips);
             }
             //apply UI color changes
             if(ApplyColorSettings)
