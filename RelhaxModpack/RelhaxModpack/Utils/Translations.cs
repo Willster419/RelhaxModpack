@@ -213,12 +213,14 @@ namespace RelhaxModpack
                 if(s.Equals(TranslationNeeded))
                 {
                     //Log warning it is todo in selected language
-                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}", componentName, ModpackSettings.Language.ToString()),Logfiles.Application,LogLevel.Error);
+                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}",
+                        componentName, ModpackSettings.Language.ToString()),Logfiles.Application,LogLevel.Error);
                     s = English[componentName];
                     if(s.Equals(TranslationNeeded))
                     {
                         //Log error it is todo in english
-                        Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English", componentName), Logfiles.Application, LogLevel.Error);
+                        Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English",
+                            componentName), Logfiles.Application, LogLevel.Error);
                         s = componentName;
                     }
                 }
@@ -228,16 +230,19 @@ namespace RelhaxModpack
                 //check if key exists in english (should not be the case 99% of the time)
                 if(English.ContainsKey(componentName))
                 {
-                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}", componentName, ModpackSettings.Language.ToString()), Logfiles.Application, LogLevel.Error);
+                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}",
+                        componentName, ModpackSettings.Language.ToString()), Logfiles.Application, LogLevel.Error);
                     s = English[componentName];
                     if (s.Equals(TranslationNeeded))
                     {
                         //Log error it is todo in english
-                        Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English", componentName), Logfiles.Application, LogLevel.Error);
+                        Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English",
+                            componentName), Logfiles.Application, LogLevel.Error);
                     }
                 }
                 //Log error it does not exist
-                Logging.WriteToLog(string.Format("component {0} does not exist in any languages", componentName), Logfiles.Application, LogLevel.Error);
+                Logging.WriteToLog(string.Format("component {0} does not exist in any languages",
+                    componentName), Logfiles.Application, LogLevel.Error);
                 s=componentName;
             }
             return s;
