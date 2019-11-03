@@ -1,8 +1,14 @@
 ﻿using Microsoft.Win32;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Text;
+using System.Timers;
+using System;
+using System.Diagnostics;
+
 
 namespace RelhaxModpack.Windows
 {
@@ -20,6 +26,8 @@ namespace RelhaxModpack.Windows
 
         public const string GameMetadataFolder = "game_metadata";
 
+        public const string WgcProcessName = "wgc";
+
         public struct GameCenterProperty
         {
             public string FileName;
@@ -31,7 +39,7 @@ namespace RelhaxModpack.Windows
         }
 
         private GameCenterProperty ClientType, Language_, MetadataVersion, MetadataProtocalVersion, ChainID,
-            ClientCurrentVersion, LocaleCurrentVersion, SdContentCurrentVersion, HdContentCurrentVersion, GameId;
+            ClientCurrentVersion, LocaleCurrentVersion, SdContentCurrentVersion, HdContentCurrentVersion, GameId, VersionName;
 
         private GameCenterProperty[] GameCenterProperties = null;
 
@@ -47,6 +55,8 @@ namespace RelhaxModpack.Windows
         private string gameInfoXmlPath = string.Empty;
 
         private string metaDataXmlPath = string.Empty;
+
+        private Timer timer = null;
 
         public GameCenterUpdateDownloader()
         {
@@ -137,6 +147,14 @@ namespace RelhaxModpack.Windows
                 GaveError = false,
                 IsRequired = true
             };
+            VersionName = new GameCenterProperty()
+            {
+                FileName = GameInfoXml,
+                Xpath = @"//protocol/game/version_name",
+                TextBlock = null,
+                GaveError = false,
+                IsRequired = true
+            };
             GameCenterProperties = new GameCenterProperty[]
             {
                 ClientType,
@@ -192,53 +210,13 @@ namespace RelhaxModpack.Windows
             };
             if ((bool)manualWoTFind.ShowDialog() && File.Exists(manualWoTFind.FileName))
             {
-                SelectedClient = manualWoTFind.FileName;
+                SelectedClient = Path.GetDirectoryName(manualWoTFind.FileName);
                 //replace the 'win32' or 'win64' directory with nothing (so removing it)
                 SelectedClient = SelectedClient.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
                 Logging.Info("GameCenterDownloader: Selected install -> {0}", SelectedClient);
             }
 
             GcDownloadStep1Init();
-        }
-
-        private void GcDownloadStep1Next_Click(object sender, RoutedEventArgs e)
-        {
-            GcDownloadMainTabControl.SelectedItem = GcDownloadStep2;
-        }
-
-        private void GcDownloadStep2PreviousButton_Click(object sender, RoutedEventArgs e)
-        {
-            GcDownloadMainTabControl.SelectedItem = GcDownloadStep1;
-        }
-
-        private void GcDownloadStep2NextButton_Click(object sender, RoutedEventArgs e)
-        {
-            GcDownloadMainTabControl.SelectedItem = GcDownloadStep3;
-        }
-
-        private void GcDownloadStep3PreviousButton_Click(object sender, RoutedEventArgs e)
-        {
-            GcDownloadMainTabControl.SelectedItem = GcDownloadStep2;
-        }
-
-        private void GcDownloadStep3NextButton_Click(object sender, RoutedEventArgs e)
-        {
-            GcDownloadMainTabControl.SelectedItem = GcDownloadStep4;
-        }
-
-        private void GcDownloadStep4PreviousButton_Click(object sender, RoutedEventArgs e)
-        {
-            GcDownloadMainTabControl.SelectedItem = GcDownloadStep3;
-        }
-
-        private void GcDownloadStep4NextButton_Click(object sender, RoutedEventArgs e)
-        {
-            GcDownloadMainTabControl.SelectedItem = GcDownloadStep5;
-        }
-
-        private void GcDownloadStep5CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
 
         private void GcDownloadStep1Init()
@@ -271,8 +249,11 @@ namespace RelhaxModpack.Windows
             {
                 foreach (GameCenterProperty gameCenterProp in GameCenterProperties)
                 {
-                    gameCenterProp.TextBlock.Text = Translations.GetTranslatedString("none");
-                    gameCenterProp.TextBlock.Foreground = System.Windows.Media.Brushes.Red;
+                    if (gameCenterProp.TextBlock != null)
+                    {
+                        gameCenterProp.TextBlock.Text = Translations.GetTranslatedString("none");
+                        gameCenterProp.TextBlock.Foreground = System.Windows.Media.Brushes.Red;
+                    }
                 }
             }
 
@@ -289,8 +270,8 @@ namespace RelhaxModpack.Windows
             //get file paths set and make sure they work
             Logging.Info("checking if path to {0} is valid", GameInfoXml);
             bool filePathsValid = true;
-            gameInfoXmlPath = Path.Combine(Path.GetDirectoryName(SelectedClient), GameInfoXml);
-            metaDataXmlPath = Path.Combine(Path.GetDirectoryName(SelectedClient), GameMetadataFolder, MetaDataXml);
+            gameInfoXmlPath = Path.Combine(SelectedClient, GameInfoXml);
+            metaDataXmlPath = Path.Combine(SelectedClient, GameMetadataFolder, MetaDataXml);
             StringBuilder missingFilesBuilder = new StringBuilder();
             if (!File.Exists(gameInfoXmlPath))
             {
@@ -326,24 +307,33 @@ namespace RelhaxModpack.Windows
                     {
                         Logging.Error("Failure getting property!");
                         gameCenterProperty.GaveError = true;
-                        gameCenterProperty.TextBlock.Text = Translations.GetTranslatedString("error");
-                        gameCenterProperty.TextBlock.Foreground = System.Windows.Media.Brushes.Red;
+                        if(gameCenterProperty.TextBlock != null)
+                        {
+                            gameCenterProperty.TextBlock.Text = Translations.GetTranslatedString("error");
+                            gameCenterProperty.TextBlock.Foreground = System.Windows.Media.Brushes.Red;
+                        }
                         gotAllValues = false;
                     }
                     else
                     {
                         gameCenterProperty.GaveError = false;
                         Logging.Warning("Did not get property, but IsRequired=False");
-                        gameCenterProperty.TextBlock.Text = Translations.GetTranslatedString("none");
-                        gameCenterProperty.TextBlock.Foreground = System.Windows.Media.Brushes.Orange;
+                        if (gameCenterProperty.TextBlock != null)
+                        {
+                            gameCenterProperty.TextBlock.Text = Translations.GetTranslatedString("none");
+                            gameCenterProperty.TextBlock.Foreground = System.Windows.Media.Brushes.Orange;
+                        }
                     }
                 }
                 else
                 {
                     Logging.Info("Success getting property!");
                     gameCenterProperty.GaveError = false;
-                    gameCenterProperty.TextBlock.Text = gameCenterProperty.Value;
-                    gameCenterProperty.TextBlock.Foreground = System.Windows.Media.Brushes.DarkGreen;
+                    if (gameCenterProperty.TextBlock != null)
+                    {
+                        gameCenterProperty.TextBlock.Text = gameCenterProperty.Value;
+                        gameCenterProperty.TextBlock.Foreground = System.Windows.Media.Brushes.DarkGreen;
+                    }
                 }
             }
 
@@ -364,6 +354,35 @@ namespace RelhaxModpack.Windows
         private void GcDownloadStep2Init()
         {
             //start timer
+            if(timer == null)
+            {
+                timer = new Timer(1000);
+                timer.Elapsed += Timer_Elapsed;
+            }
+            //timer.Start();
+            Timer_Elapsed(null, null);
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //get list of processes for WG game center
+            Process[] processes = Process.GetProcesses().Where(process => process.ProcessName.Equals(WgcProcessName)).ToArray();
+            if(processes.Count() == 0)
+            {
+                //not running
+                GcDownloadStep2GcStatus.Foreground = System.Windows.Media.Brushes.DarkGreen;
+                GcDownloadStep2GcStatus.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep2GcStatus")
+                    , Translations.GetTranslatedString("GcDownloadStep2GcStatusClosed"));
+                GcDownloadStep2NextButton.IsEnabled = true;
+            }
+            else
+            {
+                //running
+                GcDownloadStep2GcStatus.Foreground = System.Windows.Media.Brushes.Red;
+                GcDownloadStep2GcStatus.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep2GcStatus")
+                    , Translations.GetTranslatedString("GcDownloadStep2GcStatusOpened"));
+                GcDownloadStep2NextButton.IsEnabled = true;
+            }
         }
 
         private void GcDownloadStep3Init()
@@ -381,6 +400,61 @@ namespace RelhaxModpack.Windows
         private void GcDownloadStep5Init()
         {
             //stub
+        }
+
+        private void GcDownloadStep1Next_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep2;
+            GcDownloadStep2Init();
+        }
+
+        private void GcDownloadStep2PreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (timer != null)
+                timer.Stop();
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep1;
+        }
+
+        private void GcDownloadStep2NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (timer != null)
+                timer.Stop();
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep3;
+        }
+
+        private void GcDownloadStep3PreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep2;
+            GcDownloadStep2Init();
+        }
+
+        private void GcDownloadStep3NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep4;
+        }
+
+        private void GcDownloadStep4PreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep3;
+        }
+
+        private void GcDownloadStep4NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            GcDownloadMainTabControl.SelectedItem = GcDownloadStep5;
+        }
+
+        private void GcDownloadStep5CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void RelhaxWindow_Closed(object sender, System.EventArgs e)
+        {
+            if (timer != null)
+            {
+                timer.Dispose();
+                timer = null;
+            }
         }
     }
 }
