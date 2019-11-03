@@ -5173,7 +5173,6 @@
             </summary>
             <param name="componentName">The keyword phrase to check</param>
             <param name="languageToCheck">The language dictionary to check in</param>
-            <returns></returns>
         </member>
         <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
             <summary>
