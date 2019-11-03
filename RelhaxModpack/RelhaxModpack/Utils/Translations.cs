@@ -598,6 +598,15 @@ namespace RelhaxModpack
             French.Add("close", "Fermer");
             Spanish.Add("close", "Cerrar");
             Russian.Add("close", "Закрыть");
+
+            //Component: none
+            //
+            English.Add("none", "None");
+            German.Add("none", "Nichts");
+            Polish.Add("none", "Nic");
+            French.Add("none", "Aucun");
+            Spanish.Add("none", "Ninguna");
+            Russian.Add("none", "Не выбрана");
             #endregion
 
             #region Application messages
@@ -4745,6 +4754,15 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
             Russian.Add("GcDownloadStep1NextText", Russian["next"]);
 
+            //Component: GcDownloadSelectWgClient
+            //
+            English.Add("GcDownloadSelectWgClient", "Select WG Client");
+            German.Add("GcDownloadSelectWgClient", TranslationNeeded);
+            Polish.Add("GcDownloadSelectWgClient", TranslationNeeded);
+            French.Add("GcDownloadSelectWgClient", TranslationNeeded);
+            Spanish.Add("GcDownloadSelectWgClient", TranslationNeeded);
+            Russian.Add("GcDownloadSelectWgClient", TranslationNeeded);
+
             //Component: ClientTypeValue
             //Initial value for the Component -> "None" (No current entry)
             English.Add("ClientTypeValue", "None");
@@ -4834,6 +4852,15 @@ namespace RelhaxModpack
             French.Add("GameIDValue", French["ClientTypeValue"]);
             Spanish.Add("GameIDValue", Spanish["ClientTypeValue"]);
             Russian.Add("GameIDValue", Russian["ClientTypeValue"]);
+
+            //Component: GcMissingFiles
+            //
+            English.Add("GcMissingFiles", "Your Client is missing the following xml definition files");
+            German.Add("GcMissingFiles", TranslationNeeded);
+            Polish.Add("GcMissingFiles", TranslationNeeded);
+            French.Add("GcMissingFiles", TranslationNeeded);
+            Spanish.Add("GcMissingFiles", TranslationNeeded);
+            Russian.Add("GcMissingFiles", TranslationNeeded);
 
             //Component: GcDownloadStep2Header
             //
