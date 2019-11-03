@@ -19,13 +19,25 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class GameCenterUpdateDownloader : RelhaxWindow
     {
+
+        private bool init = true;
+
         public GameCenterUpdateDownloader()
         {
             InitializeComponent();
         }
 
+        private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            init = false;
+        }
+
         private void GcDownloadMainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (init)
+                return;
+
             //disable all tabItems but but selected
             foreach(TabItem item in GcDownloadMainTabControl.Items)
             {
