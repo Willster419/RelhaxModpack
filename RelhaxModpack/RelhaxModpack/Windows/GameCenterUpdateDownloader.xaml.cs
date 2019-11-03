@@ -52,6 +52,11 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private void GcDownloadStep1SelectClientButton_Click(object sender, RoutedEventArgs e)
+        {
+            //if client selected, get params
+        }
+
         private void GcDownloadStep1Next_Click(object sender, RoutedEventArgs e)
         {
             GcDownloadMainTabControl.SelectedItem = GcDownloadStep2;
@@ -118,11 +123,6 @@ namespace RelhaxModpack.Windows
         private void GcDownloadStep5Init()
         {
             //stub
-        }
-
-        private void GcDownloadStep1SelectClientButton_Click(object sender, RoutedEventArgs e)
-        {
-            //if client selected, get params
         }
     }
 }
