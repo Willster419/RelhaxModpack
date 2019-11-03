@@ -230,22 +230,38 @@ namespace RelhaxModpack
                 //check if key exists in english (should not be the case 99% of the time)
                 if(English.ContainsKey(componentName))
                 {
-                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}",
+                    Logging.WriteToLog(string.Format("Missing translation: key={0}, value=TODO, language={1}",
                         componentName, ModpackSettings.Language.ToString()), Logfiles.Application, LogLevel.Error);
                     s = English[componentName];
                     if (s.Equals(TranslationNeeded))
                     {
                         //Log error it is todo in english
-                        Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English",
+                        Logging.WriteToLog(string.Format("Missing translation: key={0}, value=TODO, language=English",
                             componentName), Logfiles.Application, LogLevel.Error);
                     }
                 }
                 //Log error it does not exist
-                Logging.WriteToLog(string.Format("component {0} does not exist in any languages",
+                Logging.WriteToLog(string.Format("Translation {0} does not exist in any languages",
                     componentName), Logfiles.Application, LogLevel.Error);
                 s=componentName;
             }
             return s;
+        }
+
+        public static bool Exists(string componentName)
+        {
+            if(CurrentLanguage == null)
+            {
+                Logging.Error("CurrentLanguage is null, using english for default");
+                return Exists(componentName, Languages.English);
+            }
+            if(!CurrentLanguage.ContainsKey(componentName))
+            {
+                Logging.WriteToLog(string.Format("Missing translation: key={0}, value=TODO, language={1}",
+                        componentName, ModpackSettings.Language.ToString()), Logfiles.Application, LogLevel.Error);
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -254,9 +270,8 @@ namespace RelhaxModpack
         /// <param name="componentName">The keyword phrase to check</param>
         /// <param name="languageToCheck">The language dictionary to check in</param>
         /// <returns></returns>
-        public static bool Exists(string componentName, Languages languageToCheck = Languages.English)
+        public static bool Exists(string componentName, Languages languageToCheck)
         {
-            //English will always have the most up to date translations. that's just how it is.
             Dictionary<string, string> DictToCheck = null;
             switch (languageToCheck)
             {
@@ -287,31 +302,24 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="window">The window to apply translations to</param>
         /// <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
-        public static void LocalizeWindow(Window window, bool applyToolTips, bool applyWindowTitle)
+        public static void LocalizeWindow(Window window, bool applyToolTips)
         {
-            if (applyWindowTitle)
+            //apply window title
+            string typeName = window.GetType().Name;
+            if (window is RelhaxWindow && Exists(typeName))
             {
-                string typeName = window.GetType().Name;
-                if (window is RelhaxWindow)
-                {
-                    if (Exists(typeName))
-                    {
-                        window.Title = GetTranslatedString(typeName);
-                    }
-                    else
-                    {
-                        Logging.Warning("Translation requested of window {0} but key for window title does not exist in translations!");
-                    }
-                }
-                else if (window is MainWindow)
-                {
-                    Logging.Debug("MainWindow Title localization skipped");
-                }
-                else
-                {
-                    Logging.Warning("Window type {0} is not of RelhaxWindow but translation requested!", typeName);
-                }
+                window.Title = GetTranslatedString(typeName);
             }
+            else if (window is MainWindow)
+            {
+                Logging.Debug("MainWindow Title localization skipped");
+            }
+            else
+            {
+                Logging.Warning("Window type {0} is not of RelhaxWindow but translation requested, skipping!", typeName);
+                return;
+            }
+
             //Get a list of all visual class controls curently presend and loaded in the window
             List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
             foreach (FrameworkElement v in allWindowControls)
