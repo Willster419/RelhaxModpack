@@ -581,6 +581,17 @@ namespace RelhaxModpack.UIComponents
                             Brush = DarkThemeBackground
                         }
                     }
+                },
+                {
+                    typeof(GameCenterUpdateDownloader), new WindowColorset()
+                    {
+                        WindowType = typeof(GameCenterUpdateDownloader),
+                        BackgroundBrush = new CustomBrush()
+                        {
+                            IsValid = true,
+                            Brush = DarkThemeBackground
+                        }
+                    }
                 }
             }
         };

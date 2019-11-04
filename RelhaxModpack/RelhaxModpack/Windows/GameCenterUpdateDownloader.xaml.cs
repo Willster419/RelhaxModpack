@@ -160,6 +160,11 @@ namespace RelhaxModpack.Windows
                 GameId
             };
 
+            foreach (TabItem item in GcDownloadMainTabControl.Items)
+            {
+                item.Background = UISettings.CurrentTheme.TabItemColorset.BackgroundBrush.Brush;
+            }
+
             Logging.Debug("GameCenterDownloader: SelectedClient = {0}", SelectedClient);
             GcDownloadStep1Init();
             init = false;
@@ -181,6 +186,7 @@ namespace RelhaxModpack.Windows
                 {
                     item.IsEnabled = true;
                 }
+                item.Background = UISettings.CurrentTheme.TabItemColorset.BackgroundBrush.Brush;
             }
         }
 
@@ -421,7 +427,11 @@ namespace RelhaxModpack.Windows
                     Logging.Exception(ex.ToString());
                     Logging.Error("Failed to get WG patch instructions (webClient)");
                     GcDownloadStep3StackPanel.Children.Clear();
-                    GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error")});
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                    {
+                        Text = Translations.GetTranslatedString("error"),
+                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                    });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
                 }
@@ -429,7 +439,11 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Error("Failed to get WG patch instructions (empty string)");
                     GcDownloadStep3StackPanel.Children.Clear();
-                    GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error") });
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                    {
+                        Text = Translations.GetTranslatedString("error"),
+                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                    });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
                 }
@@ -438,7 +452,11 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Error("Failed to get WG patch instructions (XML parse error)");
                     GcDownloadStep3StackPanel.Children.Clear();
-                    GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error") });
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                    {
+                        Text = Translations.GetTranslatedString("error"),
+                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                    });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
                 }
@@ -446,11 +464,15 @@ namespace RelhaxModpack.Windows
 
             //get all file notes
             XmlNodeList fileList = XmlUtils.GetXmlNodesFromXPath(xmlDocument, @"//file");
-            if (fileList.Count == 0)
+            if (fileList == null || fileList.Count == 0)
             {
-                Logging.Error("Failed to get WG patch instructions (empty node list with xpath '//file')");
+                Logging.Info("0 WG patches (empty node list with xpath '//file')");
                 GcDownloadStep3StackPanel.Children.Clear();
-                GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("noFilesUpToDate") });
+                GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                {
+                    Text = Translations.GetTranslatedString("noFilesUpToDate"),
+                    Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                });
                 GcDownloadStep3NextButton.IsEnabled = false;
                 return;
             }
@@ -461,7 +483,11 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Error("Failed to get WG patch instructions (XML parse error of web_seeds)");
                 GcDownloadStep3StackPanel.Children.Clear();
-                GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error") });
+                GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                {
+                    Text = Translations.GetTranslatedString("error"),
+                    Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                });
                 GcDownloadStep3NextButton.IsEnabled = false;
                 return;
             }
@@ -484,7 +510,11 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Error("Failed to get WG patch instructions (XML parse error of nodes in fileList)");
                     GcDownloadStep3StackPanel.Children.Clear();
-                    GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error") });
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                    {
+                        Text = Translations.GetTranslatedString("error"),
+                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                    });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
                 }
@@ -496,7 +526,11 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Error("Failed to get WG patch instructions (XML parse error of nodes in fileList)");
                     GcDownloadStep3StackPanel.Children.Clear();
-                    GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error") });
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                    {
+                        Text = Translations.GetTranslatedString("error"),
+                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                    });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
                 }
@@ -513,7 +547,8 @@ namespace RelhaxModpack.Windows
             {
                 GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                 {
-                    Text = string.Format("File={0}, Size={1}", pfp.Filename, Utils.SizeSuffix(pfp.Size, 1, true, false))
+                    Text = string.Format("File={0}, Size={1}", pfp.Filename, Utils.SizeSuffix(pfp.Size, 1, true, false)),
+                    Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
                 });
             }
             GcDownloadStep3NextButton.IsEnabled = true;

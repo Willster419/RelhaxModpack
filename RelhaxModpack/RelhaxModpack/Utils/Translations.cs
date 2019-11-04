@@ -83,7 +83,9 @@ namespace RelhaxModpack
             //application update notes textbox
             "ApplicationUpdateNotes",
             //xml string forming in color picker
-            "SampleXmlOutputTextbox"
+            "SampleXmlOutputTextbox",
+            //{0} kb of {1} kb
+            "GcDownloadStep4DownloadingSizes"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
@@ -4960,6 +4962,15 @@ namespace RelhaxModpack
             French.Add("GcDownloadStep3NextText", French["next"]);
             Spanish.Add("GcDownloadStep3NextText", Spanish["next"]);
             Russian.Add("GcDownloadStep3NextText", Russian["next"]);
+
+            //Component: GcDownloadStep3NoFilesUpToDate
+            //
+            English.Add("GcDownloadStep3NoFilesUpToDate", "No patch files to download (up to date)");
+            German.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
+            Polish.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
+            French.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
+            Spanish.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
+            Russian.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
 
             //Component: GcDownloadStep4Header
             //
