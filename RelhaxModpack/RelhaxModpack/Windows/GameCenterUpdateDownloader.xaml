@@ -79,7 +79,9 @@
                         <TextBlock x:Name="GcDownloadStep3NextText" Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
                     <TextBlock x:Name="GcDownloadStep3TabDescription" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Getting the list of patch files to download" VerticalAlignment="Top"/>
-                    <StackPanel x:Name="GcDownloadStep3StackPanel" HorizontalAlignment="Left" Height="225" Margin="10,31,0,0" VerticalAlignment="Top" Width="616"/>
+                    <ScrollViewer HorizontalAlignment="Stretch" Margin="10,31,10,35" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Visible" CanContentScroll="True">
+                        <StackPanel x:Name="GcDownloadStep3StackPanel" CanVerticallyScroll="True" ScrollViewer.CanContentScroll="True"/>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
             <TabItem Header="Download Update Files" IsEnabled="False" x:Name="GcDownloadStep4">
@@ -91,9 +93,11 @@
                         <TextBlock x:Name="GcDownloadStep4Next" Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </Button>
                     <TextBlock x:Name="GcDownloadStep4TabDescription" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Downloading the patch files..." VerticalAlignment="Top"/>
-                    <ProgressBar x:Name="GcDownloadStep4SingleFileProgress" HorizontalAlignment="Left" Height="15" Margin="10,83,0,0" VerticalAlignment="Top" Width="616"/>
-                    <ProgressBar x:Name="GcDownloadStep4TotalFileProgress" HorizontalAlignment="Left" Height="15" Margin="10,102,0,0" VerticalAlignment="Top" Width="616"/>
+                    <ProgressBar x:Name="GcDownloadStep4SingleFileProgress" HorizontalAlignment="Left" Height="15" Margin="10,104,0,0" VerticalAlignment="Top" Width="616"/>
+                    <ProgressBar x:Name="GcDownloadStep4TotalFileProgress" HorizontalAlignment="Left" Height="15" Margin="10,124,0,0" VerticalAlignment="Top" Width="616"/>
                     <TextBlock x:Name="GcDownloadStep4DownloadingText" HorizontalAlignment="Left" Margin="10,62,0,0" TextWrapping="Wrap" Text="Downloading patch {0} of {1}: {2}" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="GcDownloadStep4DownloadingSizes" HorizontalAlignment="Left" Margin="10,83,0,0" TextWrapping="Wrap" Text="X kb of Y kb" VerticalAlignment="Top"/>
+                    <Button x:Name="GcDownloadStep4DownloadingCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top" Width="75"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Complete!" IsEnabled="False" x:Name="GcDownloadStep5">

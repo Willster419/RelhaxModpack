@@ -8,10 +8,28 @@ using System.Text;
 using System.Timers;
 using System;
 using System.Diagnostics;
-
+using System.Web;
+using System.Net;
+using System.Xml;
 
 namespace RelhaxModpack.Windows
 {
+    public class GameCenterProperty
+    {
+        public string FileName = string.Empty;
+        public string Xpath = string.Empty;
+        public TextBlock TextBlock = null;
+        public string Value = string.Empty;
+        public bool GaveError = false;
+        public bool IsRequired = true;
+    }
+    public class PatchFileProperty
+    {
+        public string Filename = string.Empty;
+        public string FolderName = string.Empty;
+        public string BaseURL = string.Empty;
+        public ulong Size = 0;
+    }
     /// <summary>
     /// Interaction logic for GameCenterUpdateDownloader.xaml
     /// </summary>
@@ -28,27 +46,14 @@ namespace RelhaxModpack.Windows
 
         public const string WgcProcessName = "wgc";
 
-        public struct GameCenterProperty
-        {
-            public string FileName;
-            public string Xpath;
-            public TextBlock TextBlock;
-            public string Value;
-            public bool GaveError;
-            public bool IsRequired;
-        }
+        
 
         private GameCenterProperty ClientType, Language_, MetadataVersion, MetadataProtocalVersion, ChainID,
-            ClientCurrentVersion, LocaleCurrentVersion, SdContentCurrentVersion, HdContentCurrentVersion, GameId, VersionName;
+            ClientCurrentVersion, LocaleCurrentVersion, SdContentCurrentVersion, HdContentCurrentVersion, GameId;
 
         private GameCenterProperty[] GameCenterProperties = null;
 
-        public struct PatchFileProperty
-        {
-            public string Filename;
-            public string CompleteFilePath;
-            public long Size;
-        }
+        private List<PatchFileProperty> PatchFileProperties = null;
 
         private bool init = true;
 
@@ -144,14 +149,6 @@ namespace RelhaxModpack.Windows
                 FileName = GameInfoXml,
                 Xpath = @"//protocol/game/id",
                 TextBlock = GameIDValue,
-                GaveError = false,
-                IsRequired = true
-            };
-            VersionName = new GameCenterProperty()
-            {
-                FileName = GameInfoXml,
-                Xpath = @"//protocol/game/version_name",
-                TextBlock = null,
                 GaveError = false,
                 IsRequired = true
             };
@@ -317,7 +314,7 @@ namespace RelhaxModpack.Windows
                     else
                     {
                         gameCenterProperty.GaveError = false;
-                        Logging.Warning("Did not get property, but IsRequired=False");
+                        Logging.Warning("Did not get property '{0}, but IsRequired=False", gameCenterProperty.Xpath);
                         if (gameCenterProperty.TextBlock != null)
                         {
                             gameCenterProperty.TextBlock.Text = Translations.GetTranslatedString("none");
@@ -335,6 +332,7 @@ namespace RelhaxModpack.Windows
                         gameCenterProperty.TextBlock.Foreground = System.Windows.Media.Brushes.DarkGreen;
                     }
                 }
+                GameCenterProperties[i] = gameCenterProperty;
             }
 
 
@@ -359,7 +357,7 @@ namespace RelhaxModpack.Windows
                 timer = new Timer(1000);
                 timer.Elapsed += Timer_Elapsed;
             }
-            //timer.Start();
+            timer.Start();
             Timer_Elapsed(null, null);
         }
 
@@ -367,39 +365,221 @@ namespace RelhaxModpack.Windows
         {
             //get list of processes for WG game center
             Process[] processes = Process.GetProcesses().Where(process => process.ProcessName.Equals(WgcProcessName)).ToArray();
-            if(processes.Count() == 0)
+            this.Dispatcher.Invoke(() =>
             {
-                //not running
-                GcDownloadStep2GcStatus.Foreground = System.Windows.Media.Brushes.DarkGreen;
-                GcDownloadStep2GcStatus.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep2GcStatus")
-                    , Translations.GetTranslatedString("GcDownloadStep2GcStatusClosed"));
-                GcDownloadStep2NextButton.IsEnabled = true;
-            }
-            else
-            {
-                //running
-                GcDownloadStep2GcStatus.Foreground = System.Windows.Media.Brushes.Red;
-                GcDownloadStep2GcStatus.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep2GcStatus")
-                    , Translations.GetTranslatedString("GcDownloadStep2GcStatusOpened"));
-                GcDownloadStep2NextButton.IsEnabled = true;
-            }
+                if (processes.Count() == 0)
+                {
+                    //not running
+                    GcDownloadStep2GcStatus.Foreground = System.Windows.Media.Brushes.DarkGreen;
+                    GcDownloadStep2GcStatus.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep2GcStatus")
+                        , Translations.GetTranslatedString("GcDownloadStep2GcStatusClosed"));
+                    GcDownloadStep2NextButton.IsEnabled = true;
+                }
+                else
+                {
+                    //running
+                    GcDownloadStep2GcStatus.Foreground = System.Windows.Media.Brushes.Red;
+                    GcDownloadStep2GcStatus.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep2GcStatus")
+                        , Translations.GetTranslatedString("GcDownloadStep2GcStatusOpened"));
+                    GcDownloadStep2NextButton.IsEnabled = false;
+                }
+            });
         }
 
-        private void GcDownloadStep3Init()
+        private async void GcDownloadStep3Init()
         {
+            GcDownloadStep3NextButton.IsEnabled = false;
             //get patch list info
+            GcDownloadStep3StackPanel.Children.Clear();
+            GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("loading") + "..." });
+
+            //build the get request
+            Logging.Info("Building GET request");
+            StringBuilder requestBuilder = new StringBuilder();
+            requestBuilder.Append("https://wgus-wotna.wargaming.net/api/v1/patches_chain/?protocol_version=1.8");
+            requestBuilder.AppendFormat("&client_type={0}", ClientType.Value);
+            requestBuilder.AppendFormat("&lang={0}", Language_.Value);
+            requestBuilder.AppendFormat("&metadata_version={0}",MetadataVersion.Value);
+            requestBuilder.AppendFormat("&metadata_protocol_version={0}",MetadataProtocalVersion.Value);
+            requestBuilder.AppendFormat("&chain_id={0}",ChainID.Value);
+            requestBuilder.AppendFormat("&installation_id=relhax_update_request");
+            requestBuilder.AppendFormat("&client_current_version={0}",0);//ClientCurrentVersion.Value
+            requestBuilder.AppendFormat("&locale_current_version={0}",0);//LocaleCurrentVersion.Value
+            requestBuilder.AppendFormat("&sdcontent_current_version={0}",0);//SdContentCurrentVersion.Value
+            if (!string.IsNullOrEmpty(HdContentCurrentVersion.Value))
+            {
+                requestBuilder.AppendFormat("&hdcontent_current_version={0}",HdContentCurrentVersion.Value);//HdContentCurrentVersion.Value
+            }
+            requestBuilder.AppendFormat("&game_id={0}",GameId.Value);
+            Logging.Info("Built GET request: {0}", requestBuilder.ToString());
+
+            XmlDocument xmlDocument = null;
+            //download based on request
+            using (WebClient client = new WebClient())
+            {
+                string xmlString = string.Empty;
+                try
+                {
+                    xmlString = await client.DownloadStringTaskAsync(requestBuilder.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex.ToString());
+                    Logging.Error("Failed to get WG patch instructions (webClient)");
+                    GcDownloadStep3StackPanel.Children.Clear();
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error")});
+                    GcDownloadStep3NextButton.IsEnabled = false;
+                    return;
+                }
+                if(string.IsNullOrWhiteSpace(xmlString))
+                {
+                    Logging.Error("Failed to get WG patch instructions (empty string)");
+                    GcDownloadStep3StackPanel.Children.Clear();
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error") });
+                    GcDownloadStep3NextButton.IsEnabled = false;
+                    return;
+                }
+                xmlDocument = XmlUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
+                if(xmlDocument == null)
+                {
+                    Logging.Error("Failed to get WG patch instructions (XML parse error)");
+                    GcDownloadStep3StackPanel.Children.Clear();
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error") });
+                    GcDownloadStep3NextButton.IsEnabled = false;
+                    return;
+                }
+            }
+
+            //get all file notes
+            XmlNodeList fileList = XmlUtils.GetXmlNodesFromXPath(xmlDocument, @"//file");
+            if (fileList.Count == 0)
+            {
+                Logging.Error("Failed to get WG patch instructions (empty node list with xpath '//file')");
+                GcDownloadStep3StackPanel.Children.Clear();
+                GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("noFilesUpToDate") });
+                GcDownloadStep3NextButton.IsEnabled = false;
+                return;
+            }
+
+            //build list of files to download
+            string baseURL = XmlUtils.GetXmlStringFromXPath(xmlDocument, @"//protocol/patches_chain/web_seeds/url");
+            if(string.IsNullOrEmpty(baseURL))
+            {
+                Logging.Error("Failed to get WG patch instructions (XML parse error of web_seeds)");
+                GcDownloadStep3StackPanel.Children.Clear();
+                GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error") });
+                GcDownloadStep3NextButton.IsEnabled = false;
+                return;
+            }
+            Logging.Info("BaseURL parsed as {0}", baseURL);
+
+
+            if (PatchFileProperties == null)
+                PatchFileProperties = new List<PatchFileProperty>();
+            PatchFileProperties.Clear();
+            foreach (XmlNode element in fileList)
+            {
+                PatchFileProperty prop = new PatchFileProperty
+                {
+                    BaseURL = baseURL
+                };
+
+                //size
+                XmlNode node = element.SelectSingleNode(@"size");
+                if(node == null)
+                {
+                    Logging.Error("Failed to get WG patch instructions (XML parse error of nodes in fileList)");
+                    GcDownloadStep3StackPanel.Children.Clear();
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error") });
+                    GcDownloadStep3NextButton.IsEnabled = false;
+                    return;
+                }
+                prop.Size = ulong.Parse(node.InnerText);
+
+                //name
+                node = element.SelectSingleNode(@"name");
+                if (node == null)
+                {
+                    Logging.Error("Failed to get WG patch instructions (XML parse error of nodes in fileList)");
+                    GcDownloadStep3StackPanel.Children.Clear();
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock() { Text = Translations.GetTranslatedString("error") });
+                    GcDownloadStep3NextButton.IsEnabled = false;
+                    return;
+                }
+                prop.Filename = node.InnerText.Split('/')[1];
+                prop.FolderName = node.InnerText.Split('/')[0];
+
+                PatchFileProperties.Add(prop);
+                Logging.Info("Parsed Patch File: Filename={0}, FolderName={1}, Size={2}", prop.Filename, prop.FolderName, prop.Size);
+            }
+
+            //display them to UI
+            GcDownloadStep3StackPanel.Children.Clear();
+            foreach (PatchFileProperty pfp in PatchFileProperties)
+            {
+                GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                {
+                    Text = string.Format("File={0}, Size={1}", pfp.Filename, Utils.SizeSuffix(pfp.Size, 1, true, false))
+                });
+            }
+            GcDownloadStep3NextButton.IsEnabled = true;
         }
 
-        private void GcDownloadStep4Init()
+        private async void GcDownloadStep4Init()
         {
-            //create folder if not exist
+            GcDownloadStep4NextButton.IsEnabled = false;
+            GcDownloadStep4SingleFileProgress.Minimum = 0;
+            GcDownloadStep4SingleFileProgress.Maximum = 100;
+            GcDownloadStep4SingleFileProgress.Value = 0;
+            GcDownloadStep4TotalFileProgress.Minimum = 0;
+            GcDownloadStep4TotalFileProgress.Maximum = PatchFileProperties.Count;
+            GcDownloadStep4TotalFileProgress.Value = 0;
+
+            //create folders if not exist
+            string updatesRoot = Path.Combine(SelectedClient, "updates");
+            List<string> folderNames = PatchFileProperties.Select(pfp => pfp.FolderName).ToList().Distinct().ToList();
+            foreach(string folder in folderNames)
+            {
+                string completePath = Path.Combine(updatesRoot, folder);
+                Logging.Info("Creating path {0} if does not already exists {0}", completePath);
+                if (!Directory.Exists(completePath))
+                    Directory.CreateDirectory(completePath);
+            }
 
             //download patch files to correct location
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadProgressChanged += Client_DownloadProgressChanged;
+                foreach (PatchFileProperty patchFile in PatchFileProperties)
+                {
+                    GcDownloadStep4DownloadingText.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep4DownloadingText"),
+                        GcDownloadStep4TotalFileProgress.Value + 1, PatchFileProperties.Count, patchFile.Filename);
+                    Logging.Info("Downloading patch file {0}", patchFile.Filename);
+                    string completeURL = string.Format("{0}{1}/{2}", patchFile.BaseURL, patchFile.FolderName, patchFile.Filename);
+                    Logging.Info("Download URL is {0}", completeURL);
+                    try
+                    {
+                        await client.DownloadFileTaskAsync(completeURL, Path.Combine(updatesRoot, patchFile.FolderName, patchFile.Filename));
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.Exception(ex.ToString());
+                        GcDownloadStep4DownloadingText.Text = Translations.GetTranslatedString("error");
+                        GcDownloadStep4DownloadingText.Foreground = System.Windows.Media.Brushes.Red;
+                        Logging.Error("Failed to download file {0} using URL {1}", patchFile.Filename, completeURL);
+                    }
+                    GcDownloadStep4TotalFileProgress.Value++;
+                }
+            }
+            GcDownloadStep4DownloadingText.Text = Translations.GetTranslatedString("GcDownloadStep4DownloadComplete");
+            GcDownloadStep4DownloadingText.Foreground = System.Windows.Media.Brushes.DarkGreen;
+            GcDownloadStep4NextButton.IsEnabled = true;
         }
 
-        private void GcDownloadStep5Init()
+        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            //stub
+            GcDownloadStep4SingleFileProgress.Maximum = e.TotalBytesToReceive;
+            GcDownloadStep4SingleFileProgress.Value = e.BytesReceived;
         }
 
         private void GcDownloadStep1Next_Click(object sender, RoutedEventArgs e)
@@ -420,6 +600,8 @@ namespace RelhaxModpack.Windows
             if (timer != null)
                 timer.Stop();
             GcDownloadMainTabControl.SelectedItem = GcDownloadStep3;
+
+            GcDownloadStep3Init();
         }
 
         private void GcDownloadStep3PreviousButton_Click(object sender, RoutedEventArgs e)
@@ -431,11 +613,13 @@ namespace RelhaxModpack.Windows
         private void GcDownloadStep3NextButton_Click(object sender, RoutedEventArgs e)
         {
             GcDownloadMainTabControl.SelectedItem = GcDownloadStep4;
+            GcDownloadStep4Init();
         }
 
         private void GcDownloadStep4PreviousButton_Click(object sender, RoutedEventArgs e)
         {
             GcDownloadMainTabControl.SelectedItem = GcDownloadStep3;
+            GcDownloadStep3Init();
         }
 
         private void GcDownloadStep4NextButton_Click(object sender, RoutedEventArgs e)
