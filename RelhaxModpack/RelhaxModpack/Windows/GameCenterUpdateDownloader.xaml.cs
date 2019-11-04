@@ -522,6 +522,7 @@ namespace RelhaxModpack.Windows
         private async void GcDownloadStep4Init()
         {
             step4DownloadCanceled = false;
+            GcDownloadStep4PreviousButton.IsEnabled = true;
             GcDownloadStep4NextButton.IsEnabled = false;
             GcDownloadStep4SingleFileProgress.Minimum = 0;
             GcDownloadStep4SingleFileProgress.Maximum = 100;
@@ -567,6 +568,8 @@ namespace RelhaxModpack.Windows
                             GcDownloadStep4DownloadingText.Text = Translations.GetTranslatedString("canceled");
                             GcDownloadStep4DownloadingSizes.Text = string.Empty;
                             step4DownloadCanceled = false;
+                            GcDownloadStep4PreviousButton.IsEnabled = true;
+                            GcDownloadStep4NextButton.IsEnabled = false;
                             return;
                         }
                         Logging.Exception(ex.ToString());
@@ -582,6 +585,7 @@ namespace RelhaxModpack.Windows
             GcDownloadStep4DownloadingText.Text = Translations.GetTranslatedString("GcDownloadStep4DownloadComplete");
             GcDownloadStep4DownloadingText.Foreground = System.Windows.Media.Brushes.DarkGreen;
             GcDownloadStep4NextButton.IsEnabled = true;
+            GcDownloadStep4PreviousButton.IsEnabled = false;
         }
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

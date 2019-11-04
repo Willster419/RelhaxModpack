@@ -5015,6 +5015,15 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep4Next", Spanish["next"]);
             Russian.Add("GcDownloadStep4Next", Russian["next"]);
 
+            //Component: GcDownloadStep4DownloadComplete
+            //
+            English.Add("GcDownloadStep4DownloadComplete", "Package downloads complete");
+            German.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+            Polish.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+            French.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+            Spanish.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+            Russian.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+
             //Component: GcDownloadStep5Header
             //
             English.Add("GcDownloadStep5Header", "Complete!");
