@@ -96,8 +96,8 @@
                     <ProgressBar x:Name="GcDownloadStep4SingleFileProgress" HorizontalAlignment="Left" Height="15" Margin="10,104,0,0" VerticalAlignment="Top" Width="616"/>
                     <ProgressBar x:Name="GcDownloadStep4TotalFileProgress" HorizontalAlignment="Left" Height="15" Margin="10,124,0,0" VerticalAlignment="Top" Width="616"/>
                     <TextBlock x:Name="GcDownloadStep4DownloadingText" HorizontalAlignment="Left" Margin="10,62,0,0" TextWrapping="Wrap" Text="Downloading patch {0} of {1}: {2}" VerticalAlignment="Top"/>
-                    <TextBlock x:Name="GcDownloadStep4DownloadingSizes" HorizontalAlignment="Left" Margin="10,83,0,0" TextWrapping="Wrap" Text="X kb of Y kb" VerticalAlignment="Top"/>
-                    <Button x:Name="GcDownloadStep4DownloadingCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top" Width="75"/>
+                    <TextBlock x:Name="GcDownloadStep4DownloadingSizes" HorizontalAlignment="Left" Margin="10,83,0,0" TextWrapping="Wrap" Text="{}{0} kb of {1} kb" VerticalAlignment="Top"/>
+                    <Button x:Name="GcDownloadStep4DownloadingCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top" Width="75" Click="GcDownloadStep4DownloadingCancelButton_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Complete!" IsEnabled="False" x:Name="GcDownloadStep5">

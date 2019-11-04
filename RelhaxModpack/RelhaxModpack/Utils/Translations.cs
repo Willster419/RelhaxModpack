@@ -4979,6 +4979,15 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep4TabDescription", TranslationNeeded);
             Russian.Add("GcDownloadStep4TabDescription", TranslationNeeded);
 
+            //Component: GcDownloadStep4DownloadingCancelButton
+            //
+            English.Add("GcDownloadStep4DownloadingCancelButton", English["cancel"]);
+            German.Add("GcDownloadStep4DownloadingCancelButton", German["cancel"]);
+            Polish.Add("GcDownloadStep4DownloadingCancelButton", Polish["cancel"]);
+            French.Add("GcDownloadStep4DownloadingCancelButton", French["cancel"]);
+            Spanish.Add("GcDownloadStep4DownloadingCancelButton", Spanish["cancel"]);
+            Russian.Add("GcDownloadStep4DownloadingCancelButton", Russian["cancel"]);
+
             //Component: GcDownloadStep4DownloadingText
             //Downloading patch 1 of 2: wg_filename.wgpkg
             English.Add("GcDownloadStep4DownloadingText", "Downloading patch {0} of {1}: {2}");

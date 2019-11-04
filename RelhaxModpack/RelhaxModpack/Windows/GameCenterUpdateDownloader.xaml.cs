@@ -46,22 +46,16 @@ namespace RelhaxModpack.Windows
 
         public const string WgcProcessName = "wgc";
 
-        
-
         private GameCenterProperty ClientType, Language_, MetadataVersion, MetadataProtocalVersion, ChainID,
             ClientCurrentVersion, LocaleCurrentVersion, SdContentCurrentVersion, HdContentCurrentVersion, GameId;
-
         private GameCenterProperty[] GameCenterProperties = null;
-
         private List<PatchFileProperty> PatchFileProperties = null;
-
         private bool init = true;
-
         private string gameInfoXmlPath = string.Empty;
-
         private string metaDataXmlPath = string.Empty;
-
         private Timer timer = null;
+        private WebClient client = null;
+        private bool step4DownloadCanceled = false;
 
         public GameCenterUpdateDownloader()
         {
@@ -403,9 +397,9 @@ namespace RelhaxModpack.Windows
             requestBuilder.AppendFormat("&metadata_protocol_version={0}",MetadataProtocalVersion.Value);
             requestBuilder.AppendFormat("&chain_id={0}",ChainID.Value);
             requestBuilder.AppendFormat("&installation_id=relhax_update_request");
-            requestBuilder.AppendFormat("&client_current_version={0}",0);//ClientCurrentVersion.Value
-            requestBuilder.AppendFormat("&locale_current_version={0}",0);//LocaleCurrentVersion.Value
-            requestBuilder.AppendFormat("&sdcontent_current_version={0}",0);//SdContentCurrentVersion.Value
+            requestBuilder.AppendFormat("&client_current_version={0}", ClientCurrentVersion.Value);//ClientCurrentVersion.Value
+            requestBuilder.AppendFormat("&locale_current_version={0}", LocaleCurrentVersion.Value);//LocaleCurrentVersion.Value
+            requestBuilder.AppendFormat("&sdcontent_current_version={0}", SdContentCurrentVersion.Value);//SdContentCurrentVersion.Value
             if (!string.IsNullOrEmpty(HdContentCurrentVersion.Value))
             {
                 requestBuilder.AppendFormat("&hdcontent_current_version={0}",HdContentCurrentVersion.Value);//HdContentCurrentVersion.Value
@@ -415,7 +409,7 @@ namespace RelhaxModpack.Windows
 
             XmlDocument xmlDocument = null;
             //download based on request
-            using (WebClient client = new WebClient())
+            using (client = new WebClient())
             {
                 string xmlString = string.Empty;
                 try
@@ -527,6 +521,7 @@ namespace RelhaxModpack.Windows
 
         private async void GcDownloadStep4Init()
         {
+            step4DownloadCanceled = false;
             GcDownloadStep4NextButton.IsEnabled = false;
             GcDownloadStep4SingleFileProgress.Minimum = 0;
             GcDownloadStep4SingleFileProgress.Maximum = 100;
@@ -547,7 +542,7 @@ namespace RelhaxModpack.Windows
             }
 
             //download patch files to correct location
-            using (WebClient client = new WebClient())
+            using (client = new WebClient())
             {
                 client.DownloadProgressChanged += Client_DownloadProgressChanged;
                 foreach (PatchFileProperty patchFile in PatchFileProperties)
@@ -556,17 +551,30 @@ namespace RelhaxModpack.Windows
                         GcDownloadStep4TotalFileProgress.Value + 1, PatchFileProperties.Count, patchFile.Filename);
                     Logging.Info("Downloading patch file {0}", patchFile.Filename);
                     string completeURL = string.Format("{0}{1}/{2}", patchFile.BaseURL, patchFile.FolderName, patchFile.Filename);
+                    string completePath = Path.Combine(updatesRoot, patchFile.FolderName, patchFile.Filename);
                     Logging.Info("Download URL is {0}", completeURL);
                     try
                     {
-                        await client.DownloadFileTaskAsync(completeURL, Path.Combine(updatesRoot, patchFile.FolderName, patchFile.Filename));
+                        if (File.Exists(completePath))
+                            File.Delete(completePath);
+                        await client.DownloadFileTaskAsync(completeURL, completePath);
                     }
                     catch (Exception ex)
                     {
+                        if(step4DownloadCanceled)
+                        {
+                            Logging.Info("Successfully processed cancel async");
+                            GcDownloadStep4DownloadingText.Text = Translations.GetTranslatedString("canceled");
+                            GcDownloadStep4DownloadingSizes.Text = string.Empty;
+                            step4DownloadCanceled = false;
+                            return;
+                        }
                         Logging.Exception(ex.ToString());
+                        string temp = ex.GetType().ToString();
                         GcDownloadStep4DownloadingText.Text = Translations.GetTranslatedString("error");
                         GcDownloadStep4DownloadingText.Foreground = System.Windows.Media.Brushes.Red;
                         Logging.Error("Failed to download file {0} using URL {1}", patchFile.Filename, completeURL);
+                        return;
                     }
                     GcDownloadStep4TotalFileProgress.Value++;
                 }
@@ -578,8 +586,18 @@ namespace RelhaxModpack.Windows
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
+            GcDownloadStep4DownloadingSizes.Text = string.Format("{0} {1} {2}", Utils.SizeSuffix((ulong)e.BytesReceived,1,true,false),
+                Translations.GetTranslatedString("of"), Utils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true, false));
             GcDownloadStep4SingleFileProgress.Maximum = e.TotalBytesToReceive;
             GcDownloadStep4SingleFileProgress.Value = e.BytesReceived;
+        }
+
+        private void GcDownloadStep4DownloadingCancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Logging.Info("Processing cancel");
+            step4DownloadCanceled = true;
+            if (client != null)
+                client.CancelAsync();
         }
 
         private void GcDownloadStep1Next_Click(object sender, RoutedEventArgs e)
@@ -632,7 +650,7 @@ namespace RelhaxModpack.Windows
             this.Close();
         }
 
-        private void RelhaxWindow_Closed(object sender, System.EventArgs e)
+        private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
             if (timer != null)
             {
