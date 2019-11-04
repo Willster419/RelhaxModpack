@@ -18,8 +18,10 @@ namespace RelhaxModpack.Windows
     {
         public string FileName = string.Empty;
         public string Xpath = string.Empty;
-        public TextBlock TextBlock = null;
+        public TextBlock ValueBlock = null;
+        public TextBlock KeyBlock = null;
         public string Value = string.Empty;
+        public string GetRequestParamater = string.Empty;
         public bool GaveError = false;
         public bool IsRequired = true;
     }
@@ -46,9 +48,7 @@ namespace RelhaxModpack.Windows
 
         public const string WgcProcessName = "wgc";
 
-        private GameCenterProperty ClientType, Language_, MetadataVersion, MetadataProtocalVersion, ChainID,
-            ClientCurrentVersion, LocaleCurrentVersion, SdContentCurrentVersion, HdContentCurrentVersion, GameId;
-        private GameCenterProperty[] GameCenterProperties = null;
+        private List<GameCenterProperty> GameCenterProperties = null;
         private List<PatchFileProperty> PatchFileProperties = null;
         private bool init = true;
         private string gameInfoXmlPath = string.Empty;
@@ -64,101 +64,6 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //init the game center properties (xml file, xpath, textblock)
-            ClientType = new GameCenterProperty()
-            {
-                FileName = GameInfoXml,
-                Xpath = @"//protocol/game/client_type",
-                TextBlock = ClientTypeValue,
-                GaveError = false,
-                IsRequired = true
-            };
-            Language_ = new GameCenterProperty()
-            {
-                FileName = GameInfoXml,
-                Xpath = @"//protocol/game/localization",
-                TextBlock = LangValue,
-                GaveError = false,
-                IsRequired = true
-            };
-            MetadataVersion = new GameCenterProperty()
-            {
-                FileName = MetaDataXml,
-                Xpath = @"//protocol/version",
-                TextBlock = MetadataVersionValue,
-                GaveError = false,
-                IsRequired = true
-            };
-            MetadataProtocalVersion = new GameCenterProperty()
-            {
-                FileName = MetaDataXml,
-                // //modInfoAlpha.xml/@onlineFolder
-                Xpath = @"//protocol/@version",
-                TextBlock = MetadataProtocolVersionValue,
-                GaveError = false,
-                IsRequired = true
-            };
-            ChainID = new GameCenterProperty()
-            {
-                FileName = MetaDataXml,
-                Xpath = @"//protocol/predefined_section/chain_id",
-                TextBlock = ChainIDValue,
-                GaveError = false,
-                IsRequired = true
-            };
-            ClientCurrentVersion = new GameCenterProperty()
-            {
-                FileName = GameInfoXml,
-                Xpath = @"//protocol/game/part_versions/value[@name='client']",
-                TextBlock = ClientCurrentVersionValue,
-                GaveError = false,
-                IsRequired = true
-            };
-            LocaleCurrentVersion = new GameCenterProperty()
-            {
-                FileName = GameInfoXml,
-                Xpath = @"//protocol/game/part_versions/value[@name='locale']",
-                TextBlock = LocaleCurrentVersionValue,
-                GaveError = false,
-                IsRequired = true
-            };
-            SdContentCurrentVersion = new GameCenterProperty()
-            {
-                FileName = GameInfoXml,
-                Xpath = @"//protocol/game/part_versions/value[@name='sdcontent']",
-                TextBlock = SdContentCurrentVersionValue,
-                GaveError = false,
-                IsRequired = true
-            };
-            HdContentCurrentVersion = new GameCenterProperty()
-            {
-                FileName = GameInfoXml,
-                Xpath = @"//protocol/game/part_versions/value[@name='hdcontent']",
-                TextBlock = HdContentCurrentVersionValue,
-                GaveError = false,
-                IsRequired = false
-            };
-            GameId = new GameCenterProperty()
-            {
-                FileName = GameInfoXml,
-                Xpath = @"//protocol/game/id",
-                TextBlock = GameIDValue,
-                GaveError = false,
-                IsRequired = true
-            };
-            GameCenterProperties = new GameCenterProperty[]
-            {
-                ClientType,
-                Language_,
-                MetadataVersion,
-                MetadataProtocalVersion,
-                ChainID,
-                ClientCurrentVersion,
-                LocaleCurrentVersion,
-                SdContentCurrentVersion,
-                HdContentCurrentVersion,
-                GameId
-            };
 
             foreach (TabItem item in GcDownloadMainTabControl.Items)
             {
@@ -200,24 +105,30 @@ namespace RelhaxModpack.Windows
                 CheckPathExists = true,
                 //https://stackoverflow.com/a/2069090/3128017
                 //Office Files|*.doc;*.xls;*.ppt
-                Filter = "WG Client|WorldOfTanks.exe;WorldOfWarships.exe;WorldOfWarplanes.exe",
+                Filter = "WG Client|WorldOfTanks.*;WorldOfWarships.*;WorldOfWarplanes.*",
                 Multiselect = false,
                 ValidateNames = true,
                 Title = Translations.GetTranslatedString("GcDownloadSelectWgClient")
             };
-            if ((bool)manualWoTFind.ShowDialog() && File.Exists(manualWoTFind.FileName))
+            if ((bool)manualWoTFind.ShowDialog())
             {
+                GcDownloadStep1ResetParams(true, true);
                 SelectedClient = Path.GetDirectoryName(manualWoTFind.FileName);
                 //replace the 'win32' or 'win64' directory with nothing (so removing it)
                 SelectedClient = SelectedClient.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
                 Logging.Info("GameCenterDownloader: Selected install -> {0}", SelectedClient);
+                GcDownloadStep1SetupArray();
+                GcDownloadStep1GetParams();
             }
-
-            GcDownloadStep1Init();
         }
 
         private void GcDownloadStep1Init()
         {
+            if (GameCenterProperties == null)
+                GameCenterProperties = new List<GameCenterProperty>();
+            GameCenterProperties.Clear();
+            GcDownloadStep1KeyValueGrid.Children.Clear();
+
             //if client selected, get params
             //else, reset UI to none
             if (string.IsNullOrWhiteSpace(SelectedClient))
@@ -228,6 +139,7 @@ namespace RelhaxModpack.Windows
             else
             {
                 Logging.Info("SelectedClient is not empty ({0}), attempting to parse get request values",SelectedClient);
+                GcDownloadStep1SetupArray();
                 GcDownloadStep1GetParams();
             }
         }
@@ -244,14 +156,10 @@ namespace RelhaxModpack.Windows
 
             if (resetGameCenterProperties)
             {
-                foreach (GameCenterProperty gameCenterProp in GameCenterProperties)
-                {
-                    if (gameCenterProp.TextBlock != null)
-                    {
-                        gameCenterProp.TextBlock.Text = Translations.GetTranslatedString("none");
-                        gameCenterProp.TextBlock.Foreground = System.Windows.Media.Brushes.Red;
-                    }
-                }
+                if (GameCenterProperties == null)
+                    GameCenterProperties = new List<GameCenterProperty>();
+                GameCenterProperties.Clear();
+                GcDownloadStep1KeyValueGrid.Children.Clear();
             }
 
             //disable next button
@@ -291,10 +199,34 @@ namespace RelhaxModpack.Windows
 
             Logging.Info("All required files found, collecting data for GET request");
             bool gotAllValues = true;
+            GcDownloadStep1KeyValueGrid.Children.Clear();
+
             //loop to get all the params
-            for (int i = 0; i < GameCenterProperties.Length; i++)
+            for (int i = 0; i < GameCenterProperties.Count; i++)
             {
                 GameCenterProperty gameCenterProperty = GameCenterProperties[i];
+
+                gameCenterProperty.KeyBlock = new TextBlock()
+                {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    Text = gameCenterProperty.GetRequestParamater,
+                    Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                };
+                //https://stackoverflow.com/questions/18659435/programmatically-add-label-to-grid
+                Grid.SetColumn(gameCenterProperty.KeyBlock, 0);
+                Grid.SetRow(gameCenterProperty.KeyBlock, i);
+                GcDownloadStep1KeyValueGrid.Children.Add(gameCenterProperty.KeyBlock);
+
+                gameCenterProperty.ValueBlock = new TextBlock()
+                {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch
+                };
+                Grid.SetColumn(gameCenterProperty.ValueBlock, 1);
+                Grid.SetRow(gameCenterProperty.ValueBlock, i);
+                GcDownloadStep1KeyValueGrid.Children.Add(gameCenterProperty.ValueBlock);
+
                 string completeLocationPath = gameCenterProperty.FileName.Equals(GameInfoXml) ? gameInfoXmlPath : metaDataXmlPath;
                 Logging.Info("getting property '{0}' for file {1}", gameCenterProperty.Xpath, gameCenterProperty.FileName);
                 gameCenterProperty.Value = XmlUtils.GetXmlStringFromXPath(completeLocationPath, gameCenterProperty.Xpath);
@@ -304,10 +236,10 @@ namespace RelhaxModpack.Windows
                     {
                         Logging.Error("Failure getting property!");
                         gameCenterProperty.GaveError = true;
-                        if(gameCenterProperty.TextBlock != null)
+                        if(gameCenterProperty.ValueBlock != null)
                         {
-                            gameCenterProperty.TextBlock.Text = Translations.GetTranslatedString("error");
-                            gameCenterProperty.TextBlock.Foreground = System.Windows.Media.Brushes.Red;
+                            gameCenterProperty.ValueBlock.Text = Translations.GetTranslatedString("error");
+                            gameCenterProperty.ValueBlock.Foreground = System.Windows.Media.Brushes.Red;
                         }
                         gotAllValues = false;
                     }
@@ -315,10 +247,10 @@ namespace RelhaxModpack.Windows
                     {
                         gameCenterProperty.GaveError = false;
                         Logging.Warning("Did not get property '{0}, but IsRequired=False", gameCenterProperty.Xpath);
-                        if (gameCenterProperty.TextBlock != null)
+                        if (gameCenterProperty.ValueBlock != null)
                         {
-                            gameCenterProperty.TextBlock.Text = Translations.GetTranslatedString("none");
-                            gameCenterProperty.TextBlock.Foreground = System.Windows.Media.Brushes.Orange;
+                            gameCenterProperty.ValueBlock.Text = Translations.GetTranslatedString("none");
+                            gameCenterProperty.ValueBlock.Foreground = System.Windows.Media.Brushes.Orange;
                         }
                     }
                 }
@@ -326,10 +258,10 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Info("Success getting property!");
                     gameCenterProperty.GaveError = false;
-                    if (gameCenterProperty.TextBlock != null)
+                    if (gameCenterProperty.ValueBlock != null)
                     {
-                        gameCenterProperty.TextBlock.Text = gameCenterProperty.Value;
-                        gameCenterProperty.TextBlock.Foreground = System.Windows.Media.Brushes.DarkGreen;
+                        gameCenterProperty.ValueBlock.Text = gameCenterProperty.Value;
+                        gameCenterProperty.ValueBlock.Foreground = System.Windows.Media.Brushes.DarkGreen;
                     }
                 }
                 GameCenterProperties[i] = gameCenterProperty;
@@ -346,6 +278,190 @@ namespace RelhaxModpack.Windows
                 Logging.Info("Not all GET parameters found!");
                 GcDownloadStep1ResetParams(false, false);
                 return;
+            }
+        }
+
+        private void GcDownloadStep1SetupArray()
+        {
+            string compareID = string.Empty;
+            //common
+            GameCenterProperties.Add(new GameCenterProperty()
+            {
+                FileName = MetaDataXml,
+                Xpath = @"//protocol/@version",
+                GetRequestParamater = "metadata_protocol_version",
+                IsRequired = true
+            });
+            GameCenterProperties.Add(new GameCenterProperty()
+            {
+                FileName = GameInfoXml,
+                Xpath = @"//protocol/game/part_versions/value[@name='client']",
+                GetRequestParamater = "client_current_version",
+                IsRequired = true
+            });
+            GameCenterProperties.Add(new GameCenterProperty()
+            {
+                FileName = GameInfoXml,
+                Xpath = @"//protocol/game/id",
+                GetRequestParamater = "game_id",
+                IsRequired = true
+            });
+            GameCenterProperty idProp = GameCenterProperties[GameCenterProperties.Count - 1];
+            string pathToGameId = Path.Combine(SelectedClient, GameInfoXml);
+            //set wot as default
+            idProp.Value = "wot";
+            if(!File.Exists(pathToGameId))
+            {
+                Logging.Error("xml file {0} does not exist!");
+            }
+            else
+            {
+                idProp.Value = XmlUtils.GetXmlStringFromXPath(pathToGameId, idProp.Xpath);
+                Logging.Info("id processed as {0}", idProp.Value);
+            }
+            GameCenterProperties.Add(new GameCenterProperty()
+            {
+                FileName = GameInfoXml,
+                Xpath = @"//protocol/game/client_type",
+                GetRequestParamater = "client_type",
+                IsRequired = true
+            });
+            GameCenterProperties.Add(new GameCenterProperty()
+            {
+                FileName = GameInfoXml,
+                Xpath = @"//protocol/game/localization",
+                GetRequestParamater = "lang",
+                IsRequired = true
+            });
+            GameCenterProperties.Add(new GameCenterProperty()
+            {
+                FileName = GameInfoXml,
+                Xpath = @"//protocol/game/update_urls/value",
+                GetRequestParamater = "BASE_URL",
+                IsRequired = true
+            });
+
+            //different
+            if (idProp.Value.ToLower().Contains("wot"))
+            {
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = MetaDataXml,
+                    Xpath = @"//protocol/predefined_section/chain_id",
+                    GetRequestParamater = "chain_id",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = MetaDataXml,
+                    Xpath = @"//protocol/version",
+                    GetRequestParamater = "metadata_version",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = GameInfoXml,
+                    Xpath = @"//protocol/game/part_versions/value[@name='locale']",
+                    GetRequestParamater = "locale_current_version",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = GameInfoXml,
+                    Xpath = @"//protocol/game/part_versions/value[@name='sdcontent']",
+                    GetRequestParamater = "sdcontent_current_version",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = GameInfoXml,
+                    Xpath = @"//protocol/game/part_versions/value[@name='hdcontent']",
+                    GetRequestParamater = "hdcontent_current_version",
+                    IsRequired = false
+                });
+            }
+            else if (idProp.Value.ToLower().Contains("wows"))
+            {
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = MetaDataXml,
+                    Xpath = @"//protocol/predefined_section/chain_id",
+                    GetRequestParamater = "chain_id",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = MetaDataXml,
+                    Xpath = @"//protocol/version",
+                    GetRequestParamater = "metadata_version",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = GameInfoXml,
+                    Xpath = @"//protocol/game/part_versions/value[@name='locale']",
+                    GetRequestParamater = "locale_current_version",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = GameInfoXml,
+                    Xpath = @"//protocol/game/part_versions/value[@name='sdcontent']",
+                    GetRequestParamater = "sdcontent_current_version",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = GameInfoXml,
+                    Xpath = @"//protocol/game/part_versions/value[@name='udsound']",
+                    GetRequestParamater = "udsound_current_version",
+                    IsRequired = false
+                });
+            }
+            else if (idProp.Value.ToLower().Contains("wowp"))
+            {
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = MetaDataXml,
+                    Xpath = @"//protocol/chain_id",
+                    GetRequestParamater = "chain_id",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = MetaDataXml,
+                    Xpath = @"//protocol/metadata_version",
+                    GetRequestParamater = "metadata_version",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = GameInfoXml,
+                    Xpath = @"//protocol/game/part_versions/value[@name='wwlocale']",
+                    GetRequestParamater = "wwlocale_current_version",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = GameInfoXml,
+                    Xpath = @"//protocol/game/part_versions/value[@name='content']",
+                    GetRequestParamater = "content_current_version",
+                    IsRequired = true
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = GameInfoXml,
+                    Xpath = @"//protocol/game/part_versions/value[@name='hdcontent']",
+                    GetRequestParamater = "hdcontent_current_version",
+                    IsRequired = false
+                });
+                GameCenterProperties.Add(new GameCenterProperty()
+                {
+                    FileName = GameInfoXml,
+                    Xpath = @"//protocol/game/part_versions/value[@name='tm']",
+                    GetRequestParamater = "tm_current_version",
+                    IsRequired = true
+                });
             }
         }
 
@@ -396,21 +512,30 @@ namespace RelhaxModpack.Windows
             //build the get request
             Logging.Info("Building GET request");
             StringBuilder requestBuilder = new StringBuilder();
-            requestBuilder.Append("https://wgus-wotna.wargaming.net/api/v1/patches_chain/?protocol_version=1.8");
-            requestBuilder.AppendFormat("&client_type={0}", ClientType.Value);
-            requestBuilder.AppendFormat("&lang={0}", Language_.Value);
-            requestBuilder.AppendFormat("&metadata_version={0}",MetadataVersion.Value);
-            requestBuilder.AppendFormat("&metadata_protocol_version={0}",MetadataProtocalVersion.Value);
-            requestBuilder.AppendFormat("&chain_id={0}",ChainID.Value);
-            requestBuilder.AppendFormat("&installation_id=relhax_update_request");
-            requestBuilder.AppendFormat("&client_current_version={0}", ClientCurrentVersion.Value);//ClientCurrentVersion.Value
-            requestBuilder.AppendFormat("&locale_current_version={0}", LocaleCurrentVersion.Value);//LocaleCurrentVersion.Value
-            requestBuilder.AppendFormat("&sdcontent_current_version={0}", SdContentCurrentVersion.Value);//SdContentCurrentVersion.Value
-            if (!string.IsNullOrEmpty(HdContentCurrentVersion.Value))
+            List<GameCenterProperty> baseUrlPropertyList = GameCenterProperties.Where(gc => gc.GetRequestParamater.Equals("BASE_URL")).ToList();
+            if(baseUrlPropertyList == null || baseUrlPropertyList.Count == 0)
             {
-                requestBuilder.AppendFormat("&hdcontent_current_version={0}",HdContentCurrentVersion.Value);//HdContentCurrentVersion.Value
+                Logging.Error("Failed to get WG patch instructions (getting BASE_URL)");
+                GcDownloadStep3StackPanel.Children.Clear();
+                GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                {
+                    Text = Translations.GetTranslatedString("error"),
+                    Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                });
+                GcDownloadStep3NextButton.IsEnabled = false;
+                return;
             }
-            requestBuilder.AppendFormat("&game_id={0}",GameId.Value);
+            GameCenterProperty urlProperty = baseUrlPropertyList[0];
+            requestBuilder.AppendFormat("{0}api/v1/patches_chain/?protocol_version=1.8", urlProperty.Value);
+            foreach(GameCenterProperty gameCenterProperty in GameCenterProperties)
+            {
+                if (string.IsNullOrWhiteSpace(gameCenterProperty.Value) && !gameCenterProperty.IsRequired)
+                    continue;
+                else if (gameCenterProperty.GetRequestParamater.Equals("BASE_URL"))
+                    continue;
+                requestBuilder.AppendFormat("&{0}={1}", gameCenterProperty.GetRequestParamater, gameCenterProperty.Value);
+            }
+            requestBuilder.AppendFormat("&{0}={1}", "installation_id", "relhax_update_request");
             Logging.Info("Built GET request: {0}", requestBuilder.ToString());
 
             XmlDocument xmlDocument = null;
@@ -470,7 +595,7 @@ namespace RelhaxModpack.Windows
                 GcDownloadStep3StackPanel.Children.Clear();
                 GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                 {
-                    Text = Translations.GetTranslatedString("noFilesUpToDate"),
+                    Text = Translations.GetTranslatedString("GcDownloadStep3NoFilesUpToDate"),
                     Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
                 });
                 GcDownloadStep3NextButton.IsEnabled = false;
@@ -650,6 +775,7 @@ namespace RelhaxModpack.Windows
             if (timer != null)
                 timer.Stop();
             GcDownloadMainTabControl.SelectedItem = GcDownloadStep1;
+            GcDownloadStep1Init();
         }
 
         private void GcDownloadStep2NextButton_Click(object sender, RoutedEventArgs e)
@@ -657,7 +783,6 @@ namespace RelhaxModpack.Windows
             if (timer != null)
                 timer.Stop();
             GcDownloadMainTabControl.SelectedItem = GcDownloadStep3;
-
             GcDownloadStep3Init();
         }
 
