@@ -53,7 +53,6 @@ namespace RelhaxModpack
     /// </summary>
     public static class Translations
     {
-        //TODO: when write blacklist check, check if name is blank/null/whitespace!!
         private static readonly string[] TranslationComponentBlacklist = new string[]
         {
             "ApplicationVersionLabel",
@@ -84,7 +83,9 @@ namespace RelhaxModpack
             //application update notes textbox
             "ApplicationUpdateNotes",
             //xml string forming in color picker
-            "SampleXmlOutputTextbox"
+            "SampleXmlOutputTextbox",
+            //{0} kb of {1} kb
+            "GcDownloadStep4DownloadingSizes"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
@@ -214,12 +215,14 @@ namespace RelhaxModpack
                 if(s.Equals(TranslationNeeded))
                 {
                     //Log warning it is todo in selected language
-                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}", componentName, ModpackSettings.Language.ToString()),Logfiles.Application,LogLevel.Error);
+                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}",
+                        componentName, ModpackSettings.Language.ToString()),Logfiles.Application,LogLevel.Error);
                     s = English[componentName];
                     if(s.Equals(TranslationNeeded))
                     {
                         //Log error it is todo in english
-                        Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English", componentName), Logfiles.Application, LogLevel.Error);
+                        Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English",
+                            componentName), Logfiles.Application, LogLevel.Error);
                         s = componentName;
                     }
                 }
@@ -229,19 +232,39 @@ namespace RelhaxModpack
                 //check if key exists in english (should not be the case 99% of the time)
                 if(English.ContainsKey(componentName))
                 {
-                    Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}", componentName, ModpackSettings.Language.ToString()), Logfiles.Application, LogLevel.Error);
+                    Logging.WriteToLog(string.Format("Missing translation: key={0}, value=TODO, language={1}",
+                        componentName, ModpackSettings.Language.ToString()), Logfiles.Application, LogLevel.Error);
                     s = English[componentName];
                     if (s.Equals(TranslationNeeded))
                     {
                         //Log error it is todo in english
-                        Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language=English", componentName), Logfiles.Application, LogLevel.Error);
+                        Logging.WriteToLog(string.Format("Missing translation: key={0}, value=TODO, language=English",
+                            componentName), Logfiles.Application, LogLevel.Error);
                     }
                 }
                 //Log error it does not exist
-                Logging.WriteToLog(string.Format("component {0} does not exist in any languages", componentName), Logfiles.Application, LogLevel.Error);
+                Logging.WriteToLog(string.Format("Translation {0} does not exist in any languages",
+                    componentName), Logfiles.Application, LogLevel.Error);
                 s=componentName;
             }
             return s;
+        }
+
+        public static bool Exists(string componentName, bool logError)
+        {
+            if(CurrentLanguage == null)
+            {
+                Logging.Error("CurrentLanguage is null, using english for default");
+                return Exists(componentName, Languages.English, true);
+            }
+            if(!CurrentLanguage.ContainsKey(componentName))
+            {
+                if(logError)
+                    Logging.WriteToLog(string.Format("Missing translation: key={0}, value=TODO, language={1}",
+                            componentName, ModpackSettings.Language.ToString()), Logfiles.Application, LogLevel.Error);
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -249,10 +272,8 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="componentName">The keyword phrase to check</param>
         /// <param name="languageToCheck">The language dictionary to check in</param>
-        /// <returns></returns>
-        public static bool Exists(string componentName, Languages languageToCheck = Languages.English)
+        public static bool Exists(string componentName, Languages languageToCheck, bool logError)
         {
-            //English will always have the most up to date translations. that's just how it is.
             Dictionary<string, string> DictToCheck = null;
             switch (languageToCheck)
             {
@@ -273,6 +294,123 @@ namespace RelhaxModpack
                     break;
             }
             return DictToCheck.ContainsKey(componentName);
+        }
+        #endregion
+
+        #region Applying Window Translations
+        /// <summary>
+        /// Applies localized text translations for the passed in window
+        /// See the comments in the method for more information
+        /// </summary>
+        /// <param name="window">The window to apply translations to</param>
+        /// <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
+        public static void LocalizeWindow(Window window, bool applyToolTips)
+        {
+            //apply window title
+            string typeName = window.GetType().Name;
+            if (window is RelhaxWindow)
+            {
+                if (Exists(typeName, true))
+                    window.Title = GetTranslatedString(typeName);
+            }
+            else if (window is MainWindow)
+            {
+                Logging.Debug("MainWindow Title localization skipped");
+            }
+            else
+            {
+                Logging.Warning("Window type {0} is not of RelhaxWindow but translation requested, skipping!", typeName);
+                return;
+            }
+
+            //Get a list of all visual class controls curently presend and loaded in the window
+            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
+            foreach (FrameworkElement v in allWindowControls)
+            {
+                TranslateComponent(v, true);
+            }
+        }
+
+
+        private static void TranslateComponent(FrameworkElement frameworkElement, bool applyToolTips)
+        {
+            //check if component name is valid string
+            string componentName = frameworkElement.Name;
+            if (string.IsNullOrWhiteSpace(componentName))
+            {
+                //Logging.WriteToLog("Translation component name is blank", Logfiles.Application, LogLevel.Debug);
+                return;
+            }
+            //first check name is none or on blacklist
+            if (TranslationComponentBlacklist.Contains(componentName))
+            {
+                Logging.WriteToLog(string.Format("Skipping translation of {0}, present in blacklist and consider=true", componentName), Logfiles.Application, LogLevel.Debug);
+                return;
+            }
+            //getting here means that the object is a framework UI element, has a name, and is not on te blacklist. it's safe to translate
+            //use the "is" keyword to be able to apply translations (text is under different properties for each type of visuals)
+            if (frameworkElement is Control control)
+            {
+                //Generic control
+                //headered content controls have a header and content object
+                if (control is HeaderedContentControl headeredContentControl)
+                {
+                    //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
+                    if (headeredContentControl.Header is string)
+                        headeredContentControl.Header = GetTranslatedString(headeredContentControl.Name + "Header");
+                    if (headeredContentControl.Content is string)
+                        headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name);
+                    if (applyToolTips)
+                    {
+                        if (Exists(headeredContentControl.Name + "Description",false))
+                            headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description");
+                    }
+                }
+                //RelhaxHyperlink has text stored at the child textbox
+                else if (control is UIComponents.RelhaxHyperlink link)
+                {
+                    link.Text = GetTranslatedString(componentName);
+                    if (applyToolTips)
+                    {
+                        if (Exists(componentName + "Description",false))
+                            link.ToolTip = GetTranslatedString(componentName + "Description");
+                    }
+                }
+                //content controls have only a heder
+                //NOTE: button is this type
+                else if (control is ContentControl contentControl)
+                {
+                    //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
+                    if (contentControl.Content is string)
+                        contentControl.Content = GetTranslatedString(contentControl.Name);
+                    if (applyToolTips)
+                    {
+                        if (Exists(contentControl.Name + "Description", false))
+                            contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description");
+                    }
+                }
+                //textbox only has string text as input
+                else if (control is TextBox textBox)
+                {
+                    textBox.Text = GetTranslatedString(textBox.Name);
+                    if (applyToolTips)
+                    {
+                        if (Exists(textBox.Name + "Description", false))
+                            textBox.ToolTip = GetTranslatedString(textBox.Name + "Description");
+                    }
+                }
+            }
+            else if (frameworkElement is TextBlock textBlock)
+            {
+                //lightweight block of text that only uses string as it's input. makes it not a control (no content of children property)
+                textBlock.Text = GetTranslatedString(textBlock.Name);
+                //apply tool tips?
+                if (applyToolTips)
+                {
+                    if (Exists(textBlock.Name + "Description", false))
+                        textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description");
+                }
+            }
         }
         #endregion
 
@@ -462,6 +600,15 @@ namespace RelhaxModpack
             French.Add("close", "Fermer");
             Spanish.Add("close", "Cerrar");
             Russian.Add("close", "Закрыть");
+
+            //Component: none
+            //
+            English.Add("none", "None");
+            German.Add("none", "Nichts");
+            Polish.Add("none", "Nic");
+            French.Add("none", "Aucun");
+            Spanish.Add("none", "Ninguna");
+            Russian.Add("none", "Не выбрана");
             #endregion
 
             #region Application messages
@@ -1916,6 +2063,15 @@ namespace RelhaxModpack
             #endregion
 
             #region ModSelectionList
+            //Component: ModSelectionList
+            //
+            English.Add("ModSelectionList", "Selection List");
+            German.Add("ModSelectionList", TranslationNeeded);
+            Polish.Add("ModSelectionList", TranslationNeeded);
+            French.Add("ModSelectionList", TranslationNeeded);
+            Spanish.Add("ModSelectionList", TranslationNeeded);
+            Russian.Add("ModSelectionList", TranslationNeeded);
+
             //Component: ContinueButtonLabel
             //
             English.Add("ContinueButtonLabel", "Install");
@@ -2282,6 +2438,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Application Update Window
+            //Component: VersionInfo
+            //
+            English.Add("VersionInfo", "Application Update");
+            German.Add("VersionInfo", TranslationNeeded);
+            Polish.Add("VersionInfo", TranslationNeeded);
+            French.Add("VersionInfo", TranslationNeeded);
+            Spanish.Add("VersionInfo", TranslationNeeded);
+            Russian.Add("VersionInfo", TranslationNeeded);
+
             //Component: VersionInfoYesButton
             //
             English.Add("VersionInfoYesButton", "Yes");
@@ -2293,7 +2458,7 @@ namespace RelhaxModpack
 
             //Component: VersionInfoNoButton
             //
-            English.Add("VersionInfoNoButton", "no");
+            English.Add("VersionInfoNoButton", "No");
             German.Add("VersionInfoNoButton", "nein");
             Polish.Add("VersionInfoNoButton", "Nie");
             French.Add("VersionInfoNoButton", "Non");
@@ -3217,6 +3382,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Install finished window
+            //Component: InstallFinished
+            //
+            English.Add("InstallFinished", "Install Finished");
+            German.Add("InstallFinished", TranslationNeeded);
+            Polish.Add("InstallFinished", TranslationNeeded);
+            French.Add("InstallFinished", TranslationNeeded);
+            Spanish.Add("InstallFinished", TranslationNeeded);
+            Russian.Add("InstallFinished", TranslationNeeded);
+
             //Component: InstallationCompleteText
             //
             English.Add("InstallationCompleteText", "The Installation is complete. Would you like to...");
@@ -3292,6 +3466,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Diagnostics
+            //Component: Diagnostics
+            //
+            English.Add("Diagnostics", "Diagnostics");
+            German.Add("Diagnostics", TranslationNeeded);
+            Polish.Add("Diagnostics", TranslationNeeded);
+            French.Add("Diagnostics", TranslationNeeded);
+            Spanish.Add("Diagnostics", TranslationNeeded);
+            Russian.Add("Diagnostics", TranslationNeeded);
+
             //Component: MainTextBox
             //
             English.Add("DiagnosticsMainTextBox", "You can use the options below to try to diagnose or solve the issues you are having.");
@@ -3564,6 +3747,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Add zip files Dialog
+            //Component: AddPicturesZip
+            //
+            English.Add("AddPicturesZip", "Add files to zip");
+            German.Add("AddPicturesZip", TranslationNeeded);
+            Polish.Add("AddPicturesZip", TranslationNeeded);
+            French.Add("AddPicturesZip", TranslationNeeded);
+            Spanish.Add("AddPicturesZip", TranslationNeeded);
+            Russian.Add("AddPicturesZip", TranslationNeeded);
+
             //Component: DiagnosticsAddSelectionsPicturesLabel
             //the message when the UISettings.xml file is parsed and the custom theme is loaded
             English.Add("DiagnosticsAddSelectionsPicturesLabel", "Add any additional files here (your selection file, picture, etc.)");
@@ -3611,6 +3803,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Preview Window
+            //Component: Preview
+            //
+            English.Add("Preview", "Preview");
+            German.Add("Preview", TranslationNeeded);
+            Polish.Add("Preview", TranslationNeeded);
+            French.Add("Preview", TranslationNeeded);
+            Spanish.Add("Preview", TranslationNeeded);
+            Russian.Add("Preview", TranslationNeeded);
+
             //Component: noDescription
             //
             English.Add("noDescription", "No description provided");
@@ -3759,6 +3960,42 @@ namespace RelhaxModpack
             #endregion
 
             #region Advanced Installer Window
+            //Component: AdvancedProgress
+            //
+            English.Add("AdvancedProgress", "Advanced Installer Progress");
+            German.Add("AdvancedProgress", TranslationNeeded);
+            Polish.Add("AdvancedProgress", TranslationNeeded);
+            French.Add("AdvancedProgress", TranslationNeeded);
+            Spanish.Add("AdvancedProgress", TranslationNeeded);
+            Russian.Add("AdvancedProgress", TranslationNeeded);
+
+            //Component: PreInstallTabHeader
+            //
+            English.Add("PreInstallTabHeader", "Pre-install tasks");
+            German.Add("PreInstallTabHeader", TranslationNeeded);
+            Polish.Add("PreInstallTabHeader", TranslationNeeded);
+            French.Add("PreInstallTabHeader", TranslationNeeded);
+            Spanish.Add("PreInstallTabHeader", TranslationNeeded);
+            Russian.Add("PreInstallTabHeader", TranslationNeeded);
+
+            //Component: ExtractionTabHeader
+            //
+            English.Add("ExtractionTabHeader", "Extraction");
+            German.Add("ExtractionTabHeader", TranslationNeeded);
+            Polish.Add("ExtractionTabHeader", TranslationNeeded);
+            French.Add("ExtractionTabHeader", TranslationNeeded);
+            Spanish.Add("ExtractionTabHeader", TranslationNeeded);
+            Russian.Add("ExtractionTabHeader", TranslationNeeded);
+
+            //Component: PostInstallTabHeader
+            //
+            English.Add("PostInstallTabHeader", "Post-install tasks");
+            German.Add("PostInstallTabHeader", TranslationNeeded);
+            Polish.Add("PostInstallTabHeader", TranslationNeeded);
+            French.Add("PostInstallTabHeader", TranslationNeeded);
+            Spanish.Add("PostInstallTabHeader", TranslationNeeded);
+            Russian.Add("PostInstallTabHeader", TranslationNeeded);
+
             //Component: AdvancedInstallBackupMods
             //
             English.Add("AdvancedInstallBackupMods", "Backup current installation");
@@ -3897,6 +4134,15 @@ namespace RelhaxModpack
             #endregion
 
             #region News Viewer
+            //Component: NewsViewer
+            //
+            English.Add("NewsViewer", "News Viewer");
+            German.Add("NewsViewer", TranslationNeeded);
+            Polish.Add("NewsViewer", TranslationNeeded);
+            French.Add("NewsViewer", TranslationNeeded);
+            Spanish.Add("NewsViewer", TranslationNeeded);
+            Russian.Add("NewsViewer", TranslationNeeded);
+
             //Component: application_Update_TabHeader
             //
             English.Add("application_Update_TabHeader", "Application");
@@ -3926,17 +4172,35 @@ namespace RelhaxModpack
             #endregion
 
             #region Loading Window
+            //Component: ProgressIndicator
+            //
+            English.Add("ProgressIndicator", "Loading");
+            German.Add("ProgressIndicator", TranslationNeeded);
+            Polish.Add("ProgressIndicator", TranslationNeeded);
+            French.Add("ProgressIndicator", TranslationNeeded);
+            Spanish.Add("ProgressIndicator", TranslationNeeded);
+            Russian.Add("ProgressIndicator", TranslationNeeded);
+
             //Component: LoadingHeader
             //
             English.Add("LoadingHeader", "Loading, please wait");
             German.Add("LoadingHeader", "Lade, bitte warten");
-            Polish.Add("LoadingHeader", "Wczytywanie, proszę czekać...");
+            Polish.Add("LoadingHeader", "Wczytywanie, proszę czekać");
             French.Add("LoadingHeader", "Chargement, veuillez patienter");
             Spanish.Add("LoadingHeader", "Cargando, por favor espere");
-            Russian.Add("LoadingHeader", "Загрузка, пожалуйста, подождите...");
+            Russian.Add("LoadingHeader", "Загрузка, пожалуйста, подождите");
             #endregion
 
             #region First Load acks (yes i wrote that to avoid spelling the whole thing cause I may not know how even enough for auto correct to fix it)
+            //Component: FirstLoadAcknowledgments
+            //
+            English.Add("FirstLoadAcknowledgments", "First Load Acknowledgements");
+            German.Add("FirstLoadAcknowledgments", TranslationNeeded);
+            Polish.Add("FirstLoadAcknowledgments", TranslationNeeded);
+            French.Add("FirstLoadAcknowledgments", TranslationNeeded);
+            Spanish.Add("FirstLoadAcknowledgments", TranslationNeeded);
+            Russian.Add("FirstLoadAcknowledgments", TranslationNeeded);
+
             //Component: AgreementLicense
             //
             English.Add("AgreementLicense", "I have read and agree to the ");
@@ -4043,6 +4307,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Export Mode
+            //Component: ExportModeSelect
+            //
+            English.Add("ExportModeSelect", "Select WoT client for export");
+            German.Add("ExportModeSelect", TranslationNeeded);
+            Polish.Add("ExportModeSelect", TranslationNeeded);
+            French.Add("ExportModeSelect", TranslationNeeded);
+            Spanish.Add("ExportModeSelect", TranslationNeeded);
+            Russian.Add("ExportModeSelect", TranslationNeeded);
+
             //Component: selectLocationToExport
             //
             English.Add("selectLocationToExport", "Select the folder to export the mod installation into");
@@ -4099,6 +4372,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Asking to close WoT
+            //Component: AskCloseWoT
+            //
+            English.Add("AskCloseWoT", "WoT is Running");
+            German.Add("AskCloseWoT", TranslationNeeded);
+            Polish.Add("AskCloseWoT", TranslationNeeded);
+            French.Add("AskCloseWoT", TranslationNeeded);
+            Spanish.Add("AskCloseWoT", TranslationNeeded);
+            Russian.Add("AskCloseWoT", TranslationNeeded);
+
             //Component: WoTRunningTitle
             //
             English.Add("WoTRunningTitle", "WoT is Running");
@@ -4146,6 +4428,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Scaling Confirmation
+            //Component: ScalingConfirmation
+            //
+            English.Add("ScalingConfirmation", "Scaling Confirmation");
+            German.Add("ScalingConfirmation", TranslationNeeded);
+            Polish.Add("ScalingConfirmation", TranslationNeeded);
+            French.Add("ScalingConfirmation", TranslationNeeded);
+            Spanish.Add("ScalingConfirmation", TranslationNeeded);
+            Russian.Add("ScalingConfirmation", TranslationNeeded);
+
             //Component: ScalingConfirmationHeader
             //
             English.Add("ScalingConfirmationHeader", "The scaling value has changed. Would you like to keep it?");
@@ -4184,6 +4475,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Color Picker
+            //Component: RelhaxColorPicker
+            //
+            English.Add("RelhaxColorPicker", "Color Picker");
+            German.Add("RelhaxColorPicker", TranslationNeeded);
+            Polish.Add("RelhaxColorPicker", TranslationNeeded);
+            French.Add("RelhaxColorPicker", TranslationNeeded);
+            Spanish.Add("RelhaxColorPicker", TranslationNeeded);
+            Russian.Add("RelhaxColorPicker", TranslationNeeded);
+
             //Component: ColorType
             //
             English.Add("ColorType", "Brush type");
@@ -4213,12 +4513,12 @@ namespace RelhaxModpack
 
             //Component: MainColorAlpha
             //
-            English.Add("MainColorAlpha", "Transparency");
-            German.Add("MainColorAlpha", "Transparenz");
-            Polish.Add("MainColorAlpha", "Widoczność");
+            English.Add("MainColorAlpha", "Alpha");
+            German.Add("MainColorAlpha", TranslationNeeded);
+            Polish.Add("MainColorAlpha", TranslationNeeded);
             French.Add("MainColorAlpha", TranslationNeeded);
-            Spanish.Add("MainColorAlpha", "Transparencia");
-            Russian.Add("MainColorAlpha", "Прозрачность");
+            Spanish.Add("MainColorAlpha", TranslationNeeded);
+            Russian.Add("MainColorAlpha", TranslationNeeded);
 
             //Component: MainColorRed
             //
@@ -4258,12 +4558,12 @@ namespace RelhaxModpack
 
             //Component: TextColorAlpha
             //
-            English.Add("TextColorAlpha", "Widoczność");
-            German.Add("TextColorAlpha", "Transparenz");
-            Polish.Add("TextColorAlpha", "Widoczność");
+            English.Add("TextColorAlpha", "Alpha");
+            German.Add("TextColorAlpha", TranslationNeeded);
+            Polish.Add("TextColorAlpha", TranslationNeeded);
             French.Add("TextColorAlpha", TranslationNeeded);
-            Spanish.Add("TextColorAlpha", "Transparencia");
-            Russian.Add("TextColorAlpha", "Прозрачность");
+            Spanish.Add("TextColorAlpha", TranslationNeeded);
+            Russian.Add("TextColorAlpha", TranslationNeeded);
 
             //Component: TextColorRed
             //
@@ -4303,12 +4603,12 @@ namespace RelhaxModpack
 
             //Component: SecondColorAlpha
             //
-            English.Add("SecondColorAlpha", "Transparency");
-            German.Add("SecondColorAlpha", "Transparenz");
-            Polish.Add("SecondColorAlpha", "Widoczność");
+            English.Add("SecondColorAlpha", "Alpha");
+            German.Add("SecondColorAlpha", TranslationNeeded);
+            Polish.Add("SecondColorAlpha", TranslationNeeded);
             French.Add("SecondColorAlpha", TranslationNeeded);
-            Spanish.Add("SecondColorAlpha", "Transparencia");
-            Russian.Add("SecondColorAlpha", "Прозрачность");
+            Spanish.Add("SecondColorAlpha", TranslationNeeded);
+            Russian.Add("SecondColorAlpha", TranslationNeeded);
 
             //Component: SecondColorRed
             //
@@ -4404,7 +4704,7 @@ namespace RelhaxModpack
             #region Game Center download utility
             //Component: GameCenterUpdateDownloader
             //Application window title
-            English.Add("GameCenterUpdateDownloader", "Game Center Update Downloaded");
+            English.Add("GameCenterUpdateDownloader", "Game Center Update Downloader");
             German.Add("GameCenterUpdateDownloader", TranslationNeeded);
             Polish.Add("GameCenterUpdateDownloader", "Aktualizacja Game Center pobrana");
             French.Add("GameCenterUpdateDownloader", TranslationNeeded);
@@ -4455,6 +4755,15 @@ namespace RelhaxModpack
             French.Add("GcDownloadStep1NextText", French["next"]);
             Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
             Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+
+            //Component: GcDownloadSelectWgClient
+            //
+            English.Add("GcDownloadSelectWgClient", "Select WG Client");
+            German.Add("GcDownloadSelectWgClient", TranslationNeeded);
+            Polish.Add("GcDownloadSelectWgClient", TranslationNeeded);
+            French.Add("GcDownloadSelectWgClient", TranslationNeeded);
+            Spanish.Add("GcDownloadSelectWgClient", TranslationNeeded);
+            Russian.Add("GcDownloadSelectWgClient", TranslationNeeded);
 
             //Component: ClientTypeValue
             //Initial value for the Component -> "None" (No current entry)
@@ -4545,6 +4854,15 @@ namespace RelhaxModpack
             French.Add("GameIDValue", French["ClientTypeValue"]);
             Spanish.Add("GameIDValue", Spanish["ClientTypeValue"]);
             Russian.Add("GameIDValue", Russian["ClientTypeValue"]);
+
+            //Component: GcMissingFiles
+            //
+            English.Add("GcMissingFiles", "Your Client is missing the following xml definition files");
+            German.Add("GcMissingFiles", TranslationNeeded);
+            Polish.Add("GcMissingFiles", TranslationNeeded);
+            French.Add("GcMissingFiles", TranslationNeeded);
+            Spanish.Add("GcMissingFiles", TranslationNeeded);
+            Russian.Add("GcMissingFiles", TranslationNeeded);
 
             //Component: GcDownloadStep2Header
             //
@@ -4645,6 +4963,15 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep3NextText", Spanish["next"]);
             Russian.Add("GcDownloadStep3NextText", Russian["next"]);
 
+            //Component: GcDownloadStep3NoFilesUpToDate
+            //
+            English.Add("GcDownloadStep3NoFilesUpToDate", "No patch files to download (up to date)");
+            German.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
+            Polish.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
+            French.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
+            Spanish.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
+            Russian.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
+
             //Component: GcDownloadStep4Header
             //
             English.Add("GcDownloadStep4Header", "Download Update Files");
@@ -4662,6 +4989,15 @@ namespace RelhaxModpack
             French.Add("GcDownloadStep4TabDescription", TranslationNeeded);
             Spanish.Add("GcDownloadStep4TabDescription", TranslationNeeded);
             Russian.Add("GcDownloadStep4TabDescription", TranslationNeeded);
+
+            //Component: GcDownloadStep4DownloadingCancelButton
+            //
+            English.Add("GcDownloadStep4DownloadingCancelButton", English["cancel"]);
+            German.Add("GcDownloadStep4DownloadingCancelButton", German["cancel"]);
+            Polish.Add("GcDownloadStep4DownloadingCancelButton", Polish["cancel"]);
+            French.Add("GcDownloadStep4DownloadingCancelButton", French["cancel"]);
+            Spanish.Add("GcDownloadStep4DownloadingCancelButton", Spanish["cancel"]);
+            Russian.Add("GcDownloadStep4DownloadingCancelButton", Russian["cancel"]);
 
             //Component: GcDownloadStep4DownloadingText
             //Downloading patch 1 of 2: wg_filename.wgpkg
@@ -4690,6 +5026,15 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep4Next", Spanish["next"]);
             Russian.Add("GcDownloadStep4Next", Russian["next"]);
 
+            //Component: GcDownloadStep4DownloadComplete
+            //
+            English.Add("GcDownloadStep4DownloadComplete", "Package downloads complete");
+            German.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+            Polish.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+            French.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+            Spanish.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+            Russian.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+
             //Component: GcDownloadStep5Header
             //
             English.Add("GcDownloadStep5Header", "Complete!");
@@ -4701,9 +5046,9 @@ namespace RelhaxModpack
 
             //Component: GcDownloadStep5TabDescription
             //
-            English.Add("GcDownloadStep5TabDescription", "Game");
+            English.Add("GcDownloadStep5TabDescription", "The process is complete! The game center should detect the files when opened.");
             German.Add("GcDownloadStep5TabDescription", TranslationNeeded);
-            Polish.Add("GcDownloadStep5TabDescription", "Graj"); // ASSUMED: "Game!" as "Play!", imperative.
+            Polish.Add("GcDownloadStep5TabDescription", TranslationNeeded); // ASSUMED: "Game!" as "Play!", imperative.
             French.Add("GcDownloadStep5TabDescription", TranslationNeeded);
             Spanish.Add("GcDownloadStep5TabDescription", TranslationNeeded);
             Russian.Add("GcDownloadStep5TabDescription", TranslationNeeded);
@@ -4732,128 +5077,5 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Applying Window Translations
-        /// <summary>
-        /// Applies localized text translations for the passed in window
-        /// See the comments in the method for more information
-        /// </summary>
-        /// <param name="window">The window to apply translations to</param>
-        /// <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
-        public static void LocalizeWindow(Window window, bool applyToolTips, bool applyWindowTitle)
-        {
-            if (applyWindowTitle)
-            {
-                string typeName = window.GetType().Name;
-                if (window is RelhaxWindow)
-                {
-                    if (Exists(typeName))
-                    {
-                        window.Title = GetTranslatedString(typeName);
-                    }
-                    else
-                    {
-                        Logging.Warning("Translation requested of window {0} but key for window title does not exist in translations!");
-                    }
-                }
-                else if (window is MainWindow)
-                {
-                    Logging.Debug("MainWindow Title localization skipped");
-                }
-                else
-                {
-                    Logging.Warning("Window type {0} is not of RelhaxWindow but translation requested!", typeName);
-                }
-            }
-            //Get a list of all visual class controls curently presend and loaded in the window
-            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
-            foreach(FrameworkElement v in allWindowControls)
-            {
-                TranslateComponent(v, true);
-            }
-        }
-
-
-        private static void TranslateComponent(FrameworkElement frameworkElement, bool applyToolTips)
-        {
-            //TODO: pass in the object itself so now we can consider blacklist correcly and only apply when we should
-            //first check name is none or on blacklist
-            string componentName = frameworkElement.Name;
-            if (string.IsNullOrWhiteSpace(componentName))
-            {
-                //log debug translation component is blank null
-                //Logging.WriteToLog("Translation component name is blank", Logfiles.Application, LogLevel.Debug);
-                return;
-            }
-            if (TranslationComponentBlacklist.Contains(componentName))
-            {
-                Logging.WriteToLog(string.Format("Skipping translation of {0}, present in blacklist and consider=true", componentName), Logfiles.Application, LogLevel.Debug);
-                return;
-            }
-            //getting here means that the object is a framework UI element, has a name, and is not on te blacklist. it's safe to translate
-            //use the "is" keyword to be able to apply translations (text is under different properties for each type of visuals)
-            if (frameworkElement is Control control)
-            {
-                //Generic control
-                //headered content controls have a header and content object
-                if (control is HeaderedContentControl headeredContentControl)
-                {
-                    //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
-                    if (headeredContentControl.Header is string)
-                        headeredContentControl.Header = GetTranslatedString(headeredContentControl.Name + "Header");
-                    if (headeredContentControl.Content is string)
-                        headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name);
-                    if (applyToolTips)
-                    {
-                        if(Exists(headeredContentControl.Name + "Description"))
-                            headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description");
-                    }
-                }
-                //RelhaxHyperlink has text stored at the child textbox
-                else if (control is UIComponents.RelhaxHyperlink link)
-                {
-                    link.Text = GetTranslatedString(componentName);
-                    if (applyToolTips)
-                    {
-                        if (Exists(componentName + "Description"))
-                            link.ToolTip = GetTranslatedString(componentName + "Description");
-                    }
-                }
-                //content controls have only a heder
-                //NOTE: button is this type
-                else if (control is ContentControl contentControl)
-                {
-                    //ALWAYS make sure that the header and content are of type string BEFORE over-writing! (what if it is an image?)
-                    if (contentControl.Content is string)
-                        contentControl.Content = GetTranslatedString(contentControl.Name);
-                    if (applyToolTips)
-                    {
-                        if (Exists(contentControl.Name + "Description"))
-                            contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description");
-                    }
-                }
-                //textbox only has string text as input
-                else if (control is TextBox textBox)
-                {
-                    textBox.Text = GetTranslatedString(textBox.Name);
-                    if (applyToolTips)
-                    {
-                        if (Exists(textBox.Name + "Description"))
-                            textBox.ToolTip = GetTranslatedString(textBox.Name + "Description");
-                    }
-                }
-            }
-            else if (frameworkElement is TextBlock textBlock)
-            {
-                //lightweight block of text that only uses string as it's input. makes it not a control (no content of children property)
-                textBlock.Text = GetTranslatedString(textBlock.Name);
-                //apply tool tips?
-                if (applyToolTips)
-                {
-                    if (Exists(textBlock.Name + "Description"))
-                        textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description");
-                }
-            }
-        }
-        #endregion
     }
 }
