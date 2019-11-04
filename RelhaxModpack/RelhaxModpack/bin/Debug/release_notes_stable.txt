@@ -1,3 +1,13 @@
+Application version 0.29.4.0 (2019-11-3)
+https://www.virustotal.com/gui/file/777576f3d9be22a484a79689193bdc7f8d3c42a7a56587953b6329e88e456bc1/detection
+- Added new feature in diagnostics. You can now use the diagnostics window to download game center updates for any WG Game Center without peer-to-peer.
+- This enables those who are on univeristy networks (or do not wish to use peer-to-peer networking) to download updates via HTTP from the WG update servers.
+- Added task bar progress for Windows 10 and 8.1 users (and Windows 7 users using Aero).
+- Fixed issues and improved logging of Translations.LocalizeWindow() and Exists() methods.
+- Re-worked application deployment process so others on github who fork/clone the repo can build.
+- Updated translation entries.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.3.7 (2019-10-28)
 https://www.virustotal.com/gui/file/6e4f841d5d9bd1b028a5b2692a657214ae7ceddbc1084f5af586c3c5bbc2b7dc/detection
 - FINALLY fixed the intermidant issue of contour icon atlas creation failing randomly.
