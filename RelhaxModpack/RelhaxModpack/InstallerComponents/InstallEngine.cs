@@ -637,18 +637,32 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.Info("...skipped");
 
             //backup the last installed log file
+            //note this does not need to be done above this step
             string logsFilepath = Path.Combine(Settings.WoTDirectory, "logs");
             string backupInstallLogfile = Path.Combine(logsFilepath, Logging.InstallLogFilenameBackup);
             string installLogfile = Path.Combine(logsFilepath, Logging.InstallLogFilename);
+            //make the "logs" folder if it does not alredy exist
             if (!Directory.Exists(logsFilepath))
                 Directory.CreateDirectory(logsFilepath);
+            //delete the backup
             if (File.Exists(backupInstallLogfile))
                 Utils.FileDelete(backupInstallLogfile);
+            //move current to backup
             if (File.Exists(installLogfile))
                 File.Move(installLogfile, backupInstallLogfile);
 
             //start the logfile for the installer
-            Logging.Init(Logfiles.Installer, installLogfile);
+            if(!Logging.Init(Logfiles.Installer, installLogfile))
+            {
+                Logging.Error("Failed to init application installer log file at {0}", installLogfile);
+                return InstallFinishedArgs;
+            }
+
+            //write time and database version
+            string databaseHeader = string.Format("Database Version: {0}{1}", Settings.DatabaseVersion, Environment.NewLine);
+            string dateTimeHeader = string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */{1}", DateTime.Now, Environment.NewLine);
+            Logging.Installer(databaseHeader);
+            Logging.Installer(dateTimeHeader);
 
             //step 6: extract mods
             OldTime = InstallStopWatch.Elapsed;

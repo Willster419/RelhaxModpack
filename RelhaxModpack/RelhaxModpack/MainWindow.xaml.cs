@@ -1123,27 +1123,39 @@ namespace RelhaxModpack
                     }
 
                     //if the user wants to, check if the database has actually changed
-                    if (ModpackSettings.NotifyIfSameDatabase)
+                    if (ModpackSettings.NotifyIfSameDatabase && ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Stable)
                     {
+                        Logging.Info("NotifyIfSameDatabase is true and databaseDistroVersion is stable, checking if last installed database is the same as current");
                         //get the install log for last installed database version
-                        string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", "installedRelhaxFiles.log");
+                        string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename);
                         if (File.Exists(installedfilesLogPath))
                         {
                             //use index 0 of array, index 18 of string array
-                            string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0].Substring(18).Trim();
+                            string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0];
+                            Logging.Debug("lastInstalledDatabaseVersion (pre trim): {0}", lastInstalledDatabaseVersion);
+                            if(!string.IsNullOrWhiteSpace(lastInstalledDatabaseVersion) && lastInstalledDatabaseVersion.Length >=18)
+                                lastInstalledDatabaseVersion = lastInstalledDatabaseVersion.Substring(18).Trim();
+                            Logging.Debug("lastInstalledDatabaseVersion (post trim): {0}", lastInstalledDatabaseVersion);
                             if (Settings.DatabaseVersion.Equals(lastInstalledDatabaseVersion))
                             {
                                 if (MessageBox.Show(Translations.GetTranslatedString("DatabaseVersionsSameBody"), Translations.GetTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
                                 {
+                                    Logging.Info("User selected to not install");
                                     ToggleUIButtons(true);
                                     return;
                                 }
+                                else
+                                    Logging.Info("User selected to install anyways");
                             }
                         }
                         else
                         {
                             Logging.Warning("installedRelhaxFiles.log does not exist, cannot notify if same database");
                         }
+                    }
+                    else if(ModpackSettings.NotifyIfSameDatabase)
+                    {
+                        Logging.Warning("NotifyIfSameDatabase is selected but invalid database distribution! {0}", ModpackSettings.DatabaseDistroVersion.ToString());
                     }
                 }
             }
