@@ -122,7 +122,7 @@
                             <TextBlock x:Name="SaveLastInstallText" Text="Save mod selection of last installation" TextWrapping="Wrap"/>
                         </CheckBox>
                         <CheckBox x:Name="NotifyIfSameDatabaseCB" Tag="NotifyIfSameDatabaseCB"  Click="OnInformIfNoNewDatabaseChanged">
-                            <TextBlock x:Name="NotifyIfSameDatabaseText" Text="Inform if no new database available" TextWrapping="Wrap"/>
+                            <TextBlock x:Name="NotifyIfSameDatabaseText" Text="Inform if no new database available (stable database only)" TextWrapping="Wrap"/>
                         </CheckBox>
                         <CheckBox Tag="ForceManuelGameDetectionCB" x:Name="ForceManuelGameDetectionCB" Click="OnForceManuelGameDetectionChanged">
                             <TextBlock x:Name="ForceManuelGameDetectionText" Text="Force manual game detection" TextWrapping="Wrap"/>

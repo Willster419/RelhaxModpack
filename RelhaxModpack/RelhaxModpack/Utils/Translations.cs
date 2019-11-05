@@ -1539,23 +1539,33 @@ namespace RelhaxModpack
 
             //Component: NotifyIfSameDatabaseText
             //
-            English.Add("NotifyIfSameDatabaseText", "Inform if no new database available");
-            German.Add("NotifyIfSameDatabaseText", "Hinweis wenn es keine Aktuallisierungen gibt");
-            Polish.Add("NotifyIfSameDatabaseText", "Powiadom o braku nowej bazy danych"); // Shortened. Kept splitting into two lines. @Nullmaruzero
-            French.Add("NotifyIfSameDatabaseText", "Informer si aucune nouvelle base de données est disponible");
-            Spanish.Add("NotifyIfSameDatabaseText", "Informar si no hay nueva base de datos");
-            Russian.Add("NotifyIfSameDatabaseText", "Уведомлять при отстутсвии новых баз данных");
+            English.Add("NotifyIfSameDatabaseText", "Inform if no new database available (stable database only)");
+            German.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Hinweis wenn es keine Aktuallisierungen gibt"
+            Polish.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Powiadom o braku nowej bazy danych" // Shortened. Kept splitting into two lines. @Nullmaruzero
+            French.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Informer si aucune nouvelle base de données est disponible"
+            Spanish.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Informar si no hay nueva base de datos"
+            Russian.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Уведомлять при отстутсвии новых баз данных"
+
+            //Component: NotifyIfSameDatabaseCBDescriptionOLD
+            //
+            English.Add("NotifyIfSameDatabaseCBDescriptionOLD", "Notify you if your last installed database version is the same. If so, it means that there is no update to any mods. This only works with the stable database.");
+            German.Add("NotifyIfSameDatabaseCBDescriptionOLD", "Erhalte eine Benachrichtigung wenn es keine Aktualisierung der Datenbank gegeben hat und diese den selben Stand wie beim letzten Start aufweist.");
+            Polish.Add("NotifyIfSameDatabaseCBDescriptionOLD", "Wyświetla powiadomienie jeśli zainstalowana jest najnowsza wersja bazy danych.\nOznacza to, że nie ma żadnych nowych aktualizacji modów.");
+            French.Add("NotifyIfSameDatabaseCBDescriptionOLD", "Avertir si votre dernière version de base de données installée est identique. Si c'est le cas," +
+                " cela signifie qu'il n'y a pas de mise à jour de mods.");
+            Spanish.Add("NotifyIfSameDatabaseCBDescriptionOLD", "Mostrar una notificación si la última instalación tiene la misma versión de la base de datos." +
+                " De ser así, significa que no hay ninguna actualización para ningún Mod");
+            Russian.Add("NotifyIfSameDatabaseCBDescriptionOLD", "Уведомлять в случае совпадения версий баз данных. Это означает отсутствие обновлений к каким-либо модам.");
 
             //Component: NotifyIfSameDatabaseCBDescription
             //
-            English.Add("NotifyIfSameDatabaseCBDescription", "Notify you if your last installed database version is the same. If so, it means that there is no update to any mods.");
-            German.Add("NotifyIfSameDatabaseCBDescription", "Erhalte eine Benachrichtigung wenn es keine Aktualisierung der Datenbank gegeben hat und diese den selben Stand wie beim letzten Start aufweist.");
-            Polish.Add("NotifyIfSameDatabaseCBDescription", "Wyświetla powiadomienie jeśli zainstalowana jest najnowsza wersja bazy danych.\nOznacza to, że nie ma żadnych nowych aktualizacji modów.");
-            French.Add("NotifyIfSameDatabaseCBDescription", "Avertir si votre dernière version de base de données installée est identique. Si c'est le cas," +
-                " cela signifie qu'il n'y a pas de mise à jour de mods.");
-            Spanish.Add("NotifyIfSameDatabaseCBDescription", "Mostrar una notificación si la última instalación tiene la misma versión de la base de datos." +
-                " De ser así, significa que no hay ninguna actualización para ningún Mod");
-            Russian.Add("NotifyIfSameDatabaseCBDescription", "Уведомлять в случае совпадения версий баз данных. Это означает отсутствие обновлений к каким-либо модам.");
+            English.Add("NotifyIfSameDatabaseCBDescription", "Notify you if your last installed database version is the same. If so, it means that there is no update to any mods." +
+                " This only works with the stable database.");
+            German.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
+            Polish.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
+            French.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
+            Spanish.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
+            Russian.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
 
             //Component: ShowInstallCompleteWindowText
             //
