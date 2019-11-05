@@ -457,12 +457,6 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //dispose of the timer if it's not already disposed
-            if (autoInstallTimer != null)
-            {
-                autoInstallTimer.Dispose();
-                autoInstallTimer = null;
-            }
             if (ModpackSettings.MinimizeToSystemTray)
             {
                 Logging.Debug("minimizing to system tray");
@@ -471,31 +465,43 @@ namespace RelhaxModpack
             }
             else
             {
-                if (!Logging.IsLogDisposed(Logfiles.Application))
+                CloseApplication();
+            }
+        }
+
+        private void CloseApplication()
+        {
+            //dispose of the timer if it's not already disposed
+            if (autoInstallTimer != null)
+            {
+                autoInstallTimer.Dispose();
+                autoInstallTimer = null;
+            }
+
+            if (!Logging.IsLogDisposed(Logfiles.Application))
+            {
+                if (Logging.IsLogOpen(Logfiles.Application))
+                    Logging.Info("Saving settings");
+                if (!closingFromFailure)
+                    if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
+                        if (Logging.IsLogOpen(Logfiles.Application))
+                            Logging.Info("Settings saved");
+                if (Logging.IsLogOpen(Logfiles.Application))
+                    Logging.Info("Disposing tray");
+                if (RelhaxIcon != null)
+                {
+                    RelhaxIcon.Dispose();
+                    RelhaxIcon = null;
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        Logging.Info("Tray disposed");
+                }
+                else
                 {
                     if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Saving settings");
-                    if (!closingFromFailure)
-                        if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
-                            if (Logging.IsLogOpen(Logfiles.Application))
-                                Logging.Info("Settings saved");
-                    if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Disposing tray");
-                    if (RelhaxIcon != null)
-                    {
-                        RelhaxIcon.Dispose();
-                        RelhaxIcon = null;
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.Info("Tray disposed");
-                    }
-                    else
-                    {
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.Info("Tray already null");
-                    }
+                        Logging.Info("Tray already null");
                 }
-                Application.Current.Shutdown(0);
             }
+            Application.Current.Shutdown(0);
         }
 
         private void ProcessTitle()
@@ -558,8 +564,7 @@ namespace RelhaxModpack
 
         private void OnMenuItemCloseClick(object sender, EventArgs e)
         {
-            Application.Current.Shutdown();
-            Close();
+            CloseApplication();
         }
 
         private void OnMenuClickChekUpdates(object sender, EventArgs e)
