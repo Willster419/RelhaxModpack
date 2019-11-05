@@ -1,4 +1,14 @@
-Application version 0.29.4.0 (2019-11-3)
+Application version 0.29.4.1 (2019-11-04)
+https://www.virustotal.com/gui/file/18f8f48eac07e2555fb4adc77f04c68219849c6df352600b84748dcfc86f3c84/detection
+- Fixed compatibilty issues with WoWp and WoWs with the Game Center update downloader.
+- Fixed application exiting incorrectly when closing from notification icon right click.
+- Removed defunct feature of launching the old WoT Launcher in client check mode (now done via game center).
+- Fixed bugs with writing to the installer and uninstaller logfiles.
+- Fixed functionality of the option to 'inform if no new database is available'.
+- Updated english and polish translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.0 (2019-11-03)
 https://www.virustotal.com/gui/file/777576f3d9be22a484a79689193bdc7f8d3c42a7a56587953b6329e88e456bc1/detection
 - Added new feature in diagnostics. You can now use the diagnostics window to download game center updates for any WG Game Center without peer-to-peer.
 - This enables those who are on univeristy networks (or do not wish to use peer-to-peer networking) to download updates via HTTP from the WG update servers.
