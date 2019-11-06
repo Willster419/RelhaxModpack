@@ -679,7 +679,7 @@ namespace RelhaxModpack
             Spanish.Add("InstallModpackButton", "Comenzar selección de Mods");
             Russian.Add("InstallModpackButton", "Начать выбор модов");
 
-            //Component: selectWOTExecutable
+            //Component: manualWoTFind
             // File picker window asking the user to select WorldOfTanks.exe manually.
             English.Add("selectWOTExecutable", "Select your WOT executable (WorldOfTanks.exe)");
             German.Add("selectWOTExecutable", TranslationNeeded);
