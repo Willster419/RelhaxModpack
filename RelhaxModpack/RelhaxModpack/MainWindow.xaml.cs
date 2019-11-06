@@ -457,12 +457,6 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //dispose of the timer if it's not already disposed
-            if (autoInstallTimer != null)
-            {
-                autoInstallTimer.Dispose();
-                autoInstallTimer = null;
-            }
             if (ModpackSettings.MinimizeToSystemTray)
             {
                 Logging.Debug("minimizing to system tray");
@@ -471,31 +465,43 @@ namespace RelhaxModpack
             }
             else
             {
-                if (!Logging.IsLogDisposed(Logfiles.Application))
+                CloseApplication();
+            }
+        }
+
+        private void CloseApplication()
+        {
+            //dispose of the timer if it's not already disposed
+            if (autoInstallTimer != null)
+            {
+                autoInstallTimer.Dispose();
+                autoInstallTimer = null;
+            }
+
+            if (!Logging.IsLogDisposed(Logfiles.Application))
+            {
+                if (Logging.IsLogOpen(Logfiles.Application))
+                    Logging.Info("Saving settings");
+                if (!closingFromFailure)
+                    if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
+                        if (Logging.IsLogOpen(Logfiles.Application))
+                            Logging.Info("Settings saved");
+                if (Logging.IsLogOpen(Logfiles.Application))
+                    Logging.Info("Disposing tray");
+                if (RelhaxIcon != null)
+                {
+                    RelhaxIcon.Dispose();
+                    RelhaxIcon = null;
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        Logging.Info("Tray disposed");
+                }
+                else
                 {
                     if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Saving settings");
-                    if (!closingFromFailure)
-                        if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
-                            if (Logging.IsLogOpen(Logfiles.Application))
-                                Logging.Info("Settings saved");
-                    if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Disposing tray");
-                    if (RelhaxIcon != null)
-                    {
-                        RelhaxIcon.Dispose();
-                        RelhaxIcon = null;
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.Info("Tray disposed");
-                    }
-                    else
-                    {
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.Info("Tray already null");
-                    }
+                        Logging.Info("Tray already null");
                 }
-                Application.Current.Shutdown(0);
             }
+            Application.Current.Shutdown(0);
         }
 
         private void ProcessTitle()
@@ -558,8 +564,7 @@ namespace RelhaxModpack
 
         private void OnMenuItemCloseClick(object sender, EventArgs e)
         {
-            Application.Current.Shutdown();
-            Close();
+            CloseApplication();
         }
 
         private void OnMenuClickChekUpdates(object sender, EventArgs e)
@@ -1118,27 +1123,39 @@ namespace RelhaxModpack
                     }
 
                     //if the user wants to, check if the database has actually changed
-                    if (ModpackSettings.NotifyIfSameDatabase)
+                    if (ModpackSettings.NotifyIfSameDatabase && ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Stable)
                     {
+                        Logging.Info("NotifyIfSameDatabase is true and databaseDistroVersion is stable, checking if last installed database is the same as current");
                         //get the install log for last installed database version
-                        string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", "installedRelhaxFiles.log");
+                        string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename);
                         if (File.Exists(installedfilesLogPath))
                         {
                             //use index 0 of array, index 18 of string array
-                            string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0].Substring(18).Trim();
+                            string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0];
+                            Logging.Debug("lastInstalledDatabaseVersion (pre trim): {0}", lastInstalledDatabaseVersion);
+                            if(!string.IsNullOrWhiteSpace(lastInstalledDatabaseVersion) && lastInstalledDatabaseVersion.Length >=18)
+                                lastInstalledDatabaseVersion = lastInstalledDatabaseVersion.Substring(18).Trim();
+                            Logging.Debug("lastInstalledDatabaseVersion (post trim): {0}", lastInstalledDatabaseVersion);
                             if (Settings.DatabaseVersion.Equals(lastInstalledDatabaseVersion))
                             {
                                 if (MessageBox.Show(Translations.GetTranslatedString("DatabaseVersionsSameBody"), Translations.GetTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
                                 {
+                                    Logging.Info("User selected to not install");
                                     ToggleUIButtons(true);
                                     return;
                                 }
+                                else
+                                    Logging.Info("User selected to install anyways");
                             }
                         }
                         else
                         {
                             Logging.Warning("installedRelhaxFiles.log does not exist, cannot notify if same database");
                         }
+                    }
+                    else if(ModpackSettings.NotifyIfSameDatabase)
+                    {
+                        Logging.Warning("NotifyIfSameDatabase is selected but invalid database distribution! {0}", ModpackSettings.DatabaseDistroVersion.ToString());
                     }
                 }
             }

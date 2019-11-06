@@ -25,9 +25,6 @@
             <Button x:Name="ChangeInstallButton" Tag="ChangeInstall" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ChangeInstall_Click" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <TextBlock x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
-            <Button x:Name="LaunchWoTLauncherButton" Tag="LaunchWoTLauncher" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="LaunchWoTLauncher_Click" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock x:Name="LaunchWoTLauncher" Text="Start the World of Tanks launcher in integrity validation mode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"/>
-            </Button>
             <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear download cache" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ClearDownloadCache_Click" Grid.Column="1" />
             <Button Tag="CollectLogInfo" x:Name="CollectLogInfoButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CollectLogInfo_Click" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <TextBlock x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem" Margin="2,0,2,0" TextAlignment="Center"/>
@@ -39,7 +36,7 @@
                            Text="Test loading the atlas image processing libraries"/>
             </Button>
             <Button Tag="DownloadWGPatchFiles" x:Name="DownloadWGPatchFilesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"
-                    Click="DownloadWGPatchFiles_Click" Grid.Row="3" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="0">
+                    Click="DownloadWGPatchFiles_Click" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="0">
                 <TextBlock x:Name="DownloadWGPatchFilesText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
                            Text="Download WG Patch files for any WG client via HTTP"/>
             </Button>

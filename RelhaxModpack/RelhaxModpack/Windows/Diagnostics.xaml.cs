@@ -75,31 +75,6 @@ namespace RelhaxModpack.Windows
             ToggleInstallLocationNeededButtons();
         }
 
-        private void LaunchWoTLauncher_Click(object sender, RoutedEventArgs e)
-        {
-            //just to make sure
-            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
-                return;
-
-            Logging.Debug("Starting WoTLauncher with argument \"-integrity_default_client\"");
-            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("startingLauncherRepairMode");
-            string filename = Path.Combine(Settings.WoTDirectory, "WoTLauncher.exe");
-            string formattedArguement = "-integrity_default_client";
-            Logging.Info("Complete command: {0} {1}", filename, formattedArguement);
-            try
-            {
-                Process.Start(filename, formattedArguement);
-            }
-            catch (Exception ex)
-            {
-                Logging.Exception("LaunchWoTLauncher_Click");
-                Logging.Exception(ex.ToString());
-                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("failedStartLauncherRepairMode");
-                return;
-            }
-            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("launcherRepairModeStarted");
-        }
-
         private void CollectLogInfo_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
