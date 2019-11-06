@@ -1669,6 +1669,7 @@ namespace RelhaxModpack.Windows
                     CheckPathExists = true,
                     AddExtension = true,
                     Filter = "XML files|*.xml",
+                    Title = Translations.GetTranslatedString("MainWindowSelectSelectionFileToLoad"),
                     Multiselect = false,
                     ValidateNames = true
                 };
