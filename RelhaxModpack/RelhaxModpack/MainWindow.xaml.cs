@@ -990,6 +990,7 @@ namespace RelhaxModpack
                         CheckFileExists = true,
                         CheckPathExists = true,
                         Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                        Title = Translations.GetTranslatedString("selectWOTExecutable"),
                         Multiselect = false,
                         ValidateNames = true
                     };
@@ -1953,6 +1954,7 @@ namespace RelhaxModpack
                     CheckFileExists = true,
                     CheckPathExists = true,
                     Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                    Title = Translations.GetTranslatedString("selectWOTExecutable"),
                     Multiselect = false,
                     RestoreDirectory = true,
                     ValidateNames = true

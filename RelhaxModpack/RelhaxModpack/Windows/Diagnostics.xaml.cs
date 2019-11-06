@@ -50,13 +50,14 @@ namespace RelhaxModpack.Windows
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
         {
             Logging.Info("Diagnostics: Selecting WoT install");
-            //show a standard WoT selection window from manual fine WoT.exe
+            //show a standard WoT selection window from manual find WoT.exe
             OpenFileDialog manualWoTFind = new OpenFileDialog()
             {
                 AddExtension = true,
                 CheckFileExists = true,
                 CheckPathExists = true,
                 Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                Title = Translations.GetTranslatedString("selectWOTExecutable"),
                 Multiselect = false,
                 ValidateNames = true
             };

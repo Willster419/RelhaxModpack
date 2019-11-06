@@ -64,7 +64,7 @@ namespace RelhaxModpack
             "AutoInstallOneClickInstallSelectionFilePath",
             "AutoSyncFrequencyTexbox",
             "DeveloperSettingsHeaderDescription",
-            "AutoSyncCheckFrequencyTextBox",
+            //"AutoSyncCheckFrequencyTextBox",
             "AutoSyncCheckFrequencyTextBoxDescription",
             "DiagnosticsStatusTextBox",
             "seachCB",
@@ -679,6 +679,15 @@ namespace RelhaxModpack
             Spanish.Add("InstallModpackButton", "Comenzar selección de Mods");
             Russian.Add("InstallModpackButton", "Начать выбор модов");
 
+            //Component: selectWOTExecutable
+            // File picker window asking the user to select WorldOfTanks.exe manually.
+            English.Add("selectWOTExecutable", "Select your WOT executable (WorldOfTanks.exe)");
+            German.Add("selectWOTExecutable", TranslationNeeded);
+            Polish.Add("selectWOTExecutable", "Wybierz plik wykonywalny WOT (WorldOfTanks.exe)");
+            French.Add("selectWOTExecutable", TranslationNeeded);
+            Spanish.Add("selectWOTExecutable", TranslationNeeded);
+            Russian.Add("selectWOTExecutable", TranslationNeeded);
+
             //Component: InstallModpackButtonDescription
             //
             English.Add("InstallModpackButtonDescription", "Select the mods you want to install to your WoT client");
@@ -1224,6 +1233,16 @@ namespace RelhaxModpack
             Spanish.Add("LoadAutoSyncSelectionFileText", "Cargar archivo de selección");
             Russian.Add("LoadAutoSyncSelectionFileText", "Загрузить файл предустановки");
 
+            //Component: AutoSyncCheckFrequencyTextBox
+            // A label followed by a small text field asking for update check interval (time unit selected via a drop-list at the end of the line).
+            // Frequency: every [ ... ] {Minutes / Hours / Days}
+            English.Add("AutoSyncCheckFrequencyTextBox", "Frequency: every");
+            German.Add("AutoSyncCheckFrequencyTextBox", TranslationNeeded);
+            Polish.Add("AutoSyncCheckFrequencyTextBox", "Częstotliwość: co");
+            French.Add("AutoSyncCheckFrequencyTextBox", TranslationNeeded);
+            Spanish.Add("AutoSyncCheckFrequencyTextBox", TranslationNeeded);
+            Russian.Add("AutoSyncCheckFrequencyTextBox", TranslationNeeded);
+
             //Component: DeveloperSettingsHeader
             //
             English.Add("DeveloperSettingsHeader", "Developer Settings [!]");
@@ -1345,6 +1364,15 @@ namespace RelhaxModpack
             French.Add("AdvancedInstallationProgressDescription", "Montrer une fenêtre d'installation avancée pendant l'extraction, utile quand vous avez l'extraction multicoeurs activée");
             Spanish.Add("AdvancedInstallationProgressDescription", "Muestra una ventana de instalación avanzada durante la extracción, útil cuando la extración multinúcleo está habilitada");
             Russian.Add("AdvancedInstallationProgressDescription", "Показывает более подробное окно прогресса установки. Полезно при включённой многопоточной установке");
+
+            //Component: ThemeSelectText
+            // A label with 3 radio buttons underneach for selecting app's color theme.
+            English.Add("ThemeSelectText", "Select theme:");
+            German.Add("ThemeSelectText", TranslationNeeded);
+            Polish.Add("ThemeSelectText", "Wybierz motyw:");
+            French.Add("ThemeSelectText", TranslationNeeded);
+            Spanish.Add("ThemeSelectText", TranslationNeeded);
+            Russian.Add("ThemeSelectText", TranslationNeeded);
 
             //Component: ThemeDefaultText
             //
@@ -3517,7 +3545,7 @@ namespace RelhaxModpack
             //
             English.Add("DownloadWGPatchFilesText", "Download WG Patch files for any WG client via HTTP");
             German.Add("DownloadWGPatchFilesText", TranslationNeeded);
-            Polish.Add("DownloadWGPatchFilesText", "Pobierz pliki paczy WG dla dowolnego klienta (HTTP)");
+            Polish.Add("DownloadWGPatchFilesText", "Pobieranie aktualizacji dla gier WG (HTTP)");
             French.Add("DownloadWGPatchFilesText", TranslationNeeded);
             Spanish.Add("DownloadWGPatchFilesText", TranslationNeeded);
             Russian.Add("DownloadWGPatchFilesText", TranslationNeeded);
@@ -4735,7 +4763,7 @@ namespace RelhaxModpack
             //
             English.Add("GcDownloadStep1TabDescription", "Select the Wargaming client to collect data for (WoT, WoWs, WoWp)");
             German.Add("GcDownloadStep1TabDescription", TranslationNeeded);
-            Polish.Add("GcDownloadStep1TabDescription", "Wybierz grę WG, dla której chcesz zebrać dane (WoT, WoWs, WoWp)");
+            Polish.Add("GcDownloadStep1TabDescription", "Wybierz grę WG, dla której chcesz pobrać aktualizacje (WoT, WoWs, WoWp)");
             French.Add("GcDownloadStep1TabDescription", TranslationNeeded);
             Spanish.Add("GcDownloadStep1TabDescription", TranslationNeeded);
             Russian.Add("GcDownloadStep1TabDescription", TranslationNeeded);
@@ -4744,7 +4772,7 @@ namespace RelhaxModpack
             //
             English.Add("GcDownloadStep1SelectClientButton", "Select client");
             German.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
-            Polish.Add("GcDownloadStep1SelectClientButton", "Wybierz klienta");
+            Polish.Add("GcDownloadStep1SelectClientButton", "Wybierz klienta gry");
             French.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
             Spanish.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
             Russian.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
@@ -4771,7 +4799,7 @@ namespace RelhaxModpack
             //
             English.Add("GcDownloadSelectWgClient", "Select WG Client");
             German.Add("GcDownloadSelectWgClient", TranslationNeeded);
-            Polish.Add("GcDownloadSelectWgClient", "Widoczność (alpha)");
+            Polish.Add("GcDownloadSelectWgClient", "Wybierz klienta docelowej gry WG, dla której chcesz pobrać aktualizacje");
             French.Add("GcDownloadSelectWgClient", TranslationNeeded);
             Spanish.Add("GcDownloadSelectWgClient", TranslationNeeded);
             Russian.Add("GcDownloadSelectWgClient", TranslationNeeded);
