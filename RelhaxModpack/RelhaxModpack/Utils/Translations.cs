@@ -1323,7 +1323,7 @@ namespace RelhaxModpack
             //
             English.Add("SaveDisabledModsInSelectionDescription", "When a mod is re-enabled, it will be selected from your selection file");
             German.Add("SaveDisabledModsInSelectionDescription", "Wenn ein Mod wieder aktiviert wird, wird er aus deiner Auswahldatei ausgewählt");
-            Polish.Add("SaveDisabledModsInSelectionDescription", "Automatycznie zaznacza nieaktywne wybrane mody przy ich ponownym odblokowaniu.");
+            Polish.Add("SaveDisabledModsInSelectionDescription", "Zaznacza poprzednio wybrane, ale zablokowane przez nas mody, po ich ponownym odblokowaniu.");
             French.Add("SaveDisabledModsInSelectionDescription", "Quand un mod est réactivé, il sera sélectionné depuis votre sélection de fichiers");
             Spanish.Add("SaveDisabledModsInSelectionDescription", "Cuando un mod sea rehabilitado, será seleccionado desde su archivo de selección");
             Russian.Add("SaveDisabledModsInSelectionDescription", "Когда мод будет включён в БД, он снова будет выбран из вашей предустановки");
@@ -1341,7 +1341,7 @@ namespace RelhaxModpack
             //
             English.Add("AdvancedInstallationProgressDescription", "Shows an advanced installation window during extraction, useful when you have multicore extraction enabled");
             German.Add("AdvancedInstallationProgressDescription", "Zeigt während der Extraktion ein erweitertes Installationsfenster an, das nützlich ist, wenn die Multicore-Extraktion aktiviert ist");
-            Polish.Add("AdvancedInstallationProgressDescription", "Wyświetla rozbudowane okno procesu instalacji. Przydatne przy włączonym wyodrębnianiu wielordzeniowym.");
+            Polish.Add("AdvancedInstallationProgressDescription", "Wyświetla szczegółowe okno procesu instalacji. Przydatne przy włączonym wyodrębnianiu wielordzeniowym.");
             French.Add("AdvancedInstallationProgressDescription", "Montrer une fenêtre d'installation avancée pendant l'extraction, utile quand vous avez l'extraction multicoeurs activée");
             Spanish.Add("AdvancedInstallationProgressDescription", "Muestra una ventana de instalación avanzada durante la extracción, útil cuando la extración multinúcleo está habilitada");
             Russian.Add("AdvancedInstallationProgressDescription", "Показывает более подробное окно прогресса установки. Полезно при включённой многопоточной установке");
@@ -1473,7 +1473,7 @@ namespace RelhaxModpack
             //
             English.Add("UninstallQuickText", "Quick");
             German.Add("UninstallQuickText", "Schnell");
-            Polish.Add("UninstallQuickText", "Szybki");
+            Polish.Add("UninstallQuickText", "Szybka");
             French.Add("UninstallQuickText", "Rapide");
             Spanish.Add("UninstallQuickText", "Rápida");
             Russian.Add("UninstallQuickText", "Быстрый");
@@ -1519,8 +1519,8 @@ namespace RelhaxModpack
                 " Hover over a setting to have it explained.");
             German.Add("HelperText", "Willkommen im Relhax Modpack! Ich habe versucht, das Modpack so einfach wie möglich zu gestalten, aber Fragen können dennoch entstehen." +
                 " Rechtsklick auf eine Einstellung erklärt diese dann.");
-            Polish.Add("HelperText", "Witaj w Modpacku Relhax!\nMoim celem było stworzenie paczki modów tak prostej, jak to tylko możliwe,\n ale jeśli nadal czujesz się nieco zagubiony," +
-                " po prostu najedź kursorem na dowolną opcję i przeczytaj jej opis.");
+            Polish.Add("HelperText", "Witaj w Modpacku Relhax!\n\nMoim celem było stworzenie paczki modów tak prostej, jak to tylko możliwe,\n" +
+                "ale jeśli nadal czujesz się nieco zagubiony, po prostu najedź kursorem na dowolną opcję i przeczytaj jej opis.");
             French.Add("HelperText", "Bienvenue au Modpack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir." +
                 " Survolez un paramètre pour voire une explication.");
             Spanish.Add("HelperText", "¡Bienvenido a RelHax Modpack! He intentado hacer el Modpack tan sencillo como ha sido posible, pero aún así pueden surgir dudas." +
@@ -1541,7 +1541,7 @@ namespace RelhaxModpack
             //
             English.Add("NotifyIfSameDatabaseText", "Inform if no new database available (stable database only)");
             German.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Hinweis wenn es keine Aktuallisierungen gibt"
-            Polish.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Powiadom o braku nowej bazy danych" // Shortened. Kept splitting into two lines. @Nullmaruzero
+            Polish.Add("NotifyIfSameDatabaseText", "Powiadom o braku nowej bazy danych*");//"Powiadom o braku nowej bazy danych"
             French.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Informer si aucune nouvelle base de données est disponible"
             Spanish.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Informar si no hay nueva base de datos"
             Russian.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Уведомлять при отстутсвии новых баз данных"
@@ -1562,7 +1562,8 @@ namespace RelhaxModpack
             English.Add("NotifyIfSameDatabaseCBDescription", "Notify you if your last installed database version is the same. If so, it means that there is no update to any mods." +
                 " This only works with the stable database.");
             German.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
-            Polish.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
+            Polish.Add("NotifyIfSameDatabaseCBDescription", "Wyświetla powiadomienie kiedy używana jest najnowsza wersja bazy danych.\nOznacza to brak dostępnych aktualizacji modów.\n" +
+                "Opcja dostępna tylko dla stabilnej wersji bazy danych (nie BETA).");
             French.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
             Spanish.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
             Russian.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
@@ -1571,7 +1572,7 @@ namespace RelhaxModpack
             //
             English.Add("ShowInstallCompleteWindowText", "Show advanced install complete window");
             German.Add("ShowInstallCompleteWindowText", "Zeige erweitertes Fenster bei abgeschlossener Installation");
-            Polish.Add("ShowInstallCompleteWindowText", "Rozbudowane podsumowanie instalacji"); // Shortened. Kept splitting into two lines. @Nullmaruzero
+            Polish.Add("ShowInstallCompleteWindowText", "Szczegółowe podsumowanie instalacji");
             French.Add("ShowInstallCompleteWindowText", "Montrer la fenêtre d'installation complète terminée" );
             Spanish.Add("ShowInstallCompleteWindowText", "Ver ventana de instalación completada avanzada");
             Russian.Add("ShowInstallCompleteWindowText", "Показывать расширенное окно окончания установки");
