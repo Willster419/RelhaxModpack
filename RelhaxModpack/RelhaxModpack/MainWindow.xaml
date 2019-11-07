@@ -164,7 +164,7 @@
                         <Button Tag="OpenColorPickerButton" Name="OpenColorPickerButton" Click="OpenColorPickerButton_Click">
                             <TextBlock x:Name="OpenColorPickerButtonText" Text="Open color picker" TextWrapping="Wrap"/>
                         </Button>
-                        <TextBlock x:Name="ApplyCustomScalingText" Tag="ApplyCustomSclaingCB" Text="Application scaling"/>
+                        <TextBlock x:Name="ApplyCustomScalingText" Tag="ApplyCustomScalingCB" Text="Application scaling"/>
                         <!-- https://stackoverflow.com/questions/832216/wpf-how-to-make-controls-stretch-in-a-stackpanel -->
                         <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
                             <TextBlock x:Name="ApplyCustomScalingLabel" Tag="ApplyCustomScalingLabel" DockPanel.Dock="Right" Text="0.00x" Margin="0,0,5,0" IsEnabled="True" TextWrapping="Wrap"/>
