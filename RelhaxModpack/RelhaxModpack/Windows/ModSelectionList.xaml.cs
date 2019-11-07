@@ -1171,7 +1171,24 @@ namespace RelhaxModpack.Windows
                 //only enable the package if the structure leading to this package is enabled
                 if(cb2.SelectedIndex == 0 && spc.IsStructureEnabled && !spc.Checked)
                 {
-                    OnSingleDDPackageClick(sender, e);
+                    return;
+                    foreach (SelectablePackage childPackage in spc.Parent.Packages)
+                    {
+                        if (childPackage.Equals(spc))
+                            continue;
+                        //uncheck all packages of the same type
+                        if (childPackage.Type.Equals(spc.Type))
+                        {
+                            childPackage.Checked = false;
+                        }
+                    }
+
+                    //verify selected is actually checked
+                    if (!spc.Checked)
+                        spc.Checked = true;
+
+                    //dropdown packages only need to propagate up when selected...
+                    PropagateChecked(spc, SelectionPropagationDirection.PropagateUp);
                 }
             }
         }
