@@ -4811,7 +4811,7 @@ namespace RelhaxModpack
             //Application window title
             English.Add("GameCenterUpdateDownloader", "Game Center Update Downloader");
             German.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Polish.Add("GameCenterUpdateDownloader", "Aktualizacja Game Center pobrana");
+            Polish.Add("GameCenterUpdateDownloader", "Pobieranie aktualizacji gier dla Wargaming Game Center");
             French.Add("GameCenterUpdateDownloader", TranslationNeeded);
             Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
             Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
