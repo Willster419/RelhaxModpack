@@ -574,6 +574,22 @@ namespace RelhaxModpack
             French.Add("minutes", "minutes");
             Russian.Add("minutes", "минут(ы)");
 
+            //Component: hours
+            //
+            English.Add("hours", "hours");
+            German.Add("hours", TranslationNeeded);
+            Polish.Add("hours", TranslationNeeded);
+            French.Add("hours", TranslationNeeded);
+            Russian.Add("hours", TranslationNeeded);
+
+            //Component: days
+            //
+            English.Add("days", "days");
+            German.Add("days", TranslationNeeded);
+            Polish.Add("days", TranslationNeeded);
+            French.Add("days", TranslationNeeded);
+            Russian.Add("days", TranslationNeeded);
+
             //Component: next
             //
             English.Add("next", "Next");

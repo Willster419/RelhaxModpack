@@ -196,6 +196,15 @@ namespace RelhaxModpack
             ModpackSettings.DisableTriggers = true;
             ModpackSettings.VerboseLogging = true;
 
+            //load AutoSyncFrequencyComboBox with translated versions
+            //<System:String>Minutes</System:String>
+            //<System:String> Hours </System:String >
+            //<System:String> Days </System:String >
+            AutoSyncFrequencyComboBox.Items.Clear();
+            AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("minutes"));
+            AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("hours"));
+            AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("days"));
+
             //apply settings to UI elements
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
             if(ModpackSettings.ApplicationTheme == UIThemes.Custom)
@@ -2710,13 +2719,13 @@ namespace RelhaxModpack
             //parse the time into a timespan for the check timer
             switch (AutoSyncFrequencyComboBox.SelectedIndex)
             {
-                case 0:
+                case 0://mins
                     autoInstallTimer.Interval = TimeSpan.FromMinutes(timeToUse).TotalMilliseconds;
                     break;
-                case 1:
+                case 1://hours
                     autoInstallTimer.Interval = TimeSpan.FromHours(timeToUse).TotalMilliseconds;
                     break;
-                case 2:
+                case 2://days
                     autoInstallTimer.Interval = TimeSpan.FromDays(timeToUse).TotalMilliseconds;
                     break;
                 default:
@@ -2725,7 +2734,7 @@ namespace RelhaxModpack
             autoInstallTimer.AutoReset = true;
             if (!autoInstallTimerRegistered)
             {
-                Logging.Debug("auto install timer not registered to event, setting");
+                Logging.Debug("auto install timer not registered to event, registering now");
                 autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
                 autoInstallTimerRegistered = true;
             }

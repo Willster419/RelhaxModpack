@@ -227,9 +227,6 @@
                             <TextBlock Tag="AutoSyncCheckFrequencyTextBox" x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap" Text="Frequency: every"/>
                             <TextBox Tag="AutoSyncFrequencyTexbox" x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Width="25" Margin="5,0,0,0" IsEnabled="True" TextChanged="AutoSyncFrequencyTexbox_TextChanged"/>
                             <ComboBox x:Name="AutoSyncFrequencyComboBox" Tag="AutoSyncFrequencyComboBox" Margin="5,0,0,0" Width="91" IsEnabled="True" SelectedIndex="0" SelectionChanged="AutoSyncFrequencyComboBox_SelectionChanged">
-                                <System:String>Minutes</System:String>
-                                <System:String>Hours</System:String>
-                                <System:String>Days</System:String>
                             </ComboBox>
                         </StackPanel>
                         <Button x:Name="LauchEditor" Tag="LauchEditor" Margin="0,2,0,0" Click="LauchEditor_Click" IsEnabled="False" Visibility="Hidden">
