@@ -63,7 +63,7 @@ namespace RelhaxModpack
             "toggleButtonDescription",
             "AutoInstallOneClickInstallSelectionFilePath",
             "AutoSyncFrequencyTexbox",
-            "DeveloperSettingsHeaderDescription",
+            //"DeveloperSettingsHeaderDescription",
             //"AutoSyncCheckFrequencyTextBox",
             "AutoSyncCheckFrequencyTextBoxDescription",
             "DiagnosticsStatusTextBox",
@@ -758,13 +758,22 @@ namespace RelhaxModpack
                     "Поставьте галочку только в случае проблем с автоматическим определением расположения игры.");
 
             //Component: LanguageSelectionTextblock
-            //
+            // A label for a ComboButton below with available languages.
             English.Add("LanguageSelectionTextblock", "Language selection");
             German.Add("LanguageSelectionTextblock", "Sprachauswahl");
-            Polish.Add("LanguageSelectionTextblock", "Wybór języka");
+            Polish.Add("LanguageSelectionTextblock", "Język:");
             French.Add("LanguageSelectionTextblock", "Choix de langue");
             Spanish.Add("LanguageSelectionTextblock", "Selección de idioma");
             Russian.Add("LanguageSelectionTextblock", "Выбрать язык");
+
+            //Component: LanguageSelectionTextblockDescription
+            // A tooltip for LanguageSelectionTextblock button label.
+            English.Add("LanguageSelectionTextblockDescription", "Select your prefered language.\nIf you encounter missing translations or mistakes, feel free to inform us about them.");
+            German.Add("LanguageSelectionTextblockDescription", TranslationNeeded);
+            Polish.Add("LanguageSelectionTextblockDescription", "Zmienia język aplikacji.\nJeśli napotkasz brakujące lub błędne tłumaczenia, możesz nam je zgłosić.");
+            French.Add("LanguageSelectionTextblockDescription", TranslationNeeded);
+            Spanish.Add("LanguageSelectionTextblockDescription", TranslationNeeded);
+            Russian.Add("LanguageSelectionTextblockDescription", TranslationNeeded);
 
             //Component: Forms_ENG_NAButtonDescription
             English.Add("Forms_ENG_NAButtonDescription", "Go to the English-speaking 'World of Tanks' forum page for the NA server");
@@ -863,7 +872,7 @@ namespace RelhaxModpack
                     "They are stored in the 'RelHaxModBackup' folder as a zip file, named by a time stamp.");
             German.Add("BackupModsCBDescription", "Wähle diese Option, um ein Backup deiner aktuellen Mod-Installation zu erstellen. "+
                      "Diese werden im Ordner 'RelHaxModBackup' als ZIP-Datei mit einem Zeitstempel gespeichert.");
-            Polish.Add("BackupModsCBDescription", "Tworzy kopię zapasową wszystkich obecnie zainstalowanych modów i ich ustawień.\n " +
+            Polish.Add("BackupModsCBDescription", "Tworzy kopię zapasową wszystkich obecnie zainstalowanych modów i ich ustawień.\n" +
                      "Zostaną one spakowane w archiwum ZIP z sygnaturą czasową w nazwie i umieszczone w folderze „RelHaxModBackup”.");
             French.Add("BackupModsCBDescription", "Sélectionner ceci pour faire un backup de votre installation actuelle." +
                      "Les backups sont stockés dans le dossier 'RelHaxModBackup' en tant que .zip, nommé par un horodatage." );
@@ -1225,13 +1234,22 @@ namespace RelhaxModpack
             Russian.Add("ForceVisibleCBDescription", "Показывает все скрытые пакеты. Может привести к серьёзным проблемам со стабильностью");
 
             //Component: LoadAutoSyncSelectionFileText
-            //
+            // A button opening a OpenFileDialong system window for selecting the mod selection file. Used for One-Click and Auto-Install features.
             English.Add("LoadAutoSyncSelectionFileText", "Load selection file");
             German.Add("LoadAutoSyncSelectionFileText", "Auswahldatei laden");
             Polish.Add("LoadAutoSyncSelectionFileText", "Wczytaj plik kolekcji");
             French.Add("LoadAutoSyncSelectionFileText", "Charger la sélection de fichiers");
             Spanish.Add("LoadAutoSyncSelectionFileText", "Cargar archivo de selección");
             Russian.Add("LoadAutoSyncSelectionFileText", "Загрузить файл предустановки");
+
+            //Component: LoadAutoSyncSelectionFileText
+            // A tooltip for LoadAutoSyncSelectionFileText button.
+            English.Add("LoadAutoSyncSelectionFileDescription", "Load your mods selection file to use the One-Click and Auto-Install features.");
+            German.Add("LoadAutoSyncSelectionFileDescription", TranslationNeeded);
+            Polish.Add("LoadAutoSyncSelectionFileDescription", "Wczytuje wybrany plik kolekcji modów.\nUmożliwia używanie funkcji Instalacji na Kliknięcie oraz Automatycznej Instalacji.");
+            French.Add("LoadAutoSyncSelectionFileDescription", TranslationNeeded);
+            Spanish.Add("LoadAutoSyncSelectionFileDescription", TranslationNeeded);
+            Russian.Add("LoadAutoSyncSelectionFileDescription", TranslationNeeded);
 
             //Component: AutoSyncCheckFrequencyTextBox
             // A label followed by a small text field asking for update check interval (time unit selected via a drop-list at the end of the line).
@@ -1244,13 +1262,22 @@ namespace RelhaxModpack
             Russian.Add("AutoSyncCheckFrequencyTextBox", TranslationNeeded);
 
             //Component: DeveloperSettingsHeader
-            //
+            // A header-label for multiple checkboxes with developer options below.
             English.Add("DeveloperSettingsHeader", "Developer Settings [!]");
             German.Add("DeveloperSettingsHeader", "Entwickleroptionen [!]");
             Polish.Add("DeveloperSettingsHeader", "Opcje programisty [!]");
             French.Add("DeveloperSettingsHeader", "Options de développeurs [!]");
             Spanish.Add("DeveloperSettingsHeader", "Opciones de desarrollador [!]");
             Russian.Add("DeveloperSettingsHeader", "Настройки для разработчиков [!]");
+
+            //Component: DeveloperSettingsHeaderDescription
+            // A tooltip for DeveloperSettingsHeader.
+            English.Add("DeveloperSettingsHeaderDescription", "The options below may cause problems and stability issues!\nPlease, don't use them unless you know what you're doing!");
+            German.Add("DeveloperSettingsHeaderDescription", TranslationNeeded);
+            Polish.Add("DeveloperSettingsHeaderDescription", "Poniższe opcje mogą powodować problemy i niestabilność instalacji.\nUżywaj tylko jeśli wiesz co robisz!");
+            French.Add("DeveloperSettingsHeaderDescription", TranslationNeeded);
+            Spanish.Add("DeveloperSettingsHeaderDescription", TranslationNeeded);
+            Russian.Add("DeveloperSettingsHeaderDescription", TranslationNeeded);
 
             //Component: ApplyCustomScalingText
             //
@@ -1279,14 +1306,14 @@ namespace RelhaxModpack
             Spanish.Add("LauchEditorDescription", "Inicia el editor de la base de datos desde aquí, en lugar de desde la línea de comandos");
             Russian.Add("LauchEditorDescription", "Запуск редактора базы данных непосредственно здесь, а не в коммандной строке");
 
-            //Component: ApplyCustomScalingCBDescription
-            //
-            English.Add("ApplyCustomScalingCBDescription", "Apply display scaling to the installer windows");
-            German.Add("ApplyCustomScalingCBDescription", "Wende die Anzeigeskalierung auf das Installationsfenster an");
-            Polish.Add("ApplyCustomScalingCBDescription", "Zastosuj skalowanie ekranu do okien instalatora.");
-            French.Add("ApplyCustomScalingCBDescription", "Appliquer la mise à l'échelle de l'affichage aux fenêtres du programme d'installation");
-            Spanish.Add("ApplyCustomScalingCBDescription", "Aplicar la escala de visualización a las ventanas del instalador");
-            Russian.Add("ApplyCustomScalingCBDescription", "Применить масштабирование дисплея к окнам установщика");
+            //Component: ApplyCustomScalingTextDescription
+            // A tooltip for a ApplyCustomScalingText label. Describes a slider below used for changing application scaling.
+            English.Add("ApplyCustomScalingTextDescription", "Apply display scaling to the installer windows");
+            German.Add("ApplyCustomScalingTextDescription", "Wende die Anzeigeskalierung auf das Installationsfenster an");
+            Polish.Add("ApplyCustomScalingTextDescription", "Zastosuj skalowanie ekranu do okien instalatora.");
+            French.Add("ApplyCustomScalingTextDescription", "Appliquer la mise à l'échelle de l'affichage aux fenêtres du programme d'installation");
+            Spanish.Add("ApplyCustomScalingTextDescription", "Aplicar la escala de visualización a las ventanas del instalador");
+            Russian.Add("ApplyCustomScalingTextDescription", "Применить масштабирование дисплея к окнам установщика");
 
             //Component: InstallWhileDownloadingText
             //
@@ -1383,14 +1410,14 @@ namespace RelhaxModpack
             Spanish.Add("ThemeDefaultText", "Estándar");
             Russian.Add("ThemeDefaultText", "Стандартная");
 
-            //Component: ThemeDefaultDescriptionText
+            //Component: ThemeDefaultDescription
             //
-            English.Add("ThemeDefaultDescriptionText", "Default Theme");
-            German.Add("ThemeDefaultDescriptionText", "Standard Theme");
-            Polish.Add("ThemeDefaultDescriptionText", "Domyślny schemat kolorów.");
-            French.Add("ThemeDefaultDescriptionText", "Thème standard");
-            Spanish.Add("ThemeDefaultDescriptionText", "Tema por defecto");
-            Russian.Add("ThemeDefaultDescriptionText", "Стандартная тема");
+            English.Add("ThemeDefaultDescription", "Default Theme");
+            German.Add("ThemeDefaultDescription", "Standard Theme");
+            Polish.Add("ThemeDefaultDescription", "Domyślny schemat kolorów.");
+            French.Add("ThemeDefaultDescription", "Thème standard");
+            Spanish.Add("ThemeDefaultDescription", "Tema por defecto");
+            Russian.Add("ThemeDefaultDescription", "Стандартная тема");
 
             //Component: ThemeDarkText
             //
@@ -1455,6 +1482,15 @@ namespace RelhaxModpack
             Spanish.Add("OpenColorPickerButtonText", "Abrir selector de colores");
             Russian.Add("OpenColorPickerButtonText", "Открыть палитру");
 
+            //Component: OpenColorPickerButtonDescription
+            // A tooltip for OpenColorPickerButton. The button opens the color picker for theming the app. *Captain Obvious flies away*...
+            English.Add("OpenColorPickerButtonDescription", "Opens color picker, allowing you to create your own theme.");
+            German.Add("OpenColorPickerButtonDescription", TranslationNeeded);
+            Polish.Add("OpenColorPickerButtonDescription", "Otwiera narzędzie do wybierania kolorów.\nUmożliwia tworzenie własnych schematów kolorów.");
+            French.Add("OpenColorPickerButtonDescription", TranslationNeeded);
+            Spanish.Add("OpenColorPickerButtonDescription", TranslationNeeded);
+            Russian.Add("OpenColorPickerButtonDescription", TranslationNeeded);
+
             //Component: DumpColorSettingsButtonDescription
             //
             English.Add("DumpColorSettingsButtonDescription", "Writes an xml document of all components that can have a custom color applied, to make a custom theme");
@@ -1490,18 +1526,18 @@ namespace RelhaxModpack
 
             //Component: UninstallDefaultText
             //
-            English.Add("UninstallDefaultText", "Default");
+            English.Add("UninstallDefaultText", "Default"); // Check //verify the uninstall @ 'UninstallModpackButton_Click' before changing!
             German.Add("UninstallDefaultText", "Standard");
-            Polish.Add("UninstallDefaultText", "Standardowa");
+            Polish.Add("UninstallDefaultText", "Standardowy");
             French.Add("UninstallDefaultText", "Standard");
             Spanish.Add("UninstallDefaultText", "Estándar");
             Russian.Add("UninstallDefaultText", "Стандартный");
 
             //Component: UninstallQuickText
             //
-            English.Add("UninstallQuickText", "Quick");
+            English.Add("UninstallQuickText", "Quick"); // Check //verify the uninstall @ 'UninstallModpackButton_Click' before changing!
             German.Add("UninstallQuickText", "Schnell");
-            Polish.Add("UninstallQuickText", "Szybka");
+            Polish.Add("UninstallQuickText", "Szybki");
             French.Add("UninstallQuickText", "Rapide");
             Spanish.Add("UninstallQuickText", "Rápida");
             Russian.Add("UninstallQuickText", "Быстрый");
@@ -1655,30 +1691,30 @@ namespace RelhaxModpack
             Spanish.Add("ClearCacheCBDescription", "Limpia la caché de WoT en el directorio %APPDATA%. Realiza la misma operación que la opción similar en el OMC Modpack");
             Russian.Add("ClearCacheCBDescription", "Очистить папку кэша World of Tanks. Операция аналогична соответствующей опции, присутствовавшей в OMC.");
 
-            //Component: DefaultUninstallModeRBDescription
-            //
-            English.Add("DefaultUninstallModeRBDescription", "Default Uninstall will remove all files in the game's mod directories, including shortcuts and appdata cache files.");
+            //Component: UninstallDefaultDescription
+            // A radio button tooltip explaining the difference between this option and the option next (to the right) of it.
+            English.Add("UninstallDefaultDescription", "Default Uninstall will remove all files in the game's mod directories, including shortcuts and appdata cache files.");
             German.Add("DefaultUninstallModeRBDescription", "Die Standard Deinstallation wird alle Dateien in den Mod-Verzeichnissen des Spieles löschen, inklusive der" +
                 " Verknüpfungen und Dateien im 'AppData' Speicher.");
-            Polish.Add("DefaultUninstallModeRBDescription", "Domyślna dezinstalacja usunie wszystkie pliki w folderze modów i powiązane pliki, także skróty" +
+            Polish.Add("UninstallDefaultDescription", "Domyślna dezinstalacja usunie wszystkie pliki w folderze modów i powiązane pliki, także skróty" +
                 " oraz pamięć podręczną aplikacji.");
-            French.Add("DefaultUninstallModeRBDescription", "La méthode de désinstallation par défaut vas supprimer tout les fichiers dans le dossier du jeu, incluant les" +
+            French.Add("UninstallDefaultDescription", "La méthode de désinstallation par défaut vas supprimer tout les fichiers dans le dossier du jeu, incluant les" +
                 " raccourcies et le fichers de cache appdata");
-            Spanish.Add("DefaultUninstallModeRBDescription", "La desinstalación estándar eliminará todos los archivos en los directorios de Mods del juego, incluyendo accesos directos y archivos de caché");
-            Russian.Add("DefaultUninstallModeRBDescription", "Обычная деинсталляция удалит все моды, включая ярлыки и кэш в AppData.");
+            Spanish.Add("UninstallDefaultDescription", "La desinstalación estándar eliminará todos los archivos en los directorios de Mods del juego, incluyendo accesos directos y archivos de caché");
+            Russian.Add("UninstallDefaultDescription", "Обычная деинсталляция удалит все моды, включая ярлыки и кэш в AppData.");
 
-            //Component: CleanUninstallModeRBDescription
-            //
-            English.Add("CleanUninstallModeRBDescription", "Quick Uninstall will only remove files in the game's mod directories. It does not remove modpack" +
+            //Component: UninstallQuickDescription
+            // A radio button tooltip explaining the difference between this option and the option next (to the left) of it.
+            English.Add("UninstallQuickDescription", "Quick Uninstall will only remove files in the game's mod directories. It does not remove modpack" +
                 " created shortcuts or appdata cache files.");
-            German.Add("CleanUninstallModeRBDescription", "Die schnelle Deinstallation wird nur Dateien in den Mod-Verzeichnissen der Spieles löschen." +
+            German.Add("UninstallQuickDescription", "Die schnelle Deinstallation wird nur Dateien in den Mod-Verzeichnissen der Spieles löschen." +
                 " Es werden keine vom ModPack erstellten Verknüpfungen oder Dateien im 'AppData' Speicher gelöscht.");
-            Polish.Add("CleanUninstallModeRBDescription", "Szybka dezinstalacja usuwa tylko pliki w folderze modów, pomijając skróty oraz pamięć podręczną aplikacji.");
-            French.Add("CleanUninstallModeRBDescription", "La méthode de désinstallation rapide vas uniquement supprimer les fichiers dans le dossier" +
+            Polish.Add("UninstallQuickDescription", "Szybka dezinstalacja usuwa tylko pliki w folderze modów, pomijając skróty oraz pamięć podręczną aplikacji.");
+            French.Add("UninstallQuickDescription", "La méthode de désinstallation rapide vas uniquement supprimer les fichiers dans le dossier" +
                 " \"mod\" du jeu. Ceci ne supprimeras pas les raccourcis ou les fichiers de cache appdata créé par le modpack");
-            Spanish.Add("CleanUninstallModeRBDescription", "La desinstalación rápida sólo eliminará archivos en los directorios de Mods del juego. No eliminará archivos" +
+            Spanish.Add("UninstallQuickDescription", "La desinstalación rápida sólo eliminará archivos en los directorios de Mods del juego. No eliminará archivos" +
                 " del Modpack, accesos directos o archivos de caché");
-            Russian.Add("CleanUninstallModeRBDescription", "Быстрая деинсталляция удалит только моды, оставив ярлыки, созданные модпаком, и кэш в AppData.");
+            Russian.Add("UninstallQuickDescription", "Быстрая деинсталляция удалит только моды, оставив ярлыки, созданные модпаком, и кэш в AppData.");
 
             //Component: DiagnosticUtilitiesButton
             //
@@ -1710,7 +1746,7 @@ namespace RelhaxModpack
             //Component: UninstallModeGroupBoxDescription
             English.Add("UninstallModeGroupBoxDescription", "Select the uninstall mode to use");
             German.Add("UninstallModeGroupBoxDescription", "Wähle den Deinstallationsmodus");
-            Polish.Add("UninstallModeGroupBoxDescription", "Wybierz sposób dezinstalcji.");
+            Polish.Add("UninstallModeGroupBoxDescription", "Wybiera metodę dezinstalcji modów.");
             French.Add("UninstallModeGroupBoxDescription", "Sélectionner le mode d'installation à utiliser");
             Spanish.Add("UninstallModeGroupBoxDescription", "Seleccione el modo de desinstalación a utilizar");
             Russian.Add("UninstallModeGroupBoxDescription", "Выбрать метод удаления");
@@ -1996,7 +2032,7 @@ namespace RelhaxModpack
             //
             English.Add("verifyUninstallVersionAndLocation", "Confirm you wish to uninstall mods from WoT installation\n\n{0}\n\nUsing uninstall method '{1}'?");
             German.Add("verifyUninstallVersionAndLocation", "Bitte bestätige das du alle Mods von Deinem WoT deinstalliert haben möchtest\n\n{0}\n\nVerwendung von Deinstallationsmethode '{1}'?");
-            Polish.Add("verifyUninstallVersionAndLocation", "Czy chcesz odinstalować wszystkie mody z WoT?\n\n{0}\n\nUżyć metody '{1}'?");
+            Polish.Add("verifyUninstallVersionAndLocation", "Czy chcesz odinstalować wszystkie mody z WoT?\n\n{0}\n\nWybrany tryb dezinstalacji: {1}");
             French.Add("verifyUninstallVersionAndLocation", "Confirmer que vous voulez désinstaller les mods du dossier WoT\n\n{0}\n\nUsing la méthode de désinstallation '{1}'?");
             Spanish.Add("verifyUninstallVersionAndLocation", "¿Confirma que desea desinstalar mods del directorio de WoT\n\n{0}\n\nutilizando el método de desinstalación '{1}'?");
             Russian.Add("verifyUninstallVersionAndLocation", "Подтвердите необходимость удалить моды для WoT в этой папке: \n\n{0}\n\nИспользуем метод '{1}'?");
@@ -2166,16 +2202,16 @@ namespace RelhaxModpack
             Russian.Add("ClearSelectionsButtonLabel", "Снять все галочки");
 
             //Component: SearchThisTabOnlyCB
-            //
+            // A checkbox under the search field SearchTB in mods selection window. Toggles the search engine to search only in user's currently active tab.
             English.Add("SearchThisTabOnlyCB", "This tab only");
             German.Add("SearchThisTabOnlyCB", "Nur diese Registerkarte");
-            Polish.Add("SearchThisTabOnlyCB", "Tylko ta zakładka");
+            Polish.Add("SearchThisTabOnlyCB", "Szukaj tylko na tej zakładkce");
             French.Add("SearchThisTabOnlyCB", "Cet onglet seulement");
             Spanish.Add("SearchThisTabOnlyCB", "Sólo esta pestaña");
             Russian.Add("SearchThisTabOnlyCB", "Только в этой вкладке");
 
             //Component: SearchTB
-            //
+            // A label for the search field to the right. Used to find mods, configs etc. in the mod selection window.
             English.Add("SearchTB", "Search for a mod: ");
             German.Add("SearchTB", "Suche einen Mod: ");
             Polish.Add("SearchTB", "Szukaj modów:  ");
@@ -2183,18 +2219,18 @@ namespace RelhaxModpack
             Spanish.Add("SearchTB", "Buscar un mod: ");
             Russian.Add("SearchTB", "Найти мод: ");
 
-            //Component: SeachTBDescription
-            //
-            English.Add("SeachTBDescription", "You can also search for multiple name parts, separated by a * (asterisk).\nFor example: config*willster419 will display" +
+            //Component: SearchTBDescription
+            // A tooltip for SearchTB. Describes the use of a wild character in the search query.
+            English.Add("SearchTBDescription", "You can also search for multiple name parts, separated by a * (asterisk).\nFor example: config*willster419 will display" +
                 " as search result: Willster419\'s Config");
-            German.Add("SeachTBDescription", "Du kannst auch nach mehreren Namensteilen suchen, getrennt durch ein * (Sternchen).\nZum Beispiel: config*willster419" +
+            German.Add("SearchTBDescription", "Du kannst auch nach mehreren Namensteilen suchen, getrennt durch ein * (Sternchen).\nZum Beispiel: config*willster419" +
                 "  wird als Suchergebnis anzeigen: Willster419\'s Config");
-            Polish.Add("SeachTBDescription", "Użyj gwiazdki (*), aby wyszukać wiele członów nazwy.\nNa przykład: 'config * willster419' zwróci" +
-                " wynik wyszukiwania: Willster419\'s Config");
-            French.Add("SeachTBDescription", "Vous pouvez également rechercher plusieurs parties de nom, séparées par un * (astérisque).\nPar exemple: config *" +
+            Polish.Add("SearchTBDescription", "Użyj gwiazdki (*), aby wyszukać wiele członów nazwy.\nPRZYKŁAD:\n\"config * willster419\" ZWRÓCI: " +
+                " \"Willster419\'s Config\"");
+            French.Add("SearchTBDescription", "Vous pouvez également rechercher plusieurs parties de nom, séparées par un * (astérisque).\nPar exemple: config *" +
                 " willster419 affichera comme résultat de la recherche: Config de Willster419");
             Spanish.Add("SearchTBDescription", "También puede buscar varias partes del nombre, separadas por un * (asterisco).\n Por ejemplo: config*willster419 mostrará como resultado: Willster419\'s Config");
-            Russian.Add("SeachTBDescription", "Вы так же можете искать по нескольким частям названия, разделяя их * (звёздочкой).\nК примеру, config*willster419 покажет в качестве результата поиска Willster419\'s Config");
+            Russian.Add("SearchTBDescription", "Вы так же можете искать по нескольким частям названия, разделяя их * (звёздочкой).\nК примеру, config*willster419 покажет в качестве результата поиска Willster419\'s Config");
 
             //Component: InstallingAsWoTVersion
             //
@@ -3541,14 +3577,34 @@ namespace RelhaxModpack
             Spanish.Add("CollectLogInfo", "Recoge los archivos de registro en un archivo zip para informar de un problema");
             Russian.Add("CollectLogInfo", "Собрать log-файлы в ZIP-архив для отчёта об ошибке");
 
-            //Component: DownloadWGPatchFilesText
+            //Component: CollectLogInfoButtonDescription
             //
+            English.Add("CollectLogInfoButtonDescription", "Collects all the necessary log files into a one ZIP files.\nThis makes it easier for you to report a problem.");
+            German.Add("CollectLogInfoButtonDescription", TranslationNeeded);
+            Polish.Add("CollectLogInfoButtonDescription", "Tworzy archiwum ZIP ze wszystkimi plikami dziennika, ułatwiając zgłaszanie błędów.");
+            French.Add("CollectLogInfoButtonDescription", TranslationNeeded);
+            Spanish.Add("CollectLogInfoButtonDescription", TranslationNeeded);
+            Russian.Add("CollectLogInfoButtonDescription", TranslationNeeded);
+
+            //Component: DownloadWGPatchFilesText
+            // A button for a new window with multiple tabs, guiding the user through the process of manual WG patch files download over HTTP for later installation by the WGC.
             English.Add("DownloadWGPatchFilesText", "Download WG Patch files for any WG client via HTTP");
             German.Add("DownloadWGPatchFilesText", TranslationNeeded);
             Polish.Add("DownloadWGPatchFilesText", "Pobieranie aktualizacji dla gier WG (HTTP)");
             French.Add("DownloadWGPatchFilesText", TranslationNeeded);
             Spanish.Add("DownloadWGPatchFilesText", TranslationNeeded);
             Russian.Add("DownloadWGPatchFilesText", TranslationNeeded);
+
+            //Component: DownloadWGPatchFilesButtonDescription
+            // A tooltip for the DownloadWGPatchFiles button in diagnostics window. Used to manualy download WG patch files over HTTP for later installation by the WGC.
+            English.Add("DownloadWGPatchFilesButtonDescription", "Guides you through & downloads patch files for Wargaming games (WoT, WoWs, WoWp) over HTTP so you can install them later.\n" +
+                "Particularily useful for people who cannot use Wargaming Game Center's default P2P protocol.");
+            German.Add("DownloadWGPatchFilesButtonDescription", TranslationNeeded);
+            Polish.Add("DownloadWGPatchFilesButtonDescription", "Pobiera pliki aktualizacji dla gier Wargaming za pomocą protokołu HTTP celem późniejszej instalacji w WGC.\n" +
+                "Szczególnie przydatne dla osób, które nie mogą używać wbudowanego w Wargaming Game Center protokołu P2P.");
+            French.Add("DownloadWGPatchFilesButtonDescription", TranslationNeeded);
+            Spanish.Add("DownloadWGPatchFilesButtonDescription", TranslationNeeded);
+            Russian.Add("DownloadWGPatchFilesButtonDescription", TranslationNeeded);
 
             //Component: SelectedInstallation
             //
@@ -3749,13 +3805,23 @@ namespace RelhaxModpack
             Russian.Add("selectFilesToInclude", "Выберите файлы для включения в отчёт об ошибке");
 
             //Component: TestLoadImageLibraries
-            //
+            // A button in Diagnostics window for test-loading Atlas processing libraries.
             English.Add("TestLoadImageLibraries", "Test loading the atlas image processing libraries");
             German.Add("TestLoadImageLibraries", "Teste das Laden der Bibliotheken zur Atlasverarbeitung");
-            Polish.Add("TestLoadImageLibraries", "Sprawdź biblioteki przetwarzania obrazów Atlas");
+            Polish.Add("TestLoadImageLibraries", "Test bibliotek przetwarzania plików Atlas");
             French.Add("TestLoadImageLibraries", TranslationNeeded);
             Spanish.Add("TestLoadImageLibraries", "Carga de prueba de las librerías de procesamiento de imágenes de atlas");
             Russian.Add("TestLoadImageLibraries", "Протестировать библиотеки обработки изображений-атласов");
+
+            //Component: TestLoadImageLibrariesButtonDescription
+            // A tooltip for TestLoadImageLibraries button. Does hmmmm... @Willster? :>
+            English.Add("TestLoadImageLibrariesButtonDescription", "Tests the atlas image processing libraries"); // I will need your help here, @Willster. @Nullmaruzero
+            German.Add("TestLoadImageLibrariesButtonDescription", TranslationNeeded);
+            Polish.Add("TestLoadImageLibrariesButtonDescription", "Próbuje wczytać biblioteki przetwarzania obrazów Atlas.\n" +
+                "Ewentualne błędy mogą być oznakiem braku wymaganego oprogramowania w systemie."); //=> Potential (load) errors may indicate missing dependencies in your system.
+            French.Add("TestLoadImageLibrariesButtonDescription", TranslationNeeded);
+            Spanish.Add("TestLoadImageLibrariesButtonDescription", TranslationNeeded);
+            Russian.Add("TestLoadImageLibrariesButtonDescription", TranslationNeeded);
 
             //Component: loadingAtlasImageLibraries
             //
@@ -4745,7 +4811,7 @@ namespace RelhaxModpack
             //Application window title
             English.Add("GameCenterUpdateDownloader", "Game Center Update Downloader");
             German.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Polish.Add("GameCenterUpdateDownloader", "Aktualizacja Game Center pobrana");
+            Polish.Add("GameCenterUpdateDownloader", "Pobieranie aktualizacji gier dla Wargaming Game Center");
             French.Add("GameCenterUpdateDownloader", TranslationNeeded);
             Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
             Russian.Add("GameCenterUpdateDownloader", TranslationNeeded);
