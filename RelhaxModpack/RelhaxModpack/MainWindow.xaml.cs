@@ -1978,11 +1978,10 @@ namespace RelhaxModpack
             Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
 
             //verify the uninstall
-            if (MessageBox.Show(string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), Settings.WoTDirectory,
-                // Trying to translate the uninstall method name, passing just ModpackSettings.UninstallMode.ToString() as an argument ignores translations.
-                // This one will still roll back to EN string if other language does not have it. I don't expect the English strings changing. @Nullmaruzero
-                ModpackSettings.UninstallMode.ToString() == "Quick" ? Translations.GetTranslatedString("UninstallQuickText") : Translations.GetTranslatedString("UninstallDefaultText")),
-                Translations.GetTranslatedString("confirmUninstallHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
+            string uninstallModeTranslated = ModpackSettings.UninstallMode == UninstallModes.Quick ?
+                Translations.GetTranslatedString("UninstallQuickText") : Translations.GetTranslatedString("UninstallDefaultText");
+            string uninstallConfirmMessage = string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), Settings.WoTDirectory, uninstallModeTranslated);
+            if (MessageBox.Show(uninstallConfirmMessage, Translations.GetTranslatedString("confirmUninstallHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
             {
                 ToggleUIButtons(true);
                 return;
