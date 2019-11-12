@@ -167,7 +167,7 @@
     <Compile Include="InstallerComponents\XmlUnpack.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
-    <Compile Include="PrivateStuff\relhaxmodpackprivatesettings\PrivateStuff.cs" />
+    <Compile Include="PrivateStuff\PrivateStuff.cs" />
     <Compile Include="Settings\PatchSettings.cs" />
     <Compile Include="Settings\EditorSettings.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
@@ -478,7 +478,6 @@
     <EmbeddedResource Include="Resources\DLL\FreeImage64.zip" />
     <EmbeddedResource Include="Resources\DLL\nvtt32.zip" />
     <EmbeddedResource Include="Resources\DLL\nvtt64.zip" />
-    <Resource Include="PrivateStuff\github_readme_link.txt" />
     <Resource Include="Resources\Images\popular_icon.png" />
     <Resource Include="Resources\Licences\Fody.txt" />
     <Resource Include="Resources\Images\grey_area_mod.png" />
@@ -553,9 +552,11 @@ echo         //https://stackoverflow.com/questions/4450231/can-i-make-a-constant
 echo         ///^&lt;summary^&gt;String of the build number and build date/time, and other useful info.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo         public const string BuildTag = "%25DATE%25 %25TIME%25"; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo     } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"</PreBuildEvent>
+echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>if exist "$(TargetDir)sign_modpack.bat" call "$(TargetDir)sign_modpack.bat"</PostBuildEvent>
+    <PostBuildEvent>if exist "$(TargetDir)sign_modpack.bat" call "$(TargetDir)sign_modpack.bat"
+if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuffNull.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PostBuildEvent>
   </PropertyGroup>
 </Project>
