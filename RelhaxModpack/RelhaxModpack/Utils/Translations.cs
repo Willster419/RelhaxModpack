@@ -2192,6 +2192,15 @@ namespace RelhaxModpack
             Spanish.Add("SaveSelectionButtonLabel", "Guardar selección");
             Russian.Add("SaveSelectionButtonLabel", "Сохранить шаблон настроек");
 
+            //Component: SelectSelectionFileToLoad
+            //File save dialog box when the user presses 'save selection' in Mod Selection List
+            English.Add("SelectSelectionFileToLoad", "Save selection file");
+            German.Add("SelectSelectionFileToLoad", TranslationNeeded);
+            Polish.Add("SelectSelectionFileToLoad", TranslationNeeded);
+            French.Add("SelectSelectionFileToLoad", TranslationNeeded);
+            Spanish.Add("SelectSelectionFileToLoad", TranslationNeeded);
+            Russian.Add("SelectSelectionFileToLoad", TranslationNeeded);
+
             //Component: ClearSelectionsButtonLabel
             //
             English.Add("ClearSelectionsButtonLabel", "Clear selections");
