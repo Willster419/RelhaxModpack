@@ -2425,7 +2425,7 @@ namespace RelhaxModpack
             return null;
         }
 
-        private static RegistryKey GetRegistryKeys(RegistrySearch search)
+        public static RegistryKey GetRegistryKeys(RegistrySearch search)
         {
             try
             {
