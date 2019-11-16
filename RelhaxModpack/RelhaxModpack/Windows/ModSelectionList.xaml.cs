@@ -1637,7 +1637,8 @@ namespace RelhaxModpack.Windows
                 InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
                 AddExtension = true,
                 Filter = "XML files|*.xml",
-                ValidateNames = true
+                ValidateNames = true,
+                Title = Translations.GetTranslatedString("SelectSelectionFileToLoad")
             };
             if((bool)selectSavePath.ShowDialog())
                 SaveSelection(selectSavePath.FileName,false);
