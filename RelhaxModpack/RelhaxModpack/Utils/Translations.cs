@@ -3511,11 +3511,11 @@ namespace RelhaxModpack
 
             //Component: InstallationCompleteStartGameCenter
             //
-            English.Add("InstallationCompleteStartGameCenter", "Start WG Game Center (WoTLauncher.exe)?");
-            German.Add("InstallationCompleteStartGameCenter", "Starte WG Game Center (WoTLauncher.exe)?");
-            Polish.Add("InstallationCompleteStartGameCenter", "Uruchomić WG Game Center (WoTLauncher.exe)?");
-            French.Add("InstallationCompleteStartGameCenter", "Démarrer WG Game Center (WoTLauncher.exe)?");
-            Spanish.Add("InstallationCompleteStartGameCenter", "¿Iniciar WG Game Center (WoTLauncher.exe)?");
+            English.Add("InstallationCompleteStartGameCenter", "Start WG Game Center?");
+            German.Add("InstallationCompleteStartGameCenter", "Starte WG Game Center?");
+            Polish.Add("InstallationCompleteStartGameCenter", "Uruchomić WG Game Center?");
+            French.Add("InstallationCompleteStartGameCenter", "Démarrer WG Game Center?");
+            Spanish.Add("InstallationCompleteStartGameCenter", "¿Iniciar WG Game Center ?");
             Russian.Add("InstallationCompleteStartGameCenter", "Запустить Wargaming Game Center?");
 
             //Component: InstallationCompleteOpenXVM
