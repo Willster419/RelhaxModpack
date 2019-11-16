@@ -2098,7 +2098,7 @@ namespace RelhaxModpack
             //"4 seconds"
             //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings
             TimeSpan remain = TimeSpan.FromMilliseconds(remainingMilliseconds);
-            string line4 = string.Format("{0} {1} {2} {3}", remain.Minutes, Translations.GetTranslatedString("minutes"), remain.ToString(@"ss\.f"),
+            string line4 = string.Format("{0} {1} {2} {3}", remain.ToString(@"mm"), Translations.GetTranslatedString("minutes"), remain.ToString(@"ss"),
                 Translations.GetTranslatedString("seconds"));
 
             //also report to the download message process

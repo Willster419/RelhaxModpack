@@ -1638,7 +1638,7 @@ namespace RelhaxModpack.Windows
                 AddExtension = true,
                 Filter = "XML files|*.xml",
                 ValidateNames = true,
-                Title = Translations.GetTranslatedString("SelectSelectionFileToLoad")
+                Title = Translations.GetTranslatedString("SelectSelectionFileToSave")
             };
             if((bool)selectSavePath.ShowDialog())
                 SaveSelection(selectSavePath.FileName,false);
