@@ -1,3 +1,49 @@
+Application version 0.29.4.1 (2019-11-04)
+https://www.virustotal.com/gui/file/18f8f48eac07e2555fb4adc77f04c68219849c6df352600b84748dcfc86f3c84/detection
+- Fixed compatibilty issues with WoWp and WoWs with the Game Center update downloader.
+- Fixed application exiting incorrectly when closing from notification icon right click.
+- Removed defunct feature of launching the old WoT Launcher in client check mode (now done via game center).
+- Fixed bugs with writing to the installer and uninstaller logfiles.
+- Fixed functionality of the option to 'inform if no new database is available'.
+- Updated english and polish translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.0 (2019-11-03)
+https://www.virustotal.com/gui/file/777576f3d9be22a484a79689193bdc7f8d3c42a7a56587953b6329e88e456bc1/detection
+- Added new feature in diagnostics. You can now use the diagnostics window to download game center updates for any WG Game Center without peer-to-peer.
+- This enables those who are on univeristy networks (or do not wish to use peer-to-peer networking) to download updates via HTTP from the WG update servers.
+- Added task bar progress for Windows 10 and 8.1 users (and Windows 7 users using Aero).
+- Fixed issues and improved logging of Translations.LocalizeWindow() and Exists() methods.
+- Re-worked application deployment process so others on github who fork/clone the repo can build.
+- Updated translation entries.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.3.7 (2019-10-28)
+https://www.virustotal.com/gui/file/6e4f841d5d9bd1b028a5b2692a657214ae7ceddbc1084f5af586c3c5bbc2b7dc/detection
+- FINALLY fixed the intermidant issue of contour icon atlas creation failing randomly.
+- Fixed UI placement of text components in the First Load Acknowledgements window.
+- Updated polish and english translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.3.6 (2019-10-27)
+https://www.virustotal.com/gui/file/7f0188265d4b4fe13e2a26e7dfb9ee24071483f49b91d035c68749d955e9b252/detection
+- Fixed bug of the selected language (other than english) not loading on application start.
+- Added a check in waiting for the font installation process. It is stopped after 10 seconds (it should never take longer then that).
+- Fixed bugs with manual detection if user sets the WoT exe in win32 or win64.
+- Updated Spanish, French, Polish, Russian translations.
+- Added getting the backup folder size to after an installation is complete and if a backup was performed.
+- Fixed issues with xvm URL launch from advanced install finished window.
+- Fixed UI issues with Media text field display in database editor.
+- Changed installer logic so that if it fails or is canceled, it will still clean up the temporary created folders.
+- Added error handling for malformed Json patch instruction files.
+- Changed some errors to warning level events in the patcher.
+- Added error handling for xmlUnpack()
+- Added install failed information if verbose logging is enabled. (Like if the instal finishes but patches failed).
+- Improved resource disposal and cleanup after an installation.
+- Re-worked the atlas creation steps to make it more readable and better code structured.
+- Added more logging information during installation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.3.3 (2019-10-21)
 https://www.virustotal.com/gui/file/c4ca6837aa6f4a02e3f537717f087e9cd75d2ad67ddaf0a6016061b0ac004afd/detection
 - Updated german translations (thanks Elektrosmoker).

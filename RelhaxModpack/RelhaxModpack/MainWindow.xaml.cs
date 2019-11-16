@@ -19,6 +19,9 @@ using System.Timers;
 using System.Threading;
 using Timer = System.Timers.Timer;
 using Microsoft.Win32;
+using System.Text;
+using RelhaxModpack.InstallerComponents;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace RelhaxModpack
 {
@@ -41,7 +44,7 @@ namespace RelhaxModpack
         private bool databaseUpdateAvailableFromAutoSync = false;
         private bool autoInstallTimerRegistered = false;
         private CancellationTokenSource cancellationTokenSource;
-        private InstallerComponents.InstallEngine installEngine;
+        private InstallEngine installEngine;
         private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
         {
             AddExtension = true,
@@ -77,6 +80,9 @@ namespace RelhaxModpack
         private long remainingMilliseconds;
         //reference for downloading the package to keep track of the async download
         private DatabasePackage downloadingPackage = null;
+        private TaskbarManager taskbarInstance = null;
+        private TaskbarProgressBarState taskbarState = TaskbarProgressBarState.NoProgress;
+        private int taskbarValue = 0;
 
         /// <summary>
         /// The original width and height of the application before applying scaling
@@ -119,6 +125,13 @@ namespace RelhaxModpack
             //set loading flag
             loading = true;
 
+            //get taskbar instance for color change if supported
+            if (TaskbarManager.IsPlatformSupported && TaskbarManager.Instance != null)
+            {
+                taskbarInstance = TaskbarManager.Instance;
+                taskbarInstance.SetProgressState(taskbarState);
+            }
+
             //delete the updater scripts if they exist
 #pragma warning disable CS0618
             foreach (string s in new string[] { Settings.RelicBatchUpdateScript, Settings.RelicBatchUpdateScriptOld })
@@ -138,6 +151,7 @@ namespace RelhaxModpack
             //load the progress report window
             ProgressIndicator progressIndicator = new ProgressIndicator()
             {
+                LocalizeWindow = false,
                 Message = "Loading...",
                 ProgressMinimum = 0,
                 ProgressMaximum = 4
@@ -158,6 +172,7 @@ namespace RelhaxModpack
             //load translation hashes and set default language
             Translations.LoadTranslations();
             Translations.SetLanguage(Languages.English);
+
             //disconnect event handler before application
             LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
             LanguagesSelector.SelectedIndex = 0;
@@ -170,6 +185,7 @@ namespace RelhaxModpack
             //apply translation settings
             Translations.SetLanguage(ModpackSettings.Language);
             Translations.LocalizeWindow(this, true);
+            Translations.LocalizeWindow(progressIndicator, false);
             ApplyCustomUILocalizations(false);
 
             //create tray icons and menus
@@ -179,6 +195,15 @@ namespace RelhaxModpack
 #warning forced debugging settings is active
             ModpackSettings.DisableTriggers = true;
             ModpackSettings.VerboseLogging = true;
+
+            //load AutoSyncFrequencyComboBox with translated versions
+            //<System:String>Minutes</System:String>
+            //<System:String> Hours </System:String >
+            //<System:String> Days </System:String >
+            AutoSyncFrequencyComboBox.Items.Clear();
+            AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("minutes"));
+            AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("hours"));
+            AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("days"));
 
             //apply settings to UI elements
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
@@ -264,21 +289,7 @@ namespace RelhaxModpack
             }
             else
             {
-                Logging.Debug("starting async task of getting file sizes of backups");
-                Task.Run(() =>
-                {
-                    backupFolderTotalSize = 0;
-                    backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
-                    foreach (string file in backupFiles)
-                    {
-                        backupFolderTotalSize += Utils.GetFilesize(file);
-                    }
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
-                    });
-                    Logging.Debug("completed async task of getting file sizes of backups");
-                });
+                GetBackupFilesizesAsync(false);
             }
 
             Logging.Debug("checking if application is up to date");
@@ -455,45 +466,51 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (ModpackSettings.MinimizeToSystemTray)
+            {
+                Logging.Debug("minimizing to system tray");
+                Hide();
+                e.Cancel = true;
+            }
+            else
+            {
+                CloseApplication();
+            }
+        }
+
+        private void CloseApplication()
+        {
             //dispose of the timer if it's not already disposed
             if (autoInstallTimer != null)
             {
                 autoInstallTimer.Dispose();
                 autoInstallTimer = null;
             }
-            if (ModpackSettings.MinimizeToSystemTray)
+
+            if (!Logging.IsLogDisposed(Logfiles.Application))
             {
-                Logging.Debug("minimizing to system try");
-                Hide();
-                e.Cancel = true;
-            }
-            else
-            {
-                if (!Logging.IsLogDisposed(Logfiles.Application))
+                if (Logging.IsLogOpen(Logfiles.Application))
+                    Logging.Info("Saving settings");
+                if (!closingFromFailure)
+                    if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
+                        if (Logging.IsLogOpen(Logfiles.Application))
+                            Logging.Info("Settings saved");
+                if (Logging.IsLogOpen(Logfiles.Application))
+                    Logging.Info("Disposing tray");
+                if (RelhaxIcon != null)
+                {
+                    RelhaxIcon.Dispose();
+                    RelhaxIcon = null;
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        Logging.Info("Tray disposed");
+                }
+                else
                 {
                     if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Saving settings");
-                    if (!closingFromFailure)
-                        if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
-                            if (Logging.IsLogOpen(Logfiles.Application))
-                                Logging.Info("Settings saved");
-                    if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Disposing tray");
-                    if (RelhaxIcon != null)
-                    {
-                        RelhaxIcon.Dispose();
-                        RelhaxIcon = null;
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.Info("Tray disposed");
-                    }
-                    else
-                    {
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.Info("Tray already null");
-                    }
+                        Logging.Info("Tray already null");
                 }
-                Application.Current.Shutdown(0);
             }
+            Application.Current.Shutdown(0);
         }
 
         private void ProcessTitle()
@@ -556,8 +573,7 @@ namespace RelhaxModpack
 
         private void OnMenuItemCloseClick(object sender, EventArgs e)
         {
-            Application.Current.Shutdown();
-            Close();
+            CloseApplication();
         }
 
         private void OnMenuClickChekUpdates(object sender, EventArgs e)
@@ -983,6 +999,7 @@ namespace RelhaxModpack
                         CheckFileExists = true,
                         CheckPathExists = true,
                         Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                        Title = Translations.GetTranslatedString("selectWOTExecutable"),
                         Multiselect = false,
                         ValidateNames = true
                     };
@@ -1116,27 +1133,39 @@ namespace RelhaxModpack
                     }
 
                     //if the user wants to, check if the database has actually changed
-                    if (ModpackSettings.NotifyIfSameDatabase)
+                    if (ModpackSettings.NotifyIfSameDatabase && ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Stable)
                     {
+                        Logging.Info("NotifyIfSameDatabase is true and databaseDistroVersion is stable, checking if last installed database is the same as current");
                         //get the install log for last installed database version
-                        string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", "installedRelhaxFiles.log");
+                        string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename);
                         if (File.Exists(installedfilesLogPath))
                         {
                             //use index 0 of array, index 18 of string array
-                            string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0].Substring(18).Trim();
+                            string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0];
+                            Logging.Debug("lastInstalledDatabaseVersion (pre trim): {0}", lastInstalledDatabaseVersion);
+                            if(!string.IsNullOrWhiteSpace(lastInstalledDatabaseVersion) && lastInstalledDatabaseVersion.Length >=18)
+                                lastInstalledDatabaseVersion = lastInstalledDatabaseVersion.Substring(18).Trim();
+                            Logging.Debug("lastInstalledDatabaseVersion (post trim): {0}", lastInstalledDatabaseVersion);
                             if (Settings.DatabaseVersion.Equals(lastInstalledDatabaseVersion))
                             {
                                 if (MessageBox.Show(Translations.GetTranslatedString("DatabaseVersionsSameBody"), Translations.GetTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
                                 {
+                                    Logging.Info("User selected to not install");
                                     ToggleUIButtons(true);
                                     return;
                                 }
+                                else
+                                    Logging.Info("User selected to install anyways");
                             }
                         }
                         else
                         {
                             Logging.Warning("installedRelhaxFiles.log does not exist, cannot notify if same database");
                         }
+                    }
+                    else if(ModpackSettings.NotifyIfSameDatabase)
+                    {
+                        Logging.Warning("NotifyIfSameDatabase is selected but invalid database distribution! {0}", ModpackSettings.DatabaseDistroVersion.ToString());
                     }
                 }
             }
@@ -1461,7 +1490,7 @@ namespace RelhaxModpack
 
             Logging.Debug("creating install engine, cancel options and progress reporting");
             //and create and link the install engine
-            installEngine = new InstallerComponents.InstallEngine()
+            installEngine = new InstallEngine()
             {
                 FlatListSelectablePackages = flatListSelect,
                 OrderedPackagesToInstall = orderedPackagesToInstall,
@@ -1487,7 +1516,7 @@ namespace RelhaxModpack
 
             //run install
             Logging.Debug("running installation from MainWindow");
-            InstallerComponents.RelhaxInstallFinishedEventArgs results = await installEngine.RunInstallationAsync(progress);
+            RelhaxInstallFinishedEventArgs results = await installEngine.RunInstallationAsync(progress);
             Logging.Debug("installation has finished, returned to MainWindow");
             installEngine.Dispose();
             installEngine = null;
@@ -1519,8 +1548,11 @@ namespace RelhaxModpack
             TotalProgressBar.Value = TotalProgressBar.Maximum;
 
             //after waiting for the installation...
-            if (results.ExitCode == InstallerComponents.InstallerExitCodes.Success)
+            if (results.ExitCode == InstallerExitCodes.Success)
             {
+                taskbarInstance.SetProgressValue(100, 100);
+                if(ModpackSettings.VerboseLogging)
+                    DisplayAndLogInstallErrors(results, false);
                 if (ModpackSettings.ShowInstallCompleteWindow)
                 {
                     InstallFinished installFinished = new InstallFinished();
@@ -1541,17 +1573,54 @@ namespace RelhaxModpack
             }
             else
             {
-                //explain why if failed
-                MessageBox.Show(string.Format("{0}{1}{2}", Translations.GetTranslatedString("installFailed") + ":", Environment.NewLine, results.ExitCode.ToString()));
-                //and log
-                Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", results.ExitCode.ToString(), results.ErrorMessage),
-                    Logfiles.Application, LogLevel.Exception);
+                taskbarState = TaskbarProgressBarState.Error;
+                taskbarInstance.SetProgressState(taskbarState);
+                DisplayAndLogInstallErrors(results, true);
                 ToggleUIButtons(true);
+            }
+
+            //Run task to get backup text file size if a backup was done
+            if(ModpackSettings.BackupModFolder)
+                GetBackupFilesizesAsync(true);
+
+            //set taskbar progress state back to normal
+            taskbarState = TaskbarProgressBarState.NoProgress;
+            taskbarInstance.SetProgressState(taskbarState);
+        }
+
+        private void DisplayAndLogInstallErrors(RelhaxInstallFinishedEventArgs results, bool addResultsExitCode)
+        {
+            if (results.InstallFailedSteps.Count > 0)
+            {
+                StringBuilder errorBuilder = new StringBuilder();
+                errorBuilder.AppendFormat("{0}{1}", Translations.GetTranslatedString("installFailed") + ":", Environment.NewLine);
+                if (!results.InstallFailedSteps.Contains(results.ExitCode) && addResultsExitCode)
+                    results.InstallFailedSteps.Add(results.ExitCode);
+                errorBuilder.Append(string.Join(Environment.NewLine, results.InstallFailedSteps));
+
+                Logging.Exception("The installer failed in the following steps: {0}", string.Join(",", results.InstallFailedSteps));
+
+                MessageBox.Show(errorBuilder.ToString());
             }
         }
 
         private void OnInstallProgressChanged(object sender, RelhaxInstallerProgress e)
         {
+            //set taskbar progress
+            if(taskbarInstance != null)
+            {
+                if (taskbarState != TaskbarProgressBarState.Normal)
+                {
+                    taskbarState = TaskbarProgressBarState.Normal;
+                    taskbarInstance.SetProgressState(taskbarState);
+                }
+                if(taskbarValue != e.TotalCurrent)
+                {
+                    taskbarValue = e.TotalCurrent;
+                    taskbarInstance.SetProgressValue(taskbarValue, e.TotalTotal);
+                }
+            }
+
             if (ModpackSettings.AdvancedInstalProgress)
             {
                 if (AdvancedProgressWindow == null)
@@ -1626,7 +1695,7 @@ namespace RelhaxModpack
                         {
                             ChildProgressBar.Maximum = e.TotalInstallGroups;
                             ChildProgressBar.Value = e.InstallGroup;
-                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), e.ParrentCurrent.ToString(),
+                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), e.ParrentCurrent+1.ToString(),
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                             line2 = string.Format("{0}: {1} {2} {3} {4} {5}", Translations.GetTranslatedString("installExtractingCompletedThreads"), e.CompletedThreads.ToString(),
                                 Translations.GetTranslatedString("of"), e.TotalThreads.ToString(), Translations.GetTranslatedString("installExtractingOfGroup"), e.InstallGroup.ToString());
@@ -1650,7 +1719,7 @@ namespace RelhaxModpack
                         {
                             ChildProgressBar.Maximum = e.BytesTotal;
                             ChildProgressBar.Value = e.BytesProcessed;
-                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), e.ParrentCurrent.ToString(),
+                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), e.ParrentCurrent+1.ToString(),
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                             line2 = Path.GetFileName(e.Filename);
                             if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
@@ -1666,7 +1735,7 @@ namespace RelhaxModpack
                             }
                             else
                             {
-                                line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed.ToString(),
+                                line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed+1.ToString(),
                                 Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                                 line4 = e.EntryFilename;
                             }
@@ -1675,28 +1744,28 @@ namespace RelhaxModpack
                     case InstallerComponents.InstallerExitCodes.UserExtractionError:
                         ChildProgressBar.Maximum = e.BytesTotal;
                         ChildProgressBar.Value = e.BytesProcessed;
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("extractingUserMod"), e.ParrentCurrent.ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("extractingUserMod"), e.ParrentCurrent+1.ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = Path.GetFileName(e.Filename);
-                        line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed.ToString(),
+                        line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed+1.ToString(),
                             Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                         line4 = e.EntryFilename;
                         break;
                     case InstallerComponents.InstallerExitCodes.RestoreUserdataError:
                         //filename is name of file in package to backup
                         //parrentCurrentProgress is name of package
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installRestoreUserdata"), e.ParrentCurrent.ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installRestoreUserdata"), e.ParrentCurrent+1.ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         line3 = e.ParrentCurrentProgress;
                         break;
                     case InstallerComponents.InstallerExitCodes.XmlUnpackError:
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installXmlUnpack"), e.ParrentCurrent.ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installXmlUnpack"), e.ParrentCurrent+1.ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.PatchError:
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installPatchFiles"), e.ParrentCurrent.ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installPatchFiles"), e.ParrentCurrent+1.ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
@@ -1705,7 +1774,7 @@ namespace RelhaxModpack
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ContourIconAtlasError:
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installContourIconAtlas"), e.ParrentCurrent.ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installContourIconAtlas"), e.ParrentCurrent+1.ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = string.Format("{0} {1} {2} {3}", e.ChildCurrent.ToString(), Translations.GetTranslatedString("of"), e.ChildTotal.ToString(),
                             Translations.GetTranslatedString("stepsComplete"));
@@ -1894,6 +1963,7 @@ namespace RelhaxModpack
                     CheckFileExists = true,
                     CheckPathExists = true,
                     Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                    Title = Translations.GetTranslatedString("selectWOTExecutable"),
                     Multiselect = false,
                     RestoreDirectory = true,
                     ValidateNames = true
@@ -1917,8 +1987,10 @@ namespace RelhaxModpack
             Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
 
             //verify the uninstall
-            if (MessageBox.Show(string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), Settings.WoTDirectory, ModpackSettings.UninstallMode.ToString()),
-                Translations.GetTranslatedString("confirmUninstallHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
+            string uninstallModeTranslated = ModpackSettings.UninstallMode == UninstallModes.Quick ?
+                Translations.GetTranslatedString("UninstallQuickText") : Translations.GetTranslatedString("UninstallDefaultText");
+            string uninstallConfirmMessage = string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), Settings.WoTDirectory, uninstallModeTranslated);
+            if (MessageBox.Show(uninstallConfirmMessage, Translations.GetTranslatedString("confirmUninstallHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
             {
                 ToggleUIButtons(true);
                 return;
@@ -2647,13 +2719,13 @@ namespace RelhaxModpack
             //parse the time into a timespan for the check timer
             switch (AutoSyncFrequencyComboBox.SelectedIndex)
             {
-                case 0:
+                case 0://mins
                     autoInstallTimer.Interval = TimeSpan.FromMinutes(timeToUse).TotalMilliseconds;
                     break;
-                case 1:
+                case 1://hours
                     autoInstallTimer.Interval = TimeSpan.FromHours(timeToUse).TotalMilliseconds;
                     break;
-                case 2:
+                case 2://days
                     autoInstallTimer.Interval = TimeSpan.FromDays(timeToUse).TotalMilliseconds;
                     break;
                 default:
@@ -2662,7 +2734,7 @@ namespace RelhaxModpack
             autoInstallTimer.AutoReset = true;
             if (!autoInstallTimerRegistered)
             {
-                Logging.Debug("auto install timer not registered to event, setting");
+                Logging.Debug("auto install timer not registered to event, registering now");
                 autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
                 autoInstallTimerRegistered = true;
             }
@@ -2872,6 +2944,35 @@ namespace RelhaxModpack
             Directory.Move(middlePath, newPath);
 
             Logging.Info("upgrade of folder {0} successful", Path.GetFileName(newPath));
+        }
+
+        //asyncronously get the file sizes of backups
+        private async Task GetBackupFilesizesAsync(bool displayGettingSize)
+        {
+            Task.Run(() =>
+            {
+                Logging.Debug("starting async task of getting file sizes of backups");
+                if (displayGettingSize)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("backupModsSizeCalculating"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                    });
+                }
+
+                backupFolderTotalSize = 0;
+                backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
+                foreach (string file in backupFiles)
+                {
+                    backupFolderTotalSize += Utils.GetFilesize(file);
+                }
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                });
+                Logging.Debug("completed async task of getting file sizes of backups");
+            });
         }
     }
 }

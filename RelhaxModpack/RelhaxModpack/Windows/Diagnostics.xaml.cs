@@ -27,20 +27,22 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //check to make sure a selected tanks installation is selected
-            ToggleCollectInfoButton();
+            ToggleInstallLocationNeededButtons();
         }
 
-        private void ToggleCollectInfoButton()
+        private void ToggleInstallLocationNeededButtons()
         {
             if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
             {
                 CollectLogInfoButton.IsEnabled = false;
+                DownloadWGPatchFilesText.IsEnabled = false;
                 SelectedInstallation.Text = string.Format("{0}\n{1}",
                     Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
             }
             else
             {
                 CollectLogInfoButton.IsEnabled = true;
+                DownloadWGPatchFilesText.IsEnabled = false;
                 SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
             }
         }
@@ -48,13 +50,14 @@ namespace RelhaxModpack.Windows
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
         {
             Logging.Info("Diagnostics: Selecting WoT install");
-            //show a standard WoT selection window from manual fine WoT.exe
+            //show a standard WoT selection window from manual find WoT.exe
             OpenFileDialog manualWoTFind = new OpenFileDialog()
             {
                 AddExtension = true,
                 CheckFileExists = true,
                 CheckPathExists = true,
                 Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                Title = Translations.GetTranslatedString("selectWOTExecutable"),
                 Multiselect = false,
                 ValidateNames = true
             };
@@ -70,32 +73,7 @@ namespace RelhaxModpack.Windows
             }
 
             //check to make sure a selected tanks installation is selected
-            ToggleCollectInfoButton();
-        }
-
-        private void LaunchWoTLauncher_Click(object sender, RoutedEventArgs e)
-        {
-            //just to make sure
-            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
-                return;
-
-            Logging.Debug("Starting WoTLauncher with argument \"-integrity_default_client\"");
-            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("startingLauncherRepairMode");
-            string filename = Path.Combine(Settings.WoTDirectory, "WoTLauncher.exe");
-            string formattedArguement = "-integrity_default_client";
-            Logging.Info("Complete command: {0} {1}", filename, formattedArguement);
-            try
-            {
-                Process.Start(filename, formattedArguement);
-            }
-            catch (Exception ex)
-            {
-                Logging.Exception("LaunchWoTLauncher_Click");
-                Logging.Exception(ex.ToString());
-                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("failedStartLauncherRepairMode");
-                return;
-            }
-            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("launcherRepairModeStarted");
+            ToggleInstallLocationNeededButtons();
         }
 
         private void CollectLogInfo_Click(object sender, RoutedEventArgs e)
@@ -257,6 +235,15 @@ namespace RelhaxModpack.Windows
                 }
                 Logging.Info("Diagnostics: Test load image libraries fail");
             }
+        }
+
+        private void DownloadWGPatchFiles_Click(object sender, RoutedEventArgs e)
+        {
+            GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader()
+            {
+                SelectedClient = string.IsNullOrWhiteSpace(Settings.WoTDirectory)? string.Empty : Settings.WoTDirectory
+            };
+            gameCenterUpdateDownloader.ShowDialog();
         }
     }
 }

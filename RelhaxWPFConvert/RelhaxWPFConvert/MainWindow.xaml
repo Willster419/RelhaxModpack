@@ -210,6 +210,13 @@
                         <Button x:Name="changeHyperlinkTextLikeTranslations" Click="ChangeHyperlinkTextLikeTranslations_Click" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="128" Content="Change hyperlink text" Margin="0,22,0,0"/>
                     </Grid>
                 </GroupBox>
+                <GroupBox Header="Task Bar Progress" HorizontalAlignment="Left" Height="68" Margin="10,257,0,0" VerticalAlignment="Top" Width="336">
+                    <Grid>
+                        <TextBlock x:Name="TaskbarProgressLabel" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Progress in Taskbar" VerticalAlignment="Top"/>
+                        <TextBox x:Name="TaskbarProgressSet" HorizontalAlignment="Left" Height="23" Margin="106,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                        <Button x:Name="SetTaskbarProgress" Content="Set" HorizontalAlignment="Left" Margin="231,1,0,0" VerticalAlignment="Top" Width="75" Click="SetTaskbarProgress_Click"/>
+                    </Grid>
+                </GroupBox>
             </Grid>
         </TabItem>
         <TabItem Header="Image Pan and Zoom" x:Name="ImagePanZoomTab">

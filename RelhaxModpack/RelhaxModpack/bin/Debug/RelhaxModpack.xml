@@ -71,11 +71,6 @@
             The object of atlas arguments for building the image
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.DebugLockObject">
-            <summary>
-            Object that exists in all Atlas creation threads. Used for sensitive areas of code that can only be executed by one thread at a time
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.Token">
             <summary>
             The token for handling a cancel call from the user
@@ -84,19 +79,6 @@
         <member name="E:RelhaxModpack.AtlasesCreator.AtlasCreator.OnAtlasProgres">
             <summary>
             The event when atlas child progress occurs
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.ParseModTexturesAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
-            <summary>
-            Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
-            </summary>
-            <param name="allModFolderPaths">The list of absolute paths containing images to be loaded</param>
-            <param name="token">The cancellation token</param>
-            <returns>The list of textures</returns>
-        </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.DisposeparseModTextures">
-            <summary>
-            Dispose of all textures in the shared mod texture list
             </summary>
         </member>
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.CreateAtlas">
@@ -114,6 +96,19 @@
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.Dispose">
             <summary>
             Dispose of the Atlas Creator (mostly disposing image data)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.LoadModContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
+            </summary>
+            <param name="allModFolderPaths">The list of absolute paths containing mod contour icon images to be loaded</param>
+            <param name="token">The cancellation token</param>
+            <returns>The list of textures</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.DisposeparseModTextures">
+            <summary>
+            Dispose of all textures in the shared mod texture list
             </summary>
         </member>
         <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker">
@@ -1191,7 +1186,7 @@
             Entry will be processed in any case (if package is checked), even if "save user data" option is "false"
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UserFile.Files_saved">
+        <member name="P:RelhaxModpack.UserFile.FilesSaved">
             <summary>
             The list of actual files saved to the temporary backup directory. Contains the full path and file name
             </summary>
@@ -4375,6 +4370,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.GameCenterUpdateDownloader">
+            <summary>
+            Interaction logic for GameCenterUpdateDownloader.xaml
+            </summary>
+            <summary>
+            GameCenterUpdateDownloader
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.NewsViewer">
             <summary>
             Interaction logic for NewsViewer.xaml
@@ -5159,18 +5167,12 @@
             <param name="componentName">The key value of the string phrase</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages)">
+        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages,System.Boolean)">
             <summary>
             Checks is a component (key value) exists in the given language (dictionary)
             </summary>
             <param name="componentName">The keyword phrase to check</param>
             <param name="languageToCheck">The language dictionary to check in</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Translations.LoadTranslations">
-            <summary>
-            Loads all translation dictionaries. Should only be done once (at application start)
-            </summary>
         </member>
         <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
             <summary>
@@ -5179,6 +5181,11 @@
             </summary>
             <param name="window">The window to apply translations to</param>
             <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslations">
+            <summary>
+            Loads all translation dictionaries. Should only be done once (at application start)
+            </summary>
         </member>
         <member name="T:RelhaxModpack.ReplacementTypes">
             <summary>
@@ -5190,7 +5197,7 @@
             Replacing macros with file paths
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ReplacementTypes.PatchArguements">
+        <member name="F:RelhaxModpack.ReplacementTypes.PatchArguementsReplace">
             <summary>
             Replacing patch arguments of the patch object
             </summary>
@@ -5287,9 +5294,9 @@
             The dictionary to store filepath macros
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.PatchArguementsDict">
+        <member name="F:RelhaxModpack.Utils.PatchArguementsReplaceDict">
             <summary>
-            The dictionary to store patch argument macros
+            The dictionary to store patch argument (replace) macros
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utils.PatchFilesDict">

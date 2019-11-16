@@ -137,7 +137,7 @@ namespace RelhaxModpack
             if (!File.Exists(p.CompletePath))
             {
                 Logging.Warning("File '{0}' not found", p.CompletePath);
-                return PatchExitCode.Error;
+                return PatchExitCode.Warning;
             }
 
             //if from the editor, enable verbose logging (allows it to get debug log statements)
@@ -295,7 +295,7 @@ namespace RelhaxModpack
                         if (i == replacePathSplit.Count() - 2)
                         {
                             string textToAddIntoNode = replacePathSplit[replacePathSplit.Count() - 1];
-                            textToAddIntoNode = Utils.MacroReplace(textToAddIntoNode, ReplacementTypes.PatchArguements);
+                            textToAddIntoNode = Utils.MacroReplace(textToAddIntoNode, ReplacementTypes.PatchArguementsReplace);
                             Logging.Debug("adding text: {0}", textToAddIntoNode);
                             addElementToMake.InnerText = textToAddIntoNode;
                         }
@@ -766,7 +766,7 @@ namespace RelhaxModpack
 
             //last item in array is item to add
             string valueToAdd = addPathArray[addPathArray.Count - 1];
-            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguements);
+            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguementsReplace);
 
             //then remove it
             addPathArray.RemoveAt(addPathArray.Count - 1);
@@ -952,38 +952,47 @@ namespace RelhaxModpack
                 //parse the value to a string for comparison
                 string jsonValue = JsonGetCompare(result);
 
-                //only update the value if the regex search matches
-                if(Regex.IsMatch(jsonValue,p.Search))
+                try
                 {
-                    if (edit)
+                    //only update the value if the regex search matches
+                    if (Regex.IsMatch(jsonValue, p.Search))
                     {
-                        Logging.Debug("regex match for result {0}, applying edit to {1}", jsonValue, p.Replace);
-                        UpdateJsonValue(result, p.Replace);
-                    }
-                    else
-                    {
-                        Logging.Debug("regex match for result {0}, removing", jsonValue);
-                        //check if parent is array, we should not be removing from an array in this function
-                        if(result.Parent is JArray)
+                        if (edit)
                         {
-                            Logging.Error("Selected from p.path is JValue and parent is JArray. Use arrayRemove for this function");
-                            return PatchExitCode.Error;
-                        }
-                        //get the jProperty above it and remove itself
-                        else if (result.Parent is JProperty prop)
-                        {
-                            prop.Remove();
+                            Logging.Debug("regex match for result {0}, applying edit to {1}", jsonValue, p.Replace);
+                            UpdateJsonValue(result, p.Replace);
                         }
                         else
                         {
-                            Logging.Error("unknown parent type: {0}", result.Parent.GetType().ToString());
-                            return PatchExitCode.Error;
+                            Logging.Debug("regex match for result {0}, removing", jsonValue);
+                            //check if parent is array, we should not be removing from an array in this function
+                            if (result.Parent is JArray)
+                            {
+                                Logging.Error("Selected from p.path is JValue and parent is JArray. Use arrayRemove for this function");
+                                return PatchExitCode.Error;
+                            }
+                            //get the jProperty above it and remove itself
+                            else if (result.Parent is JProperty prop)
+                            {
+                                prop.Remove();
+                            }
+                            else
+                            {
+                                Logging.Error("unknown parent type: {0}", result.Parent.GetType().ToString());
+                                return PatchExitCode.Error;
+                            }
                         }
                     }
+                    else
+                    {
+                        Logging.Debug("json value {0} matches jsonPath but does not match regex search {1}", jsonValue, p.Search);
+                    }
                 }
-                else
+                catch (ArgumentException argEx)
                 {
-                    Logging.Debug("json value {0} matches jsonPath but does not match regex search {1}", jsonValue, p.Search);
+                    Logging.Error("Invalid Regex search command");
+                    Logging.Error(argEx.Message);
+                    return PatchExitCode.Error;
                 }
             }
             return PatchExitCode.Success;
@@ -1016,7 +1025,7 @@ namespace RelhaxModpack
             valueToAdd = valueToAdd.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
 
             //and run the result through the un-escape
-            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguements);
+            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguementsReplace);
 
             JArray array = JsonArrayGet(p, root);
             if (array == null)
@@ -1104,13 +1113,22 @@ namespace RelhaxModpack
                 else //assuming jobject
                     jsonResult = array[i].ToString();
 
-                if (Regex.IsMatch(jsonResult, p.Search))
+                try
                 {
-                    found = true;
-                    array[i].Remove();
-                    i--;
-                    if (remove)
-                        break;
+                    if (Regex.IsMatch(jsonResult, p.Search))
+                    {
+                        found = true;
+                        array[i].Remove();
+                        i--;
+                        if (remove)
+                            break;
+                    }
+                }
+                catch (ArgumentException argEx)
+                {
+                    Logging.Error("Invalid Regex search command");
+                    Logging.Error(argEx.Message);
+                    return PatchExitCode.Error;
                 }
             }
             if (!found)
@@ -1253,6 +1271,8 @@ namespace RelhaxModpack
                 jsonValue = c.ToString();
             else if (result.Value is bool b)
                 jsonValue = b.ToString().ToLower();
+            else if (result.Value == null)
+                jsonValue = Utils.PatchJsonNullEscape;
             else
                 jsonValue = result.Value.ToString();
             return jsonValue;
@@ -1261,7 +1281,9 @@ namespace RelhaxModpack
         private static void UpdateJsonValue(JValue jvalue, string value)
         {
             //determine what type value should be used for the json item based on attempted parsing
-            if (Utils.ParseBool(value, out bool resultBool))
+            if (value.Equals(Utils.PatchJsonNullEscape))
+                jvalue.Value = null;
+            else if (Utils.ParseBool(value, out bool resultBool))
                 jvalue.Value = resultBool;
             else if (Utils.ParseInt(value, out int resultInt))
                 jvalue.Value = resultInt;
@@ -1269,7 +1291,7 @@ namespace RelhaxModpack
                 jvalue.Value = resultFloat;
             else
                 jvalue.Value = value;
-            Logging.Debug("Json value parsed as {0}", jvalue.Value.GetType().ToString());
+            Logging.Debug("Json value parsed as data type {0}", jvalue.Value == null? Utils.PatchJsonNullEscape : jvalue.Value.GetType().ToString());
         }
 
         private static JValue CreateJsonValue(string value)
