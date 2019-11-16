@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
                     xmlns:ui="clr-namespace:RelhaxModpack.UIComponents"
                     mc:Ignorable="d"
-        Title="News" Height="450" Width="420" MinWidth="420" MinHeight="450" Loaded="RelhaxWindow_Loaded"
+        Title="News Viewer" Height="450" Width="420" MinWidth="420" MinHeight="450" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
     <Grid Tag="NewViewGrid">
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,31">

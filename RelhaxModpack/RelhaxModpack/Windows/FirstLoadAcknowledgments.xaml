@@ -6,21 +6,22 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:ui="clr-namespace:RelhaxModpack.UIComponents"
         mc:Ignorable="d"
-        Title="First Load Acknowledgments" Height="235" Width="600" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded"
+        Title="First Load Acknowledgments" Height="260" Width="600" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid>
         <StackPanel>
             <CheckBox x:Name="license_Agree" HorizontalAlignment="Stretch" Margin="10,10,10,0" VerticalAlignment="Top" Click="CheckForContinueButton">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <TextBlock x:Name="AgreementLicense" TextWrapping="Wrap" Text="You have read and agree to the "/>
+                    <TextBlock x:Name="AgreementLicense" TextWrapping="Wrap" Text="I have read and agree to the "/>
                     <ui:RelhaxHyperlink x:Name="LicenseLink" URL="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/LICENSE" Text="License Agreement"/>
                 </StackPanel>
             </CheckBox>
             <CheckBox HorizontalAlignment="Stretch"  VerticalAlignment="Top" Margin="10,10,10,0" x:Name="support" Click="CheckForContinueButton">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <TextBlock x:Name="AgreementSupport1" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="If you need support you can either visit our "/>
+                    <TextBlock x:Name="AgreementSupport1" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                               Text="I understand that I can receive support on the dedicated "/>
                     <ui:RelhaxHyperlink x:Name="AgreementSupportForums" URL="https://forums.relhaxmodpack.com/index.php?board=6.0" Text="Forums"/>
-                    <TextBlock x:Name="AgreementSupport2" Text=" or our " VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                    <TextBlock x:Name="AgreementSupport2" Text=" or " VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     <ui:RelhaxHyperlink x:Name="AgreementSupportDiscord" URL="https://discord.gg/eURMQ2Y" Text="Discord"/>
                 </StackPanel>
             </CheckBox>

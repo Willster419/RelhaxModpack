@@ -389,6 +389,12 @@ namespace RelhaxModpack
                 case Logfiles.Patcher:
                     fileToWriteTo = PatcherLogfile;
                     break;
+                case Logfiles.Installer:
+                    fileToWriteTo = InstallLogfile;
+                    break;
+                case Logfiles.Uninstaller:
+                    fileToWriteTo = UninstallLogfile;
+                    break;
             }
             //check if the application logfile is null and the application is now in a new mode
             if(fileToWriteTo == null && CommandLineSettings.ApplicationMode != ApplicationMode.Default)

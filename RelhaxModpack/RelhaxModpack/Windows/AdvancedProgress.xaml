@@ -10,7 +10,7 @@
         Title="Advanced Installer Progress" Height="600" Width="600"
         LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
     <TabControl x:Name="MainTabControl" Tag="AdvancedInstallMainTabControl">
-        <TabItem Header="Pre-install Tasks" x:Name="PreInstallTab" Tag="PreInstallTab">
+        <TabItem Header="Pre-install tasks" x:Name="PreInstallTab" Tag="PreInstallTab">
             <ScrollViewer VerticalScrollBarVisibility="Visible">
                 <StackPanel Background="#FFE5E5E5" x:Name="PreInstallPanel" CanVerticallyScroll="True" Tag="PreInstallPanel"/>
             </ScrollViewer>
