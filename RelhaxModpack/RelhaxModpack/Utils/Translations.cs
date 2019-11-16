@@ -559,7 +559,7 @@ namespace RelhaxModpack
             Russian.Add("at", "в");
 
             //Component: seconds
-            //
+            // Used for download progress. Remaining time. Example: X minutes, Y seconds.
             English.Add("seconds", "seconds");
             German.Add("seconds", "sekunden");
             Polish.Add("seconds", "sekund(y)");
@@ -567,26 +567,26 @@ namespace RelhaxModpack
             Russian.Add("seconds", "сек.");
 
             //Component: minutes
-            //
+            // Used for download progress (remaining time) AND AutoSyncFrequencyComboBox autoupdate check frequency comboBox (Minutes/Hours/Days).
             English.Add("minutes", "minutes");
             German.Add("minutes", "minuten");
             Polish.Add("minutes", "minut(y)");
             French.Add("minutes", "minutes");
             Russian.Add("minutes", "мин.");
 
-            //Component: hours
-            //
+            //Component: hours @ AutoSyncFrequencyComboBox
+            // Used for AutoSyncCheckFrequencyTextBox autoupdate check frequency comboBox (Minutes/Hours/Days).
             English.Add("hours", "hours");
             German.Add("hours", TranslationNeeded);
-            Polish.Add("hours", TranslationNeeded);
+            Polish.Add("hours", "godzin(y)");
             French.Add("hours", TranslationNeeded);
             Russian.Add("hours", "час.");
 
-            //Component: days
-            //
+            //Component: days @ AutoSyncFrequencyComboBox
+            // Used for AutoSyncFrequencyComboBox autoupdate check frequency comboBox (Minutes/Hours/Days).
             English.Add("days", "days");
             German.Add("days", TranslationNeeded);
-            Polish.Add("days", TranslationNeeded);
+            Polish.Add("days", "dni");
             French.Add("days", TranslationNeeded);
             Russian.Add("days", "дн.");
 
@@ -2208,14 +2208,14 @@ namespace RelhaxModpack
             Spanish.Add("SaveSelectionButtonLabel", "Guardar selección");
             Russian.Add("SaveSelectionButtonLabel", "Сохранить шаблон настроек");
 
-            //Component: SelectSelectionFileToLoad
+            //Component: SelectSelectionFileToSave
             //File save dialog box when the user presses 'save selection' in Mod Selection List
-            English.Add("SelectSelectionFileToLoad", "Save selection file");
-            German.Add("SelectSelectionFileToLoad", TranslationNeeded);
-            Polish.Add("SelectSelectionFileToLoad", TranslationNeeded);
-            French.Add("SelectSelectionFileToLoad", TranslationNeeded);
-            Spanish.Add("SelectSelectionFileToLoad", TranslationNeeded);
-            Russian.Add("SelectSelectionFileToLoad", "Сохранить предустановку");
+            English.Add("SelectSelectionFileToSave", "Save selection file");
+            German.Add("SelectSelectionFileToSave", TranslationNeeded);
+            Polish.Add("SelectSelectionFileToSave", "Zapisz plik kolekcji");
+            French.Add("SelectSelectionFileToSave", TranslationNeeded);
+            Spanish.Add("SelectSelectionFileToSave", TranslationNeeded);
+            Russian.Add("SelectSelectionFileToSave", "Сохранить предустановку");
 
             //Component: ClearSelectionsButtonLabel
             //
@@ -3036,8 +3036,8 @@ namespace RelhaxModpack
                 " Continue anyway?");
             German.Add("DatabaseVersionsSameBody", "Die Datenbank  wurde seit deiner letzten Installation nicht verändert. Daher gibt es keine Aktuallisierungen zu deinen aktuellen" +
                 " Modifikationen. Trotzdem fortfahren?");
-            Polish.Add("DatabaseVersionsSameBody", "Baza danych nie została zaktualizowana od ostatniej instalacji, nie ma żadych aktualizacji dla wybranych uprzednio modów." +
-                " Czy kontynuować?");
+            Polish.Add("DatabaseVersionsSameBody", "Baza danych nie została zaktualizowana od ostatniej instalacji — nie ma żadych aktualizacji dla ostatnio zainstalowanych modów.\n" +
+                "Czy nadal chcesz kontynuować?");
             French.Add("DatabaseVersionsSameBody", "La base de données n'a pas changé depuis votre dernière installation. Par conséquent, il n'y a pas de mise à jour pour votre sélection" +
                 "  de mods. Continuer de toute façon?");
             Spanish.Add("DatabaseVersionsSameBody", "La base de datos no ha cambiado desde su última instalación. Por tanto no hay actualizaciones para su selección de mods actual. ¿Continuar de todas formas?");
@@ -3047,7 +3047,7 @@ namespace RelhaxModpack
             //
             English.Add("DatabaseVersionsSameHeader", "Database version is the same");
             German.Add("DatabaseVersionsSameHeader", "Datenbank Version ist identisch");
-            Polish.Add("DatabaseVersionsSameHeader", "Wersja bazy danych jest taka sama");
+            Polish.Add("DatabaseVersionsSameHeader", "Brak aktualizacji zainstalowanych modów.");
             French.Add("DatabaseVersionsSameHeader", "La version de la base de données est la même");
             Spanish.Add("DatabaseVersionsSameHeader", "La versión de la base de datos es idéntica.");
             Russian.Add("DatabaseVersionsSameHeader", "Одинаковые версии БД");
