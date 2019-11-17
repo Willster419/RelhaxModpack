@@ -1211,6 +1211,973 @@
             <param name="userFileToCopy">The object to copy</param>
             <returns>A new UserFile object with the same values and new list elements with the same values</returns>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.BoundUISettings">
+            <summary>
+            The staic location for all color definitions that need to be databound by WPF
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ButtonHighlightBrush">
+            <summary>
+            Get or set the Button highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.TabItemHighlightBrush">
+            <summary>
+            Get or set the TabItem highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.TabItemSelectedBrush">
+            <summary>
+            Get or set the TabItem selected (mouse down) color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.CheckboxHighlightBrush">
+            <summary>
+            Get of set the Checkbox highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.CheckboxCheckmarkBrush">
+            <summary>
+            Get or set the Checkbox checkmark color (selected)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.RadioButtonHighlightBrush">
+            <summary>
+            Get or set the RadioButton highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.RadioButtonCheckmarkBrush">
+            <summary>
+            Get or set the RadioButton checkmark color (selected)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ComboboxOutsideHighlightBrush">
+            <summary>
+            Get or set the combobox highlight background color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ComboboxInsideColorBrush">
+            <summary>
+            Get or set the combobox text color of the inside list items
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ComboboxOutsideColorBrush">
+            <summary>
+            Get or set the combobox background color
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.BoundUISettings.StaticPropertyChanged">
+            <summary>
+            Event handler for when a static property is changed in code
+            </summary>
+            <remarks>See https://stackoverflow.com/questions/34762879/static-binding-doesnt-update-when-resource-changes </remarks>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.BoundUISettings.SetBrushProperty(RelhaxModpack.UIComponents.CustomPropertyBrush)">
+            <summary>
+            Set the color of one of the properties in this class. The name of the property should be inside 
+            </summary>
+            <param name="customBrush">The color and property to update</param>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassColorset">
+            <summary>
+            A ClassColorset is a definitions object of all the colors to apply to the corresponding UI object
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.ClassThemeDefinition">
+            <summary>
+            The theme definition rule set to use for this UI object class type (like Control)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.BackgroundBrush">
+            <summary>
+            The Background color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.ForegroundBrush">
+            <summary>
+            The Foreground color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.HighlightBrush">
+            <summary>
+            The Highlight color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.SelectedBrush">
+            <summary>
+            The Selected (mouse down) color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.BoundedBrushes">
+            <summary>
+            Returns a list of brushes that are bounded to WPF UI definitions
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Border class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Button class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Checkbox class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Combobox class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Control class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition">
+            <summary>
+            The UI class theme interface definition for holding all properties of theme definitions
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to the instanced UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if Background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Panel class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Progressbar class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition">
+            <summary>
+            The UI class theme definition for RadioButton class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition">
+            <summary>
+            The UI class theme definition for TabItem class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Textblock class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ComponentColorset">
+            <summary>
+            A ComponentColorset is a custom color object to apply to a particular ID'd UI object in the window
+            </summary>
+            <remarks>Highlight and Selected colors are always changed (if at all) by WPF databound properties at the ClassColorset level</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComponentColorset.ID">
+            <summary>
+            The ID of the UI object in the window of which the component colors will be applied to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComponentColorset.BackgroundBrush">
+            <summary>
+            The Background brush color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComponentColorset.ForegroundBrush">
+            <summary>
+            The Foreground brush color
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.CustomBrush">
+            <summary>
+            Wraps a Brush class with a boolean value for if the brush value should be applied
+            </summary>
+            <remarks>The implementation reasoning for this is that some color definitions can be a null color.
+            So, a custom property must be used outside of the Brush object to determine if it should actually be applied.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.CustomBrush.Brush">
+            <summary>
+            The custom color definition
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.CustomBrush.IsValid">
+            <summary>
+            The flag to determine if the Brush is valid
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.CustomPropertyBrush">
+            <summary>
+            A wrapper class for CustomBrush that adds the string name of the WPF databound property name
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.CustomPropertyBrush.BrushPropertyName">
+            <summary>
+            The name of the WPF databound property to change the color of
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.CustomBrushConverter">
+            <summary>
+            Converts from the custom CustomBrush type to a Brush object for WPF databinding
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.CustomBrushConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a CustomBrush object into a Brush object
+            </summary>
+            <param name="value">The CustomBrush object to convert</param>
+            <param name="targetType">Not implemented</param>
+            <param name="parameter">Not implemented</param>
+            <param name="culture">Not implemented</param>
+            <returns>The Brush property from the CustomBrush object</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.CustomBrushConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            This method is not implemented
+            </summary>
+            <param name="value">Not implemented</param>
+            <param name="targetType">Not implemented</param>
+            <param name="parameter">Not implemented</param>
+            <param name="culture">Not implemented</param>
+            <returns>Null</returns>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxHyperlink">
             <summary>
             Interaction logic for RelhaxHyperlink.xaml
@@ -1244,6 +2211,181 @@
         <member name="M:RelhaxModpack.UIComponents.RelhaxHyperlink.InitializeComponent">
             <summary>
             InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.Theme">
+            <summary>
+            The root object for all definitions needed for the UI engine
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ThemeName">
+            <summary>
+            The name of the theme
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.FileName">
+            <summary>
+            The xml theme filename
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListSelectedPanelColor">
+            <summary>
+            The color definition for panel components in the selection view when at least one package is checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotSelectedPanelColor">
+            <summary>
+            The color definition for panel components in the selection view when no packages are checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListSelectedTextColor">
+            <summary>
+            The color definition for 'single' and 'multi' package types when it is checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotSelectedTextColor">
+            <summary>
+            The color definition for 'single' and 'multi' package types when it is not checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListBorderColor">
+            <summary>
+            The color definition for border components in the selection view, for holding a sub level of packages
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListActiveTabHeaderBackgroundColor">
+            <summary>
+            The color definition for the background of the tab header
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListActiveTabHeaderTextColor">
+            <summary>
+            The color definition for the text color of the tab header
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasSelectionsBackgroundColor">
+            <summary>
+            The color definition for background of a not active tab header, when no components are selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasSelectionsTextColor">
+            <summary>
+            The color definition for text of a not active tab header, when no components are selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasNoSelectionsBackgroundColor">
+            <summary>
+            The color definition for background of a not active tab header, when at least one component is selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasNoSelectionsTextColor">
+            <summary>
+            The color definition for text of a not active tab header, when at least one component is selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.RadioButtonColorset">
+            <summary>
+            The set of rules to use for what parts of a RadioButton UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.CheckboxColorset">
+            <summary>
+            The set of rules to use for what parts of a Checkbox UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ButtonColorset">
+            <summary>
+            The set of rules to use for what parts of a Button UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.TabItemColorset">
+            <summary>
+            The set of rules to use for what parts of a TabItem UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ComboboxColorset">
+            <summary>
+            The set of rules to use for what parts of a Combobox UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.PanelColorset">
+            <summary>
+            The set of rules to use for what parts of a Panel UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.TextblockColorset">
+            <summary>
+            The set of rules to use for what parts of a Textblock UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.BorderColorset">
+            <summary>
+            The set of rules to use for what parts of a Border UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ControlColorset">
+            <summary>
+            The set of rules to use for what parts of a Control UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ProgressBarColorset">
+            <summary>
+            The set of rules to use for what parts of a ProgressBar UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.WindowColorsets">
+            <summary>
+            A list of rules to use for each window definition type
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.BoundedClassColorsetBrushes">
+            <summary>
+            Returns a complete list of all bounded brushes for each class component color definition
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.Themes">
+            <summary>
+            A static list of themes used in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.Themes.Default">
+            <summary>
+            The default theme used in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.Themes.Dark">
+            <summary>
+            A pre-built dark theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.Themes.Custom">
+            <summary>
+            The custom theme to be loaded from xml by the user
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.WindowColorset">
+            <summary>
+            Contains all color definitions to apply for that window, including the list of individual component color definitions
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.WindowType">
+            <summary>
+            The type object for the type of window this colorset belongs to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.BackgroundBrush">
+            <summary>
+            The background color of the window
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.ComponentColorsets">
+            <summary>
+            A list of custom colors to apply for individual UI components
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.ColorsetBackedUp">
+            <summary>
+            Flag for if this window colorset has had it's original (default) theme backed up
             </summary>
         </member>
         <member name="T:RelhaxModpack.UIComponents.ZoomBorder">
@@ -1412,6 +2554,13 @@
             Create an instance of the RelhaxInstallTaskReporter and init the UI side of it
             </summary>
         </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.LoadedAfterApply">
+            <summary>
+            Flag for when the object has been fully constructed by the UI Dispatcher.
+            </summary>
+            <remarks>Due to the multi-threaded nature of the progress reporting, progress may be reported before the reporting UI objects are fully constructed.
+            This results in null exceptions. By using a flag to determine if the object is fully created, the reporting progresses won't try to update properties of null objects</remarks>
+        </member>
         <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.ReportState">
             <summary>
             Controls the UI state of the thread reporter
@@ -1555,6 +2704,13 @@
             <summary>
             RelhaxWPFComboBox
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.AddedToList">
+            <summary>
+            Flag to determine if the Combobox object has been already added to the ModSelectionList window
+            </summary>
+            <remarks>Many components of 'single_dropDown' exist in the Combobox, and therefore the UI generation code gets run for each object.
+            So, a flag is used to prevent the ComboBox being added multiple times to the window</remarks>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.#ctor">
             <summary>
@@ -2175,6 +3331,13 @@
             Reference to list of dependencies
             </summary>
         </member>
+        <member name="F:RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs.InstallFailedSteps">
+            <summary>
+            A list of all the steps that the installer failed at when returning back to the MainWindow
+            </summary>
+            <remarks>The installer creates many threads to complete different parts of the installation.
+            One of more of these may fail and should be logged when the installer cleanly exists and returns to the MainWindow</remarks>
+        </member>
         <member name="T:RelhaxModpack.InstallerComponents.RelhaxZipFile">
             <summary>
             A wrapper class around the Ionic.Zip.Zipfile with the purpose of saving the thread ID that the zip file belongs to
@@ -2184,6 +3347,12 @@
             <summary>
             The ID number of the thread that the zip file belongs to
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.RelhaxZipFile.IsUserMod">
+            <summary>
+            Flag for if this zip file is a user mod
+            </summary>
+            <remarks>User mods are treated slightly differently then regular mods. They have no valid threadID, and should not be deleted if the extraction fails.</remarks>
         </member>
         <member name="M:RelhaxModpack.InstallerComponents.RelhaxZipFile.#ctor(System.String)">
             <summary>
@@ -3899,11 +5068,37 @@
             <remarks>It starts as null because the color is unknown (and can be different types based on the user's theme).
             It is set on user selection on a component in the selection list.</remarks>
         </member>
+        <member name="F:RelhaxModpack.UISettings.NullAllowedGlobalBrushes">
+            <summary>
+            A list of tags that are allowed to have 'null' as the value for global brushes
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UISettings.CurrentTheme">
+            <summary>
+            The currently applied theme in the UI engine
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.ApplyCustomStyles(System.Windows.Window)">
+            <summary>
+            Applies the custom style templates for a UI component class type when an ID is defined.
+            This allows for custom color definitions to be loaded.
+            </summary>
+            <param name="window">The Window to apply the styles to</param>
+        </member>
         <member name="M:RelhaxModpack.UISettings.ApplyUIColorSettings(System.Windows.Window)">
             <summary>
             Applies custom color settings to a window
             </summary>
             <param name="window">The Window object to apply color settings to</param>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.ApplyThemeToRootComponent(System.Windows.FrameworkElement,System.Boolean,RelhaxModpack.UIComponents.WindowColorset,System.Boolean)">
+            <summary>
+            Applies theme properties to UI components based on colorDefinition rule sets for that UI component class type
+            </summary>
+            <param name="rootElement">The element to start at for applying theme properties</param>
+            <param name="customWindowDefinition">To determine if to apply custom theme properties based on a list of custom theme properties for that window</param>
+            <param name="wcolorset">The property object of colorDefinition rules</param>
+            <param name="includeSelf">Determine if applying the rootElement</param>
         </member>
         <member name="M:RelhaxModpack.UISettings.LoadSettingsFile">
             <summary>
@@ -5168,6 +6363,13 @@
             </summary>
             <param name="language">The language to switch to</param>
         </member>
+        <member name="M:RelhaxModpack.Translations.GetLanguageNativeName(RelhaxModpack.Languages)">
+            <summary>
+            Get the native language name of the english enumerated name of the language
+            </summary>
+            <param name="language">The english-named enumeration of the language</param>
+            <returns>The name of the requested language in it's native language</returns>
+        </member>
         <member name="M:RelhaxModpack.Translations.GetTranslatedString(System.String)">
             <summary>
             Get a localized string in the currently selected language
@@ -5175,12 +6377,21 @@
             <param name="componentName">The key value of the string phrase</param>
             <returns></returns>
         </member>
+        <member name="M:RelhaxModpack.Translations.Exists(System.String,System.Boolean)">
+            <summary>
+            Determines if a key exists in the currently selected language, or in english if no language is selected
+            </summary>
+            <param name="componentName">The key of the component to look up</param>
+            <param name="logError">Flag to log an error in the logfile if it does not exist</param>
+            <returns>True if it exists in the currently selected language, or false otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages,System.Boolean)">
             <summary>
             Checks is a component (key value) exists in the given language (dictionary)
             </summary>
             <param name="componentName">The keyword phrase to check</param>
             <param name="languageToCheck">The language dictionary to check in</param>
+            <param name="logError">Flag for if to log if the component was not found</param>
         </member>
         <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
             <summary>
@@ -5266,6 +6477,21 @@
             </summary>
             <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
         </member>
+        <member name="T:RelhaxModpack.RegistrySearch">
+            <summary>
+            A structure to help with searching for inside the registry by providing a base area to start, and a string search path
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.RegistrySearch.Root">
+            <summary>
+            Where to base the search in the registry (current_user, local_machiene, etc.)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.RegistrySearch.Searchpath">
+            <summary>
+            The absolute folder path to the desired registry entries
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utils">
             <summary>
             A utility class for static functions used in various places in the modpack
@@ -5320,6 +6546,11 @@
         <member name="F:RelhaxModpack.Utils.TextEscapeDict">
             <summary>
             The dictionary to store literal versions of characters with their escaped versions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.PatchJsonNullEscape">
+            <summary>
+            Provides the ability to insert a 'null' value into json configurations
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utils.FreeImageLibrary">
@@ -5927,8 +7158,14 @@
             <summary>
             Checks the registry to get the latest location of where WoT is installed
             </summary>
-            <param name="WoTRoot">The string to set to the WoT path</param>
             <returns>True if operation success</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetRegistryKeys(RelhaxModpack.RegistrySearch)">
+            <summary>
+            Gets all registry keys that exist in the given search base and path
+            </summary>
+            <param name="search">The RegistrySearch structure to specify where to search and where to base the search</param>
+            <returns>The RegistryKey object of the folder in registry, or null if the search failed</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.CreateShortcut(RelhaxModpack.Shortcut,System.Text.StringBuilder)">
             <summary>

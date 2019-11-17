@@ -8,18 +8,39 @@ using RelhaxModpack.UIComponents.ClassThemeDefinitions;
 
 namespace RelhaxModpack.UIComponents
 {
+    /// <summary>
+    /// A ClassColorset is a definitions object of all the colors to apply to the corresponding UI object
+    /// </summary>
     public class ClassColorset
     {
+        /// <summary>
+        /// The theme definition rule set to use for this UI object class type (like Control)
+        /// </summary>
         public IClassThemeDefinition ClassThemeDefinition { get; set; } = null;
 
+        /// <summary>
+        /// The Background color property
+        /// </summary>
         public CustomBrush BackgroundBrush { get; set; } = null;
 
+        /// <summary>
+        /// The Foreground color property
+        /// </summary>
         public CustomBrush ForegroundBrush { get; set; } = null;
 
+        /// <summary>
+        /// The Highlight color property
+        /// </summary>
         public CustomBrush HighlightBrush { get; set; } = null;
 
+        /// <summary>
+        /// The Selected (mouse down) color property
+        /// </summary>
         public CustomBrush SelectedBrush { get; set; } = null;
 
+        /// <summary>
+        /// Returns a list of brushes that are bounded to WPF UI definitions
+        /// </summary>
         public List<CustomPropertyBrush> BoundedBrushes
         {
             get
