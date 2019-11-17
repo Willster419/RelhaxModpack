@@ -4318,7 +4318,7 @@ namespace RelhaxModpack
 
             #region First Load Acknowledgements
             //Component: FirstLoadAcknowledgments
-            //
+            // ACKS window title.
             English.Add("FirstLoadAcknowledgments", "First Load Acknowledgements");
             German.Add("FirstLoadAcknowledgments", TranslationNeeded);
             Polish.Add("FirstLoadAcknowledgments", "Pierwsze Urochomienie — Umowa Licencyjna"); // Can't think of a gracious way to do this one. @Nullmaruzero
@@ -4327,7 +4327,8 @@ namespace RelhaxModpack
             Russian.Add("FirstLoadAcknowledgments", "Первый запуск");
 
             //Component: AgreementLicense
-            //
+            // The first acknowledgement checkbox, inlines with the LicenseLink licence agreement link at the end.
+            // EXAMPLE: [x] I have read and agree to the {License Agreement}
             English.Add("AgreementLicense", "I have read and agree to the ");
             German.Add("AgreementLicense", TranslationNeeded);
             Polish.Add("AgreementLicense", "Przeczytałem/am i zgadzam się z postanowieniami ");
@@ -4336,7 +4337,7 @@ namespace RelhaxModpack
             Russian.Add("AgreementLicense", "Я прочитал и согласен с ");
 
             //Component: LicenseLink
-            //
+            // A link inlining at the end with the AgreementLicense first checkbox text from above.
             English.Add("LicenseLink", "License Agreement");
             German.Add("LicenseLink", "Lizenzvereinbarung");
             Polish.Add("LicenseLink", "Umowy Licencyjnej");
@@ -4345,7 +4346,8 @@ namespace RelhaxModpack
             Russian.Add("LicenseLink", "условиями лицензионного соглашения");
 
             //Component: AgreementSupport1
-            //
+            // The second acknowledgement checkbox, inlines with link to forums, the conjunction phrase and discord server link.
+            // EXAMPLE: [x] I understand that I can receive support on the dedicated {Forums} {or} {Discord}
             English.Add("AgreementSupport1", "I understand that I can receive support on the dedicated ");
             German.Add("AgreementSupport1", TranslationNeeded);
             Polish.Add("AgreementSupport1", "Rozumiem, że mogę uzyskać wsparcie techniczne na dedykowanym ");
@@ -4354,7 +4356,7 @@ namespace RelhaxModpack
             Russian.Add("AgreementSupport1", "Я понимаю, что могу обратиться за помощью ");
 
             //Component: AgreementSupportForums
-            //
+            // First of the inlined elements for AgreementSupport1, a link to the forums.
             English.Add("AgreementSupportForums", "Forums");
             German.Add("AgreementSupportForums", TranslationNeeded);
             Polish.Add("AgreementSupportForums", "Forum");
@@ -4363,7 +4365,7 @@ namespace RelhaxModpack
             Russian.Add("AgreementSupportForums", "на форум");
 
             //Component: AgreementSupport2
-            //
+            // Second of the inlined elements for AgreementSupport1, conjunction between a forum link and discord server link.
             English.Add("AgreementSupport2", " or ");
             German.Add("AgreementSupport2", TranslationNeeded);
             Polish.Add("AgreementSupport2", " lub serwerze ");
@@ -4372,7 +4374,7 @@ namespace RelhaxModpack
             Russian.Add("AgreementSupport2", " или на сервер в ");
 
             //Component: AgreementSupportDiscord
-            //
+            // Third and the last inlined elements for AgreementSupport1, a link to Relhax Discord server.
             English.Add("AgreementSupportDiscord", "Discord");
             Polish.Add("AgreementSupportDiscord", "Discord");
             German.Add("AgreementSupportDiscord", "Discord");
@@ -4381,25 +4383,27 @@ namespace RelhaxModpack
             Russian.Add("AgreementSupportDiscord", "Discord");
 
             //Component: AgreementHoster
-            //
+            // The third acknowledgement checkbox, just plain text. Make sure you communicate this one well.
+            // EXAMPLE: [x] I understand Relhax is a mod hosting and installation service and Relhax does not maintain every mod found in this Modpack
             English.Add("AgreementHoster", "I understand Relhax is a mod hosting and installation service and Relhax does not maintain every mod found in this Modpack");
             German.Add("AgreementHoster", "Ich verstehe, dass Relhax ein Mod-Hosting- und Installationsservice ist und Relhax nicht alle Mods verwaltet, die in diesem Modpack enthalten sind");
-            Polish.Add("AgreementHoster", "Rozumiem, że Relhax jest usługą hostowania i instalacji modów oraz, że zespół Relhax nie jest autorem wszystkich modów znajdujących się w paczce.");
+            Polish.Add("AgreementHoster", "Rozumiem, że Relhax jest to platforma instalacji modów oraz ich hosting, a zespół Relhax nie jest odpowiedzialny za rozwój wszystkich oferowanych modów.");
             French.Add("AgreementHoster", "Je comprends que Relhax est un hébergement de mods et un service d'installation. Relhax ne gère pas tous les mods de ce Modpack");
             Spanish.Add("AgreementHoster", "Comprendo que Relhax sólo es un servicio de alojamiento e instalación de mods, y Relhax no mantiene cada mod incluido en este modpack");
             Russian.Add("AgreementHoster", "Я понимаю, что Relhax является площадкой хостинга модов и сервисом их установки и то, что Relhax не занимается разработкой каждого мода из этого модпака");
 
             //Component: AgreementAnonData
-            //
+            // The fourth acknowledgement checkbox. Make sure you communicate this one well.
+            // EXAMPLE: I understand that Relhax V2 collects anonymous usage data to improve the application, and can be disabled in the advanced settings tab
             English.Add("AgreementAnonData", "I understand that Relhax V2 collects anonymous usage data to improve the application, and can be disabled in the advanced settings tab");
             German.Add("AgreementAnonData", "Ich verstehe, dass Relhax V2 anonyme Nutzungsdaten sammelt, um die Anwendung zu verbessern, und auf der Registerkarte  für erweiterte Einstellungen deaktiviert werden kann.");
-            Polish.Add("AgreementAnonData", "Rozumiem, że Relhax V2 gromadzi i wysyła anonimowe statystyki użytkowania celem poprawy aplikacji oraz, że mogę to wyłączyć w zakładce 'Zaawansowane' w dowolnym momencie.");
+            Polish.Add("AgreementAnonData", "Rozumiem, że Relhax V2 gromadzi i wysyła anonimowe dane użytkowania celem poprawy aplikacji, oraz że funkcję tę mogę wyłączyć w dowolnym momencie w zakładce 'Zaawansowane'.");
             French.Add("AgreementAnonData", "Je comprends que Relhax V2 collecte des données d'utilisation anonymes pour améliorer l'application, et peut être désactivé dans les options avancées");
             Spanish.Add("AgreementAnonData", "Comprendo que Relhax V2 recoge datos anónimos de uso para mejorar la aplicación, lo cual puede ser deshabilitado en la pestaña de opciones avanzadas");
             Russian.Add("AgreementAnonData", "Я понимаю, что Relhax V2 собирает анонимные сведения об использовании для улучшения приложения и могу отключить сбор данных в разделе расширенных настроек");
 
             //Component: ContinueButton
-            //
+            // Just a continue button on the bottom. Proceeds to the main application if everything is selected.
             English.Add("ContinueButton", "Continue");
             German.Add("ContinueButton", "Fortsetzen");
             Polish.Add("ContinueButton", "Kontynuuj");
@@ -4408,7 +4412,7 @@ namespace RelhaxModpack
             Russian.Add("ContinueButton", "Продолжить");
 
             //Component: V2UpgradeNoticeText
-            //
+            // A text block appearing (in red) under the last acknowledgement, centered in the window - only if the app detects that a conversion is required.
             English.Add("V2UpgradeNoticeText", "It looks like you are running an upgrade from V1 to V2 for the first time.\n" +
                 "Pressing continue will result in an upgrade to the file structure that cannot be reverted. It is recommended to make a backup of your V1 folder before continuing");
             German.Add("V2UpgradeNoticeText", "Es sieht so aus, als würdest du zum ersten Mal ein Upgrade von V1 auf V2 ausführen.\n" +
@@ -4422,7 +4426,7 @@ namespace RelhaxModpack
             Russian.Add("V2UpgradeNoticeText", "Похоже, что вы производите апгрейд с V1 на V2 в первый раз.\nНажатие кнопки продолжения произведёт обновление структуры файлов, которое невозможно откатить. Рекомендуется создание бэкапа папки с V1 перед продолжением");
 
             //Component: upgradingStructure
-            //
+            // Displays the structure upgrade log within the main app itself, if the user agreed to the conversion in the ACKS window and proceeded. Just like download and any other status.
             English.Add("upgradingStructure", "Upgrading V1 file and folder structure");
             German.Add("upgradingStructure", "Upgrad der V1 Datei- und Ordnerstruktur");
             Polish.Add("upgradingStructure", "Konwertowanie struktury plików i folderów V1");
@@ -5199,7 +5203,7 @@ namespace RelhaxModpack
 
             #region Select Language Window
             //Component: FirstLoadSelectLanguage
-            //Application window title
+            // Application window title.
             English.Add("FirstLoadSelectLanguage", "Language Selection");
             German.Add("FirstLoadSelectLanguage", TranslationNeeded);
             Polish.Add("FirstLoadSelectLanguage", "Wybór Języka");
@@ -5208,7 +5212,7 @@ namespace RelhaxModpack
             Russian.Add("FirstLoadSelectLanguage", "Язык интерфейса");
 
             //Component: SelectLanguageHeader
-            //
+            // A header (label) in the window with a list of radio buttons with available languages below.
             English.Add("SelectLanguageHeader", "Please select your language");
             German.Add("SelectLanguageHeader", TranslationNeeded);
             Polish.Add("SelectLanguageHeader", "Wybierz język aplikacji");
@@ -5217,7 +5221,7 @@ namespace RelhaxModpack
             Russian.Add("SelectLanguageHeader", "Пожалуйста, выберите язык");
 
             //Component: SelectLanguagesContinueButton
-            //
+            // Just a "Continue" button on the bottom. Proceeds to first-run acknowlegements window.
             English.Add("SelectLanguagesContinueButton", English["ContinueButton"]);
             German.Add("SelectLanguagesContinueButton", German["ContinueButton"]);
             Polish.Add("SelectLanguagesContinueButton", Polish["ContinueButton"]);
