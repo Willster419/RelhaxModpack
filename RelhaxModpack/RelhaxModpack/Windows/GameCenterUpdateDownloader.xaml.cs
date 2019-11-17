@@ -88,7 +88,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for GameCenterUpdateDownloader.xaml
     /// </summary>
-    public partial class GameCenterUpdateDownloader : RelhaxWindow
+    public partial class GameCenterUpdateDownloader : RelhaxWindow, IDisposable
     {
         /// <summary>
         /// The path to the root client folder (World_of_Tanks), for example
@@ -892,5 +892,46 @@ namespace RelhaxModpack.Windows
                 timer = null;
             }
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        /// <summary>
+        /// Dispose of the window and release any disposable resources
+        /// </summary>
+        /// <param name="disposing">Set to true to dispose of managed objects</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    if(timer != null)
+                    {
+                        timer.Dispose();
+                        timer = null;
+                    }
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        // ~GameCenterUpdateDownloader() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        /// <summary>
+        /// Dispose of the window and release any disposable resources
+        /// </summary>
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }
