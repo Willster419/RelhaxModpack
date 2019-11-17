@@ -434,6 +434,8 @@ namespace RelhaxModpack
             //languageName.Add("componentName","TranslatedString");
 
             #region General expressions
+            // Confirm "yes" button used in multiple places.
+            // REFERRERS: VersionInfoYesButton;
             English.Add("yes", "yes");
             German.Add("yes", "ja");
             Polish.Add("yes", "Tak");
@@ -441,6 +443,8 @@ namespace RelhaxModpack
             Spanish.Add("yes", "Sí");
             Russian.Add("yes", "Да");
 
+            // Decline button used in multiple places.
+            // REFERRERS: VersionInfoNoButton;
             English.Add("no", "no");
             German.Add("no", "nein");
             Polish.Add("no", "Nie");
@@ -448,6 +452,8 @@ namespace RelhaxModpack
             Spanish.Add("no", "No");
             Russian.Add("no", "Нет");
 
+            // Cancel button (phrase) used in multiple places.
+            // REFERRERS: CancelDownloadInstallButton; CancelButtonLabel; DeveloperSelectionsCancelButton; ExportCancelButton; GcDownloadStep4DownloadingCancelButton;
             English.Add("cancel", "Cancel");
             German.Add("cancel", "Abbrechen");
             Polish.Add("cancel", "Anuluj");
@@ -497,6 +503,7 @@ namespace RelhaxModpack
             Spanish.Add("abort", "Abortar");
             Russian.Add("abort", "Отменить");
 
+            // REFERRERS: extractionErrorHeader; GcDownloadStep1ValueError; 
             English.Add("error", "Error");
             German.Add("error", "Fehler");
             Polish.Add("error", "Błąd");
@@ -596,7 +603,8 @@ namespace RelhaxModpack
             Russian.Add("days", "дн.");
 
             //Component: next
-            //
+            // Used as a button in multiple places.
+            // REFERRERS: PreviewNextPicButton; GcDownloadStep1NextText; GcDownloadStep2NextText; GcDownloadStep3NextText; GcDownloadStep4NextText;
             English.Add("next", "Next");
             German.Add("next", "Weiter");
             Polish.Add("next", "Dalej");
@@ -604,8 +612,19 @@ namespace RelhaxModpack
             Spanish.Add("next", "Siguiente");
             Russian.Add("next", "Далее");
 
+            //Component: ContinueButton
+            // Continue button used in multiple places (at least this particular translation of it). Sometimes used as NEXT STEP, sometimes as NEXT ELEMENT.
+            // REFERRERS: DiagnosticsContinueButton; ExportContinueButton; SelectLanguagesContinueButton;
+            English.Add("ContinueButton", "Continue");
+            German.Add("ContinueButton", "Fortsetzen");
+            Polish.Add("ContinueButton", "Kontynuuj");
+            French.Add("ContinueButton", "Continuer");
+            Spanish.Add("ContinueButton", "Continuar");
+            Russian.Add("ContinueButton", "Продолжить");
+
             //Component: previous
-            //
+            // Previous button used in multiple places (at least this particular translation of it). Sometimes used as GO BACK, sometimes as PREVIOUS ELEMENT.
+            // REFERRERS: PreviewPreviousPicButton; GcDownloadStep1PreviousText; GcDownloadStep2PreviousText; GcDownloadStep3PreviousText; GcDownloadStep4PreviousText;
             English.Add("previous", "Previous");
             German.Add("previous", "Zurück");
             Polish.Add("previous", "Wstecz");
@@ -614,7 +633,8 @@ namespace RelhaxModpack
             Russian.Add("previous", "Назад");
 
             //Component: close
-            //
+            // Close button used in multiple places.
+            // REFFERERS: GcDownloadStep5CloseText;
             English.Add("close", "Close");
             German.Add("close", "Schließen");
             Polish.Add("close", "Zamknij");
@@ -623,7 +643,7 @@ namespace RelhaxModpack
             Russian.Add("close", "Закрыть");
 
             //Component: none
-            //
+            // REFERRERS: SelectedInstallationNone;
             English.Add("none", "None");
             German.Add("none", "Nichts");
             Polish.Add("none", "Brak");
@@ -998,12 +1018,12 @@ namespace RelhaxModpack
 
             //Component: CancelDownloadInstallButton
             //
-            English.Add("CancelDownloadInstallButton", "Cancel");
-            German.Add("CancelDownloadInstallButton", "Abbrechen");
-            Polish.Add("CancelDownloadInstallButton", "Anuluj");
-            French.Add("CancelDownloadInstallButton", "Annuler");
-            Spanish.Add("CancelDownloadInstallButton", "Cancelar");
-            Russian.Add("CancelDownloadInstallButton", "Отмена");
+            English.Add("CancelDownloadInstallButton", English["cancel"]);
+            German.Add("CancelDownloadInstallButton", German["cancel"]);
+            Polish.Add("CancelDownloadInstallButton", Polish["cancel"]);
+            French.Add("CancelDownloadInstallButton", French["cancel"]);
+            Spanish.Add("CancelDownloadInstallButton", Spanish["cancel"]);
+            Russian.Add("CancelDownloadInstallButton", Russian["cancel"]);
 
             //Component: appDataFolderNotExistHeader
             //
@@ -2180,12 +2200,12 @@ namespace RelhaxModpack
 
             //Component: CancelButtonLabel
             //
-            English.Add("CancelButtonLabel", "Cancel");
-            German.Add("CancelButtonLabel", "Abbrechen");
-            Polish.Add("CancelButtonLabel", "Anuluj");
-            French.Add("CancelButtonLabel", "Anuler");
-            Spanish.Add("CancelButtonLabel", "Cancelar");
-            Russian.Add("CancelButtonLabel", "Отмена");
+            English.Add("CancelButtonLabel", English["cancel"]);
+            German.Add("CancelButtonLabel", German["cancel"]);
+            Polish.Add("CancelButtonLabel", Polish["cancel"]);
+            French.Add("CancelButtonLabel", French["cancel"]);
+            Spanish.Add("CancelButtonLabel", Spanish["cancel"]);
+            Russian.Add("CancelButtonLabel", Russian["cancel"]);
 
             //Component: HelpLabel
             //
@@ -2554,22 +2574,22 @@ namespace RelhaxModpack
             Russian.Add("VersionInfo", "Обновление приложения");
 
             //Component: VersionInfoYesButton
-            //
-            English.Add("VersionInfoYesButton", "Yes");
-            German.Add("VersionInfoYesButton", "Ja");
-            Polish.Add("VersionInfoYesButton", "Tak");
-            French.Add("VersionInfoYesButton", "Oui");
-            Spanish.Add("VersionInfoYesButton", "Sí");
-            Russian.Add("VersionInfoYesButton", "Да");
+            // A button in VersionInfo window confirming the installation of the new available version of the application.
+            English.Add("VersionInfoYesButton", English["yes"]);
+            German.Add("VersionInfoYesButton", German["yes"]);
+            Polish.Add("VersionInfoYesButton", Polish["yes"]);
+            French.Add("VersionInfoYesButton", French["yes"]);
+            Spanish.Add("VersionInfoYesButton", Spanish["yes"]);
+            Russian.Add("VersionInfoYesButton", Russian["yes"]);
 
             //Component: VersionInfoNoButton
-            //
-            English.Add("VersionInfoNoButton", "No");
-            German.Add("VersionInfoNoButton", "nein");
-            Polish.Add("VersionInfoNoButton", "Nie");
-            French.Add("VersionInfoNoButton", "Non");
-            Spanish.Add("VersionInfoNoButton", "No");
-            Russian.Add("VersionInfoNoButton", "Нет");
+            // A button in VersionInfo window declining the installation of the new available version of the application.
+            English.Add("VersionInfoNoButton", English["no"]);
+            German.Add("VersionInfoNoButton", German["no"]);
+            Polish.Add("VersionInfoNoButton", Polish["no"]);
+            French.Add("VersionInfoNoButton", French["no"]);
+            Spanish.Add("VersionInfoNoButton", Spanish["no"]);
+            Russian.Add("VersionInfoNoButton", Russian["no"]);
 
             //Component: NewVersionAvailable
             //
@@ -2981,14 +3001,14 @@ namespace RelhaxModpack
             Russian.Add("extractionErrorMessage", "Возникла ошибка при удалении папки res_mods или mods. Возможно, запущен World of Tanks или неверно" +
                 " настроены разрешения к папкам и файлам.");
 
-            //Component:
+            //Component: extractionErrorHeader
             //
-            English.Add("extractionErrorHeader", "Error");
-            German.Add("extractionErrorHeader", "Fehler");
-            Polish.Add("extractionErrorHeader", "Błąd");
-            French.Add("extractionErrorHeader", "Erreur");
-            Spanish.Add("extractionErrorHeader", "Error");
-            Russian.Add("extractionErrorHeader", "Ошибка");
+            English.Add("extractionErrorHeader", English["error"]);
+            German.Add("extractionErrorHeader", German["error"]);
+            Polish.Add("extractionErrorHeader", Polish["error"]);
+            French.Add("extractionErrorHeader", French["error"]);
+            Spanish.Add("extractionErrorHeader", Spanish["error"]);
+            Russian.Add("extractionErrorHeader", Russian["error"]);
 
             //Component:
             //
@@ -3648,13 +3668,13 @@ namespace RelhaxModpack
             Russian.Add("SelectedInstallation", "Текущая папка с игрой:");
 
             //Component: SelectedInstallationNone
-            //
-            English.Add("SelectedInstallationNone", "(none)");
-            German.Add("SelectedInstallationNone", "(nichts)");
-            Polish.Add("SelectedInstallationNone", "(brak)");
-            French.Add("SelectedInstallationNone", "(aucun)");
-            Spanish.Add("SelectedInstallationNone", "(ninguna)");
-            Russian.Add("SelectedInstallationNone", "(не выбрана)");
+            // A text label with the (not selected in this case) path to the selected (active) installation.
+            English.Add("SelectedInstallationNone", "("+English["none"].ToLower()+")");
+            German.Add("SelectedInstallationNone", "("+German["none"].ToLower()+")");
+            Polish.Add("SelectedInstallationNone", "("+Polish["none"].ToLower()+")"); // This Frankenstein's monster is of my creation. @Nullmaruzero
+            French.Add("SelectedInstallationNone", "("+French["none"].ToLower()+")");
+            Spanish.Add("SelectedInstallationNone", "("+Spanish["none"].ToLower()+")");
+            Russian.Add("SelectedInstallationNone", "("+Russian["none"].ToLower()+")");
 
             //Component: collectionLogInfo
             //
@@ -3894,7 +3914,7 @@ namespace RelhaxModpack
             Russian.Add("AddPicturesZip", TranslationNeeded);
 
             //Component: DiagnosticsAddSelectionsPicturesLabel
-            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            //
             English.Add("DiagnosticsAddSelectionsPicturesLabel", "Add any additional files here (your selection file, picture, etc.)");
             German.Add("DiagnosticsAddSelectionsPicturesLabel", "Füge zusätzliche Dateien hinzu (deine Auswahldatei, Bilder, etc.)");
             Polish.Add("DiagnosticsAddSelectionsPicturesLabel", "Dodaj wszelkie dodatkowe pliki (plik kolekcji, obrazy, itp.)");
@@ -3903,7 +3923,7 @@ namespace RelhaxModpack
             Russian.Add("DiagnosticsAddSelectionsPicturesLabel", "Добавить какие-либо дополнительные файлы (файл предустановки, изображения, и т. д.)");
 
             //Component: DiagnosticsAddFilesButton
-            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            //
             English.Add("DiagnosticsAddFilesButton", "Add Files");
             German.Add("DiagnosticsAddFilesButton", "Dateien hinzufügen");
             Polish.Add("DiagnosticsAddFilesButton", "Dodaj pliki");
@@ -3912,7 +3932,7 @@ namespace RelhaxModpack
             Russian.Add("DiagnosticsAddFilesButton", "Добавить файлы");
 
             //Component: DiagnosticsRemoveSelectedButton
-            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            //
             English.Add("DiagnosticsRemoveSelectedButton", "Remove Selected");
             German.Add("DiagnosticsRemoveSelectedButton", "Entferne Ausgewähltes");
             Polish.Add("DiagnosticsRemoveSelectedButton", "Usuń zaznaczone");
@@ -3921,13 +3941,13 @@ namespace RelhaxModpack
             Russian.Add("DiagnosticsRemoveSelectedButton", "Удалить выбранное");
 
             //Component: DiagnosticsContinueButton
-            //the message when the UISettings.xml file is parsed and the custom theme is loaded
-            English.Add("DiagnosticsContinueButton", "Continue");
-            German.Add("DiagnosticsContinueButton", "Fortsetzen");
-            Polish.Add("DiagnosticsContinueButton", "Kontynuuj");
-            French.Add("DiagnosticsContinueButton", TranslationNeeded);
-            Spanish.Add("DiagnosticsContinueButton", "Continuar");
-            Russian.Add("DiagnosticsContinueButton", "Продолжить");
+            //
+            English.Add("DiagnosticsContinueButton", English["ContinueButton"]);
+            German.Add("DiagnosticsContinueButton", German["ContinueButton"]);
+            Polish.Add("DiagnosticsContinueButton", Polish["ContinueButton"]);
+            French.Add("DiagnosticsContinueButton", French["ContinueButton"]);
+            Spanish.Add("DiagnosticsContinueButton", Spanish["ContinueButton"]);
+            Russian.Add("DiagnosticsContinueButton", Russian["ContinueButton"]);
 
             //Component: cantRemoveDefaultFile
             //
@@ -3977,21 +3997,21 @@ namespace RelhaxModpack
             Russian.Add("noTimestamp", "Нет метки с датой");
 
             //Component: PreviewNextPicButton
-            //
+            // A button in mod preview window used to display the previous preview image.
             English.Add("PreviewNextPicButton", English["next"]);
             German.Add("PreviewNextPicButton", German["next"]);
-            Polish.Add("PreviewNextPicButton", Polish["next"]);
+            Polish.Add("PreviewNextPicButton", "Następny"); // As DrWeb7_1 pointed out, Slavic languages are sometimes a b*tch... @Nullmaruzero
             French.Add("PreviewNextPicButton", French["next"]);
             Spanish.Add("PreviewNextPicButton", Spanish["next"]);
             Russian.Add("PreviewNextPicButton", Russian["next"]);
 
             //Component: PreviewPreviousPicButton
-            //
-            English.Add("PreviewPreviousPicButton", "Previous");
-            German.Add("PreviewPreviousPicButton", "Zurück");
-            Polish.Add("PreviewPreviousPicButton", "Wstecz");
-            French.Add("PreviewPreviousPicButton", "Précedent");
-            Spanish.Add("PreviewPreviousPicButton", "Anterior");
+            // A button in mod preview window used to display the next preview image.
+            English.Add("PreviewPreviousPicButton", English["previous"]);
+            German.Add("PreviewPreviousPicButton", German["previous"]);
+            Polish.Add("PreviewPreviousPicButton", "Poprzedni"); // As DrWeb7_1 pointed out, Slavic languages are sometimes a b*tch... @Nullmaruzero
+            French.Add("PreviewPreviousPicButton", French["previous"]);
+            Spanish.Add("PreviewPreviousPicButton", Spanish["previous"]);
             Russian.Add("PreviewPreviousPicButton", "пред.");
 
             //Component: DevUrlHeader
@@ -4052,12 +4072,12 @@ namespace RelhaxModpack
 
             //Component: DeveloperSelectionsCancelButton
             //
-            English.Add("DeveloperSelectionsCancelButton", "Cancel");
-            German.Add("DeveloperSelectionsCancelButton", "Abbrechen");
-            Polish.Add("DeveloperSelectionsCancelButton", "Anuluj");
-            French.Add("DeveloperSelectionsCancelButton", "Annuler");
-            Spanish.Add("DeveloperSelectionsCancelButton", "Cancelar");
-            Russian.Add("DeveloperSelectionsCancelButton", "Отмена");
+            English.Add("DeveloperSelectionsCancelButton", English["cancel"]);
+            German.Add("DeveloperSelectionsCancelButton", German["cancel"]);
+            Polish.Add("DeveloperSelectionsCancelButton", Polish["cancel"]);
+            French.Add("DeveloperSelectionsCancelButton", French["cancel"]);
+            Spanish.Add("DeveloperSelectionsCancelButton", Spanish["cancel"]);
+            Russian.Add("DeveloperSelectionsCancelButton", Russian["cancel"]);
 
             //Component: DeveloperSelectionsLocalFile
             //The text in the first radioButton in the selection viewer, for the user to select their own personal config file to load
@@ -4330,7 +4350,7 @@ namespace RelhaxModpack
 
             #region First Load Acknowledgements
             //Component: FirstLoadAcknowledgments
-            //
+            // ACKS window title.
             English.Add("FirstLoadAcknowledgments", "First Load Acknowledgements");
             German.Add("FirstLoadAcknowledgments", TranslationNeeded);
             Polish.Add("FirstLoadAcknowledgments", "Pierwsze Urochomienie — Umowa Licencyjna"); // Can't think of a gracious way to do this one. @Nullmaruzero
@@ -4339,7 +4359,8 @@ namespace RelhaxModpack
             Russian.Add("FirstLoadAcknowledgments", "Первый запуск");
 
             //Component: AgreementLicense
-            //
+            // The first acknowledgement checkbox, inlines with the LicenseLink licence agreement link at the end.
+            // EXAMPLE: [x] I have read and agree to the {License Agreement}
             English.Add("AgreementLicense", "I have read and agree to the ");
             German.Add("AgreementLicense", TranslationNeeded);
             Polish.Add("AgreementLicense", "Przeczytałem/am i zgadzam się z postanowieniami ");
@@ -4348,7 +4369,7 @@ namespace RelhaxModpack
             Russian.Add("AgreementLicense", "Я прочитал и согласен с ");
 
             //Component: LicenseLink
-            //
+            // A link inlining at the end with the AgreementLicense first checkbox text from above.
             English.Add("LicenseLink", "License Agreement");
             German.Add("LicenseLink", "Lizenzvereinbarung");
             Polish.Add("LicenseLink", "Umowy Licencyjnej");
@@ -4357,7 +4378,8 @@ namespace RelhaxModpack
             Russian.Add("LicenseLink", "условиями лицензионного соглашения");
 
             //Component: AgreementSupport1
-            //
+            // The second acknowledgement checkbox, inlines with link to forums, the conjunction phrase and discord server link.
+            // EXAMPLE: [x] I understand that I can receive support on the dedicated {Forums} {or} {Discord}
             English.Add("AgreementSupport1", "I understand that I can receive support on the dedicated ");
             German.Add("AgreementSupport1", TranslationNeeded);
             Polish.Add("AgreementSupport1", "Rozumiem, że mogę uzyskać wsparcie techniczne na dedykowanym ");
@@ -4366,7 +4388,7 @@ namespace RelhaxModpack
             Russian.Add("AgreementSupport1", "Я понимаю, что могу обратиться за помощью ");
 
             //Component: AgreementSupportForums
-            //
+            // First of the inlined elements for AgreementSupport1, a link to the forums.
             English.Add("AgreementSupportForums", "Forums");
             German.Add("AgreementSupportForums", TranslationNeeded);
             Polish.Add("AgreementSupportForums", "Forum");
@@ -4375,7 +4397,7 @@ namespace RelhaxModpack
             Russian.Add("AgreementSupportForums", "на форум");
 
             //Component: AgreementSupport2
-            //
+            // Second of the inlined elements for AgreementSupport1, conjunction between a forum link and discord server link.
             English.Add("AgreementSupport2", " or ");
             German.Add("AgreementSupport2", TranslationNeeded);
             Polish.Add("AgreementSupport2", " lub serwerze ");
@@ -4384,7 +4406,7 @@ namespace RelhaxModpack
             Russian.Add("AgreementSupport2", " или на сервер в ");
 
             //Component: AgreementSupportDiscord
-            //
+            // Third and the last inlined elements for AgreementSupport1, a link to Relhax Discord server.
             English.Add("AgreementSupportDiscord", "Discord");
             Polish.Add("AgreementSupportDiscord", "Discord");
             German.Add("AgreementSupportDiscord", "Discord");
@@ -4393,34 +4415,27 @@ namespace RelhaxModpack
             Russian.Add("AgreementSupportDiscord", "Discord");
 
             //Component: AgreementHoster
-            //
+            // The third acknowledgement checkbox, just plain text. Make sure you communicate this one well.
+            // EXAMPLE: [x] I understand Relhax is a mod hosting and installation service and Relhax does not maintain every mod found in this Modpack
             English.Add("AgreementHoster", "I understand Relhax is a mod hosting and installation service and Relhax does not maintain every mod found in this Modpack");
             German.Add("AgreementHoster", "Ich verstehe, dass Relhax ein Mod-Hosting- und Installationsservice ist und Relhax nicht alle Mods verwaltet, die in diesem Modpack enthalten sind");
-            Polish.Add("AgreementHoster", "Rozumiem, że Relhax jest usługą hostowania i instalacji modów oraz, że zespół Relhax nie jest autorem wszystkich modów znajdujących się w paczce.");
+            Polish.Add("AgreementHoster", "Rozumiem, że Relhax to platforma instalacji modów oraz ich hosting, a zespół Relhax nie jest odpowiedzialny za rozwój wszystkich oferowanych modów.");
             French.Add("AgreementHoster", "Je comprends que Relhax est un hébergement de mods et un service d'installation. Relhax ne gère pas tous les mods de ce Modpack");
             Spanish.Add("AgreementHoster", "Comprendo que Relhax sólo es un servicio de alojamiento e instalación de mods, y Relhax no mantiene cada mod incluido en este modpack");
             Russian.Add("AgreementHoster", "Я понимаю, что Relhax является площадкой хостинга модов и сервисом их установки и то, что Relhax не занимается разработкой каждого мода из этого модпака");
 
             //Component: AgreementAnonData
-            //
+            // The fourth acknowledgement checkbox. Make sure you communicate this one well.
+            // EXAMPLE: I understand that Relhax V2 collects anonymous usage data to improve the application, and can be disabled in the advanced settings tab
             English.Add("AgreementAnonData", "I understand that Relhax V2 collects anonymous usage data to improve the application, and can be disabled in the advanced settings tab");
             German.Add("AgreementAnonData", "Ich verstehe, dass Relhax V2 anonyme Nutzungsdaten sammelt, um die Anwendung zu verbessern, und auf der Registerkarte  für erweiterte Einstellungen deaktiviert werden kann.");
-            Polish.Add("AgreementAnonData", "Rozumiem, że Relhax V2 gromadzi i wysyła anonimowe statystyki użytkowania celem poprawy aplikacji oraz, że mogę to wyłączyć w zakładce 'Zaawansowane' w dowolnym momencie.");
+            Polish.Add("AgreementAnonData", "Rozumiem, że Relhax V2 gromadzi i wysyła anonimowe dane użytkowania celem poprawy aplikacji, oraz że funkcję tę mogę wyłączyć w dowolnym momencie w zakładce 'Zaawansowane'.");
             French.Add("AgreementAnonData", "Je comprends que Relhax V2 collecte des données d'utilisation anonymes pour améliorer l'application, et peut être désactivé dans les options avancées");
             Spanish.Add("AgreementAnonData", "Comprendo que Relhax V2 recoge datos anónimos de uso para mejorar la aplicación, lo cual puede ser deshabilitado en la pestaña de opciones avanzadas");
             Russian.Add("AgreementAnonData", "Я понимаю, что Relhax V2 собирает анонимные сведения об использовании для улучшения приложения и могу отключить сбор данных в разделе расширенных настроек");
 
-            //Component: ContinueButton
-            //
-            English.Add("ContinueButton", "Continue");
-            German.Add("ContinueButton", "Fortsetzen");
-            Polish.Add("ContinueButton", "Kontynuuj");
-            French.Add("ContinueButton", "Continuer");
-            Spanish.Add("ContinueButton", "Continuar");
-            Russian.Add("ContinueButton", "Продолжить");
-
             //Component: V2UpgradeNoticeText
-            //
+            // A text block appearing (in red) under the last acknowledgement, centered in the window - only if the app detects that a conversion is required.
             English.Add("V2UpgradeNoticeText", "It looks like you are running an upgrade from V1 to V2 for the first time.\n" +
                 "Pressing continue will result in an upgrade to the file structure that cannot be reverted. It is recommended to make a backup of your V1 folder before continuing");
             German.Add("V2UpgradeNoticeText", "Es sieht so aus, als würdest du zum ersten Mal ein Upgrade von V1 auf V2 ausführen.\n" +
@@ -4434,7 +4449,7 @@ namespace RelhaxModpack
             Russian.Add("V2UpgradeNoticeText", "Похоже, что вы производите апгрейд с V1 на V2 в первый раз.\nНажатие кнопки продолжения произведёт обновление структуры файлов, которое невозможно откатить. Рекомендуется создание бэкапа папки с V1 перед продолжением");
 
             //Component: upgradingStructure
-            //
+            // Displays the structure upgrade log within the main app itself, if the user agreed to the conversion in the ACKS window and proceeded. Just like download and any other status.
             English.Add("upgradingStructure", "Upgrading V1 file and folder structure");
             German.Add("upgradingStructure", "Upgrad der V1 Datei- und Ordnerstruktur");
             Polish.Add("upgradingStructure", "Konwertowanie struktury plików i folderów V1");
@@ -4473,21 +4488,21 @@ namespace RelhaxModpack
 
             //Component: ExportContinueButton
             //
-            English.Add("ExportContinueButton", "Continue");
-            German.Add("ExportContinueButton", "Fortfahren");
-            Polish.Add("ExportContinueButton", "Kontynuuj");
-            French.Add("ExportContinueButton", TranslationNeeded);
-            Spanish.Add("ExportContinueButton", "Continuar");
-            Russian.Add("ExportContinueButton", "Продолжить");
+            English.Add("ExportContinueButton", English["ContinueButton"]);
+            German.Add("ExportContinueButton", German["ContinueButton"]);
+            Polish.Add("ExportContinueButton", Polish["ContinueButton"]);
+            French.Add("ExportContinueButton", French["ContinueButton"]);
+            Spanish.Add("ExportContinueButton", Spanish["ContinueButton"]);
+            Russian.Add("ExportContinueButton", Russian["ContinueButton"]);
 
             //Component: ExportCancelButton
             //
-            English.Add("ExportCancelButton", "Cancel");
-            German.Add("ExportCancelButton", "Abbrechen");
-            Polish.Add("ExportCancelButton", "Anuluj");
-            French.Add("ExportCancelButton", TranslationNeeded);
-            Spanish.Add("ExportCancelButton", "Cancelar");
-            Russian.Add("ExportCancelButton", "Отмена");
+            English.Add("ExportCancelButton", English["cancel"]);
+            German.Add("ExportCancelButton", German["cancel"]);
+            Polish.Add("ExportCancelButton", Polish["cancel"]);
+            French.Add("ExportCancelButton", French["cancel"]);
+            Spanish.Add("ExportCancelButton", Spanish["cancel"]);
+            Russian.Add("ExportCancelButton", Russian["cancel"]);
 
             //Component: ExportModeMajorVersion
             //
@@ -5147,21 +5162,21 @@ namespace RelhaxModpack
 
             //Component: GcDownloadStep4Previous
             //
-            English.Add("GcDownloadStep4Previous", English["previous"]);
-            German.Add("GcDownloadStep4Previous", German["previous"]);
-            Polish.Add("GcDownloadStep4Previous", Polish["previous"]);
-            French.Add("GcDownloadStep4Previous", French["previous"]);
-            Spanish.Add("GcDownloadStep4Previous", Spanish["previous"]);
-            Russian.Add("GcDownloadStep4Previous", Russian["previous"]);
+            English.Add("GcDownloadStep4PreviousText", English["previous"]);
+            German.Add("GcDownloadStep4PreviousText", German["previous"]);
+            Polish.Add("GcDownloadStep4PreviousText", Polish["previous"]);
+            French.Add("GcDownloadStep4PreviousText", French["previous"]);
+            Spanish.Add("GcDownloadStep4PreviousText", Spanish["previous"]);
+            Russian.Add("GcDownloadStep4PreviousText", Russian["previous"]);
 
-            //Component: GcDownloadStep4Next
+            //Component: GcDownloadStep4NextText
             //
-            English.Add("GcDownloadStep4Next", English["next"]);
-            German.Add("GcDownloadStep4Next", German["next"]);
-            Polish.Add("GcDownloadStep4Next", Polish["next"]);
-            French.Add("GcDownloadStep4Next", French["next"]);
-            Spanish.Add("GcDownloadStep4Next", Spanish["next"]);
-            Russian.Add("GcDownloadStep4Next", Russian["next"]);
+            English.Add("GcDownloadStep4NextText", English["next"]);
+            German.Add("GcDownloadStep4NextText", German["next"]);
+            Polish.Add("GcDownloadStep4NextText", Polish["next"]);
+            French.Add("GcDownloadStep4NextText", French["next"]);
+            Spanish.Add("GcDownloadStep4NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep4NextText", Russian["next"]);
 
             //Component: GcDownloadStep4DownloadComplete
             //
@@ -5190,46 +5205,46 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep5TabDescription", "¡El proceso se ha completado! WG Game Center debería detectar los archivos en su próxima ejecución");
             Russian.Add("GcDownloadStep5TabDescription", "Процесс успешно завершён. Wargaming Game Center должен обнаружить файлы после запуска.");
 
-            //Component: GcDownloadStep5Close
+            //Component: GcDownloadStep5CloseText
             //
-            English.Add("GcDownloadStep5Close", English["close"]);
-            German.Add("GcDownloadStep5Close", German["close"]);
-            Polish.Add("GcDownloadStep5Close", Polish["close"]);
-            French.Add("GcDownloadStep5Close", French["close"]);
-            Spanish.Add("GcDownloadStep5Close", Spanish["close"]);
-            Russian.Add("GcDownloadStep5Close", Russian["close"]);
+            English.Add("GcDownloadStep5CloseText", English["close"]);
+            German.Add("GcDownloadStep5CloseText", German["close"]);
+            Polish.Add("GcDownloadStep5CloseText", Polish["close"]);
+            French.Add("GcDownloadStep5CloseText", French["close"]);
+            Spanish.Add("GcDownloadStep5CloseText", Spanish["close"]);
+            Russian.Add("GcDownloadStep5CloseText", Russian["close"]);
 
             //Component: GcDownloadStep1ValueError
             //
-            English.Add("GcDownloadStep1ValueError", "Error");
-            German.Add("GcDownloadStep1ValueError", TranslationNeeded);
-            Polish.Add("GcDownloadStep1ValueError", "Błąd");
-            French.Add("GcDownloadStep1ValueError", TranslationNeeded);
-            Spanish.Add("GcDownloadStep1ValueError", "Error");
-            Russian.Add("GcDownloadStep1ValueError", "Ошибка");
+            English.Add("GcDownloadStep1ValueError", English["error"]);
+            German.Add("GcDownloadStep1ValueError", German["error"]);
+            Polish.Add("GcDownloadStep1ValueError", Polish["error"]);
+            French.Add("GcDownloadStep1ValueError", French["error"]);
+            Spanish.Add("GcDownloadStep1ValueError", Spanish["error"]);
+            Russian.Add("GcDownloadStep1ValueError", Russian["error"]);
             #endregion
 
             #region Select Language Window
             //Component: FirstLoadSelectLanguage
-            //Application window title
+            // Application window title.
             English.Add("FirstLoadSelectLanguage", "Language Selection");
             German.Add("FirstLoadSelectLanguage", TranslationNeeded);
-            Polish.Add("FirstLoadSelectLanguage", TranslationNeeded);
+            Polish.Add("FirstLoadSelectLanguage", "Wybór Języka");
             French.Add("FirstLoadSelectLanguage", TranslationNeeded);
             Spanish.Add("FirstLoadSelectLanguage", TranslationNeeded);
             Russian.Add("FirstLoadSelectLanguage", "Язык интерфейса");
 
             //Component: SelectLanguageHeader
-            //
+            // A header (label) in the window with a list of radio buttons with available languages below.
             English.Add("SelectLanguageHeader", "Please select your language");
             German.Add("SelectLanguageHeader", TranslationNeeded);
-            Polish.Add("SelectLanguageHeader", TranslationNeeded);
+            Polish.Add("SelectLanguageHeader", "Wybierz język aplikacji");
             French.Add("SelectLanguageHeader", TranslationNeeded);
             Spanish.Add("SelectLanguageHeader", TranslationNeeded);
             Russian.Add("SelectLanguageHeader", "Пожалуйста, выберите язык");
 
             //Component: SelectLanguagesContinueButton
-            //
+            // Just a "Continue" button on the bottom. Proceeds to first-run acknowlegements window.
             English.Add("SelectLanguagesContinueButton", English["ContinueButton"]);
             German.Add("SelectLanguagesContinueButton", German["ContinueButton"]);
             Polish.Add("SelectLanguagesContinueButton", Polish["ContinueButton"]);
