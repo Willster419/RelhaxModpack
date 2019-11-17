@@ -2957,9 +2957,9 @@ namespace RelhaxModpack
         }
 
         //asyncronously get the file sizes of backups
-        private async Task GetBackupFilesizesAsync(bool displayGettingSize)
+        private Task GetBackupFilesizesAsync(bool displayGettingSize)
         {
-            Task.Run(() =>
+            return Task.Run(() =>
             {
                 Logging.Debug("starting async task of getting file sizes of backups");
                 if (displayGettingSize)
