@@ -98,6 +98,32 @@
             Dispose of the Atlas Creator (mostly disposing image data)
             </summary>
         </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.AtlasUtils">
+            <summary>
+            A utility class for Atlas file processing
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.ParseModTexturesTask">
+            <summary>
+            The task of parsing all mod png images from multiple folders into a flat list of png bitmaps
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.ModContourIconImages">
+            <summary>
+            The list of parsed mod png images into textures
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.AtlasLoaderLockObject">
+            <summary>
+            Lock object used in AtlasCreator for critical sections that can't be done at the same time
+            </summary>
+            <remarks>Each atlas file is created by its own thread. However, the DDS loading and saving API used can't be used more then once at a time</remarks>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.AtlasBuilders">
+            <summary>
+            A list of Atlas creating thread engines
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.LoadModContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
             <summary>
             Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
@@ -109,6 +135,16 @@
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.DisposeparseModTextures">
             <summary>
             Dispose of all textures in the shared mod texture list
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.VerifyImageLibsLoaded">
+            <summary>
+            Verifies the Atlas processing libraries are loaded. If not, they are loaded.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.DisposeOfAllAtlasResources">
+            <summary>
+            Disposes of all statically used AtlasUtils resources, including releasing the mod texture list
             </summary>
         </member>
         <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker">
@@ -4788,6 +4824,31 @@
             The old absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Settings.WoT64bitFolder">
+            <summary>
+            The name of the 64bit folder in the 'World_of_Tanks' directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoT32bitFolder">
+            <summary>
+            The name of the 32bit folder in the 'World_of_Tanks' directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoT64bitFolderWithSlash">
+            <summary>
+            The WoT 64bit folder name with the folder separator before it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoT32bitFolderWithSlash">
+            <summary>
+            The WoT 32bit folder name with the folder separator before it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoTVersionXml">
+            <summary>
+            The name of the version xml used for getting the current client version information
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Settings.PatchFolderName">
             <summary>
             The name of the installer folder to hold all patch xml files in
@@ -4952,6 +5013,11 @@
         <member name="F:RelhaxModpack.Settings.WoTProcessName">
             <summary>
             The name of the WoT process used for detecting if it is running
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoTVersionXmlXpath">
+            <summary>
+            The xpath to the version information used by the modpack to determine the WoT client version
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.ApplicationVersion">
@@ -5548,6 +5614,16 @@
             </summary>
             <summary>
             FirstLoadSelectLanguage
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.FirstLoadSelectLanguage.Continue">
+            <summary>
+            Flag to determine if the user selected a language
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.FirstLoadSelectLanguage.#ctor">
+            <summary>
+            Create and instance of the FirstLoadSelectLanguage Window
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.FirstLoadSelectLanguage.InitializeComponent">
@@ -6166,6 +6242,11 @@
             </summary>
             <summary>
             TemplateWindow
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.TemplateWindow.#ctor">
+            <summary>
+            Create an instance of TemplateWindow
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.TemplateWindow.InitializeComponent">

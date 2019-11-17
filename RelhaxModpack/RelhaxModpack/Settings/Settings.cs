@@ -164,14 +164,29 @@ namespace RelhaxModpack
         [Obsolete]
         public static readonly string RelhaxLibrariesFolderPathOld = Path.Combine(ApplicationStartupPath, "RelHaxLibraries");
 
+        /// <summary>
+        /// The name of the 64bit folder in the 'World_of_Tanks' directory
+        /// </summary>
         public const string WoT64bitFolder = "win64";
 
+        /// <summary>
+        /// The name of the 32bit folder in the 'World_of_Tanks' directory
+        /// </summary>
         public const string WoT32bitFolder = "win32";
 
+        /// <summary>
+        /// The WoT 64bit folder name with the folder separator before it
+        /// </summary>
         public static readonly string WoT64bitFolderWithSlash = Path.DirectorySeparatorChar + WoT64bitFolder;
 
+        /// <summary>
+        /// The WoT 32bit folder name with the folder separator before it
+        /// </summary>
         public static readonly string WoT32bitFolderWithSlash = Path.DirectorySeparatorChar + WoT32bitFolder;
 
+        /// <summary>
+        /// The name of the version xml used for getting the current client version information
+        /// </summary>
         public const string WoTVersionXml = "version.xml";
 
         /// <summary>
@@ -365,6 +380,9 @@ namespace RelhaxModpack
         /// </summary>
         public const string WoTProcessName = "WorldOfTanks";
 
+        /// <summary>
+        /// The xpath to the version information used by the modpack to determine the WoT client version
+        /// </summary>
         public const string WoTVersionXmlXpath = "//version.xml/version";
 
         /// <summary>
