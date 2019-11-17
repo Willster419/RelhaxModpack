@@ -5202,7 +5202,7 @@ namespace RelhaxModpack
             //Application window title
             English.Add("FirstLoadSelectLanguage", "Language Selection");
             German.Add("FirstLoadSelectLanguage", TranslationNeeded);
-            Polish.Add("FirstLoadSelectLanguage", TranslationNeeded);
+            Polish.Add("FirstLoadSelectLanguage", "Wybór Języka");
             French.Add("FirstLoadSelectLanguage", TranslationNeeded);
             Spanish.Add("FirstLoadSelectLanguage", TranslationNeeded);
             Russian.Add("FirstLoadSelectLanguage", "Язык интерфейса");
@@ -5211,7 +5211,7 @@ namespace RelhaxModpack
             //
             English.Add("SelectLanguageHeader", "Please select your language");
             German.Add("SelectLanguageHeader", TranslationNeeded);
-            Polish.Add("SelectLanguageHeader", TranslationNeeded);
+            Polish.Add("SelectLanguageHeader", "Wybierz język aplikacji");
             French.Add("SelectLanguageHeader", TranslationNeeded);
             Spanish.Add("SelectLanguageHeader", TranslationNeeded);
             Russian.Add("SelectLanguageHeader", "Пожалуйста, выберите язык");
