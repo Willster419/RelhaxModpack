@@ -658,7 +658,7 @@ namespace RelhaxModpack
             {
                 string xPath = string.Format("//{0}/ClassColorsets/{1}", Settings.UISettingsColorFile, property.Name);
                 Logging.Debug("Searching for class definition {0} using xpath {1}", property.Name, xPath);
-                XmlElement classColorsetXmlElement = XmlUtils.GetXmlNodeFromXPath(doc, xPath) as XmlElement;
+                XmlNode classColorsetXmlElement = XmlUtils.GetXmlNodeFromXPath(doc, xPath);
                 if (classColorsetXmlElement == null)
                 {
                     Logging.Error("failed to get brush setting for global custom brush {0}", property.Name);
@@ -721,7 +721,7 @@ namespace RelhaxModpack
 
                 string xmlPath = string.Format("//{0}/{1}", Settings.UISettingsColorFile, type.Name);
                 Logging.Debug("Using XmlPath {0} for finding window instance definitions", xmlPath);
-                XmlElement classColorsetWindowXmlElement = XmlUtils.GetXmlNodeFromXPath(doc, xmlPath) as XmlElement;
+                XmlNode classColorsetWindowXmlElement = XmlUtils.GetXmlNodeFromXPath(doc, xmlPath);
                 if(classColorsetWindowXmlElement == null)
                 {
                     Logging.Debug("no xml definition found for window {0} (used xmlPath {1})", type.Name, xmlPath);
@@ -729,7 +729,7 @@ namespace RelhaxModpack
                 }
 
                 WindowColorset windowColorset = new WindowColorset();
-                if (ApplyCustomThemeCustomBrushSettings(type.Name,classColorsetWindowXmlElement,out CustomBrush windowCustomBrush))
+                if (ApplyCustomThemeCustomBrushSettings(type.Name,classColorsetWindowXmlElement, out CustomBrush windowCustomBrush))
                     windowColorset.BackgroundBrush = windowCustomBrush;
                 else
                     Logging.Debug("failed to parse color definition for window {0}", type.Name);
@@ -746,19 +746,19 @@ namespace RelhaxModpack
                     //select the CompoenentCOlorset where ID matches
                     string xPath = string.Format("//ComponentColorset[@ID='{0}']", ID);
                     Logging.Debug("Searching for ComponentColorset definition with xpath {0}", xPath);
-                    XmlElement customBrushXml = classColorsetWindowXmlElement.SelectSingleNode(xPath) as XmlElement;
+                    XmlNode customBrushXml = classColorsetWindowXmlElement.SelectSingleNode(xPath);
                     if (customBrushXml != null)
                     {
                         Logging.Debug("Entry found, attempting to parse color settings");
                         ComponentColorset componentColorset = new ComponentColorset() { ID = ID };
 
-                        XmlElement backgroundBrushXml = customBrushXml.SelectSingleNode("BackgroundBrush") as XmlElement;
+                        XmlNode backgroundBrushXml = customBrushXml.SelectSingleNode("BackgroundBrush");
                         if (ApplyCustomThemeCustomBrushSettings(ID, backgroundBrushXml, out CustomBrush componentBackgroundBrush))
                             componentColorset.BackgroundBrush = componentBackgroundBrush;
                         else
                             componentColorset.BackgroundBrush = new CustomBrush();
 
-                        XmlElement foregroundBrushXml = customBrushXml.SelectSingleNode("ForegroundBrush") as XmlElement;
+                        XmlNode foregroundBrushXml = customBrushXml.SelectSingleNode("ForegroundBrush");
                         if (ApplyCustomThemeCustomBrushSettings(ID, foregroundBrushXml, out CustomBrush componentForegroundBrush))
                             componentColorset.ForegroundBrush = componentForegroundBrush;
                         else
@@ -779,7 +779,7 @@ namespace RelhaxModpack
             return true;
         }
 
-        private static bool ApplyCustomThemeClassColorsetBrushSettings(XmlElement classColorsetXmlElement, out ClassColorset classColorset)
+        private static bool ApplyCustomThemeClassColorsetBrushSettings(XmlNode classColorsetXmlElement, out ClassColorset classColorset)
         {
             classColorset = new ClassColorset();
 
@@ -875,7 +875,7 @@ namespace RelhaxModpack
             return parsingSuccess;
         }
 
-        private static bool ApplyCustomThemeCustomBrushSettings(string customBrushName, XmlElement customBrushElement, out CustomBrush customBrush)
+        private static bool ApplyCustomThemeCustomBrushSettings(string customBrushName, XmlNode customBrushElement, out CustomBrush customBrush)
         {
             customBrush = null;
             //a null xml element means that the element should not be modified
@@ -901,7 +901,7 @@ namespace RelhaxModpack
             return true;
         }
 
-        private static bool ApplyCustomThemeBrushSettings(string componentName, string componentTag, XmlElement brushSettings, out Brush colorToOutput)
+        private static bool ApplyCustomThemeBrushSettings(string componentName, string componentTag, XmlNode brushSettings, out Brush colorToOutput)
         {
             if (string.IsNullOrEmpty(componentName))
                 componentName = "null";
