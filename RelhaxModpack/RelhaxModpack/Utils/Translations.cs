@@ -592,6 +592,16 @@ namespace RelhaxModpack
             Spanish.Add("next", "Siguiente");
             Russian.Add("next", "Далее");
 
+            //Component: ContinueButton
+            // Continue button used in many places (at least this particular translation of it).
+            // LIST: DiagnosticsContinueButton; ExportContinueButton; SelectLanguagesContinueButton;
+            English.Add("ContinueButton", "Continue");
+            German.Add("ContinueButton", "Fortsetzen");
+            Polish.Add("ContinueButton", "Kontynuuj");
+            French.Add("ContinueButton", "Continuer");
+            Spanish.Add("ContinueButton", "Continuar");
+            Russian.Add("ContinueButton", "Продолжить");
+
             //Component: previous
             //
             English.Add("previous", "Previous");
@@ -3882,7 +3892,7 @@ namespace RelhaxModpack
             Russian.Add("AddPicturesZip", TranslationNeeded);
 
             //Component: DiagnosticsAddSelectionsPicturesLabel
-            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            //
             English.Add("DiagnosticsAddSelectionsPicturesLabel", "Add any additional files here (your selection file, picture, etc.)");
             German.Add("DiagnosticsAddSelectionsPicturesLabel", "Füge zusätzliche Dateien hinzu (deine Auswahldatei, Bilder, etc.)");
             Polish.Add("DiagnosticsAddSelectionsPicturesLabel", "Dodaj wszelkie dodatkowe pliki (plik kolekcji, obrazy, itp.)");
@@ -3891,7 +3901,7 @@ namespace RelhaxModpack
             Russian.Add("DiagnosticsAddSelectionsPicturesLabel", "Добавить какие-либо дополнительные файлы (файл предустановки, изображения, и т. д.)");
 
             //Component: DiagnosticsAddFilesButton
-            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            //
             English.Add("DiagnosticsAddFilesButton", "Add Files");
             German.Add("DiagnosticsAddFilesButton", "Dateien hinzufügen");
             Polish.Add("DiagnosticsAddFilesButton", "Dodaj pliki");
@@ -3900,7 +3910,7 @@ namespace RelhaxModpack
             Russian.Add("DiagnosticsAddFilesButton", "Добавить файлы");
 
             //Component: DiagnosticsRemoveSelectedButton
-            //the message when the UISettings.xml file is parsed and the custom theme is loaded
+            //
             English.Add("DiagnosticsRemoveSelectedButton", "Remove Selected");
             German.Add("DiagnosticsRemoveSelectedButton", "Entferne Ausgewähltes");
             Polish.Add("DiagnosticsRemoveSelectedButton", "Usuń zaznaczone");
@@ -3909,13 +3919,13 @@ namespace RelhaxModpack
             Russian.Add("DiagnosticsRemoveSelectedButton", "Удалить выбранное");
 
             //Component: DiagnosticsContinueButton
-            //the message when the UISettings.xml file is parsed and the custom theme is loaded
-            English.Add("DiagnosticsContinueButton", "Continue");
-            German.Add("DiagnosticsContinueButton", "Fortsetzen");
-            Polish.Add("DiagnosticsContinueButton", "Kontynuuj");
-            French.Add("DiagnosticsContinueButton", TranslationNeeded);
-            Spanish.Add("DiagnosticsContinueButton", "Continuar");
-            Russian.Add("DiagnosticsContinueButton", "Продолжить");
+            //
+            English.Add("DiagnosticsContinueButton", English["ContinueButton"]);
+            German.Add("DiagnosticsContinueButton", German["ContinueButton"]);
+            Polish.Add("DiagnosticsContinueButton", Polish["ContinueButton"]);
+            French.Add("DiagnosticsContinueButton", French["ContinueButton"]);
+            Spanish.Add("DiagnosticsContinueButton", Spanish["ContinueButton"]);
+            Russian.Add("DiagnosticsContinueButton", Russian["ContinueButton"]);
 
             //Component: cantRemoveDefaultFile
             //
@@ -4402,15 +4412,6 @@ namespace RelhaxModpack
             Spanish.Add("AgreementAnonData", "Comprendo que Relhax V2 recoge datos anónimos de uso para mejorar la aplicación, lo cual puede ser deshabilitado en la pestaña de opciones avanzadas");
             Russian.Add("AgreementAnonData", "Я понимаю, что Relhax V2 собирает анонимные сведения об использовании для улучшения приложения и могу отключить сбор данных в разделе расширенных настроек");
 
-            //Component: ContinueButton
-            // Just a continue button on the bottom. Proceeds to the main application if everything is selected.
-            English.Add("ContinueButton", "Continue");
-            German.Add("ContinueButton", "Fortsetzen");
-            Polish.Add("ContinueButton", "Kontynuuj");
-            French.Add("ContinueButton", "Continuer");
-            Spanish.Add("ContinueButton", "Continuar");
-            Russian.Add("ContinueButton", "Продолжить");
-
             //Component: V2UpgradeNoticeText
             // A text block appearing (in red) under the last acknowledgement, centered in the window - only if the app detects that a conversion is required.
             English.Add("V2UpgradeNoticeText", "It looks like you are running an upgrade from V1 to V2 for the first time.\n" +
@@ -4465,12 +4466,12 @@ namespace RelhaxModpack
 
             //Component: ExportContinueButton
             //
-            English.Add("ExportContinueButton", "Continue");
-            German.Add("ExportContinueButton", "Fortfahren");
-            Polish.Add("ExportContinueButton", "Kontynuuj");
-            French.Add("ExportContinueButton", TranslationNeeded);
-            Spanish.Add("ExportContinueButton", "Continuar");
-            Russian.Add("ExportContinueButton", "Продолжить");
+            English.Add("ExportContinueButton", English["ContinueButton"]);
+            German.Add("ExportContinueButton", German["ContinueButton"]);
+            Polish.Add("ExportContinueButton", Polish["ContinueButton"]);
+            French.Add("ExportContinueButton", French["ContinueButton"]);
+            Spanish.Add("ExportContinueButton", Spanish["ContinueButton"]);
+            Russian.Add("ExportContinueButton", Russian["ContinueButton"]);
 
             //Component: ExportCancelButton
             //
