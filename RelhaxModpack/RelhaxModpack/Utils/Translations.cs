@@ -422,6 +422,8 @@ namespace RelhaxModpack
             //languageName.Add("componentName","TranslatedString");
 
             #region General expressions
+            // Confirm "yes" button used in multiple places.
+            // REFERRERS: VersionInfoYesButton;
             English.Add("yes", "yes");
             German.Add("yes", "ja");
             Polish.Add("yes", "Tak");
@@ -429,6 +431,8 @@ namespace RelhaxModpack
             Spanish.Add("yes", "Sí");
             Russian.Add("yes", "Да");
 
+            // Decline button used in multiple places.
+            // REFERRERS: VersionInfoNoButton;
             English.Add("no", "no");
             German.Add("no", "nein");
             Polish.Add("no", "Nie");
@@ -436,8 +440,8 @@ namespace RelhaxModpack
             Spanish.Add("no", "No");
             Russian.Add("no", "Нет");
 
-            // Cancel button (phrase) used in many places.
-            // LIST: CancelDownloadInstallButton; CancelButtonLabel; DeveloperSelectionsCancelButton; ExportCancelButton; GcDownloadStep4DownloadingCancelButton;
+            // Cancel button (phrase) used in multiple places.
+            // REFERRERS: CancelDownloadInstallButton; CancelButtonLabel; DeveloperSelectionsCancelButton; ExportCancelButton; GcDownloadStep4DownloadingCancelButton;
             English.Add("cancel", "Cancel");
             German.Add("cancel", "Abbrechen");
             Polish.Add("cancel", "Anuluj");
@@ -487,7 +491,7 @@ namespace RelhaxModpack
             Spanish.Add("abort", "Abortar");
             Russian.Add("abort", "Отменить");
 
-            // LIST: extractionErrorHeader; GcDownloadStep1ValueError; 
+            // REFERRERS: extractionErrorHeader; GcDownloadStep1ValueError; 
             English.Add("error", "Error");
             German.Add("error", "Fehler");
             Polish.Add("error", "Błąd");
@@ -587,8 +591,8 @@ namespace RelhaxModpack
             Russian.Add("days", "дн.");
 
             //Component: next
-            // Used as a button in many places.
-            // LIST: PreviewNextPicButton; GcDownloadStep1NextText; GcDownloadStep2NextText; GcDownloadStep3NextText; GcDownloadStep4NextText;
+            // Used as a button in multiple places.
+            // REFERRERS: PreviewNextPicButton; GcDownloadStep1NextText; GcDownloadStep2NextText; GcDownloadStep3NextText; GcDownloadStep4NextText;
             English.Add("next", "Next");
             German.Add("next", "Weiter");
             Polish.Add("next", "Dalej");
@@ -597,8 +601,8 @@ namespace RelhaxModpack
             Russian.Add("next", "Далее");
 
             //Component: ContinueButton
-            // Continue button used in many places (at least this particular translation of it).
-            // LIST: DiagnosticsContinueButton; ExportContinueButton; SelectLanguagesContinueButton;
+            // Continue button used in multiple places (at least this particular translation of it). Sometimes used as NEXT STEP, sometimes as NEXT ELEMENT.
+            // REFERRERS: DiagnosticsContinueButton; ExportContinueButton; SelectLanguagesContinueButton;
             English.Add("ContinueButton", "Continue");
             German.Add("ContinueButton", "Fortsetzen");
             Polish.Add("ContinueButton", "Kontynuuj");
@@ -607,7 +611,8 @@ namespace RelhaxModpack
             Russian.Add("ContinueButton", "Продолжить");
 
             //Component: previous
-            //
+            // Previous button used in multiple places (at least this particular translation of it). Sometimes used as GO BACK, sometimes as PREVIOUS ELEMENT.
+            // REFERRERS: PreviewPreviousPicButton; GcDownloadStep1PreviousText; GcDownloadStep2PreviousText; GcDownloadStep3PreviousText; GcDownloadStep4PreviousText;
             English.Add("previous", "Previous");
             German.Add("previous", "Zurück");
             Polish.Add("previous", "Wstecz");
@@ -616,7 +621,8 @@ namespace RelhaxModpack
             Russian.Add("previous", "Назад");
 
             //Component: close
-            //
+            // Close button used in multiple places.
+            // REFFERERS: GcDownloadStep5CloseText;
             English.Add("close", "Close");
             German.Add("close", "Schließen");
             Polish.Add("close", "Zamknij");
@@ -5144,12 +5150,12 @@ namespace RelhaxModpack
 
             //Component: GcDownloadStep4Previous
             //
-            English.Add("GcDownloadStep4Previous", English["previous"]);
-            German.Add("GcDownloadStep4Previous", German["previous"]);
-            Polish.Add("GcDownloadStep4Previous", Polish["previous"]);
-            French.Add("GcDownloadStep4Previous", French["previous"]);
-            Spanish.Add("GcDownloadStep4Previous", Spanish["previous"]);
-            Russian.Add("GcDownloadStep4Previous", Russian["previous"]);
+            English.Add("GcDownloadStep4PreviousText", English["previous"]);
+            German.Add("GcDownloadStep4PreviousText", German["previous"]);
+            Polish.Add("GcDownloadStep4PreviousText", Polish["previous"]);
+            French.Add("GcDownloadStep4PreviousText", French["previous"]);
+            Spanish.Add("GcDownloadStep4PreviousText", Spanish["previous"]);
+            Russian.Add("GcDownloadStep4PreviousText", Russian["previous"]);
 
             //Component: GcDownloadStep4NextText
             //
@@ -5187,14 +5193,14 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep5TabDescription", "¡El proceso se ha completado! WG Game Center debería detectar los archivos en su próxima ejecución");
             Russian.Add("GcDownloadStep5TabDescription", "Процесс успешно завершён. Wargaming Game Center должен обнаружить файлы после запуска.");
 
-            //Component: GcDownloadStep5Close
+            //Component: GcDownloadStep5CloseText
             //
-            English.Add("GcDownloadStep5Close", English["close"]);
-            German.Add("GcDownloadStep5Close", German["close"]);
-            Polish.Add("GcDownloadStep5Close", Polish["close"]);
-            French.Add("GcDownloadStep5Close", French["close"]);
-            Spanish.Add("GcDownloadStep5Close", Spanish["close"]);
-            Russian.Add("GcDownloadStep5Close", Russian["close"]);
+            English.Add("GcDownloadStep5CloseText", English["close"]);
+            German.Add("GcDownloadStep5CloseText", German["close"]);
+            Polish.Add("GcDownloadStep5CloseText", Polish["close"]);
+            French.Add("GcDownloadStep5CloseText", French["close"]);
+            Spanish.Add("GcDownloadStep5CloseText", Spanish["close"]);
+            Russian.Add("GcDownloadStep5CloseText", Russian["close"]);
 
             //Component: GcDownloadStep1ValueError
             //
