@@ -5136,7 +5136,7 @@
         </member>
         <member name="F:RelhaxModpack.UISettings.NullAllowedGlobalBrushes">
             <summary>
-            A list of tags that are allowed to have 'null' as the value for global brushes
+            A list of brush names that are allowed to have 'null' as the value for global brushes (global = at root of Theme object)
             </summary>
         </member>
         <member name="P:RelhaxModpack.UISettings.CurrentTheme">
@@ -5760,6 +5760,17 @@
         <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.#ctor">
             <summary>
             Create an instance of the GameCenterUpdateDownloaded window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.Dispose(System.Boolean)">
+            <summary>
+            Dispose of the window and release any disposable resources
+            </summary>
+            <param name="disposing">Set to true to dispose of managed objects</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.Dispose">
+            <summary>
+            Dispose of the window and release any disposable resources
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.InitializeComponent">
