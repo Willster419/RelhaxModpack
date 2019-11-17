@@ -631,7 +631,7 @@ namespace RelhaxModpack
             Russian.Add("close", "Закрыть");
 
             //Component: none
-            //
+            // REFERRERS: SelectedInstallationNone;
             English.Add("none", "None");
             German.Add("none", "Nichts");
             Polish.Add("none", "Brak");
@@ -3656,13 +3656,13 @@ namespace RelhaxModpack
             Russian.Add("SelectedInstallation", "Текущая папка с игрой:");
 
             //Component: SelectedInstallationNone
-            //
-            English.Add("SelectedInstallationNone", "(none)");
-            German.Add("SelectedInstallationNone", "(nichts)");
-            Polish.Add("SelectedInstallationNone", "(brak)");
-            French.Add("SelectedInstallationNone", "(aucun)");
-            Spanish.Add("SelectedInstallationNone", "(ninguna)");
-            Russian.Add("SelectedInstallationNone", "(не выбрана)");
+            // A text label with the (not selected in this case) path to the selected (active) installation.
+            English.Add("SelectedInstallationNone", "("+English["none"].ToLower()+")");
+            German.Add("SelectedInstallationNone", "("+German["none"].ToLower()+")");
+            Polish.Add("SelectedInstallationNone", "("+Polish["none"].ToLower()+")"); // This Frankenstein's monster is of my creation. @Nullmaruzero
+            French.Add("SelectedInstallationNone", "("+French["none"].ToLower()+")");
+            Spanish.Add("SelectedInstallationNone", "("+Spanish["none"].ToLower()+")");
+            Russian.Add("SelectedInstallationNone", "("+Russian["none"].ToLower()+")");
 
             //Component: collectionLogInfo
             //
@@ -4407,7 +4407,7 @@ namespace RelhaxModpack
             // EXAMPLE: [x] I understand Relhax is a mod hosting and installation service and Relhax does not maintain every mod found in this Modpack
             English.Add("AgreementHoster", "I understand Relhax is a mod hosting and installation service and Relhax does not maintain every mod found in this Modpack");
             German.Add("AgreementHoster", "Ich verstehe, dass Relhax ein Mod-Hosting- und Installationsservice ist und Relhax nicht alle Mods verwaltet, die in diesem Modpack enthalten sind");
-            Polish.Add("AgreementHoster", "Rozumiem, że Relhax jest to platforma instalacji modów oraz ich hosting, a zespół Relhax nie jest odpowiedzialny za rozwój wszystkich oferowanych modów.");
+            Polish.Add("AgreementHoster", "Rozumiem, że Relhax to platforma instalacji modów oraz ich hosting, a zespół Relhax nie jest odpowiedzialny za rozwój wszystkich oferowanych modów.");
             French.Add("AgreementHoster", "Je comprends que Relhax est un hébergement de mods et un service d'installation. Relhax ne gère pas tous les mods de ce Modpack");
             Spanish.Add("AgreementHoster", "Comprendo que Relhax sólo es un servicio de alojamiento e instalación de mods, y Relhax no mantiene cada mod incluido en este modpack");
             Russian.Add("AgreementHoster", "Я понимаю, что Relhax является площадкой хостинга модов и сервисом их установки и то, что Relhax не занимается разработкой каждого мода из этого модпака");
