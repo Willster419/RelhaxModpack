@@ -487,6 +487,7 @@ namespace RelhaxModpack
             Spanish.Add("abort", "Abortar");
             Russian.Add("abort", "Отменить");
 
+            // LIST: extractionErrorHeader; GcDownloadStep1ValueError; 
             English.Add("error", "Error");
             German.Add("error", "Fehler");
             Polish.Add("error", "Błąd");
@@ -2982,14 +2983,14 @@ namespace RelhaxModpack
             Russian.Add("extractionErrorMessage", "Возникла ошибка при удалении папки res_mods или mods. Возможно, запущен World of Tanks или неверно" +
                 " настроены разрешения к папкам и файлам.");
 
-            //Component:
+            //Component: extractionErrorHeader
             //
-            English.Add("extractionErrorHeader", "Error");
-            German.Add("extractionErrorHeader", "Fehler");
-            Polish.Add("extractionErrorHeader", "Błąd");
-            French.Add("extractionErrorHeader", "Erreur");
-            Spanish.Add("extractionErrorHeader", "Error");
-            Russian.Add("extractionErrorHeader", "Ошибка");
+            English.Add("extractionErrorHeader", English["error"]);
+            German.Add("extractionErrorHeader", German["error"]);
+            Polish.Add("extractionErrorHeader", Polish["error"]);
+            French.Add("extractionErrorHeader", French["error"]);
+            Spanish.Add("extractionErrorHeader", Spanish["error"]);
+            Russian.Add("extractionErrorHeader", Russian["error"]);
 
             //Component:
             //
@@ -5197,12 +5198,12 @@ namespace RelhaxModpack
 
             //Component: GcDownloadStep1ValueError
             //
-            English.Add("GcDownloadStep1ValueError", "Error");
-            German.Add("GcDownloadStep1ValueError", TranslationNeeded);
-            Polish.Add("GcDownloadStep1ValueError", "Błąd");
-            French.Add("GcDownloadStep1ValueError", TranslationNeeded);
-            Spanish.Add("GcDownloadStep1ValueError", "Error");
-            Russian.Add("GcDownloadStep1ValueError", "Ошибка");
+            English.Add("GcDownloadStep1ValueError", English["error"]);
+            German.Add("GcDownloadStep1ValueError", German["error"]);
+            Polish.Add("GcDownloadStep1ValueError", Polish["error"]);
+            French.Add("GcDownloadStep1ValueError", French["error"]);
+            Spanish.Add("GcDownloadStep1ValueError", Spanish["error"]);
+            Russian.Add("GcDownloadStep1ValueError", Russian["error"]);
             #endregion
 
             #region Select Language Window
