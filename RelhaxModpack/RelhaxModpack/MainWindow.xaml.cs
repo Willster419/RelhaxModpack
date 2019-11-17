@@ -296,21 +296,39 @@ namespace RelhaxModpack
             //if the application is up to date, then check if we need to display the welcome message to the user
             if (isApplicationUpToDate && !closingFromFailure)
             {
-                Logging.Debug("application is up to date, checking to display welcome message");
+                Logging.Info("application is up to date, checking to display welcome message");
 
                 //run checks to see if it's the first time loading the application
                 Settings.FirstLoad = !File.Exists(Settings.ModpackSettingsFileName) && !File.Exists(Settings.OldModpackSettingsFilename);
                 Settings.FirstLoadToV2 = !File.Exists(Settings.ModpackSettingsFileName) && File.Exists(Settings.OldModpackSettingsFilename);
-                Logging.Debug("FirstLoading = {0}, FirstLoadingV2 = {1}", Settings.FirstLoad.ToString(), Settings.FirstLoadToV2.ToString());
+                Logging.Info("FirstLoading = {0}, FirstLoadingV2 = {1}", Settings.FirstLoad.ToString(), Settings.FirstLoadToV2.ToString());
 
                 if (Settings.FirstLoad || Settings.FirstLoadToV2)
                 {
+                    //display the selection of language if it's the first time loading (not an upgrade)
+                    if(Settings.FirstLoad && !Settings.FirstLoadToV2)
+                    {
+                        FirstLoadSelectLanguage firstLoadSelectLanguage = new FirstLoadSelectLanguage();
+                        firstLoadSelectLanguage.ShowDialog();
+                        if(!firstLoadSelectLanguage.Continue)
+                        {
+                            Logging.Info("user did not select language, closing");
+                            Application.Current.Shutdown();
+                            closingFromFailure = true;
+                            return;
+                        }
+                        LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
+                        LanguagesSelector.SelectedItem = Translations.GetLanguageNativeName(ModpackSettings.Language);
+                        LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
+                        Translations.LocalizeWindow(this, true);
+                    }
+
                     //display the welcome window and make sure the user agrees to it
                     FirstLoadAcknowledgments firstLoadAknowledgements = new FirstLoadAcknowledgments();
                     firstLoadAknowledgements.ShowDialog();
                     if (!firstLoadAknowledgements.UserAgreed)
                     {
-                        Logging.Debug("user did not agree to application load conditions, closing");
+                        Logging.Info("user did not agree to application load conditions, closing");
                         Application.Current.Shutdown();
                         closingFromFailure = true;
                         return;
@@ -355,14 +373,6 @@ namespace RelhaxModpack
                         else
                             Logging.Info("skipped (old log does not exist)");
                         Logging.Info("upgrade to V2 complete, welcome to the future!");
-                    }
-
-                    //else process settings for first time load
-                    else if (Settings.FirstLoad)
-                    {
-                        Logging.Info("running processes for first time loading");
-                        Translations.SetLanguageOnFirstLoad();
-                        ApplySettingsToUI();
                     }
                 }
             }

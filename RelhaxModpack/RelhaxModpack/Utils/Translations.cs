@@ -166,37 +166,25 @@ namespace RelhaxModpack
             ModpackSettings.Language = language;
         }
 
-        /// <summary>
-        /// Change the language to the active language code installed on the computer, if we support
-        /// </summary>
-        public static void SetLanguageOnFirstLoad()
+        public static string GetLanguageNativeName(Languages language)
         {
-            //try to get and load the native language of the user
-            Logging.Info("Detected OS Language: " + CultureInfo.CurrentCulture.DisplayName);
-            //list of culture keys
-            //http://www.localeplanet.com/dotnet/
-            switch (CultureInfo.InstalledUICulture.Name.Split('-')[0].ToLower())
+            switch (language)
             {
-                case "de":
-                    SetLanguage(Languages.German);
-                    break;
-                case "pl":
-                    SetLanguage(Languages.Polish);
-                    break;
-                case "fr":
-                    SetLanguage(Languages.French);
-                    break;
-                case "es":
-                    SetLanguage(Languages.Spanish);
-                    break;
-                case "ru":
-                    SetLanguage(Languages.Russian);
-                    break;
+                case Languages.English:
+                    return LanguageEnglish;
+                case Languages.French:
+                    return LanguageFrench;
+                case Languages.German:
+                    return LanguageGerman;
+                case Languages.Polish:
+                    return LanguagePolish;
+                case Languages.Spanish:
+                    return LanguageSpanish;
+                case Languages.Russian:
+                    return LanguageRussian;
                 default:
-                    SetLanguage(Languages.English);
-                    break;
+                    return null;
             }
-            Logging.Info("Language has been set: {0}", ModpackSettings.Language.ToString());
         }
 
         /// <summary>
@@ -4321,7 +4309,7 @@ namespace RelhaxModpack
             Russian.Add("LoadingHeader", "Загрузка, пожалуйста, подождите");
             #endregion
 
-            #region First Load acks (yes i wrote that to avoid spelling the whole thing cause I may not know how even enough for auto correct to fix it)
+            #region First Load Acknowledgements
             //Component: FirstLoadAcknowledgments
             //
             English.Add("FirstLoadAcknowledgments", "First Load Acknowledgements");
@@ -5202,7 +5190,36 @@ namespace RelhaxModpack
             Russian.Add("GcDownloadStep1ValueError", "Ошибка");
             #endregion
 
-            //apply the bool
+            #region Select Language Window
+            //Component: FirstLoadSelectLanguage
+            //Application window title
+            English.Add("FirstLoadSelectLanguage", "Language Selection");
+            German.Add("FirstLoadSelectLanguage", TranslationNeeded);
+            Polish.Add("FirstLoadSelectLanguage", TranslationNeeded);
+            French.Add("FirstLoadSelectLanguage", TranslationNeeded);
+            Spanish.Add("FirstLoadSelectLanguage", TranslationNeeded);
+            Russian.Add("FirstLoadSelectLanguage", "Язык интерфейса");
+
+            //Component: SelectLanguageHeader
+            //
+            English.Add("SelectLanguageHeader", "Please select your language");
+            German.Add("SelectLanguageHeader", TranslationNeeded);
+            Polish.Add("SelectLanguageHeader", TranslationNeeded);
+            French.Add("SelectLanguageHeader", TranslationNeeded);
+            Spanish.Add("SelectLanguageHeader", TranslationNeeded);
+            Russian.Add("SelectLanguageHeader", "Пожалуйста, выберите язык");
+
+            //Component: SelectLanguagesContinueButton
+            //
+            English.Add("SelectLanguagesContinueButton", English["ContinueButton"]);
+            German.Add("SelectLanguagesContinueButton", German["ContinueButton"]);
+            Polish.Add("SelectLanguagesContinueButton", Polish["ContinueButton"]);
+            French.Add("SelectLanguagesContinueButton", French["ContinueButton"]);
+            Spanish.Add("SelectLanguagesContinueButton", Spanish["ContinueButton"]);
+            Russian.Add("SelectLanguagesContinueButton", Russian["ContinueButton"]);
+            #endregion
+
+            //apply the bool that all translations were applied
             TranslationsLoaded = true;
         }
         #endregion

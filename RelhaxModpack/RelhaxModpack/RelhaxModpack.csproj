@@ -217,6 +217,9 @@
     <Compile Include="Windows\ExportModeSelect.xaml.cs">
       <DependentUpon>ExportModeSelect.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FirstLoadSelectLanguage.xaml.cs">
+      <DependentUpon>FirstLoadSelectLanguage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FirstLoadAcknowledgments.xaml.cs">
       <DependentUpon>FirstLoadAcknowledgments.xaml</DependentUpon>
     </Compile>
@@ -389,6 +392,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ExportModeSelect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FirstLoadSelectLanguage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
