@@ -2916,10 +2916,6 @@ namespace RelhaxModpack.InstallerComponents
                             Task tsk = InstallerCreatedTasks[i];
                             if (tsk != null)
                             {
-                                if (tsk.Status == TaskStatus.Running)
-                                {
-                                    throw new BadMemeException("The task should not be running");
-                                }
                                 tsk.Dispose();
                                 tsk = null;
                             }
