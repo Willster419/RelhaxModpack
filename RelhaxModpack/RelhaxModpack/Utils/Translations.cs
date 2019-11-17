@@ -4003,7 +4003,7 @@ namespace RelhaxModpack
             Polish.Add("PreviewNextPicButton", "Następny"); // As DrWeb7_1 pointed out, Slavic languages are sometimes a b*tch... @Nullmaruzero
             French.Add("PreviewNextPicButton", French["next"]);
             Spanish.Add("PreviewNextPicButton", Spanish["next"]);
-            Russian.Add("PreviewNextPicButton", Russian["next"]);
+            Russian.Add("PreviewNextPicButton", "след.");
 
             //Component: PreviewPreviousPicButton
             // A button in mod preview window used to display the next preview image.
