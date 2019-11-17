@@ -1211,6 +1211,108 @@
             <param name="userFileToCopy">The object to copy</param>
             <returns>A new UserFile object with the same values and new list elements with the same values</returns>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.BoundUISettings">
+            <summary>
+            The staic location for all color definitions that need to be databound by WPF
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ButtonHighlightBrush">
+            <summary>
+            Get or set the Button highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.TabItemHighlightBrush">
+            <summary>
+            Get or set the TabItem highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.TabItemSelectedBrush">
+            <summary>
+            Get or set the TabItem selected (mouse down) color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.CheckboxHighlightBrush">
+            <summary>
+            Get of set the Checkbox highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.CheckboxCheckmarkBrush">
+            <summary>
+            Get or set the Checkbox checkmark color (selected)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.RadioButtonHighlightBrush">
+            <summary>
+            Get or set the RadioButton highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.RadioButtonCheckmarkBrush">
+            <summary>
+            Get or set the RadioButton checkmark color (selected)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ComboboxOutsideHighlightBrush">
+            <summary>
+            Get or set the combobox highlight background color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ComboboxInsideColorBrush">
+            <summary>
+            Get or set the combobox text color of the inside list items
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ComboboxOutsideColorBrush">
+            <summary>
+            Get or set the combobox background color
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.BoundUISettings.StaticPropertyChanged">
+            <summary>
+            Event handler for when a static property is changed in code
+            </summary>
+            <remarks>See https://stackoverflow.com/questions/34762879/static-binding-doesnt-update-when-resource-changes </remarks>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.BoundUISettings.SetBrushProperty(RelhaxModpack.UIComponents.CustomPropertyBrush)">
+            <summary>
+            Set the color of one of the properties in this class. The name of the property should be inside 
+            </summary>
+            <param name="customBrush">The color and property to update</param>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassColorset">
+            <summary>
+            A ClassColorset is a definitions object of all the colors to apply to the corresponding UI object
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.ClassThemeDefinition">
+            <summary>
+            The theme definition rule set to use for this UI object class type (like Control)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.BackgroundBrush">
+            <summary>
+            The Background color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.ForegroundBrush">
+            <summary>
+            The Foreground color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.HighlightBrush">
+            <summary>
+            The Highlight color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.SelectedBrush">
+            <summary>
+            The Selected (mouse down) color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.BoundedBrushes">
+            <summary>
+            Returns a list of brushes that are bounded to WPF UI definitions
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition">
             <summary>
             The UI class theme definition for Border class
@@ -2003,6 +2105,79 @@
             The name of the component for WPF databinding. An empty string indicates the component is not bound.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.ComponentColorset">
+            <summary>
+            A ComponentColorset is a custom color object to apply to a particular ID'd UI object in the window
+            </summary>
+            <remarks>Highlight and Selected colors are always changed (if at all) by WPF databound properties at the ClassColorset level</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComponentColorset.ID">
+            <summary>
+            The ID of the UI object in the window of which the component colors will be applied to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComponentColorset.BackgroundBrush">
+            <summary>
+            The Background brush color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComponentColorset.ForegroundBrush">
+            <summary>
+            The Foreground brush color
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.CustomBrush">
+            <summary>
+            Wraps a Brush class with a boolean value for if the brush value should be applied
+            </summary>
+            <remarks>The implementation reasoning for this is that some color definitions can be a null color.
+            So, a custom property must be used outside of the Brush object to determine if it should actually be applied.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.CustomBrush.Brush">
+            <summary>
+            The custom color definition
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.CustomBrush.IsValid">
+            <summary>
+            The flag to determine if the Brush is valid
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.CustomPropertyBrush">
+            <summary>
+            A wrapper class for CustomBrush that adds the string name of the WPF databound property name
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.CustomPropertyBrush.BrushPropertyName">
+            <summary>
+            The name of the WPF databound property to change the color of
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.CustomBrushConverter">
+            <summary>
+            Converts from the custom CustomBrush type to a Brush object for WPF databinding
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.CustomBrushConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a CustomBrush object into a Brush object
+            </summary>
+            <param name="value">The CustomBrush object to convert</param>
+            <param name="targetType">Not implemented</param>
+            <param name="parameter">Not implemented</param>
+            <param name="culture">Not implemented</param>
+            <returns>The Brush property from the CustomBrush object</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.CustomBrushConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            This method is not implemented
+            </summary>
+            <param name="value">Not implemented</param>
+            <param name="targetType">Not implemented</param>
+            <param name="parameter">Not implemented</param>
+            <param name="culture">Not implemented</param>
+            <returns>Null</returns>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxHyperlink">
             <summary>
             Interaction logic for RelhaxHyperlink.xaml
@@ -2036,6 +2211,181 @@
         <member name="M:RelhaxModpack.UIComponents.RelhaxHyperlink.InitializeComponent">
             <summary>
             InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.Theme">
+            <summary>
+            The root object for all definitions needed for the UI engine
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ThemeName">
+            <summary>
+            The name of the theme
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.FileName">
+            <summary>
+            The xml theme filename
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListSelectedPanelColor">
+            <summary>
+            The color definition for panel components in the selection view when at least one package is checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotSelectedPanelColor">
+            <summary>
+            The color definition for panel components in the selection view when no packages are checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListSelectedTextColor">
+            <summary>
+            The color definition for 'single' and 'multi' package types when it is checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotSelectedTextColor">
+            <summary>
+            The color definition for 'single' and 'multi' package types when it is not checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListBorderColor">
+            <summary>
+            The color definition for border components in the selection view, for holding a sub level of packages
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListActiveTabHeaderBackgroundColor">
+            <summary>
+            The color definition for the background of the tab header
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListActiveTabHeaderTextColor">
+            <summary>
+            The color definition for the text color of the tab header
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasSelectionsBackgroundColor">
+            <summary>
+            The color definition for background of a not active tab header, when no components are selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasSelectionsTextColor">
+            <summary>
+            The color definition for text of a not active tab header, when no components are selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasNoSelectionsBackgroundColor">
+            <summary>
+            The color definition for background of a not active tab header, when at least one component is selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasNoSelectionsTextColor">
+            <summary>
+            The color definition for text of a not active tab header, when at least one component is selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.RadioButtonColorset">
+            <summary>
+            The set of rules to use for what parts of a RadioButton UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.CheckboxColorset">
+            <summary>
+            The set of rules to use for what parts of a Checkbox UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ButtonColorset">
+            <summary>
+            The set of rules to use for what parts of a Button UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.TabItemColorset">
+            <summary>
+            The set of rules to use for what parts of a TabItem UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ComboboxColorset">
+            <summary>
+            The set of rules to use for what parts of a Combobox UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.PanelColorset">
+            <summary>
+            The set of rules to use for what parts of a Panel UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.TextblockColorset">
+            <summary>
+            The set of rules to use for what parts of a Textblock UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.BorderColorset">
+            <summary>
+            The set of rules to use for what parts of a Border UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ControlColorset">
+            <summary>
+            The set of rules to use for what parts of a Control UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ProgressBarColorset">
+            <summary>
+            The set of rules to use for what parts of a ProgressBar UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.WindowColorsets">
+            <summary>
+            A list of rules to use for each window definition type
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.BoundedClassColorsetBrushes">
+            <summary>
+            Returns a complete list of all bounded brushes for each class component color definition
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.Themes">
+            <summary>
+            A static list of themes used in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.Themes.Default">
+            <summary>
+            The default theme used in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.Themes.Dark">
+            <summary>
+            A pre-built dark theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.Themes.Custom">
+            <summary>
+            The custom theme to be loaded from xml by the user
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.WindowColorset">
+            <summary>
+            Contains all color definitions to apply for that window, including the list of individual component color definitions
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.WindowType">
+            <summary>
+            The type object for the type of window this colorset belongs to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.BackgroundBrush">
+            <summary>
+            The background color of the window
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.ComponentColorsets">
+            <summary>
+            A list of custom colors to apply for individual UI components
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.ColorsetBackedUp">
+            <summary>
+            Flag for if this window colorset has had it's original (default) theme backed up
             </summary>
         </member>
         <member name="T:RelhaxModpack.UIComponents.ZoomBorder">
