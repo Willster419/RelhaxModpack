@@ -1171,7 +1171,6 @@ namespace RelhaxModpack.Windows
                 //only enable the package if the structure leading to this package is enabled
                 if(cb2.SelectedIndex == 0 && spc.IsStructureEnabled && !spc.Checked)
                 {
-                    return;
                     foreach (SelectablePackage childPackage in spc.Parent.Packages)
                     {
                         if (childPackage.Equals(spc))
