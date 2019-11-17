@@ -14,22 +14,75 @@ using System.Xml;
 
 namespace RelhaxModpack.Windows
 {
+    /// <summary>
+    /// The object used in getting the value for the php update request
+    /// </summary>
     public class GameCenterProperty
     {
+        /// <summary>
+        /// The name of the xml file to get the value from
+        /// </summary>
         public string FileName = string.Empty;
+
+        /// <summary>
+        /// The xml xpath to get the value from inside the xml document
+        /// </summary>
         public string Xpath = string.Empty;
+
+        /// <summary>
+        /// The TextBlock that holds the php value text
+        /// </summary>
         public TextBlock ValueBlock = null;
+
+        /// <summary>
+        /// The Textblock that holds the php key text
+        /// </summary>
         public TextBlock KeyBlock = null;
+
+        /// <summary>
+        /// The value from the xml document to use for the php GET request
+        /// </summary>
         public string Value = string.Empty;
+
+        /// <summary>
+        /// The name of the php GET request parameter
+        /// </summary>
         public string GetRequestParamater = string.Empty;
+
+        /// <summary>
+        /// Stores if getting the value from xml document was successful
+        /// </summary>
         public bool GaveError = false;
+
+        /// <summary>
+        /// Flag for if this parameter is required (hd parameter is not required, for example)
+        /// </summary>
         public bool IsRequired = true;
     }
+
+    /// <summary>
+    /// A class definition for the xml objects returned from the php update request
+    /// </summary>
     public class PatchFileProperty
     {
+        /// <summary>
+        /// The name of the update file
+        /// </summary>
         public string Filename = string.Empty;
+
+        /// <summary>
+        /// The name of the folder inside 'updates' folder to place the update
+        /// </summary>
         public string FolderName = string.Empty;
+
+        /// <summary>
+        /// The base URL of where to download the file from
+        /// </summary>
         public string BaseURL = string.Empty;
+
+        /// <summary>
+        /// The size of the file
+        /// </summary>
         public ulong Size = 0;
     }
     /// <summary>
@@ -37,15 +90,29 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class GameCenterUpdateDownloader : RelhaxWindow
     {
-
+        /// <summary>
+        /// The path to the root client folder (World_of_Tanks), for example
+        /// </summary>
         public string SelectedClient { get; set; } = string.Empty;
 
+        /// <summary>
+        /// The name of the game info xml to get some of the php properties from
+        /// </summary>
         public const string GameInfoXml = "game_info.xml";
 
+        /// <summary>
+        /// The name of the metadata xml to get some of the php properties from
+        /// </summary>
         public const string MetaDataXml = "metadata.xml";
 
+        /// <summary>
+        /// The name of the folder where the metadata xml file is stored
+        /// </summary>
         public const string GameMetadataFolder = "game_metadata";
 
+        /// <summary>
+        /// The name of the Game center process shown in windows
+        /// </summary>
         public const string WgcProcessName = "wgc";
 
         private List<GameCenterProperty> GameCenterProperties = null;
@@ -57,6 +124,9 @@ namespace RelhaxModpack.Windows
         private WebClient client = null;
         private bool step4DownloadCanceled = false;
 
+        /// <summary>
+        /// Create an instance of the GameCenterUpdateDownloaded window
+        /// </summary>
         public GameCenterUpdateDownloader()
         {
             InitializeComponent();

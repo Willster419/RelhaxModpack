@@ -5654,12 +5654,112 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.GameCenterProperty">
+            <summary>
+            The object used in getting the value for the php update request
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.FileName">
+            <summary>
+            The name of the xml file to get the value from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.Xpath">
+            <summary>
+            The xml xpath to get the value from inside the xml document
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.ValueBlock">
+            <summary>
+            The TextBlock that holds the php value text
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.KeyBlock">
+            <summary>
+            The Textblock that holds the php key text
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.Value">
+            <summary>
+            The value from the xml document to use for the php GET request
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.GetRequestParamater">
+            <summary>
+            The name of the php GET request parameter
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.GaveError">
+            <summary>
+            Stores if getting the value from xml document was successful
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.IsRequired">
+            <summary>
+            Flag for if this parameter is required (hd parameter is not required, for example)
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.PatchFileProperty">
+            <summary>
+            A class definition for the xml objects returned from the php update request
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.PatchFileProperty.Filename">
+            <summary>
+            The name of the update file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.PatchFileProperty.FolderName">
+            <summary>
+            The name of the folder inside 'updates' folder to place the update
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.PatchFileProperty.BaseURL">
+            <summary>
+            The base URL of where to download the file from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.PatchFileProperty.Size">
+            <summary>
+            The size of the file
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.GameCenterUpdateDownloader">
             <summary>
             Interaction logic for GameCenterUpdateDownloader.xaml
             </summary>
             <summary>
             GameCenterUpdateDownloader
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.GameCenterUpdateDownloader.SelectedClient">
+            <summary>
+            The path to the root client folder (World_of_Tanks), for example
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.GameInfoXml">
+            <summary>
+            The name of the game info xml to get some of the php properties from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.MetaDataXml">
+            <summary>
+            The name of the metadata xml to get some of the php properties from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.GameMetadataFolder">
+            <summary>
+            The name of the folder where the metadata xml file is stored
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.WgcProcessName">
+            <summary>
+            The name of the Game center process shown in windows
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.#ctor">
+            <summary>
+            Create an instance of the GameCenterUpdateDownloaded window
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.InitializeComponent">
