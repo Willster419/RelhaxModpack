@@ -556,6 +556,7 @@ namespace RelhaxModpack
             German.Add("at", "bei");
             Polish.Add("at", "—"); // No short way for that. ALTERNATIVE: "z prędkością" (with [the] speed [of]) but it's clumsy and redundant. @Nullmaruzero
             French.Add("at", "à");
+            Spanish.Add("at", "en");
             Russian.Add("at", "в");
 
             //Component: seconds
@@ -564,6 +565,7 @@ namespace RelhaxModpack
             German.Add("seconds", "sekunden");
             Polish.Add("seconds", "sekund(y)");
             French.Add("seconds", "secondes");
+            Spanish.Add("seconds", "segundo(s)");
             Russian.Add("seconds", "сек.");
 
             //Component: minutes
@@ -572,6 +574,7 @@ namespace RelhaxModpack
             German.Add("minutes", "minuten");
             Polish.Add("minutes", "minut(y)");
             French.Add("minutes", "minutes");
+            Spanish.Add("minutes", "minuto(s)");
             Russian.Add("minutes", "мин.");
 
             //Component: hours @ AutoSyncFrequencyComboBox
@@ -580,6 +583,7 @@ namespace RelhaxModpack
             German.Add("hours", TranslationNeeded);
             Polish.Add("hours", "godzin(y)");
             French.Add("hours", TranslationNeeded);
+            Spanish.Add("hours", "hora(s)");
             Russian.Add("hours", "час.");
 
             //Component: days @ AutoSyncFrequencyComboBox
@@ -588,6 +592,7 @@ namespace RelhaxModpack
             German.Add("days", TranslationNeeded);
             Polish.Add("days", "dni");
             French.Add("days", TranslationNeeded);
+            Spanish.Add("days", "día(s)");
             Russian.Add("days", "дн.");
 
             //Component: next
@@ -701,7 +706,7 @@ namespace RelhaxModpack
             German.Add("selectWOTExecutable", TranslationNeeded);
             Polish.Add("selectWOTExecutable", "Wybierz plik wykonywalny WOT (WorldOfTanks.exe)");
             French.Add("selectWOTExecutable", TranslationNeeded);
-            Spanish.Add("selectWOTExecutable", TranslationNeeded);
+            Spanish.Add("selectWOTExecutable", "Seleccione su ejecutable de WoT (WorldOfTanks.exe)");
             Russian.Add("selectWOTExecutable", "Выберите исполняемый файл игры (WorldOfTanks.exe)");
 
             //Component: InstallModpackButtonDescription
@@ -788,7 +793,7 @@ namespace RelhaxModpack
             German.Add("LanguageSelectionTextblockDescription", TranslationNeeded);
             Polish.Add("LanguageSelectionTextblockDescription", "Zmienia język aplikacji.\nJeśli napotkasz brakujące lub błędne tłumaczenia, możesz nam je zgłosić.");
             French.Add("LanguageSelectionTextblockDescription", TranslationNeeded);
-            Spanish.Add("LanguageSelectionTextblockDescription", TranslationNeeded);
+            Spanish.Add("LanguageSelectionTextblockDescription", "Seleccione su idioma de preferencia.\nSi encuentra alguna traducción faltante o error de traducción, infórmenos sobre ella.");
             Russian.Add("LanguageSelectionTextblockDescription", "Выберите желаемый язык.\nЕсли вы заметите неполноту перевода или ошибки, смело сообщайте нам о них.");
 
             //Component: Forms_ENG_NAButtonDescription
@@ -879,7 +884,7 @@ namespace RelhaxModpack
             German.Add("backupModsSizeCalculating", TranslationNeeded);
             Polish.Add("backupModsSizeCalculating", "Obliczanie..."); // ASSUMED: Used as a temporary label instead of backup sizes.
             French.Add("backupModsSizeCalculating", TranslationNeeded);
-            Spanish.Add("backupModsSizeCalculating", TranslationNeeded);
+            Spanish.Add("backupModsSizeCalculating", "Calculando el tamaño de las copias de seguridad...");
             Russian.Add("backupModsSizeCalculating", "Вычисляется размер резервных копий...");
 
             //Component: BackupModsCBDescription
@@ -1264,7 +1269,7 @@ namespace RelhaxModpack
             German.Add("LoadAutoSyncSelectionFileDescription", TranslationNeeded);
             Polish.Add("LoadAutoSyncSelectionFileDescription", "Wczytuje wybrany plik kolekcji modów.\nUmożliwia używanie funkcji Instalacji na Kliknięcie oraz Automatycznej Instalacji.");
             French.Add("LoadAutoSyncSelectionFileDescription", TranslationNeeded);
-            Spanish.Add("LoadAutoSyncSelectionFileDescription", TranslationNeeded);
+            Spanish.Add("LoadAutoSyncSelectionFileDescription", "Carga el archivo de mods seleccionados para usar las funciones de instalación automática o en un clic.");
             Russian.Add("LoadAutoSyncSelectionFileDescription", "Загрузите файл предустановки для использования автоматической установки или \"установки в один клик\"");
 
             //Component: AutoSyncCheckFrequencyTextBox
@@ -1274,7 +1279,7 @@ namespace RelhaxModpack
             German.Add("AutoSyncCheckFrequencyTextBox", TranslationNeeded);
             Polish.Add("AutoSyncCheckFrequencyTextBox", "Częstotliwość: co");
             French.Add("AutoSyncCheckFrequencyTextBox", TranslationNeeded);
-            Spanish.Add("AutoSyncCheckFrequencyTextBox", TranslationNeeded);
+            Spanish.Add("AutoSyncCheckFrequencyTextBox", "Frecuencia: cada");
             Russian.Add("AutoSyncCheckFrequencyTextBox", "Частота: каждые");
 
             //Component: DeveloperSettingsHeader
@@ -1292,7 +1297,7 @@ namespace RelhaxModpack
             German.Add("DeveloperSettingsHeaderDescription", TranslationNeeded);
             Polish.Add("DeveloperSettingsHeaderDescription", "Poniższe opcje mogą powodować problemy i niestabilność instalacji.\nUżywaj tylko jeśli wiesz co robisz!");
             French.Add("DeveloperSettingsHeaderDescription", TranslationNeeded);
-            Spanish.Add("DeveloperSettingsHeaderDescription", TranslationNeeded);
+            Spanish.Add("DeveloperSettingsHeaderDescription", "¡Las opciones a continuación pueden causar problemas o inestabilidad!.\n¡Por favor, no las utilice a menos que sepa lo que está haciendo!");
             Russian.Add("DeveloperSettingsHeaderDescription", "Указанные ниже опции могут привести к нестабильному поведению игры и вызывать проблемы!\nПожалуйста, не используйте их, если не знаете, что делаете!");
 
             //Component: ApplyCustomScalingText
@@ -1414,7 +1419,7 @@ namespace RelhaxModpack
             German.Add("ThemeSelectText", TranslationNeeded);
             Polish.Add("ThemeSelectText", "Wybierz motyw:");
             French.Add("ThemeSelectText", TranslationNeeded);
-            Spanish.Add("ThemeSelectText", TranslationNeeded);
+            Spanish.Add("ThemeSelectText", "Seleccione tema:");
             Russian.Add("ThemeSelectText", "Выберите тему");
 
             //Component: ThemeDefaultText
@@ -1504,7 +1509,7 @@ namespace RelhaxModpack
             German.Add("OpenColorPickerButtonDescription", TranslationNeeded);
             Polish.Add("OpenColorPickerButtonDescription", "Otwiera narzędzie do wybierania kolorów.\nUmożliwia tworzenie własnych schematów kolorów.");
             French.Add("OpenColorPickerButtonDescription", TranslationNeeded);
-            Spanish.Add("OpenColorPickerButtonDescription", TranslationNeeded);
+            Spanish.Add("OpenColorPickerButtonDescription", "Abre el selector de colores, permitiéndole crear su propio tema.");
             Russian.Add("OpenColorPickerButtonDescription", "Открывает окно палитры, из которой можно выбрать цвета для создания собственной темы.");
 
             //Component: DumpColorSettingsButtonDescription
@@ -1623,7 +1628,7 @@ namespace RelhaxModpack
             German.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Hinweis wenn es keine Aktuallisierungen gibt"
             Polish.Add("NotifyIfSameDatabaseText", "Powiadom o braku nowej bazy danych*");//"Powiadom o braku nowej bazy danych"
             French.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Informer si aucune nouvelle base de données est disponible"
-            Spanish.Add("NotifyIfSameDatabaseText", TranslationNeeded);//"Informar si no hay nueva base de datos"
+            Spanish.Add("NotifyIfSameDatabaseText", "Informar si no hay una nueva base de datos disponible (sólo estable)");//"Informar si no hay nueva base de datos"
             Russian.Add("NotifyIfSameDatabaseText", "Сообщать об актуальности БД (только для стабильной версии)");
 
             //Component: NotifyIfSameDatabaseCBDescriptionOLD
@@ -1645,7 +1650,8 @@ namespace RelhaxModpack
             Polish.Add("NotifyIfSameDatabaseCBDescription", "Wyświetla powiadomienie kiedy używana jest najnowsza wersja bazy danych.\nOznacza to brak dostępnych aktualizacji modów.\n" +
                 "Opcja dostępna tylko dla stabilnej wersji bazy danych (nie BETA).");
             French.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
-            Spanish.Add("NotifyIfSameDatabaseCBDescription", TranslationNeeded);
+            Spanish.Add("NotifyIfSameDatabaseCBDescription", "Notificar si la última instalación tiene la misma versión de la base de datos que la actual. De ser así, significa que no ha habido ninguna actualización de ningún mod.\n" +
+                " Ésto sólo funciona con la base de datos estable.");
             Russian.Add("NotifyIfSameDatabaseCBDescription", "Если ваша версия БД является актуальной, то вы увидите уведомление. Это значит, что обновлений к модам не было.");
 
             //Component: ShowInstallCompleteWindowText
@@ -2160,7 +2166,7 @@ namespace RelhaxModpack
             German.Add("ModSelectionList", TranslationNeeded);
             Polish.Add("ModSelectionList", "Lista Wyboru Modów");
             French.Add("ModSelectionList", TranslationNeeded);
-            Spanish.Add("ModSelectionList", TranslationNeeded);
+            Spanish.Add("ModSelectionList", "Lista de selección");
             Russian.Add("ModSelectionList", "Файл предустановки");
 
             //Component: ContinueButtonLabel
@@ -2214,7 +2220,7 @@ namespace RelhaxModpack
             German.Add("SelectSelectionFileToSave", TranslationNeeded);
             Polish.Add("SelectSelectionFileToSave", "Zapisz plik kolekcji");
             French.Add("SelectSelectionFileToSave", TranslationNeeded);
-            Spanish.Add("SelectSelectionFileToSave", TranslationNeeded);
+            Spanish.Add("SelectSelectionFileToSave", "Guardar archivo de selección");
             Russian.Add("SelectSelectionFileToSave", "Сохранить предустановку");
 
             //Component: ClearSelectionsButtonLabel
@@ -2544,7 +2550,7 @@ namespace RelhaxModpack
             German.Add("VersionInfo", TranslationNeeded);
             Polish.Add("VersionInfo", "Aktualizacja Aplikacji");
             French.Add("VersionInfo", TranslationNeeded);
-            Spanish.Add("VersionInfo", TranslationNeeded);
+            Spanish.Add("VersionInfo", "Actualizacón de la aplicación");
             Russian.Add("VersionInfo", "Обновление приложения");
 
             //Component: VersionInfoYesButton
@@ -3477,7 +3483,7 @@ namespace RelhaxModpack
             German.Add("installFailed", TranslationNeeded);
             Polish.Add("installFailed", "Instalacja niepowiodła się przy następujących krokach");
             French.Add("installFailed", TranslationNeeded);
-            Spanish.Add("installFailed", TranslationNeeded);
+            Spanish.Add("installFailed", "La instalación ha fallado en los siguientes puntos");
             Russian.Add("installFailed", "Установка завершилась с ошибкой на следующем(их) этапе(ах)");
             #endregion
 
@@ -3488,7 +3494,7 @@ namespace RelhaxModpack
             German.Add("InstallFinished", TranslationNeeded);
             Polish.Add("InstallFinished", "Instalacja Zakończona");
             French.Add("InstallFinished", TranslationNeeded);
-            Spanish.Add("InstallFinished", TranslationNeeded);
+            Spanish.Add("InstallFinished", "Instalación completada");
             Russian.Add("InstallFinished", "Установка завершена");
 
             //Component: InstallationCompleteText
@@ -3572,7 +3578,7 @@ namespace RelhaxModpack
             German.Add("Diagnostics", TranslationNeeded);
             Polish.Add("Diagnostics", "Diagnostyka");
             French.Add("Diagnostics", TranslationNeeded);
-            Spanish.Add("Diagnostics", TranslationNeeded);
+            Spanish.Add("Diagnostics", "Diagnósticos");
             Russian.Add("Diagnostics", "Диагностика");
 
             //Component: MainTextBox
@@ -3608,7 +3614,7 @@ namespace RelhaxModpack
             German.Add("CollectLogInfoButtonDescription", TranslationNeeded);
             Polish.Add("CollectLogInfoButtonDescription", "Tworzy archiwum ZIP ze wszystkimi plikami dziennika, ułatwiając zgłaszanie błędów.");
             French.Add("CollectLogInfoButtonDescription", TranslationNeeded);
-            Spanish.Add("CollectLogInfoButtonDescription", TranslationNeeded);
+            Spanish.Add("CollectLogInfoButtonDescription", "Recopila todos los archivos de registro necesarios en un archivo ZIP.\nEsto le facilita informar de un problema");
             Russian.Add("CollectLogInfoButtonDescription", "Собрать все необходимые лог-файлы в одном ZIP-архиве.\nЭто упростит процесс создания отчёта об ошибке.");
 
             //Component: DownloadWGPatchFilesText
@@ -3617,7 +3623,7 @@ namespace RelhaxModpack
             German.Add("DownloadWGPatchFilesText", TranslationNeeded);
             Polish.Add("DownloadWGPatchFilesText", "Pobieranie aktualizacji dla gier WG (HTTP)");
             French.Add("DownloadWGPatchFilesText", TranslationNeeded);
-            Spanish.Add("DownloadWGPatchFilesText", TranslationNeeded);
+            Spanish.Add("DownloadWGPatchFilesText", "Descargar los archivos de parche de WG para cualquier cliente mediante HTTP");
             Russian.Add("DownloadWGPatchFilesText", "Скачать обновления для любой игры из WGC через HTTP");
 
             //Component: DownloadWGPatchFilesButtonDescription
@@ -3628,7 +3634,8 @@ namespace RelhaxModpack
             Polish.Add("DownloadWGPatchFilesButtonDescription", "Pobiera pliki aktualizacji dla gier Wargaming za pomocą protokołu HTTP celem późniejszej instalacji w WGC.\n" +
                 "Szczególnie przydatne dla osób, które nie mogą używać wbudowanego w Wargaming Game Center protokołu P2P.");
             French.Add("DownloadWGPatchFilesButtonDescription", TranslationNeeded);
-            Spanish.Add("DownloadWGPatchFilesButtonDescription", TranslationNeeded);
+            Spanish.Add("DownloadWGPatchFilesButtonDescription", "Le guiará e instalará los archivos de parche para los juegos de Wargaming (WoT, WoWs, WoWp) mediante HTTP para que los pueda instalar más tarde.\n" +
+                "Particularmente útil para quien no puede utilizar el protocolo estándar P2P de Wargaming Game Center (WGC)");
             Russian.Add("DownloadWGPatchFilesButtonDescription", "Данный мастер позволит загрузить обновления для любой игры от Wargaming (WoT, WoWS, WoWP) через HTTP, чтобы вы смогли установить их позднее.\nПолезно при возникновении проблем с режимом P2P (торрентом), используемым Wargaming Game Center по умолчанию.");
 
             //Component: SelectedInstallation
@@ -3845,7 +3852,7 @@ namespace RelhaxModpack
             Polish.Add("TestLoadImageLibrariesButtonDescription", "Próbuje wczytać biblioteki przetwarzania obrazów Atlas.\n" +
                 "Ewentualne błędy mogą być oznakiem braku wymaganego oprogramowania w systemie."); //=> Potential (load) errors may indicate missing dependencies in your system.
             French.Add("TestLoadImageLibrariesButtonDescription", TranslationNeeded);
-            Spanish.Add("TestLoadImageLibrariesButtonDescription", TranslationNeeded);
+            Spanish.Add("TestLoadImageLibrariesButtonDescription", "Comprueba las librerías de procesamiento de las imágenes tipo atlas");
             Russian.Add("TestLoadImageLibrariesButtonDescription", "Тест библиотек обработчика текстурных атласов");
 
             //Component: loadingAtlasImageLibraries
@@ -3883,7 +3890,7 @@ namespace RelhaxModpack
             German.Add("AddPicturesZip", TranslationNeeded);
             Polish.Add("AddPicturesZip", "Dodaj pliki do archiwum ZIP");
             French.Add("AddPicturesZip", TranslationNeeded);
-            Spanish.Add("AddPicturesZip", TranslationNeeded);
+            Spanish.Add("AddPicturesZip", "Añadir los archivos a ZIP");
             Russian.Add("AddPicturesZip", TranslationNeeded);
 
             //Component: DiagnosticsAddSelectionsPicturesLabel
@@ -3939,7 +3946,7 @@ namespace RelhaxModpack
             German.Add("Preview", TranslationNeeded);
             Polish.Add("Preview", "Podgląd");
             French.Add("Preview", TranslationNeeded);
-            Spanish.Add("Preview", TranslationNeeded);
+            Spanish.Add("Preview", "Previsualización");
             Russian.Add("Preview", "Предпросмотр");
 
             //Component: noDescription
@@ -4096,7 +4103,7 @@ namespace RelhaxModpack
             German.Add("AdvancedProgress", TranslationNeeded);
             Polish.Add("AdvancedProgress", "Zaawansowany Podgląd Instalacji");
             French.Add("AdvancedProgress", TranslationNeeded);
-            Spanish.Add("AdvancedProgress", TranslationNeeded);
+            Spanish.Add("AdvancedProgress", "Progreso detallado del instalador");
             Russian.Add("AdvancedProgress", "Прогресс расширенной установки");
 
             //Component: PreInstallTabHeader
@@ -4105,7 +4112,7 @@ namespace RelhaxModpack
             German.Add("PreInstallTabHeader", TranslationNeeded);
             Polish.Add("PreInstallTabHeader", "Przygotowywanie"); // => "PREPARATION(s)", otherwise it's long and clumsy. @Nullmaruzero
             French.Add("PreInstallTabHeader", TranslationNeeded);
-            Spanish.Add("PreInstallTabHeader", TranslationNeeded);
+            Spanish.Add("PreInstallTabHeader", "Operaciones pre-instalación");
             Russian.Add("PreInstallTabHeader", "Подготовка"); // "Prepaiting", otherwise it's too long. @SigmaTel71 (DrWeb7_1)
 
             //Component: ExtractionTabHeader
@@ -4114,7 +4121,7 @@ namespace RelhaxModpack
             German.Add("ExtractionTabHeader", TranslationNeeded);
             Polish.Add("ExtractionTabHeader", "Wyodrębnianie");
             French.Add("ExtractionTabHeader", TranslationNeeded);
-            Spanish.Add("ExtractionTabHeader", TranslationNeeded);
+            Spanish.Add("ExtractionTabHeader", "Extracción");
             Russian.Add("ExtractionTabHeader", "Распаковка");
 
             //Component: PostInstallTabHeader
@@ -4123,7 +4130,7 @@ namespace RelhaxModpack
             German.Add("PostInstallTabHeader", TranslationNeeded);
             Polish.Add("PostInstallTabHeader", "Zadania poinstalacyjne");
             French.Add("PostInstallTabHeader", TranslationNeeded);
-            Spanish.Add("PostInstallTabHeader", TranslationNeeded);
+            Spanish.Add("PostInstallTabHeader", "Operaciones post-instalación");
             Russian.Add("PostInstallTabHeader", "Завершение"); // See comment to PreInstallTabHeader. @SigmaTel71 (DrWeb7_1)
 
             //Component: AdvancedInstallBackupMods
@@ -4270,7 +4277,7 @@ namespace RelhaxModpack
             German.Add("NewsViewer", TranslationNeeded);
             Polish.Add("NewsViewer", "Przegląd Wiadomości");
             French.Add("NewsViewer", TranslationNeeded);
-            Spanish.Add("NewsViewer", TranslationNeeded);
+            Spanish.Add("NewsViewer", "Novedades");
             Russian.Add("NewsViewer", "Просмотр новостей");
 
             //Component: application_Update_TabHeader
@@ -4308,7 +4315,7 @@ namespace RelhaxModpack
             German.Add("ProgressIndicator", TranslationNeeded);
             Polish.Add("ProgressIndicator", "Wczytywanie");
             French.Add("ProgressIndicator", TranslationNeeded);
-            Spanish.Add("ProgressIndicator", TranslationNeeded);
+            Spanish.Add("ProgressIndicator", "Cargando");
             Russian.Add("ProgressIndicator", "Загрузка");
 
             //Component: LoadingHeader
@@ -4328,7 +4335,7 @@ namespace RelhaxModpack
             German.Add("FirstLoadAcknowledgments", TranslationNeeded);
             Polish.Add("FirstLoadAcknowledgments", "Pierwsze Urochomienie — Umowa Licencyjna"); // Can't think of a gracious way to do this one. @Nullmaruzero
             French.Add("FirstLoadAcknowledgments", TranslationNeeded);
-            Spanish.Add("FirstLoadAcknowledgments", TranslationNeeded);
+            Spanish.Add("FirstLoadAcknowledgments", "Primera ejecución — Acuerdo de Licencia"); // Me neither (LordFelix), so i'll follow PL procedure
             Russian.Add("FirstLoadAcknowledgments", "Первый запуск");
 
             //Component: AgreementLicense
@@ -4337,7 +4344,7 @@ namespace RelhaxModpack
             German.Add("AgreementLicense", TranslationNeeded);
             Polish.Add("AgreementLicense", "Przeczytałem/am i zgadzam się z postanowieniami ");
             French.Add("AgreementLicense", TranslationNeeded);
-            Spanish.Add("AgreementLicense", TranslationNeeded);
+            Spanish.Add("AgreementLicense", "He leído y acepto");
             Russian.Add("AgreementLicense", "Я прочитал и согласен с ");
 
             //Component: LicenseLink
@@ -4443,7 +4450,7 @@ namespace RelhaxModpack
             German.Add("ExportModeSelect", TranslationNeeded);
             Polish.Add("ExportModeSelect", "Wybierz klienta WoT dla eksportu");
             French.Add("ExportModeSelect", TranslationNeeded);
-            Spanish.Add("ExportModeSelect", TranslationNeeded);
+            Spanish.Add("ExportModeSelect", "Seleccione cliente de WoT para exportación");
             Russian.Add("ExportModeSelect", "Выберите клиент WoT для экспорта");
 
             //Component: selectLocationToExport
@@ -4508,7 +4515,7 @@ namespace RelhaxModpack
             German.Add("AskCloseWoT", TranslationNeeded);
             Polish.Add("AskCloseWoT", "WoT jest uruchomiony!");
             French.Add("AskCloseWoT", TranslationNeeded);
-            Spanish.Add("AskCloseWoT", TranslationNeeded);
+            Spanish.Add("AskCloseWoT", "WoT está en ejecución");
             Russian.Add("AskCloseWoT", "Обнаружена запущенная игра!");
 
             //Component: WoTRunningTitle
@@ -4564,7 +4571,7 @@ namespace RelhaxModpack
             German.Add("ScalingConfirmation", TranslationNeeded);
             Polish.Add("ScalingConfirmation", "Zmiana Skalowania");
             French.Add("ScalingConfirmation", TranslationNeeded);
-            Spanish.Add("ScalingConfirmation", TranslationNeeded);
+            Spanish.Add("ScalingConfirmation", "Confirmar escalado");
             Russian.Add("ScalingConfirmation", "Подтвердить изменения");
 
             //Component: ScalingConfirmationHeader
@@ -4611,7 +4618,7 @@ namespace RelhaxModpack
             German.Add("RelhaxColorPicker", TranslationNeeded);
             Polish.Add("RelhaxColorPicker", "Schemat Kolorów");
             French.Add("RelhaxColorPicker", TranslationNeeded);
-            Spanish.Add("RelhaxColorPicker", TranslationNeeded);
+            Spanish.Add("RelhaxColorPicker", "Selector de colores");
             Russian.Add("RelhaxColorPicker", "Палитра");
 
             //Component: ColorType
@@ -4647,7 +4654,7 @@ namespace RelhaxModpack
             German.Add("MainColorAlpha", TranslationNeeded);
             Polish.Add("MainColorAlpha", "Widoczność (alpha)");
             French.Add("MainColorAlpha", TranslationNeeded);
-            Spanish.Add("MainColorAlpha", TranslationNeeded);
+            Spanish.Add("MainColorAlpha", "Opacidad (alfa)");
             Russian.Add("MainColorAlpha", "Прозрачность (альфа-канал)");
 
             //Component: MainColorRed
@@ -4692,7 +4699,7 @@ namespace RelhaxModpack
             German.Add("TextColorAlpha", TranslationNeeded);
             Polish.Add("TextColorAlpha", "Widoczność (alpha)");
             French.Add("TextColorAlpha", TranslationNeeded);
-            Spanish.Add("TextColorAlpha", TranslationNeeded);
+            Spanish.Add("TextColorAlpha", "Opacidad (alfa)");
             Russian.Add("TextColorAlpha", "Прозрачность (альфа-канал)");
 
             //Component: TextColorRed
@@ -4737,7 +4744,7 @@ namespace RelhaxModpack
             German.Add("SecondColorAlpha", TranslationNeeded);
             Polish.Add("SecondColorAlpha", "Widoczność (alpha)");
             French.Add("SecondColorAlpha", TranslationNeeded);
-            Spanish.Add("SecondColorAlpha", TranslationNeeded);
+            Spanish.Add("SecondColorAlpha", "Opacidad (alfa)");
             Russian.Add("SecondColorAlpha", "Прозрачность (альфа-канал)");
 
             //Component: SecondColorRed
@@ -4838,7 +4845,7 @@ namespace RelhaxModpack
             German.Add("GameCenterUpdateDownloader", TranslationNeeded);
             Polish.Add("GameCenterUpdateDownloader", "Pobieranie aktualizacji gier dla Wargaming Game Center");
             French.Add("GameCenterUpdateDownloader", TranslationNeeded);
-            Spanish.Add("GameCenterUpdateDownloader", TranslationNeeded);
+            Spanish.Add("GameCenterUpdateDownloader", "Descarga de actualizaciones para Wargaming Game Center");
             Russian.Add("GameCenterUpdateDownloader", "Мастер загрузчика обновлений из Game Center");
 
             //Component: GcDownloadStep1Header
@@ -4847,7 +4854,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep1Header", TranslationNeeded);
             Polish.Add("GcDownloadStep1Header", "Wybór Klienta Gry");
             French.Add("GcDownloadStep1Header", TranslationNeeded);
-            Spanish.Add("GcDownloadStep1Header", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1Header", "Seleccione cliente de juego");
             Russian.Add("GcDownloadStep1Header", "Выберите клиенты игры");
 
             //Component: GcDownloadStep1TabDescription
@@ -4856,7 +4863,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep1TabDescription", TranslationNeeded);
             Polish.Add("GcDownloadStep1TabDescription", "Wybierz grę WG, dla której chcesz pobrać aktualizacje (WoT, WoWs, WoWp)");
             French.Add("GcDownloadStep1TabDescription", TranslationNeeded);
-            Spanish.Add("GcDownloadStep1TabDescription", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1TabDescription", "Seleccione el cliente de Wargaming para el que recolectar datos (WoT, WoWs, WoWp)");
             Russian.Add("GcDownloadStep1TabDescription", "Выберите клиент игры, установленной через Game Center (WoT, WoWS, WoWP)");
 
             //Component: GcDownloadStep1SelectClientButton
@@ -4865,7 +4872,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
             Polish.Add("GcDownloadStep1SelectClientButton", "Wybierz klienta gry");
             French.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
-            Spanish.Add("GcDownloadStep1SelectClientButton", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1SelectClientButton", "Seleccione cliente");
             Russian.Add("GcDownloadStep1SelectClientButton", "Выбрать клиент");
 
             //Component: GcDownloadStep1CurrentlySelectedClient
@@ -4874,7 +4881,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep1CurrentlySelectedClient", TranslationNeeded);
             Polish.Add("GcDownloadStep1CurrentlySelectedClient", "Obecnie wybrany klient: {0}");
             French.Add("GcDownloadStep1CurrentlySelectedClient", TranslationNeeded);
-            Spanish.Add("GcDownloadStep1CurrentlySelectedClient", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1CurrentlySelectedClient", "Cliente actualmente seleccionado: {0}");
             Russian.Add("GcDownloadStep1CurrentlySelectedClient", "Выбранный клиент");
 
             //Component: GcDownloadStep1NextText
@@ -4892,7 +4899,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadSelectWgClient", TranslationNeeded);
             Polish.Add("GcDownloadSelectWgClient", "Wybierz klienta docelowej gry WG, dla której chcesz pobrać aktualizacje");
             French.Add("GcDownloadSelectWgClient", TranslationNeeded);
-            Spanish.Add("GcDownloadSelectWgClient", TranslationNeeded);
+            Spanish.Add("GcDownloadSelectWgClient", "Seleccione cliente de WG para el que buscar actualizaciones");
             Russian.Add("GcDownloadSelectWgClient", "Выбрать клиент (WGC)");
 
             //Component: ClientTypeValue
@@ -4901,7 +4908,7 @@ namespace RelhaxModpack
             German.Add("ClientTypeValue", TranslationNeeded);
             Polish.Add("ClientTypeValue", "Brak");
             French.Add("ClientTypeValue", TranslationNeeded);
-            Spanish.Add("ClientTypeValue", TranslationNeeded);
+            Spanish.Add("ClientTypeValue", "Ninguno");
             Russian.Add("ClientTypeValue", "Нет данных");
 
             //Component: LangValue
@@ -4991,7 +4998,7 @@ namespace RelhaxModpack
             German.Add("GcMissingFiles", TranslationNeeded);
             Polish.Add("GcMissingFiles", "Twój klient nie posiada następujących plików definicji XML"); // I need to see this in action with the output. @Nullmaruzero
             French.Add("GcMissingFiles", TranslationNeeded);
-            Spanish.Add("GcMissingFiles", TranslationNeeded);
+            Spanish.Add("GcMissingFiles", "Su cliente no tiene los siguientes archivos XML de definiciones");
             Russian.Add("GcMissingFiles", "У выбранного вами клиента отсутствуют следующие XML-файлы");
 
             //Component: GcDownloadStep2Header
@@ -5000,7 +5007,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep2Header", TranslationNeeded);
             Polish.Add("GcDownloadStep2Header", "Zamykanie WG Game Center");
             French.Add("GcDownloadStep2Header", TranslationNeeded);
-            Spanish.Add("GcDownloadStep2Header", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2Header", "Cerrar Game Center");
             Russian.Add("GcDownloadStep2Header", "Закрыть Game Center");
 
             //Component: GcDownloadStep2TabDescription
@@ -5009,7 +5016,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep2TabDescription", TranslationNeeded);
             Polish.Add("GcDownloadStep2TabDescription", "Proszę zamknąć WG Game Center (aplikacja automatycznie wykryje zamknięcie).");
             French.Add("GcDownloadStep2TabDescription", TranslationNeeded);
-            Spanish.Add("GcDownloadStep2TabDescription", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2TabDescription", "Ciera el Game Center (la aplicación detectará el cierre)");
             Russian.Add("GcDownloadStep2TabDescription", "Закройте Wargaming Game Center (приложение обнаружит, что он закрылся)");
 
             //Component: GcDownloadStep2GcStatus
@@ -5018,7 +5025,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep2GcStatus", TranslationNeeded);
             Polish.Add("GcDownloadStep2GcStatus", "Game Center jest {0}");
             French.Add("GcDownloadStep2GcStatus", TranslationNeeded);
-            Spanish.Add("GcDownloadStep2GcStatus", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2GcStatus", "Game Center está {0}");
             Russian.Add("GcDownloadStep2GcStatus", "На данный момент Game Center {0}");
 
             //Component: GcDownloadStep2GcStatusOpened
@@ -5027,7 +5034,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep2GcStatusOpened", TranslationNeeded);
             Polish.Add("GcDownloadStep2GcStatusOpened", "uruchomione"); // Lowercase for the looks 'cuz it's inlined. @Nullmaruzero
             French.Add("GcDownloadStep2GcStatusOpened", TranslationNeeded);
-            Spanish.Add("GcDownloadStep2GcStatusOpened", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2GcStatusOpened", "abierto");
             Russian.Add("GcDownloadStep2GcStatusOpened", "запущен");
 
             //Component: GcDownloadStep2GcStatusClosed
@@ -5036,7 +5043,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep2GcStatusClosed", TranslationNeeded);
             Polish.Add("GcDownloadStep2GcStatusClosed", "zamknięte"); // Lowercase for the looks 'cuz it's inlined. @Nullmaruzero
             French.Add("GcDownloadStep2GcStatusClosed", TranslationNeeded);
-            Spanish.Add("GcDownloadStep2GcStatusClosed", TranslationNeeded);
+            Spanish.Add("GcDownloadStep2GcStatusClosed", "cerrado");
             Russian.Add("GcDownloadStep2GcStatusClosed", "закрыт");
 
             //Component: GcDownloadStep2PreviousText
@@ -5063,7 +5070,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep3Header", TranslationNeeded);
             Polish.Add("GcDownloadStep3Header", "Informacje o Aktualizacji");
             French.Add("GcDownloadStep3Header", TranslationNeeded);
-            Spanish.Add("GcDownloadStep3Header", TranslationNeeded);
+            Spanish.Add("GcDownloadStep3Header", "Obtener información de actualización");
             Russian.Add("GcDownloadStep3Header", "Получить сведения об обновлениях");
 
             //Component: GcDownloadStep3TabDescription
@@ -5072,7 +5079,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep3TabDescription", TranslationNeeded);
             Polish.Add("GcDownloadStep3TabDescription", "Przetwarzanie listy plików aktualizacji do pobrania");
             French.Add("GcDownloadStep3TabDescription", TranslationNeeded);
-            Spanish.Add("GcDownloadStep3TabDescription", TranslationNeeded);
+            Spanish.Add("GcDownloadStep3TabDescription", "Obteniendo lista de archivos de parche a descargar");
             Russian.Add("GcDownloadStep3TabDescription", "Получение сведений о списке файлов патчей, необходимых для загрузки");
 
             //Component: GcDownloadStep3PreviousText
@@ -5099,7 +5106,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
             Polish.Add("GcDownloadStep3NoFilesUpToDate", "Brak plików do pobrania, wszystkie są aktualne.");
             French.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
-            Spanish.Add("GcDownloadStep3NoFilesUpToDate", TranslationNeeded);
+            Spanish.Add("GcDownloadStep3NoFilesUpToDate", "No se han encontrado archivos de parche para descargar");
             Russian.Add("GcDownloadStep3NoFilesUpToDate", "Новые файлы патчей не найдены (установлена последняя версия)");
 
             //Component: GcDownloadStep4Header
@@ -5108,7 +5115,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep4Header", TranslationNeeded);
             Polish.Add("GcDownloadStep4Header", "Pobieranie Aktualizacji");
             French.Add("GcDownloadStep4Header", TranslationNeeded);
-            Spanish.Add("GcDownloadStep4Header", TranslationNeeded);
+            Spanish.Add("GcDownloadStep4Header", "Descargar archivos de actualización");
             Russian.Add("GcDownloadStep4Header", "Скачать файлы обновлений");
 
             //Component: GcDownloadStep4TabDescription
@@ -5117,7 +5124,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep4TabDescription", TranslationNeeded);
             Polish.Add("GcDownloadStep4TabDescription", "Pobieranie plików aktualizacji...");
             French.Add("GcDownloadStep4TabDescription", TranslationNeeded);
-            Spanish.Add("GcDownloadStep4TabDescription", TranslationNeeded);
+            Spanish.Add("GcDownloadStep4TabDescription", "Descargando archivos de parche...");
             Russian.Add("GcDownloadStep4TabDescription", "Обновление клиента игры: получение обновлений");
 
             //Component: GcDownloadStep4DownloadingCancelButton
@@ -5135,7 +5142,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep4DownloadingText", TranslationNeeded);
             Polish.Add("GcDownloadStep4DownloadingText", "Pobieranie aktualizacji {0} z {1}: {2}");
             French.Add("GcDownloadStep4DownloadingText", TranslationNeeded);
-            Spanish.Add("GcDownloadStep4DownloadingText", TranslationNeeded);
+            Spanish.Add("GcDownloadStep4DownloadingText", "Descargando parche {0} de  {1}: {2}");
             Russian.Add("GcDownloadStep4DownloadingText", "Скачивание обновления {0} из {1}: {2}");
 
             //Component: GcDownloadStep4Previous
@@ -5162,7 +5169,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
             Polish.Add("GcDownloadStep4DownloadComplete", "Pobieranie plików aktualizacji zakończone sukcesem!");
             French.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
-            Spanish.Add("GcDownloadStep4DownloadComplete", TranslationNeeded);
+            Spanish.Add("GcDownloadStep4DownloadComplete", "Descarga de paquetes completada");
             Russian.Add("GcDownloadStep4DownloadComplete", "Получение обновлений завершено");
 
             //Component: GcDownloadStep5Header
@@ -5171,7 +5178,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep5Header", TranslationNeeded);
             Polish.Add("GcDownloadStep5Header", "Zakończono!");
             French.Add("GcDownloadStep5Header", TranslationNeeded);
-            Spanish.Add("GcDownloadStep5Header", TranslationNeeded);
+            Spanish.Add("GcDownloadStep5Header", "¡Completado!");
             Russian.Add("GcDownloadStep5Header", "Готово!");
 
             //Component: GcDownloadStep5TabDescription
@@ -5180,7 +5187,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep5TabDescription", TranslationNeeded);
             Polish.Add("GcDownloadStep5TabDescription", "Proces zakończony sukcesem! WG Game Center powinno wykryć pobrane pliki aktualizacji przy uruchomieniu.");
             French.Add("GcDownloadStep5TabDescription", TranslationNeeded);
-            Spanish.Add("GcDownloadStep5TabDescription", TranslationNeeded);
+            Spanish.Add("GcDownloadStep5TabDescription", "¡El proceso se ha completado! WG Game Center debería detectar los archivos en su próxima ejecución");
             Russian.Add("GcDownloadStep5TabDescription", "Процесс успешно завершён. Wargaming Game Center должен обнаружить файлы после запуска.");
 
             //Component: GcDownloadStep5Close
@@ -5198,7 +5205,7 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep1ValueError", TranslationNeeded);
             Polish.Add("GcDownloadStep1ValueError", "Błąd");
             French.Add("GcDownloadStep1ValueError", TranslationNeeded);
-            Spanish.Add("GcDownloadStep1ValueError", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1ValueError", "Error");
             Russian.Add("GcDownloadStep1ValueError", "Ошибка");
             #endregion
 
