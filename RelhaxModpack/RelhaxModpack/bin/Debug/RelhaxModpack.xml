@@ -4347,6 +4347,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.FirstLoadSelectLanguage">
+            <summary>
+            Interaction logic for FirstLaunchSelectLanguage.xaml
+            </summary>
+            <summary>
+            FirstLoadSelectLanguage
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.FirstLoadSelectLanguage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.FirstLoadAcknowledgments">
             <summary>
             Interaction logic for FirstLoadAcknowledgments.xaml
@@ -5154,11 +5167,6 @@
             Sets the language dictionary to use when returning a localized string
             </summary>
             <param name="language">The language to switch to</param>
-        </member>
-        <member name="M:RelhaxModpack.Translations.SetLanguageOnFirstLoad">
-            <summary>
-            Change the language to the active language code installed on the computer, if we support
-            </summary>
         </member>
         <member name="M:RelhaxModpack.Translations.GetTranslatedString(System.String)">
             <summary>
