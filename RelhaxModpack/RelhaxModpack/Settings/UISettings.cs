@@ -38,9 +38,9 @@ namespace RelhaxModpack
         public static Brush NotSelectedTabColor = null;
 
         /// <summary>
-        /// A list of tags that are allowed to have 'null' as the value for global brushes
+        /// A list of brush names that are allowed to have 'null' as the value for global brushes (global = at root of Theme object)
         /// </summary>
-        public static readonly string[] NullAllowedGlobalBrushes = new string[]
+        private static readonly string[] NullAllowedGlobalBrushes = new string[]
         {
             "SelectionListNotActiveHasNoSelectionsBackgroundColor"
         };
