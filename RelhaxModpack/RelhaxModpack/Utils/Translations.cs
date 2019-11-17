@@ -436,6 +436,8 @@ namespace RelhaxModpack
             Spanish.Add("no", "No");
             Russian.Add("no", "Нет");
 
+            // Cancel button (phrase) used in many places.
+            // LIST: CancelDownloadInstallButton; CancelButtonLabel; DeveloperSelectionsCancelButton; ExportCancelButton; GcDownloadStep4DownloadingCancelButton;
             English.Add("cancel", "Cancel");
             German.Add("cancel", "Abbrechen");
             Polish.Add("cancel", "Anuluj");
@@ -996,12 +998,12 @@ namespace RelhaxModpack
 
             //Component: CancelDownloadInstallButton
             //
-            English.Add("CancelDownloadInstallButton", "Cancel");
-            German.Add("CancelDownloadInstallButton", "Abbrechen");
-            Polish.Add("CancelDownloadInstallButton", "Anuluj");
-            French.Add("CancelDownloadInstallButton", "Annuler");
-            Spanish.Add("CancelDownloadInstallButton", "Cancelar");
-            Russian.Add("CancelDownloadInstallButton", "Отмена");
+            English.Add("CancelDownloadInstallButton", English["cancel"]);
+            German.Add("CancelDownloadInstallButton", German["cancel"]);
+            Polish.Add("CancelDownloadInstallButton", Polish["cancel"]);
+            French.Add("CancelDownloadInstallButton", French["cancel"]);
+            Spanish.Add("CancelDownloadInstallButton", Spanish["cancel"]);
+            Russian.Add("CancelDownloadInstallButton", Russian["cancel"]);
 
             //Component: appDataFolderNotExistHeader
             //
@@ -2178,12 +2180,12 @@ namespace RelhaxModpack
 
             //Component: CancelButtonLabel
             //
-            English.Add("CancelButtonLabel", "Cancel");
-            German.Add("CancelButtonLabel", "Abbrechen");
-            Polish.Add("CancelButtonLabel", "Anuluj");
-            French.Add("CancelButtonLabel", "Anuler");
-            Spanish.Add("CancelButtonLabel", "Cancelar");
-            Russian.Add("CancelButtonLabel", "Отмена");
+            English.Add("CancelButtonLabel", English["cancel"]);
+            German.Add("CancelButtonLabel", German["cancel"]);
+            Polish.Add("CancelButtonLabel", Polish["cancel"]);
+            French.Add("CancelButtonLabel", French["cancel"]);
+            Spanish.Add("CancelButtonLabel", Spanish["cancel"]);
+            Russian.Add("CancelButtonLabel", Russian["cancel"]);
 
             //Component: HelpLabel
             //
@@ -4050,12 +4052,12 @@ namespace RelhaxModpack
 
             //Component: DeveloperSelectionsCancelButton
             //
-            English.Add("DeveloperSelectionsCancelButton", "Cancel");
-            German.Add("DeveloperSelectionsCancelButton", "Abbrechen");
-            Polish.Add("DeveloperSelectionsCancelButton", "Anuluj");
-            French.Add("DeveloperSelectionsCancelButton", "Annuler");
-            Spanish.Add("DeveloperSelectionsCancelButton", "Cancelar");
-            Russian.Add("DeveloperSelectionsCancelButton", "Отмена");
+            English.Add("DeveloperSelectionsCancelButton", English["cancel"]);
+            German.Add("DeveloperSelectionsCancelButton", German["cancel"]);
+            Polish.Add("DeveloperSelectionsCancelButton", Polish["cancel"]);
+            French.Add("DeveloperSelectionsCancelButton", French["cancel"]);
+            Spanish.Add("DeveloperSelectionsCancelButton", Spanish["cancel"]);
+            Russian.Add("DeveloperSelectionsCancelButton", Russian["cancel"]);
 
             //Component: DeveloperSelectionsLocalFile
             //The text in the first radioButton in the selection viewer, for the user to select their own personal config file to load
@@ -4475,12 +4477,12 @@ namespace RelhaxModpack
 
             //Component: ExportCancelButton
             //
-            English.Add("ExportCancelButton", "Cancel");
-            German.Add("ExportCancelButton", "Abbrechen");
-            Polish.Add("ExportCancelButton", "Anuluj");
-            French.Add("ExportCancelButton", TranslationNeeded);
-            Spanish.Add("ExportCancelButton", "Cancelar");
-            Russian.Add("ExportCancelButton", "Отмена");
+            English.Add("ExportCancelButton", English["cancel"]);
+            German.Add("ExportCancelButton", German["cancel"]);
+            Polish.Add("ExportCancelButton", Polish["cancel"]);
+            French.Add("ExportCancelButton", French["cancel"]);
+            Spanish.Add("ExportCancelButton", Spanish["cancel"]);
+            Russian.Add("ExportCancelButton", Russian["cancel"]);
 
             //Component: ExportModeMajorVersion
             //
