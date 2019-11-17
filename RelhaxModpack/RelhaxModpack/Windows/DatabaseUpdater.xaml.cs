@@ -715,7 +715,7 @@ namespace RelhaxModpack.Windows
                     {
 #pragma warning disable CS0618
                         doc.LoadXml(await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL));
-#pragma warning enable CS0618
+#pragma warning restore CS0618
                         string betaDatabaseOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
                         ReportProgress(string.Format("GITHUB online folder={0}, selected online folder to clean version={1}",
                             betaDatabaseOnlineFolderVersion, selectedVersionInfos.WoTOnlineFolderVersion));

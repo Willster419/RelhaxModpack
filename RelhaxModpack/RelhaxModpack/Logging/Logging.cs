@@ -165,7 +165,7 @@ namespace RelhaxModpack
 #pragma warning disable CA1009
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
         public static event LoggingUIThreadReport OnLoggingUIThreadReport;
-#pragma warning enable CA1009
+#pragma warning restore CA1009
 
         /// <summary>
         /// Initialize the logging system for the application

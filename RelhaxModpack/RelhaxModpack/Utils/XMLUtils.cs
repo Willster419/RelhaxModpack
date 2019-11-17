@@ -326,7 +326,7 @@ namespace RelhaxModpack
 #pragma warning disable CS0612
                     ParseDatabaseLegacy(DocumentToXDocument(modInfoDocument), globalDependencies, dependencies, logicalDependencies,
                         parsedCategoryList, true);
-#pragma warning enable CS0612
+#pragma warning restore CS0612
                     dependencies.AddRange(logicalDependencies);
                     return true;
             }
@@ -2386,7 +2386,7 @@ namespace RelhaxModpack
                     else
                         SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfoAlpha.xml"), doc, globalDependencies, dependencies, parsedCatagoryList);
                     break;
-#pragma warning enable CS0612
+#pragma warning restore CS0612
                 case DatabaseXmlVersion.OnePointOne:
                     //in 1.1, saveLocation is a document path
                     if (Path.HasExtension(saveLocation))
