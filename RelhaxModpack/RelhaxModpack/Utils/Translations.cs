@@ -586,7 +586,8 @@ namespace RelhaxModpack
             Russian.Add("days", "дн.");
 
             //Component: next
-            //
+            // Used as a button in many places.
+            // LIST: PreviewNextPicButton; GcDownloadStep1NextText; GcDownloadStep2NextText; GcDownloadStep3NextText; GcDownloadStep4NextText;
             English.Add("next", "Next");
             German.Add("next", "Weiter");
             Polish.Add("next", "Dalej");
@@ -3977,21 +3978,21 @@ namespace RelhaxModpack
             Russian.Add("noTimestamp", "Нет метки с датой");
 
             //Component: PreviewNextPicButton
-            //
+            // A button in mod preview window used to display the previous preview image.
             English.Add("PreviewNextPicButton", English["next"]);
             German.Add("PreviewNextPicButton", German["next"]);
-            Polish.Add("PreviewNextPicButton", Polish["next"]);
+            Polish.Add("PreviewNextPicButton", "Następny"); // As DrWeb7_1 pointed out, Slavic languages are sometimes a b*tch... @Nullmaruzero
             French.Add("PreviewNextPicButton", French["next"]);
             Spanish.Add("PreviewNextPicButton", Spanish["next"]);
             Russian.Add("PreviewNextPicButton", Russian["next"]);
 
             //Component: PreviewPreviousPicButton
-            //
-            English.Add("PreviewPreviousPicButton", "Previous");
-            German.Add("PreviewPreviousPicButton", "Zurück");
-            Polish.Add("PreviewPreviousPicButton", "Wstecz");
-            French.Add("PreviewPreviousPicButton", "Précedent");
-            Spanish.Add("PreviewPreviousPicButton", "Anterior");
+            // A button in mod preview window used to display the next preview image.
+            English.Add("PreviewPreviousPicButton", English["previous"]);
+            German.Add("PreviewPreviousPicButton", German["previous"]);
+            Polish.Add("PreviewPreviousPicButton", "Poprzedni"); // As DrWeb7_1 pointed out, Slavic languages are sometimes a b*tch... @Nullmaruzero
+            French.Add("PreviewPreviousPicButton", French["previous"]);
+            Spanish.Add("PreviewPreviousPicButton", Spanish["previous"]);
             Russian.Add("PreviewPreviousPicButton", "пред.");
 
             //Component: DevUrlHeader
@@ -5149,14 +5150,14 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep4Previous", Spanish["previous"]);
             Russian.Add("GcDownloadStep4Previous", Russian["previous"]);
 
-            //Component: GcDownloadStep4Next
+            //Component: GcDownloadStep4NextText
             //
-            English.Add("GcDownloadStep4Next", English["next"]);
-            German.Add("GcDownloadStep4Next", German["next"]);
-            Polish.Add("GcDownloadStep4Next", Polish["next"]);
-            French.Add("GcDownloadStep4Next", French["next"]);
-            Spanish.Add("GcDownloadStep4Next", Spanish["next"]);
-            Russian.Add("GcDownloadStep4Next", Russian["next"]);
+            English.Add("GcDownloadStep4NextText", English["next"]);
+            German.Add("GcDownloadStep4NextText", German["next"]);
+            Polish.Add("GcDownloadStep4NextText", Polish["next"]);
+            French.Add("GcDownloadStep4NextText", French["next"]);
+            Spanish.Add("GcDownloadStep4NextText", Spanish["next"]);
+            Russian.Add("GcDownloadStep4NextText", Russian["next"]);
 
             //Component: GcDownloadStep4DownloadComplete
             //
