@@ -2556,22 +2556,22 @@ namespace RelhaxModpack
             Russian.Add("VersionInfo", "Обновление приложения");
 
             //Component: VersionInfoYesButton
-            //
-            English.Add("VersionInfoYesButton", "Yes");
-            German.Add("VersionInfoYesButton", "Ja");
-            Polish.Add("VersionInfoYesButton", "Tak");
-            French.Add("VersionInfoYesButton", "Oui");
-            Spanish.Add("VersionInfoYesButton", "Sí");
-            Russian.Add("VersionInfoYesButton", "Да");
+            // A button in VersionInfo window confirming the installation of the new available version of the application.
+            English.Add("VersionInfoYesButton", English["yes"]);
+            German.Add("VersionInfoYesButton", German["yes"]);
+            Polish.Add("VersionInfoYesButton", Polish["yes"]);
+            French.Add("VersionInfoYesButton", French["yes"]);
+            Spanish.Add("VersionInfoYesButton", Spanish["yes"]);
+            Russian.Add("VersionInfoYesButton", Russian["yes"]);
 
             //Component: VersionInfoNoButton
-            //
-            English.Add("VersionInfoNoButton", "No");
-            German.Add("VersionInfoNoButton", "nein");
-            Polish.Add("VersionInfoNoButton", "Nie");
-            French.Add("VersionInfoNoButton", "Non");
-            Spanish.Add("VersionInfoNoButton", "No");
-            Russian.Add("VersionInfoNoButton", "Нет");
+            // A button in VersionInfo window declining the installation of the new available version of the application.
+            English.Add("VersionInfoNoButton", English["no"]);
+            German.Add("VersionInfoNoButton", German["no"]);
+            Polish.Add("VersionInfoNoButton", Polish["no"]);
+            French.Add("VersionInfoNoButton", French["no"]);
+            Spanish.Add("VersionInfoNoButton", Spanish["no"]);
+            Russian.Add("VersionInfoNoButton", Russian["no"]);
 
             //Component: NewVersionAvailable
             //
