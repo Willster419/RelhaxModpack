@@ -11,8 +11,14 @@ using System.Windows.Media;
 
 namespace RelhaxModpack.UIComponents
 {
+    /// <summary>
+    /// A static list of themes used in the application
+    /// </summary>
     public static class Themes
     {
+        /// <summary>
+        /// The default theme used in the application
+        /// </summary>
         public static Theme Default = new Theme()
         {
             ThemeName = "Default",
@@ -210,7 +216,7 @@ namespace RelhaxModpack.UIComponents
         //white text
         private static SolidColorBrush DarkThemeTextColor = new SolidColorBrush(Colors.White);
 
-        //very dark grey background
+        //very dark gray background
         private static SolidColorBrush DarkThemeBackground = new SolidColorBrush(Color.FromArgb(255, 26, 26, 26));
 
         //dark gray but lighter for button
@@ -221,6 +227,9 @@ namespace RelhaxModpack.UIComponents
         private static SolidColorBrush DarkThemeImageButtonBackground = new SolidColorBrush(Color.FromArgb(255, 175, 175, 175));
         #endregion
 
+        /// <summary>
+        /// A pre-built dark theme
+        /// </summary>
         public static Theme Dark = new Theme()
         {
             ThemeName = "Dark",
@@ -596,6 +605,9 @@ namespace RelhaxModpack.UIComponents
             }
         };
 
+        /// <summary>
+        /// The custom theme to be loaded from xml by the user
+        /// </summary>
         public static Theme Custom = null;
     }
 }

@@ -166,6 +166,11 @@ namespace RelhaxModpack
             ModpackSettings.Language = language;
         }
 
+        /// <summary>
+        /// Get the native language name of the english enumerated name of the language
+        /// </summary>
+        /// <param name="language">The english-named enumeration of the language</param>
+        /// <returns>The name of the requested language in it's native language</returns>
         public static string GetLanguageNativeName(Languages language)
         {
             switch (language)
@@ -238,6 +243,12 @@ namespace RelhaxModpack
             return s;
         }
 
+        /// <summary>
+        /// Determines if a key exists in the currently selected language, or in english if no language is selected
+        /// </summary>
+        /// <param name="componentName">The key of the component to look up</param>
+        /// <param name="logError">Flag to log an error in the logfile if it does not exist</param>
+        /// <returns>True if it exists in the currently selected language, or false otherwise</returns>
         public static bool Exists(string componentName, bool logError)
         {
             if(CurrentLanguage == null)
@@ -260,6 +271,7 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="componentName">The keyword phrase to check</param>
         /// <param name="languageToCheck">The language dictionary to check in</param>
+        /// <param name="logError">Flag for if to log if the component was not found</param>
         public static bool Exists(string componentName, Languages languageToCheck, bool logError)
         {
             Dictionary<string, string> DictToCheck = null;

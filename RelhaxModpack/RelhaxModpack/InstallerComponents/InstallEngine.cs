@@ -173,6 +173,11 @@ namespace RelhaxModpack.InstallerComponents
         /// </summary>
         public List<DatabasePackage> GlobalDependencies;
 
+        /// <summary>
+        /// A list of all the steps that the installer failed at when returning back to the MainWindow
+        /// </summary>
+        /// <remarks>The installer creates many threads to complete different parts of the installation.
+        /// One of more of these may fail and should be logged when the installer cleanly exists and returns to the MainWindow</remarks>
         public List<InstallerExitCodes> InstallFailedSteps = new List<InstallerExitCodes>();
     }
 
@@ -185,6 +190,12 @@ namespace RelhaxModpack.InstallerComponents
         /// The ID number of the thread that the zip file belongs to
         /// </summary>
         public int ThreadID;
+
+        /// <summary>
+        /// Flag for if this zip file is a user mod
+        /// </summary>
+        /// <remarks>User mods are treated slightly differently then regular mods. They have no valid threadID, and should not be deleted if the extraction fails.</remarks>
+        public bool IsUserMod = false;
 
         /// <summary>
         /// Constructor for making a RelhaxZipFile
@@ -699,7 +710,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     Logging.Info("Extraction started of user zipfile {0}", Path.GetFileName(userPackage.ZipFile));
                     userModsBuilder.AppendLine(string.Format("/*   {0}   */", Path.GetFileName(userPackage.ZipFile)));
-                    Unzip(userPackage, 9, userModsBuilder);
+                    Unzip(userPackage, 9, userModsBuilder, true);
                     Logging.Info("Extraction finished of user zipfile {0}", Path.GetFileName(userPackage.ZipFile));
                     Logging.Info("Completed {0} of {1} extractions", ++counter, UserPackagesToInstall.Count);
                 }
@@ -2301,7 +2312,7 @@ namespace RelhaxModpack.InstallerComponents
                         {
                             StringBuilder zipLogger = new StringBuilder();
                             zipLogger.AppendLine(string.Format("/*   {0}   */", package.ZipFile));
-                            Unzip(package, threadNum, zipLogger);
+                            Unzip(package, threadNum, zipLogger, false);
                             Logging.Installer(zipLogger.ToString());
                         }
                         else
@@ -2335,16 +2346,17 @@ namespace RelhaxModpack.InstallerComponents
             }
         }
 
-        private void Unzip(DatabasePackage package, int threadNum, StringBuilder zipLogger)
+        private void Unzip(DatabasePackage package, int threadNum, StringBuilder zipLogger, bool userMod)
         {
             //for each zip file, put it in a try catch to see if we can catch any issues in case of a one-off IO error
-            string zipFilePath = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
-            for(int i = 3; i > 0; i--)//3 strikes and you're out
+            string zipFilePath = userMod ? package.ZipFile : Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
+            for (int i = 3; i > 0; i--)//3 strikes and you're out
             {
                 try
                 {
                     using (RelhaxZipFile zip = new RelhaxZipFile(zipFilePath))
                     {
+                        zip.IsUserMod = userMod;
                         zip.ThreadID = threadNum;
                         //update args and logging here...
                         //first for loop takes care of any path replacing in the zipfile
@@ -2417,8 +2429,11 @@ namespace RelhaxModpack.InstallerComponents
                         //set total number of entries
                         Prog.EntriesTotal = (uint)zip.Entries.Count;
                         Prog.EntriesProcessed = 0;
-                        Prog.EntriesProcessedOfAThread[threadNum] = 0;
-                        Prog.EntriesTotalOfAThread[threadNum] = (uint)zip.Entries.Count;
+                        if (!userMod)
+                        {
+                            Prog.EntriesProcessedOfAThread[threadNum] = 0;
+                            Prog.EntriesTotalOfAThread[threadNum] = (uint)zip.Entries.Count;
+                        }
                         //second loop extracts each file and checks for extraction macros
                         for (int j = 0; j < zip.Entries.Count; j++)
                         {
@@ -2465,7 +2480,8 @@ namespace RelhaxModpack.InstallerComponents
                             loggingCompletePath = Path.Combine(extractPath, zipFilename.Replace(@"/", @"\"));
                             zipLogger.AppendLine(package.LogAtInstall ? loggingCompletePath : "#" + loggingCompletePath);
                             Prog.EntriesProcessed++;
-                            Prog.EntriesProcessedOfAThread[threadNum]++;
+                            if(!userMod)
+                                Prog.EntriesProcessedOfAThread[threadNum]++;
                         }
                     }
                     //set i to 0 so that it breaks out of the loop
@@ -2487,7 +2503,7 @@ namespace RelhaxModpack.InstallerComponents
                             Translations.GetTranslatedString("zipReadingErrorMessage1"), package.ZipFile, Translations.GetTranslatedString("zipReadingErrorMessage2"),
                             Translations.GetTranslatedString("zipReadingErrorHeader")));
                         //delete the file (if it exists)
-                        if(File.Exists(zipFilePath))
+                        if(File.Exists(zipFilePath) && !userMod)
                         {
                             try
                             {
@@ -2524,11 +2540,14 @@ namespace RelhaxModpack.InstallerComponents
                         Prog.BytesTotal = (int)e.TotalBytesToTransfer;
                         Prog.ChildCurrent = (int)e.BytesTransferred;
                         Prog.ChildTotal = (int)e.TotalBytesToTransfer;
-                        Prog.BytesProcessedOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.BytesTransferred;
-                        Prog.BytesTotalOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.TotalBytesToTransfer;
-                        Prog.FilenameOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.ArchiveName;
+                        if (!(sender as RelhaxZipFile).IsUserMod)
+                        {
+                            Prog.BytesProcessedOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.BytesTransferred;
+                            Prog.BytesTotalOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.TotalBytesToTransfer;
+                            Prog.FilenameOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.ArchiveName;
+                            Prog.EntryFilenameOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.CurrentEntry.FileName;
+                        }
                         Prog.EntryFilename = e.CurrentEntry.FileName;
-                        Prog.EntryFilenameOfAThread[(uint)(sender as RelhaxZipFile).ThreadID] = e.CurrentEntry.FileName;
                         Prog.Filename = e.ArchiveName;
                         Prog.ThreadID = (uint)(sender as RelhaxZipFile).ThreadID;
                         Progress.Report(Prog);
