@@ -296,21 +296,39 @@ namespace RelhaxModpack
             //if the application is up to date, then check if we need to display the welcome message to the user
             if (isApplicationUpToDate && !closingFromFailure)
             {
-                Logging.Debug("application is up to date, checking to display welcome message");
+                Logging.Info("application is up to date, checking to display welcome message");
 
                 //run checks to see if it's the first time loading the application
                 Settings.FirstLoad = !File.Exists(Settings.ModpackSettingsFileName) && !File.Exists(Settings.OldModpackSettingsFilename);
                 Settings.FirstLoadToV2 = !File.Exists(Settings.ModpackSettingsFileName) && File.Exists(Settings.OldModpackSettingsFilename);
-                Logging.Debug("FirstLoading = {0}, FirstLoadingV2 = {1}", Settings.FirstLoad.ToString(), Settings.FirstLoadToV2.ToString());
+                Logging.Info("FirstLoading = {0}, FirstLoadingV2 = {1}", Settings.FirstLoad.ToString(), Settings.FirstLoadToV2.ToString());
 
                 if (Settings.FirstLoad || Settings.FirstLoadToV2)
                 {
+                    //display the selection of language if it's the first time loading (not an upgrade)
+                    if(Settings.FirstLoad && !Settings.FirstLoadToV2)
+                    {
+                        FirstLoadSelectLanguage firstLoadSelectLanguage = new FirstLoadSelectLanguage();
+                        firstLoadSelectLanguage.ShowDialog();
+                        if(!firstLoadSelectLanguage.Continue)
+                        {
+                            Logging.Info("user did not select language, closing");
+                            Application.Current.Shutdown();
+                            closingFromFailure = true;
+                            return;
+                        }
+                        LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
+                        LanguagesSelector.SelectedItem = Translations.GetLanguageNativeName(ModpackSettings.Language);
+                        LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
+                        Translations.LocalizeWindow(this, true);
+                    }
+
                     //display the welcome window and make sure the user agrees to it
                     FirstLoadAcknowledgments firstLoadAknowledgements = new FirstLoadAcknowledgments();
                     firstLoadAknowledgements.ShowDialog();
                     if (!firstLoadAknowledgements.UserAgreed)
                     {
-                        Logging.Debug("user did not agree to application load conditions, closing");
+                        Logging.Info("user did not agree to application load conditions, closing");
                         Application.Current.Shutdown();
                         closingFromFailure = true;
                         return;
@@ -355,14 +373,6 @@ namespace RelhaxModpack
                         else
                             Logging.Info("skipped (old log does not exist)");
                         Logging.Info("upgrade to V2 complete, welcome to the future!");
-                    }
-
-                    //else process settings for first time load
-                    else if (Settings.FirstLoad)
-                    {
-                        Logging.Info("running processes for first time loading");
-                        Translations.SetLanguageOnFirstLoad();
-                        ApplySettingsToUI();
                     }
                 }
             }
@@ -1695,7 +1705,7 @@ namespace RelhaxModpack
                         {
                             ChildProgressBar.Maximum = e.TotalInstallGroups;
                             ChildProgressBar.Value = e.InstallGroup;
-                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), e.ParrentCurrent+1.ToString(),
+                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), (e.ParrentCurrent+1).ToString(),
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                             line2 = string.Format("{0}: {1} {2} {3} {4} {5}", Translations.GetTranslatedString("installExtractingCompletedThreads"), e.CompletedThreads.ToString(),
                                 Translations.GetTranslatedString("of"), e.TotalThreads.ToString(), Translations.GetTranslatedString("installExtractingOfGroup"), e.InstallGroup.ToString());
@@ -1719,7 +1729,7 @@ namespace RelhaxModpack
                         {
                             ChildProgressBar.Maximum = e.BytesTotal;
                             ChildProgressBar.Value = e.BytesProcessed;
-                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), e.ParrentCurrent+1.ToString(),
+                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), (e.ParrentCurrent+1).ToString(),
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                             line2 = Path.GetFileName(e.Filename);
                             if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
@@ -1735,7 +1745,7 @@ namespace RelhaxModpack
                             }
                             else
                             {
-                                line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed+1.ToString(),
+                                line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), (e.EntriesProcessed+1).ToString(),
                                 Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                                 line4 = e.EntryFilename;
                             }
@@ -1744,28 +1754,28 @@ namespace RelhaxModpack
                     case InstallerComponents.InstallerExitCodes.UserExtractionError:
                         ChildProgressBar.Maximum = e.BytesTotal;
                         ChildProgressBar.Value = e.BytesProcessed;
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("extractingUserMod"), e.ParrentCurrent+1.ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("extractingUserMod"), (e.ParrentCurrent+1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = Path.GetFileName(e.Filename);
-                        line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), e.EntriesProcessed+1.ToString(),
+                        line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), (e.EntriesProcessed+1).ToString(),
                             Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                         line4 = e.EntryFilename;
                         break;
                     case InstallerComponents.InstallerExitCodes.RestoreUserdataError:
                         //filename is name of file in package to backup
                         //parrentCurrentProgress is name of package
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installRestoreUserdata"), e.ParrentCurrent+1.ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installRestoreUserdata"), (e.ParrentCurrent+1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         line3 = e.ParrentCurrentProgress;
                         break;
                     case InstallerComponents.InstallerExitCodes.XmlUnpackError:
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installXmlUnpack"), e.ParrentCurrent+1.ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installXmlUnpack"), (e.ParrentCurrent+1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.PatchError:
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installPatchFiles"), e.ParrentCurrent+1.ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installPatchFiles"), (e.ParrentCurrent+1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
@@ -1774,7 +1784,7 @@ namespace RelhaxModpack
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ContourIconAtlasError:
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installContourIconAtlas"), e.ParrentCurrent+1.ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installContourIconAtlas"), (e.ParrentCurrent+1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = string.Format("{0} {1} {2} {3}", e.ChildCurrent.ToString(), Translations.GetTranslatedString("of"), e.ChildTotal.ToString(),
                             Translations.GetTranslatedString("stepsComplete"));
