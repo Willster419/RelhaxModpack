@@ -377,8 +377,8 @@
                         <CheckBox x:Name="SortCategoriesSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Content="Sort each category&#xA;(includes dependencies)" IsChecked="False" IsEnabled="False" Click="SortCategoriesSetting_Click"/>
                         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="4">
                             <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default" Checked="ApplyBehaviorSetting_Checked"/>
-                            <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="SaveDatabaseSetting_Checked"/>
-                            <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply" Checked="SaveDatabaseSetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="ApplyBehaviorSetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply" Checked="ApplyBehaviorSetting_Checked"/>
                         </StackPanel>
                         <CheckBox x:Name="ShowConfirmOnPackageApplySetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="5" VerticalAlignment="Center" Content="Show confirmation window on package apply" Click="ShowConfirmOnPackageApplySetting_Click"/>
                         <CheckBox x:Name="ShowConfirmOnPackageAddRemoveEditSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="6" VerticalAlignment="Center" Content="Show confirmation on package add/remove/move" Click="ShowConfirmOnPackageAddRemoveEditSetting_Click"/>
