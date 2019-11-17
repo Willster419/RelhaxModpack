@@ -1310,7 +1310,7 @@ namespace RelhaxModpack
             //and check if we need to actually install anything
             if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
             {
-                Logging.Info("no packages selected to install...");
+                Logging.Info("no packages selected to install, return");
                 ResetUI();
                 ToggleUIButtons(true);
                 return;
