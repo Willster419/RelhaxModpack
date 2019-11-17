@@ -2554,6 +2554,13 @@
             Create an instance of the RelhaxInstallTaskReporter and init the UI side of it
             </summary>
         </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.LoadedAfterApply">
+            <summary>
+            Flag for when the object has been fully constructed by the UI Dispatcher.
+            </summary>
+            <remarks>Due to the multi-threaded nature of the progress reporting, progress may be reported before the reporting UI objects are fully constructed.
+            This results in null exceptions. By using a flag to determine if the object is fully created, the reporting progresses won't try to update properties of null objects</remarks>
+        </member>
         <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.ReportState">
             <summary>
             Controls the UI state of the thread reporter
@@ -2697,6 +2704,13 @@
             <summary>
             RelhaxWPFComboBox
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.AddedToList">
+            <summary>
+            Flag to determine if the Combobox object has been already added to the ModSelectionList window
+            </summary>
+            <remarks>Many components of 'single_dropDown' exist in the Combobox, and therefore the UI generation code gets run for each object.
+            So, a flag is used to prevent the ComboBox being added multiple times to the window</remarks>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.#ctor">
             <summary>
@@ -3317,6 +3331,13 @@
             Reference to list of dependencies
             </summary>
         </member>
+        <member name="F:RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs.InstallFailedSteps">
+            <summary>
+            A list of all the steps that the installer failed at when returning back to the MainWindow
+            </summary>
+            <remarks>The installer creates many threads to complete different parts of the installation.
+            One of more of these may fail and should be logged when the installer cleanly exists and returns to the MainWindow</remarks>
+        </member>
         <member name="T:RelhaxModpack.InstallerComponents.RelhaxZipFile">
             <summary>
             A wrapper class around the Ionic.Zip.Zipfile with the purpose of saving the thread ID that the zip file belongs to
@@ -3326,6 +3347,12 @@
             <summary>
             The ID number of the thread that the zip file belongs to
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.RelhaxZipFile.IsUserMod">
+            <summary>
+            Flag for if this zip file is a user mod
+            </summary>
+            <remarks>User mods are treated slightly differently then regular mods. They have no valid threadID, and should not be deleted if the extraction fails.</remarks>
         </member>
         <member name="M:RelhaxModpack.InstallerComponents.RelhaxZipFile.#ctor(System.String)">
             <summary>
@@ -6336,6 +6363,13 @@
             </summary>
             <param name="language">The language to switch to</param>
         </member>
+        <member name="M:RelhaxModpack.Translations.GetLanguageNativeName(RelhaxModpack.Languages)">
+            <summary>
+            Get the native language name of the english enumerated name of the language
+            </summary>
+            <param name="language">The english-named enumeration of the language</param>
+            <returns>The name of the requested language in it's native language</returns>
+        </member>
         <member name="M:RelhaxModpack.Translations.GetTranslatedString(System.String)">
             <summary>
             Get a localized string in the currently selected language
@@ -6343,12 +6377,21 @@
             <param name="componentName">The key value of the string phrase</param>
             <returns></returns>
         </member>
+        <member name="M:RelhaxModpack.Translations.Exists(System.String,System.Boolean)">
+            <summary>
+            Determines if a key exists in the currently selected language, or in english if no language is selected
+            </summary>
+            <param name="componentName">The key of the component to look up</param>
+            <param name="logError">Flag to log an error in the logfile if it does not exist</param>
+            <returns>True if it exists in the currently selected language, or false otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages,System.Boolean)">
             <summary>
             Checks is a component (key value) exists in the given language (dictionary)
             </summary>
             <param name="componentName">The keyword phrase to check</param>
             <param name="languageToCheck">The language dictionary to check in</param>
+            <param name="logError">Flag for if to log if the component was not found</param>
         </member>
         <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
             <summary>
@@ -6434,6 +6477,21 @@
             </summary>
             <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
         </member>
+        <member name="T:RelhaxModpack.RegistrySearch">
+            <summary>
+            A structure to help with searching for inside the registry by providing a base area to start, and a string search path
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.RegistrySearch.Root">
+            <summary>
+            Where to base the search in the registry (current_user, local_machiene, etc.)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.RegistrySearch.Searchpath">
+            <summary>
+            The absolute folder path to the desired registry entries
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utils">
             <summary>
             A utility class for static functions used in various places in the modpack
@@ -6488,6 +6546,11 @@
         <member name="F:RelhaxModpack.Utils.TextEscapeDict">
             <summary>
             The dictionary to store literal versions of characters with their escaped versions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.PatchJsonNullEscape">
+            <summary>
+            Provides the ability to insert a 'null' value into json configurations
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utils.FreeImageLibrary">
@@ -7095,8 +7158,14 @@
             <summary>
             Checks the registry to get the latest location of where WoT is installed
             </summary>
-            <param name="WoTRoot">The string to set to the WoT path</param>
             <returns>True if operation success</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetRegistryKeys(RelhaxModpack.RegistrySearch)">
+            <summary>
+            Gets all registry keys that exist in the given search base and path
+            </summary>
+            <param name="search">The RegistrySearch structure to specify where to search and where to base the search</param>
+            <returns>The RegistryKey object of the folder in registry, or null if the search failed</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.CreateShortcut(RelhaxModpack.Shortcut,System.Text.StringBuilder)">
             <summary>

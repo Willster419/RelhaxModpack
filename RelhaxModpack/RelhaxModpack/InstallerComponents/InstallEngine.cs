@@ -173,6 +173,11 @@ namespace RelhaxModpack.InstallerComponents
         /// </summary>
         public List<DatabasePackage> GlobalDependencies;
 
+        /// <summary>
+        /// A list of all the steps that the installer failed at when returning back to the MainWindow
+        /// </summary>
+        /// <remarks>The installer creates many threads to complete different parts of the installation.
+        /// One of more of these may fail and should be logged when the installer cleanly exists and returns to the MainWindow</remarks>
         public List<InstallerExitCodes> InstallFailedSteps = new List<InstallerExitCodes>();
     }
 
@@ -186,6 +191,10 @@ namespace RelhaxModpack.InstallerComponents
         /// </summary>
         public int ThreadID;
 
+        /// <summary>
+        /// Flag for if this zip file is a user mod
+        /// </summary>
+        /// <remarks>User mods are treated slightly differently then regular mods. They have no valid threadID, and should not be deleted if the extraction fails.</remarks>
         public bool IsUserMod = false;
 
         /// <summary>

@@ -109,9 +109,19 @@ namespace RelhaxModpack
         }
     }
 
+    /// <summary>
+    /// A structure to help with searching for inside the registry by providing a base area to start, and a string search path
+    /// </summary>
     public struct RegistrySearch
     {
+        /// <summary>
+        /// Where to base the search in the registry (current_user, local_machiene, etc.)
+        /// </summary>
         public RegistryKey Root;
+
+        /// <summary>
+        /// The absolute folder path to the desired registry entries
+        /// </summary>
         public string Searchpath;
     }
 
@@ -204,6 +214,9 @@ namespace RelhaxModpack
             {"\t", @"\t" }
         };
 
+        /// <summary>
+        /// Provides the ability to insert a 'null' value into json configurations
+        /// </summary>
         public const string PatchJsonNullEscape = "[null]";
         #endregion
 
@@ -2342,7 +2355,6 @@ namespace RelhaxModpack
         /// <summary>
         /// Checks the registry to get the latest location of where WoT is installed
         /// </summary>
-        /// <param name="WoTRoot">The string to set to the WoT path</param>
         /// <returns>True if operation success</returns>
         public static string AutoFindWoTDirectory()
         {
@@ -2425,6 +2437,11 @@ namespace RelhaxModpack
             return null;
         }
 
+        /// <summary>
+        /// Gets all registry keys that exist in the given search base and path
+        /// </summary>
+        /// <param name="search">The RegistrySearch structure to specify where to search and where to base the search</param>
+        /// <returns>The RegistryKey object of the folder in registry, or null if the search failed</returns>
         public static RegistryKey GetRegistryKeys(RegistrySearch search)
         {
             try
