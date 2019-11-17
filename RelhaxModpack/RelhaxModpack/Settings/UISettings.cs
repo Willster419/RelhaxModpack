@@ -397,8 +397,9 @@ namespace RelhaxModpack
         #region Backup of default theme runtime
         private static void BackupDefaultThemeColorSettings()
         {
-            //make an instance of mainWindow to get the default component colors
+            //make an instance of a template window for getting UI class component color default definitions
             //note control is not backed up, because it is so generic that it should not have a default
+            //note Combobox is not backed up, because it is all done via WPF databinding
             //at the theme applying level, this would be from a tag (not class) level. but this can change between themes
             TemplateWindow templateWindow = new TemplateWindow();
 
@@ -478,6 +479,18 @@ namespace RelhaxModpack
             {
                 IsValid = true,
                 Brush = panel.Background
+            };
+
+            ProgressBar bar = templateWindowComponents.First(element => element is ProgressBar) as ProgressBar;
+            Themes.Default.ProgressBarColorset.BackgroundBrush = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = bar.Background
+            };
+            Themes.Default.ProgressBarColorset.ForegroundBrush = new CustomBrush()
+            {
+                IsValid = true,
+                Brush = bar.Foreground
             };
         }
 
