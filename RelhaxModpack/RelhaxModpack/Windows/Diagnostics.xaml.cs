@@ -247,11 +247,13 @@ namespace RelhaxModpack.Windows
 
         private void DownloadWGPatchFiles_Click(object sender, RoutedEventArgs e)
         {
-            GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader()
+            using (GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader()
             {
-                SelectedClient = string.IsNullOrWhiteSpace(Settings.WoTDirectory)? string.Empty : Settings.WoTDirectory
-            };
-            gameCenterUpdateDownloader.ShowDialog();
+                SelectedClient = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? string.Empty : Settings.WoTDirectory
+            })
+            {
+                gameCenterUpdateDownloader.ShowDialog();
+            }
         }
     }
 }

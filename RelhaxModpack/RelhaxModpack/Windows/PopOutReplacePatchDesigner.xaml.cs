@@ -15,14 +15,14 @@ using System.Windows.Shapes;
 namespace RelhaxModpack.Windows
 {
     /// <summary>
-    /// Interaction logic for TemplateWindow.xaml
+    /// Interaction logic for PopOutReplacePatchDesigner.xaml
     /// </summary>
-    public partial class TemplateWindow : RelhaxWindow
+    public partial class PopOutReplacePatchDesigner : RelhaxWindow
     {
         /// <summary>
-        /// Create an instance of TemplateWindow
+        /// Create an instance of the PopOutReplacePatchDesigner Window
         /// </summary>
-        public TemplateWindow()
+        public PopOutReplacePatchDesigner()
         {
             InitializeComponent();
         }

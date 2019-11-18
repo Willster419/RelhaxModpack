@@ -30,7 +30,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The list of actual files saved to the temporary backup directory. Contains the full path and file name
         /// </summary>
-        public List<string> FilesSaved { get; set; } = new List<string>();
+        public List<string> FilesSaved { get; } = new List<string>();
 
         /// <summary>
         /// The string representation of the UserFile object
@@ -53,8 +53,7 @@ namespace RelhaxModpack
                 Pattern = userFileToCopy.Pattern,
 #pragma warning disable CS0618 // Type or member is obsolete
                 PlaceBeforeExtraction = userFileToCopy.PlaceBeforeExtraction,
-                SystemInitiated = userFileToCopy.SystemInitiated,
-                FilesSaved = new List<string>()
+                SystemInitiated = userFileToCopy.SystemInitiated
             };
 
             return file;
@@ -73,11 +72,9 @@ namespace RelhaxModpack
                 PlaceBeforeExtraction = userFileToCopy.PlaceBeforeExtraction,
                 SystemInitiated = userFileToCopy.SystemInitiated,
 #pragma warning restore CS0618 // Type or member is obsolete
-                FilesSaved = new List<string>()
             };
 
-            foreach (string s in userFileToCopy.FilesSaved)
-                file.FilesSaved.Add(s);
+            file.FilesSaved.AddRange(userFileToCopy.FilesSaved);
 
             return file;
         }

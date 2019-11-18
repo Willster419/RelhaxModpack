@@ -359,21 +359,36 @@ namespace RelhaxModpack.Windows
             string saveLocation = @internal ? System.IO.Path.Combine(Settings.ApplicationStartupPath, "database_internal.csv") :
                 Path.Combine(Settings.ApplicationStartupPath, "database_user.csv");
             //global dependencies
-            string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tDevURL\tEnabled\tVisible" : "Category\tMod\tDevURL";
+            string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tDevURL\tEnabled\tVisible\tVersion" : "Category\tMod\tDevURL";
             sb.AppendLine(header);
             if(@internal)
             {
                 foreach (DatabasePackage dp in globalDependencies)
                 {
-                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", dp.PackageName, "GlobalDependencies", "", "0",
+                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                        dp.PackageName,
+                        "GlobalDependencies",
+                        string.Empty,
+                        "0",
                         string.IsNullOrWhiteSpace(dp.ZipFile) ? notApplicable : dp.ZipFile,
-                        string.IsNullOrWhiteSpace(dp.DevURL) ? "" : "=HYPERLINK(\"" + dp.DevURL + "\",\"link\")", dp.Enabled, ""));
+                        string.IsNullOrWhiteSpace(dp.DevURL) ? "" : "=HYPERLINK(\"" + dp.DevURL + "\",\"link\")",
+                        dp.Enabled,
+                        string.Empty,
+                        dp.Version
+                        ));
                 }
                 foreach (Dependency dep in dependencies)
                 {
-                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", dep.PackageName, "Dependencies", "", "0",
+                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                        dep.PackageName,
+                        "Dependencies",
+                        string.Empty,
+                        "0",
                         string.IsNullOrWhiteSpace(dep.ZipFile) ? notApplicable : dep.ZipFile,
-                        string.IsNullOrWhiteSpace(dep.DevURL) ? "" : "=HYPERLINK(\"" + dep.DevURL + "\",\"link\")", dep.Enabled, ""));
+                        string.IsNullOrWhiteSpace(dep.DevURL) ? "" : "=HYPERLINK(\"" + dep.DevURL + "\",\"link\")",
+                        dep.Enabled,
+                        string.Empty,
+                        dep.Version));
                 }
             }
             foreach (Category cat in parsecCateogryList)
@@ -394,10 +409,16 @@ namespace RelhaxModpack.Windows
                     }
                     else
                     {
-                        sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", sp.PackageName, sp.ParentCategory.Name, sp.NameFormatted,
-                        sp.Level, string.IsNullOrWhiteSpace(sp.ZipFile) ? notApplicable : sp.ZipFile,
-                        string.IsNullOrWhiteSpace(sp.DevURL) ? "" : "=HYPERLINK(\"" + sp.DevURL + "\",\"link\")",
-                        sp.Enabled, sp.Visible));
+                        sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                            sp.PackageName,
+                            sp.ParentCategory.Name,
+                            sp.NameFormatted,
+                            sp.Level,
+                            string.IsNullOrWhiteSpace(sp.ZipFile) ? notApplicable : sp.ZipFile,
+                            string.IsNullOrWhiteSpace(sp.DevURL) ? "" : "=HYPERLINK(\"" + sp.DevURL + "\",\"link\")",
+                            sp.Enabled,
+                            sp.Visible,
+                            sp.Version));
                     }
                 }
             }
@@ -694,7 +715,7 @@ namespace RelhaxModpack.Windows
                     {
 #pragma warning disable CS0618
                         doc.LoadXml(await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL));
-#pragma warning enable CS0618
+#pragma warning restore CS0618
                         string betaDatabaseOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
                         ReportProgress(string.Format("GITHUB online folder={0}, selected online folder to clean version={1}",
                             betaDatabaseOnlineFolderVersion, selectedVersionInfos.WoTOnlineFolderVersion));

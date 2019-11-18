@@ -2455,6 +2455,47 @@ namespace RelhaxModpack
                 return null;
             }
         }
+
+        /// <summary>
+        /// Finds the location of the Wargaming Game center installation directory from the registry
+        /// </summary>
+        /// <returns>The location of wgc.exe if found, else null</returns>
+        public static string AutoFindWgcDirectory()
+        {
+            string wgcRegistryKeyLoc = @"Software\Classes\wgc\shell\open\command";
+            Logging.Debug("searching registry ({0}) for wgc location",wgcRegistryKeyLoc);
+            //search for the location of the game center from the registry
+            RegistryKey wgcKey = GetRegistryKeys(new RegistrySearch() { Root = Registry.CurrentUser, Searchpath = wgcRegistryKeyLoc });
+            string actualLocation = null;
+            if (wgcKey != null)
+            {
+                Logging.Debug("not null key, checking results");
+                foreach (string valueInKey in wgcKey.GetValueNames())
+                {
+                    string wgcPath = wgcKey.GetValue(valueInKey) as string;
+                    Logging.Debug("parsing result name '{0}' with value '{1}'", valueInKey, wgcPath);
+                    if (!string.IsNullOrWhiteSpace(wgcPath) && wgcPath.ToLower().Contains("wgc.exe"))
+                    {
+                        //trim front
+                        wgcPath = wgcPath.Substring(1);
+                        //trim end
+                        wgcPath = wgcPath.Substring(0, wgcPath.Length - 6);
+                        Logging.Debug("parsed to new value of '{0}', checking if file exists");
+                        if (File.Exists(wgcPath))
+                        {
+                            Logging.Debug("exists, use this for wgc start");
+                            actualLocation = wgcPath;
+                            break;
+                        }
+                        else
+                        {
+                            Logging.Debug("not exist, continue to search");
+                        }
+                    }
+                }
+            }
+            return actualLocation;
+        }
         #endregion
 
         #region Install Utils

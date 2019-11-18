@@ -1,3 +1,19 @@
+Application version 0.29.4.3 (2019-11-17)
+https://www.virustotal.com/gui/file/9602c07d42e9391c3898b5ee02cdaedb6a1e7121f63855facc66e40a2c05af3e/detection
+- Fixed a nasty bug where user mods were being treated as regular packages. This means they were failing to download and getting deleted.
+- Re-worked the Patch designer utility and fixed several bugs.
+- Fixed several translation tags that were not updated or mising. (Thanks Nullmaruzero)
+- Fixed progress reporting for any x of y reports. It will no longer be 0 based (extracting package 0 of 9, for example).
+- Re-worked the messagebox for uninstallation. (Thanks Nullmaruzero)
+- Changed how translation is detected on application launch for the first time. And by that I mean it will ask YOU what language you want to use.
+- Fixed the logfile becoming messy when extracting in multicore mode.
+- Updated documentation.
+- Fixed minor issues with theme definitions for UI engine.
+- Fixed minor issues with the UI of the database editor.
+- Fixed minor issues with object locking in the atlas creator.
+- Various code cleanup and comment improvement.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.4.1 (2019-11-04)
 https://www.virustotal.com/gui/file/18f8f48eac07e2555fb4adc77f04c68219849c6df352600b84748dcfc86f3c84/detection
 - Fixed compatibilty issues with WoWp and WoWs with the Game Center update downloader.

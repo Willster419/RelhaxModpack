@@ -142,7 +142,7 @@ namespace RelhaxModpack
                     File.Delete(s);
                 }
             }
-#pragma warning enable CS0618
+#pragma warning restore CS0618
 
             //get size of original width and height of window
             OriginalHeight = Height;
@@ -321,6 +321,10 @@ namespace RelhaxModpack
                         LanguagesSelector.SelectedItem = Translations.GetLanguageNativeName(ModpackSettings.Language);
                         LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
                         Translations.LocalizeWindow(this, true);
+                        AutoSyncFrequencyComboBox.Items.Clear();
+                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("minutes"));
+                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("hours"));
+                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("days"));
                     }
 
                     //display the welcome window and make sure the user agrees to it
@@ -350,7 +354,7 @@ namespace RelhaxModpack
                         MoveUpgradeFolder(Settings.RelhaxUserModsFolderPathOld, Settings.RelhaxUserModsFolderPath);
                         MoveUpgradeFolder(Settings.RelhaxTempFolderPathOld, Settings.RelhaxTempFolderPath);
                         MoveUpgradeFolder(Settings.RelhaxLibrariesFolderPathOld, Settings.RelhaxLibrariesFolderPath);
-#pragma warning enable CS0612
+#pragma warning restore CS0612
 
                         //process xml settings file
                         //delete the new one, move the old one, reload settings
@@ -741,6 +745,22 @@ namespace RelhaxModpack
             //beta->stable (auto out of date)
             //beta->beta (update check)
             bool outOfDate = false;
+
+            //check if old settings file exists and if it was the beta channel
+            if(File.Exists(Settings.OldModpackSettingsFilename))
+            {
+                Logging.Debug("old settings file exists, load it and see if was beta distro");
+                string betaDistro = XmlUtils.GetXmlStringFromXPath(Settings.OldModpackSettingsFilename, @"//settings/BetaApplication");
+                if(bool.TryParse(betaDistro,out bool result) && result)
+                {
+                    Logging.Debug("application was beta, setting distro to beta");
+                    ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
+                }
+                else
+                {
+                    Logging.Debug("application was not beta: '{0}'", betaDistro);
+                }
+            }
 
             //make a copy of the current application version and set it to stable if (fake) alpha
             ApplicationVersions version = Settings.ApplicationVersion;
@@ -2176,7 +2196,7 @@ namespace RelhaxModpack
 #pragma warning disable CS0162
                 if (Settings.ApplicationVersion != ApplicationVersions.Stable)
                     MessageBox.Show(ex.ToString());
-#pragma warning enable CS0162
+#pragma warning restore CS0162
             }
         }
 
@@ -2957,9 +2977,9 @@ namespace RelhaxModpack
         }
 
         //asyncronously get the file sizes of backups
-        private async Task GetBackupFilesizesAsync(bool displayGettingSize)
+        private Task GetBackupFilesizesAsync(bool displayGettingSize)
         {
-            Task.Run(() =>
+            return Task.Run(() =>
             {
                 Logging.Debug("starting async task of getting file sizes of backups");
                 if (displayGettingSize)

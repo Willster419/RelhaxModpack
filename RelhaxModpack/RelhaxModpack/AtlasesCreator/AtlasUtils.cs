@@ -10,16 +10,30 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.AtlasesCreator
 {
-
+    /// <summary>
+    /// A utility class for Atlas file processing
+    /// </summary>
     public static class AtlasUtils
     {
-
+        /// <summary>
+        /// The task of parsing all mod png images from multiple folders into a flat list of png bitmaps
+        /// </summary>
         public static Task ParseModTexturesTask;
 
+        /// <summary>
+        /// The list of parsed mod png images into textures
+        /// </summary>
         public static List<Texture> ModContourIconImages;
 
+        /// <summary>
+        /// Lock object used in AtlasCreator for critical sections that can't be done at the same time
+        /// </summary>
+        /// <remarks>Each atlas file is created by its own thread. However, the DDS loading and saving API used can't be used more then once at a time</remarks>
         public static object AtlasLoaderLockObject = new object();
 
+        /// <summary>
+        /// A list of Atlas creating thread engines
+        /// </summary>
         public static List<AtlasCreator> AtlasBuilders = null;
 
         private static Stopwatch modParseStopwatch = new Stopwatch();
@@ -127,6 +141,9 @@ namespace RelhaxModpack.AtlasesCreator
             }
         }
 
+        /// <summary>
+        /// Verifies the Atlas processing libraries are loaded. If not, they are loaded.
+        /// </summary>
         public static void VerifyImageLibsLoaded()
         {
             if (!Utils.FreeImageLibrary.IsLoaded)
@@ -148,6 +165,9 @@ namespace RelhaxModpack.AtlasesCreator
                 Logging.Info("nvtt library is loaded");
         }
 
+        /// <summary>
+        /// Disposes of all statically used AtlasUtils resources, including releasing the mod texture list
+        /// </summary>
         public static void DisposeOfAllAtlasResources()
         {
             DisposeparseModTextures();

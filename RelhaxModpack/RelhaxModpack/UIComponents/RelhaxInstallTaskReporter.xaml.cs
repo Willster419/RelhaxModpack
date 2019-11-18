@@ -254,9 +254,7 @@ namespace RelhaxModpack.UIComponents
         /// <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
         protected void OnPropertyChanged(string propertyName)
         {
-            var handle = PropertyChanged;
-            if (handle != null)
-                handle(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
 

@@ -4003,7 +4003,7 @@ namespace RelhaxModpack
             Polish.Add("PreviewNextPicButton", "Następny"); // As DrWeb7_1 pointed out, Slavic languages are sometimes a b*tch... @Nullmaruzero
             French.Add("PreviewNextPicButton", French["next"]);
             Spanish.Add("PreviewNextPicButton", Spanish["next"]);
-            Russian.Add("PreviewNextPicButton", Russian["next"]);
+            Russian.Add("PreviewNextPicButton", "след.");
 
             //Component: PreviewPreviousPicButton
             // A button in mod preview window used to display the next preview image.
@@ -4907,6 +4907,15 @@ namespace RelhaxModpack
             French.Add("GcDownloadStep1NextText", French["next"]);
             Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
             Russian.Add("GcDownloadStep1NextText", Russian["next"]);
+
+            //Component: GcDownloadStep1GameCenterCheckbox
+            //
+            English.Add("GcDownloadStep1GameCenterCheckbox", "Check for game center updates instead");
+            German.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+            Polish.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+            French.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+            Russian.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
 
             //Component: GcDownloadSelectWgClient
             //

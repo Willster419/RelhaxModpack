@@ -20,8 +20,14 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class FirstLoadSelectLanguage : RelhaxWindow
     {
+        /// <summary>
+        /// Flag to determine if the user selected a language
+        /// </summary>
         public bool Continue = false;
 
+        /// <summary>
+        /// Create and instance of the FirstLoadSelectLanguage Window
+        /// </summary>
         public FirstLoadSelectLanguage()
         {
             InitializeComponent();

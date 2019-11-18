@@ -160,7 +160,7 @@ namespace RelhaxModpack
                     Current.Shutdown(0);
                     break;
                 case ApplicationMode.PatchDesigner:
-                    PatchTester patcher = new PatchTester();
+                    PatchDesigner patcher = new PatchDesigner();
                     CloseApplicationLog(true);
 
                     //start updater logging system

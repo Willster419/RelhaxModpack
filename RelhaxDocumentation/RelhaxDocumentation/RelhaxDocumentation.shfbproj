@@ -48,19 +48,19 @@
     </NamespaceSummaries>
     <MissingTags>Summary, Parameter, Returns, Value, AutoDocumentCtors, Namespace, TypeParameter, IncludeTargets, AutoDocumentDispose</MissingTags>
     <HelpTitle>Relhax Modpack Documentation</HelpTitle>
-    <HelpFileVersion>1.0.0.3</HelpFileVersion>
+    <HelpFileVersion>1.0.0.5</HelpFileVersion>
     <NamingMethod>MemberName</NamingMethod>
     <ContentPlacement>BelowNamespaces</ContentPlacement>
     <RootNamespaceContainer>True</RootNamespaceContainer>
     <RootNamespaceTitle>RelhaxModpack</RootNamespaceTitle>
     <NamespaceGrouping>False</NamespaceGrouping>
-    <MaximumGroupParts>2</MaximumGroupParts>
+    <MaximumGroupParts>3</MaximumGroupParts>
     <Preliminary>True</Preliminary>
     <FeedbackEMailAddress>info%40relhaxmodpack.com</FeedbackEMailAddress>
     <FeedbackEMailLinkText>info%40relhaxmodpack.com</FeedbackEMailLinkText>
     <SdkLinkTarget>Top</SdkLinkTarget>
     <CopyrightHref>Copyright %28C%29 2019 Willard Wider</CopyrightHref>
-    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, InheritedFrameworkInternalMembers, Internals, Privates, Protected, SealedProtected</VisibleItems>
+    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Internals, Privates, PublicCompilerGenerated</VisibleItems>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="RelhaxModpack" isExposed="True" xmlns="">
         <Filter entryType="Class" fullName="RelhaxModpack.PrivateStuff" filterName="PrivateStuff" isExposed="False" />

@@ -137,7 +137,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
         /// </summary>
-        public static bool SaveLastSelection = false;
+        public static bool SaveLastSelection = true;
 
         /// <summary>
         /// Toggle if the application should save user cache save data like session stats, or auto equip configs

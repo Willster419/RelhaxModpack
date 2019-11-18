@@ -54,5 +54,5 @@ namespace RelhaxModpack
         public static NetworkCredential WotmodsNetworkCredential = null;
         #endregion
     }
-#pragma warning enable CS1591
+#pragma warning restore CS1591
 }
