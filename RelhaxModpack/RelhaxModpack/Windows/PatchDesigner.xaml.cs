@@ -256,7 +256,9 @@ namespace RelhaxModpack.Windows
             if (patch.Type.Equals("regex"))
             {
                 PatchModeCombobox.IsEnabled = false;
-                if (patch.Lines.Count() > 0)
+                if (patch.Lines == null || patch.Lines.Count() == 0)
+                    PatchLinesPathTextbox.Clear();
+                else if (patch.Lines.Count() > 0)
                     PatchLinesPathTextbox.Text = string.Join(",", patch.Lines);
             }
             else
@@ -617,72 +619,17 @@ namespace RelhaxModpack.Windows
             }
             if((bool)OpenPatchfileDialog.ShowDialog())
             {
-                XmlDocument doc = XmlUtils.LoadXmlDocument(OpenPatchfileDialog.FileName, XmlLoadType.FromFile);
-                if(doc == null)
+                PatchesList.Items.Clear();
+                List<Patch> patches = new List<Patch>();
+                XmlUtils.AddPatchesFromFile(patches, OpenPatchfileDialog.FileName, Path.GetFileName(OpenPatchfileDialog.FileName));
+                if (patches == null || patches.Count == 0)
                 {
                     MessageBox.Show("Failed to load xml document, check the logs for more info");
                     return;
                 }
-                PatchesList.Items.Clear();
-                foreach(XmlNode node in XmlUtils.GetXmlNodesFromXPath(doc,"//patchs/patch"))
-                {
-                    Patch patch = new Patch() { FromEditor = true };
-                    foreach(XmlElement element in ((XmlElement)node).ChildNodes)
-                    {
-                        switch(element.Name)
-                        {
-                            case "type":
-                                switch(element.InnerText.ToLower().Trim())
-                                {
-                                    case "xvm":
-                                        throw new BadMemeException("XVM IS NOT SUPPORTED PLEASE STOP USING IT");
-                                    //legacy compatibility, regx -> regex
-                                    case "regx":
-                                        patch.Type = "regex";
-                                        break;
-                                    default:
-                                        patch.Type = element.InnerText.ToLower().Trim();
-                                        break;
-                                }
-                                break;
-                            case "patchPath":
-                                //remove "{" and "}"
-                                string patchPathValue = element.InnerText.Replace("{", string.Empty).Replace("}", string.Empty).Trim();
-                                switch (patchPathValue.ToLower().Trim())
-                                {
-                                    case "appdata":
-                                        patch.PatchPath = "appData";
-                                        break;
-                                    default:
-                                        patch.PatchPath = element.InnerText.ToLower().Trim();
-                                        break;
-                                }
-                                break;
-                            case "mode":
-                                patch.Mode = element.InnerText.Trim();
-                                break;
-                            case "file":
-                                patch.File = element.InnerText.Trim();
-                                break;
-                            case "version":
-                                patch.Version = Utils.ParseInt(element.InnerText.Trim(), 1);
-                                break;
-                            case "path":
-                                patch.Path = element.InnerText.Trim();
-                                break;
-                            case "line":
-                                patch.Lines = element.InnerText.Split(',');
-                                break;
-                            case "search":
-                                patch.Search = element.InnerText.Trim();
-                                break;
-                            case "replace":
-                                patch.Replace = Utils.MacroReplace(element.InnerText,ReplacementTypes.TextUnescape).Trim();
-                                break;
-                        }
-                    }
-                    PatchesList.Items.Add(patch);
-                }
+                foreach (Patch p in patches)
+                    PatchesList.Items.Add(p);
+                PatchesList.SelectedIndex = 0;
             }
         }
 
