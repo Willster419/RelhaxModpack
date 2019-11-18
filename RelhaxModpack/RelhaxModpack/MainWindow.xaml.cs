@@ -321,6 +321,10 @@ namespace RelhaxModpack
                         LanguagesSelector.SelectedItem = Translations.GetLanguageNativeName(ModpackSettings.Language);
                         LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
                         Translations.LocalizeWindow(this, true);
+                        AutoSyncFrequencyComboBox.Items.Clear();
+                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("minutes"));
+                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("hours"));
+                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("days"));
                     }
 
                     //display the welcome window and make sure the user agrees to it
