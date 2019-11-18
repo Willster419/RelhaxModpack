@@ -91,11 +91,11 @@
                         <TextBlock Tag="PatchSearchHeader" x:Name="PatchSearchHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap"
                                Text="Search" VerticalAlignment="Stretch"  Grid.Row="2"/>
                         <TextBox Tag="PatchSearchTextbox" x:Name="PatchSearchTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap"
-                             VerticalAlignment="Stretch"  Grid.Row="3" />
+                             VerticalAlignment="Stretch"  Grid.Row="3" AcceptsReturn="True" AcceptsTab="True"/>
                         <TextBlock Tag="PatchReplaceHeader" x:Name="PatchReplaceHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap"
                                Text="Replace" VerticalAlignment="Stretch" Grid.Row="4"/>
                         <TextBox Tag="PatchReplaceTextbox" x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap"
-                             VerticalAlignment="Stretch" Grid.Row="5" />
+                             VerticalAlignment="Stretch" Grid.Row="5" AcceptsReturn="True" AcceptsTab="True"/>
                     </Grid>
                 </Grid>
             </TabItem>

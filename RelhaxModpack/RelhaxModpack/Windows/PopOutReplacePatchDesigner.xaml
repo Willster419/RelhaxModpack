@@ -10,7 +10,8 @@
         LocalizeWindow="False" ApplyColorSettings="False" ApplyScaling="False" ApplyToolTips="False">
     <Grid>
         <TextBox Tag="PatchReplaceTextbox" x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" Margin="2,3,3,22" TextWrapping="{Binding IsChecked, ElementName=TextWrapCheckbox}"
-                             VerticalAlignment="Stretch" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+                  VerticalAlignment="Stretch" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                  AcceptsReturn="True" AcceptsTab="True"/>
         <CheckBox Content="Text Wrap" HorizontalAlignment="Left" Margin="2,0,0,2" VerticalAlignment="Bottom" x:Name="TextWrapCheckbox" IsChecked="True"/>
     </Grid>
 </local:RelhaxWindow>
