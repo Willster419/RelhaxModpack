@@ -45,12 +45,12 @@ namespace RelhaxModpack.Windows
         private readonly string[] validJsonModes = new string[]
         {
             "add",
-            "arrayAdd",
+            "arrayadd",
             "remove",
-            "arrayRemove",
+            "arrayremove",
             "edit",
-            "arrayEdit",
-            "arrayClear"
+            "arrayedit",
+            "arrayclear"
         };
 
         /// <summary>
@@ -99,6 +99,18 @@ namespace RelhaxModpack.Windows
             //save current brushes
             PatchFilePathBrush = PatchFilePathTextbox.Background;
             FileToPatchBrush = PatchFilePathTextbox.Background;
+
+            //subscribe to close event of popOut
+            popOutReplacePatchDesigner.Closed += PopOutReplacePatchDesigner_Closed;
+
+            //by default, set the locate file type to absolute
+            FilePathTypeCombobox.SelectedIndex = 1;
+        }
+
+        private void PopOutReplacePatchDesigner_Closed(object sender, EventArgs e)
+        {
+            PopOutReplaceBlockCB.IsChecked = false;
+            PopOutReplaceBlockCB_Click(null, null);
         }
 
         #region Settings
@@ -173,9 +185,12 @@ namespace RelhaxModpack.Windows
             PatchModeCombobox.Items.Clear();
             if (PatchTypeCombobox.SelectedItem.Equals("json"))
             {
-                PatchFollowPathSetting.IsEnabled = true;
+                //PatchFollowPathSetting.IsEnabled = true;//disabled until relhax V2
+                PatchModeCombobox.IsEnabled = true;
+                PatchLinesPathHeader.Text = "Path";
+
                 //also fill mode with json options
-                foreach(string s in validJsonModes)
+                foreach (string s in validJsonModes)
                 {
                     PatchModeCombobox.Items.Add(s);
                 }
@@ -183,51 +198,77 @@ namespace RelhaxModpack.Windows
             else if (PatchTypeCombobox.SelectedItem.Equals("xml"))
             {
                 PatchFollowPathSetting.IsEnabled = false;
+                PatchModeCombobox.IsEnabled = true;
+                PatchLinesPathHeader.Text = "Path";
+
                 foreach (string s in validXmlModes)
                 {
                     PatchModeCombobox.Items.Add(s);
                 }
             }
-            else
+            else//regex
             {
                 PatchFollowPathSetting.IsEnabled = false;
-
+                PatchModeCombobox.IsEnabled = false;
+                PatchLinesPathHeader.Text = "Line(s)";
             }
         }
 
         private void DisplayPatch(Patch patch)
         {
             //reset to nothing, then only set if the patch option is valid
-            FileToPatchTextbox.Text = string.Empty;
+            PatchFilePathTextbox.Clear();
             PatchPathCombobox.SelectedItem = null;
             PatchTypeCombobox.SelectedItem = null;
             PatchModeCombobox.SelectedItem = null;
             PatchFollowPathSetting.IsChecked = false;
-            PatchLinesPathTextbox.Text = string.Empty;
-            PatchSearchTextbox.Text = string.Empty;
-            PatchReplaceTextbox.Text = string.Empty;
+            PatchLinesPathTextbox.Clear();
+            PatchSearchTextbox.Clear();
+            PatchReplaceTextbox.Clear();
+            popOutReplacePatchDesigner.PatchReplaceTextbox.Clear();
 
             if (!string.IsNullOrWhiteSpace(patch.File))
-                FileToPatchTextbox.Text = patch.File;
+                PatchFilePathTextbox.Text = patch.File;
+
             if (!string.IsNullOrWhiteSpace(patch.PatchPath))
-                PatchPathCombobox.SelectedItem = patch.PatchPath;
+                switch(patch.PatchPath.ToLower())
+                {
+                    default:
+                        Logging.Patcher("Unknown patchPath: {0}", LogLevel.Error, patch.PatchPath);
+                        break;
+                    case @"{app}":
+                    case "app":
+                        PatchPathCombobox.SelectedIndex = 0;
+                        break;
+                    case @"{appdata}":
+                    case "appdata":
+                        PatchPathCombobox.SelectedIndex = 1;
+                        break;
+                }
+
             if (!string.IsNullOrWhiteSpace(patch.Type))
                 PatchTypeCombobox.SelectedItem = patch.Type;
+
             if (!string.IsNullOrWhiteSpace(patch.Mode))
                 PatchModeCombobox.SelectedItem = patch.Mode;
+
             PatchFollowPathSetting.IsChecked = patch.FollowPath;
             if (patch.Type.Equals("regex"))
             {
+                PatchModeCombobox.IsEnabled = false;
                 if (patch.Lines.Count() > 0)
                     PatchLinesPathTextbox.Text = string.Join(",", patch.Lines);
             }
             else
             {
+                PatchModeCombobox.IsEnabled = true;
                 if (!string.IsNullOrWhiteSpace(patch.Path))
                     PatchLinesPathTextbox.Text = patch.Path;
             }
+
             if (!string.IsNullOrWhiteSpace(patch.Search))
                 PatchSearchTextbox.Text = patch.Search;
+
             if (!string.IsNullOrWhiteSpace(patch.Replace))
                 PatchReplaceTextbox.Text = patch.Replace;
         }
@@ -252,13 +293,15 @@ namespace RelhaxModpack.Windows
             }
 
             UnsavedChanges = true;
+
             //save all UI settings to patch object
             patch.File = FileToPatchTextbox.Text;
             patch.PatchPath = PatchPathCombobox.SelectedItem as string;
             patch.Type = PatchTypeCombobox.SelectedItem as string;
             patch.Mode = PatchModeCombobox.SelectedItem as string;
             patch.FollowPath = (bool)PatchFollowPathSetting.IsChecked;
-            if(patch.Type.Equals("Regex"))
+
+            if(patch.Type.ToLower().Equals("regex"))
             {
                 patch.Lines = PatchLinesPathTextbox.Text.Split(',');
             }
@@ -266,6 +309,7 @@ namespace RelhaxModpack.Windows
             {
                 patch.Path = PatchLinesPathTextbox.Text;
             }
+
             patch.Search = PatchSearchTextbox.Text;
             patch.Replace = PatchReplaceTextbox.Text;
 
@@ -345,8 +389,8 @@ namespace RelhaxModpack.Windows
             Logging.Patcher("Checking UI elements for valid patch information...", LogLevel.Info);
             //make new patch element
             Patch patchToTest = new Patch();
-            //check input from UI left panel side
 
+            //check input from UI left panel side:
             //file location
             Logging.Patcher("File to Patch location mode: {0}", LogLevel.Info, FilePathTypeCombobox.SelectedItem ?? "(null)");
             if(FilePathTypeCombobox.SelectedItem == null)
@@ -425,6 +469,7 @@ namespace RelhaxModpack.Windows
                     Logging.Patcher("Invalid file path type, aborting", LogLevel.Info);
                     return;
             }
+
             //check patch type
             if(PatchTypeCombobox.SelectedItem == null)
             {
@@ -432,32 +477,40 @@ namespace RelhaxModpack.Windows
                 return;
             }
             patchToTest.Type = PatchTypeCombobox.SelectedItem as string;
+
             //check patch mode
-            switch (patchToTest.Type)
+            switch (patchToTest.Type.ToLower())
             {
                 case "regex":
                 case "regx":
                     if(!string.IsNullOrWhiteSpace(PatchModeCombobox.SelectedItem as string))
                     {
-                        Logging.Patcher("Type=regex, invalid patch type: {0}", LogLevel.Info, PatchModeCombobox.SelectedItem as string);
+                        Logging.Patcher("Type=regex, invalid patch type: {0}", LogLevel.Error, PatchModeCombobox.SelectedItem as string);
                         Logging.Patcher("valid types are: (null)");
                         return;
                     }
                     //set the lines
-                    if(!string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
+                    if(string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
+                    {
+                        Logging.Patcher("Type=regex, Lines to patch is blank", LogLevel.Error);
+                        return;
+                    }
+                    else
+                    {
                         patchToTest.Lines = PatchLinesPathTextbox.Text.Split(',');
+                    }
                     break;
                 case "xml":
                     //check if path/lines is valid (has string values)
                     if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
                     {
-                        Logging.Patcher("invalid patch path or lines", LogLevel.Info);
+                        Logging.Patcher("invalid xpath", LogLevel.Error);
                         return;
                     }
-                    if (!validXmlModes.Contains(PatchModeCombobox.SelectedItem as string))
+                    if (!validXmlModes.Contains((PatchModeCombobox.SelectedItem as string).ToLower()))
                     {
-                        Logging.Patcher("Type=xml, invalid patch type: {0}", LogLevel.Info, PatchModeCombobox.SelectedItem as string);
-                        Logging.Patcher("valid types are: {0}", LogLevel.Info, string.Join(",",validXmlModes));
+                        Logging.Patcher("Type=xml, invalid patch type: {0}", LogLevel.Error, PatchModeCombobox.SelectedItem as string);
+                        Logging.Patcher("valid types are: {0}", LogLevel.Error, string.Join(",",validXmlModes));
                         return;
                     }
                     patchToTest.Path = PatchLinesPathTextbox.Text;
@@ -466,10 +519,10 @@ namespace RelhaxModpack.Windows
                     //check if path/lines is valid (has string values)
                     if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
                     {
-                        Logging.Patcher("invalid patch path or lines");
+                        Logging.Patcher("invalid jsonpath");
                         return;
                     }
-                    if (!validJsonModes.Contains(PatchModeCombobox.SelectedItem as string))
+                    if (!validJsonModes.Contains((PatchModeCombobox.SelectedItem as string).ToLower()))
                     {
                         Logging.Patcher("Type=json, invalid patch type: {0}", LogLevel.Info, PatchModeCombobox.SelectedItem as string);
                         Logging.Patcher("valid types are: {0}", LogLevel.Info, string.Join(",", validJsonModes));
@@ -487,22 +540,26 @@ namespace RelhaxModpack.Windows
                 Logging.Patcher("Types=json, followPathSetting must be false!");
                 return;
             }
+
             //check search and replace
             if (string.IsNullOrWhiteSpace(PatchReplaceTextbox.Text) && string.IsNullOrWhiteSpace(PatchSearchTextbox.Text))
             {
-                Logging.Patcher("patch repalce and search are blank, invalid patch");
+                Logging.Patcher("patch replace and search are blank, invalid patch");
                 return;
             }
+
             if (string.IsNullOrWhiteSpace(PatchSearchTextbox.Text))
             {
-                Logging.Patcher("patch search is blank (is this the intent?)");
+                Logging.Patcher("patch search is blank (is this the intent?)",LogLevel.Warning);
             }
             patchToTest.Search = PatchSearchTextbox.Text;
+
             if (string.IsNullOrWhiteSpace(PatchReplaceTextbox.Text))
             {
-                Logging.Patcher("patch replace is blank (is this the intent?)");
+                Logging.Patcher("patch replace is blank (is this the intent?)", LogLevel.Info);
             }
             patchToTest.Replace = PatchReplaceTextbox.Text;
+
             //put patch into patch test methods
             //set patch from editor to true to enable verbose logging
             if(!patchToTest.FromEditor)

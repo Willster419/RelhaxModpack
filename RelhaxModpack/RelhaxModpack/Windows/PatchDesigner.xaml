@@ -70,8 +70,8 @@
                                VerticalAlignment="Stretch" Height="22" Grid.Row="3" />
                         <ComboBox Tag="PatchModeCombobox" x:Name="PatchModeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1"
                                   Margin="0,1,0,1" Grid.Row="3"/>
-                        <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path (inside xvm files)"
-                              HorizontalAlignment="Left" Margin="1,2,0,0" VerticalAlignment="Top" IsEnabled="True" Grid.Column="1" Grid.Row="4"/>
+                        <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path (inside xvm files) [disabled until Relhax V2]"
+                              HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" IsEnabled="False" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2"/>
                     </Grid>
                     <TextBlock x:Name="PatchFilePathLabel" HorizontalAlignment="Left" Margin="0,69,0,0" TextWrapping="Wrap" Text="Patch file path" VerticalAlignment="Top"/>
                     <TextBox x:Name="PatchFilePathTextbox" HorizontalAlignment="Stretch" Height="37" Margin="0,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
@@ -85,7 +85,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Tag="PatchLinesPathHeader" x:Name="PatchLinesPathHeader" HorizontalAlignment="Left" TextWrapping="Wrap"
-                               Text="Line(s)/path" VerticalAlignment="Stretch"/>
+                               Text="Path" VerticalAlignment="Stretch"/>
                         <TextBox Tag="PatchLinesPathTextbox" x:Name="PatchLinesPathTextbox" HorizontalAlignment="Stretch"  
                              TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="1" />
                         <TextBlock Tag="PatchSearchHeader" x:Name="PatchSearchHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap"
