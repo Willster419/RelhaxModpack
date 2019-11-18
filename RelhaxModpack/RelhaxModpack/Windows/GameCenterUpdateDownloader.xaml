@@ -16,6 +16,7 @@
                 </Button>
                 <TextBlock x:Name="GcDownloadStep1TabDescription" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Select the Wargaming client to collect data for (WoT, WoWs, WoWp)" VerticalAlignment="Top" Tag="GcDownloadStep4DownloadComplete"/>
                 <Button x:Name="GcDownloadStep1SelectClientButton" Content="Select client" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="148" Click="GcDownloadStep1SelectClientButton_Click" Tag="GcDownloadStep1SelectClientButton"/>
+                <CheckBox x:Name="GcDownloadStep1GameCenterCheckbox" Content="Check for game center updates instead" HorizontalAlignment="Left" Margin="163,34,0,0" VerticalAlignment="Top" Tag="GcDownloadStep1GameCenterCheckbox" Click="GcDownloadStep1GameCenterCheckbox_Click" IsChecked="False"/>
                 <TextBlock x:Name="GcDownloadStep1CurrentlySelectedClient" HorizontalAlignment="Left" Margin="10,56,0,0" TextWrapping="Wrap" Text="Currently selected client: {0}" VerticalAlignment="Top" Foreground="Red" Tag="GcDownloadStep1CurrentlySelectedClient"/>
                 <Grid x:Name="GcDownloadStep1KeyValueGrid" HorizontalAlignment="Stretch" Margin="10,77,10,35" VerticalAlignment="Top" >
                     <Grid.ColumnDefinitions>

@@ -111,6 +111,16 @@ namespace RelhaxModpack.Windows
         public const string GameMetadataFolder = "game_metadata";
 
         /// <summary>
+        /// The Wargaming game center xml file containing the app_id
+        /// </summary>
+        public const string WgcNotificationsXml = "notifications.xml";
+
+        /// <summary>
+        /// The wargaming game center xml file containing the application version
+        /// </summary>
+        public const string WgcVersionXml = "version.xml";
+
+        /// <summary>
         /// The name of the Game center process shown in windows
         /// </summary>
         public const string WgcProcessName = "wgc";
@@ -120,9 +130,12 @@ namespace RelhaxModpack.Windows
         private bool init = true;
         private string gameInfoXmlPath = string.Empty;
         private string metaDataXmlPath = string.Empty;
+        private string notificationsXmlPathWgc = string.Empty;
+        private string versionXmlPathWgc = string.Empty;
         private Timer timer = null;
         private WebClient client = null;
         private bool step4DownloadCanceled = false;
+        private string WgcSavedpath = string.Empty;
 
         /// <summary>
         /// Create an instance of the GameCenterUpdateDownloaded window
@@ -182,6 +195,12 @@ namespace RelhaxModpack.Windows
             };
             if ((bool)manualWoTFind.ShowDialog())
             {
+                if ((bool)GcDownloadStep1GameCenterCheckbox.IsChecked)
+                {
+                    GcDownloadStep1GameCenterCheckbox.Click -= GcDownloadStep1GameCenterCheckbox_Click;
+                    GcDownloadStep1GameCenterCheckbox.IsChecked = false;
+                    GcDownloadStep1GameCenterCheckbox.Click += GcDownloadStep1GameCenterCheckbox_Click;
+                }
                 GcDownloadStep1ResetParams(true, true);
                 SelectedClient = Path.GetDirectoryName(manualWoTFind.FileName);
                 //replace the 'win32' or 'win64' directory with nothing (so removing it)
@@ -209,7 +228,14 @@ namespace RelhaxModpack.Windows
             else
             {
                 Logging.Info("SelectedClient is not empty ({0}), attempting to parse get request values",SelectedClient);
-                GcDownloadStep1SetupArray();
+                if ((bool)GcDownloadStep1GameCenterCheckbox.IsChecked)
+                {
+                    GcDownloadStep1SetupArrayWGC();
+                }
+                else
+                {
+                    GcDownloadStep1SetupArray();
+                }
                 GcDownloadStep1GetParams();
             }
         }
@@ -236,33 +262,48 @@ namespace RelhaxModpack.Windows
             GcDownloadStep1Next.IsEnabled = false;
         }
 
+        private void GcDownloadStep1GameCenterCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+            if((bool)GcDownloadStep1GameCenterCheckbox.IsChecked)
+            {
+                Logging.Debug("GcDownloadStep1GameCenterCheckbox check true, checking for Wgc path");
+                if (string.IsNullOrWhiteSpace(WgcSavedpath))
+                {
+                    Logging.Debug("WgcSavedPath is null, getting from registry");
+                    WgcSavedpath = Utils.AutoFindWgcDirectory();
+                    Logging.Debug("WgcSavedPath retrieved as '{0}'", WgcSavedpath);
+                }
+                if(!string.IsNullOrWhiteSpace(WgcSavedpath))
+                {
+                    SelectedClient = Path.GetDirectoryName(WgcSavedpath);
+                    Logging.Debug("SelectedClient set as WGC path: {0}", SelectedClient);
+                    GcDownloadStep1ResetParams(true, true);
+                    GcDownloadStep1SetupArrayWGC();
+                    GcDownloadStep1GetParams();
+                    return;
+                }
+                else
+                {
+                    Logging.Error("WgcSavedPath is null, resetting");
+                }
+            }
+            //reset
+            GcDownloadStep1GameCenterCheckbox.Click -= GcDownloadStep1GameCenterCheckbox_Click;
+            GcDownloadStep1GameCenterCheckbox.IsChecked = false;
+            GcDownloadStep1GameCenterCheckbox.Click += GcDownloadStep1GameCenterCheckbox_Click;
+            GcDownloadStep1ResetParams(true, true);
+        }
+
         private void GcDownloadStep1GetParams()
         {
             GcDownloadStep1CurrentlySelectedClient.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep1CurrentlySelectedClient"),
                 SelectedClient);
             GcDownloadStep1CurrentlySelectedClient.Foreground = System.Windows.Media.Brushes.DarkGreen;
 
-            //get file paths set and make sure they work
-            Logging.Info("checking if path to {0} is valid", GameInfoXml);
-            bool filePathsValid = true;
-            gameInfoXmlPath = Path.Combine(SelectedClient, GameInfoXml);
-            metaDataXmlPath = Path.Combine(SelectedClient, GameMetadataFolder, MetaDataXml);
-            StringBuilder missingFilesBuilder = new StringBuilder();
-            if (!File.Exists(gameInfoXmlPath))
+            string missingFiles = (bool)GcDownloadStep1GameCenterCheckbox.IsChecked ? GcDownloadStep1CheckMissingFilesWgc() : GcDownloadStep1CheckMissingFiles();
+            if (!string.IsNullOrWhiteSpace(missingFiles))
             {
-                Logging.Error("{0} does not exist!", gameInfoXmlPath);
-                filePathsValid = false;
-                missingFilesBuilder.AppendLine(gameInfoXmlPath);
-            }
-            if (!File.Exists(metaDataXmlPath))
-            {
-                Logging.Error("{0} does not exist!", metaDataXmlPath);
-                filePathsValid = false;
-                missingFilesBuilder.AppendLine(metaDataXmlPath);
-            }
-            if (!filePathsValid)
-            {
-                MessageBox.Show(string.Format("{0}:{1}{2}", Translations.GetTranslatedString("GcMissingFiles"), System.Environment.NewLine, missingFilesBuilder.ToString()));
+                MessageBox.Show(string.Format("{0}:{1}{2}", Translations.GetTranslatedString("GcMissingFiles"), Environment.NewLine, missingFiles.ToString()));
                 GcDownloadStep1ResetParams(false, false);
                 return;
             }
@@ -297,9 +338,15 @@ namespace RelhaxModpack.Windows
                 Grid.SetRow(gameCenterProperty.ValueBlock, i);
                 GcDownloadStep1KeyValueGrid.Children.Add(gameCenterProperty.ValueBlock);
 
-                string completeLocationPath = gameCenterProperty.FileName.Equals(GameInfoXml) ? gameInfoXmlPath : metaDataXmlPath;
+                string completeLocationPath = string.Empty;
+                if ((bool)GcDownloadStep1GameCenterCheckbox.IsChecked)
+                    completeLocationPath = gameCenterProperty.FileName.Equals(WgcNotificationsXml) ? notificationsXmlPathWgc : versionXmlPathWgc;
+                else
+                    completeLocationPath = gameCenterProperty.FileName.Equals(GameInfoXml) ? gameInfoXmlPath : metaDataXmlPath;
+
                 Logging.Info("getting property '{0}' for file {1}", gameCenterProperty.Xpath, gameCenterProperty.FileName);
                 gameCenterProperty.Value = XmlUtils.GetXmlStringFromXPath(completeLocationPath, gameCenterProperty.Xpath);
+
                 if (string.IsNullOrWhiteSpace(gameCenterProperty.Value))
                 {
                     if (gameCenterProperty.IsRequired)
@@ -326,7 +373,7 @@ namespace RelhaxModpack.Windows
                 }
                 else
                 {
-                    Logging.Info("Success getting property!");
+                    Logging.Info("Success getting property! ({0})",gameCenterProperty.Value);
                     gameCenterProperty.GaveError = false;
                     if (gameCenterProperty.ValueBlock != null)
                     {
@@ -349,6 +396,46 @@ namespace RelhaxModpack.Windows
                 GcDownloadStep1ResetParams(false, false);
                 return;
             }
+        }
+
+        private string GcDownloadStep1CheckMissingFiles()
+        {
+            //get file paths set and make sure they work
+            Logging.Info("checking if paths for wg game are valid");
+            gameInfoXmlPath = Path.Combine(SelectedClient, GameInfoXml);
+            metaDataXmlPath = Path.Combine(SelectedClient, GameMetadataFolder, MetaDataXml);
+            StringBuilder missingFilesBuilder = new StringBuilder();
+            if (!File.Exists(gameInfoXmlPath))
+            {
+                Logging.Error("{0} does not exist!", gameInfoXmlPath);
+                missingFilesBuilder.AppendLine(gameInfoXmlPath);
+            }
+            if (!File.Exists(metaDataXmlPath))
+            {
+                Logging.Error("{0} does not exist!", metaDataXmlPath);
+                missingFilesBuilder.AppendLine(metaDataXmlPath);
+            }
+            return missingFilesBuilder.ToString();
+        }
+
+        private string GcDownloadStep1CheckMissingFilesWgc()
+        {
+            //get file paths set and make sure they work
+            Logging.Info("checking if paths for wgc are valid");
+            notificationsXmlPathWgc = Path.Combine(SelectedClient, WgcNotificationsXml);
+            versionXmlPathWgc = Path.Combine(SelectedClient, WgcVersionXml);
+            StringBuilder missingFilesBuilder = new StringBuilder();
+            if (!File.Exists(notificationsXmlPathWgc))
+            {
+                Logging.Error("{0} does not exist!", notificationsXmlPathWgc);
+                missingFilesBuilder.AppendLine(notificationsXmlPathWgc);
+            }
+            if (!File.Exists(versionXmlPathWgc))
+            {
+                Logging.Error("{0} does not exist!", versionXmlPathWgc);
+                missingFilesBuilder.AppendLine(versionXmlPathWgc);
+            }
+            return missingFilesBuilder.ToString();
         }
 
         private void GcDownloadStep1SetupArray()
@@ -535,6 +622,24 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private void GcDownloadStep1SetupArrayWGC()
+        {
+            GameCenterProperties.Add(new GameCenterProperty()
+            {
+                FileName = WgcVersionXml,
+                Xpath = @"//protocol/agent_updater/app_version",
+                GetRequestParamater = "win32_current_version",
+                IsRequired = true
+            });
+            GameCenterProperties.Add(new GameCenterProperty()
+            {
+                FileName = WgcNotificationsXml,
+                Xpath = @"//protocol/notifications/notification/app_id",
+                GetRequestParamater = "game_id",
+                IsRequired = true
+            });
+        }
+
         private void GcDownloadStep2Init()
         {
             //start timer
@@ -582,29 +687,41 @@ namespace RelhaxModpack.Windows
             //build the get request
             Logging.Info("Building GET request");
             StringBuilder requestBuilder = new StringBuilder();
-            List<GameCenterProperty> baseUrlPropertyList = GameCenterProperties.Where(gc => gc.GetRequestParamater.Equals("BASE_URL")).ToList();
-            if(baseUrlPropertyList == null || baseUrlPropertyList.Count == 0)
+            if((bool)GcDownloadStep1GameCenterCheckbox.IsChecked)
             {
-                Logging.Error("Failed to get WG patch instructions (getting BASE_URL)");
-                GcDownloadStep3StackPanel.Children.Clear();
-                GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                requestBuilder.Append("https://wguswgc-wgcct.wargaming.net/api/v1/wgc_update/?protocol_version=1.8");
+                foreach (GameCenterProperty gameCenterProperty in GameCenterProperties)
                 {
-                    Text = Translations.GetTranslatedString("error"),
-                    Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
-                });
-                GcDownloadStep3NextButton.IsEnabled = false;
-                return;
+                    requestBuilder.AppendFormat("&{0}={1}", gameCenterProperty.GetRequestParamater, gameCenterProperty.Value);
+                }
             }
-            GameCenterProperty urlProperty = baseUrlPropertyList[0];
-            requestBuilder.AppendFormat("{0}api/v1/patches_chain/?protocol_version=1.8", urlProperty.Value);
-            foreach(GameCenterProperty gameCenterProperty in GameCenterProperties)
+            else
             {
-                if (string.IsNullOrWhiteSpace(gameCenterProperty.Value) && !gameCenterProperty.IsRequired)
-                    continue;
-                else if (gameCenterProperty.GetRequestParamater.Equals("BASE_URL"))
-                    continue;
-                requestBuilder.AppendFormat("&{0}={1}", gameCenterProperty.GetRequestParamater, gameCenterProperty.Value);
+                List<GameCenterProperty> baseUrlPropertyList = GameCenterProperties.Where(gc => gc.GetRequestParamater.Equals("BASE_URL")).ToList();
+                if (baseUrlPropertyList == null || baseUrlPropertyList.Count == 0)
+                {
+                    Logging.Error("Failed to get WG patch instructions (getting BASE_URL)");
+                    GcDownloadStep3StackPanel.Children.Clear();
+                    GcDownloadStep3StackPanel.Children.Add(new TextBlock()
+                    {
+                        Text = Translations.GetTranslatedString("error"),
+                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                    });
+                    GcDownloadStep3NextButton.IsEnabled = false;
+                    return;
+                }
+                GameCenterProperty urlProperty = baseUrlPropertyList[0];
+                requestBuilder.AppendFormat("{0}api/v1/patches_chain/?protocol_version=1.8", urlProperty.Value);
+                foreach (GameCenterProperty gameCenterProperty in GameCenterProperties)
+                {
+                    if (string.IsNullOrWhiteSpace(gameCenterProperty.Value) && !gameCenterProperty.IsRequired)
+                        continue;
+                    else if (gameCenterProperty.GetRequestParamater.Equals("BASE_URL"))
+                        continue;
+                    requestBuilder.AppendFormat("&{0}={1}", gameCenterProperty.GetRequestParamater, gameCenterProperty.Value);
+                }
             }
+            
             requestBuilder.AppendFormat("&{0}={1}", "installation_id", "relhax_update_request");
             Logging.Info("Built GET request: {0}", requestBuilder.ToString());
 

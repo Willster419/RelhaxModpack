@@ -4908,6 +4908,15 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
             Russian.Add("GcDownloadStep1NextText", Russian["next"]);
 
+            //Component: GcDownloadStep1GameCenterCheckbox
+            //
+            English.Add("GcDownloadStep1GameCenterCheckbox", "Check for game center updates instead");
+            German.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+            Polish.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+            French.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+            Russian.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+
             //Component: GcDownloadSelectWgClient
             //
             English.Add("GcDownloadSelectWgClient", "Select WG Client");
