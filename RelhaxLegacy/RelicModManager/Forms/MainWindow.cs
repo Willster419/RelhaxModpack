@@ -601,9 +601,9 @@ namespace RelhaxModpack
                         //using new attemp at an update method. Application now downloads a zip file of itself, rather than an exe. Maybe it will help antivirus issues
                         string modpackExeURL = null;
                         if(Settings.UseAlternateUpdateMethod)
-                            modpackExeURL = (Settings.BetaApplication || tempManagerVersionBeta) && !tempManagerVersionStable ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
+                            modpackExeURL = (Settings.BetaApplication || tempManagerVersionBeta) && !tempManagerVersionStable ? "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
                         else
-                            modpackExeURL = (Settings.BetaApplication || tempManagerVersionBeta) && !tempManagerVersionStable ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
+                            modpackExeURL = (Settings.BetaApplication || tempManagerVersionBeta) && !tempManagerVersionStable ? "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
                         updater.DownloadFileAsync(new Uri(modpackExeURL), newExeName);
                         Logging.Manager("New application download started, UseAlternateUpdateMethod=" + Settings.UseAlternateUpdateMethod);
                         currentModDownloading = "update ";
