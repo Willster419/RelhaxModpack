@@ -4353,7 +4353,7 @@ namespace RelhaxModpack
             //Component: FirstLoadAcknowledgments
             // ACKS window title.
             English.Add("FirstLoadAcknowledgments", "First Load Acknowledgements");
-            German.Add("FirstLoadAcknowledgments", "Acknowledgements");
+            German.Add("FirstLoadAcknowledgments", "Einverständniserklärung");
             Polish.Add("FirstLoadAcknowledgments", "Pierwsze Urochomienie — Umowa Licencyjna"); // Can't think of a gracious way to do this one. @Nullmaruzero
             French.Add("FirstLoadAcknowledgments", TranslationNeeded);
             Spanish.Add("FirstLoadAcknowledgments", "Primera ejecución — Acuerdo de Licencia"); // Me neither (LordFelix), so i'll follow PL procedure
@@ -4390,7 +4390,7 @@ namespace RelhaxModpack
 
             //Component: AgreementSupportForums
             // First of the inlined elements for AgreementSupport1, a link to the forums.
-            English.Add("AgreementSupportForums", "Forum");
+            English.Add("AgreementSupportForums", "Forums");
             German.Add("AgreementSupportForums", "Forum");
             Polish.Add("AgreementSupportForums", "Forum");
             French.Add("AgreementSupportForums", "Forum");
@@ -4528,7 +4528,7 @@ namespace RelhaxModpack
             //Component: AskCloseWoT
             //
             English.Add("AskCloseWoT", "WoT is Running");
-            German.Add("AskCloseWoT", "World of Tanks läuft bereits");
+            German.Add("AskCloseWoT", "WoT läuft bereits");
             Polish.Add("AskCloseWoT", "WoT jest uruchomiony!");
             French.Add("AskCloseWoT", TranslationNeeded);
             Spanish.Add("AskCloseWoT", "WoT está en ejecución");
@@ -4631,7 +4631,7 @@ namespace RelhaxModpack
             //Component: RelhaxColorPicker
             //
             English.Add("RelhaxColorPicker", "Color Picker");
-            German.Add("RelhaxColorPicker", "Farbwahl");
+            German.Add("RelhaxColorPicker", "Farbauswahl");
             Polish.Add("RelhaxColorPicker", "Schemat Kolorów");
             French.Add("RelhaxColorPicker", TranslationNeeded);
             Spanish.Add("RelhaxColorPicker", "Selector de colores");
@@ -4658,7 +4658,7 @@ namespace RelhaxModpack
             //Component: MainColor
             //
             English.Add("MainColor", "Main Color");
-            German.Add("MainColor", "Hauptfarbe");
+            German.Add("MainColor", "Primärfarbe");
             Polish.Add("MainColor", "Kolor Podstawowy");
             French.Add("MainColor", "Couleur Principale");
             Spanish.Add("MainColor", "Color Principal");
@@ -4748,7 +4748,7 @@ namespace RelhaxModpack
             //Component: SecondColor
             //
             English.Add("SecondColor", "Second Color");
-            German.Add("SecondColor", "Zweitfarbe");
+            German.Add("SecondColor", "Sekundärfarbe");
             Polish.Add("SecondColor", "Drugi Kolor");
             French.Add("SecondColor", "Deuxième Couleur");
             Spanish.Add("SecondColor", "Color Secundario");
@@ -5065,7 +5065,7 @@ namespace RelhaxModpack
             //Component: GcDownloadStep2GcStatusClosed
             //Game Center is [Opened,Closed]
             English.Add("GcDownloadStep2GcStatusClosed", "closed");
-            German.Add("GcDownloadStep2GcStatusClosed", "geschloßen");
+            German.Add("GcDownloadStep2GcStatusClosed", "geschlossen");
             Polish.Add("GcDownloadStep2GcStatusClosed", "zamknięte"); // Lowercase for the looks 'cuz it's inlined. @Nullmaruzero
             French.Add("GcDownloadStep2GcStatusClosed", TranslationNeeded);
             Spanish.Add("GcDownloadStep2GcStatusClosed", "cerrado");
