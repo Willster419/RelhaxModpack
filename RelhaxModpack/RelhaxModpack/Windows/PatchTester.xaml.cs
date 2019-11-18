@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Xml;
 using Microsoft.Win32;
 using System.IO;
+using System.Windows.Media;
 
 namespace RelhaxModpack.Windows
 {
@@ -26,12 +27,21 @@ namespace RelhaxModpack.Windows
         private bool IsPatchListScrolling = false;
         private bool RegressionsRunning = false;
         private Point BeforeDragDropPoint;
+
+        //for the pop out replace in case it's a lot to replace
+        private PopOutReplacePatchDesigner popOutReplacePatchDesigner = new PopOutReplacePatchDesigner();
+        private Brush FileToPatchBrush = null;
+        private Brush PatchFilePathBrush = null;
+
+        //valid xml modes to put into mode combobox
         private readonly string[] validXmlModes = new string[]
         {
             "add",
             "edit",
             "remove"
         };
+
+        //valid json modes to put into mode combobox
         private readonly string[] validJsonModes = new string[]
         {
             "add",
@@ -76,13 +86,19 @@ namespace RelhaxModpack.Windows
             else
                 Logging.Patcher("Successfully loaded patcher settings", LogLevel.Info);
             LoadSettingsToUI();
+
             //load empty patch definition
             PatchesList.Items.Clear();
             AddPatchButton_Click(null, null);
             PatchesList.SelectedIndex = 0;
+
             //attach the log output to the logfile
             Logging.OnLoggingUIThreadReport += Logging_OnLoggingUIThreadReport;
             init = false;
+
+            //save current brushes
+            PatchFilePathBrush = PatchFilePathTextbox.Background;
+            FileToPatchBrush = PatchFilePathTextbox.Background;
         }
 
         #region Settings
@@ -260,10 +276,43 @@ namespace RelhaxModpack.Windows
 
             PatchesList.Items.Refresh();
         }
+
+        //scrolling constant to keep most recent log addition present on the screen
         private void LogOutput_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if(RegressionsRunning)
                 LogOutput.ScrollToEnd();
+        }
+
+        private void PopOutReplaceBlockCB_Click(object sender, RoutedEventArgs e)
+        {
+            if((bool)PopOutReplaceBlockCB.IsChecked)
+            {
+                popOutReplacePatchDesigner.Show();
+                PatchReplaceTextbox.IsEnabled = false;
+                popOutReplacePatchDesigner.PatchReplaceTextbox.Text = PatchReplaceTextbox.Text;
+            }
+            else
+            {
+                PatchReplaceTextbox.IsEnabled = true;
+                PatchReplaceTextbox.Text = popOutReplacePatchDesigner.PatchReplaceTextbox.Text;
+                popOutReplacePatchDesigner.Close();
+            }
+        }
+
+        private void FilePathTypeCombobox_Selected(object sender, RoutedEventArgs e)
+        {
+            switch(FilePathTypeCombobox.SelectedIndex)
+            {
+                case 0://absolute
+                    FileToPatchTextbox.Background = Brushes.BlanchedAlmond;
+                    PatchFilePathTextbox.Background = PatchFilePathBrush;
+                    break;
+                case 1://relative
+                    PatchFilePathTextbox.Background = Brushes.BlanchedAlmond;
+                    FileToPatchTextbox.Background = FileToPatchBrush;
+                    break;
+            }
         }
         #endregion
 
