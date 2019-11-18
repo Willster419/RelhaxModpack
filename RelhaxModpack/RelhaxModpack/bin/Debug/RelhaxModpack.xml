@@ -5752,6 +5752,16 @@
             The name of the folder where the metadata xml file is stored
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.WgcNotificationsXml">
+            <summary>
+            The Wargaming game center xml file containing the app_id
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.WgcVersionXml">
+            <summary>
+            The wargaming game center xml file containing the application version
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.WgcProcessName">
             <summary>
             The name of the Game center process shown in windows
@@ -7376,6 +7386,12 @@
             </summary>
             <param name="search">The RegistrySearch structure to specify where to search and where to base the search</param>
             <returns>The RegistryKey object of the folder in registry, or null if the search failed</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.AutoFindWgcDirectory">
+            <summary>
+            Finds the location of the Wargaming Game center installation directory from the registry
+            </summary>
+            <returns>The location of wgc.exe if found, else null</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.CreateShortcut(RelhaxModpack.Shortcut,System.Text.StringBuilder)">
             <summary>
