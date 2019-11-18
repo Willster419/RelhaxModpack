@@ -13,9 +13,9 @@ using System.Windows.Media;
 namespace RelhaxModpack.Windows
 {
     /// <summary>
-    /// Interaction logic for PatchTester.xaml
+    /// Interaction logic for PatchDesigner.xaml
     /// </summary>
-    public partial class PatchTester : RelhaxWindow
+    public partial class PatchDesigner : RelhaxWindow
     {
         private PatchSettings PatchSettings;
         private OpenFileDialog OpenPatchfileDialog;
@@ -54,9 +54,9 @@ namespace RelhaxModpack.Windows
         };
 
         /// <summary>
-        /// Create an instance of the PatchTester window
+        /// Create an instance of the PatchDesigner window
         /// </summary>
-        public PatchTester()
+        public PatchDesigner()
         {
             InitializeComponent();
         }
@@ -305,18 +305,16 @@ namespace RelhaxModpack.Windows
             switch(FilePathTypeCombobox.SelectedIndex)
             {
                 case 0://absolute
-                    FileToPatchTextbox.Background = Brushes.BlanchedAlmond;
-                    PatchFilePathTextbox.Background = PatchFilePathBrush;
-                    break;
-                case 1://relative
                     PatchFilePathTextbox.Background = Brushes.BlanchedAlmond;
                     FileToPatchTextbox.Background = FileToPatchBrush;
                     break;
+                case 1://relative
+                    FileToPatchTextbox.Background = Brushes.BlanchedAlmond;
+                    PatchFilePathTextbox.Background = PatchFilePathBrush;
+                    break;
             }
         }
-        #endregion
 
-        #region Buttons
         private void LocateFileToPatchButton_Click(object sender, RoutedEventArgs e)
         {
             if(OpenFileToPatchDialog == null)
@@ -350,13 +348,13 @@ namespace RelhaxModpack.Windows
             //check input from UI left panel side
 
             //file location
-            Logging.Patcher("File to Patch location mode: {0}", LogLevel.Info, FilePathType.SelectedItem ?? "(null)");
-            if(FilePathType.SelectedItem == null)
+            Logging.Patcher("File to Patch location mode: {0}", LogLevel.Info, FilePathTypeCombobox.SelectedItem ?? "(null)");
+            if(FilePathTypeCombobox.SelectedItem == null)
             {
                 Logging.Patcher("Invalid file path type", LogLevel.Info);
                 return;
             }
-            switch(FilePathType.SelectedItem.ToString())
+            switch(FilePathTypeCombobox.SelectedItem.ToString())
             {
                 case "Absolute":
                     Logging.Patcher("Checking if absolute file path {0} exists...", LogLevel.Info, FileToPatchTextbox.Text);

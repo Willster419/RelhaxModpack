@@ -5796,6 +5796,24 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.PopOutReplacePatchDesigner">
+            <summary>
+            Interaction logic for PopOutReplacePatchDesigner.xaml
+            </summary>
+            <summary>
+            PopOutReplacePatchDesigner
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.PopOutReplacePatchDesigner.#ctor">
+            <summary>
+            Create an instance of the PopOutReplacePatchDesigner Window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.PopOutReplacePatchDesigner.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.RelhaxColorPicker">
             <summary>
             Interaction logic for RelhaxColorPicker.xaml
@@ -6192,20 +6210,20 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.PatchTester">
+        <member name="T:RelhaxModpack.Windows.PatchDesigner">
             <summary>
-            Interaction logic for PatchTester.xaml
+            Interaction logic for PatchDesigner.xaml
             </summary>
             <summary>
-            PatchTester
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.PatchTester.#ctor">
-            <summary>
-            Create an instance of the PatchTester window
+            PatchDesigner
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.PatchTester.InitializeComponent">
+        <member name="M:RelhaxModpack.Windows.PatchDesigner.#ctor">
+            <summary>
+            Create an instance of the PatchDesigner window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.PatchDesigner.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>

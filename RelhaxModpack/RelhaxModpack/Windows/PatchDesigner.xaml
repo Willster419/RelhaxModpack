@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxModpack.Windows.PatchTester"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxModpack.Windows.PatchDesigner"
         mc:Ignorable="d"
         Title="PatchTester" Height="550" Width="800" MinHeight="550" MinWidth="640"
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
@@ -16,15 +16,14 @@
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="300"/>
+            <ColumnDefinition Width="*" MinWidth="350"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*" MinWidth="300"/>
         </Grid.ColumnDefinitions>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
             <TabItem Tag="DesignerTab" x:Name="DesignerTab" Header="Designer">
                 <Grid Background="#FFE5E5E5">
-                    <Button Tag="LocateFileToPatchButton" x:Name="LocateFileToPatchButton" Content="Open file to patch" HorizontalAlignment="Left"
-                            Margin="268,0,0,0" VerticalAlignment="Top" Width="120" Height="22" Click="LocateFileToPatchButton_Click"/>
+                    <Button Tag="LocateFileToPatchButton" x:Name="LocateFileToPatchButton" Content="Open file to patch" HorizontalAlignment="Right" VerticalAlignment="Top" Width="120" Height="22" Click="LocateFileToPatchButton_Click"/>
                     <TextBlock Tag="LocateFileToPatchButton" x:Name="FileLocationHeader" HorizontalAlignment="Left" TextWrapping="Wrap" Text="File Location on disk"
                                VerticalAlignment="Top" Height="22" Padding="0,3,0,0"/>
                     <Button Tag="TestPatchButton" x:Name="TestPatchButton" Content="Test Patch..." HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom"
@@ -52,7 +51,7 @@
                         <TextBlock Tag="PatchTypeHeader" x:Name="PatchTypeHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Patch Type"
                                VerticalAlignment="Stretch" Grid.Row="2" />
                         <ComboBox Tag="FilePathType" x:Name="FilePathTypeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1"
-                                  Margin="0,1,0,1" Selected="FilePathTypeCombobox_Selected">
+                                  Margin="0,1,0,1" SelectionChanged="FilePathTypeCombobox_Selected" >
                             <System:String>Relative</System:String>
                             <System:String>Absolute</System:String>
                         </ComboBox>
@@ -71,7 +70,7 @@
                                VerticalAlignment="Stretch" Height="22" Grid.Row="3" />
                         <ComboBox Tag="PatchModeCombobox" x:Name="PatchModeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1"
                                   Margin="0,1,0,1" Grid.Row="3"/>
-                        <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path (for allowing inside xvm files)"
+                        <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path (inside xvm files)"
                               HorizontalAlignment="Left" Margin="1,2,0,0" VerticalAlignment="Top" IsEnabled="True" Grid.Column="1" Grid.Row="4"/>
                     </Grid>
                     <TextBlock x:Name="PatchFilePathLabel" HorizontalAlignment="Left" Margin="0,69,0,0" TextWrapping="Wrap" Text="Patch file path" VerticalAlignment="Top"/>
@@ -179,9 +178,9 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Tag="LoadPatchXmlButton" x:Name="LoadPatchXmlButton" Content="Load patch XML" HorizontalAlignment="Left" Margin="3,3,0,0" Grid.Row="1" Grid.RowSpan="2"
+        <Button Tag="LoadPatchXmlButton" x:Name="LoadPatchXmlButton" Content="Load patch Xml" HorizontalAlignment="Left" Margin="3,3,0,0" Grid.Row="1" Grid.RowSpan="2"
                 VerticalAlignment="Top" Width="93" Click="LoadPatchXmlButton_Click"/>
-        <Button Tag="SavePatchXmlButton" x:Name="SavePatchXmlButton" Content="Save patch XML" HorizontalAlignment="Left" Margin="101,3,0,0" Grid.Row="1" Grid.RowSpan="2"
+        <Button Tag="SavePatchXmlButton" x:Name="SavePatchXmlButton" Content="Save patch Xml" HorizontalAlignment="Left" Margin="101,3,0,0" Grid.Row="1" Grid.RowSpan="2"
                 VerticalAlignment="Top" Width="95" Click="SavePatchXmlButton_Click"/>
     </Grid>
 </local:RelhaxWindow>

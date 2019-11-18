@@ -271,8 +271,8 @@
     <Compile Include="Windows\ModSelectionList.xaml.cs">
       <DependentUpon>ModSelectionList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\PatchTester.xaml.cs">
-      <DependentUpon>PatchTester.xaml</DependentUpon>
+    <Compile Include="Windows\PatchDesigner.xaml.cs">
+      <DependentUpon>PatchDesigner.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Preview.xaml.cs">
       <DependentUpon>Preview.xaml</DependentUpon>
@@ -422,7 +422,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\PatchTester.xaml">
+    <Page Include="Windows\PatchDesigner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
