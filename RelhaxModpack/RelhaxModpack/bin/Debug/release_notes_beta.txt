@@ -1,3 +1,14 @@
+Application version 0.29.4.5 (2019-11-18)
+https://www.virustotal.com/gui/file/d1b9ca8d9e2f7450fde8e03c4465b4f6524fece457dbed0fd2ccfe1ee97c8884/detection
+- Added the ability to udpate the Wargaming Game Center itself from the WG update utility.
+- Changed default behavior of SaveLastSelection setting to true for first time application startup.
+- Updated Documentation.
+- Updated German Translations (Thanks Elektrosmoker).
+- Addes description stubs to Patch designer and Database Editor utilities.
+- Fixed some MainWindow components not translating when launching for the first time, after language selected from new selection window.
+- Added feature to MainWindow, mod selection list and diagnostic windows to show tooltips for disabled UI components.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.4.3 (2019-11-17)
 https://www.virustotal.com/gui/file/9602c07d42e9391c3898b5ee02cdaedb6a1e7121f63855facc66e40a2c05af3e/detection
 - Fixed a nasty bug where user mods were being treated as regular packages. This means they were failing to download and getting deleted.
