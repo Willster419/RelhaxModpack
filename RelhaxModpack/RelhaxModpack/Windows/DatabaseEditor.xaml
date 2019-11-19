@@ -400,6 +400,12 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
+                <TabItem x:Name="DescriptionHelperTab" Header="How to use">
+                    <Grid Background="#FFE5E5E5">
+                        <RichTextBox x:Name="DescriptionHelperTextBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True"
+                                     HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+                    </Grid>
+                </TabItem>
             </TabControl>
             <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,20,0,0" x:Name="RightTab">
                 <TabItem x:Name="BasicTab" Header="Basic">
