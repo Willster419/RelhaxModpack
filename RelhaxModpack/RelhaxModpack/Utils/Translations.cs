@@ -3651,7 +3651,7 @@ namespace RelhaxModpack
             English.Add("DownloadWGPatchFilesButtonDescription", "Guides you through & downloads patch files for Wargaming games (WoT, WoWs, WoWp) over HTTP so you can install them later.\n" +
                 "Particularily useful for people who cannot use Wargaming Game Center's default P2P protocol.");
             German.Add("DownloadWGPatchFilesButtonDescription", "Führt dich durch die Auswahl und lädt Patch-Dateien für Wargaming-Spiele (WoT, WoWs, WoWp) über HTTP herunter, damit du sie später installieren kannst. \n" +
-                 "Besonders nützlich für Leute, die das standardmäßige P2P-Protokoll von Wargaming Game Center nicht verwenden können."));
+                 "Besonders nützlich für Leute, die das standardmäßige P2P-Protokoll von Wargaming Game Center nicht verwenden können.");
             Polish.Add("DownloadWGPatchFilesButtonDescription", "Pobiera pliki aktualizacji dla gier Wargaming za pomocą protokołu HTTP celem późniejszej instalacji w WGC.\n" +
                 "Szczególnie przydatne dla osób, które nie mogą używać wbudowanego w Wargaming Game Center protokołu P2P.");
             French.Add("DownloadWGPatchFilesButtonDescription", TranslationNeeded);
