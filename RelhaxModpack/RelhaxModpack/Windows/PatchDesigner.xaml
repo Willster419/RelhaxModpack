@@ -177,6 +177,12 @@
 
                 </Grid>
             </TabItem>
+            <TabItem x:Name="DescriptionHelperTab" Header="How to use">
+                <Grid Background="#FFE5E5E5">
+                    <RichTextBox x:Name="DescriptionHelperTextBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True"
+                                 HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+                </Grid>
+            </TabItem>
         </TabControl>
         <Button Tag="LoadPatchXmlButton" x:Name="LoadPatchXmlButton" Content="Load patch Xml" HorizontalAlignment="Left" Margin="3,3,0,0" Grid.Row="1" Grid.RowSpan="2"
                 VerticalAlignment="Top" Width="93" Click="LoadPatchXmlButton_Click"/>

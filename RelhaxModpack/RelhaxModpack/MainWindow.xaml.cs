@@ -325,6 +325,7 @@ namespace RelhaxModpack
                         AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("minutes"));
                         AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("hours"));
                         AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("days"));
+                        ApplyCustomUILocalizations(false);
                     }
 
                     //display the welcome window and make sure the user agrees to it

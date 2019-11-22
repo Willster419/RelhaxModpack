@@ -1010,6 +1010,7 @@ namespace RelhaxModpack.Windows
                             Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             IsChecked = false
                         };
+                        ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFRadioButton, true);
                         break;
                     case SelectionTypes.single_dropdown1:
                         DoComboboxStuff(package, 0);
@@ -1032,6 +1033,7 @@ namespace RelhaxModpack.Windows
                             GreyAreaVisability = package.GreyAreaMod ? Visibility.Visible : Visibility.Hidden,
                             Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                         };
+                        ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFCheckBox, true);
                         break;
                 }
                 //filters out the null UIComponents like if dropdown
