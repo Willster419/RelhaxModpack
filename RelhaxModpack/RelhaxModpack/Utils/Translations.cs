@@ -85,7 +85,8 @@ namespace RelhaxModpack
             //xml string forming in color picker
             "SampleXmlOutputTextbox",
             //{0} kb of {1} kb
-            "GcDownloadStep4DownloadingSizes"
+            "GcDownloadStep4DownloadingSizes",
+            "TaskName"
         };
         private const string TranslationNeeded = "TODO";
         private static readonly string Blank = string.Empty;
