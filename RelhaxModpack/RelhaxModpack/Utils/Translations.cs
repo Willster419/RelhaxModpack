@@ -4913,7 +4913,7 @@ namespace RelhaxModpack
             //
             English.Add("GcDownloadStep1GameCenterCheckbox", "Check for game center updates instead");
             German.Add("GcDownloadStep1GameCenterCheckbox", "Suche stattdessen nach Game Center Updates");
-            Polish.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+            Polish.Add("GcDownloadStep1GameCenterCheckbox", "Sprawdź aktualizacje tylko dla Wargaming Game Center");
             French.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
             Spanish.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
             Russian.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
