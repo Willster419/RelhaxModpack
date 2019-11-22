@@ -1419,7 +1419,7 @@ namespace RelhaxModpack
             //
             English.Add("AdvancedInstallationProgressText", "Show advanced installation progress window");
             German.Add("AdvancedInstallationProgressText", "Erweitertes Installationsfenster");
-            Polish.Add("AdvancedInstallationProgressText", "Wyświetl zaawansowany podgląd instalacji"); // Shortened. Kept splitting into two lines. @Nullmaruzero
+            Polish.Add("AdvancedInstallationProgressText", "Wyświetl szczegółowy podgląd instalacji");
             French.Add("AdvancedInstallationProgress", "Voir la fenêtre d'installation avancée");
             Spanish.Add("AdvancedInstallationProgressText", "Mostrar ventana de instalación avanzada");
             Russian.Add("AdvancedInstallationProgressText", "Показывать больше подробностей в окне прогресса установки");
@@ -4122,7 +4122,7 @@ namespace RelhaxModpack
             //
             English.Add("AdvancedProgress", "Advanced Installer Progress");
             German.Add("AdvancedProgress", "Erweiterte Instaltionsfortschrittsnanziege");
-            Polish.Add("AdvancedProgress", "Zaawansowany Podgląd Instalacji");
+            Polish.Add("AdvancedProgress", "Szczegółowy Podgląd Instalacji");
             French.Add("AdvancedProgress", TranslationNeeded);
             Spanish.Add("AdvancedProgress", "Progreso detallado del instalador");
             Russian.Add("AdvancedProgress", "Прогресс расширенной установки");
