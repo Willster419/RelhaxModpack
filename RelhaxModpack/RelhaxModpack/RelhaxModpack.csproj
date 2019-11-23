@@ -196,6 +196,9 @@
     <Compile Include="Windows\AskCloseWoT.xaml.cs">
       <DependentUpon>AskCloseWoT.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\AutoUpdatePackageWindow.xaml.cs">
+      <DependentUpon>AutoUpdatePackageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CreateFTPFolderName.xaml.cs">
       <DependentUpon>CreateFTPFolderName.xaml</DependentUpon>
     </Compile>
@@ -294,6 +297,9 @@
     <Compile Include="Utils\XmlBinary\PrimitiveFileReader.cs" />
     <Compile Include="Utils\XmlBinary\XmlBinaryHandler.cs" />
     <Compile Include="Utils\XmlUtils.cs" />
+    <Compile Include="Windows\AutoUpdateFilesInspector.xaml.cs">
+      <DependentUpon>AutoUpdateFilesInspector.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -355,6 +361,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AskCloseWoT.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AutoUpdatePackageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -459,6 +469,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AdvancedProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AutoUpdateFilesInspector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

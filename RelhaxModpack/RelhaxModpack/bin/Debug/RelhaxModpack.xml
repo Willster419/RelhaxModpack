@@ -5385,6 +5385,24 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.AutoUpdatePackageWindow">
+            <summary>
+            Interaction logic for AutoUpdatePackageWindow.xaml
+            </summary>
+            <summary>
+            AutoUpdatePackageWindow
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdatePackageWindow.#ctor">
+            <summary>
+            Create an instance of the AutoUpdatePackageWindow window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdatePackageWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.CreateFTPFolderName">
             <summary>
             Interaction logic for CreateFTPFolderName.xaml
@@ -6412,6 +6430,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.AutoUpdateFilesInspector">
+            <summary>
+            Interaction logic for Window1.xaml
+            </summary>
+            <summary>
+            AutoUpdateFilesInspector
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdateFilesInspector.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
