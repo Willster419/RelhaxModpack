@@ -300,9 +300,9 @@
             <RowDefinition Height="632*"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click"/>
-        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="90,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="MoveDatabaseObjectButton" Click="MoveDatabaseObjectButton_Click"/>
-        <Button x:Name="AddDatabaseObjectButton" Content="Add" HorizontalAlignment="Left" Margin="170,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="AddDatabaseObjectButton" Click="AddDatabaseObjectButton_Click"/>
+        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click"/>
+        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="90,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="MoveDatabaseObjectButton" Click="MoveDatabaseObjectButton_Click"/>
+        <Button x:Name="AddDatabaseObjectButton" Content="Add" HorizontalAlignment="Left" Margin="170,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="AddDatabaseObjectButton" Click="AddDatabaseObjectButton_Click"/>
         <Button x:Name="LoadAsDatabaseButton" Content="Load as..." HorizontalAlignment="Right" Margin="0,0,90,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="LoadAsDatabaseButton" Click="LoadAsDatabaseButton_Click"/>
         <Button x:Name="LoadDatabaseButton" Content="Load" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,90,30"  VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseLoad" Click="OnLoadDatabaseClick"/>
         <Button x:Name="SaveAsDatabaseButton" Content="Save as..." HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Tag="DatabaseSaveAs" Click="SaveAsDatabaseButton_Click"/>
@@ -578,6 +578,8 @@
 
             </ComboBox>
         </Grid>
-        <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="50" />
+        <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="50"/>
+        <Button x:Name="LaunchAutoUpdateButton" Content="Launch Auto-update window" HorizontalAlignment="Left" Margin="10,0,0,30" Grid.Row="1" VerticalAlignment="Bottom"
+                Width="235" Click="LaunchAutoUpdateButton_Click"/>
     </Grid>
 </local:RelhaxWindow>

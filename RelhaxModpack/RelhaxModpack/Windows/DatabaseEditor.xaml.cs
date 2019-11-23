@@ -2724,5 +2724,10 @@ namespace RelhaxModpack.Windows
             else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
                 EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
         }
+
+        private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
