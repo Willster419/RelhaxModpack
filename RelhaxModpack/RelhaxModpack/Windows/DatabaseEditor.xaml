@@ -362,6 +362,7 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="40"/>
+                            <RowDefinition Height="35"/>
                             <RowDefinition Height="20"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -398,6 +399,13 @@
                             <RadioButton x:Name="SaveDatabaseLegacySetting" Content="Legacy" Checked="SaveDatabaseSetting_Checked" />
                             <RadioButton x:Name="SaveDatabaseOnePointOneSetting" Content="1.1" Checked="SaveDatabaseSetting_Checked" />
                         </StackPanel>
+                        <Button x:Name="SelectAutoUpdateWorkDirectoryButton" HorizontalAlignment="Stretch" Grid.Row="10" VerticalAlignment="Center"
+                                Click="SelectAutoUpdateWorkDirectoryButton_Click">
+                            <TextBlock x:Name="SelectAutoUpdateWorkDirectoryTextblock" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"
+                                       Text="Select auto update work directory"/>
+                        </Button>
+                        <TextBox x:Name="SelectAutoUpdateWorkDirectoryTextbox" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Center"
+                                 TextChanged="SelectAutoUpdateWorkDirectoryTextbox_TextChanged" />
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionHelperTab" Header="How to use">
@@ -580,6 +588,6 @@
         </Grid>
         <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="50"/>
         <Button x:Name="LaunchAutoUpdateButton" Content="Launch Auto-update window" HorizontalAlignment="Left" Margin="10,0,0,30" Grid.Row="1" VerticalAlignment="Bottom"
-                Width="235" Click="LaunchAutoUpdateButton_Click"/>
+                Width="235" Click="LaunchAutoUpdateButton_Click" IsEnabled="False"/>
     </Grid>
 </local:RelhaxWindow>
