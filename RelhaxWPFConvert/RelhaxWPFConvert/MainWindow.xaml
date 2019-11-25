@@ -277,7 +277,7 @@
                 <ContentPresenter Grid.Column="1" x:Name="WpfDocumentViewer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,41,0,0"/>
             </Grid>
         </TabItem>
-        <TabItem Header="Auto Update Packages">
+        <TabItem Header="Auto Update Packages Chromium">
             <Grid x:Name="AutoUpdateTestingGrid">
                 <TextBlock x:Name="AutoUpdateWGURLHeader" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="WG mod URL" VerticalAlignment="Top"/>
                 <TextBox x:Name="AutoUpdateWGURLTextbox" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="208"
@@ -285,6 +285,17 @@
                 <TextBlock x:Name="AutoUpdateWGInfo" HorizontalAlignment="Left" Margin="10,59,0,0" TextWrapping="Wrap" Text="Data here" VerticalAlignment="Top"/>
                 <Button x:Name="AutoUpdateWGClick" Content="Button" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="75" Click="AutoUpdateWGClick_Click"/>
                 <wpf:ChromiumWebBrowser x:Name="CefBrowser" Margin="90,80,10,0" Visibility="Hidden"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Auto Update Packages IE embedded">
+            <Grid x:Name="AutoUpdateTestingGridIE">
+                <TextBlock x:Name="AutoUpdateWGURLHeaderIE" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="WG mod URL" VerticalAlignment="Top"/>
+                <TextBox x:Name="AutoUpdateWGURLTextboxIE" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="208"
+                         Text="https://wgmods.net/392/"/>
+                <TextBlock x:Name="AutoUpdateWGInfoIE" HorizontalAlignment="Left" Margin="10,59,0,0" TextWrapping="Wrap" Text="Data here" VerticalAlignment="Top"/>
+                <Button x:Name="AutoUpdateWGClickIE" Content="Button" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="75" Click="AutoUpdateWGClickIE_Click"/>
+                <WebBrowser x:Name="IEBrowse" HorizontalAlignment="Left" Height="291" Margin="90,80,0,0" VerticalAlignment="Top" Width="696" Visibility="Hidden"/>
+
             </Grid>
         </TabItem>
     </TabControl>
