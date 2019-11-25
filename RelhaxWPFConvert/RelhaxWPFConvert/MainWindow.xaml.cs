@@ -29,6 +29,10 @@ using System.Windows.Documents;
 using System.Xml;
 using System.Windows.Markup;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using System.Xml.Linq;
+using HtmlAgilityPack;
+using System.Text;
+using CefSharp;
 
 namespace RelhaxWPFConvert
 {
@@ -605,6 +609,59 @@ namespace RelhaxWPFConvert
                     taskbarInstance.SetProgressValue(result, 100);
                 }
             }
+        }
+
+        private async void AutoUpdateWGClick_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(AutoUpdateWGURLTextbox.Text))
+                return;
+            AutoUpdateWGInfo.Text = "Getting info...";
+
+            int framesLoaded = 0;
+            bool browserLoaded = false;
+            CefBrowser.FrameLoadEnd += (sendahh, endArgs) =>
+            {
+                framesLoaded++; ;
+            };
+            CefBrowser.LoadingStateChanged += (send, args) =>
+            {
+                if (!args.IsLoading)
+                    browserLoaded = true;
+            };
+
+            CefBrowser.Load(AutoUpdateWGURLTextbox.Text);
+
+            while (!browserLoaded)
+                await Task.Delay(500);
+
+            while (CefBrowser.IsLoading)
+                await Task.Delay(500);
+
+            while (framesLoaded < 2)
+                await Task.Delay(500);
+
+            string s = await CefBrowser.GetSourceAsync();
+
+            //http://blog.olussier.net/2010/03/30/easily-parse-html-documents-in-csharp/
+            
+            HtmlDocument document = new HtmlDocument();
+            document.LoadHtml(s);
+            HtmlNode node = document.DocumentNode;
+            //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
+            HtmlNodeCollection clientVersionNode = node.SelectNodes(@"//div[contains(@class, 'ModDetails_label')]");
+            string version = string.Empty;
+            if(clientVersionNode != null)
+            {
+                HtmlNode nodeTest = clientVersionNode[3];
+                HtmlNode versionNode = nodeTest.ChildNodes[0].ChildNodes[1];
+                version = versionNode.InnerText;
+            }
+            
+
+            HtmlNode downloadUrlNode = node.SelectSingleNode(@"//a[contains(@class, 'ModDetails_hidden')]");
+            string downloadURL = downloadUrlNode.Attributes["href"].Value;
+
+            AutoUpdateWGInfo.Text = string.Format("For client: {0}, download link: {1}",version,downloadURL);
         }
     }
 }
