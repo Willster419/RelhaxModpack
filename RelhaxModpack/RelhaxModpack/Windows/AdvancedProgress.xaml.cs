@@ -345,13 +345,13 @@ namespace RelhaxModpack.Windows
                             if (RestoreDataXmlUnpackReporter.TaskValue != 1)
                                 RestoreDataXmlUnpackReporter.TaskValue = 1;
                             RestoreDataXmlUnpackReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installRestoreUserdata"),
-                                progress.ParrentCurrent+1.ToString(), Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
+                                (progress.ParrentCurrent+1).ToString(), Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
                             break;
                         case InstallerExitCodes.XmlUnpackError:
                             if (RestoreDataXmlUnpackReporter.TaskValue != 2)
                                 RestoreDataXmlUnpackReporter.TaskValue = 2;
                             RestoreDataXmlUnpackReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installXmlUnpack"),
-                                progress.ParrentCurrent+1.ToString(), Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
+                                (progress.ParrentCurrent+1).ToString(), Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
                             break;
                     }
 
@@ -378,7 +378,7 @@ namespace RelhaxModpack.Windows
                         PostInstallPanel.Children.Add(PatchReporter);
                     }
 
-                    PatchReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installPatchFiles"), progress.ParrentCurrent+1.ToString(),
+                    PatchReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installPatchFiles"), (progress.ParrentCurrent+1).ToString(),
                             Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
 
                     if (PatchReporter.TaskMinimum != 0)
@@ -406,7 +406,7 @@ namespace RelhaxModpack.Windows
                         PostInstallPanel.Children.Add(ShortcutsReporter);
                     }
 
-                    ShortcutsReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("AdvancedInstallCreateShortcuts"), progress.ParrentCurrent+1.ToString(),
+                    ShortcutsReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("AdvancedInstallCreateShortcuts"), (progress.ParrentCurrent+1).ToString(),
                             Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
 
                     if (ShortcutsReporter.TaskMinimum != 0)
@@ -431,7 +431,7 @@ namespace RelhaxModpack.Windows
                     }
 
                     StringBuilder sb = new StringBuilder();
-                    sb.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installContourIconAtlas"), progress.ParrentCurrent+1.ToString(),
+                    sb.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installContourIconAtlas"), (progress.ParrentCurrent+1).ToString(),
                             Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString());
                     sb.AppendFormat("{0} {1} {2} {3}\n", progress.ChildCurrent.ToString(), Translations.GetTranslatedString("of"), progress.ChildTotal.ToString(),
                             Translations.GetTranslatedString("stepsComplete"));
