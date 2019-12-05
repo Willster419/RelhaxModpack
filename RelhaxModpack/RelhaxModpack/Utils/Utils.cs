@@ -1235,6 +1235,25 @@ namespace RelhaxModpack
                 return;
             }
         }
+
+        public static bool VerifyCanDeleteDirectory(string source)
+        {
+            string tempDest = source + "_";
+            Logging.Debug("Attempting to verify that directory {0} can be moved", source);
+            try
+            {
+                Directory.Move(source, tempDest);
+                Directory.Move(tempDest, source);
+                Logging.Debug("Can be moved");
+            }
+            catch(Exception ex)
+            {
+                Logging.Error("Failed to move");
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+            return true;
+        }
         #endregion
 
         #region Data type from string processing/parsing

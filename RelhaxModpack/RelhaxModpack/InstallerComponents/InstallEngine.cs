@@ -941,13 +941,34 @@ namespace RelhaxModpack.InstallerComponents
             Prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
             Progress.Report(Prog);
 
+            //check if the folders can be modified first
+            Logging.Info("Checking if mods folders can be modified");
+            string resModsFolder = Path.Combine(Settings.WoTDirectory, "res_mods");
+            Logging.Debug("resModsFolder parsed as {0}", resModsFolder);
+            string modsFolder = Path.Combine(Settings.WoTDirectory, "mods");
+            Logging.Debug("modsFolder parsed as {0}", modsFolder);
+            bool canBeModified = true;
+            if (!Utils.VerifyCanDeleteDirectory(resModsFolder))
+                canBeModified = false;
+            if (!Utils.VerifyCanDeleteDirectory(modsFolder))
+                canBeModified = false;
+            if (!canBeModified)
+            {
+                Logging.Error("One or both of the mods folders cannot be modified. Check file permissions or active applications");
+                return false;
+            }
+            else
+            {
+                Logging.Info("Both mods folder can be modified");
+            }
+
             //get a list of all files and folders in mods and res_mods
             List<string> ListOfAllItems = new List<string>();
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories,true).ToList());
+            if (Directory.Exists(resModsFolder))
+                ListOfAllItems.AddRange(Utils.DirectorySearch(resModsFolder, SearchOption.AllDirectories,true).ToList());
             CancellationToken.ThrowIfCancellationRequested();
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories,true).ToList());
+            if (Directory.Exists(modsFolder))
+                ListOfAllItems.AddRange(Utils.DirectorySearch(modsFolder, SearchOption.AllDirectories,true).ToList());
             CancellationToken.ThrowIfCancellationRequested();
 
             //combine with a list of any installer engine created folders
@@ -1033,17 +1054,17 @@ namespace RelhaxModpack.InstallerComponents
             //final wipe of the folders
             Prog.UninstallStatus = UninstallerExitCodes.PerformFinalClearup;
             Progress.Report(Prog);
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "res_mods"), true))
+            if (Directory.Exists(resModsFolder))
+                if (!Utils.DirectoryDelete(resModsFolder, true))
                     success = false;
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "mods"), true))
+            if (Directory.Exists(modsFolder))
+                if (!Utils.DirectoryDelete(modsFolder, true))
                     success = false;
             CancellationToken.ThrowIfCancellationRequested();
 
             //re-create the folders at the end
-            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
-            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion));
+            Directory.CreateDirectory(Path.Combine(resModsFolder, Settings.WoTClientVersion));
+            Directory.CreateDirectory(Path.Combine(modsFolder, Settings.WoTClientVersion));
 
             //if we are logging, we need to dispose of the uninstall log
             if (logIt)
@@ -1071,6 +1092,27 @@ namespace RelhaxModpack.InstallerComponents
             Prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
             Progress.Report(Prog);
 
+            //check if the folders can be modified first
+            Logging.Info("Checking if mods folders can be modified");
+            string resModsFolder = Path.Combine(Settings.WoTDirectory, "res_mods");
+            Logging.Debug("resModsFolder parsed as {0}", resModsFolder);
+            string modsFolder = Path.Combine(Settings.WoTDirectory, "mods");
+            Logging.Debug("modsFolder parsed as {0}", modsFolder);
+            bool canBeModified = true;
+            if (!Utils.VerifyCanDeleteDirectory(resModsFolder))
+                canBeModified = false;
+            if (!Utils.VerifyCanDeleteDirectory(modsFolder))
+                canBeModified = false;
+            if(!canBeModified)
+            {
+                Logging.Error("One or both of the mods folders cannot be modified. Check file permissions or active applications");
+                return false;
+            }
+            else
+            {
+                Logging.Info("Both mods folder can be modified");
+            }
+
             //get a list of all files and folders in the install log (assuming checking for logfile already done and exists)
             Logging.Debug("creating list of files to delete from reading uninstall logfile");
             string regularlogfilePath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename);
@@ -1097,11 +1139,11 @@ namespace RelhaxModpack.InstallerComponents
 
             //combine with a list of all files and folders in mods and res_mods
             Logging.Debug("adding any files in res_mods and mods by scanning the folders if they aren't on the list already");
-            if(Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories,true).ToList());
+            if(Directory.Exists(resModsFolder))
+                ListOfAllItems.AddRange(Utils.DirectorySearch(resModsFolder, SearchOption.AllDirectories,true).ToList());
             CancellationToken.ThrowIfCancellationRequested();
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories,true).ToList());
+            if (Directory.Exists(modsFolder))
+                ListOfAllItems.AddRange(Utils.DirectorySearch(modsFolder, SearchOption.AllDirectories,true).ToList());
             CancellationToken.ThrowIfCancellationRequested();
 
             //combine with a list of any installer engine created folders
@@ -1213,12 +1255,12 @@ namespace RelhaxModpack.InstallerComponents
             Logging.Debug("performing final wipe of res_mods and mods folders");
             Prog.UninstallStatus = UninstallerExitCodes.PerformFinalClearup;
             Progress.Report(Prog);
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "res_mods"), true))
+            if (Directory.Exists(resModsFolder))
+                if (!Utils.DirectoryDelete(resModsFolder, true))
                     success = false;
             CancellationToken.ThrowIfCancellationRequested();
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "mods"), true))
+            if (Directory.Exists(modsFolder))
+                if (!Utils.DirectoryDelete(modsFolder, true))
                     success = false;
             CancellationToken.ThrowIfCancellationRequested();
 
@@ -1240,8 +1282,8 @@ namespace RelhaxModpack.InstallerComponents
 
             //re-create the folders at the end
             Logging.Debug("re-creating res_mods and mods folders including wot version folder number");
-            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
-            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion));
+            Directory.CreateDirectory(Path.Combine(resModsFolder, Settings.WoTClientVersion));
+            Directory.CreateDirectory(Path.Combine(modsFolder, Settings.WoTClientVersion));
 
             //if we are logging, we need to dispose of the uninstall log
             Logging.Debug("disposing of logging and cleanup");
