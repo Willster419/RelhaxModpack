@@ -17,5 +17,15 @@ namespace RelhaxModpack.DatabaseComponents
         public UpdateTypes UpdateType { get; set; }
         public string WotmodFilenameInZip { get; set; }
         public string WotmodMD5 { get; set; }
+        private List<PatchUpdate> patchUpdates = new List<PatchUpdate>();
+        public List<PatchUpdate> PatchUpdates
+        {
+            get { return patchUpdates; }
+            set
+            {
+                patchUpdates.Clear();
+                patchUpdates.AddRange(value);
+            }
+        }
     }
 }
