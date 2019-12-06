@@ -3490,6 +3490,14 @@
             <param name="progress">The progress reporter object</param>
             <returns>A RelhaxInstallFinishedEventArgs object contain uninstallation data for if the uninstallation succeed or ended prematurely</returns>
         </member>
+        <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.UninstallMods(RelhaxModpack.UninstallModes,System.Boolean)">
+            <summary>
+            Deletes mod files from the current game client
+            </summary>
+            <param name="UninstallMode">Selects which uninstall method</param>
+            <param name="logToUninstaller">if to </param>
+            <returns>true if the uninstall processes completed, false otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.Dispose(System.Boolean)">
             <summary>
             Dispose of the Installation engine

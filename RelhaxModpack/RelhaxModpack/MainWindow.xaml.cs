@@ -1621,6 +1621,8 @@ namespace RelhaxModpack
 
         private void DisplayAndLogInstallErrors(RelhaxInstallFinishedEventArgs results, bool addResultsExitCode)
         {
+            if (!results.InstallFailedSteps.Contains(results.ExitCode) && results.ExitCode != InstallerExitCodes.Success)
+                results.InstallFailedSteps.Add(results.ExitCode);
             if (results.InstallFailedSteps.Count > 0)
             {
                 StringBuilder errorBuilder = new StringBuilder();
