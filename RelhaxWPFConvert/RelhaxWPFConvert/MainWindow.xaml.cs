@@ -261,13 +261,6 @@ namespace RelhaxWPFConvert
 
         private void DdsToBitmap_Click(object sender, RoutedEventArgs e)
         {
-            //custom load freeImage from another place
-            string dllFolder = Path.GetFullPath("tempLibFolder");
-            string dll32 = Path.Combine(dllFolder, "FreeImage32.dll");
-            string dll64 = Path.Combine(dllFolder, "FreeImage64.dll");
-            TeximpNet.Unmanaged.FreeImageLibrary library = TeximpNet.Unmanaged.FreeImageLibrary.Instance;
-            library.LoadLibrary(dll32,dll64);
-
             //check if it's actually a dds file
             bool isItADDSFile = DDSFile.IsDDSFile("damageIndicator.dds");
             Bitmap bmp = null;
@@ -329,6 +322,9 @@ namespace RelhaxWPFConvert
 
         private void BitmapToDds_Click(object sender, RoutedEventArgs e)
         {
+            TeximpNet.Unmanaged.NvTextureToolsLibrary library = TeximpNet.Unmanaged.NvTextureToolsLibrary.Instance;
+            library.LoadLibrary("nvtt.dll");
+
             BitmapData bmpData = null;
             using (Bitmap bmp2 = new Bitmap("damageIndicator.png"))
             {
