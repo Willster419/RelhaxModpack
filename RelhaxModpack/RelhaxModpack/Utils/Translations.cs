@@ -3913,7 +3913,7 @@ namespace RelhaxModpack
             Polish.Add("AddPicturesZip", "Dodaj pliki do archiwum ZIP");
             French.Add("AddPicturesZip", TranslationNeeded);
             Spanish.Add("AddPicturesZip", "Añadir los archivos a ZIP");
-            Russian.Add("AddPicturesZip", TranslationNeeded);
+            Russian.Add("AddPicturesZip", "Добавить файлы в ZIP");
 
             //Component: DiagnosticsAddSelectionsPicturesLabel
             //
@@ -4916,8 +4916,8 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep1GameCenterCheckbox", "Suche stattdessen nach Game Center Updates");
             Polish.Add("GcDownloadStep1GameCenterCheckbox", "Sprawdź aktualizacje tylko dla Wargaming Game Center");
             French.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
-            Spanish.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
-            Russian.Add("GcDownloadStep1GameCenterCheckbox", TranslationNeeded);
+            Spanish.Add("GcDownloadStep1GameCenterCheckbox", "Comprobar actualizaciones de Game Center en su lugar");
+            Russian.Add("GcDownloadStep1GameCenterCheckbox", "Проверить наличие обновлений для WGC вместо игры");
 
             //Component: GcDownloadSelectWgClient
             //
@@ -5242,7 +5242,7 @@ namespace RelhaxModpack
             German.Add("FirstLoadSelectLanguage", "Sprachauswahl");
             Polish.Add("FirstLoadSelectLanguage", "Wybór Języka");
             French.Add("FirstLoadSelectLanguage", TranslationNeeded);
-            Spanish.Add("FirstLoadSelectLanguage", TranslationNeeded);
+            Spanish.Add("FirstLoadSelectLanguage", "Selección de Idioma");
             Russian.Add("FirstLoadSelectLanguage", "Язык интерфейса");
 
             //Component: SelectLanguageHeader
@@ -5251,8 +5251,8 @@ namespace RelhaxModpack
             German.Add("SelectLanguageHeader", "Bitte wähle deine Sprache");
             Polish.Add("SelectLanguageHeader", "Wybierz język aplikacji");
             French.Add("SelectLanguageHeader", TranslationNeeded);
-            Spanish.Add("SelectLanguageHeader", TranslationNeeded);
-            Russian.Add("SelectLanguageHeader", "Пожалуйста, выберите язык");
+            Spanish.Add("SelectLanguageHeader", "Por favor, seleccione el idioma");
+            Russian.Add("SelectLanguageHeader", "Пожалуйста, выберите язык интерфейса");
 
             //Component: SelectLanguagesContinueButton
             // Just a "Continue" button on the bottom. Proceeds to first-run acknowlegements window.
