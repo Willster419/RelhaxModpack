@@ -1,3 +1,13 @@
+Application version 0.29.4.6 (2019-12-06)
+https://www.virustotal.com/gui/file/796cddf0b968204bae73857e67d4261c6277f4f7f52aeb85c3bf791bd3a22aa5/detection
+- Added hotfix from Relhax V1 with OMC view: When preview window loaded, retain window focus.
+- Fixed some window headers and tab headers not being translated correctly (Thanks Nullmaruzero).
+- Fixed a bug with progress reporting in advanced installer. It would report "extracting package x1 of y", where the extra 1 is supposed to be (x+1)
+- Re-worked uninstall methods into one method to prevent code copy-paste.
+- Re-worked installer thread error and exit code handling to show all errors.
+- Updated Polish, German, French, Spanish Translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.4.5 (2019-11-18)
 https://www.virustotal.com/gui/file/d1b9ca8d9e2f7450fde8e03c4465b4f6524fece457dbed0fd2ccfe1ee97c8884/detection
 - Added the ability to udpate the Wargaming Game Center itself from the WG update utility.
