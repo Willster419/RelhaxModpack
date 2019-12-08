@@ -18,6 +18,7 @@ using System.Xml;
 using RelhaxModpack.DatabaseComponents;
 using System.Reflection;
 using HtmlAgilityPack;
+using System.Text.RegularExpressions;
 
 namespace RelhaxModpack.Windows
 {
@@ -61,6 +62,7 @@ namespace RelhaxModpack.Windows
         private List<DatabasePackage> packages = new List<DatabasePackage>();
         private int CurrentUpdateStep = 1;
         private WebClient client = new WebClient();
+        private string UpdateOutputDirectory = string.Empty;
 
         /// <summary>
         /// Create an instance of the AutoUpdatePackageWindow window
@@ -77,7 +79,14 @@ namespace RelhaxModpack.Windows
             using (System.Windows.Forms.WebBrowser bro = new System.Windows.Forms.WebBrowser())
                 SetRegistryKey(System.Diagnostics.Process.GetCurrentProcess().ProcessName, bro.Version.Major);
 
+            Logging.Editor("Attaching datasources", LogLevel.Debug);
             PackageNamesListbox.ItemsSource = Packages;
+
+            //set autoupdate output directory
+            Logging.Editor("Setting update output directory", LogLevel.Debug);
+            UpdateOutputDirectory = Path.Combine(WorkingDirectory, "Output");
+            if (!Directory.Exists(UpdateOutputDirectory))
+                Directory.CreateDirectory(UpdateOutputDirectory);
 
             //attach logfile reporting
             LogfileTextbox.Clear();
@@ -274,12 +283,40 @@ namespace RelhaxModpack.Windows
             package.UpdateInstructions = ParseUpdateInstructions(filesDocument);
 
             Logging.Editor("Starting update zip file process");
+            bool processUpdate = false;
             switch(package.UpdateInstructions.UpdateType)
             {
                 case UpdateTypes.wotmod:
-                    ProcessWotmodUpdate(package);
+                    processUpdate = ProcessWotmodUpdate(package);
                     break;
             }
+
+            //output (move) updated zip file if successful creation
+            if (processUpdate)
+            {
+                Logging.Editor("Update process complete, moving new zip to output directory");
+                string locationToMoveTo = Path.Combine(UpdateOutputDirectory, Path.GetFileName(package.DownloadInstructions.DownloadedDatabaseZipFileLocation));
+                File.Move(package.DownloadInstructions.DownloadedDatabaseZipFileLocation, locationToMoveTo);
+
+                //change the name if the end is in the pattern yyyy-mm-dd.zip
+                Logging.Editor("Changing date of filename to today");
+                string regexPattern = @"\d\d\d\d[-_]\d\d[-_]\d\d.zip$";
+                string currentFileName = Path.GetFileName(locationToMoveTo);
+                Logging.Editor("Current filename: {0}", LogLevel.Info, currentFileName);
+                if (Regex.IsMatch(currentFileName,regexPattern))
+                {
+                    string newFileNameMatch = string.Format("{0}.zip", DateTime.Now.ToString("yyyy-MM-dd"));
+                    string newFilename = Regex.Replace(currentFileName, regexPattern, newFileNameMatch);
+                    Logging.Editor("New filename: {0}", LogLevel.Info, newFilename);
+                    File.Move(locationToMoveTo, Path.Combine(Path.GetDirectoryName(locationToMoveTo), newFilename));
+                }
+                else
+                {
+                    Logging.Editor("Failed to process new filename (is not correct format?)",LogLevel.Error);
+                }
+            }
+
+
             Logging.Editor("Finished update process step 3");
         }
 
