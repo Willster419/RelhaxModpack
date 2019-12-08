@@ -300,9 +300,9 @@
             <RowDefinition Height="632*"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click"/>
-        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="90,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="MoveDatabaseObjectButton" Click="MoveDatabaseObjectButton_Click"/>
-        <Button x:Name="AddDatabaseObjectButton" Content="Add" HorizontalAlignment="Left" Margin="170,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="AddDatabaseObjectButton" Click="AddDatabaseObjectButton_Click"/>
+        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="90,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click"/>
+        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="170,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="MoveDatabaseObjectButton" Click="MoveDatabaseObjectButton_Click"/>
+        <Button x:Name="AddDatabaseObjectButton" Content="Add" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="AddDatabaseObjectButton" Click="AddDatabaseObjectButton_Click"/>
         <Button x:Name="LoadAsDatabaseButton" Content="Load as..." HorizontalAlignment="Right" Margin="0,0,90,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="LoadAsDatabaseButton" Click="LoadAsDatabaseButton_Click"/>
         <Button x:Name="LoadDatabaseButton" Content="Load" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,90,30"  VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseLoad" Click="OnLoadDatabaseClick"/>
         <Button x:Name="SaveAsDatabaseButton" Content="Save as..." HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Tag="DatabaseSaveAs" Click="SaveAsDatabaseButton_Click"/>
@@ -544,20 +544,20 @@
                 <TabItem x:Name="MediasTab" Header="Medias">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageMediasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageMediasDisplay_SelectionChanged" AllowDrop="True" DragOver="PackageMediasDisplay_DragOver" Drop="PackageMediasDisplay_Drop" MouseMove="PackageMediasDisplay_MouseMove" PreviewMouseDown="PackageMediasDisplay_PreviewMouseDown" PreviewMouseUp="PackageMediasDisplay_PreviewMouseUp" ScrollViewer.ScrollChanged="PackageMediasDisplay_ScrollChanged"/>
-                        <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="0,334,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
-                        <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="105,334,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
-                        <Button Content="Remove Media" x:Name="MediaRemoveMediaButton" Tag="MediaRemoveMediaButton" HorizontalAlignment="Left" Margin="210,334,0,0" VerticalAlignment="Top" Width="100" Click="MediaRemoveMediaButton_Click"/>
+                        <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="10,511,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
+                        <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="230,511,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
+                        <Button Content="Remove Media" x:Name="MediaRemoveMediaButton" Tag="MediaRemoveMediaButton" HorizontalAlignment="Left" Margin="10,486,0,0" VerticalAlignment="Top" Width="467" Click="MediaRemoveMediaButton_Click"/>
                         <ComboBox x:Name="MediaTypesList" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top" Width="477" Height="20">
                             <RelhaxModpack:MediaType>Picture</RelhaxModpack:MediaType>
                             <RelhaxModpack:MediaType>Webpage</RelhaxModpack:MediaType>
                             <RelhaxModpack:MediaType>MediaFile</RelhaxModpack:MediaType>
                             <RelhaxModpack:MediaType>HTML</RelhaxModpack:MediaType>
                         </ComboBox>
-                        <TextBox x:Name="MediaTypesURL" HorizontalAlignment="Left" Height="71" Margin="0,258,0,0" VerticalAlignment="Top" Width="487"
+                        <TextBox x:Name="MediaTypesURL" HorizontalAlignment="Left" Height="173" Margin="0,258,0,0" VerticalAlignment="Top" Width="487"
                                  TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
-                        <Button Content="Preview Selected Media" x:Name="MediaPreviewSelectedMediaButton" Tag="MediaPreviewSelectedMediaButton" HorizontalAlignment="Left" Margin="0,359,0,0" VerticalAlignment="Top" Width="135" Click="MediaPreviewSelectedMediaButton_Click"/>
-                        <Button Content="Preview Edit Media" x:Name="MediaPreviewEditMediaButton" Tag="MediaPreviewEditMediaButton" HorizontalAlignment="Left" Margin="140,359,0,0" VerticalAlignment="Top" Width="110" Click="MediaPreviewEditMediaButton_Click"/>
-                        <Button x:Name="UploadMediaButton" Content="Upload and add media" HorizontalAlignment="Left" Margin="0,384,0,0" VerticalAlignment="Top" Width="135" Click="UploadMediaButton_Click"/>
+                        <Button Content="Preview Selected Media" x:Name="MediaPreviewSelectedMediaButton" Tag="MediaPreviewSelectedMediaButton" HorizontalAlignment="Left" Margin="10,461,0,0" VerticalAlignment="Top" Width="467" Click="MediaPreviewSelectedMediaButton_Click"/>
+                        <Button Content="Preview Edit Media" x:Name="MediaPreviewEditMediaButton" Tag="MediaPreviewEditMediaButton" HorizontalAlignment="Left" Margin="115,511,0,0" VerticalAlignment="Top" Width="110" Click="MediaPreviewEditMediaButton_Click"/>
+                        <Button x:Name="UploadMediaButton" Content="Upload and add media" HorizontalAlignment="Left" Margin="10,436,0,0" VerticalAlignment="Top" Width="467" Click="UploadMediaButton_Click"/>
                         <TextBlock x:Name="MediaMediaTypeLabel" HorizontalAlignment="Left" Margin="0,184,0,0" TextWrapping="Wrap" Text="Media Type" VerticalAlignment="Top"/>
                         <TextBlock HorizontalAlignment="Left" Margin="0,238,0,0" TextWrapping="Wrap" Text="Media Data" VerticalAlignment="Top" Width="66" Height="20"/>
                     </Grid>
