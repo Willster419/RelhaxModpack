@@ -697,6 +697,11 @@ namespace RelhaxModpack
             return await Task.Run(() => CreateMD5Hash(inputFile));
         }
 
+        public static async Task<string> CreateMD5HashAsync(Stream stream)
+        {
+            return await Task.Run(() => CreateMD5Hash(stream));
+        }
+
         /// <summary>
         /// Gets a zip file entry in the form of a string
         /// </summary>
