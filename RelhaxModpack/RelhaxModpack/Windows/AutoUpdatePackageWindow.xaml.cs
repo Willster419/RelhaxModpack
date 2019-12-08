@@ -159,12 +159,12 @@ namespace RelhaxModpack.Windows
                 ZipEntry filesxml = currentZip[AutoUpdateFileInstructionsXml];
                 if (downloadxml == null)
                 {
-                    Logging.Editor("This zip file does not support auto update, needs xml instructions");
+                    Logging.Editor("This zip file does not support auto update, needs xml instructions (download)");
                     return;
                 }
                 if (filesxml == null)
                 {
-                    Logging.Editor("This zip file does not support auto update, needs xml instructions");
+                    Logging.Editor("This zip file does not support auto update, needs xml instructions (files)");
                     return;
                 }
                 downloadxml.Extract(Path.Combine(WorkingDirectory, package.PackageName),ExtractExistingFileAction.OverwriteSilently);
@@ -181,6 +181,7 @@ namespace RelhaxModpack.Windows
 
         private async void UpdateProcessStep2()
         {
+            Logging.Editor("Starting update process step 2");
             DatabasePackage package = PackageNamesListbox.SelectedItems[0] as DatabasePackage;
             //parse download instructions xml files
             XmlDocument downloadDocument = XmlUtils.LoadXmlDocument(Path.Combine(WorkingDirectory, package.PackageName, "_autoUpdate", "download.xml"), XmlLoadType.FromFile);
@@ -194,7 +195,9 @@ namespace RelhaxModpack.Windows
             //parse to class objects
             DownloadInstructions downloadInstructions = ParseDownloadInstructions(downloadDocument);
 
+            //get download URL string based on download instructions type
             string directDownloadURL = string.Empty;
+            Logging.Editor("Getting download URL");
             switch(downloadInstructions.DownloadType)
             {
                 case DownloadTypes.StaticLink:
@@ -205,16 +208,25 @@ namespace RelhaxModpack.Windows
                     break;
             }
 
+            //check that download URL is valid
             if (string.IsNullOrWhiteSpace(directDownloadURL))
+            {
+                Logging.Editor("Download URL is blank", LogLevel.Error);
                 return;
+            }
+            else
+                Logging.Editor("Download URL is valid, attempting to download file");
 
+            //create download string and downlaod the file
             string downloadLocation = Path.Combine(WorkingDirectory, package.PackageName, downloadInstructions.DownloadFilename);
-
+            if (File.Exists(downloadLocation))
+                File.Delete(downloadLocation);
             await client.DownloadFileTaskAsync(directDownloadURL, downloadLocation);
             AutoUpdateProgressBar.Value = AutoUpdateProgressBar.Minimum;
+            Logging.Editor("File downloaded, step 2 complete");
         }
 
-        private void UpdateProcessStep3()
+        private void UpdateProcessStep3(string downloadedFile)
         {
             DatabasePackage package = PackageNamesListbox.SelectedItems[0] as DatabasePackage;
             //parse download instructions xml files
@@ -232,9 +244,22 @@ namespace RelhaxModpack.Windows
             switch(updateInstructions.UpdateType)
             {
                 case UpdateTypes.wotmod:
-
+                    ProcessWotmodUpdate(updateInstructions, downloadedFile);
                     break;
             }
+        }
+
+        private void ProcessWotmodUpdate(UpdateInstructions instructions, string downloadedFile)
+        {
+            Logging.Editor("Processing wotmod update");
+
+            //delete current wotmod file in zip (verify that only one wotmod file exists)
+
+            //update wotmod file in zip
+
+            //process patch instructions
+            //locate via zip files list regex search
+            //for each found, extract, load, xpath, search, replace, update
         }
 
         private DownloadInstructions ParseDownloadInstructions(XmlDocument doc)
@@ -291,14 +316,14 @@ namespace RelhaxModpack.Windows
             switch (formatVersion)
             {
                 case "1.0":
-                    ParseUpdateInstructions(instructions, doc);
+                    ParseUpdateInstructionsV1(instructions, doc);
                     break;
             }
 
             return instructions;
         }
 
-        private UpdateInstructions ParseUpdateInstructions(UpdateInstructions instructions, XmlDocument doc)
+        private UpdateInstructions ParseUpdateInstructionsV1(UpdateInstructions instructions, XmlDocument doc)
         {
             //public string InstructionsVersion { get; set; } (already got)
             //public UpdateTypes UpdateType { get; set; }
@@ -308,26 +333,66 @@ namespace RelhaxModpack.Windows
             {
                 switch (node.Name)
                 {
-                    case "WotmodFilenameInZip":
+                    case nameof(instructions.WotmodFilenameInZip):
                         instructions.WotmodFilenameInZip = node.InnerText;
                         break;
-                    case "UpdateType":
+                    case nameof(instructions.UpdateType):
                         instructions.UpdateType = (UpdateTypes)Enum.Parse(instructions.UpdateType.GetType(), node.InnerText);
                         break;
-                    case "WotmodMD5":
+                    case nameof(instructions.WotmodMD5):
                         instructions.WotmodMD5 = node.InnerText;
+                        break;
+                    case nameof(instructions.PatchUpdates):
+                        instructions.PatchUpdates = ParsePatchUpdates(node);
                         break;
                 }
             }
             return instructions;
         }
 
+        private List<PatchUpdate> ParsePatchUpdates(XmlNode patchNodee)
+        {
+            List<PatchUpdate> patchUpdates = new List<PatchUpdate>();
+            foreach(XmlNode node in patchNodee.ChildNodes)
+            {
+                PatchUpdate patchUpdate = new PatchUpdate();
+                foreach(XmlNode patchNode in node.ChildNodes)
+                {
+                    switch(node.Name)
+                    {
+                        case nameof(patchUpdate.PatchesToUpdate):
+                            patchUpdate.PatchesToUpdate = patchNode.InnerText;
+                            break;
+                        case nameof(patchUpdate.XPath):
+                            patchUpdate.XPath = patchNode.InnerText;
+                            break;
+                        case nameof(patchUpdate.Search):
+                            XmlAttribute singleReturnAttribute = node.Attributes["single"];
+                            if(singleReturnAttribute != null)
+                            {
+                                patchUpdate.SearchReturnFirst = bool.Parse(singleReturnAttribute.InnerText);
+                                Logging.Editor("Search single attribute found and processed as {0}", LogLevel.Debug, patchUpdate.SearchReturnFirst);
+                            }
+                            patchUpdate.Search = patchNode.InnerText;
+                            break;
+                        case nameof(patchUpdate.Replace):
+                            patchUpdate.Replace = patchNode.InnerText;
+                            break;
+                    }
+                }
+                patchUpdates.Add(patchUpdate);
+            }
+            return patchUpdates;
+        }
+
         private async Task<string> GetWGmodsDownloadLink(string wgmodsBaseUrl)
         {
             bool browserLoaded = false;
+            int browserLoadHits = 0;
             browser.LoadCompleted += (sendahh, endArgs) =>
             {
-                browserLoaded = true;
+                if(++browserLoadHits >= 1)
+                    browserLoaded = true;
             };
             
             //https://stackoverflow.com/questions/1298255/how-do-i-suppress-script-errors-when-using-the-wpf-webbrowser-control
@@ -341,27 +406,51 @@ namespace RelhaxModpack.Windows
             while (!browserLoaded)
                 await Task.Delay(500);
 
+            //get the entire loaded html document as a string
             var doc = browser.Document as mshtml.HTMLDocument;
             string s = doc.body.outerHTML;
 
+            //load string into html document
             //http://blog.olussier.net/2010/03/30/easily-parse-html-documents-in-csharp/
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(s);
             HtmlNode node = document.DocumentNode;
+
+            //attempt to get client version text and download link text
             //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
             HtmlNodeCollection clientVersionNode = node.SelectNodes(@"//div[contains(@class, 'ModDetails_label')]");
             string version = string.Empty;
-            if (clientVersionNode != null)
+            HtmlNode downloadUrlNode = node.SelectSingleNode(@"//a[contains(@class, 'ModDetails_hidden')]");
+            string downloadURL = string.Empty;
+
+            //parse html nodes into string values
+            if (clientVersionNode != null && clientVersionNode.Count >= 4)
             {
                 HtmlNode nodeTest = clientVersionNode[3];
                 HtmlNode versionNode = nodeTest.ChildNodes[0].ChildNodes[1];
                 version = versionNode.InnerText;
             }
+            if(downloadUrlNode != null)
+            {
+                downloadURL = downloadUrlNode.Attributes["href"].Value;
+            }
 
-            HtmlNode downloadUrlNode = node.SelectSingleNode(@"//a[contains(@class, 'ModDetails_hidden')]");
-            string downloadURL = downloadUrlNode.Attributes["href"].Value;
+            //display to user
+            Logging.Editor(string.Format("For client: {0}, download link: {1}",
+                string.IsNullOrEmpty(version)? "(null)" : version,
+                string.IsNullOrEmpty(downloadURL) ? "(null)" : downloadURL));
 
-            Logging.Editor(string.Format("For client: {0}, download link: {1}", version, downloadURL));
+            //check for empty string parsed values
+            if(string.IsNullOrEmpty(version))
+            {
+                Logging.Editor("clientVersionNode is incorrect format (count = {0}), possibly HTML did not completely load?", LogLevel.Warning,
+                    clientVersionNode == null ? "null" : clientVersionNode.Count.ToString());
+            }
+            if(string.IsNullOrEmpty(downloadURL))
+            {
+                Logging.Editor("downloadUrlNode is null, possibly HTML did not completely load?", LogLevel.Error);
+                return null;
+            }
 
             return downloadURL;
         }

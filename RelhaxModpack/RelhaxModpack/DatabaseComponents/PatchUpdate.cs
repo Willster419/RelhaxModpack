@@ -11,6 +11,7 @@ namespace RelhaxModpack.DatabaseComponents
         public string PatchesToUpdate { get; set; }
         public string XPath { get; set; }
         public string Search { get; set; }
+        public bool SearchReturnFirst { get; set; }
         public string Replace { get; set; }
     }
 }

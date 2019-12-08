@@ -9,7 +9,8 @@ namespace RelhaxModpack.DatabaseComponents
     public enum DownloadTypes
     {
         StaticLink,
-        WgMods
+        WgMods,
+        WebScrape
     }
     public class DownloadInstructions
     {
