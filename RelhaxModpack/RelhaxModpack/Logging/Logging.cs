@@ -32,7 +32,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The log file for the patcher
         /// </summary>
-        Patcher,
+        PatchDesigner,
 
         /// <summary>
         /// The log file for the database update tool
@@ -194,7 +194,7 @@ namespace RelhaxModpack
                     fileToWriteTo = EditorLogfile;
                     logfilePath = ApplicationEditorLogFilename;
                     break;
-                case Logfiles.Patcher:
+                case Logfiles.PatchDesigner:
                     fileToWriteTo = PatcherLogfile;
                     logfilePath = ApplicationPatchDesignerLogFilename;
                     break;
@@ -225,7 +225,7 @@ namespace RelhaxModpack
                 case Logfiles.Editor:
                     EditorLogfile = fileToWriteTo;
                     break;
-                case Logfiles.Patcher:
+                case Logfiles.PatchDesigner:
                     PatcherLogfile = fileToWriteTo;
                     break;
                 case Logfiles.Updater:
@@ -256,7 +256,7 @@ namespace RelhaxModpack
                     return UninstallLogfile == null ? true : false;
                 case Logfiles.Editor:
                     return EditorLogfile == null ? true : false;
-                case Logfiles.Patcher:
+                case Logfiles.PatchDesigner:
                     return PatcherLogfile == null ? true : false;
                 case Logfiles.Updater:
                     return UpdaterLogfile == null ? true : false;
@@ -290,7 +290,7 @@ namespace RelhaxModpack
                         return false;
                     return EditorLogfile.CanWrite;
 
-                case Logfiles.Patcher:
+                case Logfiles.PatchDesigner:
                     if (PatcherLogfile == null)
                         return false;
                     return PatcherLogfile.CanWrite;
@@ -332,7 +332,7 @@ namespace RelhaxModpack
                     EditorLogfile.Dispose();
                     EditorLogfile = null;
                     break;
-                case Logfiles.Patcher:
+                case Logfiles.PatchDesigner:
                     PatcherLogfile.Dispose();
                     PatcherLogfile = null;
                     break;
@@ -357,7 +357,7 @@ namespace RelhaxModpack
                 case Logfiles.Editor:
                     EditorLogfile.Write(ApplicationlogStartStop);
                     break;
-                case Logfiles.Patcher:
+                case Logfiles.PatchDesigner:
                     PatcherLogfile.Write(ApplicationlogStartStop);
                     break;
                 case Logfiles.Updater:
@@ -386,7 +386,7 @@ namespace RelhaxModpack
                 case Logfiles.Editor:
                     fileToWriteTo = EditorLogfile;
                     break;
-                case Logfiles.Patcher:
+                case Logfiles.PatchDesigner:
                     fileToWriteTo = PatcherLogfile;
                     break;
                 case Logfiles.Installer:
@@ -430,7 +430,7 @@ namespace RelhaxModpack
                 }
                 return;
             }
-            if (logfiles == Logfiles.Patcher)
+            if (logfiles == Logfiles.PatchDesigner || logfiles == Logfiles.Editor)
             {
                 string temp = fileToWriteTo.Write(message, logLevel);
                 OnLoggingUIThreadReport?.Invoke(temp);
@@ -635,7 +635,7 @@ namespace RelhaxModpack
         /// <param name="level">The level of severity included into the string format</param>
         public static void Patcher(string message, LogLevel level = LogLevel.Info)
         {
-            WriteToLog(message, Logfiles.Patcher, level);
+            WriteToLog(message, Logfiles.PatchDesigner, level);
         }
 
         /// <summary>
@@ -646,7 +646,7 @@ namespace RelhaxModpack
         /// <param name="args">The arguments to be passed into the string.Format() method</param>
         public static void Patcher(string message, LogLevel level = LogLevel.Info, params object[] args)
         {
-            WriteToLog(message, Logfiles.Patcher, level, args);
+            WriteToLog(message, Logfiles.PatchDesigner, level, args);
         }
     }
 }

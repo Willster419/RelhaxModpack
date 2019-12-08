@@ -68,7 +68,7 @@ namespace RelhaxModpack.Windows
                 if (MessageBox.Show("You have unsaved changes, return to patcher?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     return;
             }
-            if (!Logging.IsLogDisposed(Logfiles.Patcher))
+            if (!Logging.IsLogDisposed(Logfiles.PatchDesigner))
             {
                 Logging.Patcher("Saving patcher settings",LogLevel.Info);
                 if (Settings.SaveSettings(Settings.PatcherSettingsFilename, typeof(PatchSettings), null, PatchSettings))
