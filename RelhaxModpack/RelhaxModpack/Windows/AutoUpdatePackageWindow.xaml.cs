@@ -112,6 +112,7 @@ namespace RelhaxModpack.Windows
                 return;
             }
             ResetUpdateProcessButton.IsEnabled = true;
+            StartContinueUpdateProcessButton.IsEnabled = false;
             switch(CurrentUpdateStep)
             {
                 case 1:
@@ -124,11 +125,13 @@ namespace RelhaxModpack.Windows
                     UpdateProcessStep3();
                     break;
             }
+            StartContinueUpdateProcessButton.IsEnabled = true;
             CurrentUpdateStep++;
             if (CurrentUpdateStep >= 4)
             {
                 StartContinueUpdateProcessButton.Content = "Start";
                 CurrentUpdateStep = 1;
+                ResetUpdateProcessButton.IsEnabled = false;
             }
             else
             {
@@ -266,7 +269,7 @@ namespace RelhaxModpack.Windows
             Logging.Editor("File downloaded, finished update process step 2");
         }
 
-        private void UpdateProcessStep3()
+        private async void UpdateProcessStep3()
         {
             Logging.Editor("Starting update process step 3: Loading files xml instructions");
             DatabasePackage package = PackageNamesListbox.SelectedItems[0] as DatabasePackage;
@@ -287,7 +290,7 @@ namespace RelhaxModpack.Windows
             switch(package.UpdateInstructions.UpdateType)
             {
                 case UpdateTypes.wotmod:
-                    processUpdate = ProcessWotmodUpdate(package);
+                    processUpdate = await ProcessWotmodUpdate(package);
                     break;
             }
 
@@ -303,12 +306,20 @@ namespace RelhaxModpack.Windows
                 string regexPattern = @"\d\d\d\d[-_]\d\d[-_]\d\d.zip$";
                 string currentFileName = Path.GetFileName(locationToMoveTo);
                 Logging.Editor("Current filename: {0}", LogLevel.Info, currentFileName);
+
                 if (Regex.IsMatch(currentFileName,regexPattern))
                 {
                     string newFileNameMatch = string.Format("{0}.zip", DateTime.Now.ToString("yyyy-MM-dd"));
                     string newFilename = Regex.Replace(currentFileName, regexPattern, newFileNameMatch);
-                    Logging.Editor("New filename: {0}", LogLevel.Info, newFilename);
-                    File.Move(locationToMoveTo, Path.Combine(Path.GetDirectoryName(locationToMoveTo), newFilename));
+                    Logging.Editor("New filename:     {0}", LogLevel.Info, newFilename);
+                    string newFileLocation = Path.Combine(Path.GetDirectoryName(locationToMoveTo), newFilename);
+                    if(File.Exists(newFileLocation))
+                    {
+                        Logging.Editor("File already exists, overwriting",LogLevel.Warning);
+                        File.Delete(newFileLocation);
+                    }
+                    File.Move(locationToMoveTo, newFileLocation);
+                    Logging.Editor("New output file exists at {0}", LogLevel.Info, newFileLocation);
                 }
                 else
                 {
@@ -316,11 +327,10 @@ namespace RelhaxModpack.Windows
                 }
             }
 
-
             Logging.Editor("Finished update process step 3");
         }
 
-        private bool ProcessWotmodUpdate(DatabasePackage package)
+        private async Task<bool> ProcessWotmodUpdate(DatabasePackage package)
         {
             Logging.Editor("Processing wotmod update");
 
@@ -345,11 +355,11 @@ namespace RelhaxModpack.Windows
                         updateInstructions.WotmodOldFilenameInZip = entry.FileName;
                     }
                 }
-                updateInstructions.WotmodDatabaseMD5 = Utils.CreateMD5Hash(wotmodEntry.OpenReader());
+                updateInstructions.WotmodDatabaseMD5 = await Utils.CreateMD5HashAsync(wotmodEntry.OpenReader());
             }
 
             //compare md5 of file in database zip to md5 of downloaded file
-            updateInstructions.WotmodDownloadedMD5 = Utils.CreateMD5Hash(downloadInstructions.DownloadedFileLocation);
+            updateInstructions.WotmodDownloadedMD5 = await Utils.CreateMD5HashAsync(downloadInstructions.DownloadedFileLocation);
             Logging.Editor("MD5 of downloaded wotmod: {0}", LogLevel.Info, updateInstructions.WotmodDownloadedMD5);
             Logging.Editor("MD5 of database wotmod:   {0}", LogLevel.Info, updateInstructions.WotmodDatabaseMD5);
 
@@ -360,39 +370,52 @@ namespace RelhaxModpack.Windows
             }
 
             //update wotmod file in zip
-            Logging.Editor("MD5s don't match, performing update of zip files");
+            Logging.Editor("MD5s don't match, updating wotmod in database zip with downloaded one");
+            
             using (ZipFile databaseZip = new ZipFile(downloadInstructions.DownloadedDatabaseZipFileLocation))
             {
                 //remove current entry and add new entry
-                databaseZip.RemoveEntry(databaseZip[updateInstructions.WotmodOldFilenameInZip]);
-                databaseZip.AddEntry(updateInstructions.WotmodFilenameInZip, File.ReadAllBytes(downloadInstructions.DownloadedFileLocation));
+                await Task.Run(() =>
+                {
+                    databaseZip.RemoveEntry(databaseZip[updateInstructions.WotmodOldFilenameInZip]);
+                    databaseZip.AddEntry(updateInstructions.WotmodFilenameInZip, File.ReadAllBytes(downloadInstructions.DownloadedFileLocation));
+                });
 
                 //process patch instructions
                 Logging.Editor("Processing patches");
                 int patchesCount = 0;
-                foreach(PatchUpdate patchUpdate in updateInstructions.PatchUpdates)
+                Utils.AllowUIToUpdate();
+                foreach (PatchUpdate patchUpdate in updateInstructions.PatchUpdates)
                 {
                     Logging.Editor("Processing patch {0} of {1}", LogLevel.Info, ++patchesCount, updateInstructions.PatchUpdates.Count);
                     //locate via zip files list regex search
                     //for each found, extract, load, xpath, search, replace, update
 
+                    Utils.AllowUIToUpdate();
                 }
 
                 //save zip changes to disk
                 Logging.Editor("Saving zip file changes to disk");
                 databaseZip.SaveProgress += DatabaseZip_SaveProgress;
-                databaseZip.Save();
-                Logging.Editor("Save complete");
-                AutoUpdateProgressBar.Value = AutoUpdateProgressBar.Minimum;
+                await Task.Run(() =>
+                {
+                    databaseZip.Save();
+                });
             }
+
+            Logging.Editor("Save complete");
+            AutoUpdateProgressBar.Value = AutoUpdateProgressBar.Minimum;
             return true;
         }
 
         private void DatabaseZip_SaveProgress(object sender, SaveProgressEventArgs e)
         {
-            AutoUpdateProgressBar.Maximum = e.TotalBytesToTransfer;
-            AutoUpdateProgressBar.Minimum = 0;
-            AutoUpdateProgressBar.Value = e.BytesTransferred;
+            this.Dispatcher.Invoke(() =>
+            {
+                AutoUpdateProgressBar.Maximum = e.TotalBytesToTransfer;
+                AutoUpdateProgressBar.Minimum = 0;
+                AutoUpdateProgressBar.Value = e.BytesTransferred;
+            });
         }
 
         private DownloadInstructions ParseDownloadInstructions(XmlDocument doc, string databaseZipFileDownloadLocation)
@@ -652,6 +675,16 @@ namespace RelhaxModpack.Windows
                     Logging.Editor("Values are same, continue");
                 }
             }
+        }
+
+        private void ClearLogButton_Click(object sender, RoutedEventArgs e)
+        {
+            LogfileTextbox.Clear();
+        }
+
+        private void LogfileTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            LogfileTextbox.ScrollToEnd();
         }
     }
 }
