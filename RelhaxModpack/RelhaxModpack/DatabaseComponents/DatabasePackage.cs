@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.DatabaseComponents;
+using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 
@@ -193,6 +194,10 @@ namespace RelhaxModpack
         /// Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
         /// </summary>
         public bool ExtractionStarted = false;
+
+        public DownloadInstructions DownloadInstructions = null;
+
+        public UpdateInstructions UpdateInstructions = null;
 
         /// <summary>
         /// String representation of the object
