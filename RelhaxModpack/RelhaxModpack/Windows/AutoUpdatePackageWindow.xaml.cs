@@ -104,7 +104,7 @@ namespace RelhaxModpack.Windows
             client = null;
         }
 
-        private void StartContinueUpdateProcessButton_Click(object sender, RoutedEventArgs e)
+        private async void StartContinueUpdateProcessButton_Click(object sender, RoutedEventArgs e)
         {
             if(PackageNamesListbox.SelectedItems.Count == 0)
             {
@@ -116,13 +116,13 @@ namespace RelhaxModpack.Windows
             switch(CurrentUpdateStep)
             {
                 case 1:
-                    UpdateProcessStep1();
+                    await UpdateProcessStep1();
                     break;
                 case 2:
-                    UpdateProcessStep2();
+                    await UpdateProcessStep2();
                     break;
                 case 3:
-                    UpdateProcessStep3();
+                    await UpdateProcessStep3();
                     break;
             }
             StartContinueUpdateProcessButton.IsEnabled = true;
@@ -139,7 +139,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private async void UpdateProcessStep1()
+        private async Task UpdateProcessStep1()
         {
             Logging.Editor("Starting update process step 1");
 
@@ -218,7 +218,7 @@ namespace RelhaxModpack.Windows
             AutoUpdateProgressBar.Value = e.BytesReceived;
         }
 
-        private async void UpdateProcessStep2()
+        private async Task UpdateProcessStep2()
         {
             Logging.Editor("Starting update process step 2");
 
@@ -269,7 +269,7 @@ namespace RelhaxModpack.Windows
             Logging.Editor("File downloaded, finished update process step 2");
         }
 
-        private async void UpdateProcessStep3()
+        private async Task UpdateProcessStep3()
         {
             Logging.Editor("Starting update process step 3: Loading files xml instructions");
             DatabasePackage package = PackageNamesListbox.SelectedItems[0] as DatabasePackage;
@@ -366,7 +366,8 @@ namespace RelhaxModpack.Windows
             if(updateInstructions.WotmodDownloadedMD5.Equals(updateInstructions.WotmodDatabaseMD5))
             {
                 Logging.Editor("MD5 files match, no need to update package");
-                //return false;
+                //DEBUG: comment this out to test method
+                return false;
             }
 
             //update wotmod file in zip
@@ -384,14 +385,13 @@ namespace RelhaxModpack.Windows
                 //process patch instructions
                 Logging.Editor("Processing patches");
                 int patchesCount = 0;
-                Utils.AllowUIToUpdate();
                 foreach (PatchUpdate patchUpdate in updateInstructions.PatchUpdates)
                 {
                     Logging.Editor("Processing patch {0} of {1}", LogLevel.Info, ++patchesCount, updateInstructions.PatchUpdates.Count);
+                    Utils.AllowUIToUpdate();
                     //locate via zip files list regex search
                     //for each found, extract, load, xpath, search, replace, update
 
-                    Utils.AllowUIToUpdate();
                 }
 
                 //save zip changes to disk
@@ -612,6 +612,9 @@ namespace RelhaxModpack.Windows
         {
             ResetUpdateProcessButton.IsEnabled = false;
             CurrentUpdateStep = 1;
+            StartContinueUpdateProcessButton.Content = "Start";
+            if (!StartContinueUpdateProcessButton.IsEnabled)
+                StartContinueUpdateProcessButton.IsEnabled = true;
         }
 
         private void DetailedChangesWindow_Click(object sender, RoutedEventArgs e)
