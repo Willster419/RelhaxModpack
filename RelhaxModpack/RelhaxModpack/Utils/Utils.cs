@@ -28,6 +28,7 @@ using Size = System.Drawing.Size;
 using RelhaxModpack.Windows;
 using System.Threading;
 using System.Windows.Media.Imaging;
+using System.Web;
 
 namespace RelhaxModpack
 {
@@ -44,7 +45,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Replacing patch arguments of the patch object
         /// </summary>
-        PatchArguements,
+        PatchArguementsReplace,
 
         /// <summary>
         /// Replacing modpack created macros (like [quote]) with the corresponding characters
@@ -109,6 +110,22 @@ namespace RelhaxModpack
     }
 
     /// <summary>
+    /// A structure to help with searching for inside the registry by providing a base area to start, and a string search path
+    /// </summary>
+    public struct RegistrySearch
+    {
+        /// <summary>
+        /// Where to base the search in the registry (current_user, local_machiene, etc.)
+        /// </summary>
+        public RegistryKey Root;
+
+        /// <summary>
+        /// The absolute folder path to the desired registry entries
+        /// </summary>
+        public string Searchpath;
+    }
+
+    /// <summary>
     /// A utility class for static functions used in various places in the modpack
     /// </summary>
     public static class Utils
@@ -135,6 +152,11 @@ namespace RelhaxModpack
         /// </summary>
         public const long BYTES_TO_MBYTES = 1048576;
 
+        /// <summary>
+        /// The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
+        /// </summary>
+        public const string MSVCPLink = "https://www.microsoft.com/en-us/download/details.aspx?id=40784";
+
         //MACROS
         //FilePath macro
         //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/how-to-initialize-a-dictionary-with-a-collection-initializer
@@ -145,9 +167,9 @@ namespace RelhaxModpack
         public static Dictionary<string, string> FilePathDict = new Dictionary<string, string>();
 
         /// <summary>
-        /// The dictionary to store patch argument macros
+        /// The dictionary to store patch argument (replace) macros
         /// </summary>
-        public static Dictionary<string, string> PatchArguementsDict = new Dictionary<string, string>()
+        public static Dictionary<string, string> PatchArguementsReplaceDict = new Dictionary<string, string>()
         {
             {@"[sl]", @"/" }
         };
@@ -191,6 +213,11 @@ namespace RelhaxModpack
             {"\r", @"\r" },
             {"\t", @"\t" }
         };
+
+        /// <summary>
+        /// Provides the ability to insert a 'null' value into json configurations
+        /// </summary>
+        public const string PatchJsonNullEscape = "[null]";
         #endregion
 
         #region Unmanaged Library stuff
@@ -203,6 +230,71 @@ namespace RelhaxModpack
         /// The manager instance of the Nvidia Texture Tools Library
         /// </summary>
         public static RelhaxNvTexLibrary NvTexLibrary = new RelhaxNvTexLibrary();
+
+        /// <summary>
+        /// Test the ability to load an unmanaged library
+        /// </summary>
+        /// <returns>True if library loaded, false otherwise</returns>
+        public static bool TestLibrary(IRelhaxUnmanagedLibrary library, string name, bool unload)
+        {
+            Logging.Info("testing {0} library", name);
+            bool libraryLoaded;
+            if (!library.IsLoaded)
+            {
+                if (library.Load())
+                {
+                    Logging.Info("library loaded successfully");
+                    libraryLoaded = true;
+                }
+                else
+                {
+                    Logging.Error("library failed to load");
+                    libraryLoaded = false;
+                }
+            }
+            else
+            {
+                Logging.Info("library already loaded");
+                libraryLoaded = true;
+            }
+
+            if(unload && library.IsLoaded)
+            {
+                Logging.Info("unload requested and library is loaded, unloading");
+                if (library.Unload())
+                {
+                    Logging.Info("library unloaded successfully");
+                }
+                else
+                {
+                    Logging.Error("library failed to unload library");
+                    libraryLoaded = false;
+                }
+            }
+            return libraryLoaded;
+        }
+
+        /// <summary>
+        /// Test the ability to load and unload all the atlas image processing libraries
+        /// </summary>
+        /// <returns>True if both libraries loaded, false otherwise</returns>
+        public static bool TestLoadAtlasLibraries(bool unload)
+        {
+            bool freeImageLoaded = TestLibrary(FreeImageLibrary, "FreeImage", true);
+            bool nvttLoaded = TestLibrary(NvTexLibrary, "nvtt", true);
+
+            if(nvttLoaded && freeImageLoaded)
+            {
+                Logging.Info("TestLoadAtlasLibraries(): both libraries loaded");
+                return true;
+            }
+            else
+            {
+                Logging.Error("TestLoadAtlasLibraries(): failed to load one or more atlas processing libraries: freeImage={0}, nvtt={1}",
+                    freeImageLoaded.ToString(), nvttLoaded.ToString());
+                return false;
+            }
+        }
 
         /// <summary>
         /// Get a complete assembly name based on a matching keyword
@@ -323,10 +415,17 @@ namespace RelhaxModpack
                 XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
                 XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
 
-            Logging.Info("Current build is {0} Online build is {1}", currentVersion, applicationOnlineVersion);
+            Logging.Info("Current build is {0} online build is {1}", currentVersion, applicationOnlineVersion);
 
             //check if versions are equal
-            return currentVersion.Equals(applicationOnlineVersion);
+            //return currentVersion.Equals(applicationOnlineVersion);
+            //currentVersion = strA, applicationOnline=strB
+            //if currentVersion >  applicationOnline, probably testing, ok
+            //if currentVersion == applicationOnline, same version, ok
+            //if currentVersion <  applicationOnline, update available, not ok
+            //when strA < strB, it returns -1
+            bool outOfDate = (CompareVersions(currentVersion, applicationOnlineVersion) == -1);
+            return !outOfDate;
         }
         #endregion
 
@@ -520,24 +619,41 @@ namespace RelhaxModpack
         /// <returns></returns>
         public static string CreateMD5Hash(string inputFile)
         {
+            //return if arg is null or empty
             if (string.IsNullOrWhiteSpace(inputFile))
                 return "-1";
-            //first, return if the file does not exist
+
+            //return if the file does not exist
             if (!File.Exists(inputFile))
                 return "-1";
+
+            FileStream stream = null;
+            string result = string.Empty;
+            using (stream = File.OpenRead(inputFile))
+            {
+                result = CreateMD5Hash(stream);
+            }
+
+            if(result.Equals("-1"))
+            {
+                Logging.Error("Failed to check MD5 of file " + inputFile);
+            }
+            return result;
+        }
+
+        public static string CreateMD5Hash(Stream stream)
+        {
             //Create a new Stringbuilder to collect the bytes
             StringBuilder sBuilder = new StringBuilder();
             MD5 md5Hash;
-            FileStream stream;
             try
             {
                 using (md5Hash = MD5.Create())
-                using (stream = File.OpenRead(inputFile))
                 {
                     //Convert the input string to a byte array and compute the hash
                     byte[] data = md5Hash.ComputeHash(stream);
                     stream.Close();
-                    
+
                     //Loop through each byte of the hashed data 
                     //and format each one as a hexadecimal string.
                     for (int i = 0; i < data.Length; i++)
@@ -548,9 +664,10 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Logging.Warning("Failed to check crc of local file " + inputFile + ex.ToString());
+                Logging.Exception(ex.ToString());
                 return "-1";
             }
+
             //Return the hexadecimal string.
             return sBuilder.ToString();
         }
@@ -736,12 +853,15 @@ namespace RelhaxModpack
         /// <param name="value">The file size in bytes</param>
         /// <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
         /// <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
+        /// <param name="ignoreSizeWarningIf0">If set to true, the application log will not show values about the passed in value for size calculation being 0. 
+        /// File of 0 size, for example.</param>
         /// <returns>The string representation to decimalPlaces of the file size optionally with the bytes parameter</returns>
-        public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false)
+        public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false, bool ignoreSizeWarningIf0 = false)
         {
             if (value == 0)
             {
-                Logging.Warning("SizeSuffix value is 0 (why did you even call this method?)");
+                if(!ignoreSizeWarningIf0)
+                    Logging.Warning("SizeSuffix value is 0 (is this the intent?)");
                 if (sizeSuffix)
                     return "0.0 bytes";
                 else
@@ -1935,21 +2055,34 @@ namespace RelhaxModpack
         /// <param name="strB">the second version</param>
         /// <returns>less than zero if strA is less than strB, equal to zero if
         /// strA equals strB, and greater than zero if strA is greater than strB</returns>
-        /// <remarks> See https://stackoverflow.com/questions/30494/compare-version-identifiers
+        /// <remarks>
+        /// See https://stackoverflow.com/questions/30494/compare-version-identifiers
         /// Samples:
+        /// strA        | strB
         /// 1.0.0.0     | 1.0.0.1 = -1
         /// 1.0.0.1     | 1.0.0.0 =  1
         /// 1.0.0.0     | 1.0.0.0 =  0
         /// 1, 0.0.0    | 1.0.0.0 =  0
         /// 9, 5, 1, 44 | 3.4.5.6 =  1
         /// 1, 5, 1, 44 | 3.4.5.6 = -1
-        /// 6,5,4,3     | 6.5.4.3 =  0 </remarks>
+        /// 6,5,4,3     | 6.5.4.3 =  0
+        /// </remarks>
         public static int CompareVersions(string strA, string strB)
         {
-            Version vA = new Version(strA.Replace(",", "."));
-            Version vB = new Version(strB.Replace(",", "."));
+            try
+            {
+                Version vA = new Version(strA.Replace(",", "."));
+                Version vB = new Version(strB.Replace(",", "."));
 
-            return vA.CompareTo(vB);
+                return vA.CompareTo(vB);
+            }
+            catch(Exception ex)
+            {
+                Logging.Exception("failed to parse versions in CompareVersions, vA=strA={0}, vB=strB={1}", strA, strB);
+                Logging.Exception(ex.ToString());
+                //assume out of date
+                return -1;
+            }
         }
 
         /// <summary>
@@ -2136,6 +2269,36 @@ namespace RelhaxModpack
                 return false;
             }
         }
+
+        /// <summary>
+        /// Opens the selected text in Google translate web page
+        /// </summary>
+        /// <param name="message">The text to translate</param>
+        /// <returns></returns>
+        public static bool OpenInGoogleTranslate(string message)
+        {
+            //sample:
+            //https://translate.google.com/#view=home&op=translate&sl=en&tl=de&text=test
+
+            //replace percent
+            message = message.Replace(@"%", @"percent");
+            message = message.Replace(@"&", @"and");
+
+            //google translate has a limit of 5000 characters
+            if (message.Length > 4999)
+            {
+                message = message.Substring(0, 4999);
+            }
+            string textToSend = HttpUtility.UrlPathEncode(message);
+
+            //replace comma: %2C
+            textToSend = textToSend.Replace(@",", @"%2C");
+
+            //remove colon escapes and slash escapes
+            string completeTemplate = string.Format("https://translate.google.com/#view=home&op=translate&sl=en&tl={0}&text={1}",
+                Translations.GetTranslatedString("GoogleTranslateLanguageKey"), textToSend);
+            return StartProcess(completeTemplate);
+        }
         #endregion
 
         #region Macro Utils
@@ -2152,6 +2315,7 @@ namespace RelhaxModpack
             FilePathDict.Add(@"{tanksversion}", Settings.WoTClientVersion);
             FilePathDict.Add(@"{tanksonlinefolderversion}", Settings.WoTModpackOnlineFolderVersion);
             FilePathDict.Add(@"{appdata}", Settings.AppDataFolder);
+            FilePathDict.Add(@"{appData}", Settings.AppDataFolder);
             FilePathDict.Add(@"{app}", Settings.WoTDirectory);
             FilePathDict.Add(@"versiondir", Settings.WoTClientVersion);
         }
@@ -2172,8 +2336,8 @@ namespace RelhaxModpack
                 case ReplacementTypes.FilePath:
                     dictionary = FilePathDict;
                     break;
-                case ReplacementTypes.PatchArguements:
-                    dictionary = PatchArguementsDict;
+                case ReplacementTypes.PatchArguementsReplace:
+                    dictionary = PatchArguementsReplaceDict;
                     break;
                 case ReplacementTypes.PatchFiles:
                     dictionary = PatchFilesDict;
@@ -2209,94 +2373,146 @@ namespace RelhaxModpack
         /// <summary>
         /// Checks the registry to get the latest location of where WoT is installed
         /// </summary>
-        /// <param name="WoTRoot">The string to set to the WoT path</param>
         /// <returns>True if operation success</returns>
-        public static bool AutoFindWoTDirectory(ref string WoTRoot)
+        public static string AutoFindWoTDirectory()
         {
             List<string> searchPathWoT = new List<string>();
-            string[] registryPathArray;
+            RegistryKey result = null;
 
-            // here we need the value for the searchlist
-            // check replay link
-            registryPathArray = new string[] { @"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.wotreplay\shell\open\command", @"HKEY_CURRENT_USER\Software\Classes\.wotreplay\shell\open\command" };
-            foreach (string regEntry in registryPathArray)
+            //check replay link locations (the last game instance the user opened)
+            //key is null, value is path
+            RegistrySearch[] registryEntriesGroup1 = new RegistrySearch[]
             {
-                // get values from from registry
-                object obj = Registry.GetValue(regEntry, "", -1);
-                // if it is not "null", it is containing possible a string
-                if (obj != null)
-                {
-                    try
-                    {
-                        // add the thing to the checklist, but remove the Quotation Marks in front of the string and the trailing -> " "%1"
-                        searchPathWoT.Add(((string)obj).Substring(1).Substring(0, ((string)obj).Length - 7));
-                    }
-                    catch
-                    { } // only exception catching
-                }
-            }
+                new RegistrySearch(){Root = Registry.LocalMachine, Searchpath = @"SOFTWARE\Classes\.wotreplay\shell\open\command"},
+                new RegistrySearch(){Root = Registry.CurrentUser, Searchpath = @"Software\Classes\.wotreplay\shell\open\command"}
+            };
 
-            // here we need the value for the searchlist
-            string regPath = @"HKEY_CURRENT_USER\Software\Wargaming.net\Launcher\Apps\wot";
-            RegistryKey subKeyHandle = Registry.CurrentUser.OpenSubKey(regPath.Replace(@"HKEY_CURRENT_USER\", ""));
-            if (subKeyHandle != null)
+            foreach (RegistrySearch searchPath in registryEntriesGroup1)
             {
-                // get the value names at the reg Key one by one
-                foreach (string valueName in subKeyHandle.GetValueNames())
+                Logging.Debug("Searching in registry root {0} with path {1}", searchPath.Root.Name, searchPath.Searchpath);
+                result = GetRegistryKeys(searchPath);
+                if (result != null)
                 {
-                    // read the value from the regPath
-                    object obj = Registry.GetValue(regPath, valueName, -1);
-                    if (obj != null)
+                    foreach (string valueInKey in result.GetValueNames())
                     {
-                        try
+                        string possiblePath = result.GetValue(valueInKey) as string;
+                        if (!string.IsNullOrWhiteSpace(possiblePath) && possiblePath.ToLower().Contains("worldoftanks.exe"))
                         {
-                            // we did get only a path to used WoT folders, so add the game name to the path and add it to the checklist
-                            searchPathWoT.Add(Path.Combine((string)obj, "WorldOfTanks.exe"));
-                        }
-                        catch
-                        { } // only exception catching
-                    }
-                }
-            }
-
-            // here we need the value name for the searchlist
-            registryPathArray = new string[] { @"Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache", @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store" };
-            foreach (string p in registryPathArray)
-            {
-                // set the handle to the registry key
-                subKeyHandle = Registry.CurrentUser.OpenSubKey(p);
-                if (subKeyHandle == null) continue;            // subKeyHandle == null not existsting
-                // parse all value names of the registry key abouve
-                foreach (string valueName in subKeyHandle.GetValueNames())
-                {
-                    try
-                    {
-                        // if the lower string "worldoftanks.exe" is contained => match !!
-                        if (valueName.ToLower().Contains("Worldoftanks.exe".ToLower()))
-                        {
-                            // remove (replace it with "") the attachment ".ApplicationCompany" or ".FriendlyAppName" in the string and add the string to the searchlist
-                            searchPathWoT.Add(valueName.Replace(".ApplicationCompany", "").Replace(".FriendlyAppName", ""));
+                            //trim front
+                            possiblePath = possiblePath.Substring(1);
+                            //trim end
+                            possiblePath = possiblePath.Substring(0, possiblePath.Length - 6);
+                            Logging.Debug("possible path found: {0}", possiblePath);
+                            searchPathWoT.Add(possiblePath);
                         }
                     }
-                    catch
-                    { } // only exception catching
+                    result.Dispose();
+                    result = null;
                 }
             }
 
-            // this searchlist is long, maybe 30-40 entries (system depended), but the best possibility to find a currently installed WoT game.
+            //key is WoT path, don't care about value
+            RegistrySearch[] registryEntriesGroup2 = new RegistrySearch[]
+            {
+                new RegistrySearch(){Root = Registry.CurrentUser, Searchpath = @"Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache"},
+                new RegistrySearch(){Root = Registry.CurrentUser, Searchpath = @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store"}
+            };
+
+            foreach (RegistrySearch searchPath in registryEntriesGroup2)
+            {
+                Logging.Debug("Searching in registry root {0} with path {1}", searchPath.Root.Name, searchPath.Searchpath);
+                result = GetRegistryKeys(searchPath);
+                if (result != null)
+                {
+                    foreach(string possiblePath in result.GetValueNames())
+                    {
+                        if(!string.IsNullOrWhiteSpace(possiblePath) && possiblePath.ToLower().Contains("worldoftanks.exe"))
+                        {
+                            Logging.Debug("possible path found: {0}", possiblePath);
+                            searchPathWoT.Add(possiblePath);
+                        }
+                    }
+                    result.Dispose();
+                    result = null;
+                }
+            }
+
             foreach (string path in searchPathWoT)
             {
-                if (File.Exists(path))
+                string potentialResult = path;
+                //if it has win32 or win64, filter it out
+                if (potentialResult.Contains(Settings.WoT32bitFolderWithSlash) || potentialResult.Contains(Settings.WoT64bitFolderWithSlash))
                 {
-                    Logging.Info("valid game path found: {0}", path);
-                    // write the path to the central value holder
-                    WoTRoot = path;
-                    // return the path
-                    return true;
+                    potentialResult = potentialResult.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
+                }
+                if (File.Exists(potentialResult))
+                {
+                    Logging.Info("valid game path found: {0}", potentialResult);
+                    return potentialResult;
                 }
             }
             //return false if nothing found
-            return false;
+            return null;
+        }
+
+        /// <summary>
+        /// Gets all registry keys that exist in the given search base and path
+        /// </summary>
+        /// <param name="search">The RegistrySearch structure to specify where to search and where to base the search</param>
+        /// <returns>The RegistryKey object of the folder in registry, or null if the search failed</returns>
+        public static RegistryKey GetRegistryKeys(RegistrySearch search)
+        {
+            try
+            {
+                return search.Root.OpenSubKey(search.Searchpath);
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception("Failed to get registry entry");
+                Logging.Exception(ex.ToString());
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Finds the location of the Wargaming Game center installation directory from the registry
+        /// </summary>
+        /// <returns>The location of wgc.exe if found, else null</returns>
+        public static string AutoFindWgcDirectory()
+        {
+            string wgcRegistryKeyLoc = @"Software\Classes\wgc\shell\open\command";
+            Logging.Debug("searching registry ({0}) for wgc location",wgcRegistryKeyLoc);
+            //search for the location of the game center from the registry
+            RegistryKey wgcKey = GetRegistryKeys(new RegistrySearch() { Root = Registry.CurrentUser, Searchpath = wgcRegistryKeyLoc });
+            string actualLocation = null;
+            if (wgcKey != null)
+            {
+                Logging.Debug("not null key, checking results");
+                foreach (string valueInKey in wgcKey.GetValueNames())
+                {
+                    string wgcPath = wgcKey.GetValue(valueInKey) as string;
+                    Logging.Debug("parsing result name '{0}' with value '{1}'", valueInKey, wgcPath);
+                    if (!string.IsNullOrWhiteSpace(wgcPath) && wgcPath.ToLower().Contains("wgc.exe"))
+                    {
+                        //trim front
+                        wgcPath = wgcPath.Substring(1);
+                        //trim end
+                        wgcPath = wgcPath.Substring(0, wgcPath.Length - 6);
+                        Logging.Debug("parsed to new value of '{0}', checking if file exists");
+                        if (File.Exists(wgcPath))
+                        {
+                            Logging.Debug("exists, use this for wgc start");
+                            actualLocation = wgcPath;
+                            break;
+                        }
+                        else
+                        {
+                            Logging.Debug("not exist, continue to search");
+                        }
+                    }
+                }
+            }
+            return actualLocation;
         }
         #endregion
 

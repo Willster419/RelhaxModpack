@@ -80,25 +80,6 @@ namespace RelhaxModpack.UIComponents
         }
 
         #region Data UI Binding
-
-        private Color _DisabledColor = Colors.DarkGray;
-
-        /// <summary>
-        /// Set the value of the disabled component color
-        /// </summary>
-        public Color DisabledColor
-        {
-            get
-            {
-                return _DisabledColor;
-            }
-            set
-            {
-                _DisabledColor = value;
-                OnPropertyChanged(nameof(DisabledColor));
-            }
-        }
-
         private Visibility _PopularModVisability = Visibility.Hidden;
 
         /// <summary>
@@ -141,9 +122,7 @@ namespace RelhaxModpack.UIComponents
         /// <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
         protected void OnPropertyChanged(string propertyName)
         {
-            var handle = PropertyChanged;
-            if (handle != null)
-                handle(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
     }

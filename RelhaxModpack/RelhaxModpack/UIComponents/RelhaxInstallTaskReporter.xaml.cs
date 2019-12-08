@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Windows;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -50,12 +51,25 @@ namespace RelhaxModpack.UIComponents
         /// <summary>
         /// Create an instance of the RelhaxInstallTaskReporter and init the UI side of it
         /// </summary>
-        public RelhaxInstallTaskReporter()
+        public RelhaxInstallTaskReporter(string uniqueID)
         {
             InitializeComponent();
+            //dynamically create the tags and then apply the theme to itsself
+            MainBorder.Tag = string.Format("{0}_{1}", uniqueID, MainBorder.Name);
+            TaskName.Tag = string.Format("{0}_{1}", uniqueID,TaskName.Name);
+            TaskStatus.Tag = string.Format("{0}_{1}", uniqueID, TaskStatus.Name);
+            TaskProgress1.Tag = string.Format("{0}_{1}", uniqueID, TaskProgress1.Name);
+            TaskProgress2.Tag = string.Format("{0}_{1}", uniqueID,TaskProgress2.Name);
         }
 
         #region Properties
+
+        /// <summary>
+        /// Flag for when the object has been fully constructed by the UI Dispatcher.
+        /// </summary>
+        /// <remarks>Due to the multi-threaded nature of the progress reporting, progress may be reported before the reporting UI objects are fully constructed.
+        /// This results in null exceptions. By using a flag to determine if the object is fully created, the reporting progresses won't try to update properties of null objects</remarks>
+        public bool LoadedAfterApply { get; set; } = false;
 
         private TaskReportState _reportState = TaskReportState.Inactive;
 
@@ -240,10 +254,21 @@ namespace RelhaxModpack.UIComponents
         /// <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
         protected void OnPropertyChanged(string propertyName)
         {
-            var handle = PropertyChanged;
-            if (handle != null)
-                handle(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
+
+        private void RelhaxTaskReporter_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (LoadedAfterApply)
+            {
+                WindowColorset advancedColorset = null;
+                if (UISettings.CurrentTheme.WindowColorsets != null && UISettings.CurrentTheme.WindowColorsets.ContainsKey(typeof(AdvancedProgress)))
+                {
+                    advancedColorset = UISettings.CurrentTheme.WindowColorsets[typeof(AdvancedProgress)];
+                }
+                UISettings.ApplyThemeToRootComponent(this, false, advancedColorset);
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Ionic.Zip;
+using RelhaxModpack.AtlasesCreator;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TeximpNet;
 using TeximpNet.Unmanaged;
 
 namespace RelhaxModpack
@@ -14,7 +16,7 @@ namespace RelhaxModpack
     /// A wrapper class around the TexImpNet NvidiaTT library class
     /// </summary>
     /// <remarks>The class handles: 32 and 64 bit library loading determination, Extraction, and Loading into memory</remarks>
-    public class RelhaxNvTexLibrary
+    public class RelhaxNvTexLibrary : IRelhaxUnmanagedLibrary
     {
         private NvTextureToolsLibrary library = NvTextureToolsLibrary.Instance;
 
@@ -69,7 +71,30 @@ namespace RelhaxModpack
         {
             if (!IsExtracted)
                 Extract();
-            return library.LoadLibrary(Filepath);
+            try
+            {
+                return library.LoadLibrary(Filepath);
+            }
+            catch (TeximpException ex)
+            {
+                Logging.Exception("failed to load native library");
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to unload the library
+        /// </summary>
+        /// <returns>True if the library was unloaded, false otherwise</returns>
+        public bool Unload()
+        {
+            if (!IsLoaded)
+                return true;
+            else
+            {
+                return library.FreeLibrary();
+            }
         }
 
         /// <summary>

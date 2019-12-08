@@ -105,7 +105,7 @@ namespace RelhaxModpack.Windows
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress;
         private bool LoadingUI = false;
-        private List<SelectablePackage> userMods;
+        private Category UserCategory = null;
         private Preview p;
         const int FLASH_TICK_INTERVAL = 250;
         const int NUM_FLASH_TICKS = 5;
@@ -177,7 +177,7 @@ namespace RelhaxModpack.Windows
                 ParsedCategoryList = ParsedCategoryList,
                 Dependencies = Dependencies,
                 GlobalDependencies = GlobalDependencies,
-                UserMods = userMods
+                UserMods = UserCategory.Packages
             });
         }
 
@@ -579,6 +579,7 @@ namespace RelhaxModpack.Windows
                     {
                         AddPackage(cat.Packages);
                     });
+                    Utils.AllowUIToUpdate();
                 }
 
                 //perform any final loading to do
@@ -591,10 +592,11 @@ namespace RelhaxModpack.Windows
                 {
                     //add the user mods
                     AddUserMods();
-                    //finish loading
+
                     //update the text on the list
                     InstallingTo.Text = string.Format(Translations.GetTranslatedString("InstallingTo"), Settings.WoTDirectory);
                     InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
+
                     //determind if the collapse and expand buttons should be visible
                     switch (ModpackSettings.ModSelectionView)
                     {
@@ -615,6 +617,7 @@ namespace RelhaxModpack.Windows
                     //process loading selections after loading UI
                     XmlDocument SelectionsDocument = null;
                     bool shouldLoadSomething = false;
+                    bool loadSuccess = false;
                     if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
                     {
                         //check that the file exists before trying to load it
@@ -663,7 +666,7 @@ namespace RelhaxModpack.Windows
                     {
                         if(SelectionsDocument != null)
                         {
-                            LoadSelection(SelectionsDocument, true);
+                            loadSuccess = LoadSelection(SelectionsDocument, true);
                         }
                         else
                         {
@@ -672,9 +675,6 @@ namespace RelhaxModpack.Windows
                             Logging.Error("Failed to load SelectionsDocument, AutoSelectionFilePath={0}", ModpackSettings.AutoOneclickSelectionFilePath);
                         }
                     }
-
-                    //set the version of WoT we are installing for
-                    InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
 
                     //like hook up the flashing timer
                     FlashTimer.Tick += OnFlastTimerTick;
@@ -690,18 +690,23 @@ namespace RelhaxModpack.Windows
                     //set the loading flag back to false
                     LoadingUI = false;
 
+                    //set the UI color to null so it's grabbed first time
+                    UISettings.NotSelectedTabColor = null;
+
+                    //set tabs UI coloring
+                    ModTabGroups_SelectionChanged(null, null);
+
                     //if auto install or one-click install, don't show the UI
-                    if(ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
+                    if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
                         OnSelectionListReturn(this, new SelectionListEventArgs()
                         {
-                            ContinueInstallation = true,
+                            ContinueInstallation = loadSuccess,
                             ParsedCategoryList = ParsedCategoryList,
                             Dependencies = Dependencies,
                             GlobalDependencies = GlobalDependencies,
-                            UserMods = userMods
+                            UserMods = UserCategory.Packages
                         });
-                        Close();
                     }
                     else
                     {
@@ -730,7 +735,9 @@ namespace RelhaxModpack.Windows
         {
             //get a list of all zip files in the folder
             string[] zipFilesUserMods = Utils.DirectorySearch(Settings.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
-            userMods = new List<SelectablePackage>();
+
+            //init database components
+            UserCategory = new Category();
             foreach (string s in zipFilesUserMods)
             {
                 SelectablePackage sp = new SelectablePackage
@@ -745,7 +752,7 @@ namespace RelhaxModpack.Windows
                 };
                 //circular reference because
                 sp.Parent = sp.TopParent = sp;
-                userMods.Add(sp);
+                UserCategory.Packages.Add(sp);
             }
         }
 
@@ -756,11 +763,15 @@ namespace RelhaxModpack.Windows
             {
                 Name = "UserMods",
                 Header = Translations.GetTranslatedString("userMods"),
+                Style = (Style)Application.Current.Resources["RelhaxSelectionListTabItemStyle"]
             };
+            userTab.Resources.Add("TabItemHeaderSelectedBackground", UISettings.CurrentTheme.SelectionListActiveTabHeaderBackgroundColor.Brush);
             userTab.RequestBringIntoView += OnUserModsTabSelected;
             userTab.Content = userStackPanel;
             ModTabGroups.Items.Add(userTab);
-            foreach(SelectablePackage package in userMods)
+            UserCategory.TabPage = userTab;
+
+            foreach(SelectablePackage package in UserCategory.Packages)
             {
                 RelhaxWPFCheckBox userMod = new RelhaxWPFCheckBox()
                 {
@@ -768,16 +779,15 @@ namespace RelhaxModpack.Windows
                     HorizontalAlignment = HorizontalAlignment.Left,
                     HorizontalContentAlignment = HorizontalAlignment.Left,
                     VerticalContentAlignment = VerticalAlignment.Center,
-                    //FONT/BACKGROUND TODO
                     IsChecked = false,
                     IsEnabled = true,
                     Content = package.NameDisplay,
                     PopularModVisability = Visibility.Hidden,
-                    GreyAreaVisability = Visibility.Hidden
+                    GreyAreaVisability = Visibility.Hidden,
+                    Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush
                 };
                 package.UIComponent = userMod;
                 userMod.Click += OnUserPackageClick;
-                //EVENT TODO
                 userStackPanel.Children.Add(userMod);
             }
         }
@@ -795,15 +805,19 @@ namespace RelhaxModpack.Windows
                 //make the tab page
                 cat.TabPage = new TabItem()
                 {
-                    //Background TODO
                     Header = cat.Name,
                     //HorizontalAlignment = HorizontalAlignment.Left,
                     //VerticalAlignment = VerticalAlignment.Center,
                     //MinWidth = 50,
                     //MaxWidth = 150,
                     //Width = 0
-                    Tag = cat
+                    Tag = cat,
+                    Style = (Style)Application.Current.Resources["RelhaxSelectionListTabItemStyle"]
                 };
+
+                //add brush resource
+                cat.TabPage.Resources.Add("TabItemHeaderSelectedBackground", UISettings.CurrentTheme.SelectionListActiveTabHeaderBackgroundColor.Brush);
+
                 //make and attach the category header
                 cat.CategoryHeader = new SelectablePackage()
                 {
@@ -826,7 +840,8 @@ namespace RelhaxModpack.Windows
                         {
                             Background = System.Windows.Media.Brushes.Transparent,
                             HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
-                            HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch
+                            HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch,
+                            IsExpanded = true
                         };
                         cat.CategoryHeader.RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                         cat.CategoryHeader.TreeView = new StretchingTreeView()
@@ -839,11 +854,11 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.ChildStackPanel = new StackPanel();
                         cat.CategoryHeader.ChildBorder = new Border()
                         {
-                            BorderBrush = Brushes.Black,
+                            BorderBrush = UISettings.CurrentTheme.SelectionListBorderColor.Brush,
                             BorderThickness = ModpackSettings.EnableBordersLegacyView? new Thickness(1) : new Thickness(0),
                             Child = cat.CategoryHeader.ChildStackPanel,
                             Margin = new Thickness(-25, 0, 0, 0),
-                            Background = UISettings.NotSelectedPanelColor
+                            Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
                         };
                         if (cat.CategoryHeader.TreeView.Items.Count > 0)
                             cat.CategoryHeader.TreeView.Items.Clear();
@@ -852,13 +867,12 @@ namespace RelhaxModpack.Windows
                         //for root element, hook into expandable element
                         cat.CategoryHeader.TreeViewItem.Collapsed += TreeViewItem_Collapsed;
                         cat.CategoryHeader.TreeViewItem.Expanded += (sender, e) => { e.Handled = true; };
-                        //TODO BACKGROUND
                         RelhaxWPFCheckBox box = new RelhaxWPFCheckBox()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
-                            HorizontalAlignment = HorizontalAlignment.Left
-                            //forground TODO
+                            HorizontalAlignment = HorizontalAlignment.Left,
+                            Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                         };
                         cat.CategoryHeader.UIComponent = box;
                         box.Click += OnWPFComponentCheck;
@@ -874,25 +888,22 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.ParentStackPanel = new StackPanel();
                         cat.CategoryHeader.ParentBorder = new Border()
                         {
-                            //background TODO
                             Child = cat.CategoryHeader.ParentStackPanel,
                             Padding = new Thickness(2),
-                            Background = UISettings.NotSelectedPanelColor
+                            Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush,
                         };
                         cat.CategoryHeader.ScrollViewer = new ScrollViewer()
                         {
-                            //BACKROUND TODO
                             Content = cat.CategoryHeader.ParentBorder
                         };
                         //tab page -> scrollViewer -> Border -> stackPanel
                         cat.TabPage.Content = cat.CategoryHeader.ScrollViewer;
-                        //COLOR UI BACKGROUND TODO
                         //create checkbox for inside selecteionlist
                         RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
-                            //Foreground = Settings.GetTextColorWPF(),//TODO
+                            Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             HorizontalAlignment = HorizontalAlignment.Left
                         };
                         cb2.Click += OnWPFComponentCheck;
@@ -902,7 +913,7 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.ChildStackPanel = new StackPanel();
                         cat.CategoryHeader.ChildBorder = new Border()
                         {
-                            BorderBrush = Brushes.Black,
+                            BorderBrush = UISettings.CurrentTheme.SelectionListBorderColor.Brush,
                             BorderThickness = ModpackSettings.EnableBordersDefaultV2View? new Thickness(1) : new Thickness(0),
                             Child = cat.CategoryHeader.ChildStackPanel,
                             Padding = new Thickness(15,0,0,0)
@@ -965,11 +976,10 @@ namespace RelhaxModpack.Windows
                     package.ChildStackPanel = new StackPanel();
                     package.ChildBorder = new Border()
                     {
-                        BorderBrush = Brushes.Black,
+                        BorderBrush = BorderBrush = UISettings.CurrentTheme.SelectionListBorderColor.Brush,
                         BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
                         Child = package.ChildStackPanel,
-                        Background = UISettings.NotSelectedPanelColor
-                        //background TODO
+                        Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
                     };
                     //custom settings for each border
                     switch(ModpackSettings.ModSelectionView)
@@ -990,8 +1000,6 @@ namespace RelhaxModpack.Windows
                         {
                             ToolTip = package.ToolTipString,
                             Package = package,
-                            //FONT? TODO
-                            //TODO: DOES HORIZONAL BREAK LEGACY??
                             HorizontalAlignment = HorizontalAlignment.Left,
                             HorizontalContentAlignment = HorizontalAlignment.Left,
                             VerticalContentAlignment = VerticalAlignment.Center,
@@ -999,11 +1007,10 @@ namespace RelhaxModpack.Windows
                             IsEnabled = package.IsStructureEnabled,
                             PopularModVisability = package.PopularMod? Visibility.Visible : Visibility.Hidden,
                             GreyAreaVisability = package.GreyAreaMod? Visibility.Visible : Visibility.Hidden,
-                            //the UI building code ONLY deals with BUILDING the UI, not loading configuration options!!
-                            //so make it false and later when loading selection it will mark it
-                            //BACKGROUND FORGROUND TODO
+                            Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             IsChecked = false
                         };
+                        ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFRadioButton, true);
                         break;
                     case SelectionTypes.single_dropdown1:
                         DoComboboxStuff(package, 0);
@@ -1016,7 +1023,6 @@ namespace RelhaxModpack.Windows
                         {
                             ToolTip = package.ToolTipString,
                             Package = package,
-                            //FONT? TODO
                             HorizontalAlignment = HorizontalAlignment.Left,
                             HorizontalContentAlignment = HorizontalAlignment.Left,
                             VerticalContentAlignment = VerticalAlignment.Center,
@@ -1024,9 +1030,10 @@ namespace RelhaxModpack.Windows
                             IsEnabled = package.IsStructureEnabled,
                             IsChecked = false,
                             PopularModVisability = package.PopularMod ? Visibility.Visible : Visibility.Hidden,
-                            GreyAreaVisability = package.GreyAreaMod ? Visibility.Visible : Visibility.Hidden
-                            //BACKGROUND FORGROUND TODO
+                            GreyAreaVisability = package.GreyAreaMod ? Visibility.Visible : Visibility.Hidden,
+                            Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                         };
+                        ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFCheckBox, true);
                         break;
                 }
                 //filters out the null UIComponents like if dropdown
@@ -1058,7 +1065,7 @@ namespace RelhaxModpack.Windows
                             package.TreeViewItem.Expanded += (sender, e) => { e.Handled = true; };
                             package.TreeViewItem.Collapsed += (sender, e) => { e.Handled = true; };
                             //expand the tree view item
-                            package.TreeViewItem.IsExpanded = true;
+                            package.TreeViewItem.IsExpanded = !ModpackSettings.ShowOptionsCollapsedLegacy;
                             //and add the treeviewitem to the stackpanel
                             package.Parent.ChildStackPanel.Children.Add(package.TreeViewItem);
                             break;
@@ -1085,13 +1092,12 @@ namespace RelhaxModpack.Windows
                 package.Parent.RelhaxWPFComboBoxList[boxIndex] = new RelhaxWPFComboBox()
                 {
                     IsEditable = false,
-                    Name = "notAddedYet",
                     IsEnabled = false,
                     //FONT?
                     MinWidth = 100,
-                    //TODO: BELOW OK IN LEGACY?
                     MaxWidth = 420,//yes, really
-                    HorizontalAlignment = HorizontalAlignment.Left
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    AddedToList = false
                 };
             }
             ComboBoxItem cbi = new ComboBoxItem(package, package.NameDisplay)
@@ -1100,10 +1106,10 @@ namespace RelhaxModpack.Windows
                 Content = package.NameDisplay
             };
             package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Add(cbi);
-            if (package.Parent.RelhaxWPFComboBoxList[boxIndex].Name.Equals("notAddedYet"))
+            if (!package.Parent.RelhaxWPFComboBoxList[boxIndex].AddedToList)
             {
-                //lol add it
-                package.Parent.RelhaxWPFComboBoxList[boxIndex].Name = "added";
+                //add it
+                package.Parent.RelhaxWPFComboBoxList[boxIndex].AddedToList = true;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].PreviewMouseRightButtonDown += Generic_MouseDown;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].SelectionChanged += OnSingleDDPackageClick;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].Handler = OnSingleDDPackageClick;
@@ -1158,15 +1164,32 @@ namespace RelhaxModpack.Windows
         {
             if (LoadingUI)
                 return;
-            IPackageUIComponent ipc = (IPackageUIComponent)sender;
-            SelectablePackage spc;
-            if (ipc is RelhaxWPFComboBox cb2)
+            SelectablePackage spc = null;
+            if (sender is RelhaxWPFComboBox cb2)
             {
+                //get the UI cbi struct and the internal SeletablePackage
                 ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
                 spc = cbi.Package;
+                //only enable the package if the structure leading to this package is enabled
                 if(cb2.SelectedIndex == 0 && spc.IsStructureEnabled && !spc.Checked)
                 {
-                    OnSingleDDPackageClick(sender, e);
+                    foreach (SelectablePackage childPackage in spc.Parent.Packages)
+                    {
+                        if (childPackage.Equals(spc))
+                            continue;
+                        //uncheck all packages of the same type
+                        if (childPackage.Type.Equals(spc.Type))
+                        {
+                            childPackage.Checked = false;
+                        }
+                    }
+
+                    //verify selected is actually checked
+                    if (!spc.Checked)
+                        spc.Checked = true;
+
+                    //dropdown packages only need to propagate up when selected...
+                    PropagateChecked(spc, SelectionPropagationDirection.PropagateUp);
                 }
             }
         }
@@ -1211,10 +1234,9 @@ namespace RelhaxModpack.Windows
             if (LoadingUI)
                 return;
 
-            IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = null;
 
-            if (ipc is RelhaxWPFComboBox cb2)
+            if (sender is RelhaxWPFComboBox cb2)
             {
                 //don't change the selection if the user did not want to change the option
                 if (!cb2.IsDropDownOpen)
@@ -1442,6 +1464,64 @@ namespace RelhaxModpack.Windows
                     PropagateDownNotChecked(childPackage);
             }
         }
+
+        private void ModTabGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LoadingUI)
+                return;
+            if (ParsedCategoryList == null)
+                return;
+
+            List<Category> listWithUserCat = new List<Category>();
+            listWithUserCat.AddRange(ParsedCategoryList);
+            listWithUserCat.Add(UserCategory);
+
+            foreach (Category category in listWithUserCat)
+            {
+                TabItem TabIndex = category.TabPage;
+                //if the color is not saved yet, then save what the default currently is
+                if (UISettings.NotSelectedTabColor == null)
+                {
+                    //windows 10 uses a linear gradient brush (at least mine does)
+                    //windows 7 in classic theme uses a solid color brush
+                    if (UISettings.CurrentTheme.Equals(Themes.Default))
+                    {
+                        UISettings.NotSelectedTabColor = TabIndex.Background;
+                    }
+                    else
+                    {
+                        UISettings.NotSelectedTabColor = UISettings.CurrentTheme.SelectionListNotActiveHasNoSelectionsBackgroundColor.Brush;
+                    }
+                }
+
+                //3 possible conditions:
+                // if (active){ }
+                // else
+                // {
+                //  if (has selections) { }
+                //  else{ }
+                // }
+
+                if (TabIndex.IsSelected)
+                {
+                    //brush is set in tab resources when created as trigger
+                    TabIndex.Foreground = UISettings.CurrentTheme.SelectionListActiveTabHeaderTextColor.Brush;
+                }
+                else
+                {
+                    if (category.AnyPackagesChecked())
+                    {
+                        TabIndex.Background = UISettings.CurrentTheme.SelectionListNotActiveHasSelectionsBackgroundColor.Brush;
+                        TabIndex.Foreground = UISettings.CurrentTheme.SelectionListNotActiveHasSelectionsTextColor.Brush;
+                    }
+                    else
+                    {
+                        TabIndex.Background = UISettings.NotSelectedTabColor;
+                        TabIndex.Foreground = UISettings.CurrentTheme.SelectionListNotActiveHasNoSelectionsTextColor.Brush;
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Preview Code
@@ -1450,62 +1530,72 @@ namespace RelhaxModpack.Windows
         {
             if (LoadingUI)
                 return;
+
             if (e is MouseEventArgs m)
                 if (m.RightButton != MouseButtonState.Pressed)
                     return;
+
+            SelectablePackage spc = null;
             if (sender is IPackageUIComponent packageSender)
             {
-                SelectablePackage spc = packageSender.Package;
-                if (packageSender is RelhaxWPFComboBox comboboxSender)
-                {
-                    //check to see if a specific item is highlighted
-                    //if so, it means that the user wants to preview a specific version
-                    //if not, then the user clicked on the combobox as a whole, so show all items in the box
-                    bool itemHighlighted = false;
-                    foreach(ComboBoxItem itemInBox in comboboxSender.Items)
-                    {
-                        if (itemInBox.IsHighlighted)
-                        {
-                            itemHighlighted = true;
-                            spc = itemInBox.Package;
-                        }
-                    }
-                    if(!itemHighlighted)
-                    {
-                        //make a new temporary package with a custom preview items list
-                        //get a temp known good package, doesn't matter what cause we want the parent
-                        ComboBoxItem cbi = (ComboBoxItem)comboboxSender.Items[0];
-                        //parent of item in combobox is header
-                        SelectablePackage parentPackage = cbi.Package.Parent;
-                        spc = new SelectablePackage()
-                        {
-                            PackageName = parentPackage.PackageName,
-                            Name = string.Format("{0}: {1}",Translations.GetTranslatedString("dropDownItemsInside"), parentPackage.Name),
-                            Version = parentPackage.Version,
-                            Description = parentPackage.Description,
-                            UpdateComment = parentPackage.UpdateComment
-                        };
-                        spc.Medias.Clear();
-                        foreach(SelectablePackage packageToGetMediaFrom in parentPackage.Packages)
-                        {
-                            spc.Medias.AddRange(packageToGetMediaFrom.Medias);
-                        }
-                    }
-                }
-                if (spc.DevURL == null)
-                    spc.DevURL = "";
-                //show the preview
-                if (p != null)
-                {
-                    p.Close();
-                    p = null;
-                }
-                p = new Preview()
-                {
-                    Package = spc
-                };
-                p.Show();
+                spc = packageSender.Package;
             }
+            else if (sender is RelhaxWPFComboBox comboboxSender)
+            {
+                //check to see if a specific item is highlighted
+                //if so, it means that the user wants to preview a specific version
+                //if not, then the user clicked on the combobox as a whole, so show all items in the box
+                foreach (ComboBoxItem itemInBox in comboboxSender.Items)
+                {
+                    if (itemInBox.IsHighlighted && itemInBox.IsEnabled)
+                    {
+                        spc = itemInBox.Package;
+                        break;
+                    }
+                }
+                if (spc == null)
+                {
+                    //make a new temporary package with a custom preview items list
+                    //get a temp known good package, doesn't matter what cause we want the parent
+                    ComboBoxItem cbi = (ComboBoxItem)comboboxSender.Items[0];
+                    //parent of item in combobox is header
+                    SelectablePackage parentPackage = cbi.Package.Parent;
+                    spc = new SelectablePackage()
+                    {
+                        PackageName = parentPackage.PackageName,
+                        Name = string.Format("{0}: {1}", Translations.GetTranslatedString("dropDownItemsInside"), parentPackage.NameFormatted),
+                        Version = parentPackage.Version,
+                        Description = parentPackage.Description,
+                        UpdateComment = parentPackage.UpdateComment
+                    };
+                    spc.Medias.Clear();
+                    foreach (SelectablePackage packageToGetMediaFrom in parentPackage.Packages)
+                    {
+                        spc.Medias.AddRange(packageToGetMediaFrom.Medias);
+                    }
+                }
+            }
+
+            if (spc == null)
+            {
+                Logging.Error("Unable to show preview from UI component: {0}", sender.ToString());
+                return;
+            }
+
+            if (spc.DevURL == null)
+                spc.DevURL = string.Empty;
+
+            if (p != null)
+            {
+                p.Close();
+                p = null;
+            }
+
+            p = new Preview()
+            {
+                Package = spc
+            };
+            p.Show();
         }
 
         //Handler for allowing right click of disabled mods (WPF)
@@ -1548,7 +1638,8 @@ namespace RelhaxModpack.Windows
                 InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
                 AddExtension = true,
                 Filter = "XML files|*.xml",
-                ValidateNames = true
+                ValidateNames = true,
+                Title = Translations.GetTranslatedString("SelectSelectionFileToSave")
             };
             if((bool)selectSavePath.ShowDialog())
                 SaveSelection(selectSavePath.FileName,false);
@@ -1580,6 +1671,7 @@ namespace RelhaxModpack.Windows
                     CheckPathExists = true,
                     AddExtension = true,
                     Filter = "XML files|*.xml",
+                    Title = Translations.GetTranslatedString("MainWindowSelectSelectionFileToLoad"),
                     Multiselect = false,
                     ValidateNames = true
                 };
@@ -1640,12 +1732,16 @@ namespace RelhaxModpack.Windows
         private void OnClearSelectionsClick(object sender, RoutedEventArgs e)
         {
             Logging.Info("Clearing selections");
+            //clear in lists
             Utils.ClearSelections(ParsedCategoryList);
+            Utils.ClearSelections(new List<Category>() { UserCategory});
+            //update selection list UI
+            ModTabGroups_SelectionChanged(null, null);
             Logging.Info("Selections cleared");
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
 
-        private void LoadSelection(XmlDocument document, bool silent)
+        private bool LoadSelection(XmlDocument document, bool silent)
         {
             //get the string version of the document, determine what to do from there
             string selectionVersion;
@@ -1655,19 +1751,18 @@ namespace RelhaxModpack.Windows
             switch(selectionVersion)
             {
                 case "2.0":
-                    LoadSelectionV2(document, silent);
-                break;
+                    return LoadSelectionV2(document, silent);
 
                 default:
                     //log we don't know wtf it is
                     Logging.Warning("Unknown selection version: " + selectionVersion + ", aborting");
                     if(!silent)
                         MessageBox.Show(string.Format(Translations.GetTranslatedString("unknownselectionFileFormat"),selectionVersion));
-                    return;
+                    return false;
             }
         }
 
-        private void LoadSelectionV2(XmlDocument document, bool silent)
+        private bool LoadSelectionV2(XmlDocument document, bool silent)
         {
             //first uncheck everyting
             Utils.ClearSelections(ParsedCategoryList);
@@ -1723,7 +1818,7 @@ namespace RelhaxModpack.Windows
                 }
             }
             //do the same as above but for user mods
-            foreach(SelectablePackage package in userMods)
+            foreach(SelectablePackage package in UserCategory.Packages)
             {
                 if(stringUserSelections.Contains(Path.GetFileNameWithoutExtension(package.ZipFile)) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolderPath,package.ZipFile)))
                 {
@@ -1736,32 +1831,53 @@ namespace RelhaxModpack.Windows
             //now check for the correct structure of mods
             List<SelectablePackage> brokenMods = IsValidStructure(ParsedCategoryList);
             Logging.Info("Broken mods structure count: " + brokenMods.Count);
+
+            //
+            int totalBrokenCount = disabledMods.Count + brokenMods.Count + stringSelections.Count + stringUserSelections.Count;
+            if (totalBrokenCount > 0 && (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
+            {
+                Logging.Info("Selection issues with auto or one click enabled, with message warning enabled. Show message.");
+                MessageBoxResult  result = MessageBox.Show(
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"),
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"), MessageBoxButton.YesNo);
+                if(result == MessageBoxResult.No)
+                {
+                    Logging.Info("User selected stop installation");
+                    return false;
+                }
+            }
+
             //only report issues if silent is false. true means its doing something like auto selections or
-            if(!silent)
+            else if(!silent)
             {
                 Logging.Info("Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
                 disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
                 if(disabledMods.Count > 0)
                 {
                     //disabled selections
-                    MessageBox.Show(Translations.GetTranslatedString("modDeactivated") + "\n" + string.Join("\n",disabledMods));
+                    MessageBox.Show(string.Format("{0}: {1}{2}",
+                        Translations.GetTranslatedString("modDeactivated"), Environment.NewLine, string.Join(Environment.NewLine, disabledMods)));
                 }
                 if(stringSelections.Count > 0)
                 {
                     //removed selections
-                    MessageBox.Show(Translations.GetTranslatedString("modsNotFoundTechnical") + "\n" + string.Join("\n", stringSelections));
+                    MessageBox.Show(string.Format("{0}: {1}{2}",
+                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringSelections)));
                 }
                 if(stringUserSelections.Count > 0)
                 {
                     //removed user selections
-                    MessageBox.Show(Translations.GetTranslatedString("modsNotFoundTechnical") + "\n" + string.Join("\n", stringUserSelections));
+                    MessageBox.Show(string.Format("{0}: {1}{2}",
+                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringUserSelections)));
                 }
                 if(disabledStructureMods.Count > 0)
                 {
                     //removed structure user selections
-                    MessageBox.Show(Translations.GetTranslatedString("modsBrokenStructure") + "\n" + string.Join("\n", disabledStructureMods));
+                    MessageBox.Show(string.Format("{0}: {1}{2}",
+                        Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, disabledStructureMods)));
                 }
             }
+            return true;
         }
 
         private void SaveSelection(string savePath, bool silent)
@@ -1800,7 +1916,7 @@ namespace RelhaxModpack.Windows
             }
 
             //check user mods
-            foreach (SelectablePackage m in userMods)
+            foreach (SelectablePackage m in UserCategory.Packages)
             {
                 if (m.Checked)
                 {
@@ -1980,10 +2096,11 @@ namespace RelhaxModpack.Windows
                 SearchCB.Items.Clear();
                 foreach (SelectablePackage package in searchComponents)
                 {
-                    SearchCB.Items.Add(new ComboBoxItem(package, package.NameFormatted)
+                    string formatForText = string.Format("{0} [{1}]", package.NameFormatted, package.ParentCategory.Name);
+                    SearchCB.Items.Add(new ComboBoxItem(package, formatForText)
                     {
                         IsEnabled = true,
-                        Content = package.NameFormatted
+                        Content = formatForText
                     });
                 }
                 SearchCB.IsDropDownOpen = true;
@@ -2020,7 +2137,21 @@ namespace RelhaxModpack.Windows
             //https://stackoverflow.com/questions/38532196/bringintoview-is-not-working
             //Note that due to the dispatcher's priority queue, the content may not be available as soon as you make changes (such as select a tab).
             //In that case, you may want to post the bring-into-view request in a lower priority:
-            await Dispatcher.InvokeAsync(() => ctrl.BringIntoView(), DispatcherPriority.Background);
+            await Dispatcher.InvokeAsync(() =>
+            {
+                //need to expand the package to this item if selection is legacy
+                if(ModpackSettings.ModSelectionView == SelectionView.Legacy)
+                {
+                    SelectablePackage package = committedItem.Package;
+                    while(package.Level > -1)
+                    {
+                        if (!package.TreeViewItem.IsExpanded)
+                            package.TreeViewItem.IsExpanded = true;
+                        package = package.Parent;
+                    }
+                }
+                ctrl.BringIntoView();
+            }, DispatcherPriority.Background);
 
             //start the timer to show the item
             OnFlastTimerTick(null, null);
