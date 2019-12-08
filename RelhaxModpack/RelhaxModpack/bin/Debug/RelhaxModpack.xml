@@ -3805,7 +3805,7 @@
             The log file for the editor
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logfiles.Patcher">
+        <member name="F:RelhaxModpack.Logfiles.PatchDesigner">
             <summary>
             The log file for the patcher
             </summary>

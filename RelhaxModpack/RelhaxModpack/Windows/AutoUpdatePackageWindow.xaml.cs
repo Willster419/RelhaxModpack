@@ -61,6 +61,8 @@ namespace RelhaxModpack.Windows
         private List<DatabasePackage> packages = new List<DatabasePackage>();
         private int CurrentUpdateStep = 1;
         private WebClient client = new WebClient();
+        private string downloadedFileForStep3 = string.Empty;
+        private string databaseFileForStep3 = string.Empty;
 
         /// <summary>
         /// Create an instance of the AutoUpdatePackageWindow window
@@ -78,6 +80,15 @@ namespace RelhaxModpack.Windows
                 SetRegistryKey(System.Diagnostics.Process.GetCurrentProcess().ProcessName, bro.Version.Major);
 
             PackageNamesListbox.ItemsSource = Packages;
+
+            //attach logfile reporting
+            LogfileTextbox.Clear();
+            Logging.OnLoggingUIThreadReport += Logging_OnLoggingUIThreadReport;
+        }
+
+        private void Logging_OnLoggingUIThreadReport(string message)
+        {
+            LogfileTextbox.AppendText(message + Environment.NewLine);
         }
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
@@ -101,6 +112,9 @@ namespace RelhaxModpack.Windows
                     break;
                 case 2:
                     UpdateProcessStep2();
+                    break;
+                case 3:
+                    UpdateProcessStep3(downloadedFileForStep3, databaseFileForStep3);
                     break;
             }
             CurrentUpdateStep++;
@@ -126,6 +140,7 @@ namespace RelhaxModpack.Windows
                 Directory.CreateDirectory(downloadDir);
 
             string downloadPathCurrent = Path.Combine(WorkingDirectory, package.PackageName, package.ZipFile);
+            databaseFileForStep3 = downloadPathCurrent;
             bool downloadNeeded = false;
             if (File.Exists(downloadPathCurrent))
             {
@@ -147,7 +162,8 @@ namespace RelhaxModpack.Windows
             if(downloadNeeded)
             {
                 Logging.Editor("Download needed, starting");
-                await client.DownloadFileTaskAsync(package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion) + package.ZipFile + package.EndAddress, downloadPathCurrent);
+                string completeDownloadURL = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion) + package.ZipFile + package.EndAddress;
+                await client.DownloadFileTaskAsync(completeDownloadURL, downloadPathCurrent);
                 Logging.Editor("Download completed");
                 AutoUpdateProgressBar.Value = AutoUpdateProgressBar.Minimum;
             }
@@ -219,6 +235,7 @@ namespace RelhaxModpack.Windows
 
             //create download string and downlaod the file
             string downloadLocation = Path.Combine(WorkingDirectory, package.PackageName, downloadInstructions.DownloadFilename);
+            downloadedFileForStep3 = downloadLocation;
             if (File.Exists(downloadLocation))
                 File.Delete(downloadLocation);
             await client.DownloadFileTaskAsync(directDownloadURL, downloadLocation);
@@ -226,34 +243,62 @@ namespace RelhaxModpack.Windows
             Logging.Editor("File downloaded, step 2 complete");
         }
 
-        private void UpdateProcessStep3(string downloadedFile)
+        private void UpdateProcessStep3(string downloadedFile, string databaseFile)
         {
+            Logging.Editor("Starting Update Process step 3: Loading files xml instructions");
             DatabasePackage package = PackageNamesListbox.SelectedItems[0] as DatabasePackage;
             //parse download instructions xml files
-            XmlDocument filesDocument = XmlUtils.LoadXmlDocument(Path.Combine(WorkingDirectory, package.PackageName, "_autoUpdate", "download.xml"), XmlLoadType.FromFile);
+            XmlDocument filesDocument = XmlUtils.LoadXmlDocument(Path.Combine(WorkingDirectory, package.PackageName, "_autoUpdate", "files.xml"), XmlLoadType.FromFile);
 
             if (filesDocument == null)
             {
-                Logging.Editor("Failed to parse download xml document");
+                Logging.Editor("Failed to parse files xml document");
                 return;
             }
 
             //parse to class objects
             UpdateInstructions updateInstructions = ParseUpdateInstructions(filesDocument);
 
+            Logging.Editor("Starting update zip file process");
             switch(updateInstructions.UpdateType)
             {
                 case UpdateTypes.wotmod:
-                    ProcessWotmodUpdate(updateInstructions, downloadedFile);
+                    ProcessWotmodUpdate(updateInstructions, downloadedFile, databaseFile);
                     break;
             }
         }
 
-        private void ProcessWotmodUpdate(UpdateInstructions instructions, string downloadedFile)
+        private void ProcessWotmodUpdate(UpdateInstructions instructions, string downloadedFile, string databaseFile)
         {
             Logging.Editor("Processing wotmod update");
 
-            //delete current wotmod file in zip (verify that only one wotmod file exists)
+            //verify that only one wotmod file exists in database file and get crc
+            Logging.Editor("Checking for only 1 .wotmod file in the database zip file");
+            string wotmodMD5inDatabaseZip = string.Empty;
+            using (ZipFile databaseZip = new ZipFile(databaseFile))
+            {
+                ZipEntry wotmodEntry = null;
+                foreach (ZipEntry entry in databaseZip)
+                {
+                    if(entry.FileName.Contains(".wotmod"))
+                    {
+                        Logging.Editor("Found entry {0}", LogLevel.Info, entry.FileName);
+                        if (wotmodEntry == null)
+                        {
+                            wotmodEntry = entry;
+                        }
+                        else
+                        {
+                            Logging.Editor("Entry for wotmod processing already exists and will be overriden!");
+                            wotmodEntry = entry;
+                        }
+                    }
+                }
+                wotmodMD5inDatabaseZip = Utils.CreateMD5Hash(wotmodEntry.InputStream);
+            }
+
+            //compare crc of file in zip to md5 of downloaded file
+            string wotmodMD5inDownload = Utils.CreateMD5Hash(downloadedFile);
 
             //update wotmod file in zip
 
