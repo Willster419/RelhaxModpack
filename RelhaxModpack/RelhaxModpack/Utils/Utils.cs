@@ -619,24 +619,41 @@ namespace RelhaxModpack
         /// <returns></returns>
         public static string CreateMD5Hash(string inputFile)
         {
+            //return if arg is null or empty
             if (string.IsNullOrWhiteSpace(inputFile))
                 return "-1";
-            //first, return if the file does not exist
+
+            //return if the file does not exist
             if (!File.Exists(inputFile))
                 return "-1";
+
+            FileStream stream = null;
+            string result = string.Empty;
+            using (stream = File.OpenRead(inputFile))
+            {
+                result = CreateMD5Hash(stream);
+            }
+
+            if(result.Equals("-1"))
+            {
+                Logging.Error("Failed to check MD5 of file " + inputFile);
+            }
+            return result;
+        }
+
+        public static string CreateMD5Hash(Stream stream)
+        {
             //Create a new Stringbuilder to collect the bytes
             StringBuilder sBuilder = new StringBuilder();
             MD5 md5Hash;
-            FileStream stream;
             try
             {
                 using (md5Hash = MD5.Create())
-                using (stream = File.OpenRead(inputFile))
                 {
                     //Convert the input string to a byte array and compute the hash
                     byte[] data = md5Hash.ComputeHash(stream);
                     stream.Close();
-                    
+
                     //Loop through each byte of the hashed data 
                     //and format each one as a hexadecimal string.
                     for (int i = 0; i < data.Length; i++)
@@ -647,9 +664,10 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Logging.Warning("Failed to check crc of local file " + inputFile + ex.ToString());
+                Logging.Exception(ex.ToString());
                 return "-1";
             }
+
             //Return the hexadecimal string.
             return sBuilder.ToString();
         }
