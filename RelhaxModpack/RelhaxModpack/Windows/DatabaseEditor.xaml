@@ -574,10 +574,10 @@
                 <TabItem x:Name="TriggersTab" Header="Triggers">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageTriggersDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageTriggersDisplay_SelectionChanged" />
-                        <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerAddSelectedTrigger_Click"/>
-                        <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerRemoveTrigger_Click"/>
+                        <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="10,209,0,0" VerticalAlignment="Top" Width="467" Click="TriggerAddSelectedTrigger_Click"/>
+                        <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="10,234,0,0" VerticalAlignment="Top" Width="467" Click="TriggerRemoveTrigger_Click"/>
                         <ComboBox x:Name="LoadedTriggersComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
-                        <TextBox x:Name="CurrentSupportedTriggers" HorizontalAlignment="Left" Height="63" Margin="0,498,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487" IsReadOnly="True"/>
+                        <TextBox x:Name="CurrentSupportedTriggers" HorizontalAlignment="Left" Height="63" Margin="0,478,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487" IsReadOnly="True"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="ConflictingPackagesTab" Header="Conflicting Packages">
