@@ -565,10 +565,10 @@
                 <TabItem x:Name="UserDatasTab" Header="Userdatas">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageUserdatasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageUserdatasDisplay_SelectionChanged" />
-                        <Button Content="Add Userdata" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataAddUserdataButton_Click"/>
-                        <Button Content="Apply Edit" x:Name="UserdataApplyEditButton" HorizontalAlignment="Left" Margin="105,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataApplyEditButton_Click"/>
-                        <Button Content="Remove Userdata" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="210,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataRemoveUserdata_Click"/>
-                        <TextBox x:Name="UserDataEditBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
+                        <Button Content="Add Userdata" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top" Width="467" Click="UserdataAddUserdataButton_Click"/>
+                        <Button Content="Apply Edit" x:Name="UserdataApplyEditButton" HorizontalAlignment="Left" Margin="10,341,0,0" VerticalAlignment="Top" Width="467" Click="UserdataApplyEditButton_Click"/>
+                        <Button Content="Remove Userdata" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Width="467" Click="UserdataRemoveUserdata_Click"/>
+                        <TextBox x:Name="UserDataEditBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="102"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="TriggersTab" Header="Triggers">
