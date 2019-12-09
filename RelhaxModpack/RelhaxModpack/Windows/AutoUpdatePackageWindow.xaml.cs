@@ -320,8 +320,29 @@ namespace RelhaxModpack.Windows
                     //if it matches, then it's being updated no the same day. need to append "_x" to it
                     if (newFilename.Equals(currentFileName))
                     {
-                        Logging.Editor("Current and new filenames match, probably editing twice in a day.");
-                        Logging.Editor("Need to get offset at end of file");
+                        Logging.Editor("Current and new filenames match, probably editing twice in a day.",LogLevel.Warning);
+                        Logging.Editor("Need to get offset at end of file and increment it", LogLevel.Warning);
+
+                        //get the last two characters of the name (without extension)
+                        string endName = Path.GetFileNameWithoutExtension(newFilename);
+                        endName = endName.Substring(endName.Length - 2, 2);
+                        Logging.Editor("Last 2 characters: '{0}'", LogLevel.Info, endName);
+                        if(endName.Contains("_"))
+                        {
+                            Logging.Editor("Not first time editing in a day, get last int and increment", LogLevel.Warning);
+                            int current = int.Parse(endName[1].ToString()) + 1;
+                            newFilename = string.Format("{0}_{1}{2}", Path.GetFileNameWithoutExtension(newFilename), current.ToString(), Path.GetExtension(newFilename));
+                        }
+                        else
+                        {
+                            Logging.Editor("First multi edit in a day, add '_1'");
+                            newFilename = string.Format("{0}_1{1}", Path.GetFileNameWithoutExtension(newFilename), Path.GetExtension(newFilename));
+                        }
+
+                        //update newFileLocation with newFilename
+                        newFileLocation = Path.Combine(Path.GetDirectoryName(locationToMoveTo), newFilename);
+
+                        /*
                         int offset = 1;
                         string oldNewFilename = newFilename;
                         while (File.Exists(newFileLocation))
@@ -329,6 +350,7 @@ namespace RelhaxModpack.Windows
                             newFilename = string.Format("{0}_{1}{2}", Path.GetFileNameWithoutExtension(oldNewFilename), offset++.ToString(), Path.GetExtension(oldNewFilename));
                             newFileLocation = Path.Combine(Path.GetDirectoryName(locationToMoveTo), newFilename);
                         }
+                        */
                     }
 
                     Logging.Editor("New filename:     {0}", LogLevel.Info, newFilename);
@@ -387,7 +409,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Editor("MD5 files match, no need to update package");
                 //DEBUG: comment this out to test method
-                //return false;
+                return false;
             }
 
             //update wotmod file in zip
