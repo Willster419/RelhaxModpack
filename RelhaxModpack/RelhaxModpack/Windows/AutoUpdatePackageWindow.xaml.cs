@@ -421,7 +421,7 @@ namespace RelhaxModpack.Windows
         private DownloadInstructions ParseDownloadInstructions(XmlDocument doc, string databaseZipFileDownloadLocation)
         {
             DownloadInstructions instructions = new DownloadInstructions() { DownloadedDatabaseZipFileLocation = databaseZipFileDownloadLocation };
-            string formatVersion = doc.DocumentElement.Attributes["formatVersion"].Value;
+            string formatVersion = doc.DocumentElement.Attributes["formatVersion"].Value.Trim();
             instructions.InstructionsVersion = formatVersion;
             switch(formatVersion)
             {
@@ -445,19 +445,19 @@ namespace RelhaxModpack.Windows
                 switch(node.Name)
                 {
                     case "ModVersion":
-                        instructions.ModVersion = node.InnerText;
+                        instructions.ModVersion = node.InnerText.Trim();
                         break;
                     case "ClientVersion":
-                        instructions.ClientVersion = node.InnerText;
+                        instructions.ClientVersion = node.InnerText.Trim();
                         break;
                     case "DownloadType":
-                        instructions.DownloadType = (DownloadTypes)Enum.Parse(instructions.DownloadType.GetType(), node.InnerText);
+                        instructions.DownloadType = (DownloadTypes)Enum.Parse(instructions.DownloadType.GetType(), node.InnerText.Trim());
                         break;
                     case "UpdateURL":
-                        instructions.UpdateURL = node.InnerText;
+                        instructions.UpdateURL = node.InnerText.Trim();
                         break;
                     case "DownloadFilename":
-                        instructions.DownloadFilename = node.InnerText;
+                        instructions.DownloadFilename = node.InnerText.Trim();
                         break;
                 }
             }
@@ -467,7 +467,7 @@ namespace RelhaxModpack.Windows
         private UpdateInstructions ParseUpdateInstructions(XmlDocument doc)
         {
             UpdateInstructions instructions = new UpdateInstructions();
-            string formatVersion = doc.DocumentElement.Attributes["formatVersion"].Value;
+            string formatVersion = doc.DocumentElement.Attributes["formatVersion"].Value.Trim();
             instructions.InstructionsVersion = formatVersion;
             switch (formatVersion)
             {
@@ -490,10 +490,10 @@ namespace RelhaxModpack.Windows
                 switch (node.Name)
                 {
                     case nameof(instructions.WotmodFilenameInZip):
-                        instructions.WotmodFilenameInZip = node.InnerText;
+                        instructions.WotmodFilenameInZip = node.InnerText.Trim();
                         break;
                     case nameof(instructions.UpdateType):
-                        instructions.UpdateType = (UpdateTypes)Enum.Parse(instructions.UpdateType.GetType(), node.InnerText);
+                        instructions.UpdateType = (UpdateTypes)Enum.Parse(instructions.UpdateType.GetType(), node.InnerText.Trim());
                         break;
                     case nameof(instructions.PatchUpdates):
                         instructions.PatchUpdates = ParsePatchUpdates(node);
@@ -514,22 +514,22 @@ namespace RelhaxModpack.Windows
                     switch(node.Name)
                     {
                         case nameof(patchUpdate.PatchesToUpdate):
-                            patchUpdate.PatchesToUpdate = patchNode.InnerText;
+                            patchUpdate.PatchesToUpdate = patchNode.InnerText.Trim();
                             break;
                         case nameof(patchUpdate.XPath):
-                            patchUpdate.XPath = patchNode.InnerText;
+                            patchUpdate.XPath = patchNode.InnerText.Trim();
                             break;
                         case nameof(patchUpdate.Search):
                             XmlAttribute singleReturnAttribute = node.Attributes["single"];
                             if(singleReturnAttribute != null)
                             {
-                                patchUpdate.SearchReturnFirst = bool.Parse(singleReturnAttribute.InnerText);
+                                patchUpdate.SearchReturnFirst = bool.Parse(singleReturnAttribute.InnerText.Trim());
                                 Logging.Editor("Search single attribute found and processed as {0}", LogLevel.Debug, patchUpdate.SearchReturnFirst);
                             }
-                            patchUpdate.Search = patchNode.InnerText;
+                            patchUpdate.Search = patchNode.InnerText.Trim();
                             break;
                         case nameof(patchUpdate.Replace):
-                            patchUpdate.Replace = patchNode.InnerText;
+                            patchUpdate.Replace = patchNode.InnerText.Trim();
                             break;
                     }
                 }
