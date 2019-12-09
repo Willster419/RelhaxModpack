@@ -7,7 +7,7 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:RelhaxModpack="clr-namespace:RelhaxModpack" x:Name="relhaxWindow" x:Class="RelhaxModpack.Windows.DatabaseEditor"
         mc:Ignorable="d"
-        Title="DatabaseEditor" Height="837" Width="1359" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
+        Title="DatabaseEditor" Height="720" Width="1280" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
         Loaded="OnApplicationLoad" Closed="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <local:RelhaxWindow.Resources>
         <!-- https://stackoverflow.com/questions/8198645/wpf-combobox-performance-problems-by-binding-a-large-collections -->
