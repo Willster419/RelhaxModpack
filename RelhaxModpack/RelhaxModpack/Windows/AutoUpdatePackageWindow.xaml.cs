@@ -166,6 +166,8 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Editor("Current filename already exists, hashing for version");
                 string hash = await Utils.CreateMD5HashAsync(downloadPathCurrent);
+                Logging.Editor("Database MD5: {0}", LogLevel.Info, package.CRC);
+                Logging.Editor("Download MD5: {0}", LogLevel.Info, hash);
                 if (hash.Equals(package.CRC))
                 {
                     Logging.Editor("Hash matches, no need to download");
@@ -360,14 +362,14 @@ namespace RelhaxModpack.Windows
 
             //compare md5 of file in database zip to md5 of downloaded file
             updateInstructions.WotmodDownloadedMD5 = await Utils.CreateMD5HashAsync(downloadInstructions.DownloadedFileLocation);
-            Logging.Editor("MD5 of downloaded wotmod: {0}", LogLevel.Info, updateInstructions.WotmodDownloadedMD5);
-            Logging.Editor("MD5 of database wotmod:   {0}", LogLevel.Info, updateInstructions.WotmodDatabaseMD5);
+            Logging.Editor("MD5 of download wotmod: {0}", LogLevel.Info, updateInstructions.WotmodDownloadedMD5);
+            Logging.Editor("MD5 of database wotmod: {0}", LogLevel.Info, updateInstructions.WotmodDatabaseMD5);
 
             if(updateInstructions.WotmodDownloadedMD5.Equals(updateInstructions.WotmodDatabaseMD5))
             {
                 Logging.Editor("MD5 files match, no need to update package");
                 //DEBUG: comment this out to test method
-                return false;
+                //return false;
             }
 
             //update wotmod file in zip
@@ -388,10 +390,12 @@ namespace RelhaxModpack.Windows
                 foreach (PatchUpdate patchUpdate in updateInstructions.PatchUpdates)
                 {
                     Logging.Editor("Processing patch {0} of {1}", LogLevel.Info, ++patchesCount, updateInstructions.PatchUpdates.Count);
+                    Logging.Editor(patchUpdate.PatchUpdateInformation);
                     Utils.AllowUIToUpdate();
-                    //locate via zip files list regex search
-                    //for each found, extract, load, xpath, search, replace, update
-
+                    if(!ProcessUpdatePatch(patchUpdate,databaseZip))
+                    {
+                        Logging.Editor("Failed to process update patch {0}", LogLevel.Error, patchesCount);
+                    }
                 }
 
                 //save zip changes to disk
@@ -405,6 +409,37 @@ namespace RelhaxModpack.Windows
 
             Logging.Editor("Save complete");
             AutoUpdateProgressBar.Value = AutoUpdateProgressBar.Minimum;
+            return true;
+        }
+
+        private bool ProcessUpdatePatch(PatchUpdate patchUpdate, ZipFile zip)
+        {
+            string patchProcessWD = Path.Combine(WorkingDirectory, "PatchProcessing");
+            if (!Directory.Exists(patchProcessWD))
+                Directory.CreateDirectory(patchProcessWD);
+
+            //locate via zip files list regex search
+            List<ZipEntry> matchingZipEntries = new List<ZipEntry>();
+            Logging.Editor("Checking for entries that match the regex '{0}'", LogLevel.Debug, patchUpdate.PatchesToUpdate);
+            foreach(ZipEntry zipEntry in zip)
+            {
+                if(Regex.IsMatch(zipEntry.FileName,patchUpdate.PatchesToUpdate))
+                {
+                    Logging.Editor("Match found: {0}", LogLevel.Debug, zipEntry.FileName);
+                    matchingZipEntries.Add(zipEntry);
+                }
+            }
+
+            //for each found, extract, load, xpath, search, replace, update
+            foreach(ZipEntry entryMatch in matchingZipEntries)
+            {
+                //https://stackoverflow.com/a/16187809/3128017
+                string xmlText = string.Empty;
+                MemoryStream stream = null;
+                entryMatch.Extract(stream);
+                stream.Position = 0;
+            }
+
             return true;
         }
 
@@ -511,7 +546,7 @@ namespace RelhaxModpack.Windows
                 PatchUpdate patchUpdate = new PatchUpdate();
                 foreach(XmlNode patchNode in node.ChildNodes)
                 {
-                    switch(node.Name)
+                    switch(patchNode.Name)
                     {
                         case nameof(patchUpdate.PatchesToUpdate):
                             patchUpdate.PatchesToUpdate = patchNode.InnerText.Trim();
@@ -520,7 +555,7 @@ namespace RelhaxModpack.Windows
                             patchUpdate.XPath = patchNode.InnerText.Trim();
                             break;
                         case nameof(patchUpdate.Search):
-                            XmlAttribute singleReturnAttribute = node.Attributes["single"];
+                            XmlAttribute singleReturnAttribute = patchNode.Attributes["single"];
                             if(singleReturnAttribute != null)
                             {
                                 patchUpdate.SearchReturnFirst = bool.Parse(singleReturnAttribute.InnerText.Trim());
