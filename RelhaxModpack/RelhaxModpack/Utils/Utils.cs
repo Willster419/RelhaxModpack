@@ -2304,6 +2304,11 @@ namespace RelhaxModpack
                 Translations.GetTranslatedString("GoogleTranslateLanguageKey"), textToSend);
             return StartProcess(completeTemplate);
         }
+
+        public static string EmptyNullStringCheck(string stringToTest, string emptyNullReturn = "(null)")
+        {
+            return string.IsNullOrEmpty(stringToTest) ? emptyNullReturn : stringToTest;
+        }
         #endregion
 
         #region Macro Utils
