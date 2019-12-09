@@ -7,7 +7,7 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:RelhaxModpack="clr-namespace:RelhaxModpack" x:Name="relhaxWindow" x:Class="RelhaxModpack.Windows.DatabaseEditor"
         mc:Ignorable="d"
-        Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
+        Title="DatabaseEditor" Height="837" Width="1359" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
         Loaded="OnApplicationLoad" Closed="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <local:RelhaxWindow.Resources>
         <!-- https://stackoverflow.com/questions/8198645/wpf-combobox-performance-problems-by-binding-a-large-collections -->
@@ -500,9 +500,9 @@
                             <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="42,0,0,0"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Apply" x:Name="ApplyButton" Click="ApplyButton_Click" Margin="0,28,287,66" Grid.ColumnSpan="2"/>
-                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" Margin="0,55,287,38" Grid.ColumnSpan="2" RenderTransformOrigin="0.493,-0.523" />
-                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Margin="0,83,287,10" Grid.ColumnSpan="2" />
+                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Apply" x:Name="ApplyButton" Click="ApplyButton_Click" Margin="0,28,0,0" Grid.ColumnSpan="2" Width="200"/>
+                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" Margin="0,55,0,0" Grid.ColumnSpan="2" RenderTransformOrigin="0.493,-0.523" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Margin="0,83,0,0" Grid.ColumnSpan="2" Width="200" />
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
@@ -553,7 +553,7 @@
                             <RelhaxModpack:MediaType>MediaFile</RelhaxModpack:MediaType>
                             <RelhaxModpack:MediaType>HTML</RelhaxModpack:MediaType>
                         </ComboBox>
-                        <TextBox x:Name="MediaTypesURL" HorizontalAlignment="Left" Height="173" Margin="0,258,0,0" VerticalAlignment="Top" Width="487"
+                        <TextBox x:Name="MediaTypesURL" HorizontalAlignment="Stretch" Height="173" Margin="0,258,0,0" VerticalAlignment="Top"
                                  TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
                         <Button Content="Preview Selected Media" x:Name="MediaPreviewSelectedMediaButton" Tag="MediaPreviewSelectedMediaButton" HorizontalAlignment="Left" Margin="10,461,0,0" VerticalAlignment="Top" Width="467" Click="MediaPreviewSelectedMediaButton_Click"/>
                         <Button Content="Preview Edit Media" x:Name="MediaPreviewEditMediaButton" Tag="MediaPreviewEditMediaButton" HorizontalAlignment="Left" Margin="115,511,0,0" VerticalAlignment="Top" Width="110" Click="MediaPreviewEditMediaButton_Click"/>
@@ -577,7 +577,7 @@
                         <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="10,209,0,0" VerticalAlignment="Top" Width="467" Click="TriggerAddSelectedTrigger_Click"/>
                         <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="10,234,0,0" VerticalAlignment="Top" Width="467" Click="TriggerRemoveTrigger_Click"/>
                         <ComboBox x:Name="LoadedTriggersComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
-                        <TextBox x:Name="CurrentSupportedTriggers" HorizontalAlignment="Left" Height="63" Margin="0,478,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487" IsReadOnly="True"/>
+                        <TextBox x:Name="CurrentSupportedTriggers" HorizontalAlignment="Left" Height="63" Margin="0,478,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Bottom" Width="487" IsReadOnly="True"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="ConflictingPackagesTab" Header="Conflicting Packages">
