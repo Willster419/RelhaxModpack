@@ -301,6 +301,8 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Editor("Update process complete, moving new zip to output directory");
                 string locationToMoveTo = Path.Combine(UpdateOutputDirectory, Path.GetFileName(package.DownloadInstructions.DownloadedDatabaseZipFileLocation));
+                if (File.Exists(locationToMoveTo))
+                    File.Delete(locationToMoveTo);
                 File.Move(package.DownloadInstructions.DownloadedDatabaseZipFileLocation, locationToMoveTo);
 
                 //change the name if the end is in the pattern yyyy-mm-dd.zip
@@ -313,9 +315,24 @@ namespace RelhaxModpack.Windows
                 {
                     string newFileNameMatch = string.Format("{0}.zip", DateTime.Now.ToString("yyyy-MM-dd"));
                     string newFilename = Regex.Replace(currentFileName, regexPattern, newFileNameMatch);
-                    Logging.Editor("New filename:     {0}", LogLevel.Info, newFilename);
                     string newFileLocation = Path.Combine(Path.GetDirectoryName(locationToMoveTo), newFilename);
-                    if(File.Exists(newFileLocation))
+
+                    //if it matches, then it's being updated no the same day. need to append "_x" to it
+                    if (newFilename.Equals(currentFileName))
+                    {
+                        Logging.Editor("Current and new filenames match, probably editing twice in a day.");
+                        Logging.Editor("Need to get offset at end of file");
+                        int offset = 1;
+                        string oldNewFilename = newFilename;
+                        while (File.Exists(newFileLocation))
+                        {
+                            newFilename = string.Format("{0}_{1}{2}", Path.GetFileNameWithoutExtension(oldNewFilename), offset++.ToString(), Path.GetExtension(oldNewFilename));
+                            newFileLocation = Path.Combine(Path.GetDirectoryName(locationToMoveTo), newFilename);
+                        }
+                    }
+
+                    Logging.Editor("New filename:     {0}", LogLevel.Info, newFilename);
+                    if (File.Exists(newFileLocation))
                     {
                         Logging.Editor("File already exists, overwriting",LogLevel.Warning);
                         File.Delete(newFileLocation);
@@ -326,6 +343,7 @@ namespace RelhaxModpack.Windows
                 else
                 {
                     Logging.Editor("Failed to process new filename (is not correct format?)",LogLevel.Error);
+                    return;
                 }
             }
 
@@ -392,9 +410,10 @@ namespace RelhaxModpack.Windows
                     Logging.Editor("Processing patch {0} of {1}", LogLevel.Info, ++patchesCount, updateInstructions.PatchUpdates.Count);
                     Logging.Editor(patchUpdate.PatchUpdateInformation);
                     Utils.AllowUIToUpdate();
-                    if(!ProcessUpdatePatch(patchUpdate,databaseZip))
+                    if(!ProcessUpdatePatch(patchUpdate, databaseZip, package.PackageName))
                     {
                         Logging.Editor("Failed to process update patch {0}", LogLevel.Error, patchesCount);
+                        return false;
                     }
                 }
 
@@ -412,9 +431,11 @@ namespace RelhaxModpack.Windows
             return true;
         }
 
-        private bool ProcessUpdatePatch(PatchUpdate patchUpdate, ZipFile zip)
+        private bool ProcessUpdatePatch(PatchUpdate patchUpdate, ZipFile zip, string packageName)
         {
-            string patchProcessWD = Path.Combine(WorkingDirectory, "PatchProcessing");
+            string patchProcessWD = Path.Combine(WorkingDirectory, packageName, "PatchProcessing");
+            if (Directory.Exists(patchProcessWD))
+                Directory.Delete(patchProcessWD, true);
             if (!Directory.Exists(patchProcessWD))
                 Directory.CreateDirectory(patchProcessWD);
 
@@ -430,14 +451,81 @@ namespace RelhaxModpack.Windows
                 }
             }
 
+            Dictionary<string, string> patchNames = new Dictionary<string, string>();
+
             //for each found, extract, load, xpath, search, replace, update
             foreach(ZipEntry entryMatch in matchingZipEntries)
             {
+                //extract text
                 //https://stackoverflow.com/a/16187809/3128017
                 string xmlText = string.Empty;
-                MemoryStream stream = null;
-                entryMatch.Extract(stream);
-                stream.Position = 0;
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    entryMatch.Extract(stream);
+                    stream.Position = 0;
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        xmlText = reader.ReadToEnd();
+                    }
+                }
+
+                //load to document
+                XmlDocument document = XmlUtils.LoadXmlDocument(xmlText, XmlLoadType.FromString);
+                if(document == null)
+                {
+                    Logging.Editor("Failed to load xml document from zip file", LogLevel.Error);
+                    return false;
+                }
+
+                //do an xpath search
+                XmlNodeList matchingNodes = XmlUtils.GetXmlNodesFromXPath(document, patchUpdate.XPath);
+                int matches = 0;
+                if (matchingNodes != null)
+                    matches = matchingNodes.Count;
+                Logging.Editor("Matching nodes: {0}", LogLevel.Debug, matches);
+                if(matches == 0)
+                {
+                    Logging.Editor("0 matches, is this correct?", LogLevel.Warning);
+                    continue;
+                }
+
+                //if regex search match, replace
+                bool regexMatch = false;
+                foreach(XmlNode matchNode in matchingNodes)
+                {
+                    string nodeText = matchNode.InnerText.Trim();
+                    Logging.Editor("Checking for regex match: Text='{0}', Pattern='{1}'", LogLevel.Info, nodeText, patchUpdate.Search);
+                    if (Regex.IsMatch(nodeText,patchUpdate.Search))
+                    {
+                        regexMatch = true;
+                        Logging.Editor("Match found", LogLevel.Info);
+                        nodeText = Regex.Replace(nodeText, patchUpdate.Search, patchUpdate.Replace);
+                        Logging.Editor("Replaced to '{0}'", LogLevel.Info, nodeText);
+                        matchNode.InnerText = nodeText;
+                    }
+                }
+
+                if(!regexMatch)
+                {
+                    Logging.Editor("Regex was never matched, is this correct?", LogLevel.Warning);
+                    continue;
+                }
+
+                //get just the name of the patch xml and save it to PatchProcessing dir
+                string patchNameFromZip = Path.GetFileName(entryMatch.FileName);
+                document.Save(Path.Combine(patchProcessWD, patchNameFromZip));
+                patchNames.Add(entryMatch.FileName, patchNameFromZip);
+            }
+
+            //if any files exist in the directory, then they were modified and should be updated
+            for(int i = 0; i < patchNames.Count; i++)
+            {
+                //https://stackoverflow.com/questions/40412340/c-sharp-dictionary-get-item-by-index
+                string key = patchNames.ElementAt(i).Key;//zip entry string
+                string value = patchNames.ElementAt(i).Value;//just filename in PatchProcessing folder
+                Logging.Editor("Updating patch {0}", LogLevel.Info, value);
+                zip.RemoveEntry(key);
+                zip.AddFile(Path.Combine(patchProcessWD, value), "_patch");
             }
 
             return true;

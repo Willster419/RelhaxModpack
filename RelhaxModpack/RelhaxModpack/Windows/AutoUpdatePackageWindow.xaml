@@ -33,7 +33,8 @@
         <ProgressBar x:Name="AutoUpdateProgressBar" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                      Minimum="0" Value="0"/>
         <TextBox x:Name="LogfileTextbox" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True"
-                 AcceptsReturn="True" AcceptsTab="True" Text="Log messages will go here" TextBoxBase.TextChanged="LogfileTextbox_TextChanged" TextWrapping="Wrap"/>
+                 AcceptsReturn="True" AcceptsTab="True" Text="Log messages will go here" TextBoxBase.TextChanged="LogfileTextbox_TextChanged"
+                 TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"/>
         <Button x:Name="DetailedChangesWindow" Content="Detailed Changes Window" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Width="163"
                 Click="DetailedChangesWindow_Click" IsEnabled="False"/>
         <TextBlock Grid.Column="2" HorizontalAlignment="Left" Margin="2,0,0,0" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Top"/>
