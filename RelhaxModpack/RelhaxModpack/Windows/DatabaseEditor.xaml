@@ -7,7 +7,7 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:RelhaxModpack="clr-namespace:RelhaxModpack" x:Name="relhaxWindow" x:Class="RelhaxModpack.Windows.DatabaseEditor"
         mc:Ignorable="d"
-        Title="DatabaseEditor" Height="700" Width="1000" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
+        Title="DatabaseEditor" Height="837" Width="1359" MinHeight="480" MinWidth="640" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
         Loaded="OnApplicationLoad" Closed="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <local:RelhaxWindow.Resources>
         <!-- https://stackoverflow.com/questions/8198645/wpf-combobox-performance-problems-by-binding-a-large-collections -->
@@ -300,9 +300,9 @@
             <RowDefinition Height="632*"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click"/>
-        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="90,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="MoveDatabaseObjectButton" Click="MoveDatabaseObjectButton_Click"/>
-        <Button x:Name="AddDatabaseObjectButton" Content="Add" HorizontalAlignment="Left" Margin="170,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="AddDatabaseObjectButton" Click="AddDatabaseObjectButton_Click"/>
+        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="90,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click"/>
+        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="170,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="MoveDatabaseObjectButton" Click="MoveDatabaseObjectButton_Click"/>
+        <Button x:Name="AddDatabaseObjectButton" Content="Add" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="AddDatabaseObjectButton" Click="AddDatabaseObjectButton_Click"/>
         <Button x:Name="LoadAsDatabaseButton" Content="Load as..." HorizontalAlignment="Right" Margin="0,0,90,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="LoadAsDatabaseButton" Click="LoadAsDatabaseButton_Click"/>
         <Button x:Name="LoadDatabaseButton" Content="Load" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,90,30"  VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseLoad" Click="OnLoadDatabaseClick"/>
         <Button x:Name="SaveAsDatabaseButton" Content="Save as..." HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Tag="DatabaseSaveAs" Click="SaveAsDatabaseButton_Click"/>
@@ -440,14 +440,18 @@
                             <RowDefinition Height="20"/>
                             <!-- checkboxes -->
                             <RowDefinition Height="20"/>
+                            <!-- Popular and grey area-->
+                            <RowDefinition Height="20"/>
+                            <!--Visible and Enabled-->
+                            <RowDefinition Height="20"/>
                             <!-- apply button -->
-                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="40"/>
                             <!-- apply spacer -->
-                            <RowDefinition Height="2"/>
+                            <RowDefinition Height="1"/>
                             <!-- download button -->
-                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="1"/>
                             <!-- download spacer-->
-                            <RowDefinition Height="2"/>
+                            <RowDefinition Height="1"/>
                             <!-- upload button -->
                             <RowDefinition Height="20"/>
                             <!-- upload spacer -->
@@ -486,15 +490,19 @@
                         <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Log At Install" Tag="LogAtInstallCB" x:Name="PackageLogAtInstallDisplay"/>
-                            <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="8,0,0,0"/>
-                            <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="8,0,0,0"/>
-                            <CheckBox Content="Popular" x:Name="PackagePopularModDisplay" Tag="PopularModCB" Margin="8,0,0,0"/>
-                            <CheckBox Content="Grey Area" x:Name="PackageGreyAreaModDisplay" Tag="PackageGreyAreaModDisplay" Margin="8,0,0,0"/>
                             <CheckBox Content="Show In Search" x:Name="PackageShowInSearchListDisplay" Tag="PopularModCB" Margin="8,0,0,0"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Apply" x:Name="ApplyButton" Click="ApplyButton_Click"/>
-                        <Button Grid.Column="0" Grid.Row="17" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" />
-                        <Button Grid.Column="0" Grid.Row="19" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" />
+                        <StackPanel Grid.Column="0" Grid.Row="15" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+                            <CheckBox Content="Popular" x:Name="PackagePopularModDisplay" Tag="PopularModCB" Margin="0,0,0,0"/>
+                            <CheckBox Content="Grey Area" x:Name="PackageGreyAreaModDisplay" Tag="PackageGreyAreaModDisplay" Margin="37,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="16" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+                            <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="0,0,0,0"/>
+                            <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="42,0,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Apply" x:Name="ApplyButton" Click="ApplyButton_Click" Margin="0,28,0,0" Grid.ColumnSpan="2" Width="200"/>
+                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" Margin="0,55,0,0" Grid.ColumnSpan="2" RenderTransformOrigin="0.493,-0.523" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Margin="0,83,0,0" Grid.ColumnSpan="2" Width="200" />
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
@@ -522,34 +530,34 @@
                 <TabItem x:Name="DependenciesTab" Header="Dependencies">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageDependenciesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageDependenciesDisplay_SelectionChanged" />
-                        <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesAddSelected_Click"/>
-                        <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,235,0,0" VerticalAlignment="Top" Width="100" Click="DependenciesRemoveSelected_Click"/>
+                        <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesAddSelected_Click"/>
+                        <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="10,235,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesRemoveSelected_Click"/>
                         <ComboBox x:Name="LoadedDependenciesList" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
-                        <TextBlock x:Name="DependenciesLogicTypeTextBlock" HorizontalAlignment="Left" Margin="105,211,0,0" TextWrapping="Wrap" Text="With Logic Type:" VerticalAlignment="Top"/>
-                        <ComboBox x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="197,209,0,0" VerticalAlignment="Top" Width="50">
+                        <TextBlock x:Name="DependenciesLogicTypeTextBlock" HorizontalAlignment="Left" Margin="10,260,0,0" TextWrapping="Wrap" Text="With Logic Type:" VerticalAlignment="Top"/>
+                        <ComboBox x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="10,281,0,0" VerticalAlignment="Top" Width="400">
                             <RelhaxModpack:Logic>OR</RelhaxModpack:Logic>
                             <RelhaxModpack:Logic>AND</RelhaxModpack:Logic>
                         </ComboBox>
-                        <CheckBox x:Name="DependenciesNotFlag" Content="Not Flag" HorizontalAlignment="Left" Margin="252,212,0,0" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="DependenciesNotFlag" Content="Set Not Flag" HorizontalAlignment="Left" Margin="10,308,0,0" VerticalAlignment="Top"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="MediasTab" Header="Medias">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageMediasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageMediasDisplay_SelectionChanged" AllowDrop="True" DragOver="PackageMediasDisplay_DragOver" Drop="PackageMediasDisplay_Drop" MouseMove="PackageMediasDisplay_MouseMove" PreviewMouseDown="PackageMediasDisplay_PreviewMouseDown" PreviewMouseUp="PackageMediasDisplay_PreviewMouseUp" ScrollViewer.ScrollChanged="PackageMediasDisplay_ScrollChanged"/>
-                        <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="0,334,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
-                        <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="105,334,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
-                        <Button Content="Remove Media" x:Name="MediaRemoveMediaButton" Tag="MediaRemoveMediaButton" HorizontalAlignment="Left" Margin="210,334,0,0" VerticalAlignment="Top" Width="100" Click="MediaRemoveMediaButton_Click"/>
+                        <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="10,511,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
+                        <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="230,511,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
+                        <Button Content="Remove Media" x:Name="MediaRemoveMediaButton" Tag="MediaRemoveMediaButton" HorizontalAlignment="Left" Margin="10,486,0,0" VerticalAlignment="Top" Width="467" Click="MediaRemoveMediaButton_Click"/>
                         <ComboBox x:Name="MediaTypesList" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top" Width="477" Height="20">
                             <RelhaxModpack:MediaType>Picture</RelhaxModpack:MediaType>
                             <RelhaxModpack:MediaType>Webpage</RelhaxModpack:MediaType>
                             <RelhaxModpack:MediaType>MediaFile</RelhaxModpack:MediaType>
                             <RelhaxModpack:MediaType>HTML</RelhaxModpack:MediaType>
                         </ComboBox>
-                        <TextBox x:Name="MediaTypesURL" HorizontalAlignment="Left" Height="71" Margin="0,258,0,0" VerticalAlignment="Top" Width="487"
+                        <TextBox x:Name="MediaTypesURL" HorizontalAlignment="Stretch" Height="173" Margin="0,258,0,0" VerticalAlignment="Top"
                                  TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
-                        <Button Content="Preview Selected Media" x:Name="MediaPreviewSelectedMediaButton" Tag="MediaPreviewSelectedMediaButton" HorizontalAlignment="Left" Margin="0,359,0,0" VerticalAlignment="Top" Width="135" Click="MediaPreviewSelectedMediaButton_Click"/>
-                        <Button Content="Preview Edit Media" x:Name="MediaPreviewEditMediaButton" Tag="MediaPreviewEditMediaButton" HorizontalAlignment="Left" Margin="140,359,0,0" VerticalAlignment="Top" Width="110" Click="MediaPreviewEditMediaButton_Click"/>
-                        <Button x:Name="UploadMediaButton" Content="Upload and add media" HorizontalAlignment="Left" Margin="0,384,0,0" VerticalAlignment="Top" Width="135" Click="UploadMediaButton_Click"/>
+                        <Button Content="Preview Selected Media" x:Name="MediaPreviewSelectedMediaButton" Tag="MediaPreviewSelectedMediaButton" HorizontalAlignment="Left" Margin="10,461,0,0" VerticalAlignment="Top" Width="467" Click="MediaPreviewSelectedMediaButton_Click"/>
+                        <Button Content="Preview Edit Media" x:Name="MediaPreviewEditMediaButton" Tag="MediaPreviewEditMediaButton" HorizontalAlignment="Left" Margin="115,511,0,0" VerticalAlignment="Top" Width="110" Click="MediaPreviewEditMediaButton_Click"/>
+                        <Button x:Name="UploadMediaButton" Content="Upload and add media" HorizontalAlignment="Left" Margin="10,436,0,0" VerticalAlignment="Top" Width="467" Click="UploadMediaButton_Click"/>
                         <TextBlock x:Name="MediaMediaTypeLabel" HorizontalAlignment="Left" Margin="0,184,0,0" TextWrapping="Wrap" Text="Media Type" VerticalAlignment="Top"/>
                         <TextBlock HorizontalAlignment="Left" Margin="0,238,0,0" TextWrapping="Wrap" Text="Media Data" VerticalAlignment="Top" Width="66" Height="20"/>
                     </Grid>
@@ -557,19 +565,19 @@
                 <TabItem x:Name="UserDatasTab" Header="Userdatas">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageUserdatasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageUserdatasDisplay_SelectionChanged" />
-                        <Button Content="Add Userdata" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataAddUserdataButton_Click"/>
-                        <Button Content="Apply Edit" x:Name="UserdataApplyEditButton" HorizontalAlignment="Left" Margin="105,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataApplyEditButton_Click"/>
-                        <Button Content="Remove Userdata" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="210,209,0,0" VerticalAlignment="Top" Width="100" Click="UserdataRemoveUserdata_Click"/>
-                        <TextBox x:Name="UserDataEditBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
+                        <Button Content="Add Userdata" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top" Width="467" Click="UserdataAddUserdataButton_Click"/>
+                        <Button Content="Apply Edit" x:Name="UserdataApplyEditButton" HorizontalAlignment="Left" Margin="10,341,0,0" VerticalAlignment="Top" Width="467" Click="UserdataApplyEditButton_Click"/>
+                        <Button Content="Remove Userdata" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Width="467" Click="UserdataRemoveUserdata_Click"/>
+                        <TextBox x:Name="UserDataEditBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="102"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="TriggersTab" Header="Triggers">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageTriggersDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageTriggersDisplay_SelectionChanged" />
-                        <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerAddSelectedTrigger_Click"/>
-                        <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="125,209,0,0" VerticalAlignment="Top" Width="120" Click="TriggerRemoveTrigger_Click"/>
+                        <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="10,209,0,0" VerticalAlignment="Top" Width="467" Click="TriggerAddSelectedTrigger_Click"/>
+                        <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="10,234,0,0" VerticalAlignment="Top" Width="467" Click="TriggerRemoveTrigger_Click"/>
                         <ComboBox x:Name="LoadedTriggersComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
-                        <TextBox x:Name="CurrentSupportedTriggers" HorizontalAlignment="Left" Height="63" Margin="0,498,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Top" Width="487" IsReadOnly="True"/>
+                        <TextBox x:Name="CurrentSupportedTriggers" HorizontalAlignment="Left" Height="63" Margin="0,478,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Bottom" Width="487" IsReadOnly="True"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="ConflictingPackagesTab" Header="Conflicting Packages">
