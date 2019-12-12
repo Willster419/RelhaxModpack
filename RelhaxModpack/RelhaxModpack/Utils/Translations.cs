@@ -844,7 +844,7 @@ namespace RelhaxModpack
             //Component: SaveUserDataText
             //
             English.Add("SaveUserDataText", "Save user data");
-            German.Add("SaveUserDataText", "Mod Daten speichern");
+            German.Add("SaveUserDataText", "Mod-Daten speichern");
             Polish.Add("SaveUserDataText", "Zapisz ustawienia użytkownika");
             French.Add("SaveUserDataText", "Sauvegarder les données utilisateur");
             Spanish.Add("SaveUserDataText", "Guardar datos del usuario");
@@ -884,7 +884,7 @@ namespace RelhaxModpack
             //Component: BackupModsText
             //
             English.Add("BackupModsText", "Backup current mods folder");
-            German.Add("BackupModsText", "Sicherung des aktuellen Modsordner");
+            German.Add("BackupModsText", "Sicherung des aktuellen Mod-Verzeichnis");
             Polish.Add("BackupModsText", "Stwórz kopię zapasową modów"); // Shortened. Kept splitting into two lines. @Nullmaruzero
             French.Add("BackupModsText", "Sauvegarder le dossier des mods");
             Spanish.Add("BackupModsText", "Crear una copia de seguridad de la carpeta actual de Mods");
@@ -1141,7 +1141,7 @@ namespace RelhaxModpack
             //Component: CreateShortcutsText
             //
             English.Add("CreateShortcutsText", "Create desktop shortcuts");
-            German.Add("CreateShortcutsText", "Erstelle desktop verknüpfungen");
+            German.Add("CreateShortcutsText", "Erstelle Desktop Verknüpfungen");
             Polish.Add("CreateShortcutsText", "Utwórz skróty na pulpicie");
             French.Add("CreateShortcutsText", "Créer des raccourcis sur le bureau");
             Spanish.Add("CreateShortcutsText", "Crear accesos directos en el escritorio");
@@ -3521,7 +3521,7 @@ namespace RelhaxModpack
             //Component: InstallationCompleteText
             //
             English.Add("InstallationCompleteText", "The Installation is complete. Would you like to...");
-            German.Add("InstallationCompleteText", "Installation ist beendet. Willst du...");
+            German.Add("InstallationCompleteText", "Installation ist beendet. ");
             Polish.Add("InstallationCompleteText", "Instalacja zakończona. Czy chcesz teraz...");
             French.Add("InstallationCompleteText", "L'installation est terminée. Voudriez-vous...");
             Spanish.Add("InstallationCompleteText", "La instalación ha sido completada. Quiere...");
@@ -3530,7 +3530,7 @@ namespace RelhaxModpack
             //Component: InstallationCompleteStartWoT
             //
             English.Add("InstallationCompleteStartWoT", "Start the game? (WorldofTanks.exe)");
-            German.Add("InstallationCompleteStartWoT", "Das Spiel starten? (WorldofTanks.exe)");
+            German.Add("InstallationCompleteStartWoT", "Spiel starten (WorldofTanks.exe)");
             Polish.Add("InstallationCompleteStartWoT", "Uruchomić grę? (WorldofTanks.exe)");
             French.Add("InstallationCompleteStartWoT", "Démarrez le jeu? (WorldofTanks.exe)");
             Spanish.Add("InstallationCompleteStartWoT", "¿Iniciar el juego?");
@@ -3539,7 +3539,7 @@ namespace RelhaxModpack
             //Component: InstallationCompleteStartGameCenter
             //
             English.Add("InstallationCompleteStartGameCenter", "Start WG Game Center?");
-            German.Add("InstallationCompleteStartGameCenter", "Starte WG Game Center?");
+            German.Add("InstallationCompleteStartGameCenter", "WG Game Center");
             Polish.Add("InstallationCompleteStartGameCenter", "Uruchomić WG Game Center?");
             French.Add("InstallationCompleteStartGameCenter", "Démarrer WG Game Center?");
             Spanish.Add("InstallationCompleteStartGameCenter", "¿Iniciar WG Game Center ?");
@@ -3547,8 +3547,8 @@ namespace RelhaxModpack
 
             //Component: InstallationCompleteOpenXVM
             //
-            English.Add("InstallationCompleteOpenXVM", "Open your web browser to the xvm statistics login website?");
-            German.Add("InstallationCompleteOpenXVM", "Öffne Deinen Browser auf der XVM Statistik Login Webseite?");
+            English.Add("InstallationCompleteOpenXVM", "Open the xvm login website?");
+            German.Add("InstallationCompleteOpenXVM", "Öffne die XVM Login Webseite");
             Polish.Add("InstallationCompleteOpenXVM", "Przejść do strony logowania moda XVM?");
             French.Add("InstallationCompleteOpenXVM", "Ouvrir votre navigateur Web vers le site de connexion aux statistiques xvm?");
             Spanish.Add("InstallationCompleteOpenXVM", "¿Abrir su explorador en la página de inicio de sesión de las estadísticas de XVM?");
@@ -3557,7 +3557,7 @@ namespace RelhaxModpack
             //Component: InstallationCompleteCloseThisWindow
             //
             English.Add("InstallationCompleteCloseThisWindow", "Close this window?");
-            German.Add("InstallationCompleteCloseThisWindow", "Schließe dieses Fenster?");
+            German.Add("InstallationCompleteCloseThisWindow", "Schließe dieses Fenster");
             Polish.Add("InstallationCompleteCloseThisWindow", "Zamknąć to okno?");
             French.Add("InstallationCompleteCloseThisWindow", "Fermer cette fenêtre?");
             Spanish.Add("InstallationCompleteCloseThisWindow", "¿Cerrar esta ventana?");
@@ -3605,7 +3605,7 @@ namespace RelhaxModpack
             //Component: MainTextBox
             //
             English.Add("DiagnosticsMainTextBox", "You can use the options below to try to diagnose or solve the issues you are having.");
-            German.Add("DiagnosticsMainTextBox", "Du kannst mit den untenstehenden Optionen Probleme mit dem Spiel zu diagnostizieren und ggf. zu beheben.");
+            German.Add("DiagnosticsMainTextBox", "Du kannst mit den folgenden Optionen Probleme mit dem Spiel diagnostizieren und ggf. beheben.");
             Polish.Add("DiagnosticsMainTextBox", "Poniższe opcje pomogą zdiagnozować i rozwiązać napotkane problemy.");
             French.Add("DiagnosticsMainTextBox", "Vous pouvez utiliser les options ci dessous pour essayer de diagnostiqué ou résoudre les soucis que vous avez");
             Spanish.Add("DiagnosticsMainTextBox", "Puede utilizar las opciones a continuación para intentar diagnosticar o resolver problemas");
