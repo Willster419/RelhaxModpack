@@ -113,7 +113,8 @@ namespace RelhaxModpack
                 HomepageButton,
                 FindBugAddModButton,
                 SendEmailButton,
-                DonateButton
+                DonateButton,
+                LanguagesSelector
             };
         }
 
@@ -2170,7 +2171,7 @@ namespace RelhaxModpack
                 controlsToToggle.Remove(CancelDownloadInstallButton);
             foreach (FrameworkElement control in controlsToToggle)
             {
-                if (control is Button || control is CheckBox || control is RadioButton)
+                if (control is Button || control is CheckBox || control is RadioButton || control is ComboBox || control is Slider)
                 {
                     if (disabledBlacklist.Contains(control))
                         control.IsEnabled = false;
@@ -2478,13 +2479,22 @@ namespace RelhaxModpack
         {
             if ((bool)UseBetaDatabaseCB.IsChecked)
             {
+                //disable the UI part of it
                 UseBetaDatabaseCB.IsEnabled = false;
-                //get the branches. the default selected should be master
                 UseBetaDatabaseBranches.IsEnabled = false;
-                UseBetaDatabaseBranches.Items.Clear();
                 UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
+
+                //clear current list and add default master branch. and select it
+                UseBetaDatabaseBranches.Items.Clear();
+                UseBetaDatabaseBranches.Items.Add("master");
                 UseBetaDatabaseBranches.SelectedIndex = 0;
+
+                //declare objects to use
                 string jsonText = string.Empty;
+                JArray root = null;
+                List<string> branches = new List<string>();
+
+                //get the list of branches
                 using (PatientWebClient client = new PatientWebClient() { Timeout = 1500 })
                 {
                     try
@@ -2497,44 +2507,36 @@ namespace RelhaxModpack
                         Logging.Exception(wex.ToString());
                     }
                 }
-                if (string.IsNullOrWhiteSpace(jsonText))
+                if (!string.IsNullOrWhiteSpace(jsonText))
                 {
-                    //just load master and call it good. it should always be there
-                    UseBetaDatabaseBranches.Items.Clear();
-                    UseBetaDatabaseBranches.Items.Add("master");
-                    UseBetaDatabaseBranches.SelectedIndex = 0;
-                    UseBetaDatabaseBranches.IsEnabled = true;
-                    UseBetaDatabaseCB.IsEnabled = true;
-                    return;
+                    try
+                    {
+                        root = JArray.Parse(jsonText);
+                    }
+                    catch (JsonException jex)
+                    {
+                        Logging.Exception(jex.ToString());
+                    }
+                    if(root != null)
+                    {
+                        //parse the string into a json array object
+                        foreach (JObject branch in root.Children())
+                        {
+                            JValue value = (JValue)branch["name"];
+                            branches.Add((string)value.Value);
+                        }
+                        branches.Reverse();
+                    }
                 }
-                JArray root;
-                try
-                {
-                    root = JArray.Parse(jsonText);
-                }
-                catch (JsonException jex)
-                {
-                    Logging.Exception(jex.ToString());
-                    UseBetaDatabaseBranches.Items.Clear();
-                    UseBetaDatabaseBranches.Items.Add("master");
-                    UseBetaDatabaseBranches.SelectedIndex = 0;
-                    UseBetaDatabaseBranches.IsEnabled = true;
-                    UseBetaDatabaseCB.IsEnabled = true;
-                    return;
-                }
-                List<string> branches = new List<string>();
-                foreach (JObject branch in root.Children())
-                {
-                    JValue value = (JValue)branch["name"];
-                    branches.Add((string)value.Value);
-                }
-                branches.Reverse();
-                UseBetaDatabaseBranches.Items.Clear();
+
+                //fill the UI with branch items
                 foreach (string s in branches)
                     UseBetaDatabaseBranches.Items.Add(s);
+
+                //set database distribution to beta
                 ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
+
                 //default to master selected
-                UseBetaDatabaseBranches.SelectedIndex = 0;
                 UseBetaDatabaseBranches.IsEnabled = true;
                 UseBetaDatabaseCB.IsEnabled = true;
             }
