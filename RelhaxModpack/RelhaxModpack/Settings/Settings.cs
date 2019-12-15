@@ -221,6 +221,11 @@ namespace RelhaxModpack
         public const string ReadmeFromZipfileFolderName = "_readme";
 
         /// <summary>
+        /// The name of the temporary install folder that holds the auto update information of the database editor.
+        /// </summary>
+        public const string AutoUpdateZipFolderName = "_autoUpdate";
+
+        /// <summary>
         /// The list of installer folders in the root {WoT} directory to cleanup after an installation
         /// </summary>
         public static readonly string[] FoldersToCleanup = new string[]
@@ -230,7 +235,8 @@ namespace RelhaxModpack
             XmlUnpackFolderName,
             AtlasCreationFoldername,
             FontsToInstallFoldername,
-            ReadmeFromZipfileFolderName
+            ReadmeFromZipfileFolderName,
+            AutoUpdateZipFolderName
         };
 
         /// <summary>
