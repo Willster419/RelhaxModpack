@@ -2484,19 +2484,33 @@ namespace RelhaxModpack
                 UseBetaDatabaseBranches.IsEnabled = false;
                 UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
 
-                //clear current list and add default master branch. and select it
+                //clear current list
                 UseBetaDatabaseBranches.Items.Clear();
-                UseBetaDatabaseBranches.Items.Add("master");
-                UseBetaDatabaseBranches.SelectedIndex = 0;
 
                 //declare objects to use
                 string jsonText = string.Empty;
                 JArray root = null;
-                List<string> branches = new List<string>();
+                List<string> branches = new List<string>
+                {
+                    "master"
+                };
 
                 //get the list of branches
                 using (PatientWebClient client = new PatientWebClient() { Timeout = 1500 })
                 {
+                    //if windows 7, enable TLS 1.1 and 1.2
+                    //https://stackoverflow.com/questions/47017973/could-not-establish-secure-channel-for-ssl-tls-c-sharp-web-service-client
+                    //https://docs.microsoft.com/en-us/dotnet/api/system.net.servicepointmanager.securityprotocol?view=netframework-4.8#System_Net_ServicePointManager_SecurityProtocol
+                    //https://docs.microsoft.com/en-us/dotnet/framework/network-programming/tls
+                    if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
+                    {
+                        Logging.Debug("Windows 7 detected, enabling TLS 1.1 and 1.2");
+                        System.Net.ServicePointManager.SecurityProtocol =
+                            SecurityProtocolType.Ssl3 |
+                            SecurityProtocolType.Tls |
+                            SecurityProtocolType.Tls11 |
+                            SecurityProtocolType.Tls12;
+                    }
                     try
                     {
                         client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
@@ -2523,15 +2537,19 @@ namespace RelhaxModpack
                         foreach (JObject branch in root.Children())
                         {
                             JValue value = (JValue)branch["name"];
-                            branches.Add((string)value.Value);
+                            string branchName = value.Value.ToString();
+                            if (!branches.Contains(branchName))
+                                branches.Add(branchName);
                         }
-                        branches.Reverse();
                     }
                 }
 
                 //fill the UI with branch items
                 foreach (string s in branches)
                     UseBetaDatabaseBranches.Items.Add(s);
+
+                //select master (index 0) as default
+                UseBetaDatabaseBranches.SelectedIndex = 0;
 
                 //set database distribution to beta
                 ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
