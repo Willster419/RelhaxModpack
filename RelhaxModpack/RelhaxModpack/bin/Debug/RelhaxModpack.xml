@@ -4893,6 +4893,11 @@
             and will be deleted at the end of the installation
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Settings.AutoUpdateZipFolderName">
+            <summary>
+            The name of the temporary install folder that holds the auto update information of the database editor.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Settings.FoldersToCleanup">
             <summary>
             The list of installer folders in the root {WoT} directory to cleanup after an installation
