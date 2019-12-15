@@ -292,6 +292,14 @@ namespace RelhaxModpack
             RelhaxTempFolderPath,
             RelhaxLibrariesFolderPath
         };
+
+        public const string PmodLog = "pmod.log";
+
+        public const string XvmLog = "xvm.log";
+
+        public const string PythonLog = "python.log";
+
+        public const string LogsFolder = "logs";
         #endregion
 
         #region URLs
