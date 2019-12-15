@@ -1941,21 +1941,20 @@ namespace RelhaxModpack
                             else
                             {
                                 Logging.Error("failed to download the file {0} {1} {2}", package.ZipFile, Environment.NewLine, ex.ToString());
-                                //show abort retry ignore window TODO
-                                MessageBoxResult result = MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
+                                System.Windows.Forms.DialogResult result = System.Windows.Forms.MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
                                     Translations.GetTranslatedString("failedToDownload1"), Environment.NewLine,
                                     package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
-                                    Translations.GetTranslatedString("failedToDownloadHeader"), MessageBoxButton.YesNoCancel);
+                                    Translations.GetTranslatedString("failedToDownloadHeader"), System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore);
                                 switch (result)
                                 {
-                                    case MessageBoxResult.Yes:
+                                    case System.Windows.Forms.DialogResult.Retry:
                                         //keep retry as true
                                         break;
-                                    case MessageBoxResult.No:
+                                    case System.Windows.Forms.DialogResult.Ignore:
                                         //skip this file
                                         retry = false;
                                         break;
-                                    case MessageBoxResult.Cancel:
+                                    case System.Windows.Forms.DialogResult.Abort:
                                         //stop the installation all together
                                         ToggleUIButtons(true);
                                         ResetUI();
