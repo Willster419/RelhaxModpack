@@ -19,9 +19,9 @@ namespace RelhaxModpack.Windows
         //list of files who need to be seperated by 32bit and 64bit versions
         private string[] specialName32And64Versions = new string[]
         {
-            "python.log",
-            "xvm.log",
-            "pmod.log"
+            Settings.PythonLog,
+            Settings.XvmLog,
+            Settings.PmodLog
         };
 
         /// <summary>
@@ -96,20 +96,28 @@ namespace RelhaxModpack.Windows
             //create the list of files to collect (should always collect these)
             List<string> filesToCollect = new List<string>()
             {
-                //stuff in application startup path
+                //relhax files in relhax dir (relhax.log, relhaxsettings.xml, lastinstalledconfig.xml)
                 Settings.RelhaxLogFilepath,
                 Settings.RelhaxSettingsFilepath,
                 Settings.LastInstalledConfigFilepath,
-                //stuff in the tanks location (need to be combined here cause it can change from installation)
-                Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename),
-                Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename),
-                //stuff in 32bit and 64bit folders
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "python.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "pmod.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "python.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "pmod.log")
+                //relhax files in wot/logs dir (need to be combined here cause it can change from installation)
+                Path.Combine(Settings.WoTDirectory, Settings.LogsFolder, Logging.InstallLogFilename),
+                Path.Combine(Settings.WoTDirectory, Settings.LogsFolder, Logging.UninstallLogFilename),
+                //disabled for now, but in case WG decides to change it again...
+                /*
+                //wot files in wot/32bit folder
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.PmodLog),
+                //wot files in wot/64bit folder
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PmodLog),
+                */
+                //wot files in wot folder
+                Path.Combine(Settings.WoTDirectory, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.PmodLog)
             };
 
             //use a nice diagnostic window to check if the user wants to include any other files
@@ -147,12 +155,15 @@ namespace RelhaxModpack.Windows
                         string fileNameToAdd = Path.GetFileName(s);
 
                         //special case check for if filenames are the same in 32bit and 64bit
+                        //disabled for now, but in case WG decides to change it again...
+                        /*
                         if(specialName32And64Versions.Contains(fileNameToAdd))
                         {
                             string[] folderPathSep = s.Split(Path.DirectorySeparatorChar);
                             string folderName32And64 = folderPathSep[folderPathSep.Count() - 2];
                             fileNameToAdd = string.Format("{0}_{1}", folderName32And64, fileNameToAdd);
                         }
+                        */
 
                         //run a loop to check if the file already exists in the zip with the same name, if it does then pad it until it does not
                         Logging.Info("Attempting to add filename {0} in zip entry", fileNameToAdd);

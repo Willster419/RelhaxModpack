@@ -1469,12 +1469,18 @@ namespace RelhaxModpack.InstallerComponents
 
             string[] logsToDelete = new string[]
             {
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "python.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "pmod.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "python.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "pmod.log"),
+                //32 folders
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.PmodLog),
+                //64 folders
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PmodLog),
+                //root folders
+                Path.Combine(Settings.WoTDirectory, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.PmodLog),
                 Path.Combine(Settings.WoTDirectory, "WoTLauncher.log"),
                 Path.Combine(Settings.WoTDirectory, "cef.log")
             };
