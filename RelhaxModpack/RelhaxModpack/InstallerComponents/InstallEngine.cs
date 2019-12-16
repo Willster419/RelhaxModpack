@@ -1935,7 +1935,7 @@ namespace RelhaxModpack.InstallerComponents
             else
             {
                 CancellationToken.ThrowIfCancellationRequested();
-                FontsTask = Task.Factory.StartNew(async () =>
+                FontsTask = Task.Run(() =>
                 {
                     Logging.Debug("checking system installed fonts to remove duplicates");
 
@@ -1996,7 +1996,7 @@ namespace RelhaxModpack.InstallerComponents
                             Logging.Debug("FontReg process waiting to close");
                             for(int i = 0; i < timeoutSeconds; i++)
                             {
-                                await Task.Delay(1000);
+                                Thread.Sleep(1000);
                                 if(installFontss.HasExited)
                                 {
                                     Logging.Debug("FontReg process has exited");
@@ -2034,6 +2034,10 @@ namespace RelhaxModpack.InstallerComponents
                             ProgFonts = null;
                             CancellationToken.ThrowIfCancellationRequested();
                         }
+                    }
+                    else
+                    {
+                        Logging.Info("...skipped (no real font files to install)");
                     }
                 });
             }
