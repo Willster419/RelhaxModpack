@@ -251,7 +251,8 @@ namespace RelhaxModpack.Windows
                     }
                     else
                     {
-                        builder.AppendFormat("{0} {1} {2} {3} {4} {5}\n", Translations.GetTranslatedString("installExtractingMods"), progress.CompletedPackagesOfAThread[progress.ThreadID]+1,
+                        uint comp = progress.CompletedPackagesOfAThread[progress.ThreadID] > 0 ? progress.CompletedPackagesOfAThread[progress.ThreadID] : 1;
+                        builder.AppendFormat("{0} {1} {2} {3} {4} {5}\n", Translations.GetTranslatedString("installExtractingMods"), comp,
                             Translations.GetTranslatedString("of"), progress.TotalPackagesofAThread[progress.ThreadID], Translations.GetTranslatedString("installExtractingOfGroup"),
                             progress.InstallGroup);
                     }
@@ -273,7 +274,8 @@ namespace RelhaxModpack.Windows
 
                         if (progress.EntriesProcessedOfAThread != null && progress.EntriesTotalOfAThread != null)
                         {
-                            builder.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installZipFileEntry"), progress.EntriesProcessedOfAThread[progress.ThreadID]+1,
+                            uint compp = progress.EntriesProcessedOfAThread[progress.ThreadID] > 0 ? progress.EntriesProcessedOfAThread[progress.ThreadID] : 1;
+                            builder.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installZipFileEntry"), compp,
                                     Translations.GetTranslatedString("of"), progress.EntriesTotalOfAThread[progress.ThreadID]);
 
                             if (ExtractionModsReporters[progress.ThreadID].TaskMinimum != 0)
@@ -317,7 +319,7 @@ namespace RelhaxModpack.Windows
 
                     ExtractionUserModsReporter.TaskText = string.Format("{0}\n{1}\n{2}",
                         Path.GetFileName(progress.Filename),
-                        string.Format("{0} {1} {2}", progress.EntriesProcessed+1, Translations.GetTranslatedString("of"), progress.EntriesTotal),
+                        string.Format("{0} {1} {2}", (progress.EntriesProcessed > 0? progress.EntriesProcessed : 1), Translations.GetTranslatedString("of"), progress.EntriesTotal),
                         progress.EntryFilename);
                     break;
                 case InstallerExitCodes.RestoreUserdataError:
@@ -345,13 +347,13 @@ namespace RelhaxModpack.Windows
                             if (RestoreDataXmlUnpackReporter.TaskValue != 1)
                                 RestoreDataXmlUnpackReporter.TaskValue = 1;
                             RestoreDataXmlUnpackReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installRestoreUserdata"),
-                                (progress.ParrentCurrent+1).ToString(), Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
+                                ((progress.ParrentCurrent) > 0? progress.ParrentCurrent : 1).ToString(), Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
                             break;
                         case InstallerExitCodes.XmlUnpackError:
                             if (RestoreDataXmlUnpackReporter.TaskValue != 2)
                                 RestoreDataXmlUnpackReporter.TaskValue = 2;
                             RestoreDataXmlUnpackReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installXmlUnpack"),
-                                (progress.ParrentCurrent+1).ToString(), Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
+                                ((progress.ParrentCurrent) > 0? progress.ParrentCurrent : 1).ToString(), Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
                             break;
                     }
 
@@ -378,7 +380,7 @@ namespace RelhaxModpack.Windows
                         PostInstallPanel.Children.Add(PatchReporter);
                     }
 
-                    PatchReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installPatchFiles"), (progress.ParrentCurrent+1).ToString(),
+                    PatchReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("installPatchFiles"), ((progress.ParrentCurrent) > 0? progress.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
 
                     if (PatchReporter.TaskMinimum != 0)
@@ -406,7 +408,7 @@ namespace RelhaxModpack.Windows
                         PostInstallPanel.Children.Add(ShortcutsReporter);
                     }
 
-                    ShortcutsReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("AdvancedInstallCreateShortcuts"), (progress.ParrentCurrent+1).ToString(),
+                    ShortcutsReporter.TaskText = string.Format("{0} {1} {2} {3}\n{4}", Translations.GetTranslatedString("AdvancedInstallCreateShortcuts"), ((progress.ParrentCurrent) > 0? progress.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString(), progress.Filename);
 
                     if (ShortcutsReporter.TaskMinimum != 0)
@@ -431,7 +433,7 @@ namespace RelhaxModpack.Windows
                     }
 
                     StringBuilder sb = new StringBuilder();
-                    sb.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installContourIconAtlas"), (progress.ParrentCurrent+1).ToString(),
+                    sb.AppendFormat("{0} {1} {2} {3}\n", Translations.GetTranslatedString("installContourIconAtlas"), ((progress.ParrentCurrent) > 0? progress.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), progress.ParrentTotal.ToString());
                     sb.AppendFormat("{0} {1} {2} {3}\n", progress.ChildCurrent.ToString(), Translations.GetTranslatedString("of"), progress.ChildTotal.ToString(),
                             Translations.GetTranslatedString("stepsComplete"));
