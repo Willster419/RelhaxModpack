@@ -533,7 +533,7 @@ namespace RelhaxModpack
         {
             if(string.IsNullOrEmpty(oldModpackTitle))
             {
-                Logging.Info("oldModpackTitle is empty, don't update text!");
+                Logging.Info("[ProcessTitle()] oldModpackTitle is empty, don't update text!");
                 return;
             }
             //apply the title change for beta application and beta database
