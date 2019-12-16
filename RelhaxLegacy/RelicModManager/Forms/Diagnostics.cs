@@ -71,12 +71,9 @@ namespace RelhaxModpack
                         Path.Combine(AppStartupPath, "RelHaxSettings.xml"),
                         Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"),
                         Path.Combine(TanksLocation, "logs", "uninstall.log"),
-                        Path.Combine(TanksLocation, "win32", "python.log"),
-                        Path.Combine(TanksLocation, "win32", "xvm.log"),
-                        Path.Combine(TanksLocation, "win32", "pmod.log"),
-                        Path.Combine(TanksLocation, "win64", "python.log"),
-                        Path.Combine(TanksLocation, "win64", "xvm.log"),
-                        Path.Combine(TanksLocation, "win64", "pmod.log")
+                        Path.Combine(TanksLocation, "python.log"),
+                        Path.Combine(TanksLocation, "xvm.log"),
+                        Path.Combine(TanksLocation, "pmod.log")
                     };
                     using (AddPicturesZip apz = new AddPicturesZip()
                     {
