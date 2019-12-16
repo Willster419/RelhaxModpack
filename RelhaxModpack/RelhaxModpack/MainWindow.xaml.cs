@@ -1243,18 +1243,21 @@ namespace RelhaxModpack
             stopwatch.Restart();
 
             //check if wot is running
-            AskCloseWoT askCloseWoT = null;
             while (Utils.IsProcessRunning(Settings.WoTProcessName, Settings.WoTDirectory))
             {
                 //create window to determine if cancel, wait, kill TODO
-                if (askCloseWoT == null)
-                    askCloseWoT = new AskCloseWoT();
+                AskCloseWoT askCloseWoT = new AskCloseWoT();
                 //a positive result means that we are going to retry the loop
                 //it could mean the user hit retry (close true), or hit force close (succeeded, and try again anyways)
-                if (!(bool)askCloseWoT.ShowDialog())
+                askCloseWoT.ShowDialog();
+                if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.CancelInstallation)
                 {
                     ToggleUIButtons(true);
                     return;
+                }
+                else if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.ForceClosed)
+                {
+                    break;
                 }
                 Thread.Sleep(100);
             }
@@ -2029,6 +2032,33 @@ namespace RelhaxModpack
                 return;
             }
 
+            //check if wot is running
+            while (Utils.IsProcessRunning(Settings.WoTProcessName, Settings.WoTDirectory))
+            {
+                //create window to determine if cancel, wait, kill TODO
+                AskCloseWoT askCloseWoT = new AskCloseWoT();
+                //a positive result means that we are going to retry the loop
+                //it could mean the user hit retry (close true), or hit force close (succeeded, and try again anyways)
+                askCloseWoT.ShowDialog();
+                if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.CancelInstallation)
+                {
+                    ToggleUIButtons(true);
+                    return;
+                }
+                else if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.ForceClosed)
+                {
+                    break;
+                }
+                Thread.Sleep(100);
+            }
+
+            //setup the cancel button
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
+            CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Visibility = Visibility.Visible;
+            CancelDownloadInstallButton.IsEnabled = true;
+
             //create progress object
             Progress<RelhaxInstallerProgress> progress = new Progress<RelhaxInstallerProgress>();
             progress.ProgressChanged += UninstallProgressChanged;
@@ -2044,6 +2074,12 @@ namespace RelhaxModpack
             InstallerComponents.RelhaxInstallFinishedEventArgs results = await installEngine.RunUninstallationAsync(progress);
             installEngine.Dispose();
             installEngine = null;
+
+            //close and hide the install progress button
+            CancelDownloadInstallButton.IsEnabled = false;
+            CancelDownloadInstallButton.Visibility = Visibility.Hidden;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
 
             //report results
             ChildProgressBar.Value = ChildProgressBar.Maximum;

@@ -1258,6 +1258,11 @@ namespace RelhaxModpack
                 return;
             }
         }
+
+        public static string RemoveWoT32bit64bitPathIfExists(string wotPath)
+        {
+            return wotPath.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
+        }
         #endregion
 
         #region Data type from string processing/parsing
@@ -2145,38 +2150,42 @@ namespace RelhaxModpack
         {
             //check if path of exe is the same as the one we're looking at
             //first check to make sure wot path is legit
-            bool checkWithPath = true;
             if (string.IsNullOrEmpty(pathToMatch))
             {
-                Logging.WriteToLog(nameof(pathToMatch) + "Is empty, cannot check for direct path, only checking for num processes",
-                    Logfiles.Application, LogLevel.Error);
-                checkWithPath = false;
+                Logging.Info("[GetProcess()] pathToMatch is empty, only checking for instance count > 0");
             }
+
             //get list of running instances of WoT
-            //TO GET PROCESS NAME: Process.GetCurrentProcess().ProcessName
             Process[] processes = Process.GetProcessesByName(processName);
+
             //check if three are any at all
             if (processes.Length == 0)
             {
                 return null;
             }
-            //first check if the number is 1 or less, if so stop here
-            else if (processes.Length == 1)
-                return null;
-            //if not checking for path, we don't know if is the direct path, 
-            else if (!checkWithPath)
-                return processes[0];
-            else
+
+            //if not checking for path, we don't know which instance, only that there is one
+            //so return
+            Logging.Debug("[GetProcess()] Process name to match: {0}. matching entries: {1}", processName, processes.Length.ToString());
+            if (string.IsNullOrEmpty(pathToMatch))
             {
-                foreach (Process p in processes)
+                Logging.Debug("[GetProcess()] processes.length = {0} and pathToMatch is empty, returning first entry", processes.Length.ToString());
+                return processes[0];
+            }
+
+            //else try to match the path
+            foreach (Process p in processes)
+            {
+                //get path of process start file
+                //https://stackoverflow.com/questions/5497064/how-to-get-the-full-path-of-running-process
+                string processStartFilepath = RemoveWoT32bit64bitPathIfExists(Path.GetDirectoryName(p.MainModule.FileName));
+                Logging.Debug("[GetProcess()] checking if path process {0} matching with path {1}", processStartFilepath, pathToMatch);
+                if (pathToMatch.Equals(processStartFilepath))
                 {
-                    if (pathToMatch.Equals(Path.GetDirectoryName(p.StartInfo.FileName)))
-                    {
-                        Logging.WriteToLog(string.Format("Matched process name {0} to path {1}", p.ProcessName, pathToMatch),
-                            Logfiles.Application, LogLevel.Debug);
-                        return p;
-                    }
+                    Logging.Debug("[GetProcess()] Process name matched");
+                    return p;
                 }
+                Logging.Debug("[GetProcess()] Never matched path processes (count={0}) matching with path {1}", processes.Length.ToString(), pathToMatch);
             }
             return null;
         }

@@ -15,11 +15,19 @@ using System.Windows.Shapes;
 
 namespace RelhaxModpack.Windows
 {
+    public enum AskCloseWoTResult
+    {
+        Retry,
+        CancelInstallation,
+        ForceClosed
+    }
     /// <summary>
     /// Interaction logic for AskCloseWoT.xaml
     /// </summary>
     public partial class AskCloseWoT : RelhaxWindow
     {
+        public AskCloseWoTResult AskCloseWoTResult { get; set; } = AskCloseWoTResult.CancelInstallation;
+
         /// <summary>
         /// Create an instance of the AskCloseWoT window
         /// </summary>
@@ -30,12 +38,14 @@ namespace RelhaxModpack.Windows
 
         private void WoTRunningCancelInstallButton_Click(object sender, RoutedEventArgs e)
         {
+            AskCloseWoTResult = AskCloseWoTResult.CancelInstallation;
             DialogResult = false;
             Close();
         }
 
         private void WoTRunningForceCloseButton_Click(object sender, RoutedEventArgs e)
         {
+            AskCloseWoTResult = AskCloseWoTResult.Retry;
             Logging.Info("Getting WoT process(es)");
             Process WoTProcess = Utils.GetProcess(Settings.WoTProcessName, Settings.WoTDirectory);
             if(WoTProcess == null)
@@ -51,6 +61,7 @@ namespace RelhaxModpack.Windows
                 if (WoTProcess.HasExited)
                 {
                     Logging.Info("success in ending process!");
+                    AskCloseWoTResult = AskCloseWoTResult.ForceClosed;
                     DialogResult = true;
                     Close();
                 }
@@ -72,6 +83,7 @@ namespace RelhaxModpack.Windows
 
         private void WoTRunningRetryButton_Click(object sender, RoutedEventArgs e)
         {
+            AskCloseWoTResult = AskCloseWoTResult.Retry;
             DialogResult = true;
             Close();
         }
