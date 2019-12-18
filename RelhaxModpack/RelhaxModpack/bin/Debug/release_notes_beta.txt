@@ -1,3 +1,25 @@
+Application version 0.29.4.9 (2019-12-17)
+https://www.virustotal.com/gui/file/54af85ee1a97e89f822e4551ca8619037ecfa93f189ebc6b935cdc8945dd232c/detection
+- Application now targets .NET framework v4.8 to take advantage of the latest technology and framework improvements from Microsoft.
+- Reverted (kind of) clear logs and diagnostic zip file log location detection due to WG reverting the Working Directory.
+- Added Windows 7 Compatibility of enabling TLS 1.1 and 1.2 for usage of github APIs.
+- Fixed "off by one" progress reporting. Again.
+- Fixed bug of not waiting properly for the font installation to finish (if installing fonts).
+- Started work on database self-updater project. This means that some package updates can be automated.
+- Fixed bugs with control logic of loading database branches from github API.
+- Fixed bugs with WoT process detection.
+- Minor UI enable/disable toggle fixes for MainWindow.
+- Fixed several UI placement and interaction issues with the database editor. (Thanks 'The Illusion')
+- Code imrovements to the MD5 hash calculation functions.
+- Updated DotNetZip and JSON.net APIs.
+- Added HtmlAgilityPack API.
+- Minor fixes to patch designer.
+- Fixed database editor not returning when user selects to cancel closing due to unsaved changes.
+- Minor other code fixes.
+- Updated German translations. (Thanks Elektrosmoker)
+- Updated documentation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.4.6 (2019-12-06)
 https://www.virustotal.com/gui/file/796cddf0b968204bae73857e67d4261c6277f4f7f52aeb85c3bf791bd3a22aa5/detection
 - Added hotfix from Relhax V1 with OMC view: When preview window loaded, retain window focus.
