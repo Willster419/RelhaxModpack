@@ -4401,7 +4401,7 @@ namespace RelhaxModpack
             //Component: AgreementSupport2
             // Second of the inlined elements for AgreementSupport1, conjunction between a forum link and discord server link.
             English.Add("AgreementSupport2", " or ");
-            German.Add("AgreementSupport2", "oder");
+            German.Add("AgreementSupport2", " oder ");
             Polish.Add("AgreementSupport2", " lub serwerze ");
             French.Add("AgreementSupport2", " ou le ");
             Spanish.Add("AgreementSupport2", " dedicado y ");
@@ -4430,7 +4430,7 @@ namespace RelhaxModpack
             // The fourth acknowledgement checkbox. Make sure you communicate this one well.
             // EXAMPLE: I understand that Relhax V2 collects anonymous usage data to improve the application, and can be disabled in the advanced settings tab
             English.Add("AgreementAnonData", "I understand that Relhax V2 collects anonymous usage data to improve the application, and can be disabled in the advanced settings tab");
-            German.Add("AgreementAnonData", "Ich verstehe, dass Relhax V2 anonyme Nutzungsdaten sammelt, um die Anwendung zu verbessern, und auf der Registerkarte  für erweiterte Einstellungen deaktiviert werden kann.");
+            German.Add("AgreementAnonData", "Ich verstehe, dass Relhax V2 anonyme Nutzungsdaten sammelt, um die Anwendung zu verbessern, und auf der Registerkarte für erweiterte Einstellungen deaktiviert werden kann.");
             Polish.Add("AgreementAnonData", "Rozumiem, że Relhax V2 gromadzi i wysyła anonimowe dane użytkowania celem poprawy aplikacji, oraz że funkcję tę mogę wyłączyć w dowolnym momencie w zakładce 'Zaawansowane'.");
             French.Add("AgreementAnonData", "Je comprends que Relhax V2 collecte des données d'utilisation anonymes pour améliorer l'application, et peut être désactivé dans les options avancées");
             Spanish.Add("AgreementAnonData", "Comprendo que Relhax V2 recoge datos anónimos de uso para mejorar la aplicación, lo cual puede ser deshabilitado en la pestaña de opciones avanzadas");
