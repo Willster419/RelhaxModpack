@@ -156,12 +156,15 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void OnApplicationClose(object sender, EventArgs e)
+        private void RelhaxWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (UnsavedChanges)
             {
                 if (MessageBox.Show("You have unsaved changes, return to editor?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    e.Cancel = true;
                     return;
+                }
             }
             if (!Logging.IsLogDisposed(Logfiles.Editor))
             {
