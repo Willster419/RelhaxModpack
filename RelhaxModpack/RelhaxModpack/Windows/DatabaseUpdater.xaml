@@ -39,7 +39,7 @@
                         <Button x:Name="UpdateDatabaseStep5" Content="Step 5: Run script CreateModInfo.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep5_Click"/>
                         <Button x:Name="UpdateDatabaseStep6a" Content="Step 6a: Run script CreateManagerInfo.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6a_Click"/>
                         <Button x:Name="UpdateDatabaseStep6b" Content="Step 6b: Run script CreateManagerInfo.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6b_Click"/>
-                        <TextBox x:Name="UpdateDatabaseStep7" Height="35" TextWrapping="Wrap" Text="Step 7: Commit repository changes update with message: &quot;made database public @123gauss&quot;" IsReadOnly="True"/>
+                        <TextBox x:Name="UpdateDatabaseStep7" Height="35" TextWrapping="Wrap" Text="Step 7: Commit repository changes update with message: &quot;made database public&quot;" IsReadOnly="True"/>
                         <StackPanel Orientation="Horizontal">
                             <TextBox x:Name="UpdateDatabaseStep8" Height="23" TextWrapping="Wrap" Text="Step 8: Post database update on discord/forums" Margin="0,0,5,0" IsReadOnly="True"/>
                             <Button x:Name="UpdateDatabasestep8_NA_ENG" Content="NA"  Margin="0,0,0,0" Click="UpdateDatabasestep8_NA_ENG_Click"/>
@@ -61,7 +61,7 @@
                         <TextBox x:Name="UpdateApplicationV1Step1" Height="23" TextWrapping="Wrap" Text="Step 1: Modify setting for beta, create and sign beta version"/>
                         <TextBox x:Name="UpdateApplicationV1Step2" Height="23" TextWrapping="Wrap" Text="Step 2: Modify setting for stable, create and sign stable version"/>
                         <TextBox x:Name="UpdateApplicationV1Step3" Height="23" TextWrapping="Wrap" Text="Step 3: Update virustotal.com link"/>
-                        <TextBox x:Name="UpdateApplicationV1Step4" Height="23" TextWrapping="Wrap" Text="Step 4: Update on github"/>
+                        <TextBox x:Name="UpdateApplicationV1Step4" Height="23" TextWrapping="Wrap" Text="Step 4: Update on github (deprecated)"/>
                         <TextBox x:Name="UpdateApplicationV1Step6" Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file in database repo and commit"/>
                         <Button x:Name="UpdateApplicationV1Step7a" Content="Step 7a: Upload RelhaxModpack.exe to wotmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV1UploadApplicationStable"/>
                         <Button x:Name="UpdateApplicationV1Step7b" Content="Step 7b: Upload RelhaxModpackBeta.exe to wotmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV1UploadApplicationBeta"/>
@@ -69,7 +69,7 @@
                         <Button x:Name="UpdateApplicationV1Step9" Content="Step 9: Run script CreateUpdatePackages.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV1CreateUpdatePackages"/>
                         <Button x:Name="UpdateApplicationV1Step10a" Content="Step 10a: Run script CreateManagerInfo.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV1CreateManagerInfoWotmods"/>
                         <Button x:Name="UpdateApplicationV1Step10b" Content="Step 10b: Run script CreateManagerInfo.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV1CreateManagerInfoBigmods"/>
-                        <TextBox x:Name="UpdateApplicationV1Step11" Height="23" TextWrapping="Wrap" Text="Step 11: Post update notes on discord, slack, forums"/>
+                        <TextBox x:Name="UpdateApplicationV1Step11" Height="23" TextWrapping="Wrap" Text="Step 11: Post update notes on discord and forums"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -80,7 +80,7 @@
                         <TextBox x:Name="UpdateApplicationV2Step1" Height="23" TextWrapping="Wrap" Text="Step 1: Modify setting for beta, create and sign beta version"/>
                         <TextBox x:Name="UpdateApplicationV2Step2" Height="23" TextWrapping="Wrap" Text="Step 2: Modify setting for stable, create and sign stable version"/>
                         <TextBox x:Name="UpdateApplicationV2Step3" Height="23" TextWrapping="Wrap" Text="Step 3: Update virustotal.com link"/>
-                        <TextBox x:Name="UpdateApplicationV2Step4" Height="23" TextWrapping="Wrap" Text="Step 4: Update on github (not now, when official)"/>
+                        <TextBox x:Name="UpdateApplicationV2Step4" Height="23" TextWrapping="Wrap" Text="Step 4: Update on github"/>
                         <TextBox x:Name="UpdateApplicationV2Step6" Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file in database repo and commit"/>
                         <Button x:Name="UpdateApplicationV2Step7a" Content="Step 7a: Upload RelhaxModpack.exe to bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationStable"/>
                         <Button x:Name="UpdateApplicationV2Step7b" Content="Step 7b: Upload RelhaxModpackBeta.exe to bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationBeta"/>
@@ -88,7 +88,7 @@
                         <Button x:Name="UpdateApplicationV2Step9" Content="Step 9: Run script CreateUpdatePackages.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateUpdatePackages"/>
                         <Button x:Name="UpdateApplicationV2Step10a" Content="Step 10a: Run script CreateManagerInfo.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoWotmods"/>
                         <Button x:Name="UpdateApplicationV2Step10b" Content="Step 10b: Run script CreateManagerInfo.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoBigmods"/>
-                        <TextBox x:Name="UpdateApplicationV2Step11" Height="23" TextWrapping="Wrap" Text="Step 11: Post update notes on discord, slack, forums"/>
+                        <TextBox x:Name="UpdateApplicationV2Step11" Height="23" TextWrapping="Wrap" Text="Step 11: Post update notes on discord and forums"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -118,18 +118,6 @@
                 <Grid Background="#FFE5E5E5">
                     <StackPanel >
                         <Button x:Name="GenerateMD5Button" Content="Load files to hash" Click="GenerateMD5Button_Click"/>
-                    </StackPanel>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="RemapInstallStatsTab" Header="Remap install statistics">
-                <Grid Background="#FFE5E5E5">
-                    <StackPanel>
-                        <Button x:Name="RemapInstallStatStep1" Content="Download and load current stats"/>
-                        <Button x:Name="RemapInstallStatStep2" Content="Download and apply remapping"/>
-                        <TextBlock x:Name="RemapInstallStep3aDesc" Text="Append stat file name with..."/>
-                        <TextBox x:Name="RemapInstallStatStep3a"/>
-                        <Button x:Name="RemapInstallStatStep3b" Content="Upload statistics to folder"/>
-                        <Button x:Name="RemapInstallStatStep4" Content="Delete current stats and replace with latest mapping tag"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
