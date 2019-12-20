@@ -5,14 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Diagnostics" MinHeight="300" MinWidth="525" Height="300" Width="525"
-        Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
-    <Grid >
-        <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="21" Margin="10,10,10,0" TextWrapping="Wrap" Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
-        <TextBlock Tag="SelectedInstallation" x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="10,36,10,0" TextWrapping="Wrap" Text="Currently Selected Installation:" VerticalAlignment="Top" Height="34" />
-        <TextBox Tag="DiagnosticsStatusTextBox" x:Name="DiagnosticsStatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="10,209,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
-        <Grid HorizontalAlignment="Stretch" Height="129" Margin="10,75,10,0" VerticalAlignment="Top" >
+        Title="Diagnostics" Height="370" Width="525" ResizeMode="CanMinimize"
+        Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
+    <Grid Tag="DiagnosticsGrid">
+        <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="42" Margin="10,10,10,0" TextWrapping="Wrap"
+                 Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
+        <TextBlock Tag="SelectedInstallation" x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="12,57,8,0" TextWrapping="Wrap"
+                   Text="Currently Selected Installation:" VerticalAlignment="Top" Height="34" ToolTipService.ShowOnDisabled="True"/>
+        <TextBox Tag="DiagnosticsStatusTextBox" x:Name="DiagnosticsStatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="12,0,8,10" TextWrapping="Wrap"
+                 VerticalAlignment="Bottom" IsReadOnly="True"/>
+        <Grid HorizontalAlignment="Stretch" Height="173" Margin="12,96,8,0" VerticalAlignment="Top" >
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -21,17 +25,28 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ChangeInstall_Click" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock Tag="ChangeInstall" x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0"/>
+            <Button x:Name="ChangeInstallButton" Tag="ChangeInstall" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ChangeInstall_Click"
+                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
+                <TextBlock x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
-            <Button HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="LaunchWoTLauncher_Click" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock Tag="LaunchWoTLauncher" x:Name="LaunchWoTLauncher" Text="Start the World of Tanks launcher in integrity validation mode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0"/>
+            <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear download cache" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"
+                    Click="ClearDownloadCache_Click" Grid.Column="1" ToolTipService.ShowOnDisabled="True"/>
+            <Button Tag="CollectLogInfo" x:Name="CollectLogInfoButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CollectLogInfo_Click"
+                    Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
+                <TextBlock x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem" Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
-            <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear download cache" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ClearDownloadCache_Click" Grid.Column="1" />
-            <Button x:Name="CollectLogInfoButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CollectLogInfo_Click" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock Tag="CollectLogInfo" x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem" Margin="2,0,2,0"/>
+            <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabase" Content="Delete download cache database file" HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top" Margin="2,2,2,2" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click" ToolTipService.ShowOnDisabled="True"/>
+            <Button Tag="TestLoadImageLibraries" x:Name="TestLoadImageLibrariesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" ToolTipService.ShowOnDisabled="True"
+                    Click="TestLoadImageLibrariesButton_Click" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="1">
+                <TextBlock x:Name="TestLoadImageLibraries" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
+                           Text="Test loading the atlas image processing libraries"/>
             </Button>
-            <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabase" Content="Delete download cache database file" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="2,2,2,2" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click"/>
+            <Button Tag="DownloadWGPatchFiles" x:Name="DownloadWGPatchFilesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" ToolTipService.ShowOnDisabled="True"
+                    Click="DownloadWGPatchFiles_Click" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="0">
+                <TextBlock x:Name="DownloadWGPatchFilesText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
+                           Text="Download WG Patch files for any WG client via HTTP"/>
+            </Button>
         </Grid>
     </Grid>
 </local:RelhaxWindow>

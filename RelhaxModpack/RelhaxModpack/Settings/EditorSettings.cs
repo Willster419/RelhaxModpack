@@ -78,6 +78,16 @@ namespace RelhaxModpack
         public uint FTPUploadDownloadWindowTimeout = 0;
 
         /// <summary>
+        /// The form to save the database in when "save as" is pressed
+        /// </summary>
+        public DatabaseXmlVersion SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
+
+        /// <summary>
+        /// The directory where the auto updater will download, modify, and upload files to/from
+        /// </summary>
+        public string AutoUpdaterWorkDirectory = string.Empty;
+
+        /// <summary>
         /// Create an instance of the EditorSettings class. Settings should be set via property initialization style.
         /// </summary>
         public EditorSettings() { }

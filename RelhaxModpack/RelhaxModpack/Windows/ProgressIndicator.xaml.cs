@@ -72,6 +72,16 @@ namespace RelhaxModpack.Windows
                 Logging.WriteToLog("progress maximum is less than or equal to 0! (is this the intent?) setting to default of 100",
                     Logfiles.Application, LogLevel.Warning);
             }
+
+            //only load the header text if the translations are loaded
+            if(Translations.TranslationsLoaded)
+            {
+                LoadingHeader.Text = Translations.GetTranslatedString(LoadingHeader.Name);
+            }
+            else
+            {
+                LoadingHeader.Text = "Loading, please wait";
+            }
         }
 
         /// <summary>

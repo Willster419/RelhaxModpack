@@ -45,6 +45,7 @@ namespace RelhaxModpack
     /// </summary>
     public partial class App : Application
     {
+        bool exceptionShown = false;
         ExceptionCaptureDisplay exceptionCaptureDisplay = new ExceptionCaptureDisplay();
         //when application is brought to foreground
         private void Application_Activated(object sender, EventArgs e)
@@ -61,6 +62,8 @@ namespace RelhaxModpack
         //when application is closing (cannot be stopped)
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            if (Logging.IsLogOpen(Logfiles.Application))
+                Logging.Info("Disposing log");
             CloseApplicationLog(true);
         }
 
@@ -157,21 +160,21 @@ namespace RelhaxModpack
                     Current.Shutdown(0);
                     break;
                 case ApplicationMode.PatchDesigner:
-                    PatchTester patcher = new PatchTester();
+                    PatchDesigner patcher = new PatchDesigner();
                     CloseApplicationLog(true);
 
                     //start updater logging system
-                    if (!Logging.Init(Logfiles.Patcher))
+                    if (!Logging.Init(Logfiles.PatchDesigner))
                     {
                         MessageBox.Show("Failed to initialize logfile for patcher");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
                         return;
                     }
-                    Logging.WriteHeader(Logfiles.Patcher);
+                    Logging.WriteHeader(Logfiles.PatchDesigner);
                     patcher.ShowDialog();
 
                     //stop updater logging system
-                    CloseLog(Logfiles.Patcher);
+                    CloseLog(Logfiles.PatchDesigner);
                     patcher = null;
                     Current.Shutdown(0);
                     break;
@@ -221,11 +224,17 @@ namespace RelhaxModpack
         //https://stackoverflow.com/questions/793100/globally-catch-exceptions-in-a-wpf-application
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            if (!Logging.IsLogDisposed(Logfiles.Application) && Logging.IsLogOpen(Logfiles.Application))
-                Logging.WriteToLog(e.Exception.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
-            exceptionCaptureDisplay.ExceptionText = e.Exception.ToString();
-            exceptionCaptureDisplay.ShowDialog();
-            CloseApplicationLog(true);
+            if (!exceptionShown)
+            {
+                exceptionShown = true;
+                if (!Logging.IsLogDisposed(Logfiles.Application) && Logging.IsLogOpen(Logfiles.Application))
+                {
+                    Logging.WriteToLog(e.Exception.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+                }
+                exceptionCaptureDisplay.ExceptionText = e.Exception.ToString();
+                exceptionCaptureDisplay.ShowDialog();
+                CloseApplicationLog(true);
+            }
         }
     }
 }

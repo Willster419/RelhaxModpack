@@ -30,9 +30,6 @@ namespace RelhaxModpack.Windows
         {
             if (Settings.FirstLoadToV2)
                 V2UpgradeNoticeText.Visibility = Visibility.Visible;
-
-            //apply custom translations
-            //LicenseLink = new Hyperlink(new Run("tes"));
         }
 
         private void CheckForContinueButton(object sender, RoutedEventArgs e)

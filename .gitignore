@@ -197,5 +197,5 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
-/RelhaxModpack/RelhaxModpack/PrivateStuff
+/RelhaxModpack/RelhaxModpack/relhaxmodpackprivatesettings
 /RelhaxDocumentation/RelhaxDocumentation/Help

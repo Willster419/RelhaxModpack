@@ -30,7 +30,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The list of actual files saved to the temporary backup directory. Contains the full path and file name
         /// </summary>
-        public List<string> Files_saved { get; set; } = new List<string>();
+        public List<string> FilesSaved { get; } = new List<string>();
 
         /// <summary>
         /// The string representation of the UserFile object
@@ -39,6 +39,44 @@ namespace RelhaxModpack
         public override string ToString()
         {
             return Pattern;
+        }
+
+        /// <summary>
+        /// Create a copy of the UserFile object
+        /// </summary>
+        /// <param name="userFileToCopy">The object to copy</param>
+        /// <returns>A new UserFile object with the same values</returns>
+        public static UserFile Copy(UserFile userFileToCopy)
+        {
+            UserFile file =  new UserFile()
+            {
+                Pattern = userFileToCopy.Pattern,
+#pragma warning disable CS0618 // Type or member is obsolete
+                PlaceBeforeExtraction = userFileToCopy.PlaceBeforeExtraction,
+                SystemInitiated = userFileToCopy.SystemInitiated
+            };
+
+            return file;
+        }
+
+        /// <summary>
+        /// Create a deep copy of the UserFile object
+        /// </summary>
+        /// <param name="userFileToCopy">The object to copy</param>
+        /// <returns>A new UserFile object with the same values and new list elements with the same values</returns>
+        public static UserFile DeepCopy(UserFile userFileToCopy)
+        {
+            UserFile file = new UserFile()
+            {
+                Pattern = userFileToCopy.Pattern,
+                PlaceBeforeExtraction = userFileToCopy.PlaceBeforeExtraction,
+                SystemInitiated = userFileToCopy.SystemInitiated,
+#pragma warning restore CS0618 // Type or member is obsolete
+            };
+
+            file.FilesSaved.AddRange(userFileToCopy.FilesSaved);
+
+            return file;
         }
     }
 }

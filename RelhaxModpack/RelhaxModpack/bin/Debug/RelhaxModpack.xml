@@ -54,6 +54,13 @@
             Failed to create the atlas bitmap object
             </summary>
         </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.AtlasProgressDelegate">
+            <summary>
+            The delegate to invoke when calling back to the sender for the AtlasProgres event
+            </summary>
+            <param name="sender">The sending Atlas Creator</param>
+            <param name="e">Event arguments</param>
+        </member>
         <member name="T:RelhaxModpack.AtlasesCreator.AtlasCreator">
             <summary>
             Represents the entire process of building an atlas image
@@ -64,27 +71,14 @@
             The object of atlas arguments for building the image
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.DebugLockObject">
-            <summary>
-            Object that exists in all Atlas creation threads. Used for sensitive areas of code that can only be executed by one thread at a time
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.Token">
             <summary>
             The token for handling a cancel call from the user
             </summary>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.ParseModTexturesAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+        <member name="E:RelhaxModpack.AtlasesCreator.AtlasCreator.OnAtlasProgres">
             <summary>
-            Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
-            </summary>
-            <param name="allModFolderPaths">The list of absolute paths containing images to be loaded</param>
-            <param name="token">The cancellation token</param>
-            <returns>The list of textures</returns>
-        </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.DisposeparseModTextures">
-            <summary>
-            Dispose of all textures in the shared mod texture list
+            The event when atlas child progress occurs
             </summary>
         </member>
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.CreateAtlas">
@@ -102,6 +96,55 @@
         <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.Dispose">
             <summary>
             Dispose of the Atlas Creator (mostly disposing image data)
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.AtlasUtils">
+            <summary>
+            A utility class for Atlas file processing
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.ParseModTexturesTask">
+            <summary>
+            The task of parsing all mod png images from multiple folders into a flat list of png bitmaps
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.ModContourIconImages">
+            <summary>
+            The list of parsed mod png images into textures
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.AtlasLoaderLockObject">
+            <summary>
+            Lock object used in AtlasCreator for critical sections that can't be done at the same time
+            </summary>
+            <remarks>Each atlas file is created by its own thread. However, the DDS loading and saving API used can't be used more then once at a time</remarks>
+        </member>
+        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.AtlasBuilders">
+            <summary>
+            A list of Atlas creating thread engines
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.LoadModContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
+            </summary>
+            <param name="allModFolderPaths">The list of absolute paths containing mod contour icon images to be loaded</param>
+            <param name="token">The cancellation token</param>
+            <returns>The list of textures</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.DisposeparseModTextures">
+            <summary>
+            Dispose of all textures in the shared mod texture list
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.VerifyImageLibsLoaded">
+            <summary>
+            Verifies the Atlas processing libraries are loaded. If not, they are loaded.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.DisposeOfAllAtlasResources">
+            <summary>
+            Disposes of all statically used AtlasUtils resources, including releasing the mod texture list
             </summary>
         </member>
         <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker">
@@ -314,6 +357,53 @@
             <param name="placement">Output parameter receiving the rectangle's placement</param>
             <returns>True if space for the rectangle could be allocated</returns>
         </member>
+        <member name="T:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary">
+            <summary>
+            Represents an interface that all unmanaged libraries in the Modpack use. Allows for one method of testing.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.EmbeddedFilename">
+            <summary>
+            Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.ExtractedFilename">
+            <summary>
+            Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Filepath">
+            <summary>
+            Gets the absolute path to the dll file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.IsExtracted">
+            <summary>
+            Determines if the file is extracted to the Filepath property location
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.IsLoaded">
+            <summary>
+            Determines if the library is loaded into memory
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Load">
+            <summary>
+            Attempts to load the library using the Filepath property
+            </summary>
+            <returns>True if the library load was successful</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Unload">
+            <summary>
+            Attempts to unload the library
+            </summary>
+            <returns>True if the library was unloaded, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Extract">
+            <summary>
+            Extracts the embedded compressed library to the location in the Filepath property
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Category">
             <summary>
             a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
@@ -432,6 +522,13 @@
             </summary>
             <returns>The name of the package this object attaches to</returns>
         </member>
+        <member name="M:RelhaxModpack.DatabaseLogic.Copy(RelhaxModpack.DatabaseLogic)">
+            <summary>
+            Create a copy of the given DatabaseLogic object
+            </summary>
+            <param name="databaseLogicToCopy">The object to copy</param>
+            <returns>A new DatabaseLogic object with the same values</returns>
+        </member>
         <member name="T:RelhaxModpack.DatabasePackage">
             <summary>
             A database component is the base class for all other packages
@@ -542,6 +639,26 @@
             Internal instructions for updating the mod for database managers
             </summary>
         </member>
+        <member name="F:RelhaxModpack.DatabasePackage.Author">
+            <summary>
+            The name of the author of the mod/configuration/etc.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.BytesToDownload">
+            <summary>
+            The number of bytes to download, used if "install while download" is true
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.BytesDownloaded">
+            <summary>
+            The number of bytes currently downloaded, used if "install while download" is true
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabasePackage.IsCurrentlyDownloading">
+            <summary>
+            Flag to determine if this package is the one currently downloading, used if "install while download" is true
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.DatabasePackage.AppendExtraction">
             <summary>
             Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
@@ -572,6 +689,18 @@
             <summary>
             Provides a complete tree style path to the package using its internal packageName, starting with the category
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.#ctor">
+            <summary>
+            Creates an instance of the DatabasePackage class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
+            <summary>
+            Creates an instance of the DatabasePackage class based on the provided DatabasePackage
+            </summary>
+            <param name="packageToCopy">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
         </member>
         <member name="T:RelhaxModpack.Dependency">
             <summary>
@@ -613,8 +742,15 @@
         </member>
         <member name="M:RelhaxModpack.Dependency.#ctor">
             <summary>
-            Constructor to over-ride DatabasePackage default values
+            Create an instance of the Dependency class and over-ride DatabasePackage default values
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Dependency.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
+            <summary>
+            Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects
+            </summary>
+            <param name="packageToCopyFrom">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
         </member>
         <member name="T:RelhaxModpack.DatabaseComponents.IComponentWithDependencies">
             <summary>
@@ -677,6 +813,13 @@
             The string properties of the object
             </summary>
             <returns>The integer code of the MediaType and the first 80 characters of the URL</returns>
+        </member>
+        <member name="M:RelhaxModpack.Media.Copy(RelhaxModpack.Media)">
+            <summary>
+            Create a copy of the Media object
+            </summary>
+            <param name="mediaToCopy">The object to copy</param>
+            <returns>A new Media object with the same values</returns>
         </member>
         <member name="T:RelhaxModpack.PackageComparerByPackageName">
             <summary>
@@ -767,7 +910,7 @@
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.#ctor">
             <summary>
-            Constructor to over-ride DatabasePackage default values
+            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.Name">
@@ -975,7 +1118,7 @@
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.IsStructureEnabled">
             <summary>
-            Determines if the UI package structure to this package is of all enabled components.
+            Determines if all parent packages leading to this package are enabled. In other words, it checks if the path to this package is enabled
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.NameDisplay">
@@ -1020,6 +1163,13 @@
             Check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
             </summary>
             <returns>True if another package at this level is checked and enabled, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
+            <summary>
+            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
+            </summary>
+            <param name="packageToCopyFrom">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
         </member>
         <member name="T:RelhaxModpack.Trigger">
             <summary>
@@ -1072,7 +1222,7 @@
             Entry will be processed in any case (if package is checked), even if "save user data" option is "false"
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UserFile.Files_saved">
+        <member name="P:RelhaxModpack.UserFile.FilesSaved">
             <summary>
             The list of actual files saved to the temporary backup directory. Contains the full path and file name
             </summary>
@@ -1082,6 +1232,987 @@
             The string representation of the UserFile object
             </summary>
             <returns>The string pattern</returns>
+        </member>
+        <member name="M:RelhaxModpack.UserFile.Copy(RelhaxModpack.UserFile)">
+            <summary>
+            Create a copy of the UserFile object
+            </summary>
+            <param name="userFileToCopy">The object to copy</param>
+            <returns>A new UserFile object with the same values</returns>
+        </member>
+        <member name="M:RelhaxModpack.UserFile.DeepCopy(RelhaxModpack.UserFile)">
+            <summary>
+            Create a deep copy of the UserFile object
+            </summary>
+            <param name="userFileToCopy">The object to copy</param>
+            <returns>A new UserFile object with the same values and new list elements with the same values</returns>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.BoundUISettings">
+            <summary>
+            The staic location for all color definitions that need to be databound by WPF
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ButtonHighlightBrush">
+            <summary>
+            Get or set the Button highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.TabItemHighlightBrush">
+            <summary>
+            Get or set the TabItem highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.TabItemSelectedBrush">
+            <summary>
+            Get or set the TabItem selected (mouse down) color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.CheckboxHighlightBrush">
+            <summary>
+            Get of set the Checkbox highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.CheckboxCheckmarkBrush">
+            <summary>
+            Get or set the Checkbox checkmark color (selected)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.RadioButtonHighlightBrush">
+            <summary>
+            Get or set the RadioButton highlight color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.RadioButtonCheckmarkBrush">
+            <summary>
+            Get or set the RadioButton checkmark color (selected)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ComboboxOutsideHighlightBrush">
+            <summary>
+            Get or set the combobox highlight background color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ComboboxInsideColorBrush">
+            <summary>
+            Get or set the combobox text color of the inside list items
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.BoundUISettings.ComboboxOutsideColorBrush">
+            <summary>
+            Get or set the combobox background color
+            </summary>
+        </member>
+        <member name="E:RelhaxModpack.UIComponents.BoundUISettings.StaticPropertyChanged">
+            <summary>
+            Event handler for when a static property is changed in code
+            </summary>
+            <remarks>See https://stackoverflow.com/questions/34762879/static-binding-doesnt-update-when-resource-changes </remarks>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.BoundUISettings.SetBrushProperty(RelhaxModpack.UIComponents.CustomPropertyBrush)">
+            <summary>
+            Set the color of one of the properties in this class. The name of the property should be inside 
+            </summary>
+            <param name="customBrush">The color and property to update</param>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassColorset">
+            <summary>
+            A ClassColorset is a definitions object of all the colors to apply to the corresponding UI object
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.ClassThemeDefinition">
+            <summary>
+            The theme definition rule set to use for this UI object class type (like Control)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.BackgroundBrush">
+            <summary>
+            The Background color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.ForegroundBrush">
+            <summary>
+            The Foreground color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.HighlightBrush">
+            <summary>
+            The Highlight color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.SelectedBrush">
+            <summary>
+            The Selected (mouse down) color property
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassColorset.BoundedBrushes">
+            <summary>
+            Returns a list of brushes that are bounded to WPF UI definitions
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Border class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.BorderClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Button class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ButtonClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Checkbox class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.CheckboxClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Combobox class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ComboboxClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Control class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ControlClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition">
+            <summary>
+            The UI class theme interface definition for holding all properties of theme definitions
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to the instanced UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if Background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.IClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Panel class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.PanelClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Progressbar class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.ProgressbarClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition">
+            <summary>
+            The UI class theme definition for RadioButton class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RadioButtonClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition">
+            <summary>
+            The UI class theme definition for TabItem class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition">
+            <summary>
+            The UI class theme definition for Textblock class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.TextBlockClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ComponentColorset">
+            <summary>
+            A ComponentColorset is a custom color object to apply to a particular ID'd UI object in the window
+            </summary>
+            <remarks>Highlight and Selected colors are always changed (if at all) by WPF databound properties at the ClassColorset level</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComponentColorset.ID">
+            <summary>
+            The ID of the UI object in the window of which the component colors will be applied to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComponentColorset.BackgroundBrush">
+            <summary>
+            The Background brush color
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ComponentColorset.ForegroundBrush">
+            <summary>
+            The Foreground brush color
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.CustomBrush">
+            <summary>
+            Wraps a Brush class with a boolean value for if the brush value should be applied
+            </summary>
+            <remarks>The implementation reasoning for this is that some color definitions can be a null color.
+            So, a custom property must be used outside of the Brush object to determine if it should actually be applied.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.CustomBrush.Brush">
+            <summary>
+            The custom color definition
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.CustomBrush.IsValid">
+            <summary>
+            The flag to determine if the Brush is valid
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.CustomPropertyBrush">
+            <summary>
+            A wrapper class for CustomBrush that adds the string name of the WPF databound property name
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.CustomPropertyBrush.BrushPropertyName">
+            <summary>
+            The name of the WPF databound property to change the color of
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.CustomBrushConverter">
+            <summary>
+            Converts from the custom CustomBrush type to a Brush object for WPF databinding
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.CustomBrushConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a CustomBrush object into a Brush object
+            </summary>
+            <param name="value">The CustomBrush object to convert</param>
+            <param name="targetType">Not implemented</param>
+            <param name="parameter">Not implemented</param>
+            <param name="culture">Not implemented</param>
+            <returns>The Brush property from the CustomBrush object</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.CustomBrushConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            This method is not implemented
+            </summary>
+            <param name="value">Not implemented</param>
+            <param name="targetType">Not implemented</param>
+            <param name="parameter">Not implemented</param>
+            <param name="culture">Not implemented</param>
+            <returns>Null</returns>
         </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxHyperlink">
             <summary>
@@ -1116,6 +2247,215 @@
         <member name="M:RelhaxModpack.UIComponents.RelhaxHyperlink.InitializeComponent">
             <summary>
             InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.Theme">
+            <summary>
+            The root object for all definitions needed for the UI engine
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ThemeName">
+            <summary>
+            The name of the theme
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.FileName">
+            <summary>
+            The xml theme filename
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListSelectedPanelColor">
+            <summary>
+            The color definition for panel components in the selection view when at least one package is checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotSelectedPanelColor">
+            <summary>
+            The color definition for panel components in the selection view when no packages are checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListSelectedTextColor">
+            <summary>
+            The color definition for 'single' and 'multi' package types when it is checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotSelectedTextColor">
+            <summary>
+            The color definition for 'single' and 'multi' package types when it is not checked
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListBorderColor">
+            <summary>
+            The color definition for border components in the selection view, for holding a sub level of packages
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListActiveTabHeaderBackgroundColor">
+            <summary>
+            The color definition for the background of the tab header
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListActiveTabHeaderTextColor">
+            <summary>
+            The color definition for the text color of the tab header
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasSelectionsBackgroundColor">
+            <summary>
+            The color definition for background of a not active tab header, when no components are selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasSelectionsTextColor">
+            <summary>
+            The color definition for text of a not active tab header, when no components are selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasNoSelectionsBackgroundColor">
+            <summary>
+            The color definition for background of a not active tab header, when at least one component is selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.SelectionListNotActiveHasNoSelectionsTextColor">
+            <summary>
+            The color definition for text of a not active tab header, when at least one component is selected
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.RadioButtonColorset">
+            <summary>
+            The set of rules to use for what parts of a RadioButton UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.CheckboxColorset">
+            <summary>
+            The set of rules to use for what parts of a Checkbox UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ButtonColorset">
+            <summary>
+            The set of rules to use for what parts of a Button UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.TabItemColorset">
+            <summary>
+            The set of rules to use for what parts of a TabItem UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ComboboxColorset">
+            <summary>
+            The set of rules to use for what parts of a Combobox UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.PanelColorset">
+            <summary>
+            The set of rules to use for what parts of a Panel UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.TextblockColorset">
+            <summary>
+            The set of rules to use for what parts of a Textblock UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.BorderColorset">
+            <summary>
+            The set of rules to use for what parts of a Border UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ControlColorset">
+            <summary>
+            The set of rules to use for what parts of a Control UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.ProgressBarColorset">
+            <summary>
+            The set of rules to use for what parts of a ProgressBar UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.WindowColorsets">
+            <summary>
+            A list of rules to use for each window definition type
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.BoundedClassColorsetBrushes">
+            <summary>
+            Returns a complete list of all bounded brushes for each class component color definition
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.Themes">
+            <summary>
+            A static list of themes used in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.Themes.Default">
+            <summary>
+            The default theme used in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.Themes.Dark">
+            <summary>
+            A pre-built dark theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.Themes.Custom">
+            <summary>
+            The custom theme to be loaded from xml by the user
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.WindowColorset">
+            <summary>
+            Contains all color definitions to apply for that window, including the list of individual component color definitions
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.WindowType">
+            <summary>
+            The type object for the type of window this colorset belongs to
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.BackgroundBrush">
+            <summary>
+            The background color of the window
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.ComponentColorsets">
+            <summary>
+            A list of custom colors to apply for individual UI components
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.WindowColorset.ColorsetBackedUp">
+            <summary>
+            Flag for if this window colorset has had it's original (default) theme backed up
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UIComponents.ZoomBorder">
+            <summary>
+            Represents a border that allows for panning and zooming of the UIElement object inside
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.ZoomBorder.CancelMouseDown">
+            <summary>
+            Cancel the mouse down event for panning
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ZoomBorder.GetTranslateTransform(System.Windows.UIElement)">
+            <summary>
+            Returns the TranslateTransform part of the UIElement's RenderTransform
+            </summary>
+            <param name="element">The element to get the transformation parameter from</param>
+            <returns>The TranslateTransformpart of the UIElement's RenderTransform</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ZoomBorder.GetScaleTransform(System.Windows.UIElement)">
+            <summary>
+            Returns the ScaleTransform part of the UIElement's RenderTransform
+            </summary>
+            <param name="element">The element to get the transformation parameter from</param>
+            <returns>The ScaleTransform of the UIElement's RenderTransform</returns>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ZoomBorder.Child">
+            <summary>
+            Gets or Sets the child UIElement inside this border
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.ZoomBorder.Reset">
+            <summary>
+            Reset the scale and translation (zoom and pan) values
             </summary>
         </member>
         <member name="T:RelhaxModpack.UIComponents.ComboBoxItem">
@@ -1245,10 +2585,17 @@
             RelhaxInstallTaskReporter
             </summary>
         </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.#ctor">
+        <member name="M:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.#ctor(System.String)">
             <summary>
             Create an instance of the RelhaxInstallTaskReporter and init the UI side of it
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.LoadedAfterApply">
+            <summary>
+            Flag for when the object has been fully constructed by the UI Dispatcher.
+            </summary>
+            <remarks>Due to the multi-threaded nature of the progress reporting, progress may be reported before the reporting UI objects are fully constructed.
+            This results in null exceptions. By using a flag to determine if the object is fully created, the reporting progresses won't try to update properties of null objects</remarks>
         </member>
         <member name="P:RelhaxModpack.UIComponents.RelhaxInstallTaskReporter.ReportState">
             <summary>
@@ -1360,11 +2707,6 @@
             Set the brush of the Checkbox Panel Background property 
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.DisabledColor">
-            <summary>
-            Set the value of the disabled component color
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PopularModVisability">
             <summary>
             Set the visibility of the popular mod icon
@@ -1399,41 +2741,21 @@
             RelhaxWPFComboBox
             </summary>
         </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.AddedToList">
+            <summary>
+            Flag to determine if the Combobox object has been already added to the ModSelectionList window
+            </summary>
+            <remarks>Many components of 'single_dropDown' exist in the Combobox, and therefore the UI generation code gets run for each object.
+            So, a flag is used to prevent the ComboBox being added multiple times to the window</remarks>
+        </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.#ctor">
             <summary>
             Create an instance of the RelhaxWPFComboBox class
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Package">
-            <summary>
-            The package associated with this UI component
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Handler">
             <summary>
             The event to subscribe to when the selection is changed
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnEnabledChanged(System.Boolean)">
-            <summary>
-            This is not implemented
-            </summary>
-            <param name="Enabled">The value from the SelectablePackage</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnCheckedChanged(System.Boolean)">
-            <summary>
-            This is not implemented
-            </summary>
-            <param name="Checked">The value from the SelectablePackage</param>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.TextColor">
-            <summary>
-            This is not implemented
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.PanelColor">
-            <summary>
-            Set the brush of the ComboBox Panel Background property 
             </summary>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnDropDownSelectionChanged(RelhaxModpack.SelectablePackage,System.Boolean)">
@@ -1442,22 +2764,6 @@
             </summary>
             <param name="spc">The SelectablePakage that caused the update</param>
             <param name="value">The checked value</param>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFComboBox.DisabledColor">
-            <summary>
-            Set the value of the disabled component color
-            </summary>
-        </member>
-        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFComboBox.PropertyChanged">
-            <summary>
-            Event to trigger when an internal property is changed. It forces a UI update
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnPropertyChanged(System.String)">
-            <summary>
-            Method to invoke the PropertyChanged event to update the UI
-            </summary>
-            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.InitializeComponent">
             <summary>
@@ -1502,11 +2808,6 @@
         <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PanelColor">
             <summary>
             Set the brush of the RadioButton Panel Background property 
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.DisabledColor">
-            <summary>
-            Set the value of the disabled component color
             </summary>
         </member>
         <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PopularModVisability">
@@ -1577,21 +2878,27 @@
             RelhaxMediaPlayer
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.MediaURL">
+        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.mediaURL">
             <summary>
             The direct link to the audio file to preview
             </summary>
         </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor">
+        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.audioData">
             <summary>
-            Creates an instance of the RelhaxMediaPlayer user control
+            The raw audio data to parse
             </summary>
         </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor(System.String)">
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.#ctor(System.String,System.Byte[])">
             <summary>
             Creates an instance of the RelhaxMediaPlayer user control
             </summary>
-            <param name="mediaURL">The direct link to the audio file to preview</param>
+            <param name="_audioData">The audio data to use in the preview</param>
+            <param name="_mediaURL">The URL to the audio source. Used for audio type parsing.</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.StopPlaybackIfPlaying">
+            <summary>
+            Stops playback from an outside source, like if changing previews
+            </summary>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxMediaPlayer.Dispose(System.Boolean)">
             <summary>
@@ -1682,9 +2989,34 @@
             During copy operations, the number of processed copied bytes, and the total bytes to copy.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.WaitingOnDownload">
+            <summary>
+            Flag to mark if the install engine is waiting on a package to download
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.WaitingOnDownloadOfAThread">
+            <summary>
+            Flag to mark if the install engine is waiting on a package to download in a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesProcessedOfAThread">
+            <summary>
+            The number of bytes currently processed in an entry in a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.BytesTotalOfAThread">
+            <summary>
+            The number of bytes to total process in an entry in a thread
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.Filename">
             <summary>
             The name of the file currently being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.FilenameOfAThread">
+            <summary>
+            The name of the file currently being processed in a thread
             </summary>
         </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntryFilename">
@@ -1702,9 +3034,54 @@
             The total number of entries in this zip file
             </summary>
         </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntriesProcessedOfAThread">
+            <summary>
+            The number of processed entries of a zip file of a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntriesTotalOfAThread">
+            <summary>
+            The number of total entries of a zip file of a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.EntryFilenameOfAThread">
+            <summary>
+            The entry name of a zip file of a thread
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.ThreadID">
             <summary>
             The ID number of the thread that this zip file belongs to
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.TotalThreads">
+            <summary>
+            The total number of extraction threads
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.CompletedThreads">
+            <summary>
+            The number of completed extraction threads
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallGroup">
+            <summary>
+            The extraction installation group
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.TotalInstallGroups">
+            <summary>
+            The total number of install groups
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.CompletedPackagesOfAThread">
+            <summary>
+            The number of completed extracted packages that thread [index] has
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.TotalPackagesofAThread">
+            <summary>
+            The number of packages that thread [index] has
             </summary>
         </member>
         <member name="F:RelhaxModpack.UIComponents.RelhaxInstallerProgress.InstallStatus">
@@ -1990,6 +3367,13 @@
             Reference to list of dependencies
             </summary>
         </member>
+        <member name="F:RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs.InstallFailedSteps">
+            <summary>
+            A list of all the steps that the installer failed at when returning back to the MainWindow
+            </summary>
+            <remarks>The installer creates many threads to complete different parts of the installation.
+            One of more of these may fail and should be logged when the installer cleanly exists and returns to the MainWindow</remarks>
+        </member>
         <member name="T:RelhaxModpack.InstallerComponents.RelhaxZipFile">
             <summary>
             A wrapper class around the Ionic.Zip.Zipfile with the purpose of saving the thread ID that the zip file belongs to
@@ -1999,6 +3383,12 @@
             <summary>
             The ID number of the thread that the zip file belongs to
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.InstallerComponents.RelhaxZipFile.IsUserMod">
+            <summary>
+            Flag for if this zip file is a user mod
+            </summary>
+            <remarks>User mods are treated slightly differently then regular mods. They have no valid threadID, and should not be deleted if the extraction fails.</remarks>
         </member>
         <member name="M:RelhaxModpack.InstallerComponents.RelhaxZipFile.#ctor(System.String)">
             <summary>
@@ -2099,6 +3489,14 @@
             </summary>
             <param name="progress">The progress reporter object</param>
             <returns>A RelhaxInstallFinishedEventArgs object contain uninstallation data for if the uninstallation succeed or ended prematurely</returns>
+        </member>
+        <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.UninstallMods(RelhaxModpack.UninstallModes,System.Boolean)">
+            <summary>
+            Deletes mod files from the current game client
+            </summary>
+            <param name="UninstallMode">Selects which uninstall method</param>
+            <param name="logToUninstaller">if to </param>
+            <returns>true if the uninstall processes completed, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.Dispose(System.Boolean)">
             <summary>
@@ -2407,7 +3805,7 @@
             The log file for the editor
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logfiles.Patcher">
+        <member name="F:RelhaxModpack.Logfiles.PatchDesigner">
             <summary>
             The log file for the patcher
             </summary>
@@ -2829,6 +4227,16 @@
             The timeout, in seconds, until the FTP upload or download window will close. Set to 0 to disable timeout.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.EditorSettings.SaveAsDatabaseVersion">
+            <summary>
+            The form to save the database in when "save as" is pressed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.AutoUpdaterWorkDirectory">
+            <summary>
+            The directory where the auto updater will download, modify, and upload files to/from
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.EditorSettings.#ctor">
             <summary>
             Create an instance of the EditorSettings class. Settings should be set via property initialization style.
@@ -2884,6 +4292,26 @@
             The unstable private testing database.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UIThemes">
+            <summary>
+            The list of different types of themes in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIThemes.Default">
+            <summary>
+            The default application theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIThemes.Dark">
+            <summary>
+            The dark application theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UIThemes.Custom">
+            <summary>
+            A custom application theme from the UISettings.xml
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.ModpackSettings">
             <summary>
             Provides access to all settings used in the modpack.
@@ -2904,6 +4332,11 @@
             The name of the git branch to use when downloading the database. Uses the RelhaxModpackDatabase repository
             </summary>
             <remarks>URL for the repository: https://github.com/Willster419/RelhaxModpackDatabase </remarks>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AtlasLibrariesCanBeLoaded">
+            <summary>
+            Flag to track when/if the user has MSVCP2013 installed to load the atlas image processing libraries
+            </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.NotifyIfSameDatabase">
             <summary>
@@ -3056,6 +4489,26 @@
             Toggle for if the Preview window should be shown in fullscreen mode
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionFullscreen">
+            <summary>
+            Toggle for if the ModSelectionView window should be shown in fullscreen mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
+            <summary>
+            Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ShowOptionsCollapsedLegacy">
+            <summary>
+            Toggle for if the selection list options in Legacy view should be collapsed by default on start
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.AutoOneclickShowWarningOnSelectionsFail">
+            <summary>
+            Toggle if during auto or one click load if the application should inform if any selection errors during selection file load
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.AutoInstallFrequencyInterval">
             <summary>
             The time, in a specified unit, to check for anew data base version
@@ -3076,11 +4529,6 @@
             The width, in pixels, of the ModSelectionView window
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionFullscreen">
-            <summary>
-            Toggle for if the ModSelectionView window should be shown in fullscreen mode
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.ModpackSettings.PreviewX">
             <summary>
             The x-coordinate location, in pixels, of the Preview window
@@ -3099,6 +4547,11 @@
         <member name="F:RelhaxModpack.ModpackSettings.PreviewWidth">
             <summary>
             The width, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DisplayScale">
+            <summary>
+            The factor to scale the window size and components by. From 1 to 3 in increments of 0.25
             </summary>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.AutoOneclickSelectionFilePath">
@@ -3132,14 +4585,9 @@
             The application distribution version to use. When selected, it won't take affect until application restart
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
+        <member name="F:RelhaxModpack.ModpackSettings.ApplicationTheme">
             <summary>
-            t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DisplayScale">
-            <summary>
-            
+            The theme to apply to the application
             </summary>
         </member>
         <member name="M:RelhaxModpack.ModpackSettings.ApplyOldSettings(System.Xml.XmlNodeList)">
@@ -3327,39 +4775,91 @@
             The root filename of the list of selection files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolderPath">
             <summary>
             The absolute path of the application zip file and zip database file folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolderPathOld">
+            <summary>
+            The old absolute path of the application zip file and zip database file folder
+            </summary>
+            [Obsolete]
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolderPath">
             <summary>
             The absolute path of the application mod backup folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolderPathOld">
+            <summary>
+            The old absolute path of the application mod backup folder
+            </summary>
+            [Obsolete]
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolderPath">
             <summary>
             The absolute path of the application user selections folder. Default location 
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserConfigsFolderOld">
+        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolderPathOld">
             <summary>
             The old absolute path of the application user selections folder. Old Default location
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolderPath">
             <summary>
             The absolute path of the application folder where users can place custom mod zip files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxTempFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolderPathOld">
+            <summary>
+            The old absolute path of the application folder where users can place custom mod zip files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxTempFolderPath">
             <summary>
             The absolute path of the application temporary folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolder">
+        <member name="F:RelhaxModpack.Settings.RelhaxTempFolderPathOld">
+            <summary>
+            The old absolute path of the application temporary folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolderPath">
             <summary>
             The absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolderPathOld">
+            <summary>
+            The old absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoT64bitFolder">
+            <summary>
+            The name of the 64bit folder in the 'World_of_Tanks' directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoT32bitFolder">
+            <summary>
+            The name of the 32bit folder in the 'World_of_Tanks' directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoT64bitFolderWithSlash">
+            <summary>
+            The WoT 64bit folder name with the folder separator before it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoT32bitFolderWithSlash">
+            <summary>
+            The WoT 32bit folder name with the folder separator before it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.WoTVersionXml">
+            <summary>
+            The name of the version xml used for getting the current client version information
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.PatchFolderName">
@@ -3391,6 +4891,11 @@
             <summary>
             The name of the temporary install folder to hold database manager readme files. The end user does not need this folder
             and will be deleted at the end of the installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.AutoUpdateZipFolderName">
+            <summary>
+            The name of the temporary install folder that holds the auto update information of the database editor.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.FoldersToCleanup">
@@ -3528,6 +5033,11 @@
             The name of the WoT process used for detecting if it is running
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Settings.WoTVersionXmlXpath">
+            <summary>
+            The xpath to the version information used by the modpack to determine the WoT client version
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Settings.ApplicationVersion">
             <summary>
             The current distribution version of the application.
@@ -3629,65 +5139,55 @@
             Handles all custom UI settings
             </summary>
         </member>
-        <member name="F:RelhaxModpack.UISettings.CustomColorSettingsPath">
+        <member name="F:RelhaxModpack.UISettings.CustomColorSettingsPathV1">
             <summary>
             The name of the Xml element to hold all custom color settings
             </summary>
             <remarks>See CustomSettings array for list of custom colors</remarks>
         </member>
-        <member name="F:RelhaxModpack.UISettings.CustomSettings">
-            <summary>
-            A list of custom colors for controlling color behavior of components that 
-            </summary>
-            <remarks>Settings that exist in here don't directly map to 1 setting and control other color settings.
-            For example, changing the color of a selected component in the mod selection list</remarks>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.UIDocument">
-            <summary>
-            The parsed XML document containing the xml color settings
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.SelectedPanelColor">
-            <summary>
-            The color to use for when a component is selected in the selection list
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.NotSelectedPanelColor">
-            <summary>
-            The color to use for when a component is not selection in the selection list
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.SelectedTextColor">
-            <summary>
-            The color to use when a component is selected in the selection list
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.NotSelectedTextColor">
-            <summary>
-            The color to use when a component is not selected in the selection list
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.UISettings.NotSelectedTabColor">
             <summary>
             The color to use in the selection list for a tab which is not selected
             </summary>
+            <remarks>It starts as null because the color is unknown (and can be different types based on the user's theme).
+            It is set on user selection on a component in the selection list.</remarks>
         </member>
-        <member name="M:RelhaxModpack.UISettings.LoadSettings(System.Boolean)">
+        <member name="F:RelhaxModpack.UISettings.NullAllowedGlobalBrushes">
             <summary>
-            Load the custom color definitions from XML
+            A list of brush names that are allowed to have 'null' as the value for global brushes (global = at root of Theme object)
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.UISettings.CurrentTheme">
+            <summary>
+            The currently applied theme in the UI engine
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.ApplyCustomStyles(System.Windows.Window)">
+            <summary>
+            Applies the custom style templates for a UI component class type when an ID is defined.
+            This allows for custom color definitions to be loaded.
+            </summary>
+            <param name="window">The Window to apply the styles to</param>
         </member>
         <member name="M:RelhaxModpack.UISettings.ApplyUIColorSettings(System.Windows.Window)">
             <summary>
             Applies custom color settings to a window
             </summary>
-            <param name="w">The Window object to apply color settings to</param>
+            <param name="window">The Window object to apply color settings to</param>
         </member>
-        <member name="M:RelhaxModpack.UISettings.ApplyUIColorsettingsV1(System.Windows.Window)">
+        <member name="M:RelhaxModpack.UISettings.ApplyThemeToRootComponent(System.Windows.FrameworkElement,System.Boolean,RelhaxModpack.UIComponents.WindowColorset,System.Boolean)">
             <summary>
-            Applies color settings to a window of Xml document format 1.0
+            Applies theme properties to UI components based on colorDefinition rule sets for that UI component class type
             </summary>
-            <param name="w">The window to apply changes to</param>
+            <param name="rootElement">The element to start at for applying theme properties</param>
+            <param name="customWindowDefinition">To determine if to apply custom theme properties based on a list of custom theme properties for that window</param>
+            <param name="wcolorset">The property object of colorDefinition rules</param>
+            <param name="includeSelf">Determine if applying the rootElement</param>
+        </member>
+        <member name="M:RelhaxModpack.UISettings.LoadSettingsFile">
+            <summary>
+            Load the custom color definitions from XML
+            </summary>
         </member>
         <member name="M:RelhaxModpack.UISettings.ParseColorFromString(System.String,System.Windows.Media.Color@)">
             <summary>
@@ -3704,11 +5204,12 @@
             </summary>
             <param name="p">The color gradient direction to verify</param>
         </member>
-        <member name="M:RelhaxModpack.UISettings.DumpAllWindowColorSettingsToFile(System.String)">
+        <member name="M:RelhaxModpack.UISettings.DumpAllWindowColorSettingsToFile(System.String,RelhaxModpack.MainWindow)">
             <summary>
             Saves all currently enabled color settings to an xml file
             </summary>
             <param name="savePath">The path to save the xml file to</param>
+            <param name="mainWindow">If method is called from MainWindow, use itself for getting its color properties</param>
         </member>
         <member name="T:RelhaxModpack.PatchRegressionTypes">
             <summary>
@@ -3825,6 +5326,12 @@
             </summary>
             <returns>True if the library load was successful</returns>
         </member>
+        <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Unload">
+            <summary>
+            Attempts to unload the library
+            </summary>
+            <returns>True if the library was unloaded, false otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.RelhaxFreeImageLibrary.Extract">
             <summary>
             Extracts the embedded compressed library to the location in the Filepath property
@@ -3867,6 +5374,12 @@
             </summary>
             <returns>True if the library load was successful</returns>
         </member>
+        <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Unload">
+            <summary>
+            Attempts to unload the library
+            </summary>
+            <returns>True if the library was unloaded, false otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.RelhaxNvTexLibrary.Extract">
             <summary>
             Extracts the embedded compressed library to the location in the Filepath property
@@ -3886,6 +5399,44 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.AskCloseWoT.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.AutoUpdatePackageWindow">
+            <summary>
+            Interaction logic for AutoUpdatePackageWindow.xaml
+            </summary>
+            <summary>
+            AutoUpdatePackageWindow
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.AutoUpdatePackageWindow.Packages">
+            <summary>
+            Get or set the list of packages to display in the package update window
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.AutoUpdatePackageWindow.WorkingDirectory">
+            <summary>
+            Gets or sets the current directory where the window will download and upload files to/from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AutoUpdatePackageWindow.AutoUpdateDownloadInstructionsXml">
+            <summary>
+            The absolute path inside the zip file to the download instructions xml
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AutoUpdatePackageWindow.AutoUpdateFileInstructionsXml">
+            <summary>
+            The absolute path inside the zip file to the file list instructions xml
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdatePackageWindow.#ctor">
+            <summary>
+            Create an instance of the AutoUpdatePackageWindow window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdatePackageWindow.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -4113,6 +5664,29 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.FirstLoadSelectLanguage">
+            <summary>
+            Interaction logic for FirstLaunchSelectLanguage.xaml
+            </summary>
+            <summary>
+            FirstLoadSelectLanguage
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.FirstLoadSelectLanguage.Continue">
+            <summary>
+            Flag to determine if the user selected a language
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.FirstLoadSelectLanguage.#ctor">
+            <summary>
+            Create and instance of the FirstLoadSelectLanguage Window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.FirstLoadSelectLanguage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.FirstLoadAcknowledgments">
             <summary>
             Interaction logic for FirstLoadAcknowledgments.xaml
@@ -4136,6 +5710,140 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.GameCenterProperty">
+            <summary>
+            The object used in getting the value for the php update request
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.FileName">
+            <summary>
+            The name of the xml file to get the value from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.Xpath">
+            <summary>
+            The xml xpath to get the value from inside the xml document
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.ValueBlock">
+            <summary>
+            The TextBlock that holds the php value text
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.KeyBlock">
+            <summary>
+            The Textblock that holds the php key text
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.Value">
+            <summary>
+            The value from the xml document to use for the php GET request
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.GetRequestParamater">
+            <summary>
+            The name of the php GET request parameter
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.GaveError">
+            <summary>
+            Stores if getting the value from xml document was successful
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterProperty.IsRequired">
+            <summary>
+            Flag for if this parameter is required (hd parameter is not required, for example)
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.PatchFileProperty">
+            <summary>
+            A class definition for the xml objects returned from the php update request
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.PatchFileProperty.Filename">
+            <summary>
+            The name of the update file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.PatchFileProperty.FolderName">
+            <summary>
+            The name of the folder inside 'updates' folder to place the update
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.PatchFileProperty.BaseURL">
+            <summary>
+            The base URL of where to download the file from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.PatchFileProperty.Size">
+            <summary>
+            The size of the file
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.GameCenterUpdateDownloader">
+            <summary>
+            Interaction logic for GameCenterUpdateDownloader.xaml
+            </summary>
+            <summary>
+            GameCenterUpdateDownloader
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.GameCenterUpdateDownloader.SelectedClient">
+            <summary>
+            The path to the root client folder (World_of_Tanks), for example
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.GameInfoXml">
+            <summary>
+            The name of the game info xml to get some of the php properties from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.MetaDataXml">
+            <summary>
+            The name of the metadata xml to get some of the php properties from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.GameMetadataFolder">
+            <summary>
+            The name of the folder where the metadata xml file is stored
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.WgcNotificationsXml">
+            <summary>
+            The Wargaming game center xml file containing the app_id
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.WgcVersionXml">
+            <summary>
+            The wargaming game center xml file containing the application version
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.GameCenterUpdateDownloader.WgcProcessName">
+            <summary>
+            The name of the Game center process shown in windows
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.#ctor">
+            <summary>
+            Create an instance of the GameCenterUpdateDownloaded window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.Dispose(System.Boolean)">
+            <summary>
+            Dispose of the window and release any disposable resources
+            </summary>
+            <param name="disposing">Set to true to dispose of managed objects</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.Dispose">
+            <summary>
+            Dispose of the window and release any disposable resources
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.NewsViewer">
             <summary>
             Interaction logic for NewsViewer.xaml
@@ -4154,6 +5862,42 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.PopOutReplacePatchDesigner">
+            <summary>
+            Interaction logic for PopOutReplacePatchDesigner.xaml
+            </summary>
+            <summary>
+            PopOutReplacePatchDesigner
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.PopOutReplacePatchDesigner.#ctor">
+            <summary>
+            Create an instance of the PopOutReplacePatchDesigner Window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.PopOutReplacePatchDesigner.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.RelhaxColorPicker">
+            <summary>
+            Interaction logic for RelhaxColorPicker.xaml
+            </summary>
+            <summary>
+            RelhaxColorPicker
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.#ctor">
+            <summary>
+            Create an instance of the RelhaxColorPicker window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.AdvancedProgress">
             I exist as a branch
              <summary>
@@ -4166,6 +5910,11 @@
         <member name="M:RelhaxModpack.Windows.AdvancedProgress.#ctor">
             <summary>
             Create and initialize the AdvancedProgress window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.ShouldUserInstallBeCalled">
+            <summary>
+            Flag for if the user installation reporter should have been called
             </summary>
         </member>
         <member name="F:RelhaxModpack.Windows.AdvancedProgress.BackupModsReporter">
@@ -4393,6 +6142,20 @@
             DatabaseUpdater
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseUpdater.HardCodeRepoPath">
+            <summary>
+            The current path for Willster419's database repository
+            </summary>
+            <remarks>
+            This was done because the database repository is different then the application repository.
+            During debug, this can be set to have the updater (in the repository path) assume that it's in the database repository.
+            </remarks>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseUpdater.UseHardCodePath">
+            <summary>
+            Flag to use the 
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.DatabaseUpdater.#ctor">
             <summary>
             Create an instance of the DatabaseUpdater window
@@ -4513,20 +6276,20 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.PatchTester">
+        <member name="T:RelhaxModpack.Windows.PatchDesigner">
             <summary>
-            Interaction logic for PatchTester.xaml
+            Interaction logic for PatchDesigner.xaml
             </summary>
             <summary>
-            PatchTester
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.PatchTester.#ctor">
-            <summary>
-            Create an instance of the PatchTester window
+            PatchDesigner
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.PatchTester.InitializeComponent">
+        <member name="M:RelhaxModpack.Windows.PatchDesigner.#ctor">
+            <summary>
+            Create an instance of the PatchDesigner window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.PatchDesigner.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -4650,6 +6413,42 @@
             Creates an instance of the RelhaxWindow class
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.ScalingConfirmation">
+            <summary>
+            Interaction logic for ScalingConfirmation.xaml
+            </summary>
+            <summary>
+            ScalingConfirmation
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ScalingConfirmation.#ctor">
+            <summary>
+            Create an instance of the ScalingConfirmation window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ScalingConfirmation.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.TemplateWindow">
+            <summary>
+            Interaction logic for TemplateWindow.xaml
+            </summary>
+            <summary>
+            TemplateWindow
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.TemplateWindow.#ctor">
+            <summary>
+            Create an instance of TemplateWindow
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.TemplateWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.VersionInfo">
             <summary>
             Interaction logic for VersionInfo.xaml
@@ -4669,6 +6468,24 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.AutoUpdateFilesInspector">
+            <summary>
+            Interaction logic for Window1.xaml
+            </summary>
+            <summary>
+            AutoUpdateFilesInspector
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdateFilesInspector.#ctor">
+            <summary>
+            Create and instance of the AutoUpdateFilesInspector Window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdateFilesInspector.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -4784,6 +6601,11 @@
             The French language
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Languages.Spanish">
+            <summary>
+            The Spanish language
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Languages.Russian">
             <summary>
             The Russian language
@@ -4792,6 +6614,11 @@
         <member name="T:RelhaxModpack.Translations">
             <summary>
             Handles all localization for the application User Interface
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Translations.TranslationsLoaded">
+            <summary>
+            Get if the translation dictionaries have been loaded yet
             </summary>
         </member>
         <member name="F:RelhaxModpack.Translations.LanguageEnglish">
@@ -4814,9 +6641,14 @@
             French language string identifier in national language
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Translations.LanguageSpanish">
+            <summary>
+            Spanish language string identifier in national language
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Translations.LanguageRussian">
             <summary>
-            French language string identifier in national language
+            Russian language string identifier in national language
             </summary>
         </member>
         <member name="M:RelhaxModpack.Translations.SetLanguage(RelhaxModpack.Languages)">
@@ -4825,10 +6657,12 @@
             </summary>
             <param name="language">The language to switch to</param>
         </member>
-        <member name="M:RelhaxModpack.Translations.SetLanguageOnFirstLoad">
+        <member name="M:RelhaxModpack.Translations.GetLanguageNativeName(RelhaxModpack.Languages)">
             <summary>
-            Change the language to the active language code installed on the computer, if we support
+            Get the native language name of the english enumerated name of the language
             </summary>
+            <param name="language">The english-named enumeration of the language</param>
+            <returns>The name of the requested language in it's native language</returns>
         </member>
         <member name="M:RelhaxModpack.Translations.GetTranslatedString(System.String)">
             <summary>
@@ -4837,18 +6671,21 @@
             <param name="componentName">The key value of the string phrase</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages)">
+        <member name="M:RelhaxModpack.Translations.Exists(System.String,System.Boolean)">
+            <summary>
+            Determines if a key exists in the currently selected language, or in english if no language is selected
+            </summary>
+            <param name="componentName">The key of the component to look up</param>
+            <param name="logError">Flag to log an error in the logfile if it does not exist</param>
+            <returns>True if it exists in the currently selected language, or false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages,System.Boolean)">
             <summary>
             Checks is a component (key value) exists in the given language (dictionary)
             </summary>
             <param name="componentName">The keyword phrase to check</param>
             <param name="languageToCheck">The language dictionary to check in</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Translations.LoadTranslations">
-            <summary>
-            Loads all translation dictionaries. Should only be done once (at application start)
-            </summary>
+            <param name="logError">Flag for if to log if the component was not found</param>
         </member>
         <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
             <summary>
@@ -4857,6 +6694,11 @@
             </summary>
             <param name="window">The window to apply translations to</param>
             <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslations">
+            <summary>
+            Loads all translation dictionaries. Should only be done once (at application start)
+            </summary>
         </member>
         <member name="T:RelhaxModpack.ReplacementTypes">
             <summary>
@@ -4868,7 +6710,7 @@
             Replacing macros with file paths
             </summary>
         </member>
-        <member name="F:RelhaxModpack.ReplacementTypes.PatchArguements">
+        <member name="F:RelhaxModpack.ReplacementTypes.PatchArguementsReplace">
             <summary>
             Replacing patch arguments of the patch object
             </summary>
@@ -4929,6 +6771,21 @@
             </summary>
             <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
         </member>
+        <member name="T:RelhaxModpack.RegistrySearch">
+            <summary>
+            A structure to help with searching for inside the registry by providing a base area to start, and a string search path
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.RegistrySearch.Root">
+            <summary>
+            Where to base the search in the registry (current_user, local_machiene, etc.)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.RegistrySearch.Searchpath">
+            <summary>
+            The absolute folder path to the desired registry entries
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utils">
             <summary>
             A utility class for static functions used in various places in the modpack
@@ -4955,14 +6812,19 @@
             Multiply by this to convert bytes to megabytes
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Utils.MSVCPLink">
+            <summary>
+            The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Utils.FilePathDict">
             <summary>
             The dictionary to store filepath macros
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.PatchArguementsDict">
+        <member name="F:RelhaxModpack.Utils.PatchArguementsReplaceDict">
             <summary>
-            The dictionary to store patch argument macros
+            The dictionary to store patch argument (replace) macros
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utils.PatchFilesDict">
@@ -4980,6 +6842,11 @@
             The dictionary to store literal versions of characters with their escaped versions
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Utils.PatchJsonNullEscape">
+            <summary>
+            Provides the ability to insert a 'null' value into json configurations
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Utils.FreeImageLibrary">
             <summary>
             The manager instance of the FreeImage Library
@@ -4989,6 +6856,18 @@
             <summary>
             The manager instance of the Nvidia Texture Tools Library
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.TestLibrary(RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary,System.String,System.Boolean)">
+            <summary>
+            Test the ability to load an unmanaged library
+            </summary>
+            <returns>True if library loaded, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.TestLoadAtlasLibraries(System.Boolean)">
+            <summary>
+            Test the ability to load and unload all the atlas image processing libraries
+            </summary>
+            <returns>True if both libraries loaded, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.GetAssemblyName(System.String)">
             <summary>
@@ -5120,13 +6999,15 @@
             <param name="timeout">The time to wait between retries</param>
             <returns>True if the operation completed successfully, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.SizeSuffix(System.UInt64,System.UInt32,System.Boolean)">
+        <member name="M:RelhaxModpack.Utils.SizeSuffix(System.UInt64,System.UInt32,System.Boolean,System.Boolean)">
             <summary>
             Calculates and returns the size magnitude of the file (kilo, mega, giga...)
             </summary>
             <param name="value">The file size in bytes</param>
             <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
             <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
+            <param name="ignoreSizeWarningIf0">If set to true, the application log will not show values about the passed in value for size calculation being 0. 
+            File of 0 size, for example.</param>
             <returns>The string representation to decimalPlaces of the file size optionally with the bytes parameter</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.GetFilesize(System.String)">
@@ -5458,15 +7339,18 @@
             <param name="strB">the second version</param>
             <returns>less than zero if strA is less than strB, equal to zero if
             strA equals strB, and greater than zero if strA is greater than strB</returns>
-            <remarks> See https://stackoverflow.com/questions/30494/compare-version-identifiers
+            <remarks>
+            See https://stackoverflow.com/questions/30494/compare-version-identifiers
             Samples:
+            strA        | strB
             1.0.0.0     | 1.0.0.1 = -1
             1.0.0.1     | 1.0.0.0 =  1
             1.0.0.0     | 1.0.0.0 =  0
             1, 0.0.0    | 1.0.0.0 =  0
             9, 5, 1, 44 | 3.4.5.6 =  1
             1, 5, 1, 44 | 3.4.5.6 = -1
-            6,5,4,3     | 6.5.4.3 =  0 </remarks>
+            6,5,4,3     | 6.5.4.3 =  0
+            </remarks>
         </member>
         <member name="M:RelhaxModpack.Utils.GetCurrentUniversalFiletimeTimestamp">
             <summary>
@@ -5544,6 +7428,13 @@
             <param name="command">The entire command as a string style commandline</param>
             <returns>True if process start was successful, false otherwise</returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.OpenInGoogleTranslate(System.String)">
+            <summary>
+            Opens the selected text in Google translate web page
+            </summary>
+            <param name="message">The text to translate</param>
+            <returns></returns>
+        </member>
         <member name="M:RelhaxModpack.Utils.BuildFilepathMacroList">
             <summary>
             Builds the Filepath macro dictionary with settings that should be parsed from the Settings class
@@ -5557,12 +7448,24 @@
             <param name="type">The type of macro replace operation</param>
             <returns>The replaced string</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.AutoFindWoTDirectory(System.String@)">
+        <member name="M:RelhaxModpack.Utils.AutoFindWoTDirectory">
             <summary>
             Checks the registry to get the latest location of where WoT is installed
             </summary>
-            <param name="WoTRoot">The string to set to the WoT path</param>
             <returns>True if operation success</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetRegistryKeys(RelhaxModpack.RegistrySearch)">
+            <summary>
+            Gets all registry keys that exist in the given search base and path
+            </summary>
+            <param name="search">The RegistrySearch structure to specify where to search and where to base the search</param>
+            <returns>The RegistryKey object of the folder in registry, or null if the search failed</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.AutoFindWgcDirectory">
+            <summary>
+            Finds the location of the Wargaming Game center installation directory from the registry
+            </summary>
+            <returns>The location of wgc.exe if found, else null</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.CreateShortcut(RelhaxModpack.Shortcut,System.Text.StringBuilder)">
             <summary>

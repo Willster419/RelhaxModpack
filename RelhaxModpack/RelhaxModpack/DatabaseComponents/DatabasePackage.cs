@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.DatabaseComponents;
+using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 
@@ -31,7 +32,8 @@ namespace RelhaxModpack
             nameof(EndAddress),
             nameof(Triggers),
             nameof(DevURL),
-            nameof(InternalNotes)
+            nameof(InternalNotes),
+            nameof(Author)
         };
 
         /// <summary>
@@ -152,6 +154,26 @@ namespace RelhaxModpack
         /// </summary>
         public string InternalNotes = string.Empty;
 
+        /// <summary>
+        /// The name of the author of the mod/configuration/etc.
+        /// </summary>
+        public string Author = string.Empty;
+
+        /// <summary>
+        /// The number of bytes to download, used if "install while download" is true
+        /// </summary>
+        public long BytesToDownload = 0;
+
+        /// <summary>
+        /// The number of bytes currently downloaded, used if "install while download" is true
+        /// </summary>
+        public long BytesDownloaded = 0;
+
+        /// <summary>
+        /// Flag to determine if this package is the one currently downloading, used if "install while download" is true
+        /// </summary>
+        public bool IsCurrentlyDownloading = false;
+
         //append extraction flag
         /// <summary>
         /// Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
@@ -173,6 +195,10 @@ namespace RelhaxModpack
         /// </summary>
         public bool ExtractionStarted = false;
 
+        public DownloadInstructions DownloadInstructions = null;
+
+        public UpdateInstructions UpdateInstructions = null;
+
         /// <summary>
         /// String representation of the object
         /// </summary>
@@ -193,6 +219,43 @@ namespace RelhaxModpack
         /// </summary>
         public virtual string CompletePackageNamePath
         { get { return PackageName; } }
+
+        /// <summary>
+        /// Creates an instance of the DatabasePackage class
+        /// </summary>
+        public DatabasePackage()
+        {
+
+        }
+
+        /// <summary>
+        /// Creates an instance of the DatabasePackage class based on the provided DatabasePackage
+        /// </summary>
+        /// <param name="packageToCopy">The package to copy the information from</param>
+        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
+        public DatabasePackage(DatabasePackage packageToCopy, bool deep)
+        {
+            this.PackageName = packageToCopy.PackageName;
+            this.Version = packageToCopy.Version;
+            this.Timestamp = packageToCopy.Timestamp;
+            this.ZipFile = packageToCopy.ZipFile;
+            this.CRC = packageToCopy.CRC;
+            this.StartAddress = packageToCopy.StartAddress;
+            this.EndAddress = packageToCopy.EndAddress;
+            this.LogAtInstall = packageToCopy.LogAtInstall;
+            this.Triggers = new List<string>();
+            this.DevURL = packageToCopy.DevURL;
+            this.InstallGroup = packageToCopy.InstallGroup;
+            this.PatchGroup = packageToCopy.PatchGroup;
+            //don't call the property for enabled, just the internal field
+            this._Enabled = packageToCopy._Enabled;
+
+            if (deep)
+            {
+                foreach (string s in packageToCopy.Triggers)
+                    this.Triggers.Add(s);
+            }
+        }
         #endregion
     }
 }

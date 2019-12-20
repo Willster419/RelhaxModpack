@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>RelhaxModpack</RootNamespace>
     <AssemblyName>RelhaxModpack</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -70,9 +70,14 @@
     <ApplicationIcon>Resources\modpack_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetZip, Version=1.13.3.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.13.3\lib\net40\DotNetZip.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="DotNetZip, Version=1.13.4.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.13.4\lib\net40\DotNetZip.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.17.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.17\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.3.3, Culture=neutral, PublicKeyToken=8985beaab7ea3f04, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft-WindowsAPICodePack-Core.1.1.3.3\lib\net452\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -87,13 +92,13 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -118,23 +123,48 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AtlasesCreator\AtlasCreator.cs" />
+    <Compile Include="AtlasesCreator\AtlasUtils.cs" />
     <Compile Include="AtlasesCreator\Packing\ArevaloRectanglePacker.cs" />
     <Compile Include="AtlasesCreator\Packing\ImagePacker.cs" />
     <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
+    <Compile Include="AtlasesCreator\IRelhaxUnmanagedLibrary.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
     <Compile Include="DatabaseComponents\DatabasePackage.cs" />
     <Compile Include="DatabaseComponents\Dependency.cs" />
+    <Compile Include="DatabaseComponents\DownloadInstructions.cs" />
     <Compile Include="DatabaseComponents\IDatabaseLogic.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
+    <Compile Include="DatabaseComponents\PatchUpdate.cs" />
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\Trigger.cs" />
+    <Compile Include="DatabaseComponents\UpdateInstructions.cs" />
     <Compile Include="DatabaseComponents\UserFile.cs" />
+    <Compile Include="UIComponents\BoundUISettings.cs" />
+    <Compile Include="UIComponents\ClassColorset.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\BorderClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ButtonClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\CheckboxClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ComboboxClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ControlClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\IClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\PanelClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\ProgressbarClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\RadioButtonClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\TabItemClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\TextBlockClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ComponentColorset.cs" />
+    <Compile Include="UIComponents\CustomBrush.cs" />
+    <Compile Include="UIComponents\CustomBrushConverter.cs" />
     <Compile Include="UIComponents\RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\Theme.cs" />
+    <Compile Include="UIComponents\Themes.cs" />
+    <Compile Include="UIComponents\WindowColorset.cs" />
+    <Compile Include="UIComponents\ZoomBorder.cs" />
     <Compile Include="Utils\GlobalSuppressions.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />
@@ -144,7 +174,7 @@
     <Compile Include="InstallerComponents\XmlUnpack.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
-    <Compile Include="PrivateStuff\relhaxmodpackprivatesettings\PrivateStuff.cs" />
+    <Compile Include="PrivateStuff\PrivateStuff.cs" />
     <Compile Include="Settings\PatchSettings.cs" />
     <Compile Include="Settings\EditorSettings.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
@@ -173,6 +203,9 @@
     <Compile Include="Windows\AskCloseWoT.xaml.cs">
       <DependentUpon>AskCloseWoT.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\AutoUpdatePackageWindow.xaml.cs">
+      <DependentUpon>AutoUpdatePackageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CreateFTPFolderName.xaml.cs">
       <DependentUpon>CreateFTPFolderName.xaml</DependentUpon>
     </Compile>
@@ -194,12 +227,24 @@
     <Compile Include="Windows\ExportModeSelect.xaml.cs">
       <DependentUpon>ExportModeSelect.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FirstLoadSelectLanguage.xaml.cs">
+      <DependentUpon>FirstLoadSelectLanguage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FirstLoadAcknowledgments.xaml.cs">
       <DependentUpon>FirstLoadAcknowledgments.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\IPackageUIComponent.cs" />
+    <Compile Include="Windows\GameCenterUpdateDownloader.xaml.cs">
+      <DependentUpon>GameCenterUpdateDownloader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\NewsViewer.xaml.cs">
       <DependentUpon>NewsViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PopOutReplacePatchDesigner.xaml.cs">
+      <DependentUpon>PopOutReplacePatchDesigner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\RelhaxColorPicker.xaml.cs">
+      <DependentUpon>RelhaxColorPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RelhaxMediaPlayer.xaml.cs">
       <DependentUpon>RelhaxMediaPlayer.xaml</DependentUpon>
@@ -236,8 +281,8 @@
     <Compile Include="Windows\ModSelectionList.xaml.cs">
       <DependentUpon>ModSelectionList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\PatchTester.xaml.cs">
-      <DependentUpon>PatchTester.xaml</DependentUpon>
+    <Compile Include="Windows\PatchDesigner.xaml.cs">
+      <DependentUpon>PatchDesigner.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Preview.xaml.cs">
       <DependentUpon>Preview.xaml</DependentUpon>
@@ -246,6 +291,12 @@
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\RelhaxWindow.cs" />
+    <Compile Include="Windows\ScalingConfirmation.xaml.cs">
+      <DependentUpon>ScalingConfirmation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TemplateWindow.xaml.cs">
+      <DependentUpon>TemplateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
     </Compile>
@@ -253,6 +304,9 @@
     <Compile Include="Utils\XmlBinary\PrimitiveFileReader.cs" />
     <Compile Include="Utils\XmlBinary\XmlBinaryHandler.cs" />
     <Compile Include="Utils\XmlUtils.cs" />
+    <Compile Include="Windows\AutoUpdateFilesInspector.xaml.cs">
+      <DependentUpon>AutoUpdateFilesInspector.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -265,11 +319,35 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UIComponents\StyleDictionaries\RelhaxRadioButtonStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\StyleDictionaries\RelhaxCheckboxStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\StyleDictionaries\RelhaxComboboxStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UIComponents\RelhaxHyperlink.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIComponents\RelhaxInstallTaskReporter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\StyleDictionaries\RelhaxButtonStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\StyleDictionaries\RelhaxSelectionListTabItemStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\StyleDictionaries\RelhaxTabItemStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -290,6 +368,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AskCloseWoT.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AutoUpdatePackageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -333,7 +415,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\FirstLoadSelectLanguage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\FirstLoadAcknowledgments.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\GameCenterUpdateDownloader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -349,7 +439,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\PatchTester.xaml">
+    <Page Include="Windows\PatchDesigner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\PopOutReplacePatchDesigner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -361,7 +455,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\RelhaxColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\RelhaxMediaPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ScalingConfirmation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TemplateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -370,6 +476,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AdvancedProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AutoUpdateFilesInspector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -403,7 +513,6 @@
     <EmbeddedResource Include="Resources\DLL\FreeImage64.zip" />
     <EmbeddedResource Include="Resources\DLL\nvtt32.zip" />
     <EmbeddedResource Include="Resources\DLL\nvtt64.zip" />
-    <Resource Include="PrivateStuff\github_readme_link.txt" />
     <Resource Include="Resources\Images\popular_icon.png" />
     <Resource Include="Resources\Licences\Fody.txt" />
     <Resource Include="Resources\Images\grey_area_mod.png" />
@@ -414,6 +523,7 @@
     <EmbeddedResource Include="Resources\DLL\NAudio.dll" />
     <EmbeddedResource Include="Resources\DLL\Newtonsoft.Json.dll" />
     <EmbeddedResource Include="Resources\DLL\TeximpNet.dll" />
+    <EmbeddedResource Include="Resources\DLL\HtmlAgilityPack.dll" />
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
@@ -478,9 +588,11 @@ echo         //https://stackoverflow.com/questions/4450231/can-i-make-a-constant
 echo         ///^&lt;summary^&gt;String of the build number and build date/time, and other useful info.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo         public const string BuildTag = "%25DATE%25 %25TIME%25"; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
 echo     } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"</PreBuildEvent>
+echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>"$(TargetDir)sign_modpack.bat - Shortcut.lnk"</PostBuildEvent>
+    <PostBuildEvent>if exist "$(TargetDir)sign_modpack.bat" call "$(TargetDir)sign_modpack.bat"
+if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuffNull.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PostBuildEvent>
   </PropertyGroup>
 </Project>

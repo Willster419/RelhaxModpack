@@ -16,6 +16,14 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class Diagnostics : RelhaxWindow
     {
+        //list of files who need to be seperated by 32bit and 64bit versions
+        private string[] specialName32And64Versions = new string[]
+        {
+            Settings.PythonLog,
+            Settings.XvmLog,
+            Settings.PmodLog
+        };
+
         /// <summary>
         /// Create an instance of the Diagnostics window
         /// </summary>
@@ -27,66 +35,53 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //check to make sure a selected tanks installation is selected
-            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
-                ToggleUIOptions(false);
-            else
-                ToggleUIOptions(true);
+            ToggleInstallLocationNeededButtons();
+        }
 
-            //set the currently selected installation text
-            SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
+        private void ToggleInstallLocationNeededButtons()
+        {
+            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
+            {
+                CollectLogInfoButton.IsEnabled = false;
+                DownloadWGPatchFilesText.IsEnabled = false;
+                SelectedInstallation.Text = string.Format("{0}\n{1}",
+                    Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
+            }
+            else
+            {
+                CollectLogInfoButton.IsEnabled = true;
+                DownloadWGPatchFilesText.IsEnabled = false;
+                SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
+            }
         }
 
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
         {
-            //show a standard WoT selection window from manual fine WoT.exe
+            Logging.Info("Diagnostics: Selecting WoT install");
+            //show a standard WoT selection window from manual find WoT.exe
             OpenFileDialog manualWoTFind = new OpenFileDialog()
             {
                 AddExtension = true,
                 CheckFileExists = true,
                 CheckPathExists = true,
                 Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                Title = Translations.GetTranslatedString("selectWOTExecutable"),
                 Multiselect = false,
                 ValidateNames = true
             };
             if ((bool)manualWoTFind.ShowDialog())
             {
                 Settings.WoTDirectory = Path.GetDirectoryName(manualWoTFind.FileName);
-                SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
+                Settings.WoTDirectory = Settings.WoTDirectory.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
+                Logging.Info("Diagnostics: Selected WoT install -> {0}",Settings.WoTDirectory);
             }
             else
             {
-                Logging.Info("User Canceled selection");
+                Logging.Info("Diagnostics: User canceled selection");
             }
 
             //check to make sure a selected tanks installation is selected
-            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
-                ToggleUIOptions(false);
-            else
-                ToggleUIOptions(true);
-        }
-
-        private void LaunchWoTLauncher_Click(object sender, RoutedEventArgs e)
-        {
-            //just to make sure
-            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
-                return;
-
-            Logging.Debug("Starting WoTLauncher with argument \"-integrity_default_client\"");
-            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("startingLauncherRepairMode");
-            string filename = Path.Combine(Settings.WoTDirectory, "WoTLauncher.exe");
-            string formattedArguement = "-integrity_default_client";
-            Logging.Info("Complete command: {0} {1}", filename, formattedArguement);
-            try
-            {
-                Process.Start(filename, formattedArguement);
-            }
-            catch (Exception ex)
-            {
-                Logging.Exception("LaunchWoTLauncher_Click", ex);
-                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("failedStartLauncherRepairMode");
-                return;
-            }
-            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("launcherRepairModeStarted");
+            ToggleInstallLocationNeededButtons();
         }
 
         private void CollectLogInfo_Click(object sender, RoutedEventArgs e)
@@ -101,16 +96,28 @@ namespace RelhaxModpack.Windows
             //create the list of files to collect (should always collect these)
             List<string> filesToCollect = new List<string>()
             {
-                //stuff in application startup path
+                //relhax files in relhax dir (relhax.log, relhaxsettings.xml, lastinstalledconfig.xml)
                 Settings.RelhaxLogFilepath,
                 Settings.RelhaxSettingsFilepath,
                 Settings.LastInstalledConfigFilepath,
-                //stuff in the tanks location (need to be combined here cause it can change from installation)
-                Path.Combine(Settings.WoTDirectory,"logs",Logging.InstallLogFilename),
-                Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename),
-                Path.Combine(Settings.WoTDirectory, "python.log"),
-                Path.Combine(Settings.WoTDirectory, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, "pmod.log")
+                //relhax files in wot/logs dir (need to be combined here cause it can change from installation)
+                Path.Combine(Settings.WoTDirectory, Settings.LogsFolder, Logging.InstallLogFilename),
+                Path.Combine(Settings.WoTDirectory, Settings.LogsFolder, Logging.UninstallLogFilename),
+                //disabled for now, but in case WG decides to change it again...
+                /*
+                //wot files in wot/32bit folder
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.PmodLog),
+                //wot files in wot/64bit folder
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PmodLog),
+                */
+                //wot files in wot folder
+                Path.Combine(Settings.WoTDirectory, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.PmodLog)
             };
 
             //use a nice diagnostic window to check if the user wants to include any other files
@@ -121,19 +128,23 @@ namespace RelhaxModpack.Windows
                 if(File.Exists(file))
                     apz.FilesToAddList.Items.Add(file);
 
-            if((bool)apz.ShowDialog())
+            if(!(bool)apz.ShowDialog())
             {
-                foreach (string s in apz.FilesToAddList.Items)
-                    if(!filesToCollect.Contains(s))
-                        filesToCollect.Add(s);
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("canceled");
+                return;
             }
-            apz = null;
+
+            //add any new files the user added to the list, while not adding any of the above pre-added ones
+            foreach (string s in apz.FilesToAddList.Items)
+                if (!filesToCollect.Contains(s))
+                    filesToCollect.Add(s);
 
             //check in the list to make sure that the entries are valid and paths exist
-            Logging.Debug("Filtering list of files to collect");
+            Logging.Info("Filtering list of files to collect by if file exists");
             filesToCollect = filesToCollect.Where(fileEntry => !string.IsNullOrWhiteSpace(fileEntry) && File.Exists(fileEntry)).ToList();
             try
             {
+                Logging.Info("creating diagnostic zip file and adding logs");
                 using (ZipFile zip = new ZipFile())
                 {
                     foreach (string s in filesToCollect)
@@ -143,31 +154,32 @@ namespace RelhaxModpack.Windows
                         //get just the filename (it will be added to the zip file as just the name)
                         string fileNameToAdd = Path.GetFileName(s);
 
+                        //special case check for if filenames are the same in 32bit and 64bit
+                        //disabled for now, but in case WG decides to change it again...
+                        /*
+                        if(specialName32And64Versions.Contains(fileNameToAdd))
+                        {
+                            string[] folderPathSep = s.Split(Path.DirectorySeparatorChar);
+                            string folderName32And64 = folderPathSep[folderPathSep.Count() - 2];
+                            fileNameToAdd = string.Format("{0}_{1}", folderName32And64, fileNameToAdd);
+                        }
+                        */
+
                         //run a loop to check if the file already exists in the zip with the same name, if it does then pad it until it does not
-                        Logging.Debug("Attempting to add filename {0} in zip entry", fileNameToAdd);
+                        Logging.Info("Attempting to add filename {0} in zip entry", fileNameToAdd);
                         while (zip.ContainsEntry(fileNameToAdd))
                         {
                             fileNameToAdd = string.Format("{0}_{1}.{2}", Path.GetFileNameWithoutExtension(fileNameToAdd), duplicate++, Path.GetExtension(fileNameToAdd));
-                            Logging.Debug("exists, using filename {0}", fileNameToAdd);
+                            Logging.Info("exists, using filename {0}", fileNameToAdd);
                         }
+                        Logging.Debug("new name for zip: {0}", fileNameToAdd);
 
-                        //after padding, put the full path back together
-                        fileNameToAdd = Path.Combine(Path.GetDirectoryName(s), fileNameToAdd);
-
-                        //one last check to make sure it exists
-                        if(!File.Exists(fileNameToAdd))
-                        {
-                            Logging.Error("the file {0} was parsed to exist but after loop modification, it does not!", fileNameToAdd);
-                            continue;
-                        }
-                        else
-                        {
-                            //and the file to the zip file and grab the entry reference
-                            ZipEntry entry = zip.AddFile(fileNameToAdd);
-                            //then use it to modify the name of the entry in the zip file
-                            entry.FileName = Path.GetFileName(fileNameToAdd);
-                            Logging.Info("file {0} added, entry name in zip = {1}", fileNameToAdd, entry.FileName);
-                        }
+                        //and the file to the zip file and grab the entry reference
+                        ZipEntry entry = zip.AddFile(s);
+                        //then use it to modify the name of the entry in the zip file
+                        //this moves it out of all the sub-folders up to the root directory
+                        entry.FileName = Path.GetFileName(fileNameToAdd);
+                        Logging.Info("file {0} added, entry name in zip = {1}", fileNameToAdd, entry.FileName);
                     }
                     string zipSavePath = Path.Combine(
                         Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
@@ -184,40 +196,75 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void ToggleUIOptions(bool toggle)
-        {
-            CollectLogInfoButton.IsEnabled = toggle;
-        }
-
         private async void ClearDownloadCache_Click(object sender, RoutedEventArgs e)
         {
+            Logging.Info("Diagnostics: Deleting download cache");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCache");
             try
             {
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, false, 3, 100, "*.zip");
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, false, 3, 100, "*.xml");
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.zip");
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
-                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
+                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolderPath);
                 Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
+            Logging.Info("Diagnostics: Deleted download cache");
         }
 
         private async void ClearDownloadCacheDatabase_Click(object sender, RoutedEventArgs e)
         {
-            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase ");
+            Logging.Info("Diagnostics: Deleting database cache file");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase");
             try
             {
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolder, false, false, 3, 100, "*.xml");
+                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
-                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolder);
+                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCacheDatabase"), Environment.NewLine, Settings.RelhaxDownloadsFolderPath);
                 Logging.Exception(ioex.ToString());
             }
-            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheDatabaseComplete");
+            Logging.Info("Diagnostics: Deleted database cache file");
+        }
+
+        private void TestLoadImageLibrariesButton_Click(object sender, RoutedEventArgs e)
+        {
+            Logging.Info("Diagnostics: Test load image libraries");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibraries");
+            Utils.AllowUIToUpdate();
+            if (Utils.TestLoadAtlasLibraries(true))
+            {
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibrariesSuccess");
+                Logging.Info("Diagnostics: Test load image libraries pass");
+            }
+            else
+            {
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibrariesFail");
+                if (MessageBox.Show(string.Format("{0}\n{1}", Translations.GetTranslatedString("missingMSVCPLibraries"), Translations.GetTranslatedString("openLinkToMSVCP")),
+                                Translations.GetTranslatedString("missingMSVCPLibrariesHeader"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    if (!Utils.StartProcess(Utils.MSVCPLink))
+                    {
+                        Logging.Error("failed to open url to MSVCP: {0}", Utils.MSVCPLink);
+                    }
+                }
+                Logging.Info("Diagnostics: Test load image libraries fail");
+            }
+        }
+
+        private void DownloadWGPatchFiles_Click(object sender, RoutedEventArgs e)
+        {
+            using (GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader()
+            {
+                SelectedClient = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? string.Empty : Settings.WoTDirectory
+            })
+            {
+                gameCenterUpdateDownloader.ShowDialog();
+            }
         }
     }
 }

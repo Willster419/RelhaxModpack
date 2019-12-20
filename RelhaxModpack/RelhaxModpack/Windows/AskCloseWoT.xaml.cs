@@ -15,11 +15,19 @@ using System.Windows.Shapes;
 
 namespace RelhaxModpack.Windows
 {
+    public enum AskCloseWoTResult
+    {
+        Retry,
+        CancelInstallation,
+        ForceClosed
+    }
     /// <summary>
     /// Interaction logic for AskCloseWoT.xaml
     /// </summary>
     public partial class AskCloseWoT : RelhaxWindow
     {
+        public AskCloseWoTResult AskCloseWoTResult { get; set; } = AskCloseWoTResult.CancelInstallation;
+
         /// <summary>
         /// Create an instance of the AskCloseWoT window
         /// </summary>
@@ -30,31 +38,30 @@ namespace RelhaxModpack.Windows
 
         private void WoTRunningCancelInstallButton_Click(object sender, RoutedEventArgs e)
         {
+            AskCloseWoTResult = AskCloseWoTResult.CancelInstallation;
             DialogResult = false;
             Close();
         }
 
         private void WoTRunningForceCloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("Getting WoT process");
-            string WoTCloseButtonText = WoTRunningForceCloseButton.Content as string;
-            WoTRunningForceCloseButton.Content = Translations.GetTranslatedString("tryToClose");
-            Utils.AllowUIToUpdate();
+            AskCloseWoTResult = AskCloseWoTResult.Retry;
+            Logging.Info("Getting WoT process(es)");
             Process WoTProcess = Utils.GetProcess(Settings.WoTProcessName, Settings.WoTDirectory);
             if(WoTProcess == null)
             {
                 Logging.Error("Failed to get process (null result)");
                 MessageBox.Show(Translations.GetTranslatedString("failedCloseProcess"));
-                WoTRunningForceCloseButton.Content = WoTCloseButtonText;
                 return;
             }
             try
             {
                 WoTProcess.Kill();
-                WoTProcess.WaitForExit(5000);
+                System.Threading.Thread.Sleep(100);
                 if (WoTProcess.HasExited)
                 {
                     Logging.Info("success in ending process!");
+                    AskCloseWoTResult = AskCloseWoTResult.ForceClosed;
                     DialogResult = true;
                     Close();
                 }
@@ -62,7 +69,6 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Error("Failed to get process (timeout)");
                     MessageBox.Show(Translations.GetTranslatedString("failedCloseProcess"));
-                    WoTRunningForceCloseButton.Content = WoTCloseButtonText;
                     return;
                 }
             }
@@ -77,6 +83,7 @@ namespace RelhaxModpack.Windows
 
         private void WoTRunningRetryButton_Click(object sender, RoutedEventArgs e)
         {
+            AskCloseWoTResult = AskCloseWoTResult.Retry;
             DialogResult = true;
             Close();
         }

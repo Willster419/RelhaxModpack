@@ -34,7 +34,7 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
         }
 
-        private void OnHyperlinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        private void OnManualUpdatelinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             //https://stackoverflow.com/questions/10238694/example-using-hyperlink-in-wpf
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
@@ -57,6 +57,7 @@ namespace RelhaxModpack.Windows
         {
             //update the text box with the latest version
             ApplicationUpdateNotes.Text = Translations.GetTranslatedString("loadingApplicationUpdateNotes");
+            ViewUpdateNotesOnGoogleTranslate.TheHyperlink.Click += TheHyperlink_Click;
             using (WebClient client = new WebClient())
             {
                 Uri temp = new Uri((ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
@@ -74,6 +75,11 @@ namespace RelhaxModpack.Windows
                 };
                 client.DownloadStringAsync(temp);
             }
+        }
+
+        private void TheHyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.OpenInGoogleTranslate(ApplicationUpdateNotes.Text);
         }
     }
 }

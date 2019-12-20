@@ -87,7 +87,7 @@ namespace RelhaxModpack
 
         #region Database Properties
         /// <summary>
-        /// Constructor to over-ride DatabasePackage default values
+        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
         /// </summary>
         public SelectablePackage()
         {
@@ -104,9 +104,12 @@ namespace RelhaxModpack
         /// </summary>
         public string NameFormatted
         {
-            get {
-                    return Name.Replace("{version}",Version);
-                }
+            get
+            {
+                return Name
+                    .Replace(@"{version}", Version)
+                    .Replace(@"{author}", Author);
+            }
         }
 
         /// <summary>
@@ -180,13 +183,11 @@ namespace RelhaxModpack
             }
             set
             {
+                //set the internal checked value
                 _Checked = value;
+
+                //run code to determine if a standard option or a dropdown
                 int dropDownSelectionType = -1;
-                //inside here is for not comboboxes (checked)
-                if (UIComponent != null)
-                {
-                    UIComponent.OnCheckedChanged(value);
-                }
                 if (Type == SelectionTypes.single_dropdown1)
                 {
                     dropDownSelectionType = 0;
@@ -195,84 +196,106 @@ namespace RelhaxModpack
                 {
                     dropDownSelectionType = 1;
                 }
-                //inside here is for comboboxes (checked)
-                if (Enabled && dropDownSelectionType > -1 && IsStructureEnabled)
+
+                //run the checked UI code
+                //if the UI component is not null, it's a checkbox or radiobutton
+                if (UIComponent != null)
                 {
-                    switch (ModpackSettings.ModSelectionView)
+                    UIComponent.OnCheckedChanged(value);
+                }
+                //null UI component is a combobox
+                else
+                {
+                    //inside here is for comboboxes (checked)
+                    if (Enabled && dropDownSelectionType > -1 && IsStructureEnabled)
                     {
-                        case SelectionView.DefaultV2:
-                            Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
-                            break;
-                        case SelectionView.Legacy:
-                            Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
-                            break;
+                        //go to the parent array list above this that holds the combobox and run the UI code
+                        switch (ModpackSettings.ModSelectionView)
+                        {
+                            case SelectionView.DefaultV2:
+                                Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
+                                break;
+                            case SelectionView.Legacy:
+                                Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
+                                break;
+                        }
                     }
                 }
-                //inside here is for color change
-                bool actuallyDoColorChange = false;
+
+                //determine if we should perform color change on the UI component(s)
+                bool UIComponentColorChange = false;
                 if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2 && ModpackSettings.EnableColorChangeDefaultV2View)
-                    actuallyDoColorChange = true;
+                    UIComponentColorChange = true;
                 else if (ModpackSettings.ModSelectionView == SelectionView.Legacy && ModpackSettings.EnableColorChangeLegacyView)
-                    actuallyDoColorChange = true;
-                if(UIComponent != null && actuallyDoColorChange)
+                    UIComponentColorChange = true;
+
+                if(UIComponentColorChange && Visible && IsStructureVisible)
                 {
-                    //set panel and text color based on true or false
-                    switch(_Checked)
+                    //if the UI component is not null, it's a checkbox or radiobutton
+                    if (UIComponent != null)
                     {
-                        case true:
-                            if (UIComponent.PanelColor != UISettings.SelectedPanelColor)
-                                UIComponent.PanelColor = UISettings.SelectedPanelColor;
-                                UIComponent.TextColor = UISettings.SelectedTextColor;
-                            break;
-                        case false:
-                            if (!AnyPackagesChecked())
+                        //set panel and text color based on true or false for checkbox or radiobutton
+                        switch (_Checked)
+                        {
+                            case true:
+                                if (UIComponent.PanelColor != UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush)
+                                    UIComponent.PanelColor = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
+                                UIComponent.TextColor = UISettings.CurrentTheme.SelectionListSelectedTextColor.Brush;
+                                break;
+                            case false:
+                                if (!AnyPackagesChecked())
+                                {
+                                    if (UIComponent.PanelColor != UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush)
+                                        UIComponent.PanelColor = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
+                                    UIComponent.TextColor = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush;
+                                }
+                                break;
+                        }
+                    }
+                    //null UI component is a combobox
+                    else if (dropDownSelectionType > -1)
+                    {
+                        //set panel and text color based on true of false for dropdown option
+                        switch (_Checked)
+                        {
+                            case true:
+                                if (ParentBorder.Background != UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush)
+                                    ParentBorder.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
+                                break;
+                            case false:
+                                if (!AnyPackagesChecked())
+                                {
+                                    if (ParentBorder.Background != UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush)
+                                        ParentBorder.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
+                                }
+                                break;
+                        }
+                    }
+
+                    //toggle the Tab Color based on if anything is selected, done for level -1 top item
+                    if (Level == -1)
+                    {
+                        //workarounds
+                        //top item is not going to correct color
+                        if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
+                        {
+                            if (_Checked)
                             {
-                                if (UIComponent.PanelColor != UISettings.NotSelectedPanelColor)
-                                    UIComponent.PanelColor = UISettings.NotSelectedPanelColor;
-                                UIComponent.TextColor = UISettings.NotSelectedTextColor;
+                                TreeView.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
                             }
-                            break;
-                    }
-                }
-                else if (Visible && dropDownSelectionType > -1 && actuallyDoColorChange && IsStructureVisible)
-                {
-                    //in here means it's a dropdown and doing color change
-                    switch (_Checked)
-                    {
-                        case true:
-                            if (ParentBorder.Background != UISettings.SelectedPanelColor)
-                                ParentBorder.Background = UISettings.SelectedPanelColor;
-                            break;
-                        case false:
-                            if (!AnyPackagesChecked())
+                            else
                             {
-                                if (ParentBorder.Background != UISettings.NotSelectedPanelColor)
-                                    ParentBorder.Background = UISettings.NotSelectedPanelColor;
+                                TreeView.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
                             }
-                            break;
+                        }
+                        else if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
+                        {
+                            if (!_Checked)
+                            {
+                                ParentBorder.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
+                            }
+                        }
                     }
-                }
-                //toggle the Tab Color based on if anything is selected, done for level -1 top item
-                if(Level == -1)
-                {
-                    if (UISettings.NotSelectedTabColor == null)
-                        UISettings.NotSelectedTabColor = (System.Windows.Media.LinearGradientBrush)TabIndex.Background;
-                    if (_Checked)
-                        TabIndex.Background = UISettings.SelectedPanelColor;
-                    else
-                        TabIndex.Background = UISettings.NotSelectedTabColor;
-                    //workaround for legacy:
-                    //top item is not going to correct color
-                    if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
-                    {
-                        if (_Checked)
-                            TreeView.Background = UISettings.SelectedPanelColor;
-                        else
-                            TreeView.Background = UISettings.NotSelectedPanelColor;
-                    }
-                    else if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
-                        if (!_Checked)
-                            ParentBorder.Background = UISettings.NotSelectedPanelColor;
                 }
             }
         }
@@ -485,7 +508,7 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Determines if the UI package structure to this package is of all enabled components.
+        /// Determines if all parent packages leading to this package are enabled. In other words, it checks if the path to this package is enabled
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         public bool IsStructureEnabled
@@ -609,6 +632,63 @@ namespace RelhaxModpack
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
+        /// </summary>
+        /// <param name="packageToCopyFrom">The package to copy the information from</param>
+        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
+        public SelectablePackage(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom,deep)
+        {
+            InstallGroup = 4;
+            PatchGroup = 4;
+
+            if (packageToCopyFrom is Dependency dep)
+            {
+                if(deep)
+                {
+                    foreach (DatabaseLogic file in dep.Dependencies)
+                        this.Dependencies.Add(DatabaseLogic.Copy(file));
+                }
+            }
+            else if (packageToCopyFrom is SelectablePackage sp)
+            {
+                this.Type = sp.Type;
+                this.Name = "WRITE_NEW_NAME";
+                this.Visible = sp.Visible;
+                this.Size = 0;
+
+                this.UpdateComment = string.Empty;
+                this.Description = string.Empty;
+                this.PopularMod = false;
+                this._Checked = false;
+
+                this.Level = -2;
+                this.UserFiles = new List<UserFile>();
+                this.Packages = new List<SelectablePackage>();
+                this.Medias = new List<Media>();
+                this.Dependencies = new List<DatabaseLogic>();
+                this.ConflictingPackages = new List<string>();
+                this.ShowInSearchList = sp.ShowInSearchList;
+
+                if (deep)
+                {
+                    this.UpdateComment = sp.UpdateComment;
+                    this.Description = sp.Description;
+                    this.PopularMod = sp.PopularMod;
+                    this._Checked = sp._Checked;
+
+                    foreach (UserFile file in this.UserFiles)
+                        this.UserFiles.Add(UserFile.DeepCopy(file));
+
+                    foreach (Media file in this.Medias)
+                        this.Medias.Add(Media.Copy(file));
+
+                    foreach (DatabaseLogic file in this.Dependencies)
+                        this.Dependencies.Add(DatabaseLogic.Copy(file));
+                }
+            }
         }
         #endregion
     }
