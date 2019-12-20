@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -35,13 +36,15 @@ namespace RelhaxModpack.Windows
 
         private void InstallationCompleteStartGameCenterButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!Utils.StartProcess(new ProcessStartInfo()
+            string actualLocation = Utils.AutoFindWgcDirectory();
+            if(string.IsNullOrEmpty(actualLocation) || !Utils.StartProcess(actualLocation))
             {
-                WorkingDirectory = Settings.WoTDirectory,
-                FileName = Path.Combine(Settings.WoTDirectory, "WoTLauncher.exe")
-            }))
-            {
+                Logging.Error("could not start wgc process using command line '{0}'",actualLocation);
                 MessageBox.Show(Translations.GetTranslatedString("CouldNotStartProcess"));
+            }
+            else
+            {
+                Logging.Debug("wgc successfully started!");
             }
             DialogResult = true;
             Close();
@@ -59,8 +62,15 @@ namespace RelhaxModpack.Windows
 
         private void InstallationCompleteCloseAppButton_Click(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
             Close();
             Application.Current.Shutdown();
+        }
+
+        private void InstallationCompleteCloseThisWindowButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Close();
         }
     }
 }

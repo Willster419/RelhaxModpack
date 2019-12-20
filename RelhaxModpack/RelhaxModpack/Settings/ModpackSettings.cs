@@ -64,6 +64,27 @@ namespace RelhaxModpack
     }
 
     /// <summary>
+    /// The list of different types of themes in the application
+    /// </summary>
+    public enum UIThemes
+    {
+        /// <summary>
+        /// The default application theme
+        /// </summary>
+        Default,
+
+        /// <summary>
+        /// The dark application theme
+        /// </summary>
+        Dark,
+
+        /// <summary>
+        /// A custom application theme from the UISettings.xml
+        /// </summary>
+        Custom
+    }
+
+    /// <summary>
     /// Provides access to all settings used in the modpack.
     /// </summary>
     public static class ModpackSettings
@@ -76,7 +97,7 @@ namespace RelhaxModpack
             //put blacklist fields here
             nameof(PropertiesToExclude)
         };
-        #region Save-able modpack settings
+        #region Saveable modpack settings
         /// <summary>
         /// The custom path to the ModInfo.xml file if loading in test mode
         /// </summary>
@@ -87,6 +108,11 @@ namespace RelhaxModpack
         /// </summary>
         /// <remarks>URL for the repository: https://github.com/Willster419/RelhaxModpackDatabase </remarks>
         public static string BetaDatabaseSelectedBranch = "master";
+
+        /// <summary>
+        /// Flag to track when/if the user has MSVCP2013 installed to load the atlas image processing libraries
+        /// </summary>
+        public static bool AtlasLibrariesCanBeLoaded = false;
 
         /// <summary>
         /// Toggle if the program should notify the user if the database version is the same as the last installed version
@@ -111,7 +137,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
         /// </summary>
-        public static bool SaveLastSelection = false;
+        public static bool SaveLastSelection = true;
 
         /// <summary>
         /// Toggle if the application should save user cache save data like session stats, or auto equip configs
@@ -240,6 +266,26 @@ namespace RelhaxModpack
         public static bool PreviewFullscreen = false;
 
         /// <summary>
+        /// Toggle for if the ModSelectionView window should be shown in fullscreen mode
+        /// </summary>
+        public static bool ModSelectionFullscreen = false;
+
+        /// <summary>
+        /// Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+        /// </summary>
+        public static bool MinimizeToSystemTray = false;
+
+        /// <summary>
+        /// Toggle for if the selection list options in Legacy view should be collapsed by default on start
+        /// </summary>
+        public static bool ShowOptionsCollapsedLegacy = false;
+
+        /// <summary>
+        /// Toggle if during auto or one click load if the application should inform if any selection errors during selection file load
+        /// </summary>
+        public static bool AutoOneclickShowWarningOnSelectionsFail = false;
+
+        /// <summary>
         /// The time, in a specified unit, to check for anew data base version
         /// </summary>
         public static int AutoInstallFrequencyInterval = 10;
@@ -260,11 +306,6 @@ namespace RelhaxModpack
         public static int ModSelectionWidth = 800;
 
         /// <summary>
-        /// Toggle for if the ModSelectionView window should be shown in fullscreen mode
-        /// </summary>
-        public static bool ModSelectionFullscreen = false;
-
-        /// <summary>
         /// The x-coordinate location, in pixels, of the Preview window
         /// </summary>
         public static int PreviewX = 0;
@@ -283,6 +324,11 @@ namespace RelhaxModpack
         /// The width, in pixels, of the Preview window
         /// </summary>
         public static int PreviewWidth = 450;
+
+        /// <summary>
+        /// The factor to scale the window size and components by. From 1 to 3 in increments of 0.25
+        /// </summary>
+        public static double DisplayScale = 1.0f;
 
         /// <summary>
         /// The path to the auto or one click selection file
@@ -316,14 +362,9 @@ namespace RelhaxModpack
         public static ApplicationVersions ApplicationDistroVersion = ApplicationVersions.Stable;
 
         /// <summary>
-        /// t=Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+        /// The theme to apply to the application
         /// </summary>
-        public static bool MinimizeToSystemTray = false;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static double DisplayScale = 0;
+        public static UIThemes ApplicationTheme = UIThemes.Default;
         #endregion
 
         #region Legacy compatibility

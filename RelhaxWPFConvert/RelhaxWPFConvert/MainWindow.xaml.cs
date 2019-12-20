@@ -25,6 +25,14 @@ using Timer = System.Timers.Timer;
 using System.Runtime.Remoting.Contexts;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Windows.Documents;
+using System.Xml;
+using System.Windows.Markup;
+using Microsoft.WindowsAPICodePack.Taskbar;
+using System.Xml.Linq;
+using HtmlAgilityPack;
+using System.Text;
+using Microsoft.Win32;
 
 namespace RelhaxWPFConvert
 {
@@ -43,6 +51,7 @@ namespace RelhaxWPFConvert
     {
         private CancellationToken ct;
         private CancellationTokenSource tokenSource2;
+        private TaskbarManager taskbarInstance;
 
         public MainWindow()
         {
@@ -92,6 +101,20 @@ namespace RelhaxWPFConvert
         {
             //checkbox testing
             testBox1.CheckboxDisabledColor = Colors.Green;
+
+            //init UI color settings
+            UISettings.InitUIBrushes();
+
+            //get value from resource dictionary
+            bool test = (bool)Application.Current.Resources["ApplyColorSettings"];
+
+            //task bar stuff
+            //https://www.fluxbytes.com/csharp/how-to-display-a-progressbar-in-taskbar-in-c/
+            if (TaskbarManager.IsPlatformSupported)
+            {
+                taskbarInstance = TaskbarManager.Instance;
+                taskbarInstance.SetProgressState(TaskbarProgressBarState.NoProgress);
+            }
         }
 
         #region Task Reporting
@@ -238,13 +261,6 @@ namespace RelhaxWPFConvert
 
         private void DdsToBitmap_Click(object sender, RoutedEventArgs e)
         {
-            //custom load freeImage from another place
-            string dllFolder = Path.GetFullPath("tempLibFolder");
-            string dll32 = Path.Combine(dllFolder, "FreeImage32.dll");
-            string dll64 = Path.Combine(dllFolder, "FreeImage64.dll");
-            TeximpNet.Unmanaged.FreeImageLibrary library = TeximpNet.Unmanaged.FreeImageLibrary.Instance;
-            library.LoadLibrary(dll32,dll64);
-
             //check if it's actually a dds file
             bool isItADDSFile = DDSFile.IsDDSFile("damageIndicator.dds");
             Bitmap bmp = null;
@@ -306,6 +322,9 @@ namespace RelhaxWPFConvert
 
         private void BitmapToDds_Click(object sender, RoutedEventArgs e)
         {
+            TeximpNet.Unmanaged.NvTextureToolsLibrary library = TeximpNet.Unmanaged.NvTextureToolsLibrary.Instance;
+            library.LoadLibrary("nvtt.dll");
+
             BitmapData bmpData = null;
             using (Bitmap bmp2 = new Bitmap("damageIndicator.png"))
             {
@@ -394,7 +413,7 @@ namespace RelhaxWPFConvert
             JToken objectt = JToken.Parse(JsonFromFile,settings);
 
             //output
-            string newJson = objectt.ToString(Formatting.Indented, null);
+            string newJson = objectt.ToString(Newtonsoft.Json.Formatting.Indented, null);
             //toString() will now allow for output of previous formatting
             File.WriteAllText("output.json", newJson);
         }
@@ -493,5 +512,180 @@ namespace RelhaxWPFConvert
             CustomHyperlink.Text = "another test";
         }
         #endregion
+
+        #region Image pan and zoom
+        private void ImageDisplay_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            
+        }
+        #endregion
+
+        private void ToggleDisableButton_Click(object sender, RoutedEventArgs e)
+        {
+            Control[] HighlightControls = new Control[]
+            {
+                HighlightCheckbox,
+                HighlightRadioButton,
+                HighlightTabControl,
+                HighlightTabItem1,
+                HighlightTabItem2,
+                HighlitCombobox,
+                HighlightTextButton1,
+                HighlightTextButton2,
+                HighlightTextButton3
+            };
+
+            FrameworkElement[] FrameworkControls = new FrameworkElement[]
+            {
+                TestContentPresenter
+            };
+
+            foreach(Control control in HighlightControls)
+            {
+                if (control.IsEnabled)
+                    control.IsEnabled = false;
+                else
+                    control.IsEnabled = true;
+            }
+
+            foreach(FrameworkElement element in FrameworkControls)
+            {
+                if (element.IsEnabled)
+                    element.IsEnabled = false;
+                else
+                    element.IsEnabled = true;
+            }
+        }
+
+        private void ToggleDarkUIButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (UISettings.ThemeDefault)
+            {
+                UISettings.ThemeDefault = false;
+                HighlightTestingTabItemGrid.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 50, 50, 50));
+                HighlightCheckbox.Background = new SolidColorBrush(Colors.Black);
+                HighlightRadioButton.Background = new SolidColorBrush(Colors.Black);
+                HighlightRadioButton2.Background = new SolidColorBrush(Colors.Black);
+            }
+            else
+            {
+                UISettings.ThemeDefault = true;
+                HighlightTestingTabItemGrid.Background = new SolidColorBrush(Colors.Transparent);
+                HighlightCheckbox.Background = new SolidColorBrush(Colors.Transparent);
+                HighlightRadioButton.Background = new SolidColorBrush(Colors.Transparent);
+                HighlightRadioButton2.Background = new SolidColorBrush(Colors.Transparent);
+            }
+            UISettings.ToggleUIBrushes();
+        }
+
+        #region Description Document Loading testing
+        private void FlowDocumentLoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            //https://stackoverflow.com/questions/2830987/convert-xaml-to-flowdocument-to-display-in-richtextbox-in-wpf
+            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.flowdocumentscrollviewer?view=netframework-4.8
+            //https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/flow-document-overview
+            FlowDocument document = XamlReader.Parse(File.ReadAllText("SampleDescriptionFlowDocument.txt")) as FlowDocument;
+            FlowDocumentViewer.Document = document;
+        }
+
+        private void WpfDocumentLoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            object document = XamlReader.Parse(File.ReadAllText("SampleDescriptionWPFDocument.txt"));
+            WpfDocumentViewer.Content = document;
+        }
+        #endregion
+
+        private void SetTaskbarProgress_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(TaskbarProgressSet.Text,out int result))
+            {
+                if (result > 0 && 100 > result)
+                {
+                    taskbarInstance.SetProgressState(TaskbarProgressBarState.Normal);
+                    taskbarInstance.SetProgressValue(result, 100);
+                }
+            }
+        }
+
+        private async void AutoUpdateWGClickIE_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(AutoUpdateWGURLTextboxIE.Text))
+                return;
+            AutoUpdateWGInfoIE.Text = "Getting info...";
+
+            bool browserLoaded = false;
+            IEBrowse.LoadCompleted += (sendahh, endArgs) =>
+            {
+                browserLoaded = true;
+            };
+
+            //https://stackoverflow.com/questions/1298255/how-do-i-suppress-script-errors-when-using-the-wpf-webbrowser-control
+            dynamic activeX = this.IEBrowse.GetType().InvokeMember("ActiveXInstance",
+                BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
+                null, this.IEBrowse, new object[] { });
+
+            activeX.Silent = true;
+
+            using (System.Windows.Forms.WebBrowser bro = new System.Windows.Forms.WebBrowser())
+                SetRegistryKey(System.Diagnostics.Process.GetCurrentProcess().ProcessName, bro.Version.Major);
+
+            IEBrowse.Navigate(AutoUpdateWGURLTextboxIE.Text);
+
+            while (!browserLoaded)
+                await Task.Delay(500);
+
+            var doc = IEBrowse.Document as mshtml.HTMLDocument;
+
+            string s = doc.body.outerHTML;
+
+            //http://blog.olussier.net/2010/03/30/easily-parse-html-documents-in-csharp/
+
+            HtmlDocument document = new HtmlDocument();
+            document.LoadHtml(s);
+            HtmlNode node = document.DocumentNode;
+            //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
+            HtmlNodeCollection clientVersionNode = node.SelectNodes(@"//div[contains(@class, 'ModDetails_label')]");
+            string version = string.Empty;
+            if (clientVersionNode != null)
+            {
+                HtmlNode nodeTest = clientVersionNode[3];
+                HtmlNode versionNode = nodeTest.ChildNodes[0].ChildNodes[1];
+                version = versionNode.InnerText;
+            }
+
+
+            HtmlNode downloadUrlNode = node.SelectSingleNode(@"//a[contains(@class, 'ModDetails_hidden')]");
+            string downloadURL = downloadUrlNode.Attributes["href"].Value;
+
+            AutoUpdateWGInfoIE.Text = string.Format("For client: {0}, download link: {1}", version, downloadURL);
+        }
+
+        private void SetRegistryKey(string exeName, int IEVersion)
+        {
+            //https://weblog.west-wind.com/posts/2011/May/21/Web-Browser-Control-Specifying-the-IE-Version#Using-the-X--UA--Compatible-HTML-Meta-Tag
+            //https://stackoverflow.com/questions/17922308/use-latest-version-of-internet-explorer-in-the-webbrowser-control
+
+            int registryToSet = 0;
+
+            if (IEVersion >= 11)
+                registryToSet = 11001;
+            else if (IEVersion == 10)
+                registryToSet = 10001;
+            else if (IEVersion == 9)
+                registryToSet = 9999;
+            else if (IEVersion == 8)
+                registryToSet = 8888;
+            else
+                registryToSet = 7000;
+
+            using (RegistryKey Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
+                RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (Key.GetValue(exeName + ".exe") == null)
+                    Key.SetValue(exeName + ".exe", registryToSet, RegistryValueKind.DWord);
+                else if (((int)Key.GetValue(exeName + ".exe")) != registryToSet)
+                    Key.SetValue(exeName + ".exe", registryToSet, RegistryValueKind.DWord);
+            }
+        }
     }
 }

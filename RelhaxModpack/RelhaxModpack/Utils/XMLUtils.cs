@@ -326,7 +326,7 @@ namespace RelhaxModpack
 #pragma warning disable CS0612
                     ParseDatabaseLegacy(DocumentToXDocument(modInfoDocument), globalDependencies, dependencies, logicalDependencies,
                         parsedCategoryList, true);
-#pragma warning enable CS0612
+#pragma warning restore CS0612
                     dependencies.AddRange(logicalDependencies);
                     return true;
             }
@@ -682,7 +682,7 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="xmlUnpack">The Xml unpack instructions object</param>
         /// <param name="unpackBuilder">The stringBuilder to log the generated files location for the install log</param>
-        public static void UnpackXmlFile(XmlUnpack xmlUnpack, StringBuilder unpackBuilder)
+        public static bool UnpackXmlFile(XmlUnpack xmlUnpack, StringBuilder unpackBuilder)
         {
             //log info for debugging if need be
             Logging.Info(xmlUnpack.DumpInfoToLog);
@@ -696,7 +696,7 @@ namespace RelhaxModpack
             if(File.Exists(destinationCompletePath))
             {
                 Logging.Info("Replacement file already exists, skipping");
-                return;
+                return true;
             }
 
             Utils.Unpack(xmlUnpack.Pkg, sourceCompletePath, destinationCompletePath);
@@ -707,10 +707,12 @@ namespace RelhaxModpack
             {
                 XmlBinaryHandler binaryHandler = new XmlBinaryHandler();
                 binaryHandler.UnpackXmlFile(destinationCompletePath);
+                return true;
             }
             catch (Exception xmlUnpackExceptino)
             {
                 Logging.Exception(xmlUnpackExceptino.ToString());
+                return false;
             }
         }
         #endregion
@@ -2384,7 +2386,7 @@ namespace RelhaxModpack
                     else
                         SaveDatabaseLegacy(Path.Combine(saveLocation, "modInfoAlpha.xml"), doc, globalDependencies, dependencies, parsedCatagoryList);
                     break;
-#pragma warning enable CS0612
+#pragma warning restore CS0612
                 case DatabaseXmlVersion.OnePointOne:
                     //in 1.1, saveLocation is a document path
                     if (Path.HasExtension(saveLocation))

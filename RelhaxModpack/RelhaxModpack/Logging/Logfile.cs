@@ -35,6 +35,8 @@ namespace RelhaxModpack
         /// </summary>
         private FileStream fileStream;
 
+        private object lockerObject = new object();
+
         /// <summary>
         /// Create an instance of the log file
         /// </summary>
@@ -130,8 +132,11 @@ namespace RelhaxModpack
             message += Environment.NewLine;
 
             //actually write message to log
-            fileStream.Write(Encoding.UTF8.GetBytes(message), 0, Encoding.UTF8.GetByteCount(message));
-            fileStream.Flush();
+            lock (lockerObject)
+            {
+                fileStream.Write(Encoding.UTF8.GetBytes(message), 0, Encoding.UTF8.GetByteCount(message));
+                fileStream.Flush();
+            }
         }
 
         #region IDisposable Support

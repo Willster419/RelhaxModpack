@@ -68,9 +68,9 @@ namespace RelhaxModpack
                     {
                         Path.Combine(AppStartupPath, "RelHaxLog.txt"),
                         Path.Combine(AppStartupPath, "RelHaxUserConfigs", "lastInstalledConfig.xml"),
+                        Path.Combine(AppStartupPath, "RelHaxSettings.xml"),
                         Path.Combine(TanksLocation, "logs", "installedRelhaxFiles.log"),
                         Path.Combine(TanksLocation, "logs", "uninstall.log"),
-                        Path.Combine(AppStartupPath, "RelHaxSettings.xml"),
                         Path.Combine(TanksLocation, "python.log"),
                         Path.Combine(TanksLocation, "xvm.log"),
                         Path.Combine(TanksLocation, "pmod.log")
@@ -131,11 +131,11 @@ namespace RelhaxModpack
             //attempt to locate the tanks directory
             if (ParentWindow.ManuallyFindTanks() == null)
             {
-                //ParentWindow.ToggleUIButtons(true);
                 return;
             }
             //parse all strings
             ParentWindow.tanksLocation = ParentWindow.tanksLocation.Substring(0, ParentWindow.tanksLocation.Length - 17);
+            ParentWindow.tanksLocation = ParentWindow.tanksLocation.Replace("\\win32", string.Empty).Replace("\\win64", string.Empty);
             TanksLocation = ParentWindow.tanksLocation;
             SelectedInstallation.Text = Translations.GetTranslatedString(SelectedInstallation.Name) + TanksLocation;
             Logging.Manager(string.Format("tanksLocation parsed as {0}", ParentWindow.tanksLocation));

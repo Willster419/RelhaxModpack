@@ -601,9 +601,9 @@ namespace RelhaxModpack
                         //using new attemp at an update method. Application now downloads a zip file of itself, rather than an exe. Maybe it will help antivirus issues
                         string modpackExeURL = null;
                         if(Settings.UseAlternateUpdateMethod)
-                            modpackExeURL = (Settings.BetaApplication || tempManagerVersionBeta) && !tempManagerVersionStable ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
+                            modpackExeURL = (Settings.BetaApplication || tempManagerVersionBeta) && !tempManagerVersionStable ? "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
                         else
-                            modpackExeURL = (Settings.BetaApplication || tempManagerVersionBeta) && !tempManagerVersionStable ? "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
+                            modpackExeURL = (Settings.BetaApplication || tempManagerVersionBeta) && !tempManagerVersionStable ? "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.exe" : "http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe";
                         updater.DownloadFileAsync(new Uri(modpackExeURL), newExeName);
                         Logging.Manager("New application download started, UseAlternateUpdateMethod=" + Settings.UseAlternateUpdateMethod);
                         currentModDownloading = "update ";
@@ -879,11 +879,17 @@ namespace RelhaxModpack
             // this searchlist is long, maybe 30-40 entries (system depended), but the best possibility to find a currently installed WoT game.
             foreach (string path in searchPathWoT)
             {
-                if (File.Exists(path))
+                string potentialResult = path;
+                //if it has win32 or win64, filter it out
+                if (potentialResult.Contains("win32") || potentialResult.Contains("win64"))
                 {
-                    Logging.Manager(string.Format("valid game path found: {0}", path));
+                    potentialResult = potentialResult.Replace("win32\\", string.Empty).Replace("win64\\", string.Empty);
+                }
+                if (File.Exists(potentialResult))
+                {
+                    Logging.Manager(string.Format("valid game path found: {0}", potentialResult));
                     // write the path to the central value holder
-                    tanksLocation = path;
+                    tanksLocation = potentialResult;
                     // return the path
                     return path;
                 }

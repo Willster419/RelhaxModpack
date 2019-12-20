@@ -12,6 +12,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
 using Path = System.IO.Path;
+using Microsoft.WindowsAPICodePack;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace RelhaxModpack.Windows
 {
@@ -34,7 +36,7 @@ namespace RelhaxModpack.Windows
         private TreeViewItem ItemToExpand;
         private Point BeforeDragDropPoint;
         private bool IsScrolling = false;
-        private bool AlreadyLoggedMouseMove = false;
+        //private bool AlreadyLoggedMouseMove = false;
         private bool AlreadyLoggedScroll = false;
         private bool Init = true;
         private object SelectedItem = null;
@@ -154,12 +156,15 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void OnApplicationClose(object sender, EventArgs e)
+        private void RelhaxWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (UnsavedChanges)
             {
                 if (MessageBox.Show("You have unsaved changes, return to editor?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    e.Cancel = true;
                     return;
+                }
             }
             if (!Logging.IsLogDisposed(Logfiles.Editor))
             {
@@ -337,6 +342,7 @@ namespace RelhaxModpack.Windows
             FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
             SaveDatabaseLegacySetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy ? true : false;
             SaveDatabaseOnePointOneSetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.OnePointOne ? true : false;
+            SelectAutoUpdateWorkDirectoryTextbox.Text = EditorSettings.AutoUpdaterWorkDirectory;
         }
         #endregion
 
@@ -499,6 +505,7 @@ namespace RelhaxModpack.Windows
                 PackageEndAddressDisplay.IsEnabled = true;
                 PackageDevURLDisplay.IsEnabled = true;
                 PackageVersionDisplay.IsEnabled = true;
+                PackageAuthorDisplay.IsEnabled = true;
                 PackageInstallGroupDisplay.IsEnabled = true;
                 PackagePatchGroupDisplay.IsEnabled = true;
                 PackageLastUpdatedDisplay.IsEnabled = true;
@@ -676,6 +683,7 @@ namespace RelhaxModpack.Windows
             PackageZipFileDisplay.Text = package.ZipFile;
             PackageEndAddressDisplay.Text = package.EndAddress;
             PackageVersionDisplay.Text = package.Version;
+            PackageAuthorDisplay.Text = package.Author;
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
             foreach (int i in PackageInstallGroupDisplay.Items)
             {
@@ -927,6 +935,8 @@ namespace RelhaxModpack.Windows
                 return true;
             if (!package.Version.Equals(PackageVersionDisplay.Text))
                 return true;
+            if (!package.Author.Equals(PackageAuthorDisplay.Text))
+                return true;
             if (!package.InstallGroup.Equals((int)PackageInstallGroupDisplay.SelectedItem))
                 return true;
             if (!package.PatchGroup.Equals((int)PackagePatchGroupDisplay.SelectedItem))
@@ -1029,6 +1039,7 @@ namespace RelhaxModpack.Windows
             //devURL is separated by newlines for array list, so it's not necessary to escape
             package.DevURL = Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
             package.Version = PackageVersionDisplay.Text;
+            package.Author = PackageAuthorDisplay.Text;
             package.InstallGroup = (int)PackageInstallGroupDisplay.SelectedItem;
             package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
@@ -1413,7 +1424,7 @@ namespace RelhaxModpack.Windows
             }
             else if (e.LeftButton == MouseButtonState.Pressed)
             {
-                AlreadyLoggedMouseMove = true;
+                //AlreadyLoggedMouseMove = true;
                 //yeah...that got annoying real quick
                 //Logging.Editor("MouseMove DragDrop movement not accepted, leftButton={0}, isDragConfirmed={1}, IsScrolling={2}", LogLevel.Info, e.LeftButton.ToString(), isDragConfirmed.ToString(), IsScrolling.ToString());
             }
@@ -1453,7 +1464,7 @@ namespace RelhaxModpack.Windows
             if (e.LeftButton == MouseButtonState.Released)
             {
                 IsScrolling = false;
-                AlreadyLoggedMouseMove = false;
+                //AlreadyLoggedMouseMove = false;
                 AlreadyLoggedScroll = false;
                 if (DragDropTest.Visibility == Visibility.Visible)
                     DragDropTest.Visibility = Visibility.Hidden;
@@ -2718,6 +2729,36 @@ namespace RelhaxModpack.Windows
                 EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
             else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
                 EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
+        }
+
+        private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
+            {
+                Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
+                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory
+            };
+            autoUpdatePackageWindow.ShowDialog();
+        }
+
+        private void SelectAutoUpdateWorkDirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                Multiselect = false,
+                Title = "Select folder"
+            };
+            if(openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                SelectAutoUpdateWorkDirectoryTextbox.Text = openFolderDialog.FileName;
+            }
+        }
+
+        private void SelectAutoUpdateWorkDirectoryTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
+            LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
         }
     }
 }

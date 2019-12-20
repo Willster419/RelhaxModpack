@@ -19,6 +19,9 @@ using System.Timers;
 using System.Threading;
 using Timer = System.Timers.Timer;
 using Microsoft.Win32;
+using System.Text;
+using RelhaxModpack.InstallerComponents;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace RelhaxModpack
 {
@@ -31,28 +34,17 @@ namespace RelhaxModpack
         private System.Windows.Forms.NotifyIcon RelhaxIcon;
         private Stopwatch stopwatch = new Stopwatch();
         private ModSelectionList modSelectionList;
-        private Stopwatch downloadTimer = new Stopwatch();
-        private double last_download_time;
-        private double current_download_time;
-        private long last_bytes_downloaded;
-        private long current_bytes_downloaded;
         private RelhaxProgress downloadProgress = null;
         private AdvancedProgress AdvancedProgressWindow;
-        bool closingFromFailure = false;
-        NewsViewer newsViewer = null;
+        private bool closingFromFailure = false;
+        private NewsViewer newsViewer = null;
         private WebClient client = null;
-        /// <summary>
-        /// The original width and height of the application before applying scaling
-        /// </summary>
-        public double OriginalWidth, OriginalHeight = 0;
+        private VersionInfo versionInfo = null;
         private Timer autoInstallTimer = new Timer();
         private bool databaseUpdateAvailableFromAutoSync = false;
         private bool autoInstallTimerRegistered = false;
         private CancellationTokenSource cancellationTokenSource;
-        private InstallerComponents.InstallEngine installEngine;
-        private bool disableTriggersBackupVal = true;
-        private long totalSize = 0;
-        private string[] backupFiles = null;
+        private InstallEngine installEngine;
         private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
         {
             AddExtension = true,
@@ -64,9 +56,38 @@ namespace RelhaxModpack
         private DatabaseVersions databaseVersion;
         private bool loading = false;
         private string oldModpackTitle = string.Empty;
-
         //temp list of components not to toggle
-        Control[] tempDisabledBlacklist = null;
+        Control[] disabledBlacklist = null;
+        Control[] enabledBlacklist = null;
+        //backup components
+        private bool disableTriggersBackupVal = true;
+        private long backupFolderTotalSize = 0;
+        private string[] backupFiles = null;
+        //download ETA variables
+        //measures elapsed time since download started
+        private Stopwatch downloadTimer;
+        //timer to fire every second to update the display download rate
+        private Timer downloadDisplayTimer;
+        //for download rate display, last internal's bytes downloaded
+        private long lastBytesDownloaded;
+        //for both rates, the current bytes downloaded
+        private long currentBytesDownloaded;
+        //for eta rate, the total byptes needed to download
+        private long totalBytesToDownload;
+        //download rate over the last second
+        private double downloadRateDisplay;
+        //remaining time
+        private long remainingMilliseconds;
+        //reference for downloading the package to keep track of the async download
+        private DatabasePackage downloadingPackage = null;
+        private TaskbarManager taskbarInstance = null;
+        private TaskbarProgressBarState taskbarState = TaskbarProgressBarState.NoProgress;
+        private int taskbarValue = 0;
+
+        /// <summary>
+        /// The original width and height of the application before applying scaling
+        /// </summary>
+        public double OriginalWidth, OriginalHeight = 0;
 
         /// <summary>
         /// Creates the instance of the MainWindow class
@@ -75,14 +96,25 @@ namespace RelhaxModpack
         {
             InitializeComponent();
             WindowState = WindowState.Minimized;
-            tempDisabledBlacklist = new Control[]
+            disabledBlacklist = new Control[]
             {
-                ThemeDefault,
-                ThemeDark,
-                ThemeCustom,
-                UseBetaApplicationCB,
                 DisableTriggersCB,
                 VerboseLoggingCB
+            };
+            enabledBlacklist = new Control[]
+            {
+                ViewNewsButton,
+                Forms_ENG_EUButton,
+                Forms_GER_EUButton,
+                Forms_ENG_NAButton,
+                FacebookButton,
+                TwitterButton,
+                DiscordButton,
+                HomepageButton,
+                FindBugAddModButton,
+                SendEmailButton,
+                DonateButton,
+                LanguagesSelector
             };
         }
 
@@ -94,6 +126,13 @@ namespace RelhaxModpack
             //set loading flag
             loading = true;
 
+            //get taskbar instance for color change if supported
+            if (TaskbarManager.IsPlatformSupported && TaskbarManager.Instance != null)
+            {
+                taskbarInstance = TaskbarManager.Instance;
+                taskbarInstance.SetProgressState(taskbarState);
+            }
+
             //delete the updater scripts if they exist
 #pragma warning disable CS0618
             foreach (string s in new string[] { Settings.RelicBatchUpdateScript, Settings.RelicBatchUpdateScriptOld })
@@ -104,7 +143,7 @@ namespace RelhaxModpack
                     File.Delete(s);
                 }
             }
-#pragma warning enable CS0618
+#pragma warning restore CS0618
 
             //get size of original width and height of window
             OriginalHeight = Height;
@@ -113,6 +152,7 @@ namespace RelhaxModpack
             //load the progress report window
             ProgressIndicator progressIndicator = new ProgressIndicator()
             {
+                LocalizeWindow = false,
                 Message = "Loading...",
                 ProgressMinimum = 0,
                 ProgressMaximum = 4
@@ -121,42 +161,72 @@ namespace RelhaxModpack
             progressIndicator.UpdateProgress(0);
             Utils.AllowUIToUpdate();
 
-            //load translations into combobox
+            //load the supported translations into combobox
             LanguagesSelector.Items.Clear();
             LanguagesSelector.Items.Add(Translations.LanguageEnglish);
             LanguagesSelector.Items.Add(Translations.LanguageFrench);
             LanguagesSelector.Items.Add(Translations.LanguageGerman);
             LanguagesSelector.Items.Add(Translations.LanguagePolish);
             LanguagesSelector.Items.Add(Translations.LanguageRussian);
+            LanguagesSelector.Items.Add(Translations.LanguageSpanish);
 
             //load translation hashes and set default language
             Translations.LoadTranslations();
             Translations.SetLanguage(Languages.English);
+
+            //disconnect event handler before application
+            LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
             LanguagesSelector.SelectedIndex = 0;
-
-            //apply translation settings after loading so it's at least in English
-            Translations.LocalizeWindow(this, true);
-            ApplyCustomUILocalizations(false);
-
-            //create tray icons and menus
-            CreateTray();
+            LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
 
             //load and apply modpack settings
             Utils.AllowUIToUpdate();
             Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null);
-            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
-            ApplySettingsToUI();
 
+            //apply translation settings
+            Translations.SetLanguage(ModpackSettings.Language);
+            Translations.LocalizeWindow(this, true);
+            Translations.LocalizeWindow(progressIndicator, false);
+            ApplyCustomUILocalizations(false);
+
+            //create tray icons and menus
+            CreateTray();
 
             //apply forced debugging settings
 #warning forced debugging settings is active
             ModpackSettings.DisableTriggers = true;
             ModpackSettings.VerboseLogging = true;
 
+            //load AutoSyncFrequencyComboBox with translated versions
+            //<System:String>Minutes</System:String>
+            //<System:String> Hours </System:String >
+            //<System:String> Days </System:String >
+            AutoSyncFrequencyComboBox.Items.Clear();
+            AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("minutes"));
+            AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("hours"));
+            AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("days"));
+
             //apply settings to UI elements
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
-            UISettings.LoadSettings(true);
-            UISettings.ApplyUIColorSettings(this);
+            if(ModpackSettings.ApplicationTheme == UIThemes.Custom)
+            {
+                if (!UISettings.LoadSettingsFile())
+                {
+                    Logging.Warning("failed to load custom UI settings file, make sure file is called{0} and the xml syntax is correct", Settings.UISettingsColorFile);
+                    ModpackSettings.ApplicationTheme = UIThemes.Default;
+                }
+                else
+                {
+                    Logging.Info("{0} was successfully load", Settings.UISettingsColorFile);
+                }
+            }
+
+            //apply custom UI themeing (only need to explicitly call this for MainWindow)
+            UISettings.ApplyCustomStyles(this);
+
+            //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
+            //note: in wpf, the enabled trigger will occur in the loading event, so this will launch the checked events
+            ApplySettingsToUI();
 
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
@@ -192,8 +262,7 @@ namespace RelhaxModpack
             Logging.Info("Structure verified");
 
             //set the application appData directory
-            Settings.AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "Wargaming.net", "WorldOfTanks");
+            Settings.AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
             if (!Directory.Exists(Settings.AppDataFolder))
             {
                 Logging.WriteToLog(string.Format("AppDataFolder does not exist at {0}, creating it", Settings.AppDataFolder),
@@ -204,6 +273,14 @@ namespace RelhaxModpack
             //check for updates to database and application
             progressIndicator.UpdateProgress(4, Translations.GetTranslatedString("checkForUpdates"));
             bool isApplicationUpToDate = await CheckForApplicationUpdates();
+            if(!isApplicationUpToDate && versionInfo != null && !versionInfo.ConfirmUpdate)
+            {
+                Logging.Info("application is not up to date and user said don't update. we're done here.");
+                Close();
+                //https://stackoverflow.com/questions/57654546/taskcanceledexception-after-closing-window
+                Environment.Exit(0);
+                return;
+            }
             CheckForDatabaseUpdates(false);
 
             //set the file count and size for the backups folder
@@ -213,42 +290,51 @@ namespace RelhaxModpack
             }
             else
             {
-                Logging.Debug("starting async task of getting file sizes of backups");
-                Task.Run(() =>
-                {
-                    totalSize = 0;
-                    backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
-                    foreach (string file in backupFiles)
-                    {
-                        totalSize += Utils.GetFilesize(file);
-                    }
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)totalSize, 1, true));
-                    });
-                    Logging.Debug("completed async task of getting file sizes of backups");
-                });
+                GetBackupFilesizesAsync(false);
             }
 
             Logging.Debug("checking if application is up to date");
             //if the application is up to date, then check if we need to display the welcome message to the user
             if (isApplicationUpToDate && !closingFromFailure)
             {
-                Logging.Debug("application is up to date, checking to display welcome message");
+                Logging.Info("application is up to date, checking to display welcome message");
 
                 //run checks to see if it's the first time loading the application
                 Settings.FirstLoad = !File.Exists(Settings.ModpackSettingsFileName) && !File.Exists(Settings.OldModpackSettingsFilename);
                 Settings.FirstLoadToV2 = !File.Exists(Settings.ModpackSettingsFileName) && File.Exists(Settings.OldModpackSettingsFilename);
-                Logging.Debug("FirstLoading = {0}, FirstLoadingV2 = {1}", Settings.FirstLoad.ToString(), Settings.FirstLoadToV2.ToString());
+                Logging.Info("FirstLoading = {0}, FirstLoadingV2 = {1}", Settings.FirstLoad.ToString(), Settings.FirstLoadToV2.ToString());
 
                 if (Settings.FirstLoad || Settings.FirstLoadToV2)
                 {
+                    //display the selection of language if it's the first time loading (not an upgrade)
+                    if(Settings.FirstLoad && !Settings.FirstLoadToV2)
+                    {
+                        FirstLoadSelectLanguage firstLoadSelectLanguage = new FirstLoadSelectLanguage();
+                        firstLoadSelectLanguage.ShowDialog();
+                        if(!firstLoadSelectLanguage.Continue)
+                        {
+                            Logging.Info("user did not select language, closing");
+                            Application.Current.Shutdown();
+                            closingFromFailure = true;
+                            return;
+                        }
+                        LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
+                        LanguagesSelector.SelectedItem = Translations.GetLanguageNativeName(ModpackSettings.Language);
+                        LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
+                        Translations.LocalizeWindow(this, true);
+                        AutoSyncFrequencyComboBox.Items.Clear();
+                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("minutes"));
+                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("hours"));
+                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("days"));
+                        ApplyCustomUILocalizations(false);
+                    }
+
                     //display the welcome window and make sure the user agrees to it
                     FirstLoadAcknowledgments firstLoadAknowledgements = new FirstLoadAcknowledgments();
                     firstLoadAknowledgements.ShowDialog();
                     if (!firstLoadAknowledgements.UserAgreed)
                     {
-                        Logging.Debug("user did not agree to application load conditions, closing");
+                        Logging.Info("user did not agree to application load conditions, closing");
                         Application.Current.Shutdown();
                         closingFromFailure = true;
                         return;
@@ -270,7 +356,7 @@ namespace RelhaxModpack
                         MoveUpgradeFolder(Settings.RelhaxUserModsFolderPathOld, Settings.RelhaxUserModsFolderPath);
                         MoveUpgradeFolder(Settings.RelhaxTempFolderPathOld, Settings.RelhaxTempFolderPath);
                         MoveUpgradeFolder(Settings.RelhaxLibrariesFolderPathOld, Settings.RelhaxLibrariesFolderPath);
-#pragma warning enable CS0612
+#pragma warning restore CS0612
 
                         //process xml settings file
                         //delete the new one, move the old one, reload settings
@@ -293,14 +379,6 @@ namespace RelhaxModpack
                         else
                             Logging.Info("skipped (old log does not exist)");
                         Logging.Info("upgrade to V2 complete, welcome to the future!");
-                    }
-
-                    //else process settings for first time load
-                    else if (Settings.FirstLoad)
-                    {
-                        Logging.Info("running processes for first time loading");
-                        Translations.SetLanguageOnFirstLoad();
-                        ApplySettingsToUI();
                     }
                 }
             }
@@ -373,6 +451,29 @@ namespace RelhaxModpack
                         InstallModpackButton_Click(null, null);
                     }
                 }
+                //loading in normal mode, check if atlas image processing libraries can be loaded
+                else if(!ModpackSettings.AtlasLibrariesCanBeLoaded)
+                {
+                    Logging.Info("Atlas libraries never recorded being loaded, testing now via async task");
+                    Task.Run(async () =>
+                    {
+                        await Task.Delay(1000);
+
+                        ModpackSettings.AtlasLibrariesCanBeLoaded = Utils.TestLoadAtlasLibraries(true);
+                        //if after test, it fails, inform the user
+                        if (!ModpackSettings.AtlasLibrariesCanBeLoaded)
+                        {
+                            if (MessageBox.Show(string.Format("{0}\n{1}", Translations.GetTranslatedString("missingMSVCPLibraries"), Translations.GetTranslatedString("openLinkToMSVCP")),
+                                Translations.GetTranslatedString("missingMSVCPLibrariesHeader"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                            {
+                                if (!Utils.StartProcess(Utils.MSVCPLink))
+                                {
+                                    Logging.Error("failed to open url to MSVCP: {0}", Utils.MSVCPLink);
+                                }
+                            }
+                        }
+                    });
+                }
 
                 //unset loading flag
                 loading = false;
@@ -381,52 +482,58 @@ namespace RelhaxModpack
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (ModpackSettings.MinimizeToSystemTray)
+            {
+                Logging.Debug("minimizing to system tray");
+                Hide();
+                e.Cancel = true;
+            }
+            else
+            {
+                CloseApplication();
+            }
+        }
+
+        private void CloseApplication()
+        {
             //dispose of the timer if it's not already disposed
             if (autoInstallTimer != null)
             {
                 autoInstallTimer.Dispose();
                 autoInstallTimer = null;
             }
-            if (ModpackSettings.MinimizeToSystemTray)
+
+            if (!Logging.IsLogDisposed(Logfiles.Application))
             {
-                Logging.Debug("minimizing to system try");
-                Hide();
-                e.Cancel = true;
-            }
-            else
-            {
-                if (!Logging.IsLogDisposed(Logfiles.Application))
+                if (Logging.IsLogOpen(Logfiles.Application))
+                    Logging.Info("Saving settings");
+                if (!closingFromFailure)
+                    if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
+                        if (Logging.IsLogOpen(Logfiles.Application))
+                            Logging.Info("Settings saved");
+                if (Logging.IsLogOpen(Logfiles.Application))
+                    Logging.Info("Disposing tray");
+                if (RelhaxIcon != null)
+                {
+                    RelhaxIcon.Dispose();
+                    RelhaxIcon = null;
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        Logging.Info("Tray disposed");
+                }
+                else
                 {
                     if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Saving settings");
-                    if (!closingFromFailure)
-                        if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
-                            if (Logging.IsLogOpen(Logfiles.Application))
-                                Logging.Info("Settings saved");
-                    if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Disposing tray");
-                    if (RelhaxIcon != null)
-                    {
-                        RelhaxIcon.Dispose();
-                        RelhaxIcon = null;
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.Info("Tray disposed");
-                    }
-                    else
-                    {
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.Info("Tray already null");
-                    }
+                        Logging.Info("Tray already null");
                 }
-                Application.Current.Shutdown(0);
             }
+            Application.Current.Shutdown(0);
         }
 
         private void ProcessTitle()
         {
             if(string.IsNullOrEmpty(oldModpackTitle))
             {
-                Logging.Info("oldModpackTitle is empty, don't update text!");
+                Logging.Info("[ProcessTitle()] oldModpackTitle is empty, don't update text!");
                 return;
             }
             //apply the title change for beta application and beta database
@@ -482,8 +589,7 @@ namespace RelhaxModpack
 
         private void OnMenuItemCloseClick(object sender, EventArgs e)
         {
-            Application.Current.Shutdown();
-            Close();
+            CloseApplication();
         }
 
         private void OnMenuClickChekUpdates(object sender, EventArgs e)
@@ -642,6 +748,22 @@ namespace RelhaxModpack
             //beta->beta (update check)
             bool outOfDate = false;
 
+            //check if old settings file exists and if it was the beta channel
+            if(File.Exists(Settings.OldModpackSettingsFilename))
+            {
+                Logging.Debug("old settings file exists, load it and see if was beta distro");
+                string betaDistro = XmlUtils.GetXmlStringFromXPath(Settings.OldModpackSettingsFilename, @"//settings/BetaApplication");
+                if(bool.TryParse(betaDistro,out bool result) && result)
+                {
+                    Logging.Debug("application was beta, setting distro to beta");
+                    ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
+                }
+                else
+                {
+                    Logging.Debug("application was not beta: '{0}'", betaDistro);
+                }
+            }
+
             //make a copy of the current application version and set it to stable if (fake) alpha
             ApplicationVersions version = Settings.ApplicationVersion;
 
@@ -688,7 +810,7 @@ namespace RelhaxModpack
             }
 
             Logging.Info("Application is out of date, display update window");
-            VersionInfo versionInfo = new VersionInfo();
+            versionInfo = new VersionInfo();
             versionInfo.ShowDialog();
             if (versionInfo.ConfirmUpdate)
             {
@@ -734,7 +856,6 @@ namespace RelhaxModpack
             else
             {
                 Logging.Info("User pressed x or said no");
-                Application.Current.Shutdown();
                 return false;
             }
             return false;
@@ -893,7 +1014,14 @@ namespace RelhaxModpack
 
                 //parse WoT root directory
                 Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
-                if (!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
+                string searchResult = string.Empty;
+                //only run the code if the user wants to auto find the WoT directory (which is default)
+                if(!ModpackSettings.ForceManuel)
+                {
+                    searchResult = Utils.AutoFindWoTDirectory();
+                }
+
+                if (string.IsNullOrEmpty(searchResult) || ModpackSettings.ForceManuel)
                 {
                     Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
                     OpenFileDialog manualWoTFind = new OpenFileDialog()
@@ -903,12 +1031,13 @@ namespace RelhaxModpack
                         CheckFileExists = true,
                         CheckPathExists = true,
                         Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                        Title = Translations.GetTranslatedString("selectWOTExecutable"),
                         Multiselect = false,
                         ValidateNames = true
                     };
                     if ((bool)manualWoTFind.ShowDialog())
                     {
-                        Settings.WoTDirectory = manualWoTFind.FileName;
+                        searchResult = manualWoTFind.FileName;
                     }
                     else
                     {
@@ -917,8 +1046,33 @@ namespace RelhaxModpack
                         return;
                     }
                 }
-                Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
+
+                //check to make sure it is the root application, not the win32/64 versions
+                if(searchResult.Contains(Settings.WoT32bitFolderWithSlash) || searchResult.Contains(Settings.WoT64bitFolderWithSlash))
+                {
+                    searchResult = searchResult.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
+                }
+
+                //check to make sure a valid game path has been returned and the setting file exists in that directory
+                if (string.IsNullOrEmpty(searchResult) || (!File.Exists(searchResult)))
+                {
+                    Logging.Error("Failed to detect WoT exe from path {0}", searchResult);
+                    MessageBox.Show(Translations.GetTranslatedString("failedToFindWoTExe"));
+                    ToggleUIButtons(true);
+                    return;
+                }
+
+                Settings.WoTDirectory = Path.GetDirectoryName(searchResult);
                 Logging.Info("Wot root directory parsed as " + Settings.WoTDirectory);
+
+                string versionXml = Path.Combine(Settings.WoTDirectory, Settings.WoTVersionXml);
+                if (!File.Exists(versionXml))
+                {
+                    Logging.Error("Failed to find WoT version.xml file or the file does not exist! '{0}", versionXml);
+                    MessageBox.Show(Translations.GetTranslatedString("failedToFindWoTVersionXml"));
+                    ToggleUIButtons(true);
+                    return;
+                }
 
                 //check to make sure the application is not in the same directory as the WoT install
                 if (Settings.WoTDirectory.Equals(Settings.ApplicationStartupPath))
@@ -945,11 +1099,13 @@ namespace RelhaxModpack
 
                 //get the version of tanks in the format
                 //of the res_mods version folder i.e. 0.9.17.0.3
-                string versionTemp = XmlUtils.GetXmlStringFromXPath(Path.Combine(Settings.WoTDirectory, "version.xml"), "//version.xml/version");
-                Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
+                string versionTemp = XmlUtils.GetXmlStringFromXPath(versionXml, Settings.WoTVersionXmlXpath);
+                Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2).Trim();
+                Logging.Info("detected client version: {0}", Settings.WoTClientVersion);
 
                 //determine if current detected version of the game is supported
                 //only if application distribution is not alpha and database distribution is not test
+                //the warning will therefore also happen in beta, but not take effect
                 if (databaseVersion != DatabaseVersions.Test)
                 {
                     //make an array of all the supported versions
@@ -961,14 +1117,11 @@ namespace RelhaxModpack
                         ToggleUIButtons(true);
                         return;
                     }
-                    XmlDocument doc = new XmlDocument();
-                    try
+
+                    XmlDocument doc = XmlUtils.LoadXmlDocument(supportedClientsXML, XmlLoadType.FromString);
+                    if(doc == null)
                     {
-                        doc.LoadXml(supportedClientsXML);
-                    }
-                    catch (XmlException ex)
-                    {
-                        Logging.Info("Failed to parse supported_clients.xml to xml\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
+                        Logging.Error("Failed to parse supported_clients.xml ");
                         MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " supported_clients.xml");
                         ToggleUIButtons(true);
                         return;
@@ -979,60 +1132,72 @@ namespace RelhaxModpack
                     string[] supportedVersionsString = new string[supportedVersionsXML.Count];
                     for (int i = 0; i < supportedVersionsXML.Count; i++)
                     {
-                        supportedVersionsString[i] = supportedVersionsXML[i].InnerText;
+                        supportedVersionsString[i] = supportedVersionsXML[i].InnerText.Trim();
+
                         //see if this supported client version is the same as what was parsed to be the current client version
-                        if (supportedVersionsXML[i].InnerText.Equals(Settings.WoTClientVersion))
+                        if (supportedVersionsString[i].Equals(Settings.WoTClientVersion))
                         {
-                            //WoTClientVersions is already set, set the online folder
+                            //set the online folder
                             Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[i].Attributes["folder"].Value;
                         }
-
                     }
 
                     //check to see if array of supported clients has the detected WoT client version
-                    if (Settings.ApplicationVersion != ApplicationVersions.Alpha && !supportedVersionsString.Contains(Settings.WoTClientVersion))
-                    {
-                        //log and inform the user
-                        Logging.WriteToLog("Detected client version is " + Settings.WoTClientVersion + ", not supported",
-                            Logfiles.Application, LogLevel.Warning);
-                        Logging.Info("Supported versions are: " + string.Join(", ", supportedVersionsString));
-                        MessageBox.Show(string.Format("{0}: {1}\n{2}\n\n{3}:\n{4}", Translations.GetTranslatedString("detectedClientVersion"),
-                            Settings.WoTClientVersion, Translations.GetTranslatedString("supportNotGuarnteed"),
-                            Translations.GetTranslatedString("supportedClientVersions"), string.Join("\n", supportedVersionsString)),
-                            Translations.GetTranslatedString("critical"));
-                        //set the version and online folder to the last ones
-                        Settings.WoTClientVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].InnerText;
-                        Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
-                    }
-
-                    //if the version does not match, then we need to set the online download version (even if we are in test mode)
+                    //if the version does not match, then we need to set the online folder download version
                     if (!supportedVersionsString.Contains(Settings.WoTClientVersion))
                     {
                         Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
+
+                        //if it's not alpha, show the warning messages
+                        if (Settings.ApplicationVersion != ApplicationVersions.Alpha)
+                        {
+                            //log and inform the user
+                            Logging.Warning("current client version {0} does not exist in list: {1}", Settings.WoTClientVersion, string.Join(", ", supportedVersionsString));
+                            MessageBox.Show(string.Format("{0}: {1}\n{2} {3}\n\n{4}:\n{5}",
+                                Translations.GetTranslatedString("detectedClientVersion"),//0
+                                Settings.WoTClientVersion,//1
+                                Translations.GetTranslatedString("supportNotGuarnteed"),//2
+                                Translations.GetTranslatedString("couldTryBeta"),//3
+                                Translations.GetTranslatedString("supportedClientVersions"),//4
+                                string.Join("\n", supportedVersionsString)),//5
+                                Translations.GetTranslatedString("critical"));//header
+                        }
                     }
 
                     //if the user wants to, check if the database has actually changed
-                    if (ModpackSettings.NotifyIfSameDatabase)
+                    if (ModpackSettings.NotifyIfSameDatabase && ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Stable)
                     {
+                        Logging.Info("NotifyIfSameDatabase is true and databaseDistroVersion is stable, checking if last installed database is the same as current");
                         //get the install log for last installed database version
-                        string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", "installedRelhaxFiles.log");
+                        string installedfilesLogPath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename);
                         if (File.Exists(installedfilesLogPath))
                         {
                             //use index 0 of array, index 18 of string array
-                            string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0].Substring(18).Trim();
+                            string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0];
+                            Logging.Debug("lastInstalledDatabaseVersion (pre trim): {0}", lastInstalledDatabaseVersion);
+                            if(!string.IsNullOrWhiteSpace(lastInstalledDatabaseVersion) && lastInstalledDatabaseVersion.Length >=18)
+                                lastInstalledDatabaseVersion = lastInstalledDatabaseVersion.Substring(18).Trim();
+                            Logging.Debug("lastInstalledDatabaseVersion (post trim): {0}", lastInstalledDatabaseVersion);
                             if (Settings.DatabaseVersion.Equals(lastInstalledDatabaseVersion))
                             {
                                 if (MessageBox.Show(Translations.GetTranslatedString("DatabaseVersionsSameBody"), Translations.GetTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
                                 {
+                                    Logging.Info("User selected to not install");
                                     ToggleUIButtons(true);
                                     return;
                                 }
+                                else
+                                    Logging.Info("User selected to install anyways");
                             }
                         }
                         else
                         {
                             Logging.Warning("installedRelhaxFiles.log does not exist, cannot notify if same database");
                         }
+                    }
+                    else if(ModpackSettings.NotifyIfSameDatabase)
+                    {
+                        Logging.Warning("NotifyIfSameDatabase is selected but invalid database distribution! {0}", ModpackSettings.DatabaseDistroVersion.ToString());
                     }
                 }
             }
@@ -1043,7 +1208,7 @@ namespace RelhaxModpack
                 //set the owner
                 //https://stackoverflow.com/questions/21756542/why-is-window-showdialog-not-blocking-in-taskscheduler-task
                 //https://docs.microsoft.com/en-us/dotnet/api/system.windows.window.owner?view=netframework-4.8
-                Owner = Window.GetWindow(this)
+                Owner = GetWindow(this)
             };
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;
@@ -1078,18 +1243,21 @@ namespace RelhaxModpack
             stopwatch.Restart();
 
             //check if wot is running
-            AskCloseWoT askCloseWoT = null;
             while (Utils.IsProcessRunning(Settings.WoTProcessName, Settings.WoTDirectory))
             {
                 //create window to determine if cancel, wait, kill TODO
-                if (askCloseWoT == null)
-                    askCloseWoT = new AskCloseWoT();
+                AskCloseWoT askCloseWoT = new AskCloseWoT();
                 //a positive result means that we are going to retry the loop
                 //it could mean the user hit retry (close true), or hit force close (succeeded, and try again anyways)
-                if (!(bool)askCloseWoT.ShowDialog())
+                askCloseWoT.ShowDialog();
+                if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.CancelInstallation)
                 {
                     ToggleUIButtons(true);
                     return;
+                }
+                else if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.ForceClosed)
+                {
+                    break;
                 }
                 Thread.Sleep(100);
             }
@@ -1167,7 +1335,7 @@ namespace RelhaxModpack
             //and check if we need to actually install anything
             if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
             {
-                Logging.Info("no packages selected to install...");
+                Logging.Info("no packages selected to install, return");
                 ResetUI();
                 ToggleUIButtons(true);
                 return;
@@ -1200,6 +1368,10 @@ namespace RelhaxModpack
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
                 bool downlaodTaskComplete = await ProcessDownloads(packagesToDownload);
+                //stop and end the timer
+                downloadDisplayTimer.Stop();
+                downloadDisplayTimer.Dispose();
+                downloadDisplayTimer = null;
                 if (!downlaodTaskComplete)
                 {
                     Logging.Info("download task was canceled, canceling installation");
@@ -1224,6 +1396,8 @@ namespace RelhaxModpack
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
             }
+            else if (packagesToDownload.Count == 0)
+                Logging.Info("no packages to download");
 
             //now let's start the install procedures
             //like if we need to make the advanced install window
@@ -1233,17 +1407,21 @@ namespace RelhaxModpack
             if (ModpackSettings.AdvancedInstalProgress)
             {
                 Logging.Debug("advancedInstallProgress is true, making window and populating with reporters");
-                AdvancedProgressWindow = new AdvancedProgress();
+                AdvancedProgressWindow = new AdvancedProgress()
+                {
+                    ShouldUserInstallBeCalled = userModsToInstall.Count > 0
+                };
                 //build the number of InstallTaskReporter objects based on what we are doing
                 //if we are making a backup of the mods then make a reporter for it
                 if (ModpackSettings.BackupModFolder)
                 {
                     Logging.Debug("adding backupModFolder reporter");
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.BackupModsReporter))
                     {
                         IsSubProgressActive = true,
                         TaskTitle = Translations.GetTranslatedString("AdvancedInstallBackupMods"),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.BackupModsReporter = reporter;
@@ -1254,10 +1432,11 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("adding userData/clearCache/deleteLogs reporter: SaveUserData={0}, ClearCache={1}, DeleteLogs={2}",
                         ModpackSettings.SaveUserData, ModpackSettings.ClearCache, ModpackSettings.DeleteLogs);
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.BackupDataClearCacheClearLogsReporter))
                     {
                         IsSubProgressActive = false,
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.BackupDataClearCacheClearLogsReporter = reporter;
@@ -1267,11 +1446,12 @@ namespace RelhaxModpack
                 if (ModpackSettings.CleanInstallation)
                 {
                     Logging.Debug("adding CleanInstallation reporter");
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.CleanModsReporter))
                     {
                         IsSubProgressActive = false,
                         TaskTitle = Translations.GetTranslatedString("AdvancedInstallClearMods"),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.PreInstallPanel.Children.Add(reporter);
                     AdvancedProgressWindow.CleanModsReporter = reporter;
@@ -1283,11 +1463,12 @@ namespace RelhaxModpack
                 Logging.Debug("adding {0} reporters (MultiCoreExtraction={1}", numThreads, ModpackSettings.MulticoreExtraction);
                 for (int i = 0; i < numThreads; i++)
                 {
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.ExtractionModsReporters) + i)
                     {
                         IsSubProgressActive = true,
                         TaskTitle = string.Format("{0} {1}", Translations.GetTranslatedString("AdvancedInstallInstallMods"), (i + 1).ToString()),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.ExtractionPanel.Children.Add(reporter);
                     AdvancedProgressWindow.ExtractionModsReporters[i] = reporter;
@@ -1297,11 +1478,12 @@ namespace RelhaxModpack
                 if (userModsToInstall.Count > 0)
                 {
                     Logging.Debug("adding userMods reporter");
-                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter()
+                    RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.ExtractionUserModsReporter))
                     {
                         IsSubProgressActive = true,
                         TaskTitle = Translations.GetTranslatedString("AdvancedInstallInstallUserMods"),
-                        ReportState = TaskReportState.Inactive
+                        ReportState = TaskReportState.Inactive,
+                        LoadedAfterApply = false
                     };
                     AdvancedProgressWindow.ExtractionPanel.Children.Add(reporter);
                     AdvancedProgressWindow.ExtractionUserModsReporter = reporter;
@@ -1311,6 +1493,8 @@ namespace RelhaxModpack
 
                 AdvancedProgressWindow.Show();
             }
+            else
+                Logging.Debug("advancedInstallProgress is false");
 
             //make sure each trigger list for each package is unique
             foreach (DatabasePackage package in packagesToInstall)
@@ -1329,6 +1513,8 @@ namespace RelhaxModpack
             //create the cancellation token source
             cancellationTokenSource = new CancellationTokenSource();
 
+            Logging.Debug("userMods install count: {0}", userModsToInstall.Count);
+
             //if user mods are being installed, then disable triggers
             disableTriggersBackupVal = ModpackSettings.DisableTriggers;
             if (userModsToInstall.Count > 0 && !ModpackSettings.DisableTriggers)
@@ -1337,8 +1523,9 @@ namespace RelhaxModpack
                 disableTriggersBackupVal = true;
             }
 
+            Logging.Debug("creating install engine, cancel options and progress reporting");
             //and create and link the install engine
-            installEngine = new InstallerComponents.InstallEngine()
+            installEngine = new InstallEngine()
             {
                 FlatListSelectablePackages = flatListSelect,
                 OrderedPackagesToInstall = orderedPackagesToInstall,
@@ -1363,7 +1550,9 @@ namespace RelhaxModpack
             progress.ProgressChanged += OnInstallProgressChanged;
 
             //run install
-            InstallerComponents.RelhaxInstallFinishedEventArgs results = await installEngine.RunInstallationAsync(progress);
+            Logging.Debug("running installation from MainWindow");
+            RelhaxInstallFinishedEventArgs results = await installEngine.RunInstallationAsync(progress);
+            Logging.Debug("installation has finished, returned to MainWindow");
             installEngine.Dispose();
             installEngine = null;
 
@@ -1394,8 +1583,11 @@ namespace RelhaxModpack
             TotalProgressBar.Value = TotalProgressBar.Maximum;
 
             //after waiting for the installation...
-            if (results.ExitCode == InstallerComponents.InstallerExitCodes.Success)
+            if (results.ExitCode == InstallerExitCodes.Success)
             {
+                taskbarInstance.SetProgressValue(100, 100);
+                if(ModpackSettings.VerboseLogging)
+                    DisplayAndLogInstallErrors(results, false);
                 if (ModpackSettings.ShowInstallCompleteWindow)
                 {
                     InstallFinished installFinished = new InstallFinished();
@@ -1416,17 +1608,56 @@ namespace RelhaxModpack
             }
             else
             {
-                //explain why if failed
-                MessageBox.Show(string.Format("{0}{1}{2}", Translations.GetTranslatedString("installFailed") + ":", Environment.NewLine, results.ExitCode.ToString()));
-                //and log
-                Logging.WriteToLog(string.Format("Installer failed to install, exit code {0}\n{1}", results.ExitCode.ToString(), results.ErrorMessage),
-                    Logfiles.Application, LogLevel.Exception);
+                taskbarState = TaskbarProgressBarState.Error;
+                taskbarInstance.SetProgressState(taskbarState);
+                DisplayAndLogInstallErrors(results, true);
                 ToggleUIButtons(true);
+            }
+
+            //Run task to get backup text file size if a backup was done
+            if(ModpackSettings.BackupModFolder)
+                GetBackupFilesizesAsync(true);
+
+            //set taskbar progress state back to normal
+            taskbarState = TaskbarProgressBarState.NoProgress;
+            taskbarInstance.SetProgressState(taskbarState);
+        }
+
+        private void DisplayAndLogInstallErrors(RelhaxInstallFinishedEventArgs results, bool addResultsExitCode)
+        {
+            if (!results.InstallFailedSteps.Contains(results.ExitCode) && results.ExitCode != InstallerExitCodes.Success)
+                results.InstallFailedSteps.Add(results.ExitCode);
+            if (results.InstallFailedSteps.Count > 0)
+            {
+                StringBuilder errorBuilder = new StringBuilder();
+                errorBuilder.AppendFormat("{0}{1}", Translations.GetTranslatedString("installFailed") + ":", Environment.NewLine);
+                if (!results.InstallFailedSteps.Contains(results.ExitCode) && addResultsExitCode)
+                    results.InstallFailedSteps.Add(results.ExitCode);
+                errorBuilder.Append(string.Join(Environment.NewLine, results.InstallFailedSteps));
+
+                Logging.Exception("The installer failed in the following steps: {0}", string.Join(",", results.InstallFailedSteps));
+
+                MessageBox.Show(errorBuilder.ToString());
             }
         }
 
         private void OnInstallProgressChanged(object sender, RelhaxInstallerProgress e)
         {
+            //set taskbar progress
+            if(taskbarInstance != null)
+            {
+                if (taskbarState != TaskbarProgressBarState.Normal)
+                {
+                    taskbarState = TaskbarProgressBarState.Normal;
+                    taskbarInstance.SetProgressState(taskbarState);
+                }
+                if(taskbarValue != e.TotalCurrent)
+                {
+                    taskbarValue = e.TotalCurrent;
+                    taskbarInstance.SetProgressValue(taskbarValue, e.TotalTotal);
+                }
+            }
+
             if (ModpackSettings.AdvancedInstalProgress)
             {
                 if (AdvancedProgressWindow == null)
@@ -1497,30 +1728,82 @@ namespace RelhaxModpack
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ExtractionError:
-                        line1 = Translations.GetTranslatedString("installExtractingMods");
-                        line2 = Path.GetFileName(e.Filename);
-                        line3 = string.Format("{0} {1} {2}", e.EntriesProcessed, Translations.GetTranslatedString("of"), e.EntriesTotal);
-                        line4 = e.EntryFilename;
+                        if(ModpackSettings.MulticoreExtraction && !ModpackSettings.AdvancedInstalProgress)
+                        {
+                            ChildProgressBar.Maximum = e.TotalInstallGroups;
+                            ChildProgressBar.Value = e.InstallGroup;
+                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
+                                Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
+                            line2 = string.Format("{0}: {1} {2} {3} {4} {5}", Translations.GetTranslatedString("installExtractingCompletedThreads"), e.CompletedThreads.ToString(),
+                                Translations.GetTranslatedString("of"), e.TotalThreads.ToString(), Translations.GetTranslatedString("installExtractingOfGroup"), e.InstallGroup.ToString());
+                            line3 = Path.GetFileName(e.Filename);
+                            if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
+                            {
+                                line4 = string.Format(" ({0}...)", Translations.GetTranslatedString("Downloading"));
+                                if (ChildProgressBar.Maximum != e.BytesTotal)
+                                    ChildProgressBar.Maximum = e.BytesTotal;
+                                if (ChildProgressBar.Minimum != 0)
+                                    ChildProgressBar.Minimum = 0;
+                                if (ChildProgressBar.Value != e.BytesProcessed)
+                                    ChildProgressBar.Value = e.BytesProcessed;
+                            }
+                            else
+                            {
+                                line4 = e.EntryFilename;
+                            }
+                        }
+                        else
+                        {
+                            ChildProgressBar.Maximum = e.BytesTotal;
+                            ChildProgressBar.Value = e.BytesProcessed;
+                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
+                                Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
+                            line2 = Path.GetFileName(e.Filename);
+                            if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
+                            {
+                                line3 = string.Format(" ({0}...)", Translations.GetTranslatedString("Downloading"));
+                                line4 = string.Empty;
+                                if (ChildProgressBar.Maximum != e.BytesTotal)
+                                    ChildProgressBar.Maximum = e.BytesTotal;
+                                if (ChildProgressBar.Minimum != 0)
+                                    ChildProgressBar.Minimum = 0;
+                                if (ChildProgressBar.Value != e.BytesProcessed)
+                                    ChildProgressBar.Value = e.BytesProcessed;
+                            }
+                            else
+                            {
+                                line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), ((e.EntriesProcessed) > 0 ? e.EntriesProcessed : 1).ToString(),
+                                Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
+                                line4 = e.EntryFilename;
+                            }
+                        }
                         break;
                     case InstallerComponents.InstallerExitCodes.UserExtractionError:
-                        line1 = Translations.GetTranslatedString("extractingUserMod");
+                        ChildProgressBar.Maximum = e.BytesTotal;
+                        ChildProgressBar.Value = e.BytesProcessed;
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("extractingUserMod"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
+                            Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = Path.GetFileName(e.Filename);
-                        line3 = string.Format("{0} {1} {2}", e.EntriesProcessed, Translations.GetTranslatedString("of"), e.EntriesTotal);
+                        line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), ((e.EntriesProcessed) > 0 ? e.EntriesProcessed : 1).ToString(),
+                            Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                         line4 = e.EntryFilename;
                         break;
                     case InstallerComponents.InstallerExitCodes.RestoreUserdataError:
                         //filename is name of file in package to backup
                         //parrentCurrentProgress is name of package
-                        line1 = Translations.GetTranslatedString("installRestoreUserdata");
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installRestoreUserdata"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
+                            Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         line3 = e.ParrentCurrentProgress;
                         break;
                     case InstallerComponents.InstallerExitCodes.XmlUnpackError:
-                        line1 = Translations.GetTranslatedString("installXmlUnpack");
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installXmlUnpack"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
+                            Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.PatchError:
-                        line1 = Translations.GetTranslatedString("installPatchFiles");
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installPatchFiles"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
+                            Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ShortcutsError:
@@ -1528,8 +1811,10 @@ namespace RelhaxModpack
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ContourIconAtlasError:
-                        line1 = Translations.GetTranslatedString("installContourIconAtlas");
-                        line2 = e.Filename;
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installContourIconAtlas"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
+                            Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
+                        line2 = string.Format("{0} {1} {2} {3}", e.ChildCurrent.ToString(), Translations.GetTranslatedString("of"), e.ChildTotal.ToString(),
+                            Translations.GetTranslatedString("stepsComplete"));
                         break;
                     case InstallerComponents.InstallerExitCodes.FontInstallError:
                         line1 = Translations.GetTranslatedString("installFonts");
@@ -1554,11 +1839,20 @@ namespace RelhaxModpack
             using (WebClient client = new WebClient())
             {
                 this.client = client;
+                this.client.DownloadProgressChanged += (sender, args) =>
+                {
+                    if(downloadingPackage != null)
+                    {
+                        downloadingPackage.BytesDownloaded = args.BytesReceived;
+                        downloadingPackage.BytesToDownload = args.TotalBytesToReceive;
+                    }
+                };
                 int retryCount = 3;
                 string fileToDownload = string.Empty;
                 string fileToSaveTo = string.Empty;
                 foreach (DatabasePackage package in packagesToDownload)
                 {
+                    downloadingPackage = package;
                     retryCount = 3;
                     while (retryCount > 0)
                     {
@@ -1568,7 +1862,9 @@ namespace RelhaxModpack
                         try
                         {
                             Logging.Info("Async download of {0} start", package.ZipFile);
+                            package.IsCurrentlyDownloading = true;
                             await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
+                            package.IsCurrentlyDownloading = false;
                             Logging.Info("Async download of {0} finish", package.ZipFile);
                             retryCount = 0;
                             package.DownloadFlag = false;
@@ -1595,8 +1891,8 @@ namespace RelhaxModpack
 
         private async Task<bool> ProcessDownloads(List<DatabasePackage> packagesToDownload)
         {
-            //remember this is on the UI thread so we can update the progress via this
-            //and also update the UI info
+            //remember this is on the UI thread
+            //reset the UI info
             ParentProgressBar.Minimum = 0;
             ParentProgressBar.Maximum = packagesToDownload.Count;
             ParentProgressBar.Value = 0;
@@ -1623,15 +1919,10 @@ namespace RelhaxModpack
                         package.StartAddress = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
                         fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
-                        current_bytes_downloaded = 0;
-                        last_bytes_downloaded = 0;
-                        last_download_time = 0;
-                        current_download_time = 0;
-                        //restarting the time should be the last thing to happen before starting file download
-                        //kind of like a timing constraint
-                        downloadTimer.Restart();
                         try
                         {
+                            //reset current bytes downloaded
+                            currentBytesDownloaded = 0;
                             Logging.Info("Download of {0} start", package.ZipFile);
                             await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
                             Logging.Info("Download of {0} finish", package.ZipFile);
@@ -1643,6 +1934,7 @@ namespace RelhaxModpack
                             if (ex.Status == WebExceptionStatus.RequestCanceled)
                             {
                                 Logging.Info("Download canceled from UI request, stopping installation");
+                                downloadTimer.Stop();
                                 ToggleUIButtons(true);
                                 ResetUI();
                                 retry = false;
@@ -1653,21 +1945,20 @@ namespace RelhaxModpack
                             else
                             {
                                 Logging.Error("failed to download the file {0} {1} {2}", package.ZipFile, Environment.NewLine, ex.ToString());
-                                //show abort retry ignore window TODO
-                                MessageBoxResult result = MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
+                                System.Windows.Forms.DialogResult result = System.Windows.Forms.MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
                                     Translations.GetTranslatedString("failedToDownload1"), Environment.NewLine,
                                     package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
-                                    Translations.GetTranslatedString("failedToDownloadHeader"), MessageBoxButton.YesNoCancel);
+                                    Translations.GetTranslatedString("failedToDownloadHeader"), System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore);
                                 switch (result)
                                 {
-                                    case MessageBoxResult.Yes:
+                                    case System.Windows.Forms.DialogResult.Retry:
                                         //keep retry as true
                                         break;
-                                    case MessageBoxResult.No:
+                                    case System.Windows.Forms.DialogResult.Ignore:
                                         //skip this file
                                         retry = false;
                                         break;
-                                    case MessageBoxResult.Cancel:
+                                    case System.Windows.Forms.DialogResult.Abort:
                                         //stop the installation all together
                                         ToggleUIButtons(true);
                                         ResetUI();
@@ -1675,10 +1966,12 @@ namespace RelhaxModpack
                                         return false;
                                 }
                             }
-                            //if it failed or not, the file should be deleted
+                            //if it failed or canceled, the file should be deleted
                             if (File.Exists(fileToSaveTo))
                                 File.Delete(fileToSaveTo);
                         }
+                        //stop the timer
+                        downloadDisplayTimer.Stop();
                     }
                 }
             }
@@ -1695,7 +1988,8 @@ namespace RelhaxModpack
 
             //parse WoT root directory
             Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
-            if (!Utils.AutoFindWoTDirectory(ref Settings.WoTDirectory) || ModpackSettings.ForceManuel)
+            string autoSearchResult = Utils.AutoFindWoTDirectory();
+            if (string.IsNullOrEmpty(autoSearchResult) || ModpackSettings.ForceManuel)
             {
                 Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
                 OpenFileDialog manualWoTFind = new OpenFileDialog()
@@ -1705,13 +1999,14 @@ namespace RelhaxModpack
                     CheckFileExists = true,
                     CheckPathExists = true,
                     Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                    Title = Translations.GetTranslatedString("selectWOTExecutable"),
                     Multiselect = false,
                     RestoreDirectory = true,
                     ValidateNames = true
                 };
                 if ((bool)manualWoTFind.ShowDialog())
                 {
-                    Settings.WoTDirectory = manualWoTFind.FileName;
+                    autoSearchResult = manualWoTFind.FileName;
                 }
                 else
                 {
@@ -1720,7 +2015,7 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            Settings.WoTDirectory = Path.GetDirectoryName(Settings.WoTDirectory);
+            Settings.WoTDirectory = Path.GetDirectoryName(autoSearchResult);
             Logging.Info("Wot root directory parsed as " + Settings.WoTDirectory);
 
             //get the version of tanks in the format of the res_mods version folder i.e. 0.9.17.0.3
@@ -1728,12 +2023,41 @@ namespace RelhaxModpack
             Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
 
             //verify the uninstall
-            if (MessageBox.Show(string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), Settings.WoTDirectory, ModpackSettings.UninstallMode.ToString()),
-                Translations.GetTranslatedString("confirmUninstallHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
+            string uninstallModeTranslated = ModpackSettings.UninstallMode == UninstallModes.Quick ?
+                Translations.GetTranslatedString("UninstallQuickText") : Translations.GetTranslatedString("UninstallDefaultText");
+            string uninstallConfirmMessage = string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), Settings.WoTDirectory, uninstallModeTranslated);
+            if (MessageBox.Show(uninstallConfirmMessage, Translations.GetTranslatedString("confirmUninstallHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
             {
                 ToggleUIButtons(true);
                 return;
             }
+
+            //check if wot is running
+            while (Utils.IsProcessRunning(Settings.WoTProcessName, Settings.WoTDirectory))
+            {
+                //create window to determine if cancel, wait, kill TODO
+                AskCloseWoT askCloseWoT = new AskCloseWoT();
+                //a positive result means that we are going to retry the loop
+                //it could mean the user hit retry (close true), or hit force close (succeeded, and try again anyways)
+                askCloseWoT.ShowDialog();
+                if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.CancelInstallation)
+                {
+                    ToggleUIButtons(true);
+                    return;
+                }
+                else if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.ForceClosed)
+                {
+                    break;
+                }
+                Thread.Sleep(100);
+            }
+
+            //setup the cancel button
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
+            CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Visibility = Visibility.Visible;
+            CancelDownloadInstallButton.IsEnabled = true;
 
             //create progress object
             Progress<RelhaxInstallerProgress> progress = new Progress<RelhaxInstallerProgress>();
@@ -1750,6 +2074,12 @@ namespace RelhaxModpack
             InstallerComponents.RelhaxInstallFinishedEventArgs results = await installEngine.RunUninstallationAsync(progress);
             installEngine.Dispose();
             installEngine = null;
+
+            //close and hide the install progress button
+            CancelDownloadInstallButton.IsEnabled = false;
+            CancelDownloadInstallButton.Visibility = Visibility.Hidden;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
 
             //report results
             ChildProgressBar.Value = ChildProgressBar.Maximum;
@@ -1788,74 +2118,108 @@ namespace RelhaxModpack
         #region UI events
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            //update the ETA
-            //ignore the first hit of this method, because the timer started while the connection was
-            //setting up, and not actually downloading in constant stream
-            if (current_bytes_downloaded + current_download_time + last_bytes_downloaded + last_download_time == 0)
+            //if current is 0 then use it as an initial block
+            if (currentBytesDownloaded == 0)
             {
-                //set a starting point for the "current" download timer value and size downloaded
-                current_bytes_downloaded = e.BytesReceived;
-                current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
-                return;
+                //init elapsed timer
+                if(downloadTimer == null)
+                {
+                    downloadTimer = new Stopwatch();
+                }
+                downloadTimer.Restart();
+                //init update timer
+                if(downloadDisplayTimer == null)
+                {
+                    downloadDisplayTimer = new Timer()
+                    {
+                        Interval = 1000,
+                        AutoReset = true
+                    };
+                    downloadDisplayTimer.Elapsed += DownloadDisplayTimer_Elapsed;
+                }
+                downloadDisplayTimer.Stop();
+                downloadDisplayTimer.Start();
+                //init rates and history
+                lastBytesDownloaded = 0;
+                downloadRateDisplay = 0;
             }
-
-            //otherwise use standard estimating procedures
-            //set current to last and get new currents
-            last_bytes_downloaded = current_bytes_downloaded;
-            last_download_time = current_download_time;
-            current_bytes_downloaded = e.BytesReceived;
-            current_download_time = downloadTimer.Elapsed.TotalMilliseconds;
-
-            //get the current bytes per millisecond
-            double bytes_per_millisecond = (current_bytes_downloaded - last_bytes_downloaded) / (current_download_time - last_download_time);
-            double bytes_per_second = bytes_per_millisecond / 1000;
-            double kbytes_per_second = bytes_per_second / 1024;
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            double mbytes_per_second = kbytes_per_second / 1024;
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
-
-            //if we have a download rate, and a remaining size, then we can get a remaining time!
-            double remaining_bytes = e.TotalBytesToReceive - e.BytesReceived;
-            double remaining_milliseconds = remaining_bytes / bytes_per_millisecond;
-            double remaining_seconds = remaining_milliseconds / 1000;
+            currentBytesDownloaded = e.BytesReceived;
+            totalBytesToDownload = e.TotalBytesToReceive;
 
             ChildProgressBar.Maximum = e.TotalBytesToReceive;
             ChildProgressBar.Minimum = 0;
             ChildProgressBar.Value = e.BytesReceived;
 
             //break it up into lines cause it's hard to read
+            //"downloading 2 of 4"
             string line1 = string.Format("{0} {1} {2} {3}",
                 Translations.GetTranslatedString("Downloading"), ParentProgressBar.Value, Translations.GetTranslatedString("of"), ParentProgressBar.Maximum);
 
+            //"zip file name"
             string line2 = downloadProgress.ChildCurrentProgress;
 
-            string line3 = string.Format("{0} {1} {2}",
-                Utils.SizeSuffix((ulong)e.BytesReceived, 1, true), Translations.GetTranslatedString("of"), Utils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true));
+            //https://stackoverflow.com/questions/9869346/double-string-format
+            //"2MB of 8MB at 1 MB/S"
+            string line3 = string.Format("{0} {1} {2} {3} {4}/s",
+                Utils.SizeSuffix((ulong)e.BytesReceived, 1, true), Translations.GetTranslatedString("of"), Utils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true),
+                Translations.GetTranslatedString("at"), Utils.SizeSuffix((ulong)downloadRateDisplay,1,true, true));
 
-            string line4 = string.Format("{0} {1}", Math.Round(remaining_seconds, 1), Translations.GetTranslatedString("seconds"));
+            //"4 seconds"
+            //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings
+            TimeSpan remain = TimeSpan.FromMilliseconds(remainingMilliseconds);
+            string line4 = string.Format("{0} {1} {2} {3}", remain.ToString(@"mm"), Translations.GetTranslatedString("minutes"), remain.ToString(@"ss"),
+                Translations.GetTranslatedString("seconds"));
 
             //also report to the download message process
             InstallProgressTextBox.Text = string.Format("{0}\n{1}\n{2}\n{3}", line1, line2, line3, line4);
         }
 
+        private void DownloadDisplayTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //update download rate display values
+            downloadRateDisplay = currentBytesDownloaded - lastBytesDownloaded;
+
+            //update download rate ETA values
+            //bytes remaining
+            long bytesRemainToDownload = totalBytesToDownload - currentBytesDownloaded;
+
+            //overall download rate bytes/msec
+            double downloadRateOverall = 0;
+            if (downloadTimer.Elapsed.TotalMilliseconds > 0)
+                downloadRateOverall =  currentBytesDownloaded / downloadTimer.Elapsed.TotalMilliseconds;
+
+            //remaining time msec
+            if ((long)downloadRateOverall > 0)
+                remainingMilliseconds = bytesRemainToDownload / (long)downloadRateOverall;
+            else
+                remainingMilliseconds = 0;
+
+            //set current to previous
+            lastBytesDownloaded = currentBytesDownloaded;
+        }
+
         private void ToggleUIButtons(bool toggle)
         {
+            Logging.Debug("The main window UI was toggled: {0}", toggle.ToString());
             List<FrameworkElement> controlsToToggle = Utils.GetAllWindowComponentsLogical(this, false);
             //any to remove here
             if (controlsToToggle.Contains(CancelDownloadInstallButton))
                 controlsToToggle.Remove(CancelDownloadInstallButton);
             foreach (FrameworkElement control in controlsToToggle)
             {
-                if (control is Button || control is CheckBox || control is RadioButton)
+                if (control is Button || control is CheckBox || control is RadioButton || control is ComboBox || control is Slider)
                 {
-                    if (tempDisabledBlacklist.Contains(control))
+                    if (disabledBlacklist.Contains(control))
                         control.IsEnabled = false;
+                    else if (enabledBlacklist.Contains(control))
+                        control.IsEnabled = true;
                     else
                         control.IsEnabled = toggle;
                 }
             }
             //any to include here that aren't any of the above class types
             AutoSyncFrequencyTexbox.IsEnabled = toggle;
+            AutoSyncFrequencyComboBox.IsEnabled = toggle;
         }
 
         private void OnLinkButtonClick(object sender, RoutedEventArgs e)
@@ -1871,7 +2235,7 @@ namespace RelhaxModpack
 #pragma warning disable CS0162
                 if (Settings.ApplicationVersion != ApplicationVersions.Stable)
                     MessageBox.Show(ex.ToString());
-#pragma warning enable CS0162
+#pragma warning restore CS0162
             }
         }
 
@@ -1914,8 +2278,9 @@ namespace RelhaxModpack
             if (result)
             {
                 Logging.Info("Saving color settings dump to " + saveFileDialog.FileName);
-                UISettings.DumpAllWindowColorSettingsToFile(saveFileDialog.FileName);
+                UISettings.DumpAllWindowColorSettingsToFile(saveFileDialog.FileName, this);
                 Logging.Info("Color settings saved");
+                MessageBox.Show(Translations.GetTranslatedString("DumpColorSettingsSaveSuccess"));
             }
         }
 
@@ -2024,6 +2389,12 @@ namespace RelhaxModpack
         {
             if (e.LeftButton == MouseButtonState.Released)
             {
+                //if the new slider and old display scale are the same, then no need to apply
+                if(ModpackSettings.DisplayScale == ApplyCustomScalingSlider.Value)
+                {
+                    Logging.Debug("ModpackSettings.DisplayScale is same as Slider.Value, no need to apply");
+                    return;
+                }
                 ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
                 double oldTempValue = ModpackSettings.DisplayScale;
                 ModpackSettings.DisplayScale = ApplyCustomScalingSlider.Value;
@@ -2039,7 +2410,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void ApplyCustomUILocalizations(bool displaySize)
+        private void ApplyCustomUILocalizations(bool displayBackupModsSize)
         {
             //set the application information text box
             ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + Utils.GetApplicationVersion();
@@ -2051,8 +2422,9 @@ namespace RelhaxModpack
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), Settings.NumLogicalProcesors);
 
             //display the backup file sizes (if requested)
-            if (displaySize)
-                BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)totalSize, 1, true));
+            if (displayBackupModsSize)
+                BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"),
+                    backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
         }
         #endregion
 
@@ -2129,24 +2501,52 @@ namespace RelhaxModpack
         private void OnUseBetaAppChanged(object sender, RoutedEventArgs e)
         {
             if ((bool)UseBetaApplicationCB.IsChecked)
+            {
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
+                MessageBox.Show(Translations.GetTranslatedString("noChangeUntilRestart"));
+            }
             else if (!(bool)UseBetaApplicationCB.IsChecked)
+            {
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+            }
         }
 
         private async void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
         {
             if ((bool)UseBetaDatabaseCB.IsChecked)
             {
+                //disable the UI part of it
                 UseBetaDatabaseCB.IsEnabled = false;
-                //get the branches. the default selected should be master
                 UseBetaDatabaseBranches.IsEnabled = false;
-                UseBetaDatabaseBranches.Items.Clear();
                 UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
-                UseBetaDatabaseBranches.SelectedIndex = 0;
+
+                //clear current list
+                UseBetaDatabaseBranches.Items.Clear();
+
+                //declare objects to use
                 string jsonText = string.Empty;
+                JArray root = null;
+                List<string> branches = new List<string>
+                {
+                    "master"
+                };
+
+                //get the list of branches
                 using (PatientWebClient client = new PatientWebClient() { Timeout = 1500 })
                 {
+                    //if windows 7, enable TLS 1.1 and 1.2
+                    //https://stackoverflow.com/questions/47017973/could-not-establish-secure-channel-for-ssl-tls-c-sharp-web-service-client
+                    //https://docs.microsoft.com/en-us/dotnet/api/system.net.servicepointmanager.securityprotocol?view=netframework-4.8#System_Net_ServicePointManager_SecurityProtocol
+                    //https://docs.microsoft.com/en-us/dotnet/framework/network-programming/tls
+                    if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
+                    {
+                        Logging.Debug("Windows 7 detected, enabling TLS 1.1 and 1.2");
+                        System.Net.ServicePointManager.SecurityProtocol =
+                            SecurityProtocolType.Ssl3 |
+                            SecurityProtocolType.Tls |
+                            SecurityProtocolType.Tls11 |
+                            SecurityProtocolType.Tls12;
+                    }
                     try
                     {
                         client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
@@ -2157,44 +2557,40 @@ namespace RelhaxModpack
                         Logging.Exception(wex.ToString());
                     }
                 }
-                if (string.IsNullOrWhiteSpace(jsonText))
+                if (!string.IsNullOrWhiteSpace(jsonText))
                 {
-                    //just load master and call it good. it should always be there
-                    UseBetaDatabaseBranches.Items.Clear();
-                    UseBetaDatabaseBranches.Items.Add("master");
-                    UseBetaDatabaseBranches.SelectedIndex = 0;
-                    UseBetaDatabaseBranches.IsEnabled = true;
-                    UseBetaDatabaseCB.IsEnabled = true;
-                    return;
+                    try
+                    {
+                        root = JArray.Parse(jsonText);
+                    }
+                    catch (JsonException jex)
+                    {
+                        Logging.Exception(jex.ToString());
+                    }
+                    if(root != null)
+                    {
+                        //parse the string into a json array object
+                        foreach (JObject branch in root.Children())
+                        {
+                            JValue value = (JValue)branch["name"];
+                            string branchName = value.Value.ToString();
+                            if (!branches.Contains(branchName))
+                                branches.Add(branchName);
+                        }
+                    }
                 }
-                JArray root;
-                try
-                {
-                    root = JArray.Parse(jsonText);
-                }
-                catch (JsonException jex)
-                {
-                    Logging.Exception(jex.ToString());
-                    UseBetaDatabaseBranches.Items.Clear();
-                    UseBetaDatabaseBranches.Items.Add("master");
-                    UseBetaDatabaseBranches.SelectedIndex = 0;
-                    UseBetaDatabaseBranches.IsEnabled = true;
-                    UseBetaDatabaseCB.IsEnabled = true;
-                    return;
-                }
-                List<string> branches = new List<string>();
-                foreach (JObject branch in root.Children())
-                {
-                    JValue value = (JValue)branch["name"];
-                    branches.Add((string)value.Value);
-                }
-                branches.Reverse();
-                UseBetaDatabaseBranches.Items.Clear();
+
+                //fill the UI with branch items
                 foreach (string s in branches)
                     UseBetaDatabaseBranches.Items.Add(s);
-                ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
-                //default to master selected
+
+                //select master (index 0) as default
                 UseBetaDatabaseBranches.SelectedIndex = 0;
+
+                //set database distribution to beta
+                ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
+
+                //default to master selected
                 UseBetaDatabaseBranches.IsEnabled = true;
                 UseBetaDatabaseCB.IsEnabled = true;
             }
@@ -2255,9 +2651,19 @@ namespace RelhaxModpack
                 case Translations.LanguageRussian:
                     Translations.SetLanguage(Languages.Russian);
                     break;
+                case Translations.LanguageSpanish:
+                    Translations.SetLanguage(Languages.Spanish);
+                    break;
             }
-            Translations.LocalizeWindow(this, true);
-            ApplyCustomUILocalizations(!loading);
+            if (!loading)
+            {
+                Translations.LocalizeWindow(this, true);
+                ApplyCustomUILocalizations(true);
+            }
+            else
+            {
+                Logging.Error("This method should not be access when loading=true!");
+            }
         }
 
         private void VerboseLoggingCB_Click(object sender, RoutedEventArgs e)
@@ -2345,7 +2751,22 @@ namespace RelhaxModpack
 
         private void Theme_Checked(object sender, RoutedEventArgs e)
         {
-
+            //ModpackSettings is desited theme
+            if ((bool)ThemeDefault.IsChecked)
+                ModpackSettings.ApplicationTheme = UIThemes.Default;
+            else if ((bool)ThemeDark.IsChecked)
+                ModpackSettings.ApplicationTheme = UIThemes.Dark;
+            else if ((bool)ThemeCustom.IsChecked)
+                ModpackSettings.ApplicationTheme = UIThemes.Custom;
+            //try to apply it
+            UISettings.ApplyUIColorSettings(this);
+            //load the result back in
+            if (UISettings.CurrentTheme.Equals(Themes.Default))
+                ThemeDefault.IsChecked = true;
+            else if (UISettings.CurrentTheme.Equals(Themes.Dark))
+                ThemeDark.IsChecked = true;
+            else if (UISettings.CurrentTheme.Equals(Themes.Custom))
+                ThemeCustom.IsChecked = true;
         }
 
         private void SaveDisabledModsInSelection_Click(object sender, RoutedEventArgs e)
@@ -2386,13 +2807,13 @@ namespace RelhaxModpack
             //parse the time into a timespan for the check timer
             switch (AutoSyncFrequencyComboBox.SelectedIndex)
             {
-                case 0:
+                case 0://mins
                     autoInstallTimer.Interval = TimeSpan.FromMinutes(timeToUse).TotalMilliseconds;
                     break;
-                case 1:
+                case 1://hours
                     autoInstallTimer.Interval = TimeSpan.FromHours(timeToUse).TotalMilliseconds;
                     break;
-                case 2:
+                case 2://days
                     autoInstallTimer.Interval = TimeSpan.FromDays(timeToUse).TotalMilliseconds;
                     break;
                 default:
@@ -2401,7 +2822,7 @@ namespace RelhaxModpack
             autoInstallTimer.AutoReset = true;
             if (!autoInstallTimerRegistered)
             {
-                Logging.Debug("auto install timer not registered to event, setting");
+                Logging.Debug("auto install timer not registered to event, registering now");
                 autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
                 autoInstallTimerRegistered = true;
             }
@@ -2470,6 +2891,8 @@ namespace RelhaxModpack
             DeleteOldPackagesCB.IsChecked = ModpackSettings.DeleteCacheFiles;
             MinimizeToSystemTray.IsChecked = ModpackSettings.MinimizeToSystemTray;
             AdvancedInstallationProgress.IsChecked = ModpackSettings.AdvancedInstalProgress;
+            ShowOptionsCollapsedLegacyCB.IsChecked = ModpackSettings.ShowOptionsCollapsedLegacy;
+            AutoOneclickShowWarningOnSelectionsFailButton.IsChecked = ModpackSettings.AutoOneclickShowWarningOnSelectionsFail;
 
             //apply auto sync time unit and amount
             AutoSyncFrequencyTexbox.Text = ModpackSettings.AutoInstallFrequencyInterval.ToString();
@@ -2479,7 +2902,8 @@ namespace RelhaxModpack
             }
             else
             {
-                Logging.Warning("AutoInstallFrequencyTimeUnit is not valid selection, setting to default");
+                if(!loading)
+                    Logging.Warning("AutoInstallFrequencyTimeUnit is not valid selection, setting to default");
                 AutoSyncFrequencyComboBox.SelectedIndex = 0;
             }
 
@@ -2503,6 +2927,9 @@ namespace RelhaxModpack
                     break;
                 case Languages.Russian:
                     LanguagesSelector.SelectedItem = Translations.LanguageRussian;
+                    break;
+                case Languages.Spanish:
+                    LanguagesSelector.SelectedItem = Translations.LanguageSpanish;
                     break;
             }
 
@@ -2529,6 +2956,19 @@ namespace RelhaxModpack
                     break;
             }
 
+            switch(ModpackSettings.ApplicationTheme)
+            {
+                case UIThemes.Default:
+                    ThemeDefault.IsChecked = true;
+                    break;
+                case UIThemes.Dark:
+                    ThemeDark.IsChecked = true;
+                    break;
+                case UIThemes.Custom:
+                    ThemeCustom.IsChecked = true;
+                    break;
+            }
+
             //apply beta database settings
             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
             {
@@ -2541,6 +2981,22 @@ namespace RelhaxModpack
             {
                 AutoInstallCB_Click(null, null);
             }
+        }
+
+        private void OpenColorPickerButton_Click(object sender, RoutedEventArgs e)
+        {
+            RelhaxColorPicker colorPicker = new RelhaxColorPicker();
+            colorPicker.ShowDialog();
+        }
+
+        private void ShowOptionsCollapsedLegacyCB_Click(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.ShowOptionsCollapsedLegacy = (bool)ShowOptionsCollapsedLegacyCB.IsChecked;
+        }
+
+        private void AutoOneclickShowWarningOnSelectionsFailButton_Click(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.AutoOneclickShowWarningOnSelectionsFail = (bool)AutoOneclickShowWarningOnSelectionsFailButton.IsChecked;
         }
         #endregion
 
@@ -2576,6 +3032,35 @@ namespace RelhaxModpack
             Directory.Move(middlePath, newPath);
 
             Logging.Info("upgrade of folder {0} successful", Path.GetFileName(newPath));
+        }
+
+        //asyncronously get the file sizes of backups
+        private Task GetBackupFilesizesAsync(bool displayGettingSize)
+        {
+            return Task.Run(() =>
+            {
+                Logging.Debug("starting async task of getting file sizes of backups");
+                if (displayGettingSize)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("backupModsSizeCalculating"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                    });
+                }
+
+                backupFolderTotalSize = 0;
+                backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
+                foreach (string file in backupFiles)
+                {
+                    backupFolderTotalSize += Utils.GetFilesize(file);
+                }
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                });
+                Logging.Debug("completed async task of getting file sizes of backups");
+            });
         }
     }
 }

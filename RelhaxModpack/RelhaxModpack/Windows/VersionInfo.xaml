@@ -4,19 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        xmlns:ui="clr-namespace:RelhaxModpack.UIComponents"
         mc:Ignorable="d"
-        Title="Update" Height="300" Width="500" MinHeight="300" MinWidth="500" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
+        Title="Application Update" Height="315" Width="500" ResizeMode="CanMinimize" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="RelhaxWindow_Loaded"
+        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
     <Grid Tag="VersionInfoGrid">
         <TextBlock x:Name="NewVersionAvailable" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="New Version Available" VerticalAlignment="Top" Tag="NewVersionAvailable"/>
-        <TextBox x:Name="ApplicationUpdateNotes" HorizontalAlignment="Right" Height="182" Margin="0,0,10,56" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="472" Tag="ApplicationUpdateNotes" IsReadOnly="True"/>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock x:Name="HavingProblemsTextBlock" HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="Wrap" Text="If you are having problems updating, please" VerticalAlignment="Bottom" Tag="HavingProblemsTextBlock"/>
-            <TextBlock HorizontalAlignment="Left" Margin="7,0,0,10" TextWrapping="Wrap" VerticalAlignment="Bottom">
-                <Hyperlink Tag="ManualUpdateLink" x:Name="ManualUpdateLink" NavigateUri="https://github.com/Willster419/RelhaxModpack/releases/latest" RequestNavigate="OnHyperlinkClick">Click Here</Hyperlink>
-            </TextBlock>
+        <TextBox x:Name="ApplicationUpdateNotes" HorizontalAlignment="Stretch" Margin="10,31,10,76" TextWrapping="Wrap" VerticalAlignment="Stretch" Tag="ApplicationUpdateNotes" IsReadOnly="True"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="30">
+            <TextBlock x:Name="HavingProblemsTextBlock" HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Tag="HavingProblemsTextBlock"
+                       Text="If you are having problems updating, please"/>
+            <!-- <ui:RelhaxHyperlink x:Name="ViewNewsOnGoogleTranslate" Tag="ViewNewsOnGoogleTranslate" Text="View this on Google Translate" Foreground="#FF0066CC"/> -->
+            <ui:RelhaxHyperlink Tag="ManualUpdateLink" x:Name="ManualUpdateLink" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Foreground="#FF0066CC"
+                                URL="https://github.com/Willster419/RelhaxModpack/releases/latest" Text="Click Here"/>
         </StackPanel>
-        <Button x:Name="VersionInfoNoButton" Content="No" HorizontalAlignment="Left" Margin="10,0,0,31" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoNoButton" Click="OnNoButtonClick"/>
-        <Button x:Name="VersionInfoYesButton" Content="Yes" HorizontalAlignment="Right" Margin="0,0,10,31" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoYesButton" Click="OnYesButtonClick"/>
+        <Button x:Name="VersionInfoNoButton" Content="No" HorizontalAlignment="Left" Margin="10,0,0,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoNoButton" Click="OnNoButtonClick"/>
+        <Button x:Name="VersionInfoYesButton" Content="Yes" HorizontalAlignment="Right" Margin="0,0,10,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoYesButton" Click="OnYesButtonClick"/>
+        <ui:RelhaxHyperlink x:Name="ViewUpdateNotesOnGoogleTranslate" HorizontalAlignment="Left" Margin="10,0,0,30" VerticalAlignment="Bottom" Foreground="#FF0066CC"
+                            Tag="ViewUpdateNotesOnGoogleTranslate" Text="View this on Google Translate"/>
     </Grid>
 </local:RelhaxWindow>

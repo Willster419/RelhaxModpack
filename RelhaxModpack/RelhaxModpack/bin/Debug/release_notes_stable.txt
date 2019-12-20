@@ -1,3 +1,205 @@
+Application version 0.29.4.9 (2019-12-17)
+https://www.virustotal.com/gui/file/54af85ee1a97e89f822e4551ca8619037ecfa93f189ebc6b935cdc8945dd232c/detection
+- Application now targets .NET framework v4.8 to take advantage of the latest technology and framework improvements from Microsoft.
+- Reverted (kind of) clear logs and diagnostic zip file log location detection due to WG reverting the Working Directory.
+- Added Windows 7 Compatibility of enabling TLS 1.1 and 1.2 for usage of github APIs.
+- Fixed "off by one" progress reporting. Again.
+- Fixed bug of not waiting properly for the font installation to finish (if installing fonts).
+- Started work on database self-updater project. This means that some package updates can be automated.
+- Fixed bugs with control logic of loading database branches from github API.
+- Fixed bugs with WoT process detection.
+- Minor UI enable/disable toggle fixes for MainWindow.
+- Fixed several UI placement and interaction issues with the database editor. (Thanks 'The Illusion')
+- Code imrovements to the MD5 hash calculation functions.
+- Updated DotNetZip and JSON.net APIs.
+- Added HtmlAgilityPack API.
+- Minor fixes to patch designer.
+- Fixed database editor not returning when user selects to cancel closing due to unsaved changes.
+- Minor other code fixes.
+- Updated German translations. (Thanks Elektrosmoker)
+- Updated documentation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.6 (2019-12-06)
+https://www.virustotal.com/gui/file/796cddf0b968204bae73857e67d4261c6277f4f7f52aeb85c3bf791bd3a22aa5/detection
+- Added hotfix from Relhax V1 with OMC view: When preview window loaded, retain window focus.
+- Fixed some window headers and tab headers not being translated correctly (Thanks Nullmaruzero).
+- Fixed a bug with progress reporting in advanced installer. It would report "extracting package x1 of y", where the extra 1 is supposed to be (x+1)
+- Re-worked uninstall methods into one method to prevent code copy-paste.
+- Re-worked installer thread error and exit code handling to show all errors.
+- Updated Polish, German, French, Spanish Translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.5 (2019-11-18)
+https://www.virustotal.com/gui/file/d1b9ca8d9e2f7450fde8e03c4465b4f6524fece457dbed0fd2ccfe1ee97c8884/detection
+- Added the ability to udpate the Wargaming Game Center itself from the WG update utility.
+- Changed default behavior of SaveLastSelection setting to true for first time application startup.
+- Updated Documentation.
+- Updated German Translations (Thanks Elektrosmoker).
+- Addes description stubs to Patch designer and Database Editor utilities.
+- Fixed some MainWindow components not translating when launching for the first time, after language selected from new selection window.
+- Added feature to MainWindow, mod selection list and diagnostic windows to show tooltips for disabled UI components.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.3 (2019-11-17)
+https://www.virustotal.com/gui/file/9602c07d42e9391c3898b5ee02cdaedb6a1e7121f63855facc66e40a2c05af3e/detection
+- Fixed a nasty bug where user mods were being treated as regular packages. This means they were failing to download and getting deleted.
+- Re-worked the Patch designer utility and fixed several bugs.
+- Fixed several translation tags that were not updated or mising. (Thanks Nullmaruzero)
+- Fixed progress reporting for any x of y reports. It will no longer be 0 based (extracting package 0 of 9, for example).
+- Re-worked the messagebox for uninstallation. (Thanks Nullmaruzero)
+- Changed how translation is detected on application launch for the first time. And by that I mean it will ask YOU what language you want to use.
+- Fixed the logfile becoming messy when extracting in multicore mode.
+- Updated documentation.
+- Fixed minor issues with theme definitions for UI engine.
+- Fixed minor issues with the UI of the database editor.
+- Fixed minor issues with object locking in the atlas creator.
+- Various code cleanup and comment improvement.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.1 (2019-11-04)
+https://www.virustotal.com/gui/file/18f8f48eac07e2555fb4adc77f04c68219849c6df352600b84748dcfc86f3c84/detection
+- Fixed compatibilty issues with WoWp and WoWs with the Game Center update downloader.
+- Fixed application exiting incorrectly when closing from notification icon right click.
+- Removed defunct feature of launching the old WoT Launcher in client check mode (now done via game center).
+- Fixed bugs with writing to the installer and uninstaller logfiles.
+- Fixed functionality of the option to 'inform if no new database is available'.
+- Updated english and polish translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.0 (2019-11-03)
+https://www.virustotal.com/gui/file/777576f3d9be22a484a79689193bdc7f8d3c42a7a56587953b6329e88e456bc1/detection
+- Added new feature in diagnostics. You can now use the diagnostics window to download game center updates for any WG Game Center without peer-to-peer.
+- This enables those who are on univeristy networks (or do not wish to use peer-to-peer networking) to download updates via HTTP from the WG update servers.
+- Added task bar progress for Windows 10 and 8.1 users (and Windows 7 users using Aero).
+- Fixed issues and improved logging of Translations.LocalizeWindow() and Exists() methods.
+- Re-worked application deployment process so others on github who fork/clone the repo can build.
+- Updated translation entries.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.3.7 (2019-10-28)
+https://www.virustotal.com/gui/file/6e4f841d5d9bd1b028a5b2692a657214ae7ceddbc1084f5af586c3c5bbc2b7dc/detection
+- FINALLY fixed the intermidant issue of contour icon atlas creation failing randomly.
+- Fixed UI placement of text components in the First Load Acknowledgements window.
+- Updated polish and english translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.3.6 (2019-10-27)
+https://www.virustotal.com/gui/file/7f0188265d4b4fe13e2a26e7dfb9ee24071483f49b91d035c68749d955e9b252/detection
+- Fixed bug of the selected language (other than english) not loading on application start.
+- Added a check in waiting for the font installation process. It is stopped after 10 seconds (it should never take longer then that).
+- Fixed bugs with manual detection if user sets the WoT exe in win32 or win64.
+- Updated Spanish, French, Polish, Russian translations.
+- Added getting the backup folder size to after an installation is complete and if a backup was performed.
+- Fixed issues with xvm URL launch from advanced install finished window.
+- Fixed UI issues with Media text field display in database editor.
+- Changed installer logic so that if it fails or is canceled, it will still clean up the temporary created folders.
+- Added error handling for malformed Json patch instruction files.
+- Changed some errors to warning level events in the patcher.
+- Added error handling for xmlUnpack()
+- Added install failed information if verbose logging is enabled. (Like if the instal finishes but patches failed).
+- Improved resource disposal and cleanup after an installation.
+- Re-worked the atlas creation steps to make it more readable and better code structured.
+- Added more logging information during installation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.3.3 (2019-10-21)
+https://www.virustotal.com/gui/file/c4ca6837aa6f4a02e3f537717f087e9cd75d2ad67ddaf0a6016061b0ac004afd/detection
+- Updated german translations (thanks Elektrosmoker).
+- Changed textbox property for advanced progress UI reporter objects to read-only.
+- Updated descriptions of steps for processes in database updater window.
+- Added install statistic remapping (future feature, this is UI frontend only).
+- Other minor improvements.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.3.2 (2019-10-20)
+https://www.virustotal.com/gui/file/5c18786b44baaa3c38607188e4a217679d6714a679fc196cf2a8a192cc6d5822/detection
+- Fixed bugs with dark UI in selection list when colorchange option is off (both selection views).
+- Added download progress to standard and advanced reporting when "download while install" is enabled.
+- Added old option back to legacy to load up with options collapsed (search will expand to it on navigation).
+- Added option for when using one-click or auto install to show a warning to cancel install if any errors occured when applying the selection file.
+- Fixed bugs with install engine ClearLogs step.
+- Re-worked selection view UI component definitions and data binding. And by that I mean I removed the data binding. It's not used.
+- Updated English and Spanish translations. (Thanks to LordFelix for Spanish translations)
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.3.1 (2019-10-14)
+https://www.virustotal.com/gui/file/be7d950cbbcfe585396a9a5c8188a34daeeab9f78113e254811b5c2fc9cd1fd5/detection
+- Fixed crash when trying to save a UI document template of dark theme.
+- Fixed issue not allowing UI themes to be applied to post install tab of advanced install progress window.
+- Fixed issue now allowing UI themes to be applied to developer selections viewer.
+- Re-wrote older sections of developer selections viewer for new coding and API standards.
+- Fixed bugs of developer selections viewer not closing properly based on some loading errors.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.3.0 (2019-10-14)
+https://www.virustotal.com/gui/file/7b8e86d957bfc962c24e95b246066906fe228d348e79b8992b946d675594e6fc/detection
+- Fixed the auto-detection bug of finding your WoT install. The entire process is completly re-written.
+- Added initial implimentation of the UI themeing system. It includes a built-in dark theme.
+- The UI themeing system also includes the ability to customize a custom theme via the "Custom" option, loading a theme from an xml file.
+- You can base your custom theme off of the dark theme or the default.
+- There are 3 types of theme levels: "global colorsets", "class colorsets", "component colorsets".
+- Global are always applied, class are applied for a UI component type (like button), and component applies to an individual component.
+- Added a color picker to allow you to customize your colors and see what they look like.
+- Fixed issue with window size of some windows not adjusting properly when scaling was enabled.
+- Fixed placement of components of the add files to diagnostic zip window.
+- Enabled the ability to use the beta application.
+- Fixed various coloring issues.
+- Improved interface of database updater tool.
+- Fixed output of database csv file.
+- Fixed logic issues and bugs with the diagnostic and add files to diagnostic zip windows.
+- Other verious fixes.
+- Added translation TODO entries.
+- Updated translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.2.2 (2019-09-25)
+https://www.virustotal.com/gui/file/ec39c8ea1886c94a92af50efc27017ba1bacbf3e0c94e6975ed4e16c27485761/detection
+- Added spanish translatons. Thanks to LordFelix of the EU server.
+- Added auto-install frequency check dropdown menu to list of components to toggle during an installation.
+- Fixed minor issue where the application tries to apply a "new" scaling value, even if it's the same scale factor.
+- Fixed warning messages about SizeSuffix being 0 during package download.
+- Other general code cleanup and optimizations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.2.0 (2019-09-24)
+https://www.virustotal.com/gui/file/393eb1f420710822b08ad8e2de5766ee25ea5affccea757ec18baaaf2bd425ee/detection
+- Reverted logic of WoT version parsing for standard database. During patch days, if the current WoT version isn't supported, it will still install using the previous database, but install to the current WoT folder, like in V1.
+- Added message if client isn't supported about usage of beta database.
+- Fixed issue where invalid xml patches could crash the installer, fixed by catching the issue first and reporting the error.
+- Enabled beta application distribution channel.
+- Fixed application crash if an update is available or switching to beta application distribution, and user selects "no" in the application update window.
+- Fixed application crash if it fails to load atlas image processing libraries. Now it checks that they can be loaded on application startup (only will check once).
+- Added button in diagnostics window to test if the application and load the atals image processing libraries. If it fails, it can open your browser to get the required Microsoft libraries package.
+- Fixed overall UI progress reporting of basic and advnaced modes.
+- Fixed UI progress reporting of Download rate and ETA.
+- Fixed bug allowing the user to interact with the main window during a one-click or auto install.
+- Added translation entries for diagnostic window: Clearning database cache file, clearing database cache, check loading atlas image processing libraries.
+- Added category name to selection list search results to help with mods of similar names.
+- Fixed escape character issue with opening news and update notes text in google translate.
+- Fixed the "close this window" button in the advanced install finished window to actually close the window.
+- Changed application signing algorithim to SHA-256.
+- Fixed minor logging issues and UI placement of database updater tool.
+- Fixed minor UI placement issues in database editor tool.
+- General code optimizations.
+- Added more logging information for installation starting, diagnostics, atlas image processing libraries loading/unloading.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.1.0 (2019-09-15)
+https://www.virustotal.com/gui/file/28f30828e31c36d0970afc41977614bd64c226f35c267e61ed62c12749d01263/detection
+- Finally fixed the crash when using the advanced installation progress.
+- Added ability to zoom and pan preview images.
+- Added links in the version info and news viewer to view the text in google translate, in your browser, in your language.
+- Fixed issues preventing the audio preview from working.
+- Fixed issue of audio preview not stopping when selection changes.
+- Fixed layout issues of audio preview.
+- Moved downloading of audio preview data to preview window rather than UI component. This means that a progress bar will show when downloading the media for preview, like when loading images.
+- Implimented version info checking from Relhax V1.
+- Updated (some) translations.
+- Fixed UI positioning of some components in the database updater tool.
+- General code cleanup.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.0.14 (2019-08-31)
 https://www.virustotal.com/gui/file/103e2aecc812f148bfba30b841491b628890eab7c55d5881d72cdeac5de6f432/detection
 - Fixed compatibility issues with Windows 7 and some themes.

@@ -5,19 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="AddPicturesZip" Height="330" Width="600" MinHeight="75" MinWidth="100"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False"
+        Title="Add files to zip" Height="330" Width="600" MinHeight="75" MinWidth="100"
+        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True"
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
-    <Grid>
+    <Grid Tag="AddPIcturesMainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="AddSelectionsPicturesLabel" HorizontalAlignment="Stretch" Margin="10,0,10,0" TextWrapping="Wrap" Text="Add any additional helpful files here (your selection file, picture, etc.)" VerticalAlignment="Top"/>
-        <ListBox x:FieldModifier="public" x:Name="FilesToAddList" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" AllowDrop="True" SelectionMode="Multiple" DragEnter="FilesToAddList_DragEnter" Drop="FilesToAddList_Drop" />
-        <Button x:Name="AddFilesButton" Content="Add files" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="61" Click="AddFilesButton_Click"/>
-        <Button x:Name="RemoveSelectedButton" Content="Remove Selected" HorizontalAlignment="Left" Margin="76,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="98" Click="RemoveSelectedButton_Click"/>
-        <Button x:Name="ContinueButton" Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click"/>
+        <TextBlock x:Name="DiagnosticsAddSelectionsPicturesLabel" HorizontalAlignment="Stretch" Margin="10,0,10,0" TextWrapping="Wrap" Text="Add any additional files here (your selection file, picture, etc.)" VerticalAlignment="Top" Tag="AddSelectionsPicturesLabel"/>
+        <ListBox x:FieldModifier="public" x:Name="FilesToAddList" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" AllowDrop="True" SelectionMode="Extended" DragEnter="FilesToAddList_DragEnter" Drop="FilesToAddList_Drop" Tag="DebugFilesToAddList" Margin="0,0,0,5"/>
+        <Button x:Name="DiagnosticsAddFilesButton" Content="Add Files" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="61" Click="AddFilesButton_Click" Tag="AddFilesButton"/>
+        <!-- https://stackoverflow.com/questions/2984050/configure-listbox-in-wpf-so-that-i-will-be-possible-to-select-multiple-items-wit -->
+        <Button x:Name="DiagnosticsRemoveSelectedButton" Content="Remove Selected" HorizontalAlignment="Left" Margin="76,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="104" Click="RemoveSelectedButton_Click" Tag="RemoveSelectedButton"/>
+        <Button x:Name="DiagnosticsContinueButton" Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click" Tag="ContinueButton"/>
     </Grid>
 </local:RelhaxWindow>
