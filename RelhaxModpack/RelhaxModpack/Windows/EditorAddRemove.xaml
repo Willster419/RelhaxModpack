@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Add or Move Package" Height="200" Width="250"
+        Title="Add or Move Package" Height="200" Width="250" MinHeight="200" MinWidth="250"
         Loaded="RelhaxWindow_Loaded" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid>
         <TextBlock Tag="CategoryTextBox" x:Name="CategoryTextBox" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Select the Category to add to" VerticalAlignment="Top"/>
@@ -15,6 +15,6 @@
         <Button Tag="OKButton" x:Name="OKButton" Content="OK" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="OKButton_Click" IsEnabled="False"/>
         <Button Tag="CancelButton" x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="CancelButton_Click"/>
         <RadioButton Tag="AddSameLevelRadioButton" x:Name="AddSameLevelRadioButton" Content="Same Level" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" IsChecked="True" Checked="AddSameLevelRadioButton_Checked"/>
-        <RadioButton Tag="AddNewLevelRadioButton" x:Name="AddNewLevelRadioButton" Content="New Level" HorizontalAlignment="Left" Margin="157,106,0,0" VerticalAlignment="Top" Checked="AddNewLevelRadioButton_Checked"/>
+        <RadioButton Tag="AddNewLevelRadioButton" x:Name="AddNewLevelRadioButton" Content="New Level" HorizontalAlignment="Right" Margin="0,106,10,0" VerticalAlignment="Top" Checked="AddNewLevelRadioButton_Checked"/>
     </Grid>
 </local:RelhaxWindow>
