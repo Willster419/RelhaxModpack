@@ -2736,7 +2736,8 @@ namespace RelhaxModpack.Windows
             AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
             {
                 Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
-                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory
+                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
             };
             autoUpdatePackageWindow.ShowDialog();
         }

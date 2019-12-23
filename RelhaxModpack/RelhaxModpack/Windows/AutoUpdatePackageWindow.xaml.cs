@@ -59,10 +59,17 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public const string AutoUpdateFileInstructionsXml = "_autoUpdate/files.xml";
 
+        /// <summary>
+        /// The FTP credentials
+        /// </summary>
+        public NetworkCredential Credential = null;
+
         private List<DatabasePackage> packages = new List<DatabasePackage>();
         private int CurrentUpdateStep = 1;
         private WebClient client = new WebClient();
+        private WebClient databaseClient = null;
         private string UpdateOutputDirectory = string.Empty;
+        private long databaseFtpDownloadsize = 0;
 
         /// <summary>
         /// Create an instance of the AutoUpdatePackageWindow window
@@ -74,6 +81,11 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            if (Credential == null)
+                throw new NullReferenceException(nameof(Credential) +  " is null");
+
+            databaseClient = new WebClient() { Credentials = Credential };
+            databaseClient.DownloadProgressChanged += DatabaseClient_DownloadProgressChanged;
             client.DownloadProgressChanged += Client_DownloadProgressChanged;
             Logging.Editor("Checking if registry key is set for IE11 for this application");
             using (System.Windows.Forms.WebBrowser bro = new System.Windows.Forms.WebBrowser())
@@ -184,8 +196,9 @@ namespace RelhaxModpack.Windows
             if(downloadNeeded)
             {
                 Logging.Editor("Download needed, starting");
-                string completeDownloadURL = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion) + package.ZipFile + package.EndAddress;
-                await client.DownloadFileTaskAsync(completeDownloadURL, downloadPathCurrent);
+                string completeDownloadURL = string.Format("{0}{1}/{2}", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion, package.ZipFile);
+                databaseFtpDownloadsize = await Utils.FTPGetFilesizeAsync(completeDownloadURL, Credential);
+                await databaseClient.DownloadFileTaskAsync(completeDownloadURL, downloadPathCurrent);
                 Logging.Editor("Download completed");
                 AutoUpdateProgressBar.Value = AutoUpdateProgressBar.Minimum;
             }
@@ -215,8 +228,23 @@ namespace RelhaxModpack.Windows
 
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            AutoUpdateProgressBar.Maximum = e.TotalBytesToReceive;
-            AutoUpdateProgressBar.Minimum = 0;
+            if (AutoUpdateProgressBar.Maximum != e.TotalBytesToReceive)
+                AutoUpdateProgressBar.Maximum = e.TotalBytesToReceive;
+
+            if(AutoUpdateProgressBar.Minimum != 0)
+                AutoUpdateProgressBar.Minimum = 0;
+
+            AutoUpdateProgressBar.Value = e.BytesReceived;
+        }
+
+        private void DatabaseClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            if(AutoUpdateProgressBar.Maximum != databaseFtpDownloadsize)
+                AutoUpdateProgressBar.Maximum = databaseFtpDownloadsize;
+
+            if (AutoUpdateProgressBar.Minimum != 0)
+                AutoUpdateProgressBar.Minimum = 0;
+
             AutoUpdateProgressBar.Value = e.BytesReceived;
         }
 
