@@ -2121,21 +2121,26 @@ namespace RelhaxModpack
             //and the user selected to be informed of issues
             //(removed components, disabled components, etc.)
             English.Add("AutoOneclickSelectionErrorsContinueBody", "There were problems loading the selection file (most likely disabled/removed packages, etc.)" +
-                "Would you like to continue anyways?");
-            German.Add("AutoOneclickSelectionErrorsContinueBody", TranslationNeeded);
-            Polish.Add("AutoOneclickSelectionErrorsContinueBody", TranslationNeeded);
-            French.Add("AutoOneclickSelectionErrorsContinueBody", TranslationNeeded);
-            Spanish.Add("AutoOneclickSelectionErrorsContinueBody", TranslationNeeded);
-            Russian.Add("AutoOneclickSelectionErrorsContinueBody", TranslationNeeded);
+                "\nWould you like to continue anyway?");
+            German.Add("AutoOneclickSelectionErrorsContinueBody", "Es gibt Probleme mit deiner Auswahlliste. Ein oder mehrere Einträge sind derzeit nicht verfügbar." +
+                "\nWillst du fortfahren?");
+            Polish.Add("AutoOneclickSelectionErrorsContinueBody", "Wystąpiły problemy ze wczytywaniem pliku kolekcji (prawdobodobnie dezaktywowane/usunięte pakiety itp.)" +
+                "\nCzy mimo to, chcesz kontynuować?");
+            French.Add("AutoOneclickSelectionErrorsContinueBody", "Des problèmes sont survenus lors du chargement de la sélection de fichiers (Un package a probablement" +
+                " été désactivé/supprimé, etc...). \nVoulez-vous tout de même continuer?");
+            Spanish.Add("AutoOneclickSelectionErrorsContinueBody", "Hubo problemas cargando el archivo de selección (probablemente paquetes eliminados/deshabilitados, etc.)." +
+                "\n¿Quiere continuar igualmente?");
+            Russian.Add("AutoOneclickSelectionErrorsContinueBody", "Возникли проблемы при загрузке файла предустановки (вероятно, были удалены или переименованы" +
+                " пакеты, и. т. д.). \nХотите продолжить работу?");
 
             //Component: AutoOneclickSelectionErrorsContinueHeader
             //see above
             English.Add("AutoOneclickSelectionErrorsContinueHeader", "Problems loading selection file");
             German.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
-            Polish.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
-            French.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
-            Spanish.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
-            Russian.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
+            Polish.Add("AutoOneclickSelectionErrorsContinueHeader", "Błędy wczytywania pliku kolekcji");
+            French.Add("AutoOneclickSelectionErrorsContinueHeader", "Problèmes du chargement de la sélection de fichiers");
+            Spanish.Add("AutoOneclickSelectionErrorsContinueHeader", "Problemas cargando el archivo de selección");
+            Russian.Add("AutoOneclickSelectionErrorsContinueHeader", "Проблемы в импорте файла предустановки");
 
             //Component: noAutoInstallWithBeta
             //
