@@ -1542,7 +1542,7 @@ namespace RelhaxModpack.InstallerComponents
             int numThreads = ModpackSettings.MulticoreExtraction ? Settings.NumLogicalProcesors : 1;
             Prog.TotalThreads = (uint)numThreads;
 
-            Logging.Info(string.Format("Number of threads to use for install is {0}, (MulticoreExtraction={1}, LogicalProcesosrs={2}",
+            Logging.Info(string.Format("Number of threads to use for install is {0}, (MulticoreExtraction={1}, LogicalProcesosrs={2})",
                 numThreads, ModpackSettings.MulticoreExtraction, Settings.NumLogicalProcesors));
 
             //setup progress reporting for parent
@@ -1598,12 +1598,12 @@ namespace RelhaxModpack.InstallerComponents
                     }
 
                     //assign each package one at a time into a package thread
-                    Logging.Info("starting package assignment to each thread");
+                    Logging.Debug("starting package assignment to each thread");
                     for (int j = 0; j < packages.Count; j++)
                     {
                         int threadSelector = j % numThreads;
                         packageThreads[threadSelector].Add(packages[j]);
-                        Logging.Info("j index = {0}, package {1} has been assigned to packageThread {2}", j, packages[j].PackageName, threadSelector);
+                        Logging.Debug("j index = {0}, package {1} has been assigned to packageThread {2}", j, packages[j].PackageName, threadSelector);
                     }
 
                     //now the fun starts. these all can run at once. yeah.
@@ -2221,7 +2221,8 @@ namespace RelhaxModpack.InstallerComponents
                         Logging.Info("Thread ID={0}, extraction finished of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
 
                         //increment counter
-                        Logging.Info("Thread ID={0}, extracted {1} of {2}", threadNum, ++numExtracted, packagesToExtract.Count);
+                        numExtracted++;
+                        Logging.Debug("Thread ID={0}, extracted {1} of {2}", threadNum, numExtracted, packagesToExtract.Count);
 
                         //update progress of total packages extracted
                         Prog.ParrentCurrent++;

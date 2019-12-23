@@ -624,12 +624,13 @@ namespace RelhaxModpack.Windows
                         if(File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
                         {
                             //load the custom selection file
+                            Logging.Info("Loading selection file from {0}",ModpackSettings.AutoOneclickSelectionFilePath);
                             SelectionsDocument = XmlUtils.LoadXmlDocument(ModpackSettings.AutoOneclickSelectionFilePath, XmlLoadType.FromFile);
                             shouldLoadSomething = true;
                         }
                         else
                         {
-                            Logging.Warning("AutoInstall or OneClickInstall is true, but the file selection path does not exist");
+                            Logging.Warning("AutoInstall or OneClickInstall is true, but the file selection path does not exist:");
                             Logging.Warning(ModpackSettings.AutoOneclickSelectionFilePath);
                             MessageBox.Show(Translations.GetTranslatedString("configLoadFailed"));
                         }
@@ -637,7 +638,9 @@ namespace RelhaxModpack.Windows
                     //else check and load the use selection from auto launch command line
                     else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
-                        SelectionsDocument = XmlUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
+                        string thePath = Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName);
+                        Logging.Info("Loading selection file from {0}", thePath);
+                        SelectionsDocument = XmlUtils.LoadXmlDocument(thePath, XmlLoadType.FromFile);
                         shouldLoadSomething = true;
                     }
                     else if (ModpackSettings.SaveLastSelection)
@@ -650,6 +653,7 @@ namespace RelhaxModpack.Windows
                         }
                         else
                         {
+                            Logging.Info("Loading selection file from {0}", Settings.LastInstalledConfigFilepath);
                             SelectionsDocument = XmlUtils.LoadXmlDocument(Settings.LastInstalledConfigFilepath, XmlLoadType.FromFile);
                             shouldLoadSomething = true;
                         }
