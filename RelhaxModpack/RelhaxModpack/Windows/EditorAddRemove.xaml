@@ -14,7 +14,7 @@
         <ComboBox Tag="PackageComboBox" x:Name="PackageComboBox" HorizontalAlignment="Stretch" Margin="10,79,10,0" VerticalAlignment="Top" SelectionChanged="PackageComboBox_SelectionChanged" />
         <Button Tag="OKButton" x:Name="OKButton" Content="OK" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="OKButton_Click" IsEnabled="False"/>
         <Button Tag="CancelButton" x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="CancelButton_Click"/>
-        <RadioButton Tag="AddSameLevel" x:Name="AddSameLevel" Content="Same Level" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" IsChecked="True" Checked="AddSameLevel_Checked"/>
-        <RadioButton Tag="AddNewLeve1" x:Name="AddNewLeve1" Content="New Level" HorizontalAlignment="Left" Margin="157,106,0,0" VerticalAlignment="Top" Checked="AddNewLeve1_Checked"/>
+        <RadioButton Tag="AddSameLevelRadioButton" x:Name="AddSameLevelRadioButton" Content="Same Level" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" IsChecked="True" Checked="AddSameLevelRadioButton_Checked"/>
+        <RadioButton Tag="AddNewLevelRadioButton" x:Name="AddNewLevelRadioButton" Content="New Level" HorizontalAlignment="Left" Margin="157,106,0,0" VerticalAlignment="Top" Checked="AddNewLevelRadioButton_Checked"/>
     </Grid>
 </local:RelhaxWindow>

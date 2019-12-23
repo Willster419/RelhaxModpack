@@ -1916,7 +1916,7 @@ namespace RelhaxModpack.Windows
                 Dependencies = Dependencies,
                 ParsedCategoryList = ParsedCategoryList,
                 EditOrAdd = true,
-                AddSaveLevel = true,
+                AddSameLevel = true,
                 SelectedPackage = null
             };
 
@@ -1928,7 +1928,7 @@ namespace RelhaxModpack.Windows
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
             {
                 PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
-                    addRemove.SelectedPackage, DragDropEffects.Move, !addRemove.AddSaveLevel);
+                    addRemove.SelectedPackage, DragDropEffects.Move, !addRemove.AddSameLevel);
             }
         }
 
@@ -1952,7 +1952,7 @@ namespace RelhaxModpack.Windows
                 Dependencies = Dependencies,
                 ParsedCategoryList = ParsedCategoryList,
                 EditOrAdd = false,
-                AddSaveLevel = true,
+                AddSameLevel = true,
                 SelectedPackage = null
             };
             if (!(bool)addRemove.ShowDialog())
@@ -1964,7 +1964,7 @@ namespace RelhaxModpack.Windows
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
             {
                 PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
-                    addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSaveLevel);
+                    addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSameLevel);
                 DatabaseTreeView.Items.Refresh();
             }
         }
