@@ -2570,7 +2570,7 @@ namespace RelhaxModpack
             English.Add("VersionInfo", "Application Update");
             German.Add("VersionInfo", "Porgrammaktualisierung");
             Polish.Add("VersionInfo", "Aktualizacja Aplikacji");
-            French.Add("VersionInfo", T"Mise à jour de l'application");
+            French.Add("VersionInfo", "Mise à jour de l'application");
             Spanish.Add("VersionInfo", "Actualizacón de la aplicación");
             Russian.Add("VersionInfo", "Обновление приложения");
 
@@ -2770,7 +2770,7 @@ namespace RelhaxModpack
             English.Add("failedToDownload1", "Failed to download the package");
             German.Add("failedToDownload1", "Konnte Paket nicht herunterladen");
             Polish.Add("failedToDownload1", "Nie udało się pobrać pakietu");
-            French.Add("failedToDownload1", "Echec du téléchargement du package";
+            French.Add("failedToDownload1", "Echec du téléchargement du package");
             Spanish.Add("failedToDownload1", "No se ha podido descargar el paquete");
             Russian.Add("failedToDownload1", "Сбой загрузки пакета");
 
@@ -3874,7 +3874,7 @@ namespace RelhaxModpack
             German.Add("TestLoadImageLibrariesButtonDescription", "Testet die Atlas-Bildverarbeitungsbibliotheken");
             Polish.Add("TestLoadImageLibrariesButtonDescription", "Próbuje wczytać biblioteki przetwarzania obrazów Atlas.\n" +
                 "Ewentualne błędy mogą być oznakiem braku wymaganego oprogramowania w systemie."); //=> Potential (load) errors may indicate missing dependencies in your system.
-            French.Add("TestLoadImageLibrariesButtonDescription", "Tests des bibliothèques de traitement d'images atlas);
+            French.Add("TestLoadImageLibrariesButtonDescription", "Tests des bibliothèques de traitement d'images atlas");
             Spanish.Add("TestLoadImageLibrariesButtonDescription", "Comprueba las librerías de procesamiento de las imágenes tipo atlas");
             Russian.Add("TestLoadImageLibrariesButtonDescription", "Тест библиотек обработчика текстурных атласов");
 
@@ -4588,7 +4588,7 @@ namespace RelhaxModpack
             English.Add("ScalingConfirmation", "Scaling Confirmation");
             German.Add("ScalingConfirmation", "Bestätige Skalierung");
             Polish.Add("ScalingConfirmation", "Zmiana Skalowania");
-            French.Add("ScalingConfirmation", "Confirmation de mise à l'échelle);
+            French.Add("ScalingConfirmation", "Confirmation de mise à l'échelle");
             Spanish.Add("ScalingConfirmation", "Confirmar escalado");
             Russian.Add("ScalingConfirmation", "Подтвердить изменения");
 
@@ -4644,7 +4644,7 @@ namespace RelhaxModpack
             English.Add("ColorType", "Brush type");
             German.Add("ColorType", "Pinseltyp");
             Polish.Add("ColorType", "Typ wypełnienia");
-            French.Add("ColorType", "Type de pinceau);
+            French.Add("ColorType", "Type de pinceau");
             Spanish.Add("ColorType", "Tipo de pincel");
             Russian.Add("ColorType", "Тип кисти");
 
