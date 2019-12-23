@@ -1838,8 +1838,8 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Info("Selection issues with auto or one click enabled, with message warning enabled. Show message.");
                 MessageBoxResult  result = MessageBox.Show(
-                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"),
-                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"), MessageBoxButton.YesNo);
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"),
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"), MessageBoxButton.YesNo);
                 if(result == MessageBoxResult.No)
                 {
                     Logging.Info("User selected stop installation");
