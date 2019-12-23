@@ -2116,6 +2116,27 @@ namespace RelhaxModpack
             Spanish.Add("autoOneclickSelectionFileNotExist", "La ruta al archivo de selección no existe");
             Russian.Add("autoOneclickSelectionFileNotExist", "Указанный путь к файлу предустановки не существует.");
 
+            //Component: AutoOneclickSelectionErrorsContinueBody
+            //When loading the selection file for "one-click" or "auto-install" modes, if there are issues with loading the selection,
+            //and the user selected to be informed of issues
+            //(removed components, disabled components, etc.)
+            English.Add("AutoOneclickSelectionErrorsContinueBody", "There were problems loading the selection file (most likely disabled/removed packages, etc.)" +
+                "Would you like to continue anyways?");
+            German.Add("AutoOneclickSelectionErrorsContinueBody", TranslationNeeded);
+            Polish.Add("AutoOneclickSelectionErrorsContinueBody", TranslationNeeded);
+            French.Add("AutoOneclickSelectionErrorsContinueBody", TranslationNeeded);
+            Spanish.Add("AutoOneclickSelectionErrorsContinueBody", TranslationNeeded);
+            Russian.Add("AutoOneclickSelectionErrorsContinueBody", TranslationNeeded);
+
+            //Component: AutoOneclickSelectionErrorsContinueHeader
+            //see above
+            English.Add("AutoOneclickSelectionErrorsContinueHeader", "Problems loading selection file");
+            German.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
+            Polish.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
+            French.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
+            Spanish.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
+            Russian.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
+
             //Component: noAutoInstallWithBeta
             //
             English.Add("noAutoInstallWithBeta", "Auto install mode cannot be used with the beta database");
