@@ -29,6 +29,7 @@ using RelhaxModpack.Windows;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Web;
+using RelhaxModpack.DatabaseComponents;
 
 namespace RelhaxModpack
 {
@@ -107,6 +108,12 @@ namespace RelhaxModpack
         {
             return string.Format("WoTClientVersion={0}, WoTOnlineFolderVersion={1}", WoTClientVersion, WoTOnlineFolderVersion);
         }
+    }
+
+    public struct LogicTracking
+    {
+        public IComponentWithDependencies ComponentWithDependencies;
+        public DatabaseLogic DatabaseLogic;
     }
 
     /// <summary>
@@ -1598,14 +1605,22 @@ namespace RelhaxModpack
             //1- build the list of calling mods that need it
             List<Dependency> dependenciesToInstall = new List<Dependency>();
 
+            //create list to track all database dependency refrences
+            List<LogicTracking> refrencedDependencies = new List<LogicTracking>();
+
             Logging.Debug("Starting step 1 of 4 in dependency calculation: adding from categories");
-            foreach (Dependency dependency in dependencies)
+            foreach (Category category in parsedCategoryList)
             {
-                foreach (Category category in parsedCategoryList)
+                foreach (DatabaseLogic logic in category.Dependencies)
                 {
-                    foreach (DatabaseLogic logic in category.Dependencies)
+                    refrencedDependencies.Add(new LogicTracking
                     {
-                        if(logic.PackageName.Equals(dependency.PackageName))
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = category
+                    });
+                    foreach (Dependency dependency in dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
                         {
                             Logging.Debug("Category \"{0}\" uses dependency \"{1}\" (logic type {2})", category.Name, dependency.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
@@ -1615,23 +1630,29 @@ namespace RelhaxModpack
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
+
+                            //log that the categorie's dependency refrence was linked properly
+                            logic.RefrenceLinked = true;
                         }
                     }
                 }
             }
-            Logging.Debug("step 1 complete");
+            Logging.Debug("Step 1 complete");
 
             Logging.Debug("Starting step 2 of 4 in dependency calculation: adding from selectable packages that use each dependency");
-            foreach(Dependency dependency in dependencies)
+            foreach(SelectablePackage package in packages)
             {
-                //for each dependency, go through each package, and in each package...
-                //Logging.Debug("processing dependency {0}", dependency.PackageName);
-                foreach(SelectablePackage package in packages)
+                //got though each logic property. if the package called is this dependency, then add it to it's list
+                foreach (DatabaseLogic logic in package.Dependencies)
                 {
-                    //got though each logic property. if the package called is this dependency, then add it to it's list
-                    foreach(DatabaseLogic logic in package.Dependencies)
+                    refrencedDependencies.Add(new LogicTracking
                     {
-                        if(logic.PackageName.Equals(dependency.PackageName))
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = package
+                    });
+                    foreach (Dependency dependency in dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
                         {
                             Logging.Debug("SelectablePackage \"{0}\" uses dependency \"{1}\" (logic type {2})", package.PackageName, dependency.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
@@ -1642,25 +1663,32 @@ namespace RelhaxModpack
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
+
+                            //log that the categorie's dependency refrence was linked properly
+                            logic.RefrenceLinked = true;
                         }
                     }
                 }
             }
-            Logging.Debug("step 2 complete");
+            Logging.Debug("Step 2 complete");
 
             //2- append with list of dependencies that need it, regardless if it's an error or not
             Logging.Debug("Starting step 3 of 4 in dependency calculation: adding dependencies that use each dependency");
-            foreach (Dependency dependency in dependencies)
+            //for each dependency go through each dependency's package logic and if it's called then add it
+            foreach(Dependency processingDependency in dependencies)
             {
-                //Logging.Debug("processing dependency {0}", dependency.PackageName);
-                //for each dependency go through each dependency's package logic and if it's called then add it
-                foreach(Dependency processingDependency in dependencies)
+                foreach (DatabaseLogic logic in processingDependency.Dependencies)
                 {
-                    if (processingDependency.PackageName.Equals(dependency.PackageName))
-                        continue;
-                    foreach(DatabaseLogic logic in processingDependency.Dependencies)
+                    refrencedDependencies.Add(new LogicTracking
                     {
-                        if(logic.PackageName.Equals(dependency.PackageName))
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = processingDependency
+                    });
+                    foreach (Dependency dependency in dependencies)
+                    {
+                        if (processingDependency.PackageName.Equals(dependency.PackageName))
+                            continue;
+                        if (logic.PackageName.Equals(dependency.PackageName))
                         {
                             Logging.Debug("Dependency \"{0}\" uses dependency \"{1}\" (logic type {2})", processingDependency.PackageName, dependency.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
@@ -1671,11 +1699,28 @@ namespace RelhaxModpack
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
+
+                            //log that the categorie's dependency refrence was linked properly
+                            logic.RefrenceLinked = true;
                         }
                     }
                 }
             }
-            Logging.Debug("step 3 complete");
+            Logging.Debug("Step 3 complete");
+
+            //3a - check if any dependency refrences were never matched
+            //like if a category refrences dependency the_dependency_packageName, but that package does not exist
+            refrencedDependencies = refrencedDependencies.Where((refrence) => !refrence.DatabaseLogic.RefrenceLinked).ToList();
+            Logging.Debug("Broken dependency refrences count: {0}", refrencedDependencies.Count);
+            if(refrencedDependencies.Count > 0)
+            {
+                Logging.Error("The following packages call refrences to dependencies that do not exist:");
+                foreach(LogicTracking logicTracking in refrencedDependencies)
+                {
+                    Logging.Error("Package: {0} => broken refrence {1}",
+                        logicTracking.ComponentWithDependencies.ComponentInternalName, logicTracking.DatabaseLogic.PackageName);
+                }
+            }
 
             //3 - run calculations IN DEPENDENCY LIST ORDER FROM TOP DOWN
             List<Dependency> notProcessedDependnecies = new List<Dependency>(dependencies);
@@ -1705,8 +1750,8 @@ namespace RelhaxModpack
                 List<DatabaseLogic> logicalAND = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.AND).ToList();
 
                 //debug logging
-                Logging.Debug("logicalOR count: {0}", localOR.Count);
-                Logging.Debug("logicalAnd count: {0}", logicalAND.Count);
+                Logging.Debug("LogicalOR count: {0}", localOR.Count);
+                Logging.Debug("LogicalAnd count: {0}", logicalAND.Count);
 
                 //if there are no logical ands, then only do ors, vise versa
                 bool ORsPass = localOR.Count > 0? false: true;
@@ -1715,12 +1760,12 @@ namespace RelhaxModpack
                 //if ors and ands are both true already, then something's broken
                 if(ORsPass && ANDSPass)
                 {
-                    Logging.Warning("ors and ands already pass for dependency package {0}, (nothing uses it?)", dependency.PackageName);
+                    Logging.Warning("Ors and ands already pass for dependency package {0}, (nothing uses it?)", dependency.PackageName);
                     continue;
                 }
 
                 //calc the ORs first
-                Logging.Debug("processing OR logic");
+                Logging.Debug("Processing OR logic");
                 foreach(DatabaseLogic orLogic in localOR)
                 {
                     //OR logic - if any mod/dependency is checked, then it's installed and can stop there
@@ -1728,56 +1773,56 @@ namespace RelhaxModpack
                     //same case goes for negatives - if mod is NOT checked and negateFlag
                     if(!orLogic.WillBeInstalled)
                     {
-                        Logging.WriteToLog(string.Format("skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         continue;
                     }
                     if(!orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is checked and notflag is low (= true), sets orLogic to pass!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("Package {0} is checked and notflag is low (= true), sets orLogic to pass!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         ORsPass = true;
                         break;
                     }
                     else if (orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is NOT checked and notFlag is high (= false), sets orLogic to pass!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("Package {0} is NOT checked and notFlag is high (= false), sets orLogic to pass!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         ORsPass = true;
                         break;
                     }
                     else
                     {
-                        Logging.WriteToLog(string.Format("package {0}, checked={1}, notFlag={2}, does not set orLogic to pass",
+                        Logging.WriteToLog(string.Format("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass",
                             orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
                     }
                 }
 
                 //now calc the ands
-                Logging.Debug("processing AND logic");
+                Logging.Debug("Processing AND logic");
                 foreach(DatabaseLogic andLogic in logicalAND)
                 {
                     if (andLogic.WillBeInstalled && !andLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is checked and (NOT notFlag) = true, correct AND logic, continue",
+                        Logging.WriteToLog(string.Format("Package {0} is checked and (NOT notFlag) = true, correct AND logic, continue",
                             andLogic.PackageName), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = true;
                     }
                     else if (!andLogic.WillBeInstalled && andLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is NOT checked and (notFlag) = true, correct AND logic, continue",
+                        Logging.WriteToLog(string.Format("Package {0} is NOT checked and (notFlag) = true, correct AND logic, continue",
                             andLogic.PackageName), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = true;
                     }
                     else
                     {
-                        Logging.WriteToLog(string.Format("package {0}, checked={1}, notFlag={2}, incorrect AND logic, set andPass=false and break!",
+                        Logging.WriteToLog(string.Format("Package {0}, checked={1}, notFlag={2}, incorrect AND logic, set andPass=false and break!",
                             andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = false;
                         break;
                     }
                 }
-                string final = string.Format("final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
+                string final = string.Format("Final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
                 if(ANDSPass && ORsPass)
                 {
                     Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
@@ -1790,7 +1835,7 @@ namespace RelhaxModpack
 
                 if (dependency.DatabasePackageLogic.Count > 0 && (ANDSPass && ORsPass))
                 {
-                    Logging.Debug("updating future references (like logicalDependnecies) for if dependency was checked");
+                    Logging.Debug("Updating future references (like logicalDependnecies) for if dependency was checked");
                     //update any dependencies that use it
                     foreach (DatabaseLogic callingLogic in dependency.Dependencies)
                     {
@@ -1804,12 +1849,12 @@ namespace RelhaxModpack
                             List<DatabaseLogic> foundLogic = refrenced.DatabasePackageLogic.Where(logic => logic.PackageName.Equals(dependency.PackageName)).ToList();
                             if (foundLogic.Count > 0)
                             {
-                                Logging.Debug("logic refrence entry for dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
+                                Logging.Debug("Logic refrence entry for dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
                                 foundLogic[0].WillBeInstalled = ANDSPass && ORsPass;
                             }
                             else
                             {
-                                Logging.Error("found logics count is 0 for updating refrences");
+                                Logging.Error("Found logics count is 0 for updating refrences");
                             }
                         }
                         else
@@ -1822,7 +1867,7 @@ namespace RelhaxModpack
                 notProcessedDependnecies.RemoveAt(0);
             }
 
-            Logging.Debug("step 4 complete");
+            Logging.Debug("Step 4 complete");
             return dependenciesToInstall;
         }
 
