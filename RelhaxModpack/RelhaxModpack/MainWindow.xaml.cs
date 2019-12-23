@@ -98,8 +98,7 @@ namespace RelhaxModpack
             WindowState = WindowState.Minimized;
             disabledBlacklist = new Control[]
             {
-                DisableTriggersCB,
-                VerboseLoggingCB
+                DisableTriggersCB
             };
             enabledBlacklist = new Control[]
             {
@@ -195,7 +194,6 @@ namespace RelhaxModpack
             //apply forced debugging settings
 #warning forced debugging settings is active
             ModpackSettings.DisableTriggers = true;
-            ModpackSettings.VerboseLogging = true;
 
             //load AutoSyncFrequencyComboBox with translated versions
             //<System:String>Minutes</System:String>

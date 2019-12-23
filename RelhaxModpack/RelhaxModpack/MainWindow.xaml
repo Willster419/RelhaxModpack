@@ -206,7 +206,7 @@
                                 <TextBlock x:Name="UninstallQuickText" Text="Quick" TextWrapping="Wrap"/>
                             </RadioButton>
                         </StackPanel>
-                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Click="VerboseLoggingCB_Click" IsChecked="True" IsEnabled="False" ToolTipService.ShowOnDisabled="True">
+                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Click="VerboseLoggingCB_Click" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="VerboseLoggingText" Text="Verbose Logging" TextWrapping="Wrap"/>
                         </CheckBox>
                         <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Click="DisableTriggersCB_Click" IsChecked="True" IsEnabled="False" ToolTipService.ShowOnDisabled="True">
