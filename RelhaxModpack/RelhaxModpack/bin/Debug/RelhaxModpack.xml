@@ -5459,6 +5459,11 @@
             The absolute path inside the zip file to the file list instructions xml
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.AutoUpdatePackageWindow.Credential">
+            <summary>
+            The FTP credentials
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.AutoUpdatePackageWindow.#ctor">
             <summary>
             Create an instance of the AutoUpdatePackageWindow window
@@ -5603,7 +5608,7 @@
             True is moving package, false is adding package
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.EditorAddRemove.AddSaveLevel">
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.AddSameLevel">
             <summary>
             Toggles if the user requests to add the package at a new level or in the same level as the referenced package
             </summary>
