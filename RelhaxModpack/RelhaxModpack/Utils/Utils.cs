@@ -1717,7 +1717,7 @@ namespace RelhaxModpack
                 Logging.Error("The following packages call refrences to dependencies that do not exist:");
                 foreach(LogicTracking logicTracking in refrencedDependencies)
                 {
-                    Logging.Error("Package: {0} => broken refrence {1}",
+                    Logging.Error("Package: {0} => broken refrence: {1}",
                         logicTracking.ComponentWithDependencies.ComponentInternalName, logicTracking.DatabaseLogic.PackageName);
                 }
             }
