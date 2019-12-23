@@ -424,6 +424,11 @@
             The list of packages contained in this category
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Category.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Category.InstallGroup">
             <summary>
             The install group number of the category. Used to denote which install thread it is assigned to.
@@ -515,6 +520,14 @@
             <summary>
             The logic type to use for this package definition
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseLogic.RefrenceLinked">
+            <summary>
+            A flag for dependency calculation for when the application has linked the dependnecy refrence
+            </summary>
+            <remarks>During dependnecy calcuation, the application will 'link' the refrenced dependencies in a package
+            to the refrenced dependency. This allows for the application to process dependency calcuation logic in a dynamic
+            AND and OR system. Having the flag can help to determine if a refrence does not exist</remarks>
         </member>
         <member name="M:RelhaxModpack.DatabaseLogic.ToString">
             <summary>
@@ -735,6 +748,11 @@
             Property of Dependencies list to allow for interface implementation
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Dependency.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Dependency.wasLogicalDependencyLegacy">
             <summary>
             When loading from legacy database type and is was of type "logicalDependency"
@@ -760,6 +778,11 @@
         <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithDependencies.DependenciesProp">
             <summary>
             The property wrapper of the Dependencies field
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithDependencies.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
             </summary>
         </member>
         <member name="T:RelhaxModpack.MediaType">
@@ -1034,6 +1057,11 @@
         <member name="F:RelhaxModpack.SelectablePackage.ShowInSearchList">
             <summary>
             Toggle if the package should appear in the search list
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.UIComponent">
