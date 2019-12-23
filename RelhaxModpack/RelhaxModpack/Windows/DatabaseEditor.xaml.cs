@@ -1110,7 +1110,7 @@ namespace RelhaxModpack.Windows
                 packageToMove.PackageName, packageCurrentlyOver.PackageName, effects.ToString(), addBelowItem.ToString());
 
             //make sure that the source and destination are not the same
-            if (packageCurrentlyOver.Equals(packageToMove))
+            if (packageCurrentlyOver.Equals(packageToMove) && !addBelowItem)
             {
                 Logging.Editor("database packages detected to be the same, aborting dragDrop");
                 return;
