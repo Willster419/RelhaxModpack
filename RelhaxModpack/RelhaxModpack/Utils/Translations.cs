@@ -2122,7 +2122,7 @@ namespace RelhaxModpack
             //(removed components, disabled components, etc.)
             English.Add("AutoOneclickSelectionErrorsContinueBody", "There were problems loading the selection file (most likely disabled/removed packages, etc.)" +
                 "\nWould you like to continue anyway?");
-            German.Add("AutoOneclickSelectionErrorsContinueBody", "Es gibt Probleme mit deiner Auswahlliste. Ein oder mehrere Einträge sind derzeit nicht verfügbar." +
+            German.Add("AutoOneclickSelectionErrorsContinueBody", "Es gibt Probleme mit deiner Auswahldatei. Ein oder mehrere Einträge sind derzeit nicht verfügbar." +
                 "\nWillst du fortfahren?");
             Polish.Add("AutoOneclickSelectionErrorsContinueBody", "Wystąpiły problemy ze wczytywaniem pliku kolekcji (prawdobodobnie dezaktywowane/usunięte pakiety itp.)" +
                 "\nCzy mimo to, chcesz kontynuować?");
@@ -2136,7 +2136,7 @@ namespace RelhaxModpack
             //Component: AutoOneclickSelectionErrorsContinueHeader
             //see above
             English.Add("AutoOneclickSelectionErrorsContinueHeader", "Problems loading selection file");
-            German.Add("AutoOneclickSelectionErrorsContinueHeader", TranslationNeeded);
+            German.Add("AutoOneclickSelectionErrorsContinueHeader", "Probleme beim Laden der Auswahldatei");
             Polish.Add("AutoOneclickSelectionErrorsContinueHeader", "Błędy wczytywania pliku kolekcji");
             French.Add("AutoOneclickSelectionErrorsContinueHeader", "Problèmes du chargement de la sélection de fichiers");
             Spanish.Add("AutoOneclickSelectionErrorsContinueHeader", "Problemas cargando el archivo de selección");
