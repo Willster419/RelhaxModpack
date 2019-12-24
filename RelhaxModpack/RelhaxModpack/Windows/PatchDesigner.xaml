@@ -158,7 +158,7 @@
                     <TextBlock Tag="SaveOnSelectionChangeHeader" x:Name="SaveOnSelectionChangeHeader" HorizontalAlignment="Left" VerticalAlignment="Center"
                                Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" Text="Save on selection change"/>
                     <CheckBox Tag="SaveOnSelectionChangeBheckbox" x:Name="SaveOnSelectionChangeBheckbox"  HorizontalAlignment="Left" VerticalAlignment="Center"
-                              Grid.Column="1" Grid.Row="2" Checked="SaveOnSelectionChangeBheckbox_Checked"/>
+                              Grid.Column="1" Grid.Row="2" Click="SaveOnSelectionChangeBheckbox_Click"/>
                     <TextBlock Tag="ApplyBehaviorHeader" x:Name="ApplyBehaviorHeader" HorizontalAlignment="Left"    VerticalAlignment="Center"
                                Grid.Column="0" Grid.Row="3" TextWrapping="Wrap" Text="Apply Behavior"/>
                     <!--put more apply behavior here-->
@@ -173,7 +173,7 @@
                     <TextBlock Tag="SwitchToLogTabHeader" x:Name="SwitchToLogTabHeader" HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="0"
                                Grid.Row="7" TextWrapping="Wrap" Text="Switch to log tab when testing"/>
                     <CheckBox Tag="SwitchToLogTabCheckbox" x:Name="SwitchToLogTabCheckbox"  HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="1"
-                              Grid.Row="8" Checked="SwitchToLogTabCheckbox_Checked"/>
+                              Grid.Row="8" Click="SwitchToLogTabCheckbox_Click"/>
 
                 </Grid>
             </TabItem>

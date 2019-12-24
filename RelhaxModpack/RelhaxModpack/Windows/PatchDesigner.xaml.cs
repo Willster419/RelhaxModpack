@@ -165,12 +165,12 @@ namespace RelhaxModpack.Windows
             PatchSettings.VersiondirMacro = VersionDirMacroTextbox.Text;
         }
 
-        private void SaveOnSelectionChangeBheckbox_Checked(object sender, RoutedEventArgs e)
+        private void SaveOnSelectionChangeBheckbox_Click(object sender, RoutedEventArgs e)
         {
             PatchSettings.SaveSelectionBeforeLeave = (bool)SaveOnSelectionChangeBheckbox.IsChecked;
         }
 
-        private void SwitchToLogTabCheckbox_Checked(object sender, RoutedEventArgs e)
+        private void SwitchToLogTabCheckbox_Click(object sender, RoutedEventArgs e)
         {
             PatchSettings.SwitchToLogWhenTestingPatch = (bool)SwitchToLogTabCheckbox.IsChecked;
         }
