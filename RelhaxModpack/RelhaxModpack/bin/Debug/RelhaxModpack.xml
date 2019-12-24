@@ -6317,6 +6317,12 @@
             PatchDesigner
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.PatchDesigner.LaunchedFromMainWindow">
+            <summary>
+            Indicates if this editor instance was launched from the MainWindow or from command line
+            </summary>
+            <remarks>This changes the behavior of the logging for the editor</remarks>
+        </member>
         <member name="M:RelhaxModpack.Windows.PatchDesigner.#ctor">
             <summary>
             Create an instance of the PatchDesigner window
