@@ -1339,6 +1339,15 @@ namespace RelhaxModpack
             Spanish.Add("LauchEditorText", "Iniciar editor de la base de datos");
             Russian.Add("LauchEditorText", "Запустить редактор БД");
 
+            //Component: LauchPatchDesignerText
+            //button for launching the editor from the main application window
+            English.Add("LauchPatchDesignerText", "Launch Patch Designer");
+            German.Add("LauchPatchDesignerText", TranslationNeeded);
+            Polish.Add("LauchPatchDesignerText", TranslationNeeded);
+            French.Add("LauchPatchDesignerText", TranslationNeeded);
+            Spanish.Add("LauchPatchDesignerText", TranslationNeeded);
+            Russian.Add("LauchPatchDesignerText", TranslationNeeded);
+
             //Component: LauchEditorDescription
             //button for launching the editor from the main application window
             English.Add("LauchEditorDescription", "Launch the Database Editor from here, instead of from command line");

@@ -391,11 +391,15 @@ namespace RelhaxModpack
                 Logging.Info("{0} found, enabling editor button", Settings.EditorLaunchFromMainWindowFilename);
                 LauchEditor.Visibility = Visibility.Visible;
                 LauchEditor.IsEnabled = true;
+                LauchPatchDesigner.Visibility = Visibility.Visible;
+                LauchPatchDesigner.IsEnabled = true;
             }
             else
             {
                 LauchEditor.Visibility = Visibility.Hidden;
                 LauchEditor.IsEnabled = false;
+                LauchPatchDesigner.Visibility = Visibility.Hidden;
+                LauchPatchDesigner.IsEnabled = false;
             }
 
             //dispose of please wait here
@@ -3030,6 +3034,34 @@ namespace RelhaxModpack
             Directory.Move(middlePath, newPath);
 
             Logging.Info("upgrade of folder {0} successful", Path.GetFileName(newPath));
+        }
+
+        private void LauchPatchDesigner_Click(object sender, RoutedEventArgs e)
+        {
+            Logging.Info("Launching patch designer from MainWindow");
+            if (!Logging.IsLogDisposed(Logfiles.Application))
+                Logging.DisposeLogging(Logfiles.Application);
+
+            CommandLineSettings.ApplicationMode = ApplicationMode.PatchDesigner;
+            PatchDesigner designer = new PatchDesigner() { LaunchedFromMainWindow = true };
+
+            //start updater logging system
+            if (!Logging.Init(Logfiles.PatchDesigner))
+            {
+                MessageBox.Show("Failed to initialize logfile for patch designer");
+                designer = null;
+                return;
+            }
+            Logging.WriteHeader(Logfiles.PatchDesigner);
+            designer.ShowDialog();
+
+            //and set back to application
+            CommandLineSettings.ApplicationMode = ApplicationMode.Default;
+            if (!Logging.Init(Logfiles.Application))
+            {
+                MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
+                Application.Current.Shutdown((int)ReturnCodes.LogfileError);
+            }
         }
 
         //asyncronously get the file sizes of backups

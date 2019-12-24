@@ -17,6 +17,12 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class PatchDesigner : RelhaxWindow
     {
+        /// <summary>
+        /// Indicates if this editor instance was launched from the MainWindow or from command line
+        /// </summary>
+        /// <remarks>This changes the behavior of the logging for the editor</remarks>
+        public bool LaunchedFromMainWindow = false;
+
         private PatchSettings PatchSettings;
         private OpenFileDialog OpenPatchfileDialog;
         private OpenFileDialog OpenFileToPatchDialog;
@@ -105,6 +111,17 @@ namespace RelhaxModpack.Windows
 
             //by default, set the locate file type to absolute
             FilePathTypeCombobox.SelectedIndex = 1;
+
+            if (!LaunchedFromMainWindow)
+            {
+                Task.Run(async () =>
+                {
+                    if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                    {
+                        MessageBox.Show("Your application is out of date. Please launch the application normally to update");
+                    }
+                });
+            }
         }
 
         private void PopOutReplacePatchDesigner_Closed(object sender, EventArgs e)
