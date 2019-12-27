@@ -26,9 +26,12 @@
                     <Button Tag="LocateFileToPatchButton" x:Name="LocateFileToPatchButton" Content="Open file to patch" HorizontalAlignment="Right" VerticalAlignment="Top"
                             Width="120" Height="22" Click="LocateFileToPatchButton_Click"/>
                     <TextBlock Tag="LocateFileToPatchButton" x:Name="FileLocationHeader" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Target file location"
-                               VerticalAlignment="Top" Height="22" Padding="0,3,0,0"/>
+                               VerticalAlignment="Top" Height="22" Padding="0,3,0,0" ToolTip="The target file is the file you wish to patch"/>
+                    <!-- NEWLINE =&#10; -->
                     <ComboBox Tag="FilePathType" x:Name="FilePathTypeCombobox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"
-                                  Margin="129,0,0,0" SelectionChanged="FilePathTypeCombobox_Selected" Height="21" >
+                                  Margin="129,0,0,0" SelectionChanged="FilePathTypeCombobox_Selected" Height="21" ToolTip="Relative = Use defined macros in settings + 'Patch file path' to set filepath
+                              &#10;Absolute = Use 'Patch file path' only to directly map to file
+                              &#10;For example, you could set the app macro to your World_of_Tanks directory">
                         <System:String>Relative</System:String>
                         <System:String>Absolute</System:String>
                     </ComboBox>
@@ -37,8 +40,9 @@
                     <Button Tag="ApplyChangesButton" x:Name="ApplyChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                             Width="97" Click="ApplyChangesButton_Click"/>
                     <TextBox Tag="FileToPatchTextbox" x:Name="FileToPatchTextbox" HorizontalAlignment="Stretch" Height="56" TextWrapping="Wrap" VerticalAlignment="Top"
-                             Margin="0,27,0,0" />
-                    <CheckBox x:Name="PopOutReplaceBlockCB" Content="Pop-out replace textbox" HorizontalAlignment="Left" Margin="0,0,0,5" VerticalAlignment="Bottom" Click="PopOutReplaceBlockCB_Click"/>
+                             Margin="0,27,0,0" ToolTip="The target file is the file you wish to patch"/>
+                    <CheckBox x:Name="PopOutReplaceBlockCB" Content="Pop-out replace textbox" HorizontalAlignment="Left" Margin="0,0,0,5" VerticalAlignment="Bottom"
+                              Click="PopOutReplaceBlockCB_Click" ToolTip="Show a larger window to write the replace text field"/>
                     <Grid HorizontalAlignment="Left" Height="90" Margin="0,151,0,0" VerticalAlignment="Top" Width="388">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
@@ -51,11 +55,13 @@
                             <RowDefinition Height="22"/>
                         </Grid.RowDefinitions>
                         <TextBlock Tag="PatchPathHeader" x:Name="PatchPathHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap"
-                               Text="Patch Path Macro" VerticalAlignment="Stretch" Grid.Row="0"/>
+                               Text="Patch Path Macro" VerticalAlignment="Stretch" Grid.Row="0" ToolTip="app = World_of_Tanks directory 
+                                   &#10;appData = C:\Users\{username}\AppData\Roaming\Wargaming.net\WorldOfTanks"/>
                         <TextBlock Tag="PatchTypeHeader" x:Name="PatchTypeHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Patch Type"
                                VerticalAlignment="Stretch" Grid.Row="1" />
                         <ComboBox Tag="PatchPathCombobox" x:Name="PatchPathCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1"
-                                  Margin="0,1,0,1" Grid.Row="0">
+                                  Margin="0,1,0,1" Grid.Row="0" ToolTip="app = World_of_Tanks directory 
+                                   &#10;appData = C:\Users\{username}\AppData\Roaming\Wargaming.net\WorldOfTanks">
                             <System:String>app</System:String>
                             <System:String>appData</System:String>
                         </ComboBox>
@@ -70,10 +76,13 @@
                         <ComboBox Tag="PatchModeCombobox" x:Name="PatchModeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1"
                                   Margin="0,1,0,1" Grid.Row="2"/>
                         <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path [disabled until Relhax V2]"
-                              HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" IsEnabled="False" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2"/>
+                              HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" IsEnabled="False" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2"
+                                  ToolTipService.ShowOnDisabled="True" ToolTip="Follow files based on xvm configuration multiple file structure"/>
                     </Grid>
-                    <TextBlock x:Name="PatchFilePathLabel" HorizontalAlignment="Left" Margin="0,88,0,0" TextWrapping="Wrap" Text="Patch file path" VerticalAlignment="Top"/>
-                    <TextBox x:Name="PatchFilePathTextbox" HorizontalAlignment="Stretch" Height="37" Margin="0,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" />
+                    <TextBlock x:Name="PatchFilePathLabel" HorizontalAlignment="Left" Margin="0,88,0,0" TextWrapping="Wrap" Text="Patch file path" VerticalAlignment="Top"
+                               ToolTip="'file' parameter of patch xml"/>
+                    <TextBox x:Name="PatchFilePathTextbox" HorizontalAlignment="Stretch" Height="37" Margin="0,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" 
+                             ToolTip="'file' parameter of patch xml"/>
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,241,0,25">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20"/>
@@ -147,11 +156,12 @@
                     </Grid.ColumnDefinitions>
                     <!-- https://stackoverflow.com/questions/6312371/how-to-use-a-literal-curly-brace-in-xaml -->
                     <TextBlock Tag="VersionDirMacroHeader" x:Name="VersionDirMacroHeader" HorizontalAlignment="Stretch"    VerticalAlignment="Center"
-                               Grid.Column="0" Grid.Row="0" TextWrapping="Wrap" Text="{}{versiondir} Path"/>
+                               Grid.Column="0" Grid.Row="0" TextWrapping="Wrap" Text="{}{versiondir} macro"
+                               ToolTip="Set this for Relative file location mode. See relative file location tooltip."/>
                     <TextBox Tag="VersionDirMacroTextbox" x:Name="VersionDirMacroTextbox"   HorizontalAlignment="Stretch" VerticalAlignment="Center"
                              Grid.Column="1" Grid.Row="0" TextWrapping="Wrap" TextChanged="VersionDirMacroTextbox_TextChanged"/>
                     <TextBlock Tag="AppMacroHeader" x:Name="AppMacroHeader" HorizontalAlignment="Stretch"    VerticalAlignment="Center" Grid.Column="0"
-                               Grid.Row="1" TextWrapping="Wrap" Text="{}{app} Path"/>
+                               Grid.Row="1" TextWrapping="Wrap" Text="{}{app} macro" ToolTip="Set this for Relative file location mode. See relative file location tooltip."/>
                     <TextBox Tag="AppMacroTextbox" x:Name="AppMacroTextbox"   HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1"
                              Grid.Row="1" TextWrapping="Wrap" TextChanged="AppMacroTextbox_TextChanged"/>
                     <TextBlock Tag="SaveOnSelectionChangeHeader" x:Name="SaveOnSelectionChangeHeader" HorizontalAlignment="Left" VerticalAlignment="Center"
