@@ -40,8 +40,7 @@ namespace RelhaxModpack
         private NewsViewer newsViewer = null;
         private WebClient client = null;
         private VersionInfo versionInfo = null;
-        private Timer autoInstallTimer = new Timer();
-        private bool autoInstallTimerRegistered = false;
+        private Timer autoInstallTimer = null;
         private CancellationTokenSource cancellationTokenSource;
         private InstallEngine installEngine;
         private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
@@ -82,6 +81,8 @@ namespace RelhaxModpack
         private TaskbarManager taskbarInstance = null;
         private TaskbarProgressBarState taskbarState = TaskbarProgressBarState.NoProgress;
         private int taskbarValue = 0;
+        //beta database compaison for auto install
+        string oldBetaDB, newBetaDB;
 
         /// <summary>
         /// The original width and height of the application before applying scaling
@@ -2514,13 +2515,11 @@ namespace RelhaxModpack
         {
             if ((bool)UseBetaDatabaseCB.IsChecked)
             {
+                Logging.Debug("[OnUseBetaDatabaseChanged]: reset internals and get list of database branches");
                 //disable the UI part of it
                 UseBetaDatabaseCB.IsEnabled = false;
                 UseBetaDatabaseBranches.IsEnabled = false;
                 UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
-
-                //clear current list
-                UseBetaDatabaseBranches.Items.Clear();
 
                 //declare objects to use
                 string jsonText = string.Empty;
@@ -2539,7 +2538,7 @@ namespace RelhaxModpack
                     //https://docs.microsoft.com/en-us/dotnet/framework/network-programming/tls
                     if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
                     {
-                        Logging.Debug("Windows 7 detected, enabling TLS 1.1 and 1.2");
+                        Logging.Debug("[OnUseBetaDatabaseChanged]: Windows 7 detected, enabling TLS 1.1 and 1.2");
                         System.Net.ServicePointManager.SecurityProtocol =
                             SecurityProtocolType.Ssl3 |
                             SecurityProtocolType.Tls |
@@ -2548,8 +2547,12 @@ namespace RelhaxModpack
                     }
                     try
                     {
+                        Logging.Debug("[OnUseBetaDatabaseChanged]: downloading branch list as json from github API");
                         client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                        jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
+                        if(loading)
+                            jsonText = client.DownloadString(Settings.BetaDatabaseBranchesURL);
+                        else
+                            jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
                     }
                     catch (WebException wex)
                     {
@@ -2560,6 +2563,7 @@ namespace RelhaxModpack
                 {
                     try
                     {
+                        Logging.Debug("[OnUseBetaDatabaseChanged]: parsing json branches");
                         root = JArray.Parse(jsonText);
                     }
                     catch (JsonException jex)
@@ -2573,11 +2577,16 @@ namespace RelhaxModpack
                         {
                             JValue value = (JValue)branch["name"];
                             string branchName = value.Value.ToString();
+                            Logging.Debug("[OnUseBetaDatabaseChanged]: Adding branch {0}", branchName);
                             if (!branches.Contains(branchName))
                                 branches.Add(branchName);
                         }
                     }
                 }
+
+                Logging.Debug("[OnUseBetaDatabaseChanged]: Updating UI with new branches list");
+                //clear current list
+                UseBetaDatabaseBranches.Items.Clear();
 
                 //fill the UI with branch items
                 foreach (string s in branches)
@@ -2605,6 +2614,52 @@ namespace RelhaxModpack
             else
             {
                 databaseVersion = ModpackSettings.DatabaseDistroVersion;
+            }
+
+            if(databaseVersion != DatabaseVersions.Test && ModpackSettings.AutoInstall)
+            {
+                //restart timer
+                Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, restart timer for this change");
+                if(autoInstallTimer != null)
+                {
+                    autoInstallTimer.Dispose();
+                    autoInstallTimer = null;
+                }
+                autoInstallTimer = new Timer
+                {
+                    Enabled = false,
+                    AutoReset = true
+                };
+
+                switch (ModpackSettings.DatabaseDistroVersion)
+                {
+                    case DatabaseVersions.Beta:
+                        autoInstallTimer.Elapsed += AutoInstallTimer_ElapsedBeta;
+                        break;
+                    case DatabaseVersions.Stable:
+                        autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
+                        break;
+                }
+                autoInstallTimer.Enabled = true;
+
+                if(databaseVersion == DatabaseVersions.Beta)
+                {
+                    Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, database = beta, need to get current beta database for comparison");
+                    using (WebClient client = new WebClient())
+                    {
+                        client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                        if (loading)
+                        {
+                            if (string.IsNullOrEmpty(oldBetaDB))
+                                oldBetaDB = client.DownloadString(Settings.BetaDatabaseV1URL);
+                        }
+                        else
+                        {
+                            oldBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
+                        }
+                        newBetaDB = oldBetaDB;
+                    }
+                }
             }
 
             ProcessTitle();
@@ -2777,15 +2832,18 @@ namespace RelhaxModpack
             ModpackSettings.SaveDisabledMods = (bool)SaveDisabledModsInSelection.IsChecked;
         }
 
-        private void AutoInstallCB_Click(object sender, RoutedEventArgs e)
+        private async void AutoInstallCB_Click(object sender, RoutedEventArgs e)
         {
-            //must be in stable database mode to use this
-            if(ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
+            //if it's turning off, then process that only
+            if(!(bool)AutoInstallCB.IsChecked)
             {
-                Logging.Info("[AutoInstallCB_Click]: database distribution version is not stable, abort");
+                Logging.Debug("[AutoInstallCB_Click]: autoInstall being turned off, process that only");
                 ModpackSettings.AutoInstall = false;
-                AutoInstallCB.IsChecked = false;
-                MessageBox.Show(Translations.GetTranslatedString("noAutoInstallWithBeta"));
+                if (autoInstallTimer != null)
+                {
+                    autoInstallTimer.Dispose();
+                    autoInstallTimer = null;
+                }
                 return;
             }
 
@@ -2795,23 +2853,70 @@ namespace RelhaxModpack
                 Logging.Info("[AutoInstallCB_Click]: autoClickSelectionPath is null or doesn't exist, abort");
                 ModpackSettings.AutoInstall = false;
                 AutoInstallCB.IsChecked = false;
+                if (autoInstallTimer != null)
+                {
+                    autoInstallTimer.Dispose();
+                    autoInstallTimer = null;
+                }
                 MessageBox.Show(Translations.GetTranslatedString("autoOneclickSelectionFileNotExist"));
                 return;
             }
 
+            if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
+            {
+                if (!loading)
+                {
+                    Logging.Info("[AutoInstallCB_Click]: database distro is beta, verify with user");
+                    if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"),
+                        MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    {
+                        Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user declined, abort");
+                        ModpackSettings.AutoInstall = false;
+                        AutoInstallCB.IsChecked = false;
+                        if (autoInstallTimer != null)
+                        {
+                            autoInstallTimer.Dispose();
+                            autoInstallTimer = null;
+                        }
+                        return;
+                    }
+                }
+
+                Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user confirmed, setup initial check");
+                using (WebClient client = new WebClient())
+                {
+                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                    if (loading)
+                    {
+                        if (string.IsNullOrEmpty(oldBetaDB))
+                            oldBetaDB = client.DownloadString(Settings.BetaDatabaseV1URL);
+                    }
+                    else
+                    {
+                        oldBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
+                    }
+                    newBetaDB = oldBetaDB;
+                }
+            }
+
             //check the time parsed value
             int timeToUse = Utils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
-            if (timeToUse < 1)
+            if (timeToUse == 0)
             {
-                Logging.Warning("[AutoInstallCB_Click]: Invalid time specified, must be above 0");
-                MessageBox.Show("InvalidTimeNumberSpecified");
-                ModpackSettings.AutoInstall = false;
-                AutoInstallCB.IsChecked = false;
-                return;
+                Logging.Warning("[AutoInstallCB_Click]: Invalid time specified, must be above 0. using 1");
+                timeToUse = 1;
+                AutoSyncFrequencyTexbox.Text = timeToUse.ToString();
             }
 
             //parse the time into a timespan for the check timer
             Logging.Info("[AutoInstallCB_Click]: registering auto install periodic timer");
+            if (autoInstallTimer != null)
+            {
+                autoInstallTimer.Dispose();
+                autoInstallTimer = null;
+            }
+            autoInstallTimer = new Timer() { Enabled = false, AutoReset = true };
+
             switch (AutoSyncFrequencyComboBox.SelectedIndex)
             {
                 case 0://mins
@@ -2827,44 +2932,78 @@ namespace RelhaxModpack
                     throw new BadMemeException("this should not happen");
             }
 
-            autoInstallTimer.AutoReset = true;
-            if (!autoInstallTimerRegistered)
+            switch(ModpackSettings.DatabaseDistroVersion)
             {
-                Logging.Debug("[AutoInstallCB_Click]: auto install timer not registered to event, registering now");
-                autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
-                autoInstallTimerRegistered = true;
-            }
-            else
-            {
-                Logging.Debug("[AutoInstallCB_Click]: auto install timer already registered");
+                case DatabaseVersions.Beta:
+                    autoInstallTimer.Elapsed += AutoInstallTimer_ElapsedBeta;
+                    break;
+                case DatabaseVersions.Stable:
+                    autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
+                    break;
             }
 
+            //start it
+            autoInstallTimer.Enabled = true;
+
+            //and finally set value into modpack settings
             ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
-            if (ModpackSettings.AutoInstall)
-                autoInstallTimer.Enabled = true;
-            else
-                autoInstallTimer.Enabled = false;
+
             Logging.Info("[AutoInstallCB_Click]: timer registered, listening for update check intervals");
         }
 
-        private async void AutoInstallTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void AutoInstallTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Logging.Debug("[AutoInstallTimer_Elapsed]: timer has elapsed to check for database updates");
-
-            //reset check flag and get old db version
-            string oldDBVersion = Settings.DatabaseVersion;
-
-            //actually check for updates
-            await CheckForDatabaseUpdates(true);
-            
-            Logging.Debug("[AutoInstallTimer_Elapsed]: database periodic check complete, old = {0}, new = {1}", oldDBVersion, Settings.DatabaseVersion);
-
-            //check if database was updated
-            if (!oldDBVersion.Equals(Settings.DatabaseVersion))
+            this.Dispatcher.InvokeAsync(async () =>
             {
-                Logging.Debug("[AutoInstallTimer_Elapsed]: update found from auto install, running installation");
-                InstallModpackButton_Click(null, null);
-            }
+                if (loading)
+                    return;
+
+                Logging.Debug("[AutoInstallTimer_Elapsed]: timer has elapsed to check for database updates");
+
+                //reset check flag and get old db version
+                string oldDBVersion = Settings.DatabaseVersion;
+
+                //actually check for updates
+                await CheckForDatabaseUpdates(true);
+
+                Logging.Debug("[AutoInstallTimer_Elapsed]: database periodic check complete, old = {0}, new = {1}", oldDBVersion, Settings.DatabaseVersion);
+
+                //check if database was updated
+                if (!oldDBVersion.Equals(Settings.DatabaseVersion))
+                {
+                    Logging.Debug("[AutoInstallTimer_Elapsed]: update found from auto install, running installation");
+                    InstallModpackButton_Click(null, null);
+                }
+            });
+        }
+
+        private async void AutoInstallTimer_ElapsedBeta(object sender, ElapsedEventArgs e)
+        {
+            this.Dispatcher.InvokeAsync(async () =>
+            {
+                if (loading)
+                    return;
+
+                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: timer has elapsed to check for beta database updates");
+
+                using (WebClient client = new WebClient())
+                {
+                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                    newBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
+                }
+
+                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: comparing old and new beta databases");
+                if (!newBetaDB.Equals(oldBetaDB))
+                {
+                    Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old != new, starting install");
+                    oldBetaDB = newBetaDB;
+                    InstallModpackButton_Click(null, null);
+                }
+                else
+                {
+                    Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old == new, no start install");
+                }
+            });
         }
 
         private void AllowStatsGatherCB_Click(object sender, RoutedEventArgs e)
