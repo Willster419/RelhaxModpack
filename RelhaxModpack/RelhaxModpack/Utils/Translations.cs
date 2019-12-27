@@ -2160,6 +2160,26 @@ namespace RelhaxModpack
             Spanish.Add("noAutoInstallWithBeta", "El modo de instalación automática no puede ser utilizado con la base de datos en beta");
             Russian.Add("noAutoInstallWithBeta", "При использовании бета-версии БД установка в автоматическом режиме невозможна.");
 
+            //Component: autoInstallWithBetaDBConfirmBody
+            //
+            English.Add("autoInstallWithBetaDBConfirmBody", "Auto install will be enabled with beta database. The beta database is updated frequenty and could result in multiple" +
+                " installations in one day. Are you sure you would like to do this?");
+            German.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
+            Polish.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
+            French.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
+            Spanish.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
+            Russian.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
+
+            //Component: autoInstallWithBetaDBConfirmHeader
+            //
+            English.Add("autoInstallWithBetaDBConfirmHeader", English["verifyUninstallHeader"]);
+            German.Add("autoInstallWithBetaDBConfirmHeader", German["verifyUninstallHeader"]);
+            Polish.Add("autoInstallWithBetaDBConfirmHeader", Polish["verifyUninstallHeader"]);
+            French.Add("autoInstallWithBetaDBConfirmHeader", French["verifyUninstallHeader"]);
+            Spanish.Add("autoInstallWithBetaDBConfirmHeader", Spanish["verifyUninstallHeader"]);
+            Russian.Add("autoInstallWithBetaDBConfirmHeader", Russian["verifyUninstallHeader"]);
+
+
             //Component: ColorDumpSaveFileDialog
             //
             English.Add("ColorDumpSaveFileDialog", "Select where to save the colors customization file");
