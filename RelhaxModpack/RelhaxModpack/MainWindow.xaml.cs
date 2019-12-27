@@ -40,7 +40,7 @@ namespace RelhaxModpack
         private NewsViewer newsViewer = null;
         private WebClient client = null;
         private VersionInfo versionInfo = null;
-        private Timer autoInstallTimer = null;
+        private Timer autoInstallTimer = new Timer();
         private CancellationTokenSource cancellationTokenSource;
         private InstallEngine installEngine;
         private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
@@ -83,6 +83,7 @@ namespace RelhaxModpack
         private int taskbarValue = 0;
         //beta database compaison for auto install
         string oldBetaDB, newBetaDB;
+        bool timerActive = false;
 
         /// <summary>
         /// The original width and height of the application before applying scaling
@@ -1001,16 +1002,6 @@ namespace RelhaxModpack
                         return;
                     }
                 }
-                if (databaseVersion == DatabaseVersions.Beta)
-                {
-                    //if mods sync
-                    if (ModpackSettings.AutoInstall)
-                    {
-                        MessageBox.Show(Translations.GetTranslatedString("noAutoInstallWithBeta"));
-                        ToggleUIButtons(true);
-                        return;
-                    }
-                }
 
                 //parse WoT root directory
                 Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
@@ -1588,15 +1579,20 @@ namespace RelhaxModpack
                 taskbarInstance.SetProgressValue(100, 100);
                 if(ModpackSettings.VerboseLogging)
                     DisplayAndLogInstallErrors(results, false);
-                if (ModpackSettings.ShowInstallCompleteWindow)
+
+                if (!ModpackSettings.AutoInstall)
                 {
-                    InstallFinished installFinished = new InstallFinished();
-                    installFinished.ShowDialog();
+                    if (ModpackSettings.ShowInstallCompleteWindow)
+                    {
+                        InstallFinished installFinished = new InstallFinished();
+                        installFinished.ShowDialog();
+                    }
+                    else
+                    {
+                        MessageBox.Show(Translations.GetTranslatedString("installationFinished"));
+                    }
                 }
-                else
-                {
-                    MessageBox.Show(Translations.GetTranslatedString("installationFinished"));
-                }
+
                 InstallProgressTextBox.Text = string.Empty;
                 ToggleUIButtons(true);
             }
@@ -2220,6 +2216,15 @@ namespace RelhaxModpack
             //any to include here that aren't any of the above class types
             AutoSyncFrequencyTexbox.IsEnabled = toggle;
             AutoSyncFrequencyComboBox.IsEnabled = toggle;
+
+            //if false, disabling components to do an installation. so disable the auto install timer as well
+            //else enable it again
+            //sending stop() will restart the timer
+            //https://stackoverflow.com/questions/15617068/does-system-timers-timer-stop-restart-the-interval-countdown
+            if (!toggle)
+                autoInstallTimer.Stop();
+            else
+                autoInstallTimer.Start();
         }
 
         private void OnLinkButtonClick(object sender, RoutedEventArgs e)
@@ -2241,8 +2246,12 @@ namespace RelhaxModpack
 
         private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
         {
+            autoInstallTimer.Stop();
+
             Diagnostics diagnostics = new Diagnostics();
             diagnostics.ShowDialog();
+
+            autoInstallTimer.Start();
         }
 
         private void ViewNewsButton_Click(object sender, RoutedEventArgs e)
@@ -2515,6 +2524,26 @@ namespace RelhaxModpack
         {
             if ((bool)UseBetaDatabaseCB.IsChecked)
             {
+                //first check if auto install is enabled with this
+                if (ModpackSettings.AutoInstall && !loading)
+                {
+                    Logging.Info("[OnUseBetaDatabaseChanged]: autoInstall is enabled, verify with user");
+
+                    autoInstallTimer.Stop();
+
+                    if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"),
+                        MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    {
+                        Logging.Debug("[OnUseBetaDatabaseChanged]: autoInstall is enabled, user declined, abort");
+                        UseBetaDatabaseCB.Click -= OnUseBetaDatabaseChanged;
+                        UseBetaDatabaseCB.IsChecked = false;
+                        UseBetaDatabaseCB.Click += OnUseBetaDatabaseChanged;
+                        return;
+                    }
+
+                    autoInstallTimer.Start();
+                }
+
                 Logging.Debug("[OnUseBetaDatabaseChanged]: reset internals and get list of database branches");
                 //disable the UI part of it
                 UseBetaDatabaseCB.IsEnabled = false;
@@ -2618,31 +2647,12 @@ namespace RelhaxModpack
 
             if(databaseVersion != DatabaseVersions.Test && ModpackSettings.AutoInstall)
             {
-                //restart timer
+                //stop timer for applying changes
                 Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, restart timer for this change");
-                if(autoInstallTimer != null)
-                {
-                    autoInstallTimer.Dispose();
-                    autoInstallTimer = null;
-                }
-                autoInstallTimer = new Timer
-                {
-                    Enabled = false,
-                    AutoReset = true
-                };
+                autoInstallTimer.Stop();
 
-                switch (ModpackSettings.DatabaseDistroVersion)
-                {
-                    case DatabaseVersions.Beta:
-                        autoInstallTimer.Elapsed += AutoInstallTimer_ElapsedBeta;
-                        break;
-                    case DatabaseVersions.Stable:
-                        autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
-                        break;
-                }
-                autoInstallTimer.Enabled = true;
-
-                if(databaseVersion == DatabaseVersions.Beta)
+                //if beta database, get the latest one
+                if (databaseVersion == DatabaseVersions.Beta)
                 {
                     Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, database = beta, need to get current beta database for comparison");
                     using (WebClient client = new WebClient())
@@ -2660,6 +2670,19 @@ namespace RelhaxModpack
                         newBetaDB = oldBetaDB;
                     }
                 }
+
+                autoInstallTimer.Elapsed -= AutoInstallTimer_ElapsedBeta;
+                autoInstallTimer.Elapsed -= AutoInstallTimer_Elapsed;
+                switch (ModpackSettings.DatabaseDistroVersion)
+                {
+                    case DatabaseVersions.Beta:
+                        autoInstallTimer.Elapsed += AutoInstallTimer_ElapsedBeta;
+                        break;
+                    case DatabaseVersions.Stable:
+                        autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
+                        break;
+                }
+                autoInstallTimer.Start();
             }
 
             ProcessTitle();
@@ -2839,11 +2862,7 @@ namespace RelhaxModpack
             {
                 Logging.Debug("[AutoInstallCB_Click]: autoInstall being turned off, process that only");
                 ModpackSettings.AutoInstall = false;
-                if (autoInstallTimer != null)
-                {
-                    autoInstallTimer.Dispose();
-                    autoInstallTimer = null;
-                }
+                autoInstallTimer.Stop();
                 return;
             }
 
@@ -2852,12 +2871,12 @@ namespace RelhaxModpack
             {
                 Logging.Info("[AutoInstallCB_Click]: autoClickSelectionPath is null or doesn't exist, abort");
                 ModpackSettings.AutoInstall = false;
+
+                AutoInstallCB.Click -= AutoInstallCB_Click;
                 AutoInstallCB.IsChecked = false;
-                if (autoInstallTimer != null)
-                {
-                    autoInstallTimer.Dispose();
-                    autoInstallTimer = null;
-                }
+                AutoInstallCB.Click += AutoInstallCB_Click;
+
+                autoInstallTimer.Stop();
                 MessageBox.Show(Translations.GetTranslatedString("autoOneclickSelectionFileNotExist"));
                 return;
             }
@@ -2867,19 +2886,24 @@ namespace RelhaxModpack
                 if (!loading)
                 {
                     Logging.Info("[AutoInstallCB_Click]: database distro is beta, verify with user");
+
+                    autoInstallTimer.Stop();
+
                     if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"),
                         MessageBoxButton.YesNo) == MessageBoxResult.No)
                     {
                         Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user declined, abort");
                         ModpackSettings.AutoInstall = false;
+
+                        AutoInstallCB.Click -= AutoInstallCB_Click;
                         AutoInstallCB.IsChecked = false;
-                        if (autoInstallTimer != null)
-                        {
-                            autoInstallTimer.Dispose();
-                            autoInstallTimer = null;
-                        }
+                        AutoInstallCB.Click += AutoInstallCB_Click;
+
+                        autoInstallTimer.Stop();
                         return;
                     }
+
+                    autoInstallTimer.Start();
                 }
 
                 Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user confirmed, setup initial check");
@@ -2910,12 +2934,7 @@ namespace RelhaxModpack
 
             //parse the time into a timespan for the check timer
             Logging.Info("[AutoInstallCB_Click]: registering auto install periodic timer");
-            if (autoInstallTimer != null)
-            {
-                autoInstallTimer.Dispose();
-                autoInstallTimer = null;
-            }
-            autoInstallTimer = new Timer() { Enabled = false, AutoReset = true };
+            autoInstallTimer.Stop();
 
             switch (AutoSyncFrequencyComboBox.SelectedIndex)
             {
@@ -2932,7 +2951,9 @@ namespace RelhaxModpack
                     throw new BadMemeException("this should not happen");
             }
 
-            switch(ModpackSettings.DatabaseDistroVersion)
+            autoInstallTimer.Elapsed -= AutoInstallTimer_ElapsedBeta;
+            autoInstallTimer.Elapsed -= AutoInstallTimer_Elapsed;
+            switch (ModpackSettings.DatabaseDistroVersion)
             {
                 case DatabaseVersions.Beta:
                     autoInstallTimer.Elapsed += AutoInstallTimer_ElapsedBeta;
@@ -2943,7 +2964,7 @@ namespace RelhaxModpack
             }
 
             //start it
-            autoInstallTimer.Enabled = true;
+            autoInstallTimer.Start();
 
             //and finally set value into modpack settings
             ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
@@ -2953,11 +2974,15 @@ namespace RelhaxModpack
 
         private void AutoInstallTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            if (timerActive)
+                return;
+
             this.Dispatcher.InvokeAsync(async () =>
             {
                 if (loading)
                     return;
 
+                timerActive = true;
                 Logging.Debug("[AutoInstallTimer_Elapsed]: timer has elapsed to check for database updates");
 
                 //reset check flag and get old db version
@@ -2974,22 +2999,36 @@ namespace RelhaxModpack
                     Logging.Debug("[AutoInstallTimer_Elapsed]: update found from auto install, running installation");
                     InstallModpackButton_Click(null, null);
                 }
+                timerActive = false;
             });
         }
 
         private async void AutoInstallTimer_ElapsedBeta(object sender, ElapsedEventArgs e)
         {
+            if (timerActive)
+                return;
+
             this.Dispatcher.InvokeAsync(async () =>
             {
                 if (loading)
                     return;
 
+                timerActive = true;
                 Logging.Debug("[AutoInstallTimer_ElapsedBeta]: timer has elapsed to check for beta database updates");
 
                 using (WebClient client = new WebClient())
                 {
                     client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                    newBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
+                    if (string.IsNullOrEmpty(oldBetaDB))
+                    {
+                        Logging.Debug("[AutoInstallTimer_ElapsedBeta]: oldBetaDB is null/empty, set this first");
+                        oldBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
+                        newBetaDB = oldBetaDB;
+                    }
+                    else
+                    {
+                        newBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
+                    }
                 }
 
                 Logging.Debug("[AutoInstallTimer_ElapsedBeta]: comparing old and new beta databases");
@@ -3003,6 +3042,8 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old == new, no start install");
                 }
+
+                timerActive = false;
             });
         }
 
@@ -3143,8 +3184,12 @@ namespace RelhaxModpack
 
         private void OpenColorPickerButton_Click(object sender, RoutedEventArgs e)
         {
+            autoInstallTimer.Stop();
+
             RelhaxColorPicker colorPicker = new RelhaxColorPicker();
             colorPicker.ShowDialog();
+
+            autoInstallTimer.Start();
         }
 
         private void ShowOptionsCollapsedLegacyCB_Click(object sender, RoutedEventArgs e)
