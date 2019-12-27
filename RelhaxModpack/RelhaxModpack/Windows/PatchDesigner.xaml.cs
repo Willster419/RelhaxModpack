@@ -37,7 +37,7 @@ namespace RelhaxModpack.Windows
         private Point BeforeDragDropPoint;
 
         //for the pop out replace in case it's a lot to replace
-        private PopOutReplacePatchDesigner popOutReplacePatchDesigner = new PopOutReplacePatchDesigner();
+        private PopOutReplacePatchDesigner popOutReplacePatchDesigner = null;
         private Brush FileToPatchBrush = null;
         private Brush PatchFilePathBrush = null;
 
@@ -111,9 +111,6 @@ namespace RelhaxModpack.Windows
             //save current brushes
             PatchFilePathBrush = PatchFilePathTextbox.Background;
             FileToPatchBrush = PatchFilePathTextbox.Background;
-
-            //subscribe to close event of popOut
-            popOutReplacePatchDesigner.Closed += PopOutReplacePatchDesigner_Closed;
 
             //by default, set the locate file type to absolute (absolute)
             FilePathTypeCombobox.SelectedIndex = 1;
@@ -250,7 +247,9 @@ namespace RelhaxModpack.Windows
             PatchLinesPathTextbox.Clear();
             PatchSearchTextbox.Clear();
             PatchReplaceTextbox.Clear();
-            popOutReplacePatchDesigner.PatchReplaceTextbox.Clear();
+
+            if(popOutReplacePatchDesigner != null)
+                popOutReplacePatchDesigner.PatchReplaceTextbox.Clear();
 
             if (!string.IsNullOrWhiteSpace(patch.File))
                 PatchFilePathTextbox.Text = patch.File;
@@ -359,6 +358,8 @@ namespace RelhaxModpack.Windows
         {
             if((bool)PopOutReplaceBlockCB.IsChecked)
             {
+                popOutReplacePatchDesigner = new PopOutReplacePatchDesigner();
+                popOutReplacePatchDesigner.Closed += PopOutReplacePatchDesigner_Closed;
                 popOutReplacePatchDesigner.Show();
                 PatchReplaceTextbox.IsEnabled = false;
                 popOutReplacePatchDesigner.PatchReplaceTextbox.Text = PatchReplaceTextbox.Text;
@@ -368,6 +369,7 @@ namespace RelhaxModpack.Windows
                 PatchReplaceTextbox.IsEnabled = true;
                 PatchReplaceTextbox.Text = popOutReplacePatchDesigner.PatchReplaceTextbox.Text;
                 popOutReplacePatchDesigner.Close();
+                popOutReplacePatchDesigner = null;
             }
         }
 
