@@ -276,7 +276,8 @@ namespace RelhaxModpack.Windows
             Hide();
 
             //create and run async task (fire and forget style, keeps the UI thread open during the task operation)
-            Logging.Info("Starting async task: " + nameof(LoadModSelectionListAsync) + "()");
+            Logging.Info("Starting async task: {0}()", nameof(LoadModSelectionListAsync));
+
             //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
             Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
             progressIndicator.ProgressChanged += OnWindowLoadReportProgress;
@@ -305,7 +306,6 @@ namespace RelhaxModpack.Windows
                 }
 
                 //get the XML database loaded into a string based on database version type (from server download, from github, from testfile
-
                 string modInfoXml = "";
                 switch (databaseVersion)
                 {
@@ -336,9 +336,9 @@ namespace RelhaxModpack.Windows
 
                             //V1 here
                             //aparently the #warning directive in this file causes an intellisense error with XDocuemtn for some reason
-                            //#warning using V1 beta database
+                            #warning using V1 beta database in ModSelectionList
                             rootXml = Settings.BetaDatabaseV1URL;
-//#pragma warning enable CS0618
+#pragma warning restore CS0618
                             /////////
 
                             //download the xml string into "modInfoXml"
