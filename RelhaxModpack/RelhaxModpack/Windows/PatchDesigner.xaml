@@ -179,7 +179,13 @@
             <TabItem x:Name="DescriptionHelperTab" Header="How to use">
                 <Grid Background="#FFE5E5E5">
                     <RichTextBox x:Name="DescriptionHelperTextBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True"
-                                 HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+                                 HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                        <FlowDocument>
+                            <Paragraph>
+                                Description TODO
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
                 </Grid>
             </TabItem>
         </TabControl>
