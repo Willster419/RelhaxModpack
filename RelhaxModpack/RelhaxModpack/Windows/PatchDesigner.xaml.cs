@@ -398,7 +398,8 @@ namespace RelhaxModpack.Windows
                     AddExtension = true,
                     CheckPathExists = true,
                     Multiselect = false,
-                    CheckFileExists = true
+                    CheckFileExists = true,
+                    Filter = "all files|*.*"
                 };
             }
             if((bool)OpenFileToPatchDialog.ShowDialog())
@@ -655,7 +656,8 @@ namespace RelhaxModpack.Windows
                     CheckPathExists = true,
                     CheckFileExists = true,
                     Multiselect = false,
-                    DefaultExt = "xml"
+                    DefaultExt = "xml",
+                    Filter = "*.xml|*.xml"
                 };
             }
             if((bool)OpenPatchfileDialog.ShowDialog())
@@ -705,6 +707,7 @@ namespace RelhaxModpack.Windows
                     AddExtension = true,
                     CheckPathExists = true,
                     DefaultExt = "xml",
+                    Filter = "*.xml|*.xml"
                 };
             }
             if((bool)SavePatchfileDialog.ShowDialog())
