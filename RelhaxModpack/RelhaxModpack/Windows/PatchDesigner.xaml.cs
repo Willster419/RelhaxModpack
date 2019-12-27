@@ -9,6 +9,7 @@ using System.Xml;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows.Media;
+using System.Text;
 
 namespace RelhaxModpack.Windows
 {
@@ -29,6 +30,7 @@ namespace RelhaxModpack.Windows
         private SaveFileDialog SavePatchfileDialog;
         private bool UnsavedChanges = false;
         private bool init = true;
+
         //for drag drop
         private bool IsPatchListScrolling = false;
         private bool RegressionsRunning = false;
@@ -38,6 +40,9 @@ namespace RelhaxModpack.Windows
         private PopOutReplacePatchDesigner popOutReplacePatchDesigner = new PopOutReplacePatchDesigner();
         private Brush FileToPatchBrush = null;
         private Brush PatchFilePathBrush = null;
+
+        //internal selected patch
+        private Patch SelectedPatch = null;
 
         //valid xml modes to put into mode combobox
         private readonly string[] validXmlModes = new string[]
@@ -99,12 +104,9 @@ namespace RelhaxModpack.Windows
 
             //load empty patch definition
             PatchesList.Items.Clear();
-            AddPatchButton_Click(null, null);
-            PatchesList.SelectedIndex = 0;
 
             //attach the log output to the logfile
             Logging.OnLoggingUIThreadReport += Logging_OnLoggingUIThreadReport;
-            init = false;
 
             //save current brushes
             PatchFilePathBrush = PatchFilePathTextbox.Background;
@@ -113,7 +115,7 @@ namespace RelhaxModpack.Windows
             //subscribe to close event of popOut
             popOutReplacePatchDesigner.Closed += PopOutReplacePatchDesigner_Closed;
 
-            //by default, set the locate file type to absolute
+            //by default, set the locate file type to absolute (absolute)
             FilePathTypeCombobox.SelectedIndex = 1;
 
             if (!LaunchedFromMainWindow)
@@ -126,6 +128,8 @@ namespace RelhaxModpack.Windows
                     }
                 });
             }
+
+            init = false;
         }
 
         private void PopOutReplacePatchDesigner_Closed(object sender, EventArgs e)
@@ -318,13 +322,13 @@ namespace RelhaxModpack.Windows
             UnsavedChanges = true;
 
             //save all UI settings to patch object
-            patch.File = FileToPatchTextbox.Text;
             patch.PatchPath = PatchPathCombobox.SelectedItem as string;
             patch.Type = PatchTypeCombobox.SelectedItem as string;
             patch.Mode = PatchModeCombobox.SelectedItem as string;
             patch.FollowPath = (bool)PatchFollowPathSetting.IsChecked;
+            patch.File = PatchFilePathTextbox.Text;
 
-            if(patch.Type.ToLower().Equals("regex"))
+            if (patch.Type.ToLower().Equals("regex"))
             {
                 patch.Lines = PatchLinesPathTextbox.Text.Split(',');
             }
@@ -604,9 +608,13 @@ namespace RelhaxModpack.Windows
 
         private void ApplyChangesButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PatchesList.SelectedItem != null)
+            if (init)
+                return;
+
+            Logging.Patcher("[ApplyChangesButton_Click]: Applying changes to patch: {0}", LogLevel.Info, SelectedPatchToString());
+            if (SelectedPatch != null)
             {
-                SaveApplyPatch((Patch)PatchesList.SelectedItem);
+                SaveApplyPatch(SelectedPatch);
             }
         }
 
@@ -614,14 +622,24 @@ namespace RelhaxModpack.Windows
         {
             if (init)
                 return;
-            if(PatchSettings.SaveSelectionBeforeLeave && PatchesList.SelectedItem != null)
+
+            Logging.Patcher("[PatchesList_SelectionChanged]: SaveBeforeLeave = {0}, SelectedPatch = {1}", LogLevel.Info,
+                PatchSettings.SaveSelectionBeforeLeave.ToString(), SelectedPatchToString());
+
+            if (PatchesList.SelectedItem as Patch != null)
             {
-                SaveApplyPatch((Patch)PatchesList.SelectedItem);
+                //save "old"
+                if (PatchSettings.SaveSelectionBeforeLeave && SelectedPatch != null)
+                {
+                    SaveApplyPatch(SelectedPatch);
+                }
+
+                //set "new" to old and display old
+                SelectedPatch = PatchesList.SelectedItem as Patch;
+                DisplayPatch(SelectedPatch);
             }
-            if(PatchesList.SelectedItem as Patch != null)
-            {
-                DisplayPatch((Patch)PatchesList.SelectedItem);
-            }
+            else
+                Logging.Patcher("[PatchesList_SelectionChanged]: (PatchesList.SelectedItem as Patch) is null, skipping apply");
         }
 
         private void LoadPatchXmlButton_Click(object sender, RoutedEventArgs e)
@@ -656,6 +674,27 @@ namespace RelhaxModpack.Windows
 
         private void SavePatchXmlButton_Click(object sender, RoutedEventArgs e)
         {
+            //validate that the list has all valid patches
+            List<Patch> invalidPatches = Patch.GetInvalidPatchesForSave(PatchesList.Items);
+            Logging.Patcher("[SavePatchXmlButton_Click]: ", LogLevel.Info);
+
+            if(invalidPatches.Count > 0)
+            {
+                StringBuilder invalidPatchesSB = new StringBuilder();
+                string invalidHeader = "The following patches are in an invalid state and cannot be saved:";
+                invalidPatchesSB.Append(invalidHeader);
+                Logging.Patcher(invalidHeader);
+                for (int i = 0; i < invalidPatches.Count; i++)
+                {
+                    string invalidPatch = string.Format("List Index = {0}, patch = [{1}]", PatchesList.Items.IndexOf(invalidPatches[i]), invalidPatches[i].ToString());
+                    Logging.Patcher(invalidPatch);
+                    invalidPatchesSB.Append("\n" + invalidPatch);
+                }
+                MessageBox.Show(invalidPatchesSB.ToString());
+                return;
+            }
+
+            //create save dialog
             if (SavePatchfileDialog == null)
             {
                 SavePatchfileDialog = new SaveFileDialog()
@@ -668,16 +707,26 @@ namespace RelhaxModpack.Windows
             }
             if((bool)SavePatchfileDialog.ShowDialog())
             {
-                if(PatchSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && PatchesList.SelectedItem != null)
+                //if apply behavior is set to trigger apply first, then run apply
+                if(PatchSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedPatch != null)
                 {
-                    SaveApplyPatch((Patch)PatchesList.SelectedItem);
+                    Logging.Patcher("[SavePatchXmlButton_Click]: ApplyBehavior = SaveTriggersApply, running ApplyPatch() first", LogLevel.Info);
+                    SaveApplyPatch(SelectedPatch);
                 }
 
+                //delete the file if it currently exists
+                if (File.Exists(SavePatchfileDialog.FileName))
+                    File.Delete(SavePatchfileDialog.FileName);
+
+                //create the xml document
                 XmlDocument doc = new XmlDocument();
                 XmlElement patchHolder = doc.CreateElement("patchs");
                 doc.AppendChild(patchHolder);
+                int counter = 0;
                 foreach(Patch patch in PatchesList.Items)
                 {
+                    Logging.Patcher("[SavePatchXmlButton_Click]: Saving patch {0} of {1}: {2}", LogLevel.Info, ++counter, PatchesList.Items.Count, patch.ToString());
+                    Logging.Patcher("{0}", LogLevel.Info, patch.DumpPatchInfoForLog);
                     XmlElement xmlPatch = doc.CreateElement("patch");
                     patchHolder.AppendChild(xmlPatch);
 
@@ -725,6 +774,7 @@ namespace RelhaxModpack.Windows
                 
                 doc.Save(SavePatchfileDialog.FileName);
                 UnsavedChanges = false;
+                Logging.Patcher("[SavePatchXmlButton_Click]: Patch saved", LogLevel.Info);
             }
         }
 
@@ -735,8 +785,35 @@ namespace RelhaxModpack.Windows
 
         private void RemovePatchButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PatchesList.SelectedItem != null)
-                PatchesList.Items.Remove(PatchesList.SelectedItem);
+            if (PatchesList.SelectedItem == null)
+            {
+                Logging.Patcher("[RemovePatchButton_Click]: PatchesList.SelectedItem is null, skip", LogLevel.Info);
+                return;
+            }
+
+            Logging.Patcher("[RemovePatchButton_Click]: Removing selected patch: {0}", LogLevel.Info, SelectedPatchToString());
+
+            //remove item and if at least one, set it to the lowest
+            SelectedPatch = null;
+            int index = PatchesList.SelectedIndex;
+
+            PatchesList.SelectionChanged -= PatchesList_SelectionChanged;
+            PatchesList.Items.Remove(PatchesList.SelectedItem);
+            PatchesList.SelectionChanged += PatchesList_SelectionChanged;
+
+            if (PatchesList.Items.Count > index)
+            {
+                PatchesList.SelectedIndex = index;
+            }
+            else if (PatchesList.Items.Count == index)
+            {
+                PatchesList.SelectedIndex = PatchesList.Items.Count - 1;
+            }
+            else
+            {
+                PatchesList.SelectedIndex = -1;
+            }
+            SelectedPatch = PatchesList.SelectedItem as Patch;
         }
 
         private void AddPatchButton_Click(object sender, RoutedEventArgs e)
@@ -1533,5 +1610,10 @@ namespace RelhaxModpack.Windows
             };
         }
         #endregion
+
+        private string SelectedPatchToString()
+        {
+            return SelectedPatch == null ? "(null)" : SelectedPatch.ToString();
+        }
     }
 }
