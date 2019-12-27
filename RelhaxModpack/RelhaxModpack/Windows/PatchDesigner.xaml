@@ -41,8 +41,6 @@
                             Width="97" Click="ApplyChangesButton_Click"/>
                     <TextBox Tag="FileToPatchTextbox" x:Name="FileToPatchTextbox" HorizontalAlignment="Stretch" Height="56" TextWrapping="Wrap" VerticalAlignment="Top"
                              Margin="0,27,0,0" ToolTip="The target file is the file you wish to patch"/>
-                    <CheckBox x:Name="PopOutReplaceBlockCB" Content="Pop-out replace textbox" HorizontalAlignment="Left" Margin="0,0,0,5" VerticalAlignment="Bottom"
-                              Click="PopOutReplaceBlockCB_Click" ToolTip="Show a larger window to write the replace text field"/>
                     <Grid HorizontalAlignment="Left" Height="90" Margin="0,151,0,0" VerticalAlignment="Top" Width="388">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
@@ -102,6 +100,8 @@
                              VerticalAlignment="Stretch"  Grid.Row="3" AcceptsReturn="True" AcceptsTab="True"/>
                         <TextBlock Tag="PatchReplaceHeader" x:Name="PatchReplaceHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap"
                                Text="Replace" VerticalAlignment="Stretch" Grid.Row="4"/>
+                        <CheckBox x:Name="PopOutReplaceBlockCB" Content="Pop-out replace textbox" HorizontalAlignment="Right" Margin="0,0,0,4" VerticalAlignment="Bottom"
+                              Click="PopOutReplaceBlockCB_Click" ToolTip="Show a larger window to write the replace text field" Grid.Row="4"/>
                         <TextBox Tag="PatchReplaceTextbox" x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap"
                              VerticalAlignment="Stretch" Grid.Row="5" AcceptsReturn="True" AcceptsTab="True"/>
                     </Grid>
