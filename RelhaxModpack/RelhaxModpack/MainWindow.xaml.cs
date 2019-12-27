@@ -41,7 +41,6 @@ namespace RelhaxModpack
         private WebClient client = null;
         private VersionInfo versionInfo = null;
         private Timer autoInstallTimer = new Timer();
-        private bool databaseUpdateAvailableFromAutoSync = false;
         private bool autoInstallTimerRegistered = false;
         private CancellationTokenSource cancellationTokenSource;
         private InstallEngine installEngine;
@@ -279,7 +278,7 @@ namespace RelhaxModpack
                 Environment.Exit(0);
                 return;
             }
-            CheckForDatabaseUpdates(false);
+            await CheckForDatabaseUpdates(false);
 
             //set the file count and size for the backups folder
             if (!isApplicationUpToDate)
@@ -594,34 +593,32 @@ namespace RelhaxModpack
             CloseApplication();
         }
 
-        private void OnMenuClickChekUpdates(object sender, EventArgs e)
+        private async void OnMenuClickChekUpdates(object sender, EventArgs e)
         {
-            CheckForDatabaseUpdatesPeriodic(false);
-        }
+            Logging.Debug("check for database updates from menu click");
+            string oldDBVersion = Settings.DatabaseVersion;
+            
+            //make and show progress indicator
+            ProgressIndicator progressIndicator = new ProgressIndicator()
+            {
+                Message = Translations.GetTranslatedString("checkForUpdates"),
+                ProgressMinimum = 0,
+                ProgressMaximum = 1
+            };
+            progressIndicator.Show();
 
-        private void CheckForDatabaseUpdatesPeriodic(bool quiet)
-        {
-            Logging.Info("starting periodic check for database updates");
-            databaseUpdateAvailableFromAutoSync = false;
-            if (!quiet)
+            //actually check for updates
+            await CheckForDatabaseUpdates(true);
+
+            //clean up progress indicator
+            progressIndicator.Close();
+            
+            Logging.Debug("database check complete");
+            if (!oldDBVersion.Equals(Settings.DatabaseVersion))
             {
-                //make and show progress indicator
-                ProgressIndicator progressIndicator = new ProgressIndicator()
-                {
-                    Message = Translations.GetTranslatedString("checkForUpdates"),
-                    ProgressMinimum = 0,
-                    ProgressMaximum = 1
-                };
-                progressIndicator.Show();
-                CheckForDatabaseUpdates(true);
-                //clean up progress indicator
-                progressIndicator.Close();
+                Logging.Debug("old and current db versions do not match, displaying notification window");
+                MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
             }
-            else
-            {
-                CheckForDatabaseUpdates(true);
-            }
-            Logging.Info("database periodic check complete, result of update = {0}", databaseUpdateAvailableFromAutoSync);
         }
 
         private void OnMenuItemRestoreClick(object sender, EventArgs e)
@@ -667,7 +664,7 @@ namespace RelhaxModpack
         #endregion
 
         #region Update Code
-        private async void CheckForDatabaseUpdates(bool refreshModInfo)
+        private async Task CheckForDatabaseUpdates(bool refreshModInfo)
         {
             Logging.Info("Checking for database updates in CheckForDatabaseUpdates()");
 
@@ -2730,10 +2727,14 @@ namespace RelhaxModpack
                 InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
                 Multiselect = false
             };
+
             if (!(bool)selectAutoSyncSelectionFileDialog.ShowDialog())
                 return;
+
+            AutoInstallOneClickInstallSelectionFilePath.TextChanged -= AutoInstallOneClickInstallSelectionFilePath_TextChanged;
             AutoInstallOneClickInstallSelectionFilePath.Text = selectAutoSyncSelectionFileDialog.FileName;
             ModpackSettings.AutoOneclickSelectionFilePath = selectAutoSyncSelectionFileDialog.FileName;
+            AutoInstallOneClickInstallSelectionFilePath.TextChanged += AutoInstallOneClickInstallSelectionFilePath_TextChanged;
         }
 
         private void ForceEnabledCB_Clicked(object sender, RoutedEventArgs e)
@@ -2778,20 +2779,23 @@ namespace RelhaxModpack
 
         private void AutoInstallCB_Click(object sender, RoutedEventArgs e)
         {
-            string tmep = string.Empty;
-            if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
+            //must be in stable database mode to use this
+            if(ModpackSettings.DatabaseDistroVersion != DatabaseVersions.Stable)
             {
-                tmep = ModpackSettings.AutoOneclickSelectionFilePath;
-                Logging.Debug("autoClickSelectionPath is null or doesn't exist, prompting user to change");
-                LoadAutoSyncSelectionFile_Click(null, null);
-            }
-
-            if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
-            {
-                Logging.Debug("autoClickSelectionPath is null or doesn't exist still, setting to false and reverting path");
-                ModpackSettings.AutoOneclickSelectionFilePath = tmep;
+                Logging.Info("[AutoInstallCB_Click]: database distribution version is not stable, abort");
                 ModpackSettings.AutoInstall = false;
                 AutoInstallCB.IsChecked = false;
+                MessageBox.Show(Translations.GetTranslatedString("noAutoInstallWithBeta"));
+                return;
+            }
+
+            //the selection file must be set for this to work
+            if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
+            {
+                Logging.Info("[AutoInstallCB_Click]: autoClickSelectionPath is null or doesn't exist, abort");
+                ModpackSettings.AutoInstall = false;
+                AutoInstallCB.IsChecked = false;
+                MessageBox.Show(Translations.GetTranslatedString("autoOneclickSelectionFileNotExist"));
                 return;
             }
 
@@ -2799,7 +2803,7 @@ namespace RelhaxModpack
             int timeToUse = Utils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
             if (timeToUse < 1)
             {
-                Logging.Info("Invalid time specified, must be above 0");
+                Logging.Warning("[AutoInstallCB_Click]: Invalid time specified, must be above 0");
                 MessageBox.Show("InvalidTimeNumberSpecified");
                 ModpackSettings.AutoInstall = false;
                 AutoInstallCB.IsChecked = false;
@@ -2807,6 +2811,7 @@ namespace RelhaxModpack
             }
 
             //parse the time into a timespan for the check timer
+            Logging.Info("[AutoInstallCB_Click]: registering auto install periodic timer");
             switch (AutoSyncFrequencyComboBox.SelectedIndex)
             {
                 case 0://mins
@@ -2821,31 +2826,43 @@ namespace RelhaxModpack
                 default:
                     throw new BadMemeException("this should not happen");
             }
+
             autoInstallTimer.AutoReset = true;
             if (!autoInstallTimerRegistered)
             {
-                Logging.Debug("auto install timer not registered to event, registering now");
+                Logging.Debug("[AutoInstallCB_Click]: auto install timer not registered to event, registering now");
                 autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
                 autoInstallTimerRegistered = true;
             }
             else
             {
-                Logging.Debug("auto install timer already registered");
+                Logging.Debug("[AutoInstallCB_Click]: auto install timer already registered");
             }
+
             ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
             if (ModpackSettings.AutoInstall)
                 autoInstallTimer.Enabled = true;
             else
                 autoInstallTimer.Enabled = false;
+            Logging.Info("[AutoInstallCB_Click]: timer registered, listening for update check intervals");
         }
 
-        private void AutoInstallTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void AutoInstallTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Logging.Debug("timer has elapsed to check for database updates");
-            CheckForDatabaseUpdatesPeriodic(true);
-            if (databaseUpdateAvailableFromAutoSync)
+            Logging.Debug("[AutoInstallTimer_Elapsed]: timer has elapsed to check for database updates");
+
+            //reset check flag and get old db version
+            string oldDBVersion = Settings.DatabaseVersion;
+
+            //actually check for updates
+            await CheckForDatabaseUpdates(true);
+            
+            Logging.Debug("[AutoInstallTimer_Elapsed]: database periodic check complete, old = {0}, new = {1}", oldDBVersion, Settings.DatabaseVersion);
+
+            //check if database was updated
+            if (!oldDBVersion.Equals(Settings.DatabaseVersion))
             {
-                Logging.Debug("update found from auto install, running installation");
+                Logging.Debug("[AutoInstallTimer_Elapsed]: update found from auto install, running installation");
                 InstallModpackButton_Click(null, null);
             }
         }
@@ -3062,6 +3079,14 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Application.Current.Shutdown((int)ReturnCodes.LogfileError);
             }
+        }
+
+        private void AutoInstallOneClickInstallSelectionFilePath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (loading)
+                return;
+
+            ModpackSettings.AutoOneclickSelectionFilePath = AutoInstallOneClickInstallSelectionFilePath.Text;
         }
 
         //asyncronously get the file sizes of backups

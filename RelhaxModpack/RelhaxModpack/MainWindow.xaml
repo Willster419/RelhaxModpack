@@ -238,7 +238,7 @@
                             <TextBlock x:Name="AutoOneclickShowWarningOnSelectionsFailText" Text="Show warning if selection document has errors when loaded" TextWrapping="Wrap"/>
                         </CheckBox>
                         <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0"
-                                 VerticalScrollBarVisibility="Auto" ToolTipService.ShowOnDisabled="True"/>
+                                 VerticalScrollBarVisibility="Auto" ToolTipService.ShowOnDisabled="True" TextChanged="AutoInstallOneClickInstallSelectionFilePath_TextChanged"/>
                         <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" HorizontalAlignment="Stretch" Margin="0,3,0,0"
                                 Click="LoadAutoSyncSelectionFile_Click" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="LoadAutoSyncSelectionFileText" Text="Load selection file" TextWrapping="Wrap"/>
