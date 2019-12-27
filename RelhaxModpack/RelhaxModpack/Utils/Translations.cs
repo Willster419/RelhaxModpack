@@ -2165,7 +2165,8 @@ namespace RelhaxModpack
             English.Add("autoInstallWithBetaDBConfirmBody", "Auto install will be enabled with beta database. The beta database is updated frequenty and could result in multiple" +
                 " installations in one day. Are you sure you would like to do this?");
             German.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
-            Polish.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
+            Polish.Add("autoInstallWithBetaDBConfirmBody", "Automatyczna Instalacja będzie dostępna dla testowej bazy danych (BETA), która jest często aktualizowana —" +
+                " może to prowadzić do kilku aktualizacji w ciągu jednego dnia!\nCzy mimo to chcesz kontynuować?");
             French.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
             Spanish.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
             Russian.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
