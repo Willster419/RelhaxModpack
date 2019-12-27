@@ -713,7 +713,6 @@ namespace RelhaxModpack
                 Logging.Info("new version of database applied");
                 Settings.DatabaseVersion = databaseNewVersion;
                 DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
-                MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
             }
             else
             {
@@ -2221,10 +2220,13 @@ namespace RelhaxModpack
             //else enable it again
             //sending stop() will restart the timer
             //https://stackoverflow.com/questions/15617068/does-system-timers-timer-stop-restart-the-interval-countdown
-            if (!toggle)
-                autoInstallTimer.Stop();
-            else
-                autoInstallTimer.Start();
+            if (autoInstallTimer != null)
+            {
+                if (!toggle)
+                    autoInstallTimer.Stop();
+                else
+                    autoInstallTimer.Start();
+            }
         }
 
         private void OnLinkButtonClick(object sender, RoutedEventArgs e)
