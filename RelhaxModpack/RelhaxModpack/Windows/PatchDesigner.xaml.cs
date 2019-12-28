@@ -126,6 +126,11 @@ namespace RelhaxModpack.Windows
                 });
             }
 
+            //add one patch as default
+            PatchesList.Items.Add(new Patch() { FromEditor = true });
+            PatchesList.SelectedIndex = 0;
+            SelectedPatch = PatchesList.Items[0] as Patch;
+
             init = false;
         }
 
