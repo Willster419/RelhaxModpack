@@ -1710,7 +1710,10 @@ namespace RelhaxModpack.InstallerComponents
 
                             //if it already exists, delete it
                             if (File.Exists(savedFile))
+                            {
+                                Logging.Warning("File already exists in destination, overriding");
                                 File.Delete(savedFile);
+                            }
 
                             //then finally move it
                             File.Move(fileSourcePath, savedFile);
