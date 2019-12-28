@@ -1286,19 +1286,19 @@ namespace RelhaxModpack.InstallerComponents
                     if (startChar.Equals('{'))
                     {
                         //it does not have the macro, so add it. (assume {app} macro)
-                        Logging.Debug("pattern starts with \"{\", continue");
+                        Logging.Debug("Pattern starts with \"{\", continue");
                     }
                     else if (startChar.Equals('\\'))
                     {
-                        Logging.Debug("pattern starts with \"\\\", adding macro and continue");
+                        Logging.Debug("Pattern starts with \"\\\", adding macro and continue");
                         searchPattern = @"{app}" + searchPattern;
                     }
                     else
                     {
-                        Logging.Debug("pattern starts with folder name, adding macro and folder slash and continue");
+                        Logging.Debug("Pattern starts with folder name, adding macro and folder slash and continue");
                         searchPattern = @"{app}\" + searchPattern;
                     }
-                    Logging.Debug("path with macro: {0}", searchPattern);
+                    Logging.Debug("Path with macro: {0}", searchPattern);
 
                     //at this point it will have a macro, so grab it
                     //replace the macro to make the complete path
@@ -1320,7 +1320,7 @@ namespace RelhaxModpack.InstallerComponents
                     //check if we have files to move
                     if(filesToSave.Count() == 0)
                     {
-                        Logging.Info("no files found to backup");
+                        Logging.Info("No files found to backup");
                         continue;
                     }
 
@@ -1358,10 +1358,12 @@ namespace RelhaxModpack.InstallerComponents
                             File.Delete(destination);
 
                         File.Move(source, destination);
+
+                        Logging.Info("Processed file {0}", userDataFile.FilePath);
                         files.FilesSaved.Add(userDataFile);
                     }
                 }
-                Logging.Info("backup data of {0} finished", package.PackageName);
+                Logging.Info("Backup data of {0} finished", package.PackageName);
             }
             return true;
         }
@@ -1704,7 +1706,7 @@ namespace RelhaxModpack.InstallerComponents
                 string tempBackupFolder = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
                 if(!Directory.Exists(tempBackupFolder))
                 {
-                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Warning);
+                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Info);
                 }
 
                 //the list of files that was backed up already exists in a list called Files_saved. use that as the list of files to restore
@@ -1721,7 +1723,7 @@ namespace RelhaxModpack.InstallerComponents
                         string fileDestPath = Path.Combine(savedFile.WoTRoot, savedFile.FilePath);
                         if (File.Exists(fileSourcePath))
                         {
-                            Logging.Info(string.Format("Restoring file {0} of {1}", Path.GetFileName(fileDestPath), package.PackageName));
+                            Logging.Info(string.Format("Restoring file {0} of {1}", savedFile.FilePath, package.PackageName));
 
                             //make the directory if it does not exist yet
                             if (!Directory.Exists(Path.GetDirectoryName(fileDestPath)))
