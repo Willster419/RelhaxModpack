@@ -1300,18 +1300,22 @@ namespace RelhaxModpack.InstallerComponents
                     }
                     Logging.Debug("path with macro: {0}", searchPattern);
 
+                    //at this point it will have a macro, so grab it
                     //replace the macro to make the complete path
-                    searchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
-                    string directorySearchpath = Path.GetDirectoryName(searchPattern);
-                    searchPattern = Path.GetFileName(searchPattern);
-                    Logging.Debug("search term (or file): {0}", searchPattern);
+                    string completeSearchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
+                    string macro = searchPattern.Split('}')[0] + "}";
+                    string macroRootPath = Utils.MacroReplace(macro,ReplacementTypes.FilePath) + Path.DirectorySeparatorChar;
+                    searchPattern = searchPattern.Split('}')[1].Substring(1);
 
                     //if the directory to search does not exist, then make it, just in case
-                    if (!Directory.Exists(directorySearchpath))
-                        Directory.CreateDirectory(directorySearchpath);
+                    string directorycompleteSearchPattern = Path.GetDirectoryName(completeSearchPattern);
+                    if (!Directory.Exists(directorycompleteSearchPattern))
+                        Directory.CreateDirectory(directorycompleteSearchPattern);
 
                     //get the list of files to replace
-                    string[] filesToSave = Utils.DirectorySearch(directorySearchpath, SearchOption.AllDirectories, false, searchPattern, 5, 3, false);
+                    Logging.Info("Search root: {0}", macroRootPath);
+                    Logging.Info("Search term: {0}", searchPattern);
+                    string[] filesToSave = Utils.DirectorySearch(macroRootPath, SearchOption.AllDirectories, false, searchPattern, 5, 3, false);
 
                     //check if we have files to move
                     if(filesToSave.Count() == 0)
@@ -1324,9 +1328,9 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.ChildTotal = filesToSave.Count();
 
                     //make the temp directory to place the files based on this package
-                    string tempFolderPath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
-                    if(!Directory.Exists(tempFolderPath))
-                        Directory.CreateDirectory(tempFolderPath);
+                    string tempRootFolderPath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
+                    if(!Directory.Exists(tempRootFolderPath))
+                        Directory.CreateDirectory(tempRootFolderPath);
 
                     //move each file
                     foreach(string file in filesToSave)
@@ -1336,14 +1340,25 @@ namespace RelhaxModpack.InstallerComponents
                         Progress.Report(Prog);
                         CancellationToken.ThrowIfCancellationRequested();
 
-                        string destination = Path.Combine(tempFolderPath, Path.GetFileName(file));
+                        UserDataFile userDataFile = new UserDataFile()
+                        {
+                            TempSaveRoot = tempRootFolderPath,
+                            WoTRoot = macroRootPath,
+                            FilePath = file.Remove(0, macroRootPath.Length)
+                        };
+
+                        string destination = Path.Combine(userDataFile.TempSaveRoot, userDataFile.FilePath);
+                        string source = Path.Combine(userDataFile.WoTRoot, userDataFile.FilePath);
+
+                        if (!Directory.Exists(Path.GetDirectoryName(destination)))
+                            Directory.CreateDirectory(Path.GetDirectoryName(destination));
 
                         //check if destination exists first before replace
                         if (File.Exists(destination))
                             File.Delete(destination);
 
-                        File.Move(file, destination);
-                        files.FilesSaved.Add(file);
+                        File.Move(source, destination);
+                        files.FilesSaved.Add(userDataFile);
                     }
                 }
                 Logging.Info("backup data of {0} finished", package.PackageName);
@@ -1695,34 +1710,38 @@ namespace RelhaxModpack.InstallerComponents
                 //the list of files that was backed up already exists in a list called Files_saved. use that as the list of files to restore
                 foreach (UserFile files in package.UserFiles)
                 {
-                    foreach(string savedFile in files.FilesSaved)
+                    foreach(UserDataFile savedFile in files.FilesSaved)
                     {
                         CancellationToken.ThrowIfCancellationRequested();
 
                         //Files_saved should have the complete path of the destination
-                        string fileSourcePath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName, Path.GetFileName(savedFile));
+                        //rebuild the complete path to the temp and wot root files
+
+                        string fileSourcePath = Path.Combine(savedFile.TempSaveRoot,savedFile.FilePath);
+                        string fileDestPath = Path.Combine(savedFile.WoTRoot, savedFile.FilePath);
                         if (File.Exists(fileSourcePath))
                         {
-                            Logging.Info(string.Format("Restoring file {0} of {1}", Path.GetFileName(savedFile), package.PackageName));
+                            Logging.Info(string.Format("Restoring file {0} of {1}", Path.GetFileName(fileDestPath), package.PackageName));
+
                             //make the directory if it does not exist yet
-                            if (!Directory.Exists(Path.GetDirectoryName(savedFile)))
-                                Directory.CreateDirectory(Path.GetDirectoryName(savedFile));
+                            if (!Directory.Exists(Path.GetDirectoryName(fileDestPath)))
+                                Directory.CreateDirectory(Path.GetDirectoryName(fileDestPath));
 
                             //if it already exists, delete it
-                            if (File.Exists(savedFile))
+                            if (File.Exists(fileDestPath))
                             {
                                 Logging.Warning("File already exists in destination, overriding");
-                                File.Delete(savedFile);
+                                File.Delete(fileDestPath);
                             }
 
                             //then finally move it
-                            File.Move(fileSourcePath, savedFile);
+                            File.Move(fileSourcePath, fileDestPath);
 
                             //and log it
-                            restoreDataBuilder.AppendLine(savedFile);
+                            restoreDataBuilder.AppendLine(fileDestPath);
                         }
                         else
-                            Logging.Error("file {0} was reported backed up, but does not exist for package {1}", Path.GetFileName(savedFile), package.PackageName);
+                            Logging.Error("file {0} was reported backed up, but does not exist to restore for package {1}", Path.GetFileName(fileSourcePath), package.PackageName);
                     }
                 }
             }
