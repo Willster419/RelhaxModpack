@@ -1343,7 +1343,7 @@ namespace RelhaxModpack
             //button for launching the editor from the main application window
             English.Add("LauchPatchDesignerText", "Launch Patch Designer");
             German.Add("LauchPatchDesignerText", "Starte Patch Designer");
-            Polish.Add("LauchPatchDesignerText", TranslationNeeded);
+            Polish.Add("LauchPatchDesignerText", "Uruchom Patch Designer");
             French.Add("LauchPatchDesignerText", TranslationNeeded);
             Spanish.Add("LauchPatchDesignerText", TranslationNeeded);
             Russian.Add("LauchPatchDesignerText", TranslationNeeded);
@@ -2662,19 +2662,19 @@ namespace RelhaxModpack
             Russian.Add("NewVersionAvailable", "Доступна новая версия");
 
             //Component: HavingProblemsTextBlock
-            //
+            // Text on the bottom of the Updater window, followed by ManualUpdateLink with hard-coded empty space (not the key) in between.
             English.Add("HavingProblemsTextBlock", "If you are having problems updating, please");
             German.Add("HavingProblemsTextBlock", "Wenn du Probleme mit der Aktualisierung hast, bitte");
-            Polish.Add("HavingProblemsTextBlock", "Problemy z aktualizacją?,"); // Making it look decent in connection with Component: ManualUpdateLink
+            Polish.Add("HavingProblemsTextBlock", "Jeśli masz problem z aktualizacją,");
             French.Add("HavingProblemsTextBlock", "Si vous avez des problèmes avec la mise à jour, s'il vous plaît");
             Spanish.Add("HavingProblemsTextBlock", "Si tiene problemas actualizando, por favor");
             Russian.Add("HavingProblemsTextBlock", "При наличии проблем в процессе обновлений, пожалуйста,");
 
             //Component: ManualUpdateLink
-            //
+            // Link following HavingProblemsTextBlock text. Preceeded by hard-coded empty space (not the key).
             English.Add("ManualUpdateLink", "Click Here");
             German.Add("ManualUpdateLink", "Klick Hier");
-            Polish.Add("ManualUpdateLink", "Kliknij tutaj");
+            Polish.Add("ManualUpdateLink", "kliknij tutaj");
             French.Add("ManualUpdateLink", "Cliquez Ici");
             Spanish.Add("ManualUpdateLink", "Haga clic aquí");
             Russian.Add("ManualUpdateLink", "Hажмите Cюда.");
