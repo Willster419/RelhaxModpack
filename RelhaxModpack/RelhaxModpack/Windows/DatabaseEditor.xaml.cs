@@ -12,6 +12,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
 using Path = System.IO.Path;
+using Microsoft.WindowsAPICodePack;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace RelhaxModpack.Windows
 {
@@ -154,12 +156,15 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void OnApplicationClose(object sender, EventArgs e)
+        private void RelhaxWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (UnsavedChanges)
             {
                 if (MessageBox.Show("You have unsaved changes, return to editor?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    e.Cancel = true;
                     return;
+                }
             }
             if (!Logging.IsLogDisposed(Logfiles.Editor))
             {
@@ -337,6 +342,7 @@ namespace RelhaxModpack.Windows
             FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
             SaveDatabaseLegacySetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy ? true : false;
             SaveDatabaseOnePointOneSetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.OnePointOne ? true : false;
+            SelectAutoUpdateWorkDirectoryTextbox.Text = EditorSettings.AutoUpdaterWorkDirectory;
         }
         #endregion
 
@@ -1104,7 +1110,7 @@ namespace RelhaxModpack.Windows
                 packageToMove.PackageName, packageCurrentlyOver.PackageName, effects.ToString(), addBelowItem.ToString());
 
             //make sure that the source and destination are not the same
-            if (packageCurrentlyOver.Equals(packageToMove))
+            if (packageCurrentlyOver.Equals(packageToMove) && !addBelowItem)
             {
                 Logging.Editor("database packages detected to be the same, aborting dragDrop");
                 return;
@@ -1910,7 +1916,7 @@ namespace RelhaxModpack.Windows
                 Dependencies = Dependencies,
                 ParsedCategoryList = ParsedCategoryList,
                 EditOrAdd = true,
-                AddSaveLevel = true,
+                AddSameLevel = true,
                 SelectedPackage = null
             };
 
@@ -1922,7 +1928,7 @@ namespace RelhaxModpack.Windows
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
             {
                 PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
-                    addRemove.SelectedPackage, DragDropEffects.Move, !addRemove.AddSaveLevel);
+                    addRemove.SelectedPackage, DragDropEffects.Move, !addRemove.AddSameLevel);
             }
         }
 
@@ -1946,7 +1952,7 @@ namespace RelhaxModpack.Windows
                 Dependencies = Dependencies,
                 ParsedCategoryList = ParsedCategoryList,
                 EditOrAdd = false,
-                AddSaveLevel = true,
+                AddSameLevel = true,
                 SelectedPackage = null
             };
             if (!(bool)addRemove.ShowDialog())
@@ -1958,7 +1964,7 @@ namespace RelhaxModpack.Windows
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
             {
                 PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
-                    addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSaveLevel);
+                    addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSameLevel);
                 DatabaseTreeView.Items.Refresh();
             }
         }
@@ -2723,6 +2729,37 @@ namespace RelhaxModpack.Windows
                 EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
             else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
                 EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
+        }
+
+        private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
+            {
+                Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
+                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
+            };
+            autoUpdatePackageWindow.ShowDialog();
+        }
+
+        private void SelectAutoUpdateWorkDirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                Multiselect = false,
+                Title = "Select folder"
+            };
+            if(openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                SelectAutoUpdateWorkDirectoryTextbox.Text = openFolderDialog.FileName;
+            }
+        }
+
+        private void SelectAutoUpdateWorkDirectoryTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
+            LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
         }
     }
 }

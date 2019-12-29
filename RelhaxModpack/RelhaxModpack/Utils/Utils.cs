@@ -29,6 +29,7 @@ using RelhaxModpack.Windows;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Web;
+using RelhaxModpack.DatabaseComponents;
 
 namespace RelhaxModpack
 {
@@ -107,6 +108,12 @@ namespace RelhaxModpack
         {
             return string.Format("WoTClientVersion={0}, WoTOnlineFolderVersion={1}", WoTClientVersion, WoTOnlineFolderVersion);
         }
+    }
+
+    public struct LogicTracking
+    {
+        public IComponentWithDependencies ComponentWithDependencies;
+        public DatabaseLogic DatabaseLogic;
     }
 
     /// <summary>
@@ -619,24 +626,41 @@ namespace RelhaxModpack
         /// <returns></returns>
         public static string CreateMD5Hash(string inputFile)
         {
+            //return if arg is null or empty
             if (string.IsNullOrWhiteSpace(inputFile))
                 return "-1";
-            //first, return if the file does not exist
+
+            //return if the file does not exist
             if (!File.Exists(inputFile))
                 return "-1";
+
+            FileStream stream = null;
+            string result = string.Empty;
+            using (stream = File.OpenRead(inputFile))
+            {
+                result = CreateMD5Hash(stream);
+            }
+
+            if(result.Equals("-1"))
+            {
+                Logging.Error("Failed to check MD5 of file " + inputFile);
+            }
+            return result;
+        }
+
+        public static string CreateMD5Hash(Stream stream)
+        {
             //Create a new Stringbuilder to collect the bytes
             StringBuilder sBuilder = new StringBuilder();
             MD5 md5Hash;
-            FileStream stream;
             try
             {
                 using (md5Hash = MD5.Create())
-                using (stream = File.OpenRead(inputFile))
                 {
                     //Convert the input string to a byte array and compute the hash
                     byte[] data = md5Hash.ComputeHash(stream);
                     stream.Close();
-                    
+
                     //Loop through each byte of the hashed data 
                     //and format each one as a hexadecimal string.
                     for (int i = 0; i < data.Length; i++)
@@ -647,9 +671,10 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Logging.Warning("Failed to check crc of local file " + inputFile + ex.ToString());
+                Logging.Exception(ex.ToString());
                 return "-1";
             }
+
             //Return the hexadecimal string.
             return sBuilder.ToString();
         }
@@ -677,6 +702,11 @@ namespace RelhaxModpack
                 'Task.Factory.StartNew(someAction, CancellationToken.None, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);'
              */
             return await Task.Run(() => CreateMD5Hash(inputFile));
+        }
+
+        public static async Task<string> CreateMD5HashAsync(Stream stream)
+        {
+            return await Task.Run(() => CreateMD5Hash(stream));
         }
 
         /// <summary>
@@ -903,6 +933,46 @@ namespace RelhaxModpack
                 fileName = fileName.Replace(c, '_');
             }
             return fileName;
+        }
+
+        public static bool FileMove(string source, string destination, uint numRetrys = 3, uint timeout = 100)
+        {
+            bool overallSuccess = true;
+            //check to make sure the number of retries is between 1 and 10
+            if (numRetrys < 1)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (below 1), setting to 1 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 1;
+            }
+            if (numRetrys > 10)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (above 10), setting to 10 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 10;
+            }
+            uint retryCounter = 0;
+            while (retryCounter < numRetrys)
+            {
+                try
+                {
+                    File.Move(source, destination);
+                    retryCounter = numRetrys;
+                }
+                catch (Exception ex)
+                {
+                    Logging.WriteToLog(string.Format("move file {0} -> {1}, retryCount={2}, message:\n{3}", source, destination,retryCounter, ex.Message),
+                        Logfiles.Application, LogLevel.Warning);
+                    retryCounter++;
+                    System.Threading.Thread.Sleep((int)timeout);
+                    if (retryCounter == numRetrys)
+                    {
+                        Logging.Error("retries = counter, fully failed to move file {0} -> {1}", source, destination);
+                        overallSuccess = false;
+                    }
+                }
+            }
+            return overallSuccess;
         }
 
         /// <summary>
@@ -1234,6 +1304,11 @@ namespace RelhaxModpack
                 Logging.WriteToLog("Failed to apply normal attribute\n" + e.ToString(), Logfiles.Application, LogLevel.Exception);
                 return;
             }
+        }
+
+        public static string RemoveWoT32bit64bitPathIfExists(string wotPath)
+        {
+            return wotPath.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
         }
         #endregion
 
@@ -1570,14 +1645,22 @@ namespace RelhaxModpack
             //1- build the list of calling mods that need it
             List<Dependency> dependenciesToInstall = new List<Dependency>();
 
+            //create list to track all database dependency refrences
+            List<LogicTracking> refrencedDependencies = new List<LogicTracking>();
+
             Logging.Debug("Starting step 1 of 4 in dependency calculation: adding from categories");
-            foreach (Dependency dependency in dependencies)
+            foreach (Category category in parsedCategoryList)
             {
-                foreach (Category category in parsedCategoryList)
+                foreach (DatabaseLogic logic in category.Dependencies)
                 {
-                    foreach (DatabaseLogic logic in category.Dependencies)
+                    refrencedDependencies.Add(new LogicTracking
                     {
-                        if(logic.PackageName.Equals(dependency.PackageName))
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = category
+                    });
+                    foreach (Dependency dependency in dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
                         {
                             Logging.Debug("Category \"{0}\" uses dependency \"{1}\" (logic type {2})", category.Name, dependency.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
@@ -1587,23 +1670,29 @@ namespace RelhaxModpack
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
+
+                            //log that the categorie's dependency refrence was linked properly
+                            logic.RefrenceLinked = true;
                         }
                     }
                 }
             }
-            Logging.Debug("step 1 complete");
+            Logging.Debug("Step 1 complete");
 
             Logging.Debug("Starting step 2 of 4 in dependency calculation: adding from selectable packages that use each dependency");
-            foreach(Dependency dependency in dependencies)
+            foreach(SelectablePackage package in packages)
             {
-                //for each dependency, go through each package, and in each package...
-                //Logging.Debug("processing dependency {0}", dependency.PackageName);
-                foreach(SelectablePackage package in packages)
+                //got though each logic property. if the package called is this dependency, then add it to it's list
+                foreach (DatabaseLogic logic in package.Dependencies)
                 {
-                    //got though each logic property. if the package called is this dependency, then add it to it's list
-                    foreach(DatabaseLogic logic in package.Dependencies)
+                    refrencedDependencies.Add(new LogicTracking
                     {
-                        if(logic.PackageName.Equals(dependency.PackageName))
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = package
+                    });
+                    foreach (Dependency dependency in dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
                         {
                             Logging.Debug("SelectablePackage \"{0}\" uses dependency \"{1}\" (logic type {2})", package.PackageName, dependency.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
@@ -1614,25 +1703,32 @@ namespace RelhaxModpack
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
+
+                            //log that the categorie's dependency refrence was linked properly
+                            logic.RefrenceLinked = true;
                         }
                     }
                 }
             }
-            Logging.Debug("step 2 complete");
+            Logging.Debug("Step 2 complete");
 
             //2- append with list of dependencies that need it, regardless if it's an error or not
             Logging.Debug("Starting step 3 of 4 in dependency calculation: adding dependencies that use each dependency");
-            foreach (Dependency dependency in dependencies)
+            //for each dependency go through each dependency's package logic and if it's called then add it
+            foreach(Dependency processingDependency in dependencies)
             {
-                //Logging.Debug("processing dependency {0}", dependency.PackageName);
-                //for each dependency go through each dependency's package logic and if it's called then add it
-                foreach(Dependency processingDependency in dependencies)
+                foreach (DatabaseLogic logic in processingDependency.Dependencies)
                 {
-                    if (processingDependency.PackageName.Equals(dependency.PackageName))
-                        continue;
-                    foreach(DatabaseLogic logic in processingDependency.Dependencies)
+                    refrencedDependencies.Add(new LogicTracking
                     {
-                        if(logic.PackageName.Equals(dependency.PackageName))
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = processingDependency
+                    });
+                    foreach (Dependency dependency in dependencies)
+                    {
+                        if (processingDependency.PackageName.Equals(dependency.PackageName))
+                            continue;
+                        if (logic.PackageName.Equals(dependency.PackageName))
                         {
                             Logging.Debug("Dependency \"{0}\" uses dependency \"{1}\" (logic type {2})", processingDependency.PackageName, dependency.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
@@ -1643,11 +1739,28 @@ namespace RelhaxModpack
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
+
+                            //log that the categorie's dependency refrence was linked properly
+                            logic.RefrenceLinked = true;
                         }
                     }
                 }
             }
-            Logging.Debug("step 3 complete");
+            Logging.Debug("Step 3 complete");
+
+            //3a - check if any dependency refrences were never matched
+            //like if a category refrences dependency the_dependency_packageName, but that package does not exist
+            refrencedDependencies = refrencedDependencies.Where((refrence) => !refrence.DatabaseLogic.RefrenceLinked).ToList();
+            Logging.Debug("Broken dependency refrences count: {0}", refrencedDependencies.Count);
+            if(refrencedDependencies.Count > 0)
+            {
+                Logging.Error("The following packages call refrences to dependencies that do not exist:");
+                foreach(LogicTracking logicTracking in refrencedDependencies)
+                {
+                    Logging.Error("Package: {0} => broken refrence: {1}",
+                        logicTracking.ComponentWithDependencies.ComponentInternalName, logicTracking.DatabaseLogic.PackageName);
+                }
+            }
 
             //3 - run calculations IN DEPENDENCY LIST ORDER FROM TOP DOWN
             List<Dependency> notProcessedDependnecies = new List<Dependency>(dependencies);
@@ -1677,8 +1790,8 @@ namespace RelhaxModpack
                 List<DatabaseLogic> logicalAND = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.AND).ToList();
 
                 //debug logging
-                Logging.Debug("logicalOR count: {0}", localOR.Count);
-                Logging.Debug("logicalAnd count: {0}", logicalAND.Count);
+                Logging.Debug("LogicalOR count: {0}", localOR.Count);
+                Logging.Debug("LogicalAnd count: {0}", logicalAND.Count);
 
                 //if there are no logical ands, then only do ors, vise versa
                 bool ORsPass = localOR.Count > 0? false: true;
@@ -1687,12 +1800,12 @@ namespace RelhaxModpack
                 //if ors and ands are both true already, then something's broken
                 if(ORsPass && ANDSPass)
                 {
-                    Logging.Warning("ors and ands already pass for dependency package {0}, (nothing uses it?)", dependency.PackageName);
+                    Logging.Warning("Ors and ands already pass for dependency package {0}, (nothing uses it?)", dependency.PackageName);
                     continue;
                 }
 
                 //calc the ORs first
-                Logging.Debug("processing OR logic");
+                Logging.Debug("Processing OR logic");
                 foreach(DatabaseLogic orLogic in localOR)
                 {
                     //OR logic - if any mod/dependency is checked, then it's installed and can stop there
@@ -1700,56 +1813,56 @@ namespace RelhaxModpack
                     //same case goes for negatives - if mod is NOT checked and negateFlag
                     if(!orLogic.WillBeInstalled)
                     {
-                        Logging.WriteToLog(string.Format("skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         continue;
                     }
                     if(!orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is checked and notflag is low (= true), sets orLogic to pass!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("Package {0} is checked and notflag is low (= true), sets orLogic to pass!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         ORsPass = true;
                         break;
                     }
                     else if (orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is NOT checked and notFlag is high (= false), sets orLogic to pass!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("Package {0} is NOT checked and notFlag is high (= false), sets orLogic to pass!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         ORsPass = true;
                         break;
                     }
                     else
                     {
-                        Logging.WriteToLog(string.Format("package {0}, checked={1}, notFlag={2}, does not set orLogic to pass",
+                        Logging.WriteToLog(string.Format("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass",
                             orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
                     }
                 }
 
                 //now calc the ands
-                Logging.Debug("processing AND logic");
+                Logging.Debug("Processing AND logic");
                 foreach(DatabaseLogic andLogic in logicalAND)
                 {
                     if (andLogic.WillBeInstalled && !andLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is checked and (NOT notFlag) = true, correct AND logic, continue",
+                        Logging.WriteToLog(string.Format("Package {0} is checked and (NOT notFlag) = true, correct AND logic, continue",
                             andLogic.PackageName), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = true;
                     }
                     else if (!andLogic.WillBeInstalled && andLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is NOT checked and (notFlag) = true, correct AND logic, continue",
+                        Logging.WriteToLog(string.Format("Package {0} is NOT checked and (notFlag) = true, correct AND logic, continue",
                             andLogic.PackageName), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = true;
                     }
                     else
                     {
-                        Logging.WriteToLog(string.Format("package {0}, checked={1}, notFlag={2}, incorrect AND logic, set andPass=false and break!",
+                        Logging.WriteToLog(string.Format("Package {0}, checked={1}, notFlag={2}, incorrect AND logic, set andPass=false and break!",
                             andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = false;
                         break;
                     }
                 }
-                string final = string.Format("final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
+                string final = string.Format("Final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
                 if(ANDSPass && ORsPass)
                 {
                     Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
@@ -1762,7 +1875,7 @@ namespace RelhaxModpack
 
                 if (dependency.DatabasePackageLogic.Count > 0 && (ANDSPass && ORsPass))
                 {
-                    Logging.Debug("updating future references (like logicalDependnecies) for if dependency was checked");
+                    Logging.Debug("Updating future references (like logicalDependnecies) for if dependency was checked");
                     //update any dependencies that use it
                     foreach (DatabaseLogic callingLogic in dependency.Dependencies)
                     {
@@ -1776,12 +1889,12 @@ namespace RelhaxModpack
                             List<DatabaseLogic> foundLogic = refrenced.DatabasePackageLogic.Where(logic => logic.PackageName.Equals(dependency.PackageName)).ToList();
                             if (foundLogic.Count > 0)
                             {
-                                Logging.Debug("logic refrence entry for dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
+                                Logging.Debug("Logic refrence entry for dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
                                 foundLogic[0].WillBeInstalled = ANDSPass && ORsPass;
                             }
                             else
                             {
-                                Logging.Error("found logics count is 0 for updating refrences");
+                                Logging.Error("Found logics count is 0 for updating refrences");
                             }
                         }
                         else
@@ -1794,7 +1907,7 @@ namespace RelhaxModpack
                 notProcessedDependnecies.RemoveAt(0);
             }
 
-            Logging.Debug("step 4 complete");
+            Logging.Debug("Step 4 complete");
             return dependenciesToInstall;
         }
 
@@ -2122,38 +2235,42 @@ namespace RelhaxModpack
         {
             //check if path of exe is the same as the one we're looking at
             //first check to make sure wot path is legit
-            bool checkWithPath = true;
             if (string.IsNullOrEmpty(pathToMatch))
             {
-                Logging.WriteToLog(nameof(pathToMatch) + "Is empty, cannot check for direct path, only checking for num processes",
-                    Logfiles.Application, LogLevel.Error);
-                checkWithPath = false;
+                Logging.Info("[GetProcess()] pathToMatch is empty, only checking for instance count > 0");
             }
+
             //get list of running instances of WoT
-            //TO GET PROCESS NAME: Process.GetCurrentProcess().ProcessName
             Process[] processes = Process.GetProcessesByName(processName);
+
             //check if three are any at all
             if (processes.Length == 0)
             {
                 return null;
             }
-            //first check if the number is 1 or less, if so stop here
-            else if (processes.Length == 1)
-                return null;
-            //if not checking for path, we don't know if is the direct path, 
-            else if (!checkWithPath)
-                return processes[0];
-            else
+
+            //if not checking for path, we don't know which instance, only that there is one
+            //so return
+            Logging.Debug("[GetProcess()] Process name to match: {0}. matching entries: {1}", processName, processes.Length.ToString());
+            if (string.IsNullOrEmpty(pathToMatch))
             {
-                foreach (Process p in processes)
+                Logging.Debug("[GetProcess()] processes.length = {0} and pathToMatch is empty, returning first entry", processes.Length.ToString());
+                return processes[0];
+            }
+
+            //else try to match the path
+            foreach (Process p in processes)
+            {
+                //get path of process start file
+                //https://stackoverflow.com/questions/5497064/how-to-get-the-full-path-of-running-process
+                string processStartFilepath = RemoveWoT32bit64bitPathIfExists(Path.GetDirectoryName(p.MainModule.FileName));
+                Logging.Debug("[GetProcess()] checking if path process {0} matching with path {1}", processStartFilepath, pathToMatch);
+                if (pathToMatch.Equals(processStartFilepath))
                 {
-                    if (pathToMatch.Equals(Path.GetDirectoryName(p.StartInfo.FileName)))
-                    {
-                        Logging.WriteToLog(string.Format("Matched process name {0} to path {1}", p.ProcessName, pathToMatch),
-                            Logfiles.Application, LogLevel.Debug);
-                        return p;
-                    }
+                    Logging.Debug("[GetProcess()] Process name matched");
+                    return p;
                 }
+                Logging.Debug("[GetProcess()] Never matched path processes (count={0}) matching with path {1}", processes.Length.ToString(), pathToMatch);
             }
             return null;
         }
@@ -2280,6 +2397,11 @@ namespace RelhaxModpack
             string completeTemplate = string.Format("https://translate.google.com/#view=home&op=translate&sl=en&tl={0}&text={1}",
                 Translations.GetTranslatedString("GoogleTranslateLanguageKey"), textToSend);
             return StartProcess(completeTemplate);
+        }
+
+        public static string EmptyNullStringCheck(string stringToTest, string emptyNullReturn = "(null)")
+        {
+            return string.IsNullOrEmpty(stringToTest) ? emptyNullReturn : stringToTest;
         }
         #endregion
 

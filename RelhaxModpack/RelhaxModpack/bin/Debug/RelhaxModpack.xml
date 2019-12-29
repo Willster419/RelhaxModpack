@@ -424,6 +424,11 @@
             The list of packages contained in this category
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Category.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Category.InstallGroup">
             <summary>
             The install group number of the category. Used to denote which install thread it is assigned to.
@@ -515,6 +520,14 @@
             <summary>
             The logic type to use for this package definition
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseLogic.RefrenceLinked">
+            <summary>
+            A flag for dependency calculation for when the application has linked the dependnecy refrence
+            </summary>
+            <remarks>During dependnecy calcuation, the application will 'link' the refrenced dependencies in a package
+            to the refrenced dependency. This allows for the application to process dependency calcuation logic in a dynamic
+            AND and OR system. Having the flag can help to determine if a refrence does not exist</remarks>
         </member>
         <member name="M:RelhaxModpack.DatabaseLogic.ToString">
             <summary>
@@ -735,6 +748,11 @@
             Property of Dependencies list to allow for interface implementation
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Dependency.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Dependency.wasLogicalDependencyLegacy">
             <summary>
             When loading from legacy database type and is was of type "logicalDependency"
@@ -760,6 +778,11 @@
         <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithDependencies.DependenciesProp">
             <summary>
             The property wrapper of the Dependencies field
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithDependencies.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
             </summary>
         </member>
         <member name="T:RelhaxModpack.MediaType">
@@ -1034,6 +1057,11 @@
         <member name="F:RelhaxModpack.SelectablePackage.ShowInSearchList">
             <summary>
             Toggle if the package should appear in the search list
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.UIComponent">
@@ -3490,6 +3518,14 @@
             <param name="progress">The progress reporter object</param>
             <returns>A RelhaxInstallFinishedEventArgs object contain uninstallation data for if the uninstallation succeed or ended prematurely</returns>
         </member>
+        <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.UninstallMods(RelhaxModpack.UninstallModes,System.Boolean)">
+            <summary>
+            Deletes mod files from the current game client
+            </summary>
+            <param name="UninstallMode">Selects which uninstall method</param>
+            <param name="logToUninstaller">if to </param>
+            <returns>true if the uninstall processes completed, false otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.Dispose(System.Boolean)">
             <summary>
             Dispose of the Installation engine
@@ -3797,7 +3833,7 @@
             The log file for the editor
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Logfiles.Patcher">
+        <member name="F:RelhaxModpack.Logfiles.PatchDesigner">
             <summary>
             The log file for the patcher
             </summary>
@@ -4222,6 +4258,11 @@
         <member name="F:RelhaxModpack.EditorSettings.SaveAsDatabaseVersion">
             <summary>
             The form to save the database in when "save as" is pressed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.AutoUpdaterWorkDirectory">
+            <summary>
+            The directory where the auto updater will download, modify, and upload files to/from
             </summary>
         </member>
         <member name="M:RelhaxModpack.EditorSettings.#ctor">
@@ -4880,6 +4921,11 @@
             and will be deleted at the end of the installation
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Settings.AutoUpdateZipFolderName">
+            <summary>
+            The name of the temporary install folder that holds the auto update information of the database editor.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Settings.FoldersToCleanup">
             <summary>
             The list of installer folders in the root {WoT} directory to cleanup after an installation
@@ -5385,6 +5431,49 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.AutoUpdatePackageWindow">
+            <summary>
+            Interaction logic for AutoUpdatePackageWindow.xaml
+            </summary>
+            <summary>
+            AutoUpdatePackageWindow
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.AutoUpdatePackageWindow.Packages">
+            <summary>
+            Get or set the list of packages to display in the package update window
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.AutoUpdatePackageWindow.WorkingDirectory">
+            <summary>
+            Gets or sets the current directory where the window will download and upload files to/from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AutoUpdatePackageWindow.AutoUpdateDownloadInstructionsXml">
+            <summary>
+            The absolute path inside the zip file to the download instructions xml
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AutoUpdatePackageWindow.AutoUpdateFileInstructionsXml">
+            <summary>
+            The absolute path inside the zip file to the file list instructions xml
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AutoUpdatePackageWindow.Credential">
+            <summary>
+            The FTP credentials
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdatePackageWindow.#ctor">
+            <summary>
+            Create an instance of the AutoUpdatePackageWindow window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdatePackageWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.CreateFTPFolderName">
             <summary>
             Interaction logic for CreateFTPFolderName.xaml
@@ -5519,7 +5608,7 @@
             True is moving package, false is adding package
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.EditorAddRemove.AddSaveLevel">
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.AddSameLevel">
             <summary>
             Toggles if the user requests to add the package at a new level or in the same level as the referenced package
             </summary>
@@ -6228,6 +6317,12 @@
             PatchDesigner
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.PatchDesigner.LaunchedFromMainWindow">
+            <summary>
+            Indicates if this editor instance was launched from the MainWindow or from command line
+            </summary>
+            <remarks>This changes the behavior of the logging for the editor</remarks>
+        </member>
         <member name="M:RelhaxModpack.Windows.PatchDesigner.#ctor">
             <summary>
             Create an instance of the PatchDesigner window
@@ -6412,6 +6507,24 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.AutoUpdateFilesInspector">
+            <summary>
+            Interaction logic for Window1.xaml
+            </summary>
+            <summary>
+            AutoUpdateFilesInspector
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdateFilesInspector.#ctor">
+            <summary>
+            Create and instance of the AutoUpdateFilesInspector Window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.AutoUpdateFilesInspector.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>

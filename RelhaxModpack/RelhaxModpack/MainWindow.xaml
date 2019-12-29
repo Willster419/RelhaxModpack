@@ -206,7 +206,7 @@
                                 <TextBlock x:Name="UninstallQuickText" Text="Quick" TextWrapping="Wrap"/>
                             </RadioButton>
                         </StackPanel>
-                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Click="VerboseLoggingCB_Click" IsChecked="True" IsEnabled="False" ToolTipService.ShowOnDisabled="True">
+                        <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Click="VerboseLoggingCB_Click" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="VerboseLoggingText" Text="Verbose Logging" TextWrapping="Wrap"/>
                         </CheckBox>
                         <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Click="DisableTriggersCB_Click" IsChecked="True" IsEnabled="False" ToolTipService.ShowOnDisabled="True">
@@ -238,7 +238,7 @@
                             <TextBlock x:Name="AutoOneclickShowWarningOnSelectionsFailText" Text="Show warning if selection document has errors when loaded" TextWrapping="Wrap"/>
                         </CheckBox>
                         <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0"
-                                 VerticalScrollBarVisibility="Auto" ToolTipService.ShowOnDisabled="True"/>
+                                 VerticalScrollBarVisibility="Auto" ToolTipService.ShowOnDisabled="True" TextChanged="AutoInstallOneClickInstallSelectionFilePath_TextChanged"/>
                         <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" HorizontalAlignment="Stretch" Margin="0,3,0,0"
                                 Click="LoadAutoSyncSelectionFile_Click" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="LoadAutoSyncSelectionFileText" Text="Load selection file" TextWrapping="Wrap"/>
@@ -254,6 +254,9 @@
                         </StackPanel>
                         <Button x:Name="LauchEditor" Tag="LauchEditor" Margin="0,2,0,0" Click="LauchEditor_Click" IsEnabled="False" Visibility="Hidden" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="LauchEditorText" Text="Launch Database Editor" TextWrapping="Wrap"/>
+                        </Button>
+                        <Button x:Name="LauchPatchDesigner" Tag="LauchPatchDesigner" Margin="0,2,0,0" Click="LauchPatchDesigner_Click" IsEnabled="False" Visibility="Hidden" ToolTipService.ShowOnDisabled="True">
+                            <TextBlock x:Name="LauchPatchDesignerText" Text="Launch Patch Designer" TextWrapping="Wrap"/>
                         </Button>
                     </StackPanel>
                 </Grid>

@@ -49,6 +49,14 @@ namespace RelhaxModpack
         public Logic Logic = Logic.OR;
 
         /// <summary>
+        /// A flag for dependency calculation for when the application has linked the dependnecy refrence
+        /// </summary>
+        /// <remarks>During dependnecy calcuation, the application will 'link' the refrenced dependencies in a package
+        /// to the refrenced dependency. This allows for the application to process dependency calcuation logic in a dynamic
+        /// AND and OR system. Having the flag can help to determine if a refrence does not exist</remarks>
+        public bool RefrenceLinked { get; set; } = false;
+
+        /// <summary>
         /// String representation of the object
         /// </summary>
         /// <returns>The name of the package this object attaches to</returns>

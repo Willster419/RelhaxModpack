@@ -27,6 +27,11 @@ namespace RelhaxModpack
         /// </summary>
         public List<SelectablePackage> Packages = new List<SelectablePackage>();
 
+        /// <summary>
+        /// When a databasePackage, the internal packageName. When category, the category name
+        /// </summary>
+        public string ComponentInternalName { get { return Name; } }
+
         //https://stackoverflow.com/questions/1759352/how-to-mark-a-method-as-obsolete-or-deprecated
         /// <summary>
         /// The install group number of the category. Used to denote which install thread it is assigned to.

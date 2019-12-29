@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>RelhaxModpack</RootNamespace>
     <AssemblyName>RelhaxModpack</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -70,9 +70,14 @@
     <ApplicationIcon>Resources\modpack_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetZip, Version=1.13.3.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.13.3\lib\net40\DotNetZip.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="DotNetZip, Version=1.13.4.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.13.4\lib\net40\DotNetZip.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.17.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.17\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.3.3, Culture=neutral, PublicKeyToken=8985beaab7ea3f04, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft-WindowsAPICodePack-Core.1.1.3.3\lib\net452\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -87,8 +92,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
@@ -129,11 +133,14 @@
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
     <Compile Include="DatabaseComponents\DatabasePackage.cs" />
     <Compile Include="DatabaseComponents\Dependency.cs" />
-    <Compile Include="DatabaseComponents\IDatabaseLogic.cs" />
+    <Compile Include="DatabaseComponents\DownloadInstructions.cs" />
+    <Compile Include="DatabaseComponents\IComponentWithDependencies.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
+    <Compile Include="DatabaseComponents\PatchUpdate.cs" />
     <Compile Include="DatabaseComponents\SelectablePackage.cs" />
     <Compile Include="DatabaseComponents\Trigger.cs" />
+    <Compile Include="DatabaseComponents\UpdateInstructions.cs" />
     <Compile Include="DatabaseComponents\UserFile.cs" />
     <Compile Include="UIComponents\BoundUISettings.cs" />
     <Compile Include="UIComponents\ClassColorset.cs" />
@@ -195,6 +202,9 @@
     <Compile Include="Utils\RelhaxNvTexLibrary.cs" />
     <Compile Include="Windows\AskCloseWoT.xaml.cs">
       <DependentUpon>AskCloseWoT.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AutoUpdatePackageWindow.xaml.cs">
+      <DependentUpon>AutoUpdatePackageWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\CreateFTPFolderName.xaml.cs">
       <DependentUpon>CreateFTPFolderName.xaml</DependentUpon>
@@ -294,6 +304,9 @@
     <Compile Include="Utils\XmlBinary\PrimitiveFileReader.cs" />
     <Compile Include="Utils\XmlBinary\XmlBinaryHandler.cs" />
     <Compile Include="Utils\XmlUtils.cs" />
+    <Compile Include="Windows\AutoUpdateFilesInspector.xaml.cs">
+      <DependentUpon>AutoUpdateFilesInspector.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -355,6 +368,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AskCloseWoT.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AutoUpdatePackageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -462,6 +479,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\AutoUpdateFilesInspector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -502,6 +523,7 @@
     <EmbeddedResource Include="Resources\DLL\NAudio.dll" />
     <EmbeddedResource Include="Resources\DLL\Newtonsoft.Json.dll" />
     <EmbeddedResource Include="Resources\DLL\TeximpNet.dll" />
+    <EmbeddedResource Include="Resources\DLL\HtmlAgilityPack.dll" />
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>

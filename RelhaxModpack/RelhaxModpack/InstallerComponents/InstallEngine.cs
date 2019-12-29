@@ -376,7 +376,8 @@ namespace RelhaxModpack.InstallerComponents
                 if (!taskk.IsFaulted)
                 {
                     Prog.TotalCurrent++;
-                    InstallFinishedArgs.ExitCode = InstallerExitCodes.CleanupError;
+                    //save where the installer finished
+                    InstallFinishedArgs.ExitCode = Prog.InstallStatus;
                     Prog.InstallStatus = InstallerExitCodes.CleanupError;
                     Progress.Report(Prog);
                 }
@@ -391,7 +392,8 @@ namespace RelhaxModpack.InstallerComponents
                         if (!taskk.IsFaulted)
                         { 
                             Prog.TotalCurrent++;
-                            InstallFinishedArgs.ExitCode = InstallerExitCodes.Success;
+                            //cleanup passed, but in case the exit code from main install was bad, don't change it to good
+                            //InstallFinishedArgs.ExitCode = InstallerExitCodes.Success;
                             Prog.InstallStatus = InstallerExitCodes.Success;
                             Progress.Report(Prog);
                         }
@@ -402,7 +404,8 @@ namespace RelhaxModpack.InstallerComponents
                         if (!taskk.IsFaulted)
                         {
                             Prog.TotalCurrent++;
-                            InstallFinishedArgs.ExitCode = InstallerExitCodes.CleanupError;
+                            if(InstallFinishedArgs.ExitCode == InstallerExitCodes.Success)
+                                InstallFinishedArgs.ExitCode = InstallerExitCodes.CleanupError;
                             Prog.InstallStatus = InstallerExitCodes.CleanupError;
                             Progress.Report(Prog);
                         }
@@ -463,16 +466,7 @@ namespace RelhaxModpack.InstallerComponents
             InstallFinishedArgs.ExitCode = InstallerExitCodes.UnknownError;
 
             //run the uninstall methods
-            bool success = true;
-            switch (ModpackSettings.UninstallMode)
-            {
-                case UninstallModes.Default:
-                    success = UninstallModsDefault(true);
-                    break;
-                case UninstallModes.Quick:
-                    success = UninstallModsQuick(true);
-                    break;
-            }
+            bool success = UninstallMods(ModpackSettings.UninstallMode, true);
 
             if (success)
                 InstallFinishedArgs.ExitCode = InstallerExitCodes.Success;
@@ -936,177 +930,70 @@ namespace RelhaxModpack.InstallerComponents
         #endregion
 
         #region Main Uninstall methods
-        private bool UninstallModsQuick(bool logIt)
+        /// <summary>
+        /// Deletes mod files from the current game client
+        /// </summary>
+        /// <param name="UninstallMode">Selects which uninstall method</param>
+        /// <param name="logToUninstaller">if to </param>
+        /// <returns>true if the uninstall processes completed, false otherwise</returns>
+        private bool UninstallMods(UninstallModes UninstallMode, bool logToUninstaller)
         {
+            //the "prog" progress object has uninstallStatus and installStatus, so both can be safely updated
+
+            //setup uninstall and install progress
             Prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
+            Prog.InstallStatus = InstallerExitCodes.CleanModsError;
             Progress.Report(Prog);
 
-            //get a list of all files and folders in mods and res_mods
-            List<string> ListOfAllItems = new List<string>();
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories,true).ToList());
-            CancellationToken.ThrowIfCancellationRequested();
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories,true).ToList());
-            CancellationToken.ThrowIfCancellationRequested();
+            //check for access to the res_mods and mods folder
+            //check if the folders can be modified first
+            Logging.Info("Starting UninstallMods(), UninstallMode={0}, logToUninstaller={1}", UninstallMode.ToString(), logToUninstaller.ToString());
+            string resModsFolder = Path.Combine(Settings.WoTDirectory, "res_mods");
+            string modsFolder = Path.Combine(Settings.WoTDirectory, "mods");
+            Logging.Debug("resModsFolder parsed as {0}", resModsFolder);
+            Logging.Debug("modsFolder parsed as {0}", modsFolder);
 
-            //combine with a list of any installer engine created folders
-            foreach (string folder in Settings.FoldersToCleanup)
-            {
-                CancellationToken.ThrowIfCancellationRequested();
-                string folderPath = Path.Combine(Settings.WoTDirectory, folder);
-                if (Directory.Exists(folderPath))
-                    ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories,true));
-            }
 
-            ListOfAllItems.Sort();
-            ListOfAllItems.Reverse();
-
-            //split off into files and folders and shortcuts
-            List<string> ListOfAllDirectories = ListOfAllItems.Where(item => Directory.Exists(item)).ToList();
-            List<string> ListOfAllFiles = ListOfAllItems.Where(item => File.Exists(item)).ToList();
-
-            //start init progress reporting. for uninstall, only use child current, total and filename
-            Prog.ChildTotal = ListOfAllItems.Count;
-            Prog.ChildCurrent = 0;
-            Progress.Report(Prog);
-
-            if(logIt)
-            {
-                string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
-                string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
-                if (File.Exists(backupUninstallLogfile))
-                    Utils.FileDelete(backupUninstallLogfile);
-                if (File.Exists(uninstallLogfile))
-                    File.Move(uninstallLogfile, backupUninstallLogfile);
-
-                //create the uninstall logfile and write header info
-                if (!Logging.Init(Logfiles.Uninstaller, uninstallLogfile))
-                {
-                    Logging.Error("Failed to init the uninstall logfile");
-                    return false;
-                }
-                else
-                {
-                    Logging.WriteToLog(string.Format(@"/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */
-            ", DateTime.Now), Logfiles.Uninstaller, LogLevel.Info);
-                    Logging.WriteToLog(string.Format("/* Uninstall Method: {0} */", ModpackSettings.UninstallMode.ToString()), Logfiles.Uninstaller, LogLevel.Info);
-                    Logging.WriteToLog(@"/*  files and folders deleted  */", Logfiles.Uninstaller, LogLevel.Info);
-                }
-            }
-            CancellationToken.ThrowIfCancellationRequested();
-
-            //delete all files
-            bool success = true;
-            Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
-            foreach(string file in ListOfAllFiles)
-            {
-                CancellationToken.ThrowIfCancellationRequested();
-                Prog.ChildCurrent++;
-                Prog.Filename = file;
-                Progress.Report(Prog);
-                if (!Utils.FileDelete(file))
-                    success = false;
-                else
-                {
-                    if(logIt)
-                        Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
-                }
-            }
-
-            //delete all folders
-            foreach(string folder in ListOfAllDirectories)
-            {
-                CancellationToken.ThrowIfCancellationRequested();
-                Prog.ChildCurrent++;
-                Prog.Filename = folder;
-                Progress.Report(Prog);
-                if (!Utils.ProcessEmptyDirectories(folder, false))
-                    success = false;
-                else
-                {
-                    if (logIt)
-                        Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
-                }
-            }
-
-            //final wipe of the folders
-            Prog.UninstallStatus = UninstallerExitCodes.PerformFinalClearup;
-            Progress.Report(Prog);
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "res_mods"), true))
-                    success = false;
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "mods"), true))
-                    success = false;
-            CancellationToken.ThrowIfCancellationRequested();
-
-            //re-create the folders at the end
-            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
-            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion));
-
-            //if we are logging, we need to dispose of the uninstall log
-            if (logIt)
-            {
-                Logging.DisposeLogging(Logfiles.Uninstaller);
-            }
-
-            if (success)
-                Prog.UninstallStatus = UninstallerExitCodes.Success;
-            else
-                Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
-
-            InstallFinishedArgs.ParsedCategoryList = ParsedCategoryList;
-            InstallFinishedArgs.Dependencies = Dependencies;
-            InstallFinishedArgs.GlobalDependencies = GlobalDependencies;
-
-            Prog.ChildCurrent = Prog.ChildTotal;
-            Progress.Report(Prog);
-            return success;
-        }
-
-        private bool UninstallModsDefault(bool logIt)
-        {
-            //setup progress
-            Prog.UninstallStatus = UninstallerExitCodes.GettingFilelistError;
-            Progress.Report(Prog);
-
-            //get a list of all files and folders in the install log (assuming checking for logfile already done and exists)
-            Logging.Debug("creating list of files to delete from reading uninstall logfile");
-            string regularlogfilePath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename);
-            string backuplogfilePath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilenameBackup);
+            //create the lists of files to collect and strings of filepaths
             List<string> ListOfAllItems = new List<string>();
 
-            //if the original log exists, then use it
-            if(File.Exists(regularlogfilePath))
+            if (UninstallMode == UninstallModes.Default)
             {
-                Logging.Debug("using regular install log");
-                ListOfAllItems.AddRange(File.ReadAllLines(regularlogfilePath));
-            }
-            //else if the backup exists, then use it
-            else if (File.Exists(backuplogfilePath))
-            {
-                Logging.Warning("regular install log does not exist, but backup does. previous install or uninstall failure?");
-                ListOfAllItems.AddRange(File.ReadAllLines(backuplogfilePath));
-            }
-            //else we can't use one
-            else
-            {
-                Logging.Warning("regular and backup install log files do not exist, first run or used WoT cleaner tool?");
+                Logging.Debug("creating list of files to delete from reading uninstall logfile");
+                string regularlogfilePath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename);
+                string backuplogfilePath = Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilenameBackup);
+
+                //if the original log exists, then use it
+                if (File.Exists(regularlogfilePath))
+                {
+                    Logging.Debug("using regular install log");
+                    ListOfAllItems.AddRange(File.ReadAllLines(regularlogfilePath));
+                }
+                //else if the backup exists, then use it
+                else if (File.Exists(backuplogfilePath))
+                {
+                    Logging.Warning("regular install log does not exist, but backup does. previous install or uninstall failure?");
+                    ListOfAllItems.AddRange(File.ReadAllLines(backuplogfilePath));
+                }
+                //else we can't use one
+                else
+                {
+                    Logging.Warning("regular and backup install log files do not exist");
+                }
             }
 
             //combine with a list of all files and folders in mods and res_mods
             Logging.Debug("adding any files in res_mods and mods by scanning the folders if they aren't on the list already");
-            if(Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories,true).ToList());
+            if (Directory.Exists(resModsFolder))
+                ListOfAllItems.AddRange(Utils.DirectorySearch(resModsFolder, SearchOption.AllDirectories, true).ToList());
             CancellationToken.ThrowIfCancellationRequested();
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories,true).ToList());
+            if (Directory.Exists(modsFolder))
+                ListOfAllItems.AddRange(Utils.DirectorySearch(modsFolder, SearchOption.AllDirectories, true).ToList());
             CancellationToken.ThrowIfCancellationRequested();
 
             //combine with a list of any installer engine created folders
             Logging.Debug("adding any installer created folders if they exist");
-            foreach(string folder in Settings.FoldersToCleanup)
+            foreach (string folder in Settings.FoldersToCleanup)
             {
                 CancellationToken.ThrowIfCancellationRequested();
                 string folderPath = Path.Combine(Settings.WoTDirectory, folder);
@@ -1134,7 +1021,7 @@ namespace RelhaxModpack.InstallerComponents
             Prog.ChildCurrent = 0;
             Progress.Report(Prog);
 
-            if(logIt)
+            if (logToUninstaller)
             {
                 //backup old uninstall logfile
                 Logging.Debug("backing up old uninstall logfile and creating new");
@@ -1148,7 +1035,7 @@ namespace RelhaxModpack.InstallerComponents
                 //create the uninstall logfile and write header info
                 if (!Logging.Init(Logfiles.Uninstaller, uninstallLogfile))
                 {
-                    Logging.Error("Failed to init the uninstall logfile");
+                    Logging.Error("Failed to init the uninstall logfile. the uninstall will not be logged.");
                 }
                 else
                 {
@@ -1160,7 +1047,7 @@ namespace RelhaxModpack.InstallerComponents
             CancellationToken.ThrowIfCancellationRequested();
 
             //delete all files (not shortcuts)
-            Logging.Debug("deleting all files from list, not including shortcuts");
+            Logging.Debug("Deleting all files from list, not including shortcuts");
             bool success = true;
             Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
             foreach (string file in ListOfAllFiles)
@@ -1178,16 +1065,16 @@ namespace RelhaxModpack.InstallerComponents
                     }
                     else
                     {
-                        if (logIt)
+                        if (logToUninstaller)
                             Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
                     }
                 }
             }
 
-            //deal with shortcuts
+            //delete shortcuts
             //if settings.createShortcuts, then don't delete them (at least here, for now)
             //otherwise delete them
-            if (!ModpackSettings.CreateShortcuts)
+            if (UninstallMode == UninstallModes.Default && !ModpackSettings.CreateShortcuts)
             {
                 Logging.Debug("Deleting shortcuts");
                 foreach (string file in ListOfAllShortcuts)
@@ -1202,7 +1089,7 @@ namespace RelhaxModpack.InstallerComponents
                         }
                         else
                         {
-                            if (logIt)
+                            if (logToUninstaller)
                                 Logging.WriteToLog(file, Logfiles.Uninstaller, LogLevel.Info);
                         }
                     }
@@ -1213,12 +1100,12 @@ namespace RelhaxModpack.InstallerComponents
             Logging.Debug("performing final wipe of res_mods and mods folders");
             Prog.UninstallStatus = UninstallerExitCodes.PerformFinalClearup;
             Progress.Report(Prog);
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "res_mods")))
-                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "res_mods"), true))
+            if (Directory.Exists(resModsFolder))
+                if (!Utils.DirectoryDelete(resModsFolder, true))
                     success = false;
             CancellationToken.ThrowIfCancellationRequested();
-            if (Directory.Exists(Path.Combine(Settings.WoTDirectory, "mods")))
-                if (!Utils.DirectoryDelete(Path.Combine(Settings.WoTDirectory, "mods"), true))
+            if (Directory.Exists(modsFolder))
+                if (!Utils.DirectoryDelete(modsFolder, true))
                     success = false;
             CancellationToken.ThrowIfCancellationRequested();
 
@@ -1233,19 +1120,20 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     if (!Utils.ProcessEmptyDirectories(folder, false))
                         success = false;
-                    if(logIt)
+                    if (logToUninstaller)
                         Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
                 }
             }
+            CancellationToken.ThrowIfCancellationRequested();
 
             //re-create the folders at the end
             Logging.Debug("re-creating res_mods and mods folders including wot version folder number");
-            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "res_mods", Settings.WoTClientVersion));
-            Directory.CreateDirectory(Path.Combine(Settings.WoTDirectory, "mods", Settings.WoTClientVersion));
+            Directory.CreateDirectory(Path.Combine(resModsFolder, Settings.WoTClientVersion));
+            Directory.CreateDirectory(Path.Combine(modsFolder, Settings.WoTClientVersion));
 
             //if we are logging, we need to dispose of the uninstall log
             Logging.Debug("disposing of logging and cleanup");
-            if(logIt)
+            if (logToUninstaller)
             {
                 Logging.DisposeLogging(Logfiles.Uninstaller);
             }
@@ -1398,37 +1286,45 @@ namespace RelhaxModpack.InstallerComponents
                     if (startChar.Equals('{'))
                     {
                         //it does not have the macro, so add it. (assume {app} macro)
-                        Logging.Debug("pattern starts with \"{\", continue");
+                        Logging.Debug("Pattern starts with \"{\", continue");
                     }
                     else if (startChar.Equals('\\'))
                     {
-                        Logging.Debug("pattern starts with \"\\\", adding macro and continue");
+                        Logging.Debug("Pattern starts with \"\\\", adding macro and continue");
                         searchPattern = @"{app}" + searchPattern;
                     }
                     else
                     {
-                        Logging.Debug("pattern starts with folder name, adding macro and folder slash and continue");
+                        Logging.Debug("Pattern starts with folder name, adding macro and folder slash and continue");
                         searchPattern = @"{app}\" + searchPattern;
                     }
-                    Logging.Debug("path with macro: {0}", searchPattern);
-
-                    //replace the macro to make the complete path
-                    searchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
-                    string directorySearchpath = Path.GetDirectoryName(searchPattern);
-                    searchPattern = Path.GetFileName(searchPattern);
-                    Logging.Debug("search term (or file): {0}", searchPattern);
+                    Logging.Debug("Parsed path with macro: {0}", searchPattern);
 
                     //if the directory to search does not exist, then make it, just in case
-                    if (!Directory.Exists(directorySearchpath))
-                        Directory.CreateDirectory(directorySearchpath);
+                    string searchPatternDirectoryPath = Path.GetDirectoryName(Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath));
+                    if (!Directory.Exists(searchPatternDirectoryPath))
+                    {
+                        Logging.Debug("Directory {0} does not exist, creating", searchPatternDirectoryPath);
+                        Directory.CreateDirectory(searchPatternDirectoryPath);
+                    }
+
+                    //at this point it will have a macro, so grab it
+                    //replace the macro to make the complete path
+                    string macro = searchPattern.Split('}')[0] + "}";
+                    string macroRootPath = Utils.MacroReplace(macro,ReplacementTypes.FilePath) + Path.DirectorySeparatorChar;
+                    searchPattern = searchPattern.Split('}')[1].Substring(1);
+                    searchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
+                    Logging.Debug("Path macro: {0} parsed to -> {1}", macro, macroRootPath);
 
                     //get the list of files to replace
-                    string[] filesToSave = Utils.DirectorySearch(directorySearchpath, SearchOption.AllDirectories, false, searchPattern, 5, 3, false);
+                    Logging.Info("Search root: {0}", macroRootPath);
+                    Logging.Info("Search term: {0}", searchPattern);
+                    string[] filesToSave = Utils.DirectorySearch(macroRootPath, SearchOption.AllDirectories, false, searchPattern, 5, 3, false);
 
                     //check if we have files to move
                     if(filesToSave.Count() == 0)
                     {
-                        Logging.Info("no files found to backup");
+                        Logging.Info("No files found to backup");
                         continue;
                     }
 
@@ -1436,9 +1332,9 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.ChildTotal = filesToSave.Count();
 
                     //make the temp directory to place the files based on this package
-                    string tempFolderPath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
-                    if(!Directory.Exists(tempFolderPath))
-                        Directory.CreateDirectory(tempFolderPath);
+                    string tempRootFolderPath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
+                    if(!Directory.Exists(tempRootFolderPath))
+                        Directory.CreateDirectory(tempRootFolderPath);
 
                     //move each file
                     foreach(string file in filesToSave)
@@ -1448,17 +1344,30 @@ namespace RelhaxModpack.InstallerComponents
                         Progress.Report(Prog);
                         CancellationToken.ThrowIfCancellationRequested();
 
-                        string destination = Path.Combine(tempFolderPath, Path.GetFileName(file));
+                        UserDataFile userDataFile = new UserDataFile()
+                        {
+                            TempSaveRoot = tempRootFolderPath,
+                            WoTRoot = macroRootPath,
+                            FilePath = file.Remove(0, macroRootPath.Length)
+                        };
+
+                        string destination = Path.Combine(userDataFile.TempSaveRoot, userDataFile.FilePath);
+                        string source = Path.Combine(userDataFile.WoTRoot, userDataFile.FilePath);
+
+                        if (!Directory.Exists(Path.GetDirectoryName(destination)))
+                            Directory.CreateDirectory(Path.GetDirectoryName(destination));
 
                         //check if destination exists first before replace
                         if (File.Exists(destination))
                             File.Delete(destination);
 
-                        File.Move(file, destination);
-                        files.FilesSaved.Add(file);
+                        File.Move(source, destination);
+
+                        Logging.Info("Processed file {0}", userDataFile.FilePath);
+                        files.FilesSaved.Add(userDataFile);
                     }
                 }
-                Logging.Info("backup data of {0} finished", package.PackageName);
+                Logging.Info("Backup data of {0} finished", package.PackageName);
             }
             return true;
         }
@@ -1494,6 +1403,8 @@ namespace RelhaxModpack.InstallerComponents
             //backup files and folders that should be kept that aren't cache
             string[] fileNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat" };
             string[] folderNames = { "xvm", "pmod" };
+            string pmodCacheFileToDelete = "cache.dat";
+            string xvmFolderToDelete = "cache";
 
             //check if the directories are files or folders
             //if files they can move directly
@@ -1504,13 +1415,9 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if(File.Exists(Path.Combine(Settings.AppDataFolder, file)))
                 {
-                    try
+                    if(!Utils.FileMove(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
                     {
-                        File.Move(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file));
-                    }
-                    catch (Exception ex)
-                    {
-                        Logging.Exception(ex.ToString());
+                        Logging.Error("Failed to move file for clear cache");
                         return false;
                     }
                 } 
@@ -1544,10 +1451,9 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if (File.Exists(Path.Combine(AppPathTempFolder, file)))
                 {
-                    try { File.Move(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)); }
-                    catch (Exception ex)
+                    if (!Utils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)))
                     {
-                        Logging.Exception(ex.ToString());
+                        Logging.Error("Failed to move file for clear cache");
                         return false;
                     }
                 }
@@ -1556,6 +1462,12 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.Info("File does not exist in step clearCache: {0}", file);
                 }
             }
+
+            //delete extra xvm cache folder and pmod cache file
+            if(Directory.Exists(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete)))
+                Utils.DirectoryDelete(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete), true);
+            if(File.Exists(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete)))
+                Utils.FileDelete(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete));
 
             foreach (string folder in folderNames)
             {
@@ -1581,12 +1493,18 @@ namespace RelhaxModpack.InstallerComponents
 
             string[] logsToDelete = new string[]
             {
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "python.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "pmod.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "python.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "pmod.log"),
+                //32 folders
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.PmodLog),
+                //64 folders
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PmodLog),
+                //root folders
+                Path.Combine(Settings.WoTDirectory, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.PmodLog),
                 Path.Combine(Settings.WoTDirectory, "WoTLauncher.log"),
                 Path.Combine(Settings.WoTDirectory, "cef.log")
             };
@@ -1618,20 +1536,20 @@ namespace RelhaxModpack.InstallerComponents
             if (ModpackSettings.ExportMode)
             {
                 Logging.Info("Running uninstall method quick for export mode");
-                return UninstallModsQuick(false);
+                return UninstallMods(UninstallModes.Quick, false);
             }
             else if (ModpackSettings.UninstallMode == UninstallModes.Default)
             {
                 Logging.Info("Running uninstall modes method Default");
-                return UninstallModsDefault(false);
+                return UninstallMods(UninstallModes.Default, false);
             }
             else if (ModpackSettings.UninstallMode == UninstallModes.Quick)
             {
                 Logging.Info("Running uninstall modes method Quick (Advanced)");
-                return UninstallModsQuick(false);
+                return UninstallMods(UninstallModes.Quick, false);
             }
             else
-                throw new BadMemeException(":thinking:");
+                throw new BadMemeException("this should not be reached");
         }
 
         private bool ExtractFilesAsyncSetup()
@@ -1648,7 +1566,7 @@ namespace RelhaxModpack.InstallerComponents
             int numThreads = ModpackSettings.MulticoreExtraction ? Settings.NumLogicalProcesors : 1;
             Prog.TotalThreads = (uint)numThreads;
 
-            Logging.Info(string.Format("Number of threads to use for install is {0}, (MulticoreExtraction={1}, LogicalProcesosrs={2}",
+            Logging.Info(string.Format("Number of threads to use for install is {0}, (MulticoreExtraction={1}, LogicalProcesosrs={2})",
                 numThreads, ModpackSettings.MulticoreExtraction, Settings.NumLogicalProcesors));
 
             //setup progress reporting for parent
@@ -1704,12 +1622,12 @@ namespace RelhaxModpack.InstallerComponents
                     }
 
                     //assign each package one at a time into a package thread
-                    Logging.Info("starting package assignment to each thread");
+                    Logging.Debug("starting package assignment to each thread");
                     for (int j = 0; j < packages.Count; j++)
                     {
                         int threadSelector = j % numThreads;
                         packageThreads[threadSelector].Add(packages[j]);
-                        Logging.Info("j index = {0}, package {1} has been assigned to packageThread {2}", j, packages[j].PackageName, threadSelector);
+                        Logging.Debug("j index = {0}, package {1} has been assigned to packageThread {2}", j, packages[j].PackageName, threadSelector);
                     }
 
                     //now the fun starts. these all can run at once. yeah.
@@ -1795,37 +1713,44 @@ namespace RelhaxModpack.InstallerComponents
                 string tempBackupFolder = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
                 if(!Directory.Exists(tempBackupFolder))
                 {
-                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Warning);
+                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Info);
                 }
 
                 //the list of files that was backed up already exists in a list called Files_saved. use that as the list of files to restore
                 foreach (UserFile files in package.UserFiles)
                 {
-                    foreach(string savedFile in files.FilesSaved)
+                    foreach(UserDataFile savedFile in files.FilesSaved)
                     {
                         CancellationToken.ThrowIfCancellationRequested();
 
                         //Files_saved should have the complete path of the destination
-                        string fileSourcePath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName, Path.GetFileName(savedFile));
+                        //rebuild the complete path to the temp and wot root files
+
+                        string fileSourcePath = Path.Combine(savedFile.TempSaveRoot,savedFile.FilePath);
+                        string fileDestPath = Path.Combine(savedFile.WoTRoot, savedFile.FilePath);
                         if (File.Exists(fileSourcePath))
                         {
-                            Logging.Info(string.Format("Restoring file {0} of {1}", Path.GetFileName(savedFile), package.PackageName));
+                            Logging.Info(string.Format("Restoring file {0} of {1}", savedFile.FilePath, package.PackageName));
+
                             //make the directory if it does not exist yet
-                            if (!Directory.Exists(Path.GetDirectoryName(savedFile)))
-                                Directory.CreateDirectory(Path.GetDirectoryName(savedFile));
+                            if (!Directory.Exists(Path.GetDirectoryName(fileDestPath)))
+                                Directory.CreateDirectory(Path.GetDirectoryName(fileDestPath));
 
                             //if it already exists, delete it
-                            if (File.Exists(savedFile))
-                                File.Delete(savedFile);
+                            if (File.Exists(fileDestPath))
+                            {
+                                Logging.Warning("File already exists in destination, overriding");
+                                File.Delete(fileDestPath);
+                            }
 
                             //then finally move it
-                            File.Move(fileSourcePath, savedFile);
+                            File.Move(fileSourcePath, fileDestPath);
 
                             //and log it
-                            restoreDataBuilder.AppendLine(savedFile);
+                            restoreDataBuilder.AppendLine(fileDestPath);
                         }
                         else
-                            Logging.Error("file {0} was reported backed up, but does not exist for package {1}", Path.GetFileName(savedFile), package.PackageName);
+                            Logging.Error("file {0} was reported backed up, but does not exist to restore for package {1}", Path.GetFileName(fileSourcePath), package.PackageName);
                     }
                 }
             }
@@ -2041,7 +1966,7 @@ namespace RelhaxModpack.InstallerComponents
             else
             {
                 CancellationToken.ThrowIfCancellationRequested();
-                FontsTask = Task.Factory.StartNew(async () =>
+                FontsTask = Task.Run(() =>
                 {
                     Logging.Debug("checking system installed fonts to remove duplicates");
 
@@ -2102,7 +2027,7 @@ namespace RelhaxModpack.InstallerComponents
                             Logging.Debug("FontReg process waiting to close");
                             for(int i = 0; i < timeoutSeconds; i++)
                             {
-                                await Task.Delay(1000);
+                                Thread.Sleep(1000);
                                 if(installFontss.HasExited)
                                 {
                                     Logging.Debug("FontReg process has exited");
@@ -2140,6 +2065,10 @@ namespace RelhaxModpack.InstallerComponents
                             ProgFonts = null;
                             CancellationToken.ThrowIfCancellationRequested();
                         }
+                    }
+                    else
+                    {
+                        Logging.Info("...skipped (no real font files to install)");
                     }
                 });
             }
@@ -2323,7 +2252,8 @@ namespace RelhaxModpack.InstallerComponents
                         Logging.Info("Thread ID={0}, extraction finished of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
 
                         //increment counter
-                        Logging.Info("Thread ID={0}, extracted {1} of {2}", threadNum, ++numExtracted, packagesToExtract.Count);
+                        numExtracted++;
+                        Logging.Debug("Thread ID={0}, extracted {1} of {2}", threadNum, numExtracted, packagesToExtract.Count);
 
                         //update progress of total packages extracted
                         Prog.ParrentCurrent++;
@@ -2394,7 +2324,11 @@ namespace RelhaxModpack.InstallerComponents
                                 sb.Append(zipEntryName.Substring(0,7));
 
                                 //pad and add the patchGroup name
-                                sb.Append(package.PatchGroup.ToString("D3"));
+                                sb.Append(package.PatchGroup.ToString("D3") + "_");
+
+                                //pad and add the installGroup name
+                                //this will help maintain the patching order similarly expected with extractions of installGroup
+                                sb.Append(package.InstallGroup.ToString("D3") + "_");
 
                                 //name else doesn't need to change, to set the rest of the name and use it
                                 sb.Append(zipEntryName.Substring(7));

@@ -57,12 +57,12 @@ namespace RelhaxModpack
                     string patchPathStart = string.Empty;
                     if(Utils.FilePathDict.ContainsKey(@"{app}"))
                     {
-                        Logging.Info("{{app}} key found - using path replace macro ({0})", Settings.ApplicationStartupPath);
+                        Logging.Info("[PatchUtils]: {{app}} key found - using path replace macro ({0})", Settings.ApplicationStartupPath);
                         patchPathStart = Utils.MacroReplace(@"{app}", ReplacementTypes.FilePath);
                     }
                     else
                     {
-                        Logging.Info("no {{app}} key - using path relative to application ({0})", Settings.ApplicationStartupPath);
+                        Logging.Info("[PatchUtils]: no {{app}} key - using path relative to application ({0})", Settings.ApplicationStartupPath);
                         patchPathStart = Settings.ApplicationStartupPath;
                     }
 
@@ -70,7 +70,7 @@ namespace RelhaxModpack
                     {
                         if (Utils.FilePathDict.ContainsKey(@"versiondir"))
                         {
-                            Logging.Info("'versiondir' key found, replacing path with supplied tanks version");
+                            Logging.Info("[PatchUtils]: 'versiondir' key found, replacing path with supplied tanks version");
 
                             p.File = Utils.MacroReplace(p.File, ReplacementTypes.FilePath);
                         }
@@ -78,17 +78,17 @@ namespace RelhaxModpack
 
                     if (p.File[0].Equals('\\'))
                     {
-                        Logging.Debug("p.file starts with '\\', removing for path combine");
+                        Logging.Debug("[PatchUtils]: p.file starts with '\\', removing for path combine");
                         p.File = p.File.Substring(1);
                     }
 
                     if (patchPathStart[patchPathStart.Length-1].Equals('\\'))
                     {
-                        Logging.Debug("patchPathStart end with '\\', removing for path combine");
+                        Logging.Debug("[PatchUtils]: patchPathStart end with '\\', removing for path combine");
                         patchPathStart = patchPathStart.Substring(0,patchPathStart.Length-1);
                     }
                     p.CompletePath = Path.Combine(patchPathStart, p.File);
-                    Logging.Info("complete path to patch parsed as '{0}'", p.CompletePath);
+                    Logging.Info("[PatchUtils]: complete path to patch parsed as '{0}'", p.CompletePath);
                 }
                 else//from application regular install
                 {
@@ -101,7 +101,7 @@ namespace RelhaxModpack
                     {
                         if(!p.PatchPath[0].Equals('{'))
                         {
-                            //Logging.Warning("application patchpath macro does not start with '{', needs to be updated");
+                            //Logging.Warning("[PatchUtils]: application patchpath macro does not start with '{', needs to be updated");
                             //https://stackoverflow.com/questions/91362/how-to-escape-braces-curly-brackets-in-a-format-string-in-net
                             p.PatchPath = string.Format("{{{0}}}", p.PatchPath);
                         }
@@ -111,13 +111,13 @@ namespace RelhaxModpack
                     //check for that dumb filepath thing i did a while back
                     if(p.File.Contains(@"\\"))
                     {
-                        Logging.Warning("found legacy patch of \"\\\\\", please update to remove extra slashes!");
+                        Logging.Warning("[PatchUtils]: found legacy patch of \"\\\\\", please update to remove extra slashes!");
                         p.File = p.File.Replace(@"\\", @"\");
                     }
 
                     if(p.File[0].Equals('\\'))
                     {
-                        //Logging.Debug("p.file starts with '\\', removing for path combine");
+                        //Logging.Debug("[PatchUtils]: p.file starts with '\\', removing for path combine");
                         p.File = p.File.Substring(1);
                     }
 
@@ -136,7 +136,7 @@ namespace RelhaxModpack
             //check if file exists
             if (!File.Exists(p.CompletePath))
             {
-                Logging.Warning("File '{0}' not found", p.CompletePath);
+                Logging.Warning("[PatchUtils]: File '{0}' not found", p.CompletePath);
                 return PatchExitCode.Warning;
             }
 
@@ -144,7 +144,7 @@ namespace RelhaxModpack
             bool tempVerboseLoggingSetting = ModpackSettings.VerboseLogging;
             if(p.FromEditor && !ModpackSettings.VerboseLogging)
             {
-                Logging.Debug("p.FromEditor=true and ModpackSettings.VerboseLogging=false, setting to true for duration of patch method");
+                Logging.Debug("[PatchUtils]: p.FromEditor=true and ModpackSettings.VerboseLogging=false, setting to true for duration of patch method");
                 ModpackSettings.VerboseLogging = true;
             }
 
@@ -156,17 +156,17 @@ namespace RelhaxModpack
                 case "regx":
                     if (p.Lines == null || p.Lines.Count() == 0)
                     {
-                        Logging.Debug("Running regex patch as all lines, line by line");
+                        Logging.Debug("[PatchUtils]: Running regex patch as all lines, line by line");
                         patchSuccess = RegxPatch(p, null);
                     }
                     else if (p.Lines.Count() == 1 && p.Lines[0].Trim().Equals("-1"))
                     {
-                        Logging.Debug("Running regex patch as whole file");
+                        Logging.Debug("[PatchUtils]: Running regex patch as whole file");
                         patchSuccess = RegxPatch(p, new int[] { -1 });
                     }
                     else
                     {
-                        Logging.Debug("Running regex patch as specified lines, line by line");
+                        Logging.Debug("[PatchUtils]: Running regex patch as specified lines, line by line");
                         int[] lines = new int[p.Lines.Count()];
                         for (int i = 0; i < p.Lines.Count(); i++)
                         {
@@ -182,13 +182,15 @@ namespace RelhaxModpack
                     patchSuccess = JsonPatch(p);
                     break;
                 case "xvm":
-                    Logging.Error("xvm patches are not supported, please use the json patch method");
+                    Logging.Error("[PatchUtils]: xvm patches are not supported, please use the json patch method");
                     patchSuccess = PatchExitCode.Error;
                     break;
             }
-            Logging.Debug("patch complete");
+            Logging.Debug("[PatchUtils]: patch complete");
+
             //set the verbose setting back
-            Logging.Debug("temp logging setting={0}, ModpackSettings.VerboseLogging={1}, setting logging back to temp");
+            Logging.Debug("[PatchUtils]: temp logging setting={0}, ModpackSettings.VerboseLogging={1}, setting logging back to temp",
+                tempVerboseLoggingSetting, ModpackSettings.VerboseLogging);
             ModpackSettings.VerboseLogging = tempVerboseLoggingSetting;
             return patchSuccess;
         }
@@ -206,7 +208,7 @@ namespace RelhaxModpack
             XmlDocument doc = XmlUtils.LoadXmlDocument(p.CompletePath,XmlLoadType.FromFile);
             if (doc == null)
             {
-                Logging.Error("xml document from xml path is null");
+                Logging.Error("[PatchUtils]: xml document from xml path is null");
                 return PatchExitCode.Error;
             }
 
@@ -229,7 +231,7 @@ namespace RelhaxModpack
                 case "add":
                     //check to see if it's already there
                     //make the full node path
-                    Logging.Debug("checking if xml element to add already exists, creating full xml path");
+                    Logging.Debug("[PatchUtils]: checking if xml element to add already exists, creating full xml path");
 
                     //the add syntax works by using "/" as the node creation path. the last one is the value to put in
                     //there should therefore be at least 2 split element array
@@ -243,7 +245,7 @@ namespace RelhaxModpack
                     }
 
                     //in each node check if the element exist with the replace innerText
-                    Logging.Debug("full path to check if exists created as '{0}'", fullNodePath);
+                    Logging.Debug("[PatchUtils]: full path to check if exists created as '{0}'", fullNodePath);
                     XmlNodeList fullPathNodeList = null;
                     try
                     {
@@ -251,7 +253,7 @@ namespace RelhaxModpack
                     }
                     catch (System.Xml.XPath.XPathException)
                     {
-                        Logging.Error("invalid xpath: {0}", fullNodePath);
+                        Logging.Error("[PatchUtils]: invalid xpath: {0}", fullNodePath);
                         return PatchExitCode.Error;
                     }
                     if (fullPathNodeList.Count > 0)
@@ -266,26 +268,26 @@ namespace RelhaxModpack
 
                             if (fullPathMatch.InnerText.Trim().Equals(innerTextToMatch))
                             {
-                                Logging.Debug("full path found entry with matching text, aborting (no need to patch)");
+                                Logging.Debug("[PatchUtils]: full path found entry with matching text, aborting (no need to patch)");
                                 return PatchExitCode.Success;
                             }
                             else
-                                Logging.Debug("full path found entry, but text does not match. proceeding with add");
+                                Logging.Debug("[PatchUtils]: full path found entry, but text does not match. proceeding with add");
                         }
                     }
                     else
-                        Logging.Debug("full path entry not found, proceeding with add");
+                        Logging.Debug("[PatchUtils]: full path entry not found, proceeding with add");
 
                     //get to the node where to add the element
                     XmlNode xmlPath = doc.SelectSingleNode(p.Path);
                     if(xmlPath == null)
                     {
-                        Logging.Error("patch xmlPath returns null!");
+                        Logging.Error("[PatchUtils]: patch xmlPath returns null!");
                         return PatchExitCode.Error;
                     }
 
                     //create node(s) to add to the element
-                    Logging.Debug("Total inner xml elements to make: {0}", replacePathSplit.Count()-1);
+                    Logging.Debug("[PatchUtils]: Total inner xml elements to make: {0}", replacePathSplit.Count()-1);
                     List<XmlElement> nodesListToAdd = new List<XmlElement>();
                     for (int i = 0; i < replacePathSplit.Count() - 1; i++)
                     {
@@ -296,7 +298,7 @@ namespace RelhaxModpack
                         {
                             string textToAddIntoNode = replacePathSplit[replacePathSplit.Count() - 1];
                             textToAddIntoNode = Utils.MacroReplace(textToAddIntoNode, ReplacementTypes.PatchArguementsReplace);
-                            Logging.Debug("adding text: {0}", textToAddIntoNode);
+                            Logging.Debug("[PatchUtils]: adding text: {0}", textToAddIntoNode);
                             addElementToMake.InnerText = textToAddIntoNode;
                         }
                         //add it to the list
@@ -317,12 +319,12 @@ namespace RelhaxModpack
                         XmlElement child = nodesListToAdd[i];
                         parrent.InsertAfter(child, parrent.FirstChild);
                     }
-                    Logging.Debug("xml add complete");
+                    Logging.Debug("[PatchUtils]: xml add complete");
                     break;
 
                 case "edit":
                     //check to see if it's already there
-                    Logging.Debug("checking if element exists in all results");
+                    Logging.Debug("[PatchUtils]: checking if element exists in all results");
 
                     XmlNodeList xpathResults = null;
                     try
@@ -331,13 +333,13 @@ namespace RelhaxModpack
                     }
                     catch (System.Xml.XPath.XPathException)
                     {
-                        Logging.Error("invalid xpath: {0}", p.Path);
+                        Logging.Error("[PatchUtils]: invalid xpath: {0}", p.Path);
                         return PatchExitCode.Error;
                     }
 
                     if (xpathResults.Count == 0)
                     {
-                        Logging.Error("xpath not found");
+                        Logging.Error("[PatchUtils]: xpath not found");
                         return PatchExitCode.Error;
                     }
 
@@ -348,32 +350,32 @@ namespace RelhaxModpack
                         //matched, but trim and check if it matches the replace value
                         if (match.InnerText.Trim().Equals(p.Replace))
                         {
-                            Logging.Debug("found replace match for path search, incrementing match counter");
+                            Logging.Debug("[PatchUtils]: found replace match for path search, incrementing match counter");
                             matches++;
                         }
                     }
                     if (matches == xpathResults.Count)
                     {
-                        Logging.Info("all {0} path results have values equal to replace, so can skip", matches);
+                        Logging.Info("[PatchUtils]: all {0} path results have values equal to replace, so can skip", matches);
                         return PatchExitCode.Success;
                     }
                     else
-                        Logging.Info("{0} of {1} path results match, running patch");
+                        Logging.Info("[PatchUtils]: {0} of {1} path results match, so run patch", matches, xpathResults.Count);
 
                     //find and replace
                     foreach (XmlElement replaceMatch in xpathResults)
                     {
                         if (Regex.IsMatch(replaceMatch.InnerText, p.Search))
                         {
-                            Logging.Debug("found match, oldValue={0}, new value={1}", replaceMatch.InnerText, p.Replace);
+                            Logging.Debug("[PatchUtils]: found match, oldValue={0}, new value={1}", replaceMatch.InnerText, p.Replace);
                             replaceMatch.InnerText = p.Replace;
                         }
                         else
                         {
-                            Logging.Warning("Regex never matched for this xpath result: {0}",p.Path);
+                            Logging.Warning("[PatchUtils]: Regex never matched for this xpath result: {0}",p.Path);
                         }
                     }
-                    Logging.Debug("xml edit complete");
+                    Logging.Debug("[PatchUtils]: xml edit complete");
                     break;
 
                 case "remove":
@@ -385,7 +387,7 @@ namespace RelhaxModpack
                     }
                     catch (System.Xml.XPath.XPathException)
                     {
-                        Logging.Error("invalid xpath: {0}", p.Path);
+                        Logging.Error("[PatchUtils]: invalid xpath: {0}", p.Path);
                         return PatchExitCode.Error;
                     }
 
@@ -397,12 +399,12 @@ namespace RelhaxModpack
                         }
                         else
                         {
-                            Logging.Warning("xpath match found, but regex search not matched");
+                            Logging.Warning("[PatchUtils]: xpath match found, but regex search not matched");
                         }
                     }
 
                     //remove empty elements
-                    Logging.Debug("Removing any empty xml elements");
+                    Logging.Debug("[PatchUtils]: Removing any empty xml elements");
                     XDocument doc2 = XmlUtils.DocumentToXDocument(doc);
                     //note that XDocuemnt toString drops declaration
                     //https://stackoverflow.com/questions/1228976/xdocument-tostring-drops-xml-encoding-tag
@@ -410,7 +412,7 @@ namespace RelhaxModpack
 
                     //update doc with doc2
                     doc = XmlUtils.LoadXmlDocument(doc2.ToString(), XmlLoadType.FromString);
-                    Logging.Debug("xml remove complete");
+                    Logging.Debug("[PatchUtils]: xml remove complete");
                     break;
             }
 
@@ -428,10 +430,10 @@ namespace RelhaxModpack
             //if had header and has header, no change
             //if not had header and not has header, no change
             //if had header and not has header, add header
-            Logging.Debug("hadHeader={0}, hasHeader={1}", hadHeader, hasHeader);
+            Logging.Debug("[PatchUtils]: hadHeader={0}, hasHeader={1}", hadHeader, hasHeader);
             if (!hadHeader && hasHeader)
             {
-                Logging.Debug("removing header");
+                Logging.Debug("[PatchUtils]: removing header");
                 foreach (XmlNode node in doc)
                 {
                     if (node.NodeType == XmlNodeType.XmlDeclaration)
@@ -443,7 +445,7 @@ namespace RelhaxModpack
             }
             else if (hadHeader && !hasHeader)
             {
-                Logging.Debug("adding header");
+                Logging.Debug("[PatchUtils]: adding header");
                 if(string.IsNullOrEmpty(xmlDec))
                 {
                     throw new BadMemeException("nnnice.");
@@ -457,9 +459,9 @@ namespace RelhaxModpack
             }
 
             //save to disk
-            Logging.Debug("saving to disk");
+            Logging.Debug("[PatchUtils]: saving to disk");
             doc.Save(p.CompletePath);
-            Logging.Debug("xml patch completed successfully");
+            Logging.Debug("[PatchUtils]: xml patch completed successfully");
             return PatchExitCode.Success;
         }
         #endregion
@@ -481,7 +483,7 @@ namespace RelhaxModpack
             //legacy compatibility: if the replace text has "newline", then replace it with "\n" and log the warning
             if(p.Replace.Contains("newline"))
             {
-                Logging.Warning("This patch has the \"newline\" replace syntax and should be updated");
+                Logging.Warning("[PatchUtils]: This patch has the \"newline\" replace syntax and should be updated");
                 p.Replace = p.Replace.Replace("newline", "\n");
             }
 
@@ -501,7 +503,7 @@ namespace RelhaxModpack
                     {
                         if (Regex.IsMatch(fileParsed[i], p.Search))
                         {
-                            Logging.Debug("line {0} matched ({1})", i + 1, fileParsed[i]);
+                            Logging.Debug("[PatchUtils]: line {0} matched ({1})", i + 1, fileParsed[i]);
                             fileParsed[i] = Regex.Replace(fileParsed[i], p.Search, p.Replace);
                             everReplaced = true;
                         }
@@ -510,7 +512,7 @@ namespace RelhaxModpack
                     }
                     if (!everReplaced)
                     {
-                        Logging.Warning("Regex never matched");
+                        Logging.Warning("[PatchUtils]: Regex never matched");
                         return PatchExitCode.Warning;
                     }
                 }
@@ -527,7 +529,7 @@ namespace RelhaxModpack
                     }
                     else
                     {
-                        Logging.Warning("Regex never matched");
+                        Logging.Warning("[PatchUtils]: Regex never matched");
                         return PatchExitCode.Warning;
                     }
                 }
@@ -541,7 +543,7 @@ namespace RelhaxModpack
                         {
                             if (Regex.IsMatch(fileParsed[i], p.Search))
                             {
-                                Logging.Debug("line {0} matched ({1})", i + 1, fileParsed[i]);
+                                Logging.Debug("[PatchUtils]: line {0} matched ({1})", i + 1, fileParsed[i]);
                                 fileParsed[i] = Regex.Replace(fileParsed[i], p.Search, p.Replace);
                                 fileParsed[i] = Regex.Replace(fileParsed[i], "newline", "\n");
                                 everReplaced = true;
@@ -551,14 +553,14 @@ namespace RelhaxModpack
                     }
                     if (!everReplaced)
                     {
-                        Logging.Warning("Regex never matched");
+                        Logging.Warning("[PatchUtils]: Regex never matched");
                         return PatchExitCode.Warning;
                     }
                 }
             }
             catch (ArgumentException ex)
             {
-                Logging.Error("Invalid regex command");
+                Logging.Error("[PatchUtils]: Invalid regex command");
                 Logging.Debug(ex.ToString());
                 return PatchExitCode.Error;
             }
@@ -566,7 +568,7 @@ namespace RelhaxModpack
             //save the file back into the string and then the file
             file = sb.ToString().Trim();
             File.WriteAllText(p.CompletePath, file);
-            Logging.Debug("regex patch completed successfully");
+            Logging.Debug("[PatchUtils]: regex patch completed successfully");
             return PatchExitCode.Success;
         }
         #endregion
@@ -583,35 +585,35 @@ namespace RelhaxModpack
             //if no search parameter, set it to the regex default "match all" search option
             if(string.IsNullOrEmpty(p.Search))
             {
-                Logging.Warning("Patch should have search value specified, please update it!");
+                Logging.Warning("[PatchUtils]: Patch should have search value specified, please update it!");
                 p.Search = @".*";
             }
             //if no mode, treat as edit
             if(string.IsNullOrWhiteSpace(p.Mode))
             {
-                Logging.Warning("Patch should have mode value specified, please update it!");
+                Logging.Warning("[PatchUtils]: Patch should have mode value specified, please update it!");
                 p.Mode = "edit";
             }
             //arrayEdit is not a valid mode, but may be specified by mistake
             if(p.Mode.Equals("arrayEdit"))
             {
-                Logging.Warning("Patch mode \"arrayEdit\" is not a valid mode and will be treated as \"edit\", please update it!");
+                Logging.Warning("[PatchUtils]: Patch mode \"arrayEdit\" is not a valid mode and will be treated as \"edit\", please update it!");
                 p.Mode = "edit";
             }
             //if patch type is v1, run v1 patch changes
             if(p.Version == 1)
             {
-                //Logging.Warning("patch is V1 type, please update to V2!");
+                //Logging.Warning("[PatchUtils]: patch is V1 type, please update to V2!");
                 //V1 fix 1: if type if json, hard-code the replace to look for xvm reference, and replace it with the new macro used (start macro)
                 if(p.Replace.Contains("[dollar][lbracket][quote]"))
                 {
-                    //Logging.Warning("applying v1 fix 1: if json type, update xvm reference macros (start macro)");
+                    //Logging.Warning("[PatchUtils]: applying v1 fix 1: if json type, update xvm reference macros (start macro)");
                     p.Replace = p.Replace.Replace("[dollar][lbracket][quote]", "[xvm_dollar][lbracket][quote]");
                 }
                 //V1 fix 2: if type if json, hard-code the replace to look for xvm reference, and replace it with the new macro used (end macro)
                 if (p.Replace.Contains("[quote][rbracket]"))
                 {
-                    //Logging.Warning("applying v1 fix 2: if json type, update xvm reference macros (end macro)");
+                    //Logging.Warning("[PatchUtils]: applying v1 fix 2: if json type, update xvm reference macros (end macro)");
                     p.Replace = p.Replace.Replace("[quote][rbracket]", "[quote][xvm_rbracket]");
                 }
             }
@@ -629,7 +631,7 @@ namespace RelhaxModpack
                 //and also check if the replace value is an xvm direct reference, we don't allow those (needs to be escaped)
                 if (Regex.IsMatch(p.Replace, @"\$[ \t]*\{[ \t]*"""))
                 {
-                    Logging.Error("patch replace value detected as xvm reference, but is not in escaped form! must be escaped!");
+                    Logging.Error("[PatchUtils]: patch replace value detected as xvm reference, but is not in escaped form! must be escaped!");
                     return PatchExitCode.Error;
                 }
 
@@ -656,7 +658,7 @@ namespace RelhaxModpack
             {
                 string filenameForDump = Path.GetFileNameWithoutExtension(p.CompletePath) + "_escaped" + Path.GetExtension(p.CompletePath);
                 string filePathForDump = Path.Combine(Path.GetDirectoryName(p.CompletePath), filenameForDump);
-                Logging.Debug("Dumping escaped file for debug before json.net parse: " + filePathForDump);
+                Logging.Debug("[PatchUtils]: Dumping escaped file for debug before json.net parse: " + filePathForDump);
                 File.WriteAllText(filePathForDump, file);
             }
             try
@@ -665,7 +667,7 @@ namespace RelhaxModpack
             }
             catch (JsonReaderException j)
             {
-                Logging.Error("Failed to parse json file! {0}", Path.GetFileName(p.File));
+                Logging.Error("[PatchUtils]: Failed to parse json file! {0}", Path.GetFileName(p.File));
                 Logging.Debug(j.ToString());
                 return PatchExitCode.Error;
             }
@@ -677,13 +679,13 @@ namespace RelhaxModpack
             PatchExitCodeForJson = PatchExitCode.Error;
             if ((Path.GetExtension(p.CompletePath).ToLower().Equals(".xc") || p.FromEditor) && p.FollowPath)
             {
-                Logging.Debug("followpath is true, and either editor or xc file, following path to get actual root json object");
+                Logging.Debug("[PatchUtils]: followpath is true, and either editor or xc file, following path to get actual root json object");
                 searchRoot = FollowXvmPath(p, root);
             }
 
             if(searchRoot == null && p.FollowPath)
             {
-                Logging.Debug("root Jobject is null, meaning followPath previously completed, so stop here");
+                Logging.Debug("[PatchUtils]: root Jobject is null, meaning followPath previously completed, so stop here");
                 return PatchExitCodeForJson;
             }
 
@@ -709,7 +711,7 @@ namespace RelhaxModpack
                     PatchExitCodeForJson = JsonArrayRemoveClear(p, searchRoot, false);
                     break;
                 default:
-                    Logging.Error("ERROR: Unknown json patch mode, {0}", p.Mode);
+                    Logging.Error("[PatchUtils]: ERROR: Unknown json patch mode, {0}", p.Mode);
                     return PatchExitCodeForJson;
             }
 
@@ -727,7 +729,7 @@ namespace RelhaxModpack
             }
             else
                 File.WriteAllText(p.CompletePath, file);
-            Logging.Debug("json patch completed successfully");
+            Logging.Debug("[PatchUtils]: json patch completed successfully");
             return PatchExitCodeForJson;
         }
         #endregion
@@ -740,27 +742,27 @@ namespace RelhaxModpack
             //match replace with [array] or [object] at the end, special case
             if(Regex.IsMatch(p.Replace, @"\[array\]$"))
             {
-                Logging.Debug("adding blank array detected");
+                Logging.Debug("[PatchUtils]: adding blank array detected");
                 p.Replace = Regex.Replace(p.Replace, @"\[array\]$", string.Empty);
                 return JsonAddBlank(p, root, false);
             }
             else if (Regex.IsMatch(p.Replace, @"\[object\]$"))
             {
-                Logging.Debug("adding blank object detected");
+                Logging.Debug("[PatchUtils]: adding blank object detected");
                 p.Replace = Regex.Replace(p.Replace, @"\[object\]$", string.Empty);
                 return JsonAddBlank(p, root, true);
             }
 
             //here means it's a standard json add
             //split the replace into array to make path for new object
-            Logging.Debug("adding standard value");
+            Logging.Debug("[PatchUtils]: adding standard value");
             List<string> addPathArray = null;
             addPathArray = p.Replace.Split('/').ToList();
 
             //check it has at least 2 values
             if(addPathArray.Count < 2)
             {
-                Logging.Error("add syntax or replace value must have at least 2 values separated by \"/\" in its path");
+                Logging.Error("[PatchUtils]: add syntax or replace value must have at least 2 values separated by \"/\" in its path");
                 return PatchExitCode.Error;
             }
 
@@ -793,18 +795,18 @@ namespace RelhaxModpack
             }
             catch (Exception exVal)
             {
-                Logging.Error("error in jsonPath syntax: {0}", p.Path);
+                Logging.Error("[PatchUtils]: error in jsonPath syntax: {0}", p.Path);
                 Logging.Debug(exVal.ToString());
                 return PatchExitCode.Error;
             }
             if(objectRoot == null)
             {
-                Logging.Error("jsonPath does not exist: {0}", p.Path);
+                Logging.Error("[PatchUtils]: jsonPath does not exist: {0}", p.Path);
                 return PatchExitCode.Error;
             }
             if(!(objectRoot is JObject))
             {
-                Logging.Error("expected JObject, got {0}", objectRoot.Type.ToString());
+                Logging.Error("[PatchUtils]: expected JObject, got {0}", objectRoot.Type.ToString());
                 return PatchExitCode.Error;
             }
 
@@ -812,7 +814,7 @@ namespace RelhaxModpack
             JObject previous = (JObject)objectRoot;
             foreach(string s in addPathArray)
             {
-                Logging.Debug("creating object for path: {0}", s);
+                Logging.Debug("[PatchUtils]: creating object for path: {0}", s);
                 JContainer innerSearch = (JContainer)previous.SelectToken(s);
 
                 //if it's null, then it does not exist, so make it
@@ -826,39 +828,39 @@ namespace RelhaxModpack
                 }
                 else if (innerSearch is JObject innerObject)
                 {
-                    Logging.Debug("following add path, found JObject exists from the add replace path: {0}",s);
+                    Logging.Debug("[PatchUtils]: following add path, found JObject exists from the add replace path: {0}",s);
                     previous = innerObject;
                 }
                 else
                 {
-                    Logging.Error("following add path, expected JObject or null, got {0}", innerSearch.Type.ToString());
+                    Logging.Error("[PatchUtils]: following add path, expected JObject or null, got {0}", innerSearch.Type.ToString());
                     return PatchExitCode.Error;
                 }
             }
 
             //search for if the key/value already exists
-            Logging.Debug("checking if value exists and needs to be replaced");
+            Logging.Debug("[PatchUtils]: checking if value exists and needs to be replaced");
             objectRoot = previous;
             JToken resultValue = objectRoot.SelectToken(propertyName);
             //result is jvalue, parent is property
             if (resultValue is JValue jvalue)
             {
-                Logging.Debug("found result already exists, checking if value is direct equals");
+                Logging.Debug("[PatchUtils]: found result already exists, checking if value is direct equals");
                 if (valueToAdd.Equals(JsonGetCompare(jvalue)))
                 {
-                    Logging.Debug("value already matches, no need to replace");
+                    Logging.Debug("[PatchUtils]: value already matches, no need to replace");
                     return PatchExitCode.Success;
                 }
                 else
                 {
-                    Logging.Debug("value does not match, replacing");
+                    Logging.Debug("[PatchUtils]: value does not match, replacing");
                     UpdateJsonValue(jvalue, valueToAdd);
                 }
             }
             else
             {
                 //add the property to the object
-                Logging.Debug("key-value pair does not exist, adding");
+                Logging.Debug("[PatchUtils]: key-value pair does not exist, adding");
                 JProperty prop = CreateJsonProperty(propertyName, valueToAdd);
                 objectRoot.Add(prop);
             }
@@ -876,12 +878,12 @@ namespace RelhaxModpack
             }
             catch (Exception array)
             {
-                Logging.Error("error in replace syntax: {0}\n{1}", p.Replace, array.ToString());
+                Logging.Error("[PatchUtils]: error in replace syntax: {0}\n{1}", p.Replace, array.ToString());
                 return PatchExitCode.Error;
             }
             if (result != null)
             {
-                Logging.Error("cannot add blank array or object when already exists");
+                Logging.Error("[PatchUtils]: cannot add blank array or object when already exists");
                 return PatchExitCode.Error;
             }
 
@@ -914,12 +916,12 @@ namespace RelhaxModpack
             }
             catch (Exception exResults)
             {
-                Logging.Error("Error with jsonPath: {0}", p.Path);
+                Logging.Error("[PatchUtils]: Error with jsonPath: {0}", p.Path);
                 Logging.Error(exResults.ToString());
             }
             if (jsonPathresults == null || jsonPathresults.Count() == 0)
             {
-                Logging.Warning("no results from jsonPath search");
+                Logging.Warning("[PatchUtils]: no results from jsonPath search");
                 return PatchExitCode.Warning;
             }
 
@@ -933,16 +935,16 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    Logging.Error("Expected results of type JValue, returned {0}", jt.Type.ToString());
+                    Logging.Error("[PatchUtils]: Expected results of type JValue, returned {0}", jt.Type.ToString());
                     return PatchExitCode.Error;
                 }
             }
 
             //check that we have results
-            Logging.Debug("number of Jvalues: {0}", Jresults.Count);
+            Logging.Debug("[PatchUtils]: number of Jvalues: {0}", Jresults.Count);
             if (Jresults.Count == 0)
             {
-                Logging.Warning("Jresults count is 0 (is this the intent?)");
+                Logging.Warning("[PatchUtils]: Jresults count is 0 (is this the intent?)");
                 return PatchExitCode.Warning;
             }
 
@@ -959,16 +961,16 @@ namespace RelhaxModpack
                     {
                         if (edit)
                         {
-                            Logging.Debug("regex match for result {0}, applying edit to {1}", jsonValue, p.Replace);
+                            Logging.Debug("[PatchUtils]: regex match for result {0}, applying edit to {1}", jsonValue, p.Replace);
                             UpdateJsonValue(result, p.Replace);
                         }
                         else
                         {
-                            Logging.Debug("regex match for result {0}, removing", jsonValue);
+                            Logging.Debug("[PatchUtils]: regex match for result {0}, removing", jsonValue);
                             //check if parent is array, we should not be removing from an array in this function
                             if (result.Parent is JArray)
                             {
-                                Logging.Error("Selected from p.path is JValue and parent is JArray. Use arrayRemove for this function");
+                                Logging.Error("[PatchUtils]: Selected from p.path is JValue and parent is JArray. Use arrayRemove for this function");
                                 return PatchExitCode.Error;
                             }
                             //get the jProperty above it and remove itself
@@ -978,19 +980,19 @@ namespace RelhaxModpack
                             }
                             else
                             {
-                                Logging.Error("unknown parent type: {0}", result.Parent.GetType().ToString());
+                                Logging.Error("[PatchUtils]: unknown parent type: {0}", result.Parent.GetType().ToString());
                                 return PatchExitCode.Error;
                             }
                         }
                     }
                     else
                     {
-                        Logging.Debug("json value {0} matches jsonPath but does not match regex search {1}", jsonValue, p.Search);
+                        Logging.Debug("[PatchUtils]: json value {0} matches jsonPath but does not match regex search {1}", jsonValue, p.Search);
                     }
                 }
                 catch (ArgumentException argEx)
                 {
-                    Logging.Error("Invalid Regex search command");
+                    Logging.Error("[PatchUtils]: Invalid Regex search command");
                     Logging.Error(argEx.Message);
                     return PatchExitCode.Error;
                 }
@@ -1007,7 +1009,7 @@ namespace RelhaxModpack
             //maximum number of args for replace is 2
             if(addPathArray.Count > 2)
             {
-                Logging.Error("invalid replace syntax: maximum arguments is 2. given: {0}", addPathArray.Count);
+                Logging.Error("[PatchUtils]: invalid replace syntax: maximum arguments is 2. given: {0}", addPathArray.Count);
                 return PatchExitCode.Error;
             }
 
@@ -1030,7 +1032,7 @@ namespace RelhaxModpack
             JArray array = JsonArrayGet(p, root);
             if (array == null)
             {
-                Logging.Error("JArray is null");
+                Logging.Error("[PatchUtils]: JArray is null");
                 return PatchExitCode.Error;
             }
 
@@ -1038,7 +1040,7 @@ namespace RelhaxModpack
             if(index >= array.Count)
             {
                 if (index != 0)
-                    Logging.Warning("index value ({0})>= array count ({1}), putting at end of the array (is this the intent?)", index, array.Count);
+                    Logging.Warning("[PatchUtils]: index value ({0})>= array count ({1}), putting at end of the array (is this the intent?)", index, array.Count);
                 index = -1;
             }
 
@@ -1091,14 +1093,14 @@ namespace RelhaxModpack
             JArray array = JsonArrayGet(p, root);
             if (array == null)
             {
-                Logging.Error("JArray is null");
+                Logging.Error("[PatchUtils]: JArray is null");
                 return PatchExitCode.Error;
             }
 
             //can't remove from an array if it's empty #rollSafe
             if (array.Count == 0)
             {
-                Logging.Error("array is already empty");
+                Logging.Error("[PatchUtils]: array is already empty");
                 return PatchExitCode.Warning;
             }
 
@@ -1126,14 +1128,14 @@ namespace RelhaxModpack
                 }
                 catch (ArgumentException argEx)
                 {
-                    Logging.Error("Invalid Regex search command");
+                    Logging.Error("[PatchUtils]: Invalid Regex search command");
                     Logging.Error(argEx.Message);
                     return PatchExitCode.Error;
                 }
             }
             if (!found)
             {
-                Logging.Warning("no results found for search \"{0}\", with path \"{1}\"", p.Search, p.Path);
+                Logging.Warning("[PatchUtils]: no results found for search \"{0}\", with path \"{1}\"", p.Search, p.Path);
                 return PatchExitCode.Warning;
             }
             return PatchExitCode.Success;
@@ -1145,11 +1147,11 @@ namespace RelhaxModpack
         private static JObject FollowXvmPath(Patch p, JObject root)
         {
             //split the path into dots. each option therefore is a small path that it will be searching into
-            Logging.Debug("followPath start");
+            Logging.Debug("[PatchUtils]: followPath start");
             List<string> pathArray = p.Path.Split('.').ToList();
             if(pathArray.Count == 1)
             {
-                Logging.Info("pathArray count is 1, no need to follow path");
+                Logging.Info("[PatchUtils]: pathArray count is 1, no need to follow path");
                 return root;
             }
 
@@ -1159,7 +1161,7 @@ namespace RelhaxModpack
             while(pathArray.Count != 0)
             {
                 string miniPath = pathArray[0];
-                Logging.Debug("searching from minipath: {0}", miniPath);
+                Logging.Debug("[PatchUtils]: searching from minipath: {0}", miniPath);
                 JToken pathSearchResult = null;
                 try
                 {
@@ -1167,42 +1169,42 @@ namespace RelhaxModpack
                 }
                 catch (JsonException tokenSearchException)
                 {
-                    Logging.Error("error with minipath, stopping at previous");
+                    Logging.Error("[PatchUtils]: error with minipath, stopping at previous");
                     Logging.Error(tokenSearchException.ToString());
                     break;
                 }
                 if(pathSearchResult == null)
                 {
-                    Logging.Error("minipath search result is null, error with the given path?");
+                    Logging.Error("[PatchUtils]: minipath search result is null, error with the given path?");
                     break;
                 }
                 if(pathSearchResult is JObject jobject)
                 {
                     //if it's a jboject, then search inside with saving
-                    Logging.Debug("miniPath resulted in JObject, continue");
+                    Logging.Debug("[PatchUtils]: miniPath resulted in JObject, continue");
                     latest = jobject;
                 }
                 else if (pathSearchResult is JArray jarray)
                 {
                     //if the result is an array then it's an arrayEdit. return the latest object and path. an array in an array has yet to be seen
-                    Logging.Debug("miniPath resulted in Jarray, stop and return latest object");
+                    Logging.Debug("[PatchUtils]: miniPath resulted in Jarray, stop and return latest object");
                     break;
                 }
                 else if (pathSearchResult is JValue jvalue)
                 {
-                    Logging.Debug("miniPath resulted in jValue, checking if string for xvm reference");
+                    Logging.Debug("[PatchUtils]: miniPath resulted in jValue, checking if string for xvm reference");
                     if(jvalue.Value is string value)
                     {
-                        Logging.Debug("jValue is string, checking for xvm reference");
+                        Logging.Debug("[PatchUtils]: jValue is string, checking for xvm reference");
                         if(value.Contains(@"[xvm_dollar]"))
                         {
-                            Logging.Debug("xvm reference detected, checking if reference is target and not add");
+                            Logging.Debug("[PatchUtils]: xvm reference detected, checking if reference is target and not add");
                             if(pathArray.Count == 1 && !p.Mode.ToLower().Equals("add"))
                             {
-                                Logging.Debug("this reference is the target, so don't enter it. return latest object");
+                                Logging.Debug("[PatchUtils]: this reference is the target, so don't enter it. return latest object");
                                 break;
                             }
-                            Logging.Debug("reference is not target");
+                            Logging.Debug("[PatchUtils]: reference is not target");
 
                             //parse the first part of the reference, could be direct reference path inside file or filename
                             string fileOrReference = value.Split(new string[] { @"[xvm_dollar][lbracket][quote]"}, StringSplitOptions.RemoveEmptyEntries)[0].Split('[')[0];
@@ -1211,14 +1213,14 @@ namespace RelhaxModpack
                             string reference = value.Split(new string[] { @"[quote][colon][quote]" }, StringSplitOptions.RemoveEmptyEntries)[1].Split('[')[0];
                             if(string.IsNullOrEmpty(reference))
                             {
-                                Logging.Debug("reference is internal to file in new path");
+                                Logging.Debug("[PatchUtils]: reference is internal to file in new path");
                                 latest = root;
                                 pathArray[0] = fileOrReference;
                                 continue;
                             }
                             else
                             {
-                                Logging.Debug("reference is external to new file");
+                                Logging.Debug("[PatchUtils]: reference is external to new file");
                                 //load and parse the new file
                                 string folderPath = Path.GetDirectoryName(p.CompletePath);
                                 string completePathNewFile = Path.Combine(folderPath, fileOrReference);
@@ -1226,7 +1228,7 @@ namespace RelhaxModpack
                                 //check if file exists and load it
                                 if(!File.Exists(completePathNewFile))
                                 {
-                                    Logging.Error("following path resulted in \"{0}\", but does not exist!");
+                                    Logging.Error("[PatchUtils]: following path resulted in \"{0}\", but does not exist!");
                                     return null;
                                 }
 
@@ -1234,20 +1236,20 @@ namespace RelhaxModpack
                                 p.CompletePath = completePathNewFile;
                                 pathArray.RemoveAt(0);
                                 p.Path = string.Format("$.{0}.{1}", reference ,string.Join(".", pathArray));
-                                Logging.Debug("starting new recursive patch run");
+                                Logging.Debug("[PatchUtils]: starting new recursive patch run");
                                 RunPatch(p);
                                 return null;
                             }
                         }
                         else
                         {
-                            Logging.Debug("no reference detected");
+                            Logging.Debug("[PatchUtils]: no reference detected");
                             break;
                         }
                     }
                     else
                     {
-                        Logging.Debug("jValue is not string, actual value, stop at previous");
+                        Logging.Debug("[PatchUtils]: jValue is not string, actual value, stop at previous");
                         break;
                     }
                 }
@@ -1291,7 +1293,7 @@ namespace RelhaxModpack
                 jvalue.Value = resultFloat;
             else
                 jvalue.Value = value;
-            Logging.Debug("Json value parsed as data type {0}", jvalue.Value == null? Utils.PatchJsonNullEscape : jvalue.Value.GetType().ToString());
+            Logging.Debug("[PatchUtils]: Json value parsed as data type {0}", jvalue.Value == null? Utils.PatchJsonNullEscape : jvalue.Value.GetType().ToString());
         }
 
         private static JValue CreateJsonValue(string value)
@@ -1306,7 +1308,7 @@ namespace RelhaxModpack
                 jvalue = new JValue(resultFloat);
             else
                 jvalue = new JValue(value);
-            Logging.Debug("Json value parsed as {0}", jvalue.Value.GetType().ToString());
+            Logging.Debug("[PatchUtils]: Json value parsed as {0}", jvalue.Value.GetType().ToString());
             return jvalue;
         }
 
@@ -1326,12 +1328,12 @@ namespace RelhaxModpack
             }
             catch (Exception exVal)
             {
-                Logging.Error("error in jsonPath syntax: {0}", p.Path);
+                Logging.Error("[PatchUtils]: error in jsonPath syntax: {0}", p.Path);
                 Logging.Debug(exVal.ToString());
             }
             if (objectRoot == null)
             {
-                Logging.Error("path does not exist: {0}", p.Path);
+                Logging.Error("[PatchUtils]: path does not exist: {0}", p.Path);
             }
             return objectRoot as JArray;
         }
@@ -1393,7 +1395,7 @@ namespace RelhaxModpack
             //check if it exists there
             if (!File.Exists(xvmBootFile))
             {
-                Logging.Warning("extractor asked to get location of xvm folder name, but boot file does not exist! returning \"default\"");
+                Logging.Warning("[PatchUtils]: extractor asked to get location of xvm folder name, but boot file does not exist! returning \"default\"");
                 return "default";
             }
 

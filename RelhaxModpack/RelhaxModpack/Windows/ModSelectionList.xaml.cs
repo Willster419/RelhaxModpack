@@ -276,7 +276,8 @@ namespace RelhaxModpack.Windows
             Hide();
 
             //create and run async task (fire and forget style, keeps the UI thread open during the task operation)
-            Logging.Info("Starting async task: " + nameof(LoadModSelectionListAsync) + "()");
+            Logging.Info("Starting async task: {0}()", nameof(LoadModSelectionListAsync));
+
             //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
             Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
             progressIndicator.ProgressChanged += OnWindowLoadReportProgress;
@@ -305,7 +306,6 @@ namespace RelhaxModpack.Windows
                 }
 
                 //get the XML database loaded into a string based on database version type (from server download, from github, from testfile
-
                 string modInfoXml = "";
                 switch (databaseVersion)
                 {
@@ -336,9 +336,9 @@ namespace RelhaxModpack.Windows
 
                             //V1 here
                             //aparently the #warning directive in this file causes an intellisense error with XDocuemtn for some reason
-                            //#warning using V1 beta database
+                            #warning using V1 beta database in ModSelectionList
                             rootXml = Settings.BetaDatabaseV1URL;
-//#pragma warning enable CS0618
+#pragma warning restore CS0618
                             /////////
 
                             //download the xml string into "modInfoXml"
@@ -624,12 +624,13 @@ namespace RelhaxModpack.Windows
                         if(File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
                         {
                             //load the custom selection file
+                            Logging.Info("Loading selection file from {0}",ModpackSettings.AutoOneclickSelectionFilePath);
                             SelectionsDocument = XmlUtils.LoadXmlDocument(ModpackSettings.AutoOneclickSelectionFilePath, XmlLoadType.FromFile);
                             shouldLoadSomething = true;
                         }
                         else
                         {
-                            Logging.Warning("AutoInstall or OneClickInstall is true, but the file selection path does not exist");
+                            Logging.Warning("AutoInstall or OneClickInstall is true, but the file selection path does not exist:");
                             Logging.Warning(ModpackSettings.AutoOneclickSelectionFilePath);
                             MessageBox.Show(Translations.GetTranslatedString("configLoadFailed"));
                         }
@@ -637,7 +638,9 @@ namespace RelhaxModpack.Windows
                     //else check and load the use selection from auto launch command line
                     else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
-                        SelectionsDocument = XmlUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
+                        string thePath = Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName);
+                        Logging.Info("Loading selection file from {0}", thePath);
+                        SelectionsDocument = XmlUtils.LoadXmlDocument(thePath, XmlLoadType.FromFile);
                         shouldLoadSomething = true;
                     }
                     else if (ModpackSettings.SaveLastSelection)
@@ -650,6 +653,7 @@ namespace RelhaxModpack.Windows
                         }
                         else
                         {
+                            Logging.Info("Loading selection file from {0}", Settings.LastInstalledConfigFilepath);
                             SelectionsDocument = XmlUtils.LoadXmlDocument(Settings.LastInstalledConfigFilepath, XmlLoadType.FromFile);
                             shouldLoadSomething = true;
                         }
@@ -1838,8 +1842,8 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Info("Selection issues with auto or one click enabled, with message warning enabled. Show message.");
                 MessageBoxResult  result = MessageBox.Show(
-                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"),
-                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"), MessageBoxButton.YesNo);
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"),
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"), MessageBoxButton.YesNo);
                 if(result == MessageBoxResult.No)
                 {
                     Logging.Info("User selected stop installation");

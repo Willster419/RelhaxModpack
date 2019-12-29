@@ -41,8 +41,6 @@ namespace RelhaxModpack
         private WebClient client = null;
         private VersionInfo versionInfo = null;
         private Timer autoInstallTimer = new Timer();
-        private bool databaseUpdateAvailableFromAutoSync = false;
-        private bool autoInstallTimerRegistered = false;
         private CancellationTokenSource cancellationTokenSource;
         private InstallEngine installEngine;
         private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
@@ -83,6 +81,9 @@ namespace RelhaxModpack
         private TaskbarManager taskbarInstance = null;
         private TaskbarProgressBarState taskbarState = TaskbarProgressBarState.NoProgress;
         private int taskbarValue = 0;
+        //beta database compaison for auto install
+        string oldBetaDB, newBetaDB;
+        bool timerActive = false;
 
         /// <summary>
         /// The original width and height of the application before applying scaling
@@ -98,8 +99,7 @@ namespace RelhaxModpack
             WindowState = WindowState.Minimized;
             disabledBlacklist = new Control[]
             {
-                DisableTriggersCB,
-                VerboseLoggingCB
+                DisableTriggersCB
             };
             enabledBlacklist = new Control[]
             {
@@ -113,7 +113,8 @@ namespace RelhaxModpack
                 HomepageButton,
                 FindBugAddModButton,
                 SendEmailButton,
-                DonateButton
+                DonateButton,
+                LanguagesSelector
             };
         }
 
@@ -161,6 +162,8 @@ namespace RelhaxModpack
             Utils.AllowUIToUpdate();
 
             //load the supported translations into combobox
+            //disconnect event handler before translation is applied
+            LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
             LanguagesSelector.Items.Clear();
             LanguagesSelector.Items.Add(Translations.LanguageEnglish);
             LanguagesSelector.Items.Add(Translations.LanguageFrench);
@@ -173,8 +176,7 @@ namespace RelhaxModpack
             Translations.LoadTranslations();
             Translations.SetLanguage(Languages.English);
 
-            //disconnect event handler before application
-            LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
+            //apply to UI
             LanguagesSelector.SelectedIndex = 0;
             LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
 
@@ -194,7 +196,6 @@ namespace RelhaxModpack
             //apply forced debugging settings
 #warning forced debugging settings is active
             ModpackSettings.DisableTriggers = true;
-            ModpackSettings.VerboseLogging = true;
 
             //load AutoSyncFrequencyComboBox with translated versions
             //<System:String>Minutes</System:String>
@@ -280,7 +281,7 @@ namespace RelhaxModpack
                 Environment.Exit(0);
                 return;
             }
-            CheckForDatabaseUpdates(false);
+            await CheckForDatabaseUpdates(false);
 
             //set the file count and size for the backups folder
             if (!isApplicationUpToDate)
@@ -392,11 +393,15 @@ namespace RelhaxModpack
                 Logging.Info("{0} found, enabling editor button", Settings.EditorLaunchFromMainWindowFilename);
                 LauchEditor.Visibility = Visibility.Visible;
                 LauchEditor.IsEnabled = true;
+                LauchPatchDesigner.Visibility = Visibility.Visible;
+                LauchPatchDesigner.IsEnabled = true;
             }
             else
             {
                 LauchEditor.Visibility = Visibility.Hidden;
                 LauchEditor.IsEnabled = false;
+                LauchPatchDesigner.Visibility = Visibility.Hidden;
+                LauchPatchDesigner.IsEnabled = false;
             }
 
             //dispose of please wait here
@@ -532,7 +537,7 @@ namespace RelhaxModpack
         {
             if(string.IsNullOrEmpty(oldModpackTitle))
             {
-                Logging.Info("oldModpackTitle is empty, don't update text!");
+                Logging.Info("[ProcessTitle()] oldModpackTitle is empty, don't update text!");
                 return;
             }
             //apply the title change for beta application and beta database
@@ -591,34 +596,32 @@ namespace RelhaxModpack
             CloseApplication();
         }
 
-        private void OnMenuClickChekUpdates(object sender, EventArgs e)
+        private async void OnMenuClickChekUpdates(object sender, EventArgs e)
         {
-            CheckForDatabaseUpdatesPeriodic(false);
-        }
+            Logging.Debug("check for database updates from menu click");
+            string oldDBVersion = Settings.DatabaseVersion;
+            
+            //make and show progress indicator
+            ProgressIndicator progressIndicator = new ProgressIndicator()
+            {
+                Message = Translations.GetTranslatedString("checkForUpdates"),
+                ProgressMinimum = 0,
+                ProgressMaximum = 1
+            };
+            progressIndicator.Show();
 
-        private void CheckForDatabaseUpdatesPeriodic(bool quiet)
-        {
-            Logging.Info("starting periodic check for database updates");
-            databaseUpdateAvailableFromAutoSync = false;
-            if (!quiet)
+            //actually check for updates
+            await CheckForDatabaseUpdates(true);
+
+            //clean up progress indicator
+            progressIndicator.Close();
+            
+            Logging.Debug("database check complete");
+            if (!oldDBVersion.Equals(Settings.DatabaseVersion))
             {
-                //make and show progress indicator
-                ProgressIndicator progressIndicator = new ProgressIndicator()
-                {
-                    Message = Translations.GetTranslatedString("checkForUpdates"),
-                    ProgressMinimum = 0,
-                    ProgressMaximum = 1
-                };
-                progressIndicator.Show();
-                CheckForDatabaseUpdates(true);
-                //clean up progress indicator
-                progressIndicator.Close();
+                Logging.Debug("old and current db versions do not match, displaying notification window");
+                MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
             }
-            else
-            {
-                CheckForDatabaseUpdates(true);
-            }
-            Logging.Info("database periodic check complete, result of update = {0}", databaseUpdateAvailableFromAutoSync);
         }
 
         private void OnMenuItemRestoreClick(object sender, EventArgs e)
@@ -664,7 +667,7 @@ namespace RelhaxModpack
         #endregion
 
         #region Update Code
-        private async void CheckForDatabaseUpdates(bool refreshModInfo)
+        private async Task CheckForDatabaseUpdates(bool refreshModInfo)
         {
             Logging.Info("Checking for database updates in CheckForDatabaseUpdates()");
 
@@ -711,7 +714,6 @@ namespace RelhaxModpack
                 Logging.Info("new version of database applied");
                 Settings.DatabaseVersion = databaseNewVersion;
                 DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
-                MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
             }
             else
             {
@@ -1000,16 +1002,6 @@ namespace RelhaxModpack
                         return;
                     }
                 }
-                if (databaseVersion == DatabaseVersions.Beta)
-                {
-                    //if mods sync
-                    if (ModpackSettings.AutoInstall)
-                    {
-                        MessageBox.Show(Translations.GetTranslatedString("noAutoInstallWithBeta"));
-                        ToggleUIButtons(true);
-                        return;
-                    }
-                }
 
                 //parse WoT root directory
                 Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
@@ -1242,18 +1234,21 @@ namespace RelhaxModpack
             stopwatch.Restart();
 
             //check if wot is running
-            AskCloseWoT askCloseWoT = null;
             while (Utils.IsProcessRunning(Settings.WoTProcessName, Settings.WoTDirectory))
             {
                 //create window to determine if cancel, wait, kill TODO
-                if (askCloseWoT == null)
-                    askCloseWoT = new AskCloseWoT();
+                AskCloseWoT askCloseWoT = new AskCloseWoT();
                 //a positive result means that we are going to retry the loop
                 //it could mean the user hit retry (close true), or hit force close (succeeded, and try again anyways)
-                if (!(bool)askCloseWoT.ShowDialog())
+                askCloseWoT.ShowDialog();
+                if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.CancelInstallation)
                 {
                     ToggleUIButtons(true);
                     return;
+                }
+                else if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.ForceClosed)
+                {
+                    break;
                 }
                 Thread.Sleep(100);
             }
@@ -1584,15 +1579,20 @@ namespace RelhaxModpack
                 taskbarInstance.SetProgressValue(100, 100);
                 if(ModpackSettings.VerboseLogging)
                     DisplayAndLogInstallErrors(results, false);
-                if (ModpackSettings.ShowInstallCompleteWindow)
+
+                if (!ModpackSettings.AutoInstall)
                 {
-                    InstallFinished installFinished = new InstallFinished();
-                    installFinished.ShowDialog();
+                    if (ModpackSettings.ShowInstallCompleteWindow)
+                    {
+                        InstallFinished installFinished = new InstallFinished();
+                        installFinished.ShowDialog();
+                    }
+                    else
+                    {
+                        MessageBox.Show(Translations.GetTranslatedString("installationFinished"));
+                    }
                 }
-                else
-                {
-                    MessageBox.Show(Translations.GetTranslatedString("installationFinished"));
-                }
+
                 InstallProgressTextBox.Text = string.Empty;
                 ToggleUIButtons(true);
             }
@@ -1621,6 +1621,8 @@ namespace RelhaxModpack
 
         private void DisplayAndLogInstallErrors(RelhaxInstallFinishedEventArgs results, bool addResultsExitCode)
         {
+            if (!results.InstallFailedSteps.Contains(results.ExitCode) && results.ExitCode != InstallerExitCodes.Success)
+                results.InstallFailedSteps.Add(results.ExitCode);
             if (results.InstallFailedSteps.Count > 0)
             {
                 StringBuilder errorBuilder = new StringBuilder();
@@ -1726,7 +1728,7 @@ namespace RelhaxModpack
                         {
                             ChildProgressBar.Maximum = e.TotalInstallGroups;
                             ChildProgressBar.Value = e.InstallGroup;
-                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), (e.ParrentCurrent+1).ToString(),
+                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                             line2 = string.Format("{0}: {1} {2} {3} {4} {5}", Translations.GetTranslatedString("installExtractingCompletedThreads"), e.CompletedThreads.ToString(),
                                 Translations.GetTranslatedString("of"), e.TotalThreads.ToString(), Translations.GetTranslatedString("installExtractingOfGroup"), e.InstallGroup.ToString());
@@ -1750,7 +1752,7 @@ namespace RelhaxModpack
                         {
                             ChildProgressBar.Maximum = e.BytesTotal;
                             ChildProgressBar.Value = e.BytesProcessed;
-                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), (e.ParrentCurrent+1).ToString(),
+                            line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                             line2 = Path.GetFileName(e.Filename);
                             if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
@@ -1766,7 +1768,7 @@ namespace RelhaxModpack
                             }
                             else
                             {
-                                line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), (e.EntriesProcessed+1).ToString(),
+                                line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), ((e.EntriesProcessed) > 0 ? e.EntriesProcessed : 1).ToString(),
                                 Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                                 line4 = e.EntryFilename;
                             }
@@ -1775,28 +1777,28 @@ namespace RelhaxModpack
                     case InstallerComponents.InstallerExitCodes.UserExtractionError:
                         ChildProgressBar.Maximum = e.BytesTotal;
                         ChildProgressBar.Value = e.BytesProcessed;
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("extractingUserMod"), (e.ParrentCurrent+1).ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("extractingUserMod"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = Path.GetFileName(e.Filename);
-                        line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), (e.EntriesProcessed+1).ToString(),
+                        line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), ((e.EntriesProcessed) > 0 ? e.EntriesProcessed : 1).ToString(),
                             Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                         line4 = e.EntryFilename;
                         break;
                     case InstallerComponents.InstallerExitCodes.RestoreUserdataError:
                         //filename is name of file in package to backup
                         //parrentCurrentProgress is name of package
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installRestoreUserdata"), (e.ParrentCurrent+1).ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installRestoreUserdata"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         line3 = e.ParrentCurrentProgress;
                         break;
                     case InstallerComponents.InstallerExitCodes.XmlUnpackError:
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installXmlUnpack"), (e.ParrentCurrent+1).ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installXmlUnpack"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.PatchError:
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installPatchFiles"), (e.ParrentCurrent+1).ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installPatchFiles"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
@@ -1805,7 +1807,7 @@ namespace RelhaxModpack
                         line2 = e.Filename;
                         break;
                     case InstallerComponents.InstallerExitCodes.ContourIconAtlasError:
-                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installContourIconAtlas"), (e.ParrentCurrent+1).ToString(),
+                        line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installContourIconAtlas"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = string.Format("{0} {1} {2} {3}", e.ChildCurrent.ToString(), Translations.GetTranslatedString("of"), e.ChildTotal.ToString(),
                             Translations.GetTranslatedString("stepsComplete"));
@@ -1939,21 +1941,20 @@ namespace RelhaxModpack
                             else
                             {
                                 Logging.Error("failed to download the file {0} {1} {2}", package.ZipFile, Environment.NewLine, ex.ToString());
-                                //show abort retry ignore window TODO
-                                MessageBoxResult result = MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
+                                System.Windows.Forms.DialogResult result = System.Windows.Forms.MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
                                     Translations.GetTranslatedString("failedToDownload1"), Environment.NewLine,
                                     package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
-                                    Translations.GetTranslatedString("failedToDownloadHeader"), MessageBoxButton.YesNoCancel);
+                                    Translations.GetTranslatedString("failedToDownloadHeader"), System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore);
                                 switch (result)
                                 {
-                                    case MessageBoxResult.Yes:
+                                    case System.Windows.Forms.DialogResult.Retry:
                                         //keep retry as true
                                         break;
-                                    case MessageBoxResult.No:
+                                    case System.Windows.Forms.DialogResult.Ignore:
                                         //skip this file
                                         retry = false;
                                         break;
-                                    case MessageBoxResult.Cancel:
+                                    case System.Windows.Forms.DialogResult.Abort:
                                         //stop the installation all together
                                         ToggleUIButtons(true);
                                         ResetUI();
@@ -2027,6 +2028,33 @@ namespace RelhaxModpack
                 return;
             }
 
+            //check if wot is running
+            while (Utils.IsProcessRunning(Settings.WoTProcessName, Settings.WoTDirectory))
+            {
+                //create window to determine if cancel, wait, kill TODO
+                AskCloseWoT askCloseWoT = new AskCloseWoT();
+                //a positive result means that we are going to retry the loop
+                //it could mean the user hit retry (close true), or hit force close (succeeded, and try again anyways)
+                askCloseWoT.ShowDialog();
+                if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.CancelInstallation)
+                {
+                    ToggleUIButtons(true);
+                    return;
+                }
+                else if (askCloseWoT.AskCloseWoTResult == AskCloseWoTResult.ForceClosed)
+                {
+                    break;
+                }
+                Thread.Sleep(100);
+            }
+
+            //setup the cancel button
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
+            CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Visibility = Visibility.Visible;
+            CancelDownloadInstallButton.IsEnabled = true;
+
             //create progress object
             Progress<RelhaxInstallerProgress> progress = new Progress<RelhaxInstallerProgress>();
             progress.ProgressChanged += UninstallProgressChanged;
@@ -2042,6 +2070,12 @@ namespace RelhaxModpack
             InstallerComponents.RelhaxInstallFinishedEventArgs results = await installEngine.RunUninstallationAsync(progress);
             installEngine.Dispose();
             installEngine = null;
+
+            //close and hide the install progress button
+            CancelDownloadInstallButton.IsEnabled = false;
+            CancelDownloadInstallButton.Visibility = Visibility.Hidden;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
+            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
 
             //report results
             ChildProgressBar.Value = ChildProgressBar.Maximum;
@@ -2169,7 +2203,7 @@ namespace RelhaxModpack
                 controlsToToggle.Remove(CancelDownloadInstallButton);
             foreach (FrameworkElement control in controlsToToggle)
             {
-                if (control is Button || control is CheckBox || control is RadioButton)
+                if (control is Button || control is CheckBox || control is RadioButton || control is ComboBox || control is Slider)
                 {
                     if (disabledBlacklist.Contains(control))
                         control.IsEnabled = false;
@@ -2182,6 +2216,18 @@ namespace RelhaxModpack
             //any to include here that aren't any of the above class types
             AutoSyncFrequencyTexbox.IsEnabled = toggle;
             AutoSyncFrequencyComboBox.IsEnabled = toggle;
+
+            //if false, disabling components to do an installation. so disable the auto install timer as well
+            //else enable it again
+            //sending stop() will restart the timer
+            //https://stackoverflow.com/questions/15617068/does-system-timers-timer-stop-restart-the-interval-countdown
+            if (autoInstallTimer != null)
+            {
+                if (!toggle)
+                    autoInstallTimer.Stop();
+                else
+                    autoInstallTimer.Start();
+            }
         }
 
         private void OnLinkButtonClick(object sender, RoutedEventArgs e)
@@ -2203,8 +2249,12 @@ namespace RelhaxModpack
 
         private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
         {
+            autoInstallTimer.Stop();
+
             Diagnostics diagnostics = new Diagnostics();
             diagnostics.ShowDialog();
+
+            autoInstallTimer.Start();
         }
 
         private void ViewNewsButton_Click(object sender, RoutedEventArgs e)
@@ -2477,63 +2527,110 @@ namespace RelhaxModpack
         {
             if ((bool)UseBetaDatabaseCB.IsChecked)
             {
+                //first check if auto install is enabled with this
+                if (ModpackSettings.AutoInstall && !loading)
+                {
+                    Logging.Info("[OnUseBetaDatabaseChanged]: autoInstall is enabled, verify with user");
+
+                    autoInstallTimer.Stop();
+
+                    if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"),
+                        MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    {
+                        Logging.Debug("[OnUseBetaDatabaseChanged]: autoInstall is enabled, user declined, abort");
+                        UseBetaDatabaseCB.Click -= OnUseBetaDatabaseChanged;
+                        UseBetaDatabaseCB.IsChecked = false;
+                        UseBetaDatabaseCB.Click += OnUseBetaDatabaseChanged;
+                        return;
+                    }
+
+                    autoInstallTimer.Start();
+                }
+
+                Logging.Debug("[OnUseBetaDatabaseChanged]: reset internals and get list of database branches");
+                //disable the UI part of it
                 UseBetaDatabaseCB.IsEnabled = false;
-                //get the branches. the default selected should be master
                 UseBetaDatabaseBranches.IsEnabled = false;
-                UseBetaDatabaseBranches.Items.Clear();
                 UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
-                UseBetaDatabaseBranches.SelectedIndex = 0;
+
+                //declare objects to use
                 string jsonText = string.Empty;
+                JArray root = null;
+                List<string> branches = new List<string>
+                {
+                    "master"
+                };
+
+                //get the list of branches
                 using (PatientWebClient client = new PatientWebClient() { Timeout = 1500 })
                 {
+                    //if windows 7, enable TLS 1.1 and 1.2
+                    //https://stackoverflow.com/questions/47017973/could-not-establish-secure-channel-for-ssl-tls-c-sharp-web-service-client
+                    //https://docs.microsoft.com/en-us/dotnet/api/system.net.servicepointmanager.securityprotocol?view=netframework-4.8#System_Net_ServicePointManager_SecurityProtocol
+                    //https://docs.microsoft.com/en-us/dotnet/framework/network-programming/tls
+                    if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
+                    {
+                        Logging.Debug("[OnUseBetaDatabaseChanged]: Windows 7 detected, enabling TLS 1.1 and 1.2");
+                        System.Net.ServicePointManager.SecurityProtocol =
+                            SecurityProtocolType.Ssl3 |
+                            SecurityProtocolType.Tls |
+                            SecurityProtocolType.Tls11 |
+                            SecurityProtocolType.Tls12;
+                    }
                     try
                     {
+                        Logging.Debug("[OnUseBetaDatabaseChanged]: downloading branch list as json from github API");
                         client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                        jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
+                        if(loading)
+                            jsonText = client.DownloadString(Settings.BetaDatabaseBranchesURL);
+                        else
+                            jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
                     }
                     catch (WebException wex)
                     {
                         Logging.Exception(wex.ToString());
                     }
                 }
-                if (string.IsNullOrWhiteSpace(jsonText))
+                if (!string.IsNullOrWhiteSpace(jsonText))
                 {
-                    //just load master and call it good. it should always be there
-                    UseBetaDatabaseBranches.Items.Clear();
-                    UseBetaDatabaseBranches.Items.Add("master");
-                    UseBetaDatabaseBranches.SelectedIndex = 0;
-                    UseBetaDatabaseBranches.IsEnabled = true;
-                    UseBetaDatabaseCB.IsEnabled = true;
-                    return;
+                    try
+                    {
+                        Logging.Debug("[OnUseBetaDatabaseChanged]: parsing json branches");
+                        root = JArray.Parse(jsonText);
+                    }
+                    catch (JsonException jex)
+                    {
+                        Logging.Exception(jex.ToString());
+                    }
+                    if(root != null)
+                    {
+                        //parse the string into a json array object
+                        foreach (JObject branch in root.Children())
+                        {
+                            JValue value = (JValue)branch["name"];
+                            string branchName = value.Value.ToString();
+                            Logging.Debug("[OnUseBetaDatabaseChanged]: Adding branch {0}", branchName);
+                            if (!branches.Contains(branchName))
+                                branches.Add(branchName);
+                        }
+                    }
                 }
-                JArray root;
-                try
-                {
-                    root = JArray.Parse(jsonText);
-                }
-                catch (JsonException jex)
-                {
-                    Logging.Exception(jex.ToString());
-                    UseBetaDatabaseBranches.Items.Clear();
-                    UseBetaDatabaseBranches.Items.Add("master");
-                    UseBetaDatabaseBranches.SelectedIndex = 0;
-                    UseBetaDatabaseBranches.IsEnabled = true;
-                    UseBetaDatabaseCB.IsEnabled = true;
-                    return;
-                }
-                List<string> branches = new List<string>();
-                foreach (JObject branch in root.Children())
-                {
-                    JValue value = (JValue)branch["name"];
-                    branches.Add((string)value.Value);
-                }
-                branches.Reverse();
+
+                Logging.Debug("[OnUseBetaDatabaseChanged]: Updating UI with new branches list");
+                //clear current list
                 UseBetaDatabaseBranches.Items.Clear();
+
+                //fill the UI with branch items
                 foreach (string s in branches)
                     UseBetaDatabaseBranches.Items.Add(s);
-                ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
-                //default to master selected
+
+                //select master (index 0) as default
                 UseBetaDatabaseBranches.SelectedIndex = 0;
+
+                //set database distribution to beta
+                ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
+
+                //default to master selected
                 UseBetaDatabaseBranches.IsEnabled = true;
                 UseBetaDatabaseCB.IsEnabled = true;
             }
@@ -2549,6 +2646,46 @@ namespace RelhaxModpack
             else
             {
                 databaseVersion = ModpackSettings.DatabaseDistroVersion;
+            }
+
+            if(databaseVersion != DatabaseVersions.Test && ModpackSettings.AutoInstall)
+            {
+                //stop timer for applying changes
+                Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, restart timer for this change");
+                autoInstallTimer.Stop();
+
+                //if beta database, get the latest one
+                if (databaseVersion == DatabaseVersions.Beta)
+                {
+                    Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, database = beta, need to get current beta database for comparison");
+                    using (WebClient client = new WebClient())
+                    {
+                        client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                        if (loading)
+                        {
+                            if (string.IsNullOrEmpty(oldBetaDB))
+                                oldBetaDB = client.DownloadString(Settings.BetaDatabaseV1URL);
+                        }
+                        else
+                        {
+                            oldBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
+                        }
+                        newBetaDB = oldBetaDB;
+                    }
+                }
+
+                autoInstallTimer.Elapsed -= AutoInstallTimer_ElapsedBeta;
+                autoInstallTimer.Elapsed -= AutoInstallTimer_Elapsed;
+                switch (ModpackSettings.DatabaseDistroVersion)
+                {
+                    case DatabaseVersions.Beta:
+                        autoInstallTimer.Elapsed += AutoInstallTimer_ElapsedBeta;
+                        break;
+                    case DatabaseVersions.Stable:
+                        autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
+                        break;
+                }
+                autoInstallTimer.Start();
             }
 
             ProcessTitle();
@@ -2576,7 +2713,10 @@ namespace RelhaxModpack
 
         private void OnLanguageSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Translations.SetLanguage((Languages)LanguagesSelector.SelectedIndex);
+            //the event should not fire if it's loading. loading takes care of this
+            if (loading)
+                return;
+
             switch (LanguagesSelector.SelectedItem as string)
             {
                 case Translations.LanguageEnglish:
@@ -2598,15 +2738,10 @@ namespace RelhaxModpack
                     Translations.SetLanguage(Languages.Spanish);
                     break;
             }
-            if (!loading)
-            {
-                Translations.LocalizeWindow(this, true);
-                ApplyCustomUILocalizations(true);
-            }
-            else
-            {
-                Logging.Error("This method should not be access when loading=true!");
-            }
+            
+            Translations.LocalizeWindow(this, true);
+            ApplyCustomUILocalizations(true);
+            
         }
 
         private void VerboseLoggingCB_Click(object sender, RoutedEventArgs e)
@@ -2671,10 +2806,14 @@ namespace RelhaxModpack
                 InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
                 Multiselect = false
             };
+
             if (!(bool)selectAutoSyncSelectionFileDialog.ShowDialog())
                 return;
+
+            AutoInstallOneClickInstallSelectionFilePath.TextChanged -= AutoInstallOneClickInstallSelectionFilePath_TextChanged;
             AutoInstallOneClickInstallSelectionFilePath.Text = selectAutoSyncSelectionFileDialog.FileName;
             ModpackSettings.AutoOneclickSelectionFilePath = selectAutoSyncSelectionFileDialog.FileName;
+            AutoInstallOneClickInstallSelectionFilePath.TextChanged += AutoInstallOneClickInstallSelectionFilePath_TextChanged;
         }
 
         private void ForceEnabledCB_Clicked(object sender, RoutedEventArgs e)
@@ -2717,37 +2856,87 @@ namespace RelhaxModpack
             ModpackSettings.SaveDisabledMods = (bool)SaveDisabledModsInSelection.IsChecked;
         }
 
-        private void AutoInstallCB_Click(object sender, RoutedEventArgs e)
+        private async void AutoInstallCB_Click(object sender, RoutedEventArgs e)
         {
-            string tmep = string.Empty;
-            if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
+            //if it's turning off, then process that only
+            if(!(bool)AutoInstallCB.IsChecked)
             {
-                tmep = ModpackSettings.AutoOneclickSelectionFilePath;
-                Logging.Debug("autoClickSelectionPath is null or doesn't exist, prompting user to change");
-                LoadAutoSyncSelectionFile_Click(null, null);
+                Logging.Debug("[AutoInstallCB_Click]: autoInstall being turned off, process that only");
+                ModpackSettings.AutoInstall = false;
+                autoInstallTimer.Stop();
+                return;
             }
 
+            //the selection file must be set for this to work
             if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
             {
-                Logging.Debug("autoClickSelectionPath is null or doesn't exist still, setting to false and reverting path");
-                ModpackSettings.AutoOneclickSelectionFilePath = tmep;
+                Logging.Info("[AutoInstallCB_Click]: autoClickSelectionPath is null or doesn't exist, abort");
                 ModpackSettings.AutoInstall = false;
+
+                AutoInstallCB.Click -= AutoInstallCB_Click;
                 AutoInstallCB.IsChecked = false;
+                AutoInstallCB.Click += AutoInstallCB_Click;
+
+                autoInstallTimer.Stop();
+                MessageBox.Show(Translations.GetTranslatedString("autoOneclickSelectionFileNotExist"));
                 return;
+            }
+
+            if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
+            {
+                if (!loading)
+                {
+                    Logging.Info("[AutoInstallCB_Click]: database distro is beta, verify with user");
+
+                    autoInstallTimer.Stop();
+
+                    if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"),
+                        MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    {
+                        Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user declined, abort");
+                        ModpackSettings.AutoInstall = false;
+
+                        AutoInstallCB.Click -= AutoInstallCB_Click;
+                        AutoInstallCB.IsChecked = false;
+                        AutoInstallCB.Click += AutoInstallCB_Click;
+
+                        autoInstallTimer.Stop();
+                        return;
+                    }
+
+                    autoInstallTimer.Start();
+                }
+
+                Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user confirmed, setup initial check");
+                using (WebClient client = new WebClient())
+                {
+                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                    if (loading)
+                    {
+                        if (string.IsNullOrEmpty(oldBetaDB))
+                            oldBetaDB = client.DownloadString(Settings.BetaDatabaseV1URL);
+                    }
+                    else
+                    {
+                        oldBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
+                    }
+                    newBetaDB = oldBetaDB;
+                }
             }
 
             //check the time parsed value
             int timeToUse = Utils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
-            if (timeToUse < 1)
+            if (timeToUse == 0)
             {
-                Logging.Info("Invalid time specified, must be above 0");
-                MessageBox.Show("InvalidTimeNumberSpecified");
-                ModpackSettings.AutoInstall = false;
-                AutoInstallCB.IsChecked = false;
-                return;
+                Logging.Warning("[AutoInstallCB_Click]: Invalid time specified, must be above 0. using 1");
+                timeToUse = 1;
+                AutoSyncFrequencyTexbox.Text = timeToUse.ToString();
             }
 
             //parse the time into a timespan for the check timer
+            Logging.Info("[AutoInstallCB_Click]: registering auto install periodic timer");
+            autoInstallTimer.Stop();
+
             switch (AutoSyncFrequencyComboBox.SelectedIndex)
             {
                 case 0://mins
@@ -2762,33 +2951,101 @@ namespace RelhaxModpack
                 default:
                     throw new BadMemeException("this should not happen");
             }
-            autoInstallTimer.AutoReset = true;
-            if (!autoInstallTimerRegistered)
+
+            autoInstallTimer.Elapsed -= AutoInstallTimer_ElapsedBeta;
+            autoInstallTimer.Elapsed -= AutoInstallTimer_Elapsed;
+            switch (ModpackSettings.DatabaseDistroVersion)
             {
-                Logging.Debug("auto install timer not registered to event, registering now");
-                autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
-                autoInstallTimerRegistered = true;
+                case DatabaseVersions.Beta:
+                    autoInstallTimer.Elapsed += AutoInstallTimer_ElapsedBeta;
+                    break;
+                case DatabaseVersions.Stable:
+                    autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
+                    break;
             }
-            else
-            {
-                Logging.Debug("auto install timer already registered");
-            }
+
+            //start it
+            autoInstallTimer.Start();
+
+            //and finally set value into modpack settings
             ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
-            if (ModpackSettings.AutoInstall)
-                autoInstallTimer.Enabled = true;
-            else
-                autoInstallTimer.Enabled = false;
+
+            Logging.Info("[AutoInstallCB_Click]: timer registered, listening for update check intervals");
         }
 
         private void AutoInstallTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Logging.Debug("timer has elapsed to check for database updates");
-            CheckForDatabaseUpdatesPeriodic(true);
-            if (databaseUpdateAvailableFromAutoSync)
+            if (timerActive)
+                return;
+
+            this.Dispatcher.InvokeAsync(async () =>
             {
-                Logging.Debug("update found from auto install, running installation");
-                InstallModpackButton_Click(null, null);
-            }
+                if (loading)
+                    return;
+
+                timerActive = true;
+                Logging.Debug("[AutoInstallTimer_Elapsed]: timer has elapsed to check for database updates");
+
+                //reset check flag and get old db version
+                string oldDBVersion = Settings.DatabaseVersion;
+
+                //actually check for updates
+                await CheckForDatabaseUpdates(true);
+
+                Logging.Debug("[AutoInstallTimer_Elapsed]: database periodic check complete, old = {0}, new = {1}", oldDBVersion, Settings.DatabaseVersion);
+
+                //check if database was updated
+                if (!oldDBVersion.Equals(Settings.DatabaseVersion))
+                {
+                    Logging.Debug("[AutoInstallTimer_Elapsed]: update found from auto install, running installation");
+                    InstallModpackButton_Click(null, null);
+                }
+                timerActive = false;
+            });
+        }
+
+        private async void AutoInstallTimer_ElapsedBeta(object sender, ElapsedEventArgs e)
+        {
+            if (timerActive)
+                return;
+
+            this.Dispatcher.InvokeAsync(async () =>
+            {
+                if (loading)
+                    return;
+
+                timerActive = true;
+                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: timer has elapsed to check for beta database updates");
+
+                using (WebClient client = new WebClient())
+                {
+                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                    if (string.IsNullOrEmpty(oldBetaDB))
+                    {
+                        Logging.Debug("[AutoInstallTimer_ElapsedBeta]: oldBetaDB is null/empty, set this first");
+                        oldBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
+                        newBetaDB = oldBetaDB;
+                    }
+                    else
+                    {
+                        newBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
+                    }
+                }
+
+                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: comparing old and new beta databases");
+                if (!newBetaDB.Equals(oldBetaDB))
+                {
+                    Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old != new, starting install");
+                    oldBetaDB = newBetaDB;
+                    InstallModpackButton_Click(null, null);
+                }
+                else
+                {
+                    Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old == new, no start install");
+                }
+
+                timerActive = false;
+            });
         }
 
         private void AllowStatsGatherCB_Click(object sender, RoutedEventArgs e)
@@ -2928,8 +3185,12 @@ namespace RelhaxModpack
 
         private void OpenColorPickerButton_Click(object sender, RoutedEventArgs e)
         {
+            autoInstallTimer.Stop();
+
             RelhaxColorPicker colorPicker = new RelhaxColorPicker();
             colorPicker.ShowDialog();
+
+            autoInstallTimer.Start();
         }
 
         private void ShowOptionsCollapsedLegacyCB_Click(object sender, RoutedEventArgs e)
@@ -2975,6 +3236,42 @@ namespace RelhaxModpack
             Directory.Move(middlePath, newPath);
 
             Logging.Info("upgrade of folder {0} successful", Path.GetFileName(newPath));
+        }
+
+        private void LauchPatchDesigner_Click(object sender, RoutedEventArgs e)
+        {
+            Logging.Info("Launching patch designer from MainWindow");
+            if (!Logging.IsLogDisposed(Logfiles.Application))
+                Logging.DisposeLogging(Logfiles.Application);
+
+            CommandLineSettings.ApplicationMode = ApplicationMode.PatchDesigner;
+            PatchDesigner designer = new PatchDesigner() { LaunchedFromMainWindow = true };
+
+            //start updater logging system
+            if (!Logging.Init(Logfiles.PatchDesigner))
+            {
+                MessageBox.Show("Failed to initialize logfile for patch designer");
+                designer = null;
+                return;
+            }
+            Logging.WriteHeader(Logfiles.PatchDesigner);
+            designer.ShowDialog();
+
+            //and set back to application
+            CommandLineSettings.ApplicationMode = ApplicationMode.Default;
+            if (!Logging.Init(Logfiles.Application))
+            {
+                MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
+                Application.Current.Shutdown((int)ReturnCodes.LogfileError);
+            }
+        }
+
+        private void AutoInstallOneClickInstallSelectionFilePath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (loading)
+                return;
+
+            ModpackSettings.AutoOneclickSelectionFilePath = AutoInstallOneClickInstallSelectionFilePath.Text;
         }
 
         //asyncronously get the file sizes of backups

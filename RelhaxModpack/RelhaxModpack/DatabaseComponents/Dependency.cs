@@ -56,6 +56,11 @@ namespace RelhaxModpack
         public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
 
         /// <summary>
+        /// When a databasePackage, the internal packageName. When category, the category name
+        /// </summary>
+        public string ComponentInternalName { get { return PackageName; } }
+
+        /// <summary>
         /// When loading from legacy database type and is was of type "logicalDependency"
         /// </summary>
         [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
