@@ -1342,7 +1342,7 @@ namespace RelhaxModpack
             //Component: LauchPatchDesignerText
             //button for launching the editor from the main application window
             English.Add("LauchPatchDesignerText", "Launch Patch Designer");
-            German.Add("LauchPatchDesignerText", TranslationNeeded);
+            German.Add("LauchPatchDesignerText", "Starte Patch Designer");
             Polish.Add("LauchPatchDesignerText", TranslationNeeded);
             French.Add("LauchPatchDesignerText", TranslationNeeded);
             Spanish.Add("LauchPatchDesignerText", TranslationNeeded);
@@ -2164,7 +2164,8 @@ namespace RelhaxModpack
             //
             English.Add("autoInstallWithBetaDBConfirmBody", "Auto install will be enabled with beta database. The beta database is updated frequenty and could result in multiple" +
                 " installations in one day. Are you sure you would like to do this?");
-            German.Add("autoInstallWithBetaDBConfirmBody", TranslationNeeded);
+            German.Add("autoInstallWithBetaDBConfirmBody", "Die automatische Installation wird jetzt die Beta Datenbank nutzen. Diese wird häufig aktualisiert und es" +
+                " kann zu mehreren Installationen am Tag kommen. Willst du das wirklich tun?");
             Polish.Add("autoInstallWithBetaDBConfirmBody", "Automatyczna Instalacja będzie dostępna dla testowej bazy danych (BETA), która jest często aktualizowana —" +
                 " może to prowadzić do kilku aktualizacji w ciągu jednego dnia!\nCzy mimo to chcesz kontynuować?");
             French.Add("autoInstallWithBetaDBConfirmBody", "L'installation automatique sera activée avec la base de données bêta. Cette base de données est mise à jour fréquemment" +
