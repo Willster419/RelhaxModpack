@@ -162,6 +162,8 @@ namespace RelhaxModpack
             Utils.AllowUIToUpdate();
 
             //load the supported translations into combobox
+            //disconnect event handler before translation is applied
+            LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
             LanguagesSelector.Items.Clear();
             LanguagesSelector.Items.Add(Translations.LanguageEnglish);
             LanguagesSelector.Items.Add(Translations.LanguageFrench);
@@ -174,8 +176,7 @@ namespace RelhaxModpack
             Translations.LoadTranslations();
             Translations.SetLanguage(Languages.English);
 
-            //disconnect event handler before application
-            LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
+            //apply to UI
             LanguagesSelector.SelectedIndex = 0;
             LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
 
@@ -2712,7 +2713,10 @@ namespace RelhaxModpack
 
         private void OnLanguageSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Translations.SetLanguage((Languages)LanguagesSelector.SelectedIndex);
+            //the event should not fire if it's loading. loading takes care of this
+            if (loading)
+                return;
+
             switch (LanguagesSelector.SelectedItem as string)
             {
                 case Translations.LanguageEnglish:
@@ -2734,15 +2738,10 @@ namespace RelhaxModpack
                     Translations.SetLanguage(Languages.Spanish);
                     break;
             }
-            if (!loading)
-            {
-                Translations.LocalizeWindow(this, true);
-                ApplyCustomUILocalizations(true);
-            }
-            else
-            {
-                Logging.Error("This method should not be access when loading=true!");
-            }
+            
+            Translations.LocalizeWindow(this, true);
+            ApplyCustomUILocalizations(true);
+            
         }
 
         private void VerboseLoggingCB_Click(object sender, RoutedEventArgs e)
