@@ -1343,7 +1343,7 @@ namespace RelhaxModpack
             //button for launching the editor from the main application window
             English.Add("LauchPatchDesignerText", "Launch Patch Designer");
             German.Add("LauchPatchDesignerText", "Starte Patch Designer");
-            Polish.Add("LauchPatchDesignerText", TranslationNeeded);
+            Polish.Add("LauchPatchDesignerText", "Uruchom Patch Designer");
             French.Add("LauchPatchDesignerText", TranslationNeeded);
             Spanish.Add("LauchPatchDesignerText", TranslationNeeded);
             Russian.Add("LauchPatchDesignerText", TranslationNeeded);
