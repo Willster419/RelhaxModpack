@@ -1403,6 +1403,8 @@ namespace RelhaxModpack.InstallerComponents
             //backup files and folders that should be kept that aren't cache
             string[] fileNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat" };
             string[] folderNames = { "xvm", "pmod" };
+            string pmodCacheFileToDelete = "cache.dat";
+            string xvmFolderToDelete = "cache";
 
             //check if the directories are files or folders
             //if files they can move directly
@@ -1413,13 +1415,9 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if(File.Exists(Path.Combine(Settings.AppDataFolder, file)))
                 {
-                    try
+                    if(!Utils.FileMove(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
                     {
-                        File.Move(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file));
-                    }
-                    catch (Exception ex)
-                    {
-                        Logging.Exception(ex.ToString());
+                        Logging.Error("Failed to move file for clear cache");
                         return false;
                     }
                 } 
@@ -1453,10 +1451,9 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if (File.Exists(Path.Combine(AppPathTempFolder, file)))
                 {
-                    try { File.Move(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)); }
-                    catch (Exception ex)
+                    if (!Utils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)))
                     {
-                        Logging.Exception(ex.ToString());
+                        Logging.Error("Failed to move file for clear cache");
                         return false;
                     }
                 }
@@ -1465,6 +1462,12 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.Info("File does not exist in step clearCache: {0}", file);
                 }
             }
+
+            //delete extra xvm cache folder and pmod cache file
+            if(Directory.Exists(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete)))
+                Utils.DirectoryDelete(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete), true);
+            if(File.Exists(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete)))
+                Utils.FileDelete(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete));
 
             foreach (string folder in folderNames)
             {
