@@ -1298,19 +1298,23 @@ namespace RelhaxModpack.InstallerComponents
                         Logging.Debug("Pattern starts with folder name, adding macro and folder slash and continue");
                         searchPattern = @"{app}\" + searchPattern;
                     }
-                    Logging.Debug("Path with macro: {0}", searchPattern);
+                    Logging.Debug("Parsed path with macro: {0}", searchPattern);
+
+                    //if the directory to search does not exist, then make it, just in case
+                    string searchPatternDirectoryPath = Path.GetDirectoryName(Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath));
+                    if (!Directory.Exists(searchPatternDirectoryPath))
+                    {
+                        Logging.Debug("Directory {0} does not exist, creating", searchPatternDirectoryPath);
+                        Directory.CreateDirectory(searchPatternDirectoryPath);
+                    }
 
                     //at this point it will have a macro, so grab it
                     //replace the macro to make the complete path
-                    string completeSearchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
                     string macro = searchPattern.Split('}')[0] + "}";
                     string macroRootPath = Utils.MacroReplace(macro,ReplacementTypes.FilePath) + Path.DirectorySeparatorChar;
                     searchPattern = searchPattern.Split('}')[1].Substring(1);
-
-                    //if the directory to search does not exist, then make it, just in case
-                    string directorycompleteSearchPattern = Path.GetDirectoryName(completeSearchPattern);
-                    if (!Directory.Exists(directorycompleteSearchPattern))
-                        Directory.CreateDirectory(directorycompleteSearchPattern);
+                    searchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
+                    Logging.Debug("Path macro: {0} parsed to -> {1}", macro, macroRootPath);
 
                     //get the list of files to replace
                     Logging.Info("Search root: {0}", macroRootPath);
