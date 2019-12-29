@@ -1,3 +1,10 @@
+Application version 0.29.5.2 (2019-12-28)
+https://www.virustotal.com/gui/file/5606ce8555faba12d8feee308fd12478243a9a8f224d46ba4e364c062f39716f/detection
+- Fixed bug with restore and save userdata methods not parsing {versiondir} macro and cleaned up the code.
+- Fixed bugs with loading translations when the selected language isn't english.
+- Updated ClearCache() method to new V2 utility methods.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.5.1 (2019-12-28)
 https://www.virustotal.com/gui/file/cb7be4fac6530c8fe3599458cdc97e07c82d82c765395415bd98019c53c5264b/detection
 - Fixed a major bug with the user data backup and restore. The process has been re-written to allow for having files of the same name in a database package, but in different folders.
