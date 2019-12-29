@@ -1344,9 +1344,9 @@ namespace RelhaxModpack
             English.Add("LauchPatchDesignerText", "Launch Patch Designer");
             German.Add("LauchPatchDesignerText", "Starte Patch Designer");
             Polish.Add("LauchPatchDesignerText", TranslationNeeded);
-            French.Add("LauchPatchDesignerText", TranslationNeeded);
-            Spanish.Add("LauchPatchDesignerText", TranslationNeeded);
-            Russian.Add("LauchPatchDesignerText", TranslationNeeded);
+            French.Add("LauchPatchDesignerText", "Lancer le Patch Designer");
+            Spanish.Add("LauchPatchDesignerText", "Iniciar diseñador de parche");
+            Russian.Add("LauchPatchDesignerText", "Запустить конструктор патчей");
 
             //Component: LauchEditorDescription
             //button for launching the editor from the main application window
