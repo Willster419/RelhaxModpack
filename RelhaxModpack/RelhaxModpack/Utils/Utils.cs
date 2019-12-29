@@ -935,6 +935,46 @@ namespace RelhaxModpack
             return fileName;
         }
 
+        public static bool FileMove(string source, string destination, uint numRetrys = 3, uint timeout = 100)
+        {
+            bool overallSuccess = true;
+            //check to make sure the number of retries is between 1 and 10
+            if (numRetrys < 1)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (below 1), setting to 1 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 1;
+            }
+            if (numRetrys > 10)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (above 10), setting to 10 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 10;
+            }
+            uint retryCounter = 0;
+            while (retryCounter < numRetrys)
+            {
+                try
+                {
+                    File.Move(source, destination);
+                    retryCounter = numRetrys;
+                }
+                catch (Exception ex)
+                {
+                    Logging.WriteToLog(string.Format("move file {0} -> {1}, retryCount={2}, message:\n{3}", source, destination,retryCounter, ex.Message),
+                        Logfiles.Application, LogLevel.Warning);
+                    retryCounter++;
+                    System.Threading.Thread.Sleep((int)timeout);
+                    if (retryCounter == numRetrys)
+                    {
+                        Logging.Error("retries = counter, fully failed to move file {0} -> {1}", source, destination);
+                        overallSuccess = false;
+                    }
+                }
+            }
+            return overallSuccess;
+        }
+
         /// <summary>
         /// Tries to delete a file from the given path
         /// </summary>
