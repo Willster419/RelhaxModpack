@@ -1199,7 +1199,8 @@ namespace RelhaxModpack
                 //set the owner
                 //https://stackoverflow.com/questions/21756542/why-is-window-showdialog-not-blocking-in-taskscheduler-task
                 //https://docs.microsoft.com/en-us/dotnet/api/system.windows.window.owner?view=netframework-4.8
-                Owner = GetWindow(this)
+                Owner = GetWindow(this),
+                AutoInstallMode = (sender == null)
             };
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;

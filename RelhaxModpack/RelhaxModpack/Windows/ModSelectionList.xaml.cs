@@ -101,6 +101,8 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public event SelectionListClosedDelegate OnSelectionListReturn;
 
+        public bool AutoInstallMode = false;
+
         //private
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress;
@@ -618,7 +620,7 @@ namespace RelhaxModpack.Windows
                     XmlDocument SelectionsDocument = null;
                     bool shouldLoadSomething = false;
                     bool loadSuccess = false;
-                    if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
+                    if (AutoInstallMode || ModpackSettings.OneClickInstall)
                     {
                         //check that the file exists before trying to load it
                         if(File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
@@ -675,7 +677,7 @@ namespace RelhaxModpack.Windows
                         else
                         {
                             Logging.Error("Failed to load SelectionsDocument, AutoInstall={0}, OneClickInstall={1}, DatabaseDistro={2}, SaveSelection={3}",
-                            ModpackSettings.AutoInstall, ModpackSettings.OneClickInstall, databaseVersion, ModpackSettings.SaveLastSelection);
+                            AutoInstallMode, ModpackSettings.OneClickInstall, databaseVersion, ModpackSettings.SaveLastSelection);
                             Logging.Error("Failed to load SelectionsDocument, AutoSelectionFilePath={0}", ModpackSettings.AutoOneclickSelectionFilePath);
                         }
                     }
@@ -701,7 +703,7 @@ namespace RelhaxModpack.Windows
                     ModTabGroups_SelectionChanged(null, null);
 
                     //if auto install or one-click install, don't show the UI
-                    if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
+                    if (AutoInstallMode || ModpackSettings.OneClickInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
                         OnSelectionListReturn(this, new SelectionListEventArgs()
                         {
@@ -1838,7 +1840,7 @@ namespace RelhaxModpack.Windows
 
             //
             int totalBrokenCount = disabledMods.Count + brokenMods.Count + stringSelections.Count + stringUserSelections.Count;
-            if (totalBrokenCount > 0 && (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
+            if (totalBrokenCount > 0 && (AutoInstallMode || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
             {
                 Logging.Info("Selection issues with auto or one click enabled, with message warning enabled. Show message.");
                 MessageBoxResult  result = MessageBox.Show(
