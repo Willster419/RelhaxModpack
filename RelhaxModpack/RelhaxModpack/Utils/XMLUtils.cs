@@ -350,6 +350,7 @@ namespace RelhaxModpack
                 Logging.Error("location string is empty in ParseDatabase1V1");
                 return false;
             }
+
             //document for global dependencies
             string completeFilepath = Path.Combine(rootPath, GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"));
             if (!File.Exists(completeFilepath))
@@ -360,6 +361,7 @@ namespace RelhaxModpack
             XDocument globalDepsDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
             if (globalDepsDoc == null)
                 throw new BadMemeException("this should not be null");
+
             //document for dependencies
             completeFilepath = Path.Combine(rootPath, GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file"));
             if (!File.Exists(completeFilepath))
@@ -370,22 +372,26 @@ namespace RelhaxModpack
             XDocument depsDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
             if (depsDoc == null)
                 throw new BadMemeException("this should not be null");
+
             //list of documents for categories
             List<XDocument> categoryDocuments = new List<XDocument>();
             foreach(XmlNode categoryNode in GetXmlNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
             {
                 //make string path
                 completeFilepath = Path.Combine(rootPath, categoryNode.Attributes["file"].Value);
+
                 //check if file exists
                 if (!File.Exists(completeFilepath))
                 {
                     Logging.Error("{0} file does not exist at {1}", "Category", completeFilepath);
                     return false;
                 }
+
                 //load xdocument of category from category file
                 XDocument catDoc = LoadXDocument(completeFilepath, XmlLoadType.FromFile);
                 if (catDoc == null)
                     throw new BadMemeException("this should not be null");
+
                 //add Xml cat to list
                 categoryDocuments.Add(catDoc);
             }
@@ -485,7 +491,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    throw new BadMemeException("fuck you");
+                    throw new BadMemeException("invalid type");
                 }
 
                 //make a copy of the list of whitelist nodes
