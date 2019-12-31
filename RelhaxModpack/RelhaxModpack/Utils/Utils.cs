@@ -2040,6 +2040,23 @@ namespace RelhaxModpack
             }
         }
 
+        public static bool SetObjectValue(Type objectType, string valueToSet, out object newObject)
+        {
+            try
+            {
+                newObject = Activator.CreateInstance(objectType);
+                var converter = TypeDescriptor.GetConverter(objectType);
+                newObject = converter.ConvertFrom(valueToSet);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                newObject = null;
+                return false;
+            }
+        }
+
         /// <summary>
         /// Dynamically assigns field properties to custom objects of a custom type of a list
         /// </summary>
@@ -2140,6 +2157,15 @@ namespace RelhaxModpack
             //if it originates from the 
             foreach (XElement listElement in xmlListItems)
             {
+                //if it's just like a string or something then just load that
+                if(listObjectType.IsValueType)
+                {
+                    if(SetObjectValue(listObjectType,listElement.Value,out object newObject))
+                    {
+                        listProperty.Add(newObject);
+                        continue;
+                    }
+                }
                 //make sure object type is properly implemented into serialization system
                 if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
                     throw new BadMemeException("Type of this list is not of IXmlSerializable");
