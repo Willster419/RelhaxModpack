@@ -294,28 +294,30 @@ namespace RelhaxModpack
         public static bool ParseDatabase(XmlDocument modInfoDocument, List<DatabasePackage> globalDependencies,
             List<Dependency> dependencies, List<Category> parsedCategoryList, string location = null)
         {
-            Logging.Debug("start of ParseDatabase()");
+            Logging.Debug("[ParseDatabase]: Determining database version for parsing");
             //check all input parameters
             if (modInfoDocument == null)
-                throw new BadMemeException("modInfoDocument is null");
+                throw new ArgumentNullException("modInfoDocument is null");
             if (globalDependencies == null)
-                throw new BadMemeException("lists cannot be null");
+                throw new ArgumentNullException("lists cannot be null");
             else
                 globalDependencies.Clear();
             if (dependencies == null)
-                throw new BadMemeException("lists cannot be null");
+                throw new ArgumentNullException("lists cannot be null");
             else
                 dependencies.Clear();
             if (parsedCategoryList == null)
-                throw new BadMemeException("lists cannot be null");
+                throw new ArgumentNullException("lists cannot be null");
             else
                 parsedCategoryList.Clear();
+
             //determine which version of the document we are loading. allows for loading of different versions if structure change
             //a blank value is assumed to be pre 2.0 version of the database
             string versionString = GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@documentVersion");
-            Logging.WriteToLog(nameof(versionString) + "=" + (string.IsNullOrEmpty(versionString)? "(null)" : versionString), Logfiles.Application, LogLevel.Info);
+            Logging.Info("[ParseDatabase]: VersionString parsed as '{0}'", versionString);
             if (string.IsNullOrEmpty(versionString))
-                Logging.Warning("versionString is null or empty, treating as legacy");
+                Logging.Info("[ParseDatabase]: VersionString is null or empty, treating as legacy");
+
             switch(versionString)
             {
                 case "1.1":
@@ -396,7 +398,7 @@ namespace RelhaxModpack
                 categoryDocuments.Add(catDoc);
             }
             //run the loading method
-            return LoadDatabase1V1(globalDepsDoc, globalDependencies, depsDoc, dependencies, categoryDocuments, parsedCategoryList);
+            return ParseDatabase1V1(globalDepsDoc, globalDependencies, depsDoc, dependencies, categoryDocuments, parsedCategoryList);
         }
 
         /// <summary>
@@ -420,7 +422,7 @@ namespace RelhaxModpack
                 categoryDocuments.Add(LoadXDocument(category, XmlLoadType.FromString));
             }
 
-            return LoadDatabase1V1(globalDependenciesdoc, globalDependencies, dependenciesdoc, dependencies, categoryDocuments, parsedCategoryList);
+            return ParseDatabase1V1(globalDependenciesdoc, globalDependencies, dependenciesdoc, dependencies, categoryDocuments, parsedCategoryList);
         }
 
         /// <summary>
@@ -433,14 +435,14 @@ namespace RelhaxModpack
         /// <param name="categoryDocuments">The list of xml documents of the category Xml documents</param>
         /// <param name="parsedCategoryList">The list of categories</param>
         /// <returns></returns>
-        private static bool LoadDatabase1V1(XDocument globalDependenciesDoc, List<DatabasePackage> globalDependenciesList, XDocument dependenciesDoc,
+        private static bool ParseDatabase1V1(XDocument globalDependenciesDoc, List<DatabasePackage> globalDependenciesList, XDocument dependenciesDoc,
             List<Dependency> dependenciesList, List<XDocument> categoryDocuments, List<Category> parsedCategoryList)
         {
             //parsing the global dependencies
-            bool globalParsed = LoadDatabase1V1Packages(globalDependenciesDoc.XPathSelectElements("//GlobalDependencies/GlobalDependency").ToList(), globalDependenciesList,
+            bool globalParsed = ParseDatabase1V1Packages(globalDependenciesDoc.XPathSelectElements("//GlobalDependencies/GlobalDependency").ToList(), globalDependenciesList,
                 DatabasePackage.FieldsToXmlParseAttributes(), DatabasePackage.FieldsToXmlParseNodes(), typeof(DatabasePackage));
             //parsing the logical dependnecies
-            bool depsParsed = LoadDatabase1V1Packages(dependenciesDoc.XPathSelectElements("//Dependencies/Dependency").ToList(), dependenciesList,
+            bool depsParsed = ParseDatabase1V1Packages(dependenciesDoc.XPathSelectElements("//Dependencies/Dependency").ToList(), dependenciesList,
                 Dependency.FieldsToXmlParseAttributes(), Dependency.FieldsToXmlParseNodes(), typeof(Dependency));
             //parsing the categories
             bool categoriesParsed = true;
@@ -454,7 +456,7 @@ namespace RelhaxModpack
                 //parse the list of dependencies from Xml for the categories into the category in list
                 IEnumerable<XElement> listOfDependencies = categoryDocuments[i].XPathSelectElements("//Category/Dependencies/Dependency");
                 Utils.SetListEntriesField(cat, cat.GetType().GetField(nameof(cat.Dependencies)), listOfDependencies);
-                if (!LoadDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//Category/Package").ToList(), cat.Packages,
+                if (!ParseDatabase1V1Packages(categoryDocuments[i].XPathSelectElements("//Category/Package").ToList(), cat.Packages,
                     SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), typeof(SelectablePackage)))
                 {
                     categoriesParsed = false;
@@ -464,7 +466,7 @@ namespace RelhaxModpack
             return globalParsed && depsParsed && categoriesParsed;
         }
 
-        private static bool LoadDatabase1V1Packages(List<XElement> xmlPackageNodesList, IList genericPackageList,
+        private static bool ParseDatabase1V1Packages(List<XElement> xmlPackageNodesList, IList genericPackageList,
             List<string> whitelistAttributes, List<string> whitelistNodes, Type packageType)
         {
             //make the refrence for the base type of package it could be
@@ -563,7 +565,7 @@ namespace RelhaxModpack
                         if (packageOfAnyType is SelectablePackage throwAwayPackage && element.Name.LocalName.Equals(nameof(throwAwayPackage.Packages)))
                         {
                             //need hard code special case for Packages
-                            LoadDatabase1V1Packages(element.Elements().ToList(), throwAwayPackage.Packages,
+                            ParseDatabase1V1Packages(element.Elements().ToList(), throwAwayPackage.Packages,
                                 SelectablePackage.FieldsToXmlParseAttributes(), SelectablePackage.FieldsToXmlParseNodes(), packageType);
                         }
                         //HOWEVER, if the object is a list type, we need to parse the list first
