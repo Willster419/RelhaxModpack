@@ -1213,7 +1213,7 @@ namespace RelhaxModpack
             if (e.ContinueInstallation)
             {
                 OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),
-                    new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods));
+                    new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods),e.IsAutoInstall);
                 modSelectionList = null;
             }
             else
@@ -1222,7 +1222,8 @@ namespace RelhaxModpack
             }
         }
 
-        private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies, List<SelectablePackage> UserMods)
+        private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies,
+            List<SelectablePackage> UserMods, bool isAutoInstall)
         {
             //rookie mistake checks
             if (parsedCategoryList == null || dependencies == null || globalDependencies == null ||
@@ -1581,7 +1582,7 @@ namespace RelhaxModpack
                 if(ModpackSettings.VerboseLogging)
                     DisplayAndLogInstallErrors(results, false);
 
-                if (!ModpackSettings.AutoInstall)
+                if (!isAutoInstall)
                 {
                     if (ModpackSettings.ShowInstallCompleteWindow)
                     {

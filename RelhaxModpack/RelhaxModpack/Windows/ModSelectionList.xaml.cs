@@ -48,6 +48,8 @@ namespace RelhaxModpack.Windows
         /// The list of use mods
         /// </summary>
         public List<SelectablePackage> UserMods;
+
+        public bool IsAutoInstall = false;
     }
 
     /// <summary>
@@ -179,7 +181,8 @@ namespace RelhaxModpack.Windows
                 ParsedCategoryList = ParsedCategoryList,
                 Dependencies = Dependencies,
                 GlobalDependencies = GlobalDependencies,
-                UserMods = UserCategory.Packages
+                UserMods = UserCategory.Packages,
+                IsAutoInstall = AutoInstallMode
             });
         }
 
@@ -705,13 +708,14 @@ namespace RelhaxModpack.Windows
                     //if auto install or one-click install, don't show the UI
                     if (AutoInstallMode || ModpackSettings.OneClickInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
-                        OnSelectionListReturn(this, new SelectionListEventArgs()
+                        OnSelectionListReturn?.Invoke(this, new SelectionListEventArgs()
                         {
                             ContinueInstallation = loadSuccess,
                             ParsedCategoryList = ParsedCategoryList,
                             Dependencies = Dependencies,
                             GlobalDependencies = GlobalDependencies,
-                            UserMods = UserCategory.Packages
+                            UserMods = UserCategory.Packages,
+                            IsAutoInstall = AutoInstallMode
                         });
                     }
                     else
