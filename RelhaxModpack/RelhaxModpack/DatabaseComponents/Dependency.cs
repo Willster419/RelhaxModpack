@@ -51,12 +51,12 @@ namespace RelhaxModpack
         /// <summary>
         /// List of linked mods and configs that use this dependency at install time
         /// </summary>
-        public List<DatabaseLogic> DatabasePackageLogic = new List<DatabaseLogic>();
+        public List<DatabaseLogic> DatabasePackageLogic { get; set; } = new List<DatabaseLogic>();
 
         /// <summary>
         /// List of dependencies this dependency calls on
         /// </summary>
-        public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+        public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
 
         /// <summary>
         /// When loading from legacy database type and is was of type "logicalDependency"

@@ -54,12 +54,12 @@ namespace RelhaxModpack
         /// For direct link types, the URL to the element or resource
         /// </summary>
         /// <remarks>HTTP and HTTPS links work for this property</remarks>
-        public string URL = "";
+        public string URL { get; set; } = "";
 
         /// <summary>
         /// The type of media for the URL to be interpreted as
         /// </summary>
-        public MediaType MediaType = MediaType.Picture;
+        public MediaType MediaType { get; set; } = MediaType.Picture;
 
         /// <summary>
         /// The string properties of the object

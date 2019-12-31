@@ -32,7 +32,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The path or pattern to a file or files to backup to a temporary directory
         /// </summary>
-        public string Pattern = string.Empty;
+        public string Pattern { get; set; } = string.Empty;
 
         /// <summary>
         /// Speed up the restore backup function in case of ClanIcons, the "backup folder" will be pushed back at once (and not file by file)
