@@ -429,6 +429,11 @@
             When a databasePackage, the internal packageName. When category, the category name
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Category.Dependencies">
+            <summary>
+            List of dependencies of this category (Any package selected in this category needs these dependencies)
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Category.InstallGroup">
             <summary>
             The install group number of the category. Used to denote which install thread it is assigned to.
@@ -443,11 +448,6 @@
         <member name="F:RelhaxModpack.Category.CategoryHeader">
             <summary>
             The package created at selection list building that represents the header of this category
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Category.Dependencies">
-            <summary>
-            List of dependencies of this category (Any package selected in this category needs these dependencies)
             </summary>
         </member>
         <member name="P:RelhaxModpack.Category.DependenciesProp">
@@ -743,6 +743,11 @@
             List of dependencies this dependency calls on
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Dependency.wasLogicalDependencyLegacy">
+            <summary>
+            When loading from legacy database type and is was of type "logicalDependency"
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Dependency.DependenciesProp">
             <summary>
             Property of Dependencies list to allow for interface implementation
@@ -751,11 +756,6 @@
         <member name="P:RelhaxModpack.Dependency.ComponentInternalName">
             <summary>
             When a databasePackage, the internal packageName. When category, the category name
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Dependency.wasLogicalDependencyLegacy">
-            <summary>
-            When loading from legacy database type and is was of type "logicalDependency"
             </summary>
         </member>
         <member name="M:RelhaxModpack.Dependency.#ctor">
@@ -780,7 +780,7 @@
             The property wrapper of the Dependencies field
             </summary>
         </member>
-        <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithDependencies.ComponentInternalName">
+        <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithID.ComponentInternalName">
             <summary>
             When a databasePackage, the internal packageName. When category, the category name
             </summary>

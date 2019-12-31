@@ -9,8 +9,20 @@ namespace RelhaxModpack
     /// <summary>
     /// a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
     /// </summary>
-    public class Category : IComponentWithDependencies
+    public class Category : IComponentWithDependencies, IXmlSerializable
     {
+        #region Xml serialization
+        public string[] PropertiesForSerializationAttributes()
+        {
+            return new string[] { nameof(Name) };
+        }
+
+        public string[] PropertiesForSerializationElements()
+        {
+            return new string[] { nameof(Dependencies) };
+        }
+        #endregion
+
         #region Database Properties
         /// <summary>
         /// The category name displayed to the user in the selection list
@@ -32,6 +44,11 @@ namespace RelhaxModpack
         /// </summary>
         public string ComponentInternalName { get { return Name; } }
 
+        /// <summary>
+        /// List of dependencies of this category (Any package selected in this category needs these dependencies)
+        /// </summary>
+        public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+
         //https://stackoverflow.com/questions/1759352/how-to-mark-a-method-as-obsolete-or-deprecated
         /// <summary>
         /// The install group number of the category. Used to denote which install thread it is assigned to.
@@ -42,7 +59,6 @@ namespace RelhaxModpack
         #endregion
 
         #region UI Properties
-
         /// <summary>
         /// The TabItem object reference
         /// </summary>
@@ -52,19 +68,14 @@ namespace RelhaxModpack
         /// The package created at selection list building that represents the header of this category
         /// </summary>
         public SelectablePackage CategoryHeader = null;
-
-        /// <summary>
-        /// List of dependencies of this category (Any package selected in this category needs these dependencies)
-        /// </summary>
-        public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
-
-        /// <summary>
-        /// Property of Dependencies list to allow for interface implementation
-        /// </summary>
-        public List<DatabaseLogic> DependenciesProp { get  { return Dependencies; } set { Dependencies = value; } }
         #endregion
 
         #region Other Properties and Methods
+        /// <summary>
+        /// Property of Dependencies list to allow for interface implementation
+        /// </summary>
+        public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
+
         /// <summary>
         /// Sorts the Categories by their name property. Currently not implemented.
         /// </summary>

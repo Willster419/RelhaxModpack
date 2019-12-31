@@ -8,11 +8,20 @@ namespace RelhaxModpack
     /// <summary>
     /// A database component is the base class for all other packages
     /// </summary>
-    public class DatabasePackage
+    public class DatabasePackage : IXmlSerializable
     {
-        #region Xml parsing
+        #region Xml serialization
+        public virtual string[] PropertiesForSerializationAttributes()
+        {
+            return PackagePropertiesToXmlParseAttributes.ToArray();
+        }
 
-        private static readonly List<string> PackageElementsToXmlParseAttributes = new List<string>()
+        public virtual string[] PropertiesForSerializationElements()
+        {
+            return PackagePropertiesToXmlParseElements.ToArray();
+        }
+
+        private static readonly List<string> PackagePropertiesToXmlParseAttributes = new List<string>()
         {
             nameof(PackageName),
             nameof(Enabled),
@@ -20,7 +29,7 @@ namespace RelhaxModpack
             nameof(PatchGroup)
         };
 
-        private static readonly List<string> PackageElementsToXmlParseNodes = new List<string>()
+        private static readonly List<string> PackagePropertiesToXmlParseElements = new List<string>()
         {
             nameof(Size),
             nameof(Version),
@@ -42,7 +51,7 @@ namespace RelhaxModpack
         /// <returns>The list of fields</returns>
         public static List<string> FieldsToXmlParseAttributes()
         {
-            return new List<string>(PackageElementsToXmlParseAttributes);
+            return new List<string>(PackagePropertiesToXmlParseAttributes);
         }
 
         /// <summary>
@@ -51,7 +60,7 @@ namespace RelhaxModpack
         /// <returns>The list of fields</returns>
         public static List<string> FieldsToXmlParseNodes()
         {
-            return new List<string>(PackageElementsToXmlParseNodes);
+            return new List<string>(PackagePropertiesToXmlParseElements);
         }
         #endregion
 

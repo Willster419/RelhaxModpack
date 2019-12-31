@@ -38,21 +38,31 @@ namespace RelhaxModpack
         /// </summary>
         multi
     }
+
     /// <summary>
     /// A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
     /// </summary>
-    public class SelectablePackage : DatabasePackage, IComponentWithDependencies
+    public class SelectablePackage : DatabasePackage, IComponentWithDependencies, IXmlSerializable
     {
-        #region XML Parsing
+        #region Xml serialization
+        public override string[] PropertiesForSerializationAttributes()
+        {
+            return base.PropertiesForSerializationAttributes().Concat(SelectablePackagePropertiesToXmlParseAttributes.ToArray()).ToArray();
+        }
 
-        private static readonly List<string> SelectableElementsToXmlParseAttributes = new List<string>()
+        public override string[] PropertiesForSerializationElements()
+        {
+            return base.PropertiesForSerializationElements().Concat(SelectablePackagePropertiesToXmlParseElements.ToArray()).ToArray();
+        }
+
+        private static readonly List<string> SelectablePackagePropertiesToXmlParseAttributes = new List<string>()
         {
             nameof(Name),
             nameof(Type),
             nameof(Visible)
         };
 
-        private static readonly List<string> SelectableElementsToXmlParseNodes = new List<string>()
+        private static readonly List<string> SelectablePackagePropertiesToXmlParseElements = new List<string>()
         {
             nameof(Description),
             nameof(UpdateComment),
@@ -72,7 +82,7 @@ namespace RelhaxModpack
         /// <returns>The string list</returns>
         new public static List<string> FieldsToXmlParseAttributes()
         {
-            return DatabasePackage.FieldsToXmlParseAttributes().Concat(SelectableElementsToXmlParseAttributes).ToList();
+            return DatabasePackage.FieldsToXmlParseAttributes().Concat(SelectablePackagePropertiesToXmlParseAttributes).ToList();
         }
 
         /// <summary>
@@ -81,7 +91,7 @@ namespace RelhaxModpack
         /// <returns>The string list</returns>
         new public static List<string> FieldsToXmlParseNodes()
         {
-            return DatabasePackage.FieldsToXmlParseNodes().Concat(SelectableElementsToXmlParseNodes).ToList();
+            return DatabasePackage.FieldsToXmlParseNodes().Concat(SelectablePackagePropertiesToXmlParseElements).ToList();
         }
         #endregion
 

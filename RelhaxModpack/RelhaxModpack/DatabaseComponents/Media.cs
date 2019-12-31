@@ -1,4 +1,6 @@
-﻿namespace RelhaxModpack
+﻿using RelhaxModpack.DatabaseComponents;
+
+namespace RelhaxModpack
 {
     /// <summary>
     /// The supported types of media formats supported for preview in the application
@@ -34,8 +36,20 @@
     /// <summary>
     /// A media object is a preview-able component stored in a list in SelectablePackages
     /// </summary>
-    public class Media
+    public class Media : IXmlSerializable
     {
+        #region Xml serialization
+        public string[] PropertiesForSerializationAttributes()
+        {
+            return new string[] { nameof(MediaType), nameof(URL) };
+        }
+
+        public string[] PropertiesForSerializationElements()
+        {
+            return new string[] { };
+        }
+        #endregion
+
         /// <summary>
         /// For direct link types, the URL to the element or resource
         /// </summary>

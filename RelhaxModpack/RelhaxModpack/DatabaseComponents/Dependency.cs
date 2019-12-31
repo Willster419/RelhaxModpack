@@ -9,11 +9,20 @@ namespace RelhaxModpack
     /// Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
     /// for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency
     /// </summary>
-    public class Dependency : DatabasePackage, IComponentWithDependencies
+    public class Dependency : DatabasePackage, IComponentWithDependencies, IXmlSerializable
     {
-        #region XML parsing
+        #region Xml serialization
+        public override string[] PropertiesForSerializationAttributes()
+        {
+            return base.PropertiesForSerializationAttributes();
+        }
 
-        private static readonly List<string> DependencyElementsToXmlParseNodes = new List<string>()
+        public override string[] PropertiesForSerializationElements()
+        {
+            return base.PropertiesForSerializationElements().Concat(DependencyPropertiesToXmlParseElements.ToArray()).ToArray();
+        }
+
+        private static readonly List<string> DependencyPropertiesToXmlParseElements = new List<string>()
         {
             nameof(Dependencies)
         };
@@ -34,12 +43,11 @@ namespace RelhaxModpack
         /// <returns>The string list</returns>
         new public static List<string> FieldsToXmlParseNodes()
         {
-            return DatabasePackage.FieldsToXmlParseNodes().Concat(DependencyElementsToXmlParseNodes).ToList();
+            return DatabasePackage.FieldsToXmlParseNodes().Concat(DependencyPropertiesToXmlParseElements).ToList();
         }
         #endregion
 
         #region Database Properties
-
         /// <summary>
         /// List of linked mods and configs that use this dependency at install time
         /// </summary>
@@ -51,6 +59,14 @@ namespace RelhaxModpack
         public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
 
         /// <summary>
+        /// When loading from legacy database type and is was of type "logicalDependency"
+        /// </summary>
+        [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
+        public bool wasLogicalDependencyLegacy = false;
+        #endregion
+
+        #region Other Properties and Methods
+        /// <summary>
         /// Property of Dependencies list to allow for interface implementation
         /// </summary>
         public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
@@ -59,15 +75,6 @@ namespace RelhaxModpack
         /// When a databasePackage, the internal packageName. When category, the category name
         /// </summary>
         public string ComponentInternalName { get { return PackageName; } }
-
-        /// <summary>
-        /// When loading from legacy database type and is was of type "logicalDependency"
-        /// </summary>
-        [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
-        public bool wasLogicalDependencyLegacy = false;
-        #endregion
-
-        #region Other Properties and Methods
         /// <summary>
         /// Create an instance of the Dependency class and over-ride DatabasePackage default values
         /// </summary>
