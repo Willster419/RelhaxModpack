@@ -2025,6 +2025,21 @@ namespace RelhaxModpack
             }
         }
 
+        public static bool SetObjectProperty(object componentWithProperty, PropertyInfo propertyInfoFromComponent, string valueToSet)
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(propertyInfoFromComponent.PropertyType);
+                propertyInfoFromComponent.SetValue(componentWithProperty, converter.ConvertFrom(valueToSet));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+        }
+
         /// <summary>
         /// Dynamically assigns field properties to custom objects of a custom type of a list
         /// </summary>
@@ -2103,6 +2118,106 @@ namespace RelhaxModpack
                 }
             }
             return true;
+        }
+
+        public static void SetListEntries(IComponentWithID componentWithID, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
+        {
+            //get the list interfaced component
+            IList listProperty = listPropertyInfo.GetValue(componentWithID) as IList;
+
+            //we now have the empty list, now get type type of list it is
+            //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
+            Type listObjectType = listProperty.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
+                .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
+
+            //create the tracking lists for unknown and missing elements out here as null for first time init later
+            List<string> missingAttributes = null;
+            List<string> unknownAttributes = new List<string>();
+            List<string> unknownElements = new List<string>();
+
+            //so now we have the xml container (xmlListItems), and the internal memory container (listProperty)
+            //now for each xml element, get the value information and set it
+            //if it originates from the 
+            foreach (XElement listElement in xmlListItems)
+            {
+                //make sure object type is properly implemented into serialization system
+                if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
+                    throw new BadMemeException("Type of this list is not of IXmlSerializable");
+
+                //assign missing attributes if not done already
+                if (missingAttributes == null)
+                    missingAttributes = new List<string>(listEntry.PropertiesForSerializationAttributes());
+
+                foreach (XAttribute listEntryAttribute in listElement.Attributes())
+                {
+                    if (!listEntry.PropertiesForSerializationAttributes().Contains(listEntryAttribute.Name.LocalName))
+                    {
+                        unknownAttributes.Add(listEntryAttribute.Name.LocalName);
+                        continue;
+                    }
+
+                    PropertyInfo property = listObjectType.GetProperty(listEntryAttribute.Name.LocalName);
+
+                    //check if attribute exists in class object
+                    if(property == null)
+                    {
+                        Logging.Error("Property (xml attribute) {0} exists in array for serialization, but not in class design!, ", listEntryAttribute.Name.LocalName);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        continue;
+                    }
+
+                    //remove from list of potential missing mandatory elements
+                    missingAttributes.Remove(listEntryAttribute.Name.LocalName);
+
+                    if(!SetObjectProperty(listEntry, property, listEntryAttribute.Value))
+                    {
+                        Logging.Error("Failed to set property {0} for element in IList", property.Name);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    }
+                }
+
+                foreach(XElement listEntryElement in listElement.Elements())
+                {
+                    if (!listEntry.PropertiesForSerializationElements().Contains(listEntryElement.Name.LocalName))
+                    {
+                        unknownElements.Add(listEntryElement.Name.LocalName);
+                        continue;
+                    }
+
+                    PropertyInfo property = listObjectType.GetProperty(listEntryElement.Name.LocalName);
+
+                    if (property == null)
+                    {
+                        Logging.Error("Property (xml element) {0} exists in array for serialization, but not in class design!, ", listEntryElement.Name.LocalName);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        continue;
+                    }
+
+                    //no missing elements (elements are optional)
+
+                    if (!SetObjectProperty(listEntry, property, listEntryElement.Value))
+                    {
+                        Logging.Error("Failed to set property {0} for element in IList", property.Name);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    }
+                }
+
+                //logging unknown and missings
+                foreach (string missingAttribute in missingAttributes)
+                {
+                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", missingAttribute, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                }
+                foreach (string unknownAttribute in unknownAttributes)
+                {
+                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                }
+                foreach (string unknownElement in unknownElements)
+                {
+                    Logging.Error("Unknown xml element: {0}, package: {1}, line: {2}", unknownElement, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                }
+
+                listProperty.Add(listEntry);
+            }
         }
         #endregion
 
