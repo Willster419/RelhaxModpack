@@ -2146,6 +2146,7 @@ namespace RelhaxModpack
             //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
             Type listObjectType = listProperty.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
                 .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
+            Logging.Debug("[SetListEntries]: Object type in list is '{0}'", listObjectType.Name);
 
             //create the tracking lists for unknown and missing elements out here as null for first time init later
             List<string> missingAttributes = null;
@@ -2166,6 +2167,7 @@ namespace RelhaxModpack
                         continue;
                     }
                 }
+
                 //make sure object type is properly implemented into serialization system
                 if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
                     throw new BadMemeException("Type of this list is not of IXmlSerializable");
@@ -2215,7 +2217,7 @@ namespace RelhaxModpack
                     if (property == null)
                     {
                         Logging.Error("Property (xml element) {0} exists in array for serialization, but not in class design!, ", listEntryElement.Name.LocalName);
-                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
                         continue;
                     }
 
@@ -2224,7 +2226,7 @@ namespace RelhaxModpack
                     if (!SetObjectProperty(listEntry, property, listEntryElement.Value))
                     {
                         Logging.Error("Failed to set property {0} for element in IList", property.Name);
-                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
                     }
                 }
 
