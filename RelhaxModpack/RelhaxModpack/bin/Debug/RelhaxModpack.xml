@@ -7748,7 +7748,7 @@
             <param name="parsedCategoryList">The list of categories</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.XmlUtils.LoadDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Category})">
+        <member name="M:RelhaxModpack.XmlUtils.ParseDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Category})">
             <summary>
             Parse a database into version 1.1 from XDocument objects
             </summary>
