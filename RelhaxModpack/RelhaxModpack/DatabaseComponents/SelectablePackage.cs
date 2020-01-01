@@ -365,7 +365,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Toggle if the package should appear in the search list
         /// </summary>
-        public bool ShowInSearchList = true;
+        public bool ShowInSearchList { get; set; } = true;
 
         /// <summary>
         /// When a databasePackage, the internal packageName. When category, the category name
