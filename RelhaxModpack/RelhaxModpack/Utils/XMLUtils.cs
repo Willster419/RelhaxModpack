@@ -2364,15 +2364,23 @@ namespace RelhaxModpack
         {
             //make root of document
             XmlDocument doc = new XmlDocument();
+
+            //add declaration
             //https://stackoverflow.com/questions/334256/how-do-i-add-a-custom-xmldeclaration-with-xmldocument-xmldeclaration
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             doc.AppendChild(xmlDeclaration);
+
             //database root modInfo.Xml
             XmlElement root = doc.CreateElement("modInfoAlpha.xml");
+
+            //add version and onlineFolder attributes to modInfoAlpha.xml element
             root.SetAttribute("version", gameVersion.Trim());
             root.SetAttribute("onlineFolder", onlineFolderVersion.Trim());
-            //append the version information, game and online folder
+
+            //put root element into document
             doc.AppendChild(root);
+
+            //
             switch (versionToSaveAs)
             {
                 case DatabaseXmlVersion.Legacy:
@@ -2405,18 +2413,21 @@ namespace RelhaxModpack
         public static void SaveDatabase1V1(string savePath, XmlDocument doc, List<DatabasePackage> globalDependencies,
         List<Dependency> dependencies, List<Category> parsedCatagoryList)
         {
-            //save the root/header database file
+            //create root document (contains filenames for all other xml documents)
             XmlElement root = doc.DocumentElement;
             root.SetAttribute("documentVersion", "1.1");
 
+            //create and append globalDependencies
             XmlElement xmlGlobalDependencies = doc.CreateElement("globalDependencies");
-            xmlGlobalDependencies.SetAttribute("file", "globalDependencies.Xml");
+            xmlGlobalDependencies.SetAttribute("file", "globalDependencies.xml");
             root.AppendChild(xmlGlobalDependencies);
 
+            //create and append dependencies
             XmlElement xmlDependencies = doc.CreateElement("dependencies");
-            xmlDependencies.SetAttribute("file", "dependencies.Xml");
+            xmlDependencies.SetAttribute("file", "dependencies.xml");
             root.AppendChild(xmlDependencies);
 
+            //create and append categories
             XmlElement xmlCategories = doc.CreateElement("categories");
             foreach(Category cat in parsedCatagoryList)
             {
@@ -2424,30 +2435,32 @@ namespace RelhaxModpack
                 if (string.IsNullOrWhiteSpace(cat.XmlFilename))
                 {
                     cat.XmlFilename = cat.Name.Replace(" ", string.Empty);
-                    cat.XmlFilename = cat.XmlFilename.Replace("/", "_") + ".Xml";
+                    cat.XmlFilename = cat.XmlFilename.Replace("/", "_") + ".xml";
                 }
                 xmlCategory.SetAttribute("file", cat.XmlFilename);
                 xmlCategories.AppendChild(xmlCategory);
             }
             root.AppendChild(xmlCategories);
-            doc.Save(Path.Combine(savePath, "database.Xml"));
+            doc.Save(Path.Combine(savePath, "database.xml"));
 
-            //save each of the other lists
+            //save the actual xml files for database entries
+            //globalDependency
             XmlDocument xmlGlobalDependenciesFile = new XmlDocument();
             XmlDeclaration xmlDeclaration = xmlGlobalDependenciesFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             xmlGlobalDependenciesFile.AppendChild(xmlDeclaration);
             XmlElement xmlGlobalDependenciesFileRoot = xmlGlobalDependenciesFile.CreateElement("GlobalDependencies");
             SaveDatabaseList1V1(globalDependencies, xmlGlobalDependenciesFileRoot, xmlGlobalDependenciesFile, "GlobalDependency");
             xmlGlobalDependenciesFile.AppendChild(xmlGlobalDependenciesFileRoot);
-            xmlGlobalDependenciesFile.Save(Path.Combine(savePath, "globalDependencies.Xml"));
+            xmlGlobalDependenciesFile.Save(Path.Combine(savePath, "globalDependencies.xml"));
 
+            //dependency
             XmlDocument xmlDependenciesFile = new XmlDocument();
             xmlDeclaration = xmlDependenciesFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             xmlDependenciesFile.AppendChild(xmlDeclaration);
             XmlElement xmlDependenciesFileRoot = xmlDependenciesFile.CreateElement("Dependencies");
             SaveDatabaseList1V1(dependencies, xmlDependenciesFileRoot, xmlDependenciesFile, "Dependency");
             xmlDependenciesFile.AppendChild(xmlDependenciesFileRoot);
-            xmlDependenciesFile.Save(Path.Combine(savePath, "dependencies.Xml"));
+            xmlDependenciesFile.Save(Path.Combine(savePath, "dependencies.xml"));
 
             //for each category do the same thing
             foreach (Category cat in parsedCatagoryList)
@@ -2457,6 +2470,7 @@ namespace RelhaxModpack
                 xmlCategoryFile.AppendChild(xmlDeclaration);
                 XmlElement xmlCategoryFileRoot = xmlCategoryFile.CreateElement("Category");
                 xmlCategoryFileRoot.SetAttribute("Name", cat.Name);
+
                 //need to incorporate the fact that categories have dependencies
                 if (cat.Dependencies.Count > 0)
                 {
@@ -2464,14 +2478,17 @@ namespace RelhaxModpack
                     foreach(DatabaseLogic logic in cat.Dependencies)
                     {
                         XmlElement xmlCategoryDependency = xmlCategoryFile.CreateElement("Dependency");
-                        foreach(FieldInfo info in typeof(DatabaseLogic).GetFields())
+                        foreach(string attributeToSave in logic.PropertiesForSerializationAttributes())
                         {
-                            xmlCategoryDependency.SetAttribute(info.Name,info.GetValue(logic).ToString());
+                            PropertyInfo propertyInfo = logic.GetType().GetProperty(attributeToSave);
+                            xmlCategoryDependency.SetAttribute(propertyInfo.Name, propertyInfo.GetValue(logic).ToString());
                         }
                         xmlCategoryDependencies.AppendChild(xmlCategoryDependency);
                     }
                     xmlCategoryFileRoot.AppendChild(xmlCategoryDependencies);
                 }
+
+                //then save packages
                 SaveDatabaseList1V1(cat.Packages, xmlCategoryFileRoot, xmlCategoryFile, "Package");
                 xmlCategoryFile.AppendChild(xmlCategoryFileRoot);
                 xmlCategoryFile.Save(Path.Combine(savePath, cat.XmlFilename));
@@ -2484,149 +2501,125 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="packagesToSave">The generic list of packages to save</param>
         /// <param name="documentRootElement">The element that will be holding this list</param>
-        /// <param name="docToMakeElementsFrom">The document needed to create Xml elements and attributes</param>
-        /// <param name="nameToSaveElementsBy">The string name to save the Xml element name by</param>
+        /// <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
+        /// <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
         private static void SaveDatabaseList1V1(IList packagesToSave, XmlElement documentRootElement, XmlDocument docToMakeElementsFrom, string nameToSaveElementsBy)
         {
-            //save based on each type it is
-            List<string> membersToXmlSaveAsAttributes = null;
-            List<string> membersToXmlSaveAsNodes = null;
-            FieldInfo[] fields = null;
-            PropertyInfo[] properties = null;
-            XmlElement PackageHolder = null;
-            DatabasePackage samplePackageDefaults = null;
+            //based on list type, get list of elements and attributes to save as
+            //get the type of element in the list
+            Type listObjectType = packagesToSave.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
+                .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
 
-            if (packagesToSave is List<DatabasePackage>)
-            {
-                membersToXmlSaveAsAttributes = new List<string>(DatabasePackage.FieldsToXmlParseAttributes());
-                membersToXmlSaveAsNodes = new List<string>(DatabasePackage.FieldsToXmlParseNodes());
-                fields = typeof(DatabasePackage).GetFields();
-                properties = typeof(DatabasePackage).GetProperties();
-                samplePackageDefaults = new DatabasePackage();
-            }
-            else if (packagesToSave is List<Dependency>)
-            {
-                membersToXmlSaveAsAttributes = new List<string>(Dependency.FieldsToXmlParseAttributes());
-                membersToXmlSaveAsNodes = new List<string>(Dependency.FieldsToXmlParseNodes());
-                fields = typeof(Dependency).GetFields();
-                properties = typeof(Dependency).GetProperties();
-                samplePackageDefaults = new Dependency();
-            }
-            else if (packagesToSave is List<SelectablePackage>)
-            {
-                membersToXmlSaveAsAttributes = new List<string>(SelectablePackage.FieldsToXmlParseAttributes());
-                membersToXmlSaveAsNodes = new List<string>(SelectablePackage.FieldsToXmlParseNodes());
-                fields = typeof(SelectablePackage).GetFields();
-                properties = typeof(SelectablePackage).GetProperties();
-                samplePackageDefaults = new SelectablePackage();
-            }
+            if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
+                throw new BadMemeException("Type of this list is not of IXmlSerializable");
 
+            //parse for each package type
             for (int i = 0; i < packagesToSave.Count; i++)
             {
                 //it's at least a databasePackage
                 DatabasePackage packageToSaveOfAnyType = (DatabasePackage)packagesToSave[i];
                 SelectablePackage packageOnlyUsedForNames = packageToSaveOfAnyType as SelectablePackage;
+
                 //make the element to save to
-                PackageHolder = docToMakeElementsFrom.CreateElement(nameToSaveElementsBy);
+                XmlElement PackageHolder = docToMakeElementsFrom.CreateElement(nameToSaveElementsBy);
+
                 //iterate through each of the attributes and nodes in the arrays to allow for listing in custom order
-                foreach(string memberAttribute in membersToXmlSaveAsAttributes)
+                foreach(string attributeToSave in listEntry.PropertiesForSerializationAttributes())
                 {
-                    //first check if it is in fields, then if it is in properties
-                    FieldInfo[] fieldMatches = fields.Where(f => f.Name.Equals(memberAttribute)).ToArray();
-                    PropertyInfo[] propertyMatches = properties.Where(p => p.Name.Equals(memberAttribute)).ToArray();
-                    if (fieldMatches.Count() == 1)
-                    {
-                        FieldInfo fieldInType = fieldMatches[0];
-                        PackageHolder.SetAttribute(fieldInType.Name, Utils.MacroReplace(fieldInType.GetValue(packageToSaveOfAnyType).ToString(), ReplacementTypes.TextEscape));
-                    }
-                    else if (propertyMatches.Count() == 1)
-                    {
-                        PropertyInfo propertyInType = propertyMatches[0];
-                        PackageHolder.SetAttribute(propertyInType.Name, propertyInType.GetValue(packageToSaveOfAnyType).ToString());
-                    }
-                    else
-                        throw new BadMemeException("this should not happen. something is very wrong");
+                    PropertyInfo propertyOfPackage = listEntry.GetType().GetProperty(attributeToSave);
+                    //attributs are value types, so just set it
+                    PackageHolder.SetAttribute(propertyOfPackage.Name, propertyOfPackage.GetValue(packageToSaveOfAnyType).ToString());
                 }
-                foreach (string memberNode in membersToXmlSaveAsNodes)
+
+                foreach (string elementToSave in listEntry.PropertiesForSerializationElements())
                 {
-                    FieldInfo[] fieldMatches = fields.Where(f => f.Name.Equals(memberNode)).ToArray();
-                    PropertyInfo[] propertyMatches = properties.Where(p => p.Name.Equals(memberNode)).ToArray();
-                    if (fieldMatches.Count() == 1)
+                    PropertyInfo propertyOfPackage = listEntry.GetType().GetProperty(elementToSave);
+
+                    //check if it's a package list of packages
+                    if (packageOnlyUsedForNames != null && propertyOfPackage.Name.Equals(nameof(packageOnlyUsedForNames.Packages)) && packageOnlyUsedForNames.Packages.Count > 0)
                     {
-                        FieldInfo fieldInType = fieldMatches[0];
-                        //check if it's a package list of packages
-                        if (fieldInType.Name.Equals(nameof(packageOnlyUsedForNames.Packages)) && packageOnlyUsedForNames.Packages.Count > 0)
+                        XmlElement packagesHolder = docToMakeElementsFrom.CreateElement(nameof(packageOnlyUsedForNames.Packages));
+                        SaveDatabaseList1V1(packageOnlyUsedForNames.Packages, packagesHolder, docToMakeElementsFrom, nameToSaveElementsBy);
+                        PackageHolder.AppendChild(packagesHolder);
+                    }
+                    //if it is a list type like media or
+                    else if (typeof(IEnumerable).IsAssignableFrom(propertyOfPackage.PropertyType) && !propertyOfPackage.PropertyType.Equals(typeof(string)))
+                    {
+                        //get the list type to allow for itterate
+                        IList list = (IList)propertyOfPackage.GetValue(packageToSaveOfAnyType);
+
+                        //if there's no items, then don't bother
+                        if (list.Count == 0)
+                            continue;
+
+                        //get the types of objects stored in this list
+                        Type objectTypeInList = list[0].GetType();
+
+                        if (!(Activator.CreateInstance(objectTypeInList) is IXmlSerializable subListEntry))
+                            throw new BadMemeException("Type of this list is not of IXmlSerializable");
+
+                        //elementFieldHolder is holder for list type like "Medias" (the property name)
+                        XmlElement elementFieldHolder = docToMakeElementsFrom.CreateElement(propertyOfPackage.Name);
+                        for (int k = 0; k < list.Count; k++)
                         {
-                            XmlElement packagesHolder = docToMakeElementsFrom.CreateElement(nameof(packageOnlyUsedForNames.Packages));
-                            SaveDatabaseList1V1(packageOnlyUsedForNames.Packages, packagesHolder, docToMakeElementsFrom, nameToSaveElementsBy);
-                            PackageHolder.AppendChild(packagesHolder);
-                        }
-                        //if it is a list type like media or
-                        else if (typeof(IEnumerable).IsAssignableFrom(fieldInType.FieldType) && !fieldInType.FieldType.Equals(typeof(string)))
-                        {
-                            //get the list type to allow for itterate
-                            IList list = (IList)fieldInType.GetValue(packageToSaveOfAnyType);
-                            //if there's no items, then don't bother
-                            if (list.Count == 0)
-                                continue;
-                            //get the types of objects stored in this list
-                            Type objectTypeInList = list.GetType().GetInterfaces().Where(j => j.IsGenericType && j.GenericTypeArguments.Length == 1)
-                                .FirstOrDefault(j => j.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
-                            //elementFieldHolder is holder for list type like "Medias"
-                            XmlElement elementFieldHolder = docToMakeElementsFrom.CreateElement(fieldInType.Name);
-                            for (int k = 0; k < list.Count; k++)
+                            //list element value like "Media"
+                            string objectInListName = objectTypeInList.Name;
+
+                            //hard code compatibility "DatabaseLogic" -> "Dependency"
+                            if (objectInListName.Equals(nameof(DatabaseLogic)))
+                                objectInListName = nameof(Dependency);
+
+                            //create the xml holder based on object name like "Media"
+                            XmlElement elementFieldValue = docToMakeElementsFrom.CreateElement(objectInListName);
+
+                            //if it's a single value type (like string)
+                            if(objectTypeInList.IsValueType)
                             {
-                                //list element value like "Media"
-                                string objectInListName = objectTypeInList.Name;
-                                //hard code compatibility "DatabaseLogic" -> "Dependency"
-                                if (objectInListName.Equals(nameof(DatabaseLogic)))
-                                    objectInListName = nameof(Dependency);
-                                XmlElement elementFieldValue = docToMakeElementsFrom.CreateElement(objectInListName);
-                                //could be a custom type with many fields, or a single type with no fields
-                                FieldInfo[] fieldsInCustomType = objectTypeInList.GetFields();
-                                if (fieldsInCustomType.Count() == 0)
+                                elementFieldValue.InnerText = list[k].ToString();
+                            }
+                            else
+                            {
+                                //custom type like media
+                                //store attributes
+                                foreach(string attributeToSave in subListEntry.PropertiesForSerializationAttributes())
                                 {
-                                    //single type like int or string
-                                    elementFieldValue.InnerText = list[k].ToString();
+                                    PropertyInfo attributeProperty = objectTypeInList.GetProperty(attributeToSave);
+                                    elementFieldValue.SetAttribute(attributeProperty.Name, attributeProperty.GetValue(list[k]).ToString());
                                 }
-                                else
+                                
+                                //store elements
+                                foreach(string elementsToSave in subListEntry.PropertiesForSerializationElements())
                                 {
-                                    //custom type like media
-                                    foreach (FieldInfo field in objectTypeInList.GetFields())
+                                    PropertyInfo elementProperty = objectTypeInList.GetProperty(elementToSave);
+                                    string defaultValue = elementProperty.GetValue(subListEntry).ToString();
+                                    string currentValue = elementProperty.GetValue(list[k]).ToString();
+                                    if(currentValue != defaultValue)
                                     {
-                                        //at this time all custom classes only use fields and are stored as attributes
-                                        elementFieldValue.SetAttribute(field.Name, field.GetValue(list[k]).ToString());
+                                        XmlElement elementOfCustomType = docToMakeElementsFrom.CreateElement(elementToSave);
+                                        elementOfCustomType.InnerText = currentValue;
+                                        elementFieldValue.AppendChild(elementOfCustomType);
                                     }
                                 }
-                                elementFieldHolder.AppendChild(elementFieldValue);
                             }
-                            PackageHolder.AppendChild(elementFieldHolder);
+
+                            //add the "Media" to the "Medias"
+                            elementFieldHolder.AppendChild(elementFieldValue);
                         }
-                        else
-                        {
-                            XmlElement element = docToMakeElementsFrom.CreateElement(fieldInType.Name);
-                            element.InnerText = fieldInType.GetValue(packageToSaveOfAnyType).ToString();
-                            string defaultFieldValue = fieldInType.GetValue(samplePackageDefaults).ToString();
-                            //only save node values when they are not default
-                            if (!element.InnerText.Equals(defaultFieldValue))
-                            {
-                                element.InnerText = Utils.MacroReplace(element.InnerText, ReplacementTypes.TextEscape);
-                                PackageHolder.AppendChild(element);
-                            }
-                        }
+                        PackageHolder.AppendChild(elementFieldHolder);
                     }
-                    else if (propertyMatches.Count() == 1)
-                    {
-                        PropertyInfo propertyInType = propertyMatches[0];
-                        //at this time, properties don't store list attributes nor are packages lists
-                        XmlElement element = docToMakeElementsFrom.CreateElement(propertyInType.Name);
-                        element.InnerText = propertyInType.GetValue(packageToSaveOfAnyType).ToString();
-                        string defaultFieldValue = propertyInType.GetValue(samplePackageDefaults).ToString();
-                        if (!element.InnerText.Equals(defaultFieldValue))
-                            PackageHolder.AppendChild(element);
-                    }
+                    //
                     else
-                        throw new BadMemeException("this should not happen. something is very wrong");
+                    {
+                        XmlElement element = docToMakeElementsFrom.CreateElement(propertyOfPackage.Name);
+                        element.InnerText = propertyOfPackage.GetValue(packageToSaveOfAnyType).ToString();
+                        string defaultFieldValue = propertyOfPackage.GetValue(listEntry).ToString();
+                        //only save node values when they are not default
+                        if (!element.InnerText.Equals(defaultFieldValue))
+                        {
+                            element.InnerText = Utils.MacroReplace(element.InnerText, ReplacementTypes.TextEscape);
+                            PackageHolder.AppendChild(element);
+                        }
+                    }
                 }
                 //save them to the holder
                 documentRootElement.AppendChild(PackageHolder);
