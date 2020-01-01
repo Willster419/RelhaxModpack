@@ -41,7 +41,8 @@ namespace RelhaxModpack
         #region Xml serialization
         public string[] PropertiesForSerializationAttributes()
         {
-            return new string[] { nameof(MediaType), nameof(URL) };
+            //return new string[] { nameof(MediaType), nameof(URL) };
+            return new string[] { nameof(URL), nameof(MediaType) };
         }
 
         public string[] PropertiesForSerializationElements()
