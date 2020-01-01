@@ -8,7 +8,7 @@ namespace RelhaxModpack
     /// <summary>
     /// A database component is the base class for all other packages
     /// </summary>
-    public class DatabasePackage : IXmlSerializable
+    public class DatabasePackage : IXmlSerializable, IComponentWithID
     {
         #region Xml serialization
         public virtual string[] PropertiesForSerializationAttributes()
@@ -203,6 +203,8 @@ namespace RelhaxModpack
         /// Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
         /// </summary>
         public bool ExtractionStarted { get; set; } = false;
+
+        public string ComponentInternalName { get { return PackageName; } }
 
         public DownloadInstructions DownloadInstructions { get; set; } = null;
 
