@@ -2030,7 +2030,6 @@ namespace RelhaxModpack
             //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
             Type listObjectType = listProperty.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
                 .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
-            Logging.Debug("[SetListEntries]: Object type in list is '{0}'", listObjectType.Name);
 
             //create the tracking lists for unknown and missing elements out here as null for first time init later
             List<string> missingAttributes = null;
