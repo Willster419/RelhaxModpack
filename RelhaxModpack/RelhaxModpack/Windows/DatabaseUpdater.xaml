@@ -28,7 +28,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem x:Name="UpdateDatabaeTab" Header="Update Database">
+            <TabItem x:Name="UpdateDatabaeTab" Header="Update Database (V1)">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                         <TextBox x:Name="UpdateDatabaseStep0" Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!" TextAlignment="Left" IsReadOnly="True"/>
@@ -46,7 +46,7 @@
                             <Button x:Name="UpdateDatabaseStep8_EU_ENG" Content="EU ENG"  Margin="5,0,0,0" Click="UpdateDatabaseStep8_EU_ENG_Click"/>
                             <Button x:Name="UpdateDatabaseStep8_EU_GER" Content="EU GER"  Margin="5,0,0,0" Click="UpdateDatabaseStep8_EU_GER_Click"/>
                         </StackPanel>
-                        <CheckBox Content="Save V2 structure test as well?" IsChecked="True" x:Name="SaveV2StructureTest"/>
+                        <CheckBox Content="Save V2 test database as well?" IsChecked="True" x:Name="SaveV2StructureTest"/>
                     </StackPanel>
                     <ProgressBar x:Name="TotalUpdateProgressBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="22"/>
                     <ProgressBar x:Name="FileDownloadProgresBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="15" Margin="0,0,0,25" Visibility="Hidden"/>
