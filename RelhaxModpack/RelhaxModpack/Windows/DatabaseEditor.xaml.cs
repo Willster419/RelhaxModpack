@@ -73,7 +73,7 @@ namespace RelhaxModpack.Windows
             Logging.Editor("Loading editor settings");
             if (!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
             {
-                Logging.Editor("Failed to load editor settings, using defaults");
+                Logging.Editor("Failed to load editor settings, using defaults", LogLevel.Warning);
             }
             else
             {
@@ -98,29 +98,40 @@ namespace RelhaxModpack.Windows
                     Logging.Editor("file does not exist");
                 }
             }
+
             //load the trigger box with trigger options
             LoadedTriggersComboBox.Items.Clear();
             foreach (Trigger t in InstallerComponents.InstallEngine.Triggers)
             {
                 LoadedTriggersComboBox.Items.Add(t.Name);
             }
+
             //hook up timer
             DragDropTimer.Tick += OnDragDropTimerTick;
             SearchBox.Items.Clear();
+
             //set the items for the triggers combobox. this only needs to be done once anyways
             LoadedTriggersComboBox.Items.Clear();
             foreach (string s in InstallerComponents.InstallEngine.CompleteTriggerList)
                 LoadedTriggersComboBox.Items.Add(s);
             Init = false;
-            if (!LaunchedFromMainWindow)
+
+            if (!CommandLineSettings.SkipUpdate)
             {
-                Task.Run(async () =>
+                if (!LaunchedFromMainWindow)
                 {
-                    if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                    Task.Run(async () =>
                     {
-                        MessageBox.Show("Your application is out of date. Please launch the application normally to update");
-                    }
-                });
+                        if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                        {
+                            MessageBox.Show("Your application is out of date. Please launch the application normally to update");
+                        }
+                    });
+                }
+            }
+            else
+            {
+                Logging.Editor("Skipping update check from command line setting", LogLevel.Warning);
             }
         }
 
