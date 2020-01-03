@@ -689,6 +689,7 @@ namespace RelhaxModpack.Windows
             Logging.Editor("ShowDatabaseObject(), package showing = {0}", LogLevel.Info, package.PackageName);
             //load all items in the databasePackage level first
             //basic tab
+            //set text field texts
             PackagePackageNameDisplay.Text = package.PackageName;
             PackageStartAddressDisplay.Text = package.StartAddress;
             PackageZipFileDisplay.Text = package.ZipFile;
@@ -696,6 +697,8 @@ namespace RelhaxModpack.Windows
             PackageVersionDisplay.Text = package.Version;
             PackageAuthorDisplay.Text = package.Author;
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
+
+            //locate and select the patchGroup and installGroup of the package
             foreach (int i in PackageInstallGroupDisplay.Items)
             {
                 if (i == package.InstallGroup)
@@ -712,6 +715,8 @@ namespace RelhaxModpack.Windows
                     break;
                 }
             }
+
+            //some checkboxes
             PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
             PackageEnabledDisplay.IsChecked = package.Enabled;
 
@@ -739,6 +744,7 @@ namespace RelhaxModpack.Windows
                 ConflictingPackagesMessagebox.Text = "Above is list packages that use this dependency";
 
                 //display all the dependencies and packages that use the selected dependency
+                //check dependencies that use this dependency
                 foreach (Dependency dependencyy in Dependencies)
                 {
                     //don't add itself
@@ -750,11 +756,21 @@ namespace RelhaxModpack.Windows
                             //the fact i'm not breaking can help determine if a package has the dependency listed twice
                             PackageConflictingPackagesDisplay.Items.Add(dependencyy);
                 }
+                //check selectablePackages that use this dependency
                 foreach (SelectablePackage selectablePackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
                 {
                     foreach (DatabaseLogic logic in selectablePackage.Dependencies)
                         if (logic.PackageName.Equals(dependency.PackageName))
                             PackageConflictingPackagesDisplay.Items.Add(selectablePackage);
+                }
+                //check categories that use this dependency
+                foreach(Category cat in ParsedCategoryList)
+                {
+                    foreach(DatabaseLogic logic in cat.Dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
+                            PackageConflictingPackagesDisplay.Items.Add(cat);
+                    }
                 }
 
                 //also disable the "remove conflicting package" button since it won't work for these
