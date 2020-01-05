@@ -1650,7 +1650,7 @@ namespace RelhaxModpack
             //Component: helperTextShort
             //
             English.Add("helperTextShort", "Welcome to the Relhax Modpack!");
-            German.Add("helperTextShort", "Willkommen beim Relhax Modpack!");
+            German.Add("helperTextShort", "Willkommen zum Relhax Modpack!");
             Polish.Add("helperTextShort", "Witamy w paczce Relhax!");
             French.Add("helperTextShort", "Bienvenue au Modpack Relhax!");
             Spanish.Add("helperTextShort", "¡Bienvenido a RelHax Modpack!");
