@@ -1632,8 +1632,12 @@ namespace RelhaxModpack
             //
             English.Add("HelperText", "Welcome to the Relhax Modpack! I have tried to make the modpack as straight-forward as possible, but questions may still arise." +
                 " Hover over a setting to have it explained.");
-            German.Add("HelperText", "Willkommen im Relhax Modpack! Ich habe versucht, das Modpack so einfach wie möglich zu gestalten, aber Fragen können dennoch entstehen." +
-                " Rechtsklick auf eine Einstellung erklärt diese dann.");
+            German.Add("HelperText", "Willkommen beim Relhax Modpack!" +
+                " \n\nIch habe versucht, das Modpack so einfach wie möglich zu gestalten. " +
+                " \nZum Beispiel kannst du mit einem Klick der rechten Maustaste auf einen Eintrag eine Beschreibung oder Vorschau anzeigen." +
+                " \nNatürlich können dennoch Fragen entstehen." +
+                " In so einem Fall nutze bitte eine unserer unten angezeigten Kontaktmöglichkeiten." +
+                " \n\nVielen Dank für die Nutzung des Relhax Modpacks\n - Willster419");
             Polish.Add("HelperText", "Witaj w Modpacku Relhax!\n\nMoim celem było stworzenie paczki modów tak prostej, jak to tylko możliwe,\n" +
                 "ale jeśli nadal czujesz się nieco zagubiony, po prostu najedź kursorem na dowolną opcję i przeczytaj jej opis.");
             French.Add("HelperText", "Bienvenue au Modpack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir." +
