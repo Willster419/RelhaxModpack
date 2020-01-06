@@ -54,6 +54,33 @@
                     <Button Content="Cancel Download" HorizontalAlignment="Right"  VerticalAlignment="Bottom" Margin="0,0,0,42" Width="106" x:Name="CancelDownloadButon" Click="CancelDownloadButon_Click" Visibility="Hidden"/>
                 </Grid>
             </TabItem>
+            <TabItem x:Name="UpdateDatabaseV2Tab" Header="Update Database (V2)">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBox x:Name="UpdateDatabaseV2Step0" Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!"
+                                 TextAlignment="Left" IsReadOnly="True"/>
+                        <Button x:Name="UpdateDatabaseV2Step1" Content="Step 1: Load database" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
+                        <Button x:Name="UpdateDatabaseV2Step2" Content="Step 2: Update zip database via PHP script (bigmods)" HorizontalContentAlignment="Left"
+                                Click="UpdateDatabaseV2Step2_Click"/>
+                        <Button x:Name="UpdateDatabaseV2Step3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left"
+                                Click="UpdateDatabaseV2Step3_Click"/>
+                        <Button x:Name="UpdateDatabaseV2Step4" Content="Step 4: Upload changed" HorizontalContentAlignment="Left"
+                                Click="UpdateDatabaseStep4_Click"/>
+                        <Button x:Name="UpdateDatabaseV2Step5" Content="Step 5: Run script CreateModInfo.php"
+                                HorizontalContentAlignment="Left" Click="UpdateDatabaseV2Step5_Click"/>
+                        <Button x:Name="UpdateDatabaseV2Step6" Content="Step 6: Run script CreateManagerInfo.php"
+                                HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6b_Click"/>
+                        <TextBox x:Name="UpdateDatabaseV2Step7" Height="35" TextWrapping="Wrap"
+                                 Text="Step 7: Commit repository changes update with message: &quot;made database public&quot;" IsReadOnly="True"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="UpdateDatabaseV2Step8" Height="23" TextWrapping="Wrap" Text="Step 8: Post database update on discord/forums" Margin="0,0,5,0" IsReadOnly="True"/>
+                            <Button x:Name="UpdateDatabaseV2Step8_NA_ENG" Content="NA"  Margin="0,0,0,0" Click="UpdateDatabasestep8_NA_ENG_Click"/>
+                            <Button x:Name="UpdateDatabaseV2Step8_EU_ENG" Content="EU ENG"  Margin="5,0,0,0" Click="UpdateDatabaseStep8_EU_ENG_Click"/>
+                            <Button x:Name="UpdateDatabaseV2Step8_EU_GER" Content="EU GER"  Margin="5,0,0,0" Click="UpdateDatabaseStep8_EU_GER_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
             <TabItem x:Name="UpdateApplicationV1Tab" Header="Update Application (V1)">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel >
