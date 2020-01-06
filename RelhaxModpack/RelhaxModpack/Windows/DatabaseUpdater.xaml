@@ -60,7 +60,7 @@
                         <TextBox x:Name="UpdateDatabaseV2Step0" Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!"
                                  TextAlignment="Left" IsReadOnly="True"/>
                         <Button x:Name="UpdateDatabaseV2Step1" Content="Step 1: Load database" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
-                        <Button x:Name="UpdateDatabaseV2Step2" Content="Step 2: Update zip database via PHP script (bigmods)" HorizontalContentAlignment="Left"
+                        <Button x:Name="UpdateDatabaseV2Step2" Content="Step 2: Update zip database via PHP script" HorizontalContentAlignment="Left"
                                 Click="UpdateDatabaseV2Step2_Click"/>
                         <Button x:Name="UpdateDatabaseV2Step3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left"
                                 Click="UpdateDatabaseV2Step3_Click"/>
@@ -69,7 +69,7 @@
                         <Button x:Name="UpdateDatabaseV2Step5" Content="Step 5: Run script CreateModInfo.php"
                                 HorizontalContentAlignment="Left" Click="UpdateDatabaseV2Step5_Click"/>
                         <Button x:Name="UpdateDatabaseV2Step6" Content="Step 6: Run script CreateManagerInfo.php"
-                                HorizontalContentAlignment="Left" Click="UpdateDatabaseStep6b_Click"/>
+                                HorizontalContentAlignment="Left" Click="UpdateDatabaseV2Step6_Click"/>
                         <TextBox x:Name="UpdateDatabaseV2Step7" Height="35" TextWrapping="Wrap"
                                  Text="Step 7: Commit repository changes update with message: &quot;made database public&quot;" IsReadOnly="True"/>
                         <StackPanel Orientation="Horizontal">
