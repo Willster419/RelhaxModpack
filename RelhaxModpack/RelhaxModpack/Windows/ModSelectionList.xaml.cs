@@ -340,9 +340,8 @@ namespace RelhaxModpack.Windows
                             /////////
 
                             //V1 here
-                            //aparently the #warning directive in this file causes an intellisense error with XDocuemtn for some reason
                             #warning using V1 beta database in ModSelectionList
-                            rootXml = Settings.BetaDatabaseV1URL;
+                            //rootXml = Settings.BetaDatabaseV1URL;
 #pragma warning restore CS0618
                             /////////
 
@@ -420,57 +419,68 @@ namespace RelhaxModpack.Windows
 
                     case DatabaseVersions.Beta:
                         //for 2.0
-                        /*
+                        
                         string rootbetaDBURL = Settings.BetaDatabaseV2FolderURL.Replace("{branch}", ModpackSettings.BetaDatabaseSelectedBranch);
 
-                        //download the files
-                        List<string> downloadTasks = new List<string>();
-                        Logging.Debug("starting downloads to globalDependnecies, dependencies, all categories");
-                        using (WebClient client = new WebClient())
+                        Logging.Debug("Init beta db download resources");
+                        //create download url list
+                        List<string> downloadURLs = new List<string>()
                         {
-                            client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                            //global dependencies
-                            downloadTasks.Add(client.DownloadString(rootbetaDBURL + XMLUtils.GetXMLStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file")));
-                            //dependencies
-                            downloadTasks.Add(client.DownloadString(rootbetaDBURL + XMLUtils.GetXMLStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file")));
-                            //categories
-                            foreach (XmlNode categoryNode in XMLUtils.GetXMLNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
-                            {
-                                string categoryFileName = categoryNode.Attributes["file"].Value;
-                                if(string.IsNullOrWhiteSpace(categoryFileName))
-                                {
-                                    BadMemeException badMeme = new BadMemeException("Failed to parse V2 database category: " + categoryNode.ToString());
-                                    Logging.Exception(badMeme.ToString());
-                                    throw badMeme;
-                                }
-                                downloadTasks.Add(client.DownloadString(rootbetaDBURL + categoryFileName));
-                            }
+                            rootbetaDBURL + XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file"),
+                            rootbetaDBURL + XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file")
+                        };
+
+                        //categories
+                        foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
+                        {
+                            string categoryFileName = categoryNode.Attributes["file"].Value;
+                            downloadURLs.Add(rootbetaDBURL + categoryFileName);
                         }
-                        List<string> categoriesXml = new List<string>();
 
-                        Logging.Debug("tasks finished, extracting task results and sending to database string parser");
+                        //create arrays
+                        WebClient[] downloadClients = new WebClient[downloadURLs.Count];
+                        Task<string>[] downloadTasks = new Task<string>[downloadURLs.Count];
 
-                        //parse into string
-                        string globalDependencyXmlString = downloadTasks[0];
-                        string dependenicesXmlString = downloadTasks[1];
-                        for (int i = 2; i < downloadTasks.Count; i++)
+                        //setup downloads
+                        Logging.Debug("Starting async downloads");
+                        for(int i = 0; i < downloadURLs.Count; i++)
                         {
-                            categoriesXml.Add(downloadTasks[i]);
+                            downloadClients[i] = new WebClient();
+                            downloadClients[i].Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                            downloadTasks[i] = downloadClients[i].DownloadStringTaskAsync(downloadURLs[i]);
+                        }
+
+                        //wait
+                        Task.WaitAll(downloadTasks);
+
+                        //parse into strings
+                        Logging.Debug("Tasks finished, extracting task results");
+                        string globalDependencyXmlString = downloadTasks[0].Result;
+                        string dependenicesXmlString = downloadTasks[1].Result;
+
+                        List<string> categoriesXml = new List<string>();
+                        for (int i = 2; i < downloadURLs.Count; i++)
+                        {
+                            categoriesXml.Add(downloadTasks[i].Result);
                         }
 
                         //parse into lists
-                        if (!XMLUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString,categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        Logging.Debug("Sending strings to db parser");
+                        if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + "database V2");
                             return false;
-                        }*/
+                        }
+
+                        /*
                         if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                             return false;
                         }
+                        */
                         break;
 
                     case DatabaseVersions.Test:

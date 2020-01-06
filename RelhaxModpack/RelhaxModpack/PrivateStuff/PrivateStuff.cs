@@ -21,16 +21,17 @@ namespace RelhaxModpack
         public const string BigmodsFTPModpackDatabase = null;
         #endregion
 
-        #region bigmods FTP users addresses
+        #region bigmods FTP all addresses
         public const string BigmodsFTPUsersRoot = null;
         public const string BigmodsFTPUsersMedias = null;
         #endregion
 
-        #region bigmods HTTP addresses
+        #region bigmods HTTP all addresses
         public const string BigmodsEnterDownloadStatPHP = null;
         public const string BigmodsCreateDatabasePHP = null;
         public const string BigmodsCreateManagerInfoPHP = null;
         public const string BigmodsCreateUpdatePackagesPHP = null;
+        public const string BigmodsCreateModInfoPHP = null;
         #endregion
 
         #region wotmods FTP all addresses
