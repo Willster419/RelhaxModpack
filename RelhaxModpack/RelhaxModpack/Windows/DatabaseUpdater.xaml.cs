@@ -73,8 +73,6 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog SelectManagerInfoXml = new OpenFileDialog() { Title = "Find manager_version.xml", Filter = "manager_version.xml|manager_version.xml" };
         #endregion
 
-        private bool loading = true;
-
         #region Stuff for parts 3 and 4 to share
         //the version number of the last supported WoT client, used for making backup online folder
         private string LastSupportedTanksVersion = "";
@@ -148,6 +146,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Boring stuff
+        private bool loading = true;
         /// <summary>
         /// Create an instance of the DatabaseUpdater window
         /// </summary>
@@ -964,7 +963,7 @@ namespace RelhaxModpack.Windows
             SetProgress(50);
 
             //update the crc values, also makes list of updated mods
-            ReportProgress("downloaded, comparing crc values for list of updated mods");
+            ReportProgress("Downloaded, comparing crc values for list of updated mods");
             Utils.AllowUIToUpdate();
             foreach (DatabasePackage package in flatListCurrent)
             {
