@@ -341,7 +341,7 @@ namespace RelhaxModpack.Windows
 
                             //V1 here
                             #warning using V1 beta database in ModSelectionList
-                            //rootXml = Settings.BetaDatabaseV1URL;
+                            rootXml = Settings.BetaDatabaseV1URL;
 #pragma warning restore CS0618
                             /////////
 
@@ -419,7 +419,7 @@ namespace RelhaxModpack.Windows
 
                     case DatabaseVersions.Beta:
                         //for 2.0
-                        
+                        /*
                         string rootbetaDBURL = Settings.BetaDatabaseV2FolderURL.Replace("{branch}", ModpackSettings.BetaDatabaseSelectedBranch);
 
                         Logging.Debug("Init beta db download resources");
@@ -472,15 +472,17 @@ namespace RelhaxModpack.Windows
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + "database V2");
                             return false;
                         }
+                        */
 
-                        /*
+                        //for 1.0
+                        
                         if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                             return false;
                         }
-                        */
+                        
                         break;
 
                     case DatabaseVersions.Test:
