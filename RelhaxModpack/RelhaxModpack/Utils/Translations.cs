@@ -3968,6 +3968,33 @@ namespace RelhaxModpack
             French.Add("loadingAtlasImageLibrariesFail", "Echec du chargement de la bibliothèque de traitement d'images atlas");
             Spanish.Add("loadingAtlasImageLibrariesFail", "No se han podido cargar las librerías de procesamiento de imágenes de atlas");
             Russian.Add("loadingAtlasImageLibrariesFail", "Не удалось загрузить библиотеки обработчика");
+
+            //Component: CleanupModFilesText
+            //
+            English.Add("CleanupModFilesText", "Cleanup mod files placed in incorrect locations");
+            German.Add("CleanupModFilesText", TranslationNeeded);
+            Polish.Add("CleanupModFilesText", TranslationNeeded);
+            French.Add("CleanupModFilesText", TranslationNeeded);
+            Spanish.Add("CleanupModFilesText", TranslationNeeded);
+            Russian.Add("CleanupModFilesText", TranslationNeeded);
+
+            //Component: CleanupModFilesButtonDescription
+            //
+            English.Add("CleanupModFilesButtonDescription", "Deletes any mods located in locations like win32 and win64 that could be causing load conflicts");
+            German.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            Polish.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            French.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            Spanish.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            Russian.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+
+            //Component: cleanupModFilesCompleted
+            //
+            English.Add("cleanupModFilesCompleted", "Cleanup mod files completed");
+            German.Add("cleanupModFilesCompleted", TranslationNeeded);
+            Polish.Add("cleanupModFilesCompleted", TranslationNeeded);
+            French.Add("cleanupModFilesCompleted", TranslationNeeded);
+            Spanish.Add("cleanupModFilesCompleted", TranslationNeeded);
+            Russian.Add("cleanupModFilesCompleted", TranslationNeeded);
             #endregion
 
             #region Add zip files Dialog
