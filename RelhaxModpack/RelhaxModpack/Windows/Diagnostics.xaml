@@ -27,13 +27,15 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="ChangeInstallButton" Tag="ChangeInstall" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ChangeInstall_Click"
                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
-                <TextBlock x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"/>
+                <TextBlock x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"
+                           Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
             <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear download cache" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"
                     Click="ClearDownloadCache_Click" Grid.Column="1" ToolTipService.ShowOnDisabled="True"/>
             <Button Tag="CollectLogInfo" x:Name="CollectLogInfoButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CollectLogInfo_Click"
                     Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
-                <TextBlock x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem" Margin="2,0,2,0" TextAlignment="Center"/>
+                <TextBlock x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem"
+                           Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
             <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabase" Content="Delete download cache database file" HorizontalAlignment="Stretch"
                     VerticalAlignment="Top" Margin="2,2,2,2" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click" ToolTipService.ShowOnDisabled="True"/>
@@ -46,6 +48,11 @@
                     Click="DownloadWGPatchFiles_Click" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="0">
                 <TextBlock x:Name="DownloadWGPatchFilesText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
                            Text="Download WG Patch files for any WG client via HTTP"/>
+            </Button>
+            <Button Tag="CleanupModFiles" x:Name="CleanupModFilesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CleanupModFilesButton_Click"
+                    Grid.Row="3" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
+                <TextBlock x:Name="CleanupModFilesText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"
+                           Text="Cleanup mod files placed in incorrect locations" />
             </Button>
         </Grid>
     </Grid>
