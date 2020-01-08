@@ -1630,8 +1630,9 @@ namespace RelhaxModpack
 
             //Component: HelperText
             //
-            English.Add("HelperText", "Welcome to the Relhax Modpack! I have tried to make the modpack as straight-forward as possible, but questions may still arise." +
-                " Hover over a setting to have it explained.");
+            English.Add("HelperText", "Welcome to the Relhax Modpack!" +
+                "\nI have tried to make the modpack as straight-forward as possible, but questions may still arise. Hover over a setting to have it explained." +
+                "\nThanks for using Relhax, I hope you enjoy it! - Willster419");
             German.Add("HelperText", "Willkommen beim Relhax Modpack!" +
                 " \n\nIch habe versucht, das Modpack so einfach wie möglich zu gestalten. " +
                 " \nZum Beispiel kannst du mit einem Klick der rechten Maustaste auf einen Eintrag eine Beschreibung oder Vorschau anzeigen." +
