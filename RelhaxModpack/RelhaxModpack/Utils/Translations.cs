@@ -3971,31 +3971,31 @@ namespace RelhaxModpack
             Russian.Add("loadingAtlasImageLibrariesFail", "Не удалось загрузить библиотеки обработчика");
 
             //Component: CleanupModFilesText
-            //
+            // One of the buttons in the diagnostics window.
             English.Add("CleanupModFilesText", "Cleanup mod files placed in incorrect locations");
-            German.Add("CleanupModFilesText", ""Bereinige falsch platzierte Moddaten");
-            Polish.Add("CleanupModFilesText", TranslationNeeded);
+            German.Add("CleanupModFilesText", "Bereinige falsch platzierte Moddaten");
+            Polish.Add("CleanupModFilesText", "Usuń mody z niewłaściwych folderów");
             French.Add("CleanupModFilesText", TranslationNeeded);
             Spanish.Add("CleanupModFilesText", "Limpiar archivos de mods en rutas incorrectas");
-            Russian.Add("CleanupModFilesText", TranslationNeeded);
+            Russian.Add("CleanupModFilesText", "Удалить некорректно установленные моды");
 
             //Component: CleanupModFilesButtonDescription
-            //
+            // The hint/tooltip for CleanupModFilesText
             English.Add("CleanupModFilesButtonDescription", "Deletes any mods located in folders like win32 and win64 that could be causing load conflicts");
             German.Add("CleanupModFilesButtonDescription", "Löscht alle Moddaten aus den win32 und win64 Ordnern um Konflikte zu vermeiden");
-            Polish.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            Polish.Add("CleanupModFilesButtonDescription", "Czyści wszelkie mody z folderów takich jak win32 i win64 mogące powodować problemy z wczytywaniem.");
             French.Add("CleanupModFilesButtonDescription", TranslationNeeded);
             Spanish.Add("CleanupModFilesButtonDescription", "Elimina cualquier mod en carpetas como win32 y win64 que puedan causar conflictos al cargar");
-            Russian.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            Russian.Add("CleanupModFilesButtonDescription", "Будут удалены все моды, установленные в папках win32 и win64 во избежание конфликтов в процессе загрузки.");
 
             //Component: cleanupModFilesCompleted
-            //
+            // Text displaying (upon mods being cleaned up) in the dedicated status area below all the buttons in the diagnostics window (it's large enough for longer messages).
             English.Add("cleanupModFilesCompleted", "Cleanup mod files completed");
             German.Add("cleanupModFilesCompleted", "Bereinigen der Moddaten abgeschlossen");
-            Polish.Add("cleanupModFilesCompleted", TranslationNeeded);
+            Polish.Add("cleanupModFilesCompleted", "Oczyszczanie modów z niewłaściwych lokalizacji zakończone pomyślnie.");
             French.Add("cleanupModFilesCompleted", TranslationNeeded);
             Spanish.Add("cleanupModFilesCompleted", "Limpieza de mods completada");
-            Russian.Add("cleanupModFilesCompleted", TranslationNeeded);
+            Russian.Add("cleanupModFilesCompleted", "Удаление модов завершено.");
             #endregion
 
             #region Add zip files Dialog
