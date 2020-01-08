@@ -3977,7 +3977,7 @@ namespace RelhaxModpack
             Polish.Add("CleanupModFilesText", "Usuń mody z niewłaściwych folderów");
             French.Add("CleanupModFilesText", TranslationNeeded);
             Spanish.Add("CleanupModFilesText", "Limpiar archivos de mods en rutas incorrectas");
-            Russian.Add("CleanupModFilesText", TranslationNeeded);
+            Russian.Add("CleanupModFilesText", "Удалить некорректно установленные моды");
 
             //Component: CleanupModFilesButtonDescription
             //
@@ -3986,7 +3986,7 @@ namespace RelhaxModpack
             Polish.Add("CleanupModFilesButtonDescription", "Czyści wszelkie mody z folderów takich jak win32 i win64 mogące powodować problemy z wczytywaniem.");
             French.Add("CleanupModFilesButtonDescription", TranslationNeeded);
             Spanish.Add("CleanupModFilesButtonDescription", "Elimina cualquier mod en carpetas como win32 y win64 que puedan causar conflictos al cargar");
-            Russian.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            Russian.Add("CleanupModFilesButtonDescription", "Будут удалены все моды, установленные в папках win32 и win64 во избежание конфликтов в процессе загрузки.");
 
             //Component: cleanupModFilesCompleted
             //
@@ -3995,7 +3995,7 @@ namespace RelhaxModpack
             Polish.Add("cleanupModFilesCompleted", "Oczyszczanie modów z niewłaściwych lokalizacji zakończone pomyślnie");
             French.Add("cleanupModFilesCompleted", TranslationNeeded);
             Spanish.Add("cleanupModFilesCompleted", "Limpieza de mods completada");
-            Russian.Add("cleanupModFilesCompleted", TranslationNeeded);
+            Russian.Add("cleanupModFilesCompleted", "Удаление модов завершено.");
             #endregion
 
             #region Add zip files Dialog
