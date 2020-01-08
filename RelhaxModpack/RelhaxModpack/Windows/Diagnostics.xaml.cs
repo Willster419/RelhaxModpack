@@ -325,7 +325,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show(string.Format("{0}, {1}", Translations.GetTranslatedString("folderDeleteFailed"), string.Join(",\n", locationsFailedToDelete)));
             }
 
-            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanupModFilesCompleted");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("CleanupModFilesCompleted");
         }
     }
 }
