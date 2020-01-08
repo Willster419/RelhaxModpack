@@ -288,11 +288,16 @@ namespace RelhaxModpack.Windows
                     Logging.Debug("Directory does not exist");
                     continue;
                 }
-                filesToDelete.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories, true));
+                int count = 0;
+                string[] files = Utils.DirectorySearch(folderPath, SearchOption.AllDirectories, true);
+                if (files != null)
+                    count = files.Count();
+                Logging.Debug("Added {0} files", count);
+                filesToDelete.AddRange(files);
             }
 
             Logging.Debug("Deleting files");
-            for(int i = 0; i > filesToDelete.Count; i++)
+            for(int i = 0; i < filesToDelete.Count; i++)
             {
                 //check to make sure it's a file
                 if (!File.Exists(filesToDelete[i]))
@@ -309,8 +314,9 @@ namespace RelhaxModpack.Windows
             List<string> locationsFailedToDelete = new List<string>();
             foreach (string folderPath in locationsToCheck)
             {
-                if (!Utils.DirectoryDelete(folderPath, true))
-                    locationsFailedToDelete.Add(folderPath);
+                if(Directory.Exists(folderPath))
+                    if (!Utils.DirectoryDelete(folderPath, true))
+                        locationsFailedToDelete.Add(folderPath);
             }
 
             if(locationsFailedToDelete.Count > 0)
