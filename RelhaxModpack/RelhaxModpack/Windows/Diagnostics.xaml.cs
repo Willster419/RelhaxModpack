@@ -269,7 +269,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void CleanupModFilesButton_Click(object sender, RoutedEventArgs e)
+        private async void CleanupModFilesButton_Click(object sender, RoutedEventArgs e)
         {
             string[] locationsToCheck = new string[]
             {
@@ -305,8 +305,8 @@ namespace RelhaxModpack.Windows
 
                 DiagnosticsStatusTextBox.Text = string.Format("{0} {1} {2} {3}",
                     Translations.GetTranslatedString("deletingFile"), (i + 1), Translations.GetTranslatedString("of"), filesToDelete.Count);
-                Utils.FileDelete(filesToDelete[i]);
 
+                await Task.Run(() => Utils.FileDelete(filesToDelete[i]));
             }
 
             //fully delete the folders now
