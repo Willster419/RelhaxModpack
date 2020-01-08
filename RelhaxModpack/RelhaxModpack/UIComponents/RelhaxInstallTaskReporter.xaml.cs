@@ -64,6 +64,11 @@ namespace RelhaxModpack.UIComponents
 
         #region Properties
 
+        /// <summary>
+        /// Flag for when the object has been fully constructed by the UI Dispatcher.
+        /// </summary>
+        /// <remarks>Due to the multi-threaded nature of the progress reporting, progress may be reported before the reporting UI objects are fully constructed.
+        /// This results in null exceptions. By using a flag to determine if the object is fully created, the reporting progresses won't try to update properties of null objects</remarks>
         public bool LoadedAfterApply { get; set; } = false;
 
         private TaskReportState _reportState = TaskReportState.Inactive;
@@ -249,9 +254,7 @@ namespace RelhaxModpack.UIComponents
         /// <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
         protected void OnPropertyChanged(string propertyName)
         {
-            var handle = PropertyChanged;
-            if (handle != null)
-                handle(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
 

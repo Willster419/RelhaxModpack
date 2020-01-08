@@ -1,3 +1,109 @@
+Application version 0.29.5.3 (2020-01-07)
+https://www.virustotal.com/gui/file/24e809692482f1d59a4938538d495bdd92a2c7f8b17363da62d6ebfc8a219270/detection
+- Added feature in diagnostic tools to clean up mod files in the win32 and win64 folders that could be causing mod load conflicts.
+- Re-wrote Xml database serialization for database 1.1 format. It's much better and can be re-used easier.
+- Added database V2 publish method for database updater utility.
+- Updated nvtt image processing libraries. Now they are staticly linked with the msvcp libraries so they don't need to by dynamically loaded.
+- Fixed bug with autoInstall feature thinking it's running an auto-install when the feature is enabled, but the user pressed the install button.
+- Fixed bug with autoInstall feature not showing the completed window (eithor regular or advanced) when the feature is enabled, but the user pressed the install button.
+- Updated translations and added new translation entries.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.5.2 (2019-12-28)
+https://www.virustotal.com/gui/file/5606ce8555faba12d8feee308fd12478243a9a8f224d46ba4e364c062f39716f/detection
+- Fixed bug with restore and save userdata methods not parsing {versiondir} macro and cleaned up the code.
+- Fixed bugs with loading translations when the selected language isn't english.
+- Updated ClearCache() method to new V2 utility methods.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.5.1 (2019-12-28)
+https://www.virustotal.com/gui/file/cb7be4fac6530c8fe3599458cdc97e07c82d82c765395415bd98019c53c5264b/detection
+- Fixed a major bug with the user data backup and restore. The process has been re-written to allow for having files of the same name in a database package, but in different folders.
+- Added and improved logging of the user data backup and restore functions.
+- Minor UI adjustments in the database editor upload/download tool.
+- Fixed a minor bug with loading patches into the patch designer from application launch.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.5.0 (2019-12-27)
+https://www.virustotal.com/gui/file/ba2a474ac331df677cd00830095c247633008929fd0dbb363ff74a124aaef1bb/detection
+- Re-worked the dependency calculation system. Before, it would process based on the entire dependency list, with the sub-process being the refrences in the database.
+- Now, the calculation is based on the refrences, which have the sub-process to lookup from the list. This allows for logging and reporting of broken dependency references, as well any dependencies not used.
+- Changed behavior of patch ordering. Previous ordering was one by {patchGroup} property, then by patch filename. Now is {patchGroup}, then {installGroup}, then patch filename.
+- This will allow for the same behavior of installing packages using {installGroup}: Now, patches in child packages will be installed AFTER the parrent package patches are run.
+- Fixed several bugs and re-worked implimentation of auto install timer event system. Now it won't fire when you're doing other activities in the application, like in the selection list.
+- Removed restruction of verbose logging forced enabled.
+- Fixed bugs with async implimentation of checkForDatabaseUpdates() that could cuase a race condition.
+- Fixed lots of bugs with the patch designer. It's almost as if I had forgoten to finish working on it...
+- Fixed bug in database editor preventing adding a copy of the same package below said package.
+- UI component renaming in database editor and child windows.
+- Fixed issues with auto/one click selection errors window.
+- Several code sections cleaned up, logging added and/or improved, spelling mistakes fixed. Spelling is hard.
+- Updated all translations.
+- The database downloader for the package auto-updater uses FTP now to not pad the http download count.
+- Updated application and database release step instructions in database updater window.
+- Updated UI component descriptions in database editor and patch designer.
+- Added tooltip descripts to advanced features/components of the patch desiger.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.9 (2019-12-17)
+https://www.virustotal.com/gui/file/54af85ee1a97e89f822e4551ca8619037ecfa93f189ebc6b935cdc8945dd232c/detection
+- Application now targets .NET framework v4.8 to take advantage of the latest technology and framework improvements from Microsoft.
+- Reverted (kind of) clear logs and diagnostic zip file log location detection due to WG reverting the Working Directory.
+- Added Windows 7 Compatibility of enabling TLS 1.1 and 1.2 for usage of github APIs.
+- Fixed "off by one" progress reporting. Again.
+- Fixed bug of not waiting properly for the font installation to finish (if installing fonts).
+- Started work on database self-updater project. This means that some package updates can be automated.
+- Fixed bugs with control logic of loading database branches from github API.
+- Fixed bugs with WoT process detection.
+- Minor UI enable/disable toggle fixes for MainWindow.
+- Fixed several UI placement and interaction issues with the database editor. (Thanks 'The Illusion')
+- Code imrovements to the MD5 hash calculation functions.
+- Updated DotNetZip and JSON.net APIs.
+- Added HtmlAgilityPack API.
+- Minor fixes to patch designer.
+- Fixed database editor not returning when user selects to cancel closing due to unsaved changes.
+- Minor other code fixes.
+- Updated German translations. (Thanks Elektrosmoker)
+- Updated documentation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.6 (2019-12-06)
+https://www.virustotal.com/gui/file/796cddf0b968204bae73857e67d4261c6277f4f7f52aeb85c3bf791bd3a22aa5/detection
+- Added hotfix from Relhax V1 with OMC view: When preview window loaded, retain window focus.
+- Fixed some window headers and tab headers not being translated correctly (Thanks Nullmaruzero).
+- Fixed a bug with progress reporting in advanced installer. It would report "extracting package x1 of y", where the extra 1 is supposed to be (x+1)
+- Re-worked uninstall methods into one method to prevent code copy-paste.
+- Re-worked installer thread error and exit code handling to show all errors.
+- Updated Polish, German, French, Spanish Translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.5 (2019-11-18)
+https://www.virustotal.com/gui/file/d1b9ca8d9e2f7450fde8e03c4465b4f6524fece457dbed0fd2ccfe1ee97c8884/detection
+- Added the ability to udpate the Wargaming Game Center itself from the WG update utility.
+- Changed default behavior of SaveLastSelection setting to true for first time application startup.
+- Updated Documentation.
+- Updated German Translations (Thanks Elektrosmoker).
+- Addes description stubs to Patch designer and Database Editor utilities.
+- Fixed some MainWindow components not translating when launching for the first time, after language selected from new selection window.
+- Added feature to MainWindow, mod selection list and diagnostic windows to show tooltips for disabled UI components.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 0.29.4.3 (2019-11-17)
+https://www.virustotal.com/gui/file/9602c07d42e9391c3898b5ee02cdaedb6a1e7121f63855facc66e40a2c05af3e/detection
+- Fixed a nasty bug where user mods were being treated as regular packages. This means they were failing to download and getting deleted.
+- Re-worked the Patch designer utility and fixed several bugs.
+- Fixed several translation tags that were not updated or mising. (Thanks Nullmaruzero)
+- Fixed progress reporting for any x of y reports. It will no longer be 0 based (extracting package 0 of 9, for example).
+- Re-worked the messagebox for uninstallation. (Thanks Nullmaruzero)
+- Changed how translation is detected on application launch for the first time. And by that I mean it will ask YOU what language you want to use.
+- Fixed the logfile becoming messy when extracting in multicore mode.
+- Updated documentation.
+- Fixed minor issues with theme definitions for UI engine.
+- Fixed minor issues with the UI of the database editor.
+- Fixed minor issues with object locking in the atlas creator.
+- Various code cleanup and comment improvement.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 0.29.4.1 (2019-11-04)
 https://www.virustotal.com/gui/file/18f8f48eac07e2555fb4adc77f04c68219849c6df352600b84748dcfc86f3c84/detection
 - Fixed compatibilty issues with WoWp and WoWs with the Game Center update downloader.

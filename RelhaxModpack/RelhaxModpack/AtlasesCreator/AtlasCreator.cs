@@ -177,7 +177,7 @@ namespace RelhaxModpack.AtlasesCreator
 
             //copy the subtexture bitmap data to each texture bitmap data
             Logging.Info("[atlas file {0}]: parsing bitmap data", Path.GetFileName(Atlas.AtlasFile));
-            lock (atlasImage)
+            lock (AtlasUtils.AtlasLoaderLockObject)
             {
                 //lock the atlas image into memory
                 Rectangle rect = new Rectangle(0, 0, atlasImage.Width, atlasImage.Height);

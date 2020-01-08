@@ -16,6 +16,14 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class Diagnostics : RelhaxWindow
     {
+        //list of files who need to be seperated by 32bit and 64bit versions
+        private string[] specialName32And64Versions = new string[]
+        {
+            Settings.PythonLog,
+            Settings.XvmLog,
+            Settings.PmodLog
+        };
+
         /// <summary>
         /// Create an instance of the Diagnostics window
         /// </summary>
@@ -35,14 +43,16 @@ namespace RelhaxModpack.Windows
             if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
             {
                 CollectLogInfoButton.IsEnabled = false;
-                DownloadWGPatchFilesText.IsEnabled = false;
+                //DownloadWGPatchFilesText.IsEnabled = false;
+                CleanupModFilesButton.IsEnabled = false;
                 SelectedInstallation.Text = string.Format("{0}\n{1}",
                     Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
             }
             else
             {
                 CollectLogInfoButton.IsEnabled = true;
-                DownloadWGPatchFilesText.IsEnabled = false;
+                //DownloadWGPatchFilesText.IsEnabled = true;
+                CleanupModFilesButton.IsEnabled = true;
                 SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
             }
         }
@@ -88,20 +98,28 @@ namespace RelhaxModpack.Windows
             //create the list of files to collect (should always collect these)
             List<string> filesToCollect = new List<string>()
             {
-                //stuff in application startup path
+                //relhax files in relhax dir (relhax.log, relhaxsettings.xml, lastinstalledconfig.xml)
                 Settings.RelhaxLogFilepath,
                 Settings.RelhaxSettingsFilepath,
                 Settings.LastInstalledConfigFilepath,
-                //stuff in the tanks location (need to be combined here cause it can change from installation)
-                Path.Combine(Settings.WoTDirectory, "logs", Logging.InstallLogFilename),
-                Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename),
-                //stuff in 32bit and 64bit folders
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "python.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, "pmod.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "python.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "xvm.log"),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, "pmod.log")
+                //relhax files in wot/logs dir (need to be combined here cause it can change from installation)
+                Path.Combine(Settings.WoTDirectory, Settings.LogsFolder, Logging.InstallLogFilename),
+                Path.Combine(Settings.WoTDirectory, Settings.LogsFolder, Logging.UninstallLogFilename),
+                //disabled for now, but in case WG decides to change it again...
+                /*
+                //wot files in wot/32bit folder
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.PmodLog),
+                //wot files in wot/64bit folder
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PmodLog),
+                */
+                //wot files in wot folder
+                Path.Combine(Settings.WoTDirectory, Settings.PythonLog),
+                Path.Combine(Settings.WoTDirectory, Settings.XvmLog),
+                Path.Combine(Settings.WoTDirectory, Settings.PmodLog)
             };
 
             //use a nice diagnostic window to check if the user wants to include any other files
@@ -118,15 +136,17 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
+            //add any new files the user added to the list, while not adding any of the above pre-added ones
             foreach (string s in apz.FilesToAddList.Items)
                 if (!filesToCollect.Contains(s))
                     filesToCollect.Add(s);
 
             //check in the list to make sure that the entries are valid and paths exist
-            Logging.Info("Filtering list of files to collect");
+            Logging.Info("Filtering list of files to collect by if file exists");
             filesToCollect = filesToCollect.Where(fileEntry => !string.IsNullOrWhiteSpace(fileEntry) && File.Exists(fileEntry)).ToList();
             try
             {
+                Logging.Info("creating diagnostic zip file and adding logs");
                 using (ZipFile zip = new ZipFile())
                 {
                     foreach (string s in filesToCollect)
@@ -136,6 +156,17 @@ namespace RelhaxModpack.Windows
                         //get just the filename (it will be added to the zip file as just the name)
                         string fileNameToAdd = Path.GetFileName(s);
 
+                        //special case check for if filenames are the same in 32bit and 64bit
+                        //disabled for now, but in case WG decides to change it again...
+                        /*
+                        if(specialName32And64Versions.Contains(fileNameToAdd))
+                        {
+                            string[] folderPathSep = s.Split(Path.DirectorySeparatorChar);
+                            string folderName32And64 = folderPathSep[folderPathSep.Count() - 2];
+                            fileNameToAdd = string.Format("{0}_{1}", folderName32And64, fileNameToAdd);
+                        }
+                        */
+
                         //run a loop to check if the file already exists in the zip with the same name, if it does then pad it until it does not
                         Logging.Info("Attempting to add filename {0} in zip entry", fileNameToAdd);
                         while (zip.ContainsEntry(fileNameToAdd))
@@ -143,24 +174,14 @@ namespace RelhaxModpack.Windows
                             fileNameToAdd = string.Format("{0}_{1}.{2}", Path.GetFileNameWithoutExtension(fileNameToAdd), duplicate++, Path.GetExtension(fileNameToAdd));
                             Logging.Info("exists, using filename {0}", fileNameToAdd);
                         }
+                        Logging.Debug("new name for zip: {0}", fileNameToAdd);
 
-                        //after padding, put the full path back together
-                        fileNameToAdd = Path.Combine(Path.GetDirectoryName(s), fileNameToAdd);
-
-                        //one last check to make sure it exists
-                        if(!File.Exists(fileNameToAdd))
-                        {
-                            Logging.Error("the file {0} was parsed to exist but after loop modification, it does not!", fileNameToAdd);
-                            continue;
-                        }
-                        else
-                        {
-                            //and the file to the zip file and grab the entry reference
-                            ZipEntry entry = zip.AddFile(fileNameToAdd);
-                            //then use it to modify the name of the entry in the zip file
-                            entry.FileName = Path.GetFileName(fileNameToAdd);
-                            Logging.Info("file {0} added, entry name in zip = {1}", fileNameToAdd, entry.FileName);
-                        }
+                        //and the file to the zip file and grab the entry reference
+                        ZipEntry entry = zip.AddFile(s);
+                        //then use it to modify the name of the entry in the zip file
+                        //this moves it out of all the sub-folders up to the root directory
+                        entry.FileName = Path.GetFileName(fileNameToAdd);
+                        Logging.Info("file {0} added, entry name in zip = {1}", fileNameToAdd, entry.FileName);
                     }
                     string zipSavePath = Path.Combine(
                         Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
@@ -239,11 +260,72 @@ namespace RelhaxModpack.Windows
 
         private void DownloadWGPatchFiles_Click(object sender, RoutedEventArgs e)
         {
-            GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader()
+            using (GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader()
             {
-                SelectedClient = string.IsNullOrWhiteSpace(Settings.WoTDirectory)? string.Empty : Settings.WoTDirectory
+                SelectedClient = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? string.Empty : Settings.WoTDirectory
+            })
+            {
+                gameCenterUpdateDownloader.ShowDialog();
+            }
+        }
+
+        private async void CleanupModFilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            string[] locationsToCheck = new string[]
+            {
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.ModsDir),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.ResModsDir),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.ModsDir),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.ResModsDir)
             };
-            gameCenterUpdateDownloader.ShowDialog();
+
+            List<string> filesToDelete = new List<string>();
+            foreach(string folderPath in locationsToCheck)
+            {
+                Logging.Debug("Processing folder {0}", folderPath);
+                if(!Directory.Exists(folderPath))
+                {
+                    Logging.Debug("Directory does not exist");
+                    continue;
+                }
+                int count = 0;
+                string[] files = Utils.DirectorySearch(folderPath, SearchOption.AllDirectories, true);
+                if (files != null)
+                    count = files.Count();
+                Logging.Debug("Added {0} files", count);
+                filesToDelete.AddRange(files);
+            }
+
+            Logging.Debug("Deleting files");
+            for(int i = 0; i < filesToDelete.Count; i++)
+            {
+                //check to make sure it's a file
+                if (!File.Exists(filesToDelete[i]))
+                    continue;
+
+                DiagnosticsStatusTextBox.Text = string.Format("{0} {1} {2} {3}",
+                    Translations.GetTranslatedString("deletingFile"), (i + 1), Translations.GetTranslatedString("of"), filesToDelete.Count);
+
+                await Task.Run(() => Utils.FileDelete(filesToDelete[i]));
+            }
+
+            //fully delete the folders now
+            Logging.Debug("Complete delete of folders");
+            List<string> locationsFailedToDelete = new List<string>();
+            foreach (string folderPath in locationsToCheck)
+            {
+                if(Directory.Exists(folderPath))
+                    if (!Utils.DirectoryDelete(folderPath, true))
+                        locationsFailedToDelete.Add(folderPath);
+            }
+
+            if(locationsFailedToDelete.Count > 0)
+            {
+                Logging.Error("Failed to delete the folders: {0}", string.Join(",", locationsFailedToDelete));
+                MessageBox.Show(string.Format("{0}, {1}", Translations.GetTranslatedString("folderDeleteFailed"), string.Join(",\n", locationsFailedToDelete)));
+            }
+
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanupModFilesCompleted");
         }
     }
 }

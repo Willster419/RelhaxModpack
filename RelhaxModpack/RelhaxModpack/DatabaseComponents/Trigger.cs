@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.DatabaseComponents;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,20 @@ namespace RelhaxModpack
     /// Represents a trigger object used in the installer as an event starter.
     /// For example, a contour icon trigger exists to start the building of contour icons
     /// </summary>
-    public class Trigger
+    public class Trigger : IXmlSerializable
     {
+        #region Xml serialization
+        public string[] PropertiesForSerializationAttributes()
+        {
+            return new string[] { nameof(Name) };
+        }
+
+        public string[] PropertiesForSerializationElements()
+        {
+            return new string[] { };
+        }
+        #endregion
+
         /// <summary>
         /// The name of the trigger
         /// </summary>

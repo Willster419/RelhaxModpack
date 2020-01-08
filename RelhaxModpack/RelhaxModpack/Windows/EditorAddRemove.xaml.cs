@@ -49,7 +49,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Toggles if the user requests to add the package at a new level or in the same level as the referenced package
         /// </summary>
-        public bool AddSaveLevel = true;
+        public bool AddSameLevel = true;
 
         //private
         private const string GlobalDependenciesCategoryHeader = "--Global Dependencies--";
@@ -76,20 +76,20 @@ namespace RelhaxModpack.Windows
             if(EditOrAdd)
             {
                 //edit
-                AddSameLevel.Visibility = Visibility.Hidden;
-                AddSameLevel.IsEnabled = false;
-                AddNewLeve1.Visibility = Visibility.Hidden;
-                AddNewLeve1.IsEnabled = false;
+                AddSameLevelRadioButton.Visibility = Visibility.Hidden;
+                AddSameLevelRadioButton.IsEnabled = false;
+                AddNewLevelRadioButton.Visibility = Visibility.Hidden;
+                AddNewLevelRadioButton.IsEnabled = false;
                 CategoryTextBox.Text = "Select the category to move package to";
                 PackageTextBox.Text = "Select the package to move to";
             }
             else
             {
                 //add
-                AddSameLevel.Visibility = Visibility.Visible;
-                AddSameLevel.IsEnabled = true;
-                AddNewLeve1.Visibility = Visibility.Visible;
-                AddNewLeve1.IsEnabled = true;
+                AddSameLevelRadioButton.Visibility = Visibility.Visible;
+                AddSameLevelRadioButton.IsEnabled = true;
+                AddNewLevelRadioButton.Visibility = Visibility.Visible;
+                AddNewLevelRadioButton.IsEnabled = true;
                 CategoryTextBox.Text = "Select the category to add package to";
                 PackageTextBox.Text = "Select the package to add to";
             }
@@ -139,14 +139,14 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void AddSameLevel_Checked(object sender, RoutedEventArgs e)
+        private void AddSameLevelRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            AddSaveLevel = true;
+            AddSameLevel = true;
         }
 
-        private void AddNewLeve1_Checked(object sender, RoutedEventArgs e)
+        private void AddNewLevelRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            AddSaveLevel = false;
+            AddSameLevel = false;
         }
     }
 }

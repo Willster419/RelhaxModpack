@@ -19,6 +19,9 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class TemplateWindow : RelhaxWindow
     {
+        /// <summary>
+        /// Create an instance of TemplateWindow
+        /// </summary>
         public TemplateWindow()
         {
             InitializeComponent();

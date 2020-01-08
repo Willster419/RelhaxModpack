@@ -164,14 +164,33 @@ namespace RelhaxModpack
         [Obsolete]
         public static readonly string RelhaxLibrariesFolderPathOld = Path.Combine(ApplicationStartupPath, "RelHaxLibraries");
 
+        /// <summary>
+        /// The name of the 64bit folder in the 'World_of_Tanks' directory
+        /// </summary>
         public const string WoT64bitFolder = "win64";
 
+        /// <summary>
+        /// The name of the 32bit folder in the 'World_of_Tanks' directory
+        /// </summary>
         public const string WoT32bitFolder = "win32";
 
+        public const string ModsDir = "mods";
+
+        public const string ResModsDir = "res_mods";
+
+        /// <summary>
+        /// The WoT 64bit folder name with the folder separator before it
+        /// </summary>
         public static readonly string WoT64bitFolderWithSlash = Path.DirectorySeparatorChar + WoT64bitFolder;
 
+        /// <summary>
+        /// The WoT 32bit folder name with the folder separator before it
+        /// </summary>
         public static readonly string WoT32bitFolderWithSlash = Path.DirectorySeparatorChar + WoT32bitFolder;
 
+        /// <summary>
+        /// The name of the version xml used for getting the current client version information
+        /// </summary>
         public const string WoTVersionXml = "version.xml";
 
         /// <summary>
@@ -206,6 +225,11 @@ namespace RelhaxModpack
         public const string ReadmeFromZipfileFolderName = "_readme";
 
         /// <summary>
+        /// The name of the temporary install folder that holds the auto update information of the database editor.
+        /// </summary>
+        public const string AutoUpdateZipFolderName = "_autoUpdate";
+
+        /// <summary>
         /// The list of installer folders in the root {WoT} directory to cleanup after an installation
         /// </summary>
         public static readonly string[] FoldersToCleanup = new string[]
@@ -215,7 +239,8 @@ namespace RelhaxModpack
             XmlUnpackFolderName,
             AtlasCreationFoldername,
             FontsToInstallFoldername,
-            ReadmeFromZipfileFolderName
+            ReadmeFromZipfileFolderName,
+            AutoUpdateZipFolderName
         };
 
         /// <summary>
@@ -271,6 +296,14 @@ namespace RelhaxModpack
             RelhaxTempFolderPath,
             RelhaxLibrariesFolderPath
         };
+
+        public const string PmodLog = "pmod.log";
+
+        public const string XvmLog = "xvm.log";
+
+        public const string PythonLog = "python.log";
+
+        public const string LogsFolder = "logs";
         #endregion
 
         #region URLs
@@ -365,6 +398,9 @@ namespace RelhaxModpack
         /// </summary>
         public const string WoTProcessName = "WorldOfTanks";
 
+        /// <summary>
+        /// The xpath to the version information used by the modpack to determine the WoT client version
+        /// </summary>
         public const string WoTVersionXmlXpath = "//version.xml/version";
 
         /// <summary>

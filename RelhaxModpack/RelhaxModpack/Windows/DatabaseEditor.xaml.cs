@@ -12,6 +12,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
 using Path = System.IO.Path;
+using Microsoft.WindowsAPICodePack;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace RelhaxModpack.Windows
 {
@@ -71,7 +73,7 @@ namespace RelhaxModpack.Windows
             Logging.Editor("Loading editor settings");
             if (!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
             {
-                Logging.Editor("Failed to load editor settings, using defaults");
+                Logging.Editor("Failed to load editor settings, using defaults", LogLevel.Warning);
             }
             else
             {
@@ -96,29 +98,40 @@ namespace RelhaxModpack.Windows
                     Logging.Editor("file does not exist");
                 }
             }
+
             //load the trigger box with trigger options
             LoadedTriggersComboBox.Items.Clear();
             foreach (Trigger t in InstallerComponents.InstallEngine.Triggers)
             {
                 LoadedTriggersComboBox.Items.Add(t.Name);
             }
+
             //hook up timer
             DragDropTimer.Tick += OnDragDropTimerTick;
             SearchBox.Items.Clear();
+
             //set the items for the triggers combobox. this only needs to be done once anyways
             LoadedTriggersComboBox.Items.Clear();
             foreach (string s in InstallerComponents.InstallEngine.CompleteTriggerList)
                 LoadedTriggersComboBox.Items.Add(s);
             Init = false;
-            if (!LaunchedFromMainWindow)
+
+            if (!CommandLineSettings.SkipUpdate)
             {
-                Task.Run(async () =>
+                if (!LaunchedFromMainWindow)
                 {
-                    if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                    Task.Run(async () =>
                     {
-                        MessageBox.Show("Your application is out of date. Please launch the application normally to update");
-                    }
-                });
+                        if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                        {
+                            MessageBox.Show("Your application is out of date. Please launch the application normally to update");
+                        }
+                    });
+                }
+            }
+            else
+            {
+                Logging.Editor("Skipping update check from command line setting", LogLevel.Warning);
             }
         }
 
@@ -154,12 +167,15 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void OnApplicationClose(object sender, EventArgs e)
+        private void RelhaxWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (UnsavedChanges)
             {
                 if (MessageBox.Show("You have unsaved changes, return to editor?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    e.Cancel = true;
                     return;
+                }
             }
             if (!Logging.IsLogDisposed(Logfiles.Editor))
             {
@@ -337,6 +353,7 @@ namespace RelhaxModpack.Windows
             FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
             SaveDatabaseLegacySetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy ? true : false;
             SaveDatabaseOnePointOneSetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.OnePointOne ? true : false;
+            SelectAutoUpdateWorkDirectoryTextbox.Text = EditorSettings.AutoUpdaterWorkDirectory;
         }
         #endregion
 
@@ -672,6 +689,7 @@ namespace RelhaxModpack.Windows
             Logging.Editor("ShowDatabaseObject(), package showing = {0}", LogLevel.Info, package.PackageName);
             //load all items in the databasePackage level first
             //basic tab
+            //set text field texts
             PackagePackageNameDisplay.Text = package.PackageName;
             PackageStartAddressDisplay.Text = package.StartAddress;
             PackageZipFileDisplay.Text = package.ZipFile;
@@ -679,6 +697,8 @@ namespace RelhaxModpack.Windows
             PackageVersionDisplay.Text = package.Version;
             PackageAuthorDisplay.Text = package.Author;
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
+
+            //locate and select the patchGroup and installGroup of the package
             foreach (int i in PackageInstallGroupDisplay.Items)
             {
                 if (i == package.InstallGroup)
@@ -695,6 +715,8 @@ namespace RelhaxModpack.Windows
                     break;
                 }
             }
+
+            //some checkboxes
             PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
             PackageEnabledDisplay.IsChecked = package.Enabled;
 
@@ -722,6 +744,7 @@ namespace RelhaxModpack.Windows
                 ConflictingPackagesMessagebox.Text = "Above is list packages that use this dependency";
 
                 //display all the dependencies and packages that use the selected dependency
+                //check dependencies that use this dependency
                 foreach (Dependency dependencyy in Dependencies)
                 {
                     //don't add itself
@@ -733,11 +756,21 @@ namespace RelhaxModpack.Windows
                             //the fact i'm not breaking can help determine if a package has the dependency listed twice
                             PackageConflictingPackagesDisplay.Items.Add(dependencyy);
                 }
+                //check selectablePackages that use this dependency
                 foreach (SelectablePackage selectablePackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
                 {
                     foreach (DatabaseLogic logic in selectablePackage.Dependencies)
                         if (logic.PackageName.Equals(dependency.PackageName))
                             PackageConflictingPackagesDisplay.Items.Add(selectablePackage);
+                }
+                //check categories that use this dependency
+                foreach(Category cat in ParsedCategoryList)
+                {
+                    foreach(DatabaseLogic logic in cat.Dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
+                            PackageConflictingPackagesDisplay.Items.Add(cat);
+                    }
                 }
 
                 //also disable the "remove conflicting package" button since it won't work for these
@@ -1104,7 +1137,7 @@ namespace RelhaxModpack.Windows
                 packageToMove.PackageName, packageCurrentlyOver.PackageName, effects.ToString(), addBelowItem.ToString());
 
             //make sure that the source and destination are not the same
-            if (packageCurrentlyOver.Equals(packageToMove))
+            if (packageCurrentlyOver.Equals(packageToMove) && !addBelowItem)
             {
                 Logging.Editor("database packages detected to be the same, aborting dragDrop");
                 return;
@@ -1910,7 +1943,7 @@ namespace RelhaxModpack.Windows
                 Dependencies = Dependencies,
                 ParsedCategoryList = ParsedCategoryList,
                 EditOrAdd = true,
-                AddSaveLevel = true,
+                AddSameLevel = true,
                 SelectedPackage = null
             };
 
@@ -1922,7 +1955,7 @@ namespace RelhaxModpack.Windows
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
             {
                 PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
-                    addRemove.SelectedPackage, DragDropEffects.Move, !addRemove.AddSaveLevel);
+                    addRemove.SelectedPackage, DragDropEffects.Move, !addRemove.AddSameLevel);
             }
         }
 
@@ -1946,7 +1979,7 @@ namespace RelhaxModpack.Windows
                 Dependencies = Dependencies,
                 ParsedCategoryList = ParsedCategoryList,
                 EditOrAdd = false,
-                AddSaveLevel = true,
+                AddSameLevel = true,
                 SelectedPackage = null
             };
             if (!(bool)addRemove.ShowDialog())
@@ -1958,7 +1991,7 @@ namespace RelhaxModpack.Windows
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
             {
                 PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
-                    addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSaveLevel);
+                    addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSameLevel);
                 DatabaseTreeView.Items.Refresh();
             }
         }
@@ -2723,6 +2756,37 @@ namespace RelhaxModpack.Windows
                 EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
             else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
                 EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
+        }
+
+        private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
+            {
+                Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
+                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
+            };
+            autoUpdatePackageWindow.ShowDialog();
+        }
+
+        private void SelectAutoUpdateWorkDirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                Multiselect = false,
+                Title = "Select folder"
+            };
+            if(openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                SelectAutoUpdateWorkDirectoryTextbox.Text = openFolderDialog.FileName;
+            }
+        }
+
+        private void SelectAutoUpdateWorkDirectoryTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
+            LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
         }
     }
 }
