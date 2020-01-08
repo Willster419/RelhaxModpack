@@ -3973,7 +3973,7 @@ namespace RelhaxModpack
             //Component: CleanupModFilesText
             //
             English.Add("CleanupModFilesText", "Cleanup mod files placed in incorrect locations");
-            German.Add("CleanupModFilesText", ""Bereinige falsch platzierte Moddaten");
+            German.Add("CleanupModFilesText", "Bereinige falsch platzierte Moddaten");
             Polish.Add("CleanupModFilesText", TranslationNeeded);
             French.Add("CleanupModFilesText", TranslationNeeded);
             Spanish.Add("CleanupModFilesText", "Limpiar archivos de mods en rutas incorrectas");
