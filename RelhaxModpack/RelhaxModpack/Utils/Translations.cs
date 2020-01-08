@@ -3976,7 +3976,7 @@ namespace RelhaxModpack
             German.Add("CleanupModFilesText", TranslationNeeded);
             Polish.Add("CleanupModFilesText", TranslationNeeded);
             French.Add("CleanupModFilesText", TranslationNeeded);
-            Spanish.Add("CleanupModFilesText", TranslationNeeded);
+            Spanish.Add("CleanupModFilesText", "Limpiar archivos de mods en rutas incorrectas");
             Russian.Add("CleanupModFilesText", TranslationNeeded);
 
             //Component: CleanupModFilesButtonDescription
@@ -3985,7 +3985,7 @@ namespace RelhaxModpack
             German.Add("CleanupModFilesButtonDescription", TranslationNeeded);
             Polish.Add("CleanupModFilesButtonDescription", TranslationNeeded);
             French.Add("CleanupModFilesButtonDescription", TranslationNeeded);
-            Spanish.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            Spanish.Add("CleanupModFilesButtonDescription", "Elimina cualquier mod en carpetas como win32 y win64 que puedan causar conflictos al cargar");
             Russian.Add("CleanupModFilesButtonDescription", TranslationNeeded);
 
             //Component: cleanupModFilesCompleted
@@ -3994,7 +3994,7 @@ namespace RelhaxModpack
             German.Add("cleanupModFilesCompleted", TranslationNeeded);
             Polish.Add("cleanupModFilesCompleted", TranslationNeeded);
             French.Add("cleanupModFilesCompleted", TranslationNeeded);
-            Spanish.Add("cleanupModFilesCompleted", TranslationNeeded);
+            Spanish.Add("cleanupModFilesCompleted", "Limpieza de mods completada");
             Russian.Add("cleanupModFilesCompleted", TranslationNeeded);
             #endregion
 
