@@ -1751,7 +1751,7 @@ namespace RelhaxModpack
             //Component: UninstallDefaultDescription
             // A radio button tooltip explaining the difference between this option and the option next (to the right) of it.
             English.Add("UninstallDefaultDescription", "Default Uninstall will remove all files in the game's mod directories, including shortcuts and appdata cache files.");
-            German.Add("DefaultUninstallModeRBDescription", "Die Standard Deinstallation wird alle Dateien in den Mod-Verzeichnissen des Spieles löschen, inklusive der" +
+            German.Add("UninstallDefaultDescription", "Die Standard Deinstallation wird alle Dateien in den Mod-Verzeichnissen des Spieles löschen, inklusive der" +
                 " Verknüpfungen und Dateien im 'AppData' Speicher.");
             Polish.Add("UninstallDefaultDescription", "Domyślna dezinstalacja usunie wszystkie pliki w folderze modów i powiązane pliki, także skróty" +
                 " oraz pamięć podręczną aplikacji.");
