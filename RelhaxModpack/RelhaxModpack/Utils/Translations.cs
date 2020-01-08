@@ -3981,7 +3981,7 @@ namespace RelhaxModpack
 
             //Component: CleanupModFilesButtonDescription
             //
-            English.Add("CleanupModFilesButtonDescription", "Deletes any mods located in locations like win32 and win64 that could be causing load conflicts");
+            English.Add("CleanupModFilesButtonDescription", "Deletes any mods located in folders like win32 and win64 that could be causing load conflicts");
             German.Add("CleanupModFilesButtonDescription", TranslationNeeded);
             Polish.Add("CleanupModFilesButtonDescription", TranslationNeeded);
             French.Add("CleanupModFilesButtonDescription", TranslationNeeded);
