@@ -3990,12 +3990,12 @@ namespace RelhaxModpack
 
             //Component: cleanupModFilesCompleted
             // Text displaying (upon mods being cleaned up) in the dedicated status area below all the buttons in the diagnostics window (it's large enough for longer messages).
-            English.Add("CleanupModFilesCompleted", "Cleanup mod files completed");
-            German.Add("CleanupModFilesCompleted", "Bereinigen der Moddaten abgeschlossen");
-            Polish.Add("CleanupModFilesCompleted", "Oczyszczanie modów z niewłaściwych lokalizacji zakończone pomyślnie.");
-            French.Add("CleanupModFilesCompleted", TranslationNeeded);
-            Spanish.Add("CleanupModFilesCompleted", "Limpieza de mods completada");
-            Russian.Add("CleanupModFilesCompleted", "Удаление модов завершено.");
+            English.Add("cleanupModFilesCompleted", "Cleanup mod files completed");
+            German.Add("cleanupModFilesCompleted", "Bereinigen der Moddaten abgeschlossen");
+            Polish.Add("cleanupModFilesCompleted", "Oczyszczanie modów z niewłaściwych lokalizacji zakończone pomyślnie.");
+            French.Add("cleanupModFilesCompleted", TranslationNeeded);
+            Spanish.Add("cleanupModFilesCompleted", "Limpieza de mods completada");
+            Russian.Add("cleanupModFilesCompleted", "Удаление модов завершено.");
             #endregion
 
             #region Add zip files Dialog
