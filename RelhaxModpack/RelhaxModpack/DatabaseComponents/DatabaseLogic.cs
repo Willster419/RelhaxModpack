@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.DatabaseComponents;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,12 +25,24 @@ namespace RelhaxModpack
     /// <summary>
     /// Used for database dependency calculation. Determines what dependent packages use the package that this object is attached to
     /// </summary>
-    public class DatabaseLogic
+    public class DatabaseLogic : IXmlSerializable
     {
+        #region Xml serialization
+        public string[] PropertiesForSerializationAttributes()
+        {
+            return new string[] { nameof(PackageName), nameof(NotFlag), nameof(Logic) };
+        }
+
+        public string[] PropertiesForSerializationElements()
+        {
+            return new string[] { };
+        }
+        #endregion
+
         /// <summary>
         /// The name of the package that this object is attached to
         /// </summary>
-        public string PackageName = "";
+        public string PackageName { get; set; } = "";
 
         //public bool Enabled { get; set; } = false;
 
@@ -41,12 +54,12 @@ namespace RelhaxModpack
         /// <summary>
         /// Flag for negating the "AND" and "OR" logic (Creates "NAND" and "NOR") of how to install the attach object
         /// </summary>
-        public bool NotFlag = false;
+        public bool NotFlag { get; set; } = false;
 
         /// <summary>
         /// The logic type to use for this package definition
         /// </summary>
-        public Logic Logic = Logic.OR;
+        public Logic Logic { get; set; } = Logic.OR;
 
         /// <summary>
         /// A flag for dependency calculation for when the application has linked the dependnecy refrence

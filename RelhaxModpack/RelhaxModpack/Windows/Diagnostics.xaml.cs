@@ -43,14 +43,16 @@ namespace RelhaxModpack.Windows
             if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
             {
                 CollectLogInfoButton.IsEnabled = false;
-                DownloadWGPatchFilesText.IsEnabled = false;
+                //DownloadWGPatchFilesText.IsEnabled = false;
+                CleanupModFilesButton.IsEnabled = false;
                 SelectedInstallation.Text = string.Format("{0}\n{1}",
                     Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
             }
             else
             {
                 CollectLogInfoButton.IsEnabled = true;
-                DownloadWGPatchFilesText.IsEnabled = false;
+                //DownloadWGPatchFilesText.IsEnabled = true;
+                CleanupModFilesButton.IsEnabled = true;
                 SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
             }
         }
@@ -265,6 +267,65 @@ namespace RelhaxModpack.Windows
             {
                 gameCenterUpdateDownloader.ShowDialog();
             }
+        }
+
+        private async void CleanupModFilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            string[] locationsToCheck = new string[]
+            {
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.ModsDir),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.ResModsDir),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.ModsDir),
+                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.ResModsDir)
+            };
+
+            List<string> filesToDelete = new List<string>();
+            foreach(string folderPath in locationsToCheck)
+            {
+                Logging.Debug("Processing folder {0}", folderPath);
+                if(!Directory.Exists(folderPath))
+                {
+                    Logging.Debug("Directory does not exist");
+                    continue;
+                }
+                int count = 0;
+                string[] files = Utils.DirectorySearch(folderPath, SearchOption.AllDirectories, true);
+                if (files != null)
+                    count = files.Count();
+                Logging.Debug("Added {0} files", count);
+                filesToDelete.AddRange(files);
+            }
+
+            Logging.Debug("Deleting files");
+            for(int i = 0; i < filesToDelete.Count; i++)
+            {
+                //check to make sure it's a file
+                if (!File.Exists(filesToDelete[i]))
+                    continue;
+
+                DiagnosticsStatusTextBox.Text = string.Format("{0} {1} {2} {3}",
+                    Translations.GetTranslatedString("deletingFile"), (i + 1), Translations.GetTranslatedString("of"), filesToDelete.Count);
+
+                await Task.Run(() => Utils.FileDelete(filesToDelete[i]));
+            }
+
+            //fully delete the folders now
+            Logging.Debug("Complete delete of folders");
+            List<string> locationsFailedToDelete = new List<string>();
+            foreach (string folderPath in locationsToCheck)
+            {
+                if(Directory.Exists(folderPath))
+                    if (!Utils.DirectoryDelete(folderPath, true))
+                        locationsFailedToDelete.Add(folderPath);
+            }
+
+            if(locationsFailedToDelete.Count > 0)
+            {
+                Logging.Error("Failed to delete the folders: {0}", string.Join(",", locationsFailedToDelete));
+                MessageBox.Show(string.Format("{0}, {1}", Translations.GetTranslatedString("folderDeleteFailed"), string.Join(",\n", locationsFailedToDelete)));
+            }
+
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanupModFilesCompleted");
         }
     }
 }

@@ -1199,7 +1199,8 @@ namespace RelhaxModpack
                 //set the owner
                 //https://stackoverflow.com/questions/21756542/why-is-window-showdialog-not-blocking-in-taskscheduler-task
                 //https://docs.microsoft.com/en-us/dotnet/api/system.windows.window.owner?view=netframework-4.8
-                Owner = GetWindow(this)
+                Owner = GetWindow(this),
+                AutoInstallMode = (sender == null)
             };
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;
@@ -1212,7 +1213,7 @@ namespace RelhaxModpack
             if (e.ContinueInstallation)
             {
                 OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),
-                    new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods));
+                    new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods),e.IsAutoInstall);
                 modSelectionList = null;
             }
             else
@@ -1221,7 +1222,8 @@ namespace RelhaxModpack
             }
         }
 
-        private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies, List<SelectablePackage> UserMods)
+        private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies,
+            List<SelectablePackage> UserMods, bool isAutoInstall)
         {
             //rookie mistake checks
             if (parsedCategoryList == null || dependencies == null || globalDependencies == null ||
@@ -1580,7 +1582,7 @@ namespace RelhaxModpack
                 if(ModpackSettings.VerboseLogging)
                     DisplayAndLogInstallErrors(results, false);
 
-                if (!ModpackSettings.AutoInstall)
+                if (!isAutoInstall)
                 {
                     if (ModpackSettings.ShowInstallCompleteWindow)
                     {

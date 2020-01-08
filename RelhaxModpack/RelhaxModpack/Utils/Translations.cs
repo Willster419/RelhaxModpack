@@ -1344,9 +1344,9 @@ namespace RelhaxModpack
             English.Add("LauchPatchDesignerText", "Launch Patch Designer");
             German.Add("LauchPatchDesignerText", "Starte Patch Designer");
             Polish.Add("LauchPatchDesignerText", "Uruchom Patch Designer");
-            French.Add("LauchPatchDesignerText", TranslationNeeded);
-            Spanish.Add("LauchPatchDesignerText", TranslationNeeded);
-            Russian.Add("LauchPatchDesignerText", TranslationNeeded);
+            French.Add("LauchPatchDesignerText", "Lancer le Patch Designer");
+            Spanish.Add("LauchPatchDesignerText", "Iniciar diseñador de parche");
+            Russian.Add("LauchPatchDesignerText", "Запустить конструктор патчей");
 
             //Component: LauchEditorDescription
             //button for launching the editor from the main application window
@@ -1630,10 +1630,15 @@ namespace RelhaxModpack
 
             //Component: HelperText
             //
-            English.Add("HelperText", "Welcome to the Relhax Modpack! I have tried to make the modpack as straight-forward as possible, but questions may still arise." +
-                " Hover over a setting to have it explained.");
-            German.Add("HelperText", "Willkommen im Relhax Modpack! Ich habe versucht, das Modpack so einfach wie möglich zu gestalten, aber Fragen können dennoch entstehen." +
-                " Rechtsklick auf eine Einstellung erklärt diese dann.");
+            English.Add("HelperText", "Welcome to the Relhax Modpack!" +
+                "\nI have tried to make the modpack as straight-forward as possible, but questions may still arise. Hover over a setting to have it explained." +
+                "\nThanks for using Relhax, I hope you enjoy it! - Willster419");
+            German.Add("HelperText", "Willkommen beim Relhax Modpack!" +
+                " \n\nIch habe versucht, das Modpack so einfach wie möglich zu gestalten. " +
+                " \nZum Beispiel kannst du mit einem Klick der rechten Maustaste auf einen Eintrag eine Beschreibung oder Vorschau anzeigen." +
+                " \nNatürlich können dennoch Fragen entstehen." +
+                " In so einem Fall nutze bitte eine unserer unten angezeigten Kontaktmöglichkeiten." +
+                " \n\nVielen Dank für die Nutzung des Relhax Modpacks\n - Willster419");
             Polish.Add("HelperText", "Witaj w Modpacku Relhax!\n\nMoim celem było stworzenie paczki modów tak prostej, jak to tylko możliwe,\n" +
                 "ale jeśli nadal czujesz się nieco zagubiony, po prostu najedź kursorem na dowolną opcję i przeczytaj jej opis.");
             French.Add("HelperText", "Bienvenue au Modpack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir." +
@@ -1646,7 +1651,7 @@ namespace RelhaxModpack
             //Component: helperTextShort
             //
             English.Add("helperTextShort", "Welcome to the Relhax Modpack!");
-            German.Add("helperTextShort", "Willkommen im Relhax Modpack!");
+            German.Add("helperTextShort", "Willkommen zum Relhax Modpack!");
             Polish.Add("helperTextShort", "Witamy w paczce Relhax!");
             French.Add("helperTextShort", "Bienvenue au Modpack Relhax!");
             Spanish.Add("helperTextShort", "¡Bienvenido a RelHax Modpack!");
@@ -1655,7 +1660,7 @@ namespace RelhaxModpack
             //Component: NotifyIfSameDatabaseText
             //
             English.Add("NotifyIfSameDatabaseText", "Inform if no new database available (stable database only)");
-            German.Add("NotifyIfSameDatabaseText", "Hinweis wenn es keine Aktuallisierungen gibt");
+            German.Add("NotifyIfSameDatabaseText", "Benachrichtigung wenn es keine Aktuallisierungen für die Datenbank gibt");
             Polish.Add("NotifyIfSameDatabaseText", "Powiadom o braku nowej bazy danych*");//"Powiadom o braku nowej bazy danych"
             French.Add("NotifyIfSameDatabaseText", "Informer si aucune nouvelle base de données n'est disponible");//"Informer si aucune nouvelle base de données est disponible"
             Spanish.Add("NotifyIfSameDatabaseText", "Informar si no hay una nueva base de datos disponible (sólo estable)");//"Informar si no hay nueva base de datos"
@@ -3964,6 +3969,33 @@ namespace RelhaxModpack
             French.Add("loadingAtlasImageLibrariesFail", "Echec du chargement de la bibliothèque de traitement d'images atlas");
             Spanish.Add("loadingAtlasImageLibrariesFail", "No se han podido cargar las librerías de procesamiento de imágenes de atlas");
             Russian.Add("loadingAtlasImageLibrariesFail", "Не удалось загрузить библиотеки обработчика");
+
+            //Component: CleanupModFilesText
+            //
+            English.Add("CleanupModFilesText", "Cleanup mod files placed in incorrect locations");
+            German.Add("CleanupModFilesText", ""Bereinige falsch platzierte Moddaten");
+            Polish.Add("CleanupModFilesText", TranslationNeeded);
+            French.Add("CleanupModFilesText", TranslationNeeded);
+            Spanish.Add("CleanupModFilesText", "Limpiar archivos de mods en rutas incorrectas");
+            Russian.Add("CleanupModFilesText", TranslationNeeded);
+
+            //Component: CleanupModFilesButtonDescription
+            //
+            English.Add("CleanupModFilesButtonDescription", "Deletes any mods located in folders like win32 and win64 that could be causing load conflicts");
+            German.Add("CleanupModFilesButtonDescription", "Löscht alle Moddaten aus den win32 und win64 Ordnern um Konflikte zu vermeiden");
+            Polish.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            French.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            Spanish.Add("CleanupModFilesButtonDescription", "Elimina cualquier mod en carpetas como win32 y win64 que puedan causar conflictos al cargar");
+            Russian.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+
+            //Component: cleanupModFilesCompleted
+            //
+            English.Add("cleanupModFilesCompleted", "Cleanup mod files completed");
+            German.Add("cleanupModFilesCompleted", "Bereinigen der Moddaten abgeschlossen");
+            Polish.Add("cleanupModFilesCompleted", TranslationNeeded);
+            French.Add("cleanupModFilesCompleted", TranslationNeeded);
+            Spanish.Add("cleanupModFilesCompleted", "Limpieza de mods completada");
+            Russian.Add("cleanupModFilesCompleted", TranslationNeeded);
             #endregion
 
             #region Add zip files Dialog

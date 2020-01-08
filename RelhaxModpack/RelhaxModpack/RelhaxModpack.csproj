@@ -135,6 +135,8 @@
     <Compile Include="DatabaseComponents\Dependency.cs" />
     <Compile Include="DatabaseComponents\DownloadInstructions.cs" />
     <Compile Include="DatabaseComponents\IComponentWithDependencies.cs" />
+    <Compile Include="DatabaseComponents\IComponentWithID.cs" />
+    <Compile Include="DatabaseComponents\IXmlSerializable.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
     <Compile Include="DatabaseComponents\PatchUpdate.cs" />

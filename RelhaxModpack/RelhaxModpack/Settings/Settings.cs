@@ -174,6 +174,10 @@ namespace RelhaxModpack
         /// </summary>
         public const string WoT32bitFolder = "win32";
 
+        public const string ModsDir = "mods";
+
+        public const string ResModsDir = "res_mods";
+
         /// <summary>
         /// The WoT 64bit folder name with the folder separator before it
         /// </summary>

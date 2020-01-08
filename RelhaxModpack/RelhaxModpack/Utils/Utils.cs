@@ -1989,34 +1989,13 @@ namespace RelhaxModpack
             return listToCheck.Max(ma => ma.PatchGroup);
         }
 
-        /// <summary>
-        /// Dynamically sets the properties and fields of and DatabasePackage object and children based on the property reflective info and the string value to set
-        /// </summary>
-        /// <param name="packageOfAnyType">The DatabasePackage object</param>
-        /// <param name="packageFieldOrProperty">The reflective info of the Field or Property to set the information on</param>
-        /// <param name="valueToSet">The string representation of the data to set on that field or property</param>
-        /// <returns>True if operation was successful, false otherwise</returns>
-        public static bool SetObjectMember(object packageOfAnyType, MemberInfo packageFieldOrProperty, string valueToSet)
+        public static bool SetObjectProperty(object componentWithProperty, PropertyInfo propertyInfoFromComponent, string valueToSet)
         {
             try
             {
-                if(packageFieldOrProperty is FieldInfo packageField)
-                {
-                    var converter = TypeDescriptor.GetConverter(packageField.FieldType);
-                    packageField.SetValue(packageOfAnyType, converter.ConvertFrom(valueToSet));
-                    return true;
-                }
-                else if(packageFieldOrProperty is PropertyInfo packageProperty)
-                {
-                    var converter = TypeDescriptor.GetConverter(packageProperty.PropertyType);
-                    packageProperty.SetValue(packageOfAnyType, converter.ConvertFrom(valueToSet));
-                    return true;
-                }
-                else
-                {
-                    Logging.Debug("invalid type of memberinfo of member {0}", packageFieldOrProperty.Name);
-                    return false;
-                }
+                var converter = TypeDescriptor.GetConverter(propertyInfoFromComponent.PropertyType);
+                propertyInfoFromComponent.SetValue(componentWithProperty, converter.ConvertFrom(valueToSet));
+                return true;
             }
             catch (Exception ex)
             {
@@ -2025,84 +2004,131 @@ namespace RelhaxModpack
             }
         }
 
-        /// <summary>
-        /// Dynamically assigns field properties to custom objects of a custom type of a list
-        /// </summary>
-        /// <param name="objectThatHasListProperty">The List type object of other objects (Like the Media List)</param>
-        /// <param name="nameOfListField">The field type of from the Package Type (Like Media)</param>
-        /// <param name="xmlListItems">The XElement list of items (Like the xml list of media items)</param>
-        /// <returns>True if the operation was successful, false otherwise</returns>
-        public static bool SetListEntriesField(object objectThatHasListProperty, FieldInfo nameOfListField, IEnumerable<XElement> xmlListItems)
+        public static bool SetObjectValue(Type objectType, string valueToSet, out object newObject)
         {
-            //get a list type to add stuff to
-            //https://stackoverflow.com/questions/25757121/c-sharp-how-to-set-propertyinfo-value-when-its-type-is-a-listt-and-i-have-a-li
-            object obj = nameOfListField.GetValue(objectThatHasListProperty);
-            DatabasePackage packageOfAnyType = objectThatHasListProperty as DatabasePackage;
-            //IList list = (IList)packageField.GetValue(obj);
-            IList list = (IList)obj;
+            try
+            {
+                newObject = Activator.CreateInstance(objectType);
+                var converter = TypeDescriptor.GetConverter(objectType);
+                newObject = converter.ConvertFrom(valueToSet);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                newObject = null;
+                return false;
+            }
+        }
+
+        public static void SetListEntries(IComponentWithID componentWithID, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
+        {
+            //get the list interfaced component
+            IList listProperty = listPropertyInfo.GetValue(componentWithID) as IList;
+
             //we now have the empty list, now get type type of list it is
             //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
-            Type listObjectType = list.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
+            Type listObjectType = listProperty.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
                 .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
+
+            //create the tracking lists for unknown and missing elements out here as null for first time init later
+            List<string> missingAttributes = null;
+            List<string> unknownAttributes = new List<string>();
+            List<string> unknownElements = new List<string>();
+
+            //so now we have the xml container (xmlListItems), and the internal memory container (listProperty)
             //now for each xml element, get the value information and set it
             //if it originates from the 
             foreach (XElement listElement in xmlListItems)
             {
-                //2 types of options for what this list could be: single node values (string, just node value), node of many values (custon type, many values)
-                if (listElement.Attributes().Count() > 0)//custom class type
+                //if it's just like a string or something then just load that
+                if(listObjectType.IsValueType)
                 {
-                    object listEntry = Activator.CreateInstance(listObjectType);
-                    //get list of fields in this entry object
-                    FieldInfo[] fieldsInObjectInstance = listObjectType.GetFields();
-                    List<string> missingMembers = new List<string>();
-                    List<string> unknownMembers = new List<string>();
-                    foreach (FieldInfo info in fieldsInObjectInstance)
-                        missingMembers.Add(info.Name);
-                    foreach (XAttribute listEntryAttribute in listElement.Attributes())
+                    if(SetObjectValue(listObjectType,listElement.Value,out object newObject))
                     {
-                        FieldInfo[] matchingListobjectsField = fieldsInObjectInstance.Where(field => field.Name.Equals(listEntryAttribute.Name.LocalName)).ToArray();
-                        if (matchingListobjectsField.Count() == 0)
-                        {
-                            //no matching entries from xml attribute name to fieldInfo of custom type
-                            unknownMembers.Add(listEntryAttribute.Name.LocalName);
-                            continue;
-                        }
-                        FieldInfo listobjectField = matchingListobjectsField[0];
-                        missingMembers.Remove(listobjectField.Name);
-                        try
-                        {
-                            var converter = TypeDescriptor.GetConverter(listobjectField.FieldType);
-                            listobjectField.SetValue(listEntry, converter.ConvertFrom(listEntryAttribute.Value));
-                        }
-                        catch (Exception ex)
-                        {
-                            Logging.Exception(ex.ToString());
-                        }
+                        listProperty.Add(newObject);
+                        continue;
                     }
-                    foreach(string missingMember in missingMembers)
-                    {
-                        //exist in member class info, but not set from xml attributes
-                        if(packageOfAnyType!= null)
-                            Logging.Error("Missing xml attribute: {0}, package: {1}, line{2}", missingMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
-                        else
-                            Logging.Error("Missing xml attribute: {0}, object: {1}, line{2}", missingMember, objectThatHasListProperty.ToString(), ((IXmlLineInfo)listElement).LineNumber);
-                    }
-                    foreach(string unknownMember in unknownMembers)
-                    {
-                        //exist in xml attributes, but not known member in memberInfo
-                        if (packageOfAnyType != null)
-                            Logging.Error("unknown xml attribute: {0}, package: {1}, line{2}", unknownMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
-                        else
-                            Logging.Error("unknown xml attribute: {0}, object: {1}, line{2}", unknownMember, objectThatHasListProperty.ToString(), ((IXmlLineInfo)listElement).LineNumber);
-                    }
-                    list.Add(listEntry);
                 }
-                else//single primitive entry type
+
+                //make sure object type is properly implemented into serialization system
+                if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
+                    throw new BadMemeException("Type of this list is not of IXmlSerializable");
+
+                //assign missing attributes if not done already
+                if (missingAttributes == null)
+                    missingAttributes = new List<string>(listEntry.PropertiesForSerializationAttributes());
+
+                foreach (XAttribute listEntryAttribute in listElement.Attributes())
                 {
-                    list.Add(listElement.Value);
+                    if (!listEntry.PropertiesForSerializationAttributes().Contains(listEntryAttribute.Name.LocalName))
+                    {
+                        unknownAttributes.Add(listEntryAttribute.Name.LocalName);
+                        continue;
+                    }
+
+                    PropertyInfo property = listObjectType.GetProperty(listEntryAttribute.Name.LocalName);
+
+                    //check if attribute exists in class object
+                    if(property == null)
+                    {
+                        Logging.Error("Property (xml attribute) {0} exists in array for serialization, but not in class design!, ", listEntryAttribute.Name.LocalName);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        continue;
+                    }
+
+                    //remove from list of potential missing mandatory elements
+                    missingAttributes.Remove(listEntryAttribute.Name.LocalName);
+
+                    if(!SetObjectProperty(listEntry, property, listEntryAttribute.Value))
+                    {
+                        Logging.Error("Failed to set property {0} for element in IList", property.Name);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    }
                 }
+
+                foreach(XElement listEntryElement in listElement.Elements())
+                {
+                    if (!listEntry.PropertiesForSerializationElements().Contains(listEntryElement.Name.LocalName))
+                    {
+                        unknownElements.Add(listEntryElement.Name.LocalName);
+                        continue;
+                    }
+
+                    PropertyInfo property = listObjectType.GetProperty(listEntryElement.Name.LocalName);
+
+                    if (property == null)
+                    {
+                        Logging.Error("Property (xml element) {0} exists in array for serialization, but not in class design!, ", listEntryElement.Name.LocalName);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                        continue;
+                    }
+
+                    //no missing elements (elements are optional)
+
+                    if (!SetObjectProperty(listEntry, property, listEntryElement.Value))
+                    {
+                        Logging.Error("Failed to set property {0} for element in IList", property.Name);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                    }
+                }
+
+                //logging unknown and missings
+                foreach (string missingAttribute in missingAttributes)
+                {
+                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", missingAttribute, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                }
+                foreach (string unknownAttribute in unknownAttributes)
+                {
+                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                }
+                foreach (string unknownElement in unknownElements)
+                {
+                    Logging.Error("Unknown xml element: {0}, package: {1}, line: {2}", unknownElement, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                }
+
+                listProperty.Add(listEntry);
             }
-            return true;
         }
         #endregion
 

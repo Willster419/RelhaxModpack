@@ -38,21 +38,31 @@ namespace RelhaxModpack
         /// </summary>
         multi
     }
+
     /// <summary>
     /// A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
     /// </summary>
-    public class SelectablePackage : DatabasePackage, IComponentWithDependencies
+    public class SelectablePackage : DatabasePackage, IComponentWithDependencies, IXmlSerializable
     {
-        #region XML Parsing
+        #region Xml serialization
+        public override string[] PropertiesForSerializationAttributes()
+        {
+            return base.PropertiesForSerializationAttributes().Concat(SelectablePackagePropertiesToXmlParseAttributes.ToArray()).ToArray();
+        }
 
-        private static readonly List<string> SelectableElementsToXmlParseAttributes = new List<string>()
+        public override string[] PropertiesForSerializationElements()
+        {
+            return base.PropertiesForSerializationElements().Concat(SelectablePackagePropertiesToXmlParseElements.ToArray()).ToArray();
+        }
+
+        private static readonly List<string> SelectablePackagePropertiesToXmlParseAttributes = new List<string>()
         {
             nameof(Name),
             nameof(Type),
             nameof(Visible)
         };
 
-        private static readonly List<string> SelectableElementsToXmlParseNodes = new List<string>()
+        private static readonly List<string> SelectablePackagePropertiesToXmlParseElements = new List<string>()
         {
             nameof(Description),
             nameof(UpdateComment),
@@ -72,7 +82,7 @@ namespace RelhaxModpack
         /// <returns>The string list</returns>
         new public static List<string> FieldsToXmlParseAttributes()
         {
-            return DatabasePackage.FieldsToXmlParseAttributes().Concat(SelectableElementsToXmlParseAttributes).ToList();
+            return DatabasePackage.FieldsToXmlParseAttributes().Concat(SelectablePackagePropertiesToXmlParseAttributes).ToList();
         }
 
         /// <summary>
@@ -81,7 +91,7 @@ namespace RelhaxModpack
         /// <returns>The string list</returns>
         new public static List<string> FieldsToXmlParseNodes()
         {
-            return DatabasePackage.FieldsToXmlParseNodes().Concat(SelectableElementsToXmlParseNodes).ToList();
+            return DatabasePackage.FieldsToXmlParseNodes().Concat(SelectablePackagePropertiesToXmlParseElements).ToList();
         }
         #endregion
 
@@ -97,7 +107,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The display name of the package
         /// </summary>
-        public string Name = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// The name of the package with the version macro replaced for use display
@@ -115,57 +125,57 @@ namespace RelhaxModpack
         /// <summary>
         /// The Category object reference
         /// </summary>
-        public Category ParentCategory = null;
+        public Category ParentCategory { get; set; } = null;
 
         /// <summary>
         /// The type of selectable package logic to follow (see SelectionTypes enumeration for options)
         /// </summary>
-        public SelectionTypes Type = SelectionTypes.none;
+        public SelectionTypes Type { get; set; } = SelectionTypes.none;
 
         /// <summary>
         /// The reference for the direct parent of this package
         /// </summary>
-        public SelectablePackage Parent = null;
+        public SelectablePackage Parent { get; set; } = null;
 
         /// <summary>
         /// The reference for the absolute top of the package tree
         /// </summary>
-        public SelectablePackage TopParent = null;
+        public SelectablePackage TopParent { get; set; } = null;
 
         /// <summary>
         /// A flag to determine whether or not the mod should be shown in UI
         /// </summary>
-        public bool Visible = false;
+        public bool Visible { get; set; } = false;
 
         /// <summary>
         /// Update comments of the package
         /// </summary>
-        public string UpdateComment = string.Empty;
+        public string UpdateComment { get; set; } = string.Empty;
 
         /// <summary>
         /// description of the package
         /// </summary>
-        public string Description = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         /// <summary>
         /// Flag to determine if the package is popular
         /// </summary>
-        public bool PopularMod = false;
+        public bool PopularMod { get; set; } = false;
 
         /// <summary>
         /// Flag to determine if the package is of controversial nature, or if the developer is a controversial source
         /// </summary>
-        public bool GreyAreaMod = false;
+        public bool GreyAreaMod { get; set; } = false;
 
         /// <summary>
         /// Flag to determine any packages of this package should be sorted (by name)
         /// </summary>
-        public bool SortChildPackages = false;
+        public bool SortChildPackages { get; set; } = false;
 
         /// <summary>
         /// Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
         /// </summary>
-        public bool FlagForSelectionSave = false;
+        public bool FlagForSelectionSave { get; set; } = false;
 
         /// <summary>
         /// Field for whether the package is selected to install
@@ -319,27 +329,27 @@ namespace RelhaxModpack
         /// The level in the database tree where the package resides.
         /// Category header is -1, each child is +1 from there
         /// </summary>
-        public int Level = -2;
+        public int Level { get; set; } = -2;
 
         /// <summary>
         /// The list of cache files that should be backed up before wiping the directory
         /// </summary>
-        public List<UserFile> UserFiles = new List<UserFile>();
+        public List<UserFile> UserFiles { get; set; } = new List<UserFile>();
 
         /// <summary>
         /// The list of child SelectablePackage entries in this instance of SelectablePackages
         /// </summary>
-        public List<SelectablePackage> Packages = new List<SelectablePackage>();
+        public List<SelectablePackage> Packages { get; set; } = new List<SelectablePackage>();
 
         /// <summary>
         /// List of media preview items associated with this package, shown in the preview window on right click of component
         /// </summary>
-        public List<Media> Medias = new List<Media>();
+        public List<Media> Medias { get; set; } = new List<Media>();
 
         /// <summary>
         /// A list of packages (from dependencies list) that this package is dependent on in order to be installed
         /// </summary>
-        public List<DatabaseLogic> Dependencies = new List<DatabaseLogic>();
+        public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
 
         /// <summary>
         /// Property of Dependencies list to allow for interface implementation
@@ -350,12 +360,12 @@ namespace RelhaxModpack
         /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
         /// Refer to examples for more information
         /// </summary>
-        public List<string> ConflictingPackages = new List<string>();
+        public List<string> ConflictingPackages { get; set; } = new List<string>();
 
         /// <summary>
         /// Toggle if the package should appear in the search list
         /// </summary>
-        public bool ShowInSearchList = true;
+        public bool ShowInSearchList { get; set; } = true;
 
         /// <summary>
         /// When a databasePackage, the internal packageName. When category, the category name
