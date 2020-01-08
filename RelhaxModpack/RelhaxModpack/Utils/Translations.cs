@@ -3973,7 +3973,7 @@ namespace RelhaxModpack
             //Component: CleanupModFilesText
             //
             English.Add("CleanupModFilesText", "Cleanup mod files placed in incorrect locations");
-            German.Add("CleanupModFilesText", TranslationNeeded);
+            German.Add("CleanupModFilesText", ""Bereinige falsch platzierte Moddaten");
             Polish.Add("CleanupModFilesText", TranslationNeeded);
             French.Add("CleanupModFilesText", TranslationNeeded);
             Spanish.Add("CleanupModFilesText", "Limpiar archivos de mods en rutas incorrectas");
@@ -3982,7 +3982,7 @@ namespace RelhaxModpack
             //Component: CleanupModFilesButtonDescription
             //
             English.Add("CleanupModFilesButtonDescription", "Deletes any mods located in folders like win32 and win64 that could be causing load conflicts");
-            German.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            German.Add("CleanupModFilesButtonDescription", "Löscht alle Moddaten aus den win32 und win64 Ordnern um Konflikte zu vermeiden");
             Polish.Add("CleanupModFilesButtonDescription", TranslationNeeded);
             French.Add("CleanupModFilesButtonDescription", TranslationNeeded);
             Spanish.Add("CleanupModFilesButtonDescription", "Elimina cualquier mod en carpetas como win32 y win64 que puedan causar conflictos al cargar");
@@ -3991,7 +3991,7 @@ namespace RelhaxModpack
             //Component: cleanupModFilesCompleted
             //
             English.Add("cleanupModFilesCompleted", "Cleanup mod files completed");
-            German.Add("cleanupModFilesCompleted", TranslationNeeded);
+            German.Add("cleanupModFilesCompleted", "Bereinigen der Moddaten abgeschlossen");
             Polish.Add("cleanupModFilesCompleted", TranslationNeeded);
             French.Add("cleanupModFilesCompleted", TranslationNeeded);
             Spanish.Add("cleanupModFilesCompleted", "Limpieza de mods completada");
