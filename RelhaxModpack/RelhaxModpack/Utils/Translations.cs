@@ -3972,7 +3972,7 @@ namespace RelhaxModpack
             English.Add("CleanupModFilesText", "Cleanup mod files placed in incorrect locations");
             German.Add("CleanupModFilesText", "Bereinige falsch platzierte Moddaten");
             Polish.Add("CleanupModFilesText", "Usuń mody z niewłaściwych folderów");
-            French.Add("CleanupModFilesText", TranslationNeeded);
+            French.Add("CleanupModFilesText", "Nettoyer les fichiers de mods placer à des endroits incorrects");
             Spanish.Add("CleanupModFilesText", "Limpiar archivos de mods en rutas incorrectas");
             Russian.Add("CleanupModFilesText", "Удалить некорректно установленные моды");
 
@@ -3981,7 +3981,7 @@ namespace RelhaxModpack
             English.Add("CleanupModFilesButtonDescription", "Deletes any mods located in folders like win32 and win64 that could be causing load conflicts");
             German.Add("CleanupModFilesButtonDescription", "Löscht alle Moddaten aus den win32 und win64 Ordnern um Konflikte zu vermeiden");
             Polish.Add("CleanupModFilesButtonDescription", "Czyści wszelkie mody z folderów takich jak win32 i win64 mogące powodować problemy z wczytywaniem.");
-            French.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            French.Add("CleanupModFilesButtonDescription", "Supprimer tous les mods se situant dans des dossiers comme win32 et win64 qui pourrait causer des confits de chargement");
             Spanish.Add("CleanupModFilesButtonDescription", "Elimina cualquier mod en carpetas como win32 y win64 que puedan causar conflictos al cargar");
             Russian.Add("CleanupModFilesButtonDescription", "Будут удалены все моды, установленные в папках win32 и win64 во избежание конфликтов в процессе загрузки.");
 
@@ -3990,7 +3990,7 @@ namespace RelhaxModpack
             English.Add("cleanupModFilesCompleted", "Cleanup mod files completed");
             German.Add("cleanupModFilesCompleted", "Bereinigen der Moddaten abgeschlossen");
             Polish.Add("cleanupModFilesCompleted", "Oczyszczanie modów z niewłaściwych lokalizacji zakończone pomyślnie.");
-            French.Add("cleanupModFilesCompleted", TranslationNeeded);
+            French.Add("cleanupModFilesCompleted", "Nettoyage des fichiers de mods terminé");
             Spanish.Add("cleanupModFilesCompleted", "Limpieza de mods completada");
             Russian.Add("cleanupModFilesCompleted", "Удаление модов завершено.");
             #endregion
