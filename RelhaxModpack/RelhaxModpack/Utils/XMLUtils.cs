@@ -12,6 +12,8 @@ using System.Text;
 using Ionic.Zip;
 using RelhaxModpack.XmlBinary;
 using RelhaxModpack.DatabaseComponents;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace RelhaxModpack
 {
@@ -283,6 +285,40 @@ namespace RelhaxModpack
         #endregion
 
         #region Database Loading
+        public static List<string> GetBetaDatabase1V1FilesList()
+        {
+            XmlDocument rootDocument = null;
+            using (WebClient client = new WebClient())
+            {
+                //load string constant url from manager info xml
+                string rootXml = Settings.BetaDatabaseV2FolderURL + Settings.BetaDatabaseV2RootFilename;
+
+                //download the xml string into "modInfoXml"
+                client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                rootDocument = LoadXmlDocument(client.DownloadString(rootXml), XmlLoadType.FromString);
+            }
+
+            List<string> databaseFiles = new List<string>()
+            {
+                Settings.BetaDatabaseV2FolderURL + GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"),
+                Settings.BetaDatabaseV2FolderURL + GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file")
+            };
+
+            //categories
+            foreach (XmlNode categoryNode in GetXmlNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
+            {
+                string categoryFileName = categoryNode.Attributes["file"].Value;
+                databaseFiles.Add(Settings.BetaDatabaseV2FolderURL + categoryFileName);
+            }
+
+            return databaseFiles;
+        }
+
+        public async static Task<List<string>> GetBetaDatabase1V1FilesListAsync()
+        {
+            return await Task<List<string>>.Run(() => GetBetaDatabase1V1FilesList());
+        }
+
         /// <summary>
         /// Parse the Xml database of any type into lists in memory
         /// </summary>
