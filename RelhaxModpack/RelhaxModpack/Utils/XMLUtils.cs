@@ -311,7 +311,7 @@ namespace RelhaxModpack
                 databaseFiles.Add(Settings.BetaDatabaseV2FolderURL + categoryFileName);
             }
 
-            return databaseFiles;
+            return databaseFiles.Select(name => name.Replace(".Xml",".xml")).ToList();
         }
 
         public async static Task<List<string>> GetBetaDatabase1V1FilesListAsync()

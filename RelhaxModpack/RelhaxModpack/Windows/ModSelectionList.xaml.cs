@@ -321,7 +321,6 @@ namespace RelhaxModpack.Windows
                     case DatabaseVersions.Stable:
                         //make string
                         string modInfoxmlURL = Settings.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", LastSupportedWoTClientVersion) + "modInfo.dat";
-                        modInfoxmlURL = modInfoxmlURL.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
 
                         //download latest modInfo xml
                         try
@@ -393,13 +392,22 @@ namespace RelhaxModpack.Windows
                 switch(databaseVersion)
                 {
                     case DatabaseVersions.Stable:
-                        Logging.Debug("getting xml string values from zip file");
+                        Logging.Debug("Getting xml string values from zip file");
                         List<string> categoriesXml = new List<string>();
-                        string globalDependencyXmlString = Utils.GetStringFromZip(zipfile, XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file"));
-                        string dependenicesXmlString = Utils.GetStringFromZip(zipfile, XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file"));
+
+                        string globalDependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file");
+                        Logging.Debug("Found xml entry: {0}", globalDependencyFilename);
+                        string globalDependencyXmlString = Utils.GetStringFromZip(zipfile, globalDependencyFilename);
+
+                        string dependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file");
+                        Logging.Debug("Found xml entry: {0}", dependencyFilename);
+                        string dependenicesXmlString = Utils.GetStringFromZip(zipfile, dependencyFilename);
+
                         foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
                         {
-                            categoriesXml.Add(Utils.GetStringFromZip(zipfile, XmlUtils.GetXmlStringFromXPath(modInfoDocument, categoryNode.Attributes["file"].Value)));
+                            string categoryFilename = categoryNode.Attributes["file"].Value;
+                            Logging.Debug("Found xml entry: {0}", categoryFilename);
+                            categoriesXml.Add(Utils.GetStringFromZip(zipfile, categoryFilename));
                         }
                         zipfile.Dispose();
                         zipfile = null;

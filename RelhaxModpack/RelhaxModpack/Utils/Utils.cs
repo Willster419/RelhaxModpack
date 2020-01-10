@@ -2142,9 +2142,9 @@ namespace RelhaxModpack
             return string.Join(string.Empty, downloadStrings);
         }
 
-        public static Task<string> GetBetaDatabase1V1ForStringCompareAsync()
+        public async static Task<string> GetBetaDatabase1V1ForStringCompareAsync()
         {
-            return Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare());
+            return await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare());
         }
 
         public static string[] DownloadStringsFromUrls(List<string> downloadURLs)

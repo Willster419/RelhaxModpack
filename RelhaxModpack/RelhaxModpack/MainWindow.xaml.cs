@@ -2668,7 +2668,6 @@ namespace RelhaxModpack
                 if (databaseVersion == DatabaseVersions.Beta)
                 {
                     Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, database = beta, need to get current beta database for comparison");
-                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
                     if (loading)
                     {
                         if (string.IsNullOrEmpty(oldBetaDB))
@@ -2915,7 +2914,6 @@ namespace RelhaxModpack
                 }
 
                 Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user confirmed, setup initial check");
-                client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
                 if (loading)
                 {
                     if (string.IsNullOrEmpty(oldBetaDB))
