@@ -567,6 +567,7 @@ namespace RelhaxModpack.Windows
 
         private async void CleanFoldersOnlineStep2_Click(object sender, RoutedEventArgs e)
         {
+            throw new NotImplementedException("This needs to be updated to the Bigmods database location");
             ToggleUI((TabController.SelectedItem as TabItem), false);
             ReportProgress("Running Clean Folders online step 2");
             if(CleanFoldersOnlineStep2b.Items.Count == 0)
@@ -614,7 +615,7 @@ namespace RelhaxModpack.Windows
                     if(infos.WoTClientVersion.Equals("GITHUB"))
                     {
 #pragma warning disable CS0618
-                        doc.LoadXml(await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL));
+                        doc.LoadXml(await client.DownloadStringTaskAsync(Settings.BetaDatabaseV2FolderURL + Settings.BetaDatabaseV2RootFilename));
 #pragma warning restore CS0618
                         string betaDatabaseOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
                         ReportProgress(string.Format("GITHUB online folder={0}, selected online folder to clean version={1}",
