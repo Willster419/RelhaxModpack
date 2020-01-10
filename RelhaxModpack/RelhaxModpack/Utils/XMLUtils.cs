@@ -285,7 +285,7 @@ namespace RelhaxModpack
         #endregion
 
         #region Database Loading
-        public static List<string> GetBetaDatabase1V1FilesList()
+        public static XmlDocument GetBetaDatabaseRoot1V1Document()
         {
             XmlDocument rootDocument = null;
             using (WebClient client = new WebClient())
@@ -297,6 +297,30 @@ namespace RelhaxModpack
                 client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
                 rootDocument = LoadXmlDocument(client.DownloadString(rootXml), XmlLoadType.FromString);
             }
+            return rootDocument;
+        }
+
+        public static List<string> GetBetaDatabase1V1FilesList(XmlDocument rootDocument)
+        {
+            List<string> databaseFiles = new List<string>()
+            {
+                Settings.BetaDatabaseV2FolderURL + GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"),
+                Settings.BetaDatabaseV2FolderURL + GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file")
+            };
+
+            //categories
+            foreach (XmlNode categoryNode in GetXmlNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
+            {
+                string categoryFileName = categoryNode.Attributes["file"].Value;
+                databaseFiles.Add(Settings.BetaDatabaseV2FolderURL + categoryFileName);
+            }
+
+            return databaseFiles.Select(name => name.Replace(".Xml", ".xml")).ToList();
+        }
+
+        public static List<string> GetBetaDatabase1V1FilesList()
+        {
+            XmlDocument rootDocument = GetBetaDatabaseRoot1V1Document();
 
             List<string> databaseFiles = new List<string>()
             {
