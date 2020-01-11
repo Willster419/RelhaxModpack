@@ -109,9 +109,7 @@ https://docs.google....dit?usp=sharing
   No :) You can put your mods in the "RelHaxUserMods folder", and the installer will add them to the "User Mods" tab. You can install them just like they were regular mods. You can even use it to patch files with the installer's patching system, and install fonts.
 
 #### *How can I use the "auto-install" option?*
-  You need to create a shortcut to the application. Right click it, properties. In the target textbox, append "/auto-install config_file.xml", where:
-  - "auto-install "(<--note the space, required!) is the command
-  - "config_file.xml" is the filename of your saved config preference file you made from the mod selection window. The config MUST be in the folder "RelHaxUserConfigs" for this feature to work!
+   From the advanced settings tab, load a selection file and check the "auto installation" checkbox in advanced settings. The modpack will automatically check with the server (beta or stable database) for a new db version, and if one is found, an installation is started.
   
 #### (1)Performance measurements:
 Hard drive used is a Toshiba 5400 RPM 2.5 inch laptop hard drive, 8MB cache
@@ -140,4 +138,4 @@ The Relhax Modpack ~ *"Would you rather spend time on your mods, or your gamepla
 
 Disclaimer:
 
-I am in contact with WarGaming about the modifications (mods) and their configurations (configs) to ensure that they are legal and allowed in the game. There are no "Hacks" or illegal mods in the modpack, the name is used for artistic license. This modpack complies with WG's fair play policy. We try to keep up to date as much as we can with their policy, but this is by no means an official guarantee.
+There are no "Hacks" or illegal mods in the modpack, the name is used for artistic license. This modpack complies with WG's fair play policy. We try to keep up to date as much as we can with their policy, but this is by no means an official guarantee.
