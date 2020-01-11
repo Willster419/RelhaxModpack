@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Relic Gaming Community")]
 [assembly: AssemblyProduct("Relhax Modpack Installer")]
-[assembly: AssemblyCopyright("Copyright © 2019 Willard Wider")]
+[assembly: AssemblyCopyright("Copyright © 2020 Willard Wider")]
 [assembly: AssemblyTrademark("The fastest WoT modpack installer in the world")]
 [assembly: AssemblyCulture("")]
 
@@ -51,7 +51,7 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.29.5.3")]
-[assembly: AssemblyFileVersion("0.29.5.3")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: NeutralResourcesLanguage("en-US")]
 
