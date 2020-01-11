@@ -851,6 +851,7 @@ namespace RelhaxModpack.Windows
             LastSupportedTanksVersion = string.Empty;
             SetProgress(10);
 
+            ReportProgress("Loading Root database 1.1 document");
             //load root document
             XmlDocument rootDocument = XmlUtils.LoadXmlDocument(SelectModInfo.FileName, XmlLoadType.FromFile);
             if(rootDocument == null)
@@ -860,8 +861,9 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
+            ReportProgress("Parsing database 1.1 document");
             //parse main database
-            if(!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
+            if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
                 globalDependencies, dependencies, parsedCategoryList))
             {
                 ReportProgress("Failed to parse database");
