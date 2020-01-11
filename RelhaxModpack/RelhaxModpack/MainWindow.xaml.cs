@@ -752,16 +752,17 @@ namespace RelhaxModpack
             //check if old settings file exists and if it was the beta channel
             if(File.Exists(Settings.OldModpackSettingsFilename))
             {
-                Logging.Debug("old settings file exists, load it and see if was beta distro");
+                Logging.Debug("Old settings file exists, load it and see if was beta distro");
                 string betaDistro = XmlUtils.GetXmlStringFromXPath(Settings.OldModpackSettingsFilename, @"//settings/BetaApplication");
                 if(bool.TryParse(betaDistro,out bool result) && result)
                 {
-                    Logging.Debug("application was beta, setting distro to beta");
+                    Logging.Debug("Application was beta, setting distro to beta");
                     ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
                 }
                 else
                 {
-                    Logging.Debug("application was not beta: '{0}'", betaDistro);
+                    Logging.Debug("Application was not beta: '{0}'", betaDistro);
+                    ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
                 }
             }
 
