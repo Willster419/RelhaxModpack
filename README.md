@@ -98,9 +98,9 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYN
  - The GUI is not laggy during install
  - The install is not frozen when the ui thread is blocked, like moving the window for example
  - The extraction is limited to your hard drive speed, not the processor GUI reporting speed.
-This can be further exploited. If each category of mods does not interact with each other, (no file over-writes), why not install the mods of different categories at the same time? Concurrent installation can reduce install time by up to 90%.
+This can be further exploited. If several mods do not interact with each other, (no file over-writes), why not install the mods at the same time? Concurrent installation can reduce install time by up to 80% (Depends on HDD/SSD performance).
 If you want more information, I encourage you to review this presentation:
-https://docs.google....dit?usp=sharing
+https://docs.google.com/presentation/d/1H-6YLcEP3XfxeEhF21grP7Ypfw2im300201bz0NAuJI/edit#slide=id.g7bf2f002c6_0_83
 
 #### *I have a perfect selection of mods that I want. Can I save this selection?*
   Yes. Press the save selection button. It will save your config file wherever you tell it to save it. I recommend you save it in the default folder.
