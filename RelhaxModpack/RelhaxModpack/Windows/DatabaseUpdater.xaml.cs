@@ -540,10 +540,10 @@ namespace RelhaxModpack.Windows
             ReportProgress("Running Clean online folders step 1");
             ReportProgress("Downloading and parsing " + Settings.SupportedClients);
             //download supported_clients
-            XmlDocument doc;
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+            XmlDocument doc = null;
+            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                string xml = await client.DownloadStringTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients);
+                string xml = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients);
                 doc = XmlUtils.LoadXmlDocument(xml, XmlLoadType.FromString);
             }
             //parse each online folder to list type string
@@ -593,13 +593,16 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
+
             selectedVersionInfos = (VersionInfos)CleanFoldersOnlineStep2b.SelectedItem;
             ReportProgress("Getting all trash files in online folder " + selectedVersionInfos.WoTOnlineFolderVersion);
+
             //make a new list where it only has versions who's online folder match the selected one from the combobox
             List<VersionInfos> specificVersions = 
                 VersionInfosList.Where(info => info.WoTOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion)).ToList();
             List<string> allUsedZipFiles = new List<string>();
             specificVersions.Add(new VersionInfos { WoTClientVersion = "GITHUB" });
+
             foreach(VersionInfos infos in specificVersions)
             {
                 ReportProgress("Adding zip files from WoTClientVersion " + infos.WoTClientVersion);
@@ -608,41 +611,80 @@ namespace RelhaxModpack.Windows
                 List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
                 List<Dependency> dependencies = new List<Dependency>();
                 List<Category> parsedCategoryList = new List<Category>();
+                string globalDependencyXmlString = string.Empty;
+                string dependenicesXmlString = string.Empty;
+                List<string> categoriesXml = new List<string>();
+
                 //download and parse database to flat list
-                using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+                if (infos.WoTClientVersion.Equals("GITHUB"))
                 {
-                    if(infos.WoTClientVersion.Equals("GITHUB"))
+                    await Task.Run(() => doc = XmlUtils.GetBetaDatabaseRoot1V1Document());
+                    string betaDatabaseOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
+                    ReportProgress(string.Format("GITHUB online folder={0}, selected online folder to clean version={1}",
+                        betaDatabaseOnlineFolderVersion, selectedVersionInfos.WoTOnlineFolderVersion));
+                    if (!betaDatabaseOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion))
                     {
-#pragma warning disable CS0618
-                        doc.LoadXml(await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL));
-#pragma warning restore CS0618
-                        string betaDatabaseOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
-                        ReportProgress(string.Format("GITHUB online folder={0}, selected online folder to clean version={1}",
-                            betaDatabaseOnlineFolderVersion, selectedVersionInfos.WoTOnlineFolderVersion));
-                        if (!betaDatabaseOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion))
-                        {
-                            ReportProgress("Skipping (online folders are not equal)");
-                            continue;
-                        }
-                        else
-                        {
-                            ReportProgress("Including (online folders are equal");
-                        }
+                        ReportProgress("Skipping (online folders are not equal)");
+                        continue;
                     }
                     else
                     {
-                        string newModInfoName = "modInfo_" + infos.WoTClientVersion + ".xml";
-                        doc.LoadXml(await client.DownloadStringTaskAsync(PrivateStuff.ModInfosLocation + newModInfoName));
+                        ReportProgress("Including (online folders are equal");
+                        //parse beta database to lists
+                        List<string> downloadURLs = null;
+                        await Task.Run(() =>
+                        {
+                            downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList(doc);
+                            string[] downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
+
+                            globalDependencyXmlString = downloadStrings[0];
+                            dependenicesXmlString = downloadStrings[1];
+
+                            categoriesXml = new List<string>();
+                            for (int i = 2; i < downloadURLs.Count; i++)
+                            {
+                                categoriesXml.Add(downloadStrings[i]);
+                            }  
+                        });
                     }
                 }
-                if (!XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsedCategoryList))
+                else
+                {
+                    string modInfoxmlURL = Settings.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", infos.WoTClientVersion) + "modInfo.dat";
+
+                    //download latest modInfo xml
+                    using (WebClient client = new WebClient())
+                    using (Ionic.Zip.ZipFile zipfile = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL))))
+                    {
+                        //extract modinfo xml string
+                        string modInfoXml = Utils.GetStringFromZip(zipfile, "database.xml");
+                        doc = XmlUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromString);
+
+                        string globalDependencyFilename = XmlUtils.GetXmlStringFromXPath(doc, "/modInfoAlpha.xml/globalDependencies/@file");
+                        globalDependencyXmlString = Utils.GetStringFromZip(zipfile, globalDependencyFilename);
+
+                        string dependencyFilename = XmlUtils.GetXmlStringFromXPath(doc, "/modInfoAlpha.xml/dependencies/@file");
+                        dependenicesXmlString = Utils.GetStringFromZip(zipfile, dependencyFilename);
+
+                        foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(doc, "//modInfoAlpha.xml/categories/category"))
+                        {
+                            string categoryFilename = categoryNode.Attributes["file"].Value;
+                            categoriesXml.Add(Utils.GetStringFromZip(zipfile, categoryFilename));
+                        }
+                    }
+                }
+                
+                //parse into lists
+                if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, globalDependencies, dependencies, parsedCategoryList))
                 {
                     ReportProgress("failed to parse modInfo to lists");
                     ToggleUI((TabController.SelectedItem as TabItem), true);
                     return;
                 }
+
                 Utils.BuildLinksRefrence(parsedCategoryList, false);
                 Utils.BuildLevelPerPackage(parsedCategoryList);
+
                 //if the list of zip files does not already have it, then add it
                 flatList = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
                 foreach (DatabasePackage package in flatList)
@@ -809,6 +851,7 @@ namespace RelhaxModpack.Windows
             LastSupportedTanksVersion = string.Empty;
             SetProgress(10);
 
+            ReportProgress("Loading Root database 1.1 document");
             //load root document
             XmlDocument rootDocument = XmlUtils.LoadXmlDocument(SelectModInfo.FileName, XmlLoadType.FromFile);
             if(rootDocument == null)
@@ -818,8 +861,9 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
+            ReportProgress("Parsing database 1.1 document");
             //parse main database
-            if(!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
+            if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
                 globalDependencies, dependencies, parsedCategoryList))
             {
                 ReportProgress("Failed to parse database");

@@ -752,16 +752,17 @@ namespace RelhaxModpack
             //check if old settings file exists and if it was the beta channel
             if(File.Exists(Settings.OldModpackSettingsFilename))
             {
-                Logging.Debug("old settings file exists, load it and see if was beta distro");
+                Logging.Debug("Old settings file exists, load it and see if was beta distro");
                 string betaDistro = XmlUtils.GetXmlStringFromXPath(Settings.OldModpackSettingsFilename, @"//settings/BetaApplication");
                 if(bool.TryParse(betaDistro,out bool result) && result)
                 {
-                    Logging.Debug("application was beta, setting distro to beta");
+                    Logging.Debug("Application was beta, setting distro to beta");
                     ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
                 }
                 else
                 {
-                    Logging.Debug("application was not beta: '{0}'", betaDistro);
+                    Logging.Debug("Application was not beta: '{0}'", betaDistro);
+                    ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
                 }
             }
 
@@ -951,6 +952,7 @@ namespace RelhaxModpack
             //toggle buttons and reset UI
             ResetUI();
             ToggleUIButtons(false);
+            string lastSupportedWoTVersion = string.Empty;
 
             //settings for export mode
             if (ModpackSettings.ExportMode)
@@ -1133,6 +1135,10 @@ namespace RelhaxModpack
                         }
                     }
 
+                    //set the lastSupportedWoTVersion to the last one in the supported_clients.xml (it should be the latest as bottom)
+                    if(supportedVersionsString.Count() > 0)
+                        lastSupportedWoTVersion = supportedVersionsString[supportedVersionsString.Count() - 1];
+
                     //check to see if array of supported clients has the detected WoT client version
                     //if the version does not match, then we need to set the online folder download version
                     if (!supportedVersionsString.Contains(Settings.WoTClientVersion))
@@ -1193,6 +1199,7 @@ namespace RelhaxModpack
                 }
             }
 
+            Logging.Debug("lastSupportedWoTVersion: {0}", lastSupportedWoTVersion);
             //show the mod selection list
             modSelectionList = new ModSelectionList
             {
@@ -1200,7 +1207,9 @@ namespace RelhaxModpack
                 //https://stackoverflow.com/questions/21756542/why-is-window-showdialog-not-blocking-in-taskscheduler-task
                 //https://docs.microsoft.com/en-us/dotnet/api/system.windows.window.owner?view=netframework-4.8
                 Owner = GetWindow(this),
-                AutoInstallMode = (sender == null)
+                AutoInstallMode = (sender == null),
+                //get the last parsed from the xml file (should be the latest by default
+                LastSupportedWoTClientVersion = lastSupportedWoTVersion
             };
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;
@@ -2660,20 +2669,16 @@ namespace RelhaxModpack
                 if (databaseVersion == DatabaseVersions.Beta)
                 {
                     Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, database = beta, need to get current beta database for comparison");
-                    using (WebClient client = new WebClient())
+                    if (loading)
                     {
-                        client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                        if (loading)
-                        {
-                            if (string.IsNullOrEmpty(oldBetaDB))
-                                oldBetaDB = client.DownloadString(Settings.BetaDatabaseV1URL);
-                        }
-                        else
-                        {
-                            oldBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
-                        }
-                        newBetaDB = oldBetaDB;
+                        if (string.IsNullOrEmpty(oldBetaDB))
+                            oldBetaDB = Utils.GetBetaDatabase1V1ForStringCompare();
                     }
+                    else
+                    {
+                        oldBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
+                    }
+                    newBetaDB = oldBetaDB;
                 }
 
                 autoInstallTimer.Elapsed -= AutoInstallTimer_ElapsedBeta;
@@ -2910,20 +2915,16 @@ namespace RelhaxModpack
                 }
 
                 Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user confirmed, setup initial check");
-                using (WebClient client = new WebClient())
+                if (loading)
                 {
-                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                    if (loading)
-                    {
-                        if (string.IsNullOrEmpty(oldBetaDB))
-                            oldBetaDB = client.DownloadString(Settings.BetaDatabaseV1URL);
-                    }
-                    else
-                    {
-                        oldBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
-                    }
-                    newBetaDB = oldBetaDB;
+                    if (string.IsNullOrEmpty(oldBetaDB))
+                        oldBetaDB = Utils.GetBetaDatabase1V1ForStringCompare();
                 }
+                else
+                {
+                    oldBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
+                }
+                newBetaDB = oldBetaDB;
             }
 
             //check the time parsed value
@@ -3000,6 +3001,11 @@ namespace RelhaxModpack
                 if (!oldDBVersion.Equals(Settings.DatabaseVersion))
                 {
                     Logging.Debug("[AutoInstallTimer_Elapsed]: update found from auto install, running installation");
+                    if (modSelectionList != null)
+                    {
+                        Logging.Debug("[AutoInstallTimer_Elapsed]: modSelectionList != null, so don't start an install");
+                        return;
+                    }
                     InstallModpackButton_Click(null, null);
                 }
                 timerActive = false;
@@ -3019,19 +3025,15 @@ namespace RelhaxModpack
                 timerActive = true;
                 Logging.Debug("[AutoInstallTimer_ElapsedBeta]: timer has elapsed to check for beta database updates");
 
-                using (WebClient client = new WebClient())
+                if (string.IsNullOrEmpty(oldBetaDB))
                 {
-                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                    if (string.IsNullOrEmpty(oldBetaDB))
-                    {
-                        Logging.Debug("[AutoInstallTimer_ElapsedBeta]: oldBetaDB is null/empty, set this first");
-                        oldBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
-                        newBetaDB = oldBetaDB;
-                    }
-                    else
-                    {
-                        newBetaDB = await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL);
-                    }
+                    Logging.Debug("[AutoInstallTimer_ElapsedBeta]: oldBetaDB is null/empty, set this first");
+                    oldBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
+                    newBetaDB = oldBetaDB;
+                }
+                else
+                {
+                    newBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
                 }
 
                 Logging.Debug("[AutoInstallTimer_ElapsedBeta]: comparing old and new beta databases");
@@ -3039,6 +3041,11 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old != new, starting install");
                     oldBetaDB = newBetaDB;
+                    if(modSelectionList != null)
+                    {
+                        Logging.Debug("[AutoInstallTimer_ElapsedBeta]: modSelectionList != null, so don't start an install");
+                        return;
+                    }
                     InstallModpackButton_Click(null, null);
                 }
                 else

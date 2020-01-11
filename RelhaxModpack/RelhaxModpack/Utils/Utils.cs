@@ -2133,6 +2133,55 @@ namespace RelhaxModpack
         #endregion
 
         #region Generic Utils
+        public static string GetBetaDatabase1V1ForStringCompare()
+        {
+            List<string> downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList();
+
+            string[] downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
+
+            return string.Join(string.Empty, downloadStrings);
+        }
+
+        public async static Task<string> GetBetaDatabase1V1ForStringCompareAsync()
+        {
+            return await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare());
+        }
+
+        public static string[] DownloadStringsFromUrls(List<string> downloadURLs)
+        {
+            string[] downloadData = new string[downloadURLs.Count];
+
+            //create arrays
+            WebClient[] downloadClients = new WebClient[downloadURLs.Count];
+            Task<string>[] downloadTasks = new Task<string>[downloadURLs.Count];
+
+            //setup downloads
+            Logging.Debug("[DownloadStringsFromUrls]: Starting async download tasks");
+            for (int i = 0; i < downloadURLs.Count; i++)
+            {
+                downloadClients[i] = new WebClient();
+                downloadClients[i].Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                downloadTasks[i] = downloadClients[i].DownloadStringTaskAsync(downloadURLs[i]);
+            }
+
+            //wait
+            Task.WaitAll(downloadTasks);
+
+            //parse into strings
+            Logging.Debug("[DownloadStringsFromUrls]: Tasks finished, extracting task results");
+            for (int i = 0; i < downloadURLs.Count; i++)
+            {
+                downloadData[i] = downloadTasks[i].Result;
+            }
+
+            return downloadData;
+        }
+
+        public async static Task<string[]> DownloadStringsFromUrlsAsync(List<string> downloadUrls)
+        {
+            return await Task<string[]>.Run(() => DownloadStringsFromUrls(downloadUrls));
+        }
+
         /// <summary>
         /// Converts a Bitmap object to a BitmapImage object
         /// </summary>
