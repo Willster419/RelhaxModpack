@@ -105,14 +105,16 @@ namespace RelhaxModpack.Windows
 
         public bool AutoInstallMode = false;
 
+        public string LastSupportedWoTClientVersion = string.Empty;
+
         //private
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress;
         private bool LoadingUI = false;
         private Category UserCategory = null;
         private Preview p;
-        const int FLASH_TICK_INTERVAL = 250;
-        const int NUM_FLASH_TICKS = 5;
+        private const int FLASH_TICK_INTERVAL = 250;
+        private const int NUM_FLASH_TICKS = 5;
         private int numTicks = 0;
         private Brush OriginalBrush = null;
         private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
@@ -310,23 +312,32 @@ namespace RelhaxModpack.Windows
                     databaseVersion = DatabaseVersions.Test;
                 }
 
-                //get the XML database loaded into a string based on database version type (from server download, from github, from testfile
+                //get the Xml database loaded into a string based on database version type (from server download, from github, from testfile
                 string modInfoXml = "";
+                Ionic.Zip.ZipFile zipfile = null;
                 switch (databaseVersion)
                 {
                     //from server download
                     case DatabaseVersions.Stable:
                         //make string
-#pragma warning disable CS0618
-                        string modInfoxmlURL = Settings.WotmodsDatabaseRoot + "modInfo.dat";
-                        modInfoxmlURL = modInfoxmlURL.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
+                        string modInfoxmlURL = Settings.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", LastSupportedWoTClientVersion) + "modInfo.dat";
 
                         //download latest modInfo xml
-                        using(WebClient client = new WebClient())
-                        using(Ionic.Zip.ZipFile zip = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL))))
+                        try
                         {
-                            //extract modinfo xml string
-                            modInfoXml = Utils.GetStringFromZip(zip, "modInfo.xml");
+                            using (WebClient client = new WebClient())
+                            {
+                                //save zip file into memory for later
+                                zipfile = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL)));
+                                //extract modinfo xml string
+                                modInfoXml = Utils.GetStringFromZip(zipfile, "database.xml");
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Error);
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                            return false;
                         }
                         break;
                     //from github
@@ -334,16 +345,7 @@ namespace RelhaxModpack.Windows
                         using (WebClient client = new WebClient())
                         {
                             //load string constant url from manager info xml
-                            //V2 here
-                            string rootbetaDBURL = Settings.BetaDatabaseV2FolderURL.Replace("{branch}", ModpackSettings.BetaDatabaseSelectedBranch);
-                            string rootXml = rootbetaDBURL + Settings.BetaDatabaseV2RootFilename;
-                            /////////
-
-                            //V1 here
-                            #warning using V1 beta database in ModSelectionList
-                            rootXml = Settings.BetaDatabaseV1URL;
-#pragma warning restore CS0618
-                            /////////
+                            string rootXml = Settings.BetaDatabaseV2FolderURL + Settings.BetaDatabaseV2RootFilename;
 
                             //download the xml string into "modInfoXml"
                             client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
@@ -365,7 +367,7 @@ namespace RelhaxModpack.Windows
                 //check to make sure the xml string has xml in it
                 if (string.IsNullOrWhiteSpace(modInfoXml))
                 {
-                    Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Exception);
+                    Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Error);
                     MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                     return false;
                 }
@@ -390,117 +392,70 @@ namespace RelhaxModpack.Windows
                 switch(databaseVersion)
                 {
                     case DatabaseVersions.Stable:
-                        //2.0 test
-                        /*
-                        Logging.Debug("getting xml string values from zip file");
+                        Logging.Debug("Getting xml string values from zip file");
                         List<string> categoriesXml = new List<string>();
-                        string globalDependencyXmlString = Utils.GetStringFromZip(zipfilePath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"));
-                        string dependenicesXmlString = Utils.GetStringFromZip(zipfilePath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file"));
-                        foreach (XmlNode categoryNode in GetXMLNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
+
+                        string globalDependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file");
+                        Logging.Debug("Found xml entry: {0}", globalDependencyFilename);
+                        string globalDependencyXmlString = Utils.GetStringFromZip(zipfile, globalDependencyFilename);
+
+                        string dependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file");
+                        Logging.Debug("Found xml entry: {0}", dependencyFilename);
+                        string dependenicesXmlString = Utils.GetStringFromZip(zipfile, dependencyFilename);
+
+                        foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
                         {
-                            categoriesXml.Add(Utils.GetStringFromZip(zipfilePath, GetXMLStringFromXPath(rootDocument, categoryNode.Attributes["file"].Value)));
+                            string categoryFilename = categoryNode.Attributes["file"].Value;
+                            Logging.Debug("Found xml entry: {0}", categoryFilename);
+                            categoriesXml.Add(Utils.GetStringFromZip(zipfile, categoryFilename));
                         }
+                        zipfile.Dispose();
+                        zipfile = null;
 
                         //parse into lists
-                        if (!XMLUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString,categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
-                        {
-                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                            return false;
-                        }
-                        */
-                        if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString,categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                             return false;
                         }
                         break;
-
+                    //github
                     case DatabaseVersions.Beta:
-                        //for 2.0
-                        /*
-                        string rootbetaDBURL = Settings.BetaDatabaseV2FolderURL.Replace("{branch}", ModpackSettings.BetaDatabaseSelectedBranch);
-
                         Logging.Debug("Init beta db download resources");
                         //create download url list
-                        List<string> downloadURLs = new List<string>()
-                        {
-                            rootbetaDBURL + XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file"),
-                            rootbetaDBURL + XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file")
-                        };
+                        List<string> downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList();
 
-                        //categories
-                        foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
-                        {
-                            string categoryFileName = categoryNode.Attributes["file"].Value;
-                            downloadURLs.Add(rootbetaDBURL + categoryFileName);
-                        }
-
-                        //create arrays
-                        WebClient[] downloadClients = new WebClient[downloadURLs.Count];
-                        Task<string>[] downloadTasks = new Task<string>[downloadURLs.Count];
-
-                        //setup downloads
-                        Logging.Debug("Starting async downloads");
-                        for(int i = 0; i < downloadURLs.Count; i++)
-                        {
-                            downloadClients[i] = new WebClient();
-                            downloadClients[i].Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                            downloadTasks[i] = downloadClients[i].DownloadStringTaskAsync(downloadURLs[i]);
-                        }
-
-                        //wait
-                        Task.WaitAll(downloadTasks);
+                        string[] downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
 
                         //parse into strings
                         Logging.Debug("Tasks finished, extracting task results");
-                        string globalDependencyXmlString = downloadTasks[0].Result;
-                        string dependenicesXmlString = downloadTasks[1].Result;
+                        string globalDependencyXmlStringBeta = downloadStrings[0];
+                        string dependenicesXmlStringBeta = downloadStrings[1];
 
-                        List<string> categoriesXml = new List<string>();
+                        List<string> categoriesXmlBeta = new List<string>();
                         for (int i = 2; i < downloadURLs.Count; i++)
                         {
-                            categoriesXml.Add(downloadTasks[i].Result);
+                            categoriesXmlBeta.Add(downloadStrings[i]);
                         }
 
                         //parse into lists
                         Logging.Debug("Sending strings to db parser");
-                        if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + "database V2");
                             return false;
-                        }
-                        */
-
-                        //for 1.0
-                        
-                        if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
-                        {
-                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                            return false;
-                        }
-                        
+                        }                        
                         break;
-
+                    //test
                     case DatabaseVersions.Test:
-#warning using old database for test mode
-                        if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
-                        {
-                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                            return false;
-                        }
-                        /*
                         if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(ModpackSettings.CustomModInfoPath), modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                             return false;
                         }
-                        */
                         break;
                 }
 

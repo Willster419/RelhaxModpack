@@ -1628,7 +1628,7 @@ namespace RelhaxModpack
             Russian.Add("ExportWindowDesctiption", "Выберите версию WoT, для которой нужно произвести экспорт");
 
             //Component: HelperText
-            //
+            // A large area in the middle of the default window and view for the modpack. Introduces the user to the modpack. You may format it using linebreaks -> \n
             English.Add("HelperText", "Welcome to the Relhax Modpack!" +
                 "\nI have tried to make the modpack as straight-forward as possible, but questions may still arise. Hover over a setting to have it explained." +
                 "\nThanks for using Relhax, I hope you enjoy it! - Willster419");
@@ -1639,7 +1639,8 @@ namespace RelhaxModpack
                 " In so einem Fall nutze bitte eine unserer unten angezeigten Kontaktmöglichkeiten." +
                 " \n\nVielen Dank für die Nutzung des Relhax Modpacks\n - Willster419");
             Polish.Add("HelperText", "Witaj w Modpacku Relhax!\n\nMoim celem było stworzenie paczki modów tak prostej, jak to tylko możliwe,\n" +
-                "ale jeśli nadal czujesz się nieco zagubiony, po prostu najedź kursorem na dowolną opcję i przeczytaj jej opis.");
+                "ale jeśli nadal czujesz się nieco zagubiony, po prostu najedź kursorem na dowolną opcję i przeczytaj jej opis.\n\n" +
+                "Dzięki za wybranie tego modpacka, mam nadzieję, że Ci się spodoba! — Willster419");
             French.Add("HelperText", "Bienvenue au Modpack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir." +
                 " Survolez un paramètre pour voire une explication.");
             Spanish.Add("HelperText", "¡Bienvenido a RelHax Modpack! He intentado hacer el Modpack tan sencillo como ha sido posible, pero aún así pueden surgir dudas." +
@@ -1749,7 +1750,7 @@ namespace RelhaxModpack
             //Component: UninstallDefaultDescription
             // A radio button tooltip explaining the difference between this option and the option next (to the right) of it.
             English.Add("UninstallDefaultDescription", "Default Uninstall will remove all files in the game's mod directories, including shortcuts and appdata cache files.");
-            German.Add("DefaultUninstallModeRBDescription", "Die Standard Deinstallation wird alle Dateien in den Mod-Verzeichnissen des Spieles löschen, inklusive der" +
+            German.Add("UninstallDefaultDescription", "Die Standard Deinstallation wird alle Dateien in den Mod-Verzeichnissen des Spieles löschen, inklusive der" +
                 " Verknüpfungen und Dateien im 'AppData' Speicher.");
             Polish.Add("UninstallDefaultDescription", "Domyślna dezinstalacja usunie wszystkie pliki w folderze modów i powiązane pliki, także skróty" +
                 " oraz pamięć podręczną aplikacji.");
@@ -3972,7 +3973,7 @@ namespace RelhaxModpack
             English.Add("CleanupModFilesText", "Cleanup mod files placed in incorrect locations");
             German.Add("CleanupModFilesText", "Bereinige falsch platzierte Moddaten");
             Polish.Add("CleanupModFilesText", "Usuń mody z niewłaściwych folderów");
-            French.Add("CleanupModFilesText", TranslationNeeded);
+            French.Add("CleanupModFilesText", "Nettoyer les fichiers de mods placer à des endroits incorrects");
             Spanish.Add("CleanupModFilesText", "Limpiar archivos de mods en rutas incorrectas");
             Russian.Add("CleanupModFilesText", "Удалить некорректно установленные моды");
 
@@ -3981,7 +3982,7 @@ namespace RelhaxModpack
             English.Add("CleanupModFilesButtonDescription", "Deletes any mods located in folders like win32 and win64 that could be causing load conflicts");
             German.Add("CleanupModFilesButtonDescription", "Löscht alle Moddaten aus den win32 und win64 Ordnern um Konflikte zu vermeiden");
             Polish.Add("CleanupModFilesButtonDescription", "Czyści wszelkie mody z folderów takich jak win32 i win64 mogące powodować problemy z wczytywaniem.");
-            French.Add("CleanupModFilesButtonDescription", TranslationNeeded);
+            French.Add("CleanupModFilesButtonDescription", "Supprimer tous les mods se situant dans des dossiers comme win32 et win64 qui pourrait causer des confits de chargement");
             Spanish.Add("CleanupModFilesButtonDescription", "Elimina cualquier mod en carpetas como win32 y win64 que puedan causar conflictos al cargar");
             Russian.Add("CleanupModFilesButtonDescription", "Будут удалены все моды, установленные в папках win32 и win64 во избежание конфликтов в процессе загрузки.");
 
@@ -3990,7 +3991,7 @@ namespace RelhaxModpack
             English.Add("cleanupModFilesCompleted", "Cleanup mod files completed");
             German.Add("cleanupModFilesCompleted", "Bereinigen der Moddaten abgeschlossen");
             Polish.Add("cleanupModFilesCompleted", "Oczyszczanie modów z niewłaściwych lokalizacji zakończone pomyślnie.");
-            French.Add("cleanupModFilesCompleted", TranslationNeeded);
+            French.Add("cleanupModFilesCompleted", "Nettoyage des fichiers de mods terminé");
             Spanish.Add("cleanupModFilesCompleted", "Limpieza de mods completada");
             Russian.Add("cleanupModFilesCompleted", "Удаление модов завершено.");
             #endregion

@@ -4981,17 +4981,7 @@
             The default starting address of the location of mod packages (start + zip + end)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.WotmodsDatabaseRoot">
-            <summary>
-            The old default starting address of the location of mod packages (start + zip + end)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.BetaDatabaseV1URL">
-            <summary>
-            The URL to the v1 legacy beta database
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.BetaDatabaseV2FolderURL">
+        <member name="F:RelhaxModpack.Settings.BetaDatabaseV2FolderURLEscaped">
             <summary>
             The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
             </summary>
@@ -4999,11 +4989,6 @@
         <member name="F:RelhaxModpack.Settings.BetaDatabaseBranchesURL">
             <summary>
             The API URL to return a json format document of the current branches in the repository
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ManagerInfoURL">
-            <summary>
-            The URL of the V1 manager info zip file
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.ManagerInfoURLBigmods">

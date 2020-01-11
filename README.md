@@ -44,18 +44,20 @@ The goal of this project is to redefine what a modpack installer is, from the te
   - The modpack and be set at command line with a "/auto-install config_file_name.xml" switch to automatically install the modpack, with your preference of mods selected. In this situation, you could install without any interaction, and update all your mods in seconds.
   
 ### What does the modpack look like?
-![MainWindow](https://i.imgur.com/KE3wk9t.png "Main Window")
+![MainWindow](https://i.imgur.com/tR0Nn2M.png "Main Window")
 
-![ModSelection](https://i.imgur.com/Z8XvXy2.png "Mod Selection")
+![MainWindow](https://i.imgur.com/SQTj4pk.png "Main Window2")
+
+![MainWindow](https://i.imgur.com/LsVbDkS.png "Main Window3")
+
+![ModSelection](https://i.imgur.com/n1T8OQI.png "Mod Selection")
 
 ### Prefer the OMC style selection view?
-![ModSelectionOld](https://i.imgur.com/eVyL59i.png "Mod Selection Legacy")
+![ModSelectionOld](https://i.imgur.com/gh3hdNO.png "Mod Selection Legacy")
 
-https://i.imgur.com/Klqx3G2.png
+![ModSelectionOld](https://i.imgur.com/5jafeBd.png "Preview")
 
-https://i.imgur.com/eFjIdxQ.png
-
-https://i.imgur.com/rycNyvS.png
+![ModSelectionOld](https://i.imgur.com/A5zf8LI.png "Preview2")
 
 ### Additional Information
   
