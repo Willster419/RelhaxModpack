@@ -44,18 +44,20 @@ The goal of this project is to redefine what a modpack installer is, from the te
   - The modpack and be set at command line with a "/auto-install config_file_name.xml" switch to automatically install the modpack, with your preference of mods selected. In this situation, you could install without any interaction, and update all your mods in seconds.
   
 ### What does the modpack look like?
-![MainWindow](https://i.imgur.com/KE3wk9t.png "Main Window")
+![MainWindow](https://i.imgur.com/tR0Nn2M.png "Main Window")
 
-![ModSelection](https://i.imgur.com/Z8XvXy2.png "Mod Selection")
+![MainWindow](https://i.imgur.com/SQTj4pk.png "Main Window2")
+
+![MainWindow](https://i.imgur.com/LsVbDkS.png "Main Window3")
+
+![ModSelection](https://i.imgur.com/n1T8OQI.png "Mod Selection")
 
 ### Prefer the OMC style selection view?
-![ModSelectionOld](https://i.imgur.com/eVyL59i.png "Mod Selection Legacy")
+![ModSelectionOld](https://i.imgur.com/gh3hdNO.png "Mod Selection Legacy")
 
-https://i.imgur.com/Klqx3G2.png
+![ModSelectionOld](https://i.imgur.com/5jafeBd.png "Preview")
 
-https://i.imgur.com/eFjIdxQ.png
-
-https://i.imgur.com/rycNyvS.png
+![ModSelectionOld](https://i.imgur.com/A5zf8LI.png "Preview2")
 
 ### Additional Information
   
@@ -96,9 +98,9 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYN
  - The GUI is not laggy during install
  - The install is not frozen when the ui thread is blocked, like moving the window for example
  - The extraction is limited to your hard drive speed, not the processor GUI reporting speed.
-This can be further exploited. If each category of mods does not interact with each other, (no file over-writes), why not install the mods of different categories at the same time? Concurrent installation can reduce install time by up to 90%.
+This can be further exploited. If several mods do not interact with each other, (no file over-writes), why not install the mods at the same time? Concurrent installation can reduce install time by up to 80% (Depends on HDD/SSD performance).
 If you want more information, I encourage you to review this presentation:
-https://docs.google....dit?usp=sharing
+https://docs.google.com/presentation/d/1H-6YLcEP3XfxeEhF21grP7Ypfw2im300201bz0NAuJI/edit#slide=id.g7bf2f002c6_0_83
 
 #### *I have a perfect selection of mods that I want. Can I save this selection?*
   Yes. Press the save selection button. It will save your config file wherever you tell it to save it. I recommend you save it in the default folder.
@@ -107,9 +109,7 @@ https://docs.google....dit?usp=sharing
   No :) You can put your mods in the "RelHaxUserMods folder", and the installer will add them to the "User Mods" tab. You can install them just like they were regular mods. You can even use it to patch files with the installer's patching system, and install fonts.
 
 #### *How can I use the "auto-install" option?*
-  You need to create a shortcut to the application. Right click it, properties. In the target textbox, append "/auto-install config_file.xml", where:
-  - "auto-install "(<--note the space, required!) is the command
-  - "config_file.xml" is the filename of your saved config preference file you made from the mod selection window. The config MUST be in the folder "RelHaxUserConfigs" for this feature to work!
+   From the advanced settings tab, load a selection file and check the "auto installation" checkbox in advanced settings. The modpack will automatically check with the server (beta or stable database) for a new db version, and if one is found, an installation is started.
   
 #### (1)Performance measurements:
 Hard drive used is a Toshiba 5400 RPM 2.5 inch laptop hard drive, 8MB cache
@@ -138,4 +138,4 @@ The Relhax Modpack ~ *"Would you rather spend time on your mods, or your gamepla
 
 Disclaimer:
 
-I am in contact with WarGaming about the modifications (mods) and their configurations (configs) to ensure that they are legal and allowed in the game. There are no "Hacks" or illegal mods in the modpack, the name is used for artistic license. This modpack complies with WG's fair play policy. We try to keep up to date as much as we can with their policy, but this is by no means an official guarantee.
+There are no "Hacks" or illegal mods in the modpack, the name is used for artistic license. This modpack complies with WG's fair play policy. We try to keep up to date as much as we can with their policy, but this is by no means an official guarantee.

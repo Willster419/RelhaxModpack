@@ -1628,7 +1628,7 @@ namespace RelhaxModpack
             Russian.Add("ExportWindowDesctiption", "Выберите версию WoT, для которой нужно произвести экспорт");
 
             //Component: HelperText
-            //
+            // A large area in the middle of the default window and view for the modpack. Introduces the user to the modpack. You may format it using linebreaks -> \n
             English.Add("HelperText", "Welcome to the Relhax Modpack!" +
                 "\nI have tried to make the modpack as straight-forward as possible, but questions may still arise. Hover over a setting to have it explained." +
                 "\nThanks for using Relhax, I hope you enjoy it! - Willster419");
@@ -1639,12 +1639,13 @@ namespace RelhaxModpack
                 " In so einem Fall nutze bitte eine unserer unten angezeigten Kontaktmöglichkeiten." +
                 " \n\nVielen Dank für die Nutzung des Relhax Modpacks\n - Willster419");
             Polish.Add("HelperText", "Witaj w Modpacku Relhax!\n\nMoim celem było stworzenie paczki modów tak prostej, jak to tylko możliwe,\n" +
-                "ale jeśli nadal czujesz się nieco zagubiony, po prostu najedź kursorem na dowolną opcję i przeczytaj jej opis.");
+                "ale jeśli nadal czujesz się nieco zagubiony, po prostu najedź kursorem na dowolną opcję i przeczytaj jej opis.\n\n" +
+                "Dzięki za wybranie tego modpacka, mam nadzieję, że Ci się spodoba! — Willster419");
             French.Add("HelperText", "Bienvenue au Modpack Relhax! J'ai aissayé de faire le modpack le plus simple possible, mais des questions peuvent survenir." +
                 " Survolez un paramètre pour voire une explication.");
             Spanish.Add("HelperText", "¡Bienvenido a RelHax Modpack! He intentado hacer el Modpack tan sencillo como ha sido posible, pero aún así pueden surgir dudas." +
                 " Mantenga el ratón sobre una opción para obtener una explicación. No volverá a ver esta ventana de diálogo a menos que elimine el archivo de opciones en formato XML");
-            Russian.Add("HelperText", "Вас приветствует Relhax Modpack!\n\nЯ старался сделать его максимально простым для пользователя, но вопросы всё же могут возникнуть.\n\nНаведите курсор мыши на любую настройку, и вы увидите пояснение к ней.");
+            Russian.Add("HelperText", "Вас приветствует Relhax Modpack!\n\nЯ старался сделать его максимально простым для пользователя, но вопросы всё же могут возникнуть.\n\nНаведите курсор мыши на любую настройку, и вы увидите пояснение к ней.\n\nБлагодарим вас за выбор в пользу Relhax, надеюсь, вам понравится! - Willster419");
 
             //Component: helperTextShort
             //
