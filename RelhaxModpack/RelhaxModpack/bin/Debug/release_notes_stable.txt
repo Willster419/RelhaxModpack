@@ -1,4 +1,4 @@
 Application version 1.0.0.0 (2020-01-10)
-https://www.virustotal.com/gui/file/24e809692482f1d59a4938538d495bdd92a2c7f8b17363da62d6ebfc8a219270/detection
+https://www.virustotal.com/gui/file/1df83980fa58bd12a989b38e0b143582207fb8dd99c7350bb9f86ca3049c0827/detection
 - Initial Relhax V2 1.0 release
 --------------------------------------------------------------------------------------------------------------------------------------------
