@@ -1645,7 +1645,7 @@ namespace RelhaxModpack
                 " Survolez un paramètre pour voire une explication.");
             Spanish.Add("HelperText", "¡Bienvenido a RelHax Modpack! He intentado hacer el Modpack tan sencillo como ha sido posible, pero aún así pueden surgir dudas." +
                 " Mantenga el ratón sobre una opción para obtener una explicación. No volverá a ver esta ventana de diálogo a menos que elimine el archivo de opciones en formato XML");
-            Russian.Add("HelperText", "Вас приветствует Relhax Modpack!\n\nЯ старался сделать его максимально простым для пользователя, но вопросы всё же могут возникнуть.\n\nНаведите курсор мыши на любую настройку, и вы увидите пояснение к ней.");
+            Russian.Add("HelperText", "Вас приветствует Relhax Modpack!\n\nЯ старался сделать его максимально простым для пользователя, но вопросы всё же могут возникнуть.\n\nНаведите курсор мыши на любую настройку, и вы увидите пояснение к ней.\n\nБлагодарим вас за выбор в пользу Relhax, надеюсь, вам понравится! - Willster419");
 
             //Component: helperTextShort
             //
