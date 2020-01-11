@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.DatabaseComponents;
+using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 
@@ -7,11 +8,20 @@ namespace RelhaxModpack
     /// <summary>
     /// A database component is the base class for all other packages
     /// </summary>
-    public class DatabasePackage
+    public class DatabasePackage : IXmlSerializable, IComponentWithID
     {
-        #region Xml parsing
+        #region Xml serialization
+        public virtual string[] PropertiesForSerializationAttributes()
+        {
+            return PackagePropertiesToXmlParseAttributes.ToArray();
+        }
 
-        private static readonly List<string> PackageElementsToXmlParseAttributes = new List<string>()
+        public virtual string[] PropertiesForSerializationElements()
+        {
+            return PackagePropertiesToXmlParseElements.ToArray();
+        }
+
+        private static readonly List<string> PackagePropertiesToXmlParseAttributes = new List<string>()
         {
             nameof(PackageName),
             nameof(Enabled),
@@ -19,7 +29,7 @@ namespace RelhaxModpack
             nameof(PatchGroup)
         };
 
-        private static readonly List<string> PackageElementsToXmlParseNodes = new List<string>()
+        private static readonly List<string> PackagePropertiesToXmlParseElements = new List<string>()
         {
             nameof(Size),
             nameof(Version),
@@ -41,7 +51,7 @@ namespace RelhaxModpack
         /// <returns>The list of fields</returns>
         public static List<string> FieldsToXmlParseAttributes()
         {
-            return new List<string>(PackageElementsToXmlParseAttributes);
+            return new List<string>(PackagePropertiesToXmlParseAttributes);
         }
 
         /// <summary>
@@ -50,7 +60,7 @@ namespace RelhaxModpack
         /// <returns>The list of fields</returns>
         public static List<string> FieldsToXmlParseNodes()
         {
-            return new List<string>(PackageElementsToXmlParseNodes);
+            return new List<string>(PackagePropertiesToXmlParseElements);
         }
         #endregion
 
@@ -59,27 +69,27 @@ namespace RelhaxModpack
         /// <summary>
         /// A unique identifier for each component in the database. No two components will have the same PackageName
         /// </summary>
-        public string PackageName = string.Empty;
+        public string PackageName { get; set; } = string.Empty;
 
         /// <summary>
         /// A method to keep track of the version of the package
         /// </summary>
-        public string Version = string.Empty;
+        public string Version { get; set; } = string.Empty;
 
         /// <summary>
         /// Used to determine when the package entry was last modified
         /// </summary>
-        public long Timestamp = 0;
+        public long Timestamp { get; set; } = 0;
 
         /// <summary>
         /// Size of the zip file
         /// </summary>
-        public ulong Size = 0;
+        public ulong Size { get; set; } = 0;
 
         /// <summary>
         /// The zip file to extract (can be empty string)
         /// </summary>
-        public string ZipFile = string.Empty;
+        public string ZipFile { get; set; } = string.Empty;
 
         /// <summary>
         /// Internal field for Enabled property
@@ -98,80 +108,80 @@ namespace RelhaxModpack
         /// <summary>
         /// The crc checksum of the zipfile
         /// </summary>
-        public string CRC = string.Empty;
+        public string CRC { get; set; } = string.Empty;
 
         /// <summary>
         /// The start address of the URL to the zip file
         /// URL format: StartAddress + ZipFile + EndAddress
         /// </summary>
-        public string StartAddress = Settings.DefaultStartAddress;
+        public string StartAddress { get; set; } = Settings.DefaultStartAddress;
 
         /// <summary>
         /// The end address of the URL to the zip file
         /// URL format: StartAddress + ZipFile + EndAddress
         /// </summary>
-        public string EndAddress = Settings.DefaultEndAddress;
+        public string EndAddress { get; set; } = Settings.DefaultEndAddress;
 
         /// <summary>
         /// Determine at install time if the package needs to be downloaded
         /// </summary>
-        public bool DownloadFlag = false;
+        public bool DownloadFlag { get; set; } = false;
 
         /// <summary>
         /// Determine if the mod has been downloaded and is ready for installation
         /// </summary>
-        public bool ReadyForInstall = false;
+        public bool ReadyForInstall { get; set; } = false;
 
         /// <summary>
         /// Determine if the files from the package should be logged for un-installation
         /// only set this to false if absolutely necessary!
         /// </summary>
-        public bool LogAtInstall = true;
+        public bool LogAtInstall { get; set; } = true;
 
         /// <summary>
         /// The list of triggers that this package can start (list of triggers that apply to this package)
         /// </summary>
-        public List<string> Triggers = new List<string>();
+        public List<string> Triggers { get; set; } = new List<string>();
 
         /// <summary>
         /// The URL link of where you can view the web page of the mod
         /// </summary>
-        public string DevURL = string.Empty;
+        public string DevURL { get; set; } = string.Empty;
 
         /// <summary>
         /// The level at which this package can be installed. It will be installed with other packages of the same install group at the same time
         /// </summary>
-        public int InstallGroup = 0;
+        public int InstallGroup { get; set; } = 0;
 
         /// <summary>
         /// The level at which the patches for this package can be installed. Patches will be executed with other patches of the same patch group
         /// </summary>
-        public int PatchGroup = 0;
+        public int PatchGroup { get; set; } = 0;
 
         /// <summary>
         /// Internal instructions for updating the mod for database managers
         /// </summary>
-        public string InternalNotes = string.Empty;
+        public string InternalNotes { get; set; } = string.Empty;
 
         /// <summary>
         /// The name of the author of the mod/configuration/etc.
         /// </summary>
-        public string Author = string.Empty;
+        public string Author { get; set; } = string.Empty;
 
         /// <summary>
         /// The number of bytes to download, used if "install while download" is true
         /// </summary>
-        public long BytesToDownload = 0;
+        public long BytesToDownload { get; set; } = 0;
 
         /// <summary>
         /// The number of bytes currently downloaded, used if "install while download" is true
         /// </summary>
-        public long BytesDownloaded = 0;
+        public long BytesDownloaded { get; set; } = 0;
 
         /// <summary>
         /// Flag to determine if this package is the one currently downloading, used if "install while download" is true
         /// </summary>
-        public bool IsCurrentlyDownloading = false;
+        public bool IsCurrentlyDownloading { get; set; } = false;
 
         //append extraction flag
         /// <summary>
@@ -185,14 +195,20 @@ namespace RelhaxModpack
         /// <summary>
         /// Reference for the UI element of this package in the database editor
         /// </summary>
-        public TreeViewItem EditorTreeViewItem = null;
+        public TreeViewItem EditorTreeViewItem { get; set; } = null;
         #endregion
 
         #region Other Properties and Methods
         /// <summary>
         /// Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
         /// </summary>
-        public bool ExtractionStarted = false;
+        public bool ExtractionStarted { get; set; } = false;
+
+        public string ComponentInternalName { get { return PackageName; } }
+
+        public DownloadInstructions DownloadInstructions { get; set; } = null;
+
+        public UpdateInstructions UpdateInstructions { get; set; }= null;
 
         /// <summary>
         /// String representation of the object

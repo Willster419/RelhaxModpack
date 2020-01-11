@@ -29,6 +29,7 @@ using RelhaxModpack.Windows;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Web;
+using RelhaxModpack.DatabaseComponents;
 
 namespace RelhaxModpack
 {
@@ -109,9 +110,25 @@ namespace RelhaxModpack
         }
     }
 
+    public struct LogicTracking
+    {
+        public IComponentWithDependencies ComponentWithDependencies;
+        public DatabaseLogic DatabaseLogic;
+    }
+
+    /// <summary>
+    /// A structure to help with searching for inside the registry by providing a base area to start, and a string search path
+    /// </summary>
     public struct RegistrySearch
     {
+        /// <summary>
+        /// Where to base the search in the registry (current_user, local_machiene, etc.)
+        /// </summary>
         public RegistryKey Root;
+
+        /// <summary>
+        /// The absolute folder path to the desired registry entries
+        /// </summary>
         public string Searchpath;
     }
 
@@ -204,6 +221,9 @@ namespace RelhaxModpack
             {"\t", @"\t" }
         };
 
+        /// <summary>
+        /// Provides the ability to insert a 'null' value into json configurations
+        /// </summary>
         public const string PatchJsonNullEscape = "[null]";
         #endregion
 
@@ -606,24 +626,41 @@ namespace RelhaxModpack
         /// <returns></returns>
         public static string CreateMD5Hash(string inputFile)
         {
+            //return if arg is null or empty
             if (string.IsNullOrWhiteSpace(inputFile))
                 return "-1";
-            //first, return if the file does not exist
+
+            //return if the file does not exist
             if (!File.Exists(inputFile))
                 return "-1";
+
+            FileStream stream = null;
+            string result = string.Empty;
+            using (stream = File.OpenRead(inputFile))
+            {
+                result = CreateMD5Hash(stream);
+            }
+
+            if(result.Equals("-1"))
+            {
+                Logging.Error("Failed to check MD5 of file " + inputFile);
+            }
+            return result;
+        }
+
+        public static string CreateMD5Hash(Stream stream)
+        {
             //Create a new Stringbuilder to collect the bytes
             StringBuilder sBuilder = new StringBuilder();
             MD5 md5Hash;
-            FileStream stream;
             try
             {
                 using (md5Hash = MD5.Create())
-                using (stream = File.OpenRead(inputFile))
                 {
                     //Convert the input string to a byte array and compute the hash
                     byte[] data = md5Hash.ComputeHash(stream);
                     stream.Close();
-                    
+
                     //Loop through each byte of the hashed data 
                     //and format each one as a hexadecimal string.
                     for (int i = 0; i < data.Length; i++)
@@ -634,9 +671,10 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                Logging.Warning("Failed to check crc of local file " + inputFile + ex.ToString());
+                Logging.Exception(ex.ToString());
                 return "-1";
             }
+
             //Return the hexadecimal string.
             return sBuilder.ToString();
         }
@@ -664,6 +702,11 @@ namespace RelhaxModpack
                 'Task.Factory.StartNew(someAction, CancellationToken.None, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);'
              */
             return await Task.Run(() => CreateMD5Hash(inputFile));
+        }
+
+        public static async Task<string> CreateMD5HashAsync(Stream stream)
+        {
+            return await Task.Run(() => CreateMD5Hash(stream));
         }
 
         /// <summary>
@@ -890,6 +933,46 @@ namespace RelhaxModpack
                 fileName = fileName.Replace(c, '_');
             }
             return fileName;
+        }
+
+        public static bool FileMove(string source, string destination, uint numRetrys = 3, uint timeout = 100)
+        {
+            bool overallSuccess = true;
+            //check to make sure the number of retries is between 1 and 10
+            if (numRetrys < 1)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (below 1), setting to 1 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 1;
+            }
+            if (numRetrys > 10)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (above 10), setting to 10 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 10;
+            }
+            uint retryCounter = 0;
+            while (retryCounter < numRetrys)
+            {
+                try
+                {
+                    File.Move(source, destination);
+                    retryCounter = numRetrys;
+                }
+                catch (Exception ex)
+                {
+                    Logging.WriteToLog(string.Format("move file {0} -> {1}, retryCount={2}, message:\n{3}", source, destination,retryCounter, ex.Message),
+                        Logfiles.Application, LogLevel.Warning);
+                    retryCounter++;
+                    System.Threading.Thread.Sleep((int)timeout);
+                    if (retryCounter == numRetrys)
+                    {
+                        Logging.Error("retries = counter, fully failed to move file {0} -> {1}", source, destination);
+                        overallSuccess = false;
+                    }
+                }
+            }
+            return overallSuccess;
         }
 
         /// <summary>
@@ -1221,6 +1304,11 @@ namespace RelhaxModpack
                 Logging.WriteToLog("Failed to apply normal attribute\n" + e.ToString(), Logfiles.Application, LogLevel.Exception);
                 return;
             }
+        }
+
+        public static string RemoveWoT32bit64bitPathIfExists(string wotPath)
+        {
+            return wotPath.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
         }
         #endregion
 
@@ -1557,14 +1645,22 @@ namespace RelhaxModpack
             //1- build the list of calling mods that need it
             List<Dependency> dependenciesToInstall = new List<Dependency>();
 
+            //create list to track all database dependency refrences
+            List<LogicTracking> refrencedDependencies = new List<LogicTracking>();
+
             Logging.Debug("Starting step 1 of 4 in dependency calculation: adding from categories");
-            foreach (Dependency dependency in dependencies)
+            foreach (Category category in parsedCategoryList)
             {
-                foreach (Category category in parsedCategoryList)
+                foreach (DatabaseLogic logic in category.Dependencies)
                 {
-                    foreach (DatabaseLogic logic in category.Dependencies)
+                    refrencedDependencies.Add(new LogicTracking
                     {
-                        if(logic.PackageName.Equals(dependency.PackageName))
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = category
+                    });
+                    foreach (Dependency dependency in dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
                         {
                             Logging.Debug("Category \"{0}\" uses dependency \"{1}\" (logic type {2})", category.Name, dependency.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
@@ -1574,23 +1670,29 @@ namespace RelhaxModpack
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
+
+                            //log that the categorie's dependency refrence was linked properly
+                            logic.RefrenceLinked = true;
                         }
                     }
                 }
             }
-            Logging.Debug("step 1 complete");
+            Logging.Debug("Step 1 complete");
 
             Logging.Debug("Starting step 2 of 4 in dependency calculation: adding from selectable packages that use each dependency");
-            foreach(Dependency dependency in dependencies)
+            foreach(SelectablePackage package in packages)
             {
-                //for each dependency, go through each package, and in each package...
-                //Logging.Debug("processing dependency {0}", dependency.PackageName);
-                foreach(SelectablePackage package in packages)
+                //got though each logic property. if the package called is this dependency, then add it to it's list
+                foreach (DatabaseLogic logic in package.Dependencies)
                 {
-                    //got though each logic property. if the package called is this dependency, then add it to it's list
-                    foreach(DatabaseLogic logic in package.Dependencies)
+                    refrencedDependencies.Add(new LogicTracking
                     {
-                        if(logic.PackageName.Equals(dependency.PackageName))
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = package
+                    });
+                    foreach (Dependency dependency in dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
                         {
                             Logging.Debug("SelectablePackage \"{0}\" uses dependency \"{1}\" (logic type {2})", package.PackageName, dependency.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
@@ -1601,25 +1703,32 @@ namespace RelhaxModpack
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
+
+                            //log that the categorie's dependency refrence was linked properly
+                            logic.RefrenceLinked = true;
                         }
                     }
                 }
             }
-            Logging.Debug("step 2 complete");
+            Logging.Debug("Step 2 complete");
 
             //2- append with list of dependencies that need it, regardless if it's an error or not
             Logging.Debug("Starting step 3 of 4 in dependency calculation: adding dependencies that use each dependency");
-            foreach (Dependency dependency in dependencies)
+            //for each dependency go through each dependency's package logic and if it's called then add it
+            foreach(Dependency processingDependency in dependencies)
             {
-                //Logging.Debug("processing dependency {0}", dependency.PackageName);
-                //for each dependency go through each dependency's package logic and if it's called then add it
-                foreach(Dependency processingDependency in dependencies)
+                foreach (DatabaseLogic logic in processingDependency.Dependencies)
                 {
-                    if (processingDependency.PackageName.Equals(dependency.PackageName))
-                        continue;
-                    foreach(DatabaseLogic logic in processingDependency.Dependencies)
+                    refrencedDependencies.Add(new LogicTracking
                     {
-                        if(logic.PackageName.Equals(dependency.PackageName))
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = processingDependency
+                    });
+                    foreach (Dependency dependency in dependencies)
+                    {
+                        if (processingDependency.PackageName.Equals(dependency.PackageName))
+                            continue;
+                        if (logic.PackageName.Equals(dependency.PackageName))
                         {
                             Logging.Debug("Dependency \"{0}\" uses dependency \"{1}\" (logic type {2})", processingDependency.PackageName, dependency.PackageName, logic.Logic);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
@@ -1630,11 +1739,28 @@ namespace RelhaxModpack
                                 Logic = logic.Logic,
                                 NotFlag = logic.NotFlag
                             });
+
+                            //log that the categorie's dependency refrence was linked properly
+                            logic.RefrenceLinked = true;
                         }
                     }
                 }
             }
-            Logging.Debug("step 3 complete");
+            Logging.Debug("Step 3 complete");
+
+            //3a - check if any dependency refrences were never matched
+            //like if a category refrences dependency the_dependency_packageName, but that package does not exist
+            refrencedDependencies = refrencedDependencies.Where((refrence) => !refrence.DatabaseLogic.RefrenceLinked).ToList();
+            Logging.Debug("Broken dependency refrences count: {0}", refrencedDependencies.Count);
+            if(refrencedDependencies.Count > 0)
+            {
+                Logging.Error("The following packages call refrences to dependencies that do not exist:");
+                foreach(LogicTracking logicTracking in refrencedDependencies)
+                {
+                    Logging.Error("Package: {0} => broken refrence: {1}",
+                        logicTracking.ComponentWithDependencies.ComponentInternalName, logicTracking.DatabaseLogic.PackageName);
+                }
+            }
 
             //3 - run calculations IN DEPENDENCY LIST ORDER FROM TOP DOWN
             List<Dependency> notProcessedDependnecies = new List<Dependency>(dependencies);
@@ -1664,8 +1790,8 @@ namespace RelhaxModpack
                 List<DatabaseLogic> logicalAND = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.AND).ToList();
 
                 //debug logging
-                Logging.Debug("logicalOR count: {0}", localOR.Count);
-                Logging.Debug("logicalAnd count: {0}", logicalAND.Count);
+                Logging.Debug("LogicalOR count: {0}", localOR.Count);
+                Logging.Debug("LogicalAnd count: {0}", logicalAND.Count);
 
                 //if there are no logical ands, then only do ors, vise versa
                 bool ORsPass = localOR.Count > 0? false: true;
@@ -1674,12 +1800,12 @@ namespace RelhaxModpack
                 //if ors and ands are both true already, then something's broken
                 if(ORsPass && ANDSPass)
                 {
-                    Logging.Warning("ors and ands already pass for dependency package {0}, (nothing uses it?)", dependency.PackageName);
+                    Logging.Warning("Ors and ands already pass for dependency package {0}, (nothing uses it?)", dependency.PackageName);
                     continue;
                 }
 
                 //calc the ORs first
-                Logging.Debug("processing OR logic");
+                Logging.Debug("Processing OR logic");
                 foreach(DatabaseLogic orLogic in localOR)
                 {
                     //OR logic - if any mod/dependency is checked, then it's installed and can stop there
@@ -1687,56 +1813,56 @@ namespace RelhaxModpack
                     //same case goes for negatives - if mod is NOT checked and negateFlag
                     if(!orLogic.WillBeInstalled)
                     {
-                        Logging.WriteToLog(string.Format("skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         continue;
                     }
                     if(!orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is checked and notflag is low (= true), sets orLogic to pass!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("Package {0} is checked and notflag is low (= true), sets orLogic to pass!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         ORsPass = true;
                         break;
                     }
                     else if (orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is NOT checked and notFlag is high (= false), sets orLogic to pass!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("Package {0} is NOT checked and notFlag is high (= false), sets orLogic to pass!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         ORsPass = true;
                         break;
                     }
                     else
                     {
-                        Logging.WriteToLog(string.Format("package {0}, checked={1}, notFlag={2}, does not set orLogic to pass",
+                        Logging.WriteToLog(string.Format("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass",
                             orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
                     }
                 }
 
                 //now calc the ands
-                Logging.Debug("processing AND logic");
+                Logging.Debug("Processing AND logic");
                 foreach(DatabaseLogic andLogic in logicalAND)
                 {
                     if (andLogic.WillBeInstalled && !andLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is checked and (NOT notFlag) = true, correct AND logic, continue",
+                        Logging.WriteToLog(string.Format("Package {0} is checked and (NOT notFlag) = true, correct AND logic, continue",
                             andLogic.PackageName), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = true;
                     }
                     else if (!andLogic.WillBeInstalled && andLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("package {0} is NOT checked and (notFlag) = true, correct AND logic, continue",
+                        Logging.WriteToLog(string.Format("Package {0} is NOT checked and (notFlag) = true, correct AND logic, continue",
                             andLogic.PackageName), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = true;
                     }
                     else
                     {
-                        Logging.WriteToLog(string.Format("package {0}, checked={1}, notFlag={2}, incorrect AND logic, set andPass=false and break!",
+                        Logging.WriteToLog(string.Format("Package {0}, checked={1}, notFlag={2}, incorrect AND logic, set andPass=false and break!",
                             andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
                         ANDSPass = false;
                         break;
                     }
                 }
-                string final = string.Format("final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
+                string final = string.Format("Final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
                 if(ANDSPass && ORsPass)
                 {
                     Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
@@ -1749,7 +1875,7 @@ namespace RelhaxModpack
 
                 if (dependency.DatabasePackageLogic.Count > 0 && (ANDSPass && ORsPass))
                 {
-                    Logging.Debug("updating future references (like logicalDependnecies) for if dependency was checked");
+                    Logging.Debug("Updating future references (like logicalDependnecies) for if dependency was checked");
                     //update any dependencies that use it
                     foreach (DatabaseLogic callingLogic in dependency.Dependencies)
                     {
@@ -1763,12 +1889,12 @@ namespace RelhaxModpack
                             List<DatabaseLogic> foundLogic = refrenced.DatabasePackageLogic.Where(logic => logic.PackageName.Equals(dependency.PackageName)).ToList();
                             if (foundLogic.Count > 0)
                             {
-                                Logging.Debug("logic refrence entry for dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
+                                Logging.Debug("Logic refrence entry for dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
                                 foundLogic[0].WillBeInstalled = ANDSPass && ORsPass;
                             }
                             else
                             {
-                                Logging.Error("found logics count is 0 for updating refrences");
+                                Logging.Error("Found logics count is 0 for updating refrences");
                             }
                         }
                         else
@@ -1781,7 +1907,7 @@ namespace RelhaxModpack
                 notProcessedDependnecies.RemoveAt(0);
             }
 
-            Logging.Debug("step 4 complete");
+            Logging.Debug("Step 4 complete");
             return dependenciesToInstall;
         }
 
@@ -1863,34 +1989,13 @@ namespace RelhaxModpack
             return listToCheck.Max(ma => ma.PatchGroup);
         }
 
-        /// <summary>
-        /// Dynamically sets the properties and fields of and DatabasePackage object and children based on the property reflective info and the string value to set
-        /// </summary>
-        /// <param name="packageOfAnyType">The DatabasePackage object</param>
-        /// <param name="packageFieldOrProperty">The reflective info of the Field or Property to set the information on</param>
-        /// <param name="valueToSet">The string representation of the data to set on that field or property</param>
-        /// <returns>True if operation was successful, false otherwise</returns>
-        public static bool SetObjectMember(object packageOfAnyType, MemberInfo packageFieldOrProperty, string valueToSet)
+        public static bool SetObjectProperty(object componentWithProperty, PropertyInfo propertyInfoFromComponent, string valueToSet)
         {
             try
             {
-                if(packageFieldOrProperty is FieldInfo packageField)
-                {
-                    var converter = TypeDescriptor.GetConverter(packageField.FieldType);
-                    packageField.SetValue(packageOfAnyType, converter.ConvertFrom(valueToSet));
-                    return true;
-                }
-                else if(packageFieldOrProperty is PropertyInfo packageProperty)
-                {
-                    var converter = TypeDescriptor.GetConverter(packageProperty.PropertyType);
-                    packageProperty.SetValue(packageOfAnyType, converter.ConvertFrom(valueToSet));
-                    return true;
-                }
-                else
-                {
-                    Logging.Debug("invalid type of memberinfo of member {0}", packageFieldOrProperty.Name);
-                    return false;
-                }
+                var converter = TypeDescriptor.GetConverter(propertyInfoFromComponent.PropertyType);
+                propertyInfoFromComponent.SetValue(componentWithProperty, converter.ConvertFrom(valueToSet));
+                return true;
             }
             catch (Exception ex)
             {
@@ -1899,88 +2004,184 @@ namespace RelhaxModpack
             }
         }
 
-        /// <summary>
-        /// Dynamically assigns field properties to custom objects of a custom type of a list
-        /// </summary>
-        /// <param name="objectThatHasListProperty">The List type object of other objects (Like the Media List)</param>
-        /// <param name="nameOfListField">The field type of from the Package Type (Like Media)</param>
-        /// <param name="xmlListItems">The XElement list of items (Like the xml list of media items)</param>
-        /// <returns>True if the operation was successful, false otherwise</returns>
-        public static bool SetListEntriesField(object objectThatHasListProperty, FieldInfo nameOfListField, IEnumerable<XElement> xmlListItems)
+        public static bool SetObjectValue(Type objectType, string valueToSet, out object newObject)
         {
-            //get a list type to add stuff to
-            //https://stackoverflow.com/questions/25757121/c-sharp-how-to-set-propertyinfo-value-when-its-type-is-a-listt-and-i-have-a-li
-            object obj = nameOfListField.GetValue(objectThatHasListProperty);
-            DatabasePackage packageOfAnyType = objectThatHasListProperty as DatabasePackage;
-            //IList list = (IList)packageField.GetValue(obj);
-            IList list = (IList)obj;
+            try
+            {
+                newObject = Activator.CreateInstance(objectType);
+                var converter = TypeDescriptor.GetConverter(objectType);
+                newObject = converter.ConvertFrom(valueToSet);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                newObject = null;
+                return false;
+            }
+        }
+
+        public static void SetListEntries(IComponentWithID componentWithID, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
+        {
+            //get the list interfaced component
+            IList listProperty = listPropertyInfo.GetValue(componentWithID) as IList;
+
             //we now have the empty list, now get type type of list it is
             //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
-            Type listObjectType = list.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
+            Type listObjectType = listProperty.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
                 .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
+
+            //create the tracking lists for unknown and missing elements out here as null for first time init later
+            List<string> missingAttributes = null;
+            List<string> unknownAttributes = new List<string>();
+            List<string> unknownElements = new List<string>();
+
+            //so now we have the xml container (xmlListItems), and the internal memory container (listProperty)
             //now for each xml element, get the value information and set it
             //if it originates from the 
             foreach (XElement listElement in xmlListItems)
             {
-                //2 types of options for what this list could be: single node values (string, just node value), node of many values (custon type, many values)
-                if (listElement.Attributes().Count() > 0)//custom class type
+                //if it's just like a string or something then just load that
+                if(listObjectType.IsValueType)
                 {
-                    object listEntry = Activator.CreateInstance(listObjectType);
-                    //get list of fields in this entry object
-                    FieldInfo[] fieldsInObjectInstance = listObjectType.GetFields();
-                    List<string> missingMembers = new List<string>();
-                    List<string> unknownMembers = new List<string>();
-                    foreach (FieldInfo info in fieldsInObjectInstance)
-                        missingMembers.Add(info.Name);
-                    foreach (XAttribute listEntryAttribute in listElement.Attributes())
+                    if(SetObjectValue(listObjectType,listElement.Value,out object newObject))
                     {
-                        FieldInfo[] matchingListobjectsField = fieldsInObjectInstance.Where(field => field.Name.Equals(listEntryAttribute.Name.LocalName)).ToArray();
-                        if (matchingListobjectsField.Count() == 0)
-                        {
-                            //no matching entries from xml attribute name to fieldInfo of custom type
-                            unknownMembers.Add(listEntryAttribute.Name.LocalName);
-                            continue;
-                        }
-                        FieldInfo listobjectField = matchingListobjectsField[0];
-                        missingMembers.Remove(listobjectField.Name);
-                        try
-                        {
-                            var converter = TypeDescriptor.GetConverter(listobjectField.FieldType);
-                            listobjectField.SetValue(listEntry, converter.ConvertFrom(listEntryAttribute.Value));
-                        }
-                        catch (Exception ex)
-                        {
-                            Logging.Exception(ex.ToString());
-                        }
+                        listProperty.Add(newObject);
+                        continue;
                     }
-                    foreach(string missingMember in missingMembers)
-                    {
-                        //exist in member class info, but not set from xml attributes
-                        if(packageOfAnyType!= null)
-                            Logging.Error("Missing xml attribute: {0}, package: {1}, line{2}", missingMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
-                        else
-                            Logging.Error("Missing xml attribute: {0}, object: {1}, line{2}", missingMember, objectThatHasListProperty.ToString(), ((IXmlLineInfo)listElement).LineNumber);
-                    }
-                    foreach(string unknownMember in unknownMembers)
-                    {
-                        //exist in xml attributes, but not known member in memberInfo
-                        if (packageOfAnyType != null)
-                            Logging.Error("unknown xml attribute: {0}, package: {1}, line{2}", unknownMember, packageOfAnyType.PackageName, ((IXmlLineInfo)listElement).LineNumber);
-                        else
-                            Logging.Error("unknown xml attribute: {0}, object: {1}, line{2}", unknownMember, objectThatHasListProperty.ToString(), ((IXmlLineInfo)listElement).LineNumber);
-                    }
-                    list.Add(listEntry);
                 }
-                else//single primitive entry type
+
+                //make sure object type is properly implemented into serialization system
+                if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
+                    throw new BadMemeException("Type of this list is not of IXmlSerializable");
+
+                //assign missing attributes if not done already
+                if (missingAttributes == null)
+                    missingAttributes = new List<string>(listEntry.PropertiesForSerializationAttributes());
+
+                foreach (XAttribute listEntryAttribute in listElement.Attributes())
                 {
-                    list.Add(listElement.Value);
+                    if (!listEntry.PropertiesForSerializationAttributes().Contains(listEntryAttribute.Name.LocalName))
+                    {
+                        unknownAttributes.Add(listEntryAttribute.Name.LocalName);
+                        continue;
+                    }
+
+                    PropertyInfo property = listObjectType.GetProperty(listEntryAttribute.Name.LocalName);
+
+                    //check if attribute exists in class object
+                    if(property == null)
+                    {
+                        Logging.Error("Property (xml attribute) {0} exists in array for serialization, but not in class design!, ", listEntryAttribute.Name.LocalName);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        continue;
+                    }
+
+                    //remove from list of potential missing mandatory elements
+                    missingAttributes.Remove(listEntryAttribute.Name.LocalName);
+
+                    if(!SetObjectProperty(listEntry, property, listEntryAttribute.Value))
+                    {
+                        Logging.Error("Failed to set property {0} for element in IList", property.Name);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    }
                 }
+
+                foreach(XElement listEntryElement in listElement.Elements())
+                {
+                    if (!listEntry.PropertiesForSerializationElements().Contains(listEntryElement.Name.LocalName))
+                    {
+                        unknownElements.Add(listEntryElement.Name.LocalName);
+                        continue;
+                    }
+
+                    PropertyInfo property = listObjectType.GetProperty(listEntryElement.Name.LocalName);
+
+                    if (property == null)
+                    {
+                        Logging.Error("Property (xml element) {0} exists in array for serialization, but not in class design!, ", listEntryElement.Name.LocalName);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                        continue;
+                    }
+
+                    //no missing elements (elements are optional)
+
+                    if (!SetObjectProperty(listEntry, property, listEntryElement.Value))
+                    {
+                        Logging.Error("Failed to set property {0} for element in IList", property.Name);
+                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                    }
+                }
+
+                //logging unknown and missings
+                foreach (string missingAttribute in missingAttributes)
+                {
+                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", missingAttribute, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                }
+                foreach (string unknownAttribute in unknownAttributes)
+                {
+                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                }
+                foreach (string unknownElement in unknownElements)
+                {
+                    Logging.Error("Unknown xml element: {0}, package: {1}, line: {2}", unknownElement, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                }
+
+                listProperty.Add(listEntry);
             }
-            return true;
         }
         #endregion
 
         #region Generic Utils
+        public static string GetBetaDatabase1V1ForStringCompare()
+        {
+            List<string> downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList();
+
+            string[] downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
+
+            return string.Join(string.Empty, downloadStrings);
+        }
+
+        public async static Task<string> GetBetaDatabase1V1ForStringCompareAsync()
+        {
+            return await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare());
+        }
+
+        public static string[] DownloadStringsFromUrls(List<string> downloadURLs)
+        {
+            string[] downloadData = new string[downloadURLs.Count];
+
+            //create arrays
+            WebClient[] downloadClients = new WebClient[downloadURLs.Count];
+            Task<string>[] downloadTasks = new Task<string>[downloadURLs.Count];
+
+            //setup downloads
+            Logging.Debug("[DownloadStringsFromUrls]: Starting async download tasks");
+            for (int i = 0; i < downloadURLs.Count; i++)
+            {
+                downloadClients[i] = new WebClient();
+                downloadClients[i].Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                downloadTasks[i] = downloadClients[i].DownloadStringTaskAsync(downloadURLs[i]);
+            }
+
+            //wait
+            Task.WaitAll(downloadTasks);
+
+            //parse into strings
+            Logging.Debug("[DownloadStringsFromUrls]: Tasks finished, extracting task results");
+            for (int i = 0; i < downloadURLs.Count; i++)
+            {
+                downloadData[i] = downloadTasks[i].Result;
+            }
+
+            return downloadData;
+        }
+
+        public async static Task<string[]> DownloadStringsFromUrlsAsync(List<string> downloadUrls)
+        {
+            return await Task<string[]>.Run(() => DownloadStringsFromUrls(downloadUrls));
+        }
+
         /// <summary>
         /// Converts a Bitmap object to a BitmapImage object
         /// </summary>
@@ -2109,38 +2310,42 @@ namespace RelhaxModpack
         {
             //check if path of exe is the same as the one we're looking at
             //first check to make sure wot path is legit
-            bool checkWithPath = true;
             if (string.IsNullOrEmpty(pathToMatch))
             {
-                Logging.WriteToLog(nameof(pathToMatch) + "Is empty, cannot check for direct path, only checking for num processes",
-                    Logfiles.Application, LogLevel.Error);
-                checkWithPath = false;
+                Logging.Info("[GetProcess()] pathToMatch is empty, only checking for instance count > 0");
             }
+
             //get list of running instances of WoT
-            //TO GET PROCESS NAME: Process.GetCurrentProcess().ProcessName
             Process[] processes = Process.GetProcessesByName(processName);
+
             //check if three are any at all
             if (processes.Length == 0)
             {
                 return null;
             }
-            //first check if the number is 1 or less, if so stop here
-            else if (processes.Length == 1)
-                return null;
-            //if not checking for path, we don't know if is the direct path, 
-            else if (!checkWithPath)
-                return processes[0];
-            else
+
+            //if not checking for path, we don't know which instance, only that there is one
+            //so return
+            Logging.Debug("[GetProcess()] Process name to match: {0}. matching entries: {1}", processName, processes.Length.ToString());
+            if (string.IsNullOrEmpty(pathToMatch))
             {
-                foreach (Process p in processes)
+                Logging.Debug("[GetProcess()] processes.length = {0} and pathToMatch is empty, returning first entry", processes.Length.ToString());
+                return processes[0];
+            }
+
+            //else try to match the path
+            foreach (Process p in processes)
+            {
+                //get path of process start file
+                //https://stackoverflow.com/questions/5497064/how-to-get-the-full-path-of-running-process
+                string processStartFilepath = RemoveWoT32bit64bitPathIfExists(Path.GetDirectoryName(p.MainModule.FileName));
+                Logging.Debug("[GetProcess()] checking if path process {0} matching with path {1}", processStartFilepath, pathToMatch);
+                if (pathToMatch.Equals(processStartFilepath))
                 {
-                    if (pathToMatch.Equals(Path.GetDirectoryName(p.StartInfo.FileName)))
-                    {
-                        Logging.WriteToLog(string.Format("Matched process name {0} to path {1}", p.ProcessName, pathToMatch),
-                            Logfiles.Application, LogLevel.Debug);
-                        return p;
-                    }
+                    Logging.Debug("[GetProcess()] Process name matched");
+                    return p;
                 }
+                Logging.Debug("[GetProcess()] Never matched path processes (count={0}) matching with path {1}", processes.Length.ToString(), pathToMatch);
             }
             return null;
         }
@@ -2268,6 +2473,11 @@ namespace RelhaxModpack
                 Translations.GetTranslatedString("GoogleTranslateLanguageKey"), textToSend);
             return StartProcess(completeTemplate);
         }
+
+        public static string EmptyNullStringCheck(string stringToTest, string emptyNullReturn = "(null)")
+        {
+            return string.IsNullOrEmpty(stringToTest) ? emptyNullReturn : stringToTest;
+        }
         #endregion
 
         #region Macro Utils
@@ -2342,7 +2552,6 @@ namespace RelhaxModpack
         /// <summary>
         /// Checks the registry to get the latest location of where WoT is installed
         /// </summary>
-        /// <param name="WoTRoot">The string to set to the WoT path</param>
         /// <returns>True if operation success</returns>
         public static string AutoFindWoTDirectory()
         {
@@ -2425,6 +2634,11 @@ namespace RelhaxModpack
             return null;
         }
 
+        /// <summary>
+        /// Gets all registry keys that exist in the given search base and path
+        /// </summary>
+        /// <param name="search">The RegistrySearch structure to specify where to search and where to base the search</param>
+        /// <returns>The RegistryKey object of the folder in registry, or null if the search failed</returns>
         public static RegistryKey GetRegistryKeys(RegistrySearch search)
         {
             try
@@ -2437,6 +2651,47 @@ namespace RelhaxModpack
                 Logging.Exception(ex.ToString());
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Finds the location of the Wargaming Game center installation directory from the registry
+        /// </summary>
+        /// <returns>The location of wgc.exe if found, else null</returns>
+        public static string AutoFindWgcDirectory()
+        {
+            string wgcRegistryKeyLoc = @"Software\Classes\wgc\shell\open\command";
+            Logging.Debug("searching registry ({0}) for wgc location",wgcRegistryKeyLoc);
+            //search for the location of the game center from the registry
+            RegistryKey wgcKey = GetRegistryKeys(new RegistrySearch() { Root = Registry.CurrentUser, Searchpath = wgcRegistryKeyLoc });
+            string actualLocation = null;
+            if (wgcKey != null)
+            {
+                Logging.Debug("not null key, checking results");
+                foreach (string valueInKey in wgcKey.GetValueNames())
+                {
+                    string wgcPath = wgcKey.GetValue(valueInKey) as string;
+                    Logging.Debug("parsing result name '{0}' with value '{1}'", valueInKey, wgcPath);
+                    if (!string.IsNullOrWhiteSpace(wgcPath) && wgcPath.ToLower().Contains("wgc.exe"))
+                    {
+                        //trim front
+                        wgcPath = wgcPath.Substring(1);
+                        //trim end
+                        wgcPath = wgcPath.Substring(0, wgcPath.Length - 6);
+                        Logging.Debug("parsed to new value of '{0}', checking if file exists");
+                        if (File.Exists(wgcPath))
+                        {
+                            Logging.Debug("exists, use this for wgc start");
+                            actualLocation = wgcPath;
+                            break;
+                        }
+                        else
+                        {
+                            Logging.Debug("not exist, continue to search");
+                        }
+                    }
+                }
+            }
+            return actualLocation;
         }
         #endregion
 

@@ -160,21 +160,21 @@ namespace RelhaxModpack
                     Current.Shutdown(0);
                     break;
                 case ApplicationMode.PatchDesigner:
-                    PatchTester patcher = new PatchTester();
+                    PatchDesigner patcher = new PatchDesigner();
                     CloseApplicationLog(true);
 
                     //start updater logging system
-                    if (!Logging.Init(Logfiles.Patcher))
+                    if (!Logging.Init(Logfiles.PatchDesigner))
                     {
                         MessageBox.Show("Failed to initialize logfile for patcher");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
                         return;
                     }
-                    Logging.WriteHeader(Logfiles.Patcher);
+                    Logging.WriteHeader(Logfiles.PatchDesigner);
                     patcher.ShowDialog();
 
                     //stop updater logging system
-                    CloseLog(Logfiles.Patcher);
+                    CloseLog(Logfiles.PatchDesigner);
                     patcher = null;
                     Current.Shutdown(0);
                     break;

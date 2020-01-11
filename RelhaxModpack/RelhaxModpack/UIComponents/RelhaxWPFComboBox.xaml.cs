@@ -21,6 +21,11 @@ namespace RelhaxModpack.UIComponents
     /// </summary>
     public partial class RelhaxWPFComboBox : ComboBox
     {
+        /// <summary>
+        /// Flag to determine if the Combobox object has been already added to the ModSelectionList window
+        /// </summary>
+        /// <remarks>Many components of 'single_dropDown' exist in the Combobox, and therefore the UI generation code gets run for each object.
+        /// So, a flag is used to prevent the ComboBox being added multiple times to the window</remarks>
         public bool AddedToList { get; set; } = false;
 
         /// <summary>

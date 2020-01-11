@@ -137,7 +137,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
         /// </summary>
-        public static bool SaveLastSelection = false;
+        public static bool SaveLastSelection = true;
 
         /// <summary>
         /// Toggle if the application should save user cache save data like session stats, or auto equip configs
@@ -380,7 +380,6 @@ namespace RelhaxModpack
                 switch (setting.Name)
                 {
                     //put legacy names here to direct name change
-                    //TODO: super extraction and instant extraction?
                     case "backupModFolder":
                         BackupModFolder = bool.Parse(setting.InnerText);
                         break;
@@ -427,10 +426,30 @@ namespace RelhaxModpack
                         ModSelectionView = (SelectionView)int.Parse(setting.InnerText);
                         break;
                     case "BetaApplication":
-                        ApplicationDistroVersion = ApplicationVersions.Beta;
+                        if(Utils.ParseBool(setting.InnerText, false))
+                        {
+                            ApplicationDistroVersion = ApplicationVersions.Beta;
+                        }
+                        else
+                        {
+                            ApplicationDistroVersion = ApplicationVersions.Stable;
+                        }
                         break;
                     case "BetaDatabase":
-                        DatabaseDistroVersion = DatabaseVersions.Beta;
+                        if (Utils.ParseBool(setting.InnerText, false))
+                        {
+                            DatabaseDistroVersion = DatabaseVersions.Beta;
+                        }
+                        else
+                        {
+                            DatabaseDistroVersion = DatabaseVersions.Stable;
+                        }
+                        break;
+                    case "SuperExtraction":
+                        MulticoreExtraction = Utils.ParseBool(setting.InnerText, false);
+                        break;
+                    case "InstantExtraction":
+                        InstallWhileDownloading = Utils.ParseBool(setting.InnerText, false);
                         break;
                 }
             }

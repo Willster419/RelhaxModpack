@@ -17,6 +17,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="90,60,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="85" Tag="SampleTextblock"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="20" Margin="180,10,0,0" VerticalAlignment="Top" Width="85" Tag="SampleBorder"/>
         <TextBox HorizontalAlignment="Left" Height="20" Margin="180,35,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="85" Tag="SampleControl"/>
+        <ProgressBar HorizontalAlignment="Left" Height="16" Margin="180,60,0,0" VerticalAlignment="Top" Width="85" Tag="SampleProgressBar"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,80,0,0" TextWrapping="Wrap" Text="This window is for class definition templates" VerticalAlignment="Top" Width="255"/>
     </Grid>
 </local:RelhaxWindow>
