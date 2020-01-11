@@ -3000,6 +3000,11 @@ namespace RelhaxModpack
                 if (!oldDBVersion.Equals(Settings.DatabaseVersion))
                 {
                     Logging.Debug("[AutoInstallTimer_Elapsed]: update found from auto install, running installation");
+                    if (modSelectionList != null)
+                    {
+                        Logging.Debug("[AutoInstallTimer_Elapsed]: modSelectionList != null, so don't start an install");
+                        return;
+                    }
                     InstallModpackButton_Click(null, null);
                 }
                 timerActive = false;
@@ -3035,6 +3040,11 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old != new, starting install");
                     oldBetaDB = newBetaDB;
+                    if(modSelectionList != null)
+                    {
+                        Logging.Debug("[AutoInstallTimer_ElapsedBeta]: modSelectionList != null, so don't start an install");
+                        return;
+                    }
                     InstallModpackButton_Click(null, null);
                 }
                 else
