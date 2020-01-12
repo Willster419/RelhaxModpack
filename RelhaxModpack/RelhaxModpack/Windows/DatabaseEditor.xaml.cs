@@ -2576,6 +2576,8 @@ namespace RelhaxModpack.Windows
                 //stop the selection from key events!!!
                 //https://www.codeproject.com/questions/183259/how-to-prevent-selecteditem-change-on-up-and-down (second answer)
                 e.Handled = true;
+
+                //if trying to navigate but there's noting selected, then select one
                 if(SearchBox.Items.Count > 0 && SearchBox.SelectedIndex == -1)
                 {
                     SearchBox.SelectedIndex = 0;
@@ -2596,16 +2598,21 @@ namespace RelhaxModpack.Windows
             else if (SearchBox.Text.Length > 1)
             {
                 //Logging.Editor("[SearchBox_KeyUp]: Process search, search text = {0}, selectedIndex = {1}", LogLevel.Debug, SearchBox.Text, SearchBox.SelectedIndex);
+                //if something is currently selected, then changing the selected index later will loose focus on textbox part of combobox and cause the text to
+                //highlight in the middle of typing. this will "eat" the first letter or two of the user's search
                 if(SearchBox.SelectedIndex != -1)
                 {
                     TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+                    //backup what the user was typing
                     string temp = SearchBox.Text;
+                    //set the selected index to nothing. sets focus to dropdown
                     SearchBox.SelectedIndex = -1;
+                    //restore the text. sets focus and highlights the combobox text
                     SearchBox.Text = temp;
+                    //set the selection to the end (remove selection)
                     textBox.SelectionStart = ((ComboBox)sender).Text.Length;
                     textBox.SelectionLength = 0;
                 }
-
 
                 //split the search into an array based on using '*' search
                 List<DatabasePackage> searchComponents = new List<DatabasePackage>();
