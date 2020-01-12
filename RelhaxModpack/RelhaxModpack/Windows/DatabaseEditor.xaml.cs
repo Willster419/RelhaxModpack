@@ -558,6 +558,7 @@ namespace RelhaxModpack.Windows
                         PackageVisibleDisplay.IsEnabled = true;
                         PackagePopularModDisplay.IsEnabled = true;
                         PackageShowInSearchListDisplay.IsEnabled = true;
+                        PackageGreyAreaModDisplay.IsEnabled = true;
                         //enable remaining tabs
                         foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DescriptionTab, false))
                         {
