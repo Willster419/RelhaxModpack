@@ -937,13 +937,20 @@ namespace RelhaxModpack.Windows
                 string databaseFtpPath = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPModpackDatabase, lastWoTClientVersion);
                 ReportProgress(string.Format("FTP path parsed as {0}", databaseFtpPath));
                 ReportProgress("Downloading documents");
+                ReportProgress("Download root document");
                 string rootDatabase = await client.DownloadStringTaskAsync(databaseFtpPath + "database.xml");
                 XmlDocument root1V1Document = XmlUtils.LoadXmlDocument(rootDatabase, XmlLoadType.FromString);
+
+                ReportProgress("Downloading globalDependencies document");
                 string globalDependencies1V1 = await client.DownloadStringTaskAsync(databaseFtpPath + XmlUtils.GetXmlStringFromXPath(root1V1Document, "/modInfoAlpha.xml/globalDependencies/@file"));
+
+                ReportProgress("Downloading dependencies document");
                 string dependnecies1V1 = await client.DownloadStringTaskAsync(databaseFtpPath + XmlUtils.GetXmlStringFromXPath(root1V1Document, "/modInfoAlpha.xml/dependencies/@file"));
+
                 List<string> categoriesStrings1V1 = new List<string>();
                 foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(root1V1Document, "//modInfoAlpha.xml/categories/category"))
                 {
+                    ReportProgress(string.Format("Downloading category {0}", categoryNode.Attributes["file"].Value));
                     categoriesStrings1V1.Add(await client.DownloadStringTaskAsync(databaseFtpPath + categoryNode.Attributes["file"].Value));
                 }
 
@@ -1029,7 +1036,7 @@ namespace RelhaxModpack.Windows
             //get the list of renamed packages
             //a renamed package will have the same internal name, but a different display name
             //first start by getting the list of all current packages, then filter out removed and added packages
-            ReportProgress("getting list of renamed packages");
+            ReportProgress("Getting list of renamed packages");
             Utils.AllowUIToUpdate();
             List<DatabasePackage> renamedPackagesTemp = new List<DatabasePackage>(flatListCurrent);
             renamedPackagesTemp = renamedPackagesTemp.Except(removedPackages, pc).Except(addedPackages, pc).ToList();
@@ -1051,7 +1058,7 @@ namespace RelhaxModpack.Windows
 
             //list of moved packages
             //a moved package will have a different completePackagePath and different completePath, but still have the same internalName
-            ReportProgress("getting list of moved packages");
+            ReportProgress("Getting list of moved packages");
             Utils.AllowUIToUpdate();
             foreach (SelectablePackage selectablePackage in potentialRenamedPackages)
             {
@@ -1082,7 +1089,7 @@ namespace RelhaxModpack.Windows
             //if a package was internally renamed, it will show up in the added and removed list
             //a internal renamed package will have a different completePackagePath but the same completePath (assuming it wasn't renamed as well), and different internalName
             //first get the list of *selectable* Packages for added and removed
-            ReportProgress("checking add and removed list for internal renamed");
+            ReportProgress("Getting list for internal renamed");
             Utils.AllowUIToUpdate();
             List<SelectablePackage> addedSelectablePackages = addedPackages.OfType<SelectablePackage>().ToList();
             List<SelectablePackage> removedSelectablePackages = removedPackages.OfType<SelectablePackage>().ToList();
@@ -1094,7 +1101,7 @@ namespace RelhaxModpack.Windows
 
             SetProgress(90);
 
-            ReportProgress(string.Format("CompletePath count compare of add and remove is {0}", completePathDetect.Count));
+            Logging.Updater(string.Format("CompletePath count compare of add and remove is {0}", completePathDetect.Count));
             if (completePathDetect.Count > 0)
             {
                 foreach (string completePathDet in completePathDetect)
@@ -1116,7 +1123,7 @@ namespace RelhaxModpack.Windows
             List<string> nameWithMacro = addedSelectablePackages.Select(pack => pack.NameFormatted).ToList();
             nameWithMacro.AddRange(removedSelectablePackages.Select(pack => pack.NameFormatted).ToList());
             nameWithMacro = nameWithMacro.Distinct().ToList();
-            ReportProgress(string.Format("Name count compare of add and remove is {0}", completePathDetect.Count));
+            Logging.Updater(string.Format("Name count compare of add and remove is {0}", completePathDetect.Count));
             if (nameWithMacro.Count > 0)
             {
                 //if the name exists in both, then it was moved and renamed
