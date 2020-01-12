@@ -212,7 +212,7 @@ namespace RelhaxModpack.Windows
             PatchModeCombobox.Items.Clear();
             if (PatchTypeCombobox.SelectedItem.Equals("json"))
             {
-                //PatchFollowPathSetting.IsEnabled = true;//disabled until relhax V2
+                PatchFollowPathSetting.IsEnabled = true;
                 PatchModeCombobox.IsEnabled = true;
                 PatchLinesPathHeader.Text = "Path";
 
