@@ -1,3 +1,17 @@
+Application version 1.0.0.1 (2020-01-11)
+(Yup, a day one patch.)
+
+- Fixed the search combobox in the selection list. It will no longer "eat" your first type letters.
+- Fixed several bugs with database editor:
+  -  Database saving
+  -  Unsaved changes check
+  -  Disabled UI components until V2 database (needed to be enabled)
+  -  Bugs with package search combobox
+- Fixed disabled UI components until V2 patch system. (needed to be enabled)
+- Updated Spanish, Polish, Russian translations.
+- Not bad for a day one patch on initial release, if I may say so myself.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.0.0.0 (2020-01-10)
 https://www.virustotal.com/gui/file/1df83980fa58bd12a989b38e0b143582207fb8dd99c7350bb9f86ca3049c0827/detection
 - Initial Relhax V2 1.0 release
