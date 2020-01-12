@@ -1,6 +1,6 @@
 Application version 1.0.0.1 (2020-01-11)
 (Yup, a day one patch.)
-
+https://www.virustotal.com/gui/file/a8e695e33b429ce7a687e57ce141665c4c19b5bfdfaf44129539730b2adbe75e/detection
 - Fixed the search combobox in the selection list. It will no longer "eat" your first type letters.
 - Fixed several bugs with database editor:
   -  Database saving
