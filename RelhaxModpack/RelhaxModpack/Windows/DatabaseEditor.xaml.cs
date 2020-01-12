@@ -1700,19 +1700,32 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Default save location is empty, please specify before using this button");
                 return;
             }
+
             if (!Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
             {
                 MessageBox.Show(string.Format("The save path\n{0}\ndoes not exist, please re-specify", Path.GetDirectoryName(DefaultSaveLocationSetting.Text)));
                 return;
             }
+
             //if save triggers apply, then do it
             if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
             {
                 ApplyDatabaseObject(SelectedItem);
             }
+
             //actually save
-            XmlUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
+            switch (EditorSettings.SaveAsDatabaseVersion)
+            {
+                case DatabaseXmlVersion.Legacy:
+                    XmlUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);
+                    break;
+                case DatabaseXmlVersion.OnePointOne:
+                    XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), Settings.BetaDatabaseV2RootFilename),
+                        Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+                    break;
+            }
+
             UnsavedChanges = false;
         }
 
@@ -1740,30 +1753,25 @@ namespace RelhaxModpack.Windows
             if (!(bool)SaveDatabaseDialog.ShowDialog())
                 return;
 
-            //if what the user just specified is not the same as the current default, then ask to update it
-            //but only if we're in legacy mode for now
-            if (EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy)
-            {
-                if (string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ||
+            if (string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ||
                     !Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
-                    if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                        DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
-            }
+                if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
 
             //actually save
             switch (EditorSettings.SaveAsDatabaseVersion)
             {
                 case DatabaseXmlVersion.Legacy:
                     XmlUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
-                    return;
+                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);
+                    break;
                 case DatabaseXmlVersion.OnePointOne:
                     XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
                         Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
-                    return;
+                    break;
             }
-            if (EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy)
-                UnsavedChanges = false;
+
+            UnsavedChanges = false;
         }
 
         private void LoadAsDatabaseButton_Click(object sender, RoutedEventArgs e)
