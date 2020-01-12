@@ -2566,32 +2566,47 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Searchbox code
-        private void SearchBox_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            SearchBox.IsDropDownOpen = true;
-        }
-
         private void SearchBox_KeyUp(object sender, KeyEventArgs e)
         {
+            //Logging.Editor("[SearchBox_KeyUp]: Entered, search text = {0}, selectedIndex = {1}", LogLevel.Debug, SearchBox.Text, SearchBox.SelectedIndex);
+            SearchBox.IsDropDownOpen = true;
             if (e.Key == Key.Down || e.Key == Key.Up)
             {
+                //Logging.Editor("[SearchBox_KeyUp]: Key is down or up, e.Handled = true, selectedIndex = {0}", LogLevel.Debug, SearchBox.SelectedIndex);
                 //stop the selection from key events!!!
                 //https://www.codeproject.com/questions/183259/how-to-prevent-selecteditem-change-on-up-and-down (second answer)
                 e.Handled = true;
-                SearchBox.IsDropDownOpen = true;
+                if(SearchBox.Items.Count > 0 && SearchBox.SelectedIndex == -1)
+                {
+                    SearchBox.SelectedIndex = 0;
+                }
             }
             else if (e.Key == Key.Enter)
             {
+                //Logging.Editor("[SearchBox_KeyUp]: Key is enter, OnSearchBoxCommitted, search text = {0}, selectedIndex = {1}", LogLevel.Debug, SearchBox.Text, SearchBox.SelectedIndex);
                 OnSearchBoxCommitted(SearchBox.SelectedItem as EditorSearchBoxItem, false);
             }
             else if (string.IsNullOrWhiteSpace(SearchBox.Text))
             {
+                //Logging.Editor("[SearchBox_KeyUp]: SearchBox.Text is null.empty, clean items, search text = {0}, selectedIndex = {1}", LogLevel.Debug, SearchBox.Text, SearchBox.SelectedIndex);
                 SearchBox.Items.Clear();
                 SearchBox.IsDropDownOpen = false;
                 SearchBox.SelectedIndex = -1;
             }
-            else
+            else if (SearchBox.Text.Length > 1)
             {
+                //Logging.Editor("[SearchBox_KeyUp]: Process search, search text = {0}, selectedIndex = {1}", LogLevel.Debug, SearchBox.Text, SearchBox.SelectedIndex);
+                if(SearchBox.SelectedIndex != -1)
+                {
+                    TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+                    string temp = SearchBox.Text;
+                    SearchBox.SelectedIndex = -1;
+                    SearchBox.Text = temp;
+                    textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+                    textBox.SelectionLength = 0;
+                }
+
+
                 //split the search into an array based on using '*' search
                 List<DatabasePackage> searchComponents = new List<DatabasePackage>();
                 foreach (string searchTerm in SearchBox.Text.Split('*'))
@@ -2599,8 +2614,10 @@ namespace RelhaxModpack.Windows
                     //get a list of components that match the search term
                     searchComponents.AddRange(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(term => term.PackageName.ToLower().Contains(searchTerm.ToLower())));
                 }
-                //assuming it maintains the order it previously had i.e. removing only when need to...
+
+                //remove duplicates
                 searchComponents = searchComponents.Distinct().ToList();
+
                 //clear and fill the search list again
                 SearchBox.Items.Clear();
                 foreach (DatabasePackage package in searchComponents)
@@ -2611,47 +2628,61 @@ namespace RelhaxModpack.Windows
                         Content = package.PackageName
                     });
                 }
-                SearchBox.IsDropDownOpen = true;
             }
+        }
+
+        private void SearchBox_DropDownOpened(object sender, EventArgs e)
+        {
+            //Logging.Editor("[SearchBox_DropDownOpened]: Entered, search text = {0}", LogLevel.Debug, SearchBox.Text);
+            //https://stackoverflow.com/a/1444332
+            //https://stackoverflow.com/a/40117557
+            //When a comboxbox gains focus you can disable the text highlighting (i.e. by selecting no text upon the GotFocus event)
+            TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+            textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+            textBox.SelectionLength = 0;
         }
 
         private void SearchBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (SearchBox.IsDropDownOpen)
+            Logging.Editor("[SearchBox_PreviewMouseDown]: Entered, search text = {0}", LogLevel.Debug, SearchBox.Text);
+            if (!SearchBox.IsDropDownOpen)
             {
-                foreach (EditorSearchBoxItem item in SearchBox.Items)
+                return;
+            }
+
+            Logging.Editor("[SearchBox_PreviewMouseDown]: DropDown is open, search text = {0}", LogLevel.Debug, SearchBox.Text);
+            foreach (EditorSearchBoxItem item in SearchBox.Items)
+            {
+                if (item.IsHighlighted && item.IsMouseOver)
                 {
-                    if (item.IsHighlighted && item.IsMouseOver)
+                    //if it's the right mouse and we're in the conflicting packages view, the user is trying to add the element
+                    if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
                     {
-                        //if it's the right mouse and we're in the conflicting packages view, the user is trying to add the element
-                        if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
+                        Logging.Editor("Mouse right click with trigger add, checking if already exists");
+                        SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
+                        foreach (string s in selectedPackage.ConflictingPackages)
                         {
-                            Logging.Editor("Mouse right click with trigger add, checking if already exists");
-                            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-                            foreach (string s in selectedPackage.ConflictingPackages)
+                            if (s.Equals(item.Package.PackageName))
                             {
-                                if (s.Equals(item.Package.PackageName))
-                                {
-                                    Logging.Editor("Mouse right click with conflicting packages add, skipping adding cause already exists: {0}", LogLevel.Info, item.Package.PackageName);
-                                    MessageBox.Show("conflict packagename already exists");
-                                    return;
-                                }
+                                Logging.Editor("Mouse right click with conflicting packages add, skipping adding cause already exists: {0}", LogLevel.Info, item.Package.PackageName);
+                                MessageBox.Show("conflict packagename already exists");
+                                return;
                             }
-                            Logging.Editor("Mouse right click with conflicting packages add, does not exist, adding");
-
-                            selectedPackage.ConflictingPackages.Add(item.Package.PackageName);
-
-                            //update UI
-                            PackageConflictingPackagesDisplay.Items.Clear();
-                            foreach (string conflict in selectedPackage.ConflictingPackages)
-                                PackageConflictingPackagesDisplay.Items.Add(conflict);
-
-                            UnsavedChanges = true;
                         }
-                        else
-                        {
-                            OnSearchBoxCommitted(item, true);
-                        }
+                        Logging.Editor("Mouse right click with conflicting packages add, does not exist, adding");
+
+                        selectedPackage.ConflictingPackages.Add(item.Package.PackageName);
+
+                        //update UI
+                        PackageConflictingPackagesDisplay.Items.Clear();
+                        foreach (string conflict in selectedPackage.ConflictingPackages)
+                            PackageConflictingPackagesDisplay.Items.Add(conflict);
+
+                        UnsavedChanges = true;
+                    }
+                    else
+                    {
+                        OnSearchBoxCommitted(item, true);
                     }
                 }
             }
@@ -2665,6 +2696,7 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("searched text: {0}", LogLevel.Info, SearchBox.Text);
                 return;
             }
+
             item.Package.EditorTreeViewItem.Focusable = true;
             item.Package.EditorTreeViewItem.Focus();
             Logging.Editor("OnSearchBoxCommitted(), invoking async dispatch to bring into view item: {0}", LogLevel.Info, item.Package.PackageName);

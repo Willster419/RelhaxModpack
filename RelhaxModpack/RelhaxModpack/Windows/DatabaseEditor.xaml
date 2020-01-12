@@ -595,9 +595,8 @@
                 </TabItem>
             </TabControl>
             <ComboBox x:Name="SearchBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" IsEditable="True" Grid.Column="2"
-                      PreviewKeyDown="SearchBox_PreviewKeyDown" KeyUp="SearchBox_KeyUp" PreviewMouseDown="SearchBox_PreviewMouseDown"
-                      IsTextSearchEnabled="False" Style="{DynamicResource ComboBoxStyle1}" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}">
-
+                      KeyUp="SearchBox_KeyUp" PreviewMouseDown="SearchBox_PreviewMouseDown" IsTextSearchEnabled="False" DropDownOpened="SearchBox_DropDownOpened"
+                      Style="{DynamicResource ComboBoxStyle1}" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}">
             </ComboBox>
         </Grid>
         <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="50"/>
