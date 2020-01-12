@@ -29,7 +29,7 @@
         </Button>
         <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" 
                    TextAlignment="Right" Padding="3" Tag="SearchTB" Text="Search for a mod..."/>
-        <ComboBox x:Name="SearchCB" Tag="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" PreviewKeyDown="SearchCB_PreviewKeyDown"
+        <ComboBox x:Name="SearchCB" Tag="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" DropDownOpened="SearchCB_DropDownOpened"
                   KeyUp="SearchCB_KeyUp" IsEditable="True" IsTextSearchEnabled="False" PreviewMouseDown="SearchCB_PreviewMouseDown" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}"/>
         <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" Tag="ContinueButton" >
             <TextBlock x:Name="ContinueButtonLabel" Text="Install" TextWrapping="Wrap" TextAlignment="Center"/>

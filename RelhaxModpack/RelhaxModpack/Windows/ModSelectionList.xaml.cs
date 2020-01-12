@@ -1999,29 +1999,19 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Search Box Code
-
-        private void SearchCB_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
-            SearchCB.IsDropDownOpen = true;
-            //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
-            /*
-            var textbox = (TextBox)SearchCB.Template.FindName("PART_EditableTextBox", SearchCB);
-            if (textbox != null && textbox.SelectionLength > 0)
-            {
-                textbox.Select(textbox.SelectionLength, 0);
-            }
-            */
-        }
-
         private void SearchCB_KeyUp(object sender, KeyEventArgs e)
         {
+            //see editor search box section for comments and log notes
+            SearchCB.IsDropDownOpen = true;
             if (e.Key == Key.Down || e.Key == Key.Up)
             {
-                //stop the selection from key events!!!
-                //https://www.codeproject.com/questions/183259/how-to-prevent-selecteditem-change-on-up-and-down (second answer)
+                //stop the selection from key events
                 e.Handled = true;
-                SearchCB.IsDropDownOpen = true;
+
+                if (SearchCB.Items.Count > 0 && SearchCB.SelectedIndex == -1)
+                {
+                    SearchCB.SelectedIndex = 0;
+                }
             }
             else if(e.Key == Key.Enter)
             {
@@ -2032,23 +2022,24 @@ namespace RelhaxModpack.Windows
                 }
                 OnSearchCBSelectionCommitted(SearchCB.SelectedItem as ComboBoxItem);
             }
-            //check if length 0 or whitespace
             else if (string.IsNullOrWhiteSpace(SearchCB.Text))
             {
                 SearchCB.Items.Clear();
                 SearchCB.IsDropDownOpen = false;
                 SearchCB.SelectedIndex = -1;
             }
-            //check if length 1
-            /*
-            else if(SearchCB.Text.Count() == 1)
+            else if (SearchCB.Text.Length > 1)
             {
+                if (SearchCB.SelectedIndex != -1)
+                {
+                    TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+                    string temp = SearchCB.Text;
+                    SearchCB.SelectedIndex = -1;
+                    SearchCB.Text = temp;
+                    textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+                    textBox.SelectionLength = 0;
+                }
 
-            }
-            */
-            //actually search
-            else
-            {
                 //split the search into an array based on using '*' search
                 List<SelectablePackage> searchComponents = new List<SelectablePackage>();
                 foreach (string searchTerm in SearchCB.Text.Split('*'))
@@ -2067,8 +2058,10 @@ namespace RelhaxModpack.Windows
                             term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible));
                     }
                 }
-                //assuming it maintains the order it previously had i.e. removing only when need to...
+
+                //remove duplicates
                 searchComponents = searchComponents.Distinct().ToList();
+
                 //clear and fill the search list again
                 SearchCB.Items.Clear();
                 foreach (SelectablePackage package in searchComponents)
@@ -2080,8 +2073,14 @@ namespace RelhaxModpack.Windows
                         Content = formatForText
                     });
                 }
-                SearchCB.IsDropDownOpen = true;
             }
+        }
+
+        private void SearchCB_DropDownOpened(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+            textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+            textBox.SelectionLength = 0;
         }
 
         private async void OnSearchCBSelectionCommitted(ComboBoxItem committedItem)
