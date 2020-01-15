@@ -85,19 +85,41 @@ namespace RelhaxModpack.Windows
                 string[] devURLS = Package.DevURL.Split('\n');
                 for(int i = 0; i < devURLS.Count(); i++)
                 {
-                    //make a textbox
+                    //make a URI to hold the goto devurl link
+                    Uri goTo = null;
+                    try
+                    {
+                        goTo = new Uri(devURLS[i].Trim());
+                    }
+                    catch (UriFormatException)
+                    {
+                        Logging.Error("Invalid URI string, skipping: {0}", devURLS[i].Trim());
+                    }
+                    if (goTo == null)
+                        continue;
+
+                    //make a textbox to hold the hyperlink object
                     TextBlock block = new TextBlock()
                     {
                         ToolTip = devURLS[i].Trim()
                     };
                     //https://stackoverflow.com/questions/21214450/how-to-add-a-hyperlink-in-a-textblock-in-code?noredirect=1&lq=1
                     block.Inlines.Clear();
-                    Hyperlink h = new Hyperlink(new Run(i.ToString()))
+
+                    //make a run to display the number of the link
+                    Run inline = new Run(i.ToString());
+
+                    //and the hyperlink will display the run
+                    Hyperlink h = new Hyperlink(inline)
                     {
-                        NavigateUri = new Uri(devURLS[i].Trim())
+                        NavigateUri = goTo
                     };
                     h.RequestNavigate += OnHyperLinkClick;
+
+                    //add hyperlink to textbox
                     block.Inlines.Add(h);
+
+                    //add to developer url textbox
                     DevUrlHolder.Children.Add(block);
                 }
             }
