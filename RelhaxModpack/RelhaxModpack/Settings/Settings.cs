@@ -593,7 +593,7 @@ namespace RelhaxModpack
                 //but skip the exclusion list
                 if (propertiesToExclude != null && propertiesToExclude.Contains(field.Name))
                 {
-                    Logging.Debug("XML file {0}, property {1} matched to exclusion list, skipping", xmlFile, field.Name);
+                    Logging.Debug("Xml file {0}, property {1} matched to exclusion list, skipping", xmlFile, field.Name);
                     continue;
                 }
                 XmlElement element = doc.CreateElement(field.Name);
