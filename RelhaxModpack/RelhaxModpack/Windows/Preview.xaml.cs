@@ -132,10 +132,7 @@ namespace RelhaxModpack.Windows
             //make the linked labels in the link box
             for(int i =0; i < Package.Medias.Count; i++)
             {
-                TextBlock block = new TextBlock()
-                {
-
-                };
+                TextBlock block = new TextBlock();
                 block.Inlines.Clear();
                 Hyperlink h = new Hyperlink(new Run(i.ToString()))
                 {
