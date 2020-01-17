@@ -4151,7 +4151,7 @@ namespace RelhaxModpack
             Polish.Add("popularInDescription", TranslationNeeded);
             French.Add("popularInDescription", TranslationNeeded);
             Spanish.Add("popularInDescription", TranslationNeeded);
-            Russian.Add("popularInDescription", TranslationNeeded);
+            Russian.Add("popularInDescription", "Это популярный пакет");
 
             //Component: controversialInDescription
             //
@@ -4160,7 +4160,7 @@ namespace RelhaxModpack
             Polish.Add("controversialInDescription", TranslationNeeded);
             French.Add("controversialInDescription", TranslationNeeded);
             Spanish.Add("controversialInDescription", TranslationNeeded);
-            Russian.Add("controversialInDescription", TranslationNeeded);
+            Russian.Add("controversialInDescription", "Это подозрительный пакет");
 
             //Component: encryptedInDescription
             //
@@ -4169,7 +4169,7 @@ namespace RelhaxModpack
             Polish.Add("encryptedInDescription", TranslationNeeded);
             French.Add("encryptedInDescription", TranslationNeeded);
             Spanish.Add("encryptedInDescription", TranslationNeeded);
-            Russian.Add("encryptedInDescription", TranslationNeeded);
+            Russian.Add("encryptedInDescription", "Этот пакет зашифрован.\nПроверка на вирусы невозможна.");
             #endregion
 
             #region Developer Selection Window
