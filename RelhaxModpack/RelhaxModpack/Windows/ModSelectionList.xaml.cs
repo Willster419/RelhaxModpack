@@ -1830,7 +1830,7 @@ namespace RelhaxModpack.Windows
             else if(!silent)
             {
                 Logging.Info("Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
-                disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
+                    disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
                 if(disabledMods.Count > 0)
                 {
                     //disabled selections
@@ -1855,6 +1855,11 @@ namespace RelhaxModpack.Windows
                     MessageBox.Show(string.Format("{0}: {1}{2}",
                         Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, disabledStructureMods)));
                 }
+            }
+            else
+            {
+                Logging.Info("Silent = true, logging {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
+                    disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
             }
             return true;
         }
