@@ -724,10 +724,10 @@ namespace RelhaxModpack.Windows
             //devURL
             //each url is separated by newline characters "\n"
             //should be displayed with newlines already, so no change needed
-            PackageDevURLDisplay.Text = Utils.MacroReplace(package.DevURL, ReplacementTypes.TextUnescape);
+            PackageDevURLDisplay.Text = package.DevURL;
 
             //internal notes
-            PackageInternalNotesDisplay.Text = Utils.MacroReplace(package.InternalNotes, ReplacementTypes.TextUnescape);
+            PackageInternalNotesDisplay.Text = package.InternalNotesEscaped;
 
             //triggers
             foreach (string s in package.Triggers)
@@ -787,10 +787,8 @@ namespace RelhaxModpack.Windows
                 PackageTypeDisplay.SelectedItem = selectablePackage.Type;
                 PackageLevelDisplay.Text = selectablePackage.Level.ToString();
                 PackageVisibleDisplay.IsChecked = selectablePackage.Visible;
-                //PackageDescriptionDisplay.Text = Utils.MacroReplace(selectablePackage.Description,ReplacementTypes.TextUnescape);
-                //PackageUpdateNotesDisplay.Text = Utils.MacroReplace(selectablePackage.UpdateComment,ReplacementTypes.TextUnescape);
-                PackageDescriptionDisplay.Text = selectablePackage.Description;
-                PackageUpdateNotesDisplay.Text = selectablePackage.UpdateComment;
+                PackageDescriptionDisplay.Text = selectablePackage.DescriptionEscaped;
+                PackageUpdateNotesDisplay.Text = selectablePackage.UpdateCommentEscaped;
                 foreach (DatabaseLogic d in selectablePackage.Dependencies)
                     PackageDependenciesDisplay.Items.Add(d);
                 foreach (Media media in selectablePackage.Medias)
@@ -1000,13 +998,9 @@ namespace RelhaxModpack.Windows
                     return true;
                 if (!selectablePackage.Type.Equals((SelectionTypes)PackageTypeDisplay.SelectedItem))
                     return true;
-                //if (!selectablePackage.Description.Equals(Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape)))
-                //    return true;
-                //if (!selectablePackage.UpdateComment.Equals(Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape)))
-                //    return true;
-                if (!selectablePackage.Description.Equals(PackageDescriptionDisplay.Text))
+                if (!selectablePackage.DescriptionEscaped.Equals(PackageDescriptionDisplay.Text))
                     return true;
-                if (!selectablePackage.UpdateComment.Equals(PackageUpdateNotesDisplay.Text))
+                if (!selectablePackage.UpdateCommentEscaped.Equals(PackageUpdateNotesDisplay.Text))
                     return true;
 
                 if (DependenciesWereModified(selectablePackage.Dependencies))
@@ -1100,10 +1094,8 @@ namespace RelhaxModpack.Windows
                 selectablePackage.Visible = (bool)PackageVisibleDisplay.IsChecked;
                 selectablePackage.Name = PackageNameDisplay.Text;
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
-                //selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
-                //selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
-                selectablePackage.Description = PackageDescriptionDisplay.Text;
-                selectablePackage.UpdateComment = PackageUpdateNotesDisplay.Text;
+                selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
 
                 selectablePackage.Dependencies.Clear();
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)

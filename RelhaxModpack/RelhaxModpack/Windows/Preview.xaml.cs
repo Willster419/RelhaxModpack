@@ -82,8 +82,8 @@ namespace RelhaxModpack.Windows
             {
                 //devURL is now array of elements separated by newline
                 //load the stack with textblocks with tooltips for the URLs
-                string[] devURLS = Package.DevURL.Split('\n');
-                for(int i = 0; i < devURLS.Count(); i++)
+                string[] devURLS = Package.DevURLList;
+                for (int i = 0; i < devURLS.Count(); i++)
                 {
                     //make a URI to hold the goto devurl link
                     Uri goTo = null;
@@ -145,14 +145,10 @@ namespace RelhaxModpack.Windows
                 MediaIndexer.Children.Add(block);
             }
 
-            //format the descriptions and update info text strings
-            PreviewDescriptionBox.Text = string.IsNullOrWhiteSpace(Package.Description) ?
-                Translations.GetTranslatedString("noDescription") : Package.Description;
+            PreviewDescriptionBox.Text = Package.DescriptionFormatted;
 
-            //0 is update notes, 1 is update time (last updated)
-            PreviewUpdatesBox.Text = string.Format("{0}\n{1}", string.IsNullOrWhiteSpace(Package.UpdateComment) ?
-                Translations.GetTranslatedString("noUpdateInfo") : Package.UpdateComment,
-                Package.Timestamp == 0 ? Translations.GetTranslatedString("noTimestamp") : Utils.ConvertFiletimeTimestampToDate(Package.Timestamp));
+
+            PreviewUpdatesBox.Text = Package.UpdateCommentFormatted;
 
             if(EditorMode)
             {
