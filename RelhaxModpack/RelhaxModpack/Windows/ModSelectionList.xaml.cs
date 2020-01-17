@@ -1766,12 +1766,20 @@ namespace RelhaxModpack.Windows
             //check the mods in the actual list if it's in the list
             foreach(SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
             {
-                //also check to only "check" the mod if it is visible OR if the command line settings to force visiable all compoents
+                //also check to only "check" the mod if it is visible OR if the command line settings to force visible all components
                 if(stringSelections.Contains(package.PackageName) && (package.Visible || ModpackSettings.ForceVisible))
                 {
                     stringSelections.Remove(package.PackageName);
+
+                    //if it's the top level, check the category header
+                    if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
+                    {
+                        package.ParentCategory.CategoryHeader.Checked = true;
+                        Logging.Info("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
+                    }
+
                     //also check if the mod only if it's enabled OR is command line settings force enabled
-                    if(package.Enabled || ModpackSettings.ForceEnabled)
+                    if (package.Enabled || ModpackSettings.ForceEnabled)
                     {
                         package.Checked = true;
                         Logging.Info(string.Format("Checking package {0}",package.CompletePath));
@@ -1785,12 +1793,6 @@ namespace RelhaxModpack.Windows
                         }
                         disabledMods.Add(package.CompletePath);
                         Logging.Info(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
-                    }
-                    //if it's the top level, check the category header
-                    if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
-                    {
-                        package.ParentCategory.CategoryHeader.Checked = true;
-                        Logging.Info("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
                     }
                 }
             }
