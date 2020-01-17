@@ -52,6 +52,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="16"/>
                                 <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="16"/>
                             </Grid.ColumnDefinitions>
                             <Border x:Name="checkBoxBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                 <Grid x:Name="markGrid">
@@ -62,6 +63,7 @@
                             <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                             <Image x:Name="PopularModStar" Grid.Column="2"  Width="16" Height="16" VerticalAlignment="Top" Source="/RelhaxModpack;component/Resources/Images/popular_icon.png" Visibility="{Binding PopularModVisability, ElementName=checkBox}"/>
                             <Image x:Name="GreyAreaWarning" Grid.Column="3" Width="16" Height="16" VerticalAlignment="Top" Source="/RelhaxModpack;component/Resources/Images/grey_area_mod.png" Visibility="{Binding GreyAreaVisability, ElementName=checkBox}"/>
+                            <Image x:Name="ObfuscatedWarning" Grid.Column="4" Width="16" Height="16" VerticalAlignment="Top" Source="/RelhaxModpack;component/Resources/Images/obfuscated_package_icon.png" Visibility="{Binding ObfuscatedVisability, ElementName=checkBox}"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="HasContent" Value="true">

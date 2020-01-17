@@ -110,6 +110,21 @@ namespace RelhaxModpack.UIComponents
             }
         }
 
+        private Visibility _ObfuscatedVisability = Visibility.Hidden;
+
+        /// <summary>
+        /// Set visibility of the Grey area icon
+        /// </summary>
+        public Visibility ObfuscatedVisability
+        {
+            get { return _ObfuscatedVisability; }
+            set
+            {
+                _ObfuscatedVisability = value;
+                OnPropertyChanged(nameof(ObfuscatedVisability));
+            }
+        }
+
         //https://stackoverflow.com/questions/34651123/wpf-binding-a-background-color-initializes-but-not-updating
         /// <summary>
         /// Event to trigger when an internal property is changed. It forces a UI update

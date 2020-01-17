@@ -984,6 +984,7 @@ namespace RelhaxModpack.Windows
                             IsEnabled = package.IsStructureEnabled,
                             PopularModVisability = package.PopularMod? Visibility.Visible : Visibility.Hidden,
                             GreyAreaVisability = package.GreyAreaMod? Visibility.Visible : Visibility.Hidden,
+                            ObfuscatedVisability = package.ObfuscatedMod? Visibility.Visible : Visibility.Hidden,
                             Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             IsChecked = false
                         };
@@ -1008,6 +1009,7 @@ namespace RelhaxModpack.Windows
                             IsChecked = false,
                             PopularModVisability = package.PopularMod ? Visibility.Visible : Visibility.Hidden,
                             GreyAreaVisability = package.GreyAreaMod ? Visibility.Visible : Visibility.Hidden,
+                            ObfuscatedVisability = package.ObfuscatedMod ? Visibility.Visible : Visibility.Hidden,
                             Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                         };
                         ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFCheckBox, true);

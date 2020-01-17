@@ -526,6 +526,7 @@
     <EmbeddedResource Include="Resources\DLL\Newtonsoft.Json.dll" />
     <EmbeddedResource Include="Resources\DLL\TeximpNet.dll" />
     <EmbeddedResource Include="Resources\DLL\HtmlAgilityPack.dll" />
+    <Resource Include="Resources\Images\obfuscated_package_icon.png" />
     <Content Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
