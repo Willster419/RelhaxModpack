@@ -504,35 +504,43 @@ namespace RelhaxModpack
         private void CloseApplication()
         {
             //dispose of the timer if it's not already disposed
+            Logging.TryWriteToLog("Disposing autoInstallTimer", Logfiles.Application, LogLevel.Debug);
             if (autoInstallTimer != null)
             {
                 autoInstallTimer.Dispose();
                 autoInstallTimer = null;
             }
 
-            if (!Logging.IsLogDisposed(Logfiles.Application))
+            //don't save the settings file if it's in update mode or closing from a critical application failure
+            if (closingFromFailure)
             {
-                if (Logging.IsLogOpen(Logfiles.Application))
-                    Logging.Info("Saving settings");
-                if (!closingFromFailure)
-                    if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.Info("Settings saved");
-                if (Logging.IsLogOpen(Logfiles.Application))
-                    Logging.Info("Disposing tray");
-                if (RelhaxIcon != null)
-                {
-                    RelhaxIcon.Dispose();
-                    RelhaxIcon = null;
-                    if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Tray disposed");
-                }
-                else
-                {
-                    if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Tray already null");
-                }
+                Logging.TryWriteToLog("ClosingFromFailure = true, don't save settings", Logfiles.Application, LogLevel.Debug);
             }
+            else if (updateMode)
+            {
+                Logging.TryWriteToLog("UpdateMode = true, don't save settings", Logfiles.Application, LogLevel.Debug);
+            }
+            else
+            {
+                Logging.TryWriteToLog("Saving Settings", Logfiles.Application, LogLevel.Info);
+
+                if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
+                    Logging.TryWriteToLog("Settings saved", Logfiles.Application, LogLevel.Info);
+                else
+                    Logging.TryWriteToLog("An error occurred saving settings", Logfiles.Application, LogLevel.Error);
+            }
+
+            Logging.TryWriteToLog("Disposing tray", Logfiles.Application, LogLevel.Info);
+
+            if (RelhaxIcon != null)
+            {
+                RelhaxIcon.Dispose();
+                RelhaxIcon = null;
+                Logging.TryWriteToLog("Tray disposed", Logfiles.Application, LogLevel.Info);
+            }
+            else
+                Logging.TryWriteToLog("Tray already disposed?", Logfiles.Application, LogLevel.Warning);
+
             Application.Current.Shutdown(0);
         }
 
