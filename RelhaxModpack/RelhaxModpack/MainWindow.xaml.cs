@@ -84,6 +84,8 @@ namespace RelhaxModpack
         //beta database compaison for auto install
         string oldBetaDB, newBetaDB;
         bool timerActive = false;
+        //flag for if the application is in "update mode" (downloading the new application update and closing)
+        private bool updateMode = false;
 
         /// <summary>
         /// The original width and height of the application before applying scaling
@@ -290,6 +292,7 @@ namespace RelhaxModpack
             }
             else
             {
+                Logging.Debug("Application is up to date, get file size of backups");
                 GetBackupFilesizesAsync(false);
             }
 
@@ -390,7 +393,7 @@ namespace RelhaxModpack
             //if the editor unlock file exists, then enable the editor button
             if (File.Exists(Settings.EditorLaunchFromMainWindowFilename))
             {
-                Logging.Info("{0} found, enabling editor button", Settings.EditorLaunchFromMainWindowFilename);
+                Logging.Info("{0} found, enabling manager tools buttons", Settings.EditorLaunchFromMainWindowFilename);
                 LauchEditor.Visibility = Visibility.Visible;
                 LauchEditor.IsEnabled = true;
                 LauchPatchDesigner.Visibility = Visibility.Visible;
@@ -795,9 +798,10 @@ namespace RelhaxModpack
             }
 
             //if current application build does not equal requested distribution channel
+            //can assume out of date because switching distrobution channels
             if (version != ModpackSettings.ApplicationDistroVersion)
             {
-                outOfDate = true;//can assume out of date
+                outOfDate = true;
                 Logging.Info("Current build is {0} ({1}), online build is NA (changing distribution version {1}->{2})",
                     applicationBuildVersion, version.ToString(), ModpackSettings.ApplicationDistroVersion.ToString());
             }
@@ -816,6 +820,10 @@ namespace RelhaxModpack
             versionInfo.ShowDialog();
             if (versionInfo.ConfirmUpdate)
             {
+                //disable the UI during the application update process
+                updateMode = true;
+                ToggleUIButtons(false);
+
                 //check for any other running instances
                 while (true)
                 {
