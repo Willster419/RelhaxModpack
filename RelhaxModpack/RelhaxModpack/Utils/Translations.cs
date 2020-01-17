@@ -4143,6 +4143,33 @@ namespace RelhaxModpack
             French.Add("previewEncounteredError", "Prévisualisation des erreurs rencontrées");
             Spanish.Add("previewEncounteredError", "La ventana de previsualización ha encontrado un error. No se ha podido mostrar previsualización");
             Russian.Add("previewEncounteredError", "Возникла проблема в работе окна предпросмотра. Не удалось отобразить превью.");
+
+            //Component: popularInDescription
+            //
+            English.Add("popularInDescription", "This is a popular package");
+            German.Add("popularInDescription", TranslationNeeded);
+            Polish.Add("popularInDescription", TranslationNeeded);
+            French.Add("popularInDescription", TranslationNeeded);
+            Spanish.Add("popularInDescription", TranslationNeeded);
+            Russian.Add("popularInDescription", TranslationNeeded);
+
+            //Component: controversialInDescription
+            //
+            English.Add("controversialInDescription", "This is a controversial package");
+            German.Add("controversialInDescription", TranslationNeeded);
+            Polish.Add("controversialInDescription", TranslationNeeded);
+            French.Add("controversialInDescription", TranslationNeeded);
+            Spanish.Add("controversialInDescription", TranslationNeeded);
+            Russian.Add("controversialInDescription", TranslationNeeded);
+
+            //Component: encryptedInDescription
+            //
+            English.Add("encryptedInDescription", "This is an encrypted package that can't be checked for viruses");
+            German.Add("encryptedInDescription", TranslationNeeded);
+            Polish.Add("encryptedInDescription", TranslationNeeded);
+            French.Add("encryptedInDescription", TranslationNeeded);
+            Spanish.Add("encryptedInDescription", TranslationNeeded);
+            Russian.Add("encryptedInDescription", TranslationNeeded);
             #endregion
 
             #region Developer Selection Window
