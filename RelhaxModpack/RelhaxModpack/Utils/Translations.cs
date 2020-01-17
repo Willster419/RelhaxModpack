@@ -4169,7 +4169,7 @@ namespace RelhaxModpack
             Polish.Add("encryptedInDescription", TranslationNeeded);
             French.Add("encryptedInDescription", TranslationNeeded);
             Spanish.Add("encryptedInDescription", TranslationNeeded);
-            Russian.Add("encryptedInDescription", "Этот пакет зашифрован.\nПроверка на вирусы невозможна.");
+            Russian.Add("encryptedInDescription", "Этот пакет зашифрован.\nПроверка на вирусы невозможна");
             #endregion
 
             #region Developer Selection Window
