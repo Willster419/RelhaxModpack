@@ -54,38 +54,35 @@ namespace RelhaxModpack.UIComponents
             return DisplayName;
         }
 
-        private void TemplateRootGrid_Loaded(object sender, RoutedEventArgs e)
+        private void TemplateRootPanel_Loaded(object sender, RoutedEventArgs e)
         {
             if (IconsApplied)
                 return;
-            Grid templateGrid = sender as Grid;
+            StackPanel templatePanel = sender as StackPanel;
             if (true)
             {
-                templateGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(16) });
                 Image img = new Image()
                 {
                     VerticalAlignment = VerticalAlignment.Top,
                     Width = 16,
                     Height = 16,
                     Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/obfuscated_package_icon.png", UriKind.Relative))
-                }; templateGrid.Children.Add(img);
-                Grid.SetColumn(img, templateGrid.ColumnDefinitions.Count - 1);
+                };
+                templatePanel.Children.Add(img);
             }
             if (Package.GreyAreaMod)
             {
-                templateGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(16) });
                 Image img = new Image()
                 {
                     VerticalAlignment = VerticalAlignment.Top,
                     Width = 16,
                     Height = 16,
                     Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/grey_area_mod.png", UriKind.Relative))
-                }; templateGrid.Children.Add(img);
-                Grid.SetColumn(img, templateGrid.ColumnDefinitions.Count - 1);
+                };
+                templatePanel.Children.Add(img);
             }
             if (Package.PopularMod)
             {
-                templateGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(16) });
                 Image img = new Image()
                 {
                     VerticalAlignment = VerticalAlignment.Top,
@@ -93,8 +90,7 @@ namespace RelhaxModpack.UIComponents
                     Height = 16,
                     Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/popular_icon.png", UriKind.Relative))
                 };
-                templateGrid.Children.Add(img);
-                Grid.SetColumn(img, templateGrid.ColumnDefinitions.Count - 1);
+                templatePanel.Children.Add(img);
             }
             IconsApplied = true;
         }
