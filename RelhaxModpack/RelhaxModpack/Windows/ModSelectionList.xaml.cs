@@ -117,7 +117,7 @@ namespace RelhaxModpack.Windows
         private int numTicks = 0;
         private Brush OriginalBrush = null;
         private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
-        private readonly System.Windows.Forms.Timer FlashTimer = new System.Windows.Forms.Timer() { Interval=FLASH_TICK_INTERVAL };
+        private DispatcherTimer FlashTimer = null;
         private XDocument Md5HashDocument;
         private DatabaseVersions databaseVersion;
 
@@ -187,7 +187,7 @@ namespace RelhaxModpack.Windows
             });
         }
 
-        private void OnFlastTimerTick(object sender, EventArgs e)
+        private void OnFlashTimerTick(object sender, EventArgs e)
         {
             if(!(FlashTimer.Tag is SelectablePackage))
             {
@@ -263,6 +263,9 @@ namespace RelhaxModpack.Windows
         {
             //set the flag for currently loading the UI. It prevents search box or UI interaction code from happening as a failsafe
             LoadingUI = true;
+
+            //init the timer
+            FlashTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(FLASH_TICK_INTERVAL), DispatcherPriority.Background, OnFlashTimerTick, this.Dispatcher) {IsEnabled = false };
 
             //init the lists
             ParsedCategoryList = new List<Category>();
@@ -650,9 +653,6 @@ namespace RelhaxModpack.Windows
                             Logging.Error("Failed to load SelectionsDocument, AutoSelectionFilePath={0}", ModpackSettings.AutoOneclickSelectionFilePath);
                         }
                     }
-
-                    //like hook up the flashing timer
-                    FlashTimer.Tick += OnFlastTimerTick;
 
                     //set the selection window width, height
                     Width = ModpackSettings.ModSelectionWidth;
@@ -2092,7 +2092,7 @@ namespace RelhaxModpack.Windows
             }, DispatcherPriority.Background);
 
             //start the timer to show the item
-            OnFlastTimerTick(null, null);
+            OnFlashTimerTick(null, null);
             FlashTimer.Start();
         }
 
