@@ -186,7 +186,6 @@
     <Compile Include="Settings\CommandLineSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\UISettings.cs" />
-    <Compile Include="UIComponents\ComboBoxItem.cs" />
     <Compile Include="UIComponents\EditorComboBoxItem.cs" />
     <Compile Include="UIComponents\EditorSearchBoxItem.cs" />
     <Compile Include="UIComponents\LinkButton.cs" />

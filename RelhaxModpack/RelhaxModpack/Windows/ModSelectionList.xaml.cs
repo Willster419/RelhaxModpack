@@ -12,7 +12,6 @@ using System.IO;
 using Microsoft.Win32;
 using RelhaxModpack.UIComponents;
 using System.Xml.Linq;
-using ComboBoxItem = RelhaxModpack.UIComponents.ComboBoxItem;
 using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
@@ -1071,7 +1070,7 @@ namespace RelhaxModpack.Windows
                     AddedToList = false
                 };
             }
-            ComboBoxItem cbi = new ComboBoxItem(package, package.NameDisplay)
+            RelhaxComboBoxItem cbi = new RelhaxComboBoxItem(package, package.NameDisplay)
             {
                 IsEnabled = package.IsStructureEnabled,
                 Content = package.NameDisplay
@@ -1139,7 +1138,7 @@ namespace RelhaxModpack.Windows
             if (sender is RelhaxWPFComboBox cb2)
             {
                 //get the UI cbi struct and the internal SeletablePackage
-                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)cb2.SelectedItem;
                 spc = cbi.Package;
                 //only enable the package if the structure leading to this package is enabled
                 if(cb2.SelectedIndex == 0 && spc.IsStructureEnabled && !spc.Checked)
@@ -1212,7 +1211,7 @@ namespace RelhaxModpack.Windows
                 //don't change the selection if the user did not want to change the option
                 if (!cb2.IsDropDownOpen)
                     return;
-                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)cb2.SelectedItem;
                 spc = cbi.Package;
             }
 
@@ -1516,7 +1515,7 @@ namespace RelhaxModpack.Windows
                 //check to see if a specific item is highlighted
                 //if so, it means that the user wants to preview a specific version
                 //if not, then the user clicked on the combobox as a whole, so show all items in the box
-                foreach (ComboBoxItem itemInBox in comboboxSender.Items)
+                foreach (RelhaxComboBoxItem itemInBox in comboboxSender.Items)
                 {
                     if (itemInBox.IsHighlighted && itemInBox.IsEnabled)
                     {
@@ -1528,7 +1527,7 @@ namespace RelhaxModpack.Windows
                 {
                     //make a new temporary package with a custom preview items list
                     //get a temp known good package, doesn't matter what cause we want the parent
-                    ComboBoxItem cbi = (ComboBoxItem)comboboxSender.Items[0];
+                    RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)comboboxSender.Items[0];
                     //parent of item in combobox is header
                     SelectablePackage parentPackage = cbi.Package.Parent;
                     spc = new SelectablePackage()
@@ -2021,7 +2020,7 @@ namespace RelhaxModpack.Windows
                     Logging.Info("enter key pressed for search, but no actual package selected. ignoring");
                     return;
                 }
-                OnSearchCBSelectionCommitted(SearchCB.SelectedItem as ComboBoxItem);
+                OnSearchCBSelectionCommitted(SearchCB.SelectedItem as RelhaxComboBoxItem);
             }
             else if (string.IsNullOrWhiteSpace(SearchCB.Text))
             {
@@ -2068,7 +2067,7 @@ namespace RelhaxModpack.Windows
                 foreach (SelectablePackage package in searchComponents)
                 {
                     string formatForText = string.Format("{0} [{1}]", package.NameFormatted, package.ParentCategory.Name);
-                    SearchCB.Items.Add(new ComboBoxItem(package, formatForText)
+                    SearchCB.Items.Add(new RelhaxComboBoxItem(package, formatForText)
                     {
                         IsEnabled = true,
                         Content = formatForText
@@ -2084,7 +2083,7 @@ namespace RelhaxModpack.Windows
             textBox.SelectionLength = 0;
         }
 
-        private async void OnSearchCBSelectionCommitted(ComboBoxItem committedItem)
+        private async void OnSearchCBSelectionCommitted(RelhaxComboBoxItem committedItem)
         {
             //test to make sure the UIComponent is a control (it should be, but at least a test to make sure it's not null)
             Control ctrl = null;
@@ -2139,7 +2138,7 @@ namespace RelhaxModpack.Windows
         {
             if (SearchCB.IsDropDownOpen)
             {
-                foreach (ComboBoxItem item in SearchCB.Items)
+                foreach (RelhaxComboBoxItem item in SearchCB.Items)
                 {
                     if (item.IsHighlighted && item.IsMouseOver)
                     {

@@ -32,7 +32,6 @@
                     <ControlTemplate TargetType="{x:Type ComboBoxItem}">
                         <Grid x:Name="templateRootGrid" Background="Transparent" SnapsToDevicePixels="True" Loaded="TemplateRootGrid_Loaded">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">

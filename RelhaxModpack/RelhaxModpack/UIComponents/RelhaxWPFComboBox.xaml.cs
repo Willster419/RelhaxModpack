@@ -50,7 +50,7 @@ namespace RelhaxModpack.UIComponents
         {
             for (int i = 0; i < Items.Count; i++)
             {
-                ComboBoxItem cbi = (ComboBoxItem)Items[i];
+                RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)Items[i];
                 if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled)
                 {
                     //unsubscribe before changing the selected item

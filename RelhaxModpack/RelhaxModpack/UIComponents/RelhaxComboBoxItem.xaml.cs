@@ -30,6 +30,9 @@ namespace RelhaxModpack.UIComponents
         /// </summary>
         public string DisplayName { get; set; }
 
+
+        private bool IconsApplied = false;
+
         /// <summary>
         /// Creates an instance of the RelhaxComboBoxItem class
         /// </summary>
@@ -53,8 +56,10 @@ namespace RelhaxModpack.UIComponents
 
         private void TemplateRootGrid_Loaded(object sender, RoutedEventArgs e)
         {
+            if (IconsApplied)
+                return;
             Grid templateGrid = sender as Grid;
-            if (Package.ObfuscatedMod)
+            if (true)
             {
                 templateGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(16) });
                 Image img = new Image()
@@ -91,6 +96,7 @@ namespace RelhaxModpack.UIComponents
                 templateGrid.Children.Add(img);
                 Grid.SetColumn(img, templateGrid.ColumnDefinitions.Count - 1);
             }
+            IconsApplied = true;
         }
     }
 }
