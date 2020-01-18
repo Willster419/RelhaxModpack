@@ -232,6 +232,16 @@ namespace RelhaxModpack.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap obfuscated_package_icon {
+            get {
+                object obj = ResourceManager.GetObject("obfuscated_package_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap play_pause {
             get {
                 object obj = ResourceManager.GetObject("play_pause", resourceCulture);

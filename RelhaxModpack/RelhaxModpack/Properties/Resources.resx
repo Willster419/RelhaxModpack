@@ -184,4 +184,7 @@
   <data name="error_loading_picture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\error_loading_picture.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="obfuscated_package_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\obfuscated_package_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

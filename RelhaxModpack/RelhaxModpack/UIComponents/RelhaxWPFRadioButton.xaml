@@ -46,13 +46,10 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RadioButton}">
-                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True" Loaded="TemplateRoot_Loaded">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="16"/>
-                                <ColumnDefinition Width="16"/>
-                                <ColumnDefinition Width="16"/>
                             </Grid.ColumnDefinitions>
                             <Border x:Name="radioButtonBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="100" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,1,2,1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                 <Grid x:Name="markGrid" Margin="2">
@@ -60,9 +57,6 @@
                                 </Grid>
                             </Border>
                             <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            <Image x:Name="PopularModStar" Grid.Column="2"  Width="16" Height="16" VerticalAlignment="Top" Source="/RelhaxModpack;component/Resources/Images/popular_icon.png" Visibility="{Binding PopularModVisability, ElementName=radioButton}"/>
-                            <Image x:Name="GreyAreaWarning" Grid.Column="3"  Width="16" Height="16" VerticalAlignment="Top" Source="/RelhaxModpack;component/Resources/Images/grey_area_mod.png" Visibility="{Binding GreyAreaVisability, ElementName=radioButton}"/>
-                            <Image x:Name="ObfuscatedWarning" Grid.Column="4"  Width="16" Height="16" VerticalAlignment="Top" Source="/RelhaxModpack;component/Resources/Images/obfuscated_package_icon.png" Visibility="{Binding ObfuscatedVisability, ElementName=radioButton}"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="HasContent" Value="true">

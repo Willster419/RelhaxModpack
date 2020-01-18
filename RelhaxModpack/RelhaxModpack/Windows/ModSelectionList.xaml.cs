@@ -759,8 +759,6 @@ namespace RelhaxModpack.Windows
                     IsChecked = false,
                     IsEnabled = true,
                     Content = package.NameDisplay,
-                    PopularModVisability = Visibility.Hidden,
-                    GreyAreaVisability = Visibility.Hidden,
                     Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush
                 };
                 package.UIComponent = userMod;
@@ -982,9 +980,6 @@ namespace RelhaxModpack.Windows
                             VerticalContentAlignment = VerticalAlignment.Center,
                             Content = package.NameDisplay,
                             IsEnabled = package.IsStructureEnabled,
-                            PopularModVisability = package.PopularMod? Visibility.Visible : Visibility.Hidden,
-                            GreyAreaVisability = package.GreyAreaMod? Visibility.Visible : Visibility.Hidden,
-                            ObfuscatedVisability = package.ObfuscatedMod? Visibility.Visible : Visibility.Hidden,
                             Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             IsChecked = false
                         };
@@ -1007,9 +1002,6 @@ namespace RelhaxModpack.Windows
                             Content = package.NameDisplay,
                             IsEnabled = package.IsStructureEnabled,
                             IsChecked = false,
-                            PopularModVisability = package.PopularMod ? Visibility.Visible : Visibility.Hidden,
-                            GreyAreaVisability = package.GreyAreaMod ? Visibility.Visible : Visibility.Hidden,
-                            ObfuscatedVisability = package.ObfuscatedMod ? Visibility.Visible : Visibility.Hidden,
                             Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                         };
                         ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFCheckBox, true);
