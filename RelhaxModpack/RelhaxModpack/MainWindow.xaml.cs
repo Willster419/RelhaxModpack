@@ -196,7 +196,7 @@ namespace RelhaxModpack
             CreateTray();
 
             //apply forced debugging settings
-#warning forced debugging settings is active
+#warning forced trigger disable is active
             ModpackSettings.DisableTriggers = true;
 
             //load AutoSyncFrequencyComboBox with translated versions
