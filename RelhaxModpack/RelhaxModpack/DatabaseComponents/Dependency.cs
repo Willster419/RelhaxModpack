@@ -72,10 +72,6 @@ namespace RelhaxModpack
         public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
 
         /// <summary>
-        /// When a databasePackage, the internal packageName. When category, the category name
-        /// </summary>
-        public string ComponentInternalName { get { return PackageName; } }
-        /// <summary>
         /// Create an instance of the Dependency class and over-ride DatabasePackage default values
         /// </summary>
         public Dependency()

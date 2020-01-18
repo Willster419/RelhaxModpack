@@ -416,10 +416,6 @@ namespace RelhaxModpack
         /// </summary>
         public bool ShowInSearchList { get; set; } = true;
 
-        /// <summary>
-        /// When a databasePackage, the internal packageName. When category, the category name
-        /// </summary>
-        public string ComponentInternalName { get { return PackageName; } }
         #endregion
 
         #region UI Properties Shared
