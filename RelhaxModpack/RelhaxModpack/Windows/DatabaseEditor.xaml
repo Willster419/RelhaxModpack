@@ -446,9 +446,11 @@
                             <RowDefinition Height="20"/>
                             <!-- checkboxes -->
                             <RowDefinition Height="20"/>
-                            <!-- Popular and grey area-->
+                            <!-- Popular and grey area -->
                             <RowDefinition Height="20"/>
-                            <!--Visible and Enabled-->
+                            <!-- Visible and Enabled -->
+                            <RowDefinition Height="20"/>
+                            <!-- Obfuscated and Offset InstallGroup -->
                             <RowDefinition Height="20"/>
                             <!-- apply button -->
                             <RowDefinition Height="40"/>
@@ -456,7 +458,7 @@
                             <RowDefinition Height="1"/>
                             <!-- download button -->
                             <RowDefinition Height="1"/>
-                            <!-- download spacer-->
+                            <!-- download spacer -->
                             <RowDefinition Height="1"/>
                             <!-- upload button -->
                             <RowDefinition Height="20"/>
@@ -506,9 +508,13 @@
                             <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="42,0,0,0"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Apply" x:Name="ApplyButton" Click="ApplyButton_Click" Margin="0,28,0,0" Grid.ColumnSpan="2" Width="200"/>
-                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" Margin="0,55,0,0" Grid.ColumnSpan="2" RenderTransformOrigin="0.493,-0.523" Width="200" />
-                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Margin="0,83,0,0" Grid.ColumnSpan="2" Width="200" />
+                        <StackPanel Grid.Column="0" Grid.Row="17" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+                            <CheckBox Content="Obfuscated" x:Name="PackageObfuscatedModDisplay" Tag="ObfuscatedCB" Margin="0,0,0,0"/>
+                            <CheckBox Content="Offset InstallGroup" x:Name="CategoryOffsetInstallGroupDisplay" Tag="OffsetInstallGroupCB" Margin="16,0,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Apply" x:Name="ApplyButton" Click="ApplyButton_Click" Margin="0,28,0,0" Grid.ColumnSpan="2" Width="200"/>
+                        <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" Margin="0,55,0,0" Grid.ColumnSpan="2" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Margin="0,83,0,0" Grid.ColumnSpan="2" Width="200" />
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">

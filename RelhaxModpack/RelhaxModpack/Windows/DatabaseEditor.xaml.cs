@@ -497,6 +497,7 @@ namespace RelhaxModpack.Windows
                 control.IsEnabled = false;
 
             //enable components by type
+            //package null = category
             if (package == null)
             {
                 foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
@@ -506,6 +507,7 @@ namespace RelhaxModpack.Windows
                 }
                 PackageNameDisplay.IsEnabled = true;
                 ApplyButton.IsEnabled = true;
+                CategoryOffsetInstallGroupDisplay.IsEnabled = true;
             }
             else if (package is DatabasePackage)
             {
@@ -559,6 +561,7 @@ namespace RelhaxModpack.Windows
                         PackagePopularModDisplay.IsEnabled = true;
                         PackageShowInSearchListDisplay.IsEnabled = true;
                         PackageGreyAreaModDisplay.IsEnabled = true;
+                        PackageObfuscatedModDisplay.IsEnabled = true;
                         //enable remaining tabs
                         foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DescriptionTab, false))
                         {
@@ -682,6 +685,7 @@ namespace RelhaxModpack.Windows
             foreach (DatabaseLogic logic in category.Dependencies)
                 PackageDependenciesDisplay.Items.Add(logic);
             PackageNameDisplay.Text = category.Name;
+            CategoryOffsetInstallGroupDisplay.IsChecked = category.OffsetInstallGroups;
         }
 
         private void ShowDatabasePackage(DatabasePackage package)
@@ -782,6 +786,7 @@ namespace RelhaxModpack.Windows
             {
                 PackagePopularModDisplay.IsChecked = selectablePackage.PopularMod;
                 PackageGreyAreaModDisplay.IsChecked = selectablePackage.GreyAreaMod;
+                PackageObfuscatedModDisplay.IsChecked = selectablePackage.ObfuscatedMod;
                 PackageShowInSearchListDisplay.IsChecked = selectablePackage.ShowInSearchList;
                 PackageNameDisplay.Text = selectablePackage.Name;
                 PackageTypeDisplay.SelectedItem = selectablePackage.Type;
@@ -840,6 +845,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Editor("Category was modified, saving and setting flag");
                 category.Name = PackageNameDisplay.Text;
+                category.OffsetInstallGroups = (bool)CategoryOffsetInstallGroupDisplay.IsChecked;
                 category.Dependencies.Clear();
                 foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
                     category.Dependencies.Add(logic);
@@ -939,6 +945,9 @@ namespace RelhaxModpack.Windows
             if (!category.Name.Equals(PackageNameDisplay.Text))
                 return true;
 
+            if (category.OffsetInstallGroups != ((bool)CategoryOffsetInstallGroupDisplay.IsChecked))
+                return true;
+
             if (DependenciesWereModified(category.Dependencies))
                 return true;
 
@@ -986,14 +995,17 @@ namespace RelhaxModpack.Windows
             //see if it's a selectablePackage
             else if (package is SelectablePackage selectablePackage)
             {
-                if (!selectablePackage.ShowInSearchList.Equals((bool)PackageShowInSearchListDisplay.IsChecked))
+                if (selectablePackage.ShowInSearchList != ((bool)PackageShowInSearchListDisplay.IsChecked))
                     return true;
-                if (!selectablePackage.PopularMod.Equals((bool)PackagePopularModDisplay.IsChecked))
+                if (selectablePackage.PopularMod != ((bool)PackagePopularModDisplay.IsChecked))
                     return true;
-                if (!selectablePackage.GreyAreaMod.Equals((bool)PackageGreyAreaModDisplay.IsChecked))
+                if (selectablePackage.GreyAreaMod != ((bool)PackageGreyAreaModDisplay.IsChecked))
                     return true;
-                if (!selectablePackage.Visible.Equals((bool)PackageVisibleDisplay.IsChecked))
+                if (selectablePackage.ObfuscatedMod != ((bool)PackageObfuscatedModDisplay.IsChecked))
                     return true;
+                if (selectablePackage.Visible != ((bool)PackageVisibleDisplay.IsChecked))
+                    return true;
+
                 if (!selectablePackage.Name.Equals(PackageNameDisplay.Text))
                     return true;
                 if (!selectablePackage.Type.Equals((SelectionTypes)PackageTypeDisplay.SelectedItem))
@@ -1090,6 +1102,7 @@ namespace RelhaxModpack.Windows
             {
                 selectablePackage.ShowInSearchList = (bool)PackageShowInSearchListDisplay.IsChecked;
                 selectablePackage.PopularMod = (bool)PackagePopularModDisplay.IsChecked;
+                selectablePackage.ObfuscatedMod = (bool)PackageObfuscatedModDisplay.IsChecked;
                 selectablePackage.GreyAreaMod = (bool)PackageGreyAreaModDisplay.IsChecked;
                 selectablePackage.Visible = (bool)PackageVisibleDisplay.IsChecked;
                 selectablePackage.Name = PackageNameDisplay.Text;
