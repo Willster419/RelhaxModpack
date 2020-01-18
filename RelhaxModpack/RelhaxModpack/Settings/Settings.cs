@@ -469,9 +469,6 @@ namespace RelhaxModpack
         public static Ionic.Zip.ZipFile ManagerInfoZipfile = null;
         #endregion
 
-        //had to put this here because of bugs with intellisense. It's supposed to be in mod selection list
-#warning using V1 beta database
-
         #region Settings parsing to/from XML file
         /// <summary>
         /// Loads/serializes an xml file into a settings class based on class type
