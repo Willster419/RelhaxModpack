@@ -160,6 +160,9 @@
     <Compile Include="UIComponents\ComponentColorset.cs" />
     <Compile Include="UIComponents\CustomBrush.cs" />
     <Compile Include="UIComponents\CustomBrushConverter.cs" />
+    <Compile Include="UIComponents\RelhaxComboBoxItem.xaml.cs">
+      <DependentUpon>RelhaxComboBoxItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIComponents\RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
@@ -321,6 +324,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UIComponents\RelhaxComboBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UIComponents\StyleDictionaries\RelhaxRadioButtonStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
