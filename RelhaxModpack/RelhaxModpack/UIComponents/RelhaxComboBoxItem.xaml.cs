@@ -59,7 +59,7 @@ namespace RelhaxModpack.UIComponents
             if (IconsApplied)
                 return;
             StackPanel templatePanel = sender as StackPanel;
-            if (true)
+            if (Package.ObfuscatedMod)
             {
                 Image img = new Image()
                 {
