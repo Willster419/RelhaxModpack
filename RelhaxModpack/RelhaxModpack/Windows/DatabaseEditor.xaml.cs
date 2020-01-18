@@ -14,6 +14,7 @@ using System.Xml;
 using Path = System.IO.Path;
 using Microsoft.WindowsAPICodePack;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
 {
@@ -32,7 +33,6 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog OpenZipFileDialog;
         private SaveFileDialog SaveZipFileDialog;
         private OpenFileDialog OpenPictureDialog;
-        private System.Windows.Forms.Timer DragDropTimer = new System.Windows.Forms.Timer() { Enabled = false, Interval = 1000 };
         private TreeViewItem ItemToExpand;
         private Point BeforeDragDropPoint;
         private bool IsScrolling = false;
@@ -42,7 +42,8 @@ namespace RelhaxModpack.Windows
         private object SelectedItem = null;
         private Preview Preview;
         private bool UnsavedChanges = false;
-        System.Windows.Forms.Timer ReselectOldItem = new System.Windows.Forms.Timer() { Interval = 50 };
+        private DispatcherTimer DragDropTimer = null;
+        private DispatcherTimer ReselectOldItem = null;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -67,7 +68,6 @@ namespace RelhaxModpack.Windows
 
         private void OnApplicationLoad(object sender, RoutedEventArgs e)
         {
-            ReselectOldItem.Tick += AwesomeHack_Tick;
             Logging.Editor("Editor start");
             EditorSettings = new EditorSettings();
             Logging.Editor("Loading editor settings");
@@ -106,8 +106,11 @@ namespace RelhaxModpack.Windows
                 LoadedTriggersComboBox.Items.Add(t.Name);
             }
 
-            //hook up timer
-            DragDropTimer.Tick += OnDragDropTimerTick;
+            //init timers
+            ReselectOldItem = new DispatcherTimer(TimeSpan.FromMilliseconds(50), DispatcherPriority.Normal, AwesomeHack_Tick, this.Dispatcher) { IsEnabled = false };
+            DragDropTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, OnDragDropTimerTick, this.Dispatcher) { IsEnabled = false };
+
+            //clear searchbox
             SearchBox.Items.Clear();
 
             //set the items for the triggers combobox. this only needs to be done once anyways
@@ -140,15 +143,12 @@ namespace RelhaxModpack.Windows
             if(SelectedItem is DatabasePackage db)
             {
                 db.EditorTreeViewItem.IsSelected = true;
-                ReselectOldItem.Enabled = false;
-                ReselectOldItem.Stop();
             }
             else if (SelectedItem is EditorComboBoxItem edit)
             {
                 edit.Package.EditorTreeViewItem.IsSelected = true;
-                ReselectOldItem.Enabled = false;
-                ReselectOldItem.Stop();
             }
+            ReselectOldItem.Stop();
         }
 
         private void OnDragDropTimerTick(object sender, EventArgs e)
@@ -655,7 +655,6 @@ namespace RelhaxModpack.Windows
                         Logging.Editor("applyDatabaseObject failed, not changing entry");
                         //only start the hack when it's supposed to be used as a revert for changing back to a package selection
                         ReselectOldItem.Start();
-                        ReselectOldItem.Enabled = true;
                         return;
                     }
                 }
