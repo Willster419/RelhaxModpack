@@ -140,7 +140,8 @@ namespace RelhaxModpack
                     CloseLog(Logfiles.Updater);
                     updater = null;
                     Current.Shutdown(0);
-                    break;
+                    Environment.Exit(0);
+                    return;
                 case ApplicationMode.Editor:
                     DatabaseEditor editor = new DatabaseEditor();
                     CloseApplicationLog(true);
@@ -158,7 +159,8 @@ namespace RelhaxModpack
                     CloseLog(Logfiles.Editor);
                     editor = null;
                     Current.Shutdown(0);
-                    break;
+                    Environment.Exit(0);
+                    return;
                 case ApplicationMode.PatchDesigner:
                     PatchDesigner patcher = new PatchDesigner();
                     CloseApplicationLog(true);
@@ -177,13 +179,15 @@ namespace RelhaxModpack
                     CloseLog(Logfiles.PatchDesigner);
                     patcher = null;
                     Current.Shutdown(0);
-                    break;
+                    Environment.Exit(0);
+                    return;
                 case ApplicationMode.Patcher:
                     Logging.Info("Running patch mode");
                     if(CommandLineSettings.PatchFilenames.Count == 0)
                     {
                         Logging.Error("0 patch files parsed from command line!");
                         Current.Shutdown(-3);
+                        Environment.Exit(-3);
                     }
                     else
                     {
@@ -202,6 +206,7 @@ namespace RelhaxModpack
                         {
                             Logging.Error("0 patches parsed from files!");
                             Current.Shutdown(-4);
+                            Environment.Exit(-4);
                         }
                         PatchExitCode exitCode = PatchExitCode.Success;
                         //always return on worst condition
@@ -216,8 +221,9 @@ namespace RelhaxModpack
                         Logging.Info("patching finished, exit code {0} ({1})", (int)exitCode, exitCode.ToString());
                         CloseApplicationLog(true);
                         Current.Shutdown((int)exitCode);
+                        Environment.Exit((int)exitCode);
                     }
-                    break;
+                    return;
             }
         }
 

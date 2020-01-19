@@ -419,6 +419,11 @@
             The xml filename of this category. Used in database structure V2
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Category.OffsetInstallGroups">
+            <summary>
+            Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Category.Packages">
             <summary>
             The list of packages contained in this category
@@ -753,11 +758,6 @@
             Property of Dependencies list to allow for interface implementation
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Dependency.ComponentInternalName">
-            <summary>
-            When a databasePackage, the internal packageName. When category, the category name
-            </summary>
-        </member>
         <member name="M:RelhaxModpack.Dependency.#ctor">
             <summary>
             Create an instance of the Dependency class and over-ride DatabasePackage default values
@@ -988,7 +988,12 @@
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.GreyAreaMod">
             <summary>
-            Flag to determine if the package is of controversial nature, or if the developer is a controversial source
+            Flag to determine if the package is of controversial nature
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.ObfuscatedMod">
+            <summary>
+            Flag to determine if the if the package is obfuscated/encrypted and can't be checked for viruses or malware
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.SortChildPackages">
@@ -1057,11 +1062,6 @@
         <member name="P:RelhaxModpack.SelectablePackage.ShowInSearchList">
             <summary>
             Toggle if the package should appear in the search list
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.SelectablePackage.ComponentInternalName">
-            <summary>
-            When a databasePackage, the internal packageName. When category, the category name
             </summary>
         </member>
         <member name="F:RelhaxModpack.SelectablePackage.UIComponent">
@@ -2242,6 +2242,42 @@
             <param name="culture">Not implemented</param>
             <returns>Null</returns>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxComboBoxItem">
+            <summary>
+            Interaction logic for RelhaxComboBoxItem.xaml
+            </summary>
+            <summary>
+            RelhaxComboBoxItem
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxComboBoxItem.Package">
+            <summary>
+            The SelectablePackage object that is being wrapped around
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxComboBoxItem.DisplayName">
+            <summary>
+            The text to display in the Combobox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxComboBoxItem.#ctor(RelhaxModpack.SelectablePackage,System.String)">
+            <summary>
+            Creates an instance of the RelhaxComboBoxItem class
+            </summary>
+            <param name="package">The package to wrap around</param>
+            <param name="display">The text to display in the Combobox</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxComboBoxItem.ToString">
+            <summary>
+            Allows for displaying of custom text in the Combobox
+            </summary>
+            <returns>The text to display in the Combobox (DisplayName property)</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxComboBoxItem.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxHyperlink">
             <summary>
             Interaction logic for RelhaxHyperlink.xaml
@@ -2486,34 +2522,6 @@
             Reset the scale and translation (zoom and pan) values
             </summary>
         </member>
-        <member name="T:RelhaxModpack.UIComponents.ComboBoxItem">
-            <summary>
-            The ComboBoxItem class is a wrapper class for displaying SelectablePackages as combo box items. The ToString() allows for display of the package name
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.ComboBoxItem.Package">
-            <summary>
-            The SelectablePackage object that is being wrapped around
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.ComboBoxItem.DisplayName">
-            <summary>
-            The text to display in the Combobox
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.ComboBoxItem.#ctor(RelhaxModpack.SelectablePackage,System.String)">
-            <summary>
-            Creates an instance of the ComboBoxItem class
-            </summary>
-            <param name="package">The package to wrap around</param>
-            <param name="display">The text to display in the Combobox</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.ComboBoxItem.ToString">
-            <summary>
-            Allows for displaying of custom text in the Combobox
-            </summary>
-            <returns>The text to display in the Combobox (DisplayName property)</returns>
-        </member>
         <member name="T:RelhaxModpack.UIComponents.EditorComboBoxItem">
             <summary>
             The EditorComboBoxItem class is a wrapper class for displaying DatabaseObjects as combo box items. The ToString() allows for display of the internal PackageName property
@@ -2735,27 +2743,6 @@
             Set the brush of the Checkbox Panel Background property 
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PopularModVisability">
-            <summary>
-            Set the visibility of the popular mod icon
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.GreyAreaVisability">
-            <summary>
-            Set visibility of the Grey area icon
-            </summary>
-        </member>
-        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PropertyChanged">
-            <summary>
-            Event to trigger when an internal property is changed. It forces a UI update
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnPropertyChanged(System.String)">
-            <summary>
-            Method to invoke the PropertyChanged event to update the UI
-            </summary>
-            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.InitializeComponent">
             <summary>
             InitializeComponent
@@ -2838,27 +2825,6 @@
             Set the brush of the RadioButton Panel Background property 
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PopularModVisability">
-            <summary>
-            Set the visibility of the popular mod icon
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.GreyAreaVisability">
-            <summary>
-            Set visibility of the Grey area icon
-            </summary>
-        </member>
-        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PropertyChanged">
-            <summary>
-            Event to trigger when an internal property is changed. It forces a UI update
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnPropertyChanged(System.String)">
-            <summary>
-            Method to invoke the PropertyChanged event to update the UI
-            </summary>
-            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.InitializeComponent">
             <summary>
             InitializeComponent
@@ -2906,12 +2872,12 @@
             RelhaxMediaPlayer
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.mediaURL">
+        <member name="F:RelhaxModpack.UIComponents.RelhaxMediaPlayer.MediaURL">
             <summary>
             The direct link to the audio file to preview
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.audioData">
+        <member name="F:RelhaxModpack.UIComponents.RelhaxMediaPlayer.AudioData">
             <summary>
             The raw audio data to parse
             </summary>
@@ -5497,6 +5463,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.Credits">
+            <summary>
+            Interaction logic for Credits.xaml
+            </summary>
+            <summary>
+            Credits
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.Credits.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.DevleoperSelectionsClosedEWventArgs">
             <summary>
             Event argument passed back to the caller for when the developer selection window is closed
@@ -5844,17 +5823,6 @@
         <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.#ctor">
             <summary>
             Create an instance of the GameCenterUpdateDownloaded window
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.Dispose(System.Boolean)">
-            <summary>
-            Dispose of the window and release any disposable resources
-            </summary>
-            <param name="disposing">Set to true to dispose of managed objects</param>
-        </member>
-        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.Dispose">
-            <summary>
-            Dispose of the window and release any disposable resources
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.InitializeComponent">
@@ -7936,21 +7904,6 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.dds_reader">
-             <summary>
-               Looks up a localized string similar to                   GNU LESSER GENERAL PUBLIC LICENSE
-                                   Version 2.1, February 1999
-            
-             Copyright (C) 1991, 1999 Free Software Foundation, Inc.
-             51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-             Everyone is permitted to copy and distribute verbatim copies
-             of this license document, but changing it is not allowed.
-            
-            (This is the first released version of the Lesser GPL.  It also counts
-             as the successor of the GNU Library Public License, version 2, hence
-             the version numb [rest of string was truncated]&quot;;.
-             </summary>
-        </member>
         <member name="P:RelhaxModpack.Properties.Resources.discord_brand">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -7960,6 +7913,20 @@
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.DotNetZip">
+             <summary>
+               Looks up a localized string similar to Software Licenses that apply to the DotNetZip library and tools
+            
+            As DotNetZip includes work derived from other projects, you are required to comply with the terms and conditions for each of them. These licenses include BSD, Apache, and zlib.
+            
+            To use the software, you must accept the licenses. If you do not accept the licenses, do not use the software.
+            
+            Original intellectual property in DotNetZip is provided under the Ms-PL:
+                
+                Copyright (c) 2006 - 2011 Dino Chiesa 
+                Copyright (c) 2006, 200 [rest of string was truncated]&quot;;.
+             </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.EMail">
             <summary>
@@ -8001,6 +7968,35 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Properties.Resources.HtmlAgilityPack">
+             <summary>
+               Looks up a localized string similar to The MIT License (MIT)
+            Permission is hereby granted, free of charge, to any person obtaining a copy
+            of this software and associated documentation files (the &quot;Software&quot;), to deal
+            in the Software without restriction, including without limitation the rights
+            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            copies of the Software, and to permit persons to whom the Software is
+            furnished to do so, subject to the following conditions:
+            
+            The above copyright notice and this permission n [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.Json_NET">
+             <summary>
+               Looks up a localized string similar to The MIT License (MIT)
+            
+            Copyright (c) 2007 James Newton-King
+            
+            Permission is hereby granted, free of charge, to any person obtaining a copy of
+            this software and associated documentation files (the &quot;Software&quot;), to deal in
+            the Software without restriction, including without limitation the rights to
+            use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+            the Software, and to permit persons to whom the Software is furnished to do so,
+            subject to the following conditions:
+            
+            The ab [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
         <member name="P:RelhaxModpack.Properties.Resources.modpack_icon">
             <summary>
               Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
@@ -8023,7 +8019,7 @@
                   the copyright owner that is [rest of string was truncated]&quot;;.
              </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.NAudio1">
+        <member name="P:RelhaxModpack.Properties.Resources.NAudio">
              <summary>
                Looks up a localized string similar to Microsoft Public License (Ms-PL)
             
@@ -8037,6 +8033,11 @@
             
             A &quot;contributor&quot; is any person that distributes its contribution [rest of string was truncated]&quot;;.
              </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.obfuscated_package_icon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.play_pause">
             <summary>
@@ -8055,14 +8056,17 @@
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.SpriteSheetPacker">
              <summary>
-               Looks up a localized string similar to Copyright (c) 2009-2010 Nick Gravelyn (nick@gravelyn.com), Markus Ewald (cygon@nuclex.org)
+               Looks up a localized string similar to Copyright (c) 2014-2015 amakaseev.
             
-            Permission is hereby granted, free of charge, to any person obtaining a 
-            copy of this software and associated documentation files (the &quot;Software&quot;), 
-            to deal in the Software without restriction, including without limitation 
-            the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-            and/or sell copies of the Software, and to permit persons to whom the Software 
-            is furnished to do so, subject to t [rest of string was truncated]&quot;;.
+            Permission is hereby granted, free of charge, to any person obtaining
+            a copy of this software and associated documentation files (the
+            &quot;Software&quot;), to deal in the Software without restriction, including
+            without limitation the rights to use, copy, modify, merge, publish,
+            distribute, sublicense, and/or sell copies of the Software, and to
+            permit persons to whom the Software is furnished to do so, subject to
+            the following conditions:
+            
+            The above copyright notice and t [rest of string was truncated]&quot;;.
              </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.stop2">
@@ -8088,6 +8092,18 @@
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.WindowsAPICodePack">
+             <summary>
+               Looks up a localized string similar to License: Custom License
+            MICROSOFT SOFTWARE LICENSE TERMS
+            MICROSOFT WINDOWS API CODE PACK FOR MICROSOFT .NET FRAMEWORK
+            ___________________________________________________
+            These license terms are an agreement between Microsoft Corporation (or based on where you live, one of its affiliates) and you. Please read them. They apply to the software named above, which includes the media on which you received it, if any. The terms also apply to any Microsoft
+            • updates,
+            • supplements,
+            • Internet-based services, [rest of string was truncated]&quot;;.
+             </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.WoT_brand_light_grey">
             <summary>
