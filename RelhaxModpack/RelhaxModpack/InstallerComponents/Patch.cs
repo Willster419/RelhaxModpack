@@ -92,10 +92,11 @@ namespace RelhaxModpack
         {
             get
             {
-                return string.Format("{0} patch, NativeProcessingFile={1}, ActualFile={2}," +
-                    "{3}{4}PatchPath={5}, FileToPatch={6}," +
-                    "{7}{8}Lines={9}, Path={10}, Search={11}, Replace={12}",
+                return string.Format("{0} patch, Version={1}, NativeProcessingFile={2}, ActualFile={3}," +
+                    "{4}{5}PatchPath={6}, FileToPatch={7}," +
+                    "{8}{9}Lines={10}, Path={11}, Search={12}, Replace={13}",
                     Type.ToLower(),
+                    Version,
                     NativeProcessingFile,
                     ActualPatchName,
                     Environment.NewLine,

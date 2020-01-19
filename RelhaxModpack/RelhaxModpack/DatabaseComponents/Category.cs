@@ -14,7 +14,7 @@ namespace RelhaxModpack
         #region Xml serialization
         public string[] PropertiesForSerializationAttributes()
         {
-            return new string[] { nameof(Name) };
+            return new string[] { nameof(Name), nameof(OffsetInstallGroups) };
         }
 
         public string[] PropertiesForSerializationElements()
@@ -27,12 +27,17 @@ namespace RelhaxModpack
         /// <summary>
         /// The category name displayed to the user in the selection list
         /// </summary>
-        public string Name { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// The xml filename of this category. Used in database structure V2
         /// </summary>
-        public string XmlFilename { get; set; } = "";
+        public string XmlFilename { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree
+        /// </summary>
+        public bool OffsetInstallGroups { get; set; } = true;
         
         /// <summary>
         /// The list of packages contained in this category

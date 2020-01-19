@@ -225,6 +225,10 @@
                         <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Margin="15,0,0,0" Click="ExportModeCB_Click" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="ExportModeText" Text="Export mode" TextWrapping="Wrap"/>
                         </CheckBox>
+                        <Button x:Name="ViewCreditsButton" Tag="ViewCreditsButton" HorizontalAlignment="Stretch" Margin="0,3,3,0"
+                                Click="ViewCreditsButton_Click" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
+                            <TextBlock x:Name="ViewCreditsButtonText" Text="View Credits" TextWrapping="Wrap"/>
+                        </Button>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" IsEnabled="True" Click="AutoInstallCB_Click" ToolTipService.ShowOnDisabled="True">

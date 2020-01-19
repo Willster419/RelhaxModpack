@@ -73,8 +73,8 @@
                                VerticalAlignment="Stretch" Height="22" Grid.Row="2" />
                         <ComboBox Tag="PatchModeCombobox" x:Name="PatchModeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1"
                                   Margin="0,1,0,1" Grid.Row="2"/>
-                        <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path [disabled until Relhax V2]"
-                              HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" IsEnabled="False" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2"
+                        <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path"
+                              HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2"
                                   ToolTipService.ShowOnDisabled="True" ToolTip="Follow files based on xvm configuration multiple file structure"/>
                     </Grid>
                     <TextBlock x:Name="PatchFilePathLabel" HorizontalAlignment="Left" Margin="0,88,0,0" TextWrapping="Wrap" Text="Patch file path" VerticalAlignment="Top"

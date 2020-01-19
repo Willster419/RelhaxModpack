@@ -84,6 +84,8 @@ namespace RelhaxModpack
         //beta database compaison for auto install
         string oldBetaDB, newBetaDB;
         bool timerActive = false;
+        //flag for if the application is in "update mode" (downloading the new application update and closing)
+        private bool updateMode = false;
 
         /// <summary>
         /// The original width and height of the application before applying scaling
@@ -194,7 +196,7 @@ namespace RelhaxModpack
             CreateTray();
 
             //apply forced debugging settings
-#warning forced debugging settings is active
+#warning forced trigger disable is active
             ModpackSettings.DisableTriggers = true;
 
             //load AutoSyncFrequencyComboBox with translated versions
@@ -290,6 +292,7 @@ namespace RelhaxModpack
             }
             else
             {
+                Logging.Debug("Application is up to date, get file size of backups");
                 GetBackupFilesizesAsync(false);
             }
 
@@ -390,7 +393,7 @@ namespace RelhaxModpack
             //if the editor unlock file exists, then enable the editor button
             if (File.Exists(Settings.EditorLaunchFromMainWindowFilename))
             {
-                Logging.Info("{0} found, enabling editor button", Settings.EditorLaunchFromMainWindowFilename);
+                Logging.Info("{0} found, enabling manager tools buttons", Settings.EditorLaunchFromMainWindowFilename);
                 LauchEditor.Visibility = Visibility.Visible;
                 LauchEditor.IsEnabled = true;
                 LauchPatchDesigner.Visibility = Visibility.Visible;
@@ -501,35 +504,43 @@ namespace RelhaxModpack
         private void CloseApplication()
         {
             //dispose of the timer if it's not already disposed
+            Logging.TryWriteToLog("Disposing autoInstallTimer", Logfiles.Application, LogLevel.Debug);
             if (autoInstallTimer != null)
             {
                 autoInstallTimer.Dispose();
                 autoInstallTimer = null;
             }
 
-            if (!Logging.IsLogDisposed(Logfiles.Application))
+            //don't save the settings file if it's in update mode or closing from a critical application failure
+            if (closingFromFailure)
             {
-                if (Logging.IsLogOpen(Logfiles.Application))
-                    Logging.Info("Saving settings");
-                if (!closingFromFailure)
-                    if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
-                        if (Logging.IsLogOpen(Logfiles.Application))
-                            Logging.Info("Settings saved");
-                if (Logging.IsLogOpen(Logfiles.Application))
-                    Logging.Info("Disposing tray");
-                if (RelhaxIcon != null)
-                {
-                    RelhaxIcon.Dispose();
-                    RelhaxIcon = null;
-                    if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Tray disposed");
-                }
-                else
-                {
-                    if (Logging.IsLogOpen(Logfiles.Application))
-                        Logging.Info("Tray already null");
-                }
+                Logging.TryWriteToLog("ClosingFromFailure = true, don't save settings", Logfiles.Application, LogLevel.Debug);
             }
+            else if (updateMode)
+            {
+                Logging.TryWriteToLog("UpdateMode = true, don't save settings", Logfiles.Application, LogLevel.Debug);
+            }
+            else
+            {
+                Logging.TryWriteToLog("Saving Settings", Logfiles.Application, LogLevel.Info);
+
+                if (Settings.SaveSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null))
+                    Logging.TryWriteToLog("Settings saved", Logfiles.Application, LogLevel.Info);
+                else
+                    Logging.TryWriteToLog("An error occurred saving settings", Logfiles.Application, LogLevel.Error);
+            }
+
+            Logging.TryWriteToLog("Disposing tray", Logfiles.Application, LogLevel.Info);
+
+            if (RelhaxIcon != null)
+            {
+                RelhaxIcon.Dispose();
+                RelhaxIcon = null;
+                Logging.TryWriteToLog("Tray disposed", Logfiles.Application, LogLevel.Info);
+            }
+            else
+                Logging.TryWriteToLog("Tray already disposed?", Logfiles.Application, LogLevel.Warning);
+
             Application.Current.Shutdown(0);
         }
 
@@ -795,9 +806,10 @@ namespace RelhaxModpack
             }
 
             //if current application build does not equal requested distribution channel
+            //can assume out of date because switching distrobution channels
             if (version != ModpackSettings.ApplicationDistroVersion)
             {
-                outOfDate = true;//can assume out of date
+                outOfDate = true;
                 Logging.Info("Current build is {0} ({1}), online build is NA (changing distribution version {1}->{2})",
                     applicationBuildVersion, version.ToString(), ModpackSettings.ApplicationDistroVersion.ToString());
             }
@@ -816,6 +828,10 @@ namespace RelhaxModpack
             versionInfo.ShowDialog();
             if (versionInfo.ConfirmUpdate)
             {
+                //disable the UI during the application update process
+                updateMode = true;
+                ToggleUIButtons(false);
+
                 //check for any other running instances
                 while (true)
                 {
@@ -3185,6 +3201,9 @@ namespace RelhaxModpack
                 OnUseBetaDatabaseChanged(true, null);
             }
 
+            //apply beta application settings
+            UseBetaApplicationCB.IsChecked = ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Beta ? true : false;
+
             //apply auto install check
             if (ModpackSettings.AutoInstall)
             {
@@ -3210,6 +3229,13 @@ namespace RelhaxModpack
         private void AutoOneclickShowWarningOnSelectionsFailButton_Click(object sender, RoutedEventArgs e)
         {
             ModpackSettings.AutoOneclickShowWarningOnSelectionsFail = (bool)AutoOneclickShowWarningOnSelectionsFailButton.IsChecked;
+        }
+
+        private void ViewCreditsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Credits credits = new Credits();
+            credits.ShowDialog();
+            credits = null;
         }
         #endregion
 

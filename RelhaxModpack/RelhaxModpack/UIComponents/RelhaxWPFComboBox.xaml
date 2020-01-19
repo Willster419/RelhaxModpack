@@ -6,7 +6,8 @@
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              x:Name="comboBox"
              x:Class="RelhaxModpack.UIComponents.RelhaxWPFComboBox"
-             mc:Ignorable="d">
+             mc:Ignorable="d"
+             SelectionChanged="ComboBox_SelectionChanged">
     <ComboBox.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -17,6 +18,12 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <DataTemplate x:Key="realTemp" DataType="{x:Type local:RelhaxComboBoxItem}">
+            <!-- https://stackoverflow.com/a/13968498/3128017 -->
+            <StackPanel x:Name="templateRootPanel" Background="Transparent" SnapsToDevicePixels="True" Orientation="Horizontal" Loaded="TemplateRootPanel_Loaded">
+                <ContentPresenter Name="MyContent" Content="{Binding}"/>
+            </StackPanel>
+        </DataTemplate>
         <LinearGradientBrush x:Key="ComboBox.Static.Background" EndPoint="0,1" StartPoint="0,0">
             <GradientStop Color="#FFF0F0F0" Offset="0.0"/>
             <GradientStop Color="#FFE5E5E5" Offset="1.0"/>
@@ -175,7 +182,7 @@
                     </Themes:SystemDropShadowChrome>
                 </Popup>
                 <ToggleButton x:Name="toggleButton" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton}"/>
-                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{StaticResource realTemp}" Content="{TemplateBinding SelectionBoxItem}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
             </Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true">

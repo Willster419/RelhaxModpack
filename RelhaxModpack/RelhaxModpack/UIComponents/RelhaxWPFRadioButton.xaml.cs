@@ -19,7 +19,7 @@ namespace RelhaxModpack.UIComponents
     /// <summary>
     /// Interaction logic for RelhaxWPFRadioButton.xaml
     /// </summary>
-    public partial class RelhaxWPFRadioButton : RadioButton, IPackageUIComponent, INotifyPropertyChanged
+    public partial class RelhaxWPFRadioButton : RadioButton, IPackageUIComponent
     {
         /// <summary>
         /// Create an instance of the RelhaxWPFRadioButton class
@@ -79,51 +79,46 @@ namespace RelhaxModpack.UIComponents
             }
         }
 
-        #region Data UI Binding
-        private Visibility _PopularModVisability = Visibility.Hidden;
-
-        /// <summary>
-        /// Set the visibility of the popular mod icon
-        /// </summary>
-        public Visibility PopularModVisability
+        private void TemplateRoot_Loaded(object sender, RoutedEventArgs e)
         {
-            get { return _PopularModVisability; }
-            set
+            Grid templateGrid = sender as Grid;
+            if (Package.ObfuscatedMod)
             {
-                _PopularModVisability = value;
-                OnPropertyChanged(nameof(PopularModVisability));
+                templateGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(16) });
+                Image img = new Image()
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 16,
+                    Height = 16,
+                    Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/obfuscated_package_icon.png", UriKind.Relative))
+                }; templateGrid.Children.Add(img);
+                Grid.SetColumn(img, templateGrid.ColumnDefinitions.Count - 1);
+            }
+            if (Package.GreyAreaMod)
+            {
+                templateGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(16) });
+                Image img = new Image()
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 16,
+                    Height = 16,
+                    Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/grey_area_mod.png", UriKind.Relative))
+                }; templateGrid.Children.Add(img);
+                Grid.SetColumn(img, templateGrid.ColumnDefinitions.Count - 1);
+            }
+            if (Package.PopularMod)
+            {
+                templateGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(16) });
+                Image img = new Image()
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 16,
+                    Height = 16,
+                    Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/popular_icon.png", UriKind.Relative))
+                };
+                templateGrid.Children.Add(img);
+                Grid.SetColumn(img, templateGrid.ColumnDefinitions.Count - 1);
             }
         }
-
-        private Visibility _GreyAreaVisability = Visibility.Hidden;
-
-        /// <summary>
-        /// Set visibility of the Grey area icon
-        /// </summary>
-        public Visibility GreyAreaVisability
-        {
-            get { return _GreyAreaVisability; }
-            set
-            {
-                _GreyAreaVisability = value;
-                OnPropertyChanged(nameof(GreyAreaVisability));
-            }
-        }
-
-        //https://stackoverflow.com/questions/34651123/wpf-binding-a-background-color-initializes-but-not-updating
-        /// <summary>
-        /// Event to trigger when an internal property is changed. It forces a UI update
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Method to invoke the PropertyChanged event to update the UI
-        /// </summary>
-        /// <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }

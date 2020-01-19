@@ -12,7 +12,6 @@ using System.IO;
 using Microsoft.Win32;
 using RelhaxModpack.UIComponents;
 using System.Xml.Linq;
-using ComboBoxItem = RelhaxModpack.UIComponents.ComboBoxItem;
 using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
@@ -118,7 +117,7 @@ namespace RelhaxModpack.Windows
         private int numTicks = 0;
         private Brush OriginalBrush = null;
         private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
-        private readonly System.Windows.Forms.Timer FlashTimer = new System.Windows.Forms.Timer() { Interval=FLASH_TICK_INTERVAL };
+        private DispatcherTimer FlashTimer = null;
         private XDocument Md5HashDocument;
         private DatabaseVersions databaseVersion;
 
@@ -188,7 +187,7 @@ namespace RelhaxModpack.Windows
             });
         }
 
-        private void OnFlastTimerTick(object sender, EventArgs e)
+        private void OnFlashTimerTick(object sender, EventArgs e)
         {
             if(!(FlashTimer.Tag is SelectablePackage))
             {
@@ -264,6 +263,9 @@ namespace RelhaxModpack.Windows
         {
             //set the flag for currently loading the UI. It prevents search box or UI interaction code from happening as a failsafe
             LoadingUI = true;
+
+            //init the timer
+            FlashTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(FLASH_TICK_INTERVAL), DispatcherPriority.Background, OnFlashTimerTick, this.Dispatcher) {IsEnabled = false };
 
             //init the lists
             ParsedCategoryList = new List<Category>();
@@ -652,9 +654,6 @@ namespace RelhaxModpack.Windows
                         }
                     }
 
-                    //like hook up the flashing timer
-                    FlashTimer.Tick += OnFlastTimerTick;
-
                     //set the selection window width, height
                     Width = ModpackSettings.ModSelectionWidth;
                     Height = ModpackSettings.ModSelectionHeight;
@@ -759,8 +758,6 @@ namespace RelhaxModpack.Windows
                     IsChecked = false,
                     IsEnabled = true,
                     Content = package.NameDisplay,
-                    PopularModVisability = Visibility.Hidden,
-                    GreyAreaVisability = Visibility.Hidden,
                     Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush
                 };
                 package.UIComponent = userMod;
@@ -982,8 +979,6 @@ namespace RelhaxModpack.Windows
                             VerticalContentAlignment = VerticalAlignment.Center,
                             Content = package.NameDisplay,
                             IsEnabled = package.IsStructureEnabled,
-                            PopularModVisability = package.PopularMod? Visibility.Visible : Visibility.Hidden,
-                            GreyAreaVisability = package.GreyAreaMod? Visibility.Visible : Visibility.Hidden,
                             Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             IsChecked = false
                         };
@@ -1006,8 +1001,6 @@ namespace RelhaxModpack.Windows
                             Content = package.NameDisplay,
                             IsEnabled = package.IsStructureEnabled,
                             IsChecked = false,
-                            PopularModVisability = package.PopularMod ? Visibility.Visible : Visibility.Hidden,
-                            GreyAreaVisability = package.GreyAreaMod ? Visibility.Visible : Visibility.Hidden,
                             Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                         };
                         ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFCheckBox, true);
@@ -1077,7 +1070,7 @@ namespace RelhaxModpack.Windows
                     AddedToList = false
                 };
             }
-            ComboBoxItem cbi = new ComboBoxItem(package, package.NameDisplay)
+            RelhaxComboBoxItem cbi = new RelhaxComboBoxItem(package, package.NameDisplay)
             {
                 IsEnabled = package.IsStructureEnabled,
                 Content = package.NameDisplay
@@ -1090,7 +1083,6 @@ namespace RelhaxModpack.Windows
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].PreviewMouseRightButtonDown += Generic_MouseDown;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].SelectionChanged += OnSingleDDPackageClick;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].Handler = OnSingleDDPackageClick;
-                package.Parent.RelhaxWPFComboBoxList[boxIndex].DropDownClosed += DropDownSelectSelfFix;
                 if (package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Count > 0)
                 {
                     package.Parent.RelhaxWPFComboBoxList[boxIndex].IsEnabled = true;
@@ -1131,43 +1123,6 @@ namespace RelhaxModpack.Windows
                 else if (!(bool)rb.IsChecked)
                     rb.IsChecked = true;
                 OnSinglePackageClick(sender, e);
-            }
-        }
-        //special fix for when the combobox is showing selectedIndex item 0 (first item)
-        //(AND it's not actually clicked, just showing it), and user selects that one
-        //this takes care of event not previously firing to select it in memory
-        //https://stackoverflow.com/questions/25763954/event-when-combobox-is-selected
-        private void DropDownSelectSelfFix(object sender, EventArgs e)
-        {
-            if (LoadingUI)
-                return;
-            SelectablePackage spc = null;
-            if (sender is RelhaxWPFComboBox cb2)
-            {
-                //get the UI cbi struct and the internal SeletablePackage
-                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
-                spc = cbi.Package;
-                //only enable the package if the structure leading to this package is enabled
-                if(cb2.SelectedIndex == 0 && spc.IsStructureEnabled && !spc.Checked)
-                {
-                    foreach (SelectablePackage childPackage in spc.Parent.Packages)
-                    {
-                        if (childPackage.Equals(spc))
-                            continue;
-                        //uncheck all packages of the same type
-                        if (childPackage.Type.Equals(spc.Type))
-                        {
-                            childPackage.Checked = false;
-                        }
-                    }
-
-                    //verify selected is actually checked
-                    if (!spc.Checked)
-                        spc.Checked = true;
-
-                    //dropdown packages only need to propagate up when selected...
-                    PropagateChecked(spc, SelectionPropagationDirection.PropagateUp);
-                }
             }
         }
 
@@ -1218,7 +1173,7 @@ namespace RelhaxModpack.Windows
                 //don't change the selection if the user did not want to change the option
                 if (!cb2.IsDropDownOpen)
                     return;
-                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)cb2.SelectedItem;
                 spc = cbi.Package;
             }
 
@@ -1522,7 +1477,7 @@ namespace RelhaxModpack.Windows
                 //check to see if a specific item is highlighted
                 //if so, it means that the user wants to preview a specific version
                 //if not, then the user clicked on the combobox as a whole, so show all items in the box
-                foreach (ComboBoxItem itemInBox in comboboxSender.Items)
+                foreach (RelhaxComboBoxItem itemInBox in comboboxSender.Items)
                 {
                     if (itemInBox.IsHighlighted && itemInBox.IsEnabled)
                     {
@@ -1534,7 +1489,7 @@ namespace RelhaxModpack.Windows
                 {
                     //make a new temporary package with a custom preview items list
                     //get a temp known good package, doesn't matter what cause we want the parent
-                    ComboBoxItem cbi = (ComboBoxItem)comboboxSender.Items[0];
+                    RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)comboboxSender.Items[0];
                     //parent of item in combobox is header
                     SelectablePackage parentPackage = cbi.Package.Parent;
                     spc = new SelectablePackage()
@@ -1766,12 +1721,20 @@ namespace RelhaxModpack.Windows
             //check the mods in the actual list if it's in the list
             foreach(SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
             {
-                //also check to only "check" the mod if it is visible OR if the command line settings to force visiable all compoents
+                //also check to only "check" the mod if it is visible OR if the command line settings to force visible all components
                 if(stringSelections.Contains(package.PackageName) && (package.Visible || ModpackSettings.ForceVisible))
                 {
                     stringSelections.Remove(package.PackageName);
+
+                    //if it's the top level, check the category header
+                    if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
+                    {
+                        package.ParentCategory.CategoryHeader.Checked = true;
+                        Logging.Info("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
+                    }
+
                     //also check if the mod only if it's enabled OR is command line settings force enabled
-                    if(package.Enabled || ModpackSettings.ForceEnabled)
+                    if (package.Enabled || ModpackSettings.ForceEnabled)
                     {
                         package.Checked = true;
                         Logging.Info(string.Format("Checking package {0}",package.CompletePath));
@@ -1785,12 +1748,6 @@ namespace RelhaxModpack.Windows
                         }
                         disabledMods.Add(package.CompletePath);
                         Logging.Info(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
-                    }
-                    //if it's the top level, check the category header
-                    if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
-                    {
-                        package.ParentCategory.CategoryHeader.Checked = true;
-                        Logging.Info("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
                     }
                 }
             }
@@ -1828,7 +1785,7 @@ namespace RelhaxModpack.Windows
             else if(!silent)
             {
                 Logging.Info("Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
-                disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
+                    disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
                 if(disabledMods.Count > 0)
                 {
                     //disabled selections
@@ -1853,6 +1810,11 @@ namespace RelhaxModpack.Windows
                     MessageBox.Show(string.Format("{0}: {1}{2}",
                         Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, disabledStructureMods)));
                 }
+            }
+            else
+            {
+                Logging.Info("Silent = true, logging {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
+                    disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
             }
             return true;
         }
@@ -1999,29 +1961,19 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Search Box Code
-
-        private void SearchCB_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
-            SearchCB.IsDropDownOpen = true;
-            //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
-            /*
-            var textbox = (TextBox)SearchCB.Template.FindName("PART_EditableTextBox", SearchCB);
-            if (textbox != null && textbox.SelectionLength > 0)
-            {
-                textbox.Select(textbox.SelectionLength, 0);
-            }
-            */
-        }
-
         private void SearchCB_KeyUp(object sender, KeyEventArgs e)
         {
+            //see editor search box section for comments and log notes
+            SearchCB.IsDropDownOpen = true;
             if (e.Key == Key.Down || e.Key == Key.Up)
             {
-                //stop the selection from key events!!!
-                //https://www.codeproject.com/questions/183259/how-to-prevent-selecteditem-change-on-up-and-down (second answer)
+                //stop the selection from key events
                 e.Handled = true;
-                SearchCB.IsDropDownOpen = true;
+
+                if (SearchCB.Items.Count > 0 && SearchCB.SelectedIndex == -1)
+                {
+                    SearchCB.SelectedIndex = 0;
+                }
             }
             else if(e.Key == Key.Enter)
             {
@@ -2030,25 +1982,26 @@ namespace RelhaxModpack.Windows
                     Logging.Info("enter key pressed for search, but no actual package selected. ignoring");
                     return;
                 }
-                OnSearchCBSelectionCommitted(SearchCB.SelectedItem as ComboBoxItem);
+                OnSearchCBSelectionCommitted(SearchCB.SelectedItem as RelhaxComboBoxItem);
             }
-            //check if length 0 or whitespace
             else if (string.IsNullOrWhiteSpace(SearchCB.Text))
             {
                 SearchCB.Items.Clear();
                 SearchCB.IsDropDownOpen = false;
                 SearchCB.SelectedIndex = -1;
             }
-            //check if length 1
-            /*
-            else if(SearchCB.Text.Count() == 1)
+            else if (SearchCB.Text.Length > 1)
             {
+                if (SearchCB.SelectedIndex != -1)
+                {
+                    TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+                    string temp = SearchCB.Text;
+                    SearchCB.SelectedIndex = -1;
+                    SearchCB.Text = temp;
+                    textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+                    textBox.SelectionLength = 0;
+                }
 
-            }
-            */
-            //actually search
-            else
-            {
                 //split the search into an array based on using '*' search
                 List<SelectablePackage> searchComponents = new List<SelectablePackage>();
                 foreach (string searchTerm in SearchCB.Text.Split('*'))
@@ -2067,24 +2020,32 @@ namespace RelhaxModpack.Windows
                             term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible));
                     }
                 }
-                //assuming it maintains the order it previously had i.e. removing only when need to...
+
+                //remove duplicates
                 searchComponents = searchComponents.Distinct().ToList();
+
                 //clear and fill the search list again
                 SearchCB.Items.Clear();
                 foreach (SelectablePackage package in searchComponents)
                 {
                     string formatForText = string.Format("{0} [{1}]", package.NameFormatted, package.ParentCategory.Name);
-                    SearchCB.Items.Add(new ComboBoxItem(package, formatForText)
+                    SearchCB.Items.Add(new RelhaxComboBoxItem(package, formatForText)
                     {
                         IsEnabled = true,
                         Content = formatForText
                     });
                 }
-                SearchCB.IsDropDownOpen = true;
             }
         }
 
-        private async void OnSearchCBSelectionCommitted(ComboBoxItem committedItem)
+        private void SearchCB_DropDownOpened(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+            textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+            textBox.SelectionLength = 0;
+        }
+
+        private async void OnSearchCBSelectionCommitted(RelhaxComboBoxItem committedItem)
         {
             //test to make sure the UIComponent is a control (it should be, but at least a test to make sure it's not null)
             Control ctrl = null;
@@ -2131,7 +2092,7 @@ namespace RelhaxModpack.Windows
             }, DispatcherPriority.Background);
 
             //start the timer to show the item
-            OnFlastTimerTick(null, null);
+            OnFlashTimerTick(null, null);
             FlashTimer.Start();
         }
 
@@ -2139,7 +2100,7 @@ namespace RelhaxModpack.Windows
         {
             if (SearchCB.IsDropDownOpen)
             {
-                foreach (ComboBoxItem item in SearchCB.Items)
+                foreach (RelhaxComboBoxItem item in SearchCB.Items)
                 {
                     if (item.IsHighlighted && item.IsMouseOver)
                     {

@@ -148,6 +148,11 @@ namespace RelhaxModpack
         /// </summary>
         public string DevURL { get; set; } = string.Empty;
 
+        public string[] DevURLList
+        {
+            get { return DevURL.Replace("\r", string.Empty).Split('\n'); }
+        }
+
         /// <summary>
         /// The level at which this package can be installed. It will be installed with other packages of the same install group at the same time
         /// </summary>
@@ -162,6 +167,11 @@ namespace RelhaxModpack
         /// Internal instructions for updating the mod for database managers
         /// </summary>
         public string InternalNotes { get; set; } = string.Empty;
+
+        public string InternalNotesEscaped
+        {
+            get { return Utils.MacroReplace(InternalNotes, ReplacementTypes.TextUnescape); }
+        }
 
         /// <summary>
         /// The name of the author of the mod/configuration/etc.
