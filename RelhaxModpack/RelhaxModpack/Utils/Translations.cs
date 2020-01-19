@@ -1618,6 +1618,24 @@ namespace RelhaxModpack
             Russian.Add("ExportModeCBDescription", "Режим экспорта позволит выбрать папку для экспорта установленных модификаций в игру. Только для продвинутых пользователей.\n" +
                 "Учтите, что эта опция НЕ распакует XML-файлы игры, патчить их или создавать атласы. Инструкции находятся в папке экспорта.");
 
+            //Component: ViewCreditsButtonText
+            //
+            English.Add("ViewCreditsButtonText", "View Credits");
+            German.Add("ViewCreditsButtonText", TranslationNeeded);
+            Polish.Add("ViewCreditsButtonText", TranslationNeeded);
+            French.Add("ViewCreditsButtonText", TranslationNeeded);
+            Spanish.Add("ViewCreditsButtonText", TranslationNeeded);
+            Russian.Add("ViewCreditsButtonText", TranslationNeeded);
+
+            //Component: ViewCreditsButtonDescription
+            //
+            English.Add("ViewCreditsButtonDescription", "See all the awesome people and projects that support the modpack!");
+            German.Add("ViewCreditsButtonDescription", TranslationNeeded);
+            Polish.Add("ViewCreditsButtonDescription", TranslationNeeded);
+            French.Add("ViewCreditsButtonDescription", TranslationNeeded);
+            Spanish.Add("ViewCreditsButtonDescription", TranslationNeeded);
+            Russian.Add("ViewCreditsButtonDescription", TranslationNeeded);
+
             //Component: ExportWindowDesctiption
             //
             English.Add("ExportWindowDesctiption", "Select the version of WoT you wish to export for");
@@ -5381,6 +5399,17 @@ namespace RelhaxModpack
             French.Add("SelectLanguagesContinueButton", French["ContinueButton"]);
             Spanish.Add("SelectLanguagesContinueButton", Spanish["ContinueButton"]);
             Russian.Add("SelectLanguagesContinueButton", Russian["ContinueButton"]);
+            #endregion
+
+            #region Credits
+            //Component: Credits
+            //Application window title
+            English.Add("Credits", "Relhax Modpack Credits");
+            German.Add("Credits", TranslationNeeded);
+            Polish.Add("Credits", TranslationNeeded);
+            French.Add("Credits", TranslationNeeded);
+            Spanish.Add("Credits", TranslationNeeded);
+            Russian.Add("Credits", TranslationNeeded);
             #endregion
 
             //apply the bool that all translations were applied
