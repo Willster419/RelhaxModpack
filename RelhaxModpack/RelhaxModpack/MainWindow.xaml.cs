@@ -3230,6 +3230,13 @@ namespace RelhaxModpack
         {
             ModpackSettings.AutoOneclickShowWarningOnSelectionsFail = (bool)AutoOneclickShowWarningOnSelectionsFailButton.IsChecked;
         }
+
+        private void ViewCreditsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Credits credits = new Credits();
+            credits.ShowDialog();
+            credits = null;
+        }
         #endregion
 
         //move folders with a special middle step

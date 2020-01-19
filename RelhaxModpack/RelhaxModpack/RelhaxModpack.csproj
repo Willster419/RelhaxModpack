@@ -213,6 +213,9 @@
     <Compile Include="Windows\CreateFTPFolderName.xaml.cs">
       <DependentUpon>CreateFTPFolderName.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Credits.xaml.cs">
+      <DependentUpon>Credits.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DeveloperSelectionsViewer.xaml.cs">
       <DependentUpon>DeveloperSelectionsViewer.xaml</DependentUpon>
     </Compile>
@@ -384,6 +387,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\CreateFTPFolderName.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Credits.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
