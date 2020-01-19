@@ -513,6 +513,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\Licences\WindowsAPICodePack.txt" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -529,7 +530,6 @@
     <EmbeddedResource Include="Resources\DLL\nvtt32.zip" />
     <EmbeddedResource Include="Resources\DLL\nvtt64.zip" />
     <Resource Include="Resources\Images\popular_icon.png" />
-    <Resource Include="Resources\Licences\Fody.txt" />
     <Resource Include="Resources\Images\grey_area_mod.png" />
     <Resource Include="Resources\Images\error_loading_picture.png" />
     <EmbeddedResource Include="Resources\DLL\DotNetZip.dll" />
@@ -540,7 +540,10 @@
     <EmbeddedResource Include="Resources\DLL\TeximpNet.dll" />
     <EmbeddedResource Include="Resources\DLL\HtmlAgilityPack.dll" />
     <Resource Include="Resources\Images\obfuscated_package_icon.png" />
-    <Content Include="Resources\Licences\modpack_license_agrement.txt" />
+    <Resource Include="Resources\Licences\Json.NET.txt" />
+    <Resource Include="Resources\Licences\DotNetZip.txt" />
+    <Resource Include="Resources\Licences\HtmlAgilityPack.txt" />
+    <Resource Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
   <ItemGroup>
@@ -576,7 +579,6 @@
     <Resource Include="Resources\Images\WoT brand light grey.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Licences\dds-reader.txt" />
     <Resource Include="Resources\Licences\NAudio.txt" />
     <Resource Include="Resources\Licences\SpriteSheetPacker.txt" />
     <Resource Include="Resources\Licences\TeximpNet.txt" />
