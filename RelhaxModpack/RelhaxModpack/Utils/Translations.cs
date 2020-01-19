@@ -5410,6 +5410,132 @@ namespace RelhaxModpack
             French.Add("Credits", TranslationNeeded);
             Spanish.Add("Credits", TranslationNeeded);
             Russian.Add("Credits", TranslationNeeded);
+
+            //Component: creditsProjectLeader
+            //
+            English.Add("creditsProjectLeader", "Project Leader");
+            German.Add("creditsProjectLeader", TranslationNeeded);
+            Polish.Add("creditsProjectLeader", TranslationNeeded);
+            French.Add("creditsProjectLeader", TranslationNeeded);
+            Spanish.Add("creditsProjectLeader", TranslationNeeded);
+            Russian.Add("creditsProjectLeader", TranslationNeeded);
+
+            //Component: creditsDatabaseManagers
+            //
+            English.Add("creditsDatabaseManagers", "Database Managers");
+            German.Add("creditsDatabaseManagers", TranslationNeeded);
+            Polish.Add("creditsDatabaseManagers", TranslationNeeded);
+            French.Add("creditsDatabaseManagers", TranslationNeeded);
+            Spanish.Add("creditsDatabaseManagers", TranslationNeeded);
+            Russian.Add("creditsDatabaseManagers", TranslationNeeded);
+
+            //Component: creditsusingOpenSourceProjs
+            //
+            English.Add("creditsusingOpenSourceProjs", "Relhax Modpack uses the following Open Source projects");
+            German.Add("creditsusingOpenSourceProjs", TranslationNeeded);
+            Polish.Add("creditsusingOpenSourceProjs", TranslationNeeded);
+            French.Add("creditsusingOpenSourceProjs", TranslationNeeded);
+            Spanish.Add("creditsusingOpenSourceProjs", TranslationNeeded);
+            Russian.Add("creditsusingOpenSourceProjs", TranslationNeeded);
+
+            //Component: creditsSpecialThanks
+            //
+            English.Add("creditsSpecialThanks", "Special thanks");
+            German.Add("creditsSpecialThanks", TranslationNeeded);
+            Polish.Add("creditsSpecialThanks", TranslationNeeded);
+            French.Add("creditsSpecialThanks", TranslationNeeded);
+            Spanish.Add("creditsSpecialThanks", TranslationNeeded);
+            Russian.Add("creditsSpecialThanks", TranslationNeeded);
+
+            //Component: creditsGrumpelumpf
+            //
+            English.Add("creditsGrumpelumpf", "Project leader of OMC, allowed us to pick up Relhax from where he left off");
+            German.Add("creditsGrumpelumpf", TranslationNeeded);
+            Polish.Add("creditsGrumpelumpf", TranslationNeeded);
+            French.Add("creditsGrumpelumpf", TranslationNeeded);
+            Spanish.Add("creditsGrumpelumpf", TranslationNeeded);
+            Russian.Add("creditsGrumpelumpf", TranslationNeeded);
+
+            //Component: creditsRkk1945
+            //
+            English.Add("creditsRkk1945", "The first beta tester who worked with me for months to get the project running");
+            German.Add("creditsRkk1945", TranslationNeeded);
+            Polish.Add("creditsRkk1945", TranslationNeeded);
+            French.Add("creditsRkk1945", TranslationNeeded);
+            Spanish.Add("creditsRkk1945", TranslationNeeded);
+            Russian.Add("creditsRkk1945", TranslationNeeded);
+
+            //Component: creditsRgc
+            //
+            English.Add("creditsRgc", "Sponsoring the modpack and being my first beta tester group");
+            German.Add("creditsRgc", TranslationNeeded);
+            Polish.Add("creditsRgc", TranslationNeeded);
+            French.Add("creditsRgc", TranslationNeeded);
+            Spanish.Add("creditsRgc", TranslationNeeded);
+            Russian.Add("creditsRgc", TranslationNeeded);
+
+            //Component: creditsBetaTestersName
+            //
+            English.Add("creditsBetaTestersName", "Our beta testing team");
+            German.Add("creditsBetaTestersName", TranslationNeeded);
+            Polish.Add("creditsBetaTestersName", TranslationNeeded);
+            French.Add("creditsBetaTestersName", TranslationNeeded);
+            Spanish.Add("creditsBetaTestersName", TranslationNeeded);
+            Russian.Add("creditsBetaTestersName", TranslationNeeded);
+
+            //Component: creditsBetaTesters
+            //
+            English.Add("creditsBetaTesters", "Continuing to test and report issues in the application before it goes live");
+            German.Add("creditsBetaTesters", TranslationNeeded);
+            Polish.Add("creditsBetaTesters", TranslationNeeded);
+            French.Add("creditsBetaTesters", TranslationNeeded);
+            Spanish.Add("creditsBetaTesters", TranslationNeeded);
+            Russian.Add("creditsBetaTesters", TranslationNeeded);
+
+            //Component: creditsSilvers
+            //
+            English.Add("creditsSilvers", "Helping with the community outreach and social networking");
+            German.Add("creditsSilvers", TranslationNeeded);
+            Polish.Add("creditsSilvers", TranslationNeeded);
+            French.Add("creditsSilvers", TranslationNeeded);
+            Spanish.Add("creditsSilvers", TranslationNeeded);
+            Russian.Add("creditsSilvers", TranslationNeeded);
+
+            //Component: creditsXantier
+            //
+            English.Add("creditsXantier", "Initial IT support and setting up our server");
+            German.Add("creditsXantier", TranslationNeeded);
+            Polish.Add("creditsXantier", TranslationNeeded);
+            French.Add("creditsXantier", TranslationNeeded);
+            Spanish.Add("creditsXantier", TranslationNeeded);
+            Russian.Add("creditsXantier", TranslationNeeded);
+
+            //Component: creditsSpritePacker
+            //
+            English.Add("creditsSpritePacker", "Developing the sprite sheet packer algorithm and porting to .NET");
+            German.Add("creditsSpritePacker", TranslationNeeded);
+            Polish.Add("creditsSpritePacker", TranslationNeeded);
+            French.Add("creditsSpritePacker", TranslationNeeded);
+            Spanish.Add("creditsSpritePacker", TranslationNeeded);
+            Russian.Add("creditsSpritePacker", TranslationNeeded);
+
+            //Component: creditsWargaming
+            //
+            English.Add("creditsWargaming", "Making an easy to automate modding system");
+            German.Add("creditsWargaming", TranslationNeeded);
+            Polish.Add("creditsWargaming", TranslationNeeded);
+            French.Add("creditsWargaming", TranslationNeeded);
+            Spanish.Add("creditsWargaming", TranslationNeeded);
+            Russian.Add("creditsWargaming", TranslationNeeded);
+
+            //Component: creditsUsersLikeU
+            //
+            English.Add("creditsUsersLikeU", "Users like you");
+            German.Add("creditsUsersLikeU", TranslationNeeded);
+            Polish.Add("creditsUsersLikeU", TranslationNeeded);
+            French.Add("creditsUsersLikeU", TranslationNeeded);
+            Spanish.Add("creditsUsersLikeU", TranslationNeeded);
+            Russian.Add("creditsUsersLikeU", TranslationNeeded);
             #endregion
 
             //apply the bool that all translations were applied
