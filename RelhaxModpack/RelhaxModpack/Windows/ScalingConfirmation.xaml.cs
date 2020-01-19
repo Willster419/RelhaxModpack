@@ -23,7 +23,7 @@ namespace RelhaxModpack.Windows
 
         private int TimeToRevert = 10;
 
-        private DispatcherTimer Timer = new DispatcherTimer();
+        private DispatcherTimer Timer = null;
 
         /// <summary>
         /// Create an instance of the ScalingConfirmation window
@@ -36,8 +36,7 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             ScalingConfirmationRevertTime.Text = string.Format(Translations.GetTranslatedString(ScalingConfirmationRevertTime.Name), TimeToRevert);
-            Timer.Interval = TimeSpan.FromMilliseconds(1000);
-            Timer.Tick += Timer_Tick;
+            Timer = new DispatcherTimer(TimeSpan.FromMilliseconds(1000), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher);
             Timer.Start();
         }
 
