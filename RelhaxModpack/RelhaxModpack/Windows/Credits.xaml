@@ -5,7 +5,8 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:local="clr-namespace:RelhaxModpack.Windows"
                     mc:Ignorable="d"
-                    Title="Credits" Height="450" Width="800" Loaded="RelhaxWindow_Loaded"
+                    Title="Credits" Loaded="RelhaxWindow_Loaded"
+                    Height="625" Width="600" MinHeight="100" MinWidth="100"
                     ApplyColorSettings="True" ApplyScaling="True" ApplyToolTips="False" LocalizeWindow="False">  
     <Grid>
         <TextBox x:Name="CreditsTextBox" HorizontalAlignment="Stretch" Margin="10,10,10,10" TextWrapping="Wrap" VerticalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
