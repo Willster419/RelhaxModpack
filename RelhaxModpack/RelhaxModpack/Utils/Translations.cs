@@ -5429,6 +5429,15 @@ namespace RelhaxModpack
             Spanish.Add("creditsDatabaseManagers", TranslationNeeded);
             Russian.Add("creditsDatabaseManagers", TranslationNeeded);
 
+            //Component: creditsTranslators
+            //
+            English.Add("creditsTranslators", "Translators");
+            German.Add("creditsTranslators", TranslationNeeded);
+            Polish.Add("creditsTranslators", TranslationNeeded);
+            French.Add("creditsTranslators", TranslationNeeded);
+            Spanish.Add("creditsTranslators", TranslationNeeded);
+            Russian.Add("creditsTranslators", TranslationNeeded);
+
             //Component: creditsusingOpenSourceProjs
             //
             English.Add("creditsusingOpenSourceProjs", "Relhax Modpack uses the following Open Source projects");
