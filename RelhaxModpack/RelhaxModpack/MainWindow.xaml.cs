@@ -3201,6 +3201,9 @@ namespace RelhaxModpack
                 OnUseBetaDatabaseChanged(true, null);
             }
 
+            //apply beta application settings
+            UseBetaApplicationCB.IsChecked = ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Beta ? true : false;
+
             //apply auto install check
             if (ModpackSettings.AutoInstall)
             {
