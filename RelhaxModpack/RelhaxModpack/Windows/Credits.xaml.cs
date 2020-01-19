@@ -35,14 +35,14 @@ namespace RelhaxModpack.Windows
             StringBuilder creditsBuilder = new StringBuilder();
             //project lead and database managers
             creditsBuilder.AppendFormat("{0}: Willster419{1}{1}", Translations.GetTranslatedString("creditsProjectLeader"), nl);
-            creditsBuilder.AppendFormat("{0}:{1}", Translations.GetTranslatedString("creditsProjectLeader"), nl);
-            creditsBuilder.AppendLine(string.Join(", ",new string[] { "Elektrosmoker", "Dirty20067", "123GAUSS", "TheIllusion"}));
+            creditsBuilder.AppendFormat("{0}:{1}", Translations.GetTranslatedString("creditsDatabaseManagers"), nl);
+            creditsBuilder.AppendLine(string.Join(", ",new string[] { "elektrosmoker", "Dirty20067", "123GAUSS", "TheIllusion"}));
             creditsBuilder.AppendLine();
 
             //Translators
             creditsBuilder.AppendFormat("{0}:{1}", Translations.GetTranslatedString("creditsTranslators"), nl);
             creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguageEnglish, string.Join(", ",new string[] { "Rkk1945", "Willster419"}), nl);
-            creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguageGerman, string.Join(", ", new string[] {"Grumpelumpf", "Dirty20067", "123GAUSS", "Elektrosmoker" }), nl);
+            creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguageGerman, string.Join(", ", new string[] {"Grumpelumpf", "Dirty20067", "123GAUSS", "elektrosmoker" }), nl);
             creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguageFrench, string.Join(", ", new string[] {"Merkk", "Toshiro" }), nl);
             creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguageSpanish, "LordFelix", nl);
             creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguagePolish, string.Join(", ", new string[] {"Neoros","Nullmaruzero" }), nl);
