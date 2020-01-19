@@ -9,9 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using RelhaxModpack.UIComponents;
-using System.Timers;
 using System.IO;
 using System.Net;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
 {
@@ -36,8 +36,7 @@ namespace RelhaxModpack.Windows
         private Media CurrentDispalyMedia = null;
         private WebBrowser browser = null;
         private ZoomBorder zoomBorder = null;
-
-        private Timer FocusTimer = null;
+        private DispatcherTimer FocusTimer = null;
 
         /// <summary>
         /// Create an instance of the Preview window
@@ -188,20 +187,14 @@ namespace RelhaxModpack.Windows
             //set the timer if the view is OMC
             if(ModpackSettings.ModSelectionView == SelectionView.Legacy)
             {
-                FocusTimer = new Timer()
-                {
-                    Interval = 10,
-                    AutoReset = false,
-                    Enabled = true
-                };
-                FocusTimer.Elapsed += (senderr, args) =>
-                {
-                    this.Dispatcher.InvokeAsync(() =>
-                    {
-                        this.Focus();
-                    });
-                };
+                FocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
             }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            FocusTimer.Stop();
+            this.Focus();
         }
 
         private void OnMediaHyperlinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
@@ -429,12 +422,6 @@ namespace RelhaxModpack.Windows
             {
                 browser.Dispose();
                 browser = null;
-            }
-
-            if (FocusTimer != null)
-            {
-                FocusTimer.Dispose();
-                FocusTimer = null;
             }
         }
 
