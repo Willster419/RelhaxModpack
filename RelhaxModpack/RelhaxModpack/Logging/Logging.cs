@@ -366,6 +366,17 @@ namespace RelhaxModpack
             }
         }
 
+        public static void TryWriteToLog(string message, Logfiles logfile, LogLevel logLevel)
+        {
+            if (!IsLogDisposed(logfile) && IsLogOpen(logfile))
+                WriteToLog(message, logfile, logLevel);
+        }
+
+        public static void TryWriteToLog(string messageFormat, Logfiles logfile, LogLevel logLevel, params object[] args)
+        {
+            TryWriteToLog(string.Format(messageFormat, args), logfile, logLevel);
+        }
+
         /// <summary>
         /// Writes a message to a logfile instance, if it exists
         /// </summary>

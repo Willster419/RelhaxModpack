@@ -61,25 +61,6 @@ namespace RelhaxModpack.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to                   GNU LESSER GENERAL PUBLIC LICENSE
-        ///                       Version 2.1, February 1999
-        ///
-        /// Copyright (C) 1991, 1999 Free Software Foundation, Inc.
-        /// 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-        /// Everyone is permitted to copy and distribute verbatim copies
-        /// of this license document, but changing it is not allowed.
-        ///
-        ///(This is the first released version of the Lesser GPL.  It also counts
-        /// as the successor of the GNU Library Public License, version 2, hence
-        /// the version numb [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string dds_reader {
-            get {
-                return ResourceManager.GetString("dds_reader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap discord_brand {
@@ -96,6 +77,24 @@ namespace RelhaxModpack.Properties {
             get {
                 object obj = ResourceManager.GetObject("donation", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Software Licenses that apply to the DotNetZip library and tools
+        ///
+        ///As DotNetZip includes work derived from other projects, you are required to comply with the terms and conditions for each of them. These licenses include BSD, Apache, and zlib.
+        ///
+        ///To use the software, you must accept the licenses. If you do not accept the licenses, do not use the software.
+        ///
+        ///Original intellectual property in DotNetZip is provided under the Ms-PL:
+        ///    
+        ///    Copyright (c) 2006 - 2011 Dino Chiesa 
+        ///    Copyright (c) 2006, 200 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DotNetZip {
+            get {
+                return ResourceManager.GetString("DotNetZip", resourceCulture);
             }
         }
         
@@ -180,6 +179,43 @@ namespace RelhaxModpack.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The MIT License (MIT)
+        ///Permission is hereby granted, free of charge, to any person obtaining a copy
+        ///of this software and associated documentation files (the &quot;Software&quot;), to deal
+        ///in the Software without restriction, including without limitation the rights
+        ///to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        ///copies of the Software, and to permit persons to whom the Software is
+        ///furnished to do so, subject to the following conditions:
+        ///
+        ///The above copyright notice and this permission n [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string HtmlAgilityPack {
+            get {
+                return ResourceManager.GetString("HtmlAgilityPack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The MIT License (MIT)
+        ///
+        ///Copyright (c) 2007 James Newton-King
+        ///
+        ///Permission is hereby granted, free of charge, to any person obtaining a copy of
+        ///this software and associated documentation files (the &quot;Software&quot;), to deal in
+        ///the Software without restriction, including without limitation the rights to
+        ///use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+        ///the Software, and to permit persons to whom the Software is furnished to do so,
+        ///subject to the following conditions:
+        ///
+        ///The ab [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Json_NET {
+            get {
+                return ResourceManager.GetString("Json_NET", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon modpack_icon {
@@ -223,9 +259,19 @@ namespace RelhaxModpack.Properties {
         ///
         ///A &quot;contributor&quot; is any person that distributes its contribution [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string NAudio1 {
+        internal static string NAudio {
             get {
-                return ResourceManager.GetString("NAudio1", resourceCulture);
+                return ResourceManager.GetString("NAudio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap obfuscated_package_icon {
+            get {
+                object obj = ResourceManager.GetObject("obfuscated_package_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -260,14 +306,17 @@ namespace RelhaxModpack.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright (c) 2009-2010 Nick Gravelyn (nick@gravelyn.com), Markus Ewald (cygon@nuclex.org)
+        ///   Looks up a localized string similar to Copyright (c) 2014-2015 amakaseev.
         ///
-        ///Permission is hereby granted, free of charge, to any person obtaining a 
-        ///copy of this software and associated documentation files (the &quot;Software&quot;), 
-        ///to deal in the Software without restriction, including without limitation 
-        ///the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-        ///and/or sell copies of the Software, and to permit persons to whom the Software 
-        ///is furnished to do so, subject to t [rest of string was truncated]&quot;;.
+        ///Permission is hereby granted, free of charge, to any person obtaining
+        ///a copy of this software and associated documentation files (the
+        ///&quot;Software&quot;), to deal in the Software without restriction, including
+        ///without limitation the rights to use, copy, modify, merge, publish,
+        ///distribute, sublicense, and/or sell copies of the Software, and to
+        ///permit persons to whom the Software is furnished to do so, subject to
+        ///the following conditions:
+        ///
+        ///The above copyright notice and t [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SpriteSheetPacker {
             get {
@@ -310,6 +359,22 @@ namespace RelhaxModpack.Properties {
             get {
                 object obj = ResourceManager.GetObject("twitter_brand", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License: Custom License
+        ///MICROSOFT SOFTWARE LICENSE TERMS
+        ///MICROSOFT WINDOWS API CODE PACK FOR MICROSOFT .NET FRAMEWORK
+        ///___________________________________________________
+        ///These license terms are an agreement between Microsoft Corporation (or based on where you live, one of its affiliates) and you. Please read them. They apply to the software named above, which includes the media on which you received it, if any. The terms also apply to any Microsoft
+        ///• updates,
+        ///• supplements,
+        ///• Internet-based services, [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string WindowsAPICodePack {
+            get {
+                return ResourceManager.GetString("WindowsAPICodePack", resourceCulture);
             }
         }
         

@@ -174,6 +174,10 @@ namespace RelhaxModpack
         /// </summary>
         public const string WoT32bitFolder = "win32";
 
+        public const string ModsDir = "mods";
+
+        public const string ResModsDir = "res_mods";
+
         /// <summary>
         /// The WoT 64bit folder name with the folder separator before it
         /// </summary>
@@ -303,38 +307,28 @@ namespace RelhaxModpack
         #endregion
 
         #region URLs
+        public const string BigmodsDatabaseRootEscaped = "http://bigmods.relhaxmodpack.com/RelhaxModpack/resources/database/{dbVersion}/";
+
         /// <summary>
         /// The default starting address of the location of mod packages (start + zip + end)
         /// </summary>
         public const string DefaultStartAddress = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
 
         /// <summary>
-        /// The old default starting address of the location of mod packages (start + zip + end)
-        /// </summary>
-        [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
-        public const string WotmodsDatabaseRoot = @"http://wotmods.relhaxmodpack.com/WoT/{onlineFolder}/";
-
-        /// <summary>
-        /// The URL to the v1 legacy beta database
-        /// </summary>
-        [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
-        public const string BetaDatabaseV1URL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/master/modInfo.xml";
-
-        /// <summary>
         /// The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
         /// </summary>
-        public const string BetaDatabaseV2FolderURL = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/{branch}/latest_database/";
+        public const string BetaDatabaseV2FolderURLEscaped = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/{branch}/latest_database/";
+
+        public static string BetaDatabaseV2FolderURL
+        {
+            get
+            { return BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch); }
+        }
 
         /// <summary>
         /// The API URL to return a json format document of the current branches in the repository
         /// </summary>
         public const string BetaDatabaseBranchesURL = "https://api.github.com/repos/Willster419/RelhaxModpackDatabase/branches";
-
-        /// <summary>
-        /// The URL of the V1 manager info zip file
-        /// </summary>
-        [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
-        public const string ManagerInfoURL = "http://wotmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat";
 
         /// <summary>
         /// The URL of the V2 manager info zip file
@@ -403,7 +397,7 @@ namespace RelhaxModpack
         /// The current distribution version of the application.
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
-        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Stable;
+        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Beta;
 
         /// <summary>
         /// Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed)
@@ -474,9 +468,6 @@ namespace RelhaxModpack
         /// </summary>
         public static Ionic.Zip.ZipFile ManagerInfoZipfile = null;
         #endregion
-
-        //had to put this here because of bugs with intellisense. It's supposed to be in mod selection list
-#warning using V1 beta database
 
         #region Settings parsing to/from XML file
         /// <summary>
@@ -599,7 +590,7 @@ namespace RelhaxModpack
                 //but skip the exclusion list
                 if (propertiesToExclude != null && propertiesToExclude.Contains(field.Name))
                 {
-                    Logging.Debug("XML file {0}, property {1} matched to exclusion list, skipping", xmlFile, field.Name);
+                    Logging.Debug("Xml file {0}, property {1} matched to exclusion list, skipping", xmlFile, field.Name);
                     continue;
                 }
                 XmlElement element = doc.CreateElement(field.Name);

@@ -276,14 +276,29 @@
                 <ContentPresenter Grid.Column="1" x:Name="WpfDocumentViewer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,41,0,0"/>
             </Grid>
         </TabItem>
-        <TabItem Header="Auto Update Packages via IE embedded">
-            <Grid x:Name="AutoUpdateTestingGridIE">
+        <TabItem Header="Other tests 2">
+            <Grid>
                 <TextBlock x:Name="AutoUpdateWGURLHeaderIE" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="WG mod URL" VerticalAlignment="Top"/>
-                <TextBox x:Name="AutoUpdateWGURLTextboxIE" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="208"
+                <TextBox x:Name="AutoUpdateWGURLTextboxIE" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="152"
                          Text="https://wgmods.net/392/"/>
                 <TextBlock x:Name="AutoUpdateWGInfoIE" HorizontalAlignment="Left" Margin="10,59,0,0" TextWrapping="Wrap" Text="Data here" VerticalAlignment="Top"/>
                 <Button x:Name="AutoUpdateWGClickIE" Content="Get Info" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="75" Click="AutoUpdateWGClickIE_Click"/>
                 <WebBrowser x:Name="IEBrowse" HorizontalAlignment="Left" Height="291" Margin="90,80,0,0" VerticalAlignment="Top" Width="696" Visibility="Hidden"/>
+                <RichTextBox HorizontalAlignment="Left" Height="167" Margin="167,31,0,0" VerticalAlignment="Top" Width="302">
+                    <FlowDocument>
+                        <Section FontSize="12">
+                            <Paragraph Tag="IdForTranslations1">
+                                This is a test.
+                            </Paragraph>
+                        </Section>
+                        <Paragraph>
+                            <Run Text="From property." Tag="IdForTranslations2"/>
+                            <Run>From content.</Run>
+                        </Paragraph>
+                        <Paragraph>Another test.</Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+                <TextBlock HorizontalAlignment="Left" Margin="167,10,0,0" TextWrapping="Wrap" Text="Flow Document with tag/ID testing" VerticalAlignment="Top"/>
             </Grid>
         </TabItem>
     </TabControl>

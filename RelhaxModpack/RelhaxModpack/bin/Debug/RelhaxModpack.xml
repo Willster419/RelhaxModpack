@@ -409,19 +409,34 @@
             a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Category.Name">
+        <member name="P:RelhaxModpack.Category.Name">
             <summary>
             The category name displayed to the user in the selection list
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Category.XmlFilename">
+        <member name="P:RelhaxModpack.Category.XmlFilename">
             <summary>
             The xml filename of this category. Used in database structure V2
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Category.Packages">
+        <member name="P:RelhaxModpack.Category.OffsetInstallGroups">
+            <summary>
+            Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Category.Packages">
             <summary>
             The list of packages contained in this category
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Category.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Category.Dependencies">
+            <summary>
+            List of dependencies of this category (Any package selected in this category needs these dependencies)
             </summary>
         </member>
         <member name="F:RelhaxModpack.Category.InstallGroup">
@@ -430,19 +445,14 @@
             Two (or more) categories can have the same number to be on the same install thread
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Category.TabPage">
+        <member name="P:RelhaxModpack.Category.TabPage">
             <summary>
             The TabItem object reference
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Category.CategoryHeader">
+        <member name="P:RelhaxModpack.Category.CategoryHeader">
             <summary>
             The package created at selection list building that represents the header of this category
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Category.Dependencies">
-            <summary>
-            List of dependencies of this category (Any package selected in this category needs these dependencies)
             </summary>
         </member>
         <member name="P:RelhaxModpack.Category.DependenciesProp">
@@ -496,7 +506,7 @@
             Used for database dependency calculation. Determines what dependent packages use the package that this object is attached to
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseLogic.PackageName">
+        <member name="P:RelhaxModpack.DatabaseLogic.PackageName">
             <summary>
             The name of the package that this object is attached to
             </summary>
@@ -506,15 +516,23 @@
             Flag to determine if this package will be installed
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseLogic.NotFlag">
+        <member name="P:RelhaxModpack.DatabaseLogic.NotFlag">
             <summary>
             Flag for negating the "AND" and "OR" logic (Creates "NAND" and "NOR") of how to install the attach object
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabaseLogic.Logic">
+        <member name="P:RelhaxModpack.DatabaseLogic.Logic">
             <summary>
             The logic type to use for this package definition
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseLogic.RefrenceLinked">
+            <summary>
+            A flag for dependency calculation for when the application has linked the dependnecy refrence
+            </summary>
+            <remarks>During dependnecy calcuation, the application will 'link' the refrenced dependencies in a package
+            to the refrenced dependency. This allows for the application to process dependency calcuation logic in a dynamic
+            AND and OR system. Having the flag can help to determine if a refrence does not exist</remarks>
         </member>
         <member name="M:RelhaxModpack.DatabaseLogic.ToString">
             <summary>
@@ -546,27 +564,27 @@
             </summary>
             <returns>The list of fields</returns>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.PackageName">
+        <member name="P:RelhaxModpack.DatabasePackage.PackageName">
             <summary>
             A unique identifier for each component in the database. No two components will have the same PackageName
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.Version">
+        <member name="P:RelhaxModpack.DatabasePackage.Version">
             <summary>
             A method to keep track of the version of the package
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.Timestamp">
+        <member name="P:RelhaxModpack.DatabasePackage.Timestamp">
             <summary>
             Used to determine when the package entry was last modified
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.Size">
+        <member name="P:RelhaxModpack.DatabasePackage.Size">
             <summary>
             Size of the zip file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.ZipFile">
+        <member name="P:RelhaxModpack.DatabasePackage.ZipFile">
             <summary>
             The zip file to extract (can be empty string)
             </summary>
@@ -581,80 +599,80 @@
             Determines if the component is enabled or disabled
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.CRC">
+        <member name="P:RelhaxModpack.DatabasePackage.CRC">
             <summary>
             The crc checksum of the zipfile
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.StartAddress">
+        <member name="P:RelhaxModpack.DatabasePackage.StartAddress">
             <summary>
             The start address of the URL to the zip file
             URL format: StartAddress + ZipFile + EndAddress
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.EndAddress">
+        <member name="P:RelhaxModpack.DatabasePackage.EndAddress">
             <summary>
             The end address of the URL to the zip file
             URL format: StartAddress + ZipFile + EndAddress
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.DownloadFlag">
+        <member name="P:RelhaxModpack.DatabasePackage.DownloadFlag">
             <summary>
             Determine at install time if the package needs to be downloaded
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.ReadyForInstall">
+        <member name="P:RelhaxModpack.DatabasePackage.ReadyForInstall">
             <summary>
             Determine if the mod has been downloaded and is ready for installation
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.LogAtInstall">
+        <member name="P:RelhaxModpack.DatabasePackage.LogAtInstall">
             <summary>
             Determine if the files from the package should be logged for un-installation
             only set this to false if absolutely necessary!
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.Triggers">
+        <member name="P:RelhaxModpack.DatabasePackage.Triggers">
             <summary>
             The list of triggers that this package can start (list of triggers that apply to this package)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.DevURL">
+        <member name="P:RelhaxModpack.DatabasePackage.DevURL">
             <summary>
             The URL link of where you can view the web page of the mod
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.InstallGroup">
+        <member name="P:RelhaxModpack.DatabasePackage.InstallGroup">
             <summary>
             The level at which this package can be installed. It will be installed with other packages of the same install group at the same time
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.PatchGroup">
+        <member name="P:RelhaxModpack.DatabasePackage.PatchGroup">
             <summary>
             The level at which the patches for this package can be installed. Patches will be executed with other patches of the same patch group
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.InternalNotes">
+        <member name="P:RelhaxModpack.DatabasePackage.InternalNotes">
             <summary>
             Internal instructions for updating the mod for database managers
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.Author">
+        <member name="P:RelhaxModpack.DatabasePackage.Author">
             <summary>
             The name of the author of the mod/configuration/etc.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.BytesToDownload">
+        <member name="P:RelhaxModpack.DatabasePackage.BytesToDownload">
             <summary>
             The number of bytes to download, used if "install while download" is true
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.BytesDownloaded">
+        <member name="P:RelhaxModpack.DatabasePackage.BytesDownloaded">
             <summary>
             The number of bytes currently downloaded, used if "install while download" is true
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.IsCurrentlyDownloading">
+        <member name="P:RelhaxModpack.DatabasePackage.IsCurrentlyDownloading">
             <summary>
             Flag to determine if this package is the one currently downloading, used if "install while download" is true
             </summary>
@@ -664,12 +682,12 @@
             Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.EditorTreeViewItem">
+        <member name="P:RelhaxModpack.DatabasePackage.EditorTreeViewItem">
             <summary>
             Reference for the UI element of this package in the database editor
             </summary>
         </member>
-        <member name="F:RelhaxModpack.DatabasePackage.ExtractionStarted">
+        <member name="P:RelhaxModpack.DatabasePackage.ExtractionStarted">
             <summary>
             Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
             </summary>
@@ -720,24 +738,24 @@
             </summary>
             <returns>The string list</returns>
         </member>
-        <member name="F:RelhaxModpack.Dependency.DatabasePackageLogic">
+        <member name="P:RelhaxModpack.Dependency.DatabasePackageLogic">
             <summary>
             List of linked mods and configs that use this dependency at install time
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Dependency.Dependencies">
+        <member name="P:RelhaxModpack.Dependency.Dependencies">
             <summary>
             List of dependencies this dependency calls on
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Dependency.DependenciesProp">
-            <summary>
-            Property of Dependencies list to allow for interface implementation
             </summary>
         </member>
         <member name="F:RelhaxModpack.Dependency.wasLogicalDependencyLegacy">
             <summary>
             When loading from legacy database type and is was of type "logicalDependency"
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Dependency.DependenciesProp">
+            <summary>
+            Property of Dependencies list to allow for interface implementation
             </summary>
         </member>
         <member name="M:RelhaxModpack.Dependency.#ctor">
@@ -760,6 +778,11 @@
         <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithDependencies.DependenciesProp">
             <summary>
             The property wrapper of the Dependencies field
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithID.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
             </summary>
         </member>
         <member name="T:RelhaxModpack.MediaType">
@@ -797,13 +820,13 @@
             A media object is a preview-able component stored in a list in SelectablePackages
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Media.URL">
+        <member name="P:RelhaxModpack.Media.URL">
             <summary>
             For direct link types, the URL to the element or resource
             </summary>
             <remarks>HTTP and HTTPS links work for this property</remarks>
         </member>
-        <member name="F:RelhaxModpack.Media.MediaType">
+        <member name="P:RelhaxModpack.Media.MediaType">
             <summary>
             The type of media for the URL to be interpreted as
             </summary>
@@ -913,7 +936,7 @@
             Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Name">
+        <member name="P:RelhaxModpack.SelectablePackage.Name">
             <summary>
             The display name of the package
             </summary>
@@ -923,57 +946,62 @@
             The name of the package with the version macro replaced for use display
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.ParentCategory">
+        <member name="P:RelhaxModpack.SelectablePackage.ParentCategory">
             <summary>
             The Category object reference
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Type">
+        <member name="P:RelhaxModpack.SelectablePackage.Type">
             <summary>
             The type of selectable package logic to follow (see SelectionTypes enumeration for options)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Parent">
+        <member name="P:RelhaxModpack.SelectablePackage.Parent">
             <summary>
             The reference for the direct parent of this package
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.TopParent">
+        <member name="P:RelhaxModpack.SelectablePackage.TopParent">
             <summary>
             The reference for the absolute top of the package tree
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Visible">
+        <member name="P:RelhaxModpack.SelectablePackage.Visible">
             <summary>
             A flag to determine whether or not the mod should be shown in UI
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.UpdateComment">
+        <member name="P:RelhaxModpack.SelectablePackage.UpdateComment">
             <summary>
             Update comments of the package
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Description">
+        <member name="P:RelhaxModpack.SelectablePackage.Description">
             <summary>
             description of the package
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.PopularMod">
+        <member name="P:RelhaxModpack.SelectablePackage.PopularMod">
             <summary>
             Flag to determine if the package is popular
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.GreyAreaMod">
+        <member name="P:RelhaxModpack.SelectablePackage.GreyAreaMod">
             <summary>
-            Flag to determine if the package is of controversial nature, or if the developer is a controversial source
+            Flag to determine if the package is of controversial nature
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.SortChildPackages">
+        <member name="P:RelhaxModpack.SelectablePackage.ObfuscatedMod">
+            <summary>
+            Flag to determine if the if the package is obfuscated/encrypted and can't be checked for viruses or malware
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.SortChildPackages">
             <summary>
             Flag to determine any packages of this package should be sorted (by name)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.FlagForSelectionSave">
+        <member name="P:RelhaxModpack.SelectablePackage.FlagForSelectionSave">
             <summary>
             Used as internal flag for if application settings is checked "SaveDisabledModsInSelection". Allows for disabled mods to be saved back to the user's selection
             </summary>
@@ -994,28 +1022,28 @@
             The override also enables the triggering of the UI components to reflect the user's selection changes.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Level">
+        <member name="P:RelhaxModpack.SelectablePackage.Level">
             <summary>
             The level in the database tree where the package resides.
             Category header is -1, each child is +1 from there
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.UserFiles">
+        <member name="P:RelhaxModpack.SelectablePackage.UserFiles">
             <summary>
             The list of cache files that should be backed up before wiping the directory
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Packages">
+        <member name="P:RelhaxModpack.SelectablePackage.Packages">
             <summary>
             The list of child SelectablePackage entries in this instance of SelectablePackages
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Medias">
+        <member name="P:RelhaxModpack.SelectablePackage.Medias">
             <summary>
             List of media preview items associated with this package, shown in the preview window on right click of component
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.Dependencies">
+        <member name="P:RelhaxModpack.SelectablePackage.Dependencies">
             <summary>
             A list of packages (from dependencies list) that this package is dependent on in order to be installed
             </summary>
@@ -1025,13 +1053,13 @@
             Property of Dependencies list to allow for interface implementation
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.ConflictingPackages">
+        <member name="P:RelhaxModpack.SelectablePackage.ConflictingPackages">
             <summary>
             A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
             Refer to examples for more information
             </summary>
         </member>
-        <member name="F:RelhaxModpack.SelectablePackage.ShowInSearchList">
+        <member name="P:RelhaxModpack.SelectablePackage.ShowInSearchList">
             <summary>
             Toggle if the package should appear in the search list
             </summary>
@@ -1207,7 +1235,7 @@
             An object that represents cache files generated by mods that should be backed up and restored as to not loose cache data (like session stats or auto equip data)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.UserFile.Pattern">
+        <member name="P:RelhaxModpack.UserFile.Pattern">
             <summary>
             The path or pattern to a file or files to backup to a temporary directory
             </summary>
@@ -2214,6 +2242,42 @@
             <param name="culture">Not implemented</param>
             <returns>Null</returns>
         </member>
+        <member name="T:RelhaxModpack.UIComponents.RelhaxComboBoxItem">
+            <summary>
+            Interaction logic for RelhaxComboBoxItem.xaml
+            </summary>
+            <summary>
+            RelhaxComboBoxItem
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxComboBoxItem.Package">
+            <summary>
+            The SelectablePackage object that is being wrapped around
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.RelhaxComboBoxItem.DisplayName">
+            <summary>
+            The text to display in the Combobox
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxComboBoxItem.#ctor(RelhaxModpack.SelectablePackage,System.String)">
+            <summary>
+            Creates an instance of the RelhaxComboBoxItem class
+            </summary>
+            <param name="package">The package to wrap around</param>
+            <param name="display">The text to display in the Combobox</param>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxComboBoxItem.ToString">
+            <summary>
+            Allows for displaying of custom text in the Combobox
+            </summary>
+            <returns>The text to display in the Combobox (DisplayName property)</returns>
+        </member>
+        <member name="M:RelhaxModpack.UIComponents.RelhaxComboBoxItem.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.RelhaxHyperlink">
             <summary>
             Interaction logic for RelhaxHyperlink.xaml
@@ -2458,34 +2522,6 @@
             Reset the scale and translation (zoom and pan) values
             </summary>
         </member>
-        <member name="T:RelhaxModpack.UIComponents.ComboBoxItem">
-            <summary>
-            The ComboBoxItem class is a wrapper class for displaying SelectablePackages as combo box items. The ToString() allows for display of the package name
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.ComboBoxItem.Package">
-            <summary>
-            The SelectablePackage object that is being wrapped around
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.ComboBoxItem.DisplayName">
-            <summary>
-            The text to display in the Combobox
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.ComboBoxItem.#ctor(RelhaxModpack.SelectablePackage,System.String)">
-            <summary>
-            Creates an instance of the ComboBoxItem class
-            </summary>
-            <param name="package">The package to wrap around</param>
-            <param name="display">The text to display in the Combobox</param>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.ComboBoxItem.ToString">
-            <summary>
-            Allows for displaying of custom text in the Combobox
-            </summary>
-            <returns>The text to display in the Combobox (DisplayName property)</returns>
-        </member>
         <member name="T:RelhaxModpack.UIComponents.EditorComboBoxItem">
             <summary>
             The EditorComboBoxItem class is a wrapper class for displaying DatabaseObjects as combo box items. The ToString() allows for display of the internal PackageName property
@@ -2707,27 +2743,6 @@
             Set the brush of the Checkbox Panel Background property 
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PopularModVisability">
-            <summary>
-            Set the visibility of the popular mod icon
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.GreyAreaVisability">
-            <summary>
-            Set visibility of the Grey area icon
-            </summary>
-        </member>
-        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.PropertyChanged">
-            <summary>
-            Event to trigger when an internal property is changed. It forces a UI update
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.OnPropertyChanged(System.String)">
-            <summary>
-            Method to invoke the PropertyChanged event to update the UI
-            </summary>
-            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFCheckBox.InitializeComponent">
             <summary>
             InitializeComponent
@@ -2810,27 +2825,6 @@
             Set the brush of the RadioButton Panel Background property 
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PopularModVisability">
-            <summary>
-            Set the visibility of the popular mod icon
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.GreyAreaVisability">
-            <summary>
-            Set visibility of the Grey area icon
-            </summary>
-        </member>
-        <member name="E:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.PropertyChanged">
-            <summary>
-            Event to trigger when an internal property is changed. It forces a UI update
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.OnPropertyChanged(System.String)">
-            <summary>
-            Method to invoke the PropertyChanged event to update the UI
-            </summary>
-            <param name="propertyName">The name of the property that changed, to update it's UI binding</param>
-        </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFRadioButton.InitializeComponent">
             <summary>
             InitializeComponent
@@ -2878,12 +2872,12 @@
             RelhaxMediaPlayer
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.mediaURL">
+        <member name="F:RelhaxModpack.UIComponents.RelhaxMediaPlayer.MediaURL">
             <summary>
             The direct link to the audio file to preview
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UIComponents.RelhaxMediaPlayer.audioData">
+        <member name="F:RelhaxModpack.UIComponents.RelhaxMediaPlayer.AudioData">
             <summary>
             The raw audio data to parse
             </summary>
@@ -4953,17 +4947,7 @@
             The default starting address of the location of mod packages (start + zip + end)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.WotmodsDatabaseRoot">
-            <summary>
-            The old default starting address of the location of mod packages (start + zip + end)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.BetaDatabaseV1URL">
-            <summary>
-            The URL to the v1 legacy beta database
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.BetaDatabaseV2FolderURL">
+        <member name="F:RelhaxModpack.Settings.BetaDatabaseV2FolderURLEscaped">
             <summary>
             The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
             </summary>
@@ -4971,11 +4955,6 @@
         <member name="F:RelhaxModpack.Settings.BetaDatabaseBranchesURL">
             <summary>
             The API URL to return a json format document of the current branches in the repository
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ManagerInfoURL">
-            <summary>
-            The URL of the V1 manager info zip file
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.ManagerInfoURLBigmods">
@@ -5431,6 +5410,11 @@
             The absolute path inside the zip file to the file list instructions xml
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.AutoUpdatePackageWindow.Credential">
+            <summary>
+            The FTP credentials
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.AutoUpdatePackageWindow.#ctor">
             <summary>
             Create an instance of the AutoUpdatePackageWindow window
@@ -5475,6 +5459,19 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.CreateFTPFolderName.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.Credits">
+            <summary>
+            Interaction logic for Credits.xaml
+            </summary>
+            <summary>
+            Credits
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.Credits.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -5575,7 +5572,7 @@
             True is moving package, false is adding package
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.EditorAddRemove.AddSaveLevel">
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.AddSameLevel">
             <summary>
             Toggles if the user requests to add the package at a new level or in the same level as the referenced package
             </summary>
@@ -5826,17 +5823,6 @@
         <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.#ctor">
             <summary>
             Create an instance of the GameCenterUpdateDownloaded window
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.Dispose(System.Boolean)">
-            <summary>
-            Dispose of the window and release any disposable resources
-            </summary>
-            <param name="disposing">Set to true to dispose of managed objects</param>
-        </member>
-        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.Dispose">
-            <summary>
-            Dispose of the window and release any disposable resources
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.InitializeComponent">
@@ -6283,6 +6269,12 @@
             <summary>
             PatchDesigner
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.PatchDesigner.LaunchedFromMainWindow">
+            <summary>
+            Indicates if this editor instance was launched from the MainWindow or from command line
+            </summary>
+            <remarks>This changes the behavior of the logging for the editor</remarks>
         </member>
         <member name="M:RelhaxModpack.Windows.PatchDesigner.#ctor">
             <summary>
@@ -7297,24 +7289,6 @@
             <param name="listToCheck">The list of DatabasePackages</param>
             <returns>The maximum PatchGroup number</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.SetObjectMember(System.Object,System.Reflection.MemberInfo,System.String)">
-            <summary>
-            Dynamically sets the properties and fields of and DatabasePackage object and children based on the property reflective info and the string value to set
-            </summary>
-            <param name="packageOfAnyType">The DatabasePackage object</param>
-            <param name="packageFieldOrProperty">The reflective info of the Field or Property to set the information on</param>
-            <param name="valueToSet">The string representation of the data to set on that field or property</param>
-            <returns>True if operation was successful, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.SetListEntriesField(System.Object,System.Reflection.FieldInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
-            <summary>
-            Dynamically assigns field properties to custom objects of a custom type of a list
-            </summary>
-            <param name="objectThatHasListProperty">The List type object of other objects (Like the Media List)</param>
-            <param name="nameOfListField">The field type of from the Package Type (Like Media)</param>
-            <param name="xmlListItems">The XElement list of items (Like the xml list of media items)</param>
-            <returns>True if the operation was successful, false otherwise</returns>
-        </member>
         <member name="M:RelhaxModpack.Utils.BitmapToImageSource(System.Drawing.Bitmap)">
             <summary>
             Converts a Bitmap object to a BitmapImage object
@@ -7709,7 +7683,7 @@
             <param name="parsedCategoryList">The list of categories</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.XmlUtils.LoadDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Category})">
+        <member name="M:RelhaxModpack.XmlUtils.ParseDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Category})">
             <summary>
             Parse a database into version 1.1 from XDocument objects
             </summary>
@@ -7801,8 +7775,8 @@
             </summary>
             <param name="packagesToSave">The generic list of packages to save</param>
             <param name="documentRootElement">The element that will be holding this list</param>
-            <param name="docToMakeElementsFrom">The document needed to create Xml elements and attributes</param>
-            <param name="nameToSaveElementsBy">The string name to save the Xml element name by</param>
+            <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
+            <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
         </member>
         <member name="M:RelhaxModpack.XmlUtils.AddPatchesFromFile(System.Collections.Generic.List{RelhaxModpack.Patch},System.String,System.String)">
             <summary>
@@ -7930,21 +7904,6 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.dds_reader">
-             <summary>
-               Looks up a localized string similar to                   GNU LESSER GENERAL PUBLIC LICENSE
-                                   Version 2.1, February 1999
-            
-             Copyright (C) 1991, 1999 Free Software Foundation, Inc.
-             51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-             Everyone is permitted to copy and distribute verbatim copies
-             of this license document, but changing it is not allowed.
-            
-            (This is the first released version of the Lesser GPL.  It also counts
-             as the successor of the GNU Library Public License, version 2, hence
-             the version numb [rest of string was truncated]&quot;;.
-             </summary>
-        </member>
         <member name="P:RelhaxModpack.Properties.Resources.discord_brand">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -7954,6 +7913,20 @@
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.DotNetZip">
+             <summary>
+               Looks up a localized string similar to Software Licenses that apply to the DotNetZip library and tools
+            
+            As DotNetZip includes work derived from other projects, you are required to comply with the terms and conditions for each of them. These licenses include BSD, Apache, and zlib.
+            
+            To use the software, you must accept the licenses. If you do not accept the licenses, do not use the software.
+            
+            Original intellectual property in DotNetZip is provided under the Ms-PL:
+                
+                Copyright (c) 2006 - 2011 Dino Chiesa 
+                Copyright (c) 2006, 200 [rest of string was truncated]&quot;;.
+             </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.EMail">
             <summary>
@@ -7995,6 +7968,35 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Properties.Resources.HtmlAgilityPack">
+             <summary>
+               Looks up a localized string similar to The MIT License (MIT)
+            Permission is hereby granted, free of charge, to any person obtaining a copy
+            of this software and associated documentation files (the &quot;Software&quot;), to deal
+            in the Software without restriction, including without limitation the rights
+            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            copies of the Software, and to permit persons to whom the Software is
+            furnished to do so, subject to the following conditions:
+            
+            The above copyright notice and this permission n [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.Json_NET">
+             <summary>
+               Looks up a localized string similar to The MIT License (MIT)
+            
+            Copyright (c) 2007 James Newton-King
+            
+            Permission is hereby granted, free of charge, to any person obtaining a copy of
+            this software and associated documentation files (the &quot;Software&quot;), to deal in
+            the Software without restriction, including without limitation the rights to
+            use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+            the Software, and to permit persons to whom the Software is furnished to do so,
+            subject to the following conditions:
+            
+            The ab [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
         <member name="P:RelhaxModpack.Properties.Resources.modpack_icon">
             <summary>
               Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
@@ -8017,7 +8019,7 @@
                   the copyright owner that is [rest of string was truncated]&quot;;.
              </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.NAudio1">
+        <member name="P:RelhaxModpack.Properties.Resources.NAudio">
              <summary>
                Looks up a localized string similar to Microsoft Public License (Ms-PL)
             
@@ -8031,6 +8033,11 @@
             
             A &quot;contributor&quot; is any person that distributes its contribution [rest of string was truncated]&quot;;.
              </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.obfuscated_package_icon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.play_pause">
             <summary>
@@ -8049,14 +8056,17 @@
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.SpriteSheetPacker">
              <summary>
-               Looks up a localized string similar to Copyright (c) 2009-2010 Nick Gravelyn (nick@gravelyn.com), Markus Ewald (cygon@nuclex.org)
+               Looks up a localized string similar to Copyright (c) 2014-2015 amakaseev.
             
-            Permission is hereby granted, free of charge, to any person obtaining a 
-            copy of this software and associated documentation files (the &quot;Software&quot;), 
-            to deal in the Software without restriction, including without limitation 
-            the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-            and/or sell copies of the Software, and to permit persons to whom the Software 
-            is furnished to do so, subject to t [rest of string was truncated]&quot;;.
+            Permission is hereby granted, free of charge, to any person obtaining
+            a copy of this software and associated documentation files (the
+            &quot;Software&quot;), to deal in the Software without restriction, including
+            without limitation the rights to use, copy, modify, merge, publish,
+            distribute, sublicense, and/or sell copies of the Software, and to
+            permit persons to whom the Software is furnished to do so, subject to
+            the following conditions:
+            
+            The above copyright notice and t [rest of string was truncated]&quot;;.
              </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.stop2">
@@ -8082,6 +8092,18 @@
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.WindowsAPICodePack">
+             <summary>
+               Looks up a localized string similar to License: Custom License
+            MICROSOFT SOFTWARE LICENSE TERMS
+            MICROSOFT WINDOWS API CODE PACK FOR MICROSOFT .NET FRAMEWORK
+            ___________________________________________________
+            These license terms are an agreement between Microsoft Corporation (or based on where you live, one of its affiliates) and you. Please read them. They apply to the software named above, which includes the media on which you received it, if any. The terms also apply to any Microsoft
+            • updates,
+            • supplements,
+            • Internet-based services, [rest of string was truncated]&quot;;.
+             </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.WoT_brand_light_grey">
             <summary>

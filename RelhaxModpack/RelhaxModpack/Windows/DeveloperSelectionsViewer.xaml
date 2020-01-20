@@ -14,6 +14,6 @@
             <StackPanel x:Name="DeveloperSelectionsStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="DeveloperSelectionPanel"/>
         </Border>
         <TextBlock Tag="DeveloperSelectionsTextHeader" x:Name="DeveloperSelectionsTextHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Selection to load" VerticalAlignment="Top" Margin="10,10,10,0" />
-        <Button Tag="DeveloperSelectionsLocalFile" x:Name="DeveloperSelectionsLocalFile" Content="Local file" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="78" Click="LocalFile_Click"/>
+        <Button Tag="DeveloperSelectionsLocalFile" x:Name="DeveloperSelectionsLocalFile" Content="Local file" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="102" Click="LocalFile_Click"/>
     </Grid>
 </local:RelhaxWindow>

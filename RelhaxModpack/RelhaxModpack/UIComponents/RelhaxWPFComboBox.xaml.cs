@@ -28,6 +28,8 @@ namespace RelhaxModpack.UIComponents
         /// So, a flag is used to prevent the ComboBox being added multiple times to the window</remarks>
         public bool AddedToList { get; set; } = false;
 
+        private StackPanel thePanel = null;
+
         /// <summary>
         /// Create an instance of the RelhaxWPFComboBox class
         /// </summary>
@@ -50,7 +52,7 @@ namespace RelhaxModpack.UIComponents
         {
             for (int i = 0; i < Items.Count; i++)
             {
-                ComboBoxItem cbi = (ComboBoxItem)Items[i];
+                RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)Items[i];
                 if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled)
                 {
                     //unsubscribe before changing the selected item
@@ -73,6 +75,71 @@ namespace RelhaxModpack.UIComponents
                 SelectionChanged -= Handler;
                 SelectedIndex = 0;
                 SelectionChanged += Handler;
+            }
+        }
+
+        private void TemplateRootPanel_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (thePanel == null)
+            {
+                thePanel = (StackPanel)sender;
+                if (this.SelectedItem == null)
+                    return;
+                ApplyIcons();
+            }
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.SelectedItem == null)
+                return;
+            if (thePanel == null)
+                return;
+            ApplyIcons();
+        }
+
+        private void ApplyIcons()
+        {
+            RelhaxComboBoxItem relhaxComboBoxItem = (RelhaxComboBoxItem)this.SelectedItem;
+            SelectablePackage package = relhaxComboBoxItem.Package;
+
+            while (thePanel.Children.Count > 1)
+            {
+                thePanel.Children.RemoveAt(thePanel.Children.Count - 1);
+            }
+
+            if (package.ObfuscatedMod)
+            {
+                Image img = new Image()
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 16,
+                    Height = 16,
+                    Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/obfuscated_package_icon.png", UriKind.Relative))
+                };
+                thePanel.Children.Add(img);
+            }
+            if (package.GreyAreaMod)
+            {
+                Image img = new Image()
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 16,
+                    Height = 16,
+                    Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/grey_area_mod.png", UriKind.Relative))
+                };
+                thePanel.Children.Add(img);
+            }
+            if (package.PopularMod)
+            {
+                Image img = new Image()
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 16,
+                    Height = 16,
+                    Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/popular_icon.png", UriKind.Relative))
+                };
+                thePanel.Children.Add(img);
             }
         }
     }

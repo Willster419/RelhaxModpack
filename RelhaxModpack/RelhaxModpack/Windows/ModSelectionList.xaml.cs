@@ -12,7 +12,6 @@ using System.IO;
 using Microsoft.Win32;
 using RelhaxModpack.UIComponents;
 using System.Xml.Linq;
-using ComboBoxItem = RelhaxModpack.UIComponents.ComboBoxItem;
 using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
@@ -48,6 +47,8 @@ namespace RelhaxModpack.Windows
         /// The list of use mods
         /// </summary>
         public List<SelectablePackage> UserMods;
+
+        public bool IsAutoInstall = false;
     }
 
     /// <summary>
@@ -101,18 +102,22 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public event SelectionListClosedDelegate OnSelectionListReturn;
 
+        public bool AutoInstallMode = false;
+
+        public string LastSupportedWoTClientVersion = string.Empty;
+
         //private
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress;
         private bool LoadingUI = false;
         private Category UserCategory = null;
         private Preview p;
-        const int FLASH_TICK_INTERVAL = 250;
-        const int NUM_FLASH_TICKS = 5;
+        private const int FLASH_TICK_INTERVAL = 250;
+        private const int NUM_FLASH_TICKS = 5;
         private int numTicks = 0;
         private Brush OriginalBrush = null;
         private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
-        private readonly System.Windows.Forms.Timer FlashTimer = new System.Windows.Forms.Timer() { Interval=FLASH_TICK_INTERVAL };
+        private DispatcherTimer FlashTimer = null;
         private XDocument Md5HashDocument;
         private DatabaseVersions databaseVersion;
 
@@ -177,11 +182,12 @@ namespace RelhaxModpack.Windows
                 ParsedCategoryList = ParsedCategoryList,
                 Dependencies = Dependencies,
                 GlobalDependencies = GlobalDependencies,
-                UserMods = UserCategory.Packages
+                UserMods = UserCategory.Packages,
+                IsAutoInstall = AutoInstallMode
             });
         }
 
-        private void OnFlastTimerTick(object sender, EventArgs e)
+        private void OnFlashTimerTick(object sender, EventArgs e)
         {
             if(!(FlashTimer.Tag is SelectablePackage))
             {
@@ -258,6 +264,9 @@ namespace RelhaxModpack.Windows
             //set the flag for currently loading the UI. It prevents search box or UI interaction code from happening as a failsafe
             LoadingUI = true;
 
+            //init the timer
+            FlashTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(FLASH_TICK_INTERVAL), DispatcherPriority.Background, OnFlashTimerTick, this.Dispatcher) {IsEnabled = false };
+
             //init the lists
             ParsedCategoryList = new List<Category>();
             GlobalDependencies = new List<DatabasePackage>();
@@ -276,7 +285,8 @@ namespace RelhaxModpack.Windows
             Hide();
 
             //create and run async task (fire and forget style, keeps the UI thread open during the task operation)
-            Logging.Info("Starting async task: " + nameof(LoadModSelectionListAsync) + "()");
+            Logging.Info("Starting async task: {0}()", nameof(LoadModSelectionListAsync));
+
             //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
             Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
             progressIndicator.ProgressChanged += OnWindowLoadReportProgress;
@@ -304,24 +314,32 @@ namespace RelhaxModpack.Windows
                     databaseVersion = DatabaseVersions.Test;
                 }
 
-                //get the XML database loaded into a string based on database version type (from server download, from github, from testfile
-
+                //get the Xml database loaded into a string based on database version type (from server download, from github, from testfile
                 string modInfoXml = "";
+                Ionic.Zip.ZipFile zipfile = null;
                 switch (databaseVersion)
                 {
                     //from server download
                     case DatabaseVersions.Stable:
                         //make string
-#pragma warning disable CS0618
-                        string modInfoxmlURL = Settings.WotmodsDatabaseRoot + "modInfo.dat";
-                        modInfoxmlURL = modInfoxmlURL.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
+                        string modInfoxmlURL = Settings.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", LastSupportedWoTClientVersion) + "modInfo.dat";
 
                         //download latest modInfo xml
-                        using(WebClient client = new WebClient())
-                        using(Ionic.Zip.ZipFile zip = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL))))
+                        try
                         {
-                            //extract modinfo xml string
-                            modInfoXml = Utils.GetStringFromZip(zip, "modInfo.xml");
+                            using (WebClient client = new WebClient())
+                            {
+                                //save zip file into memory for later
+                                zipfile = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL)));
+                                //extract modinfo xml string
+                                modInfoXml = Utils.GetStringFromZip(zipfile, "database.xml");
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Error);
+                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
+                            return false;
                         }
                         break;
                     //from github
@@ -329,17 +347,7 @@ namespace RelhaxModpack.Windows
                         using (WebClient client = new WebClient())
                         {
                             //load string constant url from manager info xml
-                            //V2 here
-                            string rootbetaDBURL = Settings.BetaDatabaseV2FolderURL.Replace("{branch}", ModpackSettings.BetaDatabaseSelectedBranch);
-                            string rootXml = rootbetaDBURL + Settings.BetaDatabaseV2RootFilename;
-                            /////////
-
-                            //V1 here
-                            //aparently the #warning directive in this file causes an intellisense error with XDocuemtn for some reason
-                            //#warning using V1 beta database
-                            rootXml = Settings.BetaDatabaseV1URL;
-//#pragma warning enable CS0618
-                            /////////
+                            string rootXml = Settings.BetaDatabaseV2FolderURL + Settings.BetaDatabaseV2RootFilename;
 
                             //download the xml string into "modInfoXml"
                             client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
@@ -361,7 +369,7 @@ namespace RelhaxModpack.Windows
                 //check to make sure the xml string has xml in it
                 if (string.IsNullOrWhiteSpace(modInfoXml))
                 {
-                    Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Exception);
+                    Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Error);
                     MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                     return false;
                 }
@@ -386,104 +394,70 @@ namespace RelhaxModpack.Windows
                 switch(databaseVersion)
                 {
                     case DatabaseVersions.Stable:
-                        //2.0 test
-                        /*
-                        Logging.Debug("getting xml string values from zip file");
+                        Logging.Debug("Getting xml string values from zip file");
                         List<string> categoriesXml = new List<string>();
-                        string globalDependencyXmlString = Utils.GetStringFromZip(zipfilePath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"));
-                        string dependenicesXmlString = Utils.GetStringFromZip(zipfilePath, GetXMLStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file"));
-                        foreach (XmlNode categoryNode in GetXMLNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
+
+                        string globalDependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file");
+                        Logging.Debug("Found xml entry: {0}", globalDependencyFilename);
+                        string globalDependencyXmlString = Utils.GetStringFromZip(zipfile, globalDependencyFilename);
+
+                        string dependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file");
+                        Logging.Debug("Found xml entry: {0}", dependencyFilename);
+                        string dependenicesXmlString = Utils.GetStringFromZip(zipfile, dependencyFilename);
+
+                        foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
                         {
-                            categoriesXml.Add(Utils.GetStringFromZip(zipfilePath, GetXMLStringFromXPath(rootDocument, categoryNode.Attributes["file"].Value)));
+                            string categoryFilename = categoryNode.Attributes["file"].Value;
+                            Logging.Debug("Found xml entry: {0}", categoryFilename);
+                            categoriesXml.Add(Utils.GetStringFromZip(zipfile, categoryFilename));
                         }
+                        zipfile.Dispose();
+                        zipfile = null;
 
                         //parse into lists
-                        if (!XMLUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString,categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
-                        {
-                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                            return false;
-                        }
-                        */
-                        if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString,categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                             return false;
                         }
                         break;
-
+                    //github
                     case DatabaseVersions.Beta:
-                        //for 2.0
-                        /*
-                        string rootbetaDBURL = Settings.BetaDatabaseV2FolderURL.Replace("{branch}", ModpackSettings.BetaDatabaseSelectedBranch);
+                        Logging.Debug("Init beta db download resources");
+                        //create download url list
+                        List<string> downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList();
 
-                        //download the files
-                        List<string> downloadTasks = new List<string>();
-                        Logging.Debug("starting downloads to globalDependnecies, dependencies, all categories");
-                        using (WebClient client = new WebClient())
+                        string[] downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
+
+                        //parse into strings
+                        Logging.Debug("Tasks finished, extracting task results");
+                        string globalDependencyXmlStringBeta = downloadStrings[0];
+                        string dependenicesXmlStringBeta = downloadStrings[1];
+
+                        List<string> categoriesXmlBeta = new List<string>();
+                        for (int i = 2; i < downloadURLs.Count; i++)
                         {
-                            client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                            //global dependencies
-                            downloadTasks.Add(client.DownloadString(rootbetaDBURL + XMLUtils.GetXMLStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file")));
-                            //dependencies
-                            downloadTasks.Add(client.DownloadString(rootbetaDBURL + XMLUtils.GetXMLStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file")));
-                            //categories
-                            foreach (XmlNode categoryNode in XMLUtils.GetXMLNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
-                            {
-                                string categoryFileName = categoryNode.Attributes["file"].Value;
-                                if(string.IsNullOrWhiteSpace(categoryFileName))
-                                {
-                                    BadMemeException badMeme = new BadMemeException("Failed to parse V2 database category: " + categoryNode.ToString());
-                                    Logging.Exception(badMeme.ToString());
-                                    throw badMeme;
-                                }
-                                downloadTasks.Add(client.DownloadString(rootbetaDBURL + categoryFileName));
-                            }
-                        }
-                        List<string> categoriesXml = new List<string>();
-
-                        Logging.Debug("tasks finished, extracting task results and sending to database string parser");
-
-                        //parse into string
-                        string globalDependencyXmlString = downloadTasks[0];
-                        string dependenicesXmlString = downloadTasks[1];
-                        for (int i = 2; i < downloadTasks.Count; i++)
-                        {
-                            categoriesXml.Add(downloadTasks[i]);
+                            categoriesXmlBeta.Add(downloadStrings[i]);
                         }
 
                         //parse into lists
-                        if (!XMLUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString,categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
+                        Logging.Debug("Sending strings to db parser");
+                        if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + "database V2");
                             return false;
-                        }*/
-                        if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
-                        {
-                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                            return false;
-                        }
+                        }                        
                         break;
-
+                    //test
                     case DatabaseVersions.Test:
-#warning using old database for test mode
-                        if (!XmlUtils.ParseDatabase(modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
-                        {
-                            Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                            MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                            return false;
-                        }
-                        /*
                         if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(ModpackSettings.CustomModInfoPath), modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                         {
                             Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                             MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
                             return false;
                         }
-                        */
                         break;
                 }
 
@@ -618,18 +592,19 @@ namespace RelhaxModpack.Windows
                     XmlDocument SelectionsDocument = null;
                     bool shouldLoadSomething = false;
                     bool loadSuccess = false;
-                    if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall)
+                    if (AutoInstallMode || ModpackSettings.OneClickInstall)
                     {
                         //check that the file exists before trying to load it
                         if(File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
                         {
                             //load the custom selection file
+                            Logging.Info("Loading selection file from {0}",ModpackSettings.AutoOneclickSelectionFilePath);
                             SelectionsDocument = XmlUtils.LoadXmlDocument(ModpackSettings.AutoOneclickSelectionFilePath, XmlLoadType.FromFile);
                             shouldLoadSomething = true;
                         }
                         else
                         {
-                            Logging.Warning("AutoInstall or OneClickInstall is true, but the file selection path does not exist");
+                            Logging.Warning("AutoInstall or OneClickInstall is true, but the file selection path does not exist:");
                             Logging.Warning(ModpackSettings.AutoOneclickSelectionFilePath);
                             MessageBox.Show(Translations.GetTranslatedString("configLoadFailed"));
                         }
@@ -637,7 +612,9 @@ namespace RelhaxModpack.Windows
                     //else check and load the use selection from auto launch command line
                     else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
-                        SelectionsDocument = XmlUtils.LoadXmlDocument(Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName), XmlLoadType.FromFile);
+                        string thePath = Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName);
+                        Logging.Info("Loading selection file from {0}", thePath);
+                        SelectionsDocument = XmlUtils.LoadXmlDocument(thePath, XmlLoadType.FromFile);
                         shouldLoadSomething = true;
                     }
                     else if (ModpackSettings.SaveLastSelection)
@@ -650,6 +627,7 @@ namespace RelhaxModpack.Windows
                         }
                         else
                         {
+                            Logging.Info("Loading selection file from {0}", Settings.LastInstalledConfigFilepath);
                             SelectionsDocument = XmlUtils.LoadXmlDocument(Settings.LastInstalledConfigFilepath, XmlLoadType.FromFile);
                             shouldLoadSomething = true;
                         }
@@ -671,13 +649,10 @@ namespace RelhaxModpack.Windows
                         else
                         {
                             Logging.Error("Failed to load SelectionsDocument, AutoInstall={0}, OneClickInstall={1}, DatabaseDistro={2}, SaveSelection={3}",
-                            ModpackSettings.AutoInstall, ModpackSettings.OneClickInstall, databaseVersion, ModpackSettings.SaveLastSelection);
+                            AutoInstallMode, ModpackSettings.OneClickInstall, databaseVersion, ModpackSettings.SaveLastSelection);
                             Logging.Error("Failed to load SelectionsDocument, AutoSelectionFilePath={0}", ModpackSettings.AutoOneclickSelectionFilePath);
                         }
                     }
-
-                    //like hook up the flashing timer
-                    FlashTimer.Tick += OnFlastTimerTick;
 
                     //set the selection window width, height
                     Width = ModpackSettings.ModSelectionWidth;
@@ -697,15 +672,16 @@ namespace RelhaxModpack.Windows
                     ModTabGroups_SelectionChanged(null, null);
 
                     //if auto install or one-click install, don't show the UI
-                    if (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
+                    if (AutoInstallMode || ModpackSettings.OneClickInstall || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
                     {
-                        OnSelectionListReturn(this, new SelectionListEventArgs()
+                        OnSelectionListReturn?.Invoke(this, new SelectionListEventArgs()
                         {
                             ContinueInstallation = loadSuccess,
                             ParsedCategoryList = ParsedCategoryList,
                             Dependencies = Dependencies,
                             GlobalDependencies = GlobalDependencies,
-                            UserMods = UserCategory.Packages
+                            UserMods = UserCategory.Packages,
+                            IsAutoInstall = AutoInstallMode
                         });
                     }
                     else
@@ -782,8 +758,6 @@ namespace RelhaxModpack.Windows
                     IsChecked = false,
                     IsEnabled = true,
                     Content = package.NameDisplay,
-                    PopularModVisability = Visibility.Hidden,
-                    GreyAreaVisability = Visibility.Hidden,
                     Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush
                 };
                 package.UIComponent = userMod;
@@ -1005,8 +979,6 @@ namespace RelhaxModpack.Windows
                             VerticalContentAlignment = VerticalAlignment.Center,
                             Content = package.NameDisplay,
                             IsEnabled = package.IsStructureEnabled,
-                            PopularModVisability = package.PopularMod? Visibility.Visible : Visibility.Hidden,
-                            GreyAreaVisability = package.GreyAreaMod? Visibility.Visible : Visibility.Hidden,
                             Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             IsChecked = false
                         };
@@ -1029,8 +1001,6 @@ namespace RelhaxModpack.Windows
                             Content = package.NameDisplay,
                             IsEnabled = package.IsStructureEnabled,
                             IsChecked = false,
-                            PopularModVisability = package.PopularMod ? Visibility.Visible : Visibility.Hidden,
-                            GreyAreaVisability = package.GreyAreaMod ? Visibility.Visible : Visibility.Hidden,
                             Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                         };
                         ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFCheckBox, true);
@@ -1100,7 +1070,7 @@ namespace RelhaxModpack.Windows
                     AddedToList = false
                 };
             }
-            ComboBoxItem cbi = new ComboBoxItem(package, package.NameDisplay)
+            RelhaxComboBoxItem cbi = new RelhaxComboBoxItem(package, package.NameDisplay)
             {
                 IsEnabled = package.IsStructureEnabled,
                 Content = package.NameDisplay
@@ -1113,7 +1083,6 @@ namespace RelhaxModpack.Windows
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].PreviewMouseRightButtonDown += Generic_MouseDown;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].SelectionChanged += OnSingleDDPackageClick;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].Handler = OnSingleDDPackageClick;
-                package.Parent.RelhaxWPFComboBoxList[boxIndex].DropDownClosed += DropDownSelectSelfFix;
                 if (package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Count > 0)
                 {
                     package.Parent.RelhaxWPFComboBoxList[boxIndex].IsEnabled = true;
@@ -1154,43 +1123,6 @@ namespace RelhaxModpack.Windows
                 else if (!(bool)rb.IsChecked)
                     rb.IsChecked = true;
                 OnSinglePackageClick(sender, e);
-            }
-        }
-        //special fix for when the combobox is showing selectedIndex item 0 (first item)
-        //(AND it's not actually clicked, just showing it), and user selects that one
-        //this takes care of event not previously firing to select it in memory
-        //https://stackoverflow.com/questions/25763954/event-when-combobox-is-selected
-        private void DropDownSelectSelfFix(object sender, EventArgs e)
-        {
-            if (LoadingUI)
-                return;
-            SelectablePackage spc = null;
-            if (sender is RelhaxWPFComboBox cb2)
-            {
-                //get the UI cbi struct and the internal SeletablePackage
-                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
-                spc = cbi.Package;
-                //only enable the package if the structure leading to this package is enabled
-                if(cb2.SelectedIndex == 0 && spc.IsStructureEnabled && !spc.Checked)
-                {
-                    foreach (SelectablePackage childPackage in spc.Parent.Packages)
-                    {
-                        if (childPackage.Equals(spc))
-                            continue;
-                        //uncheck all packages of the same type
-                        if (childPackage.Type.Equals(spc.Type))
-                        {
-                            childPackage.Checked = false;
-                        }
-                    }
-
-                    //verify selected is actually checked
-                    if (!spc.Checked)
-                        spc.Checked = true;
-
-                    //dropdown packages only need to propagate up when selected...
-                    PropagateChecked(spc, SelectionPropagationDirection.PropagateUp);
-                }
             }
         }
 
@@ -1241,7 +1173,7 @@ namespace RelhaxModpack.Windows
                 //don't change the selection if the user did not want to change the option
                 if (!cb2.IsDropDownOpen)
                     return;
-                ComboBoxItem cbi = (ComboBoxItem)cb2.SelectedItem;
+                RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)cb2.SelectedItem;
                 spc = cbi.Package;
             }
 
@@ -1545,7 +1477,7 @@ namespace RelhaxModpack.Windows
                 //check to see if a specific item is highlighted
                 //if so, it means that the user wants to preview a specific version
                 //if not, then the user clicked on the combobox as a whole, so show all items in the box
-                foreach (ComboBoxItem itemInBox in comboboxSender.Items)
+                foreach (RelhaxComboBoxItem itemInBox in comboboxSender.Items)
                 {
                     if (itemInBox.IsHighlighted && itemInBox.IsEnabled)
                     {
@@ -1557,7 +1489,7 @@ namespace RelhaxModpack.Windows
                 {
                     //make a new temporary package with a custom preview items list
                     //get a temp known good package, doesn't matter what cause we want the parent
-                    ComboBoxItem cbi = (ComboBoxItem)comboboxSender.Items[0];
+                    RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)comboboxSender.Items[0];
                     //parent of item in combobox is header
                     SelectablePackage parentPackage = cbi.Package.Parent;
                     spc = new SelectablePackage()
@@ -1789,12 +1721,20 @@ namespace RelhaxModpack.Windows
             //check the mods in the actual list if it's in the list
             foreach(SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
             {
-                //also check to only "check" the mod if it is visible OR if the command line settings to force visiable all compoents
+                //also check to only "check" the mod if it is visible OR if the command line settings to force visible all components
                 if(stringSelections.Contains(package.PackageName) && (package.Visible || ModpackSettings.ForceVisible))
                 {
                     stringSelections.Remove(package.PackageName);
+
+                    //if it's the top level, check the category header
+                    if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
+                    {
+                        package.ParentCategory.CategoryHeader.Checked = true;
+                        Logging.Info("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
+                    }
+
                     //also check if the mod only if it's enabled OR is command line settings force enabled
-                    if(package.Enabled || ModpackSettings.ForceEnabled)
+                    if (package.Enabled || ModpackSettings.ForceEnabled)
                     {
                         package.Checked = true;
                         Logging.Info(string.Format("Checking package {0}",package.CompletePath));
@@ -1808,12 +1748,6 @@ namespace RelhaxModpack.Windows
                         }
                         disabledMods.Add(package.CompletePath);
                         Logging.Info(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
-                    }
-                    //if it's the top level, check the category header
-                    if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
-                    {
-                        package.ParentCategory.CategoryHeader.Checked = true;
-                        Logging.Info("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
                     }
                 }
             }
@@ -1834,12 +1768,12 @@ namespace RelhaxModpack.Windows
 
             //
             int totalBrokenCount = disabledMods.Count + brokenMods.Count + stringSelections.Count + stringUserSelections.Count;
-            if (totalBrokenCount > 0 && (ModpackSettings.AutoInstall || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
+            if (totalBrokenCount > 0 && (AutoInstallMode || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
             {
                 Logging.Info("Selection issues with auto or one click enabled, with message warning enabled. Show message.");
                 MessageBoxResult  result = MessageBox.Show(
-                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"),
-                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"), MessageBoxButton.YesNo);
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"),
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"), MessageBoxButton.YesNo);
                 if(result == MessageBoxResult.No)
                 {
                     Logging.Info("User selected stop installation");
@@ -1851,7 +1785,7 @@ namespace RelhaxModpack.Windows
             else if(!silent)
             {
                 Logging.Info("Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
-                disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
+                    disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
                 if(disabledMods.Count > 0)
                 {
                     //disabled selections
@@ -1876,6 +1810,11 @@ namespace RelhaxModpack.Windows
                     MessageBox.Show(string.Format("{0}: {1}{2}",
                         Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, disabledStructureMods)));
                 }
+            }
+            else
+            {
+                Logging.Info("Silent = true, logging {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
+                    disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
             }
             return true;
         }
@@ -2022,29 +1961,19 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Search Box Code
-
-        private void SearchCB_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
-            SearchCB.IsDropDownOpen = true;
-            //https://stackoverflow.com/questions/17250650/wpf-combobox-auto-highlighting-on-first-letter-input
-            /*
-            var textbox = (TextBox)SearchCB.Template.FindName("PART_EditableTextBox", SearchCB);
-            if (textbox != null && textbox.SelectionLength > 0)
-            {
-                textbox.Select(textbox.SelectionLength, 0);
-            }
-            */
-        }
-
         private void SearchCB_KeyUp(object sender, KeyEventArgs e)
         {
+            //see editor search box section for comments and log notes
+            SearchCB.IsDropDownOpen = true;
             if (e.Key == Key.Down || e.Key == Key.Up)
             {
-                //stop the selection from key events!!!
-                //https://www.codeproject.com/questions/183259/how-to-prevent-selecteditem-change-on-up-and-down (second answer)
+                //stop the selection from key events
                 e.Handled = true;
-                SearchCB.IsDropDownOpen = true;
+
+                if (SearchCB.Items.Count > 0 && SearchCB.SelectedIndex == -1)
+                {
+                    SearchCB.SelectedIndex = 0;
+                }
             }
             else if(e.Key == Key.Enter)
             {
@@ -2053,25 +1982,26 @@ namespace RelhaxModpack.Windows
                     Logging.Info("enter key pressed for search, but no actual package selected. ignoring");
                     return;
                 }
-                OnSearchCBSelectionCommitted(SearchCB.SelectedItem as ComboBoxItem);
+                OnSearchCBSelectionCommitted(SearchCB.SelectedItem as RelhaxComboBoxItem);
             }
-            //check if length 0 or whitespace
             else if (string.IsNullOrWhiteSpace(SearchCB.Text))
             {
                 SearchCB.Items.Clear();
                 SearchCB.IsDropDownOpen = false;
                 SearchCB.SelectedIndex = -1;
             }
-            //check if length 1
-            /*
-            else if(SearchCB.Text.Count() == 1)
+            else if (SearchCB.Text.Length > 1)
             {
+                if (SearchCB.SelectedIndex != -1)
+                {
+                    TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+                    string temp = SearchCB.Text;
+                    SearchCB.SelectedIndex = -1;
+                    SearchCB.Text = temp;
+                    textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+                    textBox.SelectionLength = 0;
+                }
 
-            }
-            */
-            //actually search
-            else
-            {
                 //split the search into an array based on using '*' search
                 List<SelectablePackage> searchComponents = new List<SelectablePackage>();
                 foreach (string searchTerm in SearchCB.Text.Split('*'))
@@ -2090,24 +2020,32 @@ namespace RelhaxModpack.Windows
                             term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible));
                     }
                 }
-                //assuming it maintains the order it previously had i.e. removing only when need to...
+
+                //remove duplicates
                 searchComponents = searchComponents.Distinct().ToList();
+
                 //clear and fill the search list again
                 SearchCB.Items.Clear();
                 foreach (SelectablePackage package in searchComponents)
                 {
                     string formatForText = string.Format("{0} [{1}]", package.NameFormatted, package.ParentCategory.Name);
-                    SearchCB.Items.Add(new ComboBoxItem(package, formatForText)
+                    SearchCB.Items.Add(new RelhaxComboBoxItem(package, formatForText)
                     {
                         IsEnabled = true,
                         Content = formatForText
                     });
                 }
-                SearchCB.IsDropDownOpen = true;
             }
         }
 
-        private async void OnSearchCBSelectionCommitted(ComboBoxItem committedItem)
+        private void SearchCB_DropDownOpened(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+            textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+            textBox.SelectionLength = 0;
+        }
+
+        private async void OnSearchCBSelectionCommitted(RelhaxComboBoxItem committedItem)
         {
             //test to make sure the UIComponent is a control (it should be, but at least a test to make sure it's not null)
             Control ctrl = null;
@@ -2154,7 +2092,7 @@ namespace RelhaxModpack.Windows
             }, DispatcherPriority.Background);
 
             //start the timer to show the item
-            OnFlastTimerTick(null, null);
+            OnFlashTimerTick(null, null);
             FlashTimer.Start();
         }
 
@@ -2162,7 +2100,7 @@ namespace RelhaxModpack.Windows
         {
             if (SearchCB.IsDropDownOpen)
             {
-                foreach (ComboBoxItem item in SearchCB.Items)
+                foreach (RelhaxComboBoxItem item in SearchCB.Items)
                 {
                     if (item.IsHighlighted && item.IsMouseOver)
                     {

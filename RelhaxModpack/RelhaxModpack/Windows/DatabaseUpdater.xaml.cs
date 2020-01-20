@@ -26,6 +26,9 @@ namespace RelhaxModpack.Windows
         private const string MissingPackagesTxt = "missingPackages.txt";
         private const string RepoResourcesFolder = "resources";
         private const string RepoLatestDatabaseFolder = "latest_database";
+        private const string UpdaterErrorExceptionCatcherLogfile = "UpdaterErrorCatcher.log";
+        private const string InstallStatisticsXml = "install_statistics.xml";
+
         /// <summary>
         /// The current path for Willster419's database repository
         /// </summary>
@@ -40,7 +43,7 @@ namespace RelhaxModpack.Windows
         public static bool UseHardCodePath = false;
         #endregion
 
-        #region properties
+        #region Properties
         private string DatabaseUpdatePath
         {
             get { return Path.Combine(UseHardCodePath ? HardCodeRepoPath : Settings.ApplicationStartupPath, RepoResourcesFolder, DatabaseUpdateFilename); }
@@ -62,7 +65,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Editables
+        #region Editable values
         private string KeyFilename = "key.txt";//can be overridden by command line argument
         private WebClient client;
         private bool authorized = false;
@@ -72,22 +75,9 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog SelectManagerInfoXml = new OpenFileDialog() { Title = "Find manager_version.xml", Filter = "manager_version.xml|manager_version.xml" };
         #endregion
 
-        private bool loading = true;
-
         #region Stuff for parts 3 and 4 to share
-        //strings
-        //the modInfoXml document name to upload to the modInfo online folder
-        //only used for uploading to the server TODO: can be moved to step 4 ONLY
-        //RENAME TO NewModInfoXml
-        private string CurrentModInfoXml = "";
-        //the last supported modInfo, gotten from the supported_clients.xml for comparing with the currentModInfoXml
-        //LastSupportedModInfoXml is old name
-        private string LastSupportedModInfoXml = "";
-        //the new database version to upload
-        private string DatabaseUpdateVersion = "";
         //the version number of the last supported WoT client, used for making backup online folder
         private string LastSupportedTanksVersion = "";
-
         #endregion
 
         #region Stuff for Cleaning online folders
@@ -158,6 +148,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Boring stuff
+        private bool loading = true;
         /// <summary>
         /// Create an instance of the DatabaseUpdater window
         /// </summary>
@@ -218,8 +209,6 @@ namespace RelhaxModpack.Windows
             string[] filesToDelete = new string[]
             {
                 DatabaseXml,
-                CurrentModInfoXml,
-                LastSupportedModInfoXml,
                 TrashXML,
                 MissingPackagesTxt
             };
@@ -336,6 +325,35 @@ namespace RelhaxModpack.Windows
         {
             JobProgressBar.Value = prog;
             Utils.AllowUIToUpdate();
+        }
+
+        private async Task<bool> LoadDatabase1V1FromBigmods(string lastWoTClientVersion, List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
+            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                string databaseFtpPath = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPModpackDatabase, lastWoTClientVersion);
+                ReportProgress(string.Format("FTP path parsed as {0}", databaseFtpPath));
+                ReportProgress("Downloading documents");
+                ReportProgress("Download root document");
+                string rootDatabase = await client.DownloadStringTaskAsync(databaseFtpPath + "database.xml");
+                XmlDocument root1V1Document = XmlUtils.LoadXmlDocument(rootDatabase, XmlLoadType.FromString);
+
+                ReportProgress("Downloading globalDependencies document");
+                string globalDependencies1V1 = await client.DownloadStringTaskAsync(databaseFtpPath + XmlUtils.GetXmlStringFromXPath(root1V1Document, "/modInfoAlpha.xml/globalDependencies/@file"));
+
+                ReportProgress("Downloading dependencies document");
+                string dependnecies1V1 = await client.DownloadStringTaskAsync(databaseFtpPath + XmlUtils.GetXmlStringFromXPath(root1V1Document, "/modInfoAlpha.xml/dependencies/@file"));
+
+                List<string> categoriesStrings1V1 = new List<string>();
+                foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(root1V1Document, "//modInfoAlpha.xml/categories/category"))
+                {
+                    ReportProgress(string.Format("Downloading category {0}", categoryNode.Attributes["file"].Value));
+                    categoriesStrings1V1.Add(await client.DownloadStringTaskAsync(databaseFtpPath + categoryNode.Attributes["file"].Value));
+                }
+
+                ReportProgress("Parsing to lists");
+                return XmlUtils.ParseDatabase1V1FromStrings(globalDependencies1V1, dependnecies1V1, categoriesStrings1V1, globalDependencies, dependencies, parsedCategoryList);
+            }
         }
         #endregion
 
@@ -458,94 +476,7 @@ namespace RelhaxModpack.Windows
             SaveDatabaseText(false);
         }
         #endregion
-
-        #region Application update V1
-        private async void UpdateApplicationV1UploadApplicationStable(object sender, RoutedEventArgs e)
-        {
-            ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Locate V1 application");
-            if (!(bool)SelectV1Application.ShowDialog())
-            {
-                ToggleUI((TabController.SelectedItem as TabItem), true);
-                ReportProgress("Canceled");
-                return;
-            }
-            ReportProgress("Located");
-
-            ReportProgress("Uploading stable V1 application to wotmods...");
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
-            {
-                await client.UploadFileTaskAsync(PrivateStuff.FTPModpackRoot + Path.GetFileName(SelectV1Application.FileName), SelectV1Application.FileName);
-            }
-            ReportProgress("Done");
-            ToggleUI((TabController.SelectedItem as TabItem), true);
-        }
-
-        private async void UpdateApplicationV1UploadApplicationBeta(object sender, RoutedEventArgs e)
-        {
-            ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Locate V1 beta application");
-            if (!(bool)SelectV1Application.ShowDialog())
-            {
-                ToggleUI((TabController.SelectedItem as TabItem), true);
-                ReportProgress("Canceled");
-                return;
-            }
-            ReportProgress("Located");
-
-            ReportProgress("Uploading beta V1 application to wotmods...");
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
-            {
-                await client.UploadFileTaskAsync(PrivateStuff.FTPModpackRoot + Path.GetFileName(SelectV1Application.FileName), SelectV1Application.FileName);
-            }
-            ReportProgress("Done");
-            ToggleUI((TabController.SelectedItem as TabItem), true);
-        }
-
-        private async void UpdateApplicationV1UploadManagerInfo(object sender, RoutedEventArgs e)
-        {
-            ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Running upload manager_info.xml to wotmods and bigmods");
-            if (!(bool)SelectManagerInfoXml.ShowDialog())
-            {
-                ToggleUI((TabController.SelectedItem as TabItem), true);
-                return;
-            }
-
-            ReportProgress("Upload manager_info.xml to wotmods");
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
-            {
-                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
-            }
-
-            ReportProgress("Upload manager_info.xml to bigmods");
-            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
-            {
-                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
-            }
-            ReportProgress("Done");
-            ToggleUI((TabController.SelectedItem as TabItem), true);
-        }
-
-        private async void UpdateApplicationV1CreateUpdatePackages(object sender, RoutedEventArgs e)
-        {
-            ReportProgress("Running script to create update packages (wotmods)...");
-            await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateUpdatePackagesPHP, 30 * Utils.TO_SECONDS);
-        }
-
-        private async void UpdateApplicationV1CreateManagerInfoWotmods(object sender, RoutedEventArgs e)
-        {
-            ReportProgress("Running script to create manager info (wotmods)...");
-            await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
-        }
-
-        private async void UpdateApplicationV1CreateManagerInfoBigmods(object sender, RoutedEventArgs e)
-        {
-            ReportProgress("Running script to create manager info (bigmods)...");
-            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
-        }
-        #endregion
-
+        
         #region Application update V2
         private async void UpdateApplicationV2UploadApplicationStable(object sender, RoutedEventArgs e)
         {
@@ -592,20 +523,14 @@ namespace RelhaxModpack.Windows
         private async void UpdateApplicationV2UploadManagerInfo(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Running upload manager_info.xml to wotmods and bigmods");
+            ReportProgress("Running upload manager_info.xml to bigmods");
             if (!(bool)SelectManagerInfoXml.ShowDialog())
             {
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
 
-            ReportProgress("Upload manager_info.xml to wotmods");
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
-            {
-                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
-            }
-
-            ReportProgress("Upload manager_info.xml to bigmods");
+            ReportProgress("Upload manager_info.xml");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);
@@ -618,12 +543,6 @@ namespace RelhaxModpack.Windows
         {
             ReportProgress("Running script to create update packages (bigmods)...");
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateUpdatePackagesPHP, 100000);
-        }
-
-        private async void UpdateApplicationV2CreateManagerInfoWotmods(object sender, RoutedEventArgs e)
-        {
-            ReportProgress("Running script to create manager info (wotmods)...");
-            await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 100000);
         }
 
         private async void UpdateApplicationV2CreateManagerInfoBigmods(object sender, RoutedEventArgs e)
@@ -640,10 +559,10 @@ namespace RelhaxModpack.Windows
             ReportProgress("Running Clean online folders step 1");
             ReportProgress("Downloading and parsing " + Settings.SupportedClients);
             //download supported_clients
-            XmlDocument doc;
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+            XmlDocument doc = null;
+            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                string xml = await client.DownloadStringTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients);
+                string xml = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients);
                 doc = XmlUtils.LoadXmlDocument(xml, XmlLoadType.FromString);
             }
             //parse each online folder to list type string
@@ -693,13 +612,16 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
+
             selectedVersionInfos = (VersionInfos)CleanFoldersOnlineStep2b.SelectedItem;
             ReportProgress("Getting all trash files in online folder " + selectedVersionInfos.WoTOnlineFolderVersion);
+
             //make a new list where it only has versions who's online folder match the selected one from the combobox
             List<VersionInfos> specificVersions = 
                 VersionInfosList.Where(info => info.WoTOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion)).ToList();
             List<string> allUsedZipFiles = new List<string>();
             specificVersions.Add(new VersionInfos { WoTClientVersion = "GITHUB" });
+
             foreach(VersionInfos infos in specificVersions)
             {
                 ReportProgress("Adding zip files from WoTClientVersion " + infos.WoTClientVersion);
@@ -708,41 +630,80 @@ namespace RelhaxModpack.Windows
                 List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
                 List<Dependency> dependencies = new List<Dependency>();
                 List<Category> parsedCategoryList = new List<Category>();
+                string globalDependencyXmlString = string.Empty;
+                string dependenicesXmlString = string.Empty;
+                List<string> categoriesXml = new List<string>();
+
                 //download and parse database to flat list
-                using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+                if (infos.WoTClientVersion.Equals("GITHUB"))
                 {
-                    if(infos.WoTClientVersion.Equals("GITHUB"))
+                    await Task.Run(() => doc = XmlUtils.GetBetaDatabaseRoot1V1Document());
+                    string betaDatabaseOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
+                    ReportProgress(string.Format("GITHUB online folder={0}, selected online folder to clean version={1}",
+                        betaDatabaseOnlineFolderVersion, selectedVersionInfos.WoTOnlineFolderVersion));
+                    if (!betaDatabaseOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion))
                     {
-#pragma warning disable CS0618
-                        doc.LoadXml(await client.DownloadStringTaskAsync(Settings.BetaDatabaseV1URL));
-#pragma warning restore CS0618
-                        string betaDatabaseOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, Settings.DatabaseOnlineFolderXpath);
-                        ReportProgress(string.Format("GITHUB online folder={0}, selected online folder to clean version={1}",
-                            betaDatabaseOnlineFolderVersion, selectedVersionInfos.WoTOnlineFolderVersion));
-                        if (!betaDatabaseOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion))
-                        {
-                            ReportProgress("Skipping (online folders are not equal)");
-                            continue;
-                        }
-                        else
-                        {
-                            ReportProgress("Including (online folders are equal");
-                        }
+                        ReportProgress("Skipping (online folders are not equal)");
+                        continue;
                     }
                     else
                     {
-                        string newModInfoName = "modInfo_" + infos.WoTClientVersion + ".xml";
-                        doc.LoadXml(await client.DownloadStringTaskAsync(PrivateStuff.ModInfosLocation + newModInfoName));
+                        ReportProgress("Including (online folders are equal");
+                        //parse beta database to lists
+                        List<string> downloadURLs = null;
+                        await Task.Run(() =>
+                        {
+                            downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList(doc);
+                            string[] downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
+
+                            globalDependencyXmlString = downloadStrings[0];
+                            dependenicesXmlString = downloadStrings[1];
+
+                            categoriesXml = new List<string>();
+                            for (int i = 2; i < downloadURLs.Count; i++)
+                            {
+                                categoriesXml.Add(downloadStrings[i]);
+                            }  
+                        });
                     }
                 }
-                if (!XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsedCategoryList))
+                else
+                {
+                    string modInfoxmlURL = Settings.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", infos.WoTClientVersion) + "modInfo.dat";
+
+                    //download latest modInfo xml
+                    using (WebClient client = new WebClient())
+                    using (Ionic.Zip.ZipFile zipfile = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL))))
+                    {
+                        //extract modinfo xml string
+                        string modInfoXml = Utils.GetStringFromZip(zipfile, "database.xml");
+                        doc = XmlUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromString);
+
+                        string globalDependencyFilename = XmlUtils.GetXmlStringFromXPath(doc, "/modInfoAlpha.xml/globalDependencies/@file");
+                        globalDependencyXmlString = Utils.GetStringFromZip(zipfile, globalDependencyFilename);
+
+                        string dependencyFilename = XmlUtils.GetXmlStringFromXPath(doc, "/modInfoAlpha.xml/dependencies/@file");
+                        dependenicesXmlString = Utils.GetStringFromZip(zipfile, dependencyFilename);
+
+                        foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(doc, "//modInfoAlpha.xml/categories/category"))
+                        {
+                            string categoryFilename = categoryNode.Attributes["file"].Value;
+                            categoriesXml.Add(Utils.GetStringFromZip(zipfile, categoryFilename));
+                        }
+                    }
+                }
+                
+                //parse into lists
+                if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, globalDependencies, dependencies, parsedCategoryList))
                 {
                     ReportProgress("failed to parse modInfo to lists");
                     ToggleUI((TabController.SelectedItem as TabItem), true);
                     return;
                 }
+
                 Utils.BuildLinksRefrence(parsedCategoryList, false);
                 Utils.BuildLevelPerPackage(parsedCategoryList);
+
                 //if the list of zip files does not already have it, then add it
                 flatList = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
                 foreach (DatabasePackage package in flatList)
@@ -844,21 +805,20 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion
-
-        #region Database Updating
-        private async void UpdateDatabaseStep2_Click(object sender, RoutedEventArgs e)
+        
+        #region Database Updating V2
+        private async void UpdateDatabaseV2Step2_Click(object sender, RoutedEventArgs e)
         {
             ReportProgress("Starting Update database step 2...");
             ReportProgress("Running script to update online hash database...");
             //a PatientWebClient should allow a timeout value of 5 mins (or more)
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateDatabasePHP, 30 * Utils.TO_SECONDS * Utils.TO_MINUETS);
         }
-              
-        private async void UpdateDatabaseStep3_Click(object sender, RoutedEventArgs e)
+
+        private async void UpdateDatabaseV2Step3_Click(object sender, RoutedEventArgs e)
         {
-            ToggleUI((TabController.SelectedItem as TabItem), false);
-            //getting local crcs and comparing them on server
             //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
             ReportProgress("Starting DatabaseUpdate step 3");
             ReportProgress("Preparing database update");
 
@@ -869,11 +829,23 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
-            if(!File.Exists(SelectModInfo.FileName))
+            if (!File.Exists(SelectModInfo.FileName))
             {
                 ReportProgress("selectMofInfo file selected does not exist:" + SelectModInfo.FileName);
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
+            }
+
+            //initialize the application main logile if possible for logging potential util level exception issues
+            ReportProgress("Attempting to init the main log file for exception logging");
+            if(Logging.Init(Logfiles.Application, UpdaterErrorExceptionCatcherLogfile))
+            {
+                Logging.Info(Settings.LogSpacingLineup);
+                Logging.Info("Log file initialized for database V2 step 3 error and exception catching");
+            }
+            else
+            {
+                ReportProgress("Failed to initialize the custom application logfile. Error and exception catching will be disabled");
             }
 
             //init stringBuilders
@@ -895,32 +867,40 @@ namespace RelhaxModpack.Windows
             List<DatabaseBeforeAfter> movedPackages = new List<DatabaseBeforeAfter>();
 
             //init strings
-            CurrentModInfoXml = string.Empty;
-            DatabaseUpdateVersion = string.Empty;
-            LastSupportedModInfoXml = string.Empty;
             LastSupportedTanksVersion = string.Empty;
-
             SetProgress(10);
 
-            //load current modInfoXml and check for duplicates
-            ReportProgress("Loading current modInfo.xml and checking for duplicates");
-            XmlDocument currentDatabase = new XmlDocument();
-            currentDatabase.Load(SelectModInfo.FileName);
-            if(!XmlUtils.ParseDatabase(currentDatabase,globalDependencies,dependencies,parsedCategoryList))
+            ReportProgress("Loading Root database 1.1 document");
+            //load root document
+            XmlDocument rootDocument = XmlUtils.LoadXmlDocument(SelectModInfo.FileName, XmlLoadType.FromFile);
+            if(rootDocument == null)
             {
-                ReportProgress("failed to parse modInfo to lists");
+                ReportProgress("Failed to parse root database file. Invalid XML document");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            ReportProgress("Parsing database 1.1 document");
+            //parse main database
+            if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
+                globalDependencies, dependencies, parsedCategoryList))
+            {
+                ReportProgress("Failed to parse database");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
 
             SetProgress(20);
 
+            //bulid link refrences (parent/child, levels, etc)
             Utils.BuildLinksRefrence(parsedCategoryList, true);
             Utils.BuildLevelPerPackage(parsedCategoryList);
             List<DatabasePackage> flatListCurrent = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
 
+            //check for duplicates
+            ReportProgress("Checking for duplicate database packageName entries");
             List<string> duplicates = Utils.CheckForDuplicates(globalDependencies, dependencies, parsedCategoryList);
-            if(duplicates.Count > 0)
+            if (duplicates.Count > 0)
             {
                 ReportProgress("ERROR: Duplicates found!");
                 foreach (string s in duplicates)
@@ -928,6 +908,7 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
+            ReportProgress("No duplicates found");
 
             SetProgress(30);
 
@@ -944,88 +925,79 @@ namespace RelhaxModpack.Windows
             string lastWoTClientVersion = database_version_text.InnerText.Split('_')[0];
             string lastDate = database_version_text.InnerText.Split('_')[1];
 
-            ReportProgress(string.Format("lastWoTClientVersion = {0}", lastWoTClientVersion));
-            ReportProgress(string.Format("lastDate = {0}", lastDate));
+            ReportProgress(string.Format("lastWoTClientVersion    = {0}", lastWoTClientVersion));
             ReportProgress(string.Format("currentWoTClientVersion = {0}", Settings.WoTClientVersion));
-            ReportProgress(string.Format("currentDate = {0}", dateTimeFormat));
+            ReportProgress(string.Format("lastDate                = {0}", lastDate));
+            ReportProgress(string.Format("currentDate             = {0}", dateTimeFormat));
+
+            string databaseVersionTag = string.Empty;
 
             if (lastWoTClientVersion.Equals(Settings.WoTClientVersion) && lastDate.Equals(dateTimeFormat))
             {
-                ReportProgress("lastWoTVersion and date match, so incrementing the version");
+                ReportProgress("WoTVersion and date match, so incrementing the itteration");
                 int lastItteration = int.Parse(database_version_text.InnerText.Split('_')[2]);
-                DatabaseUpdateVersion = string.Format("{0}_{1}_{2}", Settings.WoTClientVersion, dateTimeFormat, ++lastItteration);
+                databaseVersionTag = string.Format("{0}_{1}_{2}", Settings.WoTClientVersion, dateTimeFormat, ++lastItteration);
             }
             else
             {
                 ReportProgress("lastWoTVersion and/or date NOT match, not incrementing the version (starts at 1)");
-                DatabaseUpdateVersion = string.Format("{0}_{1}_1", Settings.WoTClientVersion, dateTimeFormat);
+                databaseVersionTag = string.Format("{0}_{1}_1", Settings.WoTClientVersion, dateTimeFormat);
             }
 
-            ReportProgress(string.Format("DatabaseUpdateVersion = {0}", DatabaseUpdateVersion));
+            ReportProgress(string.Format("databaseVersionTag = {0}", databaseVersionTag));
 
             //update and save the manager_version.xml file
-            database_version_text.InnerText = DatabaseUpdateVersion;
+            database_version_text.InnerText = databaseVersionTag;
             doc.Save(ManagerVersionPath);
-
-            //get last supported wot version for comparison
-            LastSupportedTanksVersion = lastWoTClientVersion;
-            LastSupportedModInfoXml = "modInfo_" + LastSupportedTanksVersion + ".xml";
-
-            //also delete this just in case
-            if (File.Exists(LastSupportedModInfoXml))
-                File.Delete(LastSupportedModInfoXml);
 
             SetProgress(40);
 
-            ReportProgress("getting last supported modInfo");
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
-            {
-                await client.DownloadFileTaskAsync(PrivateStuff.ModInfosLocation + LastSupportedModInfoXml, LastSupportedModInfoXml);
-            }
-
             //make a flat list of old (last supported modInfoxml) for comparison
-            XmlDocument oldDatabase = new XmlDocument();
-            oldDatabase.Load(LastSupportedModInfoXml);
             List<DatabasePackage> globalDependenciesOld = new List<DatabasePackage>();
             List<Dependency> dependenciesOld = new List<Dependency>();
             List<Category> parsedCateogryListOld = new List<Category>();
-            if(!XmlUtils.ParseDatabase(oldDatabase,globalDependenciesOld,dependenciesOld, parsedCateogryListOld))
+
+            //get last supported wot version for comparison
+            ReportProgress("Getting last supported database files");
+            LastSupportedTanksVersion = lastWoTClientVersion;
+
+            //get strings for 1v1 parsing
+            //BigmodsFTPModpackDatabase -> .../database/
+            if (!await LoadDatabase1V1FromBigmods(lastWoTClientVersion, globalDependenciesOld, dependenciesOld, parsedCateogryListOld))
             {
-                ReportProgress("failed to parse modInfo to lists");
+                ReportProgress("Failed to parse modInfo to lists");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
+
+            //build link references of old document
             Utils.BuildLinksRefrence(parsedCateogryListOld, true);
             Utils.BuildLevelPerPackage(parsedCateogryListOld);
             List<DatabasePackage> flatListOld = Utils.GetFlatList(globalDependenciesOld, dependenciesOld, null, parsedCateogryListOld);
 
             //download and load latest database.xml file from server
-            ReportProgress("downloading database.xml of current WoT onlineFolder version from server");
-            XmlDocument databaseXml = new XmlDocument();
-            if (File.Exists(DatabaseXml))
-            {
-                File.Delete(DatabaseXml);
-            }
+            ReportProgress("Downloading database.xml of current WoT onlineFolder version from server");
+            XmlDocument databaseXml = null;
             using (client = new WebClient())
             {
-                await client.DownloadFileTaskAsync(string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
-                    Settings.WoTModpackOnlineFolderVersion, DatabaseXml), DatabaseXml);
-                databaseXml.Load(DatabaseXml);
+                string databaseXmlString = await client.DownloadStringTaskAsync(string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
+                    Settings.WoTModpackOnlineFolderVersion, DatabaseXml));
+                databaseXml = XmlUtils.LoadXmlDocument(databaseXmlString, XmlLoadType.FromString);
             }
 
             SetProgress(50);
 
             //update the crc values, also makes list of updated mods
-            ReportProgress("downloaded, comparing crc values for list of updated mods");
+            ReportProgress("Downloaded, comparing crc values for list of updated mods");
             Utils.AllowUIToUpdate();
-            foreach(DatabasePackage package in flatListCurrent)
+            foreach (DatabasePackage package in flatListCurrent)
             {
-                if(string.IsNullOrEmpty(package.ZipFile))
+                if (string.IsNullOrEmpty(package.ZipFile))
                     continue;
                 //"//database/file[@name="Sounds_HRMOD_Gun_Sounds_by_Zorgane_v2.01_1.2.0_2018-10-12.zip"]"
-                string xpathText = string.Format("//database/file[@name=\"{0}\"]",package.ZipFile);
+                string xpathText = string.Format("//database/file[@name=\"{0}\"]", package.ZipFile);
                 XmlNode databaseEntry = databaseXml.SelectSingleNode(xpathText);
-                if(databaseEntry != null)
+                if (databaseEntry != null)
                 {
                     string newCRC = databaseEntry.Attributes["md5"].Value;
                     if (string.IsNullOrWhiteSpace(newCRC))
@@ -1058,7 +1030,7 @@ namespace RelhaxModpack.Windows
 
             //do list magic to get all added, removed, disabled, etc package lists
             //used for disabled, removed, added mods
-            ReportProgress("getting list of added and removed packages");
+            ReportProgress("Getting list of added and removed packages");
             Utils.AllowUIToUpdate();
             PackageComparerByPackageName pc = new PackageComparerByPackageName();
 
@@ -1071,29 +1043,29 @@ namespace RelhaxModpack.Windows
             //get the list of renamed packages
             //a renamed package will have the same internal name, but a different display name
             //first start by getting the list of all current packages, then filter out removed and added packages
-            ReportProgress("getting list of renamed packages");
+            ReportProgress("Getting list of renamed packages");
             Utils.AllowUIToUpdate();
             List<DatabasePackage> renamedPackagesTemp = new List<DatabasePackage>(flatListCurrent);
             renamedPackagesTemp = renamedPackagesTemp.Except(removedPackages, pc).Except(addedPackages, pc).ToList();
             //https://stackoverflow.com/questions/3842714/linq-selection-by-type-of-an-object
             List<SelectablePackage> selectablePackagesOld = flatListOld.OfType<SelectablePackage>().ToList();
             List<SelectablePackage> potentialRenamedPackages = renamedPackagesTemp.OfType<SelectablePackage>().ToList();
-            foreach(SelectablePackage selectablePackage in potentialRenamedPackages)
+            foreach (SelectablePackage selectablePackage in potentialRenamedPackages)
             {
                 List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.PackageName.Equals(selectablePackage.PackageName)).ToList();
                 if (results.Count == 0)
                     continue;
                 SelectablePackage result = results[0];
-                if(!selectablePackage.NameFormatted.Equals(result.NameFormatted))
+                if (!selectablePackage.NameFormatted.Equals(result.NameFormatted))
                 {
                     Logging.Updater("package rename-> old:{0}, new:{1}", LogLevel.Info, result.PackageName, selectablePackage.PackageName);
-                    renamedPackages.Add(new DatabaseBeforeAfter() {Before = result, After = selectablePackage });
+                    renamedPackages.Add(new DatabaseBeforeAfter() { Before = result, After = selectablePackage });
                 }
             }
 
             //list of moved packages
             //a moved package will have a different completePackagePath and different completePath, but still have the same internalName
-            ReportProgress("getting list of moved packages");
+            ReportProgress("Getting list of moved packages");
             Utils.AllowUIToUpdate();
             foreach (SelectablePackage selectablePackage in potentialRenamedPackages)
             {
@@ -1124,7 +1096,7 @@ namespace RelhaxModpack.Windows
             //if a package was internally renamed, it will show up in the added and removed list
             //a internal renamed package will have a different completePackagePath but the same completePath (assuming it wasn't renamed as well), and different internalName
             //first get the list of *selectable* Packages for added and removed
-            ReportProgress("checking add and removed list for internal renamed");
+            ReportProgress("Getting list for internal renamed");
             Utils.AllowUIToUpdate();
             List<SelectablePackage> addedSelectablePackages = addedPackages.OfType<SelectablePackage>().ToList();
             List<SelectablePackage> removedSelectablePackages = removedPackages.OfType<SelectablePackage>().ToList();
@@ -1136,14 +1108,14 @@ namespace RelhaxModpack.Windows
 
             SetProgress(90);
 
-            ReportProgress(string.Format("CompletePath count compare of add and remove is {0}", completePathDetect.Count));
+            Logging.Updater(string.Format("CompletePath count compare of add and remove is {0}", completePathDetect.Count));
             if (completePathDetect.Count > 0)
             {
-                foreach(string completePathDet in completePathDetect)
+                foreach (string completePathDet in completePathDetect)
                 {
                     List<SelectablePackage> addResultList = addedSelectablePackages.Where(pack => pack.CompletePath.Equals(completePathDet)).ToList();
                     List<SelectablePackage> removeResultList = removedSelectablePackages.Where(pack => pack.CompletePath.Equals(completePathDet)).ToList();
-                    if(addResultList.Count > 0 && removeResultList.Count > 0)
+                    if (addResultList.Count > 0 && removeResultList.Count > 0)
                     {
                         SelectablePackage addResult = addResultList[0];
                         SelectablePackage removeResult = removeResultList[0];
@@ -1158,11 +1130,11 @@ namespace RelhaxModpack.Windows
             List<string> nameWithMacro = addedSelectablePackages.Select(pack => pack.NameFormatted).ToList();
             nameWithMacro.AddRange(removedSelectablePackages.Select(pack => pack.NameFormatted).ToList());
             nameWithMacro = nameWithMacro.Distinct().ToList();
-            ReportProgress(string.Format("Name count compare of add and remove is {0}", completePathDetect.Count));
-            if(nameWithMacro.Count > 0)
+            Logging.Updater(string.Format("Name count compare of add and remove is {0}", completePathDetect.Count));
+            if (nameWithMacro.Count > 0)
             {
                 //if the name exists in both, then it was moved and renamed
-                foreach(string name in nameWithMacro)
+                foreach (string name in nameWithMacro)
                 {
                     List<SelectablePackage> addResultList = addedSelectablePackages.Where(pack => pack.NameFormatted.Equals(name)).ToList();
                     List<SelectablePackage> removeResultList = removedSelectablePackages.Where(pack => pack.NameFormatted.Equals(name)).ToList();
@@ -1173,11 +1145,11 @@ namespace RelhaxModpack.Windows
                         movedPackages.Add(new DatabaseBeforeAfter() { Before = removeResult, After = addResult });
                         renamedPackages.Add(new DatabaseBeforeAfter() { Before = removeResult, After = addResult });
 
-                        for(int i = 0; i < addedPackages.Count; i++)
+                        for (int i = 0; i < addedPackages.Count; i++)
                         {
-                            if(addedPackages[i] is SelectablePackage selectablePackage)
+                            if (addedPackages[i] is SelectablePackage selectablePackage)
                             {
-                                if(selectablePackage.NameFormatted.Equals(addResult.NameFormatted))
+                                if (selectablePackage.NameFormatted.Equals(addResult.NameFormatted))
                                 {
                                     addedPackages.RemoveAt(i);
                                     break;
@@ -1247,7 +1219,7 @@ namespace RelhaxModpack.Windows
             //make stringBuilder of databaseUpdate.text
             databaseUpdateText.Clear();
             databaseUpdateText.AppendLine("Database Update!\n");
-            databaseUpdateText.AppendLine("New version tag: " + DatabaseUpdateVersion);
+            databaseUpdateText.AppendLine("New version tag: " + databaseVersionTag);
 
             databaseUpdateText.Append("\n" + numberBuilder.ToString());
 
@@ -1260,7 +1232,7 @@ namespace RelhaxModpack.Windows
                 databaseUpdateText.AppendLine(" - " + dp.CompletePath);
 
             databaseUpdateText.AppendLine("\nRenamed:");
-                foreach (DatabaseBeforeAfter dp in renamedPackages)
+            foreach (DatabaseBeforeAfter dp in renamedPackages)
                 databaseUpdateText.AppendFormat(" - \"{0}\" was renamed to \"{1}\"\r\n", dp.Before.NameFormatted, dp.After.NameFormatted);
 
             databaseUpdateText.AppendLine("\nMoved:");
@@ -1291,20 +1263,13 @@ namespace RelhaxModpack.Windows
             ReportProgress("Updating databases");
             File.Delete(SelectModInfo.FileName);
             XmlUtils.SaveDatabase(SelectModInfo.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.Legacy);
-
-            //and save it in new form as well
-            if ((bool)SaveV2StructureTest.IsChecked)
-            {
-                XmlUtils.SaveDatabase(RepoLatestDatabaseFolderPath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                    globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
-            }
+                globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Ready for step 4");
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
-        private async void UpdateDatabaseStep4_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseV2Step4_Click(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
             //check for stuff
@@ -1324,40 +1289,69 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
-            if(string.IsNullOrEmpty(DatabaseUpdateVersion))
-            {
-                ReportProgress("DatabaseUpdateVersion is null");
-                ToggleUI((TabController.SelectedItem as TabItem), true);
-                return;
-            }
-            if(!File.Exists(ManagerVersionPath))
+            if (!File.Exists(ManagerVersionPath))
             {
                 ReportProgress("manager_version.xml does not exist");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
 
-            //save and upload new modInfo file (will override the current name if exist[which it should unless new WoT client version supported])
-            //make the name of current (to be supported) XML file for uploading later
-            CurrentModInfoXml = "modInfo_" + Settings.WoTClientVersion + ".xml";
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+            SetProgress(10);
+
+            //database xmls
+            ReportProgress("Uploading new database files to bigmods");
+            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                //upload new modINfo file
-                ReportProgress("Saving and uploading new modInfo.xml to legacy wotmods V1 live server folder");
-                await client.UploadFileTaskAsync(PrivateStuff.ModInfosLocation + CurrentModInfoXml, SelectModInfo.FileName);
-                SetProgress(20);
+                string databaseFtpPath = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPModpackDatabase, Settings.WoTClientVersion);
+                ReportProgress(string.Format("FTP upload path parsed as {0}", databaseFtpPath));
 
-                //upload manager_version.xml
-                ReportProgress("Uploading new manager_version.xml to legacy wotmods location");
-                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.ManagerVersion, ManagerVersionPath);
-                SetProgress(40);
+                //check if ftp folder exists
+                ReportProgress(string.Format("Checking if FTP folder '{0}' exists", Settings.WoTClientVersion));
+                string[] folders = await Utils.FTPListFilesFoldersAsync(PrivateStuff.BigmodsFTPModpackDatabase, PrivateStuff.BigmodsNetworkCredential);
+                if (!folders.Contains(Settings.WoTClientVersion))
+                {
+                    ReportProgress("Does not exist, making");
+                    await Utils.FTPMakeFolderAsync(databaseFtpPath, PrivateStuff.BigmodsNetworkCredential);
+                }
+                else
+                {
+                    ReportProgress("Yes, yes it does");
+                }
 
-                //upload databaseUpdate.txt
-                ReportProgress("uploading new databaseUpdate.txt to legacy wotmods location");
-                await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + DatabaseUpdateFilename, DatabaseUpdatePath);
-                SetProgress(60);
+                //RepoLatestDatabaseFolderPath
+                ReportProgress("Uploading root");
+                string rootDatabasePath = Path.Combine(RepoLatestDatabaseFolderPath, "database.xml");
+                XmlDocument root1V1Document = XmlUtils.LoadXmlDocument(rootDatabasePath, XmlLoadType.FromFile);
+                await client.UploadFileTaskAsync(databaseFtpPath + "database.xml", rootDatabasePath);
+
+                //list of files by xml name to upload (because they all sit in the same folder, ftp and local
+                ReportProgress("Creating list of database files to upload");
+                List<string> xmlFilesNames = new List<string>()
+                {
+                    XmlUtils.GetXmlStringFromXPath(root1V1Document, "/modInfoAlpha.xml/globalDependencies/@file"),
+                    XmlUtils.GetXmlStringFromXPath(root1V1Document, "/modInfoAlpha.xml/dependencies/@file")
+                };
+                foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(root1V1Document, "//modInfoAlpha.xml/categories/category"))
+                {
+                    xmlFilesNames.Add(categoryNode.Attributes["file"].Value);
+                }
+
+                //upload the files
+                foreach(string xmlFilename in xmlFilesNames)
+                {
+                    ReportProgress(string.Format("Uploading {0}", xmlFilename));
+                    string localPath = Path.Combine(RepoLatestDatabaseFolderPath, xmlFilename);
+                    string ftpPath = databaseFtpPath + xmlFilename;
+                    Logging.Updater("localPath = {0}", LogLevel.Debug, localPath);
+                    Logging.Updater("ftpPath   = {0}", LogLevel.Debug, ftpPath);
+                    await client.UploadFileTaskAsync(ftpPath, localPath);
+                }
             }
+            ReportProgress("Database uploads complete");
 
+            SetProgress(85);
+
+            //manager_version.xml
             ReportProgress("Uploading new manager_version.xml to bigmods");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
@@ -1365,7 +1359,7 @@ namespace RelhaxModpack.Windows
                 await client.UploadFileTaskAsync(completeURL, ManagerVersionPath);
             }
 
-            SetProgress(80);
+            SetProgress(90);
 
             //check if supported_clients.xml needs to be updated for a new version
             ReportProgress("Checking if supported_clients.xml needs to be updated for new WoT version");
@@ -1381,13 +1375,7 @@ namespace RelhaxModpack.Windows
                 versionRoot.AppendChild(supported_client);
                 supportedClients.Save(SupportedClientsPath);
 
-                ReportProgress("Uploading new supported_clients.xml to legacy wotmods location");
-                using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
-                {
-                    await client.UploadFileTaskAsync(PrivateStuff.FTPManagerInfoRoot + Settings.SupportedClients, SupportedClientsPath);
-                }
-
-                ReportProgress("Uploading new supported_clients.xml to bigmods");
+                ReportProgress("Uploading new supported_clients.xml");
                 using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
                 {
                     await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients, SupportedClientsPath);
@@ -1403,24 +1391,17 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
-        private async void UpdateDatabaseStep5_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseV2Step5_Click(object sender, RoutedEventArgs e)
         {
-            ReportProgress("Starting update database step 5...");
-            ReportProgress("Running script to create mod info on bigmods");
-            await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateModInfoPHP, 100000);
+            ReportProgress("Starting update database step 5");
+            ReportProgress("Running script to create mod info data file(s)");
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateModInfoPHP, 100000);
         }
 
-        private async void UpdateDatabaseStep6a_Click(object sender, RoutedEventArgs e)
+        private async void UpdateDatabaseV2Step6_Click(object sender, RoutedEventArgs e)
         {
-            ReportProgress("Starting Update database step 6a...");
-            ReportProgress("Running script to create manager info (wotmods)");
-            await RunPhpScript(PrivateStuff.WotmodsNetworkCredential, PrivateStuff.CreateManagerInfoPHP, 100000);
-        }
-
-        private async void UpdateDatabaseStep6b_Click(object sender, RoutedEventArgs e)
-        {
-            ReportProgress("Starting Update database step 6b...");
-            ReportProgress("Running script to create manager info (bigmods)");
+            ReportProgress("Starting Update database step 6");
+            ReportProgress("Running script to create manager info data file");
             await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 100000);
         }
 
@@ -1437,6 +1418,174 @@ namespace RelhaxModpack.Windows
         private void UpdateDatabaseStep8_EU_GER_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.eu/index.php?/topic/624499-");
+        }
+        #endregion
+
+        #region Statistics
+        private async void DatabaseStatsSave_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            //BigmodsFTPModpackManager
+            ReportProgress("Starting stats saving");
+
+            using (client = new WebClient { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                //download manager_version.xml
+                ReportProgress("Downloading manager_version.xml from bigmods for app version");
+                string managerVersionXml = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.ManagerVersion);
+                string managerVersionXpath = @"/version/relhax_v2_stable";
+                string managerVersion = XmlUtils.GetXmlStringFromXPath(managerVersionXml, managerVersionXpath, Settings.ManagerVersion);
+                ReportProgress("Done, parsed as " + managerVersion);
+
+                //download supported_clients.xml
+                ReportProgress("Downloading supported_clients.xml from bigmods for db version");
+                string supportedClientsXml = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients);
+                //https://stackoverflow.com/questions/1459132/xslt-getting-last-element
+                string supportedClientsXpath = @"(//version)[last()]";
+                string supportedClientLast = XmlUtils.GetXmlStringFromXPath(supportedClientsXml, supportedClientsXpath, Settings.SupportedClients);
+                ReportProgress("Done, parsed as " + supportedClientLast);
+
+                //create new name
+                string dateTimeFormat = string.Format("{0:yyyy_MM_dd}", DateTime.Now);
+                string newFileName = string.Format("{0}_{1}_{2}_{3}.xml",dateTimeFormat, Path.GetFileNameWithoutExtension(InstallStatisticsXml),managerVersion,supportedClientLast);
+                ReportProgress(string.Format("New filename parsed as '{0}', checking it doesn't exist on server", newFileName));
+
+                //make sure name isn't on server already
+                string[] filesOnServer = await Utils.FTPListFilesFoldersAsync(PrivateStuff.BigmodsFTPModpackInstallStats, PrivateStuff.BigmodsNetworkCredential);
+                if(filesOnServer.Contains(newFileName))
+                {
+                    ReportProgress("Already exists, abort");
+                    return;
+                }
+
+                //upload to server
+                ReportProgress("Does not exist, copying to new name");
+                string instalStatsXmlText = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackInstallStats + InstallStatisticsXml);
+                await client.UploadStringTaskAsync(PrivateStuff.BigmodsFTPModpackInstallStats + newFileName, instalStatsXmlText);
+                ReportProgress("Done");
+            }
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+
+        private async void DatabaseStatsUpdateCurrent_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
+            List<Dependency> dependencies = new List<Dependency>();
+            List<Category> parsedCategoryList = new List<Category>();
+            string currentInstallStatsXml = string.Empty;
+
+            using (client = new WebClient { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                //download supported_clients.xml
+                ReportProgress("Downloading supported_clients.xml from bigmods for db version");
+                string supportedClientsXml = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients);
+                string supportedClientsXpath = @"(//version)[last()]";
+                string supportedClientLast = XmlUtils.GetXmlStringFromXPath(supportedClientsXml, supportedClientsXpath, Settings.SupportedClients);
+                ReportProgress("Done, parsed as " + supportedClientLast);
+
+                ReportProgress("Loading current database from bigmods");
+                if (!await LoadDatabase1V1FromBigmods(supportedClientLast, globalDependencies, dependencies, parsedCategoryList))
+                {
+                    ReportProgress("Failed to parse modInfo to lists");
+                    ToggleUI((TabController.SelectedItem as TabItem), true);
+                    return;
+                }
+
+                //download current install statistics
+                ReportProgress("Downloading current install statistics");
+                currentInstallStatsXml = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackInstallStats + InstallStatisticsXml);
+            }
+
+            ReportProgress("Preparing lists for merge");
+            XmlDocument installStats = XmlUtils.LoadXmlDocument(currentInstallStatsXml, XmlLoadType.FromString);
+            List<DatabasePackage> flatList = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+
+            //replace any non existent entries in installStats with empty entries where installCount = 0
+            foreach(DatabasePackage package in flatList)
+            {
+                //@"//package[@name='Dependency_global_WoT_xml_Creation']"
+                string xPath = string.Format(@"//package[@name='{0}']", package.PackageName);
+                XmlNode node = installStats.SelectSingleNode(xPath);
+                if(node == null)
+                {
+                    ReportProgress(string.Format("Package '{0}' does not exist, adding to install stats",package.PackageName));
+                    Utils.AllowUIToUpdate();
+                    XmlElement element = installStats.CreateElement("package");
+                    XmlAttribute nameAttribute = installStats.CreateAttribute("name");
+                    nameAttribute.Value = package.PackageName;
+                    XmlAttribute instalCountAttribute = installStats.CreateAttribute("installCount");
+                    instalCountAttribute.Value = 0.ToString();
+                    element.Attributes.Append(nameAttribute);
+                    element.Attributes.Append(instalCountAttribute);
+                    installStats.DocumentElement.AppendChild(element);
+                }
+            }
+
+            //upload document back to server
+            ReportProgress("Merge complete, uploading statistics back to server");
+            using (client = new WebClient { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                string xml = installStats.InnerXml;
+                await client.UploadStringTaskAsync(PrivateStuff.BigmodsFTPModpackInstallStats + InstallStatisticsXml, xml);
+            }
+            ReportProgress("Done");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+
+        private async void DatabaseStatsMakeNew_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
+            List<Dependency> dependencies = new List<Dependency>();
+            List<Category> parsedCategoryList = new List<Category>();
+
+            using (client = new WebClient { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                //download supported_clients.xml
+                ReportProgress("Downloading supported_clients.xml from bigmods for db version");
+                string supportedClientsXml = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients);
+                string supportedClientsXpath = @"(//version)[last()]";
+                string supportedClientLast = XmlUtils.GetXmlStringFromXPath(supportedClientsXml, supportedClientsXpath, Settings.SupportedClients);
+                ReportProgress("Done, parsed as " + supportedClientLast);
+
+                ReportProgress("Loading current database from bigmods");
+                if (!await LoadDatabase1V1FromBigmods(supportedClientLast, globalDependencies, dependencies, parsedCategoryList))
+                {
+                    ReportProgress("Failed to parse modInfo to lists");
+                    ToggleUI((TabController.SelectedItem as TabItem), true);
+                    return;
+                }
+            }
+
+            ReportProgress("Creating new xml document");
+            List<DatabasePackage> flatList = Utils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            XmlDocument doc = new XmlDocument();
+            XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            doc.AppendChild(xmlDeclaration);
+            XmlElement root = doc.CreateElement(InstallStatisticsXml);
+            doc.AppendChild(root);
+
+            foreach (DatabasePackage package in flatList)
+            {
+                XmlElement element = doc.CreateElement("package");
+                XmlAttribute nameAttribute = doc.CreateAttribute("name");
+                nameAttribute.Value = package.PackageName;
+                XmlAttribute instalCountAttribute = doc.CreateAttribute("installCount");
+                instalCountAttribute.Value = 0.ToString();
+                element.Attributes.Append(nameAttribute);
+                element.Attributes.Append(instalCountAttribute);
+                root.AppendChild(element);
+            }
+
+            ReportProgress("Document created, uploading to server");
+            using (client = new WebClient { Credentials = PrivateStuff.BigmodsNetworkCredential })
+            {
+                string xml = doc.InnerXml;
+                await client.UploadStringTaskAsync(PrivateStuff.BigmodsFTPModpackInstallStats + InstallStatisticsXml, xml);
+            }
+            ReportProgress("Done");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion
     }

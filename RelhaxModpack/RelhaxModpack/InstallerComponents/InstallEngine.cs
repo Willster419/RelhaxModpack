@@ -1286,37 +1286,45 @@ namespace RelhaxModpack.InstallerComponents
                     if (startChar.Equals('{'))
                     {
                         //it does not have the macro, so add it. (assume {app} macro)
-                        Logging.Debug("pattern starts with \"{\", continue");
+                        Logging.Debug("Pattern starts with \"{\", continue");
                     }
                     else if (startChar.Equals('\\'))
                     {
-                        Logging.Debug("pattern starts with \"\\\", adding macro and continue");
+                        Logging.Debug("Pattern starts with \"\\\", adding macro and continue");
                         searchPattern = @"{app}" + searchPattern;
                     }
                     else
                     {
-                        Logging.Debug("pattern starts with folder name, adding macro and folder slash and continue");
+                        Logging.Debug("Pattern starts with folder name, adding macro and folder slash and continue");
                         searchPattern = @"{app}\" + searchPattern;
                     }
-                    Logging.Debug("path with macro: {0}", searchPattern);
-
-                    //replace the macro to make the complete path
-                    searchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
-                    string directorySearchpath = Path.GetDirectoryName(searchPattern);
-                    searchPattern = Path.GetFileName(searchPattern);
-                    Logging.Debug("search term (or file): {0}", searchPattern);
+                    Logging.Debug("Parsed path with macro: {0}", searchPattern);
 
                     //if the directory to search does not exist, then make it, just in case
-                    if (!Directory.Exists(directorySearchpath))
-                        Directory.CreateDirectory(directorySearchpath);
+                    string searchPatternDirectoryPath = Path.GetDirectoryName(Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath));
+                    if (!Directory.Exists(searchPatternDirectoryPath))
+                    {
+                        Logging.Debug("Directory {0} does not exist, creating", searchPatternDirectoryPath);
+                        Directory.CreateDirectory(searchPatternDirectoryPath);
+                    }
+
+                    //at this point it will have a macro, so grab it
+                    //replace the macro to make the complete path
+                    string macro = searchPattern.Split('}')[0] + "}";
+                    string macroRootPath = Utils.MacroReplace(macro,ReplacementTypes.FilePath) + Path.DirectorySeparatorChar;
+                    searchPattern = searchPattern.Split('}')[1].Substring(1);
+                    searchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
+                    Logging.Debug("Path macro: {0} parsed to -> {1}", macro, macroRootPath);
 
                     //get the list of files to replace
-                    string[] filesToSave = Utils.DirectorySearch(directorySearchpath, SearchOption.AllDirectories, false, searchPattern, 5, 3, false);
+                    Logging.Info("Search root: {0}", macroRootPath);
+                    Logging.Info("Search term: {0}", searchPattern);
+                    string[] filesToSave = Utils.DirectorySearch(macroRootPath, SearchOption.AllDirectories, false, searchPattern, 5, 3, false);
 
                     //check if we have files to move
                     if(filesToSave.Count() == 0)
                     {
-                        Logging.Info("no files found to backup");
+                        Logging.Info("No files found to backup");
                         continue;
                     }
 
@@ -1324,9 +1332,9 @@ namespace RelhaxModpack.InstallerComponents
                     Prog.ChildTotal = filesToSave.Count();
 
                     //make the temp directory to place the files based on this package
-                    string tempFolderPath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
-                    if(!Directory.Exists(tempFolderPath))
-                        Directory.CreateDirectory(tempFolderPath);
+                    string tempRootFolderPath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
+                    if(!Directory.Exists(tempRootFolderPath))
+                        Directory.CreateDirectory(tempRootFolderPath);
 
                     //move each file
                     foreach(string file in filesToSave)
@@ -1336,17 +1344,30 @@ namespace RelhaxModpack.InstallerComponents
                         Progress.Report(Prog);
                         CancellationToken.ThrowIfCancellationRequested();
 
-                        string destination = Path.Combine(tempFolderPath, Path.GetFileName(file));
+                        UserDataFile userDataFile = new UserDataFile()
+                        {
+                            TempSaveRoot = tempRootFolderPath,
+                            WoTRoot = macroRootPath,
+                            FilePath = file.Remove(0, macroRootPath.Length)
+                        };
+
+                        string destination = Path.Combine(userDataFile.TempSaveRoot, userDataFile.FilePath);
+                        string source = Path.Combine(userDataFile.WoTRoot, userDataFile.FilePath);
+
+                        if (!Directory.Exists(Path.GetDirectoryName(destination)))
+                            Directory.CreateDirectory(Path.GetDirectoryName(destination));
 
                         //check if destination exists first before replace
                         if (File.Exists(destination))
                             File.Delete(destination);
 
-                        File.Move(file, destination);
-                        files.FilesSaved.Add(file);
+                        File.Move(source, destination);
+
+                        Logging.Info("Processed file {0}", userDataFile.FilePath);
+                        files.FilesSaved.Add(userDataFile);
                     }
                 }
-                Logging.Info("backup data of {0} finished", package.PackageName);
+                Logging.Info("Backup data of {0} finished", package.PackageName);
             }
             return true;
         }
@@ -1382,6 +1403,8 @@ namespace RelhaxModpack.InstallerComponents
             //backup files and folders that should be kept that aren't cache
             string[] fileNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat" };
             string[] folderNames = { "xvm", "pmod" };
+            string pmodCacheFileToDelete = "cache.dat";
+            string xvmFolderToDelete = "cache";
 
             //check if the directories are files or folders
             //if files they can move directly
@@ -1392,13 +1415,9 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if(File.Exists(Path.Combine(Settings.AppDataFolder, file)))
                 {
-                    try
+                    if(!Utils.FileMove(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
                     {
-                        File.Move(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file));
-                    }
-                    catch (Exception ex)
-                    {
-                        Logging.Exception(ex.ToString());
+                        Logging.Error("Failed to move file for clear cache");
                         return false;
                     }
                 } 
@@ -1432,10 +1451,9 @@ namespace RelhaxModpack.InstallerComponents
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if (File.Exists(Path.Combine(AppPathTempFolder, file)))
                 {
-                    try { File.Move(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)); }
-                    catch (Exception ex)
+                    if (!Utils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)))
                     {
-                        Logging.Exception(ex.ToString());
+                        Logging.Error("Failed to move file for clear cache");
                         return false;
                     }
                 }
@@ -1444,6 +1462,12 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.Info("File does not exist in step clearCache: {0}", file);
                 }
             }
+
+            //delete extra xvm cache folder and pmod cache file
+            if(Directory.Exists(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete)))
+                Utils.DirectoryDelete(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete), true);
+            if(File.Exists(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete)))
+                Utils.FileDelete(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete));
 
             foreach (string folder in folderNames)
             {
@@ -1542,7 +1566,7 @@ namespace RelhaxModpack.InstallerComponents
             int numThreads = ModpackSettings.MulticoreExtraction ? Settings.NumLogicalProcesors : 1;
             Prog.TotalThreads = (uint)numThreads;
 
-            Logging.Info(string.Format("Number of threads to use for install is {0}, (MulticoreExtraction={1}, LogicalProcesosrs={2}",
+            Logging.Info(string.Format("Number of threads to use for install is {0}, (MulticoreExtraction={1}, LogicalProcesosrs={2})",
                 numThreads, ModpackSettings.MulticoreExtraction, Settings.NumLogicalProcesors));
 
             //setup progress reporting for parent
@@ -1598,12 +1622,12 @@ namespace RelhaxModpack.InstallerComponents
                     }
 
                     //assign each package one at a time into a package thread
-                    Logging.Info("starting package assignment to each thread");
+                    Logging.Debug("starting package assignment to each thread");
                     for (int j = 0; j < packages.Count; j++)
                     {
                         int threadSelector = j % numThreads;
                         packageThreads[threadSelector].Add(packages[j]);
-                        Logging.Info("j index = {0}, package {1} has been assigned to packageThread {2}", j, packages[j].PackageName, threadSelector);
+                        Logging.Debug("j index = {0}, package {1} has been assigned to packageThread {2}", j, packages[j].PackageName, threadSelector);
                     }
 
                     //now the fun starts. these all can run at once. yeah.
@@ -1689,37 +1713,44 @@ namespace RelhaxModpack.InstallerComponents
                 string tempBackupFolder = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName);
                 if(!Directory.Exists(tempBackupFolder))
                 {
-                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Warning);
+                    Logging.WriteToLog(string.Format("folder {0} does not exist, skipping", package.PackageName), Logfiles.Application, LogLevel.Info);
                 }
 
                 //the list of files that was backed up already exists in a list called Files_saved. use that as the list of files to restore
                 foreach (UserFile files in package.UserFiles)
                 {
-                    foreach(string savedFile in files.FilesSaved)
+                    foreach(UserDataFile savedFile in files.FilesSaved)
                     {
                         CancellationToken.ThrowIfCancellationRequested();
 
                         //Files_saved should have the complete path of the destination
-                        string fileSourcePath = Path.Combine(Settings.RelhaxTempFolderPath, package.PackageName, Path.GetFileName(savedFile));
+                        //rebuild the complete path to the temp and wot root files
+
+                        string fileSourcePath = Path.Combine(savedFile.TempSaveRoot,savedFile.FilePath);
+                        string fileDestPath = Path.Combine(savedFile.WoTRoot, savedFile.FilePath);
                         if (File.Exists(fileSourcePath))
                         {
-                            Logging.Info(string.Format("Restoring file {0} of {1}", Path.GetFileName(savedFile), package.PackageName));
+                            Logging.Info(string.Format("Restoring file {0} of {1}", savedFile.FilePath, package.PackageName));
+
                             //make the directory if it does not exist yet
-                            if (!Directory.Exists(Path.GetDirectoryName(savedFile)))
-                                Directory.CreateDirectory(Path.GetDirectoryName(savedFile));
+                            if (!Directory.Exists(Path.GetDirectoryName(fileDestPath)))
+                                Directory.CreateDirectory(Path.GetDirectoryName(fileDestPath));
 
                             //if it already exists, delete it
-                            if (File.Exists(savedFile))
-                                File.Delete(savedFile);
+                            if (File.Exists(fileDestPath))
+                            {
+                                Logging.Warning("File already exists in destination, overriding");
+                                File.Delete(fileDestPath);
+                            }
 
                             //then finally move it
-                            File.Move(fileSourcePath, savedFile);
+                            File.Move(fileSourcePath, fileDestPath);
 
                             //and log it
-                            restoreDataBuilder.AppendLine(savedFile);
+                            restoreDataBuilder.AppendLine(fileDestPath);
                         }
                         else
-                            Logging.Error("file {0} was reported backed up, but does not exist for package {1}", Path.GetFileName(savedFile), package.PackageName);
+                            Logging.Error("file {0} was reported backed up, but does not exist to restore for package {1}", Path.GetFileName(fileSourcePath), package.PackageName);
                     }
                 }
             }
@@ -2221,7 +2252,8 @@ namespace RelhaxModpack.InstallerComponents
                         Logging.Info("Thread ID={0}, extraction finished of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
 
                         //increment counter
-                        Logging.Info("Thread ID={0}, extracted {1} of {2}", threadNum, ++numExtracted, packagesToExtract.Count);
+                        numExtracted++;
+                        Logging.Debug("Thread ID={0}, extracted {1} of {2}", threadNum, numExtracted, packagesToExtract.Count);
 
                         //update progress of total packages extracted
                         Prog.ParrentCurrent++;
@@ -2292,7 +2324,11 @@ namespace RelhaxModpack.InstallerComponents
                                 sb.Append(zipEntryName.Substring(0,7));
 
                                 //pad and add the patchGroup name
-                                sb.Append(package.PatchGroup.ToString("D3"));
+                                sb.Append(package.PatchGroup.ToString("D3") + "_");
+
+                                //pad and add the installGroup name
+                                //this will help maintain the patching order similarly expected with extractions of installGroup
+                                sb.Append(package.InstallGroup.ToString("D3") + "_");
 
                                 //name else doesn't need to change, to set the rest of the name and use it
                                 sb.Append(zipEntryName.Substring(7));

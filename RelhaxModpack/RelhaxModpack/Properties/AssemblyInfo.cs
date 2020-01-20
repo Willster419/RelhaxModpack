@@ -7,13 +7,13 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Relic Modpack")]
+[assembly: AssemblyTitle("Relhax Modpack")]
 [assembly: AssemblyDescription("The fastest WoT modpack installer in the world")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Relic Gaming Community")]
-[assembly: AssemblyProduct("Relic Modpack Installer")]
-[assembly: AssemblyCopyright("Copyright © 2019 Willard Wider")]
-[assembly: AssemblyTrademark("Would you rather work on your mods, or your gameplay?")]
+[assembly: AssemblyProduct("Relhax Modpack Installer")]
+[assembly: AssemblyCopyright("Copyright © 2020 Willard Wider")]
+[assembly: AssemblyTrademark("The fastest WoT modpack installer in the world")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -51,7 +51,7 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.29.4.9")]
-[assembly: AssemblyFileVersion("0.29.4.9")]
+[assembly: AssemblyVersion("1.0.0.2")]
+[assembly: AssemblyFileVersion("1.0.0.2")]
 [assembly: NeutralResourcesLanguage("en-US")]
 

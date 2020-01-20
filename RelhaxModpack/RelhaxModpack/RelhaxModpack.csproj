@@ -134,7 +134,9 @@
     <Compile Include="DatabaseComponents\DatabasePackage.cs" />
     <Compile Include="DatabaseComponents\Dependency.cs" />
     <Compile Include="DatabaseComponents\DownloadInstructions.cs" />
-    <Compile Include="DatabaseComponents\IDatabaseLogic.cs" />
+    <Compile Include="DatabaseComponents\IComponentWithDependencies.cs" />
+    <Compile Include="DatabaseComponents\IComponentWithID.cs" />
+    <Compile Include="DatabaseComponents\IXmlSerializable.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
     <Compile Include="DatabaseComponents\PackageComparer.cs" />
     <Compile Include="DatabaseComponents\PatchUpdate.cs" />
@@ -158,6 +160,9 @@
     <Compile Include="UIComponents\ComponentColorset.cs" />
     <Compile Include="UIComponents\CustomBrush.cs" />
     <Compile Include="UIComponents\CustomBrushConverter.cs" />
+    <Compile Include="UIComponents\RelhaxComboBoxItem.xaml.cs">
+      <DependentUpon>RelhaxComboBoxItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIComponents\RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
@@ -181,7 +186,6 @@
     <Compile Include="Settings\CommandLineSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\UISettings.cs" />
-    <Compile Include="UIComponents\ComboBoxItem.cs" />
     <Compile Include="UIComponents\EditorComboBoxItem.cs" />
     <Compile Include="UIComponents\EditorSearchBoxItem.cs" />
     <Compile Include="UIComponents\LinkButton.cs" />
@@ -208,6 +212,9 @@
     </Compile>
     <Compile Include="Windows\CreateFTPFolderName.xaml.cs">
       <DependentUpon>CreateFTPFolderName.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Credits.xaml.cs">
+      <DependentUpon>Credits.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DeveloperSelectionsViewer.xaml.cs">
       <DependentUpon>DeveloperSelectionsViewer.xaml</DependentUpon>
@@ -319,6 +326,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UIComponents\RelhaxComboBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UIComponents\StyleDictionaries\RelhaxRadioButtonStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -376,6 +387,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\CreateFTPFolderName.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Credits.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -498,6 +513,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\Licences\WindowsAPICodePack.txt" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -514,7 +530,6 @@
     <EmbeddedResource Include="Resources\DLL\nvtt32.zip" />
     <EmbeddedResource Include="Resources\DLL\nvtt64.zip" />
     <Resource Include="Resources\Images\popular_icon.png" />
-    <Resource Include="Resources\Licences\Fody.txt" />
     <Resource Include="Resources\Images\grey_area_mod.png" />
     <Resource Include="Resources\Images\error_loading_picture.png" />
     <EmbeddedResource Include="Resources\DLL\DotNetZip.dll" />
@@ -524,7 +539,11 @@
     <EmbeddedResource Include="Resources\DLL\Newtonsoft.Json.dll" />
     <EmbeddedResource Include="Resources\DLL\TeximpNet.dll" />
     <EmbeddedResource Include="Resources\DLL\HtmlAgilityPack.dll" />
-    <Content Include="Resources\Licences\modpack_license_agrement.txt" />
+    <Resource Include="Resources\Images\obfuscated_package_icon.png" />
+    <Resource Include="Resources\Licences\Json.NET.txt" />
+    <Resource Include="Resources\Licences\DotNetZip.txt" />
+    <Resource Include="Resources\Licences\HtmlAgilityPack.txt" />
+    <Resource Include="Resources\Licences\modpack_license_agrement.txt" />
     <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
   <ItemGroup>
@@ -560,7 +579,6 @@
     <Resource Include="Resources\Images\WoT brand light grey.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Licences\dds-reader.txt" />
     <Resource Include="Resources\Licences\NAudio.txt" />
     <Resource Include="Resources\Licences\SpriteSheetPacker.txt" />
     <Resource Include="Resources\Licences\TeximpNet.txt" />

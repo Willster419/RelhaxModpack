@@ -14,6 +14,7 @@ using System.Xml;
 using Path = System.IO.Path;
 using Microsoft.WindowsAPICodePack;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
 {
@@ -32,7 +33,6 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog OpenZipFileDialog;
         private SaveFileDialog SaveZipFileDialog;
         private OpenFileDialog OpenPictureDialog;
-        private System.Windows.Forms.Timer DragDropTimer = new System.Windows.Forms.Timer() { Enabled = false, Interval = 1000 };
         private TreeViewItem ItemToExpand;
         private Point BeforeDragDropPoint;
         private bool IsScrolling = false;
@@ -42,7 +42,8 @@ namespace RelhaxModpack.Windows
         private object SelectedItem = null;
         private Preview Preview;
         private bool UnsavedChanges = false;
-        System.Windows.Forms.Timer ReselectOldItem = new System.Windows.Forms.Timer() { Interval = 50 };
+        private DispatcherTimer DragDropTimer = null;
+        private DispatcherTimer ReselectOldItem = null;
         private string[] UIHeaders = new string[]
         {
             "-----Global Dependencies-----",
@@ -67,13 +68,12 @@ namespace RelhaxModpack.Windows
 
         private void OnApplicationLoad(object sender, RoutedEventArgs e)
         {
-            ReselectOldItem.Tick += AwesomeHack_Tick;
             Logging.Editor("Editor start");
             EditorSettings = new EditorSettings();
             Logging.Editor("Loading editor settings");
             if (!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
             {
-                Logging.Editor("Failed to load editor settings, using defaults");
+                Logging.Editor("Failed to load editor settings, using defaults", LogLevel.Warning);
             }
             else
             {
@@ -98,29 +98,43 @@ namespace RelhaxModpack.Windows
                     Logging.Editor("file does not exist");
                 }
             }
+
             //load the trigger box with trigger options
             LoadedTriggersComboBox.Items.Clear();
             foreach (Trigger t in InstallerComponents.InstallEngine.Triggers)
             {
                 LoadedTriggersComboBox.Items.Add(t.Name);
             }
-            //hook up timer
-            DragDropTimer.Tick += OnDragDropTimerTick;
+
+            //init timers
+            ReselectOldItem = new DispatcherTimer(TimeSpan.FromMilliseconds(50), DispatcherPriority.Normal, AwesomeHack_Tick, this.Dispatcher) { IsEnabled = false };
+            DragDropTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, OnDragDropTimerTick, this.Dispatcher) { IsEnabled = false };
+
+            //clear searchbox
             SearchBox.Items.Clear();
+
             //set the items for the triggers combobox. this only needs to be done once anyways
             LoadedTriggersComboBox.Items.Clear();
             foreach (string s in InstallerComponents.InstallEngine.CompleteTriggerList)
                 LoadedTriggersComboBox.Items.Add(s);
             Init = false;
-            if (!LaunchedFromMainWindow)
+
+            if (!CommandLineSettings.SkipUpdate)
             {
-                Task.Run(async () =>
+                if (!LaunchedFromMainWindow)
                 {
-                    if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                    Task.Run(async () =>
                     {
-                        MessageBox.Show("Your application is out of date. Please launch the application normally to update");
-                    }
-                });
+                        if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                        {
+                            MessageBox.Show("Your application is out of date. Please launch the application normally to update");
+                        }
+                    });
+                }
+            }
+            else
+            {
+                Logging.Editor("Skipping update check from command line setting", LogLevel.Warning);
             }
         }
 
@@ -129,15 +143,12 @@ namespace RelhaxModpack.Windows
             if(SelectedItem is DatabasePackage db)
             {
                 db.EditorTreeViewItem.IsSelected = true;
-                ReselectOldItem.Enabled = false;
-                ReselectOldItem.Stop();
             }
             else if (SelectedItem is EditorComboBoxItem edit)
             {
                 edit.Package.EditorTreeViewItem.IsSelected = true;
-                ReselectOldItem.Enabled = false;
-                ReselectOldItem.Stop();
             }
+            ReselectOldItem.Stop();
         }
 
         private void OnDragDropTimerTick(object sender, EventArgs e)
@@ -486,6 +497,7 @@ namespace RelhaxModpack.Windows
                 control.IsEnabled = false;
 
             //enable components by type
+            //package null = category
             if (package == null)
             {
                 foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
@@ -495,6 +507,7 @@ namespace RelhaxModpack.Windows
                 }
                 PackageNameDisplay.IsEnabled = true;
                 ApplyButton.IsEnabled = true;
+                CategoryOffsetInstallGroupDisplay.IsEnabled = true;
             }
             else if (package is DatabasePackage)
             {
@@ -547,6 +560,8 @@ namespace RelhaxModpack.Windows
                         PackageVisibleDisplay.IsEnabled = true;
                         PackagePopularModDisplay.IsEnabled = true;
                         PackageShowInSearchListDisplay.IsEnabled = true;
+                        PackageGreyAreaModDisplay.IsEnabled = true;
+                        PackageObfuscatedModDisplay.IsEnabled = true;
                         //enable remaining tabs
                         foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DescriptionTab, false))
                         {
@@ -640,7 +655,6 @@ namespace RelhaxModpack.Windows
                         Logging.Editor("applyDatabaseObject failed, not changing entry");
                         //only start the hack when it's supposed to be used as a revert for changing back to a package selection
                         ReselectOldItem.Start();
-                        ReselectOldItem.Enabled = true;
                         return;
                     }
                 }
@@ -670,6 +684,7 @@ namespace RelhaxModpack.Windows
             foreach (DatabaseLogic logic in category.Dependencies)
                 PackageDependenciesDisplay.Items.Add(logic);
             PackageNameDisplay.Text = category.Name;
+            CategoryOffsetInstallGroupDisplay.IsChecked = category.OffsetInstallGroups;
         }
 
         private void ShowDatabasePackage(DatabasePackage package)
@@ -678,6 +693,7 @@ namespace RelhaxModpack.Windows
             Logging.Editor("ShowDatabaseObject(), package showing = {0}", LogLevel.Info, package.PackageName);
             //load all items in the databasePackage level first
             //basic tab
+            //set text field texts
             PackagePackageNameDisplay.Text = package.PackageName;
             PackageStartAddressDisplay.Text = package.StartAddress;
             PackageZipFileDisplay.Text = package.ZipFile;
@@ -685,6 +701,8 @@ namespace RelhaxModpack.Windows
             PackageVersionDisplay.Text = package.Version;
             PackageAuthorDisplay.Text = package.Author;
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
+
+            //locate and select the patchGroup and installGroup of the package
             foreach (int i in PackageInstallGroupDisplay.Items)
             {
                 if (i == package.InstallGroup)
@@ -701,16 +719,18 @@ namespace RelhaxModpack.Windows
                     break;
                 }
             }
+
+            //some checkboxes
             PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
             PackageEnabledDisplay.IsChecked = package.Enabled;
 
             //devURL
             //each url is separated by newline characters "\n"
             //should be displayed with newlines already, so no change needed
-            PackageDevURLDisplay.Text = Utils.MacroReplace(package.DevURL, ReplacementTypes.TextUnescape);
+            PackageDevURLDisplay.Text = package.DevURL;
 
             //internal notes
-            PackageInternalNotesDisplay.Text = Utils.MacroReplace(package.InternalNotes, ReplacementTypes.TextUnescape);
+            PackageInternalNotesDisplay.Text = package.InternalNotesEscaped;
 
             //triggers
             foreach (string s in package.Triggers)
@@ -728,6 +748,7 @@ namespace RelhaxModpack.Windows
                 ConflictingPackagesMessagebox.Text = "Above is list packages that use this dependency";
 
                 //display all the dependencies and packages that use the selected dependency
+                //check dependencies that use this dependency
                 foreach (Dependency dependencyy in Dependencies)
                 {
                     //don't add itself
@@ -739,11 +760,21 @@ namespace RelhaxModpack.Windows
                             //the fact i'm not breaking can help determine if a package has the dependency listed twice
                             PackageConflictingPackagesDisplay.Items.Add(dependencyy);
                 }
+                //check selectablePackages that use this dependency
                 foreach (SelectablePackage selectablePackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
                 {
                     foreach (DatabaseLogic logic in selectablePackage.Dependencies)
                         if (logic.PackageName.Equals(dependency.PackageName))
                             PackageConflictingPackagesDisplay.Items.Add(selectablePackage);
+                }
+                //check categories that use this dependency
+                foreach(Category cat in ParsedCategoryList)
+                {
+                    foreach(DatabaseLogic logic in cat.Dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
+                            PackageConflictingPackagesDisplay.Items.Add(cat);
+                    }
                 }
 
                 //also disable the "remove conflicting package" button since it won't work for these
@@ -754,15 +785,14 @@ namespace RelhaxModpack.Windows
             {
                 PackagePopularModDisplay.IsChecked = selectablePackage.PopularMod;
                 PackageGreyAreaModDisplay.IsChecked = selectablePackage.GreyAreaMod;
+                PackageObfuscatedModDisplay.IsChecked = selectablePackage.ObfuscatedMod;
                 PackageShowInSearchListDisplay.IsChecked = selectablePackage.ShowInSearchList;
                 PackageNameDisplay.Text = selectablePackage.Name;
                 PackageTypeDisplay.SelectedItem = selectablePackage.Type;
                 PackageLevelDisplay.Text = selectablePackage.Level.ToString();
                 PackageVisibleDisplay.IsChecked = selectablePackage.Visible;
-                //PackageDescriptionDisplay.Text = Utils.MacroReplace(selectablePackage.Description,ReplacementTypes.TextUnescape);
-                //PackageUpdateNotesDisplay.Text = Utils.MacroReplace(selectablePackage.UpdateComment,ReplacementTypes.TextUnescape);
-                PackageDescriptionDisplay.Text = selectablePackage.Description;
-                PackageUpdateNotesDisplay.Text = selectablePackage.UpdateComment;
+                PackageDescriptionDisplay.Text = selectablePackage.DescriptionEscaped;
+                PackageUpdateNotesDisplay.Text = selectablePackage.UpdateCommentEscaped;
                 foreach (DatabaseLogic d in selectablePackage.Dependencies)
                     PackageDependenciesDisplay.Items.Add(d);
                 foreach (Media media in selectablePackage.Medias)
@@ -814,6 +844,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Editor("Category was modified, saving and setting flag");
                 category.Name = PackageNameDisplay.Text;
+                category.OffsetInstallGroups = (bool)CategoryOffsetInstallGroupDisplay.IsChecked;
                 category.Dependencies.Clear();
                 foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
                     category.Dependencies.Add(logic);
@@ -913,6 +944,9 @@ namespace RelhaxModpack.Windows
             if (!category.Name.Equals(PackageNameDisplay.Text))
                 return true;
 
+            if (category.OffsetInstallGroups != ((bool)CategoryOffsetInstallGroupDisplay.IsChecked))
+                return true;
+
             if (DependenciesWereModified(category.Dependencies))
                 return true;
 
@@ -960,25 +994,24 @@ namespace RelhaxModpack.Windows
             //see if it's a selectablePackage
             else if (package is SelectablePackage selectablePackage)
             {
-                if (!selectablePackage.ShowInSearchList.Equals((bool)PackageShowInSearchListDisplay.IsChecked))
+                if (selectablePackage.ShowInSearchList != ((bool)PackageShowInSearchListDisplay.IsChecked))
                     return true;
-                if (!selectablePackage.PopularMod.Equals((bool)PackagePopularModDisplay.IsChecked))
+                if (selectablePackage.PopularMod != ((bool)PackagePopularModDisplay.IsChecked))
                     return true;
-                if (!selectablePackage.GreyAreaMod.Equals((bool)PackageGreyAreaModDisplay.IsChecked))
+                if (selectablePackage.GreyAreaMod != ((bool)PackageGreyAreaModDisplay.IsChecked))
                     return true;
-                if (!selectablePackage.Visible.Equals((bool)PackageVisibleDisplay.IsChecked))
+                if (selectablePackage.ObfuscatedMod != ((bool)PackageObfuscatedModDisplay.IsChecked))
                     return true;
+                if (selectablePackage.Visible != ((bool)PackageVisibleDisplay.IsChecked))
+                    return true;
+
                 if (!selectablePackage.Name.Equals(PackageNameDisplay.Text))
                     return true;
                 if (!selectablePackage.Type.Equals((SelectionTypes)PackageTypeDisplay.SelectedItem))
                     return true;
-                //if (!selectablePackage.Description.Equals(Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape)))
-                //    return true;
-                //if (!selectablePackage.UpdateComment.Equals(Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape)))
-                //    return true;
-                if (!selectablePackage.Description.Equals(PackageDescriptionDisplay.Text))
+                if (!selectablePackage.DescriptionEscaped.Equals(PackageDescriptionDisplay.Text))
                     return true;
-                if (!selectablePackage.UpdateComment.Equals(PackageUpdateNotesDisplay.Text))
+                if (!selectablePackage.UpdateCommentEscaped.Equals(PackageUpdateNotesDisplay.Text))
                     return true;
 
                 if (DependenciesWereModified(selectablePackage.Dependencies))
@@ -1068,14 +1101,13 @@ namespace RelhaxModpack.Windows
             {
                 selectablePackage.ShowInSearchList = (bool)PackageShowInSearchListDisplay.IsChecked;
                 selectablePackage.PopularMod = (bool)PackagePopularModDisplay.IsChecked;
+                selectablePackage.ObfuscatedMod = (bool)PackageObfuscatedModDisplay.IsChecked;
                 selectablePackage.GreyAreaMod = (bool)PackageGreyAreaModDisplay.IsChecked;
                 selectablePackage.Visible = (bool)PackageVisibleDisplay.IsChecked;
                 selectablePackage.Name = PackageNameDisplay.Text;
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
-                //selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
-                //selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
-                selectablePackage.Description = PackageDescriptionDisplay.Text;
-                selectablePackage.UpdateComment = PackageUpdateNotesDisplay.Text;
+                selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
 
                 selectablePackage.Dependencies.Clear();
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
@@ -1110,7 +1142,7 @@ namespace RelhaxModpack.Windows
                 packageToMove.PackageName, packageCurrentlyOver.PackageName, effects.ToString(), addBelowItem.ToString());
 
             //make sure that the source and destination are not the same
-            if (packageCurrentlyOver.Equals(packageToMove))
+            if (packageCurrentlyOver.Equals(packageToMove) && !addBelowItem)
             {
                 Logging.Editor("database packages detected to be the same, aborting dragDrop");
                 return;
@@ -1672,19 +1704,32 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Default save location is empty, please specify before using this button");
                 return;
             }
+
             if (!Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
             {
                 MessageBox.Show(string.Format("The save path\n{0}\ndoes not exist, please re-specify", Path.GetDirectoryName(DefaultSaveLocationSetting.Text)));
                 return;
             }
+
             //if save triggers apply, then do it
             if (EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply && SelectedItem != null)
             {
                 ApplyDatabaseObject(SelectedItem);
             }
+
             //actually save
-            XmlUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
+            switch (EditorSettings.SaveAsDatabaseVersion)
+            {
+                case DatabaseXmlVersion.Legacy:
+                    XmlUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);
+                    break;
+                case DatabaseXmlVersion.OnePointOne:
+                    XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), Settings.BetaDatabaseV2RootFilename),
+                        Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+                    break;
+            }
+
             UnsavedChanges = false;
         }
 
@@ -1712,30 +1757,25 @@ namespace RelhaxModpack.Windows
             if (!(bool)SaveDatabaseDialog.ShowDialog())
                 return;
 
-            //if what the user just specified is not the same as the current default, then ask to update it
-            //but only if we're in legacy mode for now
-            if (EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy)
-            {
-                if (string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ||
+            if (string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ||
                     !Path.GetDirectoryName(SaveDatabaseDialog.FileName).Equals(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
-                    if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                        DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
-            }
+                if (MessageBox.Show("Use this as default save location?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
 
             //actually save
             switch (EditorSettings.SaveAsDatabaseVersion)
             {
                 case DatabaseXmlVersion.Legacy:
                     XmlUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);//temp set for old database for now
-                    return;
+                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);
+                    break;
                 case DatabaseXmlVersion.OnePointOne:
                     XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
                         Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
-                    return;
+                    break;
             }
-            if (EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy)
-                UnsavedChanges = false;
+
+            UnsavedChanges = false;
         }
 
         private void LoadAsDatabaseButton_Click(object sender, RoutedEventArgs e)
@@ -1916,7 +1956,7 @@ namespace RelhaxModpack.Windows
                 Dependencies = Dependencies,
                 ParsedCategoryList = ParsedCategoryList,
                 EditOrAdd = true,
-                AddSaveLevel = true,
+                AddSameLevel = true,
                 SelectedPackage = null
             };
 
@@ -1928,7 +1968,7 @@ namespace RelhaxModpack.Windows
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
             {
                 PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
-                    addRemove.SelectedPackage, DragDropEffects.Move, !addRemove.AddSaveLevel);
+                    addRemove.SelectedPackage, DragDropEffects.Move, !addRemove.AddSameLevel);
             }
         }
 
@@ -1952,7 +1992,7 @@ namespace RelhaxModpack.Windows
                 Dependencies = Dependencies,
                 ParsedCategoryList = ParsedCategoryList,
                 EditOrAdd = false,
-                AddSaveLevel = true,
+                AddSameLevel = true,
                 SelectedPackage = null
             };
             if (!(bool)addRemove.ShowDialog())
@@ -1964,7 +2004,7 @@ namespace RelhaxModpack.Windows
                 && itemToMove.Parent is TreeViewItem parentItemToMove && addRemove.SelectedPackage.EditorTreeViewItem.Parent is TreeViewItem parentItemCurrentlyOver)
             {
                 PerformDatabaseMoveAdd(addRemove.SelectedPackage.EditorTreeViewItem, itemToMove, parentItemToMove, parentItemCurrentlyOver, editorItemToMove.Package,
-                    addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSaveLevel);
+                    addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSameLevel);
                 DatabaseTreeView.Items.Refresh();
             }
         }
@@ -2530,32 +2570,54 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Searchbox code
-        private void SearchBox_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            SearchBox.IsDropDownOpen = true;
-        }
-
         private void SearchBox_KeyUp(object sender, KeyEventArgs e)
         {
+            //Logging.Editor("[SearchBox_KeyUp]: Entered, search text = {0}, selectedIndex = {1}", LogLevel.Debug, SearchBox.Text, SearchBox.SelectedIndex);
+            SearchBox.IsDropDownOpen = true;
             if (e.Key == Key.Down || e.Key == Key.Up)
             {
+                //Logging.Editor("[SearchBox_KeyUp]: Key is down or up, e.Handled = true, selectedIndex = {0}", LogLevel.Debug, SearchBox.SelectedIndex);
                 //stop the selection from key events!!!
                 //https://www.codeproject.com/questions/183259/how-to-prevent-selecteditem-change-on-up-and-down (second answer)
                 e.Handled = true;
-                SearchBox.IsDropDownOpen = true;
+
+                //if trying to navigate but there's noting selected, then select one
+                if(SearchBox.Items.Count > 0 && SearchBox.SelectedIndex == -1)
+                {
+                    SearchBox.SelectedIndex = 0;
+                }
             }
             else if (e.Key == Key.Enter)
             {
+                //Logging.Editor("[SearchBox_KeyUp]: Key is enter, OnSearchBoxCommitted, search text = {0}, selectedIndex = {1}", LogLevel.Debug, SearchBox.Text, SearchBox.SelectedIndex);
                 OnSearchBoxCommitted(SearchBox.SelectedItem as EditorSearchBoxItem, false);
             }
             else if (string.IsNullOrWhiteSpace(SearchBox.Text))
             {
+                //Logging.Editor("[SearchBox_KeyUp]: SearchBox.Text is null.empty, clean items, search text = {0}, selectedIndex = {1}", LogLevel.Debug, SearchBox.Text, SearchBox.SelectedIndex);
                 SearchBox.Items.Clear();
                 SearchBox.IsDropDownOpen = false;
                 SearchBox.SelectedIndex = -1;
             }
-            else
+            else if (SearchBox.Text.Length > 1)
             {
+                //Logging.Editor("[SearchBox_KeyUp]: Process search, search text = {0}, selectedIndex = {1}", LogLevel.Debug, SearchBox.Text, SearchBox.SelectedIndex);
+                //if something is currently selected, then changing the selected index later will loose focus on textbox part of combobox and cause the text to
+                //highlight in the middle of typing. this will "eat" the first letter or two of the user's search
+                if(SearchBox.SelectedIndex != -1)
+                {
+                    TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+                    //backup what the user was typing
+                    string temp = SearchBox.Text;
+                    //set the selected index to nothing. sets focus to dropdown
+                    SearchBox.SelectedIndex = -1;
+                    //restore the text. sets focus and highlights the combobox text
+                    SearchBox.Text = temp;
+                    //set the selection to the end (remove selection)
+                    textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+                    textBox.SelectionLength = 0;
+                }
+
                 //split the search into an array based on using '*' search
                 List<DatabasePackage> searchComponents = new List<DatabasePackage>();
                 foreach (string searchTerm in SearchBox.Text.Split('*'))
@@ -2563,8 +2625,10 @@ namespace RelhaxModpack.Windows
                     //get a list of components that match the search term
                     searchComponents.AddRange(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(term => term.PackageName.ToLower().Contains(searchTerm.ToLower())));
                 }
-                //assuming it maintains the order it previously had i.e. removing only when need to...
+
+                //remove duplicates
                 searchComponents = searchComponents.Distinct().ToList();
+
                 //clear and fill the search list again
                 SearchBox.Items.Clear();
                 foreach (DatabasePackage package in searchComponents)
@@ -2575,47 +2639,61 @@ namespace RelhaxModpack.Windows
                         Content = package.PackageName
                     });
                 }
-                SearchBox.IsDropDownOpen = true;
             }
+        }
+
+        private void SearchBox_DropDownOpened(object sender, EventArgs e)
+        {
+            //Logging.Editor("[SearchBox_DropDownOpened]: Entered, search text = {0}", LogLevel.Debug, SearchBox.Text);
+            //https://stackoverflow.com/a/1444332
+            //https://stackoverflow.com/a/40117557
+            //When a comboxbox gains focus you can disable the text highlighting (i.e. by selecting no text upon the GotFocus event)
+            TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+            textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+            textBox.SelectionLength = 0;
         }
 
         private void SearchBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (SearchBox.IsDropDownOpen)
+            Logging.Editor("[SearchBox_PreviewMouseDown]: Entered, search text = {0}", LogLevel.Debug, SearchBox.Text);
+            if (!SearchBox.IsDropDownOpen)
             {
-                foreach (EditorSearchBoxItem item in SearchBox.Items)
+                return;
+            }
+
+            Logging.Editor("[SearchBox_PreviewMouseDown]: DropDown is open, search text = {0}", LogLevel.Debug, SearchBox.Text);
+            foreach (EditorSearchBoxItem item in SearchBox.Items)
+            {
+                if (item.IsHighlighted && item.IsMouseOver)
                 {
-                    if (item.IsHighlighted && item.IsMouseOver)
+                    //if it's the right mouse and we're in the conflicting packages view, the user is trying to add the element
+                    if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
                     {
-                        //if it's the right mouse and we're in the conflicting packages view, the user is trying to add the element
-                        if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
+                        Logging.Editor("Mouse right click with trigger add, checking if already exists");
+                        SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
+                        foreach (string s in selectedPackage.ConflictingPackages)
                         {
-                            Logging.Editor("Mouse right click with trigger add, checking if already exists");
-                            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-                            foreach (string s in selectedPackage.ConflictingPackages)
+                            if (s.Equals(item.Package.PackageName))
                             {
-                                if (s.Equals(item.Package.PackageName))
-                                {
-                                    Logging.Editor("Mouse right click with conflicting packages add, skipping adding cause already exists: {0}", LogLevel.Info, item.Package.PackageName);
-                                    MessageBox.Show("conflict packagename already exists");
-                                    return;
-                                }
+                                Logging.Editor("Mouse right click with conflicting packages add, skipping adding cause already exists: {0}", LogLevel.Info, item.Package.PackageName);
+                                MessageBox.Show("conflict packagename already exists");
+                                return;
                             }
-                            Logging.Editor("Mouse right click with conflicting packages add, does not exist, adding");
-
-                            selectedPackage.ConflictingPackages.Add(item.Package.PackageName);
-
-                            //update UI
-                            PackageConflictingPackagesDisplay.Items.Clear();
-                            foreach (string conflict in selectedPackage.ConflictingPackages)
-                                PackageConflictingPackagesDisplay.Items.Add(conflict);
-
-                            UnsavedChanges = true;
                         }
-                        else
-                        {
-                            OnSearchBoxCommitted(item, true);
-                        }
+                        Logging.Editor("Mouse right click with conflicting packages add, does not exist, adding");
+
+                        selectedPackage.ConflictingPackages.Add(item.Package.PackageName);
+
+                        //update UI
+                        PackageConflictingPackagesDisplay.Items.Clear();
+                        foreach (string conflict in selectedPackage.ConflictingPackages)
+                            PackageConflictingPackagesDisplay.Items.Add(conflict);
+
+                        UnsavedChanges = true;
+                    }
+                    else
+                    {
+                        OnSearchBoxCommitted(item, true);
                     }
                 }
             }
@@ -2629,6 +2707,7 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("searched text: {0}", LogLevel.Info, SearchBox.Text);
                 return;
             }
+
             item.Package.EditorTreeViewItem.Focusable = true;
             item.Package.EditorTreeViewItem.Focus();
             Logging.Editor("OnSearchBoxCommitted(), invoking async dispatch to bring into view item: {0}", LogLevel.Info, item.Package.PackageName);
@@ -2736,7 +2815,8 @@ namespace RelhaxModpack.Windows
             AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
             {
                 Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
-                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory
+                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
             };
             autoUpdatePackageWindow.ShowDialog();
         }
