@@ -1,3 +1,22 @@
+BETA Application version 1.0.0.2 (2020-01-19)
+https://www.virustotal.com/gui/file/f415f3b8a67844297175db1daf5720ea207d066545c0ca4ee2d32eee6afbc96b/detection
+- Fixed bug of application crashing when trying to parse invalid preview URI strings.
+- Changed application to not save settings nor allow UI interaction during "update mode" (when user presses yes to new version, waiting for download).
+- Fixed issues with logging during application closing.
+- Added get properties to database class for getting escaped and formatted update/description strings.
+- Enabled usage of new database properties: Popular mod, controversial mod.
+- Added new database property: Obfuscated mod. Shows when a mod is encrypted and can't be scanned for viruses.
+- Fixed minor bug in logging when showing checked package.
+- Improved display of populer, controversial, obfuscated mod icons to show left to right of package and reduce load time.
+- Added display of popular, controversial and obfuscated mod icons to dropDown selections.
+- Added category property: OffsetInstallGroups. When false, it will not apply an additional installGroup offset to package install group calculation, allowing more parallelism and faster installations.
+- Fixed bug with beta application checkbox not being set on application start.
+- Fixed bugs with Timers vs. DispatchTimers.
+- Added statistics management tools to database updater utility.
+- Improved logging.
+- Updated translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.0.0.1 (2020-01-11)
 (Yup, a day one patch.)
 https://www.virustotal.com/gui/file/a8e695e33b429ce7a687e57ce141665c4c19b5bfdfaf44129539730b2adbe75e/detection
