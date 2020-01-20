@@ -413,9 +413,29 @@
                         <RichTextBox x:Name="DescriptionHelperTextBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True"
                                      HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" IsReadOnly="True" SpellCheck.IsEnabled="True" IsDocumentEnabled="True">
                             <FlowDocument>
-                                <Paragraph>
-                                    Description TODO
+                                <Paragraph TextAlignment="Center">
+                                    Welcome to the Editor "How To"
                                 </Paragraph>
+                                <Paragraph>
+                                    Useful Macro's:
+                                </Paragraph>
+                                <List>
+                                    <ListItem>
+                                        <Paragraph>
+                                            CRTL+ALT+CLICK AND DRAG MOUSE TO COPY AND MOVE PACKAGE INTO ANOTHER PACKAGE
+                                        </Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>
+                                            DOUBLE CLICK DEV URL'S TO OPEN THEM
+                                        </Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>
+                                            CRTL AND CLICK AND DRAG TO COPY PACKAGE
+                                        </Paragraph>
+                                    </ListItem>
+                                </List>
                             </FlowDocument>
                         </RichTextBox>
                     </Grid>
