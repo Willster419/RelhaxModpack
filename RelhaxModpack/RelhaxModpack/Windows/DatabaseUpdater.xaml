@@ -102,6 +102,15 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+            <TabItem x:Name="StatisticsToolsTab" Header="Statistics Tools">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel >
+                        <Button x:Name="DatabaseStatsSave" Content="Save live stats to FTP folder with new name" HorizontalContentAlignment="Left" Click="DatabaseStatsSave_Click"/>
+                        <Button x:Name="DatabaseStatsUpdateCurrent" Content="Update live stats with new packageNames" HorizontalContentAlignment="Left" Click="DatabaseStatsUpdateCurrent_Click"/>
+                        <Button x:Name="DatabaseStatsMakeNew" Content="Create new stats with new packageNames (overwrite live)" HorizontalContentAlignment="Left" Click="DatabaseStatsMakeNew_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
         </TabControl>
         <TextBox x:Name="LogOutput" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,0,0,30" TextWrapping="Wrap" VerticalAlignment="Stretch"
                  VerticalScrollBarVisibility="Visible" TextChanged="LogOutput_TextChanged" IsReadOnly="True"/>
