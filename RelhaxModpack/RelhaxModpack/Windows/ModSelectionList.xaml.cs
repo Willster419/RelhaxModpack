@@ -48,6 +48,9 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public List<SelectablePackage> UserMods;
 
+        /// <summary>
+        /// Flag to determine if the current installation is started from auto install mode
+        /// </summary>
         public bool IsAutoInstall = false;
     }
 
@@ -102,8 +105,15 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public event SelectionListClosedDelegate OnSelectionListReturn;
 
+        /// <summary>
+        /// Flag to determine if the current installation is started from auto install mode
+        /// </summary>
         public bool AutoInstallMode = false;
 
+        /// <summary>
+        /// The latest supported formatted version of WoT, in full version format (e.g. 1.7.0.1) 
+        /// </summary>
+        /// <remarks>This is used for patch days when a user is installing for a WoT version not yet supported</remarks>
         public string LastSupportedWoTClientVersion = string.Empty;
 
         //private
@@ -321,6 +331,8 @@ namespace RelhaxModpack.Windows
                 {
                     //from server download
                     case DatabaseVersions.Stable:
+                        if (string.IsNullOrEmpty(LastSupportedWoTClientVersion))
+                            throw new BadMemeException("LastSupportedWoTClientVersion is null/empty when needed for Stable installation");
                         //make string
                         string modInfoxmlURL = Settings.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", LastSupportedWoTClientVersion) + "modInfo.dat";
 

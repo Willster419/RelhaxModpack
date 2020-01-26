@@ -6,10 +6,25 @@ using System.Text;
 
 namespace RelhaxModpack
 {
+    /// <summary>
+    /// A structure that is used to track the relative path of a user file (like session stats),
+    /// and the root path between the installer and WoT directory
+    /// </summary>
     public struct UserDataFile
     {
+        /// <summary>
+        /// The WoT root directory where the UserDataFile is from
+        /// </summary>
         public string WoTRoot;
+
+        /// <summary>
+        /// The directory path to the Relhax installer temporary folder for holding user files during an installation
+        /// </summary>
         public string TempSaveRoot;
+
+        /// <summary>
+        /// The relative path of the user file
+        /// </summary>
         public string FilePath;
     }
     /// <summary>

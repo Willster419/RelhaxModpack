@@ -15,10 +15,24 @@ using System.Windows.Shapes;
 
 namespace RelhaxModpack.Windows
 {
+    /// <summary>
+    /// A return enumeration for the result of the AskCloseWoT window
+    /// </summary>
     public enum AskCloseWoTResult
     {
+        /// <summary>
+        /// Try again to check if WoT is open
+        /// </summary>
         Retry,
+
+        /// <summary>
+        /// Cancel the current installation
+        /// </summary>
         CancelInstallation,
+
+        /// <summary>
+        /// Attempt to force close the WoT process
+        /// </summary>
         ForceClosed
     }
     /// <summary>
@@ -26,6 +40,9 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class AskCloseWoT : RelhaxWindow
     {
+        /// <summary>
+        /// The return structure for determining the result from closing this window
+        /// </summary>
         public AskCloseWoTResult AskCloseWoTResult { get; set; } = AskCloseWoTResult.CancelInstallation;
 
         /// <summary>

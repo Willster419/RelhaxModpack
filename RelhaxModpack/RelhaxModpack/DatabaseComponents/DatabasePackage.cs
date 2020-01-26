@@ -158,6 +158,9 @@ namespace RelhaxModpack
         /// </summary>
         public string DevURL { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets an array of dev URLs, separated by the newline character
+        /// </summary>
         public string[] DevURLList
         {
             get { return DevURL.Replace("\r", string.Empty).Split('\n'); }
@@ -178,6 +181,9 @@ namespace RelhaxModpack
         /// </summary>
         public string InternalNotes { get; set; } = string.Empty;
 
+        /// <summary>
+        /// An escaped version of the internal notes. Replaces '\n' literal with '\n' special
+        /// </summary>
         public string InternalNotesEscaped
         {
             get { return Utils.MacroReplace(InternalNotes, ReplacementTypes.TextUnescape); }
@@ -224,6 +230,9 @@ namespace RelhaxModpack
         /// </summary>
         public bool ExtractionStarted { get; set; } = false;
 
+        /// <summary>
+        /// When a databasePackage, the internal packageName. When category, the category name
+        /// </summary>
         public string ComponentInternalName { get { return PackageName; } }
 
         public DownloadInstructions DownloadInstructions { get; set; } = null;

@@ -684,6 +684,11 @@
             The URL link of where you can view the web page of the mod
             </summary>
         </member>
+        <member name="P:RelhaxModpack.DatabasePackage.DevURLList">
+            <summary>
+            Gets an array of dev URLs, separated by the newline character
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.DatabasePackage.InstallGroup">
             <summary>
             The level at which this package can be installed. It will be installed with other packages of the same install group at the same time
@@ -697,6 +702,11 @@
         <member name="P:RelhaxModpack.DatabasePackage.InternalNotes">
             <summary>
             Internal instructions for updating the mod for database managers
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabasePackage.InternalNotesEscaped">
+            <summary>
+            An escaped version of the internal notes. Replaces '\n' literal with '\n' special
             </summary>
         </member>
         <member name="P:RelhaxModpack.DatabasePackage.Author">
@@ -732,6 +742,11 @@
         <member name="P:RelhaxModpack.DatabasePackage.ExtractionStarted">
             <summary>
             Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabasePackage.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
             </summary>
         </member>
         <member name="M:RelhaxModpack.DatabasePackage.ToString">
@@ -834,6 +849,11 @@
         <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithDependencies.DependenciesProp">
             <summary>
             The property wrapper of the Dependencies field
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.DatabaseComponents.IComponentWithID">
+            <summary>
+            Represents an interface that defines a unique ID or name to be returned on a database component
             </summary>
         </member>
         <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithID.ComponentInternalName">
@@ -1346,6 +1366,27 @@
         <member name="P:RelhaxModpack.Trigger.TriggerTask">
             <summary>
             The reference for the task that the trigger should perform
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.UserDataFile">
+            <summary>
+            A structure that is used to track the relative path of a user file (like session stats),
+            and the root path between the installer and WoT directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UserDataFile.WoTRoot">
+            <summary>
+            The WoT root directory where the UserDataFile is from
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UserDataFile.TempSaveRoot">
+            <summary>
+            The directory path to the Relhax installer temporary folder for holding user files during an installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UserDataFile.FilePath">
+            <summary>
+            The relative path of the user file
             </summary>
         </member>
         <member name="T:RelhaxModpack.UserFile">
@@ -3726,6 +3767,35 @@
             </summary>
             <returns>The type, mode and lines/path if in editor mode. Else, the base ToString()</returns>
         </member>
+        <member name="P:RelhaxModpack.Patch.IsValidForSave">
+            <summary>
+            Gets a value that determines if all required properties are filed out to be saved to a patch file
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Patch.GetInvalidPatchesForSave(RelhaxModpack.Patch[])">
+            <summary>
+            Returns a list of patch objects that are not ready to be written to a patch file
+            </summary>
+            <param name="patchList">The list of patches to check</param>
+            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+            <seealso cref="P:RelhaxModpack.Patch.IsValidForSave"/>
+        </member>
+        <member name="M:RelhaxModpack.Patch.GetInvalidPatchesForSave(System.Collections.Generic.List{RelhaxModpack.Patch})">
+            <summary>
+            Returns a list of patch objects that are not ready to be written to a patch file
+            </summary>
+            <param name="patchList">The list of patches to check</param>
+            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+            <seealso cref="P:RelhaxModpack.Patch.IsValidForSave"/>
+        </member>
+        <member name="M:RelhaxModpack.Patch.GetInvalidPatchesForSave(System.Windows.Controls.ItemCollection)">
+            <summary>
+            Returns a list of patch objects that are not ready to be written to a patch file
+            </summary>
+            <param name="patchList">The list of patches to check</param>
+            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+            <seealso cref="P:RelhaxModpack.Patch.IsValidForSave"/>
+        </member>
         <member name="T:RelhaxModpack.Shortcut">
             <summary>
             Represents instructions on how to create a shortcut
@@ -4095,6 +4165,24 @@
             Writes the ApplicationlogStartStop constant to the logfile
             </summary>
             <param name="logfile">The logfile to write the header on</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.TryWriteToLog(System.String,RelhaxModpack.Logfiles,RelhaxModpack.LogLevel)">
+            <summary>
+            Attempts to write to a specified logfile. No error is logged if it cannot
+            </summary>
+            <remarks>It checks to make sure the logfile isn't disposed, and then to make sure the logfile is open in a valid instance</remarks>
+            <param name="message">The message to write</param>
+            <param name="logfile">The logfile to write to</param>
+            <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.TryWriteToLog(System.String,RelhaxModpack.Logfiles,RelhaxModpack.LogLevel,System.Object[])">
+            <summary>
+            Attempts to write to a specified logfile. No error is logged if it cannot
+            </summary>
+            <param name="messageFormat">The formatted string to be passed into the string.Format() method</param>
+            <param name="logfile">The logfile to write to</param>
+            <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
         <member name="M:RelhaxModpack.Logging.WriteToLog(System.String,RelhaxModpack.Logfiles,RelhaxModpack.LogLevel)">
             <summary>
@@ -5540,12 +5628,37 @@
             Extracts the embedded compressed library to the location in the Filepath property
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.AskCloseWoTResult">
+            <summary>
+            A return enumeration for the result of the AskCloseWoT window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AskCloseWoTResult.Retry">
+            <summary>
+            Try again to check if WoT is open
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AskCloseWoTResult.CancelInstallation">
+            <summary>
+            Cancel the current installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.AskCloseWoTResult.ForceClosed">
+            <summary>
+            Attempt to force close the WoT process
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.AskCloseWoT">
             <summary>
             Interaction logic for AskCloseWoT.xaml
             </summary>
             <summary>
             AskCloseWoT
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.AskCloseWoT.AskCloseWoTResult">
+            <summary>
+            The return structure for determining the result from closing this window
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.AskCloseWoT.#ctor">
@@ -5645,6 +5758,11 @@
             </summary>
             <summary>
             Credits
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.Credits.#ctor">
+            <summary>
+            Create an instance of the Credits window
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.Credits.InitializeComponent">
@@ -6377,6 +6495,11 @@
             The list of use mods
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.IsAutoInstall">
+            <summary>
+            Flag to determine if the current installation is started from auto install mode
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.SelectionListClosedDelegate">
             <summary>
             The delegate to invoke when calling back to the sender for the SelectionClosed event
@@ -6427,6 +6550,17 @@
             <summary>
             The event that a caller can subscribe to wait for when the selection window actually closes, with arguments for the installation
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.ModSelectionList.AutoInstallMode">
+            <summary>
+            Flag to determine if the current installation is started from auto install mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.ModSelectionList.LastSupportedWoTClientVersion">
+            <summary>
+            The latest supported formatted version of WoT, in full version format (e.g. 1.7.0.1) 
+            </summary>
+            <remarks>This is used for patch days when a user is installing for a WoT version not yet supported</remarks>
         </member>
         <member name="M:RelhaxModpack.Windows.ModSelectionList.#ctor">
             <summary>
@@ -6939,6 +7073,22 @@
             </summary>
             <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
         </member>
+        <member name="T:RelhaxModpack.LogicTracking">
+            <summary>
+            A structure used to keep a reference of a component and a dependency that it calls
+            </summary>
+            <remarks>This is used to determine if any packages call any dependencies who's packageName does not exist in the database</remarks>
+        </member>
+        <member name="F:RelhaxModpack.LogicTracking.ComponentWithDependencies">
+            <summary>
+            The database component what has dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.LogicTracking.DatabaseLogic">
+            <summary>
+            The called dependency from the component
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.RegistrySearch">
             <summary>
             A structure to help with searching for inside the registry by providing a base area to start, and a string search path
@@ -7132,12 +7282,28 @@
             <param name="inputFile">The path to the file to calculate</param>
             <returns></returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.CreateMD5Hash(System.IO.Stream)">
+            <summary>
+            Creates an MD5 hash calculation from and stream object
+            </summary>
+            <param name="stream">The stream object to calculate from</param>
+            <returns>The MD5 calculated hash</returns>
+            <exception cref="T:System.ArgumentNullException"/>
+        </member>
         <member name="M:RelhaxModpack.Utils.CreateMD5HashAsync(System.String)">
             <summary>
             Creates an MD5 hash calculation of the input file
             </summary>
             <param name="inputFile">The path to the file to calculate</param>
             <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CreateMD5HashAsync(System.IO.Stream)">
+            <summary>
+            Creates an MD5 hash calculation from and stream object
+            </summary>
+            <param name="stream">The stream object to calculate from</param>
+            <returns>The MD5 calculated hash</returns>
+            <exception cref="T:System.ArgumentNullException"/>
         </member>
         <member name="M:RelhaxModpack.Utils.GetStringFromZip(System.String,System.String,System.String)">
             <summary>
