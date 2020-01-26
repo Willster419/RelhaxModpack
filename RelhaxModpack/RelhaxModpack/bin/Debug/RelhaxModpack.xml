@@ -1100,10 +1100,37 @@
             Update comments of the package
             </summary>
         </member>
+        <member name="P:RelhaxModpack.SelectablePackage.UpdateCommentEscaped">
+            <summary>
+            Gets an escaped version of the UpdateComment property, replacing literal '\n' with special character '\n', for example
+            </summary>
+            <seealso cref="P:RelhaxModpack.SelectablePackage.UpdateComment"/>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.UpdateCommentFormatted">
+            <summary>
+            Gets a user display formatted version of the UpdateCommentEscaped property, with a timestamp (if available). If no comment, a translated 'noComment' entry is returned
+            </summary>
+            <seealso cref="P:RelhaxModpack.SelectablePackage.UpdateCommentEscaped"/>
+            <seealso cref="P:RelhaxModpack.SelectablePackage.UpdateComment"/>
+        </member>
         <member name="P:RelhaxModpack.SelectablePackage.Description">
             <summary>
             description of the package
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.DescriptionEscaped">
+            <summary>
+            Gets an escaped version of the Description property, replacing literal '\n' with special character '\n', for example
+            </summary>
+            <seealso cref="P:RelhaxModpack.SelectablePackage.Description"/>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.DescriptionFormatted">
+            <summary>
+            Gets a user display formatted version of the UpdateCommentEscaped property. Additionally could contain an encrypted, controversial or popular entry.
+            If no description, a translated 'noDescription' entry is returned
+            </summary>
+            <seealso cref="P:RelhaxModpack.SelectablePackage.DescriptionEscaped"/>
+            <seealso cref="P:RelhaxModpack.SelectablePackage.Description"/>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.PopularMod">
             <summary>
@@ -8085,6 +8112,12 @@
             <returns>The list of URLs</returns>
         </member>
         <member name="M:RelhaxModpack.XmlUtils.GetBetaDatabase1V1FilesList">
+            <summary>
+            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
+            </summary>
+            <returns>The list of URLs</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.GetBetaDatabase1V1FilesListAsync">
             <summary>
             Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
             </summary>

@@ -351,6 +351,10 @@ namespace RelhaxModpack
             return databaseFiles.Select(name => name.Replace(".Xml",".xml")).ToList();
         }
 
+        /// <summary>
+        /// Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
+        /// </summary>
+        /// <returns>The list of URLs</returns>
         public async static Task<List<string>> GetBetaDatabase1V1FilesListAsync()
         {
             return await Task<List<string>>.Run(() => GetBetaDatabase1V1FilesList());
