@@ -4841,6 +4841,16 @@
             The name of the 32bit folder in the 'World_of_Tanks' directory
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Settings.ModsDir">
+            <summary>
+            The name of the 'mods' directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ResModsDir">
+            <summary>
+            The name of the 'res_mods' directory
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Settings.WoT64bitFolderWithSlash">
             <summary>
             The WoT 64bit folder name with the folder separator before it
@@ -4942,15 +4952,49 @@
             Array of all Modpack created folders in the application directory
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Settings.PmodLog">
+            <summary>
+            The name of the pmod log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.XvmLog">
+            <summary>
+            The name of the xvm log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.PythonLog">
+            <summary>
+            The name of the WoT python debug log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.LogsFolder">
+            <summary>
+            The name of the logs folder used for WG CEF browser and Relhax Modpack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.BigmodsDatabaseRootEscaped">
+            <summary>
+            The escaped constant URL of the stable database on the server, escaped with the 'dbVersion' macro
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Settings.DefaultStartAddress">
             <summary>
-            The default starting address of the location of mod packages (start + zip + end)
+            The default starting address of the location of mod packages (start + zip + end), escaped with the 'onlineFolder' macro
             </summary>
+            <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
         </member>
         <member name="F:RelhaxModpack.Settings.BetaDatabaseV2FolderURLEscaped">
             <summary>
-            The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
+            The URL of the V2 beta database root folder, escaped with the 'branch' macro
             </summary>
+            <remarks>'branch' is a name of a github branch on the RelhaxModpackDatabase repo</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Settings.BetaDatabaseV2FolderURL">
+            <summary>
+            The URL of the V2 beta database root folder, using BetaDatabaseSelectedBranch as the replacement for the 'branch' macro
+            </summary>
+            <remarks>By default, this value is 'master'</remarks>
+            <seealso cref="F:RelhaxModpack.ModpackSettings.BetaDatabaseSelectedBranch"/>
         </member>
         <member name="F:RelhaxModpack.Settings.BetaDatabaseBranchesURL">
             <summary>

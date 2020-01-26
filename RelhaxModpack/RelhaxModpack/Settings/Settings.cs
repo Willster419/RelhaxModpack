@@ -174,8 +174,14 @@ namespace RelhaxModpack
         /// </summary>
         public const string WoT32bitFolder = "win32";
 
+        /// <summary>
+        /// The name of the 'mods' directory
+        /// </summary>
         public const string ModsDir = "mods";
 
+        /// <summary>
+        /// The name of the 'res_mods' directory
+        /// </summary>
         public const string ResModsDir = "res_mods";
 
         /// <summary>
@@ -297,28 +303,50 @@ namespace RelhaxModpack
             RelhaxLibrariesFolderPath
         };
 
+        /// <summary>
+        /// The name of the pmod log file
+        /// </summary>
         public const string PmodLog = "pmod.log";
 
+        /// <summary>
+        /// The name of the xvm log file
+        /// </summary>
         public const string XvmLog = "xvm.log";
 
+        /// <summary>
+        /// The name of the WoT python debug log file
+        /// </summary>
         public const string PythonLog = "python.log";
 
+        /// <summary>
+        /// The name of the logs folder used for WG CEF browser and Relhax Modpack
+        /// </summary>
         public const string LogsFolder = "logs";
         #endregion
 
         #region URLs
+        /// <summary>
+        /// The escaped constant URL of the stable database on the server, escaped with the 'dbVersion' macro
+        /// </summary>
         public const string BigmodsDatabaseRootEscaped = "http://bigmods.relhaxmodpack.com/RelhaxModpack/resources/database/{dbVersion}/";
 
         /// <summary>
-        /// The default starting address of the location of mod packages (start + zip + end)
+        /// The default starting address of the location of mod packages (start + zip + end), escaped with the 'onlineFolder' macro
         /// </summary>
+        /// <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
         public const string DefaultStartAddress = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
 
         /// <summary>
-        /// The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
+        /// The URL of the V2 beta database root folder, escaped with the 'branch' macro
         /// </summary>
+        /// <remarks>'branch' is a name of a github branch on the RelhaxModpackDatabase repo</remarks>
         public const string BetaDatabaseV2FolderURLEscaped = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/{branch}/latest_database/";
 
+        /// <summary>
+        /// The URL of the V2 beta database root folder, using BetaDatabaseSelectedBranch as the replacement for the 'branch' macro
+        /// </summary>
+        /// <remarks>By default, this value is 'master'</remarks>
+        /// <seealso cref="ModpackSettings.BetaDatabaseSelectedBranch"/>
         public static string BetaDatabaseV2FolderURL
         {
             get
