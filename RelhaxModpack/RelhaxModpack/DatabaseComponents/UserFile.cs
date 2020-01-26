@@ -18,11 +18,21 @@ namespace RelhaxModpack
     public class UserFile : IXmlSerializable
     {
         #region Xml serialization
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes
+        /// </summary>
+        /// <returns>A list of string property names</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public string[] PropertiesForSerializationAttributes()
         {
             return new string[] { nameof(Pattern) };
         }
 
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml elements
+        /// </summary>
+        /// <returns>A list of string property names</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public string[] PropertiesForSerializationElements()
         {
             return new string[] { };

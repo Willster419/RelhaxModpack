@@ -409,6 +409,20 @@
             a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Category.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Category.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
         <member name="P:RelhaxModpack.Category.Name">
             <summary>
             The category name displayed to the user in the selection list
@@ -506,6 +520,20 @@
             Used for database dependency calculation. Determines what dependent packages use the package that this object is attached to
             </summary>
         </member>
+        <member name="M:RelhaxModpack.DatabaseLogic.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.DatabaseLogic.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
         <member name="P:RelhaxModpack.DatabaseLogic.PackageName">
             <summary>
             The name of the package that this object is attached to
@@ -551,6 +579,20 @@
             <summary>
             A database component is the base class for all other packages
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.DatabasePackage.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
         <member name="M:RelhaxModpack.DatabasePackage.FieldsToXmlParseAttributes">
             <summary>
@@ -726,6 +768,20 @@
             for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Dependency.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Dependency.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
         <member name="M:RelhaxModpack.Dependency.FieldsToXmlParseAttributes">
             <summary>
             Gets a list of fields (including from base classes) that can be parsed as xml attributes
@@ -785,6 +841,26 @@
             When a databasePackage, the internal packageName. When category, the category name
             </summary>
         </member>
+        <member name="T:RelhaxModpack.DatabaseComponents.IXmlSerializable">
+            <summary>
+            Represents an interface that when implemented, will specify which properties of a class
+            get serialized into xml attributes and elements
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabaseComponents.IXmlSerializable.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.DatabaseComponents.IXmlSerializable.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
         <member name="T:RelhaxModpack.MediaType">
             <summary>
             The supported types of media formats supported for preview in the application
@@ -819,6 +895,20 @@
             <summary>
             A media object is a preview-able component stored in a list in SelectablePackages
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Media.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Media.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
         <member name="P:RelhaxModpack.Media.URL">
             <summary>
@@ -918,6 +1008,20 @@
             <summary>
             A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.SelectablePackage.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.FieldsToXmlParseAttributes">
             <summary>
@@ -1205,6 +1309,20 @@
             For example, a contour icon trigger exists to start the building of contour icons
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Trigger.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Trigger.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
         <member name="P:RelhaxModpack.Trigger.Name">
             <summary>
             The name of the trigger
@@ -1234,6 +1352,20 @@
             <summary>
             An object that represents cache files generated by mods that should be backed up and restored as to not loose cache data (like session stats or auto equip data)
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.UserFile.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.UserFile.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
         <member name="P:RelhaxModpack.UserFile.Pattern">
             <summary>
