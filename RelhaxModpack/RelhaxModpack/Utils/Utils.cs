@@ -110,9 +110,20 @@ namespace RelhaxModpack
         }
     }
 
+    /// <summary>
+    /// A structure used to keep a reference of a component and a dependency that it calls
+    /// </summary>
+    /// <remarks>This is used to determine if any packages call any dependencies who's packageName does not exist in the database</remarks>
     public struct LogicTracking
     {
+        /// <summary>
+        /// The database component what has dependencies
+        /// </summary>
         public IComponentWithDependencies ComponentWithDependencies;
+
+        /// <summary>
+        /// The called dependency from the component
+        /// </summary>
         public DatabaseLogic DatabaseLogic;
     }
 
@@ -648,8 +659,17 @@ namespace RelhaxModpack
             return result;
         }
 
+        /// <summary>
+        /// Creates an MD5 hash calculation from and stream object
+        /// </summary>
+        /// <param name="stream">The stream object to calculate from</param>
+        /// <returns>The MD5 calculated hash</returns>
+        /// <exception cref="ArgumentNullException"/>
         public static string CreateMD5Hash(Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+
             //Create a new Stringbuilder to collect the bytes
             StringBuilder sBuilder = new StringBuilder();
             MD5 md5Hash;
@@ -704,8 +724,17 @@ namespace RelhaxModpack
             return await Task.Run(() => CreateMD5Hash(inputFile));
         }
 
+        /// <summary>
+        /// Creates an MD5 hash calculation from and stream object
+        /// </summary>
+        /// <param name="stream">The stream object to calculate from</param>
+        /// <returns>The MD5 calculated hash</returns>
+        /// <exception cref="ArgumentNullException"/>
         public static async Task<string> CreateMD5HashAsync(Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+
             return await Task.Run(() => CreateMD5Hash(stream));
         }
 
@@ -935,6 +964,16 @@ namespace RelhaxModpack
             return fileName;
         }
 
+        /// <summary>
+        /// Attempts to move a file from source to destination with numRetrys, with a file timeout of timeout
+        /// </summary>
+        /// <param name="source">The source file to move</param>
+        /// <param name="destination">The destination of the file to move</param>
+        /// <param name="numRetrys">The number of fail retries if it failes to move the file</param>
+        /// <param name="timeout">The timeout, in milliseconds, to wait between faliures</param>
+        /// <returns>True if the file was moved, false otherwise</returns>
+        /// <remarks>This method does NOT work to move a file across physical drives. 
+        /// This method does NOT check if the destination file already exists.</remarks>
         public static bool FileMove(string source, string destination, uint numRetrys = 3, uint timeout = 100)
         {
             bool overallSuccess = true;
@@ -1306,6 +1345,12 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Removes the directory character and Wots 'win32' and/or 'win64' directories if it exists in the string
+        /// </summary>
+        /// <param name="wotPath">The path to the WoT exe</param>
+        /// <returns>The absolute directory path to the World_of_Tanks folder</returns>
+        /// <remarks>This is for in case the user specifies the WoT exe inside the win32 and/or win64 folders</remarks>
         public static string RemoveWoT32bit64bitPathIfExists(string wotPath)
         {
             return wotPath.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
@@ -1645,7 +1690,7 @@ namespace RelhaxModpack
             //1- build the list of calling mods that need it
             List<Dependency> dependenciesToInstall = new List<Dependency>();
 
-            //create list to track all database dependency refrences
+            //create list to track all database dependency references
             List<LogicTracking> refrencedDependencies = new List<LogicTracking>();
 
             Logging.Debug("Starting step 1 of 4 in dependency calculation: adding from categories");
@@ -1671,7 +1716,7 @@ namespace RelhaxModpack
                                 NotFlag = logic.NotFlag
                             });
 
-                            //log that the categorie's dependency refrence was linked properly
+                            //log that the categories dependency reference was linked properly
                             logic.RefrenceLinked = true;
                         }
                     }
@@ -1712,7 +1757,7 @@ namespace RelhaxModpack
             }
             Logging.Debug("Step 2 complete");
 
-            //2- append with list of dependencies that need it, regardless if it's an error or not
+
             Logging.Debug("Starting step 3 of 4 in dependency calculation: adding dependencies that use each dependency");
             //for each dependency go through each dependency's package logic and if it's called then add it
             foreach(Dependency processingDependency in dependencies)
@@ -1778,7 +1823,7 @@ namespace RelhaxModpack
                         string errorMessage = string.Format("dependency {0} is referencing the dependency {1} which has not yet been processed!" +
                             "This will lead to logic errors in database calculation! (Tip: this dependency ({0}) should be BELOW ({1}) in the" +
                             "list of dependencies in the editor. (Order matters!)",dependency.PackageName, login.PackageName);
-                        Logging.Debug(errorMessage);
+                        Logging.Error(errorMessage);
                         if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                             MessageBox.Show(errorMessage);
                     }
@@ -1790,8 +1835,8 @@ namespace RelhaxModpack
                 List<DatabaseLogic> logicalAND = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.AND).ToList();
 
                 //debug logging
-                Logging.Debug("LogicalOR count: {0}", localOR.Count);
-                Logging.Debug("LogicalAnd count: {0}", logicalAND.Count);
+                Logging.Debug("Logical OR count: {0}", localOR.Count);
+                Logging.Debug("Logical AND count: {0}", logicalAND.Count);
 
                 //if there are no logical ands, then only do ors, vise versa
                 bool ORsPass = localOR.Count > 0? false: true;
@@ -1994,6 +2039,13 @@ namespace RelhaxModpack
             return listToCheck.Max(ma => ma.PatchGroup);
         }
 
+        /// <summary>
+        /// Attempts to set a property value of a class or structure object instance with the string valueToSet
+        /// </summary>
+        /// <param name="componentWithProperty">The class or structure object instance to have property set</param>
+        /// <param name="propertyInfoFromComponent">The property information/metadata of the property to set on the object</param>
+        /// <param name="valueToSet">The string version of the value to set</param>
+        /// <returns>False if the value could not be set, true otherwise</returns>
         public static bool SetObjectProperty(object componentWithProperty, PropertyInfo propertyInfoFromComponent, string valueToSet)
         {
             try
@@ -2009,6 +2061,13 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Attempts to create an instance of a value type object and set it's value based on valueToSet for objectType
+        /// </summary>
+        /// <param name="objectType">The type of value object to create</param>
+        /// <param name="valueToSet">The string version of the value to set</param>
+        /// <param name="newObject">The new value type object created</param>
+        /// <returns>False if the value could not be set, true otherwise</returns>
         public static bool SetObjectValue(Type objectType, string valueToSet, out object newObject)
         {
             try
@@ -2026,12 +2085,18 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Creates all database entries in a list property, parsing each list entry object by xmlListItems
+        /// </summary>
+        /// <param name="componentWithID">The database component with the list property, for example SelectablePackage</param>
+        /// <param name="listPropertyInfo">the property metadata/info about the list property, for example Medias</param>
+        /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
         public static void SetListEntries(IComponentWithID componentWithID, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
         {
             //get the list interfaced component
             IList listProperty = listPropertyInfo.GetValue(componentWithID) as IList;
 
-            //we now have the empty list, now get type type of list it is
+            //we now have the empty list, now get type of list it is
             //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
             Type listObjectType = listProperty.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
                 .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
@@ -2138,6 +2203,10 @@ namespace RelhaxModpack
         #endregion
 
         #region Generic Utils
+        /// <summary>
+        /// Get all xml strings for the V2 database file format from the selected beta database github branch
+        /// </summary>
+        /// <returns>all xml files in string form of the V2 database</returns>
         public static string GetBetaDatabase1V1ForStringCompare()
         {
             List<string> downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList();
@@ -2147,11 +2216,20 @@ namespace RelhaxModpack
             return string.Join(string.Empty, downloadStrings);
         }
 
+        /// <summary>
+        /// Get all xml strings for the V2 database file format from the selected beta database github branch
+        /// </summary>
+        /// <returns>all xml files in string form of the V2 database</returns>
         public async static Task<string> GetBetaDatabase1V1ForStringCompareAsync()
         {
             return await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare());
         }
 
+        /// <summary>
+        /// Downloads an array of strings from a list of download URLs all at the same time
+        /// </summary>
+        /// <param name="downloadURLs">the list of string URLs to download</param>
+        /// <returns>An array of downloaded strings, or empty for each string that failed to download</returns>
         public static string[] DownloadStringsFromUrls(List<string> downloadURLs)
         {
             string[] downloadData = new string[downloadURLs.Count];
@@ -2182,9 +2260,14 @@ namespace RelhaxModpack
             return downloadData;
         }
 
-        public async static Task<string[]> DownloadStringsFromUrlsAsync(List<string> downloadUrls)
+        /// <summary>
+        /// Downloads an array of strings from a list of download URLs all at the same time
+        /// </summary>
+        /// <param name="downloadURLs">the list of string URLs to download</param>
+        /// <returns>An array of downloaded strings, or empty for each string that failed to download</returns>
+        public async static Task<string[]> DownloadStringsFromUrlsAsync(List<string> downloadURLs)
         {
-            return await Task<string[]>.Run(() => DownloadStringsFromUrls(downloadUrls));
+            return await Task<string[]>.Run(() => DownloadStringsFromUrls(downloadURLs));
         }
 
         /// <summary>
@@ -2479,6 +2562,12 @@ namespace RelhaxModpack
             return StartProcess(completeTemplate);
         }
 
+        /// <summary>
+        /// Tests if an input string is null or empty
+        /// </summary>
+        /// <param name="stringToTest">The string to test</param>
+        /// <param name="emptyNullReturn">The emptyNullReturn value if the string is null or empty, stringToTest otherwise</param>
+        /// <returns></returns>
         public static string EmptyNullStringCheck(string stringToTest, string emptyNullReturn = "(null)")
         {
             return string.IsNullOrEmpty(stringToTest) ? emptyNullReturn : stringToTest;

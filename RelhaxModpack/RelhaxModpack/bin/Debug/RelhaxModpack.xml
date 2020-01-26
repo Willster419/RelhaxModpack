@@ -7359,6 +7359,18 @@
             <param name="fileName">The filename to replace characters from</param>
             <returns>The filename with valid characters</returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.FileMove(System.String,System.String,System.UInt32,System.UInt32)">
+            <summary>
+            Attempts to move a file from source to destination with numRetrys, with a file timeout of timeout
+            </summary>
+            <param name="source">The source file to move</param>
+            <param name="destination">The destination of the file to move</param>
+            <param name="numRetrys">The number of fail retries if it failes to move the file</param>
+            <param name="timeout">The timeout, in milliseconds, to wait between faliures</param>
+            <returns>True if the file was moved, false otherwise</returns>
+            <remarks>This method does NOT work to move a file across physical drives. 
+            This method does NOT check if the destination file already exists.</remarks>
+        </member>
         <member name="M:RelhaxModpack.Utils.FileDelete(System.String,System.UInt32,System.UInt32)">
             <summary>
             Tries to delete a file from the given path
@@ -7433,6 +7445,14 @@
             Applies the "Normal" file attribute to a file
             </summary>
             <param name="file">The file to apply normal attributes to</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.RemoveWoT32bit64bitPathIfExists(System.String)">
+            <summary>
+            Removes the directory character and Wots 'win32' and/or 'win64' directories if it exists in the string
+            </summary>
+            <param name="wotPath">The path to the WoT exe</param>
+            <returns>The absolute directory path to the World_of_Tanks folder</returns>
+            <remarks>This is for in case the user specifies the WoT exe inside the win32 and/or win64 folders</remarks>
         </member>
         <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean)">
             <summary>
@@ -7631,6 +7651,58 @@
             <param name="listToCheck">The list of DatabasePackages</param>
             <returns>The maximum PatchGroup number</returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.SetObjectProperty(System.Object,System.Reflection.PropertyInfo,System.String)">
+            <summary>
+            Attempts to set a property value of a class or structure object instance with the string valueToSet
+            </summary>
+            <param name="componentWithProperty">The class or structure object instance to have property set</param>
+            <param name="propertyInfoFromComponent">The property information/metadata of the property to set on the object</param>
+            <param name="valueToSet">The string version of the value to set</param>
+            <returns>False if the value could not be set, true otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.SetObjectValue(System.Type,System.String,System.Object@)">
+            <summary>
+            Attempts to create an instance of a value type object and set it's value based on valueToSet for objectType
+            </summary>
+            <param name="objectType">The type of value object to create</param>
+            <param name="valueToSet">The string version of the value to set</param>
+            <param name="newObject">The new value type object created</param>
+            <returns>False if the value could not be set, true otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.SetListEntries(RelhaxModpack.DatabaseComponents.IComponentWithID,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
+            <summary>
+            Creates all database entries in a list property, parsing each list entry object by xmlListItems
+            </summary>
+            <param name="componentWithID">The database component with the list property, for example SelectablePackage</param>
+            <param name="listPropertyInfo">the property metadata/info about the list property, for example Medias</param>
+            <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetBetaDatabase1V1ForStringCompare">
+            <summary>
+            Get all xml strings for the V2 database file format from the selected beta database github branch
+            </summary>
+            <returns>all xml files in string form of the V2 database</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetBetaDatabase1V1ForStringCompareAsync">
+            <summary>
+            Get all xml strings for the V2 database file format from the selected beta database github branch
+            </summary>
+            <returns>all xml files in string form of the V2 database</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.DownloadStringsFromUrls(System.Collections.Generic.List{System.String})">
+            <summary>
+            Downloads an array of strings from a list of download URLs all at the same time
+            </summary>
+            <param name="downloadURLs">the list of string URLs to download</param>
+            <returns>An array of downloaded strings, or empty for each string that failed to download</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.DownloadStringsFromUrlsAsync(System.Collections.Generic.List{System.String})">
+            <summary>
+            Downloads an array of strings from a list of download URLs all at the same time
+            </summary>
+            <param name="downloadURLs">the list of string URLs to download</param>
+            <returns>An array of downloaded strings, or empty for each string that failed to download</returns>
+        </member>
         <member name="M:RelhaxModpack.Utils.BitmapToImageSource(System.Drawing.Bitmap)">
             <summary>
             Converts a Bitmap object to a BitmapImage object
@@ -7749,6 +7821,14 @@
             Opens the selected text in Google translate web page
             </summary>
             <param name="message">The text to translate</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.EmptyNullStringCheck(System.String,System.String)">
+            <summary>
+            Tests if an input string is null or empty
+            </summary>
+            <param name="stringToTest">The string to test</param>
+            <param name="emptyNullReturn">The emptyNullReturn value if the string is null or empty, stringToTest otherwise</param>
             <returns></returns>
         </member>
         <member name="M:RelhaxModpack.Utils.BuildFilepathMacroList">
