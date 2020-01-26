@@ -8071,6 +8071,25 @@
             <returns>The node list of matching results, or null</returns>
             <remarks>XmlElement and XmlAttribute inherit from XmlNode</remarks> 
         </member>
+        <member name="M:RelhaxModpack.XmlUtils.GetBetaDatabaseRoot1V1Document">
+            <summary>
+            Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
+            </summary>
+            <returns>the XmlDocument object of the root database file</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.GetBetaDatabase1V1FilesList(System.Xml.XmlDocument)">
+            <summary>
+            Get a list of all URLs to each xml document file of the database
+            </summary>
+            <param name="rootDocument">The root 'database.xml' document object</param>
+            <returns>The list of URLs</returns>
+        </member>
+        <member name="M:RelhaxModpack.XmlUtils.GetBetaDatabase1V1FilesList">
+            <summary>
+            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
+            </summary>
+            <returns>The list of URLs</returns>
+        </member>
         <member name="M:RelhaxModpack.XmlUtils.ParseDatabase(System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category},System.String)">
             <summary>
             Parse the Xml database of any type into lists in memory

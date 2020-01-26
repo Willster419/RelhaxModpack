@@ -285,6 +285,10 @@ namespace RelhaxModpack
         #endregion
 
         #region Database Loading
+        /// <summary>
+        /// Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
+        /// </summary>
+        /// <returns>the XmlDocument object of the root database file</returns>
         public static XmlDocument GetBetaDatabaseRoot1V1Document()
         {
             XmlDocument rootDocument = null;
@@ -300,6 +304,11 @@ namespace RelhaxModpack
             return rootDocument;
         }
 
+        /// <summary>
+        /// Get a list of all URLs to each xml document file of the database
+        /// </summary>
+        /// <param name="rootDocument">The root 'database.xml' document object</param>
+        /// <returns>The list of URLs</returns>
         public static List<string> GetBetaDatabase1V1FilesList(XmlDocument rootDocument)
         {
             List<string> databaseFiles = new List<string>()
@@ -318,6 +327,10 @@ namespace RelhaxModpack
             return databaseFiles.Select(name => name.Replace(".Xml", ".xml")).ToList();
         }
 
+        /// <summary>
+        /// Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
+        /// </summary>
+        /// <returns>The list of URLs</returns>
         public static List<string> GetBetaDatabase1V1FilesList()
         {
             XmlDocument rootDocument = GetBetaDatabaseRoot1V1Document();
