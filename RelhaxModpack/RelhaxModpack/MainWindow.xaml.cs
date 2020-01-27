@@ -2690,7 +2690,7 @@ namespace RelhaxModpack
                     if (loading)
                     {
                         if (string.IsNullOrEmpty(oldBetaDB))
-                            oldBetaDB = Utils.GetBetaDatabase1V1ForStringCompare();
+                            oldBetaDB = Utils.GetBetaDatabase1V1ForStringCompare(true);
                     }
                     else
                     {
@@ -2936,7 +2936,7 @@ namespace RelhaxModpack
                 if (loading)
                 {
                     if (string.IsNullOrEmpty(oldBetaDB))
-                        oldBetaDB = Utils.GetBetaDatabase1V1ForStringCompare();
+                        oldBetaDB = Utils.GetBetaDatabase1V1ForStringCompare(true);
                 }
                 else
                 {
@@ -3200,7 +3200,7 @@ namespace RelhaxModpack
             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
             {
                 UseBetaDatabaseCB.IsChecked = true;
-                OnUseBetaDatabaseChanged(true, null);
+                OnUseBetaDatabaseChanged(null, null);
             }
 
             //apply beta application settings

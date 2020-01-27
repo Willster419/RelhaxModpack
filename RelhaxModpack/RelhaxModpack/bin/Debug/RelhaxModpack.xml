@@ -7699,7 +7699,7 @@
             <param name="listPropertyInfo">the property metadata/info about the list property, for example Medias</param>
             <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetBetaDatabase1V1ForStringCompare">
+        <member name="M:RelhaxModpack.Utils.GetBetaDatabase1V1ForStringCompare(System.Boolean)">
             <summary>
             Get all xml strings for the V2 database file format from the selected beta database github branch
             </summary>
