@@ -5577,7 +5577,7 @@
         </member>
         <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.IsExtracted">
             <summary>
-            Determines if the file is extracted to the Filepath property location
+            Determines if the file is extracted to the Filepath property location. Also checks if latest version is extracted.
             </summary>
         </member>
         <member name="P:RelhaxModpack.RelhaxFreeImageLibrary.IsLoaded">
@@ -5625,7 +5625,7 @@
         </member>
         <member name="P:RelhaxModpack.RelhaxNvTexLibrary.IsExtracted">
             <summary>
-            Determines if the file is extracted to the Filepath property location
+            Determines if the file is extracted to the Filepath property location. Also checks if latest version is extracted.
             </summary>
         </member>
         <member name="P:RelhaxModpack.RelhaxNvTexLibrary.IsLoaded">
