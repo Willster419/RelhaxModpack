@@ -163,7 +163,7 @@ namespace RelhaxModpack
         /// </summary>
         public string[] DevURLList
         {
-            get { return DevURL.Replace("\r", string.Empty).Split('\n'); }
+            get { return Utils.MacroReplace(DevURL, ReplacementTypes.TextUnescape).Replace("\r", string.Empty).Split('\n'); }
         }
 
         /// <summary>
