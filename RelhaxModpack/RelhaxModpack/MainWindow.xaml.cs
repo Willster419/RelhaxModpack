@@ -1359,10 +1359,7 @@ namespace RelhaxModpack
                 return;
             }
 
-            //temporary fix for allowing packages to be installed in similar order to v1 legacy system
             //offset the installGroup values of selectablePackages added by the level of the package in the tree
-#warning selectablePackage level offset is active
-            Logging.Warning("selectablePackage level offset is active");
             Utils.PropagateInstallGroupsPerLevel(packagesToInstall);
 
             //perform list install order calculations
