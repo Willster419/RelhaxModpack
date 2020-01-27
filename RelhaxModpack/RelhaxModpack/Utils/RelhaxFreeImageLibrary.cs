@@ -46,12 +46,33 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Determines if the file is extracted to the Filepath property location
+        /// Determines if the file is extracted to the Filepath property location. Also checks if latest version is extracted.
         /// </summary>
         public bool IsExtracted
         {
             get
-            { return File.Exists(Filepath); }
+            {
+                if (!File.Exists(Filepath))
+                {
+                    Logging.Info("Teximpnet library file does not exist, extracting: {0}", EmbeddedFilename);
+                    return false;
+                }
+                Logging.Info("Teximpnet library file exists, checking if latest via Hash comparison not exist, extracting: {0}", EmbeddedFilename);
+                string extractedHash = Utils.CreateMD5Hash(Filepath);
+                Logging.Debug("{0} hash local:    {1}", EmbeddedFilename, extractedHash);
+
+                //file exists, but is it up to date?
+                string embeddedHash = string.Empty;
+                string resourceName = Utils.GetAssemblyName(EmbeddedFilename);
+                using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+                using (ZipFile zout = ZipFile.Read(stream))
+                using (Stream dllStream = zout[0].OpenReader())
+                {
+                    embeddedHash = Utils.CreateMD5Hash(dllStream);
+                }
+                Logging.Debug("{0} hash internal: {1}", EmbeddedFilename, embeddedHash);
+                return extractedHash.Equals(embeddedHash);
+            }
         }
 
         /// <summary>
@@ -107,6 +128,8 @@ namespace RelhaxModpack
                 Logging.Warning("Unmanaged library {0} is already extracted", EmbeddedFilename);
                 return;
             }
+            if (File.Exists(Filepath))
+                File.Delete(Filepath);
             //https://stackoverflow.com/questions/38381684/reading-zip-file-from-byte-array-using-ionic-zip
             string resourceName = Utils.GetAssemblyName(EmbeddedFilename);
             Logging.Info("Extracting unmanaged teximpnet library: {0}", EmbeddedFilename);
