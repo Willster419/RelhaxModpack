@@ -36,10 +36,8 @@ namespace RelhaxModpack
         private ModSelectionList modSelectionList;
         private RelhaxProgress downloadProgress = null;
         private AdvancedProgress AdvancedProgressWindow;
-        private bool closingFromFailure = false;
         private NewsViewer newsViewer = null;
         private WebClient client = null;
-        private VersionInfo versionInfo = null;
         private Timer autoInstallTimer = new Timer();
         private CancellationTokenSource cancellationTokenSource;
         private InstallEngine installEngine;
@@ -200,9 +198,6 @@ namespace RelhaxModpack
             ModpackSettings.DisableTriggers = true;
 
             //load AutoSyncFrequencyComboBox with translated versions
-            //<System:String>Minutes</System:String>
-            //<System:String> Hours </System:String >
-            //<System:String> Days </System:String >
             AutoSyncFrequencyComboBox.Items.Clear();
             AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("minutes"));
             AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("hours"));
@@ -242,6 +237,7 @@ namespace RelhaxModpack
             }
 
             //verify folder structure for all folders in the directory
+            //this also serves as checking write permissions from the current working directory
             progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("verDirStructure"));
             Utils.AllowUIToUpdate();
             Logging.Info("Verifying folder structure");
@@ -254,10 +250,10 @@ namespace RelhaxModpack
                 }
                 catch (Exception ex)
                 {
-                    Logging.WriteToLog("Failed to check application folder structure\n" + ex.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
+                    Logging.WriteToLog("Failed to check application folder structure\n" + ex.ToString(), Logfiles.Application, LogLevel.Exception);
                     MessageBox.Show(Translations.GetTranslatedString("failedVerifyFolderStructure"));
-                    closingFromFailure = true;
-                    Application.Current.Shutdown();
+                    Close();
+                    Environment.Exit(0);
                     return;
                 }
             }
@@ -272,117 +268,169 @@ namespace RelhaxModpack
                 Directory.CreateDirectory(Settings.AppDataFolder);
             }
 
-            //check for updates to database and application
+            //check for updates to application
             progressIndicator.UpdateProgress(4, Translations.GetTranslatedString("checkForUpdates"));
             bool isApplicationUpToDate = await CheckForApplicationUpdates();
-            if(!isApplicationUpToDate && versionInfo != null && !versionInfo.ConfirmUpdate)
+
+            //if not up to date, ask if user wants to update
+            if(!isApplicationUpToDate)
             {
-                Logging.Info("application is not up to date and user said don't update. we're done here.");
-                Close();
-                //https://stackoverflow.com/questions/57654546/taskcanceledexception-after-closing-window
-                Environment.Exit(0);
+                Logging.Info("Application is out of date, display update window");
+                VersionInfo versionInfo = new VersionInfo();
+                versionInfo.ShowDialog();
+
+                if(!versionInfo.ConfirmUpdate)
+                {
+                    Logging.Info("Application is not up to date and user said don't update. we're done here.");
+                    //Close() will still run the _close event handler
+                    Close();
+                    //https://stackoverflow.com/questions/57654546/taskcanceledexception-after-closing-window
+                    Environment.Exit(0);
+                    return;
+                }
+
+                //disable the UI during the application update process
+                updateMode = true;
+                ToggleUIButtons(false);
+
+                //check for any other running instances
+                while (true)
+                {
+                    Thread.Sleep(100);
+                    if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
+                    {
+                        MessageBoxResult result = MessageBox.Show(Translations.GetTranslatedString("closeInstanceRunningForUpdate"), Translations.GetTranslatedString("critical"), MessageBoxButton.OKCancel);
+                        if (result != MessageBoxResult.OK)
+                        {
+                            Logging.Info("User canceled update, because he does not want to end the parallel running Relhax instance.");
+                            Close();
+                            Environment.Exit(0);
+                            return;
+                        }
+                    }
+                    else
+                        break;
+                }
+
+                //start download of new version
+                using (WebClient client = new WebClient())
+                {
+                    //start download of new version
+                    client.DownloadProgressChanged += OnUpdateDownloadProgresChange;
+                    client.DownloadFileCompleted += OnUpdateDownloadCompleted;
+
+                    //set the UI for a download
+                    ResetUI();
+                    stopwatch.Reset();
+
+                    //check to make sure this window is displayed for progress
+                    if (WindowState != WindowState.Normal)
+                        WindowState = WindowState.Normal;
+
+                    //download the file
+                    string modpackURL = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
+                        Settings.ApplicationUpdateURL :
+                        Settings.ApplicationBetaUpdateURL;
+
+                    //make sure to delete it if it's currently three
+                    if (File.Exists(Settings.ApplicationUpdateFileName))
+                        File.Delete(Settings.ApplicationUpdateFileName);
+                    client.DownloadFileAsync(new Uri(modpackURL), Settings.ApplicationUpdateFileName);
+                }
+
+                //getting here means it's out of date and the update was accepted and started. just return
                 return;
             }
+
+            //check for updates to database
             await CheckForDatabaseUpdates(false);
 
             //set the file count and size for the backups folder
-            if (!isApplicationUpToDate)
-            {
-                Logging.Info("don't get file size of backups, application is not up to date");
-            }
-            else
-            {
-                Logging.Debug("Application is up to date, get file size of backups");
-                GetBackupFilesizesAsync(false);
-            }
+            Logging.Debug("Application is up to date, get file size of backups");
+            GetBackupFilesizesAsync(false);
 
-            Logging.Debug("checking if application is up to date");
             //if the application is up to date, then check if we need to display the welcome message to the user
-            if (isApplicationUpToDate && !closingFromFailure)
+            Logging.Info("Application is up to date, checking to display welcome message");
+
+            //run checks to see if it's the first time loading the application
+            Settings.FirstLoad = !File.Exists(Settings.ModpackSettingsFileName) && !File.Exists(Settings.OldModpackSettingsFilename);
+            Settings.FirstLoadToV2 = !File.Exists(Settings.ModpackSettingsFileName) && File.Exists(Settings.OldModpackSettingsFilename);
+            Logging.Info("FirstLoading = {0}, FirstLoadingV2 = {1}", Settings.FirstLoad.ToString(), Settings.FirstLoadToV2.ToString());
+
+            if (Settings.FirstLoad || Settings.FirstLoadToV2)
             {
-                Logging.Info("application is up to date, checking to display welcome message");
-
-                //run checks to see if it's the first time loading the application
-                Settings.FirstLoad = !File.Exists(Settings.ModpackSettingsFileName) && !File.Exists(Settings.OldModpackSettingsFilename);
-                Settings.FirstLoadToV2 = !File.Exists(Settings.ModpackSettingsFileName) && File.Exists(Settings.OldModpackSettingsFilename);
-                Logging.Info("FirstLoading = {0}, FirstLoadingV2 = {1}", Settings.FirstLoad.ToString(), Settings.FirstLoadToV2.ToString());
-
-                if (Settings.FirstLoad || Settings.FirstLoadToV2)
+                //display the selection of language if it's the first time loading (not an upgrade)
+                if (Settings.FirstLoad && !Settings.FirstLoadToV2)
                 {
-                    //display the selection of language if it's the first time loading (not an upgrade)
-                    if(Settings.FirstLoad && !Settings.FirstLoadToV2)
+                    FirstLoadSelectLanguage firstLoadSelectLanguage = new FirstLoadSelectLanguage();
+                    firstLoadSelectLanguage.ShowDialog();
+                    if (!firstLoadSelectLanguage.Continue)
                     {
-                        FirstLoadSelectLanguage firstLoadSelectLanguage = new FirstLoadSelectLanguage();
-                        firstLoadSelectLanguage.ShowDialog();
-                        if(!firstLoadSelectLanguage.Continue)
-                        {
-                            Logging.Info("user did not select language, closing");
-                            Application.Current.Shutdown();
-                            closingFromFailure = true;
-                            return;
-                        }
-                        LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
-                        LanguagesSelector.SelectedItem = Translations.GetLanguageNativeName(ModpackSettings.Language);
-                        LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
-                        Translations.LocalizeWindow(this, true);
-                        AutoSyncFrequencyComboBox.Items.Clear();
-                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("minutes"));
-                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("hours"));
-                        AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("days"));
-                        ApplyCustomUILocalizations(false);
-                    }
-
-                    //display the welcome window and make sure the user agrees to it
-                    FirstLoadAcknowledgments firstLoadAknowledgements = new FirstLoadAcknowledgments();
-                    firstLoadAknowledgements.ShowDialog();
-                    if (!firstLoadAknowledgements.UserAgreed)
-                    {
-                        Logging.Info("user did not agree to application load conditions, closing");
-                        Application.Current.Shutdown();
-                        closingFromFailure = true;
+                        Logging.Info("User did not select language, closing");
+                        Close();
+                        Environment.Exit(0);
                         return;
                     }
+                    LanguagesSelector.SelectionChanged -= OnLanguageSelectionChanged;
+                    LanguagesSelector.SelectedItem = Translations.GetLanguageNativeName(ModpackSettings.Language);
+                    LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
+                    Translations.LocalizeWindow(this, true);
+                    AutoSyncFrequencyComboBox.Items.Clear();
+                    AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("minutes"));
+                    AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("hours"));
+                    AutoSyncFrequencyComboBox.Items.Add(Translations.GetTranslatedString("days"));
+                    ApplyCustomUILocalizations(false);
+                }
 
-                    //if user agreed and its the first time loading in v2, the do the structure upgrade
-                    else if (Settings.FirstLoadToV2)
-                    {
-                        progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("upgradingStructure"));
-                        Utils.AllowUIToUpdate();
-                        Logging.Info("starting upgrade to V2");
+                //display the welcome window and make sure the user agrees to it
+                FirstLoadAcknowledgments firstLoadAknowledgements = new FirstLoadAcknowledgments();
+                firstLoadAknowledgements.ShowDialog();
+                if (!firstLoadAknowledgements.UserAgreed)
+                {
+                    Logging.Info("User did not agree to application load conditions, closing");
+                    Close();
+                    Environment.Exit(0);
+                    return;
+                }
+                //if user agreed and its the first time loading in v2, the do the structure upgrade
+                else if (Settings.FirstLoadToV2)
+                {
+                    progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("upgradingStructure"));
+                    Utils.AllowUIToUpdate();
+                    Logging.Info("starting upgrade to V2");
 
-                        //process libraries folder
-                        Logging.Info("upgrade folders to new names");
+                    //process libraries folder
+                    Logging.Info("upgrade folders to new names");
 #pragma warning disable CS0612
-                        MoveUpgradeFolder(Settings.RelhaxDownloadsFolderPathOld, Settings.RelhaxDownloadsFolderPath);
-                        MoveUpgradeFolder(Settings.RelhaxModBackupFolderPathOld, Settings.RelhaxModBackupFolderPath);
-                        MoveUpgradeFolder(Settings.RelhaxUserSelectionsFolderPathOld, Settings.RelhaxUserSelectionsFolderPath);
-                        MoveUpgradeFolder(Settings.RelhaxUserModsFolderPathOld, Settings.RelhaxUserModsFolderPath);
-                        MoveUpgradeFolder(Settings.RelhaxTempFolderPathOld, Settings.RelhaxTempFolderPath);
-                        MoveUpgradeFolder(Settings.RelhaxLibrariesFolderPathOld, Settings.RelhaxLibrariesFolderPath);
+                    MoveUpgradeFolder(Settings.RelhaxDownloadsFolderPathOld, Settings.RelhaxDownloadsFolderPath);
+                    MoveUpgradeFolder(Settings.RelhaxModBackupFolderPathOld, Settings.RelhaxModBackupFolderPath);
+                    MoveUpgradeFolder(Settings.RelhaxUserSelectionsFolderPathOld, Settings.RelhaxUserSelectionsFolderPath);
+                    MoveUpgradeFolder(Settings.RelhaxUserModsFolderPathOld, Settings.RelhaxUserModsFolderPath);
+                    MoveUpgradeFolder(Settings.RelhaxTempFolderPathOld, Settings.RelhaxTempFolderPath);
+                    MoveUpgradeFolder(Settings.RelhaxLibrariesFolderPathOld, Settings.RelhaxLibrariesFolderPath);
 #pragma warning restore CS0612
 
-                        //process xml settings file
-                        //delete the new one, move the old one, reload settings
-                        Logging.Info("moving, loading settings");
-                        File.Move(Settings.OldModpackSettingsFilename, Settings.ModpackSettingsFileName);
-                        Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null);
-                        ApplySettingsToUI();
+                    //process xml settings file
+                    //delete the new one, move the old one, reload settings
+                    Logging.Info("moving, loading settings");
+                    File.Move(Settings.OldModpackSettingsFilename, Settings.ModpackSettingsFileName);
+                    Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null);
+                    ApplySettingsToUI();
 
-                        //process log file
-                        Logging.Info("moving and re-init of logging system");
-                        if (File.Exists(Logging.OldApplicationLogFilename))
-                        {
-                            Logging.DisposeLogging(Logfiles.Application);
-                            string tempNewLogText = File.ReadAllText(Logging.ApplicationLogFilename);
-                            File.Delete(Logging.ApplicationLogFilename);
-                            File.Move(Logging.OldApplicationLogFilename, Logging.ApplicationLogFilename);
-                            File.AppendAllText(Logging.ApplicationLogFilename, tempNewLogText);
-                            Logging.Init(Logfiles.Application, Logging.ApplicationLogFilename);
-                        }
-                        else
-                            Logging.Info("skipped (old log does not exist)");
-                        Logging.Info("upgrade to V2 complete, welcome to the future!");
+                    //process log file
+                    Logging.Info("moving and re-init of logging system");
+                    if (File.Exists(Logging.OldApplicationLogFilename))
+                    {
+                        Logging.DisposeLogging(Logfiles.Application);
+                        string tempNewLogText = File.ReadAllText(Logging.ApplicationLogFilename);
+                        File.Delete(Logging.ApplicationLogFilename);
+                        File.Move(Logging.OldApplicationLogFilename, Logging.ApplicationLogFilename);
+                        File.AppendAllText(Logging.ApplicationLogFilename, tempNewLogText);
+                        Logging.Init(Logfiles.Application, Logging.ApplicationLogFilename);
                     }
+                    else
+                        Logging.Info("skipped (old log does not exist)");
+                    Logging.Info("upgrade to V2 complete, welcome to the future!");
                 }
             }
 
@@ -415,76 +463,77 @@ namespace RelhaxModpack
             }
 
             //show the UI if not closing the application out of failure
-            if (!closingFromFailure)
+            WindowState = WindowState.Normal;
+
+            //get the current application scale
+            //https://stackoverflow.com/questions/5022397/scale-an-entire-wpf-window
+            //https://stackoverflow.com/questions/44683626/wpf-application-same-size-at-every-system-scale-scale-independent
+            double currentScale = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;
+
+            //if display scale is 0, then set it to what it is currently
+            if (ModpackSettings.DisplayScale == 0)
+                ModpackSettings.DisplayScale = currentScale;
+
+            //if current scale is not target, then update
+            if (ModpackSettings.DisplayScale != currentScale)
             {
-                WindowState = WindowState.Normal;
-                //get the current application scale
-                //https://stackoverflow.com/questions/5022397/scale-an-entire-wpf-window
-                //https://stackoverflow.com/questions/44683626/wpf-application-same-size-at-every-system-scale-scale-independent
-                double currentScale = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;
+                Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+            }
 
-                //if display scale is 0, then set it to what it is currently
-                if (ModpackSettings.DisplayScale == 0)
-                    ModpackSettings.DisplayScale = currentScale;
+            //apply to slider
+            ApplyCustomScalingSlider.Value = ModpackSettings.DisplayScale;
+            ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
 
-                //if current scale is not target, then update
-                if (ModpackSettings.DisplayScale != currentScale)
+            //if silent start is selected, start the application minimized
+            if (CommandLineSettings.SilentStart)
+            {
+                Logging.Info("SilentStart found from command line, minimizing on startup");
+                WindowState = WindowState.Minimized;
+            }
+
+            //else if the auto-install option was set, immediately start the installation
+            else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
+            {
+                Logging.Info("auto-install specified to launch install using {0}", CommandLineSettings.AutoInstallFileName);
+                if (!File.Exists(Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName)))
                 {
-                    Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                    Logging.Error("configuration file not found in {0}, aborting", Settings.RelhaxUserSelectionsFolderPath);
+                    CommandLineSettings.AutoInstallFileName = string.Empty;
                 }
-
-                //apply to slider
-                ApplyCustomScalingSlider.Value = ModpackSettings.DisplayScale;
-                ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
-
-                //if silent start is selected, start the application minimized
-                if (CommandLineSettings.SilentStart)
+                else
                 {
-                    Logging.Info("SilentStart found from command line, minimizing on startup");
-                    WindowState = WindowState.Minimized;
+                    Logging.Info("file exists, launching modpack installation!");
+                    InstallModpackButton_Click(null, null);
                 }
-                //else if the auto-install option was set, immediately start the installation
-                else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
-                {
-                    Logging.Info("auto-install specified to launch install using {0}", CommandLineSettings.AutoInstallFileName);
-                    if (!File.Exists(Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName)))
-                    {
-                        Logging.Error("configuration file not found in {0}, aborting", Settings.RelhaxUserSelectionsFolderPath);
-                        CommandLineSettings.AutoInstallFileName = string.Empty;
-                    }
-                    else
-                    {
-                        Logging.Info("file exists, launching modpack installation!");
-                        InstallModpackButton_Click(null, null);
-                    }
-                }
-                //loading in normal mode, check if atlas image processing libraries can be loaded
-                else if(!ModpackSettings.AtlasLibrariesCanBeLoaded)
-                {
-                    Logging.Info("Atlas libraries never recorded being loaded, testing now via async task");
-                    Task.Run(async () =>
-                    {
-                        await Task.Delay(1000);
+            }
 
-                        ModpackSettings.AtlasLibrariesCanBeLoaded = Utils.TestLoadAtlasLibraries(true);
-                        //if after test, it fails, inform the user
-                        if (!ModpackSettings.AtlasLibrariesCanBeLoaded)
+            //loading in normal mode, check if atlas image processing libraries can be loaded
+            else if (!ModpackSettings.AtlasLibrariesCanBeLoaded)
+            {
+                Logging.Info("Atlas libraries never recorded being loaded, testing now via async task");
+                Task.Run(async () =>
+                {
+                    await Task.Delay(1000);
+
+                    ModpackSettings.AtlasLibrariesCanBeLoaded = Utils.TestLoadAtlasLibraries(true);
+
+                    //if after test, it fails, inform the user
+                    if (!ModpackSettings.AtlasLibrariesCanBeLoaded)
+                    {
+                        if (MessageBox.Show(string.Format("{0}\n{1}", Translations.GetTranslatedString("missingMSVCPLibraries"), Translations.GetTranslatedString("openLinkToMSVCP")),
+                            Translations.GetTranslatedString("missingMSVCPLibrariesHeader"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         {
-                            if (MessageBox.Show(string.Format("{0}\n{1}", Translations.GetTranslatedString("missingMSVCPLibraries"), Translations.GetTranslatedString("openLinkToMSVCP")),
-                                Translations.GetTranslatedString("missingMSVCPLibrariesHeader"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                            if (!Utils.StartProcess(Utils.MSVCPLink))
                             {
-                                if (!Utils.StartProcess(Utils.MSVCPLink))
-                                {
-                                    Logging.Error("failed to open url to MSVCP: {0}", Utils.MSVCPLink);
-                                }
+                                Logging.Error("failed to open url to MSVCP: {0}", Utils.MSVCPLink);
                             }
                         }
-                    });
-                }
-
-                //unset loading flag
-                loading = false;
+                    }
+                });
             }
+
+            //unset loading flag
+            loading = false;
         }
 
         private void TheMainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -512,13 +561,13 @@ namespace RelhaxModpack
             }
 
             //don't save the settings file if it's in update mode or closing from a critical application failure
-            if (closingFromFailure)
-            {
-                Logging.TryWriteToLog("ClosingFromFailure = true, don't save settings", Logfiles.Application, LogLevel.Debug);
-            }
-            else if (updateMode)
+            if (updateMode)
             {
                 Logging.TryWriteToLog("UpdateMode = true, don't save settings", Logfiles.Application, LogLevel.Debug);
+            }
+            else if(loading)
+            {
+                Logging.TryWriteToLog("loading = true, so never a clean load, don't save settings", Logfiles.Application, LogLevel.Debug);
             }
             else
             {
@@ -697,7 +746,7 @@ namespace RelhaxModpack
                 }
                 //only get if from the downloaded version
                 //get the version info string
-                string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, "manager_version.xml");
+                string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.ManagerVersion);
                 if (string.IsNullOrEmpty(xmlString))
                 {
                     Logging.WriteToLog("Failed to get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
@@ -740,7 +789,11 @@ namespace RelhaxModpack
             if (CommandLineSettings.SkipUpdate)
             {
                 if (Settings.ApplicationVersion != ApplicationVersions.Alpha)
+                {
+#pragma warning disable CS0162
                     MessageBox.Show(Translations.GetTranslatedString("skipUpdateWarning"));
+#pragma warning restore CS0162
+                }
                 Logging.Warning("Skipping update check from command-line option SkipUpdate");
                 return true;
             }
@@ -751,7 +804,6 @@ namespace RelhaxModpack
                 Logging.Warning("Alpha is invalid option for ModpackSettings.ApplicationDistroVersion, setting to stable");
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
             }
-
 
             //4 possibilities:
             //stable->stable (update check)
@@ -801,12 +853,12 @@ namespace RelhaxModpack
             //only true alpha build version will get here
             if (version == ApplicationVersions.Alpha)
             {
-                Logging.Debug("application version is {0} on alpha build, skipping update check");
+                Logging.Debug("application version is {0} on (true) alpha build, skipping update check");
                 return true;
             }
 
             //if current application build does not equal requested distribution channel
-            //can assume out of date because switching distrobution channels
+            //can assume out of date because switching distribution channels
             if (version != ModpackSettings.ApplicationDistroVersion)
             {
                 outOfDate = true;
@@ -817,66 +869,17 @@ namespace RelhaxModpack
             {
                 outOfDate = !(await Utils.IsManagerUptoDate(applicationBuildVersion));
             }
+
             if (!outOfDate)
             {
                 Logging.Info("Application up to date");
                 return true;
             }
-
-            Logging.Info("Application is out of date, display update window");
-            versionInfo = new VersionInfo();
-            versionInfo.ShowDialog();
-            if (versionInfo.ConfirmUpdate)
-            {
-                //disable the UI during the application update process
-                updateMode = true;
-                ToggleUIButtons(false);
-
-                //check for any other running instances
-                while (true)
-                {
-                    Thread.Sleep(100);
-                    if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
-                    {
-                        MessageBoxResult result = MessageBox.Show(Translations.GetTranslatedString("closeInstanceRunningForUpdate"), Translations.GetTranslatedString("critical"), MessageBoxButton.OKCancel);
-                        if (result != MessageBoxResult.OK)
-                        {
-                            Logging.Info("User canceled update, because he does not want to end the parallel running Relhax instance.");
-                            Application.Current.Shutdown();
-                            Close();
-                            return false;
-                        }
-                    }
-                    else
-                        break;
-                }
-                using (WebClient client = new WebClient())
-                {
-                    //start download of new version
-                    client.DownloadProgressChanged += OnUpdateDownloadProgresChange;
-                    client.DownloadFileCompleted += OnUpdateDownloadCompleted;
-                    //set the UI for a download
-                    ResetUI();
-                    stopwatch.Reset();
-                    //check to make sure this window is displayed for progress
-                    if (WindowState != WindowState.Normal)
-                        WindowState = WindowState.Normal;
-                    //download the file
-                    string modpackURL = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
-                        Settings.ApplicationUpdateURL :
-                        Settings.ApplicationBetaUpdateURL;
-                    //make sure to delete it if it's currently three
-                    if (File.Exists(Settings.ApplicationUpdateFileName))
-                        File.Delete(Settings.ApplicationUpdateFileName);
-                    client.DownloadFileAsync(new Uri(modpackURL), Settings.ApplicationUpdateFileName);
-                }
-            }
             else
             {
-                Logging.Info("User pressed x or said no");
+                Logging.Info("Application not up to date");
                 return false;
             }
-            return false;
         }
 
         private void ResetUI()
@@ -1164,6 +1167,7 @@ namespace RelhaxModpack
                         //if it's not alpha, show the warning messages
                         if (Settings.ApplicationVersion != ApplicationVersions.Alpha)
                         {
+#pragma warning disable CS0162
                             //log and inform the user
                             Logging.Warning("current client version {0} does not exist in list: {1}", Settings.WoTClientVersion, string.Join(", ", supportedVersionsString));
                             MessageBox.Show(string.Format("{0}: {1}\n{2} {3}\n\n{4}:\n{5}",
@@ -1174,6 +1178,7 @@ namespace RelhaxModpack
                                 Translations.GetTranslatedString("supportedClientVersions"),//4
                                 string.Join("\n", supportedVersionsString)),//5
                                 Translations.GetTranslatedString("critical"));//header
+#pragma warning restore CS0162
                         }
                     }
 
