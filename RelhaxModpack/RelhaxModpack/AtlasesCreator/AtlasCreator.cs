@@ -315,7 +315,7 @@ namespace RelhaxModpack.AtlasesCreator
             }
             else
             {
-                Logging.Info("[atlas file {0}]: Success Packing into {1} x {2} pixel", Path.GetFileName(Atlas.AtlasFile), outputImage.Height, outputImage.Width);
+                Logging.Info("[atlas file {0}]: Success packing into {1} x {2} pixel", Path.GetFileName(Atlas.AtlasFile), outputImage.Height, outputImage.Width);
             }
 
             //save it to the class for disposal
@@ -324,11 +324,19 @@ namespace RelhaxModpack.AtlasesCreator
             //export the atlas file
             //delete one if it exists
             if (File.Exists(Atlas.AtlasFile))
+            {
+                Logging.Info("[atlas file {0}]: File already exists, deleting", Path.GetFileName(Atlas.AtlasFile));
                 File.Delete(Atlas.AtlasFile);
+            }
+
             //then save
-            SaveDDS(Atlas.AtlasFile, outputImage);
+            if(!SaveDDS(Atlas.AtlasFile, outputImage))
+            {
+                Logging.Error("[atlas file {0}]: failed to create atlas image: {1}", Path.GetFileName(Atlas.AtlasFile), Atlas.AtlasFile);
+                return FailCode.ImageExporter;
+            }
             OnAtlasProgres?.Invoke(this, null);
-            Logging.Info("[atlas file {0}]: successfully created Atlas image: {1}", Path.GetFileName(Atlas.AtlasFile), Atlas.AtlasFile);
+            Logging.Info("[atlas file {0}]: successfully created atlas image: {1}", Path.GetFileName(Atlas.AtlasFile), Atlas.AtlasFile);
 
             //export the mapfile
             //delete one if it exists
@@ -380,16 +388,19 @@ namespace RelhaxModpack.AtlasesCreator
             return copy;
         }
 
-        private void SaveDDS(string filename, Bitmap image)
+        private bool SaveDDS(string filename, Bitmap image)
         {
             // Lock the bitmap's bits. 
             //https://stackoverflow.com/questions/28655133/difference-between-bitmap-and-bitmapdata
             //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.imaging.bitmapdata.scan0?view=netframework-4.8#System_Drawing_Imaging_BitmapData_Scan0
             Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
+            Logging.Debug("[atlas file {0}]: Locking bits of image {1} x {2} size", Path.GetFileName(Atlas.AtlasFile), image.Width, image.Height);
             BitmapData bmpData = image.LockBits(rect, ImageLockMode.ReadOnly, image.PixelFormat);
+            Logging.Debug("[atlas file {0}]: Bits locked, creating Surface and Compressor objects", Path.GetFileName(Atlas.AtlasFile));
 
             //create surface object for processing
             //and compress to DDS
+            bool success = true;
             using (Surface surfaceFromRawData = Surface.LoadFromRawData(bmpData.Scan0, image.Width, image.Height, bmpData.Stride, true))
             using (Compressor compressor = new Compressor())
             {
@@ -397,10 +408,21 @@ namespace RelhaxModpack.AtlasesCreator
                 compressor.Input.AlphaMode = AlphaMode.None;
                 compressor.Input.GenerateMipmaps = false;
                 compressor.Input.ConvertToNormalMap = false;
-                compressor.Input.SetData(surfaceFromRawData);
-                compressor.Process(filename);
+
+                Logging.Debug("[atlas file {0}]: Attempting to set image data", Path.GetFileName(Atlas.AtlasFile));
+                if(compressor.Input.SetData(surfaceFromRawData))
+                {
+                    Logging.Debug("[atlas file {0}]: Image data set, attempting to process for compression", Path.GetFileName(Atlas.AtlasFile));
+                    success = compressor.Process(filename);
+                }
+                else
+                {
+                    success = false;
+                }
             }
             image.UnlockBits(bmpData);
+
+            return success;
         }
         #endregion
 
