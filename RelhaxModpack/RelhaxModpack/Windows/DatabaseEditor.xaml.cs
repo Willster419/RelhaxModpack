@@ -80,10 +80,6 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("Editor settings loaded success");
             }
 
-#warning forcing sort categories to be off
-            Logging.Editor("forcing sort categories off", LogLevel.Warning);
-            EditorSettings.SortDatabaseList = false;
-
             //check if we are loading the document auto from the command line
             LoadSettingsToUI();
             if (!string.IsNullOrWhiteSpace(CommandLineSettings.EditorAutoLoadFileName))
@@ -223,11 +219,6 @@ namespace RelhaxModpack.Windows
         {
             //clear and reset
             DatabaseTreeView.Items.Clear();
-            //RESET UI TODO? or don't do it?
-
-            //if user requests, sort the lists like the selection list does
-            if (EditorSettings.SortDatabaseList)
-                Utils.SortDatabase(parsedCategoryList);
 
             //create treeviewItems for each entry
             //first make the globalDependencies header
@@ -342,7 +333,6 @@ namespace RelhaxModpack.Windows
             BigmodsUsernameSetting.Text = EditorSettings.BigmodsUsername;
             BigmodsPasswordSetting.Text = EditorSettings.BigmodsPassword;
             SaveSelectionBeforeLeaveSetting.IsChecked = EditorSettings.SaveSelectionBeforeLeave;
-            SortCategoriesSetting.IsChecked = EditorSettings.SortDatabaseList;
             ApplyBehaviorDefaultSetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.Default ? true : false;
             ApplyBehaviorApplyTriggersSaveSetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave ? true : false;
             ApplyBehaviorSaveTriggersApplySetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply ? true : false;
@@ -2535,11 +2525,6 @@ namespace RelhaxModpack.Windows
         private void SaveSelectionBeforeLeaveSetting_Click(object sender, RoutedEventArgs e)
         {
             EditorSettings.SaveSelectionBeforeLeave = (bool)SaveSelectionBeforeLeaveSetting.IsChecked;
-        }
-
-        private void SortCategoriesSetting_Click(object sender, RoutedEventArgs e)
-        {
-            EditorSettings.SortDatabaseList = (bool)SortCategoriesSetting.IsChecked;
         }
 
         private void ApplyBehaviorSetting_Checked(object sender, RoutedEventArgs e)

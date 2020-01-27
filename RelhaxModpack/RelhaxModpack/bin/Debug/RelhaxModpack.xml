@@ -4438,11 +4438,6 @@
             Before you click on a new selection to display, it will apply any changes made. Can be used with ApplyBehavior.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.EditorSettings.SortDatabaseList">
-            <summary>
-            Sort the database list per level. Not currently implemented
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.EditorSettings.ApplyBehavior">
             <summary>
             The behavior the editor should use for the save and apply buttons

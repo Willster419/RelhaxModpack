@@ -48,11 +48,6 @@ namespace RelhaxModpack
         public bool SaveSelectionBeforeLeave = false;
 
         /// <summary>
-        /// Sort the database list per level. Not currently implemented
-        /// </summary>
-        public bool SortDatabaseList = false;
-
-        /// <summary>
         /// The behavior the editor should use for the save and apply buttons
         /// </summary>
         public ApplyBehavior ApplyBehavior = ApplyBehavior.Default;
