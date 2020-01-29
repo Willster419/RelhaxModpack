@@ -137,7 +137,7 @@ namespace RelhaxModpack
 
             //delete the updater scripts if they exist
 #pragma warning disable CS0618
-            foreach (string s in new string[] { Settings.RelicBatchUpdateScript, Settings.RelicBatchUpdateScriptOld })
+            foreach (string s in new string[] { Settings.RelicBatchUpdateScript, Settings.RelicBatchUpdateScriptOld, "RelhaxModpack_update.exe", "RelhaxModpack_update.zip", })
             {
                 if (File.Exists(s))
                 {
