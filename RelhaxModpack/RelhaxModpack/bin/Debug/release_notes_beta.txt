@@ -1,3 +1,9 @@
+BETA Application version 1.0.1.1 (2020-01-28)
+- Fixed DevURL bugs with database editor.
+- Fixed DevURL bugs with database csv output.
+- Added debug logging and null checks in bug isolation during application update.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.0.1.0 (2020-01-26)
 https://www.virustotal.com/gui/file/c450147a9cac4fab33d8bb56be60f7858a3c642f485f1cc16ca06d1c0f0582d5/detection
 - Fixed bug of application crashing when trying to parse invalid preview URI strings.
