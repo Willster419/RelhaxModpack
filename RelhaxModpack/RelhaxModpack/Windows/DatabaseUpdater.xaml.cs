@@ -369,7 +369,7 @@ namespace RelhaxModpack.Windows
             List<Dependency> dependencies = new List<Dependency>();
             XmlDocument doc = new XmlDocument();
             doc.Load(SelectModInfo.FileName);
-            XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList);
+            XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList, Path.GetDirectoryName(SelectModInfo.FileName));
             //link stuff in memory or something
             Utils.BuildLinksRefrence(parsecCateogryList, false);
             //create variables
