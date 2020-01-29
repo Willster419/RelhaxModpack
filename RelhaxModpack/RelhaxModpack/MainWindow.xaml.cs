@@ -903,10 +903,12 @@ namespace RelhaxModpack
             {
                 Logging.WriteToLog("Failed to download application update\n" + e.Error.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
                 MessageBox.Show(Translations.GetTranslatedString("cantDownloadNewVersion"));
-                Application.Current.Shutdown();
+                Environment.Exit(-1);
+                return;
             }
 
             //try to extract the update
+            Logging.Debug("Extracting update zip file");
             try
             {
                 using (ZipFile zip = ZipFile.Read(Settings.ApplicationUpdateFileName))
@@ -918,11 +920,23 @@ namespace RelhaxModpack
             {
                 Logging.WriteToLog("Failed to extract update zip file\n" + zipex.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
                 MessageBox.Show(Translations.GetTranslatedString("failedToExtractUpdateArchive"));
-                Application.Current.Shutdown();
+                Environment.Exit(-1);
+                return;
+            }
+
+            //check that zip isn't null
+            Logging.Debug("Getting update script from Manager info zip file");
+            if(Settings.ManagerInfoZipfile == null)
+            {
+                Logging.Error("Settings.ManagerInfoZipfile is null, failed to get update script");
+                MessageBox.Show(Translations.GetTranslatedString("cantStartNewApp"));
+                Environment.Exit(-1);
+                return;
             }
 
             //extract the batch script to update the application
             string batchScript = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.RelicBatchUpdateScriptServer);
+            Logging.Debug("Writing batch script to disk");
             File.WriteAllText(Settings.RelicBatchUpdateScript, batchScript);
 
             //try to start the update script
@@ -944,7 +958,8 @@ namespace RelhaxModpack
                     Logfiles.Application, LogLevel.ApplicationHalt);
                 MessageBox.Show(Translations.GetTranslatedString("cantStartNewApp"));
             }
-            Application.Current.Shutdown();
+            Environment.Exit(0);
+            return;
         }
 
         private void OnUpdateDownloadProgresChange(object sender, DownloadProgressChangedEventArgs e)
