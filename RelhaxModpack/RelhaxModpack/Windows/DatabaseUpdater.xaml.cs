@@ -389,7 +389,7 @@ namespace RelhaxModpack.Windows
                         string.Empty,
                         "0",
                         string.IsNullOrWhiteSpace(dp.ZipFile) ? notApplicable : dp.ZipFile,
-                        string.IsNullOrWhiteSpace(dp.DevURL) ? "" : "=HYPERLINK(\"" + dp.DevURL + "\",\"link\")",
+                        string.IsNullOrWhiteSpace(dp.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + dp.DevURLList[0].Trim() + "\",\"link\")",
                         dp.Enabled,
                         string.Empty,
                         dp.Version
@@ -403,7 +403,7 @@ namespace RelhaxModpack.Windows
                         string.Empty,
                         "0",
                         string.IsNullOrWhiteSpace(dep.ZipFile) ? notApplicable : dep.ZipFile,
-                        string.IsNullOrWhiteSpace(dep.DevURL) ? "" : "=HYPERLINK(\"" + dep.DevURL + "\",\"link\")",
+                        string.IsNullOrWhiteSpace(dep.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + dep.DevURLList[0].Trim() + "\",\"link\")",
                         dep.Enabled,
                         string.Empty,
                         dep.Version));
@@ -423,7 +423,7 @@ namespace RelhaxModpack.Windows
                             nameIndneted = "--" + nameIndneted;
                         }
                         sb.AppendLine(string.Format("{0}\t{1}\t{2}", sp.ParentCategory.Name, nameIndneted,
-                            string.IsNullOrWhiteSpace(sp.DevURL) ? "" : "=HYPERLINK(\"" + sp.DevURL + "\",\"link\")"));
+                            string.IsNullOrWhiteSpace(sp.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + sp.DevURLList[0].Trim() + "\",\"link\")"));
                     }
                     else
                     {
@@ -433,7 +433,7 @@ namespace RelhaxModpack.Windows
                             sp.NameFormatted,
                             sp.Level,
                             string.IsNullOrWhiteSpace(sp.ZipFile) ? notApplicable : sp.ZipFile,
-                            string.IsNullOrWhiteSpace(sp.DevURL) ? "" : "=HYPERLINK(\"" + sp.DevURL + "\",\"link\")",
+                            string.IsNullOrWhiteSpace(sp.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + sp.DevURLList[0].Trim() + "\",\"link\")",
                             sp.Enabled,
                             sp.Visible,
                             sp.Version));
