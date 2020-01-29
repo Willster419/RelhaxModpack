@@ -715,9 +715,7 @@ namespace RelhaxModpack.Windows
             PackageEnabledDisplay.IsChecked = package.Enabled;
 
             //devURL
-            //each url is separated by newline characters "\n"
-            //should be displayed with newlines already, so no change needed
-            PackageDevURLDisplay.Text = package.DevURL;
+            PackageDevURLDisplay.Text = Utils.MacroReplace(package.DevURL,ReplacementTypes.TextUnescape);
 
             //internal notes
             PackageInternalNotesDisplay.Text = package.InternalNotesEscaped;
