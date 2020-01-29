@@ -905,6 +905,7 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.GetTranslatedString("cantDownloadNewVersion"));
                 Application.Current.Shutdown();
             }
+
             //try to extract the update
             try
             {
@@ -919,9 +920,11 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.GetTranslatedString("failedToExtractUpdateArchive"));
                 Application.Current.Shutdown();
             }
+
             //extract the batch script to update the application
             string batchScript = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.RelicBatchUpdateScriptServer);
             File.WriteAllText(Settings.RelicBatchUpdateScript, batchScript);
+
             //try to start the update script
             try
             {
