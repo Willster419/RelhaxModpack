@@ -84,6 +84,8 @@ namespace RelhaxModpack
         bool timerActive = false;
         //flag for if the application is in "update mode" (downloading the new application update and closing)
         private bool updateMode = false;
+        //task during update mode to get the manager info document as well
+        Task<ZipFile> DownloadManagerInfoZip = null;
 
         /// <summary>
         /// The original width and height of the application before applying scaling
@@ -318,6 +320,10 @@ namespace RelhaxModpack
                     //start download of new version
                     client.DownloadProgressChanged += OnUpdateDownloadProgresChange;
                     client.DownloadFileCompleted += OnUpdateDownloadCompleted;
+
+                    //start to download the manager info file as well
+                    Logging.Info("Starting task GetManagerInfoZipfileAsync()");
+                    DownloadManagerInfoZip = Utils.GetManagerInfoZipfileAsync(false);
 
                     //set the UI for a download
                     ResetUI();
@@ -895,7 +901,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void OnUpdateDownloadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        private async void OnUpdateDownloadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             //stop the timer
             stopwatch.Reset();
@@ -924,14 +930,36 @@ namespace RelhaxModpack
                 return;
             }
 
-            //check that zip isn't null
-            Logging.Debug("Getting update script from Manager info zip file");
+            //check that zip isn't null, and get it if it is
+            Logging.Debug("Checking on Task GetManagerInfoZipfileAsync()");
+            if(!DownloadManagerInfoZip.IsCompleted)
+            {
+                Logging.Debug("Task GetManagerInfoZipfileAsync() is not done, setting timeout for 10 seconds");
+                if(DownloadManagerInfoZip.Wait(TimeSpan.FromSeconds(10)))
+                {
+                    Logging.Debug("Task GetManagerInfoZipfileAsync() finished successfully");
+                }
+                else
+                {
+                    Logging.Debug("Task GetManagerInfoZipfileAsync() failed, timeout. Try again...");
+                }
+            }
+            else
+            {
+                Settings.ManagerInfoZipfile = DownloadManagerInfoZip.Result;
+            }
+
+            //and one final check
             if(Settings.ManagerInfoZipfile == null)
             {
-                Logging.Error("Settings.ManagerInfoZipfile is null, failed to get update script");
-                MessageBox.Show(Translations.GetTranslatedString("cantStartNewApp"));
-                Environment.Exit(-1);
-                return;
+                Logging.Warning("Settings.ManagerInfoZipfile is null, getting now");
+                Settings.ManagerInfoZipfile = await Utils.GetManagerInfoZipfileAsync(false);
+                if (Settings.ManagerInfoZipfile == null)
+                {
+                    MessageBox.Show(Translations.GetTranslatedString("failedToExtractUpdateArchive"));
+                    Environment.Exit(-1);
+                    return;
+                }
             }
 
             //extract the batch script to update the application
