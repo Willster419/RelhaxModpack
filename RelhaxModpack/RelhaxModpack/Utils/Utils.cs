@@ -1749,7 +1749,7 @@ namespace RelhaxModpack
                                 NotFlag = logic.NotFlag
                             });
 
-                            //log that the categorie's dependency refrence was linked properly
+                            //log that the categories dependency reference was linked properly
                             logic.RefrenceLinked = true;
                         }
                     }
@@ -1785,7 +1785,7 @@ namespace RelhaxModpack
                                 NotFlag = logic.NotFlag
                             });
 
-                            //log that the categorie's dependency refrence was linked properly
+                            //log that the categories dependency reference was linked properly
                             logic.RefrenceLinked = true;
                         }
                     }
@@ -1793,16 +1793,16 @@ namespace RelhaxModpack
             }
             Logging.Debug("Step 3 complete");
 
-            //3a - check if any dependency refrences were never matched
-            //like if a category refrences dependency the_dependency_packageName, but that package does not exist
+            //3a - check if any dependency references were never matched
+            //like if a category references dependency the_dependency_packageName, but that package does not exist
             refrencedDependencies = refrencedDependencies.Where((refrence) => !refrence.DatabaseLogic.RefrenceLinked).ToList();
-            Logging.Debug("Broken dependency refrences count: {0}", refrencedDependencies.Count);
+            Logging.Debug("Broken dependency references count: {0}", refrencedDependencies.Count);
             if(refrencedDependencies.Count > 0)
             {
-                Logging.Error("The following packages call refrences to dependencies that do not exist:");
+                Logging.Error("The following packages call references to dependencies that do not exist:");
                 foreach(LogicTracking logicTracking in refrencedDependencies)
                 {
-                    Logging.Error("Package: {0} => broken refrence: {1}",
+                    Logging.Error("Package: {0} => broken reference: {1}",
                         logicTracking.ComponentWithDependencies.ComponentInternalName, logicTracking.DatabaseLogic.PackageName);
                 }
             }
@@ -1820,7 +1820,7 @@ namespace RelhaxModpack
                     List<Dependency> matches = notProcessedDependnecies.Where(dep => login.PackageName.Equals(dep.PackageName)).ToList();
                     if(matches.Count > 0)
                     {
-                        string errorMessage = string.Format("dependency {0} is referencing the dependency {1} which has not yet been processed!" +
+                        string errorMessage = string.Format("Dependency {0} is referencing the dependency {1} which has not yet been processed!" +
                             "This will lead to logic errors in database calculation! (Tip: this dependency ({0}) should be BELOW ({1}) in the" +
                             "list of dependencies in the editor. (Order matters!)",dependency.PackageName, login.PackageName);
                         Logging.Error(errorMessage);
@@ -1829,7 +1829,7 @@ namespace RelhaxModpack
                     }
                 }
 
-                //two types of logics - OR and AND (with nots)
+                //two types of logics - OR and AND (with NOT flags)
                 //each can be calculated separately
                 List<DatabaseLogic> localOR = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.OR).ToList();
                 List<DatabaseLogic> logicalAND = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.AND).ToList();
@@ -1845,7 +1845,7 @@ namespace RelhaxModpack
                 //if ors and ands are both true already, then something's broken
                 if(ORsPass && ANDSPass)
                 {
-                    Logging.Warning("Ors and ands already pass for dependency package {0}, (nothing uses it?)", dependency.PackageName);
+                    Logging.Warning("Logic ORs and ANDs already pass for dependency package {0} (nothing uses it?)", dependency.PackageName);
                     continue;
                 }
 
@@ -1864,7 +1864,7 @@ namespace RelhaxModpack
                     }
                     if(!orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("Package {0} is checked and notflag is low (= true), sets orLogic to pass!", orLogic.PackageName),
+                        Logging.WriteToLog(string.Format("Package {0} is checked and notFlag is low (= true), sets orLogic to pass!", orLogic.PackageName),
                             Logfiles.Application, LogLevel.Debug);
                         ORsPass = true;
                         break;
@@ -1907,6 +1907,7 @@ namespace RelhaxModpack
                         break;
                     }
                 }
+
                 string final = string.Format("Final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
                 if(ANDSPass && ORsPass)
                 {
@@ -1924,27 +1925,27 @@ namespace RelhaxModpack
                     //update any dependencies that use it
                     foreach (DatabaseLogic callingLogic in dependency.Dependencies)
                     {
-                        //get the dependency (if it is a dependency) that logic'ed this dependency
+                        //get the dependency (if it is a dependency) that called this dependency
                         List<Dependency> found = dependencies.Where(dep => dep.PackageName.Equals(callingLogic.PackageName)).ToList();
 
                         if (found.Count > 0)
                         {
                             Dependency refrenced = found[0];
-                            //now get the logic entry that refrences the original calculated depdnency
+                            //now get the logic entry that references the original calculated dependency
                             List<DatabaseLogic> foundLogic = refrenced.DatabasePackageLogic.Where(logic => logic.PackageName.Equals(dependency.PackageName)).ToList();
                             if (foundLogic.Count > 0)
                             {
-                                Logging.Debug("Logic refrence entry for dep {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
+                                Logging.Debug("Logic reference entry for dependency {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
                                 foundLogic[0].WillBeInstalled = ANDSPass && ORsPass;
                             }
                             else
                             {
-                                Logging.Error("Found logics count is 0 for updating refrences");
+                                Logging.Error("Found logics count is 0 for updating references");
                             }
                         }
                         else
                         {
-                            Logging.Error("found count is 0 for updating references");
+                            Logging.Error("Found count is 0 for updating references");
                         }
                     }
                 }
