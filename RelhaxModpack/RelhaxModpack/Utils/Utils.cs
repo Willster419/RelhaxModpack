@@ -1820,9 +1820,9 @@ namespace RelhaxModpack
                     List<Dependency> matches = notProcessedDependnecies.Where(dep => login.PackageName.Equals(dep.PackageName)).ToList();
                     if(matches.Count > 0)
                     {
-                        string errorMessage = string.Format("Dependency {0} is referencing the dependency {1} which has not yet been processed!" +
-                            "This will lead to logic errors in database calculation! (Tip: this dependency ({0}) should be BELOW ({1}) in the" +
-                            "list of dependencies in the editor. (Order matters!)",dependency.PackageName, login.PackageName);
+                        string errorMessage = string.Format("Dependency {0} is referencing the dependency {1} which has not yet been processed! " +
+                            "This will lead to logic errors in database calculation! Tip: this dependency ({0}) should be BELOW ({1}) in the" +
+                            "list of dependencies in the editor. Order matters!",dependency.PackageName, login.PackageName);
                         Logging.Error(errorMessage);
                         if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
                             MessageBox.Show(errorMessage);

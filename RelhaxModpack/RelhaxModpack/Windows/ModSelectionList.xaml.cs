@@ -360,6 +360,7 @@ namespace RelhaxModpack.Windows
                         {
                             //load string constant url from manager info xml
                             string rootXml = Settings.BetaDatabaseV2FolderURL + Settings.BetaDatabaseV2RootFilename;
+                            Logging.Debug("Download beta database from {0}", rootXml);
 
                             //download the xml string into "modInfoXml"
                             client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
