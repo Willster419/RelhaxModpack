@@ -21,6 +21,7 @@ namespace RelhaxModpack.UIComponents
     /// </summary>
     public partial class RelhaxWPFRadioButton : RadioButton, IPackageUIComponent
     {
+        private bool iconsSet = false;
         /// <summary>
         /// Create an instance of the RelhaxWPFRadioButton class
         /// </summary>
@@ -81,6 +82,9 @@ namespace RelhaxModpack.UIComponents
 
         private void TemplateRoot_Loaded(object sender, RoutedEventArgs e)
         {
+            if (iconsSet)
+                return;
+            iconsSet = true;
             Grid templateGrid = sender as Grid;
             if (Package.ObfuscatedMod)
             {

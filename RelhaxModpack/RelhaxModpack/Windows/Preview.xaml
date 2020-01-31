@@ -34,14 +34,9 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
-                <!--
-                <TextBlock x:Name="DevUrlBlock" Grid.Row="4" Margin="0,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="131" TextAlignment="Right">
-                    <Hyperlink x:Name="DevUrlLink">Developer Website</Hyperlink>
-                </TextBlock>
-                -->
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Tag="DevURLPanel">
                     <TextBlock x:Name="DevUrlHeader" Tag="DevUrlHeader" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="Developer Links" Margin="0,0,0,4"/>
-                    <StackPanel Tag="DevUrlHolde" x:Name="DevUrlHolder" HorizontalAlignment="Stretch" Height="16" Margin="5,0,0,4" VerticalAlignment="Bottom"/>
+                    <StackPanel Tag="DevUrlHolde" x:Name="DevUrlHolder" HorizontalAlignment="Stretch" Height="16" Margin="5,0,0,4" VerticalAlignment="Bottom" Orientation="Horizontal"/>
                 </StackPanel>
                 <Grid >
                     <Grid.RowDefinitions>

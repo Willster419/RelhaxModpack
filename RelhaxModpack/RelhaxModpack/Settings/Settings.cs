@@ -65,7 +65,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The default end address of the location of mod packages (start + zip + end)
         /// </summary>
-        public const string DefaultEndAddress = @"";
+        public const string DefaultEndAddress = "";
 
         /// <summary>
         /// The filename of the V2 root database document. All category names and filenames, and version info is in this document
@@ -174,8 +174,14 @@ namespace RelhaxModpack
         /// </summary>
         public const string WoT32bitFolder = "win32";
 
+        /// <summary>
+        /// The name of the 'mods' directory
+        /// </summary>
         public const string ModsDir = "mods";
 
+        /// <summary>
+        /// The name of the 'res_mods' directory
+        /// </summary>
         public const string ResModsDir = "res_mods";
 
         /// <summary>
@@ -297,28 +303,50 @@ namespace RelhaxModpack
             RelhaxLibrariesFolderPath
         };
 
+        /// <summary>
+        /// The name of the pmod log file
+        /// </summary>
         public const string PmodLog = "pmod.log";
 
+        /// <summary>
+        /// The name of the xvm log file
+        /// </summary>
         public const string XvmLog = "xvm.log";
 
+        /// <summary>
+        /// The name of the WoT python debug log file
+        /// </summary>
         public const string PythonLog = "python.log";
 
+        /// <summary>
+        /// The name of the logs folder used for WG CEF browser and Relhax Modpack
+        /// </summary>
         public const string LogsFolder = "logs";
         #endregion
 
         #region URLs
+        /// <summary>
+        /// The escaped constant URL of the stable database on the server, escaped with the 'dbVersion' macro
+        /// </summary>
         public const string BigmodsDatabaseRootEscaped = "http://bigmods.relhaxmodpack.com/RelhaxModpack/resources/database/{dbVersion}/";
 
         /// <summary>
-        /// The default starting address of the location of mod packages (start + zip + end)
+        /// The default starting address of the location of mod packages (start + zip + end), escaped with the 'onlineFolder' macro
         /// </summary>
+        /// <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
         public const string DefaultStartAddress = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
 
         /// <summary>
-        /// The URL of the V2 beta database root folder. (NOTE: database V2 is multiple files)
+        /// The URL of the V2 beta database root folder, escaped with the 'branch' macro
         /// </summary>
+        /// <remarks>'branch' is a name of a github branch on the RelhaxModpackDatabase repo</remarks>
         public const string BetaDatabaseV2FolderURLEscaped = "https://raw.githubusercontent.com/Willster419/RelhaxModpackDatabase/{branch}/latest_database/";
 
+        /// <summary>
+        /// The URL of the V2 beta database root folder, using BetaDatabaseSelectedBranch as the replacement for the 'branch' macro
+        /// </summary>
+        /// <remarks>By default, this value is 'master'</remarks>
+        /// <seealso cref="ModpackSettings.BetaDatabaseSelectedBranch"/>
         public static string BetaDatabaseV2FolderURL
         {
             get
@@ -397,7 +425,7 @@ namespace RelhaxModpack
         /// The current distribution version of the application.
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
-        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Beta;
+        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Stable;
 
         /// <summary>
         /// Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed)
@@ -416,30 +444,30 @@ namespace RelhaxModpack
         /// <summary>
         /// The location of the WoT app data folder parsed at installation time
         /// </summary>
-        public static string AppDataFolder = "";
+        public static string AppDataFolder = string.Empty;
 
         /// <summary>
         /// The location of the WoT installation directory parsed at installation time
         /// </summary>
         /// <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
-        public static string WoTDirectory = "";
+        public static string WoTDirectory = string.Empty;
         
         /// <summary>
         /// The version information of WoT parsed at install time
         /// </summary>
         /// <remarks>This info is gathered from the "version.xml" file from the game's root directory</remarks>
-        public static string WoTClientVersion = "";
+        public static string WoTClientVersion = string.Empty;
 
         /// <summary>
         /// The version of the online folder name containing the zip files for this game
         /// </summary>
         /// <remarks>The online folders are done by major versions only i.e. 1.4.1, 1.5.0, etc. All zip files on 1.5.0.x are stored in this folder</remarks>
-        public static string WoTModpackOnlineFolderVersion = "";
+        public static string WoTModpackOnlineFolderVersion = string.Empty;
 
         /// <summary>
         /// The version of the database parsed upon application load
         /// </summary>
-        public static string DatabaseVersion = "";
+        public static string DatabaseVersion = string.Empty;
 
         /// <summary>
         /// Determines if this is the first time the application is loading
@@ -520,7 +548,7 @@ namespace RelhaxModpack
             {
                 //verify that the setting name in xml matches a fieldInfo property in the class
                 FieldInfo[] matches = fields.Where(f => f.Name.Equals(settings[i].Name)).ToArray();
-                //Logging.WriteToLog("" + matches.Count() + " matches for xml setting name " + settings[i].Name, Logfiles.Application, LogLevel.Debug);
+                //Logging.WriteToLog(string.Empty + matches.Count() + " matches for xml setting name " + settings[i].Name, Logfiles.Application, LogLevel.Debug);
                 if(matches.Count() > 1)
                 {
                     throw new BadMemeException("ugh");

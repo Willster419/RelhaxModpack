@@ -46,11 +46,21 @@ namespace RelhaxModpack
     public class SelectablePackage : DatabasePackage, IComponentWithDependencies, IXmlSerializable
     {
         #region Xml serialization
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes
+        /// </summary>
+        /// <returns>A list of string property names</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public override string[] PropertiesForSerializationAttributes()
         {
             return base.PropertiesForSerializationAttributes().Concat(SelectablePackagePropertiesToXmlParseAttributes.ToArray()).ToArray();
         }
 
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml elements
+        /// </summary>
+        /// <returns>A list of string property names</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public override string[] PropertiesForSerializationElements()
         {
             return base.PropertiesForSerializationElements().Concat(SelectablePackagePropertiesToXmlParseElements.ToArray()).ToArray();
@@ -154,11 +164,20 @@ namespace RelhaxModpack
         /// </summary>
         public string UpdateComment { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets an escaped version of the UpdateComment property, replacing literal '\n' with special character '\n', for example
+        /// </summary>
+        /// <seealso cref="UpdateComment"/>
         public string UpdateCommentEscaped
         {
             get { return Utils.MacroReplace(UpdateComment, ReplacementTypes.TextUnescape); }
         }
 
+        /// <summary>
+        /// Gets a user display formatted version of the UpdateCommentEscaped property, with a timestamp (if available). If no comment, a translated 'noComment' entry is returned
+        /// </summary>
+        /// <seealso cref="UpdateCommentEscaped"/>
+        /// <seealso cref="UpdateComment"/>
         public string UpdateCommentFormatted
         {
             get
@@ -174,11 +193,21 @@ namespace RelhaxModpack
         /// </summary>
         public string Description { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets an escaped version of the Description property, replacing literal '\n' with special character '\n', for example
+        /// </summary>
+        /// <seealso cref="Description"/>
         public string DescriptionEscaped
         {
             get { return Utils.MacroReplace(Description, ReplacementTypes.TextUnescape); }
         }
 
+        /// <summary>
+        /// Gets a user display formatted version of the UpdateCommentEscaped property. Additionally could contain an encrypted, controversial or popular entry.
+        /// If no description, a translated 'noDescription' entry is returned
+        /// </summary>
+        /// <seealso cref="DescriptionEscaped"/>
+        /// <seealso cref="Description"/>
         public string DescriptionFormatted
         {
             get

@@ -22,6 +22,9 @@ namespace RelhaxModpack.Windows
 
         private readonly string nl = Environment.NewLine;
 
+        /// <summary>
+        /// Create an instance of the Credits window
+        /// </summary>
         public Credits()
         {
             InitializeComponent();
