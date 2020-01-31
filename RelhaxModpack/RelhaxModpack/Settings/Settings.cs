@@ -65,7 +65,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The default end address of the location of mod packages (start + zip + end)
         /// </summary>
-        public const string DefaultEndAddress = @"";
+        public const string DefaultEndAddress = "";
 
         /// <summary>
         /// The filename of the V2 root database document. All category names and filenames, and version info is in this document
@@ -425,7 +425,7 @@ namespace RelhaxModpack
         /// The current distribution version of the application.
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
-        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Beta;
+        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Stable;
 
         /// <summary>
         /// Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed)
@@ -444,30 +444,30 @@ namespace RelhaxModpack
         /// <summary>
         /// The location of the WoT app data folder parsed at installation time
         /// </summary>
-        public static string AppDataFolder = "";
+        public static string AppDataFolder = string.Empty;
 
         /// <summary>
         /// The location of the WoT installation directory parsed at installation time
         /// </summary>
         /// <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
-        public static string WoTDirectory = "";
+        public static string WoTDirectory = string.Empty;
         
         /// <summary>
         /// The version information of WoT parsed at install time
         /// </summary>
         /// <remarks>This info is gathered from the "version.xml" file from the game's root directory</remarks>
-        public static string WoTClientVersion = "";
+        public static string WoTClientVersion = string.Empty;
 
         /// <summary>
         /// The version of the online folder name containing the zip files for this game
         /// </summary>
         /// <remarks>The online folders are done by major versions only i.e. 1.4.1, 1.5.0, etc. All zip files on 1.5.0.x are stored in this folder</remarks>
-        public static string WoTModpackOnlineFolderVersion = "";
+        public static string WoTModpackOnlineFolderVersion = string.Empty;
 
         /// <summary>
         /// The version of the database parsed upon application load
         /// </summary>
-        public static string DatabaseVersion = "";
+        public static string DatabaseVersion = string.Empty;
 
         /// <summary>
         /// Determines if this is the first time the application is loading
@@ -548,7 +548,7 @@ namespace RelhaxModpack
             {
                 //verify that the setting name in xml matches a fieldInfo property in the class
                 FieldInfo[] matches = fields.Where(f => f.Name.Equals(settings[i].Name)).ToArray();
-                //Logging.WriteToLog("" + matches.Count() + " matches for xml setting name " + settings[i].Name, Logfiles.Application, LogLevel.Debug);
+                //Logging.WriteToLog(string.Empty + matches.Count() + " matches for xml setting name " + settings[i].Name, Logfiles.Application, LogLevel.Debug);
                 if(matches.Count() > 1)
                 {
                     throw new BadMemeException("ugh");
