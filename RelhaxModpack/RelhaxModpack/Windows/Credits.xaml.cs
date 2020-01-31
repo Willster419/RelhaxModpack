@@ -35,18 +35,14 @@ namespace RelhaxModpack.Windows
             StringBuilder creditsBuilder = new StringBuilder();
             //project lead and database managers
             creditsBuilder.AppendFormat("{0}: Willster419{1}{1}", Translations.GetTranslatedString("creditsProjectLeader"), nl);
-            creditsBuilder.AppendFormat("{0}:{1}", "XVM Specialtist", string.Join(", ", new string[] { "elektrosmoker" }), nl);
-            creditsBuilder.AppendFormat("{0}:{1}", "Consistancy Manager", string.Join(", ", new string[] { "elektrosmoker" }), nl);
-            creditsBuilder.AppendFormat("{0}:{1}", "Configuration Builder", string.Join(", ", new string[] { "The Illusion" }), nl);
-            creditsBuilder.AppendFormat("{0}:{1}", "Custom Tank Skins Specialtist", string.Join(", ", new string[] { "The Illusion" }), nl);
             creditsBuilder.AppendFormat("{0}:{1}", Translations.GetTranslatedString("creditsDatabaseManagers"), nl);
-            creditsBuilder.AppendLine(string.Join(", ",new string[] { "elektrosmoker", "dirty20067", "123Gauss", "The Illusion"}));
+            creditsBuilder.AppendLine(string.Join(", ",new string[] { "elektrosmoker", "Dirty20067", "123GAUSS", "TheIllusion"}));
             creditsBuilder.AppendLine();
 
             //Translators
             creditsBuilder.AppendFormat("{0}:{1}", Translations.GetTranslatedString("creditsTranslators"), nl);
             creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguageEnglish, string.Join(", ",new string[] { "Rkk1945", "Willster419"}), nl);
-            creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguageGerman, string.Join(", ", new string[] {"Grumpelumpf", "dirty20067", "123Gauss", "elektrosmoker" }), nl);
+            creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguageGerman, string.Join(", ", new string[] {"Grumpelumpf", "Dirty20067", "123GAUSS", "elektrosmoker" }), nl);
             creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguageFrench, string.Join(", ", new string[] {"Merkk", "Toshiro" }), nl);
             creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguageSpanish, "LordFelix", nl);
             creditsBuilder.AppendFormat("{0}: {1}{2}", Translations.LanguagePolish, string.Join(", ", new string[] {"Neoros","Nullmaruzero" }), nl);
