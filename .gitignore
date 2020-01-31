@@ -199,3 +199,4 @@ FakesAssemblies/
 *.opt
 /RelhaxModpack/RelhaxModpack/relhaxmodpackprivatesettings
 /RelhaxDocumentation/RelhaxDocumentation/Help
+*.code-workspace
