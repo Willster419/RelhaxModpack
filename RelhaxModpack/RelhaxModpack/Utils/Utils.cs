@@ -1846,6 +1846,10 @@ namespace RelhaxModpack
                 if(ORsPass && ANDSPass)
                 {
                     Logging.Warning("Logic ORs and ANDs already pass for dependency package {0} (nothing uses it?)", dependency.PackageName);
+                    Logging.Debug("Skip calculation logic and remove from not processed list");
+
+                    //remove it from list of not processed dependencies
+                    notProcessedDependnecies.RemoveAt(0);
                     continue;
                 }
 
@@ -1950,6 +1954,7 @@ namespace RelhaxModpack
                     }
                 }
 
+                //remove it from list of not processed dependencies
                 notProcessedDependnecies.RemoveAt(0);
             }
 
