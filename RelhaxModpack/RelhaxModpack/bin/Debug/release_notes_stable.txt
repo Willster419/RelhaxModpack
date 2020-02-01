@@ -1,5 +1,5 @@
 ATTENTION! PLEASE READ!
-Due to an error in the application updater, this update will need to be manually downloaded from github (the 'click here' link in this window).
+Due to a possible error in the application updater, this update may need to be manually downloaded from github
 You may also click this link to get the latest application:
 https://github.com/Willster419/RelhaxModpack/releases/latest
 Sorry for the inconvenience.
