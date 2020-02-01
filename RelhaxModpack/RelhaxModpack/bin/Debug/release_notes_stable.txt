@@ -6,6 +6,7 @@ Sorry for the inconvenience.
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 Application version 1.0.2.0 (2020-02-01)
+https://www.virustotal.com/gui/file/d6ed6d8994f5fe51f11655c760af1e8d08e35f13fdc445acf1c75cb95e47ad69/detection
 - Fixed critical bug of application update method when it was re-written. Sorry about that everyone.
 - Added "RelhaxModpack_update.exe", "RelhaxModpack_update.zip" to list of files to check for and delete on startup.
 - Fixed minor bug displaying incorrect dependency calculation results.
