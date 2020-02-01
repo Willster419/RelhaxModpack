@@ -1813,11 +1813,13 @@ namespace RelhaxModpack
             //3 - run calculations IN DEPENDENCY LIST ORDER FROM TOP DOWN
             List<Dependency> notProcessedDependnecies = new List<Dependency>(dependencies);
             Logging.Debug("Starting step 4 of 4 in dependency calculation: calculating dependencies from top down (perspective to list)");
+            int calcNumber = 1;
             foreach (Dependency dependency in dependencies)
             {
                 //first check if this dependency is referencing a dependency that has not yet been processed
                 //if so then note it in the log
-                Logging.Debug("Calculating if dependency {0} will be installed",dependency.PackageName);
+                Logging.Debug(string.Empty);
+                Logging.Debug("Calculating if dependency {0} will be installed, {1} of {2}", dependency.PackageName, calcNumber++, dependencies.Count);
                 foreach(DatabaseLogic login in dependency.DatabasePackageLogic)
                 {
                     List<Dependency> matches = notProcessedDependnecies.Where(dep => login.PackageName.Equals(dep.PackageName)).ToList();
@@ -1911,12 +1913,12 @@ namespace RelhaxModpack
                 string final = string.Format("Final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
                 if(ANDSPass && ORsPass)
                 {
-                    Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!{1}", final, Environment.NewLine);
+                    Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
                     dependenciesToInstall.Add(dependency);
                 }
                 else
                 {
-                    Logging.Debug("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!{1}", final, Environment.NewLine);
+                    Logging.Debug("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!", final);
                 }
 
                 if (dependency.DatabasePackageLogic.Count > 0 && (ANDSPass && ORsPass))
