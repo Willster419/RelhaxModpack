@@ -1707,7 +1707,8 @@ namespace RelhaxModpack
                     {
                         if (logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.Debug("Category \"{0}\" uses dependency \"{1}\" (logic type {2})", category.Name, dependency.PackageName, logic.Logic);
+                            Logging.Debug("Category \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                                category.Name, dependency.PackageName, logic.Logic, logic.NotFlag);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
                                 PackageName = category.Name,
@@ -1739,7 +1740,8 @@ namespace RelhaxModpack
                     {
                         if (logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.Debug("SelectablePackage \"{0}\" uses dependency \"{1}\" (logic type {2})", package.PackageName, dependency.PackageName, logic.Logic);
+                            Logging.Debug("SelectablePackage \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                                package.PackageName, dependency.PackageName, logic.Logic, logic.NotFlag);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
                                 //set PackageName to the selectablepackage package name so later we know where this logic entry came from
@@ -1775,7 +1777,8 @@ namespace RelhaxModpack
                             continue;
                         if (logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.Debug("Dependency \"{0}\" uses dependency \"{1}\" (logic type {2})", processingDependency.PackageName, dependency.PackageName, logic.Logic);
+                            Logging.Debug("Dependency \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                                processingDependency.PackageName, dependency.PackageName, logic.Logic, logic.NotFlag);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
                                 PackageName = processingDependency.PackageName,
@@ -1820,7 +1823,7 @@ namespace RelhaxModpack
                     List<Dependency> matches = notProcessedDependnecies.Where(dep => login.PackageName.Equals(dep.PackageName)).ToList();
                     if(matches.Count > 0)
                     {
-                        string errorMessage = string.Format("Dependency {0} is referencing the dependency {1} which has not yet been processed! " +
+                        string errorMessage = string.Format("Dependency {0} is referenced by the dependency {1} which has not yet been processed! " +
                             "This will lead to logic errors in database calculation! Tip: this dependency ({0}) should be BELOW ({1}) in the" +
                             "list of dependencies in the editor. Order matters!",dependency.PackageName, login.PackageName);
                         Logging.Error(errorMessage);
@@ -1862,28 +1865,24 @@ namespace RelhaxModpack
                     //same case goes for negatives - if mod is NOT checked and negateFlag
                     if(!orLogic.WillBeInstalled)
                     {
-                        Logging.WriteToLog(string.Format("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName),
-                            Logfiles.Application, LogLevel.Debug);
+                        Logging.Debug("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
                         continue;
                     }
                     if(!orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("Package {0} is checked and notFlag is low (= true), sets orLogic to pass!", orLogic.PackageName),
-                            Logfiles.Application, LogLevel.Debug);
+                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
                         ORsPass = true;
                         break;
                     }
                     else if (orLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("Package {0} is NOT checked and notFlag is high (= false), sets orLogic to pass!", orLogic.PackageName),
-                            Logfiles.Application, LogLevel.Debug);
+                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
                         ORsPass = true;
                         break;
                     }
                     else
                     {
-                        Logging.WriteToLog(string.Format("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass",
-                            orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
+                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
                     }
                 }
 
@@ -1893,20 +1892,17 @@ namespace RelhaxModpack
                 {
                     if (andLogic.WillBeInstalled && !andLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("Package {0} is checked and (NOT notFlag) = true, correct AND logic, continue",
-                            andLogic.PackageName), Logfiles.Application, LogLevel.Debug);
+                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
                         ANDSPass = true;
                     }
                     else if (!andLogic.WillBeInstalled && andLogic.NotFlag)
                     {
-                        Logging.WriteToLog(string.Format("Package {0} is NOT checked and (notFlag) = true, correct AND logic, continue",
-                            andLogic.PackageName), Logfiles.Application, LogLevel.Debug);
+                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
                         ANDSPass = true;
                     }
                     else
                     {
-                        Logging.WriteToLog(string.Format("Package {0}, checked={1}, notFlag={2}, incorrect AND logic, set andPass=false and break!",
-                            andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag), Logfiles.Application, LogLevel.Debug);
+                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, incorrect AND logic, set ANDSPass=false and stop processing!", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
                         ANDSPass = false;
                         break;
                     }
@@ -1915,12 +1911,12 @@ namespace RelhaxModpack
                 string final = string.Format("Final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
                 if(ANDSPass && ORsPass)
                 {
-                    Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
+                    Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!{1}", final, Environment.NewLine);
                     dependenciesToInstall.Add(dependency);
                 }
                 else
                 {
-                    Logging.Debug("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!", final);
+                    Logging.Debug("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!{1}", final, Environment.NewLine);
                 }
 
                 if (dependency.DatabasePackageLogic.Count > 0 && (ANDSPass && ORsPass))
