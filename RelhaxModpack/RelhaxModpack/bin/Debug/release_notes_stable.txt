@@ -1,6 +1,20 @@
 ATTENTION! PLEASE READ!
 Due to an error in the application updater, this update will need to be manually downloaded from github (the 'click here' link in this window).
+You may also click this link to get the latest application:
+https://github.com/Willster419/RelhaxModpack/releases/latest
 Sorry for the inconvenience.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 1.0.2.0 (2020-02-01)
+- Fixed critical bug of application update method when it was re-written. Sorry about that everyone.
+- Added "RelhaxModpack_update.exe", "RelhaxModpack_update.zip" to list of files to check for and delete on startup.
+- Fixed minor bug displaying incorrect dependency calculation results.
+- Added/updated logging in depepndency calculation processing.
+- Fixed DevURL bugs with database editor.
+- Fixed DevURL bugs with database csv output.
+- Fixed issue loading database for csv output in database updater.
+- Added debug logging and null checks in bug isolation during application update.
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 Application version 1.0.1.0 (2020-01-26)
 https://www.virustotal.com/gui/file/c450147a9cac4fab33d8bb56be60f7858a3c642f485f1cc16ca06d1c0f0582d5/detection
