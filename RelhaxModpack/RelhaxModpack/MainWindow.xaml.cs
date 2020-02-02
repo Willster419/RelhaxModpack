@@ -3065,40 +3065,37 @@ namespace RelhaxModpack
             Logging.Info("[AutoInstallCB_Click]: timer registered, listening for update check intervals");
         }
 
-        private void AutoInstallTimer_Elapsed(object sender, EventArgs e)
+        private async void AutoInstallTimer_Elapsed(object sender, EventArgs e)
         {
             if (timerActive)
                 return;
 
-            this.Dispatcher.InvokeAsync(async () =>
+            if (loading)
+                return;
+
+            timerActive = true;
+            Logging.Debug("[AutoInstallTimer_Elapsed]: timer has elapsed to check for database updates");
+
+            //reset check flag and get old db version
+            string oldDBVersion = Settings.DatabaseVersion;
+
+            //actually check for updates
+            await CheckForDatabaseUpdatesAsync(true);
+
+            Logging.Debug("[AutoInstallTimer_Elapsed]: database periodic check complete, old = {0}, new = {1}", oldDBVersion, Settings.DatabaseVersion);
+
+            //check if database was updated
+            if (!oldDBVersion.Equals(Settings.DatabaseVersion))
             {
-                if (loading)
-                    return;
-
-                timerActive = true;
-                Logging.Debug("[AutoInstallTimer_Elapsed]: timer has elapsed to check for database updates");
-
-                //reset check flag and get old db version
-                string oldDBVersion = Settings.DatabaseVersion;
-
-                //actually check for updates
-                await CheckForDatabaseUpdatesAsync(true);
-
-                Logging.Debug("[AutoInstallTimer_Elapsed]: database periodic check complete, old = {0}, new = {1}", oldDBVersion, Settings.DatabaseVersion);
-
-                //check if database was updated
-                if (!oldDBVersion.Equals(Settings.DatabaseVersion))
+                Logging.Debug("[AutoInstallTimer_Elapsed]: update found from auto install, running installation");
+                if (modSelectionList != null)
                 {
-                    Logging.Debug("[AutoInstallTimer_Elapsed]: update found from auto install, running installation");
-                    if (modSelectionList != null)
-                    {
-                        Logging.Debug("[AutoInstallTimer_Elapsed]: modSelectionList != null, so don't start an install");
-                        return;
-                    }
-                    InstallModpackButton_Click(null, null);
+                    Logging.Debug("[AutoInstallTimer_Elapsed]: modSelectionList != null, so don't start an install");
+                    return;
                 }
-                timerActive = false;
-            });
+                InstallModpackButton_Click(null, null);
+            }
+            timerActive = false;
         }
 
         private async void AutoInstallTimer_ElapsedBeta(object sender, EventArgs e)
@@ -3106,44 +3103,41 @@ namespace RelhaxModpack
             if (timerActive)
                 return;
 
-            this.Dispatcher.InvokeAsync(async () =>
+            if (loading)
+                return;
+
+            timerActive = true;
+            Logging.Debug("[AutoInstallTimer_ElapsedBeta]: timer has elapsed to check for beta database updates");
+
+            if (string.IsNullOrEmpty(oldBetaDB))
             {
-                if (loading)
+                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: oldBetaDB is null/empty, set this first");
+                oldBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
+                newBetaDB = oldBetaDB;
+            }
+            else
+            {
+                newBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
+            }
+
+            Logging.Debug("[AutoInstallTimer_ElapsedBeta]: comparing old and new beta databases");
+            if (!newBetaDB.Equals(oldBetaDB))
+            {
+                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old != new, starting install");
+                oldBetaDB = newBetaDB;
+                if (modSelectionList != null)
+                {
+                    Logging.Debug("[AutoInstallTimer_ElapsedBeta]: modSelectionList != null, so don't start an install");
                     return;
-
-                timerActive = true;
-                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: timer has elapsed to check for beta database updates");
-
-                if (string.IsNullOrEmpty(oldBetaDB))
-                {
-                    Logging.Debug("[AutoInstallTimer_ElapsedBeta]: oldBetaDB is null/empty, set this first");
-                    oldBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
-                    newBetaDB = oldBetaDB;
                 }
-                else
-                {
-                    newBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
-                }
+                InstallModpackButton_Click(null, null);
+            }
+            else
+            {
+                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old == new, no start install");
+            }
 
-                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: comparing old and new beta databases");
-                if (!newBetaDB.Equals(oldBetaDB))
-                {
-                    Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old != new, starting install");
-                    oldBetaDB = newBetaDB;
-                    if(modSelectionList != null)
-                    {
-                        Logging.Debug("[AutoInstallTimer_ElapsedBeta]: modSelectionList != null, so don't start an install");
-                        return;
-                    }
-                    InstallModpackButton_Click(null, null);
-                }
-                else
-                {
-                    Logging.Debug("[AutoInstallTimer_ElapsedBeta]: old == new, no start install");
-                }
-
-                timerActive = false;
-            });
+            timerActive = false;
         }
 
         private void AllowStatsGatherCB_Click(object sender, RoutedEventArgs e)
