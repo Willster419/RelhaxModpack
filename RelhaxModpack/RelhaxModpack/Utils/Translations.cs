@@ -1155,7 +1155,7 @@ namespace RelhaxModpack
             Polish.Add("CreateShortcutsCBDescription", "Tworzy na pulpicie skróty do modyfikacji, które są plikami wykonywalnymi EXE (np. konfigurator moda WWIIHA).");
             French.Add("CreateShortcutsCBDescription", "Une fois sélectionné, L'installation créera des icônes de raccourci sur votre bureau pour les mods qui ont des" +
                 " fichiers .exe (comme la configuration WWIIHA)");
-            Spanish.Add("CreateShortcutsCBDescription", "Si está seleccionado, creará accesos directos en el escritorio para los mods que sean archivos .exe (p. ej. cofiguración de WWIIHA");
+            Spanish.Add("CreateShortcutsCBDescription", "Si está seleccionado, creará accesos directos en el escritorio para los mods que sean archivos .exe (p. ej. cofiguración de WWIIHA)");
             Russian.Add("CreateShortcutsCBDescription", "Если выбрано, то будут созданы ярлыки на рабочем столе для модов, являющимися EXE-файлами (как WWIIHA)");
 
             //Component: DeleteOldPackagesText
@@ -1624,7 +1624,7 @@ namespace RelhaxModpack
             German.Add("ViewCreditsButtonText", "Danksagung");
             Polish.Add("ViewCreditsButtonText", TranslationNeeded);
             French.Add("ViewCreditsButtonText", TranslationNeeded);
-            Spanish.Add("ViewCreditsButtonText", TranslationNeeded);
+            Spanish.Add("ViewCreditsButtonText", "Ver créditos");
             Russian.Add("ViewCreditsButtonText", TranslationNeeded);
 
             //Component: ViewCreditsButtonDescription
@@ -1633,7 +1633,7 @@ namespace RelhaxModpack
             German.Add("ViewCreditsButtonDescription", "Übersicht aller großartigen Leute und Projekte, die das Modpack unterstützen");
             Polish.Add("ViewCreditsButtonDescription", TranslationNeeded);
             French.Add("ViewCreditsButtonDescription", TranslationNeeded);
-            Spanish.Add("ViewCreditsButtonDescription", TranslationNeeded);
+            Spanish.Add("ViewCreditsButtonDescription", "¡Ver todas las increíbles personas y proyectos que apoyan el modpack!");
             Russian.Add("ViewCreditsButtonDescription", TranslationNeeded);
 
             //Component: ExportWindowDesctiption
@@ -4168,7 +4168,7 @@ namespace RelhaxModpack
             German.Add("popularInDescription", "Dies ist ein popüläres Paket");
             Polish.Add("popularInDescription", TranslationNeeded);
             French.Add("popularInDescription", TranslationNeeded);
-            Spanish.Add("popularInDescription", TranslationNeeded);
+            Spanish.Add("popularInDescription", "Este paquete es popular");
             Russian.Add("popularInDescription", "Это популярный пакет");
 
             //Component: controversialInDescription
@@ -4177,7 +4177,7 @@ namespace RelhaxModpack
             German.Add("controversialInDescription", "Dies ist ein umstrittenes Paket");
             Polish.Add("controversialInDescription", TranslationNeeded);
             French.Add("controversialInDescription", TranslationNeeded);
-            Spanish.Add("controversialInDescription", TranslationNeeded);
+            Spanish.Add("controversialInDescription", "Este paquete es polémico");
             Russian.Add("controversialInDescription", "Это подозрительный пакет");
 
             //Component: encryptedInDescription
@@ -4186,7 +4186,7 @@ namespace RelhaxModpack
             German.Add("encryptedInDescription", "Dies ist ein  verschlüsseltes Paket, welches nicht auf Viren überprüft werden kann");
             Polish.Add("encryptedInDescription", TranslationNeeded);
             French.Add("encryptedInDescription", TranslationNeeded);
-            Spanish.Add("encryptedInDescription", TranslationNeeded);
+            Spanish.Add("encryptedInDescription", "Este paquete está encriptado y no se puede verificar que no contenga virus.");
             Russian.Add("encryptedInDescription", "Этот пакет зашифрован.\nПроверка на вирусы невозможна");
             #endregion
 
@@ -5408,7 +5408,7 @@ namespace RelhaxModpack
             German.Add("Credits", "Relhax Modpack Danksagung");
             Polish.Add("Credits", TranslationNeeded);
             French.Add("Credits", TranslationNeeded);
-            Spanish.Add("Credits", TranslationNeeded);
+            Spanish.Add("Credits", "Créditos de Relhax Modpack");
             Russian.Add("Credits", TranslationNeeded);
 
             //Component: creditsProjectLeader
@@ -5417,7 +5417,7 @@ namespace RelhaxModpack
             German.Add("creditsProjectLeader", "Projektleiter");
             Polish.Add("creditsProjectLeader", TranslationNeeded);
             French.Add("creditsProjectLeader", TranslationNeeded);
-            Spanish.Add("creditsProjectLeader", TranslationNeeded);
+            Spanish.Add("creditsProjectLeader", "Líder de proyecto");
             Russian.Add("creditsProjectLeader", TranslationNeeded);
 
             //Component: creditsDatabaseManagers
@@ -5426,7 +5426,7 @@ namespace RelhaxModpack
             German.Add("creditsDatabaseManagers", "Datenbank Manager");
             Polish.Add("creditsDatabaseManagers", TranslationNeeded);
             French.Add("creditsDatabaseManagers", TranslationNeeded);
-            Spanish.Add("creditsDatabaseManagers", TranslationNeeded);
+            Spanish.Add("creditsDatabaseManagers", "Administradores de la base de datos");
             Russian.Add("creditsDatabaseManagers", TranslationNeeded);
 
             //Component: creditsTranslators
@@ -5435,7 +5435,7 @@ namespace RelhaxModpack
             German.Add("creditsTranslators", "Übersetzer");
             Polish.Add("creditsTranslators", TranslationNeeded);
             French.Add("creditsTranslators", TranslationNeeded);
-            Spanish.Add("creditsTranslators", TranslationNeeded);
+            Spanish.Add("creditsTranslators", "Traductores");
             Russian.Add("creditsTranslators", TranslationNeeded);
 
             //Component: creditsusingOpenSourceProjs
@@ -5444,7 +5444,7 @@ namespace RelhaxModpack
             German.Add("creditsusingOpenSourceProjs", "Relhax Modpack nutzt folgende Open-Source Projekte");
             Polish.Add("creditsusingOpenSourceProjs", TranslationNeeded);
             French.Add("creditsusingOpenSourceProjs", TranslationNeeded);
-            Spanish.Add("creditsusingOpenSourceProjs", TranslationNeeded);
+            Spanish.Add("creditsusingOpenSourceProjs", "Relhax Modpack usa los siguientes proyectos de código abierto");
             Russian.Add("creditsusingOpenSourceProjs", TranslationNeeded);
 
             //Component: creditsSpecialThanks
@@ -5453,7 +5453,7 @@ namespace RelhaxModpack
             German.Add("creditsSpecialThanks", "Besonderer Dank");
             Polish.Add("creditsSpecialThanks", TranslationNeeded);
             French.Add("creditsSpecialThanks", TranslationNeeded);
-            Spanish.Add("creditsSpecialThanks", TranslationNeeded);
+            Spanish.Add("creditsSpecialThanks", "Agradecimientos especiales");
             Russian.Add("creditsSpecialThanks", TranslationNeeded);
 
             //Component: creditsGrumpelumpf
@@ -5462,7 +5462,7 @@ namespace RelhaxModpack
             German.Add("creditsGrumpelumpf", "Projektleiter des OMC Modpack, hat Relhax erlaubt dort weiter zu machen wo er aufgehört hat");
             Polish.Add("creditsGrumpelumpf", TranslationNeeded);
             French.Add("creditsGrumpelumpf", TranslationNeeded);
-            Spanish.Add("creditsGrumpelumpf", TranslationNeeded);
+            Spanish.Add("creditsGrumpelumpf", "Líder de proyecto de OMC Modpack, nos permitió retomar Relhax desde donde él lo dejó");
             Russian.Add("creditsGrumpelumpf", TranslationNeeded);
 
             //Component: creditsRkk1945
@@ -5471,7 +5471,7 @@ namespace RelhaxModpack
             German.Add("creditsRkk1945", "Der erste Betatester, der mir über Monate half das Projekt zu auf die Beine zu stellen");
             Polish.Add("creditsRkk1945", TranslationNeeded);
             French.Add("creditsRkk1945", TranslationNeeded);
-            Spanish.Add("creditsRkk1945", TranslationNeeded);
+            Spanish.Add("creditsRkk1945", "El primer beta tester que trabajó conmigo durante meses para poner en marcha el proyecto");
             Russian.Add("creditsRkk1945", TranslationNeeded);
 
             //Component: creditsRgc
@@ -5480,7 +5480,7 @@ namespace RelhaxModpack
             German.Add("creditsRgc", "Sponsor des Modpacks und meine erste Betatestgruppe");
             Polish.Add("creditsRgc", TranslationNeeded);
             French.Add("creditsRgc", TranslationNeeded);
-            Spanish.Add("creditsRgc", TranslationNeeded);
+            Spanish.Add("creditsRgc", "Sponsor del modpack y miembro del primer grupo de beta testers");
             Russian.Add("creditsRgc", TranslationNeeded);
 
             //Component: creditsBetaTestersName
@@ -5489,7 +5489,7 @@ namespace RelhaxModpack
             German.Add("creditsBetaTestersName", "Unser Betatest Team");
             Polish.Add("creditsBetaTestersName", TranslationNeeded);
             French.Add("creditsBetaTestersName", TranslationNeeded);
-            Spanish.Add("creditsBetaTestersName", TranslationNeeded);
+            Spanish.Add("creditsBetaTestersName", "Nuestro equipo de beta testers");
             Russian.Add("creditsBetaTestersName", TranslationNeeded);
 
             //Component: creditsBetaTesters
@@ -5498,7 +5498,7 @@ namespace RelhaxModpack
             German.Add("creditsBetaTesters", "Kontinuierlich Probleme in der Anwendung zu testen und zu melden, bevor sie live geschaltet wird");
             Polish.Add("creditsBetaTesters", TranslationNeeded);
             French.Add("creditsBetaTesters", TranslationNeeded);
-            Spanish.Add("creditsBetaTesters", TranslationNeeded);
+            Spanish.Add("creditsBetaTesters", "Testeo continuado e informe de bugs en la aplicación antes de su publicación");
             Russian.Add("creditsBetaTesters", TranslationNeeded);
 
             //Component: creditsSilvers
@@ -5507,7 +5507,7 @@ namespace RelhaxModpack
             German.Add("creditsSilvers", "Hilfe bei der Öffentlichkeitsarbeit und sozialen Netzwerken");
             Polish.Add("creditsSilvers", TranslationNeeded);
             French.Add("creditsSilvers", TranslationNeeded);
-            Spanish.Add("creditsSilvers", TranslationNeeded);
+            Spanish.Add("creditsSilvers", "Ayuda con la comunicación con la comunidad y en redes sociales");
             Russian.Add("creditsSilvers", TranslationNeeded);
 
             //Component: creditsXantier
@@ -5516,7 +5516,7 @@ namespace RelhaxModpack
             German.Add("creditsXantier", "Erster IT-Support und Einrichtung unseres Servers");
             Polish.Add("creditsXantier", TranslationNeeded);
             French.Add("creditsXantier", TranslationNeeded);
-            Spanish.Add("creditsXantier", TranslationNeeded);
+            Spanish.Add("creditsXantier", "Soporte inicial de IT y preparación el servidor");
             Russian.Add("creditsXantier", TranslationNeeded);
 
             //Component: creditsSpritePacker
@@ -5525,7 +5525,7 @@ namespace RelhaxModpack
             German.Add("creditsSpritePacker", "Entwicklung des Sprite Sheet Packer-Algorithmus und Portierung nach .NET");
             Polish.Add("creditsSpritePacker", TranslationNeeded);
             French.Add("creditsSpritePacker", TranslationNeeded);
-            Spanish.Add("creditsSpritePacker", TranslationNeeded);
+            Spanish.Add("creditsSpritePacker", "Desarrollo del algoritmo de empaquetado de hojas de sprites y portado a .NET");
             Russian.Add("creditsSpritePacker", TranslationNeeded);
 
             //Component: creditsWargaming
@@ -5534,7 +5534,7 @@ namespace RelhaxModpack
             German.Add("creditsWargaming", "Ein einfach zu automatisierendes Modding-System");
             Polish.Add("creditsWargaming", TranslationNeeded);
             French.Add("creditsWargaming", TranslationNeeded);
-            Spanish.Add("creditsWargaming", TranslationNeeded);
+            Spanish.Add("creditsWargaming", "Crear un método sencillo para automatizar el sistema de mods");
             Russian.Add("creditsWargaming", TranslationNeeded);
 
             //Component: creditsUsersLikeU
@@ -5543,7 +5543,7 @@ namespace RelhaxModpack
             German.Add("creditsUsersLikeU", "Benutzer wie du");
             Polish.Add("creditsUsersLikeU", TranslationNeeded);
             French.Add("creditsUsersLikeU", TranslationNeeded);
-            Spanish.Add("creditsUsersLikeU", TranslationNeeded);
+            Spanish.Add("creditsUsersLikeU", "Usuarios como usted");
             Russian.Add("creditsUsersLikeU", TranslationNeeded);
             #endregion
 
