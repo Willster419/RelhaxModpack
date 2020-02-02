@@ -356,7 +356,7 @@ namespace RelhaxModpack
             }
 
             //check for updates to database
-            await CheckForDatabaseUpdates(false);
+            await CheckForDatabaseUpdatesAsync(false);
 
             //set the file count and size for the backups folder
             Logging.Debug("Application is up to date, get file size of backups");
@@ -691,7 +691,7 @@ namespace RelhaxModpack
             progressIndicator.Show();
 
             //actually check for updates
-            await CheckForDatabaseUpdates(true);
+            await CheckForDatabaseUpdatesAsync(true);
 
             //clean up progress indicator
             progressIndicator.Close();
@@ -747,7 +747,7 @@ namespace RelhaxModpack
         #endregion
 
         #region Update Code
-        private async Task CheckForDatabaseUpdates(bool refreshModInfo)
+        private async Task CheckForDatabaseUpdatesAsync(bool refreshModInfo)
         {
             Logging.Info("Checking for database updates in CheckForDatabaseUpdates()");
 
@@ -3082,7 +3082,7 @@ namespace RelhaxModpack
                 string oldDBVersion = Settings.DatabaseVersion;
 
                 //actually check for updates
-                await CheckForDatabaseUpdates(true);
+                await CheckForDatabaseUpdatesAsync(true);
 
                 Logging.Debug("[AutoInstallTimer_Elapsed]: database periodic check complete, old = {0}, new = {1}", oldDBVersion, Settings.DatabaseVersion);
 
