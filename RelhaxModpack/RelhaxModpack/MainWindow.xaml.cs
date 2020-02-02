@@ -17,11 +17,11 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Timers;
 using System.Threading;
-using Timer = System.Timers.Timer;
 using Microsoft.Win32;
 using System.Text;
 using RelhaxModpack.InstallerComponents;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using System.Windows.Threading;
 
 namespace RelhaxModpack
 {
@@ -38,7 +38,7 @@ namespace RelhaxModpack
         private AdvancedProgress AdvancedProgressWindow = null;
         private NewsViewer newsViewer = null;
         private WebClient client = null;
-        private Timer autoInstallTimer = new Timer();
+        private DispatcherTimer autoInstallTimer = new DispatcherTimer();
         private CancellationTokenSource cancellationTokenSource = null;
         private InstallEngine installEngine = null;
         private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
@@ -61,9 +61,9 @@ namespace RelhaxModpack
         private string[] backupFiles = null;
         //download ETA variables
         //measures elapsed time since download started
-        private Stopwatch downloadTimer;
+        private Stopwatch downloadTimer = null;
         //timer to fire every second to update the display download rate
-        private Timer downloadDisplayTimer;
+        private DispatcherTimer downloadDisplayTimer = null;
         //for download rate display, last internal's bytes downloaded
         private long lastBytesDownloaded;
         //for both rates, the current bytes downloaded
@@ -577,7 +577,6 @@ namespace RelhaxModpack
             Logging.TryWriteToLog("Disposing autoInstallTimer", Logfiles.Application, LogLevel.Debug);
             if (autoInstallTimer != null)
             {
-                autoInstallTimer.Dispose();
                 autoInstallTimer = null;
             }
 
@@ -1451,7 +1450,6 @@ namespace RelhaxModpack
                 bool downlaodTaskComplete = await ProcessDownloads(packagesToDownload);
                 //stop and end the timer
                 downloadDisplayTimer.Stop();
-                downloadDisplayTimer.Dispose();
                 downloadDisplayTimer = null;
                 if (!downlaodTaskComplete)
                 {
@@ -2216,12 +2214,12 @@ namespace RelhaxModpack
                 //init update timer
                 if(downloadDisplayTimer == null)
                 {
-                    downloadDisplayTimer = new Timer()
+                    downloadDisplayTimer = new DispatcherTimer()
                     {
-                        Interval = 1000,
-                        AutoReset = true
+                        Interval = TimeSpan.FromMilliseconds(1000),
+                        IsEnabled = false
                     };
-                    downloadDisplayTimer.Elapsed += DownloadDisplayTimer_Elapsed;
+                    downloadDisplayTimer.Tick += DownloadDisplayTimer_Elapsed;
                 }
                 downloadDisplayTimer.Stop();
                 downloadDisplayTimer.Start();
@@ -2260,7 +2258,7 @@ namespace RelhaxModpack
             InstallProgressTextBox.Text = string.Format("{0}\n{1}\n{2}\n{3}", line1, line2, line3, line4);
         }
 
-        private void DownloadDisplayTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void DownloadDisplayTimer_Elapsed(object sender, EventArgs e)
         {
             //update download rate display values
             downloadRateDisplay = currentBytesDownloaded - lastBytesDownloaded;
@@ -2313,10 +2311,10 @@ namespace RelhaxModpack
             //https://stackoverflow.com/questions/15617068/does-system-timers-timer-stop-restart-the-interval-countdown
             if (autoInstallTimer != null)
             {
-                if (!toggle)
-                    autoInstallTimer.Stop();
-                else
+                if (toggle)
                     autoInstallTimer.Start();
+                else
+                    autoInstallTimer.Stop();
             }
         }
 
@@ -2652,7 +2650,7 @@ namespace RelhaxModpack
                 };
 
                 //get the list of branches
-                using (PatientWebClient client = new PatientWebClient() { Timeout = 1500 })
+                using (PatientWebClient client = new PatientWebClient() { Timeout = 3000 })
                 {
                     //if windows 7, enable TLS 1.1 and 1.2
                     //https://stackoverflow.com/questions/47017973/could-not-establish-secure-channel-for-ssl-tls-c-sharp-web-service-client
@@ -2760,15 +2758,15 @@ namespace RelhaxModpack
                     newBetaDB = oldBetaDB;
                 }
 
-                autoInstallTimer.Elapsed -= AutoInstallTimer_ElapsedBeta;
-                autoInstallTimer.Elapsed -= AutoInstallTimer_Elapsed;
+                autoInstallTimer.Tick -= AutoInstallTimer_ElapsedBeta;
+                autoInstallTimer.Tick -= AutoInstallTimer_Elapsed;
                 switch (ModpackSettings.DatabaseDistroVersion)
                 {
                     case DatabaseVersions.Beta:
-                        autoInstallTimer.Elapsed += AutoInstallTimer_ElapsedBeta;
+                        autoInstallTimer.Tick += AutoInstallTimer_ElapsedBeta;
                         break;
                     case DatabaseVersions.Stable:
-                        autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
+                        autoInstallTimer.Tick += AutoInstallTimer_Elapsed;
                         break;
                 }
                 autoInstallTimer.Start();
@@ -3022,27 +3020,27 @@ namespace RelhaxModpack
             switch (AutoSyncFrequencyComboBox.SelectedIndex)
             {
                 case 0://mins
-                    autoInstallTimer.Interval = TimeSpan.FromMinutes(timeToUse).TotalMilliseconds;
+                    autoInstallTimer.Interval = TimeSpan.FromMinutes(timeToUse);
                     break;
                 case 1://hours
-                    autoInstallTimer.Interval = TimeSpan.FromHours(timeToUse).TotalMilliseconds;
+                    autoInstallTimer.Interval = TimeSpan.FromHours(timeToUse);
                     break;
                 case 2://days
-                    autoInstallTimer.Interval = TimeSpan.FromDays(timeToUse).TotalMilliseconds;
+                    autoInstallTimer.Interval = TimeSpan.FromDays(timeToUse);
                     break;
                 default:
                     throw new BadMemeException("this should not happen");
             }
 
-            autoInstallTimer.Elapsed -= AutoInstallTimer_ElapsedBeta;
-            autoInstallTimer.Elapsed -= AutoInstallTimer_Elapsed;
+            autoInstallTimer.Tick -= AutoInstallTimer_ElapsedBeta;
+            autoInstallTimer.Tick -= AutoInstallTimer_Elapsed;
             switch (ModpackSettings.DatabaseDistroVersion)
             {
                 case DatabaseVersions.Beta:
-                    autoInstallTimer.Elapsed += AutoInstallTimer_ElapsedBeta;
+                    autoInstallTimer.Tick += AutoInstallTimer_ElapsedBeta;
                     break;
                 case DatabaseVersions.Stable:
-                    autoInstallTimer.Elapsed += AutoInstallTimer_Elapsed;
+                    autoInstallTimer.Tick += AutoInstallTimer_Elapsed;
                     break;
             }
 
@@ -3055,7 +3053,7 @@ namespace RelhaxModpack
             Logging.Info("[AutoInstallCB_Click]: timer registered, listening for update check intervals");
         }
 
-        private void AutoInstallTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void AutoInstallTimer_Elapsed(object sender, EventArgs e)
         {
             if (timerActive)
                 return;
@@ -3091,7 +3089,7 @@ namespace RelhaxModpack
             });
         }
 
-        private async void AutoInstallTimer_ElapsedBeta(object sender, ElapsedEventArgs e)
+        private async void AutoInstallTimer_ElapsedBeta(object sender, EventArgs e)
         {
             if (timerActive)
                 return;
