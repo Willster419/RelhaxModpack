@@ -605,7 +605,12 @@ namespace RelhaxModpack.Windows
                     XmlDocument SelectionsDocument = null;
                     bool shouldLoadSomething = false;
                     bool loadSuccess = false;
-                    if (AutoInstallMode || ModpackSettings.OneClickInstall)
+                    //if test mode, don't load the "default_checked" document
+                    if(databaseVersion == DatabaseVersions.Test)
+                    {
+                        Logging.Debug("Test mode is active, don't load default_checked selection");
+                    }
+                    else if (AutoInstallMode || ModpackSettings.OneClickInstall)
                     {
                         //check that the file exists before trying to load it
                         if(File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
