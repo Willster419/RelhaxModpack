@@ -2613,6 +2613,7 @@ namespace RelhaxModpack
 
         private async void OnUseBetaDatabaseChanged(object sender, RoutedEventArgs e)
         {
+            UseBetaDatabaseBranches.IsEnabled = false;
             if ((bool)UseBetaDatabaseCB.IsChecked)
             {
                 //first check if auto install is enabled with this
@@ -2638,8 +2639,10 @@ namespace RelhaxModpack
                 Logging.Debug("[OnUseBetaDatabaseChanged]: reset internals and get list of database branches");
                 //disable the UI part of it
                 UseBetaDatabaseCB.IsEnabled = false;
-                UseBetaDatabaseBranches.IsEnabled = false;
+                UseBetaDatabaseBranches.IsEnabled = true;
+                UseBetaDatabaseBranches.Items.Clear();
                 UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
+                UseBetaDatabaseBranches.IsEnabled = false;
 
                 //declare objects to use
                 string jsonText = string.Empty;
@@ -2712,8 +2715,17 @@ namespace RelhaxModpack
                 foreach (string s in branches)
                     UseBetaDatabaseBranches.Items.Add(s);
 
-                //select master (index 0) as default
-                UseBetaDatabaseBranches.SelectedIndex = 0;
+                if (!string.IsNullOrEmpty(ModpackSettings.BetaDatabaseSelectedBranch) && branches.Contains(ModpackSettings.BetaDatabaseSelectedBranch))
+                {
+                    Logging.Debug("[OnUseBetaDatabaseChanged]: Branch '{0}' set from settings exists on repo and is being set", ModpackSettings.BetaDatabaseSelectedBranch);
+                    UseBetaDatabaseBranches.SelectedIndex = branches.IndexOf(ModpackSettings.BetaDatabaseSelectedBranch);
+                }
+                else
+                {
+                    Logging.Debug("[OnUseBetaDatabaseChanged]: Setting default branch 'master', branch '{0}' does not exist on repo or is blank", ModpackSettings.BetaDatabaseSelectedBranch);
+                    //select master (index 0) as default
+                    UseBetaDatabaseBranches.SelectedIndex = 0;
+                }
 
                 //set database distribution to beta
                 ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
