@@ -31,16 +31,16 @@ namespace RelhaxModpack
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     public partial class MainWindow : Window
     {
-        private System.Windows.Forms.NotifyIcon RelhaxIcon;
+        private System.Windows.Forms.NotifyIcon RelhaxIcon = null;
         private Stopwatch stopwatch = new Stopwatch();
-        private ModSelectionList modSelectionList;
+        private ModSelectionList modSelectionList = null;
         private RelhaxProgress downloadProgress = null;
-        private AdvancedProgress AdvancedProgressWindow;
+        private AdvancedProgress AdvancedProgressWindow = null;
         private NewsViewer newsViewer = null;
         private WebClient client = null;
         private Timer autoInstallTimer = new Timer();
-        private CancellationTokenSource cancellationTokenSource;
-        private InstallEngine installEngine;
+        private CancellationTokenSource cancellationTokenSource = null;
+        private InstallEngine installEngine = null;
         private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
         {
             AddExtension = true,
