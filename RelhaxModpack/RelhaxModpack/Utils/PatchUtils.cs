@@ -49,9 +49,10 @@ namespace RelhaxModpack
         /// <returns>The operation exit code</returns>
         public static PatchExitCode RunPatch(Patch p)
         {
-            //parse macros for when not from editor
+            //parse macros for when not from editor. because the editor will pre-parse macros before sending them
             if (!p.FromEditor)
             {
+                //if we are in stand alone patch mode
                 if(CommandLineSettings.ApplicationMode == ApplicationMode.Patcher)
                 {
                     string patchPathStart = string.Empty;
@@ -92,16 +93,18 @@ namespace RelhaxModpack
                 }
                 else//from application regular install
                 {
+                    Logging.Info("[PatchUtils]: Patch format version: {0}", p.Version);
                     //process the start of the path
                     if(string.IsNullOrWhiteSpace(p.PatchPath))
                     {
+                        Logging.Warning("[PatchUtils]: PatchPath is empty, using '{{app}}'", p.PatchPath);
                         p.PatchPath = Settings.WoTDirectory;
                     }
                     else
                     {
                         if(!p.PatchPath[0].Equals('{'))
                         {
-                            //Logging.Warning("[PatchUtils]: application patchpath macro does not start with '{', needs to be updated");
+                            Logging.Warning("[PatchUtils]: application patchpath macro does not start with '{', needs to be updated");
                             //https://stackoverflow.com/questions/91362/how-to-escape-braces-curly-brackets-in-a-format-string-in-net
                             p.PatchPath = string.Format("{{{0}}}", p.PatchPath);
                         }
@@ -111,17 +114,17 @@ namespace RelhaxModpack
                     //check for that dumb filepath thing i did a while back
                     if(p.File.Contains(@"\\"))
                     {
-                        Logging.Warning("[PatchUtils]: found legacy patch of \"\\\\\", please update to remove extra slashes!");
+                        Logging.Warning("[PatchUtils]: found legacy patch folder slashes, please update to remove extra slashes!");
                         p.File = p.File.Replace(@"\\", @"\");
                     }
 
                     if(p.File[0].Equals('\\'))
                     {
-                        //Logging.Debug("[PatchUtils]: p.file starts with '\\', removing for path combine");
+                        Logging.Info("[PatchUtils]: p.file starts with '\\', removing for path combine");
                         p.File = p.File.Substring(1);
                     }
 
-                    //also check for "xvmConfigFolderName"
+                    //also check for if "xvmConfigFolderName" exists yet in the file path macro location
                     if(!Utils.FilePathDict.ContainsKey(@"xvmConfigFolderName"))
                         Utils.FilePathDict.Add(@"xvmConfigFolderName", GetXvmFolderName().Trim());
 
@@ -146,6 +149,11 @@ namespace RelhaxModpack
             {
                 Logging.Debug("[PatchUtils]: p.FromEditor=true and ModpackSettings.VerboseLogging=false, setting to true for duration of patch method");
                 ModpackSettings.VerboseLogging = true;
+            }
+
+            if(p.Version == 1)
+            {
+                Logging.Warning("[PatchUtils]: patch is V1 format, please update to V2!");
             }
 
             //actually run the patches based on what type it is
@@ -588,33 +596,40 @@ namespace RelhaxModpack
                 Logging.Warning("[PatchUtils]: Patch should have search value specified, please update it!");
                 p.Search = @".*";
             }
+
             //if no mode, treat as edit
             if(string.IsNullOrWhiteSpace(p.Mode))
             {
                 Logging.Warning("[PatchUtils]: Patch should have mode value specified, please update it!");
                 p.Mode = "edit";
             }
+
             //arrayEdit is not a valid mode, but may be specified by mistake
             if(p.Mode.Equals("arrayEdit"))
             {
                 Logging.Warning("[PatchUtils]: Patch mode \"arrayEdit\" is not a valid mode and will be treated as \"edit\", please update it!");
                 p.Mode = "edit";
             }
+
             //if patch type is v1, run v1 patch changes
             if(p.Version == 1)
             {
-                //Logging.Warning("[PatchUtils]: patch is V1 type, please update to V2!");
                 //V1 fix 1: if type if json, hard-code the replace to look for xvm reference, and replace it with the new macro used (start macro)
                 if(p.Replace.Contains("[dollar][lbracket][quote]"))
                 {
-                    //Logging.Warning("[PatchUtils]: applying v1 fix 1: if json type, update xvm reference macros (start macro)");
+                    Logging.Info("[PatchUtils]: Applying v1 fix 1: if json type, update xvm reference macros (start macro)");
                     p.Replace = p.Replace.Replace("[dollar][lbracket][quote]", "[xvm_dollar][lbracket][quote]");
                 }
                 //V1 fix 2: if type if json, hard-code the replace to look for xvm reference, and replace it with the new macro used (end macro)
                 if (p.Replace.Contains("[quote][rbracket]"))
                 {
-                    //Logging.Warning("[PatchUtils]: applying v1 fix 2: if json type, update xvm reference macros (end macro)");
+                    Logging.Warning("[PatchUtils]: Applying v1 fix 2: if json type, update xvm reference macros (end macro)");
                     p.Replace = p.Replace.Replace("[quote][rbracket]", "[quote][xvm_rbracket]");
+                }
+
+                if(p.FollowPath)
+                {
+                    Logging.Error("[PatchUtils]: Patch format 1 is not compatible with FollowPath!");
                 }
             }
 
@@ -679,13 +694,13 @@ namespace RelhaxModpack
             PatchExitCodeForJson = PatchExitCode.Error;
             if ((Path.GetExtension(p.CompletePath).ToLower().Equals(".xc") || p.FromEditor) && p.FollowPath)
             {
-                Logging.Debug("[PatchUtils]: followpath is true, and either editor or xc file, following path to get actual root json object");
+                Logging.Debug("[PatchUtils]: Followpath is true, and either editor or xc file, following path to get actual root json object");
                 searchRoot = FollowXvmPath(p, root);
             }
 
             if(searchRoot == null && p.FollowPath)
             {
-                Logging.Debug("[PatchUtils]: root Jobject is null, meaning followPath previously completed, so stop here");
+                Logging.Debug("[PatchUtils]: Root Jobject is null, meaning followPath previously completed, so stop here");
                 return PatchExitCodeForJson;
             }
 
@@ -711,7 +726,7 @@ namespace RelhaxModpack
                     PatchExitCodeForJson = JsonArrayRemoveClear(p, searchRoot, false);
                     break;
                 default:
-                    Logging.Error("[PatchUtils]: ERROR: Unknown json patch mode, {0}", p.Mode);
+                    Logging.Error("[PatchUtils]: Unknown json patch mode, {0}", p.Mode);
                     return PatchExitCodeForJson;
             }
 
@@ -722,13 +737,16 @@ namespace RelhaxModpack
             file = file.Trim() + Environment.NewLine;
 
             //write to disk and finish
-            if(p.FollowPath && p.FromEditor)
+            if (p.FollowPath && p.FromEditor)
             {
                 //if followpath and from editor, actually save it to testfile
                 File.WriteAllText(p.FollowPathEditorCompletePath, file);
             }
             else
+            {
                 File.WriteAllText(p.CompletePath, file);
+            }
+
             Logging.Debug("[PatchUtils]: json patch completed successfully");
             return PatchExitCodeForJson;
         }

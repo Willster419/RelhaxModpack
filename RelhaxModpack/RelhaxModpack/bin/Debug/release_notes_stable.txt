@@ -1,3 +1,61 @@
+ATTENTION! PLEASE READ!
+Due to a possible error in the application updater, this update may need to be manually downloaded from github
+You may also click this link to get the latest application:
+https://github.com/Willster419/RelhaxModpack/releases/latest
+Sorry for the inconvenience.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 1.0.2.0 (2020-02-01)
+https://www.virustotal.com/gui/file/d6ed6d8994f5fe51f11655c760af1e8d08e35f13fdc445acf1c75cb95e47ad69/detection
+- Fixed critical bug of application update method when it was re-written. Sorry about that everyone.
+- Added "RelhaxModpack_update.exe", "RelhaxModpack_update.zip" to list of files to check for and delete on startup.
+- Fixed minor bug displaying incorrect dependency calculation results.
+- Added/updated logging in depepndency calculation processing.
+- Fixed DevURL bugs with database editor.
+- Fixed DevURL bugs with database csv output.
+- Fixed issue loading database for csv output in database updater.
+- Added debug logging and null checks in bug isolation during application update.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 1.0.1.0 (2020-01-26)
+https://www.virustotal.com/gui/file/c450147a9cac4fab33d8bb56be60f7858a3c642f485f1cc16ca06d1c0f0582d5/detection
+- Fixed bug of application crashing when trying to parse invalid preview URI strings.
+- Fixed bug of application not creating atlases with new nvtt API (version conflicts between nvtt and TexImpNet APIs).
+- Changed application to not save settings nor allow UI interaction during "update mode" (when user presses yes to new version, waiting for download).
+- Fixed bug with application not loading when autoInstall was set to true with the beta database.
+- Fixed bugs with display and internal parsing of developer URLs.
+- Fixed issues with logging during application closing.
+- Added get properties to database class for getting escaped and formatted update/description strings.
+- Enabled usage of new database properties: Popular mod, controversial mod.
+- Added new database property: Obfuscated mod. Shows when a mod is encrypted and can't be scanned for viruses.
+- Fixed minor bug in logging when showing checked package.
+- Added a credits window for the team and our usage of 3rd party APIs.
+- Improved display of populer, controversial, obfuscated mod icons to show left to right of package and reduce load time.
+- Added display of popular, controversial and obfuscated mod icons to dropDown selections.
+- Added category property: OffsetInstallGroups. When false, it will not apply an additional installGroup offset to package install group calculation, allowing more parallelism and faster installations.
+- Fixed bug with beta application checkbox not being set on application start.
+- Fixed bugs with Timers vs. DispatchTimers.
+- Added statistics management tools to database updater utility.
+- Updated HtmlAgilityPack and DotNetZip APIs.
+- Improved logging.
+- Updated translations.
+- Added lots of documentation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 1.0.0.1 (2020-01-11)
+(Yup, a day one patch.)
+https://www.virustotal.com/gui/file/a8e695e33b429ce7a687e57ce141665c4c19b5bfdfaf44129539730b2adbe75e/detection
+- Fixed the search combobox in the selection list. It will no longer "eat" your first type letters.
+- Fixed several bugs with database editor:
+  -  Database saving
+  -  Unsaved changes check
+  -  Disabled UI components until V2 database (needed to be enabled)
+  -  Bugs with package search combobox
+- Fixed disabled UI components until V2 patch system. (needed to be enabled)
+- Updated Spanish, Polish, Russian translations.
+- Not bad for a day one patch on initial release, if I may say so myself.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.0.0.0 (2020-01-10)
 https://www.virustotal.com/gui/file/1df83980fa58bd12a989b38e0b143582207fb8dd99c7350bb9f86ca3049c0827/detection
 - Initial Relhax V2 1.0 release

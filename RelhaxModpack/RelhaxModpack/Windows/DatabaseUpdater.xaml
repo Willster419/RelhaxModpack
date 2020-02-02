@@ -68,8 +68,7 @@
                         <Button x:Name="UpdateApplicationV2Step7b" Content="Step 7b: Upload RelhaxModpackBeta.exe to bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationBeta"/>
                         <Button x:Name="UpdateApplicationV2Step8" Content="Step 8: Upload manager_info.xml to wotmods and bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadManagerInfo"/>
                         <Button x:Name="UpdateApplicationV2Step9" Content="Step 9: Run script CreateUpdatePackages.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateUpdatePackages"/>
-                        <Button x:Name="UpdateApplicationV2Step10a" Content="Step 10a: Run script CreateManagerInfo.php (wotmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoWotmods"/>
-                        <Button x:Name="UpdateApplicationV2Step10b" Content="Step 10b: Run script CreateManagerInfo.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoBigmods"/>
+                        <Button x:Name="UpdateApplicationV2Step10" Content="Step 10: Run script CreateManagerInfo.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoBigmods"/>
                         <TextBox x:Name="UpdateApplicationV2Step11" Height="23" TextWrapping="Wrap" Text="Step 11: Post update notes on discord and forums"/>
                     </StackPanel>
                 </Grid>
@@ -100,6 +99,15 @@
                 <Grid Background="#FFE5E5E5">
                     <StackPanel >
                         <Button x:Name="GenerateMD5Button" Content="Load files to hash" Click="GenerateMD5Button_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="StatisticsToolsTab" Header="Statistics Tools">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel >
+                        <Button x:Name="DatabaseStatsSave" Content="Save live stats to FTP folder with new name" HorizontalContentAlignment="Left" Click="DatabaseStatsSave_Click"/>
+                        <Button x:Name="DatabaseStatsUpdateCurrent" Content="Update live stats with new packageNames" HorizontalContentAlignment="Left" Click="DatabaseStatsUpdateCurrent_Click"/>
+                        <Button x:Name="DatabaseStatsMakeNew" Content="Create new stats with new packageNames (overwrite live)" HorizontalContentAlignment="Left" Click="DatabaseStatsMakeNew_Click"/>
                     </StackPanel>
                 </Grid>
             </TabItem>

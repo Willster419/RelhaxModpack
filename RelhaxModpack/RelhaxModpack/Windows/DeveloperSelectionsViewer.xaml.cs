@@ -30,7 +30,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// the name of the file to load from the online list of selection files
         /// </summary>
-        public string FileToLoad = "";
+        public string FileToLoad = string.Empty;
     }
 
     /// <summary>

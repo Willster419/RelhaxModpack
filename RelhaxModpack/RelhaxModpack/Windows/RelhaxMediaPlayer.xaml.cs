@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.IO;
 using System.Threading.Tasks;
 using NAudio.Wave;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.UIComponents
 {
@@ -17,18 +18,18 @@ namespace RelhaxModpack.UIComponents
         /// <summary>
         /// The direct link to the audio file to preview
         /// </summary>
-        private string mediaURL { get; set; }
+        private string MediaURL = string.Empty;
 
         /// <summary>
         /// The raw audio data to parse
         /// </summary>
-        private byte[] audioData { get; set; }
+        private byte[] AudioData = null;
 
         //private
-        private Timer UITimer = new Timer();
+        private DispatcherTimer UITimer_ = null;
         private IWavePlayer waveOutDevice = new WaveOut();
-        private MemoryStream audioStream;
-        private WaveStream audioFileReader2;
+        private MemoryStream audioStream = null;
+        private WaveStream audioFileReader2 = null;
 
         /// <summary>
         /// Creates an instance of the RelhaxMediaPlayer user control
@@ -37,16 +38,16 @@ namespace RelhaxModpack.UIComponents
         /// <param name="_mediaURL">The URL to the audio source. Used for audio type parsing.</param>
         public RelhaxMediaPlayer( string _mediaURL, byte[] _audioData)
         {
-            mediaURL = _mediaURL;
-            audioData = _audioData;
+            MediaURL = _mediaURL;
+            AudioData = _audioData;
             InitializeComponent();
         }
 
         private async void OnComponentLoad(object sender, RoutedEventArgs e)
         {
-            if (audioData == null)
+            if (AudioData == null)
                 throw new BadMemeException("lol you forgot to set the audio data");
-            if (string.IsNullOrEmpty(mediaURL))
+            if (string.IsNullOrWhiteSpace(MediaURL))
                 throw new BadMemeException("lol you forgot to pass in the Media URL");
 
             //tell the user it's loading the file
@@ -54,12 +55,12 @@ namespace RelhaxModpack.UIComponents
 
             //use an async load
             bool taskComplete = false;
-            await Task.Factory.StartNew(() =>
+            await Task.Run(() =>
             {
                 try
                 {
-                    audioStream = new MemoryStream(audioData);
-                    switch (Path.GetExtension(mediaURL).ToLower())
+                    audioStream = new MemoryStream(AudioData);
+                    switch (Path.GetExtension(MediaURL).ToLower())
                     {
                         case ".mp3":
                             audioFileReader2 = new Mp3FileReader(audioStream);
@@ -76,7 +77,7 @@ namespace RelhaxModpack.UIComponents
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception("Failed to load audio preview: {0}", mediaURL);
+                    Logging.Exception("Failed to load audio preview: {0}", MediaURL);
                     Logging.Exception(ex.ToString());
                 }
             });
@@ -93,7 +94,7 @@ namespace RelhaxModpack.UIComponents
             //now that it's loaded, setup the UI
             //https://stackoverflow.com/questions/10371741/naudio-seeking-and-navigation-to-play-from-the-specified-position
             Seekbar.Maximum = (int)audioFileReader2.TotalTime.TotalMilliseconds;
-            FileName.Text = Path.GetFileName(mediaURL);
+            FileName.Text = Path.GetFileName(MediaURL);
 
             //start off the volume at 50%
             Volume.Minimum = 0;
@@ -104,27 +105,21 @@ namespace RelhaxModpack.UIComponents
             waveOutDevice.PlaybackStopped += OnWaveDevicePlaybackStopped;
 
             //setup the UI timer to make the display updated based on position of audio
-            UITimer.Interval = 100;
-            UITimer.Elapsed += OnUITimerElapse;
-            UITimer.Stop();
-            UITimer.AutoReset = true;
+            UITimer_ = new DispatcherTimer(TimeSpan.FromMilliseconds(100), DispatcherPriority.Normal, OnUITimerElapse, this.Dispatcher) { IsEnabled = false };
         }
 
-        private void OnUITimerElapse(object sender, ElapsedEventArgs e)
+        private void OnUITimerElapse(object sender, EventArgs e)
         {
             if (waveOutDevice == null)
             {
-                UITimer.Stop();
+                UITimer_.Stop();
                 return;
             }
-            Dispatcher.InvokeAsync(() =>
-            {
-                if (waveOutDevice.PlaybackState != PlaybackState.Playing)
-                    StopButton_Click(null, null);
+            if (waveOutDevice.PlaybackState != PlaybackState.Playing)
+                StopButton_Click(null, null);
 
-                if (Seekbar.Minimum <= audioFileReader2.CurrentTime.TotalMilliseconds && audioFileReader2.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
-                    Seekbar.Value = (int)audioFileReader2.CurrentTime.TotalMilliseconds;
-            });
+            if (Seekbar.Minimum <= audioFileReader2.CurrentTime.TotalMilliseconds && audioFileReader2.CurrentTime.TotalMilliseconds <= Seekbar.Maximum)
+                Seekbar.Value = (int)audioFileReader2.CurrentTime.TotalMilliseconds;
         }
 
         /// <summary>
@@ -151,7 +146,7 @@ namespace RelhaxModpack.UIComponents
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             waveOutDevice.Stop();
-            UITimer.Stop();
+            UITimer_.Stop();
             Seekbar.Value = 0;
             audioFileReader2.Position = 0;
         }
@@ -163,11 +158,11 @@ namespace RelhaxModpack.UIComponents
                 case PlaybackState.Stopped:
                 case PlaybackState.Paused:
                     waveOutDevice.Play();
-                    UITimer.Start();
+                    UITimer_.Start();
                     break;
                 case PlaybackState.Playing:
                     waveOutDevice.Pause();
-                    UITimer.Stop();
+                    UITimer_.Stop();
                     break;
             }
         }
@@ -197,7 +192,7 @@ namespace RelhaxModpack.UIComponents
         {
             //pause
             waveOutDevice.Pause();
-            UITimer.Stop();
+            UITimer_.Stop();
 
             //get the total scroll bar usable length
             double scrollWidth = Seekbar.ActualWidth - 20;
@@ -233,8 +228,6 @@ namespace RelhaxModpack.UIComponents
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    UITimer.Dispose();
-                    UITimer = null;
                     waveOutDevice.Dispose();
                     waveOutDevice = null;
                     audioStream.Dispose();

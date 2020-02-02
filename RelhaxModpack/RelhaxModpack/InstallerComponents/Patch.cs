@@ -92,10 +92,11 @@ namespace RelhaxModpack
         {
             get
             {
-                return string.Format("{0} patch, NativeProcessingFile={1}, ActualFile={2}," +
-                    "{3}{4}PatchPath={5}, FileToPatch={6}," +
-                    "{7}{8}Lines={9}, Path={10}, Search={11}, Replace={12}",
+                return string.Format("{0} patch, Version={1}, NativeProcessingFile={2}, ActualFile={3}," +
+                    "{4}{5}PatchPath={6}, FileToPatch={7}," +
+                    "{8}{9}Lines={10}, Path={11}, Search={12}, Replace={13}",
                     Type.ToLower(),
+                    Version,
                     NativeProcessingFile,
                     ActualPatchName,
                     Environment.NewLine,
@@ -120,6 +121,9 @@ namespace RelhaxModpack
             return FromEditor? string.Format("type={0} ,mode={1}, lines/path={2}", Type, Mode, Lines == null ? Path : string.Join(",", Lines)) : base.ToString();
         }
 
+        /// <summary>
+        /// Gets a value that determines if all required properties are filed out to be saved to a patch file
+        /// </summary>
         public bool IsValidForSave
         {
             get
@@ -143,17 +147,35 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Returns a list of patch objects that are not ready to be written to a patch file
+        /// </summary>
+        /// <param name="patchList">The list of patches to check</param>
+        /// <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+        /// <seealso cref="IsValidForSave"/>
         public static List<Patch> GetInvalidPatchesForSave(Patch[] patchList)
         {
             return GetInvalidPatchesForSave(patchList.ToList());
         }
 
+        /// <summary>
+        /// Returns a list of patch objects that are not ready to be written to a patch file
+        /// </summary>
+        /// <param name="patchList">The list of patches to check</param>
+        /// <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+        /// <seealso cref="IsValidForSave"/>
         public static List<Patch> GetInvalidPatchesForSave(List<Patch> patchList)
         {
             //https://stackoverflow.com/questions/1938204/linq-where-vs-findall
             return patchList.FindAll(patch => !patch.IsValidForSave);
         }
 
+        /// <summary>
+        /// Returns a list of patch objects that are not ready to be written to a patch file
+        /// </summary>
+        /// <param name="patchList">The list of patches to check</param>
+        /// <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+        /// <seealso cref="IsValidForSave"/>
         public static List<Patch> GetInvalidPatchesForSave(ItemCollection patchList)
         {
             //https://stackoverflow.com/questions/471595/casting-an-item-collection-from-a-listbox-to-a-generic-list

@@ -13,6 +13,7 @@ namespace RelhaxModpack
 
         #region bigmods FTP modpack addresses
         public const string BigmodsFTPModpackRoot = null;
+        public const string BigmodsFTPModpackInstallStats = null;
         public const string BigmodsFTPModpackMedias = null;
         public const string BigmodsFTPModpackRelhaxModpack = null;
         public const string BigmodsFTPRootWoT = null;
