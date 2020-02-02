@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Net;
 using System.IO;
 using System.Timers;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
 {
@@ -91,10 +92,10 @@ namespace RelhaxModpack.Windows
         public uint Countdown = 0;
 
         //private
-        private WebClient client;
-        private string CompleteFTPPath;
+        private WebClient client = null;
+        private string CompleteFTPPath = string.Empty;
         private long FTPDownloadFilesize = -1;
-        private Timer timer = new Timer() { AutoReset = true, Enabled = false, Interval = 1000 };
+        private DispatcherTimer timer = null;
 
         /// <summary>
         /// Create an instance of the DatabaseEditorDownlaod class
@@ -106,8 +107,8 @@ namespace RelhaxModpack.Windows
 
         private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //hook up the timer
-            timer.Elapsed += Timer_Elapsed;
+            //init timer
+            timer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Background, Timer_Elapsed, this.Dispatcher) { IsEnabled = false };
 
             //set the open folder and file button
             //if uploading, the buttons are invalid, don't show then
@@ -238,24 +239,20 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Editor("Countdown is > 0, starting");
                 TimeoutClose.Visibility = Visibility.Visible;
-                timer.Enabled = true;
+                timer.Start();
                 TimeoutClose.Text = Countdown.ToString();
             }
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void Timer_Elapsed(object sender, EventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            TimeoutClose.Text = (--Countdown).ToString();
+            if (Countdown == 0)
             {
-                TimeoutClose.Text = (--Countdown).ToString();
-                if (Countdown == 0)
-                {
-                    Logging.Editor("countdown complete, closing the window");
-                    timer.Enabled = false;
-                    timer.Dispose();
-                    Close();
-                }
-            });
+                Logging.Editor("countdown complete, closing the window");
+                timer.Stop();
+                Close();
+            }
         }
 
         private async void Client_DownloadUploadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.DatabaseComponents
 {
+    /// <summary>
+    /// Represents an interface that defines a unique ID or name to be returned on a database component
+    /// </summary>
     public interface IComponentWithID
     {
         /// <summary>

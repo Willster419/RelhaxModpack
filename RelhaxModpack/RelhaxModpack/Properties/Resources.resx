@@ -118,9 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="dds_reader" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Licences\dds-reader.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="discord_brand" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\discord brand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -151,7 +148,7 @@
   <data name="modpack_license_agrement" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Licences\modpack_license_agrement.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="NAudio1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="NAudio" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Licences\NAudio.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="play_pause" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -183,5 +180,20 @@
   </data>
   <data name="error_loading_picture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\error_loading_picture.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="obfuscated_package_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\obfuscated_package_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DotNetZip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Licences\DotNetZip.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="HtmlAgilityPack" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Licences\HtmlAgilityPack.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Json_NET" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Licences\Json.NET.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="WindowsAPICodePack" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Licences\WindowsAPICodePack.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

@@ -5,12 +5,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Text;
-using System.Timers;
 using System;
 using System.Diagnostics;
 using System.Web;
 using System.Net;
 using System.Xml;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
 {
@@ -88,7 +88,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for GameCenterUpdateDownloader.xaml
     /// </summary>
-    public partial class GameCenterUpdateDownloader : RelhaxWindow, IDisposable
+    public partial class GameCenterUpdateDownloader : RelhaxWindow
     {
         /// <summary>
         /// The path to the root client folder (World_of_Tanks), for example
@@ -132,7 +132,7 @@ namespace RelhaxModpack.Windows
         private string metaDataXmlPath = string.Empty;
         private string notificationsXmlPathWgc = string.Empty;
         private string versionXmlPathWgc = string.Empty;
-        private Timer timer = null;
+        private DispatcherTimer timer = null;
         private WebClient client = null;
         private bool step4DownloadCanceled = false;
         private string WgcSavedpath = string.Empty;
@@ -147,7 +147,6 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
             foreach (TabItem item in GcDownloadMainTabControl.Items)
             {
                 item.Background = UISettings.CurrentTheme.TabItemColorset.BackgroundBrush.Brush;
@@ -645,36 +644,32 @@ namespace RelhaxModpack.Windows
             //start timer
             if(timer == null)
             {
-                timer = new Timer(1000);
-                timer.Elapsed += Timer_Elapsed;
+                timer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Background, Timer_Elapsed, this.Dispatcher) { IsEnabled = false };
             }
             timer.Start();
             Timer_Elapsed(null, null);
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void Timer_Elapsed(object sender, EventArgs e)
         {
             //get list of processes for WG game center
             Process[] processes = Process.GetProcesses().Where(process => process.ProcessName.Equals(WgcProcessName)).ToArray();
-            this.Dispatcher.Invoke(() =>
+            if (processes.Count() == 0)
             {
-                if (processes.Count() == 0)
-                {
-                    //not running
-                    GcDownloadStep2GcStatus.Foreground = System.Windows.Media.Brushes.DarkGreen;
-                    GcDownloadStep2GcStatus.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep2GcStatus")
-                        , Translations.GetTranslatedString("GcDownloadStep2GcStatusClosed"));
-                    GcDownloadStep2NextButton.IsEnabled = true;
-                }
-                else
-                {
-                    //running
-                    GcDownloadStep2GcStatus.Foreground = System.Windows.Media.Brushes.Red;
-                    GcDownloadStep2GcStatus.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep2GcStatus")
-                        , Translations.GetTranslatedString("GcDownloadStep2GcStatusOpened"));
-                    GcDownloadStep2NextButton.IsEnabled = false;
-                }
-            });
+                //not running
+                GcDownloadStep2GcStatus.Foreground = System.Windows.Media.Brushes.DarkGreen;
+                GcDownloadStep2GcStatus.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep2GcStatus")
+                    , Translations.GetTranslatedString("GcDownloadStep2GcStatusClosed"));
+                GcDownloadStep2NextButton.IsEnabled = true;
+            }
+            else
+            {
+                //running
+                GcDownloadStep2GcStatus.Foreground = System.Windows.Media.Brushes.Red;
+                GcDownloadStep2GcStatus.Text = string.Format(Translations.GetTranslatedString("GcDownloadStep2GcStatus")
+                    , Translations.GetTranslatedString("GcDownloadStep2GcStatusOpened"));
+                GcDownloadStep2NextButton.IsEnabled = false;
+            }
         }
 
         private async void GcDownloadStep3Init()
@@ -1000,55 +995,5 @@ namespace RelhaxModpack.Windows
         {
             this.Close();
         }
-
-        private void RelhaxWindow_Closed(object sender, EventArgs e)
-        {
-            if (timer != null)
-            {
-                timer.Dispose();
-                timer = null;
-            }
-        }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        /// <summary>
-        /// Dispose of the window and release any disposable resources
-        /// </summary>
-        /// <param name="disposing">Set to true to dispose of managed objects</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    if(timer != null)
-                    {
-                        timer.Dispose();
-                        timer = null;
-                    }
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        // ~GameCenterUpdateDownloader() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        /// <summary>
-        /// Dispose of the window and release any disposable resources
-        /// </summary>
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

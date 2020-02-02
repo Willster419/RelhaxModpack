@@ -9,9 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using RelhaxModpack.UIComponents;
-using System.Timers;
 using System.IO;
 using System.Net;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
 {
@@ -36,8 +36,7 @@ namespace RelhaxModpack.Windows
         private Media CurrentDispalyMedia = null;
         private WebBrowser browser = null;
         private ZoomBorder zoomBorder = null;
-
-        private Timer FocusTimer = null;
+        private DispatcherTimer FocusTimer = null;
 
         /// <summary>
         /// Create an instance of the Preview window
@@ -82,22 +81,44 @@ namespace RelhaxModpack.Windows
             {
                 //devURL is now array of elements separated by newline
                 //load the stack with textblocks with tooltips for the URLs
-                string[] devURLS = Package.DevURL.Split('\n');
-                for(int i = 0; i < devURLS.Count(); i++)
+                string[] devURLS = Package.DevURLList;
+                for (int i = 0; i < devURLS.Count(); i++)
                 {
-                    //make a textbox
+                    //make a URI to hold the goto devurl link
+                    Uri goTo = null;
+                    try
+                    {
+                        goTo = new Uri(devURLS[i].Trim());
+                    }
+                    catch (UriFormatException)
+                    {
+                        Logging.Error("Invalid URI string, skipping: {0}", devURLS[i].Trim());
+                    }
+                    if (goTo == null)
+                        continue;
+
+                    //make a textbox to hold the hyperlink object
                     TextBlock block = new TextBlock()
                     {
                         ToolTip = devURLS[i].Trim()
                     };
                     //https://stackoverflow.com/questions/21214450/how-to-add-a-hyperlink-in-a-textblock-in-code?noredirect=1&lq=1
                     block.Inlines.Clear();
-                    Hyperlink h = new Hyperlink(new Run(i.ToString()))
+
+                    //make a run to display the number of the link
+                    Run inline = new Run(i.ToString());
+
+                    //and the hyperlink will display the run
+                    Hyperlink h = new Hyperlink(inline)
                     {
-                        NavigateUri = new Uri(devURLS[i].Trim())
+                        NavigateUri = goTo
                     };
                     h.RequestNavigate += OnHyperLinkClick;
+
+                    //add hyperlink to textbox
                     block.Inlines.Add(h);
+
+                    //add to developer url textbox
                     DevUrlHolder.Children.Add(block);
                 }
             }
@@ -110,10 +131,7 @@ namespace RelhaxModpack.Windows
             //make the linked labels in the link box
             for(int i =0; i < Package.Medias.Count; i++)
             {
-                TextBlock block = new TextBlock()
-                {
-
-                };
+                TextBlock block = new TextBlock();
                 block.Inlines.Clear();
                 Hyperlink h = new Hyperlink(new Run(i.ToString()))
                 {
@@ -126,14 +144,10 @@ namespace RelhaxModpack.Windows
                 MediaIndexer.Children.Add(block);
             }
 
-            //format the descriptions and update info text strings
-            PreviewDescriptionBox.Text = string.IsNullOrWhiteSpace(Package.Description) ?
-                Translations.GetTranslatedString("noDescription") : Package.Description;
+            PreviewDescriptionBox.Text = Package.DescriptionFormatted;
 
-            //0 is update notes, 1 is update time (last updated)
-            PreviewUpdatesBox.Text = string.Format("{0}\n{1}", string.IsNullOrWhiteSpace(Package.UpdateComment) ?
-                Translations.GetTranslatedString("noUpdateInfo") : Package.UpdateComment,
-                Package.Timestamp == 0 ? Translations.GetTranslatedString("noTimestamp") : Utils.ConvertFiletimeTimestampToDate(Package.Timestamp));
+
+            PreviewUpdatesBox.Text = Package.UpdateCommentFormatted;
 
             if(EditorMode)
             {
@@ -173,20 +187,14 @@ namespace RelhaxModpack.Windows
             //set the timer if the view is OMC
             if(ModpackSettings.ModSelectionView == SelectionView.Legacy)
             {
-                FocusTimer = new Timer()
-                {
-                    Interval = 10,
-                    AutoReset = false,
-                    Enabled = true
-                };
-                FocusTimer.Elapsed += (senderr, args) =>
-                {
-                    this.Dispatcher.InvokeAsync(() =>
-                    {
-                        this.Focus();
-                    });
-                };
+                FocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
             }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            FocusTimer.Stop();
+            this.Focus();
         }
 
         private void OnMediaHyperlinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
@@ -414,12 +422,6 @@ namespace RelhaxModpack.Windows
             {
                 browser.Dispose();
                 browser = null;
-            }
-
-            if (FocusTimer != null)
-            {
-                FocusTimer.Dispose();
-                FocusTimer = null;
             }
         }
 

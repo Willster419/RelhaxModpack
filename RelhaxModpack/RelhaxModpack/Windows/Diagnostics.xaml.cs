@@ -260,13 +260,11 @@ namespace RelhaxModpack.Windows
 
         private void DownloadWGPatchFiles_Click(object sender, RoutedEventArgs e)
         {
-            using (GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader()
+            GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader()
             {
                 SelectedClient = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? string.Empty : Settings.WoTDirectory
-            })
-            {
-                gameCenterUpdateDownloader.ShowDialog();
-            }
+            };
+            gameCenterUpdateDownloader.ShowDialog();
         }
 
         private async void CleanupModFilesButton_Click(object sender, RoutedEventArgs e)

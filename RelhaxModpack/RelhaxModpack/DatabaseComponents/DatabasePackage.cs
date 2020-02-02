@@ -11,11 +11,21 @@ namespace RelhaxModpack
     public class DatabasePackage : IXmlSerializable, IComponentWithID
     {
         #region Xml serialization
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes
+        /// </summary>
+        /// <returns>A list of string property names</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public virtual string[] PropertiesForSerializationAttributes()
         {
             return PackagePropertiesToXmlParseAttributes.ToArray();
         }
 
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml elements
+        /// </summary>
+        /// <returns>A list of string property names</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public virtual string[] PropertiesForSerializationElements()
         {
             return PackagePropertiesToXmlParseElements.ToArray();
@@ -149,6 +159,14 @@ namespace RelhaxModpack
         public string DevURL { get; set; } = string.Empty;
 
         /// <summary>
+        /// Gets an array of dev URLs, separated by the newline character
+        /// </summary>
+        public string[] DevURLList
+        {
+            get { return Utils.MacroReplace(DevURL, ReplacementTypes.TextUnescape).Replace("\r", string.Empty).Split('\n'); }
+        }
+
+        /// <summary>
         /// The level at which this package can be installed. It will be installed with other packages of the same install group at the same time
         /// </summary>
         public int InstallGroup { get; set; } = 0;
@@ -162,6 +180,14 @@ namespace RelhaxModpack
         /// Internal instructions for updating the mod for database managers
         /// </summary>
         public string InternalNotes { get; set; } = string.Empty;
+
+        /// <summary>
+        /// An escaped version of the internal notes. Replaces '\n' literal with '\n' special
+        /// </summary>
+        public string InternalNotesEscaped
+        {
+            get { return Utils.MacroReplace(InternalNotes, ReplacementTypes.TextUnescape); }
+        }
 
         /// <summary>
         /// The name of the author of the mod/configuration/etc.
@@ -204,6 +230,9 @@ namespace RelhaxModpack
         /// </summary>
         public bool ExtractionStarted { get; set; } = false;
 
+        /// <summary>
+        /// When a databasePackage, the internal packageName. When category, the category name
+        /// </summary>
         public string ComponentInternalName { get { return PackageName; } }
 
         public DownloadInstructions DownloadInstructions { get; set; } = null;

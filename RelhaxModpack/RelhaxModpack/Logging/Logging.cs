@@ -367,6 +367,31 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Attempts to write to a specified logfile. No error is logged if it cannot
+        /// </summary>
+        /// <remarks>It checks to make sure the logfile isn't disposed, and then to make sure the logfile is open in a valid instance</remarks>
+        /// <param name="message">The message to write</param>
+        /// <param name="logfile">The logfile to write to</param>
+        /// <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
+        public static void TryWriteToLog(string message, Logfiles logfile, LogLevel logLevel)
+        {
+            if (!IsLogDisposed(logfile) && IsLogOpen(logfile))
+                WriteToLog(message, logfile, logLevel);
+        }
+
+        /// <summary>
+        /// Attempts to write to a specified logfile. No error is logged if it cannot
+        /// </summary>
+        /// <param name="messageFormat">The formatted string to be passed into the string.Format() method</param>
+        /// <param name="logfile">The logfile to write to</param>
+        /// <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
+        public static void TryWriteToLog(string messageFormat, Logfiles logfile, LogLevel logLevel, params object[] args)
+        {
+            TryWriteToLog(string.Format(messageFormat, args), logfile, logLevel);
+        }
+
+        /// <summary>
         /// Writes a message to a logfile instance, if it exists
         /// </summary>
         /// <param name="message">The message to write</param>

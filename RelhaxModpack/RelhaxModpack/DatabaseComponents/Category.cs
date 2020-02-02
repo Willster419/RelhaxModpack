@@ -12,11 +12,21 @@ namespace RelhaxModpack
     public class Category : IComponentWithDependencies, IXmlSerializable
     {
         #region Xml serialization
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes
+        /// </summary>
+        /// <returns>A list of string property names</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public string[] PropertiesForSerializationAttributes()
         {
-            return new string[] { nameof(Name) };
+            return new string[] { nameof(Name), nameof(OffsetInstallGroups) };
         }
 
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml elements
+        /// </summary>
+        /// <returns>A list of string property names</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public string[] PropertiesForSerializationElements()
         {
             return new string[] { nameof(Dependencies) };
@@ -27,12 +37,17 @@ namespace RelhaxModpack
         /// <summary>
         /// The category name displayed to the user in the selection list
         /// </summary>
-        public string Name { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// The xml filename of this category. Used in database structure V2
         /// </summary>
-        public string XmlFilename { get; set; } = "";
+        public string XmlFilename { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree
+        /// </summary>
+        public bool OffsetInstallGroups { get; set; } = true;
         
         /// <summary>
         /// The list of packages contained in this category

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Controls;
+using System.Text;
 
 namespace RelhaxModpack
 {
@@ -45,11 +46,21 @@ namespace RelhaxModpack
     public class SelectablePackage : DatabasePackage, IComponentWithDependencies, IXmlSerializable
     {
         #region Xml serialization
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes
+        /// </summary>
+        /// <returns>A list of string property names</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public override string[] PropertiesForSerializationAttributes()
         {
             return base.PropertiesForSerializationAttributes().Concat(SelectablePackagePropertiesToXmlParseAttributes.ToArray()).ToArray();
         }
 
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml elements
+        /// </summary>
+        /// <returns>A list of string property names</returns>
+        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public override string[] PropertiesForSerializationElements()
         {
             return base.PropertiesForSerializationElements().Concat(SelectablePackagePropertiesToXmlParseElements.ToArray()).ToArray();
@@ -68,6 +79,7 @@ namespace RelhaxModpack
             nameof(UpdateComment),
             nameof(PopularMod),
             nameof(GreyAreaMod),
+            nameof(ObfuscatedMod),
             nameof(ShowInSearchList),
             nameof(Medias),
             nameof(UserFiles),
@@ -153,9 +165,70 @@ namespace RelhaxModpack
         public string UpdateComment { get; set; } = string.Empty;
 
         /// <summary>
+        /// Gets an escaped version of the UpdateComment property, replacing literal '\n' with special character '\n', for example
+        /// </summary>
+        /// <seealso cref="UpdateComment"/>
+        public string UpdateCommentEscaped
+        {
+            get { return Utils.MacroReplace(UpdateComment, ReplacementTypes.TextUnescape); }
+        }
+
+        /// <summary>
+        /// Gets a user display formatted version of the UpdateCommentEscaped property, with a timestamp (if available). If no comment, a translated 'noComment' entry is returned
+        /// </summary>
+        /// <seealso cref="UpdateCommentEscaped"/>
+        /// <seealso cref="UpdateComment"/>
+        public string UpdateCommentFormatted
+        {
+            get
+            {
+              return string.Format("{0}\n{1}", string.IsNullOrWhiteSpace(this.UpdateComment) ?
+                Translations.GetTranslatedString("noUpdateInfo") : this.UpdateCommentEscaped,
+                this.Timestamp == 0 ? Translations.GetTranslatedString("noTimestamp") : Utils.ConvertFiletimeTimestampToDate(this.Timestamp));
+            }
+        }
+
+        /// <summary>
         /// description of the package
         /// </summary>
         public string Description { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets an escaped version of the Description property, replacing literal '\n' with special character '\n', for example
+        /// </summary>
+        /// <seealso cref="Description"/>
+        public string DescriptionEscaped
+        {
+            get { return Utils.MacroReplace(Description, ReplacementTypes.TextUnescape); }
+        }
+
+        /// <summary>
+        /// Gets a user display formatted version of the UpdateCommentEscaped property. Additionally could contain an encrypted, controversial or popular entry.
+        /// If no description, a translated 'noDescription' entry is returned
+        /// </summary>
+        /// <seealso cref="DescriptionEscaped"/>
+        /// <seealso cref="Description"/>
+        public string DescriptionFormatted
+        {
+            get
+            {
+                StringBuilder descriptionBuilder = new StringBuilder();
+                if (this.ObfuscatedMod)
+                    descriptionBuilder.AppendFormat("-- {0} --\n", Translations.GetTranslatedString("encryptedInDescription"));
+
+                if (this.GreyAreaMod)
+                    descriptionBuilder.AppendFormat("-- {0} --\n", Translations.GetTranslatedString("controversialInDescription"));
+
+                if (this.PopularMod)
+                    descriptionBuilder.AppendFormat("-- {0} --\n", Translations.GetTranslatedString("popularInDescription"));
+
+                if(string.IsNullOrWhiteSpace(Description))
+                    return string.Format("{0}\n{1}", descriptionBuilder.ToString(), Translations.GetTranslatedString("noDescription"));
+
+                else
+                    return string.IsNullOrWhiteSpace(descriptionBuilder.ToString()) ? DescriptionEscaped : string.Format("{0}\n{1}", descriptionBuilder.ToString(), DescriptionEscaped);
+            }
+        }
 
         /// <summary>
         /// Flag to determine if the package is popular
@@ -163,9 +236,14 @@ namespace RelhaxModpack
         public bool PopularMod { get; set; } = false;
 
         /// <summary>
-        /// Flag to determine if the package is of controversial nature, or if the developer is a controversial source
+        /// Flag to determine if the package is of controversial nature
         /// </summary>
         public bool GreyAreaMod { get; set; } = false;
+
+        /// <summary>
+        /// Flag to determine if the if the package is obfuscated/encrypted and can't be checked for viruses or malware
+        /// </summary>
+        public bool ObfuscatedMod { get; set; } = false;
 
         /// <summary>
         /// Flag to determine any packages of this package should be sorted (by name)
@@ -367,10 +445,6 @@ namespace RelhaxModpack
         /// </summary>
         public bool ShowInSearchList { get; set; } = true;
 
-        /// <summary>
-        /// When a databasePackage, the internal packageName. When category, the category name
-        /// </summary>
-        public string ComponentInternalName { get { return PackageName; } }
         #endregion
 
         #region UI Properties Shared
@@ -596,7 +670,7 @@ namespace RelhaxModpack
             get
             {
                 string toolTipResult = string.IsNullOrWhiteSpace(Description) ?
-                    Translations.GetTranslatedString("noDescription") : Description;
+                    Translations.GetTranslatedString("noDescription") : DescriptionEscaped;
                 return string.Format("{0}\n\n{1}{2}",
                     toolTipResult, Translations.GetTranslatedString("lastUpdated"), TimeStampString).Replace("_","__");
             }
