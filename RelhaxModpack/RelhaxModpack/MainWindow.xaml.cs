@@ -211,7 +211,7 @@ namespace RelhaxModpack
             {
                 if (!UISettings.LoadSettingsFile())
                 {
-                    Logging.Warning("failed to load custom UI settings file, make sure file is called{0} and the xml syntax is correct", Settings.UISettingsColorFile);
+                    Logging.Warning("Failed to load custom UI settings file, make sure file is called{0} and the xml syntax is correct", Settings.UISettingsColorFile);
                     ModpackSettings.ApplicationTheme = UIThemes.Default;
                 }
                 else
@@ -234,8 +234,15 @@ namespace RelhaxModpack
             databaseVersion = ModpackSettings.DatabaseDistroVersion;
             if (CommandLineSettings.TestMode)
             {
-                Logging.Info("test mode set for installation only (not saved to settings)");
+                Logging.Info("Test mode set for application instance only (not saved to settings)");
                 databaseVersion = DatabaseVersions.Test;
+                Logging.Info("Test mode, disable statistics upload if enabled");
+                if (ModpackSettings.AllowStatisticDataGather)
+                {
+                    //2020/02/02 checked in debugger and the event is not triggered by setting UI version to false
+                    AllowStatsGatherCB.IsChecked = false;
+                    ModpackSettings.AllowStatisticDataGather = false;
+                }
             }
 
             //verify folder structure for all folders in the directory
@@ -452,6 +459,14 @@ namespace RelhaxModpack
                 LauchEditor.IsEnabled = true;
                 LauchPatchDesigner.Visibility = Visibility.Visible;
                 LauchPatchDesigner.IsEnabled = true;
+
+                //also disable update statistics
+                Logging.Info("Also disable upload statistics since this is a developer environment");
+                if (ModpackSettings.AllowStatisticDataGather)
+                {
+                    AllowStatsGatherCB.IsChecked = false;
+                    ModpackSettings.AllowStatisticDataGather = false;
+                }
             }
             else
             {
