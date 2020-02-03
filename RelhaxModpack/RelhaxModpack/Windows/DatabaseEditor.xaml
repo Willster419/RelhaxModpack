@@ -300,13 +300,14 @@
             <RowDefinition Height="632*"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="90,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click"/>
-        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="170,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="MoveDatabaseObjectButton" Click="MoveDatabaseObjectButton_Click"/>
-        <Button x:Name="AddDatabaseObjectButton" Content="Add/Copy" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="AddDatabaseObjectButton" Click="AddDatabaseObjectButton_Click"/>
-        <Button x:Name="LoadAsDatabaseButton" Content="Load as..." HorizontalAlignment="Right" Margin="0,0,90,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="LoadAsDatabaseButton" Click="LoadAsDatabaseButton_Click"/>
-        <Button x:Name="LoadDatabaseButton" Content="Load" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,90,30"  VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseLoad" Click="OnLoadDatabaseClick"/>
-        <Button x:Name="SaveAsDatabaseButton" Content="Save as..." HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Tag="DatabaseSaveAs" Click="SaveAsDatabaseButton_Click"/>
-        <Button x:Name="SaveDatabaseButton" Content="Save" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,10,30" VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseSave" Click="SaveDatabaseButton_Click" />
+        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove"       HorizontalAlignment="Left"  Margin="90,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click" IsEnabled="False"/>
+        <Button x:Name="MoveDatabaseObjectButton"   Content="Move"         HorizontalAlignment="Left"  Margin="170,0,0,5"   Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="MoveDatabaseObjectButton"   Click="MoveDatabaseObjectButton_Click"   IsEnabled="False"/>
+        <Button x:Name="AddDatabaseObjectButton"    Content="Add/Copy"     HorizontalAlignment="Left"  Margin="10,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="AddDatabaseObjectButton"    Click="AddDatabaseObjectButton_Click"    IsEnabled="False"/>
+        <Button x:Name="ApplyButton"                Content="Apply"        HorizontalAlignment="Right" Margin="0,0,170,30"  Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="ApplyButton"                Click="ApplyButton_Click"                IsEnabled="False"/>
+        <Button x:Name="LoadAsDatabaseButton"       Content="Load as..."   HorizontalAlignment="Right" Margin="0,0,90,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="LoadAsDatabaseButton"       Click="LoadAsDatabaseButton_Click"/>
+        <Button x:Name="LoadDatabaseButton"         Content="Load"         HorizontalAlignment="Right" Margin="0,0,90,30"   Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseLoad"               Click="OnLoadDatabaseClick"/>
+        <Button x:Name="SaveAsDatabaseButton"       Content="Save as..."   HorizontalAlignment="Right" Margin="0,0,10,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseSaveAs"             Click="SaveAsDatabaseButton_Click"/>
+        <Button x:Name="SaveDatabaseButton"         Content="Save"         HorizontalAlignment="Right" Margin="0,0,10,30"   Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseSave"               Click="SaveDatabaseButton_Click" />
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="250"/>
@@ -328,9 +329,7 @@
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="InstallGroupsTab" Header="Install Groups">
-                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" PreviewMouseMove="DatabaseTreeView_PreviewMouseMove"
-                              ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview"
-                              Drop="OnTreeViewGroupsDrop" DragOver="OnTreeViewGroupsDragOver" >
+                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="False">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -339,9 +338,7 @@
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="PatchGroupsTab" Header="Patch Groups">
-                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewGroupsDrop"
-                              DragOver="OnTreeViewGroupsDragOver" PreviewMouseMove="DatabaseTreeView_PreviewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll"
-                              PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview" >
+                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="False">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -471,18 +468,15 @@
                             <RowDefinition Height="20"/>
                             <!-- Obfuscated and Offset InstallGroup -->
                             <RowDefinition Height="20"/>
-                            <!-- apply button -->
-                            <RowDefinition Height="40"/>
-                            <!-- apply spacer -->
-                            <RowDefinition Height="1"/>
+                            <!-- space between checkboxes and download zip button -->
+                            <RowDefinition Height="20"/>
                             <!-- download button -->
-                            <RowDefinition Height="1"/>
-                            <!-- download spacer -->
-                            <RowDefinition Height="1"/>
-                            <!-- upload button -->
                             <RowDefinition Height="20"/>
                             <!-- upload spacer -->
                             <RowDefinition Height="2"/>
+                            <!-- upload button-->
+                            <RowDefinition Height="20"/>
+                            <!-- extra space -->
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock x:Name="PackageDisplayNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
@@ -511,8 +505,8 @@
                             <RelhaxModpack:SelectionTypes>single_dropdown2</RelhaxModpack:SelectionTypes>
                             <RelhaxModpack:SelectionTypes>multi</RelhaxModpack:SelectionTypes>
                         </ComboBox>
-                        <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center"/>
-                        <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
+                        <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
                         <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
                         <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
@@ -531,9 +525,8 @@
                             <CheckBox Content="Obfuscated" x:Name="PackageObfuscatedModDisplay" Tag="ObfuscatedCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Offset InstallGroup" x:Name="CategoryOffsetInstallGroupDisplay" Tag="OffsetInstallGroupCB" Margin="16,0,0,0"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Apply" x:Name="ApplyButton" Click="ApplyButton_Click" Margin="0,28,0,0" Grid.ColumnSpan="2" Width="200"/>
-                        <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" Margin="0,55,0,0" Grid.ColumnSpan="2" Width="200" />
-                        <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Margin="0,83,0,0" Grid.ColumnSpan="2" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="19" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200"/>
+                        <Button Grid.Column="0" Grid.Row="21" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">

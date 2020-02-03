@@ -263,7 +263,7 @@ namespace RelhaxModpack.Windows
             //make a flat list (can be used in patchGroup as well)
             List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
             //make an array of group headers
-            TreeViewItem[] installGroupHeaders = new TreeViewItem[Utils.GetMaxInstallGroupNumber(allFlatList) + 1];
+            TreeViewItem[] installGroupHeaders = new TreeViewItem[Utils.GetMaxInstallGroupNumberWithOffset(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal install group number
             //hey while we're at it let's add the items to the instal group dispaly box
             PackageInstallGroupDisplay.Items.Clear();
@@ -273,7 +273,7 @@ namespace RelhaxModpack.Windows
                 installGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Install Group {0}---", i), Tag = i };
                 InstallGroupsTreeView.Items.Add(installGroupHeaders[i]);
                 installGroupHeaders[i].Items.Clear();
-                foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.InstallGroup == i).ToList())
+                foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.InstallGroupWithOffset == i).ToList())
                 {
                     //add them to the install group headers
                     installGroupHeaders[i].Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(packageWithEqualGroupNumber) });
@@ -353,69 +353,75 @@ namespace RelhaxModpack.Windows
         {
             if (Init)
                 return;
-            if (LeftTabView.SelectedItem is TabItem selectedTab)
+            if (!(LeftTabView.SelectedItem is TabItem selectedTab))
+                return;
+
+            //disable apply whenever left tab views change
+            ApplyButton.IsEnabled = false;
+
+            if (selectedTab.Equals(DatabaseViewTab))
             {
-                if (selectedTab.Equals(DatabaseViewTab))
+                RightTab.IsEnabled = true;
+                SearchBox.IsEnabled = true;
+                RemoveDatabaseObjectButton.IsEnabled = true;
+                MoveDatabaseObjectButton.IsEnabled = true;
+                AddDatabaseObjectButton.IsEnabled = true;
+                /*
+                //check if the database is actually loaded before Loading the database view
+                if (GlobalDependencies.Count == 0)
                 {
-                    RightTab.IsEnabled = true;
-                    SearchBox.IsEnabled = true;
-                    RemoveDatabaseObjectButton.IsEnabled = true;
-                    MoveDatabaseObjectButton.IsEnabled = true;
-                    AddDatabaseObjectButton.IsEnabled = true;
-                    //check if the database is actually loaded before Loading the database view
-                    if (GlobalDependencies.Count == 0)
-                    {
-                        Logging.Editor("Database is not yet loaded, skipping UI loading");
-                    }
-                    else
-                    {
-                        Logging.Editor("Database is loaded, UI loading()");
-                        LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
-                    }
+                    Logging.Editor("Database is not yet loaded, skipping UI loading");
                 }
-                else if (selectedTab.Equals(InstallGroupsTab))
+                else
                 {
-                    RightTab.IsEnabled = false;
-                    SearchBox.IsEnabled = true;
-                    RemoveDatabaseObjectButton.IsEnabled = false;
-                    MoveDatabaseObjectButton.IsEnabled = false;
-                    AddDatabaseObjectButton.IsEnabled = false;
-                    if (GlobalDependencies.Count == 0)
-                    {
-                        Logging.Editor("Database is not yet loaded, skipping UI loading");
-                    }
-                    else
-                    {
-                        Logging.Editor("Database is loaded, UI loading()");
-                        LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
-                    }
+                    Logging.Editor("Database is loaded, UI loading()");
+                    LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
                 }
-                else if (selectedTab.Equals(PatchGroupsTab))
+                */
+            }
+            else if (selectedTab.Equals(InstallGroupsTab))
+            {
+                RightTab.IsEnabled = false;
+                SearchBox.IsEnabled = true;
+                RemoveDatabaseObjectButton.IsEnabled = false;
+                MoveDatabaseObjectButton.IsEnabled = false;
+                AddDatabaseObjectButton.IsEnabled = false;
+                if (GlobalDependencies.Count == 0)
                 {
-                    RightTab.IsEnabled = false;
-                    SearchBox.IsEnabled = true;
-                    RemoveDatabaseObjectButton.IsEnabled = false;
-                    MoveDatabaseObjectButton.IsEnabled = false;
-                    AddDatabaseObjectButton.IsEnabled = false;
-                    if (GlobalDependencies.Count == 0)
-                    {
-                        Logging.Editor("Database is not yet loaded, skipping UI loading");
-                    }
-                    else
-                    {
-                        Logging.Editor("Database is loaded, UI loading()");
-                        LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
-                    }
+                    Logging.Editor("Database is not yet loaded, skipping UI loading");
                 }
-                else if (selectedTab.Equals(SettingsTab))
+                else
                 {
-                    SearchBox.IsEnabled = false;
-                    RightTab.IsEnabled = false;
-                    RemoveDatabaseObjectButton.IsEnabled = false;
-                    MoveDatabaseObjectButton.IsEnabled = false;
-                    AddDatabaseObjectButton.IsEnabled = false;
+                    Logging.Editor("Database is loaded, UI loading()");
+                    LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
                 }
             }
+            else if (selectedTab.Equals(PatchGroupsTab))
+            {
+                RightTab.IsEnabled = false;
+                SearchBox.IsEnabled = true;
+                RemoveDatabaseObjectButton.IsEnabled = false;
+                MoveDatabaseObjectButton.IsEnabled = false;
+                AddDatabaseObjectButton.IsEnabled = false;
+                if (GlobalDependencies.Count == 0)
+                {
+                    Logging.Editor("Database is not yet loaded, skipping UI loading");
+                }
+                else
+                {
+                    Logging.Editor("Database is loaded, UI loading()");
+                    LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                }
+            }
+            else if (selectedTab.Equals(SettingsTab))
+            {
+                SearchBox.IsEnabled = false;
+                RightTab.IsEnabled = false;
+                RemoveDatabaseObjectButton.IsEnabled = false;
+                MoveDatabaseObjectButton.IsEnabled = false;
+                AddDatabaseObjectButton.IsEnabled = false;
+            }
+            
         }
 
         private void PackageDevURLDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
