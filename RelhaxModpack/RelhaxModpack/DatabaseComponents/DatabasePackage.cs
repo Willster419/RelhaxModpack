@@ -156,7 +156,7 @@ namespace RelhaxModpack
 
         public List<string> TriggersList
         {
-            get { return Triggers.Split(',').ToList(); }
+            get { return Triggers.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
         }
 
         /// <summary>

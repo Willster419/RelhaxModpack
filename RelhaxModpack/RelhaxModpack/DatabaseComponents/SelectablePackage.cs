@@ -442,7 +442,7 @@ namespace RelhaxModpack
 
         public List<string> ConflictingPackagesList
         {
-            get { return ConflictingPackages.Split(',').ToList(); }
+            get { return ConflictingPackages.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).ToList(); }
         }
 
         /// <summary>
