@@ -578,11 +578,11 @@
                         <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,235,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesRemoveSelected_Click"/>
                         <ComboBox x:Name="LoadedDependenciesList" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                         <TextBlock x:Name="DependenciesLogicTypeTextBlock" HorizontalAlignment="Left" Margin="0,260,0,0" TextWrapping="Wrap" Text="With Logic Type:" VerticalAlignment="Top"/>
-                        <ComboBox x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="0,281,0,0" VerticalAlignment="Top" Width="400">
+                        <ComboBox x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="0,281,0,0" VerticalAlignment="Top" Width="400" SelectionChanged="LoadedLogicsList_SelectionChanged" >
                             <RelhaxModpack:Logic>OR</RelhaxModpack:Logic>
                             <RelhaxModpack:Logic>AND</RelhaxModpack:Logic>
                         </ComboBox>
-                        <CheckBox x:Name="DependenciesNotFlag" Content="Set Not Flag" HorizontalAlignment="Left" Margin="0,308,0,0" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="DependenciesNotFlag" Content="Set Not Flag" HorizontalAlignment="Left" Margin="0,308,0,0" VerticalAlignment="Top" Click="DependenciesNotFlag_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="MediasTab" Header="Medias">
@@ -606,12 +606,12 @@
                         <TextBlock HorizontalAlignment="Left" Margin="0,238,0,0" TextWrapping="Wrap" Text="Media Data" VerticalAlignment="Top" Width="66" Height="20"/>
                     </Grid>
                 </TabItem>
-                <TabItem x:Name="UserDatasTab" Header="Userdatas">
+                <TabItem x:Name="UserDatasTab" Header="User files">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageUserdatasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageUserdatasDisplay_SelectionChanged" />
-                        <Button Content="Add Userdata" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top" Width="467" Click="UserdataAddUserdataButton_Click"/>
+                        <Button Content="Add User file" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top" Width="467" Click="UserdataAddUserdataButton_Click"/>
                         <Button Content="Apply Edit" x:Name="UserdataApplyEditButton" HorizontalAlignment="Left" Margin="10,341,0,0" VerticalAlignment="Top" Width="467" Click="UserdataApplyEditButton_Click"/>
-                        <Button Content="Remove Userdata" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Width="467" Click="UserdataRemoveUserdata_Click"/>
+                        <Button Content="Remove User file" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Width="467" Click="UserdataRemoveUserdata_Click"/>
                         <TextBox x:Name="UserDataEditBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="102"/>
                     </Grid>
                 </TabItem>

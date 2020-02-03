@@ -699,20 +699,41 @@ namespace RelhaxModpack.Windows
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
 
             //locate and select the patchGroup and installGroup of the package
+            //if it can't, then extend the number of options until its there
+            bool wasSelected = false;
             foreach (int i in PackageInstallGroupDisplay.Items)
             {
                 if (i == package.InstallGroup)
                 {
                     PackageInstallGroupDisplay.SelectedItem = i;
+                    wasSelected = true;
                     break;
                 }
             }
+            if(!wasSelected)
+            {
+                int lastValue = (int)PackageInstallGroupDisplay.Items[PackageInstallGroupDisplay.Items.Count - 1];
+                while (lastValue <= package.InstallGroup)
+                {
+                    PackageInstallGroupDisplay.Items.Add(++lastValue);
+                }
+            }
+
+            wasSelected = false;
             foreach (int i in PackagePatchGroupDisplay.Items)
             {
                 if (i == package.PatchGroup)
                 {
                     PackagePatchGroupDisplay.SelectedItem = i;
                     break;
+                }
+            }
+            if (!wasSelected)
+            {
+                int lastValue = (int)PackagePatchGroupDisplay.Items[PackagePatchGroupDisplay.Items.Count - 1];
+                while (lastValue <= package.PatchGroup)
+                {
+                    PackagePatchGroupDisplay.Items.Add(++lastValue);
                 }
             }
 
@@ -861,6 +882,7 @@ namespace RelhaxModpack.Windows
             //check packagename, notflag, logic
             foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
             {
+                DatabaseLogic logicInDatabase = dependencies[i];
                 if (!logic.Equals(dependencies[i]))
                     return true;
                 i++;
@@ -917,15 +939,15 @@ namespace RelhaxModpack.Windows
             return false;
         }
 
-        private bool ConflictingPackagesModified(List<string> conflicts)
+        private bool ConflictingPackagesModified(List<string> conflictEntries)
         {
-            if (conflicts.Count != PackageConflictingPackagesDisplay.Items.Count)
+            if (conflictEntries.Count != PackageConflictingPackagesDisplay.Items.Count)
                 return true;
 
             int i = 0;
             foreach (string conflict in PackageConflictingPackagesDisplay.Items)
             {
-                if (!conflict.Equals(conflicts[i]))
+                if (!conflict.Equals(conflictEntries[i]))
                     return true;
                 i++;
             }
@@ -978,15 +1000,14 @@ namespace RelhaxModpack.Windows
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
                 return true;
 
-            //dependency
-            if (package is Dependency dependency)
+            if (package is IComponentWithDependencies componentWithDependencies)
             {
-                if (DependenciesWereModified(dependency.Dependencies))
+                if (DependenciesWereModified(componentWithDependencies.DependenciesProp))
                     return true;
             }
 
             //see if it's a selectablePackage
-            else if (package is SelectablePackage selectablePackage)
+            if (package is SelectablePackage selectablePackage)
             {
                 if (selectablePackage.ShowInSearchList != ((bool)PackageShowInSearchListDisplay.IsChecked))
                     return true;
@@ -1006,9 +1027,6 @@ namespace RelhaxModpack.Windows
                 if (!selectablePackage.DescriptionEscaped.Equals(PackageDescriptionDisplay.Text))
                     return true;
                 if (!selectablePackage.UpdateCommentEscaped.Equals(PackageUpdateNotesDisplay.Text))
-                    return true;
-
-                if (DependenciesWereModified(selectablePackage.Dependencies))
                     return true;
 
                 if (UserFilesWereModified(selectablePackage.UserFiles))
@@ -1082,16 +1100,24 @@ namespace RelhaxModpack.Windows
                 PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
             }
 
-            //see if it's a dependency
-            if (package is Dependency dependency)
+            //this gets dependencies and selectable packages
+            if(package is IComponentWithDependencies componentWithDependencies)
             {
-                dependency.Dependencies.Clear();
+                componentWithDependencies.DependenciesProp.Clear();
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
-                    dependency.Dependencies.Add(dl);
+                {
+                    if (PackageDependenciesDisplay.SelectedItem != null && dl.Equals(PackageDependenciesDisplay.SelectedItem))
+                    {
+                        if (LoadedLogicsList.SelectedItem != null)
+                            dl.Logic = (Logic)LoadedLogicsList.SelectedItem;
+                        dl.NotFlag = (bool)DependenciesNotFlag.IsChecked;
+                    }
+                    componentWithDependencies.DependenciesProp.Add(dl);
+                }
             }
 
-            //see if it's a selectablePackage
-            else if (package is SelectablePackage selectablePackage)
+            //if it's a selectablePackage
+            if (package is SelectablePackage selectablePackage)
             {
                 selectablePackage.ShowInSearchList = (bool)PackageShowInSearchListDisplay.IsChecked;
                 selectablePackage.PopularMod = (bool)PackagePopularModDisplay.IsChecked;
@@ -1103,21 +1129,41 @@ namespace RelhaxModpack.Windows
                 selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
                 selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
 
-                selectablePackage.Dependencies.Clear();
-                foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
-                    selectablePackage.Dependencies.Add(dl);
-
                 selectablePackage.UserFiles.Clear();
                 foreach (UserFile uf in PackageUserdatasDisplay.Items)
+                {
+                    if(PackageUserdatasDisplay.SelectedItem != null && PackageUserdatasDisplay.SelectedItem.Equals(uf))
+                    {
+                        if (!string.IsNullOrWhiteSpace(UserDataEditBox.Text))
+                            uf.Pattern = UserDataEditBox.Text;
+                    }
                     selectablePackage.UserFiles.Add(uf);
+                }
 
                 selectablePackage.Medias.Clear();
                 foreach (Media m in PackageMediasDisplay.Items)
+                {
+                    if (PackageMediasDisplay.SelectedItem != null && PackageMediasDisplay.SelectedItem.Equals(m))
+                    {
+                        if (MediaTypesList.SelectedItem != null)
+                            m.MediaType = (MediaType)MediaTypesList.SelectedItem;
+                        if (!string.IsNullOrWhiteSpace(MediaTypesURL.Text))
+                            m.URL = MediaTypesURL.Text;
+                    }
                     selectablePackage.Medias.Add(m);
+                }
 
                 selectablePackage.ConflictingPackages.Clear();
                 foreach (string s in PackageConflictingPackagesDisplay.Items)
+                {
                     selectablePackage.ConflictingPackages.Add(s);
+                }
+
+                selectablePackage.Triggers.Clear();
+                foreach(string s in PackageTriggersDisplay.Items)
+                {
+                    selectablePackage.Triggers.Add(s);
+                }
             }
 
             //there now are unsaved changes
@@ -2506,6 +2552,22 @@ namespace RelhaxModpack.Windows
                 PackageConflictingPackagesDisplay.Items.Add(confligt);
 
             UnsavedChanges = true;
+        }
+
+        private void DependenciesNotFlag_Click(object sender, RoutedEventArgs e)
+        {
+            if(PackageDependenciesDisplay.SelectedItem is DatabaseLogic logic)
+            {
+                logic.NotFlag = (bool)DependenciesNotFlag.IsChecked;
+            }
+        }
+
+        private void LoadedLogicsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PackageDependenciesDisplay.SelectedItem is DatabaseLogic logic)
+            {
+                logic.Logic = (Logic)LoadedLogicsList.SelectedItem;
+            }
         }
         #endregion
 
