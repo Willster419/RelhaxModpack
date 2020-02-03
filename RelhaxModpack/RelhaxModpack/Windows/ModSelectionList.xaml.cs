@@ -2029,13 +2029,13 @@ namespace RelhaxModpack.Windows
                     {
                         TabItem selected = (TabItem)ModTabGroups.SelectedItem;
                         searchComponents.AddRange(Utils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
-                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible && term.ParentCategory.TabPage.Equals(selected)));
+                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.IsStructureVisible && term.ShowInSearchList && term.ParentCategory.TabPage.Equals(selected)));
                     }
                     else
                     {
                         //get a list of components that match the search term
                         searchComponents.AddRange(Utils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
-                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible));
+                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.IsStructureVisible && term.ShowInSearchList));
                     }
                 }
 
