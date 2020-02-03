@@ -1126,6 +1126,12 @@ namespace RelhaxModpack.Windows
                 PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
             }
 
+            package.Triggers.Clear();
+            foreach (string s in PackageTriggersDisplay.Items)
+            {
+                package.Triggers.Add(s);
+            }
+
             //this gets dependencies and selectable packages
             if(package is IComponentWithDependencies componentWithDependencies)
             {
@@ -1165,12 +1171,6 @@ namespace RelhaxModpack.Windows
                 foreach (string s in PackageConflictingPackagesDisplay.Items)
                 {
                     selectablePackage.ConflictingPackages.Add(s);
-                }
-
-                selectablePackage.Triggers.Clear();
-                foreach(string s in PackageTriggersDisplay.Items)
-                {
-                    selectablePackage.Triggers.Add(s);
                 }
             }
 
