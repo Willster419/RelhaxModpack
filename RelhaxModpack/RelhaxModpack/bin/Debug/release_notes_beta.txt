@@ -1,8 +1,17 @@
-ATTENTION! PLEASE READ!
-Due to a possible error in the application updater, this update may need to be manually downloaded from github
-You may also click this link to get the latest application:
-https://github.com/Willster419/RelhaxModpack/releases/latest
-Sorry for the inconvenience.
+BETA Application version 1.0.2.1 (2020-02-02)
+- Re-worked UI of database editor, changed how some list style components are edited and applied.
+- Fixed database editor views of InstallGroup to factor in the categories offset level parameter.
+- Fixed other editor bugs.
+- Fixed bug in test mode where default checked items were being applied.
+- Fixed bug with the selection list showing hidden packages in the search result, clicking on them results in a crash.
+- Fixed bug with the selection list of a disabled combobox item component not allowing to be previewed.
+- Fixed bug with the selection list of the first drop down item not selecting from initial state.
+- Added feature in the preview window showing the name of the mod/package you are previewing when previewing all items in a drop down list.
+- Fixed Windows 7 compatibility bug preventing the application from getting the update notes.
+- Added documentation as tooltips for database editor.
+- Updated Russian and Spanish translations.
+- Updated documentation.
+- Minor code readability optimizations.
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 Application version 1.0.2.0 (2020-02-01)
