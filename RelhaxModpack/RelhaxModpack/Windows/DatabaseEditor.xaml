@@ -324,7 +324,7 @@
             </Grid.ColumnDefinitions>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
             <TabControl x:Name="LeftTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" SelectionChanged="LeftTabView_SelectionChanged">
-                <TabItem x:Name="DatabaseViewTab" Header="Database Tree View" ToolTip="View and edit the database tree">
+                <TabItem x:Name="DatabaseViewTab" Header="Database Tree View">
                     <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewDatabaseDrop"
                               DragOver="OnTreeViewDatabaseDragOver"  ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview"
                               PreviewMouseUp="OnTreeViewMouseUpPreview" SelectedItemChanged="DatabaseTreeView_SelectedItemChanged" KeyDown="DatabaseTreeView_KeyDown"
@@ -578,11 +578,12 @@
                         <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,235,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesRemoveSelected_Click"/>
                         <ComboBox x:Name="LoadedDependenciesList" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                         <TextBlock x:Name="DependenciesLogicTypeTextBlock" HorizontalAlignment="Left" Margin="0,260,0,0" TextWrapping="Wrap" Text="With Logic Type:" VerticalAlignment="Top"/>
-                        <ComboBox x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="0,281,0,0" VerticalAlignment="Top" Width="400" SelectionChanged="LoadedLogicsList_SelectionChanged" >
+                        <ComboBox x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="0,281,0,0" VerticalAlignment="Top" Width="400">
                             <RelhaxModpack:Logic>OR</RelhaxModpack:Logic>
                             <RelhaxModpack:Logic>AND</RelhaxModpack:Logic>
                         </ComboBox>
-                        <CheckBox x:Name="DependenciesNotFlag" Content="Set Not Flag" HorizontalAlignment="Left" Margin="0,308,0,0" VerticalAlignment="Top" Click="DependenciesNotFlag_Click"/>
+                        <CheckBox x:Name="DependenciesNotFlag" Content="Set Not Flag" HorizontalAlignment="Left" Margin="0,308,0,0" VerticalAlignment="Top"/>
+                        <Button Content="Apply Edit" x:Name="DependenciesApplyEditButton" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,323,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesApplyEditButton_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="MediasTab" Header="Medias">
@@ -608,7 +609,7 @@
                 </TabItem>
                 <TabItem x:Name="UserDatasTab" Header="User files">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox x:Name="PackageUserdatasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageUserdatasDisplay_SelectionChanged" />
+                        <ListBox x:Name="PackageUserFilesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageUserdatasDisplay_SelectionChanged" />
                         <Button Content="Add User file" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top" Width="467" Click="UserdataAddUserdataButton_Click"/>
                         <Button Content="Apply Edit" x:Name="UserdataApplyEditButton" HorizontalAlignment="Left" Margin="10,341,0,0" VerticalAlignment="Top" Width="467" Click="UserdataApplyEditButton_Click"/>
                         <Button Content="Remove User file" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Width="467" Click="UserdataRemoveUserdata_Click"/>
