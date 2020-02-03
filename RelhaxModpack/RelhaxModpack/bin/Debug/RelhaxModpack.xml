@@ -946,6 +946,13 @@
             The type of media for the URL to be interpreted as
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Media.SelectablePackageNameFormatted">
+            <summary>
+            The NameFormatted property result from the Media's SelectablePackage container
+            </summary>
+            <remarks>This is used for when multiple SelectalbePackage sources are being used for preview display
+            (like multiple items inside a combobox)</remarks>
+        </member>
         <member name="M:RelhaxModpack.Media.ToString">
             <summary>
             The string properties of the object
@@ -2976,11 +2983,6 @@
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.#ctor">
             <summary>
             Create an instance of the RelhaxWPFComboBox class
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIComponents.RelhaxWPFComboBox.Handler">
-            <summary>
-            The event to subscribe to when the selection is changed
             </summary>
         </member>
         <member name="M:RelhaxModpack.UIComponents.RelhaxWPFComboBox.OnDropDownSelectionChanged(RelhaxModpack.SelectablePackage,System.Boolean)">
