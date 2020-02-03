@@ -748,7 +748,7 @@ namespace RelhaxModpack.Windows
             PackageInternalNotesDisplay.Text = package.InternalNotesEscaped;
 
             //triggers (the lists were already cleared)
-            foreach (string s in package.Triggers)
+            foreach (string s in package.TriggersList)
                 PackageTriggersDisplay.Items.Add(s);
 
             //then handle if dependency
@@ -829,7 +829,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 PackageConflictingPackagesDisplay.Items.Clear();
-                foreach (string s in selectablePackage.ConflictingPackages)
+                foreach (string s in selectablePackage.ConflictingPackagesList)
                 {
                     PackageConflictingPackagesDisplay.Items.Add(s);
                 }
@@ -1023,7 +1023,7 @@ namespace RelhaxModpack.Windows
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
                 return true;
 
-            if (TriggersWereModified(package.Triggers))
+            if (TriggersWereModified(package.TriggersList))
                 return true;
 
             if (package is IComponentWithDependencies componentWithDependencies)
@@ -1061,7 +1061,7 @@ namespace RelhaxModpack.Windows
                 if (MediasModified(selectablePackage.Medias))
                     return true;
 
-                if (ConflictingPackagesModified(selectablePackage.ConflictingPackages))
+                if (ConflictingPackagesModified(selectablePackage.ConflictingPackagesList))
                     return true;
             }
             return false;
@@ -1116,6 +1116,7 @@ namespace RelhaxModpack.Windows
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
             package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
+            package.Triggers = string.Join(",", PackageTriggersDisplay.Items);
 
             //if the zipfile was updated, then update the last modified date
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
@@ -1124,12 +1125,6 @@ namespace RelhaxModpack.Windows
                 package.ZipFile = PackageZipFileDisplay.Text;
                 package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
                 PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
-            }
-
-            package.Triggers.Clear();
-            foreach (string s in PackageTriggersDisplay.Items)
-            {
-                package.Triggers.Add(s);
             }
 
             //this gets dependencies and selectable packages
@@ -1154,6 +1149,7 @@ namespace RelhaxModpack.Windows
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
                 selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
                 selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items);
 
                 selectablePackage.UserFiles.Clear();
                 foreach (string uf in PackageUserFilesDisplay.Items)
@@ -1165,12 +1161,6 @@ namespace RelhaxModpack.Windows
                 foreach (Media m in PackageMediasDisplay.Items)
                 {
                     selectablePackage.Medias.Add(Media.Copy(m));
-                }
-
-                selectablePackage.ConflictingPackages.Clear();
-                foreach (string s in PackageConflictingPackagesDisplay.Items)
-                {
-                    selectablePackage.ConflictingPackages.Add(s);
                 }
             }
 
@@ -2651,23 +2641,18 @@ namespace RelhaxModpack.Windows
                     {
                         Logging.Editor("Mouse right click with trigger add, checking if already exists");
                         SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-                        foreach (string s in selectedPackage.ConflictingPackages)
+                        foreach (string s in selectedPackage.ConflictingPackagesList)
                         {
                             if (s.Equals(item.Package.PackageName))
                             {
                                 Logging.Editor("Mouse right click with conflicting packages add, skipping adding cause already exists: {0}", LogLevel.Info, item.Package.PackageName);
-                                MessageBox.Show("conflict packagename already exists");
+                                MessageBox.Show("Conflict PackageName already exists");
                                 return;
                             }
                         }
                         Logging.Editor("Mouse right click with conflicting packages add, does not exist, adding");
 
-                        selectedPackage.ConflictingPackages.Add(item.Package.PackageName);
-
-                        //update UI
-                        PackageConflictingPackagesDisplay.Items.Clear();
-                        foreach (string conflict in selectedPackage.ConflictingPackages)
-                            PackageConflictingPackagesDisplay.Items.Add(conflict);
+                        PackageConflictingPackagesDisplay.Items.Add(item.Package.PackageName);
 
                         UnsavedChanges = true;
                     }

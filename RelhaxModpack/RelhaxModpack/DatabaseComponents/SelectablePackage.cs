@@ -438,7 +438,12 @@ namespace RelhaxModpack
         /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
         /// Refer to examples for more information
         /// </summary>
-        public List<string> ConflictingPackages { get; set; } = new List<string>();
+        public string ConflictingPackages { get; set; } = string.Empty;
+
+        public List<string> ConflictingPackagesList
+        {
+            get { return ConflictingPackages.Split(',').ToList(); }
+        }
 
         /// <summary>
         /// Toggle if the package should appear in the search list
@@ -780,7 +785,7 @@ namespace RelhaxModpack
                 this.Packages = new List<SelectablePackage>();
                 this.Medias = new List<Media>();
                 this.Dependencies = new List<DatabaseLogic>();
-                this.ConflictingPackages = new List<string>();
+                this.ConflictingPackages = string.Empty;
                 this.ShowInSearchList = sp.ShowInSearchList;
 
                 if (deep)

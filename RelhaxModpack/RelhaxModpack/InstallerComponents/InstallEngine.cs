@@ -509,9 +509,9 @@ namespace RelhaxModpack.InstallerComponents
                 }
                 foreach (DatabasePackage package in PackagesToInstall)
                 {
-                    if (package.Triggers.Count > 0)
+                    if (package.TriggersList.Count > 0)
                     {
-                        foreach (string triggerFromPackage in package.Triggers)
+                        foreach (string triggerFromPackage in package.TriggersList)
                         {
                             //in theory, each database package trigger is unique in each package AND in installer
                             Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
@@ -2264,8 +2264,8 @@ namespace RelhaxModpack.InstallerComponents
                         //after zip file extraction, process triggers (if enabled)
                         if (!DisableTriggersForInstall)
                         {
-                            if (package.Triggers.Count > 0)
-                                ProcessTriggers(package.Triggers);
+                            if (package.TriggersList.Count > 0)
+                                ProcessTriggers(package.TriggersList);
                         }
                     }
                 }

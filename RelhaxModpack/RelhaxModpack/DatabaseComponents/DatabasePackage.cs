@@ -1,6 +1,7 @@
 ﻿using RelhaxModpack.DatabaseComponents;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace RelhaxModpack
@@ -151,7 +152,12 @@ namespace RelhaxModpack
         /// <summary>
         /// The list of triggers that this package can start (list of triggers that apply to this package)
         /// </summary>
-        public List<string> Triggers { get; set; } = new List<string>();
+        public string Triggers { get; set; } = string.Empty;
+
+        public List<string> TriggersList
+        {
+            get { return Triggers.Split(',').ToList(); }
+        }
 
         /// <summary>
         /// The URL link of where you can view the web page of the mod
@@ -291,18 +297,12 @@ namespace RelhaxModpack
             this.StartAddress = packageToCopy.StartAddress;
             this.EndAddress = packageToCopy.EndAddress;
             this.LogAtInstall = packageToCopy.LogAtInstall;
-            this.Triggers = new List<string>();
+            this.Triggers = packageToCopy.Triggers;
             this.DevURL = packageToCopy.DevURL;
             this.InstallGroup = packageToCopy.InstallGroup;
             this.PatchGroup = packageToCopy.PatchGroup;
             //don't call the property for enabled, just the internal field
             this._Enabled = packageToCopy._Enabled;
-
-            if (deep)
-            {
-                foreach (string s in packageToCopy.Triggers)
-                    this.Triggers.Add(s);
-            }
         }
         #endregion
     }
