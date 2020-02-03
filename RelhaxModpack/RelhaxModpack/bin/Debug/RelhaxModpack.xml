@@ -694,6 +694,11 @@
             The level at which this package can be installed. It will be installed with other packages of the same install group at the same time
             </summary>
         </member>
+        <member name="P:RelhaxModpack.DatabasePackage.InstallGroupWithOffset">
+            <summary>
+            The level at which this package will be installed, factoring if the category is set to offset the install group with the package level
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.DatabasePackage.PatchGroup">
             <summary>
             The level at which the patches for this package can be installed. Patches will be executed with other patches of the same patch group
@@ -1278,6 +1283,11 @@
         <member name="F:RelhaxModpack.SelectablePackage.TabIndex">
             <summary>
             The TabItem UI reference
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.InstallGroupWithOffset">
+            <summary>
+            The level at which this package will be installed, factoring if the category is set to offset the install group with the package level
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.CompletePath">
@@ -7662,6 +7672,13 @@
         <member name="M:RelhaxModpack.Utils.GetMaxInstallGroupNumber(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
             <summary>
             Gets the maximum InstallGroup number from a list of Packages
+            </summary>
+            <param name="listToCheck">The list of DatabasePackages</param>
+            <returns>The maximum InstallGroup number</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetMaxInstallGroupNumberWithOffset(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
+            <summary>
+            Gets the maximum InstallGroup number from a list of Packages factoring in the offset that a category may apply to it
             </summary>
             <param name="listToCheck">The list of DatabasePackages</param>
             <returns>The maximum InstallGroup number</returns>
