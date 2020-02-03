@@ -1248,10 +1248,6 @@ namespace RelhaxModpack.Windows
             {
                 //check it and propagate change
                 spc.Checked = true;
-                //if it's a user check box end here
-                //DISABLED FOR NOW
-                //if (ipc is RelhaxUserCheckBox)
-                   // return;
 
                 //down
                 PropagateChecked(spc, SelectionPropagationDirection.PropagateDown);
@@ -1263,8 +1259,6 @@ namespace RelhaxModpack.Windows
                 //uncheck it and propagate change
                 spc.Checked = false;
 
-                //if (ipc is RelhaxUserCheckBox)
-                   // return;
                 PropagateDownNotChecked(spc);
             }
         }
