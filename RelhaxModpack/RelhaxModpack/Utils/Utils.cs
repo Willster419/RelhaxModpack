@@ -2034,6 +2034,16 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Gets the maximum InstallGroup number from a list of Packages factoring in the offset that a category may apply to it
+        /// </summary>
+        /// <param name="listToCheck">The list of DatabasePackages</param>
+        /// <returns>The maximum InstallGroup number</returns>
+        public static int GetMaxInstallGroupNumberWithOffset(List<DatabasePackage> listToCheck)
+        {
+            return listToCheck.Max(ma => ma.InstallGroupWithOffset);
+        }
+
+        /// <summary>
         /// Gets the maximum PatchGroup number from a list of Packages
         /// </summary>
         /// <param name="listToCheck">The list of DatabasePackages</param>
