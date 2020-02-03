@@ -343,7 +343,7 @@ namespace RelhaxModpack.Windows
                 else
                     completeLocationPath = gameCenterProperty.FileName.Equals(GameInfoXml) ? gameInfoXmlPath : metaDataXmlPath;
 
-                Logging.Info("getting property '{0}' for file {1}", gameCenterProperty.Xpath, gameCenterProperty.FileName);
+                Logging.Info("Getting property '{0}' for file {1}", gameCenterProperty.Xpath, completeLocationPath);
                 gameCenterProperty.Value = XmlUtils.GetXmlStringFromXPath(completeLocationPath, gameCenterProperty.Xpath);
 
                 if (string.IsNullOrWhiteSpace(gameCenterProperty.Value))
@@ -451,7 +451,7 @@ namespace RelhaxModpack.Windows
             GameCenterProperties.Add(new GameCenterProperty()
             {
                 FileName = GameInfoXml,
-                Xpath = @"//protocol/game/part_versions/value[@name='client']",
+                Xpath = @"//protocol/game/part_versions/version[@name='client']/@installed",
                 GetRequestParamater = "client_current_version",
                 IsRequired = true
             });
@@ -517,21 +517,21 @@ namespace RelhaxModpack.Windows
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='locale']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='locale']/@installed",
                     GetRequestParamater = "locale_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='sdcontent']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='sdcontent']/@installed",
                     GetRequestParamater = "sdcontent_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='hdcontent']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='hdcontent']/@installed",
                     GetRequestParamater = "hdcontent_current_version",
                     IsRequired = false
                 });
@@ -555,21 +555,21 @@ namespace RelhaxModpack.Windows
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='locale']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='locale']/@installed",
                     GetRequestParamater = "locale_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='sdcontent']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='sdcontent']/@installed",
                     GetRequestParamater = "sdcontent_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='udsound']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='udsound']/@installed",
                     GetRequestParamater = "udsound_current_version",
                     IsRequired = false
                 });
@@ -593,28 +593,28 @@ namespace RelhaxModpack.Windows
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='wwlocale']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='wwlocale']/@installed",
                     GetRequestParamater = "wwlocale_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='content']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='content']/@installed",
                     GetRequestParamater = "content_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='hdcontent']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='hdcontent']/@installed",
                     GetRequestParamater = "hdcontent_current_version",
                     IsRequired = false
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='tm']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='tm']/@installed",
                     GetRequestParamater = "tm_current_version",
                     IsRequired = true
                 });
