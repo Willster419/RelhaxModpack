@@ -65,12 +65,19 @@ namespace RelhaxModpack
         /// For direct link types, the URL to the element or resource
         /// </summary>
         /// <remarks>HTTP and HTTPS links work for this property</remarks>
-        public string URL { get; set; } = "";
+        public string URL { get; set; } = string.Empty;
 
         /// <summary>
         /// The type of media for the URL to be interpreted as
         /// </summary>
         public MediaType MediaType { get; set; } = MediaType.Picture;
+
+        /// <summary>
+        /// The NameFormatted property result from the Media's SelectablePackage container
+        /// </summary>
+        /// <remarks>This is used for when multiple SelectalbePackage sources are being used for preview display
+        /// (like multiple items inside a combobox)</remarks>
+        public string SelectablePackageNameFormatted { get; set; } = string.Empty;
 
         /// <summary>
         /// The string properties of the object

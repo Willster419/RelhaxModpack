@@ -960,10 +960,16 @@ namespace RelhaxModpack.Windows
                     package.Visible = true;
                 if (ModpackSettings.ForceEnabled && !package.IsStructureEnabled)
                     package.Enabled = true;
-                
+
+                //set the package's media SelectablePackageNameFormatted property to what the selectablePackage media actually is
+                foreach(Media media in package.Medias)
+                {
+                    media.SelectablePackageNameFormatted = package.NameFormatted;
+                }
+
                 //special code for the borders and stackpanels
                 //if the child container for sub options hsa yet to be made AND there are sub options, make it
-                if(package.ChildBorder == null && package.Packages.Count > 0)
+                if (package.ChildBorder == null && package.Packages.Count > 0)
                 {
                     package.ChildStackPanel = new StackPanel();
                     package.ChildBorder = new Border()
