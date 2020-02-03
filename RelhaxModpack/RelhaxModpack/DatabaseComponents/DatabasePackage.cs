@@ -172,6 +172,14 @@ namespace RelhaxModpack
         public int InstallGroup { get; set; } = 0;
 
         /// <summary>
+        /// The level at which this package will be installed, factoring if the category is set to offset the install group with the package level
+        /// </summary>
+        public virtual int InstallGroupWithOffset
+        {
+            get { return InstallGroup; }
+        }
+
+        /// <summary>
         /// The level at which the patches for this package can be installed. Patches will be executed with other patches of the same patch group
         /// </summary>
         public int PatchGroup { get; set; } = 0;
