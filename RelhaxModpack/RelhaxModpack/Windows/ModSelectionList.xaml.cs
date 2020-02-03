@@ -1093,14 +1093,13 @@ namespace RelhaxModpack.Windows
                 IsEnabled = package.IsStructureEnabled,
                 Content = package.NameDisplay
             };
+            cbi.PreviewMouseLeftButtonDown += OnSingleDDPackageClick;
             package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Add(cbi);
             if (!package.Parent.RelhaxWPFComboBoxList[boxIndex].AddedToList)
             {
                 //add it
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].AddedToList = true;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].PreviewMouseRightButtonDown += Generic_MouseDown;
-                package.Parent.RelhaxWPFComboBoxList[boxIndex].SelectionChanged += OnSingleDDPackageClick;
-                package.Parent.RelhaxWPFComboBoxList[boxIndex].Handler = OnSingleDDPackageClick;
                 if (package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Count > 0)
                 {
                     package.Parent.RelhaxWPFComboBoxList[boxIndex].IsEnabled = true;
@@ -1186,14 +1185,12 @@ namespace RelhaxModpack.Windows
 
             SelectablePackage spc = null;
 
-            if (sender is RelhaxWPFComboBox cb2)
-            {
-                //don't change the selection if the user did not want to change the option
-                if (!cb2.IsDropDownOpen)
-                    return;
-                RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)cb2.SelectedItem;
-                spc = cbi.Package;
-            }
+            RelhaxComboBoxItem cb2 = sender as RelhaxComboBoxItem;
+            spc = cb2.Package;
+
+            //null means that no mouse is over it
+            if (spc == null)
+                return;
 
             if (!spc.IsStructureEnabled)
                 return;
