@@ -1023,6 +1023,9 @@ namespace RelhaxModpack.Windows
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
                 return true;
 
+            if (TriggersWereModified(package.Triggers))
+                return true;
+
             if (package is IComponentWithDependencies componentWithDependencies)
             {
                 if (DependenciesWereModified(componentWithDependencies.DependenciesProp))
@@ -2433,7 +2436,7 @@ namespace RelhaxModpack.Windows
         #region Trigger and conflicting package modify buttons
         private void TriggerAddSelectedTrigger_Click(object sender, RoutedEventArgs e)
         {
-            if (LoadedTriggersComboBox.SelectedIndex < 0)
+            if (LoadedTriggersComboBox.SelectedItem == null)
             {
                 MessageBox.Show("Invalid selection");
                 return;
@@ -2472,6 +2475,7 @@ namespace RelhaxModpack.Windows
         {
             if (PackageTriggersDisplay.SelectedItem == null)
                 return;
+
             LoadedTriggersComboBox.SelectedIndex = -1;
 
             foreach (string s in LoadedTriggersComboBox.Items)
