@@ -1486,17 +1486,43 @@ namespace RelhaxModpack.Windows
             }
             else if (sender is RelhaxWPFComboBox comboboxSender)
             {
+                //temp enable all items so that the mouse over property can work
+                bool[] wasDisabled = new bool[comboboxSender.Items.Count];
+                int tracker = 0;
+                foreach (RelhaxComboBoxItem itemInBox1 in comboboxSender.Items)
+                {
+                    if (!itemInBox1.IsEnabled)
+                    {
+                        itemInBox1.IsEnabled = true;
+                        wasDisabled[tracker] = true;
+                    }
+                    else
+                    {
+                        wasDisabled[tracker] = false;
+                    }
+
+                    tracker++;
+                }
+                Utils.AllowUIToUpdate();
                 //check to see if a specific item is highlighted
                 //if so, it means that the user wants to preview a specific version
                 //if not, then the user clicked on the combobox as a whole, so show all items in the box
                 foreach (RelhaxComboBoxItem itemInBox in comboboxSender.Items)
                 {
-                    if (itemInBox.IsHighlighted && itemInBox.IsEnabled)
+                    if (itemInBox.IsMouseOver)
                     {
                         spc = itemInBox.Package;
                         break;
                     }
                 }
+                for(int i = 0; i < wasDisabled.Count(); i++)
+                {
+                    if(wasDisabled[i])
+                    {
+                        (comboboxSender.Items[i] as RelhaxComboBoxItem).IsEnabled = false;
+                    }
+                }
+
                 if (spc == null)
                 {
                     //make a new temporary package with a custom preview items list
