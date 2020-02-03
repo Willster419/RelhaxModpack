@@ -1116,7 +1116,7 @@ namespace RelhaxModpack.Windows
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
             package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
-            package.Triggers = string.Join(",", PackageTriggersDisplay.Items);
+            package.Triggers = string.Join(",", PackageTriggersDisplay.Items.Cast<string>());
 
             //if the zipfile was updated, then update the last modified date
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
@@ -1149,7 +1149,7 @@ namespace RelhaxModpack.Windows
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
                 selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
                 selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
-                selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items);
+                selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items.Cast<string>());
 
                 selectablePackage.UserFiles.Clear();
                 foreach (string uf in PackageUserFilesDisplay.Items)
