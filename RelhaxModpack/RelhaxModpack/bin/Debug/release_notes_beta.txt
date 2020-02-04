@@ -1,3 +1,9 @@
+BETA Application version 1.0.2.2 (2020-02-03)
+- Fixed bugs with parsing of conflicting packages and triggers.
+- Fixed bugs with WG patch download utility. WG tried to be all sneaky and change their update data structure.
+- Fixed bugs with saving triggers in database editor.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 BETA Application version 1.0.2.1 (2020-02-02)
 - Re-worked UI of database editor, changed how some list style components are edited and applied.
 - Fixed database editor views of InstallGroup to factor in the categories offset level parameter.
