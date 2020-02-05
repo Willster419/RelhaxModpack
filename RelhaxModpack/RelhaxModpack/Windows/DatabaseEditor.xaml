@@ -306,7 +306,7 @@
                 Tag="MoveDatabaseObjectButton"   Click="MoveDatabaseObjectButton_Click"   IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Move the selected package to below another package.\nSupports moving between package types"/>
         <Button x:Name="AddDatabaseObjectButton"    Content="Add/Copy"     HorizontalAlignment="Left"  Margin="10,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
                 Tag="AddDatabaseObjectButton"    Click="AddDatabaseObjectButton_Click"    IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Add a package to the database by making a copy of the selected package"/>
-        <Button x:Name="ApplyButton"                Content="Apply"        HorizontalAlignment="Right" Margin="0,0,170,30"  Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+        <Button x:Name="ApplyButton"                Content="Apply"        HorizontalAlignment="Right" Margin="0,0,170,5"  Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="45"
                 Tag="ApplyButton"                Click="ApplyButton_Click"                IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Apply any changes from the right tab to the selected package"/>
         <Button x:Name="LoadAsDatabaseButton"       Content="Load as..."   HorizontalAlignment="Right" Margin="0,0,90,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
                 Tag="LoadAsDatabaseButton"       Click="LoadAsDatabaseButton_Click" ToolTipService.ShowOnDisabled="True" ToolTip="Select the database to load from a file dialog"/>
