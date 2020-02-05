@@ -300,13 +300,22 @@
             <RowDefinition Height="632*"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove" HorizontalAlignment="Left" Margin="90,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click"/>
-        <Button x:Name="MoveDatabaseObjectButton" Content="Move" HorizontalAlignment="Left" Margin="170,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="MoveDatabaseObjectButton" Click="MoveDatabaseObjectButton_Click"/>
-        <Button x:Name="AddDatabaseObjectButton" Content="Add/Copy" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="AddDatabaseObjectButton" Click="AddDatabaseObjectButton_Click"/>
-        <Button x:Name="LoadAsDatabaseButton" Content="Load as..." HorizontalAlignment="Right" Margin="0,0,90,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20" Tag="LoadAsDatabaseButton" Click="LoadAsDatabaseButton_Click"/>
-        <Button x:Name="LoadDatabaseButton" Content="Load" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,90,30"  VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseLoad" Click="OnLoadDatabaseClick"/>
-        <Button x:Name="SaveAsDatabaseButton" Content="Save as..." HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="1" VerticalAlignment="Bottom" Width="75" Tag="DatabaseSaveAs" Click="SaveAsDatabaseButton_Click"/>
-        <Button x:Name="SaveDatabaseButton" Content="Save" HorizontalAlignment="Right" Grid.Row="1" Margin="0,0,10,30" VerticalAlignment="Bottom" Width="75" Height="20" Tag="DatabaseSave" Click="SaveDatabaseButton_Click" />
+        <Button x:Name="RemoveDatabaseObjectButton" Content="Remove"       HorizontalAlignment="Left"  Margin="90,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click" IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Remove the selected package from the database"/>
+        <Button x:Name="MoveDatabaseObjectButton"   Content="Move"         HorizontalAlignment="Left"  Margin="170,0,0,5"   Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="MoveDatabaseObjectButton"   Click="MoveDatabaseObjectButton_Click"   IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Move the selected package to below another package.\nSupports moving between package types"/>
+        <Button x:Name="AddDatabaseObjectButton"    Content="Add/Copy"     HorizontalAlignment="Left"  Margin="10,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="AddDatabaseObjectButton"    Click="AddDatabaseObjectButton_Click"    IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Add a package to the database by making a copy of the selected package"/>
+        <Button x:Name="ApplyButton"                Content="Apply"        HorizontalAlignment="Right" Margin="0,0,170,30"  Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="ApplyButton"                Click="ApplyButton_Click"                IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Apply any changes from the right tab to the selected package"/>
+        <Button x:Name="LoadAsDatabaseButton"       Content="Load as..."   HorizontalAlignment="Right" Margin="0,0,90,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="LoadAsDatabaseButton"       Click="LoadAsDatabaseButton_Click" ToolTipService.ShowOnDisabled="True" ToolTip="Select the database to load from a file dialog"/>
+        <Button x:Name="LoadDatabaseButton"         Content="Load"         HorizontalAlignment="Right" Margin="0,0,90,30"   Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="DatabaseLoad"               Click="OnLoadDatabaseClick"        ToolTipService.ShowOnDisabled="True" ToolTip="Select the database to load directly from a saved settings location"/>
+        <Button x:Name="SaveAsDatabaseButton"       Content="Save as..."   HorizontalAlignment="Right" Margin="0,0,10,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="DatabaseSaveAs"             Click="SaveAsDatabaseButton_Click" ToolTipService.ShowOnDisabled="True" ToolTip="Select a location from a file dialog to save the database"/>
+        <Button x:Name="SaveDatabaseButton"         Content="Save"         HorizontalAlignment="Right" Margin="0,0,10,30"   Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="DatabaseSave"               Click="SaveDatabaseButton_Click"   ToolTipService.ShowOnDisabled="True" ToolTip="Directly save the database to a saved settings location"/>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="250"/>
@@ -327,10 +336,8 @@
                         </TreeView.Resources>
                     </TreeView>
                 </TabItem>
-                <TabItem x:Name="InstallGroupsTab" Header="Install Groups">
-                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" PreviewMouseMove="DatabaseTreeView_PreviewMouseMove"
-                              ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview"
-                              Drop="OnTreeViewGroupsDrop" DragOver="OnTreeViewGroupsDragOver" >
+                <TabItem x:Name="InstallGroupsTab" Header="Install Groups" ToolTip="View the current install groups that will be formed when an installation is started">
+                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="False">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -338,10 +345,8 @@
                         </TreeView.Resources>
                     </TreeView>
                 </TabItem>
-                <TabItem x:Name="PatchGroupsTab" Header="Patch Groups">
-                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewGroupsDrop"
-                              DragOver="OnTreeViewGroupsDragOver" PreviewMouseMove="DatabaseTreeView_PreviewMouseMove" ScrollViewer.ScrollChanged="OnTreeViewScroll"
-                              PreviewMouseDown="OnTreeViewMouseDownPreview" PreviewMouseUp="OnTreeViewMouseUpPreview" >
+                <TabItem x:Name="PatchGroupsTab" Header="Patch Groups" ToolTip="View the current patch groups that will be formed when an installation is started">
+                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="False">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -349,7 +354,7 @@
                         </TreeView.Resources>
                     </TreeView>
                 </TabItem>
-                <TabItem x:Name="SettingsTab" Header="Settings">
+                <TabItem x:Name="SettingsTab" Header="Settings" ToolTip="View and edit settings of this tool">
                     <Grid Background="#FFE5E5E5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20"/>
@@ -369,22 +374,30 @@
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="BigmodsUsernameTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Username" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
-                        <TextBlock x:Name="BigmodsPasswordTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Password" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
-                        <TextBlock x:Name="ApplyBehaviorTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Apply Behavior" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"/>
+                        <TextBlock x:Name="BigmodsUsernameTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Username" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"
+                                   ToolTip="Enter your FTP account user name to enable FTP integration features"/>
+                        <TextBlock x:Name="BigmodsPasswordTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Password" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"
+                                   ToolTip="Enter your FTP account password to enable FTP integration features"/>
+                        <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Content="Save Selection information before leave (auto apply)"
+                                  Click="SaveSelectionBeforeLeaveSetting_Click" ToolTip="When selecting a new package in the Database view,\nthe application will automatically apply changes before changing to the new selection"/>
+                        <TextBlock x:Name="ApplyBehaviorTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Apply Behavior" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"
+                                   ToolTip="Change the behavior of how the application auto-applies and auto-saves your work"/>
                         <TextBox x:Name="BigmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" TextChanged="BigmodsUsernameSetting_TextChanged"/>
                         <TextBox x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TextChanged="BigmodsPasswordSetting_TextChanged"/>
-                        <CheckBox x:Name="SaveSelectionBeforeLeaveSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Content="Save Selection information before leave (auto apply)" Click="SaveSelectionBeforeLeaveSetting_Click"/>
                         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="4">
-                            <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default" Checked="ApplyBehaviorSetting_Checked"/>
-                            <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="ApplyBehaviorSetting_Checked"/>
-                            <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply" Checked="ApplyBehaviorSetting_Checked"/>
+                            <RadioButton x:Name="ApplyBehaviorDefaultSetting" Content="Default" Checked="ApplyBehaviorSetting_Checked" ToolTip="No auto-apply or auto-save features"/>
+                            <RadioButton x:Name="ApplyBehaviorApplyTriggersSaveSetting" Content="Apply triggers Save" Checked="ApplyBehaviorSetting_Checked" ToolTip="Pressing &quot;Apply&quot; button will press &quot;Save&quot; afterwards"/>
+                            <RadioButton x:Name="ApplyBehaviorSaveTriggersApplySetting" Content="Save triggers Apply" Checked="ApplyBehaviorSetting_Checked" ToolTip="Pressing &quot;Save&quot; button will first press &quot;Apply&quot;"/>
                         </StackPanel>
-                        <CheckBox x:Name="ShowConfirmOnPackageApplySetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="5" VerticalAlignment="Center" Content="Show confirmation window on package apply" Click="ShowConfirmOnPackageApplySetting_Click"/>
-                        <CheckBox x:Name="ShowConfirmOnPackageAddRemoveEditSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="6" VerticalAlignment="Center" Content="Show confirmation on package add/remove/move" Click="ShowConfirmOnPackageAddRemoveEditSetting_Click"/>
-                        <Button x:Name="SelectDefaultSaveLocationButton" Content="Select default save location" HorizontalAlignment="Stretch" Grid.Row="7" VerticalAlignment="Center" Click="SelectDefaultSaveLocationButton_Click" />
+                        <CheckBox x:Name="ShowConfirmOnPackageApplySetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="5" VerticalAlignment="Center" Content="Show confirmation window on package apply"
+                                  Click="ShowConfirmOnPackageApplySetting_Click" ToolTip="Show a message box to confirm changes to be applied when pressing the &quot;Apply&quot; button"/>
+                        <CheckBox x:Name="ShowConfirmOnPackageAddRemoveEditSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="6" VerticalAlignment="Center" Content="Show confirmation on package add/remove/move"
+                                  Click="ShowConfirmOnPackageAddRemoveEditSetting_Click" ToolTip="Show a message box to confirm when pressing one of the add/move/remove buttons"/>
+                        <Button x:Name="SelectDefaultSaveLocationButton" Content="Select default save location" HorizontalAlignment="Stretch" Grid.Row="7" VerticalAlignment="Center" Click="SelectDefaultSaveLocationButton_Click"
+                                ToolTip="Select the location to use for the &quot;Save&quot; and &quot;Load&quot; buttons"/>
                         <TextBox x:Name="DefaultSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="DefaultSaveLocationSetting_TextChanged" />
-                        <TextBlock x:Name="FtpUpDownAutoCloseTimeoutLabel" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="FTP U/L and D/L auto close timeout" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="FtpUpDownAutoCloseTimeoutLabel" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="FTP U/L and D/L auto close timeout" VerticalAlignment="Center"
+                                   ToolTip="Select the time, in seconds, for the FTP upload/download window to automatically be closed. Select 0 to disable automatic closing"/>
                         <Grid x:Name="FtpUpDownAutoCloseTimoutPanel" Grid.Column="1" Grid.Row="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="10*"/>
@@ -393,13 +406,14 @@
                             <Slider x:Name="FtpUpDownAutoCloseTimoutSlider" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsEnabled="True" ValueChanged="FtpUpDownAutoCloseTimoutSlider_ValueChanged" IsSnapToTickEnabled="True"/>
                             <TextBlock x:Name="FtpUpDownAutoCloseTimoutDisplayLabel" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="Test" Grid.Column="1"/>
                         </Grid>
-                        <TextBlock x:Name="SaveAsDatabaseType" HorizontalAlignment="Stretch"  Grid.Row="9" TextWrapping="Wrap" Text="&quot;Save as&quot; saves as database type:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="SaveAsDatabaseType" HorizontalAlignment="Stretch"  Grid.Row="9" TextWrapping="Wrap" Text="&quot;Save&quot;/&quot;Save as&quot; buttons save as database type:" VerticalAlignment="Center"
+                                   ToolTip="As of writing this tooltip, this setting should be kept on &quot;1.1&quot;"/>
                         <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="9" VerticalAlignment="Center">
                             <RadioButton x:Name="SaveDatabaseLegacySetting" Content="Legacy" Checked="SaveDatabaseSetting_Checked" />
                             <RadioButton x:Name="SaveDatabaseOnePointOneSetting" Content="1.1" Checked="SaveDatabaseSetting_Checked" />
                         </StackPanel>
-                        <Button x:Name="SelectAutoUpdateWorkDirectoryButton" HorizontalAlignment="Stretch" Grid.Row="10" VerticalAlignment="Center"
-                                Click="SelectAutoUpdateWorkDirectoryButton_Click">
+                        <Button x:Name="SelectAutoUpdateWorkDirectoryButton" HorizontalAlignment="Stretch" Grid.Row="10" VerticalAlignment="Center" Click="SelectAutoUpdateWorkDirectoryButton_Click"
+                                ToolTip="Select the folder to use for the auto update feature (work in progress)">
                             <TextBlock x:Name="SelectAutoUpdateWorkDirectoryTextblock" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"
                                        Text="Select auto update work directory"/>
                         </Button>
@@ -407,7 +421,7 @@
                                  TextChanged="SelectAutoUpdateWorkDirectoryTextbox_TextChanged" />
                     </Grid>
                 </TabItem>
-                <TabItem x:Name="DescriptionHelperTab" Header="How to use">
+                <TabItem x:Name="DescriptionHelperTab" Header="How to use" ToolTip="Read some documentation on this tool">
                     <Grid Background="#FFE5E5E5">
                         <RichTextBox x:Name="DescriptionHelperTextBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True"
                                      HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" IsReadOnly="True" SpellCheck.IsEnabled="True" IsDocumentEnabled="True">
@@ -416,7 +430,7 @@
                                     Welcome to the Editor "How To"
                                 </Paragraph>
                                 <Paragraph>
-                                    Useful Macro's:
+                                    Useful Macros:
                                 </Paragraph>
                                 <List>
                                     <ListItem>
@@ -435,6 +449,9 @@
                                         </Paragraph>
                                     </ListItem>
                                 </List>
+                                <Paragraph>
+                                    <Hyperlink NavigateUri="https://docs.google.com/document/d/1o2CXmhuPrQlk0PQUYRlatzep2ImRtW3DRG-7zl1B0rk/edit">Documentation user guide</Hyperlink>
+                                </Paragraph>
                             </FlowDocument>
                         </RichTextBox>
                     </Grid>
@@ -471,18 +488,15 @@
                             <RowDefinition Height="20"/>
                             <!-- Obfuscated and Offset InstallGroup -->
                             <RowDefinition Height="20"/>
-                            <!-- apply button -->
-                            <RowDefinition Height="40"/>
-                            <!-- apply spacer -->
-                            <RowDefinition Height="1"/>
+                            <!-- space between checkboxes and download zip button -->
+                            <RowDefinition Height="20"/>
                             <!-- download button -->
-                            <RowDefinition Height="1"/>
-                            <!-- download spacer -->
-                            <RowDefinition Height="1"/>
-                            <!-- upload button -->
                             <RowDefinition Height="20"/>
                             <!-- upload spacer -->
                             <RowDefinition Height="2"/>
+                            <!-- upload button-->
+                            <RowDefinition Height="20"/>
+                            <!-- extra space -->
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock x:Name="PackageDisplayNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
@@ -511,8 +525,8 @@
                             <RelhaxModpack:SelectionTypes>single_dropdown2</RelhaxModpack:SelectionTypes>
                             <RelhaxModpack:SelectionTypes>multi</RelhaxModpack:SelectionTypes>
                         </ComboBox>
-                        <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center"/>
-                        <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
+                        <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
                         <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
                         <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
@@ -531,9 +545,8 @@
                             <CheckBox Content="Obfuscated" x:Name="PackageObfuscatedModDisplay" Tag="ObfuscatedCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Offset InstallGroup" x:Name="CategoryOffsetInstallGroupDisplay" Tag="OffsetInstallGroupCB" Margin="16,0,0,0"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Apply" x:Name="ApplyButton" Click="ApplyButton_Click" Margin="0,28,0,0" Grid.ColumnSpan="2" Width="200"/>
-                        <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipUload" Click="ZipDownload_Click" Margin="0,55,0,0" Grid.ColumnSpan="2" Width="200" />
-                        <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Margin="0,83,0,0" Grid.ColumnSpan="2" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="19" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200"/>
+                        <Button Grid.Column="0" Grid.Row="21" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
@@ -561,15 +574,16 @@
                 <TabItem x:Name="DependenciesTab" Header="Dependencies">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageDependenciesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageDependenciesDisplay_SelectionChanged" />
-                        <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesAddSelected_Click"/>
-                        <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="10,235,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesRemoveSelected_Click"/>
+                        <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="0,210,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesAddSelected_Click"/>
+                        <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,235,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesRemoveSelected_Click"/>
                         <ComboBox x:Name="LoadedDependenciesList" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
-                        <TextBlock x:Name="DependenciesLogicTypeTextBlock" HorizontalAlignment="Left" Margin="10,260,0,0" TextWrapping="Wrap" Text="With Logic Type:" VerticalAlignment="Top"/>
-                        <ComboBox x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="10,281,0,0" VerticalAlignment="Top" Width="400">
+                        <TextBlock x:Name="DependenciesLogicTypeTextBlock" HorizontalAlignment="Left" Margin="0,260,0,0" TextWrapping="Wrap" Text="With Logic Type:" VerticalAlignment="Top"/>
+                        <ComboBox x:Name="LoadedLogicsList" HorizontalAlignment="Left" Margin="0,281,0,0" VerticalAlignment="Top" Width="400">
                             <RelhaxModpack:Logic>OR</RelhaxModpack:Logic>
                             <RelhaxModpack:Logic>AND</RelhaxModpack:Logic>
                         </ComboBox>
-                        <CheckBox x:Name="DependenciesNotFlag" Content="Set Not Flag" HorizontalAlignment="Left" Margin="10,308,0,0" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="DependenciesNotFlag" Content="Set Not Flag" HorizontalAlignment="Left" Margin="0,308,0,0" VerticalAlignment="Top"/>
+                        <Button Content="Apply Edit" x:Name="DependenciesApplyEditButton" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,323,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesApplyEditButton_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="MediasTab" Header="Medias">
@@ -578,7 +592,7 @@
                         <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="10,511,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
                         <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="230,511,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
                         <Button Content="Remove Media" x:Name="MediaRemoveMediaButton" Tag="MediaRemoveMediaButton" HorizontalAlignment="Left" Margin="10,486,0,0" VerticalAlignment="Top" Width="467" Click="MediaRemoveMediaButton_Click"/>
-                        <ComboBox x:Name="MediaTypesList" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top" Width="477" Height="20">
+                        <ComboBox x:Name="MediaTypesList" HorizontalAlignment="Left" Margin="0,205,0,0" VerticalAlignment="Top" Width="477" Height="20">
                             <RelhaxModpack:MediaType>Picture</RelhaxModpack:MediaType>
                             <RelhaxModpack:MediaType>Webpage</RelhaxModpack:MediaType>
                             <RelhaxModpack:MediaType>MediaFile</RelhaxModpack:MediaType>
@@ -593,20 +607,20 @@
                         <TextBlock HorizontalAlignment="Left" Margin="0,238,0,0" TextWrapping="Wrap" Text="Media Data" VerticalAlignment="Top" Width="66" Height="20"/>
                     </Grid>
                 </TabItem>
-                <TabItem x:Name="UserDatasTab" Header="Userdatas">
+                <TabItem x:Name="UserDatasTab" Header="User files">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox x:Name="PackageUserdatasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageUserdatasDisplay_SelectionChanged" />
-                        <Button Content="Add Userdata" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top" Width="467" Click="UserdataAddUserdataButton_Click"/>
+                        <ListBox x:Name="PackageUserFilesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageUserdatasDisplay_SelectionChanged" />
+                        <Button Content="Add User file" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top" Width="467" Click="UserdataAddUserdataButton_Click"/>
                         <Button Content="Apply Edit" x:Name="UserdataApplyEditButton" HorizontalAlignment="Left" Margin="10,341,0,0" VerticalAlignment="Top" Width="467" Click="UserdataApplyEditButton_Click"/>
-                        <Button Content="Remove Userdata" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Width="467" Click="UserdataRemoveUserdata_Click"/>
+                        <Button Content="Remove User file" x:Name="UserdataRemoveUserdata" Tag="UserdataRemoveUserdata" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Width="467" Click="UserdataRemoveUserdata_Click"/>
                         <TextBox x:Name="UserDataEditBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="102"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="TriggersTab" Header="Triggers">
                     <Grid Background="#FFE5E5E5">
                         <ListBox x:Name="PackageTriggersDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageTriggersDisplay_SelectionChanged" />
-                        <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="10,209,0,0" VerticalAlignment="Top" Width="467" Click="TriggerAddSelectedTrigger_Click"/>
-                        <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="10,234,0,0" VerticalAlignment="Top" Width="467" Click="TriggerRemoveTrigger_Click"/>
+                        <Button Content="Add selected Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="467" Click="TriggerAddSelectedTrigger_Click"/>
+                        <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="467" Click="TriggerRemoveTrigger_Click"/>
                         <ComboBox x:Name="LoadedTriggersComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
                         <TextBox x:Name="CurrentSupportedTriggers" HorizontalAlignment="Left" Height="63" Margin="0,478,0,0" TextWrapping="Wrap" Text="Currently Supported Triggers:&#xA;build_contour_icons - start the process of building the contour icons atlas files&#xA;create_shortcuts - start the process of creating the shortcuts" VerticalAlignment="Bottom" Width="487" IsReadOnly="True"/>
                     </Grid>

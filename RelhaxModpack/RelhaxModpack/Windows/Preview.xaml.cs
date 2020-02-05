@@ -125,8 +125,6 @@ namespace RelhaxModpack.Windows
 
             //set the name of the window to be the package name
             Title = Package.NameFormatted;
-            if (Package.PopularMod)
-                Title = string.Format("{0} ({1})", Title, Translations.GetTranslatedString("popular"));
 
             //make the linked labels in the link box
             for(int i =0; i < Package.Medias.Count; i++)
@@ -224,6 +222,8 @@ namespace RelhaxModpack.Windows
         private async void DisplayMedia(Media media)
         {
             CurrentDispalyMedia = media;
+            //set title on window to what the item is we're currently previewing
+            Title = media.SelectablePackageNameFormatted;
             //if the child is our media player, then stop and dispose
             if(MainPreviewBorder.Child != null && MainPreviewBorder.Child is RelhaxMediaPlayer player)
             {
