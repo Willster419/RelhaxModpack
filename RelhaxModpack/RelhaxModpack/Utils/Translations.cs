@@ -754,7 +754,7 @@ namespace RelhaxModpack
             German.Add("UninstallModpackButtonDescription", "*Alle* Mods entfernen, die auf deinem WoT Client installiert sind");
             Polish.Add("UninstallModpackButtonDescription", "Usuń *wszystkie* zainstalowane mody.");
             French.Add("UninstallModpackButtonDescription", "Supprimer *tous* les mods installés sur votre client WoT");
-            Spanish.Add("UninstallModpackButtonDescription", "Eliminar *todos* los Mods installados en su cliente de WoT");
+            Spanish.Add("UninstallModpackButtonDescription", "Elimina *todos* los Mods installados en su cliente de WoT");
             Russian.Add("UninstallModpackButtonDescription", "Удаление *всех* установленных в клиент WoT модификаций");
 
             //Component: ViewNewsButton
@@ -918,7 +918,7 @@ namespace RelhaxModpack
                      "Zostaną one spakowane w archiwum ZIP z sygnaturą czasową w nazwie i umieszczone w folderze „RelHaxModBackup”.");
             French.Add("BackupModsCBDescription", "Sélectionner ceci pour faire un backup de votre installation actuelle." +
                      "Les backups sont stockés dans le dossier 'RelHaxModBackup' en tant que .zip, nommé par un horodatage." );
-            Spanish.Add("BackupModsCBDescription", "Seleccione esta opción para crear una copia de seguridad de los Mods actualmente instalados." +
+            Spanish.Add("BackupModsCBDescription", "Seleccione esta opción para crear una copia de seguridad de los Mods actualmente instalados. " +
                     "Será almacenada en la carpeta 'RelHaxModBackup' como archivo zip, nombrado por una timestamp.");
             Russian.Add("BackupModsCBDescription", "Выберите для создания бэкапа имеющихся модов. Они будут находиться в папке 'RelHaxModBackup' в виде ZIP-архива и иметь в названии файла дату создания.");
 
@@ -1272,7 +1272,7 @@ namespace RelhaxModpack
             German.Add("ForceVisibleCBDescription", "Bewirkt, dass alle ausgeblendeten Pakete sichtbar sind. Kann zu schwerwiegenden Stabilitätsproblemen deiner Installation führen");
             Polish.Add("ForceVisibleCBDescription", "Wyświetla na liście wyboru wszystkie ukryte pakiety i mody.\nUWAGA: Może prowadzić do poważnych problemów ze stabilnością instalacji!");
             French.Add("ForceVisibleCBDescription", "Activer tout les paquets visible peut causer de lourds problèmes de stabilité de votre installation");
-            Spanish.Add("ForceVisibleCBDescription", "Fuerza todos los paquetes a ser visibles. Puede causar problemas de inestabilidad severa de la instalación");
+            Spanish.Add("ForceVisibleCBDescription", "Fuerza a todos los paquetes a ser visibles. Puede causar problemas de inestabilidad severa de la instalación");
             Russian.Add("ForceVisibleCBDescription", "Показывает все скрытые пакеты. Может привести к серьёзным проблемам со стабильностью");
 
             //Component: LoadAutoSyncSelectionFileText
@@ -1363,7 +1363,7 @@ namespace RelhaxModpack
             German.Add("ApplyCustomScalingTextDescription", "Wende die Anzeigeskalierung auf das Installationsfenster an");
             Polish.Add("ApplyCustomScalingTextDescription", "Zastosuj skalowanie ekranu do okien instalatora.");
             French.Add("ApplyCustomScalingTextDescription", "Appliquer la mise à l'échelle de l'affichage aux fenêtres du programme d'installation");
-            Spanish.Add("ApplyCustomScalingTextDescription", "Aplicar la escala de visualización a las ventanas del instalador");
+            Spanish.Add("ApplyCustomScalingTextDescription", "Aplica esta escala de visualización a las ventanas del instalador");
             Russian.Add("ApplyCustomScalingTextDescription", "Применить масштабирование дисплея к окнам установщика");
 
             //Component: InstallWhileDownloadingText
@@ -1614,7 +1614,7 @@ namespace RelhaxModpack
                 " de mods. Pour les utilisateurs avancés, notez que l'installation ne fera pas: Déballez " +
                 "les fichiers xml du jeu, corrigez les fichiers (fournis depuis le jeu) ou créez l'atlas. Les instructions peuvent être trouvées dans le répertoire d'exportation.");
             Spanish.Add("ExportModeCBDescription", "El modo de exportación le permitirá seleccionar una carpeta y versión de WoT a la que exportar la instalación de Mods. Sólo para usuarios avanzados." +
-                " Tenga en cuenta que NO: desempaquetará archivos XML, archivos de parche (proporcionados por el juego), o creará los archivos de tipo atlas. Habrá instrucciones en el directorio exportado.");
+                " Tenga en cuenta que NO desempaquetará archivos XML o archivos de parche (proporcionados por el juego), ni creará los archivos de tipo atlas. Habrá instrucciones en el directorio exportado.");
             Russian.Add("ExportModeCBDescription", "Режим экспорта позволит выбрать папку для экспорта установленных модификаций в игру. Только для продвинутых пользователей.\n" +
                 "Учтите, что эта опция НЕ распакует XML-файлы игры, патчить их или создавать атласы. Инструкции находятся в папке экспорта.");
 
@@ -1663,7 +1663,7 @@ namespace RelhaxModpack
                 " Survolez un paramètre pour voire une explication.");
             Spanish.Add("HelperText", "¡Bienvenido a RelHax Modpack!" +
                 "\nHe intentado hacer el Modpack tan sencillo como ha sido posible, pero aún así pueden surgir dudas. Mantenga el ratón sobre una opción para obtener una explicación." +
-                "\n¡Gracias por usar Relhax, espero que lo disfrute!");
+                "\n¡Gracias por usar Relhax, espero que lo disfrute! - Willster419");
             Russian.Add("HelperText", "Вас приветствует Relhax Modpack!\n\nЯ старался сделать его максимально простым для пользователя, но вопросы всё же могут возникнуть.\n\nНаведите курсор мыши на любую настройку, и вы увидите пояснение к ней.\n\nБлагодарим вас за выбор в пользу Relhax, надеюсь, вам понравится! - Willster419");
 
             //Component: helperTextShort
@@ -1704,7 +1704,7 @@ namespace RelhaxModpack
                 "Opcja dostępna tylko dla stabilnej wersji bazy danych (nie BETA).");
             French.Add("NotifyIfSameDatabaseCBDescription", "Vous informe si votre dernière version de base de données installée est la même. Si c'est le cas, cela signifie qu'il n'y a pas de mise à jour des mods. Cela ne marche qu'avec la base de données stables.");
             Spanish.Add("NotifyIfSameDatabaseCBDescription", "Notificar si la última instalación tiene la misma versión de la base de datos que la actual. De ser así, significa que no ha habido ninguna actualización de ningún mod.\n" +
-                " Ésto sólo funciona con la base de datos estable.");
+                "Esto solo funciona con la base de datos estable.");
             Russian.Add("NotifyIfSameDatabaseCBDescription", "Если ваша версия БД является актуальной, то вы увидите уведомление. Это значит, что обновлений к модам не было.");
 
             //Component: ShowInstallCompleteWindowText
@@ -1754,7 +1754,7 @@ namespace RelhaxModpack
             German.Add("ClearCacheText", "Cache-Daten für WoT löschen");
             Polish.Add("ClearCacheText", "Wyczyść pamięć podręczną WoT");
             French.Add("ClearCacheText", "Nettoyer le dossier de Cache WoT");
-            Spanish.Add("ClearCacheText", "Limpiar los datos de caché de WoT");
+            Spanish.Add("ClearCacheText", "Limpiar datos de caché de WoT");
             Russian.Add("ClearCacheText", "Очистить кэш World of Tanks");
 
             //Component: ClearCachCBDescription
@@ -1992,7 +1992,7 @@ namespace RelhaxModpack
             German.Add("EnableBordersDefaultV2CBDescription", "Jede Auswahl schwarz einrahmen");
             Polish.Add("EnableBordersDefaultV2CBDescription", "Włącza czarne obramowanie modów i opcji konfiguracji.");
             French.Add("EnableBordersDefaultV2CBDescription", "Activer les bordures noires autour de chaque mod et selections de configuration.");
-            Spanish.Add("EnableBordersDefaultV2CBDescription", "Habilitar los bordes negros alrededor de cada mod y subnivel de configuración");
+            Spanish.Add("EnableBordersDefaultV2CBDescription", "Habilita los bordes negros alrededor de cada mod y subnivel de configuración");
             Russian.Add("EnableBordersDefaultV2CBDescription", "Включить показ чёрных рамок вокруг наименования каждого мода и конфигурации.");
 
 
@@ -3708,7 +3708,7 @@ namespace RelhaxModpack
             German.Add("CollectLogInfo", "Sammle und packe Protokolldateien in einer ZIP-Datei um ein Problem zu melden");
             Polish.Add("CollectLogInfo", "Zbierz pliki dziennika, aby zgłosić problem");
             French.Add("CollectLogInfo", "Recueillir les fichiers journaux dans un fichier zip pour signaler un problème");
-            Spanish.Add("CollectLogInfo", "Recoge los archivos de registro en un archivo zip para informar de un problema");
+            Spanish.Add("CollectLogInfo", "Recoger los archivos de registro en un archivo zip para informar de un problema");
             Russian.Add("CollectLogInfo", "Собрать log-файлы в ZIP-архив для отчёта об ошибке");
 
             //Component: CollectLogInfoButtonDescription
@@ -3947,7 +3947,7 @@ namespace RelhaxModpack
             German.Add("TestLoadImageLibraries", "Teste das Laden der Bibliotheken zur Atlasverarbeitung");
             Polish.Add("TestLoadImageLibraries", "Test bibliotek przetwarzania plików Atlas");
             French.Add("TestLoadImageLibraries", "Test de chargement des bibliothèques de traitement d'images atlas");
-            Spanish.Add("TestLoadImageLibraries", "Carga de prueba de las librerías de procesamiento de imágenes de atlas");
+            Spanish.Add("TestLoadImageLibraries", "Carga de prueba de las librerías de procesamiento de imágenes tipo atlas");
             Russian.Add("TestLoadImageLibraries", "Протестировать библиотеки обработки изображений-атласов");
 
             //Component: TestLoadImageLibrariesButtonDescription
