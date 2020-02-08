@@ -263,7 +263,7 @@ namespace RelhaxModpack.Windows
             //make a flat list (can be used in patchGroup as well)
             List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
             //make an array of group headers
-            TreeViewItem[] installGroupHeaders = new TreeViewItem[Utils.GetMaxInstallGroupNumber(allFlatList) + 1];
+            TreeViewItem[] installGroupHeaders = new TreeViewItem[Utils.GetMaxInstallGroupNumberWithOffset(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal install group number
             //hey while we're at it let's add the items to the instal group dispaly box
             PackageInstallGroupDisplay.Items.Clear();
@@ -273,7 +273,7 @@ namespace RelhaxModpack.Windows
                 installGroupHeaders[i] = new TreeViewItem() { Header = string.Format("---Install Group {0}---", i), Tag = i };
                 InstallGroupsTreeView.Items.Add(installGroupHeaders[i]);
                 installGroupHeaders[i].Items.Clear();
-                foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.InstallGroup == i).ToList())
+                foreach (DatabasePackage packageWithEqualGroupNumber in allFlatList.Where(package => package.InstallGroupWithOffset == i).ToList())
                 {
                     //add them to the install group headers
                     installGroupHeaders[i].Items.Add(new TreeViewItem() { Header = new EditorComboBoxItem(packageWithEqualGroupNumber) });
@@ -353,69 +353,75 @@ namespace RelhaxModpack.Windows
         {
             if (Init)
                 return;
-            if (LeftTabView.SelectedItem is TabItem selectedTab)
+            if (!(LeftTabView.SelectedItem is TabItem selectedTab))
+                return;
+
+            //disable apply whenever left tab views change
+            ApplyButton.IsEnabled = false;
+
+            if (selectedTab.Equals(DatabaseViewTab))
             {
-                if (selectedTab.Equals(DatabaseViewTab))
+                RightTab.IsEnabled = true;
+                SearchBox.IsEnabled = true;
+                RemoveDatabaseObjectButton.IsEnabled = true;
+                MoveDatabaseObjectButton.IsEnabled = true;
+                AddDatabaseObjectButton.IsEnabled = true;
+                /*
+                //check if the database is actually loaded before Loading the database view
+                if (GlobalDependencies.Count == 0)
                 {
-                    RightTab.IsEnabled = true;
-                    SearchBox.IsEnabled = true;
-                    RemoveDatabaseObjectButton.IsEnabled = true;
-                    MoveDatabaseObjectButton.IsEnabled = true;
-                    AddDatabaseObjectButton.IsEnabled = true;
-                    //check if the database is actually loaded before Loading the database view
-                    if (GlobalDependencies.Count == 0)
-                    {
-                        Logging.Editor("Database is not yet loaded, skipping UI loading");
-                    }
-                    else
-                    {
-                        Logging.Editor("Database is loaded, UI loading()");
-                        LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
-                    }
+                    Logging.Editor("Database is not yet loaded, skipping UI loading");
                 }
-                else if (selectedTab.Equals(InstallGroupsTab))
+                else
                 {
-                    RightTab.IsEnabled = false;
-                    SearchBox.IsEnabled = true;
-                    RemoveDatabaseObjectButton.IsEnabled = false;
-                    MoveDatabaseObjectButton.IsEnabled = false;
-                    AddDatabaseObjectButton.IsEnabled = false;
-                    if (GlobalDependencies.Count == 0)
-                    {
-                        Logging.Editor("Database is not yet loaded, skipping UI loading");
-                    }
-                    else
-                    {
-                        Logging.Editor("Database is loaded, UI loading()");
-                        LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
-                    }
+                    Logging.Editor("Database is loaded, UI loading()");
+                    LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
                 }
-                else if (selectedTab.Equals(PatchGroupsTab))
+                */
+            }
+            else if (selectedTab.Equals(InstallGroupsTab))
+            {
+                RightTab.IsEnabled = false;
+                SearchBox.IsEnabled = true;
+                RemoveDatabaseObjectButton.IsEnabled = false;
+                MoveDatabaseObjectButton.IsEnabled = false;
+                AddDatabaseObjectButton.IsEnabled = false;
+                if (GlobalDependencies.Count == 0)
                 {
-                    RightTab.IsEnabled = false;
-                    SearchBox.IsEnabled = true;
-                    RemoveDatabaseObjectButton.IsEnabled = false;
-                    MoveDatabaseObjectButton.IsEnabled = false;
-                    AddDatabaseObjectButton.IsEnabled = false;
-                    if (GlobalDependencies.Count == 0)
-                    {
-                        Logging.Editor("Database is not yet loaded, skipping UI loading");
-                    }
-                    else
-                    {
-                        Logging.Editor("Database is loaded, UI loading()");
-                        LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
-                    }
+                    Logging.Editor("Database is not yet loaded, skipping UI loading");
                 }
-                else if (selectedTab.Equals(SettingsTab))
+                else
                 {
-                    SearchBox.IsEnabled = false;
-                    RightTab.IsEnabled = false;
-                    RemoveDatabaseObjectButton.IsEnabled = false;
-                    MoveDatabaseObjectButton.IsEnabled = false;
-                    AddDatabaseObjectButton.IsEnabled = false;
+                    Logging.Editor("Database is loaded, UI loading()");
+                    LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
                 }
             }
+            else if (selectedTab.Equals(PatchGroupsTab))
+            {
+                RightTab.IsEnabled = false;
+                SearchBox.IsEnabled = true;
+                RemoveDatabaseObjectButton.IsEnabled = false;
+                MoveDatabaseObjectButton.IsEnabled = false;
+                AddDatabaseObjectButton.IsEnabled = false;
+                if (GlobalDependencies.Count == 0)
+                {
+                    Logging.Editor("Database is not yet loaded, skipping UI loading");
+                }
+                else
+                {
+                    Logging.Editor("Database is loaded, UI loading()");
+                    LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
+                }
+            }
+            else if (selectedTab.Equals(SettingsTab))
+            {
+                SearchBox.IsEnabled = false;
+                RightTab.IsEnabled = false;
+                RemoveDatabaseObjectButton.IsEnabled = false;
+                MoveDatabaseObjectButton.IsEnabled = false;
+                AddDatabaseObjectButton.IsEnabled = false;
+            }
+            
         }
 
         private void PackageDevURLDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -672,7 +678,7 @@ namespace RelhaxModpack.Windows
             ResetRightPanels(null);
             Logging.Editor("ShowDatabaseCategory(), category showing = {0}", LogLevel.Info, category.Name);
             foreach (DatabaseLogic logic in category.Dependencies)
-                PackageDependenciesDisplay.Items.Add(logic);
+                PackageDependenciesDisplay.Items.Add(DatabaseLogic.Copy(logic));
             PackageNameDisplay.Text = category.Name;
             CategoryOffsetInstallGroupDisplay.IsChecked = category.OffsetInstallGroups;
         }
@@ -693,20 +699,41 @@ namespace RelhaxModpack.Windows
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
 
             //locate and select the patchGroup and installGroup of the package
+            //if it can't, then extend the number of options until its there
+            bool wasSelected = false;
             foreach (int i in PackageInstallGroupDisplay.Items)
             {
                 if (i == package.InstallGroup)
                 {
                     PackageInstallGroupDisplay.SelectedItem = i;
+                    wasSelected = true;
                     break;
                 }
             }
+            if(!wasSelected)
+            {
+                int lastValue = (int)PackageInstallGroupDisplay.Items[PackageInstallGroupDisplay.Items.Count - 1];
+                while (lastValue <= package.InstallGroup)
+                {
+                    PackageInstallGroupDisplay.Items.Add(++lastValue);
+                }
+            }
+
+            wasSelected = false;
             foreach (int i in PackagePatchGroupDisplay.Items)
             {
                 if (i == package.PatchGroup)
                 {
                     PackagePatchGroupDisplay.SelectedItem = i;
                     break;
+                }
+            }
+            if (!wasSelected)
+            {
+                int lastValue = (int)PackagePatchGroupDisplay.Items[PackagePatchGroupDisplay.Items.Count - 1];
+                while (lastValue <= package.PatchGroup)
+                {
+                    PackagePatchGroupDisplay.Items.Add(++lastValue);
                 }
             }
 
@@ -720,8 +747,8 @@ namespace RelhaxModpack.Windows
             //internal notes
             PackageInternalNotesDisplay.Text = package.InternalNotesEscaped;
 
-            //triggers
-            foreach (string s in package.Triggers)
+            //triggers (the lists were already cleared)
+            foreach (string s in package.TriggersList)
                 PackageTriggersDisplay.Items.Add(s);
 
             //then handle if dependency
@@ -729,11 +756,13 @@ namespace RelhaxModpack.Windows
             {
                 //display all dependencies that the selected dependency uses
                 foreach (DatabaseLogic d in dependency.Dependencies)
-                    PackageDependenciesDisplay.Items.Add(d);
+                {
+                    PackageDependenciesDisplay.Items.Add(DatabaseLogic.Copy(d));
+                }
 
                 //change the "conflicting packages" tab into a "dependency usage" tab
                 ConflictingPackagesTab.Header = "Dependency Usage";
-                ConflictingPackagesMessagebox.Text = "Above is list packages that use this dependency";
+                ConflictingPackagesMessagebox.Text = "List packages that use this dependency";
 
                 //display all the dependencies and packages that use the selected dependency
                 //check dependencies that use this dependency
@@ -748,6 +777,7 @@ namespace RelhaxModpack.Windows
                             //the fact i'm not breaking can help determine if a package has the dependency listed twice
                             PackageConflictingPackagesDisplay.Items.Add(dependencyy);
                 }
+
                 //check selectablePackages that use this dependency
                 foreach (SelectablePackage selectablePackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
                 {
@@ -755,6 +785,7 @@ namespace RelhaxModpack.Windows
                         if (logic.PackageName.Equals(dependency.PackageName))
                             PackageConflictingPackagesDisplay.Items.Add(selectablePackage);
                 }
+
                 //check categories that use this dependency
                 foreach(Category cat in ParsedCategoryList)
                 {
@@ -781,15 +812,27 @@ namespace RelhaxModpack.Windows
                 PackageVisibleDisplay.IsChecked = selectablePackage.Visible;
                 PackageDescriptionDisplay.Text = selectablePackage.DescriptionEscaped;
                 PackageUpdateNotesDisplay.Text = selectablePackage.UpdateCommentEscaped;
+
                 foreach (DatabaseLogic d in selectablePackage.Dependencies)
-                    PackageDependenciesDisplay.Items.Add(d);
+                {
+                    PackageDependenciesDisplay.Items.Add(DatabaseLogic.Copy(d));
+                }
+
                 foreach (Media media in selectablePackage.Medias)
-                    PackageMediasDisplay.Items.Add(media);
+                {
+                    PackageMediasDisplay.Items.Add(Media.Copy(media));
+                }
+
                 foreach (UserFile data in selectablePackage.UserFiles)
-                    PackageUserdatasDisplay.Items.Add(data);
+                {
+                    PackageUserFilesDisplay.Items.Add(data.Pattern);
+                }
+
                 PackageConflictingPackagesDisplay.Items.Clear();
-                foreach (string s in selectablePackage.ConflictingPackages)
+                foreach (string s in selectablePackage.ConflictingPackagesList)
+                {
                     PackageConflictingPackagesDisplay.Items.Add(s);
+                }
 
                 //set the conflicting packages tab
                 ConflictingPackagesTab.Header = "Conflicting Packages";
@@ -835,7 +878,7 @@ namespace RelhaxModpack.Windows
                 category.OffsetInstallGroups = (bool)CategoryOffsetInstallGroupDisplay.IsChecked;
                 category.Dependencies.Clear();
                 foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
-                    category.Dependencies.Add(logic);
+                    category.Dependencies.Add(DatabaseLogic.Copy(logic));
 
                 //there now are unsaved changes
                 UnsavedChanges = true;
@@ -855,7 +898,12 @@ namespace RelhaxModpack.Windows
             //check packagename, notflag, logic
             foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
             {
-                if (!logic.Equals(dependencies[i]))
+                DatabaseLogic logicInDatabase = dependencies[i];
+                if (!logic.NotFlag.Equals(logicInDatabase.NotFlag))
+                    return true;
+                if (!logic.Logic.Equals(logicInDatabase.Logic))
+                    return true;
+                if (!logic.PackageName.Equals(logicInDatabase.PackageName))
                     return true;
                 i++;
             }
@@ -881,13 +929,13 @@ namespace RelhaxModpack.Windows
 
         private bool UserFilesWereModified(List<UserFile> userFiles)
         {
-            if (userFiles.Count != PackageUserdatasDisplay.Items.Count)
+            if (userFiles.Count != PackageUserFilesDisplay.Items.Count)
                 return true;
 
             int i = 0;
-            foreach (UserFile file in PackageUserdatasDisplay.Items)
+            foreach (string file in PackageUserFilesDisplay.Items)
             {
-                if (!file.Equals(userFiles[i]))
+                if (!file.Equals(userFiles[i].Pattern))
                     return true;
                 i++;
             }
@@ -903,7 +951,10 @@ namespace RelhaxModpack.Windows
             int i = 0;
             foreach (Media media in PackageMediasDisplay.Items)
             {
-                if (!media.Equals(Medias[i]))
+                Media mediaInDatabase = Medias[i];
+                if (!media.URL.Equals(mediaInDatabase.URL))
+                    return true;
+                if (!media.MediaType.Equals(mediaInDatabase.MediaType))
                     return true;
                 i++;
             }
@@ -911,15 +962,15 @@ namespace RelhaxModpack.Windows
             return false;
         }
 
-        private bool ConflictingPackagesModified(List<string> conflicts)
+        private bool ConflictingPackagesModified(List<string> conflictEntries)
         {
-            if (conflicts.Count != PackageConflictingPackagesDisplay.Items.Count)
+            if (conflictEntries.Count != PackageConflictingPackagesDisplay.Items.Count)
                 return true;
 
             int i = 0;
             foreach (string conflict in PackageConflictingPackagesDisplay.Items)
             {
-                if (!conflict.Equals(conflicts[i]))
+                if (!conflict.Equals(conflictEntries[i]))
                     return true;
                 i++;
             }
@@ -972,15 +1023,17 @@ namespace RelhaxModpack.Windows
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
                 return true;
 
-            //dependency
-            if (package is Dependency dependency)
+            if (TriggersWereModified(package.TriggersList))
+                return true;
+
+            if (package is IComponentWithDependencies componentWithDependencies)
             {
-                if (DependenciesWereModified(dependency.Dependencies))
+                if (DependenciesWereModified(componentWithDependencies.DependenciesProp))
                     return true;
             }
 
             //see if it's a selectablePackage
-            else if (package is SelectablePackage selectablePackage)
+            if (package is SelectablePackage selectablePackage)
             {
                 if (selectablePackage.ShowInSearchList != ((bool)PackageShowInSearchListDisplay.IsChecked))
                     return true;
@@ -1002,16 +1055,13 @@ namespace RelhaxModpack.Windows
                 if (!selectablePackage.UpdateCommentEscaped.Equals(PackageUpdateNotesDisplay.Text))
                     return true;
 
-                if (DependenciesWereModified(selectablePackage.Dependencies))
-                    return true;
-
                 if (UserFilesWereModified(selectablePackage.UserFiles))
                     return true;
 
                 if (MediasModified(selectablePackage.Medias))
                     return true;
 
-                if (ConflictingPackagesModified(selectablePackage.ConflictingPackages))
+                if (ConflictingPackagesModified(selectablePackage.ConflictingPackagesList))
                     return true;
             }
             return false;
@@ -1066,6 +1116,7 @@ namespace RelhaxModpack.Windows
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
             package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
+            package.Triggers = string.Join(",", PackageTriggersDisplay.Items.Cast<string>());
 
             //if the zipfile was updated, then update the last modified date
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
@@ -1076,16 +1127,18 @@ namespace RelhaxModpack.Windows
                 PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
             }
 
-            //see if it's a dependency
-            if (package is Dependency dependency)
+            //this gets dependencies and selectable packages
+            if(package is IComponentWithDependencies componentWithDependencies)
             {
-                dependency.Dependencies.Clear();
+                componentWithDependencies.DependenciesProp.Clear();
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
-                    dependency.Dependencies.Add(dl);
+                {
+                    componentWithDependencies.DependenciesProp.Add(DatabaseLogic.Copy(dl));
+                }
             }
 
-            //see if it's a selectablePackage
-            else if (package is SelectablePackage selectablePackage)
+            //if it's a selectablePackage
+            if (package is SelectablePackage selectablePackage)
             {
                 selectablePackage.ShowInSearchList = (bool)PackageShowInSearchListDisplay.IsChecked;
                 selectablePackage.PopularMod = (bool)PackagePopularModDisplay.IsChecked;
@@ -1096,22 +1149,19 @@ namespace RelhaxModpack.Windows
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
                 selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
                 selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
-
-                selectablePackage.Dependencies.Clear();
-                foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
-                    selectablePackage.Dependencies.Add(dl);
+                selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items.Cast<string>());
 
                 selectablePackage.UserFiles.Clear();
-                foreach (UserFile uf in PackageUserdatasDisplay.Items)
-                    selectablePackage.UserFiles.Add(uf);
+                foreach (string uf in PackageUserFilesDisplay.Items)
+                {
+                    selectablePackage.UserFiles.Add(new UserFile() { Pattern = uf });
+                }
 
                 selectablePackage.Medias.Clear();
                 foreach (Media m in PackageMediasDisplay.Items)
-                    selectablePackage.Medias.Add(m);
-
-                selectablePackage.ConflictingPackages.Clear();
-                foreach (string s in PackageConflictingPackagesDisplay.Items)
-                    selectablePackage.ConflictingPackages.Add(s);
+                {
+                    selectablePackage.Medias.Add(Media.Copy(m));
+                }
             }
 
             //there now are unsaved changes
@@ -1634,29 +1684,24 @@ namespace RelhaxModpack.Windows
 
         private void OnEditorUploadFinished(object sender, EditorUploadDownloadEventArgs e)
         {
-            Logging.Editor("upload finished, applying change");
-            UnsavedChanges = true;
+            Logging.Editor("Upload finished, applying change");
+
             if (e.Package == null)
             {
-                Logging.Editor("upload was media, applying media change");
                 //uploaded media
-                Logging.Editor("Upload of {0} success, adding entry in editor", LogLevel.Info, e.UploadedFilename);
-                SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
+                Logging.Editor("Upload of {0} success, adding entry in UI", LogLevel.Info, e.UploadedFilename);
                 Media m = new Media()
                 {
                     MediaType = MediaType.Picture,
                     URL = string.Format("{0}{1}", e.UploadedFilepathOnline, e.UploadedFilename).Replace("ftp:", "http:")
                 };
-                selectedPackage.Medias.Add(m);
-
-                PackageMediasDisplay.Items.Clear();
-                foreach (Media logic in selectedPackage.Medias)
-                    PackageMediasDisplay.Items.Add(logic);
+                PackageMediasDisplay.Items.Add(m);
             }
             //else uploaded package zipfile entry
             else
             {
-                Logging.Editor("upload was package zipfile, checking if currently displayed");
+                Logging.Editor("Upload was package zipfile, checking if currently displayed");
+
                 DatabasePackage selectedItem = null;
                 if (SelectedItem is DatabasePackage dp)
                     selectedItem = dp;
@@ -1664,22 +1709,25 @@ namespace RelhaxModpack.Windows
                     selectedItem = editorComboBoxItem.Package;
 
                 string tempZipName = e.Package.ZipFile;
+
                 //update the package crc and timestamp values
                 e.Package.CRC = "f";
                 e.Package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
 
                 if (selectedItem.Equals(e.Package))
                 {
-                    Logging.Editor("it's currently displayed, updating entry for display");
+                    Logging.Editor("It's currently displayed, updating entry for display");
                     ApplyDatabaseObject(e.Package);
                     e.Package.ZipFile = tempZipName;
                     ShowDatabasePackage(e.Package);
                 }
                 else
                 {
-                    Logging.Editor("it's currently not displayed, updating entry for not display");
+                    Logging.Editor("It's currently not displayed, updating entry for not display");
                 }
             }
+
+            UnsavedChanges = true;
         }
         #endregion
 
@@ -1998,8 +2046,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Right side package modify buttons
-
+        #region Dependency modify buttons
         private void DependenciesAddSelected_Click(object sender, RoutedEventArgs e)
         {
             if (LoadedDependenciesList.SelectedIndex < 0)
@@ -2013,26 +2060,10 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            Logging.Editor("adding dependency to component");
-            IComponentWithDependencies component = null;
-            //convert it out of editorComboBoxItem if it is in one
-            if (SelectedItem is EditorComboBoxItem editorComboBoxItem)
-            {
-                if (editorComboBoxItem.Package is IComponentWithDependencies componentWithDependencies)
-                    component = componentWithDependencies;
-            }
-            else if (SelectedItem is IComponentWithDependencies componentWithDependencies)
-            {
-                component = componentWithDependencies;
-            }
-            else
-            {
-                Logging.Editor("SelectedItem is invalid type: {0}", LogLevel.Info, SelectedItem.GetType().ToString());
-                return;
-            }
+            Logging.Editor("Adding dependency to component");
 
             //check the list of databaselogic in the item, make sure we're not trying to add a duplicate item
-            foreach (DatabaseLogic logic in component.DependenciesProp)
+            foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
             {
                 if (logic.PackageName.Equals((LoadedDependenciesList.SelectedItem as Dependency).PackageName))
                 {
@@ -2040,18 +2071,35 @@ namespace RelhaxModpack.Windows
                     return;
                 }
             }
-            component.DependenciesProp.Add(new DatabaseLogic()
+
+            //add to UI
+            PackageDependenciesDisplay.Items.Add(new DatabaseLogic()
             {
                 PackageName = (LoadedDependenciesList.SelectedItem as Dependency).PackageName,
                 Logic = (Logic)LoadedLogicsList.SelectedItem,
                 NotFlag = (bool)DependenciesNotFlag.IsChecked
-            }
-            );
+            });
 
-            //update the UI
-            PackageDependenciesDisplay.Items.Clear();
-            foreach (DatabaseLogic logic in component.DependenciesProp)
-                PackageDependenciesDisplay.Items.Add(logic);
+            UnsavedChanges = true;
+        }
+
+        private void DependenciesApplyEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PackageDependenciesDisplay.SelectedItem == null)
+                return;
+
+            DatabaseLogic selectedLogic = (DatabaseLogic)PackageDependenciesDisplay.SelectedItem;
+            selectedLogic.Logic = (Logic)LoadedLogicsList.SelectedItem;
+            selectedLogic.NotFlag = (bool)DependenciesNotFlag.IsChecked;
+        }
+
+        private void DependenciesRemoveSelected_Click(object sender, RoutedEventArgs e)
+        {
+            if (PackageDependenciesDisplay.SelectedItem == null)
+                return;
+
+            //remove the selected item from the UI display
+            PackageDependenciesDisplay.Items.Remove(PackageDependenciesDisplay.SelectedItem);
 
             UnsavedChanges = true;
         }
@@ -2062,8 +2110,10 @@ namespace RelhaxModpack.Windows
                 return;
 
             DatabaseLogic selectedLogic = (DatabaseLogic)PackageDependenciesDisplay.SelectedItem;
+
             LoadedLogicsList.SelectedItem = selectedLogic.Logic;
             DependenciesNotFlag.IsChecked = selectedLogic.NotFlag;
+
             LoadedDependenciesList.SelectedIndex = -1;
 
             //check if it exits in the list of all loaded dependencies (it should) and if it does select it
@@ -2076,185 +2126,9 @@ namespace RelhaxModpack.Windows
                 }
             }
         }
+        #endregion
 
-        private void DependenciesRemoveSelected_Click(object sender, RoutedEventArgs e)
-        {
-            //remove the selected item from the UI display
-            PackageDependenciesDisplay.Items.Remove(PackageDependenciesDisplay.SelectedItem);
-
-            //remove it from the list of logics/dependencies of the selected item
-            if (SelectedItem is IComponentWithDependencies packageLogic)
-            {
-                packageLogic.DependenciesProp.Remove(PackageDependenciesDisplay.SelectedItem as DatabaseLogic);
-            }
-
-            UnsavedChanges = true;
-        }
-
-        private SelectablePackage GetSelectablePackage(object obj)
-        {
-            if (obj is SelectablePackage selectablePackage)
-                return selectablePackage;
-
-            else if (obj is EditorComboBoxItem editorComboBoxItem)
-                if (editorComboBoxItem.Package is SelectablePackage selectablePackage2)
-                    return selectablePackage2;
-
-            return null;
-        }
-
-        private void MediaAddMediaButton_Click(object sender, RoutedEventArgs e)
-        {
-            //input filtering
-            if (string.IsNullOrWhiteSpace(MediaTypesURL.Text))
-            {
-                MessageBox.Show("Media URL must exist");
-                return;
-            }
-            if (MediaTypesList.SelectedIndex == -1)
-            {
-                MessageBox.Show("Invalid Type");
-                return;
-            }
-            Logging.Editor("adding media");
-
-            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-            foreach (Media media in selectedPackage.Medias)
-            {
-                if (media.URL.Equals(MediaTypesURL.Text))
-                {
-                    MessageBox.Show("Media URL already exists in list");
-                }
-            }
-            Media m = new Media()
-            {
-                MediaType = (MediaType)MediaTypesList.SelectedItem,
-                URL = MediaTypesURL.Text
-            };
-            selectedPackage.Medias.Add(m);
-
-            PackageMediasDisplay.Items.Clear();
-            foreach (Media logic in selectedPackage.Medias)
-                PackageMediasDisplay.Items.Add(logic);
-
-            UnsavedChanges = true;
-        }
-
-        private void MediaApplyEditButton_Click(object sender, RoutedEventArgs e)
-        {
-            //input filtering
-            if (string.IsNullOrWhiteSpace(MediaTypesURL.Text))
-            {
-                MessageBox.Show("Media URL must exist");
-                return;
-            }
-            if (MediaTypesList.SelectedIndex == -1)
-            {
-                MessageBox.Show("Invalid Type");
-                return;
-            }
-            if (PackageMediasDisplay.SelectedIndex < 0)
-            {
-                MessageBox.Show("Invalid media to apply edit to");
-                return;
-            }
-            Logging.Editor("applying media edit from component");
-
-            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-            Media selectedMediaInUI = (PackageMediasDisplay.SelectedItem as Media);
-            Media mediainList = selectedPackage.Medias.Find(med => med.MediaType.Equals(selectedMediaInUI.MediaType) && med.URL.Equals(selectedMediaInUI.URL));
-
-            mediainList.MediaType = (MediaType)MediaTypesList.SelectedItem;
-            mediainList.URL = MediaTypesURL.Text;
-
-            //update the UI
-            PackageMediasDisplay.Items.Clear();
-            foreach (Media logic in selectedPackage.Medias)
-                PackageMediasDisplay.Items.Add(logic);
-
-            UnsavedChanges = true;
-        }
-
-        private void PackageMediasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (PackageMediasDisplay.SelectedItem == null)
-                return;
-            Media media = (Media)PackageMediasDisplay.SelectedItem;
-            MediaTypesList.SelectedItem = media.MediaType;
-            MediaTypesURL.Text = media.URL;
-        }
-
-        private void MediaRemoveMediaButton_Click(object sender, RoutedEventArgs e)
-        {
-            Logging.Editor("removing media from component");
-
-            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-            Media selectedMediaInUI = (PackageMediasDisplay.SelectedItem as Media);
-            Media mediainList = selectedPackage.Medias.Find(med => med.MediaType.Equals(selectedMediaInUI.MediaType) && med.URL.Equals(selectedMediaInUI.URL));
-
-            //remove from internal list
-            selectedPackage.Medias.Remove(mediainList);
-
-            //update UI
-            PackageMediasDisplay.Items.Clear();
-            foreach (Media logic in selectedPackage.Medias)
-                PackageMediasDisplay.Items.Add(logic);
-
-            UnsavedChanges = true;
-        }
-
-        private void UploadMediaButton_Click(object sender, RoutedEventArgs e)
-        {
-            //initial checks
-            //make sure FTP credentials are at least entered
-            if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
-            {
-                MessageBox.Show("Missing FTP credentials");
-                return;
-            }
-
-            //get the path to upload to
-            if (OpenPictureDialog == null)
-                OpenPictureDialog = new OpenFileDialog()
-                {
-                    AddExtension = true,
-                    CheckFileExists = true,
-                    CheckPathExists = true,
-                    //InitialDirectory = Settings.ApplicationStartupPath,
-                    Multiselect = true,
-                    Title = "Select image file to upload"
-                };
-            if (!(bool)OpenPictureDialog.ShowDialog())
-                return;
-
-            //select path to upload to on server
-            EditorSelectMediaUploadLocation selectUploadLocation = new EditorSelectMediaUploadLocation()
-            {
-                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
-            };
-            if (!(bool)selectUploadLocation.ShowDialog())
-                return;
-
-            //start upload
-            foreach (string mediaToUploadPath in OpenPictureDialog.FileNames)
-            {
-                string mediaToUploadFilename = Path.GetFileName(mediaToUploadPath);
-                DatabaseEditorDownload name = new DatabaseEditorDownload()
-                {
-                    ZipFilePathDisk = mediaToUploadPath,
-                    ZipFilePathOnline = selectUploadLocation.UploadPath,
-                    ZipFileName = mediaToUploadFilename,
-                    Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
-                    Upload = true,
-                    PackageToUpdate = null,
-                    Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
-                };
-                //this needs to be changed to a show() with event handler made for on exit
-                name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
-                name.Show();
-            }
-        }
-
+        #region Media preview buttons
         private void MediaPreviewSelectedMediaButton_Click(object sender, RoutedEventArgs e)
         {
             if (PackageMediasDisplay.SelectedIndex == -1)
@@ -2262,6 +2136,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Invalid Index");
                 return;
             }
+
             if (PackageMediasDisplay.SelectedItem is Media media)
             {
                 SelectablePackage package = new SelectablePackage()
@@ -2305,6 +2180,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Invalid Type");
                 return;
             }
+
             SelectablePackage package = new SelectablePackage()
             {
                 PackageName = "TEST_PREVIEW",
@@ -2315,6 +2191,7 @@ namespace RelhaxModpack.Windows
                 URL = MediaTypesURL.Text,
                 MediaType = (MediaType)MediaTypesList.SelectedItem
             });
+
             if (Preview != null)
             {
                 Preview = null;
@@ -2333,134 +2210,241 @@ namespace RelhaxModpack.Windows
                 Preview = null;
             }
         }
+        #endregion
 
+        #region Media modify buttons
+        private void MediaAddMediaButton_Click(object sender, RoutedEventArgs e)
+        {
+            //input filtering
+            if (string.IsNullOrWhiteSpace(MediaTypesURL.Text))
+            {
+                MessageBox.Show("Media URL must exist");
+                return;
+            }
+            if (MediaTypesList.SelectedIndex == -1)
+            {
+                MessageBox.Show("Invalid Type");
+                return;
+            }
+            Logging.Editor("Adding media");
+
+            foreach (Media media in PackageMediasDisplay.Items)
+            {
+                if (media.URL.Equals(MediaTypesURL.Text))
+                {
+                    MessageBox.Show("Media URL already exists in list");
+                }
+            }
+
+            Media m = new Media()
+            {
+                MediaType = (MediaType)MediaTypesList.SelectedItem,
+                URL = MediaTypesURL.Text
+            };
+            PackageMediasDisplay.Items.Add(m);
+
+            UnsavedChanges = true;
+        }
+
+        private void MediaApplyEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            //input filtering
+            if (string.IsNullOrWhiteSpace(MediaTypesURL.Text))
+            {
+                MessageBox.Show("Media URL must exist");
+                return;
+            }
+            if (MediaTypesList.SelectedIndex == -1)
+            {
+                MessageBox.Show("Invalid Type");
+                return;
+            }
+            if (PackageMediasDisplay.SelectedIndex < 0)
+            {
+                MessageBox.Show("Invalid media to apply edit to");
+                return;
+            }
+            Logging.Editor("Applying media edit from component");
+
+            Media selectedMediaInUI = (PackageMediasDisplay.SelectedItem as Media);
+
+            selectedMediaInUI.MediaType = (MediaType)MediaTypesList.SelectedItem;
+            selectedMediaInUI.URL = MediaTypesURL.Text;
+
+            UnsavedChanges = true;
+        }
+
+        private void MediaRemoveMediaButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PackageMediasDisplay.SelectedItem == null)
+                return;
+            Logging.Editor("Removing media from UI list");
+
+            Media selectedMediaInUI = (PackageMediasDisplay.SelectedItem as Media);
+
+            //remove from UI list
+            PackageMediasDisplay.Items.Remove(selectedMediaInUI);
+
+            UnsavedChanges = true;
+        }
+
+        private void PackageMediasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PackageMediasDisplay.SelectedItem == null)
+                return;
+
+            Media media = (Media)PackageMediasDisplay.SelectedItem;
+            MediaTypesList.SelectedItem = media.MediaType;
+            MediaTypesURL.Text = media.URL;
+        }
+
+        private void UploadMediaButton_Click(object sender, RoutedEventArgs e)
+        {
+            //initial checks
+            //make sure FTP credentials are at least entered
+            if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
+            {
+                MessageBox.Show("Missing FTP credentials");
+                return;
+            }
+
+            //get the path to upload to
+            if (OpenPictureDialog == null)
+                OpenPictureDialog = new OpenFileDialog()
+                {
+                    AddExtension = true,
+                    CheckFileExists = true,
+                    CheckPathExists = true,
+                    //InitialDirectory = Settings.ApplicationStartupPath,
+                    Multiselect = true,
+                    Title = "Select image file to upload"
+                };
+
+            if (!(bool)OpenPictureDialog.ShowDialog())
+                return;
+
+            //select path to upload to on server
+            EditorSelectMediaUploadLocation selectUploadLocation = new EditorSelectMediaUploadLocation()
+            {
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
+            };
+            if (!(bool)selectUploadLocation.ShowDialog())
+                return;
+
+            //start upload
+            foreach (string mediaToUploadPath in OpenPictureDialog.FileNames)
+            {
+                string mediaToUploadFilename = Path.GetFileName(mediaToUploadPath);
+                DatabaseEditorDownload name = new DatabaseEditorDownload()
+                {
+                    ZipFilePathDisk = mediaToUploadPath,
+                    ZipFilePathOnline = selectUploadLocation.UploadPath,
+                    ZipFileName = mediaToUploadFilename,
+                    Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
+                    Upload = true,
+                    PackageToUpdate = null,
+                    Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
+                };
+                //this needs to be changed to a show() with event handler made for on exit
+                name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
+                name.Show();
+            }
+        }
+        #endregion
+
+        #region UserFile modify buttons
         private void UserdataAddUserdataButton_Click(object sender, RoutedEventArgs e)
         {
             //check if valid input
             if (string.IsNullOrWhiteSpace(UserDataEditBox.Text))
             {
-                MessageBox.Show("no user data path specified");
+                MessageBox.Show("No user file specified");
                 return;
             }
+
             //check if already exists
-            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-            foreach (UserFile userfile in selectedPackage.UserFiles)
+            foreach (string userfile in PackageUserFilesDisplay.Items)
             {
-                if (userfile.Pattern.Equals(UserDataEditBox.Text))
+                if (userfile.Equals(UserDataEditBox.Text))
                 {
-                    MessageBox.Show("user data already exists");
+                    MessageBox.Show("User file already exists");
                     return;
                 }
             }
-            Logging.Editor("adding userData {0}", LogLevel.Info, UserDataEditBox.Text);
 
-            selectedPackage.UserFiles.Add(new UserFile { Pattern = UserDataEditBox.Text });
+            Logging.Editor("Adding UserFile {0}", LogLevel.Info, UserDataEditBox.Text);
 
-            //update UI
-            PackageUserdatasDisplay.Items.Clear();
-            foreach (UserFile logic in selectedPackage.UserFiles)
-                PackageUserdatasDisplay.Items.Add(logic);
+            PackageUserFilesDisplay.Items.Add(UserDataEditBox.Text);
 
             UnsavedChanges = true;
         }
 
         private void UserdataApplyEditButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PackageUserdatasDisplay.SelectedIndex < 0)
+            if (PackageUserFilesDisplay.SelectedIndex < 0)
             {
                 MessageBox.Show("Invalid selection");
                 return;
             }
 
-            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-            foreach (UserFile userfile in selectedPackage.UserFiles)
+            foreach (string userfile in PackageUserFilesDisplay.Items)
             {
-                if (userfile.Pattern.Equals(UserDataEditBox.Text))
+                if (userfile.Equals(UserDataEditBox.Text))
                 {
-                    MessageBox.Show("user data already exists");
+                    MessageBox.Show("User file already exists");
                     return;
                 }
             }
-            Logging.Editor("editing userData", LogLevel.Info);
 
-            UserFile UserFileInUi = (PackageUserdatasDisplay.SelectedItem as UserFile);
-            UserFile file = selectedPackage.UserFiles.Find(med => med.Pattern.Equals(UserFileInUi.Pattern));
+            Logging.Editor("Editing UserFile", LogLevel.Info);
+            string patternInUI = (PackageUserFilesDisplay.SelectedItem as string);
+            patternInUI = UserDataEditBox.Text;
 
-            file.Pattern = UserDataEditBox.Text;
+            UnsavedChanges = true;
+        }
 
-            //update UI
-            PackageUserdatasDisplay.Items.Clear();
-            foreach (UserFile logic in selectedPackage.UserFiles)
-                PackageUserdatasDisplay.Items.Add(logic);
+        private void UserdataRemoveUserdata_Click(object sender, RoutedEventArgs e)
+        {
+            if (PackageUserFilesDisplay.SelectedItem == null)
+                return;
+
+            Logging.Editor("Removing UserFile from UI");
+            PackageUserFilesDisplay.Items.Remove(PackageUserFilesDisplay.SelectedItem);
 
             UnsavedChanges = true;
         }
 
         private void PackageUserdatasDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (PackageUserdatasDisplay.SelectedItem == null)
+            if (PackageUserFilesDisplay.SelectedItem == null)
                 return;
-            UserDataEditBox.Text = (PackageUserdatasDisplay.SelectedItem as UserFile).Pattern;
+
+            UserDataEditBox.Text = (PackageUserFilesDisplay.SelectedItem as string);
         }
+        #endregion
 
-        private void UserdataRemoveUserdata_Click(object sender, RoutedEventArgs e)
-        {
-            Logging.Editor("removing userdata from component");
-
-            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-            UserFile UserFileInUi = (PackageUserdatasDisplay.SelectedItem as UserFile);
-            UserFile file = selectedPackage.UserFiles.Find(med => med.Pattern.Equals(UserFileInUi.Pattern));
-            selectedPackage.UserFiles.Remove(file);
-
-            //update UI
-            PackageUserdatasDisplay.Items.Clear();
-            foreach (UserFile logic in selectedPackage.UserFiles)
-                PackageUserdatasDisplay.Items.Add(logic);
-
-            UnsavedChanges = true;
-        }
-
+        #region Trigger and conflicting package modify buttons
         private void TriggerAddSelectedTrigger_Click(object sender, RoutedEventArgs e)
         {
-            if (LoadedTriggersComboBox.SelectedIndex < 0)
+            if (LoadedTriggersComboBox.SelectedItem == null)
             {
                 MessageBox.Show("Invalid selection");
                 return;
             }
 
-            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-            foreach (string s in selectedPackage.Triggers)
+            foreach (string s in PackageTriggersDisplay.Items)
             {
                 if (s.Equals(LoadedTriggersComboBox.SelectedItem as string))
                 {
-                    MessageBox.Show("trigger already exists");
+                    MessageBox.Show("Trigger already exists");
                     return;
                 }
             }
-            Logging.Editor("adding trigger");
 
-            selectedPackage.Triggers.Add(LoadedTriggersComboBox.SelectedItem as string);
-
-            //update UI
-            PackageTriggersDisplay.Items.Clear();
-            foreach (string trigger in selectedPackage.Triggers)
-                PackageTriggersDisplay.Items.Add(trigger);
+            Logging.Editor("Adding trigger to UI");
+            PackageTriggersDisplay.Items.Add(LoadedTriggersComboBox.SelectedItem as string);
 
             UnsavedChanges = true;
-        }
-
-        private void PackageTriggersDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (PackageTriggersDisplay.SelectedItem == null)
-                return;
-            LoadedTriggersComboBox.SelectedIndex = -1;
-            foreach (string s in LoadedTriggersComboBox.Items)
-            {
-                if (s.Equals(PackageTriggersDisplay.SelectedItem as string))
-                {
-                    LoadedTriggersComboBox.SelectedItem = s;
-                }
-            }
         }
 
         private void TriggerRemoveTrigger_Click(object sender, RoutedEventArgs e)
@@ -2471,16 +2455,26 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            Logging.Editor("removing trigger from component");
-            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-            selectedPackage.Triggers.Remove(PackageTriggersDisplay.SelectedItem as string);
-
-            //update UI
-            PackageTriggersDisplay.Items.Clear();
-            foreach (string trigger in selectedPackage.Triggers)
-                PackageTriggersDisplay.Items.Add(trigger);
+            Logging.Editor("Removing trigger from component in UI");
+            PackageTriggersDisplay.Items.Remove(PackageTriggersDisplay.SelectedItem);
 
             UnsavedChanges = true;
+        }
+
+        private void PackageTriggersDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PackageTriggersDisplay.SelectedItem == null)
+                return;
+
+            LoadedTriggersComboBox.SelectedIndex = -1;
+
+            foreach (string s in LoadedTriggersComboBox.Items)
+            {
+                if (s.Equals(PackageTriggersDisplay.SelectedItem as string))
+                {
+                    LoadedTriggersComboBox.SelectedItem = s;
+                }
+            }
         }
 
         private void ConflictingPackagesRemoveConflictingPackage_Click(object sender, RoutedEventArgs e)
@@ -2491,20 +2485,13 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-            selectedPackage.ConflictingPackages.Remove(PackageConflictingPackagesDisplay.SelectedItem as string);
-
-            //update UI
-            PackageConflictingPackagesDisplay.Items.Clear();
-            foreach (string confligt in selectedPackage.ConflictingPackages)
-                PackageConflictingPackagesDisplay.Items.Add(confligt);
+            PackageConflictingPackagesDisplay.Items.Remove(PackageConflictingPackagesDisplay.SelectedItem);
 
             UnsavedChanges = true;
         }
         #endregion
 
         #region Settings tab events
-
         private void BigmodsUsernameSetting_TextChanged(object sender, TextChangedEventArgs e)
         {
             EditorSettings.BigmodsUsername = BigmodsUsernameSetting.Text;
@@ -2654,23 +2641,18 @@ namespace RelhaxModpack.Windows
                     {
                         Logging.Editor("Mouse right click with trigger add, checking if already exists");
                         SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-                        foreach (string s in selectedPackage.ConflictingPackages)
+                        foreach (string s in selectedPackage.ConflictingPackagesList)
                         {
                             if (s.Equals(item.Package.PackageName))
                             {
                                 Logging.Editor("Mouse right click with conflicting packages add, skipping adding cause already exists: {0}", LogLevel.Info, item.Package.PackageName);
-                                MessageBox.Show("conflict packagename already exists");
+                                MessageBox.Show("Conflict PackageName already exists");
                                 return;
                             }
                         }
                         Logging.Editor("Mouse right click with conflicting packages add, does not exist, adding");
 
-                        selectedPackage.ConflictingPackages.Add(item.Package.PackageName);
-
-                        //update UI
-                        PackageConflictingPackagesDisplay.Items.Clear();
-                        foreach (string conflict in selectedPackage.ConflictingPackages)
-                            PackageConflictingPackagesDisplay.Items.Add(conflict);
+                        PackageConflictingPackagesDisplay.Items.Add(item.Package.PackageName);
 
                         UnsavedChanges = true;
                     }
@@ -2822,6 +2804,18 @@ namespace RelhaxModpack.Windows
         {
             EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
             LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
+        }
+
+        private SelectablePackage GetSelectablePackage(object obj)
+        {
+            if (obj is SelectablePackage selectablePackage)
+                return selectablePackage;
+
+            else if (obj is EditorComboBoxItem editorComboBoxItem)
+                if (editorComboBoxItem.Package is SelectablePackage selectablePackage2)
+                    return selectablePackage2;
+
+            return null;
         }
     }
 }

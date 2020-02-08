@@ -605,7 +605,12 @@ namespace RelhaxModpack.Windows
                     XmlDocument SelectionsDocument = null;
                     bool shouldLoadSomething = false;
                     bool loadSuccess = false;
-                    if (AutoInstallMode || ModpackSettings.OneClickInstall)
+                    //if test mode, don't load the "default_checked" document
+                    if(databaseVersion == DatabaseVersions.Test)
+                    {
+                        Logging.Debug("Test mode is active, don't load default_checked selection");
+                    }
+                    else if (AutoInstallMode || ModpackSettings.OneClickInstall)
                     {
                         //check that the file exists before trying to load it
                         if(File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
@@ -955,10 +960,16 @@ namespace RelhaxModpack.Windows
                     package.Visible = true;
                 if (ModpackSettings.ForceEnabled && !package.IsStructureEnabled)
                     package.Enabled = true;
-                
+
+                //set the package's media SelectablePackageNameFormatted property to what the selectablePackage media actually is
+                foreach(Media media in package.Medias)
+                {
+                    media.SelectablePackageNameFormatted = package.NameFormatted;
+                }
+
                 //special code for the borders and stackpanels
                 //if the child container for sub options hsa yet to be made AND there are sub options, make it
-                if(package.ChildBorder == null && package.Packages.Count > 0)
+                if (package.ChildBorder == null && package.Packages.Count > 0)
                 {
                     package.ChildStackPanel = new StackPanel();
                     package.ChildBorder = new Border()
@@ -1088,14 +1099,13 @@ namespace RelhaxModpack.Windows
                 IsEnabled = package.IsStructureEnabled,
                 Content = package.NameDisplay
             };
+            cbi.PreviewMouseLeftButtonDown += OnSingleDDPackageClick;
             package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Add(cbi);
             if (!package.Parent.RelhaxWPFComboBoxList[boxIndex].AddedToList)
             {
                 //add it
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].AddedToList = true;
                 package.Parent.RelhaxWPFComboBoxList[boxIndex].PreviewMouseRightButtonDown += Generic_MouseDown;
-                package.Parent.RelhaxWPFComboBoxList[boxIndex].SelectionChanged += OnSingleDDPackageClick;
-                package.Parent.RelhaxWPFComboBoxList[boxIndex].Handler = OnSingleDDPackageClick;
                 if (package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Count > 0)
                 {
                     package.Parent.RelhaxWPFComboBoxList[boxIndex].IsEnabled = true;
@@ -1181,14 +1191,12 @@ namespace RelhaxModpack.Windows
 
             SelectablePackage spc = null;
 
-            if (sender is RelhaxWPFComboBox cb2)
-            {
-                //don't change the selection if the user did not want to change the option
-                if (!cb2.IsDropDownOpen)
-                    return;
-                RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)cb2.SelectedItem;
-                spc = cbi.Package;
-            }
+            RelhaxComboBoxItem cb2 = sender as RelhaxComboBoxItem;
+            spc = cb2.Package;
+
+            //null means that no mouse is over it
+            if (spc == null)
+                return;
 
             if (!spc.IsStructureEnabled)
                 return;
@@ -1243,10 +1251,6 @@ namespace RelhaxModpack.Windows
             {
                 //check it and propagate change
                 spc.Checked = true;
-                //if it's a user check box end here
-                //DISABLED FOR NOW
-                //if (ipc is RelhaxUserCheckBox)
-                   // return;
 
                 //down
                 PropagateChecked(spc, SelectionPropagationDirection.PropagateDown);
@@ -1258,8 +1262,6 @@ namespace RelhaxModpack.Windows
                 //uncheck it and propagate change
                 spc.Checked = false;
 
-                //if (ipc is RelhaxUserCheckBox)
-                   // return;
                 PropagateDownNotChecked(spc);
             }
         }
@@ -1487,17 +1489,43 @@ namespace RelhaxModpack.Windows
             }
             else if (sender is RelhaxWPFComboBox comboboxSender)
             {
+                //temp enable all items so that the mouse over property can work
+                bool[] wasDisabled = new bool[comboboxSender.Items.Count];
+                int tracker = 0;
+                foreach (RelhaxComboBoxItem itemInBox1 in comboboxSender.Items)
+                {
+                    if (!itemInBox1.IsEnabled)
+                    {
+                        itemInBox1.IsEnabled = true;
+                        wasDisabled[tracker] = true;
+                    }
+                    else
+                    {
+                        wasDisabled[tracker] = false;
+                    }
+
+                    tracker++;
+                }
+                Utils.AllowUIToUpdate();
                 //check to see if a specific item is highlighted
                 //if so, it means that the user wants to preview a specific version
                 //if not, then the user clicked on the combobox as a whole, so show all items in the box
                 foreach (RelhaxComboBoxItem itemInBox in comboboxSender.Items)
                 {
-                    if (itemInBox.IsHighlighted && itemInBox.IsEnabled)
+                    if (itemInBox.IsMouseOver)
                     {
                         spc = itemInBox.Package;
                         break;
                     }
                 }
+                for(int i = 0; i < wasDisabled.Count(); i++)
+                {
+                    if(wasDisabled[i])
+                    {
+                        (comboboxSender.Items[i] as RelhaxComboBoxItem).IsEnabled = false;
+                    }
+                }
+
                 if (spc == null)
                 {
                     //make a new temporary package with a custom preview items list
@@ -2024,13 +2052,13 @@ namespace RelhaxModpack.Windows
                     {
                         TabItem selected = (TabItem)ModTabGroups.SelectedItem;
                         searchComponents.AddRange(Utils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
-                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible && term.ParentCategory.TabPage.Equals(selected)));
+                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.IsStructureVisible && term.ShowInSearchList && term.ParentCategory.TabPage.Equals(selected)));
                     }
                     else
                     {
                         //get a list of components that match the search term
                         searchComponents.AddRange(Utils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
-                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.Visible));
+                            term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.IsStructureVisible && term.ShowInSearchList));
                     }
                 }
 
