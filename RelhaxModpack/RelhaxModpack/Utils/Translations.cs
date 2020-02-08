@@ -4504,7 +4504,7 @@ namespace RelhaxModpack
             German.Add("AgreementLicense", "Von mir gelesen und bestätigt: ");
             Polish.Add("AgreementLicense", "Przeczytałem/am i zgadzam się z postanowieniami ");
             French.Add("AgreementLicense", "J'ai lu et accepté le");
-            Spanish.Add("AgreementLicense", "He leído y acepto");
+            Spanish.Add("AgreementLicense", "He leído y acepto el ");
             Russian.Add("AgreementLicense", "Я прочитал и согласен с ");
 
             //Component: LicenseLink
@@ -4541,7 +4541,7 @@ namespace RelhaxModpack
             German.Add("AgreementSupport2", " oder ");
             Polish.Add("AgreementSupport2", " lub serwerze ");
             French.Add("AgreementSupport2", " ou le ");
-            Spanish.Add("AgreementSupport2", " dedicado y ");
+            Spanish.Add("AgreementSupport2", " dedicado y en ");
             Russian.Add("AgreementSupport2", " или на сервер в ");
 
             //Component: AgreementSupportDiscord
@@ -4560,7 +4560,7 @@ namespace RelhaxModpack
             German.Add("AgreementHoster", "Ich verstehe, dass Relhax ein Mod-Hosting- und Installationsservice ist und Relhax nicht alle Mods verwaltet, die in diesem Modpack enthalten sind");
             Polish.Add("AgreementHoster", "Rozumiem, że Relhax to platforma instalacji modów oraz ich hosting, a zespół Relhax nie jest odpowiedzialny za rozwój wszystkich oferowanych modów.");
             French.Add("AgreementHoster", "Je comprends que Relhax est un hébergement de mods et un service d'installation. Relhax ne gère pas tous les mods de ce Modpack");
-            Spanish.Add("AgreementHoster", "Comprendo que Relhax sólo es un servicio de alojamiento e instalación de mods, y Relhax no mantiene cada mod incluido en este modpack");
+            Spanish.Add("AgreementHoster", "Entiendo que Relhax sólo es un servicio de alojamiento e instalación de mods, y Relhax no mantiene cada mod incluido en este modpack");
             Russian.Add("AgreementHoster", "Я понимаю, что Relhax является площадкой хостинга модов и сервисом их установки и то, что Relhax не занимается разработкой каждого мода из этого модпака");
 
             //Component: AgreementAnonData
@@ -4570,7 +4570,7 @@ namespace RelhaxModpack
             German.Add("AgreementAnonData", "Ich verstehe, dass Relhax V2 anonyme Nutzungsdaten sammelt, um die Anwendung zu verbessern, und auf der Registerkarte für erweiterte Einstellungen deaktiviert werden kann.");
             Polish.Add("AgreementAnonData", "Rozumiem, że Relhax V2 gromadzi i wysyła anonimowe dane użytkowania celem poprawy aplikacji, oraz że funkcję tę mogę wyłączyć w dowolnym momencie w zakładce 'Zaawansowane'.");
             French.Add("AgreementAnonData", "Je comprends que Relhax V2 collecte des données d'utilisation anonymes pour améliorer l'application, et peut être désactivé dans les options avancées");
-            Spanish.Add("AgreementAnonData", "Comprendo que Relhax V2 recoge datos anónimos de uso para mejorar la aplicación, lo cual puede ser deshabilitado en la pestaña de opciones avanzadas");
+            Spanish.Add("AgreementAnonData", "Entiendo que Relhax V2 recoge datos anónimos de uso para mejorar la aplicación, lo cual puede ser deshabilitado en la pestaña de opciones avanzadas");
             Russian.Add("AgreementAnonData", "Я понимаю, что Relhax V2 собирает анонимные сведения об использовании для улучшения приложения и знаю, что могу отключить сбор данных в разделе расширенных настроек");
 
             //Component: V2UpgradeNoticeText
