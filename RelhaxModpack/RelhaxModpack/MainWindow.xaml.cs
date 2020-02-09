@@ -1436,7 +1436,7 @@ namespace RelhaxModpack
             //first, if we have downloads to do and doing them the standard way, then start processing them
             if (packagesToDownload.Count > 0 && !ModpackSettings.InstallWhileDownloading)
             {
-                Logging.Info("download while install = false and packages to download, starting ProcessDownloads()");
+                Logging.Info("Download while install = false and packages to download, starting ProcessDownloads()");
                 //toggle the button before and after as well
                 CancelDownloadInstallButton.Visibility = Visibility.Visible;
                 CancelDownloadInstallButton.IsEnabled = true;
@@ -1451,7 +1451,7 @@ namespace RelhaxModpack
                 downloadDisplayTimer = null;
                 if (!downlaodTaskComplete)
                 {
-                    Logging.Info("download task was canceled, canceling installation");
+                    Logging.Info("Download task was canceled, canceling installation");
                     ToggleUIButtons(true);
                     return;
                 }
@@ -1460,12 +1460,12 @@ namespace RelhaxModpack
                 //connect the install and disconnect the download
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
-                Logging.Info(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
+                Logging.Info(string.Format("Download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
                 lastTime = stopwatch.Elapsed;
             }
             else if (packagesToDownload.Count > 0 && ModpackSettings.InstallWhileDownloading)
             {
-                Logging.Info("download while install = true and packages to download, starting ProcessDownloadsAsync()");
+                Logging.Info("Download while install = true and packages to download, starting ProcessDownloadsAsync()");
                 ProcessDownloadsAsync(packagesToDownload);
                 //async does download and install at the same time, so subscribe to both, install first
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
@@ -1474,7 +1474,7 @@ namespace RelhaxModpack
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
             }
             else if (packagesToDownload.Count == 0)
-                Logging.Info("no packages to download");
+                Logging.Info("No packages to download, continue");
 
             //now let's start the install procedures
             //like if we need to make the advanced install window
