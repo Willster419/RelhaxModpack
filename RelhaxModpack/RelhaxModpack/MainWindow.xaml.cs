@@ -1351,13 +1351,11 @@ namespace RelhaxModpack
             //perform dependency calculations
             //get a flat list of packages to install
             List<DatabasePackage> flatList = Utils.GetFlatList(null, null, null, parsedCategoryList);
-            List<SelectablePackage> flatListSelect = new List<SelectablePackage>();
+            List<SelectablePackage> flatListSelect = Utils.GetFlatSelectablePackageList(parsedCategoryList);
 
-            //convert it to correct class type
-            foreach (SelectablePackage sp in flatList)
-                flatListSelect.Add(sp);
-            Logging.Debug("starting Utils.CalculateDependencies()");
+            Logging.Debug("Starting Utils.CalculateDependencies()");
             List<Dependency> dependneciesToInstall = new List<Dependency>(Utils.CalculateDependencies(dependencies, flatListSelect, parsedCategoryList));
+            Logging.Debug("Finished Utils.CalculateDependencies()");
 
             //make a flat list of all packages to install (including those without a zip file) for statistic data gathering
             if (ModpackSettings.AllowStatisticDataGather)
@@ -1398,7 +1396,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)
                     {
-                        Logging.Error("an error occurred sending statistic data");
+                        Logging.Error("An error occurred sending statistic data");
                         Logging.Error(ex.ToString());
                     }
                 });
@@ -1418,7 +1416,7 @@ namespace RelhaxModpack
             //and check if we need to actually install anything
             if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
             {
-                Logging.Info("no packages selected to install, return");
+                Logging.Info("No packages selected to install, return");
                 ResetUI();
                 ToggleUIButtons(true);
                 return;
