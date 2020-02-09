@@ -491,11 +491,11 @@
                             <!-- space between checkboxes and download zip button -->
                             <RowDefinition Height="20"/>
                             <!-- download button -->
-                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="40"/>
                             <!-- upload spacer -->
                             <RowDefinition Height="2"/>
                             <!-- upload button-->
-                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="40"/>
                             <!-- extra space -->
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
@@ -545,8 +545,8 @@
                             <CheckBox Content="Obfuscated" x:Name="PackageObfuscatedModDisplay" Tag="ObfuscatedCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Offset InstallGroup" x:Name="CategoryOffsetInstallGroupDisplay" Tag="OffsetInstallGroupCB" Margin="16,0,0,0"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="22" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" Margin="0,20,0,0" Height="42"/>
-                        <Button Grid.Column="0" Grid.Row="22" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" Height="42" Margin="0,67,0,0"/>
+                        <Button Grid.Column="0" Grid.Row="19" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="21" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" />
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
