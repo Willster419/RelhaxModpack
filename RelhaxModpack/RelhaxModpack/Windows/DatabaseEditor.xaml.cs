@@ -378,18 +378,6 @@ namespace RelhaxModpack.Windows
                 RemoveDatabaseObjectButton.IsEnabled = true;
                 MoveDatabaseObjectButton.IsEnabled = true;
                 AddDatabaseObjectButton.IsEnabled = true;
-                /*
-                //check if the database is actually loaded before Loading the database view
-                if (GlobalDependencies.Count == 0)
-                {
-                    Logging.Editor("Database is not yet loaded, skipping UI loading");
-                }
-                else
-                {
-                    Logging.Editor("Database is loaded, UI loading()");
-                    LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
-                }
-                */
             }
             else if (selectedTab.Equals(InstallGroupsTab))
             {
@@ -511,7 +499,8 @@ namespace RelhaxModpack.Windows
         private void ResetRightPanels(DatabasePackage package)
         {
             Logging.Editor("ResetRightPanels(), package type = {0}, name= {1}", LogLevel.Info, package == null ? "(null)" : package.GetType().ToString(), package == null ? "(null)" : package.PackageName);
-            //for each tab, disable all components. then enable them back of tye type of database object
+
+            //for each tab, disable all UI components
             List<Control> controlsToDisable = new List<Control>();
             foreach (TabItem tabItem in RightTab.Items)
             {
@@ -520,6 +509,7 @@ namespace RelhaxModpack.Windows
                     //if it's a common element used in the panel, then disable it
                     if (element is CheckBox || element is ComboBox || element is Button || element is TextBox || element is ListBox)
                         controlsToDisable.Add((Control)element);
+
                     //also clear it's data for each type
                     if (element is CheckBox box)
                         box.IsChecked = false;
@@ -542,11 +532,13 @@ namespace RelhaxModpack.Windows
                         lbox.Items.Clear();
                 }
             }
+
             //there's a couple that don't need to be disabled
             if (controlsToDisable.Contains(CurrentSupportedTriggers))
                 controlsToDisable.Remove(CurrentSupportedTriggers);
             else
                 throw new BadMemeException("but it's there i swear");
+
             //disable the components
             foreach (Control control in controlsToDisable)
                 control.IsEnabled = false;
