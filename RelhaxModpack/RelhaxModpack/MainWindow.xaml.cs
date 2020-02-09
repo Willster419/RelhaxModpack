@@ -1939,6 +1939,7 @@ namespace RelhaxModpack
                     {
                         package.StartAddress = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
+                        Logging.Debug("[{0}]: Download of {1} from URL {2}", nameof(ProcessDownloadsAsync), package.PackageName, fileToDownload);
                         fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
                         try
                         {
@@ -1961,9 +1962,40 @@ namespace RelhaxModpack
                             }
                             Logging.Error("Failed to download the file {0}, try {1} of {2}\n{3}", package.ZipFile, retryCount, 1, ex.ToString());
                             retryCount--;
+
                             //if it failed or not, the file should be deleted
                             if (File.Exists(fileToSaveTo))
                                 File.Delete(fileToSaveTo);
+
+                            //if we've hit the retry limit, then mark it as downloaded
+                            if(retryCount <= 0)
+                            {
+                                Logging.Error("Failed to download the file {0} using URL {1}", package.ZipFile, fileToDownload);
+                                System.Windows.Forms.DialogResult result = System.Windows.Forms.MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
+                                    Translations.GetTranslatedString("failedToDownload1"), Environment.NewLine,
+                                    package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
+                                    Translations.GetTranslatedString("failedToDownloadHeader"), System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore);
+                                switch (result)
+                                {
+                                    case System.Windows.Forms.DialogResult.Retry:
+                                        //keep retry as true
+                                        Logging.Info("User selected retry, set retryCount");
+                                        retryCount++;
+                                        break;
+                                    case System.Windows.Forms.DialogResult.Ignore:
+                                        //skip this file
+                                        Logging.Debug("Ignore file that failed to download, it will be logged during installation");
+                                        package.IsCurrentlyDownloading = false;
+                                        package.DownloadFlag = false;
+                                        package.DownloadFailed = true;
+                                        break;
+                                    case System.Windows.Forms.DialogResult.Abort:
+                                        //stop the installation all together
+                                        //trigger the cancel button?
+                                        CancelDownloadInstallButton_Install_Click(null, null);
+                                        break;
+                                }
+                            }
                         }
                     }
                 }
@@ -1999,6 +2031,7 @@ namespace RelhaxModpack
                         //replace the start address macro
                         package.StartAddress = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
+                        Logging.Debug("[{0}]: Download of {1} from URL {2}", nameof(ProcessDownloads), package.PackageName, fileToDownload);
                         fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
                         try
                         {
@@ -2038,6 +2071,7 @@ namespace RelhaxModpack
                                     case System.Windows.Forms.DialogResult.Ignore:
                                         //skip this file
                                         retry = false;
+                                        package.DownloadFailed = true;
                                         break;
                                     case System.Windows.Forms.DialogResult.Abort:
                                         //stop the installation all together

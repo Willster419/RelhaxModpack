@@ -2258,17 +2258,23 @@ namespace RelhaxModpack.InstallerComponents
 
                         Progress.Report(Prog);
 
+                        //don't extract if the package failed to download
+                        if(package.DownloadFailed)
+                        {
+                            Logging.Error("Skipping package {0} due to failed download", package.PackageName);
+                            InstallFinishedArgs.InstallFailedSteps.Add(InstallerExitCodes.DownloadModsError);
+                        }
+                        else if (string.IsNullOrWhiteSpace(package.ZipFile))
+                        {
+                            Logging.Warning("Zipfile for package {0} is blank!", package.PackageName);
+                        }
                         //stop if the zipfile name is blank (no actual zipfile to extract)
-                        if (!string.IsNullOrWhiteSpace(package.ZipFile))
+                        else
                         {
                             StringBuilder zipLogger = new StringBuilder();
                             zipLogger.AppendLine(string.Format("/*   {0}   */", package.ZipFile));
                             Unzip(package, threadNum, zipLogger, false);
                             Logging.Installer(zipLogger.ToString());
-                        }
-                        else
-                        {
-                            Logging.Warning("zipfile for package {0} is blank!", package.PackageName);
                         }
 
                         Logging.Info("Thread ID={0}, extraction finished of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
