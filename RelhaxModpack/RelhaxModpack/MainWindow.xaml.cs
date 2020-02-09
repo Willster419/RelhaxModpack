@@ -2459,15 +2459,7 @@ namespace RelhaxModpack
             if (ModpackSettings.InstallWhileDownloading)
             {
                 Logging.Info("InstallWhileDownloading is true, attempt to cancel download thread");
-                if (client == null)
-                {
-                    Logging.Info("Unable to cancel download thread, client reference is null (maybe no packages to download?)");
-                }
-                else
-                {
-                    Logging.Info("Sending cancel request to download thread");
-                    client.CancelAsync();
-                }
+                CancelDownloadInstallButton_Download_Click(null, null);
             }
         }
 
