@@ -193,6 +193,18 @@ namespace RelhaxModpack.Windows
         {
             return Utils.GetMaxInstallGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
         }
+
+        private SelectablePackage GetSelectablePackage(object obj)
+        {
+            if (obj is SelectablePackage selectablePackage)
+                return selectablePackage;
+
+            else if (obj is EditorComboBoxItem editorComboBoxItem)
+                if (editorComboBoxItem.Package is SelectablePackage selectablePackage2)
+                    return selectablePackage2;
+
+            return null;
+        }
         #endregion
 
         #region Load UI Views
@@ -2805,17 +2817,5 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
-
-        private SelectablePackage GetSelectablePackage(object obj)
-        {
-            if (obj is SelectablePackage selectablePackage)
-                return selectablePackage;
-
-            else if (obj is EditorComboBoxItem editorComboBoxItem)
-                if (editorComboBoxItem.Package is SelectablePackage selectablePackage2)
-                    return selectablePackage2;
-
-            return null;
-        }
     }
 }
