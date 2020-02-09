@@ -421,7 +421,46 @@ namespace RelhaxModpack.Windows
                 MoveDatabaseObjectButton.IsEnabled = false;
                 AddDatabaseObjectButton.IsEnabled = false;
             }
-            
+
+        }
+
+        private void SaveDatabaseSetting_Checked(object sender, RoutedEventArgs e)
+        {
+            if ((bool)SaveDatabaseLegacySetting.IsChecked)
+                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
+            else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
+                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
+        }
+
+        private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
+            {
+                Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
+                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
+            };
+            autoUpdatePackageWindow.ShowDialog();
+        }
+
+        private void SelectAutoUpdateWorkDirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                Multiselect = false,
+                Title = "Select folder"
+            };
+            if (openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                SelectAutoUpdateWorkDirectoryTextbox.Text = openFolderDialog.FileName;
+            }
+        }
+
+        private void SelectAutoUpdateWorkDirectoryTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
+            LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
         }
 
         private void PackageDevURLDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -2766,45 +2805,6 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
-
-        private void SaveDatabaseSetting_Checked(object sender, RoutedEventArgs e)
-        {
-            if ((bool)SaveDatabaseLegacySetting.IsChecked)
-                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
-            else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
-                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
-        }
-
-        private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
-        {
-            AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
-            {
-                Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
-                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
-                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
-            };
-            autoUpdatePackageWindow.ShowDialog();
-        }
-
-        private void SelectAutoUpdateWorkDirectoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
-            {
-                IsFolderPicker = true,
-                Multiselect = false,
-                Title = "Select folder"
-            };
-            if(openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                SelectAutoUpdateWorkDirectoryTextbox.Text = openFolderDialog.FileName;
-            }
-        }
-
-        private void SelectAutoUpdateWorkDirectoryTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
-            LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
-        }
 
         private SelectablePackage GetSelectablePackage(object obj)
         {
