@@ -306,7 +306,7 @@
                 Tag="MoveDatabaseObjectButton"   Click="MoveDatabaseObjectButton_Click"   IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Move the selected package to below another package.\nSupports moving between package types"/>
         <Button x:Name="AddDatabaseObjectButton"    Content="Add/Copy"     HorizontalAlignment="Left"  Margin="10,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
                 Tag="AddDatabaseObjectButton"    Click="AddDatabaseObjectButton_Click"    IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Add a package to the database by making a copy of the selected package"/>
-        <Button x:Name="ApplyButton"                Content="Apply"        HorizontalAlignment="Right" Margin="0,0,170,30"  Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+        <Button x:Name="ApplyButton"                Content="Apply"        HorizontalAlignment="Right" Margin="0,0,170,5"  Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="45"
                 Tag="ApplyButton"                Click="ApplyButton_Click"                IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Apply any changes from the right tab to the selected package"/>
         <Button x:Name="LoadAsDatabaseButton"       Content="Load as..."   HorizontalAlignment="Right" Margin="0,0,90,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
                 Tag="LoadAsDatabaseButton"       Click="LoadAsDatabaseButton_Click" ToolTipService.ShowOnDisabled="True" ToolTip="Select the database to load from a file dialog"/>
@@ -545,8 +545,8 @@
                             <CheckBox Content="Obfuscated" x:Name="PackageObfuscatedModDisplay" Tag="ObfuscatedCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Offset InstallGroup" x:Name="CategoryOffsetInstallGroupDisplay" Tag="OffsetInstallGroupCB" Margin="16,0,0,0"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="19" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200"/>
-                        <Button Grid.Column="0" Grid.Row="21" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200"/>
+                        <Button Grid.Column="0" Grid.Row="22" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" Margin="0,20,0,0" Height="42"/>
+                        <Button Grid.Column="0" Grid.Row="22" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" Height="42" Margin="0,67,0,0"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
