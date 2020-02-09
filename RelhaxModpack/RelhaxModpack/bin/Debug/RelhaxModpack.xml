@@ -734,6 +734,11 @@
             Flag to determine if this package is the one currently downloading, used if "install while download" is true
             </summary>
         </member>
+        <member name="P:RelhaxModpack.DatabasePackage.DownloadFailed">
+            <summary>
+            Flag to determine if this package failed to download from either download methods
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.DatabasePackage.AppendExtraction">
             <summary>
             Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
