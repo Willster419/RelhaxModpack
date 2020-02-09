@@ -109,8 +109,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TeximpNet, Version=1.4.1.0, Culture=neutral, PublicKeyToken=978ca55aa4aa29a3, processorArchitecture=MSIL">
-      <HintPath>..\packages\TeximpNet.1.4.1\lib\net40\TeximpNet.dll</HintPath>
+    <Reference Include="TeximpNet, Version=1.4.2.0, Culture=neutral, PublicKeyToken=978ca55aa4aa29a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\TeximpNet.1.4.2\lib\net40\TeximpNet.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -612,11 +612,11 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <PostBuildEvent>if exist "$(TargetDir)sign_modpack.bat" call "$(TargetDir)sign_modpack.bat"
 if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuffNull.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\TeximpNet.1.4.1\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.4.1\build\TeximpNet.targets')" />
+  <Import Project="..\packages\TeximpNet.1.4.2\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.4.2\build\TeximpNet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\TeximpNet.1.4.1\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.4.1\build\TeximpNet.targets'))" />
+    <Error Condition="!Exists('..\packages\TeximpNet.1.4.2\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.4.2\build\TeximpNet.targets'))" />
   </Target>
 </Project>
