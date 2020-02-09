@@ -402,9 +402,13 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Editor("Database is not yet loaded, skipping UI loading");
                 }
+                else if (sender == null)
+                {
+                    Logging.Editor("Database is loaded but this call is not from UI event. Don't load install view.");
+                }
                 else
                 {
-                    Logging.Editor("Database is loaded, UI loading()");
+                    Logging.Editor("Database is loaded and this call is from UI event. Load install view.");
                     LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
                 }
             }
@@ -419,9 +423,13 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Editor("Database is not yet loaded, skipping UI loading");
                 }
+                else if (sender == null)
+                {
+                    Logging.Editor("Database is loaded but this call is not from UI event. Don't load patch view.");
+                }
                 else
                 {
-                    Logging.Editor("Database is loaded, UI loading()");
+                    Logging.Editor("Database is loaded and this call is from UI event. Load patch view.");
                     LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
                 }
             }
@@ -542,6 +550,10 @@ namespace RelhaxModpack.Windows
             //disable the components
             foreach (Control control in controlsToDisable)
                 control.IsEnabled = false;
+
+            //process controls dependent on which view you're currently in (tab view)
+            //(essentially this enables the tab, search and add/move/remove buttons when database view tab (left) is selected 
+            LeftTabView_SelectionChanged(null, null);
 
             //enable components by type
             //package null = category
