@@ -1446,9 +1446,14 @@ namespace RelhaxModpack
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
                 bool downlaodTaskComplete = await ProcessDownloads(packagesToDownload);
+
                 //stop and end the timer
-                downloadDisplayTimer.Stop();
-                downloadDisplayTimer = null;
+                if(downloadDisplayTimer != null)
+                {
+                    downloadDisplayTimer.Stop();
+                    downloadDisplayTimer = null;
+                }
+
                 if (!downlaodTaskComplete)
                 {
                     Logging.Info("Download task was canceled, canceling installation");
