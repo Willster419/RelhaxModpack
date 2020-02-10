@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:ui="clr-namespace:RelhaxModpack.UIComponents"
         mc:Ignorable="d"
-        Title="Application Update" Height="315" Width="500" ResizeMode="CanMinimize" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="RelhaxWindow_Loaded"
+        Title="Application Update" Height="114" Width="367" ResizeMode="CanMinimize" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
     <Grid Tag="VersionInfoGrid">
-        <TextBlock x:Name="NewVersionAvailable" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="New Version Available" VerticalAlignment="Top" Tag="NewVersionAvailable"/>
-        <TextBox x:Name="ApplicationUpdateNotes" HorizontalAlignment="Stretch" Margin="10,31,10,76" TextWrapping="Wrap" VerticalAlignment="Stretch" Tag="ApplicationUpdateNotes" IsReadOnly="True"/>
+        <!-- <TextBlock x:Name="NewVersionAvailable" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="New Version Available" VerticalAlignment="Top" Tag="NewVersionAvailable"/> -->
+        <!-- <TextBox x:Name="ApplicationUpdateNotes" HorizontalAlignment="Stretch" Margin="10,75,10,51" TextWrapping="Wrap" VerticalAlignment="Stretch" Tag="ApplicationUpdateNotes" IsReadOnly="True" TextChanged="ApplicationUpdateNotes_TextChanged"/> -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="30">
             <TextBlock x:Name="HavingProblemsTextBlock" HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Tag="HavingProblemsTextBlock"
                        Text="If you are having problems updating, please"/>
@@ -18,9 +18,12 @@
             <ui:RelhaxHyperlink Tag="ManualUpdateLink" x:Name="ManualUpdateLink" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Foreground="#FF0066CC"
                                 URL="https://github.com/Willster419/RelhaxModpack/releases/latest" Text="Click Here"/>
         </StackPanel>
-        <Button x:Name="VersionInfoNoButton" Content="No" HorizontalAlignment="Left" Margin="10,0,0,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoNoButton" Click="OnNoButtonClick"/>
-        <Button x:Name="VersionInfoYesButton" Content="Yes" HorizontalAlignment="Right" Margin="0,0,10,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoYesButton" Click="OnYesButtonClick"/>
-        <ui:RelhaxHyperlink x:Name="ViewUpdateNotesOnGoogleTranslate" HorizontalAlignment="Left" Margin="10,0,0,30" VerticalAlignment="Bottom" Foreground="#FF0066CC"
-                            Tag="ViewUpdateNotesOnGoogleTranslate" Text="View this on Google Translate"/>
+        <TextBlock Text="There is a new update available. Do you wish to update?" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,60"/>
+        <!--<TextBlock Text="Change Log" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,241"/> -->
+        <Button x:Name="VersionInfoNoButton" Content="No" HorizontalAlignment="Left" Margin="90,0,0,35" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoNoButton" Click="OnNoButtonClick"/>
+        <Button x:Name="VersionInfoYesButton" Content="Yes" HorizontalAlignment="Left" Margin="10,0,0,35" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoYesButton" Click="OnYesButtonClick" RenderTransformOrigin="2.084,0.15"/>
+        <Button x:Name="VersionInfoChangelogButton" Content="View Changelogs" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="170,0,0,35" Width="105" Tag="VersionInfoChangelogs" Click="OnChangelogButtonClick" Height="20"/>
+        <!-- <ui:RelhaxHyperlink x:Name="ViewUpdateNotesOnGoogleTranslate" HorizontalAlignment="Left" Margin="10,0,0,30" VerticalAlignment="Bottom" Foreground="#FF0066CC"
+                            Tag="ViewUpdateNotesOnGoogleTranslate" Text="View this on Google Translate"/> -->
     </Grid>
 </local:RelhaxWindow>
