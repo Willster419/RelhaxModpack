@@ -2074,9 +2074,12 @@ namespace RelhaxModpack
                                         //keep retry as true
                                         break;
                                     case System.Windows.Forms.DialogResult.Ignore:
-                                        //skip this file
+                                        //skip this file and log it failed
                                         retry = false;
                                         package.DownloadFailed = true;
+
+                                        //set the flag for download even though it failed
+                                        package.DownloadFlag = false;
                                         break;
                                     case System.Windows.Forms.DialogResult.Abort:
                                         //stop the installation all together
@@ -2091,7 +2094,8 @@ namespace RelhaxModpack
                                 File.Delete(fileToSaveTo);
                         }
                         //stop the timer
-                        downloadDisplayTimer.Stop();
+                        if(downloadDisplayTimer != null)
+                            downloadDisplayTimer.Stop();
                     }
                 }
             }
