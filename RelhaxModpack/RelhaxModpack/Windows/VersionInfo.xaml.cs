@@ -71,30 +71,30 @@ namespace RelhaxModpack.Windows
             }
 
             //update the text box with the latest version
-            ApplicationUpdateNotes.Text = Translations.GetTranslatedString("loadingApplicationUpdateNotes");
-            ViewUpdateNotesOnGoogleTranslate.TheHyperlink.Click += TheHyperlink_Click;
-            using (WebClient client = new WebClient())
-            {
-                Uri temp = new Uri((ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
-                    Settings.ApplicationNotesStableUrl : Settings.ApplicationNotesBetaUrl);
-                client.DownloadStringCompleted += (senderr, args) =>
-                {
-                    if(args.Error != null)
-                    {
-                        Logging.Exception("Failed to get update notes");
-                        Logging.Exception(args.Error.ToString());
-                        ApplicationUpdateNotes.Text = Translations.GetTranslatedString("failedToGetUpdateNotes");
-                    }
-                    else
-                        ApplicationUpdateNotes.Text = args.Result;
-                };
-                client.DownloadStringAsync(temp);
-            }
-        }
+            //ApplicationUpdateNotes.Text = Translations.GetTranslatedString("loadingApplicationUpdateNotes");
+            //ViewUpdateNotesOnGoogleTranslate.TheHyperlink.Click += TheHyperlink_Click;
+            //using (WebClient client = new WebClient())
+            //{
+            //    Uri temp = new Uri((ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
+            //        Settings.ApplicationNotesStableUrl : Settings.ApplicationNotesBetaUrl);
+           //     client.DownloadStringCompleted += (senderr, args) =>
+            //    {
+             //       if(args.Error != null)
+               //     {
+                 //       Logging.Exception("Failed to get update notes");
+                   //     Logging.Exception(args.Error.ToString());
+                     //   ApplicationUpdateNotes.Text = Translations.GetTranslatedString("failedToGetUpdateNotes");
+                  //  }
+                   // else
+                     //   ApplicationUpdateNotes.Text = args.Result;
+               // };
+               // client.DownloadStringAsync(temp);
+           // }
+       // }
 
-        private void TheHyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            Utils.OpenInGoogleTranslate(ApplicationUpdateNotes.Text);
+        //private void TheHyperlink_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Utils.OpenInGoogleTranslate(ApplicationUpdateNotes.Text);
         }
 
         //private void ApplicationUpdateNotes_TextChanged(object sender, TextChangedEventArgs e)
