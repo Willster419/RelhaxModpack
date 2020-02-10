@@ -47,6 +47,11 @@ namespace RelhaxModpack.Windows
             Close();
         }
 
+        private void OnChangelogButtonClick(object sender, RoutedEventArgs e)
+        {
+            NewsViewer newsViewer = new NewsViewer();
+            newsViewer.Show();
+        }
         private void OnNoButtonClick(object sender, RoutedEventArgs e)
         {
             ConfirmUpdate = false;
@@ -91,5 +96,10 @@ namespace RelhaxModpack.Windows
         {
             Utils.OpenInGoogleTranslate(ApplicationUpdateNotes.Text);
         }
+
+        //private void ApplicationUpdateNotes_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+//
+        //}
     }
 }
