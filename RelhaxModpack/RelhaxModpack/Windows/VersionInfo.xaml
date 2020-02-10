@@ -18,8 +18,6 @@
             <ui:RelhaxHyperlink Tag="ManualUpdateLink" x:Name="ManualUpdateLink" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Foreground="#FF0066CC"
                                 URL="https://github.com/Willster419/RelhaxModpack/releases/latest" Text="Click Here"/>
         </StackPanel>
-        <Button x:Name="VersionInfoNoButton" Content="No" HorizontalAlignment="Left" Margin="10,0,0,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoNoButton" Click="OnNoButtonClick"/>
-        <Button x:Name="VersionInfoYesButton" Content="Yes" HorizontalAlignment="Right" Margin="0,0,10,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoYesButton" Click="OnYesButtonClick"/>
         <TextBlock Text="Do you wish to update now?" HorizontalAlignment="Left" VerticalAlignment="Bottom" Tag="VersionInfoAskText" Margin="10,0,0,55"/>
         <Button x:Name="VersionInfoNoButton" Content="Cancel" HorizontalAlignment="Stretch" Margin="329,0,90,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoNoButton" Click="OnNoButtonClick"/>
         <Button x:Name="VersionInfoYesButton" Content="Update" HorizontalAlignment="Stretch" Margin="409,0,10,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoYesButton" Click="OnYesButtonClick"/>
