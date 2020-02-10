@@ -984,11 +984,34 @@ namespace RelhaxModpack.InstallerComponents
 
             //combine with a list of all files and folders in mods and res_mods
             Logging.Debug("adding any files in res_mods and mods by scanning the folders if they aren't on the list already");
+            bool success = true;
             if (Directory.Exists(resModsFolder))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(resModsFolder, SearchOption.AllDirectories, true).ToList());
+            {
+                string[] filesFromResMods = Utils.DirectorySearch(resModsFolder, SearchOption.AllDirectories, true);
+                if (filesFromResMods != null && filesFromResMods.Count() > 0)
+                {
+                    ListOfAllItems.AddRange(filesFromResMods.ToList());
+                }
+                else
+                {
+                    Logging.Error("Failed to get list of files from {0}", resModsFolder);
+                    success = false;
+                }
+            }
             CancellationToken.ThrowIfCancellationRequested();
             if (Directory.Exists(modsFolder))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(modsFolder, SearchOption.AllDirectories, true).ToList());
+            {
+                string[] filesFromMods = Utils.DirectorySearch(modsFolder, SearchOption.AllDirectories, true);
+                if (filesFromMods != null && filesFromMods.Count() > 0)
+                {
+                    ListOfAllItems.AddRange(filesFromMods.ToList());
+                }
+                else
+                {
+                    Logging.Error("Failed to get list of files from {0}", modsFolder);
+                    success = false;
+                }
+            }
             CancellationToken.ThrowIfCancellationRequested();
 
             //combine with a list of any installer engine created folders
@@ -1048,7 +1071,6 @@ namespace RelhaxModpack.InstallerComponents
 
             //delete all files (not shortcuts)
             Logging.Debug("Deleting all files from list, not including shortcuts");
-            bool success = true;
             Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
             foreach (string file in ListOfAllFiles)
             {
@@ -2236,17 +2258,23 @@ namespace RelhaxModpack.InstallerComponents
 
                         Progress.Report(Prog);
 
+                        //don't extract if the package failed to download
+                        if(package.DownloadFailed)
+                        {
+                            Logging.Error("Skipping package {0} due to failed download", package.PackageName);
+                            InstallFinishedArgs.InstallFailedSteps.Add(InstallerExitCodes.DownloadModsError);
+                        }
+                        else if (string.IsNullOrWhiteSpace(package.ZipFile))
+                        {
+                            Logging.Warning("Zipfile for package {0} is blank!", package.PackageName);
+                        }
                         //stop if the zipfile name is blank (no actual zipfile to extract)
-                        if (!string.IsNullOrWhiteSpace(package.ZipFile))
+                        else
                         {
                             StringBuilder zipLogger = new StringBuilder();
                             zipLogger.AppendLine(string.Format("/*   {0}   */", package.ZipFile));
                             Unzip(package, threadNum, zipLogger, false);
                             Logging.Installer(zipLogger.ToString());
-                        }
-                        else
-                        {
-                            Logging.Warning("zipfile for package {0} is blank!", package.PackageName);
                         }
 
                         Logging.Info("Thread ID={0}, extraction finished of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);

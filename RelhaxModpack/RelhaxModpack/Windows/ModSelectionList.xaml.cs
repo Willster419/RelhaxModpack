@@ -1752,7 +1752,7 @@ namespace RelhaxModpack.Windows
             List<string> stringSelections = new List<string>();
             List<string> stringUserSelections = new List<string>();
             List<string> disabledMods = new List<string>();
-            List<string> disabledStructureMods = new List<string>();
+            List<SelectablePackage> brokenMods = null;
 
             foreach(XmlNode node in xmlSelections)
                 stringSelections.Add(node.InnerText);
@@ -1804,7 +1804,7 @@ namespace RelhaxModpack.Windows
                 }
             }
             //now check for the correct structure of mods
-            List<SelectablePackage> brokenMods = IsValidStructure(ParsedCategoryList);
+            brokenMods = IsValidStructure(ParsedCategoryList);
             Logging.Info("Broken mods structure count: " + brokenMods.Count);
 
             //
@@ -1845,11 +1845,11 @@ namespace RelhaxModpack.Windows
                     MessageBox.Show(string.Format("{0}: {1}{2}",
                         Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringUserSelections)));
                 }
-                if(disabledStructureMods.Count > 0)
+                if(brokenMods.Count > 0)
                 {
                     //removed structure user selections
                     MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, disabledStructureMods)));
+                        Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, brokenMods.Select(package => package.CompletePath).ToArray())));
                 }
             }
             else

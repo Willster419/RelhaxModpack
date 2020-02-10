@@ -1,3 +1,27 @@
+Application version 1.0.3.0 (2020-02-09)
+https://www.virustotal.com/gui/file/0f5e29d75dcd5b5d88f66d603c59454376028643eb754abcd2b415b8f19e6c1c/detection
+- Fixed bug in the clean/uninstall process crashing if access to mods/res_mods is denied. Now it will log the error and report.
+- Re-worked UI of database editor, changed how some list style components are edited and applied.
+- Fixed database editor views of InstallGroup to factor in the categories offset level parameter.
+- Fixed bugs with handling failed downloads in both "install while downloading" is true and false.
+- Fixed bug in test mode where default checked items were being applied.
+- Fixed bug with the selection list showing hidden packages in the search result, clicking on them results in a crash.
+- Fixed bug with the selection list of a disabled combobox item component not allowing to be previewed.
+- Fixed bug with the selection list of the first drop down item not selecting from initial state.
+- Fixed bug with the selection list of not showing packages with broken selections.
+- Added feature in the preview window showing the name of the mod/package you are previewing when previewing all items in a drop down list.
+- Fixed Windows 7 compatibility bug preventing the application from getting the update notes.
+- Added documentation as tooltips for database editor.
+- Updated Russian and Spanish translations.
+- Updated documentation.
+- Minor code readability optimizations.
+- Fixed bugs with parsing of conflicting packages and triggers.
+- Fixed bugs with WG patch download utility. WG tried to be all sneaky and change their update data structure.
+- Fixed bugs with saving triggers in database editor.
+- Minor database editor bug fixes and design optimizations.
+- Other minor code optimizations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 BETA Application version 1.0.2.2 (2020-02-03)
 - Fixed bugs with parsing of conflicting packages and triggers.
 - Fixed bugs with WG patch download utility. WG tried to be all sneaky and change their update data structure.

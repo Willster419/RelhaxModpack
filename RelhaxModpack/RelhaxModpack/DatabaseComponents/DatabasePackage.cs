@@ -223,6 +223,11 @@ namespace RelhaxModpack
         /// </summary>
         public bool IsCurrentlyDownloading { get; set; } = false;
 
+        /// <summary>
+        /// Flag to determine if this package failed to download from either download methods
+        /// </summary>
+        public bool DownloadFailed { get; set; } = false;
+
         //append extraction flag
         /// <summary>
         /// Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
