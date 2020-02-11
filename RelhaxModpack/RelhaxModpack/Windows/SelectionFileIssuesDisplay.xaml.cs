@@ -17,7 +17,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for RelhaxMessageWindow.xaml
     /// </summary>
-    public partial class RelhaxMessageWindow : RelhaxWindow
+    public partial class SelectionFileIssuesDisplay : RelhaxWindow
     {
         /// <summary>
         /// Get or set the text of the window header (TextBlock)
@@ -38,16 +38,31 @@ namespace RelhaxModpack.Windows
         }
 
         /// <summary>
+        /// Get or set the text of the window button
+        /// </summary>
+        public string ButtonText
+        {
+            get { return MessageWindowCloseButton.Content as string; }
+            set { MessageWindowCloseButton.Content = value; }
+        }
+
+        /// <summary>
         /// Create an instance of the RelhaxMessageWindow class
         /// </summary>
-        public RelhaxMessageWindow()
+        public SelectionFileIssuesDisplay()
         {
             InitializeComponent();
         }
 
-        private void RelhaxMessageWindow_Loaded(object sender, RoutedEventArgs e)
+        private void MessageWindowCloseButton_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
+        }
 
+        private void RelhaxWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
         }
     }
 }
