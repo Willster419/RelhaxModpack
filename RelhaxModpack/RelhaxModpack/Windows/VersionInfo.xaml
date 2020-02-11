@@ -19,8 +19,8 @@
                                 URL="https://github.com/Willster419/RelhaxModpack/releases/latest" Text="Click Here"/>
         </StackPanel>
         <TextBlock Text="Do you wish to update now?" HorizontalAlignment="Left" VerticalAlignment="Bottom" Tag="VersionInfoAskText" Margin="10,0,0,55"/>
-        <Button x:Name="VersionInfoNoButton" Content="Cancel" HorizontalAlignment="Stretch" Margin="329,0,90,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoNoButton" Click="OnNoButtonClick"/>
-        <Button x:Name="VersionInfoYesButton" Content="Update" HorizontalAlignment="Stretch" Margin="409,0,10,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoYesButton" Click="OnYesButtonClick"/>
+        <Button x:Name="VersionInfoNoButton" Background="Red" Foreground="Black" Content="Cancel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoNoButton" Click="OnNoButtonClick" Margin="0,0,90,51"/>
+        <Button x:Name="VersionInfoYesButton" Background="Green" Foreground="Black" Content="Update" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoYesButton" Click="OnYesButtonClick" Margin="0,0,10,51"/>
         <ui:RelhaxHyperlink x:Name="ViewUpdateNotesOnGoogleTranslate" HorizontalAlignment="Left" Margin="10,0,0,30" VerticalAlignment="Bottom" Foreground="#FF0066CC"
                             Tag="ViewUpdateNotesOnGoogleTranslate" Text="View this on Google Translate"/>
     </Grid>
