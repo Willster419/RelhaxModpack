@@ -296,6 +296,9 @@
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\RelhaxWindow.cs" />
+    <Compile Include="Windows\RelhaxMessageWindow.xaml.cs">
+      <DependentUpon>RelhaxMessageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ScalingConfirmation.xaml.cs">
       <DependentUpon>ScalingConfirmation.xaml</DependentUpon>
     </Compile>
@@ -473,6 +476,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\RelhaxMediaPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\RelhaxMessageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
