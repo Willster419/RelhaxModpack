@@ -1827,30 +1827,49 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Info("Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
                     disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
+                SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay();
+                int totalCount = disabledMods.Count + stringSelections.Count + stringUserSelections.Count + brokenMods.Count;
                 if(disabledMods.Count > 0)
                 {
+                    totalCount -= disabledMods.Count;
                     //disabled selections
-                    MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modDeactivated"), Environment.NewLine, string.Join(Environment.NewLine, disabledMods)));
+                    window.HeaderText = Translations.GetTranslatedString("modDeactivated");
+                    window.BodyText = string.Join(Environment.NewLine, disabledMods);
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0? "close" : "next");
+                    window.ShowDialog();
                 }
                 if(stringSelections.Count > 0)
                 {
+                    totalCount -= stringSelections.Count;
                     //removed selections
-                    MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringSelections)));
+                    window.HeaderText = Translations.GetTranslatedString("modsNotFoundTechnical");
+                    window.BodyText = string.Join(Environment.NewLine, stringSelections);
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
+                    window.ShowDialog();
                 }
                 if(stringUserSelections.Count > 0)
                 {
+                    totalCount -= stringUserSelections.Count;
                     //removed user selections
-                    MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringUserSelections)));
+                    window.HeaderText = Translations.GetTranslatedString("modsNotFoundTechnical");
+                    window.BodyText = string.Join(Environment.NewLine, stringUserSelections);
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
+                    window.ShowDialog();
                 }
                 if(brokenMods.Count > 0)
                 {
                     //removed structure user selections
-                    MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, brokenMods.Select(package => package.CompletePath).ToArray())));
+                    window.HeaderText = Translations.GetTranslatedString("modsBrokenStructure");
+                    window.BodyText = string.Join(Environment.NewLine, brokenMods.Select(package => package.CompletePath).ToArray());
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString("close");
+                    window.ShowDialog();
                 }
+                window.Close();
+                window = null;
             }
             else
             {
