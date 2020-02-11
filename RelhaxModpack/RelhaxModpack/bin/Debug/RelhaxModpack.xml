@@ -6754,6 +6754,39 @@
             Creates an instance of the RelhaxWindow class
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.SelectionFileIssuesDisplay">
+            <summary>
+            Interaction logic for RelhaxMessageWindow.xaml
+            </summary>
+            <summary>
+            SelectionFileIssuesDisplay
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.SelectionFileIssuesDisplay.HeaderText">
+            <summary>
+            Get or set the text of the window header (TextBlock)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.SelectionFileIssuesDisplay.BodyText">
+            <summary>
+            Get of set the text of the window body (TextBox)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.SelectionFileIssuesDisplay.ButtonText">
+            <summary>
+            Get or set the text of the window button
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.SelectionFileIssuesDisplay.#ctor">
+            <summary>
+            Create an instance of the RelhaxMessageWindow class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.SelectionFileIssuesDisplay.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.ScalingConfirmation">
             <summary>
             Interaction logic for ScalingConfirmation.xaml
