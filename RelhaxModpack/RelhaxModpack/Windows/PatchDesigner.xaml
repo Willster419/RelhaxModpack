@@ -194,6 +194,24 @@
                             <Paragraph>
                                 Description TODO
                             </Paragraph>
+                            <List>
+                                <ListItem>
+                                    <Paragraph>
+                                        Use "$." at the start, and "." for each node for .json files.
+                                        See more here: "https://goessner.net/articles/JsonPath/index.html#e2"
+                                    </Paragraph>
+                                </ListItem>
+                                <ListItem>
+                                    <Paragraph>
+                                        Use "/" for nodes in ".xml" patches. See more here: "https://goessner.net/articles/JsonPath/index.html#e2" "Xpath"
+                                    </Paragraph>
+                                </ListItem>
+                                <ListItem>
+                                    <Paragraph>
+                                        If you wish to use regex, please use this: "https://regex101.com/"
+                                    </Paragraph>
+                                </ListItem>
+                            </List>
                         </FlowDocument>
                     </RichTextBox>
                 </Grid>
