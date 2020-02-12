@@ -1006,12 +1006,10 @@ namespace RelhaxModpack
 
         private void OnUpdateDownloadProgresChange(object sender, DownloadProgressChangedEventArgs e)
         {
-            //if it's in instant extraction mode, don't show download progress
-            if (ModpackSettings.InstallWhileDownloading)
-                return;
             //if it's not running, start it
             if (!stopwatch.IsRunning)
                 stopwatch.Start();
+
             //set the update progress bar
             ChildProgressBar.Value = e.ProgressPercentage;
             float MBDownloaded = (float)e.BytesReceived / (float)Utils.BYTES_TO_MBYTES;
