@@ -57,17 +57,17 @@ namespace RelhaxModpack.UIComponents
         }
 
         private Brush foregroundBrush = null;
-        private void userControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             this.Foreground = Brushes.DarkRed;
         }
 
-        private void userControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        private void UserControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             this.Foreground = foregroundBrush;
         }
 
-        private void userControl_Loaded(object sender, RoutedEventArgs e)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             foregroundBrush = this.Foreground;
         }
