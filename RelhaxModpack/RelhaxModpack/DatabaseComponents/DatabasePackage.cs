@@ -178,7 +178,7 @@ namespace RelhaxModpack
         public int InstallGroup { get; set; } = 0;
 
         /// <summary>
-        /// The level at which this package will be installed, factoring if the category is set to offset the install group with the package level
+        /// The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
         /// </summary>
         public virtual int InstallGroupWithOffset
         {
