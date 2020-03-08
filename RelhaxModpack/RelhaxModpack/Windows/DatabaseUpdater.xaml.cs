@@ -36,7 +36,7 @@ namespace RelhaxModpack.Windows
         /// This was done because the database repository is different then the application repository.
         /// During debug, this can be set to have the updater (in the repository path) assume that it's in the database repository.
         /// </remarks>
-        public const string HardCodeRepoPath = "F:\\Tanks Stuff\\RelhaxModpackDatabase";
+        public const string HardCodeRepoPath = "C:\\Users\\Willster419\\Tanks Stuff\\RelhaxModpackDatabase";
         /// <summary>
         /// Flag to use the 
         /// </summary>
