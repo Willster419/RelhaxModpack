@@ -601,6 +601,44 @@ namespace RelhaxModpack.UIComponents
                             Brush = DarkThemeBackground
                         }
                     }
+                },
+                {
+                    typeof(VersionInfo), new WindowColorset()
+                    {
+                        WindowType = typeof(VersionInfo),
+                        BackgroundBrush = new CustomBrush()
+                        {
+                            IsValid = true,
+                            Brush = DarkThemeBackground
+                        },
+                        ComponentColorsets = new Dictionary<string, ComponentColorset>()
+                        {
+                            {
+                                "VersionInfoNoButton", new ComponentColorset()
+                                {
+                                    ID = "VersionInfoNoButton",
+                                    ForegroundBrush = null,
+                                    BackgroundBrush = new CustomBrush()
+                                    {
+                                        IsValid = true,
+                                        Brush = Brushes.Red
+                                    }
+                                }
+                            },
+                            {
+                                "VersionInfoYesButton", new ComponentColorset()
+                                {
+                                    ID = "VersionInfoYesButton",
+                                    ForegroundBrush = null,
+                                    BackgroundBrush = new CustomBrush()
+                                    {
+                                        IsValid = true,
+                                        Brush = Brushes.Green
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         };
