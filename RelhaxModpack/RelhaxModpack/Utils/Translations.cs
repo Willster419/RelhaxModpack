@@ -2719,6 +2719,15 @@ namespace RelhaxModpack
             French.Add("ViewUpdateNotesOnGoogleTranslate", "Voir les notes de mise à jour sur Google Traduction");
             Spanish.Add("ViewUpdateNotesOnGoogleTranslate", "Ver en Traductor de Google");
             Russian.Add("ViewUpdateNotesOnGoogleTranslate", "Посмотреть через переводчик Google");
+
+            //Component: VersionInfoAskText
+            // Text in the window with Yes and No buttons asking the user if he/she wants to update the application
+            English.Add("VersionInfoAskText", "Do you wish to update now?");
+            German.Add("VersionInfoAskText", TranslationNeeded);
+            Polish.Add("VersionInfoAskText", TranslationNeeded);
+            French.Add("VersionInfoAskText", "Voulez vous faire la mise à jour maintenant?");
+            Spanish.Add("VersionInfoAskText", TranslationNeeded);
+            Russian.Add("VersionInfoAskText", TranslationNeeded);
             #endregion
 
             #region Installer Messages
