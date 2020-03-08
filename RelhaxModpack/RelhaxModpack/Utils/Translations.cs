@@ -2724,7 +2724,7 @@ namespace RelhaxModpack
             // Text in the window with Yes and No buttons asking the user if he/she wants to update the application
             English.Add("VersionInfoAskText", "Do you wish to update now?");
             German.Add("VersionInfoAskText", TranslationNeeded);
-            Polish.Add("VersionInfoAskText", TranslationNeeded);
+            Polish.Add("VersionInfoAskText", "Czy chcesz zaktualizować teraz?");
             French.Add("VersionInfoAskText", "Voulez vous faire la mise à jour maintenant?");
             Spanish.Add("VersionInfoAskText", TranslationNeeded);
             Russian.Add("VersionInfoAskText", TranslationNeeded);
