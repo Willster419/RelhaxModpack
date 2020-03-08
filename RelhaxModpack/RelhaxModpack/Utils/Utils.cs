@@ -30,6 +30,7 @@ using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Web;
 using RelhaxModpack.DatabaseComponents;
+using System.Runtime.CompilerServices;
 
 namespace RelhaxModpack
 {
@@ -2581,6 +2582,21 @@ namespace RelhaxModpack
         public static string EmptyNullStringCheck(string stringToTest, string emptyNullReturn = "(null)")
         {
             return string.IsNullOrEmpty(stringToTest) ? emptyNullReturn : stringToTest;
+        }
+
+        /// <summary>
+        /// Gets the name of the method above this
+        /// </summary>
+        /// <returns>The name of the calling method on this method</returns>
+        /// <remarks>This is mostly used for in logging, to log the name of the method
+        /// See https://stackoverflow.com/a/2652481/3128017 </remarks>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string GetExecutingMethodName()
+        {
+            StackTrace st = new StackTrace();
+            StackFrame sf = st.GetFrame(1);
+
+            return sf.GetMethod().Name;
         }
         #endregion
 
