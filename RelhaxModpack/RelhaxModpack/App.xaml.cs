@@ -100,7 +100,7 @@ namespace RelhaxModpack
                 {
                     byte[] assemblyData = new byte[stream.Length];
                     stream.Read(assemblyData, 0, assemblyData.Length);
-                    Logging.Debug("an assembly was loaded via AssemblyResolve: {0}", dllName);
+                    Logging.Debug("An assembly was loaded via AssemblyResolve: {0}", dllName);
                     return Assembly.Load(assemblyData);
                 }
             };
