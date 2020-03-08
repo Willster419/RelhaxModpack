@@ -2356,7 +2356,7 @@ namespace RelhaxModpack.InstallerComponents
 
                                 //pad and add the installGroup name
                                 //this will help maintain the patching order similarly expected with extractions of installGroup
-                                sb.Append(package.InstallGroup.ToString("D3") + "_");
+                                sb.Append(package.InstallGroupWithOffset.ToString("D3") + "_");
 
                                 //name else doesn't need to change, to set the rest of the name and use it
                                 sb.Append(zipEntryName.Substring(7));

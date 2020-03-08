@@ -1980,27 +1980,9 @@ namespace RelhaxModpack
 
             foreach(DatabasePackage package in packagesToInstall)
             {
-                orderedList[package.InstallGroup].Add(package);
+                orderedList[package.InstallGroupWithOffset].Add(package);
             }
             return orderedList;
-        }
-
-        /// <summary>
-        /// Offsets the InstallGroup for a package by adding the group with the level parameter
-        /// </summary>
-        /// <param name="packagesToInstall">The list of package to perform the offset on</param>
-        public static void PropagateInstallGroupsPerLevel(List<DatabasePackage> packagesToInstall)
-        {
-            foreach(DatabasePackage package in packagesToInstall)
-            {
-                if (package is SelectablePackage selectablePackage)
-                {
-                    if (selectablePackage.ParentCategory.OffsetInstallGroups)
-                    {
-                        selectablePackage.InstallGroup += selectablePackage.Level;
-                    }
-                }
-            }
         }
 
         /// <summary>
