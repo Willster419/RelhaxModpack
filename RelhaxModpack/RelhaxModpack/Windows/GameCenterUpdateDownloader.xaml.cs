@@ -187,7 +187,7 @@ namespace RelhaxModpack.Windows
                 CheckPathExists = true,
                 //https://stackoverflow.com/a/2069090/3128017
                 //Office Files|*.doc;*.xls;*.ppt
-                Filter = "WG Client|WorldOfTanks.*;WorldOfWarships.*;WorldOfWarplanes.*",
+                Filter = string.Format("WG Client Update Document|{0}", GameInfoXml),
                 Multiselect = false,
                 ValidateNames = true,
                 Title = Translations.GetTranslatedString("GcDownloadSelectWgClient")
