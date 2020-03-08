@@ -2685,7 +2685,7 @@ namespace RelhaxModpack
                             possiblePath = possiblePath.Substring(1);
                             //trim end
                             possiblePath = possiblePath.Substring(0, possiblePath.Length - 6);
-                            Logging.Debug("possible path found: {0}", possiblePath);
+                            Logging.Debug("Possible path found: {0}", possiblePath);
                             searchPathWoT.Add(possiblePath);
                         }
                     }
@@ -2711,7 +2711,7 @@ namespace RelhaxModpack
                     {
                         if(!string.IsNullOrWhiteSpace(possiblePath) && possiblePath.ToLower().Contains("worldoftanks.exe"))
                         {
-                            Logging.Debug("possible path found: {0}", possiblePath);
+                            Logging.Debug("Possible path found: {0}", possiblePath);
                             searchPathWoT.Add(possiblePath);
                         }
                     }
@@ -2730,7 +2730,7 @@ namespace RelhaxModpack
                 }
                 if (File.Exists(potentialResult))
                 {
-                    Logging.Info("valid game path found: {0}", potentialResult);
+                    Logging.Info("Valid game path found: {0}", potentialResult);
                     return potentialResult;
                 }
             }
@@ -2764,33 +2764,33 @@ namespace RelhaxModpack
         public static string AutoFindWgcDirectory()
         {
             string wgcRegistryKeyLoc = @"Software\Classes\wgc\shell\open\command";
-            Logging.Debug("searching registry ({0}) for wgc location",wgcRegistryKeyLoc);
+            Logging.Debug("Searching registry ({0}) for wgc location",wgcRegistryKeyLoc);
             //search for the location of the game center from the registry
             RegistryKey wgcKey = GetRegistryKeys(new RegistrySearch() { Root = Registry.CurrentUser, Searchpath = wgcRegistryKeyLoc });
             string actualLocation = null;
             if (wgcKey != null)
             {
-                Logging.Debug("not null key, checking results");
+                Logging.Debug("Not null key, checking results");
                 foreach (string valueInKey in wgcKey.GetValueNames())
                 {
                     string wgcPath = wgcKey.GetValue(valueInKey) as string;
-                    Logging.Debug("parsing result name '{0}' with value '{1}'", valueInKey, wgcPath);
+                    Logging.Debug("Parsing result name '{0}' with value '{1}'", valueInKey, wgcPath);
                     if (!string.IsNullOrWhiteSpace(wgcPath) && wgcPath.ToLower().Contains("wgc.exe"))
                     {
                         //trim front
                         wgcPath = wgcPath.Substring(1);
                         //trim end
                         wgcPath = wgcPath.Substring(0, wgcPath.Length - 6);
-                        Logging.Debug("parsed to new value of '{0}', checking if file exists");
+                        Logging.Debug("Parsed to new value of '{0}', checking if file exists");
                         if (File.Exists(wgcPath))
                         {
-                            Logging.Debug("exists, use this for wgc start");
+                            Logging.Debug("Exists, use this for wgc start");
                             actualLocation = wgcPath;
                             break;
                         }
                         else
                         {
-                            Logging.Debug("not exist, continue to search");
+                            Logging.Debug("Not exist, continue to search");
                         }
                     }
                 }
