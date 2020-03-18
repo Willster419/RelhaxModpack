@@ -4245,7 +4245,7 @@
             <param name="level">The severity level of the message. Will be written as part of the format</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Debug(System.String,System.Boolean)">
+        <member name="M:RelhaxModpack.Logging.Debug(System.String)">
             <summary>
             Writes a debug level message to the application log
             </summary>
@@ -7903,6 +7903,14 @@
             <param name="stringToTest">The string to test</param>
             <param name="emptyNullReturn">The emptyNullReturn value if the string is null or empty, stringToTest otherwise</param>
             <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetExecutingMethodName">
+            <summary>
+            Gets the name of the method above this
+            </summary>
+            <returns>The name of the calling method on this method</returns>
+            <remarks>This is mostly used for in logging, to log the name of the method
+            See https://stackoverflow.com/a/2652481/3128017 </remarks>
         </member>
         <member name="M:RelhaxModpack.Utils.BuildFilepathMacroList">
             <summary>
