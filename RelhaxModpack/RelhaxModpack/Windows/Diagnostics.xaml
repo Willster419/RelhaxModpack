@@ -54,6 +54,11 @@
                 <TextBlock x:Name="CleanupModFilesText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"
                            Text="Cleanup mod files placed in incorrect locations" />
             </Button>
+            <Button Tag="ClearGameCache" x:Name="ClearGameCacheButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ClearGameCacheButton_Click"
+                    Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
+                <TextBlock x:Name="CleanGameCacheText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
+                           Text="Clear Game Cache"/>
+            </Button>
         </Grid>
     </Grid>
 </local:RelhaxWindow>

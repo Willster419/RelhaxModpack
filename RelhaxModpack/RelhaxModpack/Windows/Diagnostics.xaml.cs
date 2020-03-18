@@ -325,5 +325,10 @@ namespace RelhaxModpack.Windows
 
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanupModFilesCompleted");
         }
+
+        private void ClearGameCacheButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
