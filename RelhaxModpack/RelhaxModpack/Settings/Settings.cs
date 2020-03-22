@@ -88,6 +88,16 @@ namespace RelhaxModpack
         public const string RelicBatchUpdateScriptServer = "relic_self_updater.txt";
 
         /// <summary>
+        /// The name of the application executable when compiled with stable distribution
+        /// </summary>
+        public const string ApplicationFilenameStable = "RelhaxModpack.exe";
+
+        /// <summary>
+        /// The name of the application executable when compiled with beta distribution
+        /// </summary>
+        public const string ApplicationFilenameBeta = "RelhaxModpackBeta.exe";
+
+        /// <summary>
         /// The old V1 filename to save the self updater script as
         /// </summary>
         [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
