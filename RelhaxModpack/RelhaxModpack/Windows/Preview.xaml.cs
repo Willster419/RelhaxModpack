@@ -54,6 +54,7 @@ namespace RelhaxModpack.Windows
                 Logging.Error("Package is null, it should never be null!");
                 MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                 Close();
+                return;
             }
 
             //and for the medias element
@@ -62,6 +63,7 @@ namespace RelhaxModpack.Windows
                 Logging.Error("Package.Medias is null, it should never be null!");
                 MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                 Close();
+                return;
             }
 
             //translate 3 components
