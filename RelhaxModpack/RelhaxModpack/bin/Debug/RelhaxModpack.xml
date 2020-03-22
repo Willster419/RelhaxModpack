@@ -7968,6 +7968,12 @@
             <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
             <param name="destinationCompletePath">The complete path to copy the destination file to</param>
         </member>
+        <member name="M:RelhaxModpack.Utils.ClearCache">
+            <summary>
+            Clear the WoT appdata cache folder
+            </summary>
+            <returns>True if clearing operation was sucessfull, false otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.Utils.FTPMakeFolder(System.String,System.Net.ICredentials)">
             <summary>
             Create an FTP folder
