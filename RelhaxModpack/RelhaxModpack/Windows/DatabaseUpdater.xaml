@@ -34,7 +34,7 @@
                         <TextBox x:Name="UpdateDatabaseV2Step0" Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!"
                                  TextAlignment="Left" IsReadOnly="True"/>
                         <Button x:Name="UpdateDatabaseV2Step1" Content="Step 1: Load database" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
-                        <Button x:Name="UpdateDatabaseV2Step2" Content="Step 2: Update zip database via PHP script" HorizontalContentAlignment="Left"
+                        <Button x:Name="UpdateDatabaseV2Step2" Content="Step 2: Update FTP server database via PHP script" HorizontalContentAlignment="Left"
                                 Click="UpdateDatabaseV2Step2_Click"/>
                         <Button x:Name="UpdateDatabaseV2Step3" Content="Step 3: Prepare database update" HorizontalContentAlignment="Left"
                                 Click="UpdateDatabaseV2Step3_Click"/>
@@ -45,7 +45,7 @@
                         <Button x:Name="UpdateDatabaseV2Step6" Content="Step 6: Run script CreateManagerInfo.php"
                                 HorizontalContentAlignment="Left" Click="UpdateDatabaseV2Step6_Click"/>
                         <TextBox x:Name="UpdateDatabaseV2Step7" Height="35" TextWrapping="Wrap"
-                                 Text="Step 7: Commit repository changes update with message: &quot;made database public&quot;" IsReadOnly="True"/>
+                                 Text="Step 7: Commit repository changes update with message: &quot;Published Database&quot;" IsReadOnly="True"/>
                         <StackPanel Orientation="Horizontal">
                             <TextBox x:Name="UpdateDatabaseV2Step8" Height="23" TextWrapping="Wrap" Text="Step 8: Post database update on discord/forums" Margin="0,0,5,0" IsReadOnly="True"/>
                             <Button x:Name="UpdateDatabaseV2Step8_NA_ENG" Content="NA"  Margin="0,0,0,0" Click="UpdateDatabasestep8_NA_ENG_Click"/>
@@ -58,17 +58,17 @@
             <TabItem x:Name="UpdateApplicationV2Tab" Header="Update Application">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel>
-                        <TextBox x:Name="UpdateApplicationV2Step0" Height="23" TextWrapping="Wrap" Text="Step 0: Verify Application Works, is number updated"/>
-                        <TextBox x:Name="UpdateApplicationV2Step1" Height="23" TextWrapping="Wrap" Text="Step 1: Modify setting for beta, create and sign beta version"/>
-                        <TextBox x:Name="UpdateApplicationV2Step2" Height="23" TextWrapping="Wrap" Text="Step 2: Modify setting for stable, create and sign stable version"/>
-                        <TextBox x:Name="UpdateApplicationV2Step3" Height="23" TextWrapping="Wrap" Text="Step 3: Update virustotal.com link"/>
-                        <TextBox x:Name="UpdateApplicationV2Step4" Height="23" TextWrapping="Wrap" Text="Step 4: Update on github"/>
-                        <TextBox x:Name="UpdateApplicationV2Step6" Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file in database repo and commit"/>
-                        <Button x:Name="UpdateApplicationV2Step7a" Content="Step 7a: Upload RelhaxModpack.exe to bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationStable"/>
-                        <Button x:Name="UpdateApplicationV2Step7b" Content="Step 7b: Upload RelhaxModpackBeta.exe to bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationBeta"/>
-                        <Button x:Name="UpdateApplicationV2Step8" Content="Step 8: Upload manager_info.xml to wotmods and bigmods" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadManagerInfo"/>
-                        <Button x:Name="UpdateApplicationV2Step9" Content="Step 9: Run script CreateUpdatePackages.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateUpdatePackages"/>
-                        <Button x:Name="UpdateApplicationV2Step10" Content="Step 10: Run script CreateManagerInfo.php (bigmods)" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoBigmods"/>
+                        <TextBox x:Name="UpdateApplicationV2Step0"  Height="23" TextWrapping="Wrap" Text="Step 0: Verify Application Works, is number updated"/>
+                        <TextBox x:Name="UpdateApplicationV2Step1"  Height="23" TextWrapping="Wrap" Text="Step 1: Modify setting for beta, create and sign beta version"/>
+                        <TextBox x:Name="UpdateApplicationV2Step2"  Height="23" TextWrapping="Wrap" Text="Step 2: Modify setting for stable, create and sign stable version"/>
+                        <TextBox x:Name="UpdateApplicationV2Step3"  Height="23" TextWrapping="Wrap" Text="Step 3: Update virustotal.com link"/>
+                        <TextBox x:Name="UpdateApplicationV2Step4"  Height="23" TextWrapping="Wrap" Text="Step 4: Update on github"/>
+                        <TextBox x:Name="UpdateApplicationV2Step6"  Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file in database repo and commit"/>
+                        <Button x:Name="UpdateApplicationV2Step7a"  Content="Step 7a: Upload RelhaxModpack.exe" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationStable"/>
+                        <Button x:Name="UpdateApplicationV2Step7b"  Content="Step 7b: Upload RelhaxModpackBeta.exe" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationBeta"/>
+                        <Button x:Name="UpdateApplicationV2Step8"   Content="Step 8: Upload manager_info.xml" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadManagerInfo"/>
+                        <Button x:Name="UpdateApplicationV2Step9"   Content="Step 9: Run script CreateUpdatePackages.php" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateUpdatePackages"/>
+                        <Button x:Name="UpdateApplicationV2Step10"  Content="Step 10: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoBigmods"/>
                         <TextBox x:Name="UpdateApplicationV2Step11" Height="23" TextWrapping="Wrap" Text="Step 11: Post update notes on discord and forums"/>
                     </StackPanel>
                 </Grid>
