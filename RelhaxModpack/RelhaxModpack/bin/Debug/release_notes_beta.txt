@@ -1,3 +1,21 @@
+Beta Application version 1.0.3.1 (2020-03-22)
+https://www.virustotal.com/gui/file/29ce45674dfead3ac4b7a30f7e33a7534732bf8c54c2cb83bce903f7840c596c/detection
+- Re-worked messages for selection list issues (like listing disabled packages).
+- Fixed issues with the WG update utility for updating the WG game center.
+- Fixed no progress bar reporting during application update.
+- Added ability to clear game cache from diagnosstic utilities window.
+- Re-worked the version info dialog window (Arkhorse / TheIllusion).
+- Fixed bug with install group calculations based on offset max value.
+- Changed GameCenter Updater to use "game_info.xml" instead for which file to load.
+- Added feature to show a messageBox of first load of selectionList to inform users that they can right click to select a component. Added additional logic so that it will never show outside of a first load scenario.
+- Added/updated utility methods.
+- Fixed/updated issues and features with the database updater.
+- Fixed issues with preview window not displaying correct package information when selecting from combobox bulk preview.
+- Adjusted display/preview window height to be 2/3 rather then 1/2.
+- Updated documentation.
+- Updated translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.0.3.0 (2020-02-09)
 https://www.virustotal.com/gui/file/0f5e29d75dcd5b5d88f66d603c59454376028643eb754abcd2b415b8f19e6c1c/detection
 - Fixed bug in the clean/uninstall process crashing if access to mods/res_mods is denied. Now it will log the error and report.
