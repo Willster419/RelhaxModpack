@@ -951,12 +951,11 @@
             The type of media for the URL to be interpreted as
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Media.SelectablePackageNameFormatted">
+        <member name="P:RelhaxModpack.Media.SelectablePackageParent">
             <summary>
-            The NameFormatted property result from the Media's SelectablePackage container
+            Gets or sets the SelectablePackage parent of the media item
             </summary>
-            <remarks>This is used for when multiple SelectalbePackage sources are being used for preview display
-            (like multiple items inside a combobox)</remarks>
+            <remarks>This is used in the preview window to get the name to display in the title</remarks>
         </member>
         <member name="M:RelhaxModpack.Media.ToString">
             <summary>
@@ -6643,14 +6642,19 @@
             Preview
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.Preview.Package">
+        <member name="P:RelhaxModpack.Windows.Preview.Medias">
             <summary>
-            The package with media elements to preview
+            Get or set the list of media preview components
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.Preview.EditorMode">
+        <member name="P:RelhaxModpack.Windows.Preview.EditorMode">
             <summary>
             Sets if the preview was launched from the editor or from the selection list
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.Preview.ComboBoxItemsInsideMode">
+            <summary>
+            Get or set if the package received contains media from multiple packages from a combobox
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.Preview.#ctor">
