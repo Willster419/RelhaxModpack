@@ -48,6 +48,11 @@ namespace RelhaxModpack
         /// Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree
         /// </summary>
         public bool OffsetInstallGroups { get; set; } = true;
+
+        /// <summary>
+        /// A list of database managers who are known to maintain this category
+        /// </summary>
+        public string Maintainers { get; set; } = string.Empty;
         
         /// <summary>
         /// The list of packages contained in this category
