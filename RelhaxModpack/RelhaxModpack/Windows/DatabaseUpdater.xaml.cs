@@ -161,7 +161,7 @@ namespace RelhaxModpack.Windows
         {
             if (SelectModInfo.ShowDialog() == true)
             {
-                LogOutput.Text = "Loading ModInfo...";
+                LogOutput.Text = "Loading database...";
                 //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
                 //for the folder version: //modInfoAlpha.xml/@version
                 Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@onlineFolder");
@@ -1632,7 +1632,29 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
+            //list creation and parsing
+            List<Category> parsedCategoryList = new List<Category>();
+            List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
+            List<Dependency> dependencies = new List<Dependency>();
+            XmlDocument doc = new XmlDocument();
+            doc.Load(SelectModInfo.FileName);
+            XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsedCategoryList, Path.GetDirectoryName(SelectModInfo.FileName));
 
+            //link stuff in memory
+            Utils.BuildLinksRefrence(parsedCategoryList, false);
+
+            List<string> duplicatesList = Utils.CheckForDuplicates(globalDependencies,dependencies,parsedCategoryList);
+
+            if(duplicatesList == null || duplicatesList.Count == 0)
+            {
+                ReportProgress("No duplicates");
+            }
+            else
+            {
+                ReportProgress("The following packages are duplicate packageNames:");
+                foreach (string s in duplicatesList)
+                    ReportProgress(s);
+            }
 
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
@@ -1641,7 +1663,7 @@ namespace RelhaxModpack.Windows
         {
             //init UI
             ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Checking for dupplicate UIDs");
+            ReportProgress("Checking for duplicate UIDs");
 
             //checks
             if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
@@ -1657,7 +1679,7 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-
+            ReportProgress("UIDs aren't ready yet");
 
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
@@ -1682,7 +1704,7 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-
+            ReportProgress("UIDs aren't ready yet");
 
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
