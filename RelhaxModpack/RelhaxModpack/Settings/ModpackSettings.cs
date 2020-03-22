@@ -155,6 +155,11 @@ namespace RelhaxModpack
         public static bool DisplayUserModsWarning = true;
 
         /// <summary>
+        /// A one time run bool to display a message about how the user can right click a selection to get a preview window
+        /// </summary>
+        public static bool DisplaySelectionPreviewMessage = true;
+
+        /// <summary>
         /// Toggle if the application should use debug level logging or just info
         /// </summary>
         public static bool VerboseLogging = false;

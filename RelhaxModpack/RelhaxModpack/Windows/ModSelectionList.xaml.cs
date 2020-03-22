@@ -713,7 +713,7 @@ namespace RelhaxModpack.Windows
             }).ContinueWith((t) =>
             {
                 //https://stackoverflow.com/questions/32067034/how-to-handle-task-run-exception
-                if(t.IsFaulted)
+                if (t.IsFaulted)
                 {
                     Logging.Exception(t.Exception.ToString());
                     MessageBox.Show(Translations.GetTranslatedString("failedToLoadSelectionList"),
@@ -721,6 +721,21 @@ namespace RelhaxModpack.Windows
                     loadingProgress.Close();
                     loadingProgress = null;
                     this.Close();
+                }
+                else
+                {
+                    //hook for if first load, show a message box that you can right click a component for selection view
+                    if (!Settings.FirstLoad)
+                    {
+                        ModpackSettings.DisplaySelectionPreviewMessage = false;
+                    }
+                    if (Settings.FirstLoad && ModpackSettings.DisplaySelectionPreviewMessage)
+                    {
+                        ModpackSettings.DisplaySelectionPreviewMessage = false;
+                        this.Dispatcher.InvokeAsync(() => {
+                            MessageBox.Show(this, Translations.GetTranslatedString("HelpLabel"));
+                        });
+                    }
                 }
             });
         }
