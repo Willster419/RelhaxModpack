@@ -2194,19 +2194,9 @@ namespace RelhaxModpack.Windows
 
             if (PackageMediasDisplay.SelectedItem is Media media)
             {
-                SelectablePackage package = new SelectablePackage()
-                {
-                    PackageName = "TEST_PREVIEW",
-                    Name = "TEST_PREVIEW"
-                };
-                package.Medias.Add(media);
-                if (Preview != null)
-                {
-                    Preview = null;
-                }
                 Preview = new Preview()
                 {
-                    Package = package,
+                    Medias = new List<Media>() { media },
                     EditorMode = true
                 };
                 try
@@ -2236,16 +2226,11 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            SelectablePackage package = new SelectablePackage()
-            {
-                PackageName = "TEST_PREVIEW",
-                Name = "TEST_PREVIEW"
-            };
-            package.Medias.Add(new Media()
+            Media testMedia = new Media()
             {
                 URL = MediaTypesURL.Text,
                 MediaType = (MediaType)MediaTypesList.SelectedItem
-            });
+            };
 
             if (Preview != null)
             {
@@ -2253,7 +2238,7 @@ namespace RelhaxModpack.Windows
             }
             Preview = new Preview()
             {
-                Package = package,
+                Medias = new List<Media>() { testMedia },
                 EditorMode = true
             };
             try

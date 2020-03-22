@@ -961,10 +961,10 @@ namespace RelhaxModpack.Windows
                 if (ModpackSettings.ForceEnabled && !package.IsStructureEnabled)
                     package.Enabled = true;
 
-                //set the package's media SelectablePackageNameFormatted property to what the selectablePackage media actually is
+                //set all media's package reference back to itself
                 foreach(Media media in package.Medias)
                 {
-                    media.SelectablePackageNameFormatted = package.NameFormatted;
+                    media.SelectablePackageParent = package;
                 }
 
                 //special code for the borders and stackpanels
@@ -1483,6 +1483,7 @@ namespace RelhaxModpack.Windows
                     return;
 
             SelectablePackage spc = null;
+            bool comboboxItemsInside = false;
             if (sender is IPackageUIComponent packageSender)
             {
                 spc = packageSender.Package;
@@ -1507,6 +1508,7 @@ namespace RelhaxModpack.Windows
                     tracker++;
                 }
                 Utils.AllowUIToUpdate();
+
                 //check to see if a specific item is highlighted
                 //if so, it means that the user wants to preview a specific version
                 //if not, then the user clicked on the combobox as a whole, so show all items in the box
@@ -1528,19 +1530,17 @@ namespace RelhaxModpack.Windows
 
                 if (spc == null)
                 {
+                    //log that it's a combobox sender for the mode in the preview window
+                    comboboxItemsInside = true;
+
                     //make a new temporary package with a custom preview items list
                     //get a temp known good package, doesn't matter what cause we want the parent
                     RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)comboboxSender.Items[0];
+
                     //parent of item in combobox is header
                     SelectablePackage parentPackage = cbi.Package.Parent;
-                    spc = new SelectablePackage()
-                    {
-                        PackageName = parentPackage.PackageName,
-                        Name = string.Format("{0}: {1}", Translations.GetTranslatedString("dropDownItemsInside"), parentPackage.NameFormatted),
-                        Version = parentPackage.Version,
-                        Description = parentPackage.Description,
-                        UpdateComment = parentPackage.UpdateComment
-                    };
+                    spc = new SelectablePackage();
+
                     spc.Medias.Clear();
                     foreach (SelectablePackage packageToGetMediaFrom in parentPackage.Packages)
                     {
@@ -1555,9 +1555,6 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            if (spc.DevURL == null)
-                spc.DevURL = string.Empty;
-
             if (p != null)
             {
                 p.Close();
@@ -1566,7 +1563,8 @@ namespace RelhaxModpack.Windows
 
             p = new Preview()
             {
-                Package = spc
+                ComboBoxItemsInsideMode = comboboxItemsInside,
+                Medias = spc.Medias
             };
             p.Show();
         }
