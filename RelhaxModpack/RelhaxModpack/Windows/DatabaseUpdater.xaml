@@ -102,13 +102,29 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="StatisticsToolsTab" Header="Statistics Tools">
+            <TabItem x:Name="StatisticsToolsTab" Header="Other DB Tools">
                 <Grid Background="#FFE5E5E5">
-                    <StackPanel >
-                        <Button x:Name="DatabaseStatsSave" Content="Save live stats to FTP folder with new name" HorizontalContentAlignment="Left" Click="DatabaseStatsSave_Click"/>
-                        <Button x:Name="DatabaseStatsUpdateCurrent" Content="Update live stats with new packageNames" HorizontalContentAlignment="Left" Click="DatabaseStatsUpdateCurrent_Click"/>
-                        <Button x:Name="DatabaseStatsMakeNew" Content="Create new stats with new packageNames (overwrite live)" HorizontalContentAlignment="Left" Click="DatabaseStatsMakeNew_Click"/>
-                    </StackPanel>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="DatabaseStatsSave" Click="DatabaseStatsSave_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                        <TextBlock Text="Save live stats to FTP folder with new name" TextWrapping="Wrap"/>
+                    </Button>
+                    <Button x:Name="DatabaseStatsUpdateCurrent" Click="DatabaseStatsUpdateCurrent_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,41,0,0">
+                        <TextBlock Text="Update live stats with new packageNames" TextWrapping="Wrap"/>
+                    </Button>
+                    <Button x:Name="DatabaseStatsMakeNew" Click="DatabaseStatsMakeNew_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,82,0,0">
+                        <TextBlock Text="Create new stats with new packageNames (overwrite live)" TextWrapping="Wrap"/>
+                    </Button>
+                    <Button Content="Check for duplicate PackageNames" Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button Content="Check for duplicate UIDs" Grid.Column="1" HorizontalAlignment="Left" Margin="5,26,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button Content="Check for missing and assign new UIDs" Grid.Column="1" HorizontalAlignment="Left" Margin="5,51,0,0" VerticalAlignment="Top" Width="75"/>
                 </Grid>
             </TabItem>
         </TabControl>
