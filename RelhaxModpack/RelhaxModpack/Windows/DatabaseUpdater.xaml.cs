@@ -1610,5 +1610,20 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion
+
+        private void DatabaseDuplicatePNsCheck_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DatabaseDuplicateUIDsCheck_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddMissingUIDs_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
