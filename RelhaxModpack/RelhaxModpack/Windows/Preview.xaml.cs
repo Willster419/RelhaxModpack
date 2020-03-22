@@ -53,7 +53,7 @@ namespace RelhaxModpack.Windows
         private void OnPreviewWindowLoad(object sender, RoutedEventArgs e)
         {
             //make sure Medias is a valid entry
-            if(Medias == null)
+            if (Medias == null)
             {
                 Logging.Error("Preview Medias list is null");
                 MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
@@ -62,7 +62,7 @@ namespace RelhaxModpack.Windows
             }
 
             //check that all components have the package parent reference set
-            foreach(Media media in Medias)
+            foreach (Media media in Medias)
             {
                 bool anyMediaErrors = false;
                 if (media.SelectablePackageParent == null)
@@ -71,7 +71,7 @@ namespace RelhaxModpack.Windows
                     Logging.Error(media.ToString());
                     anyMediaErrors = true;
                 }
-                if(anyMediaErrors)
+                if (anyMediaErrors)
                 {
                     MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                     Close();
@@ -85,7 +85,7 @@ namespace RelhaxModpack.Windows
             PreviewPreviousPicButton.Content = Translations.GetTranslatedString(PreviewPreviousPicButton.Name);
 
             //make the linked labels in the link box
-            for(int i =0; i < Medias.Count; i++)
+            for (int i = 0; i < Medias.Count; i++)
             {
                 TextBlock block = new TextBlock();
                 block.Inlines.Clear();
@@ -100,14 +100,14 @@ namespace RelhaxModpack.Windows
                 MediaIndexer.Children.Add(block);
             }
 
-            if(EditorMode)
+            if (EditorMode)
             {
+                Logging.Debug("EditorMode = true, ignoring setting for startup location");
                 WindowStartupLocation = WindowStartupLocation.Manual;
             }
-
-            //if the saved preview window point is within the screen, then load it to there
             else
             {
+                //if the saved preview window point is within the screen, then load it to there
                 if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
                 {
                     //set for manual window location setting
@@ -123,9 +123,11 @@ namespace RelhaxModpack.Windows
                         Logfiles.Application, nameof(Preview), ModpackSettings.PreviewX, ModpackSettings.PreviewY);
                     WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 }
+
                 //set width and height
                 Width = ModpackSettings.PreviewWidth;
                 Height = ModpackSettings.PreviewHeight;
+
                 //set if full screen
                 if (ModpackSettings.PreviewFullscreen)
                     WindowState = WindowState.Maximized;
@@ -144,7 +146,7 @@ namespace RelhaxModpack.Windows
             }
 
             //set the timer if the view is OMC
-            if(ModpackSettings.ModSelectionView == SelectionView.Legacy)
+            if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
             {
                 OMCViewLegacyFocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
             }
@@ -157,7 +159,7 @@ namespace RelhaxModpack.Windows
             if (CurrentDispalyMedia == null || (!CurrentDispalyMedia.Equals(media)))
             {
                 //check if devurl, desciption, update notes need to be changed if selectablePackage changed as well
-                if(CurrentDisplaySP == null || (!CurrentDisplaySP.Equals(media.SelectablePackageParent)))
+                if (CurrentDisplaySP == null || (!CurrentDisplaySP.Equals(media.SelectablePackageParent)))
                 {
                     //check if devURL element should be enabled or not
                     if (string.IsNullOrWhiteSpace(media.SelectablePackageParent.DevURL))
@@ -244,11 +246,12 @@ namespace RelhaxModpack.Windows
             CurrentDispalyMedia = media;
 
             //if the child is our media player, then stop and dispose
-            if(MainPreviewBorder.Child != null && MainPreviewBorder.Child is RelhaxMediaPlayer player)
+            if (MainPreviewBorder.Child != null && MainPreviewBorder.Child is RelhaxMediaPlayer player)
             {
                 player.StopPlaybackIfPlaying();
                 player.Dispose();
             }
+
             //null the child element and make it again
             MainPreviewBorder.Child = null;
             Logging.Debug("loading preview of MediaType {0}, URL={1}", media.MediaType.ToString(), media.URL);
@@ -338,7 +341,7 @@ namespace RelhaxModpack.Windows
                             bitmapImage.EndInit();
                             pictureViewer.Source = bitmapImage;
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             Logging.Exception("failed to load picture");
                             Logging.Exception(ex.ToString());
@@ -374,7 +377,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        #region image mouse click and resizing
+        #region Image mouse click and resizing
         private void MainContentControl_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //only work on left button
@@ -382,7 +385,7 @@ namespace RelhaxModpack.Windows
                 return;
 
             //send cancel for the mouse click drag in the zoom border
-            if(zoomBorder != null)
+            if (zoomBorder != null)
             {
                 zoomBorder.CancelMouseDown = true;
             }
@@ -467,12 +470,12 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
             //save window location, size and fullscreen property (if not in editor mode)
-            if(!EditorMode)
+            if (!EditorMode)
             {
                 ModpackSettings.PreviewFullscreen = WindowState == WindowState.Maximized ? true : false;
                 ModpackSettings.PreviewHeight = (int)Height;
                 ModpackSettings.PreviewWidth = (int)Width;
-                if(Utils.PointWithinScreen((int)Left, (int)Top))
+                if (Utils.PointWithinScreen((int)Left, (int)Top))
                 {
                     ModpackSettings.PreviewX = (int)Left;
                     ModpackSettings.PreviewY = (int)Top;
@@ -480,14 +483,14 @@ namespace RelhaxModpack.Windows
             }
 
             Logging.Debug("Preview:  Disposing image memory stream");
-            if(ImageStream != null)
+            if (ImageStream != null)
             {
                 ImageStream.Dispose();
                 ImageStream = null;
             }
 
             Logging.Debug("Preview:  Disposing browser");
-            if(browser != null)
+            if (browser != null)
             {
                 browser.Dispose();
                 browser = null;
