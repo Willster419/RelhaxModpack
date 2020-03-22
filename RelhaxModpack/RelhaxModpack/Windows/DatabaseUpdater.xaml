@@ -122,13 +122,14 @@
                     <Button x:Name="DatabaseStatsMakeNew" Click="DatabaseStatsMakeNew_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,82,0,0">
                         <TextBlock Text="Create new stats with new packageNames (overwrite live)" TextWrapping="Wrap"/>
                     </Button>
-                    <Button x:Name="DatabaseDuplicatePNsCheck" Grid.Column="1" Margin="5,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="DatabaseDuplicatePNsCheck_Click">
+                    <Button x:Name="AnotherLoadDatabaseButton" Content="Load Database" HorizontalAlignment="Stretch" Margin="5,0,0,0" VerticalAlignment="Top" Grid.Column="1" Click="OnLoadModInfo"/>
+                    <Button x:Name="DatabaseDuplicatePNsCheck" Grid.Column="1" Margin="5,25,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="DatabaseDuplicatePNsCheck_Click">
                         <TextBlock Text="Check for duplicate PackageNames" TextWrapping="Wrap"/>
                     </Button>
-                    <Button x:Name="DatabaseDuplicateUIDsCheck" Grid.Column="1" Margin="5,41,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="DatabaseDuplicateUIDsCheck_Click">
+                    <Button x:Name="DatabaseDuplicateUIDsCheck" Grid.Column="1" Margin="5,66,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="DatabaseDuplicateUIDsCheck_Click">
                         <TextBlock Text="Check for duplicate UIDs" TextWrapping="Wrap"/>
                     </Button>
-                    <Button x:Name="AddMissingUIDs" Grid.Column="1" Margin="5,66,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="AddMissingUIDs_Click">
+                    <Button x:Name="AddMissingUIDs" Grid.Column="1" Margin="5,91,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="AddMissingUIDs_Click">
                         <TextBlock Text="Check for missing and assign new UIDs" TextWrapping="Wrap"/>
                     </Button>
                 </Grid>
