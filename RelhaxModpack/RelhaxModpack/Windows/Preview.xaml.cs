@@ -36,7 +36,7 @@ namespace RelhaxModpack.Windows
         private Media CurrentDispalyMedia = null;
         private WebBrowser browser = null;
         private ZoomBorder zoomBorder = null;
-        private DispatcherTimer FocusTimer = null;
+        private DispatcherTimer OMCViewLegacyFocusTimer = null;
 
         /// <summary>
         /// Create an instance of the Preview window
@@ -185,13 +185,13 @@ namespace RelhaxModpack.Windows
             //set the timer if the view is OMC
             if(ModpackSettings.ModSelectionView == SelectionView.Legacy)
             {
-                FocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
+                OMCViewLegacyFocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
             }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            FocusTimer.Stop();
+            OMCViewLegacyFocusTimer.Stop();
             this.Focus();
         }
 
