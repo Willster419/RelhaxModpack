@@ -490,10 +490,21 @@ namespace RelhaxModpack.Windows
             }
             ReportProgress("Located");
 
+            //check if it's the correct file to upload
+            if (!Path.GetFileName(SelectV2Application.FileName).Equals(Settings.ApplicationFilenameStable))
+            {
+                if (MessageBox.Show(string.Format("The file selected is not {0}, are you sure you selected the correct file?",
+                    Settings.ApplicationFilenameStable), "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                {
+                    ReportProgress("Canceled");
+                    return;
+                }
+            }
+
             ReportProgress("Uploading stable V2 application to bigmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
+                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Settings.ApplicationFilenameStable, SelectV2Application.FileName);
             }
             ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -511,10 +522,21 @@ namespace RelhaxModpack.Windows
             }
             ReportProgress("Located");
 
+            //check if it's the correct file to upload
+            if (!Path.GetFileName(SelectV2Application.FileName).Equals(Settings.ApplicationFilenameBeta))
+            {
+                if (MessageBox.Show(string.Format("The file selected is not {0}, are you sure you selected the correct file?",
+                    Settings.ApplicationFilenameBeta), "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                {
+                    ReportProgress("Canceled");
+                    return;
+                }
+            }
+
             ReportProgress("Uploading beta V2 application to bigmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
+                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Settings.ApplicationFilenameBeta, SelectV2Application.FileName);
             }
             ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -825,13 +847,13 @@ namespace RelhaxModpack.Windows
             //checks
             if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
-                ReportProgress("wot online folder version is empty");
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
             if (!File.Exists(SelectModInfo.FileName))
             {
-                ReportProgress("selectMofInfo file selected does not exist:" + SelectModInfo.FileName);
+                ReportProgress("SelectModInfo file selected does not exist:" + SelectModInfo.FileName);
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
@@ -1015,7 +1037,7 @@ namespace RelhaxModpack.Windows
                         package.Size = fakeSize;
                         if (package.Size == 0)
                         {
-                            Logging.Updater("zip file {0} is 0 bytes (empty file)", LogLevel.Info, package.ZipFile);
+                            Logging.Updater("Zip file {0} is 0 bytes (empty file)", LogLevel.Info, package.ZipFile);
                             return;
                         }
                     }
@@ -1058,7 +1080,7 @@ namespace RelhaxModpack.Windows
                 SelectablePackage result = results[0];
                 if (!selectablePackage.NameFormatted.Equals(result.NameFormatted))
                 {
-                    Logging.Updater("package rename-> old:{0}, new:{1}", LogLevel.Info, result.PackageName, selectablePackage.PackageName);
+                    Logging.Updater("Package rename-> old:{0}, new:{1}", LogLevel.Info, result.PackageName, selectablePackage.PackageName);
                     renamedPackages.Add(new DatabaseBeforeAfter() { Before = result, After = selectablePackage });
                 }
             }
@@ -1077,7 +1099,7 @@ namespace RelhaxModpack.Windows
                 bool completePackageNamePathChanged = !result.CompletePackageNamePath.Equals(selectablePackage.CompletePackageNamePath);
                 if (completeNamePathChanged && completePackageNamePathChanged)
                 {
-                    Logging.Updater("package moved: {0}", LogLevel.Info, selectablePackage.PackageName);
+                    Logging.Updater("Package moved: {0}", LogLevel.Info, selectablePackage.PackageName);
                     movedPackages.Add(new DatabaseBeforeAfter { Before = result, After = selectablePackage });
                 }
             }
@@ -1279,13 +1301,13 @@ namespace RelhaxModpack.Windows
             //checks
             if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
-                ReportProgress("wot online folder version is empty");
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
             if (!File.Exists(SelectModInfo.FileName))
             {
-                ReportProgress("selectMofInfo file selected does not exist:" + SelectModInfo.FileName);
+                ReportProgress("SelectMofInfo file selected does not exist:" + SelectModInfo.FileName);
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
