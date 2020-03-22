@@ -684,7 +684,7 @@ namespace RelhaxModpack.Windows
             StringBuilder requestBuilder = new StringBuilder();
             if((bool)GcDownloadStep1GameCenterCheckbox.IsChecked)
             {
-                requestBuilder.Append("https://wguswgc-wgcct.wargaming.net/api/v1/wgc_update/?protocol_version=1.8");
+                requestBuilder.Append("https://wguswgc-wgcct.wargaming.net/api/v1/wgc_update/?protocol_version=1.9");
                 foreach (GameCenterProperty gameCenterProperty in GameCenterProperties)
                 {
                     requestBuilder.AppendFormat("&{0}={1}", gameCenterProperty.GetRequestParamater, gameCenterProperty.Value);
@@ -706,7 +706,7 @@ namespace RelhaxModpack.Windows
                     return;
                 }
                 GameCenterProperty urlProperty = baseUrlPropertyList[0];
-                requestBuilder.AppendFormat("{0}api/v1/patches_chain/?protocol_version=1.8", urlProperty.Value);
+                requestBuilder.AppendFormat("{0}api/v1/patches_chain/?protocol_version=1.9", urlProperty.Value);
                 foreach (GameCenterProperty gameCenterProperty in GameCenterProperties)
                 {
                     if (string.IsNullOrWhiteSpace(gameCenterProperty.Value) && !gameCenterProperty.IsRequired)
