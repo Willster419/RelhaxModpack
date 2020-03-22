@@ -177,6 +177,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        #region Step 1
         private void GcDownloadStep1SelectClientButton_Click(object sender, RoutedEventArgs e)
         {
             //if client selected, get params
@@ -638,7 +639,9 @@ namespace RelhaxModpack.Windows
                 IsRequired = true
             });
         }
+        #endregion
 
+        #region Step 2
         private void GcDownloadStep2Init()
         {
             //start timer
@@ -671,7 +674,9 @@ namespace RelhaxModpack.Windows
                 GcDownloadStep2NextButton.IsEnabled = false;
             }
         }
+        #endregion
 
+        #region Step 3
         private async void GcDownloadStep3Init()
         {
             GcDownloadStep3NextButton.IsEnabled = false;
@@ -860,7 +865,9 @@ namespace RelhaxModpack.Windows
             }
             GcDownloadStep3NextButton.IsEnabled = true;
         }
+        #endregion
 
+        #region Step 4
         private async void GcDownloadStep4Init()
         {
             step4DownloadCanceled = false;
@@ -929,7 +936,9 @@ namespace RelhaxModpack.Windows
             GcDownloadStep4NextButton.IsEnabled = true;
             GcDownloadStep4PreviousButton.IsEnabled = false;
         }
+        #endregion
 
+        #region UI events
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             GcDownloadStep4DownloadingSizes.Text = string.Format("{0} {1} {2}", Utils.SizeSuffix((ulong)e.BytesReceived,1,true,false),
@@ -995,5 +1004,6 @@ namespace RelhaxModpack.Windows
         {
             this.Close();
         }
+        #endregion
     }
 }
