@@ -19,12 +19,12 @@
         <TabControl x:Name="TabController" HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" SelectionChanged="TabControl_SelectionChanged" >
             <TabItem x:Name="AuthStatusTab" Header="Authorization Status">
                 <Grid Background="#FFE5E5E5">
-                    <TextBlock x:Name="PasswordLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Please Enter password to use this tool" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="PasswordLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Please enter password to use this tool" VerticalAlignment="Top"/>
                     <TextBox x:Name="PaswordTextbox" HorizontalAlignment="Stretch" Height="46" Margin="10,26,10,0" TextWrapping="Wrap" VerticalAlignment="Top" KeyDown="PaswordTextbox_KeyDown"/>
-                    <Button x:Name="PasswordButton" Content="Check text" HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top" Width="75" Click="PasswordButton_Click"/>
-                    <TextBlock x:Name="AuthStatusTextblock" HorizontalAlignment="Left" Margin="170,80,0,0" TextWrapping="Wrap" Text="Current status: Denied" VerticalAlignment="Top" Foreground="#FFEE1111" Width="204"/>
+                    <Button x:Name="PasswordButton" Content="From above textbox" HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top" Width="129" Click="PasswordButton_Click"/>
+                    <TextBlock x:Name="AuthStatusTextblock" HorizontalAlignment="Left" Margin="224,80,0,0" TextWrapping="Wrap" Text="Current status: Denied" VerticalAlignment="Top" Foreground="#FFEE1111" Width="150"/>
                     <TextBlock HorizontalAlignment="Left" Margin="10,103,0,0" TextWrapping="Wrap" Text="Without the password, the only sections available are MD5 generation and database output." VerticalAlignment="Top" Width="364" Height="38"/>
-                    <Button x:Name="LoadPasswordFromFileButton" Content="From File" HorizontalAlignment="Left" Margin="90,78,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="LoadPasswordFromFileButton_Click"/>
+                    <Button x:Name="LoadPasswordFromFileButton" Content="From file" HorizontalAlignment="Left" Margin="144,78,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="LoadPasswordFromFileButton_Click"/>
 
                 </Grid>
             </TabItem>
