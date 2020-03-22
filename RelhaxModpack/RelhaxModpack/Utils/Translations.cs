@@ -4022,6 +4022,14 @@ namespace RelhaxModpack
             French.Add("cleanupModFilesCompleted", "Nettoyage des fichiers de mods terminé");
             Spanish.Add("cleanupModFilesCompleted", "Limpieza de mods completada");
             Russian.Add("cleanupModFilesCompleted", "Удаление модов завершено.");
+
+            //Component: CleanGameCacheText
+            // Text block for button to allow user to clear cache data from applicationData folders
+            English.Add("CleanGameCacheText", "Clear game cache files");
+            German.Add("CleanGameCacheText", TranslationNeeded);
+            Polish.Add("CleanGameCacheText", TranslationNeeded);
+            French.Add("CleanGameCacheText", TranslationNeeded);
+            Spanish.Add("CleanGameCacheText", TranslationNeeded);
             #endregion
 
             #region Add zip files Dialog
