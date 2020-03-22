@@ -73,11 +73,10 @@ namespace RelhaxModpack
         public MediaType MediaType { get; set; } = MediaType.Picture;
 
         /// <summary>
-        /// The NameFormatted property result from the Media's SelectablePackage container
+        /// Gets or sets the SelectablePackage parent of the media item
         /// </summary>
-        /// <remarks>This is used for when multiple SelectalbePackage sources are being used for preview display
-        /// (like multiple items inside a combobox)</remarks>
-        public string SelectablePackageNameFormatted { get; set; } = string.Empty;
+        /// <remarks>This is used in the preview window to get the name to display in the title</remarks>
+        public SelectablePackage SelectablePackageParent { get; set; } = null;
 
         /// <summary>
         /// The string properties of the object
