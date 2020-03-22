@@ -634,7 +634,7 @@ namespace RelhaxModpack.Windows
             GameCenterProperties.Add(new GameCenterProperty()
             {
                 FileName = WgcNotificationsXml,
-                Xpath = @"//protocol/notifications/notification/app_id",
+                Xpath = @"//protocol/notifications/notification/app_id[contains(text(),'WGC.')]",
                 GetRequestParamater = "game_id",
                 IsRequired = true
             });
