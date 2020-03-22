@@ -4030,6 +4030,30 @@ namespace RelhaxModpack
             Polish.Add("CleanGameCacheText", TranslationNeeded);
             French.Add("CleanGameCacheText", TranslationNeeded);
             Spanish.Add("CleanGameCacheText", TranslationNeeded);
+
+            //Component: cleanGameCacheProgress
+            //
+            English.Add("cleanGameCacheProgress", "Clearing game cache files");
+            German.Add("cleanGameCacheProgress", TranslationNeeded);
+            Polish.Add("cleanGameCacheProgress", TranslationNeeded);
+            French.Add("cleanGameCacheProgress", TranslationNeeded);
+            Spanish.Add("cleanGameCacheProgress", TranslationNeeded);
+
+            //Component: cleanGameCacheSucess
+            //
+            English.Add("cleanGameCacheSucess", "Sucessfully cleared game cache files");
+            German.Add("cleanGameCacheSucess", TranslationNeeded);
+            Polish.Add("cleanGameCacheSucess", TranslationNeeded);
+            French.Add("cleanGameCacheSucess", TranslationNeeded);
+            Spanish.Add("cleanGameCacheSucess", TranslationNeeded);
+
+            //Component: cleanGameCacheFail
+            //
+            English.Add("cleanGameCacheFail", "Failed to clear game cache files");
+            German.Add("cleanGameCacheFail", TranslationNeeded);
+            Polish.Add("cleanGameCacheFail", TranslationNeeded);
+            French.Add("cleanGameCacheFail", TranslationNeeded);
+            Spanish.Add("cleanGameCacheFail", TranslationNeeded);
             #endregion
 
             #region Add zip files Dialog
