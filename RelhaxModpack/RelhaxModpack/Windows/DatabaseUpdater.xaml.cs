@@ -1611,19 +1611,81 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
+        #region DatabasePackage and UIDs checks
         private void DatabaseDuplicatePNsCheck_Click(object sender, RoutedEventArgs e)
         {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Checking for duplicate packageNames");
 
+            //checks
+            if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+            if (!File.Exists(SelectModInfo.FileName))
+            {
+                ReportProgress("SelectModInfo file selected does not exist:" + SelectModInfo.FileName);
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+
+
+            ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
         private void DatabaseDuplicateUIDsCheck_Click(object sender, RoutedEventArgs e)
         {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Checking for dupplicate UIDs");
 
+            //checks
+            if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+            if (!File.Exists(SelectModInfo.FileName))
+            {
+                ReportProgress("SelectModInfo file selected does not exist:" + SelectModInfo.FileName);
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+
+
+            ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
         private void AddMissingUIDs_Click(object sender, RoutedEventArgs e)
         {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Checking for missing UIDs and adding");
 
+            //checks
+            if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+            if (!File.Exists(SelectModInfo.FileName))
+            {
+                ReportProgress("SelectModInfo file selected does not exist:" + SelectModInfo.FileName);
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+
+
+            ToggleUI((TabController.SelectedItem as TabItem), true);
         }
+        #endregion
     }
 }
