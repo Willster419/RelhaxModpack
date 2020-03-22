@@ -29,7 +29,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Sets if the preview was launched from the editor or from the selection list
         /// </summary>
-        public bool EditorMode = false;
+        public bool EditorMode { get; set; } = false;
 
         //private
         private MemoryStream ImageStream = null;
