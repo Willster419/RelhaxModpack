@@ -4630,6 +4630,11 @@
             A one time run bool to display a message about how to use user mods
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DisplaySelectionPreviewMessage">
+            <summary>
+            A one time run bool to display a message about how the user can right click a selection to get a preview window
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.VerboseLogging">
             <summary>
             Toggle if the application should use debug level logging or just info
