@@ -438,6 +438,11 @@
             Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Category.Maintainers">
+            <summary>
+            A list of database managers who are known to maintain this category
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Category.Packages">
             <summary>
             The list of packages contained in this category
@@ -610,6 +615,13 @@
             <summary>
             A unique identifier for each component in the database. No two components will have the same PackageName
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabasePackage.UID">
+            <summary>
+            Another non-changing, randomly generated unique 16 character identifier for each component in the database.
+            </summary>
+            <remarks>These fulfill the originally intended purpose of the PackageName defined back in OMC.
+            Once generated, the value should not be modified, and will only be removed when the package is removed.</remarks>
         </member>
         <member name="P:RelhaxModpack.DatabasePackage.Version">
             <summary>
@@ -5020,6 +5032,16 @@
         <member name="F:RelhaxModpack.Settings.RelicBatchUpdateScriptServer">
             <summary>
             The filename of the self updater script inside the manager zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationFilenameStable">
+            <summary>
+            The name of the application executable when compiled with stable distribution
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationFilenameBeta">
+            <summary>
+            The name of the application executable when compiled with beta distribution
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.RelicBatchUpdateScriptOld">
