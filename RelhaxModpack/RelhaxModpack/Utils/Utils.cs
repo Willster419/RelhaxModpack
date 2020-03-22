@@ -31,6 +31,7 @@ using System.Windows.Media.Imaging;
 using System.Web;
 using RelhaxModpack.DatabaseComponents;
 using System.Runtime.CompilerServices;
+using RelhaxModpack.UIComponents;
 
 namespace RelhaxModpack
 {
@@ -2922,6 +2923,114 @@ namespace RelhaxModpack
                         Logging.Warning("no matching zip entries for file: {0}", zipPath);
                 }
             }
+        }
+
+        /// <summary>
+        /// Clear the WoT appdata cache folder
+        /// </summary>
+        /// <returns>True if clearing operation was sucessfull, false otherwise</returns>
+        public static bool ClearCache()
+        {
+            //make sure that the app data folder exists
+            //if it does not, then it does not need to run this
+            if (!Directory.Exists(Settings.AppDataFolder))
+            {
+                Logging.Info("Appdata folder does not exist, creating");
+                Directory.CreateDirectory(Settings.AppDataFolder);
+                return true;
+            }
+            Logging.Info("Appdata folder exists, backing up user settings and clearing cache");
+
+            //make the temp folder if it does not already exist
+            string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolderPath, "AppDataBackup");
+            //delete if possibly from previous install
+            if (Directory.Exists(AppPathTempFolder))
+                Utils.DirectoryDelete(AppPathTempFolder, true);
+
+            //and make the folder at the end
+            Directory.CreateDirectory(AppPathTempFolder);
+
+            //backup files and folders that should be kept that aren't cache
+            string[] fileNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat" };
+            string[] folderNames = { "xvm", "pmod" };
+            string pmodCacheFileToDelete = "cache.dat";
+            string xvmFolderToDelete = "cache";
+
+            //check if the directories are files or folders
+            //if files they can move directly
+            //if folders they have to be re-created on the destination and files moved manually
+            Logging.WriteToLog("Starting clearing cache step 1 of 3: backing up old files", Logfiles.Application, LogLevel.Debug);
+            foreach (string file in fileNames)
+            {
+                Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
+                if (File.Exists(Path.Combine(Settings.AppDataFolder, file)))
+                {
+                    if (!Utils.FileMove(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
+                    {
+                        Logging.Error("Failed to move file for clear cache");
+                        return false;
+                    }
+                }
+                else
+                {
+                    Logging.Info("File does not exist in step clearCache: {0}", file);
+                }
+            }
+
+            foreach (string folder in folderNames)
+            {
+                if (Directory.Exists(Path.Combine(Settings.AppDataFolder, folder)))
+                {
+                    Utils.DirectoryMove(Path.Combine(Settings.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
+                }
+                else
+                {
+                    Logging.Info("Folder does not exist in step clearCache: {0}", folder);
+                }
+            }
+
+            //now delete the temp folder
+            Logging.WriteToLog("Starting clearing cache step 2 of 3: actually clearing cache", Logfiles.Application, LogLevel.Debug);
+            Utils.DirectoryDelete(Settings.AppDataFolder, true);
+
+            //then put the above files back
+            Logging.WriteToLog("Starting clearing cache step 3 of 3: restoring old files", Logfiles.Application, LogLevel.Debug);
+            Directory.CreateDirectory(Settings.AppDataFolder);
+            foreach (string file in fileNames)
+            {
+                Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
+                if (File.Exists(Path.Combine(AppPathTempFolder, file)))
+                {
+                    if (!Utils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)))
+                    {
+                        Logging.Error("Failed to move file for clear cache");
+                        return false;
+                    }
+                }
+                else
+                {
+                    Logging.Info("File does not exist in step clearCache: {0}", file);
+                }
+            }
+
+            //delete extra xvm cache folder and pmod cache file
+            if (Directory.Exists(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete)))
+                Utils.DirectoryDelete(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete), true);
+            if (File.Exists(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete)))
+                Utils.FileDelete(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete));
+
+            foreach (string folder in folderNames)
+            {
+                if (Directory.Exists(Path.Combine(AppPathTempFolder, folder)))
+                {
+                    Utils.DirectoryMove(Path.Combine(AppPathTempFolder, folder), Path.Combine(Settings.AppDataFolder, folder), true);
+                }
+                else
+                {
+                    Logging.Info("Folder does not exist in step clearCache: {0}", folder);
+                }
+            }
+            return true;
         }
         #endregion
 

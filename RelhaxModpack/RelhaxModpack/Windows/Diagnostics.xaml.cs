@@ -326,9 +326,23 @@ namespace RelhaxModpack.Windows
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanupModFilesCompleted");
         }
 
-        private void ClearGameCacheButton_Click(object sender, RoutedEventArgs e)
+        private async void ClearGameCacheButton_Click(object sender, RoutedEventArgs e)
         {
+            Logging.Info("[Diagnostics]: Cleaning AppData cache");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheProgress");
 
+            bool clearCache = await Task.Run(() => Utils.ClearCache());
+
+            if(clearCache)
+            {
+                Logging.Info("[Diagnostics]: Cleaning AppData cache success");
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheSucess");
+            }
+            else
+            {
+                Logging.Info("[Diagnostics]: Cleaning AppData cache fail");
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheFail");
+            }
         }
     }
 }
