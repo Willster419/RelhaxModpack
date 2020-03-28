@@ -45,6 +45,14 @@ namespace RelhaxModpack.UIComponents
             set { ChildTextblock.Text = value; }
         }
 
+        public Brush MouseOverBackground { get; set; } = Brushes.Red;
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            ChildTextblock.Foreground = this.Foreground;
+            TheHyperlink.Foreground = this.Foreground;
+        }
+
         private void TheHyperlink_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(URL))
@@ -56,20 +64,16 @@ namespace RelhaxModpack.UIComponents
             { Logging.Exception(ex.ToString()); }
         }
 
-        private Brush foregroundBrush = null;
-        private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void ChildTextblock_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            this.Foreground = Brushes.DarkRed;
+            ChildTextblock.Foreground = MouseOverBackground;
+            TheHyperlink.Foreground = MouseOverBackground;
         }
 
-        private void UserControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        private void ChildTextblock_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            this.Foreground = foregroundBrush;
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            foregroundBrush = this.Foreground;
+            ChildTextblock.Foreground = this.Foreground;
+            TheHyperlink.Foreground = this.Foreground;
         }
     }
 }
