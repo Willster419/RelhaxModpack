@@ -15,6 +15,7 @@ using Path = System.IO.Path;
 using Microsoft.WindowsAPICodePack;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Threading;
+using System.Text.RegularExpressions;
 
 namespace RelhaxModpack.Windows
 {
@@ -49,6 +50,7 @@ namespace RelhaxModpack.Windows
             "-----Global Dependencies-----",
             "-----Dependencies-----",
         };
+        private readonly string HttpRegexSearch = @"https*:\/{2}\S+";
 
         //public
         /// <summary>
@@ -646,7 +648,61 @@ namespace RelhaxModpack.Windows
 
         private void PackageDisplayUrlParse_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (!(sender is TextBox))
+            {
+                Logging.Editor("[MouseDoubleClick]: The MouseDoubleClick has been registered to an invalid component! {0}", LogLevel.Error, sender.GetType().ToString());
+                return;
+            }
+            TextBox sender_ = (TextBox)sender;
 
+            //split the textbox into http arrays
+            string[] httpSplit = sender_.Text.Split(new string[] { "http" }, StringSplitOptions.RemoveEmptyEntries);
+            int stringSplitLength = "http".Length;
+
+            //find out where the curser selection is
+            int sectionHttpStart = 0;
+            int sectionHttpEnd = 0;
+            int sectionSplitEnd = 0;
+            for(int i = 0; i < httpSplit.Count(); i++)
+            {
+                string httpParse = httpSplit[i];
+
+                //do a regex split to get the end words
+                string[] httpParseRegex = Regex.Split(httpParse, @"\s");
+                string httpParseRegexStart = httpParseRegex[0];
+                //string httpParseRegexEnd = httpParseRegex[1];
+
+                //get word index calculations with reference to where the curser selection is
+                sectionHttpStart = sectionSplitEnd;
+                sectionHttpEnd = sectionHttpStart + httpParseRegexStart.Length;
+                sectionSplitEnd = sectionHttpStart + httpParse.Length;
+                if (i > 0)
+                    sectionSplitEnd += stringSplitLength;
+                Logging.Editor("[MouseDoubleClick]: sectionHttpStart: {0}, sectionHttpEnd: {1}, sectionSplitEnd: {2}, selectionStart{3}",
+                    LogLevel.Debug, sectionHttpStart, sectionHttpEnd, sectionSplitEnd, sender_.SelectionStart);
+
+                if(sectionHttpStart <= sender_.SelectionStart && sender_.SelectionStart < sectionHttpEnd)
+                {
+                    Logging.Editor("[MouseDoubleClick]: Valid http index found to parse: {0}", LogLevel.Debug, i);
+                    //split on end via whitespace character
+                    string parsedHttpLink = Regex.Split(httpParse, @"\s")[0];
+                    parsedHttpLink = string.Format("{0}{1}", "http", parsedHttpLink);
+                    Logging.Editor("[MouseDoubleClick]: Parsed http string: {0}", LogLevel.Info, parsedHttpLink);
+                    try
+                    {
+                        System.Diagnostics.Process.Start(parsedHttpLink);
+                    }
+                    catch
+                    {
+                        Logging.Editor("[MouseDoubleClick]: Failed to open DevURL {0}", LogLevel.Info, parsedHttpLink);
+                    }
+                    break;
+                }
+            }
+            if(sectionSplitEnd == 0)
+            {
+                Logging.Editor("[MouseDoubleClick]: Never found an 'http' sequence to begin parsing", LogLevel.Info);
+            }
         }
         #endregion
 
