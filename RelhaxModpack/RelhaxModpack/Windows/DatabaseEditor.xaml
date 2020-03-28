@@ -560,7 +560,7 @@
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="PackageDescriptionDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True"/>
+                        <TextBox x:Name="PackageDescriptionDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True" MouseDoubleClick="PackageDisplayUrlParse_MouseDoubleClick"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DevURLTab" Header="Dev URL">
@@ -572,7 +572,7 @@
                 </TabItem>
                 <TabItem x:Name="InternalNotesTab" Header="Internal Notes">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="PackageInternalNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True"/>
+                        <TextBox x:Name="PackageInternalNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True" MouseDoubleClick="PackageDevURLDisplay_MouseDoubleClick"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="UpdateNotesTab" Header="Update Notes">

@@ -643,6 +643,11 @@ namespace RelhaxModpack.Windows
             foreach (Dependency d in Dependencies)
                 LoadedDependenciesList.Items.Add(d);
         }
+
+        private void PackageDisplayUrlParse_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
         #endregion
 
         #region Show and Apply database methods
