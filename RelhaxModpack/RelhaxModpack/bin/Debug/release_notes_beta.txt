@@ -1,3 +1,10 @@
+Beta Application version 1.0.3.2 (2020-03-28)
+https://www.virustotal.com/gui/file/204c835f0c3447d88a31672ecab0dbe164c7043e72b49c43b3d74823c2760879/detection
+- Fixed incorrect application of color to some hyperlinks in the application.
+- Added double-click to open URLs in database editor, in description, update notes, and internal notes.
+- Fixed bugs with recent database updater changes.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.0.3.1 (2020-03-22)
 https://www.virustotal.com/gui/file/29ce45674dfead3ac4b7a30f7e33a7534732bf8c54c2cb83bce903f7840c596c/detection
 - Re-worked messages for selection list issues (like listing disabled packages).
