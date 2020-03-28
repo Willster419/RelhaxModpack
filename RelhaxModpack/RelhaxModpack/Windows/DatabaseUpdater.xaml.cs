@@ -496,6 +496,7 @@ namespace RelhaxModpack.Windows
                 if (MessageBox.Show(string.Format("The file selected is not {0}, are you sure you selected the correct file?",
                     Settings.ApplicationFilenameStable), "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.No)
                 {
+                    ToggleUI((TabController.SelectedItem as TabItem), true);
                     ReportProgress("Canceled");
                     return;
                 }
@@ -528,6 +529,7 @@ namespace RelhaxModpack.Windows
                 if (MessageBox.Show(string.Format("The file selected is not {0}, are you sure you selected the correct file?",
                     Settings.ApplicationFilenameBeta), "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.No)
                 {
+                    ToggleUI((TabController.SelectedItem as TabItem), true);
                     ReportProgress("Canceled");
                     return;
                 }
