@@ -2258,6 +2258,73 @@
             The name of the component for WPF databinding. An empty string indicates the component is not bound.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition">
             <summary>
             The UI class theme definition for TabItem class
@@ -2664,6 +2731,11 @@
         <member name="P:RelhaxModpack.UIComponents.Theme.ProgressBarColorset">
             <summary>
             The set of rules to use for what parts of a ProgressBar UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.RelhaxHyperlinkColorset">
+            <summary>
+            The set of rules to use for what parts of a RelhaxHyperlink UI object can be themed
             </summary>
         </member>
         <member name="P:RelhaxModpack.UIComponents.Theme.WindowColorsets">
