@@ -187,6 +187,15 @@ namespace RelhaxModpack.UIComponents
                 },
                 SelectedBrush = null
             },
+            RelhaxHyperlinkColorset = new ClassColorset()
+            {
+                ClassThemeDefinition = new RelhaxHyperlinkClassThemeDefinition(),
+                ForegroundBrush = new CustomBrush()
+                {
+                    IsValid = true,
+                    Brush = Brushes.Blue
+                }
+            },
             //empty definition to not apply any changes
             //colorSet object and xml object MUST exist for parsing to work!
             ControlColorset = new ClassColorset()
@@ -456,6 +465,15 @@ namespace RelhaxModpack.UIComponents
                 {
                     IsValid = true,
                     Brush = DarkThemeTextColor
+                }
+            },
+            RelhaxHyperlinkColorset = new ClassColorset()
+            {
+                ClassThemeDefinition = new RelhaxHyperlinkClassThemeDefinition(),
+                ForegroundBrush = new CustomBrush()
+                {
+                    IsValid = true,
+                    Brush = Brushes.LightBlue
                 }
             },
             ControlColorset = new ClassColorset()
