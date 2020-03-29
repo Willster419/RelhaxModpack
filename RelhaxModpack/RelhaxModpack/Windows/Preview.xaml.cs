@@ -35,6 +35,11 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool ComboBoxItemsInsideMode { get; set; } = false;
 
+        /// <summary>
+        /// Get or set the package that invoked the preview window
+        /// </summary>
+        public SelectablePackage InvokedPackage = null;
+
         private Media CurrentDispalyMedia = null;
         private SelectablePackage CurrentDisplaySP = null;
         private MemoryStream ImageStream = null;
@@ -53,9 +58,9 @@ namespace RelhaxModpack.Windows
         private void OnPreviewWindowLoad(object sender, RoutedEventArgs e)
         {
             //make sure Medias is a valid entry
-            if (Medias == null)
+            if (Medias == null || InvokedPackage == null)
             {
-                Logging.Error("Preview Medias list is null");
+                Logging.Error("Preview Medias list or InvokedPackage null: MediasNull?={0}, InvokedPacakgeNull?={1}", Medias==null, InvokedPackage==null);
                 MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                 Close();
                 return;
@@ -140,9 +145,14 @@ namespace RelhaxModpack.Windows
             }
             else
             {
-                Title = Translations.GetTranslatedString("noDescription");
-                PreviewDescriptionBox.Text = Translations.GetTranslatedString("noDescription");
-                PreviewUpdatesBox.Text = Translations.GetTranslatedString("noUpdateInfo");
+                if(ComboBoxItemsInsideMode)
+                    Title = string.Format("{0}: ({1})", Translations.GetTranslatedString("dropDownItemsInside"), Translations.GetTranslatedString("none"));
+                else
+                    Title = InvokedPackage.NameFormatted;
+
+                PreviewDescriptionBox.Text = InvokedPackage.DescriptionFormatted;
+                PreviewUpdatesBox.Text = InvokedPackage.UpdateCommentFormatted;
+                CurrentDisplaySP = InvokedPackage;
             }
 
             //set the timer if the view is OMC

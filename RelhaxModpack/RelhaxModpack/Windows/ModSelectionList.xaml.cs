@@ -1579,7 +1579,8 @@ namespace RelhaxModpack.Windows
             p = new Preview()
             {
                 ComboBoxItemsInsideMode = comboboxItemsInside,
-                Medias = spc.Medias
+                Medias = spc.Medias,
+                InvokedPackage = spc
             };
             p.Show();
         }
