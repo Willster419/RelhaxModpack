@@ -1102,12 +1102,13 @@ namespace RelhaxModpack.Windows
                 {
                     IsEditable = false,
                     IsEnabled = false,
-                    //FONT?
+                    ToolTip = package.ToolTipString,
                     MinWidth = 100,
                     MaxWidth = 420,//yes, really
                     HorizontalAlignment = HorizontalAlignment.Left,
                     AddedToList = false
                 };
+                ToolTipService.SetShowOnDisabled(package.Parent.RelhaxWPFComboBoxList[boxIndex], true);
             }
             RelhaxComboBoxItem cbi = new RelhaxComboBoxItem(package, package.NameDisplay)
             {
