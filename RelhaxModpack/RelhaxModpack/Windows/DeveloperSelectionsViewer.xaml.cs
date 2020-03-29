@@ -113,7 +113,6 @@ namespace RelhaxModpack.Windows
                 RadioButton selectionButton = new RadioButton()
                 {
                     Content = node.Attributes["displayName"],
-                    ToolTip = Translations.GetTranslatedString("lastModified") + ": " + node.Attributes["lastModified"],
                     Tag = node.InnerText,
                     IsChecked = firstOne,
                     Style = (Style)Application.Current.Resources["RelhaxRadioButtonStyle"]
