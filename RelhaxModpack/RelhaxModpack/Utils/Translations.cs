@@ -2645,6 +2645,24 @@ namespace RelhaxModpack
             French.Add("invisible", "Invisible");
             Spanish.Add("invisible", "invisible");
             Russian.Add("invisible", "невидим");
+
+            //Component: SelectionFileIssuesDisplay
+            //window title for when issues applying a user's selection
+            English.Add("SelectionFileIssuesDisplay", "Errors applying selection file");
+            German.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            Polish.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            French.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            Spanish.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            Russian.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+
+            //Component: selectionFileIssues
+            //alias of SelectionFileIssuesDisplay
+            English.Add("selectionFileIssues", English["SelectionFileIssuesDisplay"]);
+            German.Add("selectionFileIssues", German["SelectionFileIssuesDisplay"]);
+            Polish.Add("selectionFileIssues", Polish["SelectionFileIssuesDisplay"]);
+            French.Add("selectionFileIssues", French["SelectionFileIssuesDisplay"]);
+            Spanish.Add("selectionFileIssues", Spanish["SelectionFileIssuesDisplay"]);
+            Russian.Add("selectionFileIssues", Russian["SelectionFileIssuesDisplay"]);
             #endregion
 
             #region Application Update Window
