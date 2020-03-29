@@ -6756,6 +6756,11 @@
             Get or set if the package received contains media from multiple packages from a combobox
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.Preview.InvokedPackage">
+            <summary>
+            Get or set the package that invoked the preview window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.Preview.#ctor">
             <summary>
             Create an instance of the Preview window
