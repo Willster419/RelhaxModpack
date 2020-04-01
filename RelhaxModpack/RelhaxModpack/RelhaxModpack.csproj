@@ -87,9 +87,8 @@
       <HintPath>..\packages\Microsoft-WindowsAPICodePack-Shell.1.1.3.3\lib\net452\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.1.9.0\lib\net35\NAudio.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -109,8 +108,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TeximpNet, Version=1.4.1.0, Culture=neutral, PublicKeyToken=978ca55aa4aa29a3, processorArchitecture=MSIL">
-      <HintPath>..\packages\TeximpNet.1.4.1\lib\net40\TeximpNet.dll</HintPath>
+    <Reference Include="TeximpNet, Version=1.4.2.0, Culture=neutral, PublicKeyToken=978ca55aa4aa29a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\TeximpNet.1.4.2\lib\net40\TeximpNet.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -154,6 +153,7 @@
     <Compile Include="UIComponents\ClassThemeDefinitions\PanelClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ClassThemeDefinitions\ProgressbarClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ClassThemeDefinitions\RadioButtonClassThemeDefinition.cs" />
+    <Compile Include="UIComponents\ClassThemeDefinitions\RelhaxHyperlinkClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ClassThemeDefinitions\TabItemClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ClassThemeDefinitions\TextBlockClassThemeDefinition.cs" />
     <Compile Include="UIComponents\ComponentColorset.cs" />
@@ -297,6 +297,9 @@
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\RelhaxWindow.cs" />
+    <Compile Include="Windows\SelectionFileIssuesDisplay.xaml.cs">
+      <DependentUpon>SelectionFileIssuesDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ScalingConfirmation.xaml.cs">
       <DependentUpon>ScalingConfirmation.xaml</DependentUpon>
     </Compile>
@@ -477,6 +480,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\SelectionFileIssuesDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ScalingConfirmation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -612,11 +619,11 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <PostBuildEvent>if exist "$(TargetDir)sign_modpack.bat" call "$(TargetDir)sign_modpack.bat"
 if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuffNull.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\TeximpNet.1.4.1\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.4.1\build\TeximpNet.targets')" />
+  <Import Project="..\packages\TeximpNet.1.4.2\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.4.2\build\TeximpNet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\TeximpNet.1.4.1\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.4.1\build\TeximpNet.targets'))" />
+    <Error Condition="!Exists('..\packages\TeximpNet.1.4.2\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.4.2\build\TeximpNet.targets'))" />
   </Target>
 </Project>

@@ -1006,12 +1006,10 @@ namespace RelhaxModpack
 
         private void OnUpdateDownloadProgresChange(object sender, DownloadProgressChangedEventArgs e)
         {
-            //if it's in instant extraction mode, don't show download progress
-            if (ModpackSettings.InstallWhileDownloading)
-                return;
             //if it's not running, start it
             if (!stopwatch.IsRunning)
                 stopwatch.Start();
+
             //set the update progress bar
             ChildProgressBar.Value = e.ProgressPercentage;
             float MBDownloaded = (float)e.BytesReceived / (float)Utils.BYTES_TO_MBYTES;
@@ -1351,13 +1349,11 @@ namespace RelhaxModpack
             //perform dependency calculations
             //get a flat list of packages to install
             List<DatabasePackage> flatList = Utils.GetFlatList(null, null, null, parsedCategoryList);
-            List<SelectablePackage> flatListSelect = new List<SelectablePackage>();
+            List<SelectablePackage> flatListSelect = Utils.GetFlatSelectablePackageList(parsedCategoryList);
 
-            //convert it to correct class type
-            foreach (SelectablePackage sp in flatList)
-                flatListSelect.Add(sp);
-            Logging.Debug("starting Utils.CalculateDependencies()");
+            Logging.Debug("Starting Utils.CalculateDependencies()");
             List<Dependency> dependneciesToInstall = new List<Dependency>(Utils.CalculateDependencies(dependencies, flatListSelect, parsedCategoryList));
+            Logging.Debug("Finished Utils.CalculateDependencies()");
 
             //make a flat list of all packages to install (including those without a zip file) for statistic data gathering
             if (ModpackSettings.AllowStatisticDataGather)
@@ -1398,7 +1394,7 @@ namespace RelhaxModpack
                     }
                     catch (Exception ex)
                     {
-                        Logging.Error("an error occurred sending statistic data");
+                        Logging.Error("An error occurred sending statistic data");
                         Logging.Error(ex.ToString());
                     }
                 });
@@ -1418,14 +1414,11 @@ namespace RelhaxModpack
             //and check if we need to actually install anything
             if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
             {
-                Logging.Info("no packages selected to install, return");
+                Logging.Info("No packages selected to install, return");
                 ResetUI();
                 ToggleUIButtons(true);
                 return;
             }
-
-            //offset the installGroup values of selectablePackages added by the level of the package in the tree
-            Utils.PropagateInstallGroupsPerLevel(packagesToInstall);
 
             //perform list install order calculations
             List<DatabasePackage>[] orderedPackagesToInstall = Utils.CreateOrderedInstallList(packagesToInstall);
@@ -1438,7 +1431,7 @@ namespace RelhaxModpack
             //first, if we have downloads to do and doing them the standard way, then start processing them
             if (packagesToDownload.Count > 0 && !ModpackSettings.InstallWhileDownloading)
             {
-                Logging.Info("download while install = false and packages to download, starting ProcessDownloads()");
+                Logging.Info("Download while install = false and packages to download, starting ProcessDownloads()");
                 //toggle the button before and after as well
                 CancelDownloadInstallButton.Visibility = Visibility.Visible;
                 CancelDownloadInstallButton.IsEnabled = true;
@@ -1448,12 +1441,17 @@ namespace RelhaxModpack
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
                 bool downlaodTaskComplete = await ProcessDownloads(packagesToDownload);
+
                 //stop and end the timer
-                downloadDisplayTimer.Stop();
-                downloadDisplayTimer = null;
+                if(downloadDisplayTimer != null)
+                {
+                    downloadDisplayTimer.Stop();
+                    downloadDisplayTimer = null;
+                }
+
                 if (!downlaodTaskComplete)
                 {
-                    Logging.Info("download task was canceled, canceling installation");
+                    Logging.Info("Download task was canceled, canceling installation");
                     ToggleUIButtons(true);
                     return;
                 }
@@ -1462,12 +1460,12 @@ namespace RelhaxModpack
                 //connect the install and disconnect the download
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
-                Logging.Info(string.Format("download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
+                Logging.Info(string.Format("Download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
                 lastTime = stopwatch.Elapsed;
             }
             else if (packagesToDownload.Count > 0 && ModpackSettings.InstallWhileDownloading)
             {
-                Logging.Info("download while install = true and packages to download, starting ProcessDownloadsAsync()");
+                Logging.Info("Download while install = true and packages to download, starting ProcessDownloadsAsync()");
                 ProcessDownloadsAsync(packagesToDownload);
                 //async does download and install at the same time, so subscribe to both, install first
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
@@ -1476,7 +1474,7 @@ namespace RelhaxModpack
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
             }
             else if (packagesToDownload.Count == 0)
-                Logging.Info("no packages to download");
+                Logging.Info("No packages to download, continue");
 
             //now let's start the install procedures
             //like if we need to make the advanced install window
@@ -1941,6 +1939,7 @@ namespace RelhaxModpack
                     {
                         package.StartAddress = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
+                        Logging.Debug("[{0}]: Download of {1} from URL {2}", nameof(ProcessDownloadsAsync), package.PackageName, fileToDownload);
                         fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
                         try
                         {
@@ -1963,9 +1962,40 @@ namespace RelhaxModpack
                             }
                             Logging.Error("Failed to download the file {0}, try {1} of {2}\n{3}", package.ZipFile, retryCount, 1, ex.ToString());
                             retryCount--;
+
                             //if it failed or not, the file should be deleted
                             if (File.Exists(fileToSaveTo))
                                 File.Delete(fileToSaveTo);
+
+                            //if we've hit the retry limit, then mark it as downloaded
+                            if(retryCount <= 0)
+                            {
+                                Logging.Error("Failed to download the file {0} using URL {1}", package.ZipFile, fileToDownload);
+                                System.Windows.Forms.DialogResult result = System.Windows.Forms.MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
+                                    Translations.GetTranslatedString("failedToDownload1"), Environment.NewLine,
+                                    package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
+                                    Translations.GetTranslatedString("failedToDownloadHeader"), System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore);
+                                switch (result)
+                                {
+                                    case System.Windows.Forms.DialogResult.Retry:
+                                        //keep retry as true
+                                        Logging.Info("User selected retry, set retryCount");
+                                        retryCount++;
+                                        break;
+                                    case System.Windows.Forms.DialogResult.Ignore:
+                                        //skip this file
+                                        Logging.Debug("Ignore file that failed to download, it will be logged during installation");
+                                        package.IsCurrentlyDownloading = false;
+                                        package.DownloadFlag = false;
+                                        package.DownloadFailed = true;
+                                        break;
+                                    case System.Windows.Forms.DialogResult.Abort:
+                                        //stop the installation all together
+                                        //trigger the cancel button?
+                                        CancelDownloadInstallButton_Install_Click(null, null);
+                                        break;
+                                }
+                            }
                         }
                     }
                 }
@@ -2001,6 +2031,7 @@ namespace RelhaxModpack
                         //replace the start address macro
                         package.StartAddress = package.StartAddress.Replace("{onlineFolder}", Settings.WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
+                        Logging.Debug("[{0}]: Download of {1} from URL {2}", nameof(ProcessDownloads), package.PackageName, fileToDownload);
                         fileToSaveTo = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
                         try
                         {
@@ -2038,8 +2069,12 @@ namespace RelhaxModpack
                                         //keep retry as true
                                         break;
                                     case System.Windows.Forms.DialogResult.Ignore:
-                                        //skip this file
+                                        //skip this file and log it failed
                                         retry = false;
+                                        package.DownloadFailed = true;
+
+                                        //set the flag for download even though it failed
+                                        package.DownloadFlag = false;
                                         break;
                                     case System.Windows.Forms.DialogResult.Abort:
                                         //stop the installation all together
@@ -2054,7 +2089,8 @@ namespace RelhaxModpack
                                 File.Delete(fileToSaveTo);
                         }
                         //stop the timer
-                        downloadDisplayTimer.Stop();
+                        if(downloadDisplayTimer != null)
+                            downloadDisplayTimer.Stop();
                     }
                 }
             }
@@ -2427,15 +2463,7 @@ namespace RelhaxModpack
             if (ModpackSettings.InstallWhileDownloading)
             {
                 Logging.Info("InstallWhileDownloading is true, attempt to cancel download thread");
-                if (client == null)
-                {
-                    Logging.Info("Unable to cancel download thread, client reference is null (maybe no packages to download?)");
-                }
-                else
-                {
-                    Logging.Info("Sending cancel request to download thread");
-                    client.CancelAsync();
-                }
+                CancelDownloadInstallButton_Download_Click(null, null);
             }
         }
 

@@ -713,7 +713,7 @@ namespace RelhaxModpack.Windows
             }).ContinueWith((t) =>
             {
                 //https://stackoverflow.com/questions/32067034/how-to-handle-task-run-exception
-                if(t.IsFaulted)
+                if (t.IsFaulted)
                 {
                     Logging.Exception(t.Exception.ToString());
                     MessageBox.Show(Translations.GetTranslatedString("failedToLoadSelectionList"),
@@ -721,6 +721,21 @@ namespace RelhaxModpack.Windows
                     loadingProgress.Close();
                     loadingProgress = null;
                     this.Close();
+                }
+                else
+                {
+                    //hook for if first load, show a message box that you can right click a component for selection view
+                    if (!Settings.FirstLoad)
+                    {
+                        ModpackSettings.DisplaySelectionPreviewMessage = false;
+                    }
+                    if (Settings.FirstLoad && ModpackSettings.DisplaySelectionPreviewMessage)
+                    {
+                        ModpackSettings.DisplaySelectionPreviewMessage = false;
+                        this.Dispatcher.InvokeAsync(() => {
+                            MessageBox.Show(this, Translations.GetTranslatedString("HelpLabel"));
+                        });
+                    }
                 }
             });
         }
@@ -961,10 +976,10 @@ namespace RelhaxModpack.Windows
                 if (ModpackSettings.ForceEnabled && !package.IsStructureEnabled)
                     package.Enabled = true;
 
-                //set the package's media SelectablePackageNameFormatted property to what the selectablePackage media actually is
+                //set all media's package reference back to itself
                 foreach(Media media in package.Medias)
                 {
-                    media.SelectablePackageNameFormatted = package.NameFormatted;
+                    media.SelectablePackageParent = package;
                 }
 
                 //special code for the borders and stackpanels
@@ -1087,12 +1102,13 @@ namespace RelhaxModpack.Windows
                 {
                     IsEditable = false,
                     IsEnabled = false,
-                    //FONT?
+                    ToolTip = package.ToolTipString,
                     MinWidth = 100,
                     MaxWidth = 420,//yes, really
                     HorizontalAlignment = HorizontalAlignment.Left,
                     AddedToList = false
                 };
+                ToolTipService.SetShowOnDisabled(package.Parent.RelhaxWPFComboBoxList[boxIndex], true);
             }
             RelhaxComboBoxItem cbi = new RelhaxComboBoxItem(package, package.NameDisplay)
             {
@@ -1483,6 +1499,7 @@ namespace RelhaxModpack.Windows
                     return;
 
             SelectablePackage spc = null;
+            bool comboboxItemsInside = false;
             if (sender is IPackageUIComponent packageSender)
             {
                 spc = packageSender.Package;
@@ -1507,6 +1524,7 @@ namespace RelhaxModpack.Windows
                     tracker++;
                 }
                 Utils.AllowUIToUpdate();
+
                 //check to see if a specific item is highlighted
                 //if so, it means that the user wants to preview a specific version
                 //if not, then the user clicked on the combobox as a whole, so show all items in the box
@@ -1528,19 +1546,17 @@ namespace RelhaxModpack.Windows
 
                 if (spc == null)
                 {
+                    //log that it's a combobox sender for the mode in the preview window
+                    comboboxItemsInside = true;
+
                     //make a new temporary package with a custom preview items list
                     //get a temp known good package, doesn't matter what cause we want the parent
                     RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)comboboxSender.Items[0];
+
                     //parent of item in combobox is header
                     SelectablePackage parentPackage = cbi.Package.Parent;
-                    spc = new SelectablePackage()
-                    {
-                        PackageName = parentPackage.PackageName,
-                        Name = string.Format("{0}: {1}", Translations.GetTranslatedString("dropDownItemsInside"), parentPackage.NameFormatted),
-                        Version = parentPackage.Version,
-                        Description = parentPackage.Description,
-                        UpdateComment = parentPackage.UpdateComment
-                    };
+                    spc = new SelectablePackage();
+
                     spc.Medias.Clear();
                     foreach (SelectablePackage packageToGetMediaFrom in parentPackage.Packages)
                     {
@@ -1555,9 +1571,6 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            if (spc.DevURL == null)
-                spc.DevURL = string.Empty;
-
             if (p != null)
             {
                 p.Close();
@@ -1566,7 +1579,9 @@ namespace RelhaxModpack.Windows
 
             p = new Preview()
             {
-                Package = spc
+                ComboBoxItemsInsideMode = comboboxItemsInside,
+                Medias = spc.Medias,
+                InvokedPackage = spc
             };
             p.Show();
         }
@@ -1752,7 +1767,7 @@ namespace RelhaxModpack.Windows
             List<string> stringSelections = new List<string>();
             List<string> stringUserSelections = new List<string>();
             List<string> disabledMods = new List<string>();
-            List<string> disabledStructureMods = new List<string>();
+            List<SelectablePackage> brokenMods = null;
 
             foreach(XmlNode node in xmlSelections)
                 stringSelections.Add(node.InnerText);
@@ -1804,7 +1819,7 @@ namespace RelhaxModpack.Windows
                 }
             }
             //now check for the correct structure of mods
-            List<SelectablePackage> brokenMods = IsValidStructure(ParsedCategoryList);
+            brokenMods = IsValidStructure(ParsedCategoryList);
             Logging.Info("Broken mods structure count: " + brokenMods.Count);
 
             //
@@ -1827,30 +1842,49 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Info("Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
                     disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
+                SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay();
+                int totalCount = disabledMods.Count + stringSelections.Count + stringUserSelections.Count + brokenMods.Count;
                 if(disabledMods.Count > 0)
                 {
+                    totalCount -= disabledMods.Count;
                     //disabled selections
-                    MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modDeactivated"), Environment.NewLine, string.Join(Environment.NewLine, disabledMods)));
+                    window.HeaderText = Translations.GetTranslatedString("modDeactivated");
+                    window.BodyText = string.Join(Environment.NewLine, disabledMods);
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0? "close" : "next");
+                    window.ShowDialog();
                 }
                 if(stringSelections.Count > 0)
                 {
+                    totalCount -= stringSelections.Count;
                     //removed selections
-                    MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringSelections)));
+                    window.HeaderText = Translations.GetTranslatedString("modsNotFoundTechnical");
+                    window.BodyText = string.Join(Environment.NewLine, stringSelections);
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
+                    window.ShowDialog();
                 }
                 if(stringUserSelections.Count > 0)
                 {
+                    totalCount -= stringUserSelections.Count;
                     //removed user selections
-                    MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modsNotFoundTechnical"), Environment.NewLine, string.Join(Environment.NewLine, stringUserSelections)));
+                    window.HeaderText = Translations.GetTranslatedString("modsNotFoundTechnical");
+                    window.BodyText = string.Join(Environment.NewLine, stringUserSelections);
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
+                    window.ShowDialog();
                 }
-                if(disabledStructureMods.Count > 0)
+                if(brokenMods.Count > 0)
                 {
                     //removed structure user selections
-                    MessageBox.Show(string.Format("{0}: {1}{2}",
-                        Translations.GetTranslatedString("modsBrokenStructure"), Environment.NewLine, string.Join(Environment.NewLine, disabledStructureMods)));
+                    window.HeaderText = Translations.GetTranslatedString("modsBrokenStructure");
+                    window.BodyText = string.Join(Environment.NewLine, brokenMods.Select(package => package.CompletePath).ToArray());
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString("close");
+                    window.ShowDialog();
                 }
+                window.Close();
+                window = null;
             }
             else
             {

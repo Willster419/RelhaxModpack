@@ -15,6 +15,7 @@ using Path = System.IO.Path;
 using Microsoft.WindowsAPICodePack;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Threading;
+using System.Text.RegularExpressions;
 
 namespace RelhaxModpack.Windows
 {
@@ -49,6 +50,7 @@ namespace RelhaxModpack.Windows
             "-----Global Dependencies-----",
             "-----Dependencies-----",
         };
+        private readonly string HttpRegexSearch = @"https*:\/{2}\S+";
 
         //public
         /// <summary>
@@ -192,6 +194,18 @@ namespace RelhaxModpack.Windows
         private int GetMaxInstallGroups()
         {
             return Utils.GetMaxInstallGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+        }
+
+        private SelectablePackage GetSelectablePackage(object obj)
+        {
+            if (obj is SelectablePackage selectablePackage)
+                return selectablePackage;
+
+            else if (obj is EditorComboBoxItem editorComboBoxItem)
+                if (editorComboBoxItem.Package is SelectablePackage selectablePackage2)
+                    return selectablePackage2;
+
+            return null;
         }
         #endregion
 
@@ -366,18 +380,6 @@ namespace RelhaxModpack.Windows
                 RemoveDatabaseObjectButton.IsEnabled = true;
                 MoveDatabaseObjectButton.IsEnabled = true;
                 AddDatabaseObjectButton.IsEnabled = true;
-                /*
-                //check if the database is actually loaded before Loading the database view
-                if (GlobalDependencies.Count == 0)
-                {
-                    Logging.Editor("Database is not yet loaded, skipping UI loading");
-                }
-                else
-                {
-                    Logging.Editor("Database is loaded, UI loading()");
-                    LoadDatabaseView(GlobalDependencies, Dependencies, ParsedCategoryList);
-                }
-                */
             }
             else if (selectedTab.Equals(InstallGroupsTab))
             {
@@ -390,9 +392,13 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Editor("Database is not yet loaded, skipping UI loading");
                 }
+                else if (sender == null)
+                {
+                    Logging.Editor("Database is loaded but this call is not from UI event. Don't load install view.");
+                }
                 else
                 {
-                    Logging.Editor("Database is loaded, UI loading()");
+                    Logging.Editor("Database is loaded and this call is from UI event. Load install view.");
                     LoadInstallView(GlobalDependencies, Dependencies, ParsedCategoryList);
                 }
             }
@@ -407,9 +413,13 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Editor("Database is not yet loaded, skipping UI loading");
                 }
+                else if (sender == null)
+                {
+                    Logging.Editor("Database is loaded but this call is not from UI event. Don't load patch view.");
+                }
                 else
                 {
-                    Logging.Editor("Database is loaded, UI loading()");
+                    Logging.Editor("Database is loaded and this call is from UI event. Load patch view.");
                     LoadPatchView(GlobalDependencies, Dependencies, ParsedCategoryList);
                 }
             }
@@ -421,7 +431,46 @@ namespace RelhaxModpack.Windows
                 MoveDatabaseObjectButton.IsEnabled = false;
                 AddDatabaseObjectButton.IsEnabled = false;
             }
-            
+
+        }
+
+        private void SaveDatabaseSetting_Checked(object sender, RoutedEventArgs e)
+        {
+            if ((bool)SaveDatabaseLegacySetting.IsChecked)
+                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
+            else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
+                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
+        }
+
+        private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
+            {
+                Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
+                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
+                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
+            };
+            autoUpdatePackageWindow.ShowDialog();
+        }
+
+        private void SelectAutoUpdateWorkDirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                Multiselect = false,
+                Title = "Select folder"
+            };
+            if (openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                SelectAutoUpdateWorkDirectoryTextbox.Text = openFolderDialog.FileName;
+            }
+        }
+
+        private void SelectAutoUpdateWorkDirectoryTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
+            LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
         }
 
         private void PackageDevURLDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -452,7 +501,8 @@ namespace RelhaxModpack.Windows
         private void ResetRightPanels(DatabasePackage package)
         {
             Logging.Editor("ResetRightPanels(), package type = {0}, name= {1}", LogLevel.Info, package == null ? "(null)" : package.GetType().ToString(), package == null ? "(null)" : package.PackageName);
-            //for each tab, disable all components. then enable them back of tye type of database object
+
+            //for each tab, disable all UI components
             List<Control> controlsToDisable = new List<Control>();
             foreach (TabItem tabItem in RightTab.Items)
             {
@@ -461,6 +511,7 @@ namespace RelhaxModpack.Windows
                     //if it's a common element used in the panel, then disable it
                     if (element is CheckBox || element is ComboBox || element is Button || element is TextBox || element is ListBox)
                         controlsToDisable.Add((Control)element);
+
                     //also clear it's data for each type
                     if (element is CheckBox box)
                         box.IsChecked = false;
@@ -483,14 +534,20 @@ namespace RelhaxModpack.Windows
                         lbox.Items.Clear();
                 }
             }
+
             //there's a couple that don't need to be disabled
             if (controlsToDisable.Contains(CurrentSupportedTriggers))
                 controlsToDisable.Remove(CurrentSupportedTriggers);
             else
                 throw new BadMemeException("but it's there i swear");
+
             //disable the components
             foreach (Control control in controlsToDisable)
                 control.IsEnabled = false;
+
+            //process controls dependent on which view you're currently in (tab view)
+            //(essentially this enables the tab, search and add/move/remove buttons when database view tab (left) is selected 
+            LeftTabView_SelectionChanged(null, null);
 
             //enable components by type
             //package null = category
@@ -587,6 +644,65 @@ namespace RelhaxModpack.Windows
             LoadedDependenciesList.Items.Clear();
             foreach (Dependency d in Dependencies)
                 LoadedDependenciesList.Items.Add(d);
+        }
+
+        private void PackageDisplayUrlParse_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is TextBox))
+            {
+                Logging.Editor("[MouseDoubleClick]: The MouseDoubleClick has been registered to an invalid component! {0}", LogLevel.Error, sender.GetType().ToString());
+                return;
+            }
+            TextBox sender_ = (TextBox)sender;
+
+            //split the textbox into http arrays
+            string[] httpSplit = sender_.Text.Split(new string[] { "http" }, StringSplitOptions.RemoveEmptyEntries);
+            int stringSplitLength = "http".Length;
+
+            //find out where the curser selection is
+            int sectionHttpStart = 0;
+            int sectionHttpEnd = 0;
+            int sectionSplitEnd = 0;
+            for(int i = 0; i < httpSplit.Count(); i++)
+            {
+                string httpParse = httpSplit[i];
+
+                //do a regex split to get the end words
+                string[] httpParseRegex = Regex.Split(httpParse, @"\s");
+                string httpParseRegexStart = httpParseRegex[0];
+                //string httpParseRegexEnd = httpParseRegex[1];
+
+                //get word index calculations with reference to where the curser selection is
+                sectionHttpStart = sectionSplitEnd;
+                sectionHttpEnd = sectionHttpStart + httpParseRegexStart.Length;
+                sectionSplitEnd = sectionHttpStart + httpParse.Length;
+                if (i > 0)
+                    sectionSplitEnd += stringSplitLength;
+                Logging.Editor("[MouseDoubleClick]: sectionHttpStart: {0}, sectionHttpEnd: {1}, sectionSplitEnd: {2}, selectionStart{3}",
+                    LogLevel.Debug, sectionHttpStart, sectionHttpEnd, sectionSplitEnd, sender_.SelectionStart);
+
+                if(sectionHttpStart <= sender_.SelectionStart && sender_.SelectionStart < sectionHttpEnd)
+                {
+                    Logging.Editor("[MouseDoubleClick]: Valid http index found to parse: {0}", LogLevel.Debug, i);
+                    //split on end via whitespace character
+                    string parsedHttpLink = Regex.Split(httpParse, @"\s")[0];
+                    parsedHttpLink = string.Format("{0}{1}", "http", parsedHttpLink);
+                    Logging.Editor("[MouseDoubleClick]: Parsed http string: {0}", LogLevel.Info, parsedHttpLink);
+                    try
+                    {
+                        System.Diagnostics.Process.Start(parsedHttpLink);
+                    }
+                    catch
+                    {
+                        Logging.Editor("[MouseDoubleClick]: Failed to open DevURL {0}", LogLevel.Info, parsedHttpLink);
+                    }
+                    break;
+                }
+            }
+            if(sectionSplitEnd == 0)
+            {
+                Logging.Editor("[MouseDoubleClick]: Never found an 'http' sequence to begin parsing", LogLevel.Info);
+            }
         }
         #endregion
 
@@ -2139,19 +2255,9 @@ namespace RelhaxModpack.Windows
 
             if (PackageMediasDisplay.SelectedItem is Media media)
             {
-                SelectablePackage package = new SelectablePackage()
-                {
-                    PackageName = "TEST_PREVIEW",
-                    Name = "TEST_PREVIEW"
-                };
-                package.Medias.Add(media);
-                if (Preview != null)
-                {
-                    Preview = null;
-                }
                 Preview = new Preview()
                 {
-                    Package = package,
+                    Medias = new List<Media>() { media },
                     EditorMode = true
                 };
                 try
@@ -2181,16 +2287,11 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            SelectablePackage package = new SelectablePackage()
-            {
-                PackageName = "TEST_PREVIEW",
-                Name = "TEST_PREVIEW"
-            };
-            package.Medias.Add(new Media()
+            Media testMedia = new Media()
             {
                 URL = MediaTypesURL.Text,
                 MediaType = (MediaType)MediaTypesList.SelectedItem
-            });
+            };
 
             if (Preview != null)
             {
@@ -2198,7 +2299,7 @@ namespace RelhaxModpack.Windows
             }
             Preview = new Preview()
             {
-                Package = package,
+                Medias = new List<Media>() { testMedia },
                 EditorMode = true
             };
             try
@@ -2766,56 +2867,5 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
-
-        private void SaveDatabaseSetting_Checked(object sender, RoutedEventArgs e)
-        {
-            if ((bool)SaveDatabaseLegacySetting.IsChecked)
-                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
-            else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
-                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
-        }
-
-        private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
-        {
-            AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
-            {
-                Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
-                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
-                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
-            };
-            autoUpdatePackageWindow.ShowDialog();
-        }
-
-        private void SelectAutoUpdateWorkDirectoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
-            {
-                IsFolderPicker = true,
-                Multiselect = false,
-                Title = "Select folder"
-            };
-            if(openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                SelectAutoUpdateWorkDirectoryTextbox.Text = openFolderDialog.FileName;
-            }
-        }
-
-        private void SelectAutoUpdateWorkDirectoryTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
-            LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
-        }
-
-        private SelectablePackage GetSelectablePackage(object obj)
-        {
-            if (obj is SelectablePackage selectablePackage)
-                return selectablePackage;
-
-            else if (obj is EditorComboBoxItem editorComboBoxItem)
-                if (editorComboBoxItem.Package is SelectablePackage selectablePackage2)
-                    return selectablePackage2;
-
-            return null;
-        }
     }
 }

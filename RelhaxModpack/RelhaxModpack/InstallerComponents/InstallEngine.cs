@@ -984,11 +984,34 @@ namespace RelhaxModpack.InstallerComponents
 
             //combine with a list of all files and folders in mods and res_mods
             Logging.Debug("adding any files in res_mods and mods by scanning the folders if they aren't on the list already");
+            bool success = true;
             if (Directory.Exists(resModsFolder))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(resModsFolder, SearchOption.AllDirectories, true).ToList());
+            {
+                string[] filesFromResMods = Utils.DirectorySearch(resModsFolder, SearchOption.AllDirectories, true);
+                if (filesFromResMods != null && filesFromResMods.Count() > 0)
+                {
+                    ListOfAllItems.AddRange(filesFromResMods.ToList());
+                }
+                else
+                {
+                    Logging.Error("Failed to get list of files from {0}", resModsFolder);
+                    success = false;
+                }
+            }
             CancellationToken.ThrowIfCancellationRequested();
             if (Directory.Exists(modsFolder))
-                ListOfAllItems.AddRange(Utils.DirectorySearch(modsFolder, SearchOption.AllDirectories, true).ToList());
+            {
+                string[] filesFromMods = Utils.DirectorySearch(modsFolder, SearchOption.AllDirectories, true);
+                if (filesFromMods != null && filesFromMods.Count() > 0)
+                {
+                    ListOfAllItems.AddRange(filesFromMods.ToList());
+                }
+                else
+                {
+                    Logging.Error("Failed to get list of files from {0}", modsFolder);
+                    success = false;
+                }
+            }
             CancellationToken.ThrowIfCancellationRequested();
 
             //combine with a list of any installer engine created folders
@@ -1048,7 +1071,6 @@ namespace RelhaxModpack.InstallerComponents
 
             //delete all files (not shortcuts)
             Logging.Debug("Deleting all files from list, not including shortcuts");
-            bool success = true;
             Prog.UninstallStatus = UninstallerExitCodes.UninstallError;
             foreach (string file in ListOfAllFiles)
             {
@@ -1380,107 +1402,10 @@ namespace RelhaxModpack.InstallerComponents
             Prog.Filename = string.Empty;
             Progress.Report(Prog);
 
-            //make sure that the app data folder exists
-            //if it does not, then it does not need to run this
-            if (!Directory.Exists(Settings.AppDataFolder))
-            {
-                Logging.Info("Appdata folder does not exist, creating");
-                Directory.CreateDirectory(Settings.AppDataFolder);
-                return true;
-            }
-            Logging.Info("Appdata folder exists, backing up user settings and clearing cache");
-
-            //make the temp folder if it does not already exist
-            string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolderPath, "AppDataBackup");
-            //delete if possibly from previous install
-            if (Directory.Exists(AppPathTempFolder))
-                Utils.DirectoryDelete(AppPathTempFolder, true);
-
+            //check for cancel
             CancellationToken.ThrowIfCancellationRequested();
-            //and make the folder at the end
-            Directory.CreateDirectory(AppPathTempFolder);
 
-            //backup files and folders that should be kept that aren't cache
-            string[] fileNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat" };
-            string[] folderNames = { "xvm", "pmod" };
-            string pmodCacheFileToDelete = "cache.dat";
-            string xvmFolderToDelete = "cache";
-
-            //check if the directories are files or folders
-            //if files they can move directly
-            //if folders they have to be re-created on the destination and files moved manually
-            Logging.WriteToLog("Starting clearing cache step 1 of 3: backing up old files", Logfiles.Application, LogLevel.Debug);
-            foreach(string file in fileNames)
-            {
-                Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
-                if(File.Exists(Path.Combine(Settings.AppDataFolder, file)))
-                {
-                    if(!Utils.FileMove(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
-                    {
-                        Logging.Error("Failed to move file for clear cache");
-                        return false;
-                    }
-                } 
-                else
-                {
-                    Logging.Info("File does not exist in step clearCache: {0}", file);
-                }
-            }
-
-            foreach(string folder in folderNames)
-            {
-                if (Directory.Exists(Path.Combine(Settings.AppDataFolder, folder)))
-                {
-                    Utils.DirectoryMove(Path.Combine(Settings.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
-                }
-                else
-                {
-                    Logging.Info("Folder does not exist in step clearCache: {0}", folder);
-                }
-            }
-
-            //now delete the temp folder
-            Logging.WriteToLog("Starting clearing cache step 2 of 3: actually clearing cache", Logfiles.Application, LogLevel.Debug);
-            Utils.DirectoryDelete(Settings.AppDataFolder, true);
-
-            //then put the above files back
-            Logging.WriteToLog("Starting clearing cache step 3 of 3: restoring old files", Logfiles.Application, LogLevel.Debug);
-            Directory.CreateDirectory(Settings.AppDataFolder);
-            foreach (string file in fileNames)
-            {
-                Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
-                if (File.Exists(Path.Combine(AppPathTempFolder, file)))
-                {
-                    if (!Utils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)))
-                    {
-                        Logging.Error("Failed to move file for clear cache");
-                        return false;
-                    }
-                }
-                else
-                {
-                    Logging.Info("File does not exist in step clearCache: {0}", file);
-                }
-            }
-
-            //delete extra xvm cache folder and pmod cache file
-            if(Directory.Exists(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete)))
-                Utils.DirectoryDelete(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete), true);
-            if(File.Exists(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete)))
-                Utils.FileDelete(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete));
-
-            foreach (string folder in folderNames)
-            {
-                if (Directory.Exists(Path.Combine(AppPathTempFolder, folder)))
-                {
-                    Utils.DirectoryMove(Path.Combine(AppPathTempFolder, folder), Path.Combine(Settings.AppDataFolder, folder), true);
-                }
-                else
-                {
-                    Logging.Info("Folder does not exist in step clearCache: {0}", folder);
-                }
-            }
-            return true;
+            return Utils.ClearCache();
         }
 
         private bool ClearLogs()
@@ -2236,17 +2161,23 @@ namespace RelhaxModpack.InstallerComponents
 
                         Progress.Report(Prog);
 
+                        //don't extract if the package failed to download
+                        if(package.DownloadFailed)
+                        {
+                            Logging.Error("Skipping package {0} due to failed download", package.PackageName);
+                            InstallFinishedArgs.InstallFailedSteps.Add(InstallerExitCodes.DownloadModsError);
+                        }
+                        else if (string.IsNullOrWhiteSpace(package.ZipFile))
+                        {
+                            Logging.Warning("Zipfile for package {0} is blank!", package.PackageName);
+                        }
                         //stop if the zipfile name is blank (no actual zipfile to extract)
-                        if (!string.IsNullOrWhiteSpace(package.ZipFile))
+                        else
                         {
                             StringBuilder zipLogger = new StringBuilder();
                             zipLogger.AppendLine(string.Format("/*   {0}   */", package.ZipFile));
                             Unzip(package, threadNum, zipLogger, false);
                             Logging.Installer(zipLogger.ToString());
-                        }
-                        else
-                        {
-                            Logging.Warning("zipfile for package {0} is blank!", package.PackageName);
                         }
 
                         Logging.Info("Thread ID={0}, extraction finished of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
@@ -2328,7 +2259,7 @@ namespace RelhaxModpack.InstallerComponents
 
                                 //pad and add the installGroup name
                                 //this will help maintain the patching order similarly expected with extractions of installGroup
-                                sb.Append(package.InstallGroup.ToString("D3") + "_");
+                                sb.Append(package.InstallGroupWithOffset.ToString("D3") + "_");
 
                                 //name else doesn't need to change, to set the rest of the name and use it
                                 sb.Append(zipEntryName.Substring(7));

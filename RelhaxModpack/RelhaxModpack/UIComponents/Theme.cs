@@ -128,6 +128,11 @@ namespace RelhaxModpack.UIComponents
         public ClassColorset ProgressBarColorset { get; set; } = null;
 
         /// <summary>
+        /// The set of rules to use for what parts of a RelhaxHyperlink UI object can be themed
+        /// </summary>
+        public ClassColorset RelhaxHyperlinkColorset { get; set; } = null;
+
+        /// <summary>
         /// A list of rules to use for each window definition type
         /// </summary>
         public Dictionary<Type, WindowColorset> WindowColorsets { get; set; } = null;

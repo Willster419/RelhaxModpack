@@ -438,6 +438,11 @@
             Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Category.Maintainers">
+            <summary>
+            A list of database managers who are known to maintain this category
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Category.Packages">
             <summary>
             The list of packages contained in this category
@@ -611,6 +616,13 @@
             A unique identifier for each component in the database. No two components will have the same PackageName
             </summary>
         </member>
+        <member name="P:RelhaxModpack.DatabasePackage.UID">
+            <summary>
+            Another non-changing, randomly generated unique 16 character identifier for each component in the database.
+            </summary>
+            <remarks>These fulfill the originally intended purpose of the PackageName defined back in OMC.
+            Once generated, the value should not be modified, and will only be removed when the package is removed.</remarks>
+        </member>
         <member name="P:RelhaxModpack.DatabasePackage.Version">
             <summary>
             A method to keep track of the version of the package
@@ -696,7 +708,7 @@
         </member>
         <member name="P:RelhaxModpack.DatabasePackage.InstallGroupWithOffset">
             <summary>
-            The level at which this package will be installed, factoring if the category is set to offset the install group with the package level
+            The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
             </summary>
         </member>
         <member name="P:RelhaxModpack.DatabasePackage.PatchGroup">
@@ -732,6 +744,11 @@
         <member name="P:RelhaxModpack.DatabasePackage.IsCurrentlyDownloading">
             <summary>
             Flag to determine if this package is the one currently downloading, used if "install while download" is true
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabasePackage.DownloadFailed">
+            <summary>
+            Flag to determine if this package failed to download from either download methods
             </summary>
         </member>
         <member name="F:RelhaxModpack.DatabasePackage.AppendExtraction">
@@ -946,12 +963,11 @@
             The type of media for the URL to be interpreted as
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Media.SelectablePackageNameFormatted">
+        <member name="P:RelhaxModpack.Media.SelectablePackageParent">
             <summary>
-            The NameFormatted property result from the Media's SelectablePackage container
+            Gets or sets the SelectablePackage parent of the media item
             </summary>
-            <remarks>This is used for when multiple SelectalbePackage sources are being used for preview display
-            (like multiple items inside a combobox)</remarks>
+            <remarks>This is used in the preview window to get the name to display in the title</remarks>
         </member>
         <member name="M:RelhaxModpack.Media.ToString">
             <summary>
@@ -1294,7 +1310,7 @@
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.InstallGroupWithOffset">
             <summary>
-            The level at which this package will be installed, factoring if the category is set to offset the install group with the package level
+            The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.CompletePath">
@@ -2242,6 +2258,73 @@
             The name of the component for WPF databinding. An empty string indicates the component is not bound.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.ClassType">
+            <summary>
+            The Type object that corresponds to this UI class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.BackgroundAllowed">
+            <summary>
+            Determines if background color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.BackgroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.BackgroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.BackgroundDependencyProperty">
+            <summary>
+            The reference to the Background DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.ForegroundAllowed">
+            <summary>
+            Determines if Foreground color is allowed to change
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.ForegroundBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.ForegroundAppliedLocal">
+            <summary>
+            Determines if the color is applied locally as to not interfere with dependency source ordering
+            </summary>
+            <remarks>See https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/dependency-property-value-precedence#setcurrentvalue </remarks>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.ForegroundDependencyProperty">
+            <summary>
+            The reference to the Foreground DependencyProperty (if exists) of this class type for setting the value locally
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.HighlightAllowed">
+            <summary>
+            Determines if Highlight color is allowed to change. Highlight can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.HighlightBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.SelectAllowed">
+            <summary>
+            Determines if Select (mouse button down color) color is allowed to change. Select can only be changed by WPF data-bind
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.ClassThemeDefinitions.RelhaxHyperlinkClassThemeDefinition.SelectBoundName">
+            <summary>
+            The name of the component for WPF databinding. An empty string indicates the component is not bound.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UIComponents.ClassThemeDefinitions.TabItemClassThemeDefinition">
             <summary>
             The UI class theme definition for TabItem class
@@ -2648,6 +2731,11 @@
         <member name="P:RelhaxModpack.UIComponents.Theme.ProgressBarColorset">
             <summary>
             The set of rules to use for what parts of a ProgressBar UI object can be themed
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.UIComponents.Theme.RelhaxHyperlinkColorset">
+            <summary>
+            The set of rules to use for what parts of a RelhaxHyperlink UI object can be themed
             </summary>
         </member>
         <member name="P:RelhaxModpack.UIComponents.Theme.WindowColorsets">
@@ -4626,6 +4714,11 @@
             A one time run bool to display a message about how to use user mods
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.DisplaySelectionPreviewMessage">
+            <summary>
+            A one time run bool to display a message about how the user can right click a selection to get a preview window
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.VerboseLogging">
             <summary>
             Toggle if the application should use debug level logging or just info
@@ -5011,6 +5104,16 @@
         <member name="F:RelhaxModpack.Settings.RelicBatchUpdateScriptServer">
             <summary>
             The filename of the self updater script inside the manager zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationFilenameStable">
+            <summary>
+            The name of the application executable when compiled with stable distribution
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationFilenameBeta">
+            <summary>
+            The name of the application executable when compiled with beta distribution
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.RelicBatchUpdateScriptOld">
@@ -6638,14 +6741,24 @@
             Preview
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.Preview.Package">
+        <member name="P:RelhaxModpack.Windows.Preview.Medias">
             <summary>
-            The package with media elements to preview
+            Get or set the list of media preview components
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.Preview.EditorMode">
+        <member name="P:RelhaxModpack.Windows.Preview.EditorMode">
             <summary>
             Sets if the preview was launched from the editor or from the selection list
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.Preview.ComboBoxItemsInsideMode">
+            <summary>
+            Get or set if the package received contains media from multiple packages from a combobox
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.Preview.InvokedPackage">
+            <summary>
+            Get or set the package that invoked the preview window
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.Preview.#ctor">
@@ -6747,6 +6860,39 @@
         <member name="M:RelhaxModpack.Windows.RelhaxWindow.#ctor">
             <summary>
             Creates an instance of the RelhaxWindow class
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.SelectionFileIssuesDisplay">
+            <summary>
+            Interaction logic for RelhaxMessageWindow.xaml
+            </summary>
+            <summary>
+            SelectionFileIssuesDisplay
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.SelectionFileIssuesDisplay.HeaderText">
+            <summary>
+            Get or set the text of the window header (TextBlock)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.SelectionFileIssuesDisplay.BodyText">
+            <summary>
+            Get of set the text of the window body (TextBox)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.SelectionFileIssuesDisplay.ButtonText">
+            <summary>
+            Get or set the text of the window button
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.SelectionFileIssuesDisplay.#ctor">
+            <summary>
+            Create an instance of the RelhaxMessageWindow class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.SelectionFileIssuesDisplay.InitializeComponent">
+            <summary>
+            InitializeComponent
             </summary>
         </member>
         <member name="T:RelhaxModpack.Windows.ScalingConfirmation">
@@ -7659,12 +7805,6 @@
             <param name="packagesToInstall"></param>
             <returns>The array of DatabasePackage lists</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.PropagateInstallGroupsPerLevel(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
-            <summary>
-            Offsets the InstallGroup for a package by adding the group with the level parameter
-            </summary>
-            <param name="packagesToInstall">The list of package to perform the offset on</param>
-        </member>
         <member name="M:RelhaxModpack.Utils.ClearSelections(System.Collections.Generic.List{RelhaxModpack.Category})">
             <summary>
             Clears all selections in the given lists by setting the checked properties to false
@@ -7872,6 +8012,14 @@
             <param name="emptyNullReturn">The emptyNullReturn value if the string is null or empty, stringToTest otherwise</param>
             <returns></returns>
         </member>
+        <member name="M:RelhaxModpack.Utils.GetExecutingMethodName">
+            <summary>
+            Gets the name of the method above this
+            </summary>
+            <returns>The name of the calling method on this method</returns>
+            <remarks>This is mostly used for in logging, to log the name of the method
+            See https://stackoverflow.com/a/2652481/3128017 </remarks>
+        </member>
         <member name="M:RelhaxModpack.Utils.BuildFilepathMacroList">
             <summary>
             Builds the Filepath macro dictionary with settings that should be parsed from the Settings class
@@ -7918,6 +8066,12 @@
             <param name="package">The zip archive to extract the file from</param>
             <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
             <param name="destinationCompletePath">The complete path to copy the destination file to</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.ClearCache">
+            <summary>
+            Clear the WoT appdata cache folder
+            </summary>
+            <returns>True if clearing operation was sucessfull, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.FTPMakeFolder(System.String,System.Net.ICredentials)">
             <summary>

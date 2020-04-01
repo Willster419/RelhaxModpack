@@ -7,13 +7,13 @@
         mc:Ignorable="d"
         Title="Preview" Height="550" Width="450" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnPreviewWindowLoad" Closed="RelhaxWindow_Closed"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="PreviewMainGrid">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="PreviewMainGrid" x:Name="PreviewMainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="50" Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition MinHeight="50" Height="*"/>
+            <RowDefinition MinHeight="50" Height="3*" x:Name="PictureRowDefinition"/>
+            <RowDefinition Height="Auto" x:Name="GridSplitterRowDefinition"/>
+            <RowDefinition MinHeight="50" Height="2*" x:Name="DescriptionUpdateRowDefinition"/>
         </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" x:Name="PictureGrid">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="30"/>
