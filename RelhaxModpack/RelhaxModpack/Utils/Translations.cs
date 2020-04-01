@@ -2650,7 +2650,7 @@ namespace RelhaxModpack
             //window title for when issues applying a user's selection
             English.Add("SelectionFileIssuesDisplay", "Errors applying selection file");
             German.Add("SelectionFileIssuesDisplay", TranslationNeeded);
-            Polish.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            Polish.Add("SelectionFileIssuesDisplay", "Błędy z zastosowaniem pliku kolekcji");
             French.Add("SelectionFileIssuesDisplay", TranslationNeeded);
             Spanish.Add("SelectionFileIssuesDisplay", TranslationNeeded);
             Russian.Add("SelectionFileIssuesDisplay", TranslationNeeded);
@@ -4045,7 +4045,7 @@ namespace RelhaxModpack
             // Text block for button to allow user to clear cache data from applicationData folders
             English.Add("CleanGameCacheText", "Clear game cache files");
             German.Add("CleanGameCacheText", TranslationNeeded);
-            Polish.Add("CleanGameCacheText", TranslationNeeded);
+            Polish.Add("CleanGameCacheText", "Wyczyść pamięc podręczną gry");
             French.Add("CleanGameCacheText", TranslationNeeded);
             Spanish.Add("CleanGameCacheText", TranslationNeeded);
 
@@ -4053,23 +4053,23 @@ namespace RelhaxModpack
             //
             English.Add("cleanGameCacheProgress", "Clearing game cache files");
             German.Add("cleanGameCacheProgress", TranslationNeeded);
-            Polish.Add("cleanGameCacheProgress", TranslationNeeded);
+            Polish.Add("cleanGameCacheProgress", "Czyszczenie pamięci podręcznej gry");
             French.Add("cleanGameCacheProgress", TranslationNeeded);
             Spanish.Add("cleanGameCacheProgress", TranslationNeeded);
 
-            //Component: cleanGameCacheSucess
+            //Component: cleanGameCacheSuccess
             //
-            English.Add("cleanGameCacheSucess", "Sucessfully cleared game cache files");
-            German.Add("cleanGameCacheSucess", TranslationNeeded);
-            Polish.Add("cleanGameCacheSucess", TranslationNeeded);
-            French.Add("cleanGameCacheSucess", TranslationNeeded);
-            Spanish.Add("cleanGameCacheSucess", TranslationNeeded);
+            English.Add("cleanGameCacheSuccess", "Sucessfully cleared game cache files");
+            German.Add("cleanGameCacheSuccess", TranslationNeeded);
+            Polish.Add("cleanGameCacheSuccess", "Czyszczenie pamięci podręcznej gry zakończone sukcesem");
+            French.Add("cleanGameCacheSuccess", TranslationNeeded);
+            Spanish.Add("cleanGameCacheSuccess", TranslationNeeded);
 
             //Component: cleanGameCacheFail
             //
             English.Add("cleanGameCacheFail", "Failed to clear game cache files");
             German.Add("cleanGameCacheFail", TranslationNeeded);
-            Polish.Add("cleanGameCacheFail", TranslationNeeded);
+            Polish.Add("cleanGameCacheFail", "Nie udało się wyczyścić pamięci podręcznej gry");
             French.Add("cleanGameCacheFail", TranslationNeeded);
             Spanish.Add("cleanGameCacheFail", TranslationNeeded);
             #endregion
