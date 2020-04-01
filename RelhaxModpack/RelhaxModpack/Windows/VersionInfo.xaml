@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:ui="clr-namespace:RelhaxModpack.UIComponents"
         mc:Ignorable="d"
-        Title="Application Update" Height="315" Width="500" ResizeMode="CanMinimize" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="RelhaxWindow_Loaded"
+        Title="Application Update" Height="450" Width="715" ResizeMode="CanResize" MinHeight="315" MinWidth="500" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
     <Grid Tag="VersionInfoGrid">
         <TextBlock x:Name="NewVersionAvailable" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="New Version Available" VerticalAlignment="Top" Tag="NewVersionAvailable"/>
@@ -18,8 +18,9 @@
             <ui:RelhaxHyperlink Tag="ManualUpdateLink" x:Name="ManualUpdateLink" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Foreground="#FF0066CC"
                                 URL="https://github.com/Willster419/RelhaxModpack/releases/latest" Text="Click Here"/>
         </StackPanel>
-        <Button x:Name="VersionInfoNoButton" Content="No" HorizontalAlignment="Left" Margin="10,0,0,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoNoButton" Click="OnNoButtonClick"/>
-        <Button x:Name="VersionInfoYesButton" Content="Yes" HorizontalAlignment="Right" Margin="0,0,10,51" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoYesButton" Click="OnYesButtonClick"/>
+        <TextBlock Text="Do you wish to update now?" HorizontalAlignment="Left" VerticalAlignment="Bottom" Tag="VersionInfoAskText" Margin="10,0,0,55"/>
+        <Button x:Name="VersionInfoNoButton" Background="Red" Foreground="Black" Content="Cancel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoNoButton" Click="OnNoButtonClick" Margin="0,0,90,51"/>
+        <Button x:Name="VersionInfoYesButton" Background="Green" Foreground="Black" Content="Update" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Tag="VersionInfoYesButton" Click="OnYesButtonClick" Margin="0,0,10,51"/>
         <ui:RelhaxHyperlink x:Name="ViewUpdateNotesOnGoogleTranslate" HorizontalAlignment="Left" Margin="10,0,0,30" VerticalAlignment="Bottom" Foreground="#FF0066CC"
                             Tag="ViewUpdateNotesOnGoogleTranslate" Text="View this on Google Translate"/>
     </Grid>

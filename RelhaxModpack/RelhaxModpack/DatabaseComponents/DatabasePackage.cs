@@ -83,6 +83,13 @@ namespace RelhaxModpack
         public string PackageName { get; set; } = string.Empty;
 
         /// <summary>
+        /// Another non-changing, randomly generated unique 16 character identifier for each component in the database.
+        /// </summary>
+        /// <remarks>These fulfill the originally intended purpose of the PackageName defined back in OMC.
+        /// Once generated, the value should not be modified, and will only be removed when the package is removed.</remarks>
+        public string UID { get; set; } = string.Empty;
+
+        /// <summary>
         /// A method to keep track of the version of the package
         /// </summary>
         public string Version { get; set; } = string.Empty;
@@ -178,7 +185,7 @@ namespace RelhaxModpack
         public int InstallGroup { get; set; } = 0;
 
         /// <summary>
-        /// The level at which this package will be installed, factoring if the category is set to offset the install group with the package level
+        /// The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
         /// </summary>
         public virtual int InstallGroupWithOffset
         {

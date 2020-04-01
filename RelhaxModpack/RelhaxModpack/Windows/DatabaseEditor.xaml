@@ -435,23 +435,32 @@
                                 <List>
                                     <ListItem>
                                         <Paragraph>
-                                            CRTL+ALT+CLICK AND DRAG MOUSE TO COPY AND MOVE PACKAGE INTO ANOTHER PACKAGE
+                                            CRTL+ALT+CLICK AND DRAG To copy and move a package into another package level
                                         </Paragraph>
                                     </ListItem>
                                     <ListItem>
                                         <Paragraph>
-                                            DOUBLE CLICK DEV URL'S TO OPEN THEM
+                                            Double click URL's to open them
                                         </Paragraph>
                                     </ListItem>
                                     <ListItem>
                                         <Paragraph>
-                                            CRTL AND CLICK AND DRAG TO COPY PACKAGE
+                                            CRTL+CLICK AND DRAG to copy a package
                                         </Paragraph>
                                     </ListItem>
                                 </List>
-                                <Paragraph>
-                                    <Hyperlink NavigateUri="https://docs.google.com/document/d/1o2CXmhuPrQlk0PQUYRlatzep2ImRtW3DRG-7zl1B0rk/edit">Documentation user guide</Hyperlink>
-                                </Paragraph>
+                                <List>
+                                    <ListItem>
+                                        <Paragraph>
+                                            <Hyperlink NavigateUri="https://docs.google.com/document/d/1o2CXmhuPrQlk0PQUYRlatzep2ImRtW3DRG-7zl1B0rk/edit">Documentation user guide</Hyperlink>
+                                        </Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>
+                                            <Hyperlink NavigateUri="https://docs.google.com/spreadsheets/d/1VPKXRB-e7tcxNwWyrNIKCft-lIUhWunYxeSOCNe3zw8/edit">Database Standards</Hyperlink>
+                                        </Paragraph>
+                                    </ListItem>
+                                </List>
                             </FlowDocument>
                         </RichTextBox>
                     </Grid>
@@ -551,7 +560,7 @@
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="PackageDescriptionDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True"/>
+                        <TextBox x:Name="PackageDescriptionDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True" MouseDoubleClick="PackageDisplayUrlParse_MouseDoubleClick"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DevURLTab" Header="Dev URL">
@@ -563,12 +572,12 @@
                 </TabItem>
                 <TabItem x:Name="InternalNotesTab" Header="Internal Notes">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="PackageInternalNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True"/>
+                        <TextBox x:Name="PackageInternalNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True" MouseDoubleClick="PackageDisplayUrlParse_MouseDoubleClick"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="UpdateNotesTab" Header="Update Notes">
                     <Grid Background="#FFE5E5E5">
-                        <TextBox x:Name="PackageUpdateNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True"/>
+                        <TextBox x:Name="PackageUpdateNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" AcceptsTab="True" MouseDoubleClick="PackageDisplayUrlParse_MouseDoubleClick"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DependenciesTab" Header="Dependencies">

@@ -2645,6 +2645,24 @@ namespace RelhaxModpack
             French.Add("invisible", "Invisible");
             Spanish.Add("invisible", "invisible");
             Russian.Add("invisible", "невидим");
+
+            //Component: SelectionFileIssuesDisplay
+            //window title for when issues applying a user's selection
+            English.Add("SelectionFileIssuesDisplay", "Errors applying selection file");
+            German.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            Polish.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            French.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            Spanish.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            Russian.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+
+            //Component: selectionFileIssues
+            //alias of SelectionFileIssuesDisplay
+            English.Add("selectionFileIssues", English["SelectionFileIssuesDisplay"]);
+            German.Add("selectionFileIssues", German["SelectionFileIssuesDisplay"]);
+            Polish.Add("selectionFileIssues", Polish["SelectionFileIssuesDisplay"]);
+            French.Add("selectionFileIssues", French["SelectionFileIssuesDisplay"]);
+            Spanish.Add("selectionFileIssues", Spanish["SelectionFileIssuesDisplay"]);
+            Russian.Add("selectionFileIssues", Russian["SelectionFileIssuesDisplay"]);
             #endregion
 
             #region Application Update Window
@@ -2719,6 +2737,15 @@ namespace RelhaxModpack
             French.Add("ViewUpdateNotesOnGoogleTranslate", "Voir les notes de mise à jour sur Google Traduction");
             Spanish.Add("ViewUpdateNotesOnGoogleTranslate", "Ver en Traductor de Google");
             Russian.Add("ViewUpdateNotesOnGoogleTranslate", "Посмотреть через переводчик Google");
+
+            //Component: VersionInfoAskText
+            // Text in the window with Yes and No buttons asking the user if he/she wants to update the application
+            English.Add("VersionInfoAskText", "Do you wish to update now?");
+            German.Add("VersionInfoAskText", TranslationNeeded);
+            Polish.Add("VersionInfoAskText", "Czy chcesz zaktualizować teraz?");
+            French.Add("VersionInfoAskText", "Voulez vous faire la mise à jour maintenant?");
+            Spanish.Add("VersionInfoAskText", TranslationNeeded);
+            Russian.Add("VersionInfoAskText", TranslationNeeded);
             #endregion
 
             #region Installer Messages
@@ -3624,7 +3651,7 @@ namespace RelhaxModpack
             German.Add("InstallationCompleteStartGameCenter", "WG Game Center");
             Polish.Add("InstallationCompleteStartGameCenter", "Uruchomić WG Game Center?");
             French.Add("InstallationCompleteStartGameCenter", "Démarrer WG Game Center?");
-            Spanish.Add("InstallationCompleteStartGameCenter", "¿Iniciar WG Game Center ?");
+            Spanish.Add("InstallationCompleteStartGameCenter", "¿Iniciar WG Game Center?");
             Russian.Add("InstallationCompleteStartGameCenter", "Запустить Wargaming.net Game Center?"); // *sigh* - DrWeb7_1
 
             //Component: InstallationCompleteOpenXVM
@@ -4013,6 +4040,38 @@ namespace RelhaxModpack
             French.Add("cleanupModFilesCompleted", "Nettoyage des fichiers de mods terminé");
             Spanish.Add("cleanupModFilesCompleted", "Limpieza de mods completada");
             Russian.Add("cleanupModFilesCompleted", "Удаление модов завершено.");
+
+            //Component: CleanGameCacheText
+            // Text block for button to allow user to clear cache data from applicationData folders
+            English.Add("CleanGameCacheText", "Clear game cache files");
+            German.Add("CleanGameCacheText", TranslationNeeded);
+            Polish.Add("CleanGameCacheText", TranslationNeeded);
+            French.Add("CleanGameCacheText", TranslationNeeded);
+            Spanish.Add("CleanGameCacheText", TranslationNeeded);
+
+            //Component: cleanGameCacheProgress
+            //
+            English.Add("cleanGameCacheProgress", "Clearing game cache files");
+            German.Add("cleanGameCacheProgress", TranslationNeeded);
+            Polish.Add("cleanGameCacheProgress", TranslationNeeded);
+            French.Add("cleanGameCacheProgress", TranslationNeeded);
+            Spanish.Add("cleanGameCacheProgress", TranslationNeeded);
+
+            //Component: cleanGameCacheSucess
+            //
+            English.Add("cleanGameCacheSucess", "Sucessfully cleared game cache files");
+            German.Add("cleanGameCacheSucess", TranslationNeeded);
+            Polish.Add("cleanGameCacheSucess", TranslationNeeded);
+            French.Add("cleanGameCacheSucess", TranslationNeeded);
+            Spanish.Add("cleanGameCacheSucess", TranslationNeeded);
+
+            //Component: cleanGameCacheFail
+            //
+            English.Add("cleanGameCacheFail", "Failed to clear game cache files");
+            German.Add("cleanGameCacheFail", TranslationNeeded);
+            Polish.Add("cleanGameCacheFail", TranslationNeeded);
+            French.Add("cleanGameCacheFail", TranslationNeeded);
+            Spanish.Add("cleanGameCacheFail", TranslationNeeded);
             #endregion
 
             #region Add zip files Dialog

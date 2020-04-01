@@ -88,6 +88,16 @@ namespace RelhaxModpack
         public const string RelicBatchUpdateScriptServer = "relic_self_updater.txt";
 
         /// <summary>
+        /// The name of the application executable when compiled with stable distribution
+        /// </summary>
+        public const string ApplicationFilenameStable = "RelhaxModpack.exe";
+
+        /// <summary>
+        /// The name of the application executable when compiled with beta distribution
+        /// </summary>
+        public const string ApplicationFilenameBeta = "RelhaxModpackBeta.exe";
+
+        /// <summary>
         /// The old V1 filename to save the self updater script as
         /// </summary>
         [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
@@ -425,7 +435,7 @@ namespace RelhaxModpack
         /// The current distribution version of the application.
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
-        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Stable;
+        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Alpha;
 
         /// <summary>
         /// Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed)

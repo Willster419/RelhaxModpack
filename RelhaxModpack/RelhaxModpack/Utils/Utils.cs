@@ -30,6 +30,8 @@ using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Web;
 using RelhaxModpack.DatabaseComponents;
+using System.Runtime.CompilerServices;
+using RelhaxModpack.UIComponents;
 
 namespace RelhaxModpack
 {
@@ -1968,7 +1970,7 @@ namespace RelhaxModpack
         public static List<DatabasePackage>[] CreateOrderedInstallList(List<DatabasePackage> packagesToInstall)
         {
             //get the max number of defined groups
-            int maxGrops = packagesToInstall.Select(max => max.InstallGroup).Max();
+            int maxGrops = packagesToInstall.Select(max => max.InstallGroupWithOffset).Max();
 
             //make the list to return
             //make it maxGroups +1 because group 4 exists, but making a array of 4 is 0-3
@@ -1980,27 +1982,9 @@ namespace RelhaxModpack
 
             foreach(DatabasePackage package in packagesToInstall)
             {
-                orderedList[package.InstallGroup].Add(package);
+                orderedList[package.InstallGroupWithOffset].Add(package);
             }
             return orderedList;
-        }
-
-        /// <summary>
-        /// Offsets the InstallGroup for a package by adding the group with the level parameter
-        /// </summary>
-        /// <param name="packagesToInstall">The list of package to perform the offset on</param>
-        public static void PropagateInstallGroupsPerLevel(List<DatabasePackage> packagesToInstall)
-        {
-            foreach(DatabasePackage package in packagesToInstall)
-            {
-                if (package is SelectablePackage selectablePackage)
-                {
-                    if (selectablePackage.ParentCategory.OffsetInstallGroups)
-                    {
-                        selectablePackage.InstallGroup += selectablePackage.Level;
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -2600,6 +2584,21 @@ namespace RelhaxModpack
         {
             return string.IsNullOrEmpty(stringToTest) ? emptyNullReturn : stringToTest;
         }
+
+        /// <summary>
+        /// Gets the name of the method above this
+        /// </summary>
+        /// <returns>The name of the calling method on this method</returns>
+        /// <remarks>This is mostly used for in logging, to log the name of the method
+        /// See https://stackoverflow.com/a/2652481/3128017 </remarks>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string GetExecutingMethodName()
+        {
+            StackTrace st = new StackTrace();
+            StackFrame sf = st.GetFrame(1);
+
+            return sf.GetMethod().Name;
+        }
         #endregion
 
         #region Macro Utils
@@ -2703,7 +2702,7 @@ namespace RelhaxModpack
                             possiblePath = possiblePath.Substring(1);
                             //trim end
                             possiblePath = possiblePath.Substring(0, possiblePath.Length - 6);
-                            Logging.Debug("possible path found: {0}", possiblePath);
+                            Logging.Debug("Possible path found: {0}", possiblePath);
                             searchPathWoT.Add(possiblePath);
                         }
                     }
@@ -2729,7 +2728,7 @@ namespace RelhaxModpack
                     {
                         if(!string.IsNullOrWhiteSpace(possiblePath) && possiblePath.ToLower().Contains("worldoftanks.exe"))
                         {
-                            Logging.Debug("possible path found: {0}", possiblePath);
+                            Logging.Debug("Possible path found: {0}", possiblePath);
                             searchPathWoT.Add(possiblePath);
                         }
                     }
@@ -2748,7 +2747,7 @@ namespace RelhaxModpack
                 }
                 if (File.Exists(potentialResult))
                 {
-                    Logging.Info("valid game path found: {0}", potentialResult);
+                    Logging.Info("Valid game path found: {0}", potentialResult);
                     return potentialResult;
                 }
             }
@@ -2782,33 +2781,33 @@ namespace RelhaxModpack
         public static string AutoFindWgcDirectory()
         {
             string wgcRegistryKeyLoc = @"Software\Classes\wgc\shell\open\command";
-            Logging.Debug("searching registry ({0}) for wgc location",wgcRegistryKeyLoc);
+            Logging.Debug("Searching registry ({0}) for wgc location",wgcRegistryKeyLoc);
             //search for the location of the game center from the registry
             RegistryKey wgcKey = GetRegistryKeys(new RegistrySearch() { Root = Registry.CurrentUser, Searchpath = wgcRegistryKeyLoc });
             string actualLocation = null;
             if (wgcKey != null)
             {
-                Logging.Debug("not null key, checking results");
+                Logging.Debug("Not null key, checking results");
                 foreach (string valueInKey in wgcKey.GetValueNames())
                 {
                     string wgcPath = wgcKey.GetValue(valueInKey) as string;
-                    Logging.Debug("parsing result name '{0}' with value '{1}'", valueInKey, wgcPath);
+                    Logging.Debug("Parsing result name '{0}' with value '{1}'", valueInKey, wgcPath);
                     if (!string.IsNullOrWhiteSpace(wgcPath) && wgcPath.ToLower().Contains("wgc.exe"))
                     {
                         //trim front
                         wgcPath = wgcPath.Substring(1);
                         //trim end
                         wgcPath = wgcPath.Substring(0, wgcPath.Length - 6);
-                        Logging.Debug("parsed to new value of '{0}', checking if file exists");
+                        Logging.Debug("Parsed to new value of '{0}', checking if file exists");
                         if (File.Exists(wgcPath))
                         {
-                            Logging.Debug("exists, use this for wgc start");
+                            Logging.Debug("Exists, use this for wgc start");
                             actualLocation = wgcPath;
                             break;
                         }
                         else
                         {
-                            Logging.Debug("not exist, continue to search");
+                            Logging.Debug("Not exist, continue to search");
                         }
                     }
                 }
@@ -2924,6 +2923,114 @@ namespace RelhaxModpack
                         Logging.Warning("no matching zip entries for file: {0}", zipPath);
                 }
             }
+        }
+
+        /// <summary>
+        /// Clear the WoT appdata cache folder
+        /// </summary>
+        /// <returns>True if clearing operation was sucessfull, false otherwise</returns>
+        public static bool ClearCache()
+        {
+            //make sure that the app data folder exists
+            //if it does not, then it does not need to run this
+            if (!Directory.Exists(Settings.AppDataFolder))
+            {
+                Logging.Info("Appdata folder does not exist, creating");
+                Directory.CreateDirectory(Settings.AppDataFolder);
+                return true;
+            }
+            Logging.Info("Appdata folder exists, backing up user settings and clearing cache");
+
+            //make the temp folder if it does not already exist
+            string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolderPath, "AppDataBackup");
+            //delete if possibly from previous install
+            if (Directory.Exists(AppPathTempFolder))
+                Utils.DirectoryDelete(AppPathTempFolder, true);
+
+            //and make the folder at the end
+            Directory.CreateDirectory(AppPathTempFolder);
+
+            //backup files and folders that should be kept that aren't cache
+            string[] fileNames = { "preferences.xml", "preferences_ct.xml", "modsettings.dat" };
+            string[] folderNames = { "xvm", "pmod" };
+            string pmodCacheFileToDelete = "cache.dat";
+            string xvmFolderToDelete = "cache";
+
+            //check if the directories are files or folders
+            //if files they can move directly
+            //if folders they have to be re-created on the destination and files moved manually
+            Logging.WriteToLog("Starting clearing cache step 1 of 3: backing up old files", Logfiles.Application, LogLevel.Debug);
+            foreach (string file in fileNames)
+            {
+                Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
+                if (File.Exists(Path.Combine(Settings.AppDataFolder, file)))
+                {
+                    if (!Utils.FileMove(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
+                    {
+                        Logging.Error("Failed to move file for clear cache");
+                        return false;
+                    }
+                }
+                else
+                {
+                    Logging.Info("File does not exist in step clearCache: {0}", file);
+                }
+            }
+
+            foreach (string folder in folderNames)
+            {
+                if (Directory.Exists(Path.Combine(Settings.AppDataFolder, folder)))
+                {
+                    Utils.DirectoryMove(Path.Combine(Settings.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
+                }
+                else
+                {
+                    Logging.Info("Folder does not exist in step clearCache: {0}", folder);
+                }
+            }
+
+            //now delete the temp folder
+            Logging.WriteToLog("Starting clearing cache step 2 of 3: actually clearing cache", Logfiles.Application, LogLevel.Debug);
+            Utils.DirectoryDelete(Settings.AppDataFolder, true);
+
+            //then put the above files back
+            Logging.WriteToLog("Starting clearing cache step 3 of 3: restoring old files", Logfiles.Application, LogLevel.Debug);
+            Directory.CreateDirectory(Settings.AppDataFolder);
+            foreach (string file in fileNames)
+            {
+                Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
+                if (File.Exists(Path.Combine(AppPathTempFolder, file)))
+                {
+                    if (!Utils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)))
+                    {
+                        Logging.Error("Failed to move file for clear cache");
+                        return false;
+                    }
+                }
+                else
+                {
+                    Logging.Info("File does not exist in step clearCache: {0}", file);
+                }
+            }
+
+            //delete extra xvm cache folder and pmod cache file
+            if (Directory.Exists(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete)))
+                Utils.DirectoryDelete(Path.Combine(AppPathTempFolder, folderNames[0], xvmFolderToDelete), true);
+            if (File.Exists(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete)))
+                Utils.FileDelete(Path.Combine(AppPathTempFolder, folderNames[1], pmodCacheFileToDelete));
+
+            foreach (string folder in folderNames)
+            {
+                if (Directory.Exists(Path.Combine(AppPathTempFolder, folder)))
+                {
+                    Utils.DirectoryMove(Path.Combine(AppPathTempFolder, folder), Path.Combine(Settings.AppDataFolder, folder), true);
+                }
+                else
+                {
+                    Logging.Info("Folder does not exist in step clearCache: {0}", folder);
+                }
+            }
+            return true;
         }
         #endregion
 

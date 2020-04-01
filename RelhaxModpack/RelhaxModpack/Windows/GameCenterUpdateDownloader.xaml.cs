@@ -177,6 +177,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        #region Step 1
         private void GcDownloadStep1SelectClientButton_Click(object sender, RoutedEventArgs e)
         {
             //if client selected, get params
@@ -187,7 +188,7 @@ namespace RelhaxModpack.Windows
                 CheckPathExists = true,
                 //https://stackoverflow.com/a/2069090/3128017
                 //Office Files|*.doc;*.xls;*.ppt
-                Filter = "WG Client|WorldOfTanks.*;WorldOfWarships.*;WorldOfWarplanes.*",
+                Filter = string.Format("WG Client Update Document|{0}", GameInfoXml),
                 Multiselect = false,
                 ValidateNames = true,
                 Title = Translations.GetTranslatedString("GcDownloadSelectWgClient")
@@ -633,12 +634,14 @@ namespace RelhaxModpack.Windows
             GameCenterProperties.Add(new GameCenterProperty()
             {
                 FileName = WgcNotificationsXml,
-                Xpath = @"//protocol/notifications/notification/app_id",
+                Xpath = @"//protocol/notifications/notification/app_id[contains(text(),'WGC.')]",
                 GetRequestParamater = "game_id",
                 IsRequired = true
             });
         }
+        #endregion
 
+        #region Step 2
         private void GcDownloadStep2Init()
         {
             //start timer
@@ -671,7 +674,9 @@ namespace RelhaxModpack.Windows
                 GcDownloadStep2NextButton.IsEnabled = false;
             }
         }
+        #endregion
 
+        #region Step 3
         private async void GcDownloadStep3Init()
         {
             GcDownloadStep3NextButton.IsEnabled = false;
@@ -684,7 +689,7 @@ namespace RelhaxModpack.Windows
             StringBuilder requestBuilder = new StringBuilder();
             if((bool)GcDownloadStep1GameCenterCheckbox.IsChecked)
             {
-                requestBuilder.Append("https://wguswgc-wgcct.wargaming.net/api/v1/wgc_update/?protocol_version=1.8");
+                requestBuilder.Append("https://wguswgc-wgcct.wargaming.net/api/v1/wgc_update/?protocol_version=1.9");
                 foreach (GameCenterProperty gameCenterProperty in GameCenterProperties)
                 {
                     requestBuilder.AppendFormat("&{0}={1}", gameCenterProperty.GetRequestParamater, gameCenterProperty.Value);
@@ -706,7 +711,7 @@ namespace RelhaxModpack.Windows
                     return;
                 }
                 GameCenterProperty urlProperty = baseUrlPropertyList[0];
-                requestBuilder.AppendFormat("{0}api/v1/patches_chain/?protocol_version=1.8", urlProperty.Value);
+                requestBuilder.AppendFormat("{0}api/v1/patches_chain/?protocol_version=1.9", urlProperty.Value);
                 foreach (GameCenterProperty gameCenterProperty in GameCenterProperties)
                 {
                     if (string.IsNullOrWhiteSpace(gameCenterProperty.Value) && !gameCenterProperty.IsRequired)
@@ -860,7 +865,9 @@ namespace RelhaxModpack.Windows
             }
             GcDownloadStep3NextButton.IsEnabled = true;
         }
+        #endregion
 
+        #region Step 4
         private async void GcDownloadStep4Init()
         {
             step4DownloadCanceled = false;
@@ -929,7 +936,9 @@ namespace RelhaxModpack.Windows
             GcDownloadStep4NextButton.IsEnabled = true;
             GcDownloadStep4PreviousButton.IsEnabled = false;
         }
+        #endregion
 
+        #region UI events
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             GcDownloadStep4DownloadingSizes.Text = string.Format("{0} {1} {2}", Utils.SizeSuffix((ulong)e.BytesReceived,1,true,false),
@@ -995,5 +1004,6 @@ namespace RelhaxModpack.Windows
         {
             this.Close();
         }
+        #endregion
     }
 }

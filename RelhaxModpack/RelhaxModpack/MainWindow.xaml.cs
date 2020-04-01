@@ -1420,9 +1420,6 @@ namespace RelhaxModpack
                 return;
             }
 
-            //offset the installGroup values of selectablePackages added by the level of the package in the tree
-            Utils.PropagateInstallGroupsPerLevel(packagesToInstall);
-
             //perform list install order calculations
             List<DatabasePackage>[] orderedPackagesToInstall = Utils.CreateOrderedInstallList(packagesToInstall);
 
