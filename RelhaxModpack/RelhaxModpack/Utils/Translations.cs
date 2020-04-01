@@ -3651,7 +3651,7 @@ namespace RelhaxModpack
             German.Add("InstallationCompleteStartGameCenter", "WG Game Center");
             Polish.Add("InstallationCompleteStartGameCenter", "Uruchomić WG Game Center?");
             French.Add("InstallationCompleteStartGameCenter", "Démarrer WG Game Center?");
-            Spanish.Add("InstallationCompleteStartGameCenter", "¿Iniciar WG Game Center ?");
+            Spanish.Add("InstallationCompleteStartGameCenter", "¿Iniciar WG Game Center?");
             Russian.Add("InstallationCompleteStartGameCenter", "Запустить Wargaming.net Game Center?"); // *sigh* - DrWeb7_1
 
             //Component: InstallationCompleteOpenXVM
