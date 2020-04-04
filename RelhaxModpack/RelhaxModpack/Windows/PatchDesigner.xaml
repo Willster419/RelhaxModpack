@@ -53,7 +53,13 @@
                             <RowDefinition Height="22"/>
                             <RowDefinition Height="22"/>
                         </Grid.RowDefinitions>
-                        
+                        <TextBlock Tag="PatchVersionHeader" x:Name="PatchVersionHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" Text="Patch Version"
+                                   ToolTip="Select the version of the patch file to be used in the installer.&#10;Version 2 allows for the use of followPath option for json."/>
+                        <ComboBox Tag="PatchVersionCombobox" x:Name="PatchVersionCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Grid.Row="0" Margin="0,1,0,1"
+                                  ToolTip="Select the version of the patch file to be used in the installer.&#10;Version 2 allows for the use of followPath option for json.">
+                            <System:String>1</System:String>
+                            <System:String>2</System:String>
+                        </ComboBox>
                         <TextBlock Tag="PatchPathHeader" x:Name="PatchPathHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Stretch" Grid.Row="1"
                                    ToolTip="app = World_of_Tanks directory &#10;appData = C:\Users\{username}\AppData\Roaming\Wargaming.net\WorldOfTanks"/>
                         <ComboBox Tag="PatchPathCombobox" x:Name="PatchPathCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Margin="0,1,0,1" Grid.Row="1"
