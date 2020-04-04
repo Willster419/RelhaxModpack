@@ -3919,6 +3919,11 @@
             </summary>
             <returns>The type, mode and lines/path if in editor mode. Else, the base ToString()</returns>
         </member>
+        <member name="P:RelhaxModpack.Patch.ListboxDisplay">
+            <summary>
+            Gets a listbox style UI element display-ready text
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Patch.IsValidForSave">
             <summary>
             Gets a value that determines if all required properties are filed out to be saved to a patch file
