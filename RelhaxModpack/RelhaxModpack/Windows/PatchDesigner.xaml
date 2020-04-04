@@ -81,7 +81,7 @@
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,265,0,25">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20"/>
-                            <RowDefinition Height="22"/>
+                            <RowDefinition Height="35"/>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="35"/>
                             <RowDefinition Height="20"/>
