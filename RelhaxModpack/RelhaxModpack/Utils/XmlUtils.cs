@@ -2973,10 +2973,6 @@ namespace RelhaxModpack
                 version.InnerText = patch.Version.ToString();
                 xmlPatch.AppendChild(version);
 
-                XmlElement followPath = doc.CreateElement("followPath");
-                followPath.InnerText = patch.Version == 1? false.ToString() : patch.FollowPath.ToString();
-                xmlPatch.AppendChild(followPath);
-
                 XmlElement type = doc.CreateElement("type");
                 type.InnerText = patch.Type;
                 xmlPatch.AppendChild(type);
@@ -2988,6 +2984,10 @@ namespace RelhaxModpack
                 XmlElement patchPath = doc.CreateElement("patchPath");
                 patchPath.InnerText = patch.PatchPath;
                 xmlPatch.AppendChild(patchPath);
+
+                XmlElement followPath = doc.CreateElement("followPath");
+                followPath.InnerText = patch.Version == 1 ? false.ToString() : patch.FollowPath.ToString();
+                xmlPatch.AppendChild(followPath);
 
                 XmlElement file = doc.CreateElement("file");
                 file.InnerText = patch.File;
