@@ -3808,6 +3808,31 @@
             A patch is an instruction object of how to modify a text file. Can be a json, xml, or plain text file
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Patch.TypeRegex1">
+            <summary>
+            One of two string values used for regex type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.TypeRegex2">
+            <summary>
+            One of two string values used for regex type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.TypeXml">
+            <summary>
+            The string value used for xml type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.TypeJson">
+            <summary>
+            The string value used for json type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patch.TypeXvm">
+            <summary>
+            The string value used for xvm type legacy patches
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Patch.NativeProcessingFile">
             <summary>
             A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
