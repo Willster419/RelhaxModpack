@@ -241,6 +241,20 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private void PatchVersionCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //only patch versions 2+ will support the followPath option
+            if(PatchVersionCombobox.SelectedIndex == 0)
+            {
+                PatchFollowPathSetting.IsChecked = false;
+                PatchFollowPathSetting.IsEnabled = false;
+            }
+            else
+            {
+                PatchFollowPathSetting.IsEnabled = true;
+            }
+        }
+
         private void DisplayPatch(Patch patch)
         {
             //reset to nothing, then only set if the patch option is valid
@@ -281,7 +295,21 @@ namespace RelhaxModpack.Windows
             if (!string.IsNullOrWhiteSpace(patch.Mode))
                 PatchModeCombobox.SelectedItem = patch.Mode;
 
-            PatchFollowPathSetting.IsChecked = patch.FollowPath;
+            //set the version. it's at least version 1
+            PatchVersionCombobox.SelectedItem = patch.Version;
+
+            //only set the followPath setting if the version is > 1
+            //else it is set off by the selectedValueChanged event in PatchVersionCombobox
+            if (patch.Version > 1)
+            {
+                PatchFollowPathSetting.IsChecked = patch.FollowPath;
+            }
+            else if (patch.Version == 1 && patch.FollowPath)
+            {
+                Logging.Patcher("Patch version is 1, followPath can't be enabled (not supported). Disabling.", LogLevel.Error);
+                patch.FollowPath = false;
+            }
+
             if (patch.Type.Equals("regex"))
             {
                 PatchModeCombobox.IsEnabled = false;
@@ -329,6 +357,7 @@ namespace RelhaxModpack.Windows
             patch.PatchPath = PatchPathCombobox.SelectedItem as string;
             patch.Type = PatchTypeCombobox.SelectedItem as string;
             patch.Mode = PatchModeCombobox.SelectedItem as string;
+            patch.Version = (int)PatchVersionCombobox.SelectedItem;
             patch.FollowPath = (bool)PatchFollowPathSetting.IsChecked;
             patch.File = PatchFilePathTextbox.Text;
 
