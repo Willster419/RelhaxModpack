@@ -129,7 +129,8 @@
         <TabControl Tag="RightSideTabControl" x:Name="RightSideTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2">
             <TabItem Tag="PatchesListTab"  x:Name="PatchesListTab" Header="Patches list">
                 <Grid Background="#FFE5E5E5">
-                    <ListBox Tag="PatchesList" x:Name="PatchesList" HorizontalAlignment="Stretch"  Margin="0,21,0,20" VerticalAlignment="Stretch" SelectionChanged="PatchesList_SelectionChanged" ScrollViewer.ScrollChanged="PatchesList_ScrollChanged" PreviewMouseUp="PatchesList_PreviewMouseUp" PreviewMouseDown="PatchesList_PreviewMouseDown" MouseMove="PatchesList_MouseMove" DragOver="PatchesList_DragOver" Drop="PatchesList_Drop" AllowDrop="True"/>
+                    <ListBox Tag="PatchesList" x:Name="PatchesList" HorizontalAlignment="Stretch"  Margin="0,21,0,20" VerticalAlignment="Stretch" SelectionChanged="PatchesList_SelectionChanged" ScrollViewer.ScrollChanged="PatchesList_ScrollChanged"
+                             PreviewMouseUp="PatchesList_PreviewMouseUp" PreviewMouseDown="PatchesList_PreviewMouseDown" MouseMove="PatchesList_MouseMove" DragOver="PatchesList_DragOver" Drop="PatchesList_Drop" AllowDrop="True" DisplayMemberPath="ListboxDisplay"/>
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Patches list (click and drag to order)" VerticalAlignment="Top"/>
                     <Button Tag="RemovePatchButton" x:Name="RemovePatchButton" Content="Remove Patch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="95" Click="RemovePatchButton_Click"/>
                     <Button Tag="AddPatchButton" x:Name="AddPatchButton" Content="Add new patch" HorizontalAlignment="Right" Margin="0,0,100,0" VerticalAlignment="Bottom" Width="95" Click="AddPatchButton_Click"/>

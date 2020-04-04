@@ -147,6 +147,14 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Gets a listbox style UI element display-ready text
+        /// </summary>
+        public string ListboxDisplay
+        {
+            get { return string.Format("type={0} ,mode={1}, lines/path={2}", Type, Mode, Lines == null ? Path : string.Join(",", Lines)); }
+        }
+
+        /// <summary>
         /// Gets a value that determines if all required properties are filed out to be saved to a patch file
         /// </summary>
         public bool IsValidForSave
