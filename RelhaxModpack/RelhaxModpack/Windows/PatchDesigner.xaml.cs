@@ -304,9 +304,10 @@ namespace RelhaxModpack.Windows
             {
                 PatchFollowPathSetting.IsChecked = patch.FollowPath;
             }
-            else if (patch.Version == 1 && patch.FollowPath)
+            else if (patch.FollowPath && (patch.Version == 1 || !patch.Type.Equals(Patch.TypeJson)))
             {
-                Logging.Patcher("Patch version is 1, followPath can't be enabled (not supported). Disabling.", LogLevel.Error);
+                Logging.Patcher("Patch option followPath can't be enabled (not supported). Disabling.", LogLevel.Error);
+                Logging.Patcher("Version: {0}, Type: {1}", LogLevel.Error, patch.Version, patch.Type);
                 patch.FollowPath = false;
             }
 
