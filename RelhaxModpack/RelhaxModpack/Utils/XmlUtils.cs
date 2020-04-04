@@ -2733,7 +2733,7 @@ namespace RelhaxModpack
                     NativeProcessingFile = Path.GetFileName(filename),
                     ActualPatchName = originalNameFromZip
                 };
-                Logging.Debug("adding patch from file: {0} -> original name: {1}", Path.GetFileName(filename), originalNameFromZip);
+                Logging.Debug("Adding patch from file: {0} -> original name: {1}", Path.GetFileName(filename), originalNameFromZip);
                 
                 //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
                 foreach (XmlNode property in patchNode.ChildNodes)
