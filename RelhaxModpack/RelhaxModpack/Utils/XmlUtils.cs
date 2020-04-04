@@ -2751,6 +2751,9 @@ namespace RelhaxModpack
                         case "patchPath":
                             p.PatchPath = property.InnerText.Trim();
                             break;
+                        case "followPath":
+                            p.FollowPath = Utils.ParseBool(property.InnerText.Trim(), false);
+                            break;
                         case "file":
                             p.File = property.InnerText.Trim();
                             break;
@@ -2951,6 +2954,67 @@ namespace RelhaxModpack
                 }
                 atlases.Add(sc);
             }
+        }
+
+        public static XmlDocument SavePatchToXmlDocument(List<Patch> PatchesList)
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlElement patchHolder = doc.CreateElement("patchs");
+            doc.AppendChild(patchHolder);
+            int counter = 0;
+            foreach (Patch patch in PatchesList)
+            {
+                Logging.Patcher("[SavePatchToXmlDocument]: Saving patch {0} of {1}: {2}", LogLevel.Info, ++counter, PatchesList.Count, patch.ToString());
+                Logging.Patcher("{0}", LogLevel.Info, patch.DumpPatchInfoForLog);
+                XmlElement xmlPatch = doc.CreateElement("patch");
+                patchHolder.AppendChild(xmlPatch);
+
+                XmlElement version = doc.CreateElement("version");
+                version.InnerText = patch.Version.ToString();
+                xmlPatch.AppendChild(version);
+
+                XmlElement followPath = doc.CreateElement("followPath");
+                followPath.InnerText = patch.Version == 1? false.ToString() : patch.FollowPath.ToString();
+                xmlPatch.AppendChild(followPath);
+
+                XmlElement type = doc.CreateElement("type");
+                type.InnerText = patch.Type;
+                xmlPatch.AppendChild(type);
+
+                XmlElement mode = doc.CreateElement("mode");
+                mode.InnerText = patch.Mode;
+                xmlPatch.AppendChild(mode);
+
+                XmlElement patchPath = doc.CreateElement("patchPath");
+                patchPath.InnerText = patch.PatchPath;
+                xmlPatch.AppendChild(patchPath);
+
+                XmlElement file = doc.CreateElement("file");
+                file.InnerText = patch.File;
+                xmlPatch.AppendChild(file);
+
+                if (patch.Type.Equals("regex"))
+                {
+                    XmlElement line = doc.CreateElement("line");
+                    line.InnerText = string.Join(",", patch.Lines);
+                    xmlPatch.AppendChild(line);
+                }
+                else
+                {
+                    XmlElement line = doc.CreateElement("path");
+                    line.InnerText = patch.Path;
+                    xmlPatch.AppendChild(line);
+                }
+
+                XmlElement search = doc.CreateElement("search");
+                search.InnerText = patch.Search;
+                xmlPatch.AppendChild(search);
+
+                XmlElement replace = doc.CreateElement("replace");
+                replace.InnerText = Utils.MacroReplace(patch.Replace, ReplacementTypes.TextEscape);
+                xmlPatch.AppendChild(replace);
+            }
+            return doc;
         }
         #endregion
     }
