@@ -310,7 +310,7 @@ namespace RelhaxModpack.Windows
                 patch.FollowPath = false;
             }
 
-            if (patch.Type.Equals("regex"))
+            if (patch.Type.Equals(Patch.TypeRegex1) || patch.Type.Equals(Patch.TypeRegex2)
             {
                 PatchModeCombobox.IsEnabled = false;
                 if (patch.Lines == null || patch.Lines.Count() == 0)

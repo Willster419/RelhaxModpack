@@ -160,8 +160,8 @@ namespace RelhaxModpack
             PatchExitCode patchSuccess = PatchExitCode.Error;
             switch (p.Type.ToLower())
             {
-                case "regex":
-                case "regx":
+                case Patch.TypeRegex1:
+                case Patch.TypeRegex2:
                     if (p.Lines == null || p.Lines.Count() == 0)
                     {
                         Logging.Debug("[PatchUtils]: Running regex patch as all lines, line by line");
@@ -183,14 +183,18 @@ namespace RelhaxModpack
                         patchSuccess = RegxPatch(p, lines);
                     }
                     break;
-                case "xml":
+                case Patch.TypeXml:
                     patchSuccess = XMLPatch(p);
                     break;
-                case "json":
+                case Patch.TypeJson:
                     patchSuccess = JsonPatch(p);
                     break;
-                case "xvm":
+                case Patch.TypeXvm:
                     Logging.Error("[PatchUtils]: xvm patches are not supported, please use the json patch method");
+                    patchSuccess = PatchExitCode.Error;
+                    break;
+                default:
+                    Logging.Error("[PatchUtils]: Unknown patch type: {0}", p.Type.ToLower());
                     patchSuccess = PatchExitCode.Error;
                     break;
             }
