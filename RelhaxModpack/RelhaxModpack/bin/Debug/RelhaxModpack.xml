@@ -440,7 +440,12 @@
         </member>
         <member name="P:RelhaxModpack.Category.Maintainers">
             <summary>
-            A list of database managers who are known to maintain this category
+            A list of database managers who are known to maintain this component
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Category.MaintainersList">
+            <summary>
+            Returns a list database managers who are known to maintain this component
             </summary>
         </member>
         <member name="P:RelhaxModpack.Category.Packages">
@@ -479,11 +484,6 @@
             Reference for the UI element of this package in the database editor
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Category.DependenciesProp">
-            <summary>
-            Property of Dependencies list to allow for interface implementation
-            </summary>
-        </member>
         <member name="M:RelhaxModpack.Category.CompareCatagories(RelhaxModpack.Category,RelhaxModpack.Category)">
             <summary>
             Sorts the Categories by their name property. Currently not implemented.
@@ -509,6 +509,61 @@
             Check if any packages in this category are selected for install
             </summary>
             <returns>Try if any package is selected, false otherwise</returns>
+        </member>
+        <member name="T:RelhaxModpack.DatabaseComponents.IDatabaseComponent">
+            <summary>
+            An interface for all components in the database
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.IDatabaseComponent.ComponentInternalName">
+            <summary>
+            When a databasePackage, the internal packageName. When category, the category name
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.IDatabaseComponent.EditorTreeViewItem">
+            <summary>
+            Reference for the UI element of this package in the database editor
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.IDatabaseComponent.Maintainers">
+            <summary>
+            A list of database managers who are known to maintain this component
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.IDatabaseComponent.MaintainersList">
+            <summary>
+            Returns a list of database managers who are known to maintain this component
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.DatabaseComponents.IComponentWithDependencies">
+            <summary>
+            Provides an interface for Categories and packages to share commonality since they both can have dependencies
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithDependencies.Dependencies">
+            <summary>
+            The property wrapper of the Dependencies field
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.DatabaseComponents.IXmlSerializable">
+            <summary>
+            Represents an interface that when implemented, will specify which properties of a class
+            get serialized into xml attributes and elements
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.DatabaseComponents.IXmlSerializable.PropertiesForSerializationAttributes">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
+        </member>
+        <member name="M:RelhaxModpack.DatabaseComponents.IXmlSerializable.PropertiesForSerializationElements">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml elements
+            </summary>
+            <returns>A list of string property names</returns>
+            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
         <member name="T:RelhaxModpack.Logic">
             <summary>
@@ -648,6 +703,16 @@
             A method to keep track of the version of the package
             </summary>
         </member>
+        <member name="P:RelhaxModpack.DatabasePackage.Maintainers">
+            <summary>
+            A list of database managers who are known to maintain this component
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabasePackage.MaintainersList">
+            <summary>
+            Returns a list database managers who are known to maintain this component
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.DatabasePackage.Timestamp">
             <summary>
             Used to determine when the package entry was last modified
@@ -709,6 +774,11 @@
         <member name="P:RelhaxModpack.DatabasePackage.Triggers">
             <summary>
             The list of triggers that this package can start (list of triggers that apply to this package)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabasePackage.TriggersList">
+            <summary>
+            Returns a list of triggers that this component can start
             </summary>
         </member>
         <member name="P:RelhaxModpack.DatabasePackage.DevURL">
@@ -866,11 +936,6 @@
             When loading from legacy database type and is was of type "logicalDependency"
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Dependency.DependenciesProp">
-            <summary>
-            Property of Dependencies list to allow for interface implementation
-            </summary>
-        </member>
         <member name="M:RelhaxModpack.Dependency.#ctor">
             <summary>
             Create an instance of the Dependency class and over-ride DatabasePackage default values
@@ -882,46 +947,6 @@
             </summary>
             <param name="packageToCopyFrom">The package to copy the information from</param>
             <param name="deep">Set to true to copy list objects, false to use new lists</param>
-        </member>
-        <member name="T:RelhaxModpack.DatabaseComponents.IComponentWithDependencies">
-            <summary>
-            Provides an interface for Categories and packages to share commonality since they both can have dependencies
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithDependencies.DependenciesProp">
-            <summary>
-            The property wrapper of the Dependencies field
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.DatabaseComponents.IComponentWithID">
-            <summary>
-            Represents an interface that defines a unique ID or name to be returned on a database component
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.DatabaseComponents.IComponentWithID.ComponentInternalName">
-            <summary>
-            When a databasePackage, the internal packageName. When category, the category name
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.DatabaseComponents.IXmlSerializable">
-            <summary>
-            Represents an interface that when implemented, will specify which properties of a class
-            get serialized into xml attributes and elements
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.DatabaseComponents.IXmlSerializable.PropertiesForSerializationAttributes">
-            <summary>
-            Defines a list of properties in the class to be serialized into xml attributes
-            </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
-        </member>
-        <member name="M:RelhaxModpack.DatabaseComponents.IXmlSerializable.PropertiesForSerializationElements">
-            <summary>
-            Defines a list of properties in the class to be serialized into xml elements
-            </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
         <member name="T:RelhaxModpack.MediaType">
             <summary>
@@ -1245,11 +1270,6 @@
         <member name="P:RelhaxModpack.SelectablePackage.Dependencies">
             <summary>
             A list of packages (from dependencies list) that this package is dependent on in order to be installed
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.SelectablePackage.DependenciesProp">
-            <summary>
-            Property of Dependencies list to allow for interface implementation
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.ConflictingPackages">
@@ -7912,7 +7932,7 @@
             <param name="newObject">The new value type object created</param>
             <returns>False if the value could not be set, true otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.SetListEntries(RelhaxModpack.DatabaseComponents.IComponentWithID,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
+        <member name="M:RelhaxModpack.Utils.SetListEntries(RelhaxModpack.DatabaseComponents.IDatabaseComponent,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
             <summary>
             Creates all database entries in a list property, parsing each list entry object by xmlListItems
             </summary>
