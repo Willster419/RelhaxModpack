@@ -535,12 +535,6 @@ namespace RelhaxModpack.Windows
                 }
             }
 
-            //there's a couple that don't need to be disabled
-            if (controlsToDisable.Contains(CurrentSupportedTriggers))
-                controlsToDisable.Remove(CurrentSupportedTriggers);
-            else
-                throw new BadMemeException("but it's there i swear");
-
             //disable the components
             foreach (Control control in controlsToDisable)
                 control.IsEnabled = false;
