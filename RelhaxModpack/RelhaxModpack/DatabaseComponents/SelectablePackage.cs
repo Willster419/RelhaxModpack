@@ -43,7 +43,7 @@ namespace RelhaxModpack
     /// <summary>
     /// A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
     /// </summary>
-    public class SelectablePackage : DatabasePackage, IComponentWithDependencies, IXmlSerializable
+    public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         #region Xml serialization
         /// <summary>
