@@ -2799,7 +2799,7 @@ namespace RelhaxModpack.Windows
             {
                 item.Package.EditorTreeViewItem.BringIntoView();
                 item.Package.EditorTreeViewItem.IsSelected = true;
-                SelectDatabaseObject(item.Package, null);
+                SelectDatabaseObject(item.Package, GetPackageTreeViewItem(GetDatabasePackage(SelectedItem)));
             }, System.Windows.Threading.DispatcherPriority.Background);
         }
         #endregion
