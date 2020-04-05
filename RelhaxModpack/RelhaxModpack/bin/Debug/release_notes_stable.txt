@@ -1,3 +1,27 @@
+Application version 1.0.4.0 (2020-04-05)
+https://www.virustotal.com/gui/file/6b6174cbd2aa27069c1e8f7119de4447821957bdab981661a47884dece853b48/detection
+- Added "Maintainers" internal database property for database managers to track who generally works on database sections.
+- Fixed issues with preview window not displaying correct package information when selecting from combobox bulk preview.
+- Adjusted display/preview window height to be 2/3 rather then 1/2.
+- Re-worked interface definitions to allow for more refrences being saved into class properties.
+- Fixed incorrect application of color to some hyperlinks in the application.
+- Re-worked messages for selection list issues (like listing disabled packages).
+- Fixed issues with the WG update utility for updating the WG game center.
+- Fixed no progress bar reporting during application update.
+- Added ability to clear game cache from diagnosstic utilities window.
+- Re-worked the version info dialog window (Arkhorse / TheIllusion).
+- Fixed bug with install group calculations based on offset max value.
+- Changed GameCenter Updater to use "game_info.xml" instead for which file to load.
+- Added feature to show a messageBox of first load of selectionList to inform users that they can right click to select a component. Added additional logic so that it will never show outside of a first load scenario.
+- Added/updated utility methods.
+- General code optimizations and cleanup.
+- Fixed/updated issues and features with the database updater.
+- Fixed/updated issues and features with the database editor.
+- Updated logging messages.
+- Updated documentation.
+- Updated translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.0.3.0 (2020-02-09)
 https://www.virustotal.com/gui/file/0f5e29d75dcd5b5d88f66d603c59454376028643eb754abcd2b415b8f19e6c1c/detection
 - Fixed bug in the clean/uninstall process crashing if access to mods/res_mods is denied. Now it will log the error and report.
