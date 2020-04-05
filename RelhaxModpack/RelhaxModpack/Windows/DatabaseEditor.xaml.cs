@@ -722,7 +722,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Show and Apply database methods
+        #region Show database methods
         private void DatabaseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             //set handled parameter so that the parent events don't fire
