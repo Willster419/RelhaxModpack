@@ -9,7 +9,7 @@ namespace RelhaxModpack
     /// <summary>
     /// A database component is the base class for all other packages
     /// </summary>
-    public class DatabasePackage : IXmlSerializable, IComponentWithID
+    public class DatabasePackage : IDatabaseComponent, IXmlSerializable
     {
         #region Xml serialization
         /// <summary>
@@ -93,6 +93,11 @@ namespace RelhaxModpack
         /// A method to keep track of the version of the package
         /// </summary>
         public string Version { get; set; } = string.Empty;
+
+        /// <summary>
+        /// A list of database managers who are known to maintain this category
+        /// </summary>
+        public string Maintainers { get; set; } = string.Empty;
 
         /// <summary>
         /// Used to determine when the package entry was last modified

@@ -128,12 +128,12 @@
     <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
     <Compile Include="AtlasesCreator\IRelhaxUnmanagedLibrary.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
+    <Compile Include="DatabaseComponents\IDatabaseComponent.cs" />
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
     <Compile Include="DatabaseComponents\DatabasePackage.cs" />
     <Compile Include="DatabaseComponents\Dependency.cs" />
     <Compile Include="DatabaseComponents\DownloadInstructions.cs" />
     <Compile Include="DatabaseComponents\IComponentWithDependencies.cs" />
-    <Compile Include="DatabaseComponents\IComponentWithID.cs" />
     <Compile Include="DatabaseComponents\IXmlSerializable.cs" />
     <Compile Include="DatabaseComponents\Media.cs" />
     <Compile Include="DatabaseComponents\PackageComparer.cs" />

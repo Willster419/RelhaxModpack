@@ -9,7 +9,7 @@ namespace RelhaxModpack
     /// <summary>
     /// a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
     /// </summary>
-    public class Category : IComponentWithDependencies, IXmlSerializable
+    public class Category : IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         #region Xml serialization
         /// <summary>
@@ -53,7 +53,7 @@ namespace RelhaxModpack
         /// A list of database managers who are known to maintain this category
         /// </summary>
         public string Maintainers { get; set; } = string.Empty;
-        
+
         /// <summary>
         /// The list of packages contained in this category
         /// </summary>

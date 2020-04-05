@@ -2118,7 +2118,7 @@ namespace RelhaxModpack
         /// <param name="componentWithID">The database component with the list property, for example SelectablePackage</param>
         /// <param name="listPropertyInfo">the property metadata/info about the list property, for example Medias</param>
         /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
-        public static void SetListEntries(IComponentWithID componentWithID, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
+        public static void SetListEntries(IDatabaseComponent componentWithID, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
         {
             //get the list interfaced component
             IList listProperty = listPropertyInfo.GetValue(componentWithID) as IList;

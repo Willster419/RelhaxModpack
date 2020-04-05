@@ -220,7 +220,7 @@ namespace RelhaxModpack.Windows
             return null;
         }
 
-        private TreeViewItem GetPackageTreeViewItem(IComponentWithID componentWithID)
+        private TreeViewItem GetPackageTreeViewItem(IDatabaseComponent componentWithID)
         {
             if (componentWithID is Category category)
                 return category.EditorTreeViewItem;

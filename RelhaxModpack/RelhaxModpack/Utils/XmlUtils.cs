@@ -563,7 +563,7 @@ namespace RelhaxModpack
                 if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
                     throw new BadMemeException("Type of this list is not of IXmlSerializable");
 
-                IComponentWithID componentWithID = (IComponentWithID)listEntry;
+                IDatabaseComponent componentWithID = (IDatabaseComponent)listEntry;
 
                 //create attribute and element unknown and missing lists
                 List<string> unknownAttributes = new List<string>();

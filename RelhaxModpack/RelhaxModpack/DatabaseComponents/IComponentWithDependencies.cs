@@ -9,7 +9,7 @@ namespace RelhaxModpack.DatabaseComponents
     /// <summary>
     /// Provides an interface for Categories and packages to share commonality since they both can have dependencies
     /// </summary>
-    public interface IComponentWithDependencies : IComponentWithID
+    public interface IComponentWithDependencies : IDatabaseComponent
     {
         /// <summary>
         /// The property wrapper of the Dependencies field
