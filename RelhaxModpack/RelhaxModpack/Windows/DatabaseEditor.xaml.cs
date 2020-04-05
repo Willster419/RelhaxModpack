@@ -792,6 +792,7 @@ namespace RelhaxModpack.Windows
             foreach (DatabaseLogic logic in category.Dependencies)
                 PackageDependenciesDisplay.Items.Add(DatabaseLogic.Copy(logic));
             PackageNameDisplay.Text = category.Name;
+            PackageMaintainersDisplay.Text = category.Maintainers;
             CategoryOffsetInstallGroupDisplay.IsChecked = category.OffsetInstallGroups;
         }
 
@@ -803,6 +804,7 @@ namespace RelhaxModpack.Windows
             //basic tab
             //set text field texts
             PackagePackageNameDisplay.Text = package.PackageName;
+            PackageMaintainersDisplay.Text = package.Maintainers;
             PackageStartAddressDisplay.Text = package.StartAddress;
             PackageZipFileDisplay.Text = package.ZipFile;
             PackageEndAddressDisplay.Text = package.EndAddress;
@@ -1008,6 +1010,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Editor("Category was modified, saving and setting flag");
                 category.Name = PackageNameDisplay.Text;
+                category.Maintainers = PackageMaintainersDisplay.Text;
                 category.OffsetInstallGroups = (bool)CategoryOffsetInstallGroupDisplay.IsChecked;
                 category.Dependencies.Clear();
                 foreach (DatabaseLogic logic in PackageDependenciesDisplay.Items)
@@ -1058,6 +1061,7 @@ namespace RelhaxModpack.Windows
             //save everything from the UI into the package
             //save package elements first
             package.PackageName = PackagePackageNameDisplay.Text;
+            package.Maintainers = PackageMaintainersDisplay.Text;
             package.StartAddress = PackageStartAddressDisplay.Text;
             package.EndAddress = PackageEndAddressDisplay.Text;
 
@@ -1220,6 +1224,9 @@ namespace RelhaxModpack.Windows
             if (!category.Name.Equals(PackageNameDisplay.Text))
                 return true;
 
+            if (!category.Maintainers.Equals(PackageMaintainersDisplay.Text))
+                return true;
+
             if (category.OffsetInstallGroups != ((bool)CategoryOffsetInstallGroupDisplay.IsChecked))
                 return true;
 
@@ -1234,6 +1241,8 @@ namespace RelhaxModpack.Windows
             //save everything from the UI into the package
             //save package elements first
             if (!package.PackageName.Equals(PackagePackageNameDisplay.Text))
+                return true;
+            if (!package.Maintainers.Equals(PackageMaintainersDisplay.Text))
                 return true;
             if (!package.StartAddress.Equals(PackageStartAddressDisplay.Text))
                 return true;
