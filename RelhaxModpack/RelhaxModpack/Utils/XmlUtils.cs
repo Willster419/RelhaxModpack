@@ -533,6 +533,9 @@ namespace RelhaxModpack
                     //https://stackoverflow.com/questions/18887061/getting-attribute-value-using-xelement
                     Name = categoryDocuments[i].Root.Attribute("Name").Value
                 };
+                XElement result = categoryDocuments[i].XPathSelectElement(@"/Category/Maintainers");
+                if (result != null)
+                    cat.Maintainers = result.Value.ToString();
 
                 //parse the list of dependencies from Xml for the categories into the category in list
                 Logging.Debug("[ParseDatabase1V1]: Parsing Dependency references for category {0}", cat.Name);
@@ -2545,8 +2548,17 @@ namespace RelhaxModpack
                 XmlDocument xmlCategoryFile = new XmlDocument();
                 xmlDeclaration = xmlCategoryFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
                 xmlCategoryFile.AppendChild(xmlDeclaration);
+
                 XmlElement xmlCategoryFileRoot = xmlCategoryFile.CreateElement("Category");
-                xmlCategoryFileRoot.SetAttribute("Name", cat.Name);
+                xmlCategoryFileRoot.SetAttribute(nameof(cat.Name), cat.Name);
+
+                //create Maintainers element
+                if(!string.IsNullOrWhiteSpace(cat.Maintainers))
+                {
+                    XmlElement xmlCategoryMaintainers = xmlCategoryFile.CreateElement(nameof(cat.Maintainers));
+                    xmlCategoryMaintainers.InnerText = cat.Maintainers;
+                    xmlCategoryFileRoot.AppendChild(xmlCategoryMaintainers);
+                }
 
                 //need to incorporate the fact that categories have dependencies
                 if (cat.Dependencies.Count > 0)
