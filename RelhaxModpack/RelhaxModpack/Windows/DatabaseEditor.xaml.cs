@@ -2862,14 +2862,30 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
+        #region Double click jump code
         private void PackageDependenciesDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            Logging.Editor("PackageDependenciesDisplay_MouseDoubleClick(), selectedItem = {0}", LogLevel.Info, SelectedItem);
+            Dispatcher.InvokeAsync(() =>
+            {
+                DatabasePackage selectedPackage = PackageDependenciesDisplay.SelectedItem as DatabasePackage;
+                selectedPackage.EditorTreeViewItem.BringIntoView();
+                selectedPackage.EditorTreeViewItem.IsSelected = true;
+                SelectDatabaseObject(selectedPackage, null);
+            }, System.Windows.Threading.DispatcherPriority.Background);
         }
 
         private void PackageConflictingPackagesDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            Logging.Editor("PackageConflictingPackagesDisplay_MouseDoubleClick(), selectedItem = {0}", LogLevel.Info, SelectedItem);
+            Dispatcher.InvokeAsync(() =>
+            {
+                DatabasePackage selectedPackage = PackageConflictingPackagesDisplay.SelectedItem as DatabasePackage;
+                selectedPackage.EditorTreeViewItem.BringIntoView();
+                selectedPackage.EditorTreeViewItem.IsSelected = true;
+                SelectDatabaseObject(selectedPackage, null);
+            }, System.Windows.Threading.DispatcherPriority.Background);
         }
+        #endregion
     }
 }
