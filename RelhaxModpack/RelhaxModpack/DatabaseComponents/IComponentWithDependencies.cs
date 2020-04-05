@@ -14,6 +14,6 @@ namespace RelhaxModpack.DatabaseComponents
         /// <summary>
         /// The property wrapper of the Dependencies field
         /// </summary>
-        List<DatabaseLogic> DependenciesProp { get; set; }
+        List<DatabaseLogic> Dependencies { get; set; }
     }
 }

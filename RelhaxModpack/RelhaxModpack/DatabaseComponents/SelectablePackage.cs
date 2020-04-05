@@ -430,11 +430,6 @@ namespace RelhaxModpack
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
 
         /// <summary>
-        /// Property of Dependencies list to allow for interface implementation
-        /// </summary>
-        public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
-
-        /// <summary>
         /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
         /// Refer to examples for more information
         /// </summary>

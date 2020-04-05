@@ -77,11 +77,6 @@ namespace RelhaxModpack
 
         #region Other Properties and Methods
         /// <summary>
-        /// Property of Dependencies list to allow for interface implementation
-        /// </summary>
-        public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
-
-        /// <summary>
         /// Create an instance of the Dependency class and over-ride DatabasePackage default values
         /// </summary>
         public Dependency()

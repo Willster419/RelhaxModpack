@@ -97,11 +97,6 @@ namespace RelhaxModpack
 
         #region Other Properties and Methods
         /// <summary>
-        /// Property of Dependencies list to allow for interface implementation
-        /// </summary>
-        public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
-
-        /// <summary>
         /// Sorts the Categories by their name property. Currently not implemented.
         /// </summary>
         /// <param name="x">The first Category to compare</param>

@@ -1689,14 +1689,14 @@ namespace RelhaxModpack
             List<IComponentWithDependencies> componentsWithDependencies_ = new List<IComponentWithDependencies>();
 
             //get all categories where at least one dependency exists
-            componentsWithDependencies_.AddRange(componentsWithDependencies.Where(cat => cat.DependenciesProp.Count > 0));
+            componentsWithDependencies_.AddRange(componentsWithDependencies.Where(cat => cat.Dependencies.Count > 0));
 
             //get all packages and dependnecies where at least one dependency exists
-            componentsWithDependencies_.AddRange(GetFlatList(null, dependencies, null, componentsWithDependencies).OfType<IComponentWithDependencies>().Where(component => component.DependenciesProp.Count > 0).ToList());
+            componentsWithDependencies_.AddRange(GetFlatList(null, dependencies, null, componentsWithDependencies).OfType<IComponentWithDependencies>().Where(component => component.Dependencies.Count > 0).ToList());
 
             foreach (IComponentWithDependencies componentWithDependencies in componentsWithDependencies_)
             {
-                foreach(DatabaseLogic logic in componentWithDependencies.DependenciesProp)
+                foreach(DatabaseLogic logic in componentWithDependencies.Dependencies)
                 {
                     logic.ParentPackageRefrence = componentWithDependencies;
                     logic.DependencyPackageRefrence = dependencies.Find(dependency => dependency.PackageName.Equals(logic.PackageName));

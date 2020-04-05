@@ -1084,10 +1084,10 @@ namespace RelhaxModpack.Windows
             //this gets dependencies and selectable packages
             if(package is IComponentWithDependencies componentWithDependencies)
             {
-                componentWithDependencies.DependenciesProp.Clear();
+                componentWithDependencies.Dependencies.Clear();
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
                 {
-                    componentWithDependencies.DependenciesProp.Add(DatabaseLogic.Copy(dl));
+                    componentWithDependencies.Dependencies.Add(DatabaseLogic.Copy(dl));
                 }
             }
 
@@ -1265,7 +1265,7 @@ namespace RelhaxModpack.Windows
 
             if (package is IComponentWithDependencies componentWithDependencies)
             {
-                if (DependenciesWereModified(componentWithDependencies.DependenciesProp))
+                if (DependenciesWereModified(componentWithDependencies.Dependencies))
                     return true;
             }
 
