@@ -474,6 +474,11 @@
             The package created at selection list building that represents the header of this category
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Category.EditorTreeViewItem">
+            <summary>
+            Reference for the UI element of this package in the database editor
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Category.DependenciesProp">
             <summary>
             Property of Dependencies list to allow for interface implementation
@@ -541,7 +546,12 @@
         </member>
         <member name="P:RelhaxModpack.DatabaseLogic.PackageName">
             <summary>
-            The name of the package that this object is attached to
+            The name of the package that *this* package is dependent on
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseLogic.PackageUID">
+            <summary>
+            The UID of the package that *this* package is dependent on
             </summary>
         </member>
         <member name="P:RelhaxModpack.DatabaseLogic.WillBeInstalled">
@@ -566,6 +576,16 @@
             <remarks>During dependnecy calcuation, the application will 'link' the refrenced dependencies in a package
             to the refrenced dependency. This allows for the application to process dependency calcuation logic in a dynamic
             AND and OR system. Having the flag can help to determine if a refrence does not exist</remarks>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseLogic.ParentPackageRefrence">
+            <summary>
+            Gets or sets a refrence to the parent package this dependency came from
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.DatabaseLogic.DependencyPackageRefrence">
+            <summary>
+            Gets or sets a reference to the dependency object that this databaseLogic object links to
+            </summary>
         </member>
         <member name="M:RelhaxModpack.DatabaseLogic.ToString">
             <summary>
@@ -1236,6 +1256,11 @@
             <summary>
             A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
             Refer to examples for more information
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.ConflictingPackagesList">
+            <summary>
+            Returns a list of the ConflictingPackages string property
             </summary>
         </member>
         <member name="P:RelhaxModpack.SelectablePackage.ShowInSearchList">
@@ -7818,6 +7843,13 @@
             </summary>
             <param name="packages">The list of package values to</param>
             <param name="level">The level to assign the level parameter</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.BuildDependencyPackageRefrences(System.Collections.Generic.List{RelhaxModpack.Category},System.Collections.Generic.List{RelhaxModpack.Dependency})">
+            <summary>
+            Links the databasePackage objects with dependencies objects to have those objects link references to the parent and the dependency object
+            </summary>
+            <param name="componentsWithDependencies">List of all DatabasePackage objects that have dependencies</param>
+            <param name="dependencies">List of all Dependencies that exist in the database</param>
         </member>
         <member name="M:RelhaxModpack.Utils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.SelectablePackage},System.Collections.Generic.List{RelhaxModpack.Category})">
             <summary>
