@@ -95,9 +95,17 @@ namespace RelhaxModpack
         public string Version { get; set; } = string.Empty;
 
         /// <summary>
-        /// A list of database managers who are known to maintain this category
+        /// A list of database managers who are known to maintain this component
         /// </summary>
         public string Maintainers { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Returns a list database managers who are known to maintain this component
+        /// </summary>
+        public List<string> MaintainersList
+        {
+            get { return Maintainers.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
+        }
 
         /// <summary>
         /// Used to determine when the package entry was last modified
@@ -166,6 +174,9 @@ namespace RelhaxModpack
         /// </summary>
         public string Triggers { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Returns a list of triggers that this component can start
+        /// </summary>
         public List<string> TriggersList
         {
             get { return Triggers.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }

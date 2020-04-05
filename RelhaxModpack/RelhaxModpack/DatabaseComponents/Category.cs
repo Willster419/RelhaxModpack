@@ -50,9 +50,17 @@ namespace RelhaxModpack
         public bool OffsetInstallGroups { get; set; } = true;
 
         /// <summary>
-        /// A list of database managers who are known to maintain this category
+        /// A list of database managers who are known to maintain this component
         /// </summary>
         public string Maintainers { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Returns a list database managers who are known to maintain this component
+        /// </summary>
+        public List<string> MaintainersList
+        {
+            get { return Maintainers.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
+        }
 
         /// <summary>
         /// The list of packages contained in this category

@@ -7,6 +7,9 @@ using System.Windows.Controls;
 
 namespace RelhaxModpack.DatabaseComponents
 {
+    /// <summary>
+    /// An interface for all components in the database
+    /// </summary>
     public interface IDatabaseComponent
     {
         /// <summary>
@@ -20,8 +23,13 @@ namespace RelhaxModpack.DatabaseComponents
         TreeViewItem EditorTreeViewItem { get; set; }
 
         /// <summary>
-        /// A list of database managers who are known to maintain this category
+        /// A list of database managers who are known to maintain this component
         /// </summary>
         string Maintainers { get; set; }
+
+        /// <summary>
+        /// Returns a list of database managers who are known to maintain this component
+        /// </summary>
+        List<string> MaintainersList { get; }
     }
 }
