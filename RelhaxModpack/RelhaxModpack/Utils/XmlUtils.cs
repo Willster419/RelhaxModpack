@@ -578,7 +578,7 @@ namespace RelhaxModpack
                     //check if the whitelist contains it
                     if (!listEntry.PropertiesForSerializationAttributes().Contains(attributeName))
                     {
-                        Logging.Debug("member {0} from Xml attribute does not exist in fieldInfo", attributeName);
+                        Logging.Debug("Member {0} from Xml attribute does not exist in fieldInfo", attributeName);
                         unknownAttributes.Add(attributeName);
                         continue;
                     }
