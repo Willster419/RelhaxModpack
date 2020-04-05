@@ -3,6 +3,7 @@ using RelhaxModpack.UIComponents;
 using RelhaxModpack.DatabaseComponents;
 using System.Windows.Controls;
 using System;
+using System.Linq;
 
 namespace RelhaxModpack
 {
