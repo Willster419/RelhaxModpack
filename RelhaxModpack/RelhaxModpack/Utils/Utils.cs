@@ -1680,6 +1680,35 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Links the databasePackage objects with dependencies objects to have those objects link references to the parent and the dependency object
+        /// </summary>
+        /// <param name="componentsWithDependencies">List of all DatabasePackage objects that have dependencies</param>
+        /// <param name="dependencies">List of all Dependencies that exist in the database</param>
+        public static void BuildDependencyPackageRefrences(List<Category> componentsWithDependencies, List<Dependency> dependencies)
+        {
+            List<IComponentWithDependencies> componentsWithDependencies_ = new List<IComponentWithDependencies>();
+
+            //get all categories where at least one dependency exists
+            componentsWithDependencies_.AddRange(componentsWithDependencies.Where(cat => cat.DependenciesProp.Count > 0));
+
+            //get all packages and dependnecies where at least one dependency exists
+            componentsWithDependencies_.AddRange(GetFlatList(null, dependencies, null, componentsWithDependencies).OfType<IComponentWithDependencies>().Where(component => component.DependenciesProp.Count > 0).ToList());
+
+            foreach (IComponentWithDependencies componentWithDependencies in componentsWithDependencies_)
+            {
+                foreach(DatabaseLogic logic in componentWithDependencies.DependenciesProp)
+                {
+                    logic.ParentPackageRefrence = componentWithDependencies;
+                    logic.DependencyPackageRefrence = dependencies.Find(dependency => dependency.PackageName.Equals(logic.PackageName));
+                    if(logic.DependencyPackageRefrence == null)
+                    {
+                        Logging.Error("DatabaseLogic component from package {0} was unable to link to dependency {1} (does the dependency not exist or bad reference?)", componentWithDependencies.ComponentInternalName, logic.PackageName);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
         /// </summary>
         /// <param name="dependencies">The list of dependencies</param>

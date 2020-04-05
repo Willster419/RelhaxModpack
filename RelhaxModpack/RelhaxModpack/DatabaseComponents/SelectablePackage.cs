@@ -440,6 +440,9 @@ namespace RelhaxModpack
         /// </summary>
         public string ConflictingPackages { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Returns a list of the ConflictingPackages string property
+        /// </summary>
         public List<string> ConflictingPackagesList
         {
             get { return ConflictingPackages.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).ToList(); }

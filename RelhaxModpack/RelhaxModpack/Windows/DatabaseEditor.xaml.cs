@@ -207,6 +207,28 @@ namespace RelhaxModpack.Windows
 
             return null;
         }
+
+        private DatabasePackage GetDatabasePackage(object obj)
+        {
+            if (obj is SelectablePackage selectablePackage)
+                return selectablePackage;
+
+            else if (obj is EditorComboBoxItem editorComboBoxItem)
+                if (editorComboBoxItem.Package is DatabasePackage databasePackage2)
+                    return databasePackage2;
+
+            return null;
+        }
+
+        private TreeViewItem GetPackageTreeViewItem(IComponentWithID componentWithID)
+        {
+            if (componentWithID is Category category)
+                return category.EditorTreeViewItem;
+            else if (componentWithID is DatabasePackage databasePackage)
+                return databasePackage.EditorTreeViewItem;
+            else
+                return null;
+        }
         #endregion
 
         #region Load UI Views
@@ -258,9 +280,9 @@ namespace RelhaxModpack.Windows
             //add the category, then add each level recursivly
             foreach (Category cat in parsedCategoryList)
             {
-                TreeViewItem CategoryHeader = new TreeViewItem() { Header = cat };
-                DatabaseTreeView.Items.Add(CategoryHeader);
-                LoadUI(CategoryHeader, cat.Packages);
+                cat.EditorTreeViewItem = new TreeViewItem() { Header = cat };
+                DatabaseTreeView.Items.Add(cat.EditorTreeViewItem);
+                LoadUI(cat.EditorTreeViewItem, cat.Packages);
             }
 
             //adding the spacing that dirty wants...
@@ -1972,6 +1994,7 @@ namespace RelhaxModpack.Windows
             //build internal database links
             Utils.BuildLinksRefrence(ParsedCategoryList, true);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+            Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
@@ -2013,6 +2036,7 @@ namespace RelhaxModpack.Windows
             //build internal database links
             Utils.BuildLinksRefrence(ParsedCategoryList, true);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+            Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
@@ -2865,25 +2889,51 @@ namespace RelhaxModpack.Windows
         #region Double click jump code
         private void PackageDependenciesDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (PackageDependenciesDisplay.SelectedItem == null)
+            {
+                Logging.Editor("PackageDependenciesDisplay_MouseDoubleClick(), selectedItem is null, don't jump", LogLevel.Debug, SelectedItem);
+                return;
+            }
+
+            //items in the dependences list are DatabaseLogic
             Logging.Editor("PackageDependenciesDisplay_MouseDoubleClick(), selectedItem = {0}", LogLevel.Info, SelectedItem);
             Dispatcher.InvokeAsync(() =>
             {
-                DatabasePackage selectedPackage = PackageDependenciesDisplay.SelectedItem as DatabasePackage;
-                selectedPackage.EditorTreeViewItem.BringIntoView();
-                selectedPackage.EditorTreeViewItem.IsSelected = true;
-                SelectDatabaseObject(selectedPackage, null);
+                DatabaseLogic selectedLogic = PackageDependenciesDisplay.SelectedItem as DatabaseLogic;
+                selectedLogic.DependencyPackageRefrence.EditorTreeViewItem.BringIntoView();
+                selectedLogic.DependencyPackageRefrence.EditorTreeViewItem.IsSelected = true;
+                SelectDatabaseObject(selectedLogic.DependencyPackageRefrence, GetPackageTreeViewItem(GetDatabasePackage(SelectedItem)));
             }, System.Windows.Threading.DispatcherPriority.Background);
         }
 
         private void PackageConflictingPackagesDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (PackageConflictingPackagesDisplay.SelectedItem == null)
+            {
+                Logging.Editor("PackageConflictingPackagesDisplay_MouseDoubleClick(), selectedItem is null, don't jump", LogLevel.Debug, SelectedItem);
+                return;
+            }
+
+            //items in list are string (conflict) or DatabasePackage or category
             Logging.Editor("PackageConflictingPackagesDisplay_MouseDoubleClick(), selectedItem = {0}", LogLevel.Info, SelectedItem);
             Dispatcher.InvokeAsync(() =>
             {
-                DatabasePackage selectedPackage = PackageConflictingPackagesDisplay.SelectedItem as DatabasePackage;
-                selectedPackage.EditorTreeViewItem.BringIntoView();
-                selectedPackage.EditorTreeViewItem.IsSelected = true;
-                SelectDatabaseObject(selectedPackage, null);
+                if (PackageConflictingPackagesDisplay.SelectedItem is DatabasePackage selectedPackage)
+                {
+                    selectedPackage.EditorTreeViewItem.BringIntoView();
+                    selectedPackage.EditorTreeViewItem.IsSelected = true;
+                    SelectDatabaseObject(selectedPackage, GetPackageTreeViewItem(GetDatabasePackage(SelectedItem)));
+                }
+                else if (PackageConflictingPackagesDisplay.SelectedItem is Category category)
+                {
+                    category.EditorTreeViewItem.BringIntoView();
+                    category.EditorTreeViewItem.IsSelected = true;
+                    SelectDatabaseObject(category, GetPackageTreeViewItem(GetDatabasePackage(SelectedItem)));
+                }
+                else if (PackageConflictingPackagesDisplay.SelectedItem is string)
+                {
+                    Logging.Editor("Conflicting packages are not implemented for double click jump",LogLevel.Debug);
+                }
             }, System.Windows.Threading.DispatcherPriority.Background);
         }
         #endregion
