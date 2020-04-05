@@ -53,7 +53,8 @@ namespace RelhaxModpack
             nameof(Triggers),
             nameof(DevURL),
             nameof(InternalNotes),
-            nameof(Author)
+            nameof(Author),
+            nameof(Maintainers)
         };
 
         /// <summary>
@@ -329,6 +330,7 @@ namespace RelhaxModpack
             this.DevURL = packageToCopy.DevURL;
             this.InstallGroup = packageToCopy.InstallGroup;
             this.PatchGroup = packageToCopy.PatchGroup;
+            this.Maintainers = packageToCopy.Maintainers;
             //don't call the property for enabled, just the internal field
             this._Enabled = packageToCopy._Enabled;
         }

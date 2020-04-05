@@ -30,7 +30,7 @@ namespace RelhaxModpack
         /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public string[] PropertiesForSerializationElements()
         {
-            return new string[] { nameof(Dependencies) };
+            return new string[] { nameof(Dependencies), nameof(Maintainers) };
         }
         #endregion
 
