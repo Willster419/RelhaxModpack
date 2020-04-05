@@ -723,26 +723,6 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Show and Apply database methods
-
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
-        {
-            //check if we should ask a confirm first
-            if (EditorSettings.ShowConfirmationOnPackageApply)
-            {
-                if (MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
-                    return;
-            }
-            //first make sure databaseTreeView selected item is treeviewitem
-            if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
-            {
-                ApplyDatabaseObject(selectedTreeViewItem.Header);
-                //trigger a UI update
-                object tempRef = selectedTreeViewItem.Header;
-                selectedTreeViewItem.Header = null;
-                selectedTreeViewItem.Header = tempRef;
-            }
-        }
-
         private void DatabaseTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             //set handled parameter so that the parent events don't fire
@@ -972,6 +952,27 @@ namespace RelhaxModpack.Windows
                 ConflictingPackagesRemoveConflictingPackage.IsEnabled = true;
             }
         }
+        #endregion
+
+        #region Apply database methods
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        {
+            //check if we should ask a confirm first
+            if (EditorSettings.ShowConfirmationOnPackageApply)
+            {
+                if (MessageBox.Show("Confirm to apply changes?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                    return;
+            }
+            //first make sure databaseTreeView selected item is treeviewitem
+            if (DatabaseTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
+            {
+                ApplyDatabaseObject(selectedTreeViewItem.Header);
+                //trigger a UI update
+                object tempRef = selectedTreeViewItem.Header;
+                selectedTreeViewItem.Header = null;
+                selectedTreeViewItem.Header = tempRef;
+            }
+        }
 
         private bool ApplyDatabaseObject(object obj)
         {
@@ -1020,6 +1021,110 @@ namespace RelhaxModpack.Windows
             return true;
         }
 
+        private bool ApplyDatabasePackage(DatabasePackage package)
+        {
+            Logging.Editor("ApplyDatabasePackage(), package saving = {0}", LogLevel.Info, package.PackageName);
+
+            //check if the to save packagename is unique
+            if (!PackagePackageNameDisplay.Text.Equals(package.PackageName))
+            {
+                Logging.Editor("packageName is new, checking if it is unique");
+                if (Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList), PackagePackageNameDisplay.Text))
+                {
+                    MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
+                    return false;
+                }
+            }
+
+            //check if package was actually modified before saving all these delicious properties
+            if (!PackageWasModified(package))
+            {
+                Logging.Editor("package was not modified, don't apply anything");
+                return true;
+            }
+
+            //only check for missing zip file if there is text be begin with
+            if (!string.IsNullOrWhiteSpace(PackageZipFileDisplay.Text))
+            {
+                if (!package.ZipFile.Equals(PackageZipFileDisplay.Text) && !Path.GetExtension(PackageZipFileDisplay.Text).Equals(".zip"))
+                {
+                    MessageBox.Show("no zip in file extension, was this a mistake?");
+                    return false;
+                }
+            }
+
+            Logging.Editor("package was modified, saving changes to memory and setting changes switch");
+
+            //save everything from the UI into the package
+            //save package elements first
+            package.PackageName = PackagePackageNameDisplay.Text;
+            package.StartAddress = PackageStartAddressDisplay.Text;
+            package.EndAddress = PackageEndAddressDisplay.Text;
+
+            //devURL is separated by newlines for array list, so it's not necessary to escape
+            package.DevURL = Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
+            package.Version = PackageVersionDisplay.Text;
+            package.Author = PackageAuthorDisplay.Text;
+            package.InstallGroup = (int)PackageInstallGroupDisplay.SelectedItem;
+            package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;
+            package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
+            package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
+            package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
+            package.Triggers = string.Join(",", PackageTriggersDisplay.Items.Cast<string>());
+
+            //if the zipfile was updated, then update the last modified date
+            if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
+            {
+                package.CRC = "f";
+                package.ZipFile = PackageZipFileDisplay.Text;
+                package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
+            }
+
+            //this gets dependencies and selectable packages
+            if(package is IComponentWithDependencies componentWithDependencies)
+            {
+                componentWithDependencies.DependenciesProp.Clear();
+                foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
+                {
+                    componentWithDependencies.DependenciesProp.Add(DatabaseLogic.Copy(dl));
+                }
+            }
+
+            //if it's a selectablePackage
+            if (package is SelectablePackage selectablePackage)
+            {
+                selectablePackage.ShowInSearchList = (bool)PackageShowInSearchListDisplay.IsChecked;
+                selectablePackage.PopularMod = (bool)PackagePopularModDisplay.IsChecked;
+                selectablePackage.ObfuscatedMod = (bool)PackageObfuscatedModDisplay.IsChecked;
+                selectablePackage.GreyAreaMod = (bool)PackageGreyAreaModDisplay.IsChecked;
+                selectablePackage.Visible = (bool)PackageVisibleDisplay.IsChecked;
+                selectablePackage.Name = PackageNameDisplay.Text;
+                selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
+                selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items.Cast<string>());
+
+                selectablePackage.UserFiles.Clear();
+                foreach (string uf in PackageUserFilesDisplay.Items)
+                {
+                    selectablePackage.UserFiles.Add(new UserFile() { Pattern = uf });
+                }
+
+                selectablePackage.Medias.Clear();
+                foreach (Media m in PackageMediasDisplay.Items)
+                {
+                    selectablePackage.Medias.Add(Media.Copy(m));
+                }
+            }
+
+            //there now are unsaved changes
+            UnsavedChanges = true;
+            return true;
+        }
+        #endregion
+
+        #region Checks if a package was modified
         private bool DependenciesWereModified(List<DatabaseLogic> dependencies)
         {
             //check if counts are equal. if not, then modifications exist
@@ -1197,108 +1302,6 @@ namespace RelhaxModpack.Windows
                     return true;
             }
             return false;
-        }
-
-        private bool ApplyDatabasePackage(DatabasePackage package)
-        {
-            Logging.Editor("ApplyDatabasePackage(), package saving = {0}", LogLevel.Info, package.PackageName);
-
-            //check if the to save packagename is unique
-            if (!PackagePackageNameDisplay.Text.Equals(package.PackageName))
-            {
-                Logging.Editor("packageName is new, checking if it is unique");
-                if (Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList), PackagePackageNameDisplay.Text))
-                {
-                    MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
-                    return false;
-                }
-            }
-
-            //check if package was actually modified before saving all these delicious properties
-            if (!PackageWasModified(package))
-            {
-                Logging.Editor("package was not modified, don't apply anything");
-                return true;
-            }
-
-            //only check for missing zip file if there is text be begin with
-            if (!string.IsNullOrWhiteSpace(PackageZipFileDisplay.Text))
-            {
-                if (!package.ZipFile.Equals(PackageZipFileDisplay.Text) && !Path.GetExtension(PackageZipFileDisplay.Text).Equals(".zip"))
-                {
-                    MessageBox.Show("no zip in file extension, was this a mistake?");
-                    return false;
-                }
-            }
-
-            Logging.Editor("package was modified, saving changes to memory and setting changes switch");
-
-            //save everything from the UI into the package
-            //save package elements first
-            package.PackageName = PackagePackageNameDisplay.Text;
-            package.StartAddress = PackageStartAddressDisplay.Text;
-            package.EndAddress = PackageEndAddressDisplay.Text;
-
-            //devURL is separated by newlines for array list, so it's not necessary to escape
-            package.DevURL = Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
-            package.Version = PackageVersionDisplay.Text;
-            package.Author = PackageAuthorDisplay.Text;
-            package.InstallGroup = (int)PackageInstallGroupDisplay.SelectedItem;
-            package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;
-            package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
-            package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
-            package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
-            package.Triggers = string.Join(",", PackageTriggersDisplay.Items.Cast<string>());
-
-            //if the zipfile was updated, then update the last modified date
-            if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
-            {
-                package.CRC = "f";
-                package.ZipFile = PackageZipFileDisplay.Text;
-                package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
-                PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
-            }
-
-            //this gets dependencies and selectable packages
-            if(package is IComponentWithDependencies componentWithDependencies)
-            {
-                componentWithDependencies.DependenciesProp.Clear();
-                foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
-                {
-                    componentWithDependencies.DependenciesProp.Add(DatabaseLogic.Copy(dl));
-                }
-            }
-
-            //if it's a selectablePackage
-            if (package is SelectablePackage selectablePackage)
-            {
-                selectablePackage.ShowInSearchList = (bool)PackageShowInSearchListDisplay.IsChecked;
-                selectablePackage.PopularMod = (bool)PackagePopularModDisplay.IsChecked;
-                selectablePackage.ObfuscatedMod = (bool)PackageObfuscatedModDisplay.IsChecked;
-                selectablePackage.GreyAreaMod = (bool)PackageGreyAreaModDisplay.IsChecked;
-                selectablePackage.Visible = (bool)PackageVisibleDisplay.IsChecked;
-                selectablePackage.Name = PackageNameDisplay.Text;
-                selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
-                selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
-                selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
-                selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items.Cast<string>());
-
-                selectablePackage.UserFiles.Clear();
-                foreach (string uf in PackageUserFilesDisplay.Items)
-                {
-                    selectablePackage.UserFiles.Add(new UserFile() { Pattern = uf });
-                }
-
-                selectablePackage.Medias.Clear();
-                foreach (Media m in PackageMediasDisplay.Items)
-                {
-                    selectablePackage.Medias.Add(Media.Copy(m));
-                }
-            }
-
-            //there now are unsaved changes
-            UnsavedChanges = true;
-            return true;
         }
         #endregion
 
