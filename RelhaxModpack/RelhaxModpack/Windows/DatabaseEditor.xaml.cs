@@ -575,6 +575,7 @@ namespace RelhaxModpack.Windows
                         control.IsEnabled = true;
                 }
                 PackageNameDisplay.IsEnabled = true;
+                PackageMaintainersDisplay.IsEnabled = true;
                 ApplyButton.IsEnabled = true;
                 CategoryOffsetInstallGroupDisplay.IsEnabled = true;
             }
@@ -583,6 +584,7 @@ namespace RelhaxModpack.Windows
                 //basic tab is always difficult
                 PackagePackageNameDisplay.IsEnabled = true;
                 PackageStartAddressDisplay.IsEnabled = true;
+                PackageMaintainersDisplay.IsEnabled = true;
                 PackageZipFileDisplay.IsEnabled = true;
                 PackageEndAddressDisplay.IsEnabled = true;
                 PackageDevURLDisplay.IsEnabled = true;
@@ -746,7 +748,7 @@ namespace RelhaxModpack.Windows
             if (EditorSettings.SaveSelectionBeforeLeave)
             {
                 //only try to save database object if selected item is of correct type
-                if (SelectedItem is EditorComboBoxItem || SelectedItem is DatabasePackage)
+                if (SelectedItem is EditorComboBoxItem || SelectedItem is IDatabaseComponent)
                 {
                     if (ApplyDatabaseObject(SelectedItem))
                     {
