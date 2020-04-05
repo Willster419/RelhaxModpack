@@ -2861,5 +2861,15 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
+
+        private void PackageDependenciesDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void PackageConflictingPackagesDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

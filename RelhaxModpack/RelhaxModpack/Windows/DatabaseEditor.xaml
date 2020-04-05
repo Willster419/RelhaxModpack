@@ -582,7 +582,8 @@
                 </TabItem>
                 <TabItem x:Name="DependenciesTab" Header="Dependencies">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox x:Name="PackageDependenciesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageDependenciesDisplay_SelectionChanged" />
+                        <ListBox x:Name="PackageDependenciesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageDependenciesDisplay_SelectionChanged" DisplayMemberPath="PackageName"
+                                 MouseDoubleClick="PackageDependenciesDisplay_MouseDoubleClick"/>
                         <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="0,210,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesAddSelected_Click"/>
                         <Button Content="Remove Selected" x:Name="DependenciesRemoveSelected" Tag="DependenciesRemoveSelected" HorizontalAlignment="Left" Margin="0,235,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesRemoveSelected_Click"/>
                         <ComboBox x:Name="LoadedDependenciesList" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="22"/>
@@ -648,7 +649,7 @@
                 </TabItem>
                 <TabItem x:Name="ConflictingPackagesTab" Header="Conflicting Packages">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox x:Name="PackageConflictingPackagesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" />
+                        <ListBox x:Name="PackageConflictingPackagesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" MouseDoubleClick="PackageConflictingPackagesDisplay_MouseDoubleClick" DisplayMemberPath="PackageName"/>
                         <Button Content="Remove Conflicting package" x:Name="ConflictingPackagesRemoveConflictingPackage" Tag="ConflictingPackagesButton1" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="171" Click="ConflictingPackagesRemoveConflictingPackage_Click"/>
                         <TextBlock x:Name="ConflictingPackagesMessagebox" HorizontalAlignment="Left" Height="20" Margin="0,209,0,0" TextWrapping="Wrap" Text="To add a package to the list, search it above and right click it" VerticalAlignment="Top" />
                     </Grid>
