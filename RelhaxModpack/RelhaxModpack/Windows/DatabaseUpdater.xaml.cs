@@ -1749,7 +1749,7 @@ namespace RelhaxModpack.Windows
                     {
                         packageToAddUID.UID = Utils.GenerateUID(allPackages);
                     });
-                    ReportProgress(string.Format("Generated UID {0} for package {1}", packageToAddUID.UID, packageToAddUID.PackageName));
+                    ReportProgress(string.Format("Package {0} got generated UID {1}", packageToAddUID.PackageName, packageToAddUID.UID));
                 }
             }
 
@@ -1776,7 +1776,7 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            XmlUtils.SaveDatabase1V1(SelectModInfoSave.FileName,docDuplicateCheck,globalDependenciesDuplicateCheck,dependenciesDuplicateCheck,parsedCategoryListDuplicateCheck);
+            XmlUtils.SaveDatabase1V1(Path.GetDirectoryName(SelectModInfoSave.FileName), docDuplicateCheck,globalDependenciesDuplicateCheck,dependenciesDuplicateCheck,parsedCategoryListDuplicateCheck);
 
             ReportProgress("Database saved");
             ToggleUI((TabController.SelectedItem as TabItem), true);
