@@ -1,3 +1,9 @@
+Beta Application version 1.0.4.1 (2020-04-05)
+https://www.virustotal.com/gui/file/3e4784017ea9ded6f196b2089a0d7dd0de49dd0535824357db8d59b4e63d6eee/detection
+- Fixed issue with editor not clearing UI when a text "filler" selection is selected
+- Added features to database updater tool: Check for duplicate packageNames, UIDs, add missing UIDs.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.0.4.0 (2020-04-05)
 https://www.virustotal.com/gui/file/6b6174cbd2aa27069c1e8f7119de4447821957bdab981661a47884dece853b48/detection
 - Added "Maintainers" internal database property for database managers to track who generally works on database sections.
