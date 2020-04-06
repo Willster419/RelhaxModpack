@@ -520,9 +520,10 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void ResetRightPanels(DatabasePackage package)
+        private void ResetRightPanels(DatabasePackage package, bool resetForComponent = true)
         {
-            Logging.Editor("ResetRightPanels(), package type = {0}, name= {1}", LogLevel.Info, package == null ? "(null)" : package.GetType().ToString(), package == null ? "(null)" : package.PackageName);
+            Logging.Editor("ResetRightPanels(), package type = {0}, name = {1}, resetForComponent = {2}",
+                LogLevel.Info, package == null ? "(null)" : package.GetType().ToString(), package == null ? "(null)" : package.PackageName, resetForComponent);
 
             //for each tab, disable all UI components
             List<Control> controlsToDisable = new List<Control>();
@@ -532,11 +533,15 @@ namespace RelhaxModpack.Windows
                 {
                     //if it's a common element used in the panel, then disable it
                     if (element is CheckBox || element is ComboBox || element is Button || element is TextBox || element is ListBox)
+                    {
                         controlsToDisable.Add((Control)element);
+                    }
 
                     //also clear it's data for each type
                     if (element is CheckBox box)
+                    {
                         box.IsChecked = false;
+                    }
                     else if (element is ComboBox cbox)
                     {
                         if (cbox.Name.Equals(nameof(PackageInstallGroupDisplay)) || cbox.Name.Equals(nameof(PackagePatchGroupDisplay)) ||
@@ -548,12 +553,18 @@ namespace RelhaxModpack.Windows
                             continue;
                         }
                         else
+                        {
                             cbox.Items.Clear();
+                        }
                     }
                     else if (element is TextBox tbox && !tbox.Name.Equals(nameof(CurrentSupportedTriggers)))
+                    {
                         tbox.Text = string.Empty;
+                    }
                     else if (element is ListBox lbox)
+                    {
                         lbox.Items.Clear();
+                    }
                 }
             }
 
@@ -567,92 +578,95 @@ namespace RelhaxModpack.Windows
 
             //enable components by type
             //package null = category
-            if (package == null)
+            if (resetForComponent)
             {
-                foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
+                if (package == null)
                 {
-                    if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
-                        control.IsEnabled = true;
-                }
-                PackageNameDisplay.IsEnabled = true;
-                PackageMaintainersDisplay.IsEnabled = true;
-                ApplyButton.IsEnabled = true;
-                CategoryOffsetInstallGroupDisplay.IsEnabled = true;
-            }
-            else if (package is DatabasePackage)
-            {
-                //basic tab is always difficult
-                PackagePackageNameDisplay.IsEnabled = true;
-                PackageStartAddressDisplay.IsEnabled = true;
-                PackageMaintainersDisplay.IsEnabled = true;
-                PackageZipFileDisplay.IsEnabled = true;
-                PackageEndAddressDisplay.IsEnabled = true;
-                PackageDevURLDisplay.IsEnabled = true;
-                PackageVersionDisplay.IsEnabled = true;
-                PackageAuthorDisplay.IsEnabled = true;
-                PackageInstallGroupDisplay.IsEnabled = true;
-                PackagePatchGroupDisplay.IsEnabled = true;
-                PackageLastUpdatedDisplay.IsEnabled = true;
-                PackageLogAtInstallDisplay.IsEnabled = true;
-                PackageEnabledDisplay.IsEnabled = true;//kinda meta
-                ApplyButton.IsEnabled = true;
-                ZipDownload.IsEnabled = true;
-                ZipUload.IsEnabled = true;
-                //all have internal notes and triggers
-                foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(TriggersTab, false))
-                {
-                    if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
-                        control.IsEnabled = true;
-                }
-                foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(InternalNotesTab, false))
-                {
-                    if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
-                        control.IsEnabled = true;
-                }
-                if (package is Dependency dependency || package is SelectablePackage spackage)
-                {
-                    //dependency and selectable package both have dependencies
                     foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
                     {
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
                     }
-                    //conflicting packages gets used for showing elements that are used by the dependency
-                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(ConflictingPackagesTab, false))
+                    PackageNameDisplay.IsEnabled = true;
+                    PackageMaintainersDisplay.IsEnabled = true;
+                    ApplyButton.IsEnabled = true;
+                    CategoryOffsetInstallGroupDisplay.IsEnabled = true;
+                }
+                else if (package is DatabasePackage)
+                {
+                    //basic tab is always difficult
+                    PackagePackageNameDisplay.IsEnabled = true;
+                    PackageStartAddressDisplay.IsEnabled = true;
+                    PackageMaintainersDisplay.IsEnabled = true;
+                    PackageZipFileDisplay.IsEnabled = true;
+                    PackageEndAddressDisplay.IsEnabled = true;
+                    PackageDevURLDisplay.IsEnabled = true;
+                    PackageVersionDisplay.IsEnabled = true;
+                    PackageAuthorDisplay.IsEnabled = true;
+                    PackageInstallGroupDisplay.IsEnabled = true;
+                    PackagePatchGroupDisplay.IsEnabled = true;
+                    PackageLastUpdatedDisplay.IsEnabled = true;
+                    PackageLogAtInstallDisplay.IsEnabled = true;
+                    PackageEnabledDisplay.IsEnabled = true;//kinda meta
+                    ApplyButton.IsEnabled = true;
+                    ZipDownload.IsEnabled = true;
+                    ZipUload.IsEnabled = true;
+                    //all have internal notes and triggers
+                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(TriggersTab, false))
                     {
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
                     }
-                    if (package is SelectablePackage)
+                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(InternalNotesTab, false))
                     {
-                        //enable remaining elements on basic tab
-                        PackageNameDisplay.IsEnabled = true;
-                        PackageTypeDisplay.IsEnabled = true;
-                        PackageVisibleDisplay.IsEnabled = true;
-                        PackagePopularModDisplay.IsEnabled = true;
-                        PackageShowInSearchListDisplay.IsEnabled = true;
-                        PackageGreyAreaModDisplay.IsEnabled = true;
-                        PackageObfuscatedModDisplay.IsEnabled = true;
-                        //enable remaining tabs
-                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DescriptionTab, false))
+                        if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                            control.IsEnabled = true;
+                    }
+                    if (package is Dependency dependency || package is SelectablePackage spackage)
+                    {
+                        //dependency and selectable package both have dependencies
+                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
                         {
                             if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                 control.IsEnabled = true;
                         }
-                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(UpdateNotesTab, false))
+                        //conflicting packages gets used for showing elements that are used by the dependency
+                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(ConflictingPackagesTab, false))
                         {
                             if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                 control.IsEnabled = true;
                         }
-                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(MediasTab, false))
+                        if (package is SelectablePackage)
                         {
-                            if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
-                                control.IsEnabled = true;
-                        }
-                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(UserDatasTab, false))
-                        {
-                            if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
-                                control.IsEnabled = true;
+                            //enable remaining elements on basic tab
+                            PackageNameDisplay.IsEnabled = true;
+                            PackageTypeDisplay.IsEnabled = true;
+                            PackageVisibleDisplay.IsEnabled = true;
+                            PackagePopularModDisplay.IsEnabled = true;
+                            PackageShowInSearchListDisplay.IsEnabled = true;
+                            PackageGreyAreaModDisplay.IsEnabled = true;
+                            PackageObfuscatedModDisplay.IsEnabled = true;
+                            //enable remaining tabs
+                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DescriptionTab, false))
+                            {
+                                if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                                    control.IsEnabled = true;
+                            }
+                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(UpdateNotesTab, false))
+                            {
+                                if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                                    control.IsEnabled = true;
+                            }
+                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(MediasTab, false))
+                            {
+                                if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                                    control.IsEnabled = true;
+                            }
+                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(UserDatasTab, false))
+                            {
+                                if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                                    control.IsEnabled = true;
+                            }
                         }
                     }
                 }
@@ -785,6 +799,11 @@ namespace RelhaxModpack.Windows
                 ShowDatabasePackage(package);
             else if (obj is EditorComboBoxItem editorComboBoxItem)
                 ShowDatabasePackage(editorComboBoxItem.Package);
+            else
+            {
+                //it's one of those string filler things
+                ResetRightPanels(null, false);
+            }
         }
 
         private void ShowDatabaseCategory(Category category)
