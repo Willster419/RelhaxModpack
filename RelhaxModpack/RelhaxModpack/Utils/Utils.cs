@@ -1519,18 +1519,49 @@ namespace RelhaxModpack
 
         #region Database Utils
         /// <summary>
+        /// Checks for any duplicate UID entries inside the provided lists
+        /// </summary>
+        /// <param name="globalDependencies">The list of global dependencies</param>
+        /// <param name="dependencies">The list of dependencies</param>
+        /// <param name="parsedCategoryList">The list of categories</param>
+        /// <returns>A list of packages with duplicate UIDs, or an empty list if no duplicates</returns>
+        public static List<DatabasePackage> CheckForDuplicateUIDsPackageList(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
+            List<DatabasePackage> duplicatesList = new List<DatabasePackage>();
+            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            foreach (DatabasePackage package in flatList)
+            {
+                List<DatabasePackage> packagesWithMatchingUID = flatList.FindAll(item => item.UID.Equals(package.UID));
+                //by default it will at least match itself
+                if (packagesWithMatchingUID.Count > 1)
+                    duplicatesList.Add(package);
+            }
+            return duplicatesList;
+        }
+
+        /// <summary>
+        /// Checks for any duplicate UID entries inside the provided lists
+        /// </summary>
+        /// <param name="globalDependencies">The list of global dependencies</param>
+        /// <param name="dependencies">The list of dependencies</param>
+        /// <param name="parsedCategoryList">The list of categories</param>
+        /// <returns>A list of duplicate UIDs, or an empty list if no duplicates</returns>
+        public static List<string> CheckForDuplicateUIDsStringsList(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
+            return CheckForDuplicateUIDsPackageList(globalDependencies, dependencies, parsedCategoryList).Select(package => package.UID).ToList();
+        }
+
+        /// <summary>
         /// Checks for any duplicate PackageName entries inside the provided lists
         /// </summary>
         /// <param name="globalDependencies">The list of global dependencies</param>
         /// <param name="dependencies">The list of dependencies</param>
         /// <param name="parsedCategoryList">The list of categories</param>
-        /// <param name="logicalDependencies">The list of logical dependencies</param>
         /// <returns>A list of duplicate packages, or an empty list if no duplicates</returns>
-        public static List<string> CheckForDuplicates(List<DatabasePackage> globalDependencies, List<Dependency> dependencies,
-            List<Category> parsedCategoryList, List<Dependency> logicalDependencies = null)
+        public static List<string> CheckForDuplicates(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
             List<string> duplicatesList = new List<string>();
-            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, logicalDependencies, parsedCategoryList);
+            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
             foreach(DatabasePackage package in flatList)
             {
                 List<DatabasePackage> packagesWithPackagename = flatList.Where(item => item.PackageName.Equals(package.PackageName)).ToList();
@@ -2336,14 +2367,38 @@ namespace RelhaxModpack
         /// Creates a string of random characters
         /// </summary>
         /// <param name="length">The number of characters to create the random string</param>
+        /// <param name="chars">The list of characters to use for making the random string</param>
         /// <returns>The random string</returns>
         /// <remarks>See https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c </remarks>
-        public static string RandomString(int length)
+        public static string RandomString(int length, string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
         {
             Random random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        /// <summary>
+        /// Generates a Unique IDentifier for a package using the constant defined number of string and character selections
+        /// </summary>
+        /// <returns>a Unique IDentifier for a package</returns>
+        public static string GenerateUID()
+        {
+            return RandomString(Settings.NumberUIDCharacters, Settings.UIDCharacters);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="allPackages"></param>
+        /// <returns></returns>
+        public static string GenerateUID(List<DatabasePackage> allPackages)
+        {
+            string UID = GenerateUID();
+            while (allPackages.Find(package => package.UID.Equals(UID)) != null)
+            {
+                UID = GenerateUID();
+            }
+            return UID;
         }
 
         /// <summary>

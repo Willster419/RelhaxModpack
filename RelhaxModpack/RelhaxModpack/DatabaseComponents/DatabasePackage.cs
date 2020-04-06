@@ -37,7 +37,8 @@ namespace RelhaxModpack
             nameof(PackageName),
             nameof(Enabled),
             nameof(InstallGroup),
-            nameof(PatchGroup)
+            nameof(PatchGroup),
+            //nameof(UID)
         };
 
         private static readonly List<string> PackagePropertiesToXmlParseElements = new List<string>()

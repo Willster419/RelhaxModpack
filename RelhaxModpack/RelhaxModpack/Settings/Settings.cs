@@ -502,6 +502,16 @@ namespace RelhaxModpack
         public const double MinimumDisplayScale = 1.0F;
 
         /// <summary>
+        /// The number of characters that make up a package UID
+        /// </summary>
+        public const int NumberUIDCharacters = 16;
+
+        /// <summary>
+        /// The array of character options that are used for generating the UID
+        /// </summary>
+        public const string UIDCharacters = @"abcdefghijklmnopqrstuvwxyz0123456789";
+
+        /// <summary>
         /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk.
         /// </summary>
         public static Ionic.Zip.ZipFile ManagerInfoZipfile = null;

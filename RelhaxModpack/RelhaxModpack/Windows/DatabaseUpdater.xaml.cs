@@ -70,6 +70,7 @@ namespace RelhaxModpack.Windows
         private WebClient client;
         private bool authorized = false;
         private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
+        private SaveFileDialog SelectModInfoSave = new SaveFileDialog() { Filter = "*.xml|*.xml" };
         private OpenFileDialog SelectV1Application = new OpenFileDialog() { Title = "Find V1 application to upload", Filter = "*.exe|*.exe" };
         private OpenFileDialog SelectV2Application = new OpenFileDialog() { Title = "Find V2 application to upload", Filter = "*.exe|*.exe" };
         private OpenFileDialog SelectManagerInfoXml = new OpenFileDialog() { Title = "Find manager_version.xml", Filter = "manager_version.xml|manager_version.xml" };
@@ -84,6 +85,13 @@ namespace RelhaxModpack.Windows
         List<VersionInfos> VersionInfosList;
         VersionInfos selectedVersionInfos;
         bool cancelDelete = false;
+        #endregion
+
+        #region Stuff for checking for duplicate PNs and UIDs
+        List<Category> parsedCategoryListDuplicateCheck;
+        List<DatabasePackage> globalDependenciesDuplicateCheck;
+        List<Dependency> dependenciesDuplicateCheck;
+        XmlDocument docDuplicateCheck;
         #endregion
 
         #region Password auth stuff
@@ -1614,6 +1622,30 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region DatabasePackage and UIDs checks
+        private void AnotherLoadDatabaseButton_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Loading database");
+
+            OnLoadModInfo(null, null);
+
+            //list creation and parsing
+            parsedCategoryListDuplicateCheck = new List<Category>();
+            globalDependenciesDuplicateCheck = new List<DatabasePackage>();
+            dependenciesDuplicateCheck = new List<Dependency>();
+            docDuplicateCheck = XmlUtils.LoadXmlDocument(SelectModInfo.FileName, XmlLoadType.FromFile);
+            XmlUtils.ParseDatabase(docDuplicateCheck, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, Path.GetDirectoryName(SelectModInfo.FileName));
+
+            //link stuff in memory
+            Utils.BuildLinksRefrence(parsedCategoryListDuplicateCheck, false);
+            Utils.BuildLevelPerPackage(parsedCategoryListDuplicateCheck);
+            Utils.BuildDependencyPackageRefrences(parsedCategoryListDuplicateCheck, dependenciesDuplicateCheck);
+
+            ReportProgress("Database loaded");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+
         private void DatabaseDuplicatePNsCheck_Click(object sender, RoutedEventArgs e)
         {
             //init UI
@@ -1627,25 +1659,14 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
-            if (!File.Exists(SelectModInfo.FileName))
+            if ((docDuplicateCheck == null) || (dependenciesDuplicateCheck == null) || (globalDependenciesDuplicateCheck == null) || (parsedCategoryListDuplicateCheck == null))
             {
-                ReportProgress("SelectModInfo file selected does not exist:" + SelectModInfo.FileName);
+                ReportProgress("Lists not loaded yet for duplicate checks or adds");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
 
-            //list creation and parsing
-            List<Category> parsedCategoryList = new List<Category>();
-            List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
-            List<Dependency> dependencies = new List<Dependency>();
-            XmlDocument doc = new XmlDocument();
-            doc.Load(SelectModInfo.FileName);
-            XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsedCategoryList, Path.GetDirectoryName(SelectModInfo.FileName));
-
-            //link stuff in memory
-            Utils.BuildLinksRefrence(parsedCategoryList, false);
-
-            List<string> duplicatesList = Utils.CheckForDuplicates(globalDependencies,dependencies,parsedCategoryList);
+            List<string> duplicatesList = Utils.CheckForDuplicates(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck);
 
             if(duplicatesList == null || duplicatesList.Count == 0)
             {
@@ -1674,19 +1695,30 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
-            if (!File.Exists(SelectModInfo.FileName))
+            if ((docDuplicateCheck == null) || (dependenciesDuplicateCheck == null) || (globalDependenciesDuplicateCheck == null) || (parsedCategoryListDuplicateCheck == null))
             {
-                ReportProgress("SelectModInfo file selected does not exist:" + SelectModInfo.FileName);
+                ReportProgress("Lists not loaded yet for duplicate checks or adds");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
 
-            ReportProgress("UIDs aren't ready yet");
+            List<DatabasePackage> duplicatesList = Utils.CheckForDuplicateUIDsPackageList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck);
+
+            if (duplicatesList.Count == 0)
+            {
+                ReportProgress("No duplicates");
+            }
+            else
+            {
+                ReportProgress("The following packages are duplicate UIDs:");
+                foreach (DatabasePackage package in duplicatesList)
+                    ReportProgress(string.Format("PackageName: {0}, UID: {1}",package.PackageName,package.UID));
+            }
 
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
-        private void AddMissingUIDs_Click(object sender, RoutedEventArgs e)
+        private async void AddMissingUIDs_Click(object sender, RoutedEventArgs e)
         {
             //init UI
             ToggleUI((TabController.SelectedItem as TabItem), false);
@@ -1699,15 +1731,54 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
-            if (!File.Exists(SelectModInfo.FileName))
+            if ((docDuplicateCheck == null) || (dependenciesDuplicateCheck == null) || (globalDependenciesDuplicateCheck == null) || (parsedCategoryListDuplicateCheck == null))
             {
-                ReportProgress("SelectModInfo file selected does not exist:" + SelectModInfo.FileName);
+                ReportProgress("Lists not loaded yet for duplicate checks or adds");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
 
-            ReportProgress("UIDs aren't ready yet");
+            //create a flat list
+            List<DatabasePackage> allPackages = Utils.GetFlatList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, null, parsedCategoryListDuplicateCheck);
 
+            foreach (DatabasePackage packageToAddUID in allPackages)
+            {
+                if(string.IsNullOrWhiteSpace(packageToAddUID.UID))
+                {
+                    await Task.Run(() =>
+                    {
+                        packageToAddUID.UID = Utils.GenerateUID(allPackages);
+                    });
+                    ReportProgress(string.Format("Generated UID {0} for package {1}", packageToAddUID.UID, packageToAddUID.PackageName));
+                }
+            }
+
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+
+        private void SaveDatabaseDuplicateCheckButton_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Saving Database");
+
+            //checks
+            if ((docDuplicateCheck == null) || (dependenciesDuplicateCheck == null) || (globalDependenciesDuplicateCheck == null) || (parsedCategoryListDuplicateCheck == null))
+            {
+                ReportProgress("Lists not loaded yet for duplicate checks or adds");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            if(SelectModInfoSave.ShowDialog() == false)
+            {
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            XmlUtils.SaveDatabase1V1(SelectModInfoSave.FileName,docDuplicateCheck,globalDependenciesDuplicateCheck,dependenciesDuplicateCheck,parsedCategoryListDuplicateCheck);
+
+            ReportProgress("Database saved");
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion
