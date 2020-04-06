@@ -5564,6 +5564,16 @@
             The default amount that the application will be scaled to. 100%
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Settings.NumberUIDCharacters">
+            <summary>
+            The number of characters that make up a package UID
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.UIDCharacters">
+            <summary>
+            The array of character options that are used for generating the UID
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Settings.ManagerInfoZipfile">
             <summary>
             The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk.
@@ -7804,14 +7814,31 @@
             <returns>The parsed or default enumeration value</returns>
             <remarks>see https://stackoverflow.com/questions/10685794/how-to-use-generic-tryparse-with-enum </remarks>
         </member>
-        <member name="M:RelhaxModpack.Utils.CheckForDuplicates(System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category},System.Collections.Generic.List{RelhaxModpack.Dependency})">
+        <member name="M:RelhaxModpack.Utils.CheckForDuplicateUIDsPackageList(System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Checks for any duplicate UID entries inside the provided lists
+            </summary>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns>A list of packages with duplicate UIDs, or an empty list if no duplicates</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CheckForDuplicateUIDsStringsList(System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
+            <summary>
+            Checks for any duplicate UID entries inside the provided lists
+            </summary>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns>A list of duplicate UIDs, or an empty list if no duplicates</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.CheckForDuplicates(System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
             <summary>
             Checks for any duplicate PackageName entries inside the provided lists
             </summary>
             <param name="globalDependencies">The list of global dependencies</param>
             <param name="dependencies">The list of dependencies</param>
             <param name="parsedCategoryList">The list of categories</param>
-            <param name="logicalDependencies">The list of logical dependencies</param>
             <returns>A list of duplicate packages, or an empty list if no duplicates</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.IsDuplicateName(System.Collections.Generic.List{RelhaxModpack.DatabasePackage},System.String)">
@@ -7973,13 +8000,27 @@
             <param name="bitmap">The Bitmap object to convert</param>
             <returns>The BitmapImage object</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.RandomString(System.Int32)">
+        <member name="M:RelhaxModpack.Utils.RandomString(System.Int32,System.String)">
             <summary>
             Creates a string of random characters
             </summary>
             <param name="length">The number of characters to create the random string</param>
+            <param name="chars">The list of characters to use for making the random string</param>
             <returns>The random string</returns>
             <remarks>See https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c </remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GenerateUID">
+            <summary>
+            Generates a Unique IDentifier for a package using the constant defined number of string and character selections
+            </summary>
+            <returns>a Unique IDentifier for a package</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GenerateUID(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
+            <summary>
+            
+            </summary>
+            <param name="allPackages"></param>
+            <returns></returns>
         </member>
         <member name="M:RelhaxModpack.Utils.CompareVersions(System.String,System.String)">
             <summary>
