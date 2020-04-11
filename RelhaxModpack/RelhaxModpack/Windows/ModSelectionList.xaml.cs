@@ -746,7 +746,10 @@ namespace RelhaxModpack.Windows
             string[] zipFilesUserMods = Utils.DirectorySearch(Settings.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
 
             //init database components
-            UserCategory = new Category();
+            UserCategory = new Category()
+            {
+                OffsetInstallGroups = false
+            };
             foreach (string s in zipFilesUserMods)
             {
                 SelectablePackage sp = new SelectablePackage
@@ -757,7 +760,8 @@ namespace RelhaxModpack.Windows
                     Level = 0,
                     PatchGroup = 9,
                     InstallGroup = 9,
-                    DownloadFlag = false
+                    DownloadFlag = false,
+                    ParentCategory = UserCategory
                 };
                 //circular reference because
                 sp.Parent = sp.TopParent = sp;
