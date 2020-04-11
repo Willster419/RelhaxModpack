@@ -4047,7 +4047,8 @@ namespace RelhaxModpack
             German.Add("CleanGameCacheText", TranslationNeeded);
             Polish.Add("CleanGameCacheText", "Wyczyść pamięc podręczną gry");
             French.Add("CleanGameCacheText", TranslationNeeded);
-            Spanish.Add("CleanGameCacheText", TranslationNeeded);
+            Spanish.Add("CleanGameCacheText", "Limpar caché del juego");
+            Russian.Add("CleanGameCacheText", TranslationNeeded);
 
             //Component: cleanGameCacheProgress
             //
@@ -4055,7 +4056,8 @@ namespace RelhaxModpack
             German.Add("cleanGameCacheProgress", TranslationNeeded);
             Polish.Add("cleanGameCacheProgress", "Czyszczenie pamięci podręcznej gry");
             French.Add("cleanGameCacheProgress", TranslationNeeded);
-            Spanish.Add("cleanGameCacheProgress", TranslationNeeded);
+            Spanish.Add("cleanGameCacheProgress", "Limpiando caché del juego");
+            Russian.Add("cleanGameCacheProgress", TranslationNeeded);
 
             //Component: cleanGameCacheSuccess
             //
@@ -4063,7 +4065,8 @@ namespace RelhaxModpack
             German.Add("cleanGameCacheSuccess", TranslationNeeded);
             Polish.Add("cleanGameCacheSuccess", "Czyszczenie pamięci podręcznej gry zakończone sukcesem");
             French.Add("cleanGameCacheSuccess", TranslationNeeded);
-            Spanish.Add("cleanGameCacheSuccess", TranslationNeeded);
+            Spanish.Add("cleanGameCacheSuccess", "Caché del juego limpiada con éxito");
+            Russian.Add("cleanGameCacheSuccess", TranslationNeeded);
 
             //Component: cleanGameCacheFail
             //
@@ -4071,7 +4074,8 @@ namespace RelhaxModpack
             German.Add("cleanGameCacheFail", TranslationNeeded);
             Polish.Add("cleanGameCacheFail", "Nie udało się wyczyścić pamięci podręcznej gry");
             French.Add("cleanGameCacheFail", TranslationNeeded);
-            Spanish.Add("cleanGameCacheFail", TranslationNeeded);
+            Spanish.Add("cleanGameCacheFail", "No se ha podido limpar los archivos de caché del juego");
+            Russian.Add("cleanGameCacheFail", TranslationNeeded);
             #endregion
 
             #region Add zip files Dialog
