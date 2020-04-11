@@ -8079,6 +8079,86 @@
             <param name="pathToMatch">(Optional) The directory that the process is running from</param>
             <returns>The Process object that matches, or null if no matches</returns>
         </member>
+        <member name="T:RelhaxModpack.Utils.ProcessAccessFlags">
+            <summary>
+            An enumeration of desired access rights to ask for information when opening a process's info
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.All">
+            <summary>
+            All process info
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.Terminate">
+            <summary>
+            Terminate the process
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.CreateThread">
+            <summary>
+            Create a thread from the process
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.VirtualMemoryOperation">
+            <summary>
+            View the process's virtual memory operations
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.VirtualMemoryRead">
+            <summary>
+            View the process's virtual memory reads
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.VirtualMemoryWrite">
+            <summary>
+            View the process's virtual memoty writes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.DuplicateHandle">
+            <summary>
+            Ability to create a duplicate process handle
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.CreateProcess">
+            <summary>
+            Ability for process to create processes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.SetQuota">
+            <summary>
+            Set quotas on the process
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.SetInformation">
+            <summary>
+            Set information about the process
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.QueryInformation">
+            <summary>
+            Query information about the process
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.QueryLimitedInformation">
+            <summary>
+            Query information about the process that does not require administrator rights
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.Synchronize">
+            <summary>
+            Synchronize rights
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetExecutablePathAboveVista(System.Int32)">
+            <summary>
+            Gets the path to the application, including exe filename, based on the process ID
+            </summary>
+            <param name="ProcessId">The process ID from Process object</param>
+            <returns>The path to the process's exe</returns>
+            <remarks>This can throw a Win32Exception if the method fails.
+            It uses kernel32.dll p/invoke methods to perform the operation.
+            Does not work below windows vista.</remarks>
+        </member>
         <member name="M:RelhaxModpack.Utils.IsProcessRunning(System.String,System.String)">
             <summary>
             Wrapper for IsProcessRunning() to return boolean type
