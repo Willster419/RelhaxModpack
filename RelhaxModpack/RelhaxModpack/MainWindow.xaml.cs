@@ -1571,7 +1571,7 @@ namespace RelhaxModpack
                 AdvancedProgressWindow.Show();
             }
             else
-                Logging.Debug("advancedInstallProgress is false");
+                Logging.Debug("AdvancedInstallProgress is false");
 
             //make sure each trigger list for each package is unique
             foreach (DatabasePackage package in packagesToInstall)
@@ -1589,7 +1589,7 @@ namespace RelhaxModpack
             //create the cancellation token source
             cancellationTokenSource = new CancellationTokenSource();
 
-            Logging.Debug("userMods install count: {0}", userModsToInstall.Count);
+            Logging.Debug("UserMods install count: {0}", userModsToInstall.Count);
 
             //if user mods are being installed, then disable triggers
             disableTriggersBackupVal = ModpackSettings.DisableTriggers;
@@ -1599,7 +1599,7 @@ namespace RelhaxModpack
                 disableTriggersBackupVal = true;
             }
 
-            Logging.Debug("creating install engine, cancel options and progress reporting");
+            Logging.Debug("Creating install engine, cancel options and progress reporting");
             //and create and link the install engine
             installEngine = new InstallEngine()
             {
@@ -1626,9 +1626,9 @@ namespace RelhaxModpack
             progress.ProgressChanged += OnInstallProgressChanged;
 
             //run install
-            Logging.Debug("running installation from MainWindow");
+            Logging.Debug("Running installation from MainWindow");
             RelhaxInstallFinishedEventArgs results = await installEngine.RunInstallationAsync(progress);
-            Logging.Debug("installation has finished, returned to MainWindow");
+            Logging.Debug("Installation has finished, returned to MainWindow");
             installEngine.Dispose();
             installEngine = null;
 
