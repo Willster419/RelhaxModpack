@@ -1046,13 +1046,13 @@ namespace RelhaxModpack
                         foldertoExportTo = exportFolderSelect.SelectedPath;
                     else
                     {
-                        Logging.Debug("user canceled selecting folder, stop");
+                        Logging.Debug("User canceled selecting folder, stop");
                         ToggleUIButtons(true);
                         return;
                     }
                 }
 
-                Logging.Debug("ask which version of client to export for");
+                Logging.Debug("Ask which version of client to export for");
                 ExportModeSelect exportModeSelect = new ExportModeSelect();
                 if ((bool)exportModeSelect.ShowDialog())
                 {
@@ -1064,7 +1064,7 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    Logging.Debug("exportModeSelect returned false, stop");
+                    Logging.Debug("ExportModeSelect returned false, stop");
                     ToggleUIButtons(true);
                     return;
                 }
