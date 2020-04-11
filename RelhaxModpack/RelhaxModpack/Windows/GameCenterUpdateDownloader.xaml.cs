@@ -177,6 +177,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        #region Step 1
         private void GcDownloadStep1SelectClientButton_Click(object sender, RoutedEventArgs e)
         {
             //if client selected, get params
@@ -187,7 +188,7 @@ namespace RelhaxModpack.Windows
                 CheckPathExists = true,
                 //https://stackoverflow.com/a/2069090/3128017
                 //Office Files|*.doc;*.xls;*.ppt
-                Filter = "WG Client|WorldOfTanks.*;WorldOfWarships.*;WorldOfWarplanes.*",
+                Filter = string.Format("WG Client Update Document|{0}", GameInfoXml),
                 Multiselect = false,
                 ValidateNames = true,
                 Title = Translations.GetTranslatedString("GcDownloadSelectWgClient")
@@ -343,7 +344,7 @@ namespace RelhaxModpack.Windows
                 else
                     completeLocationPath = gameCenterProperty.FileName.Equals(GameInfoXml) ? gameInfoXmlPath : metaDataXmlPath;
 
-                Logging.Info("getting property '{0}' for file {1}", gameCenterProperty.Xpath, gameCenterProperty.FileName);
+                Logging.Info("Getting property '{0}' for file {1}", gameCenterProperty.Xpath, completeLocationPath);
                 gameCenterProperty.Value = XmlUtils.GetXmlStringFromXPath(completeLocationPath, gameCenterProperty.Xpath);
 
                 if (string.IsNullOrWhiteSpace(gameCenterProperty.Value))
@@ -451,7 +452,7 @@ namespace RelhaxModpack.Windows
             GameCenterProperties.Add(new GameCenterProperty()
             {
                 FileName = GameInfoXml,
-                Xpath = @"//protocol/game/part_versions/value[@name='client']",
+                Xpath = @"//protocol/game/part_versions/version[@name='client']/@installed",
                 GetRequestParamater = "client_current_version",
                 IsRequired = true
             });
@@ -517,21 +518,21 @@ namespace RelhaxModpack.Windows
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='locale']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='locale']/@installed",
                     GetRequestParamater = "locale_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='sdcontent']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='sdcontent']/@installed",
                     GetRequestParamater = "sdcontent_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='hdcontent']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='hdcontent']/@installed",
                     GetRequestParamater = "hdcontent_current_version",
                     IsRequired = false
                 });
@@ -555,21 +556,21 @@ namespace RelhaxModpack.Windows
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='locale']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='locale']/@installed",
                     GetRequestParamater = "locale_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='sdcontent']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='sdcontent']/@installed",
                     GetRequestParamater = "sdcontent_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='udsound']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='udsound']/@installed",
                     GetRequestParamater = "udsound_current_version",
                     IsRequired = false
                 });
@@ -593,28 +594,28 @@ namespace RelhaxModpack.Windows
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='wwlocale']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='wwlocale']/@installed",
                     GetRequestParamater = "wwlocale_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='content']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='content']/@installed",
                     GetRequestParamater = "content_current_version",
                     IsRequired = true
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='hdcontent']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='hdcontent']/@installed",
                     GetRequestParamater = "hdcontent_current_version",
                     IsRequired = false
                 });
                 GameCenterProperties.Add(new GameCenterProperty()
                 {
                     FileName = GameInfoXml,
-                    Xpath = @"//protocol/game/part_versions/value[@name='tm']",
+                    Xpath = @"//protocol/game/part_versions/version[@name='tm']/@installed",
                     GetRequestParamater = "tm_current_version",
                     IsRequired = true
                 });
@@ -633,12 +634,14 @@ namespace RelhaxModpack.Windows
             GameCenterProperties.Add(new GameCenterProperty()
             {
                 FileName = WgcNotificationsXml,
-                Xpath = @"//protocol/notifications/notification/app_id",
+                Xpath = @"//protocol/notifications/notification/app_id[contains(text(),'WGC.')]",
                 GetRequestParamater = "game_id",
                 IsRequired = true
             });
         }
+        #endregion
 
+        #region Step 2
         private void GcDownloadStep2Init()
         {
             //start timer
@@ -671,7 +674,9 @@ namespace RelhaxModpack.Windows
                 GcDownloadStep2NextButton.IsEnabled = false;
             }
         }
+        #endregion
 
+        #region Step 3
         private async void GcDownloadStep3Init()
         {
             GcDownloadStep3NextButton.IsEnabled = false;
@@ -684,7 +689,7 @@ namespace RelhaxModpack.Windows
             StringBuilder requestBuilder = new StringBuilder();
             if((bool)GcDownloadStep1GameCenterCheckbox.IsChecked)
             {
-                requestBuilder.Append("https://wguswgc-wgcct.wargaming.net/api/v1/wgc_update/?protocol_version=1.8");
+                requestBuilder.Append("https://wguswgc-wgcct.wargaming.net/api/v1/wgc_update/?protocol_version=1.9");
                 foreach (GameCenterProperty gameCenterProperty in GameCenterProperties)
                 {
                     requestBuilder.AppendFormat("&{0}={1}", gameCenterProperty.GetRequestParamater, gameCenterProperty.Value);
@@ -706,7 +711,7 @@ namespace RelhaxModpack.Windows
                     return;
                 }
                 GameCenterProperty urlProperty = baseUrlPropertyList[0];
-                requestBuilder.AppendFormat("{0}api/v1/patches_chain/?protocol_version=1.8", urlProperty.Value);
+                requestBuilder.AppendFormat("{0}api/v1/patches_chain/?protocol_version=1.9", urlProperty.Value);
                 foreach (GameCenterProperty gameCenterProperty in GameCenterProperties)
                 {
                     if (string.IsNullOrWhiteSpace(gameCenterProperty.Value) && !gameCenterProperty.IsRequired)
@@ -860,7 +865,9 @@ namespace RelhaxModpack.Windows
             }
             GcDownloadStep3NextButton.IsEnabled = true;
         }
+        #endregion
 
+        #region Step 4
         private async void GcDownloadStep4Init()
         {
             step4DownloadCanceled = false;
@@ -929,7 +936,9 @@ namespace RelhaxModpack.Windows
             GcDownloadStep4NextButton.IsEnabled = true;
             GcDownloadStep4PreviousButton.IsEnabled = false;
         }
+        #endregion
 
+        #region UI events
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             GcDownloadStep4DownloadingSizes.Text = string.Format("{0} {1} {2}", Utils.SizeSuffix((ulong)e.BytesReceived,1,true,false),
@@ -995,5 +1004,6 @@ namespace RelhaxModpack.Windows
         {
             this.Close();
         }
+        #endregion
     }
 }

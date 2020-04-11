@@ -384,6 +384,10 @@ namespace RelhaxModpack
             {
                 colorset = CurrentTheme.BorderColorset;
             }
+            else if (element is RelhaxHyperlink)
+            {
+                colorset = CurrentTheme.RelhaxHyperlinkColorset;
+            }
             else if (element is Control)
             {
                 colorset = CurrentTheme.ControlColorset;

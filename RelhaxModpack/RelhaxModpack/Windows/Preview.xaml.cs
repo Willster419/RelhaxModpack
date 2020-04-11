@@ -20,23 +20,32 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class Preview : RelhaxWindow
     {
-        //public
         /// <summary>
-        /// The package with media elements to preview
+        /// Get or set the list of media preview components
         /// </summary>
-        public SelectablePackage Package = null;
+        public List<Media> Medias { get; set; } = null;
 
         /// <summary>
         /// Sets if the preview was launched from the editor or from the selection list
         /// </summary>
-        public bool EditorMode = false;
+        public bool EditorMode { get; set; } = false;
 
-        //private
-        private MemoryStream ImageStream = null;
+        /// <summary>
+        /// Get or set if the package received contains media from multiple packages from a combobox
+        /// </summary>
+        public bool ComboBoxItemsInsideMode { get; set; } = false;
+
+        /// <summary>
+        /// Get or set the package that invoked the preview window
+        /// </summary>
+        public SelectablePackage InvokedPackage = null;
+
         private Media CurrentDispalyMedia = null;
+        private SelectablePackage CurrentDisplaySP = null;
+        private MemoryStream ImageStream = null;
         private WebBrowser browser = null;
         private ZoomBorder zoomBorder = null;
-        private DispatcherTimer FocusTimer = null;
+        private DispatcherTimer OMCViewLegacyFocusTimer = null;
 
         /// <summary>
         /// Create an instance of the Preview window
@@ -48,20 +57,31 @@ namespace RelhaxModpack.Windows
 
         private void OnPreviewWindowLoad(object sender, RoutedEventArgs e)
         {
-            //check to make sure the Package element exists
-            if(Package == null)
+            //make sure Medias is a valid entry
+            if (Medias == null || InvokedPackage == null)
             {
-                Logging.Error("Package is null, it should never be null!");
+                Logging.Error("Preview Medias list or InvokedPackage null: MediasNull?={0}, InvokedPacakgeNull?={1}", Medias==null, InvokedPackage==null);
                 MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                 Close();
+                return;
             }
 
-            //and for the medias element
-            if(Package.Medias == null)
+            //check that all components have the package parent reference set
+            foreach (Media media in Medias)
             {
-                Logging.Error("Package.Medias is null, it should never be null!");
-                MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
-                Close();
+                bool anyMediaErrors = false;
+                if (media.SelectablePackageParent == null)
+                {
+                    Logging.Error("A media component does not have its SelectablePackageParent set");
+                    Logging.Error(media.ToString());
+                    anyMediaErrors = true;
+                }
+                if (anyMediaErrors)
+                {
+                    MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
+                    Close();
+                    return;
+                }
             }
 
             //translate 3 components
@@ -69,73 +89,14 @@ namespace RelhaxModpack.Windows
             PreviewNextPicButton.Content = Translations.GetTranslatedString(PreviewNextPicButton.Name);
             PreviewPreviousPicButton.Content = Translations.GetTranslatedString(PreviewPreviousPicButton.Name);
 
-            //check if devURL element should be enabled or not
-            if (string.IsNullOrWhiteSpace(Package.DevURL))
-            {
-                DevUrlHeader.IsEnabled = false;
-                DevUrlHeader.Visibility = Visibility.Hidden;
-                DevUrlHolder.IsEnabled = false;
-                DevUrlHolder.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                //devURL is now array of elements separated by newline
-                //load the stack with textblocks with tooltips for the URLs
-                string[] devURLS = Package.DevURLList;
-                for (int i = 0; i < devURLS.Count(); i++)
-                {
-                    //make a URI to hold the goto devurl link
-                    Uri goTo = null;
-                    try
-                    {
-                        goTo = new Uri(devURLS[i].Trim());
-                    }
-                    catch (UriFormatException)
-                    {
-                        Logging.Error("Invalid URI string, skipping: {0}", devURLS[i].Trim());
-                    }
-                    if (goTo == null)
-                        continue;
-
-                    //make a textbox to hold the hyperlink object
-                    TextBlock block = new TextBlock()
-                    {
-                        ToolTip = devURLS[i].Trim()
-                    };
-                    //https://stackoverflow.com/questions/21214450/how-to-add-a-hyperlink-in-a-textblock-in-code?noredirect=1&lq=1
-                    block.Inlines.Clear();
-
-                    //make a run to display the number of the link
-                    Run inline = new Run(i.ToString());
-
-                    //and the hyperlink will display the run
-                    Hyperlink h = new Hyperlink(inline)
-                    {
-                        NavigateUri = goTo
-                    };
-                    h.RequestNavigate += OnHyperLinkClick;
-
-                    //add hyperlink to textbox
-                    block.Inlines.Add(h);
-
-                    //add to developer url textbox
-                    DevUrlHolder.Children.Add(block);
-                }
-            }
-
-            //set the name of the window to be the package name
-            Title = Package.NameFormatted;
-            if (Package.PopularMod)
-                Title = string.Format("{0} ({1})", Title, Translations.GetTranslatedString("popular"));
-
             //make the linked labels in the link box
-            for(int i =0; i < Package.Medias.Count; i++)
+            for (int i = 0; i < Medias.Count; i++)
             {
                 TextBlock block = new TextBlock();
                 block.Inlines.Clear();
                 Hyperlink h = new Hyperlink(new Run(i.ToString()))
                 {
-                    Tag = Package.Medias[i],
+                    Tag = Medias[i],
                     //dummy URI just to make the request navigate work
                     NavigateUri = new Uri("http://google.com")
                 };
@@ -144,19 +105,14 @@ namespace RelhaxModpack.Windows
                 MediaIndexer.Children.Add(block);
             }
 
-            PreviewDescriptionBox.Text = Package.DescriptionFormatted;
-
-
-            PreviewUpdatesBox.Text = Package.UpdateCommentFormatted;
-
-            if(EditorMode)
+            if (EditorMode)
             {
+                Logging.Debug("EditorMode = true, ignoring setting for startup location");
                 WindowStartupLocation = WindowStartupLocation.Manual;
             }
-
-            //if the saved preview window point is within the screen, then load it to there
             else
             {
+                //if the saved preview window point is within the screen, then load it to there
                 if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
                 {
                     //set for manual window location setting
@@ -172,64 +128,140 @@ namespace RelhaxModpack.Windows
                         Logfiles.Application, nameof(Preview), ModpackSettings.PreviewX, ModpackSettings.PreviewY);
                     WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 }
+
                 //set width and height
                 Width = ModpackSettings.PreviewWidth;
                 Height = ModpackSettings.PreviewHeight;
+
                 //set if full screen
                 if (ModpackSettings.PreviewFullscreen)
                     WindowState = WindowState.Maximized;
             }
 
-            //finally if there is at least one media element, display it
-            if (Package.Medias.Count > 0)
-                DisplayMedia(Package.Medias[0]);
+            //invoke displaying the first element
+            if (Medias.Count > 0)
+            {
+                DisplayMedia(Medias[0]);
+            }
+            else
+            {
+                if(ComboBoxItemsInsideMode)
+                    Title = string.Format("{0}: ({1})", Translations.GetTranslatedString("dropDownItemsInside"), Translations.GetTranslatedString("none"));
+                else
+                    Title = InvokedPackage.NameFormatted;
+
+                PreviewDescriptionBox.Text = InvokedPackage.DescriptionFormatted;
+                PreviewUpdatesBox.Text = InvokedPackage.UpdateCommentFormatted;
+                CurrentDisplaySP = InvokedPackage;
+            }
 
             //set the timer if the view is OMC
-            if(ModpackSettings.ModSelectionView == SelectionView.Legacy)
+            if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
             {
-                FocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
-            }
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            FocusTimer.Stop();
-            this.Focus();
-        }
-
-        private void OnMediaHyperlinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
-        {
-            if(sender is Hyperlink link)
-            {
-                if(link.Tag is Media media)
-                {
-                    if(!media.Equals(CurrentDispalyMedia))
-                        DisplayMedia(media);
-                }
-            }
-        }
-
-        private void OnHyperLinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start(e.Uri.OriginalString);
-            }
-            catch (Exception ex)
-            {
-                Logging.Exception(ex.ToString());
+                OMCViewLegacyFocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
             }
         }
 
         private async void DisplayMedia(Media media)
         {
+            //the devURL, description and update notes only need to be
+            //re-parsed if the package has changed
+            if (CurrentDispalyMedia == null || (!CurrentDispalyMedia.Equals(media)))
+            {
+                //check if devurl, desciption, update notes need to be changed if selectablePackage changed as well
+                if (CurrentDisplaySP == null || (!CurrentDisplaySP.Equals(media.SelectablePackageParent)))
+                {
+                    //check if devURL element should be enabled or not
+                    if (string.IsNullOrWhiteSpace(media.SelectablePackageParent.DevURL))
+                    {
+                        DevUrlHeader.IsEnabled = false;
+                        DevUrlHeader.Visibility = Visibility.Hidden;
+                        DevUrlHolder.IsEnabled = false;
+                        DevUrlHolder.Visibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        //devURL is now array of elements separated by newline
+                        //load the stack with textblocks with tooltips for the URLs
+                        string[] devURLS = media.SelectablePackageParent.DevURLList;
+
+                        //clear last list of URL links
+                        DevUrlHolder.Children.Clear();
+
+                        for (int i = 0; i < devURLS.Count(); i++)
+                        {
+                            //make a URI to hold the goto devurl link
+                            Uri goTo = null;
+                            try
+                            {
+                                goTo = new Uri(devURLS[i].Trim());
+                            }
+                            catch (UriFormatException)
+                            {
+                                Logging.Error("Invalid URI string, skipping: {0}", devURLS[i].Trim());
+                            }
+                            if (goTo == null)
+                                continue;
+
+                            //make a textbox to hold the hyperlink object
+                            TextBlock block = new TextBlock()
+                            {
+                                ToolTip = devURLS[i].Trim()
+                            };
+                            //https://stackoverflow.com/questions/21214450/how-to-add-a-hyperlink-in-a-textblock-in-code?noredirect=1&lq=1
+                            block.Inlines.Clear();
+
+                            //make a run to display the number of the link
+                            Run inline = new Run(i.ToString());
+
+                            //and the hyperlink will display the run
+                            Hyperlink h = new Hyperlink(inline)
+                            {
+                                NavigateUri = goTo
+                            };
+                            h.RequestNavigate += OnHyperLinkClick;
+
+                            //add hyperlink to textbox
+                            block.Inlines.Add(h);
+
+                            //add to developer url textbox
+                            DevUrlHolder.Children.Add(block);
+                        }
+                    }
+
+                    //set the name of the window to be the package name
+                    if (EditorMode)
+                    {
+                        Title = "EDITOR_TEST_MODE";
+                    }
+                    else if (ComboBoxItemsInsideMode)
+                    {
+                        Title = string.Format("{0}: {1}", Translations.GetTranslatedString("dropDownItemsInside"), media.SelectablePackageParent.NameFormatted);
+                    }
+                    else
+                    {
+                        Title = media.SelectablePackageParent.NameFormatted;
+                    }
+
+                    //set description
+                    PreviewDescriptionBox.Text = media.SelectablePackageParent.DescriptionFormatted;
+
+                    //set update notes
+                    PreviewUpdatesBox.Text = media.SelectablePackageParent.UpdateCommentFormatted;
+
+                    //update the last currentDisplayedSP
+                    CurrentDisplaySP = media.SelectablePackageParent;
+                }
+            }
             CurrentDispalyMedia = media;
+
             //if the child is our media player, then stop and dispose
-            if(MainPreviewBorder.Child != null && MainPreviewBorder.Child is RelhaxMediaPlayer player)
+            if (MainPreviewBorder.Child != null && MainPreviewBorder.Child is RelhaxMediaPlayer player)
             {
                 player.StopPlaybackIfPlaying();
                 player.Dispose();
             }
+
             //null the child element and make it again
             MainPreviewBorder.Child = null;
             Logging.Debug("loading preview of MediaType {0}, URL={1}", media.MediaType.ToString(), media.URL);
@@ -319,7 +351,7 @@ namespace RelhaxModpack.Windows
                             bitmapImage.EndInit();
                             pictureViewer.Source = bitmapImage;
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             Logging.Exception("failed to load picture");
                             Logging.Exception(ex.ToString());
@@ -355,7 +387,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        #region image mouse click and resizing
+        #region Image mouse click and resizing
         private void MainContentControl_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //only work on left button
@@ -363,7 +395,7 @@ namespace RelhaxModpack.Windows
                 return;
 
             //send cancel for the mouse click drag in the zoom border
-            if(zoomBorder != null)
+            if (zoomBorder != null)
             {
                 zoomBorder.CancelMouseDown = true;
             }
@@ -385,6 +417,55 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
+        #region UI events
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            OMCViewLegacyFocusTimer.Stop();
+            this.Focus();
+        }
+
+        private void OnMediaHyperlinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            if (sender is Hyperlink link)
+            {
+                if (link.Tag is Media media)
+                {
+                    if (!media.Equals(CurrentDispalyMedia))
+                        DisplayMedia(media);
+                }
+            }
+        }
+
+        private void OnHyperLinkClick(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(e.Uri.OriginalString);
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+            }
+        }
+
+        private void PreviewNextPicButton_Click(object sender, RoutedEventArgs e)
+        {
+            int index = Medias.IndexOf(CurrentDispalyMedia);
+            if (index < Medias.Count - 1)
+            {
+                DisplayMedia(Medias[index + 1]);
+            }
+        }
+
+        private void PreviewPreviousPicButton_Click(object sender, RoutedEventArgs e)
+        {
+            int index = Medias.IndexOf(CurrentDispalyMedia);
+            if (index > 0)
+            {
+                DisplayMedia(Medias[index - 1]);
+            }
+        }
+
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             if (MainPreviewBorder.Child is ProgressBar bar)
@@ -394,16 +475,17 @@ namespace RelhaxModpack.Windows
                 bar.Value = e.BytesReceived;
             }
         }
+        #endregion
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
             //save window location, size and fullscreen property (if not in editor mode)
-            if(!EditorMode)
+            if (!EditorMode)
             {
                 ModpackSettings.PreviewFullscreen = WindowState == WindowState.Maximized ? true : false;
                 ModpackSettings.PreviewHeight = (int)Height;
                 ModpackSettings.PreviewWidth = (int)Width;
-                if(Utils.PointWithinScreen((int)Left, (int)Top))
+                if (Utils.PointWithinScreen((int)Left, (int)Top))
                 {
                     ModpackSettings.PreviewX = (int)Left;
                     ModpackSettings.PreviewY = (int)Top;
@@ -411,35 +493,17 @@ namespace RelhaxModpack.Windows
             }
 
             Logging.Debug("Preview:  Disposing image memory stream");
-            if(ImageStream != null)
+            if (ImageStream != null)
             {
                 ImageStream.Dispose();
                 ImageStream = null;
             }
 
             Logging.Debug("Preview:  Disposing browser");
-            if(browser != null)
+            if (browser != null)
             {
                 browser.Dispose();
                 browser = null;
-            }
-        }
-
-        private void PreviewNextPicButton_Click(object sender, RoutedEventArgs e)
-        {
-            int index = Package.Medias.IndexOf(CurrentDispalyMedia);
-            if(index < Package.Medias.Count-1)
-            {
-                DisplayMedia(Package.Medias[index + 1]);
-            }
-        }
-
-        private void PreviewPreviousPicButton_Click(object sender, RoutedEventArgs e)
-        {
-            int index = Package.Medias.IndexOf(CurrentDispalyMedia);
-            if(index > 0)
-            {
-                DisplayMedia(Package.Medias[index - 1]);
             }
         }
     }

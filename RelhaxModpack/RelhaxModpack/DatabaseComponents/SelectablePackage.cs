@@ -43,7 +43,7 @@ namespace RelhaxModpack
     /// <summary>
     /// A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
     /// </summary>
-    public class SelectablePackage : DatabasePackage, IComponentWithDependencies, IXmlSerializable
+    public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         #region Xml serialization
         /// <summary>
@@ -430,15 +430,18 @@ namespace RelhaxModpack
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
 
         /// <summary>
-        /// Property of Dependencies list to allow for interface implementation
-        /// </summary>
-        public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
-
-        /// <summary>
         /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
         /// Refer to examples for more information
         /// </summary>
-        public List<string> ConflictingPackages { get; set; } = new List<string>();
+        public string ConflictingPackages { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Returns a list of the ConflictingPackages string property
+        /// </summary>
+        public List<string> ConflictingPackagesList
+        {
+            get { return ConflictingPackages.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).ToList(); }
+        }
 
         /// <summary>
         /// Toggle if the package should appear in the search list
@@ -519,6 +522,28 @@ namespace RelhaxModpack
         #endregion
 
         #region Other Properties and Methods
+        /// <summary>
+        /// The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
+        /// </summary>
+        public override int InstallGroupWithOffset
+        {
+            get
+            {
+                if(Level == -2)
+                {
+                    throw new BadMemeException("You forgot to perform database linking to set level");
+                }
+                if(ParentCategory == null)
+                {
+                    throw new BadMemeException("You forgot to perform database linking to make ParentCategory not null");
+                }
+                if (ParentCategory.OffsetInstallGroups)
+                    return InstallGroup + Level;
+                else
+                    return InstallGroup;
+            }
+        }
+
         /// <summary>
         /// Provides a complete path of the name fields from the top package down to where this package is located in the tree
         /// </summary>
@@ -758,7 +783,7 @@ namespace RelhaxModpack
                 this.Packages = new List<SelectablePackage>();
                 this.Medias = new List<Media>();
                 this.Dependencies = new List<DatabaseLogic>();
-                this.ConflictingPackages = new List<string>();
+                this.ConflictingPackages = string.Empty;
                 this.ShowInSearchList = sp.ShowInSearchList;
 
                 if (deep)

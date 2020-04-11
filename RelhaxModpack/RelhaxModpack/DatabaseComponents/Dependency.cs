@@ -9,7 +9,7 @@ namespace RelhaxModpack
     /// Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
     /// for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency
     /// </summary>
-    public class Dependency : DatabasePackage, IComponentWithDependencies, IXmlSerializable
+    public class Dependency : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         #region Xml serialization
         /// <summary>
@@ -76,11 +76,6 @@ namespace RelhaxModpack
         #endregion
 
         #region Other Properties and Methods
-        /// <summary>
-        /// Property of Dependencies list to allow for interface implementation
-        /// </summary>
-        public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
-
         /// <summary>
         /// Create an instance of the Dependency class and over-ride DatabasePackage default values
         /// </summary>

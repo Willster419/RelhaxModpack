@@ -88,6 +88,16 @@ namespace RelhaxModpack
         public const string RelicBatchUpdateScriptServer = "relic_self_updater.txt";
 
         /// <summary>
+        /// The name of the application executable when compiled with stable distribution
+        /// </summary>
+        public const string ApplicationFilenameStable = "RelhaxModpack.exe";
+
+        /// <summary>
+        /// The name of the application executable when compiled with beta distribution
+        /// </summary>
+        public const string ApplicationFilenameBeta = "RelhaxModpackBeta.exe";
+
+        /// <summary>
         /// The old V1 filename to save the self updater script as
         /// </summary>
         [Obsolete("Database format V1 is deprecated, please use V2 instead.")]
@@ -490,6 +500,16 @@ namespace RelhaxModpack
         /// The default amount that the application will be scaled to. 100%
         /// </summary>
         public const double MinimumDisplayScale = 1.0F;
+
+        /// <summary>
+        /// The number of characters that make up a package UID
+        /// </summary>
+        public const int NumberUIDCharacters = 16;
+
+        /// <summary>
+        /// The array of character options that are used for generating the UID
+        /// </summary>
+        public const string UIDCharacters = @"abcdefghijklmnopqrstuvwxyz0123456789";
 
         /// <summary>
         /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk.

@@ -36,7 +36,7 @@ namespace RelhaxModpack.Windows
         /// This was done because the database repository is different then the application repository.
         /// During debug, this can be set to have the updater (in the repository path) assume that it's in the database repository.
         /// </remarks>
-        public const string HardCodeRepoPath = "F:\\Tanks Stuff\\RelhaxModpackDatabase";
+        public const string HardCodeRepoPath = "C:\\Users\\Willster419\\Tanks Stuff\\RelhaxModpackDatabase";
         /// <summary>
         /// Flag to use the 
         /// </summary>
@@ -70,6 +70,7 @@ namespace RelhaxModpack.Windows
         private WebClient client;
         private bool authorized = false;
         private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
+        private SaveFileDialog SelectModInfoSave = new SaveFileDialog() { Filter = "*.xml|*.xml" };
         private OpenFileDialog SelectV1Application = new OpenFileDialog() { Title = "Find V1 application to upload", Filter = "*.exe|*.exe" };
         private OpenFileDialog SelectV2Application = new OpenFileDialog() { Title = "Find V2 application to upload", Filter = "*.exe|*.exe" };
         private OpenFileDialog SelectManagerInfoXml = new OpenFileDialog() { Title = "Find manager_version.xml", Filter = "manager_version.xml|manager_version.xml" };
@@ -84,6 +85,13 @@ namespace RelhaxModpack.Windows
         List<VersionInfos> VersionInfosList;
         VersionInfos selectedVersionInfos;
         bool cancelDelete = false;
+        #endregion
+
+        #region Stuff for checking for duplicate PNs and UIDs
+        List<Category> parsedCategoryListDuplicateCheck;
+        List<DatabasePackage> globalDependenciesDuplicateCheck;
+        List<Dependency> dependenciesDuplicateCheck;
+        XmlDocument docDuplicateCheck;
         #endregion
 
         #region Password auth stuff
@@ -161,7 +169,7 @@ namespace RelhaxModpack.Windows
         {
             if (SelectModInfo.ShowDialog() == true)
             {
-                LogOutput.Text = "Loading ModInfo...";
+                LogOutput.Text = "Loading database...";
                 //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
                 //for the folder version: //modInfoAlpha.xml/@version
                 Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@onlineFolder");
@@ -490,10 +498,22 @@ namespace RelhaxModpack.Windows
             }
             ReportProgress("Located");
 
+            //check if it's the correct file to upload
+            if (!Path.GetFileName(SelectV2Application.FileName).Equals(Settings.ApplicationFilenameStable))
+            {
+                if (MessageBox.Show(string.Format("The file selected is not {0}, are you sure you selected the correct file?",
+                    Settings.ApplicationFilenameStable), "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                {
+                    ToggleUI((TabController.SelectedItem as TabItem), true);
+                    ReportProgress("Canceled");
+                    return;
+                }
+            }
+
             ReportProgress("Uploading stable V2 application to bigmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
+                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Settings.ApplicationFilenameStable, SelectV2Application.FileName);
             }
             ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -511,10 +531,22 @@ namespace RelhaxModpack.Windows
             }
             ReportProgress("Located");
 
+            //check if it's the correct file to upload
+            if (!Path.GetFileName(SelectV2Application.FileName).Equals(Settings.ApplicationFilenameBeta))
+            {
+                if (MessageBox.Show(string.Format("The file selected is not {0}, are you sure you selected the correct file?",
+                    Settings.ApplicationFilenameBeta), "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                {
+                    ToggleUI((TabController.SelectedItem as TabItem), true);
+                    ReportProgress("Canceled");
+                    return;
+                }
+            }
+
             ReportProgress("Uploading beta V2 application to bigmods...");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Path.GetFileName(SelectV2Application.FileName), SelectV2Application.FileName);
+                await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackRelhaxModpack + Settings.ApplicationFilenameBeta, SelectV2Application.FileName);
             }
             ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -825,13 +857,13 @@ namespace RelhaxModpack.Windows
             //checks
             if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
-                ReportProgress("wot online folder version is empty");
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
             if (!File.Exists(SelectModInfo.FileName))
             {
-                ReportProgress("selectMofInfo file selected does not exist:" + SelectModInfo.FileName);
+                ReportProgress("SelectModInfo file selected does not exist:" + SelectModInfo.FileName);
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
@@ -1015,7 +1047,7 @@ namespace RelhaxModpack.Windows
                         package.Size = fakeSize;
                         if (package.Size == 0)
                         {
-                            Logging.Updater("zip file {0} is 0 bytes (empty file)", LogLevel.Info, package.ZipFile);
+                            Logging.Updater("Zip file {0} is 0 bytes (empty file)", LogLevel.Info, package.ZipFile);
                             return;
                         }
                     }
@@ -1058,7 +1090,7 @@ namespace RelhaxModpack.Windows
                 SelectablePackage result = results[0];
                 if (!selectablePackage.NameFormatted.Equals(result.NameFormatted))
                 {
-                    Logging.Updater("package rename-> old:{0}, new:{1}", LogLevel.Info, result.PackageName, selectablePackage.PackageName);
+                    Logging.Updater("Package rename-> old:{0}, new:{1}", LogLevel.Info, result.PackageName, selectablePackage.PackageName);
                     renamedPackages.Add(new DatabaseBeforeAfter() { Before = result, After = selectablePackage });
                 }
             }
@@ -1077,7 +1109,7 @@ namespace RelhaxModpack.Windows
                 bool completePackageNamePathChanged = !result.CompletePackageNamePath.Equals(selectablePackage.CompletePackageNamePath);
                 if (completeNamePathChanged && completePackageNamePathChanged)
                 {
-                    Logging.Updater("package moved: {0}", LogLevel.Info, selectablePackage.PackageName);
+                    Logging.Updater("Package moved: {0}", LogLevel.Info, selectablePackage.PackageName);
                     movedPackages.Add(new DatabaseBeforeAfter { Before = result, After = selectablePackage });
                 }
             }
@@ -1279,13 +1311,13 @@ namespace RelhaxModpack.Windows
             //checks
             if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
-                ReportProgress("wot online folder version is empty");
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
             if (!File.Exists(SelectModInfo.FileName))
             {
-                ReportProgress("selectMofInfo file selected does not exist:" + SelectModInfo.FileName);
+                ReportProgress("SelectMofInfo file selected does not exist:" + SelectModInfo.FileName);
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
@@ -1585,6 +1617,168 @@ namespace RelhaxModpack.Windows
                 await client.UploadStringTaskAsync(PrivateStuff.BigmodsFTPModpackInstallStats + InstallStatisticsXml, xml);
             }
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+        #endregion
+
+        #region DatabasePackage and UIDs checks
+        private void AnotherLoadDatabaseButton_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Loading database");
+
+            OnLoadModInfo(null, null);
+
+            //list creation and parsing
+            parsedCategoryListDuplicateCheck = new List<Category>();
+            globalDependenciesDuplicateCheck = new List<DatabasePackage>();
+            dependenciesDuplicateCheck = new List<Dependency>();
+            docDuplicateCheck = XmlUtils.LoadXmlDocument(SelectModInfo.FileName, XmlLoadType.FromFile);
+            XmlUtils.ParseDatabase(docDuplicateCheck, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, Path.GetDirectoryName(SelectModInfo.FileName));
+
+            //link stuff in memory
+            Utils.BuildLinksRefrence(parsedCategoryListDuplicateCheck, false);
+            Utils.BuildLevelPerPackage(parsedCategoryListDuplicateCheck);
+            Utils.BuildDependencyPackageRefrences(parsedCategoryListDuplicateCheck, dependenciesDuplicateCheck);
+
+            ReportProgress("Database loaded");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+
+        private void DatabaseDuplicatePNsCheck_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Checking for duplicate packageNames");
+
+            //checks
+            if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+            if ((docDuplicateCheck == null) || (dependenciesDuplicateCheck == null) || (globalDependenciesDuplicateCheck == null) || (parsedCategoryListDuplicateCheck == null))
+            {
+                ReportProgress("Lists not loaded yet for duplicate checks or adds");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            List<string> duplicatesList = Utils.CheckForDuplicates(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck);
+
+            if(duplicatesList == null || duplicatesList.Count == 0)
+            {
+                ReportProgress("No duplicates");
+            }
+            else
+            {
+                ReportProgress("The following packages are duplicate packageNames:");
+                foreach (string s in duplicatesList)
+                    ReportProgress(s);
+            }
+
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+
+        private void DatabaseDuplicateUIDsCheck_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Checking for duplicate UIDs");
+
+            //checks
+            if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+            if ((docDuplicateCheck == null) || (dependenciesDuplicateCheck == null) || (globalDependenciesDuplicateCheck == null) || (parsedCategoryListDuplicateCheck == null))
+            {
+                ReportProgress("Lists not loaded yet for duplicate checks or adds");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            List<DatabasePackage> duplicatesList = Utils.CheckForDuplicateUIDsPackageList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck);
+
+            if (duplicatesList.Count == 0)
+            {
+                ReportProgress("No duplicates");
+            }
+            else
+            {
+                ReportProgress("The following packages are duplicate UIDs:");
+                foreach (DatabasePackage package in duplicatesList)
+                    ReportProgress(string.Format("PackageName: {0}, UID: {1}",package.PackageName,package.UID));
+            }
+
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+
+        private async void AddMissingUIDs_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Checking for missing UIDs and adding");
+
+            //checks
+            if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+            if ((docDuplicateCheck == null) || (dependenciesDuplicateCheck == null) || (globalDependenciesDuplicateCheck == null) || (parsedCategoryListDuplicateCheck == null))
+            {
+                ReportProgress("Lists not loaded yet for duplicate checks or adds");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            //create a flat list
+            List<DatabasePackage> allPackages = Utils.GetFlatList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, null, parsedCategoryListDuplicateCheck);
+
+            foreach (DatabasePackage packageToAddUID in allPackages)
+            {
+                if(string.IsNullOrWhiteSpace(packageToAddUID.UID))
+                {
+                    await Task.Run(() =>
+                    {
+                        packageToAddUID.UID = Utils.GenerateUID(allPackages);
+                    });
+                    ReportProgress(string.Format("Package {0} got generated UID {1}", packageToAddUID.PackageName, packageToAddUID.UID));
+                }
+            }
+
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+
+        private void SaveDatabaseDuplicateCheckButton_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Saving Database");
+
+            //checks
+            if ((docDuplicateCheck == null) || (dependenciesDuplicateCheck == null) || (globalDependenciesDuplicateCheck == null) || (parsedCategoryListDuplicateCheck == null))
+            {
+                ReportProgress("Lists not loaded yet for duplicate checks or adds");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            if(SelectModInfoSave.ShowDialog() == false)
+            {
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            XmlUtils.SaveDatabase1V1(Path.GetDirectoryName(SelectModInfoSave.FileName), docDuplicateCheck,globalDependenciesDuplicateCheck,dependenciesDuplicateCheck,parsedCategoryListDuplicateCheck);
+
+            ReportProgress("Database saved");
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion

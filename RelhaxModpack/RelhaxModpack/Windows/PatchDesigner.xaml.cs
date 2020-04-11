@@ -241,6 +241,20 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private void PatchVersionCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //only patch versions 2+ will support the followPath option
+            if(PatchVersionCombobox.SelectedIndex == 0)
+            {
+                PatchFollowPathSetting.IsChecked = false;
+                PatchFollowPathSetting.IsEnabled = false;
+            }
+            else
+            {
+                PatchFollowPathSetting.IsEnabled = true;
+            }
+        }
+
         private void DisplayPatch(Patch patch)
         {
             //reset to nothing, then only set if the patch option is valid
@@ -281,8 +295,23 @@ namespace RelhaxModpack.Windows
             if (!string.IsNullOrWhiteSpace(patch.Mode))
                 PatchModeCombobox.SelectedItem = patch.Mode;
 
-            PatchFollowPathSetting.IsChecked = patch.FollowPath;
-            if (patch.Type.Equals("regex"))
+            //set the version. it's at least version 1
+            PatchVersionCombobox.SelectedItem = patch.Version;
+
+            //only set the followPath setting if the version is > 1
+            //else it is set off by the selectedValueChanged event in PatchVersionCombobox
+            if (patch.Version > 1)
+            {
+                PatchFollowPathSetting.IsChecked = patch.FollowPath;
+            }
+            else if (patch.FollowPath && (patch.Version == 1 || !patch.Type.Equals(Patch.TypeJson)))
+            {
+                Logging.Patcher("Patch option followPath can't be enabled (not supported). Disabling.", LogLevel.Error);
+                Logging.Patcher("Version: {0}, Type: {1}", LogLevel.Error, patch.Version, patch.Type);
+                patch.FollowPath = false;
+            }
+
+            if (patch.Type.Equals(Patch.TypeRegex1) || patch.Type.Equals(Patch.TypeRegex2))
             {
                 PatchModeCombobox.IsEnabled = false;
                 if (patch.Lines == null || patch.Lines.Count() == 0)
@@ -329,6 +358,7 @@ namespace RelhaxModpack.Windows
             patch.PatchPath = PatchPathCombobox.SelectedItem as string;
             patch.Type = PatchTypeCombobox.SelectedItem as string;
             patch.Mode = PatchModeCombobox.SelectedItem as string;
+            patch.Version = (int)PatchVersionCombobox.SelectedItem;
             patch.FollowPath = (bool)PatchFollowPathSetting.IsChecked;
             patch.File = PatchFilePathTextbox.Text;
 
@@ -724,64 +754,13 @@ namespace RelhaxModpack.Windows
                     SaveApplyPatch(SelectedPatch);
                 }
 
+                //save patches to XmlDocuemnt
+                XmlDocument doc = XmlUtils.SavePatchToXmlDocument(PatchesList.Items.OfType<Patch>().ToList());
+                
                 //delete the file if it currently exists
                 if (File.Exists(SavePatchfileDialog.FileName))
                     File.Delete(SavePatchfileDialog.FileName);
 
-                //create the xml document
-                XmlDocument doc = new XmlDocument();
-                XmlElement patchHolder = doc.CreateElement("patchs");
-                doc.AppendChild(patchHolder);
-                int counter = 0;
-                foreach(Patch patch in PatchesList.Items)
-                {
-                    Logging.Patcher("[SavePatchXmlButton_Click]: Saving patch {0} of {1}: {2}", LogLevel.Info, ++counter, PatchesList.Items.Count, patch.ToString());
-                    Logging.Patcher("{0}", LogLevel.Info, patch.DumpPatchInfoForLog);
-                    XmlElement xmlPatch = doc.CreateElement("patch");
-                    patchHolder.AppendChild(xmlPatch);
-
-                    XmlElement version = doc.CreateElement("version");
-                    version.InnerText = 2.ToString();
-                    xmlPatch.AppendChild(version);
-
-                    XmlElement type = doc.CreateElement("type");
-                    type.InnerText = patch.Type;
-                    xmlPatch.AppendChild(type);
-
-                    XmlElement mode = doc.CreateElement("mode");
-                    mode.InnerText = patch.Mode;
-                    xmlPatch.AppendChild(mode);
-
-                    XmlElement patchPath = doc.CreateElement("patchPath");
-                    patchPath.InnerText = patch.PatchPath;
-                    xmlPatch.AppendChild(patchPath);
-
-                    XmlElement file = doc.CreateElement("file");
-                    file.InnerText = patch.File;
-                    xmlPatch.AppendChild(file);
-
-                    if(patch.Type.Equals("regex"))
-                    {
-                        XmlElement line = doc.CreateElement("line");
-                        line.InnerText = string.Join(",",patch.Lines);
-                        xmlPatch.AppendChild(line);
-                    }
-                    else
-                    {
-                        XmlElement line = doc.CreateElement("path");
-                        line.InnerText = patch.Path;
-                        xmlPatch.AppendChild(line);
-                    }
-
-                    XmlElement search = doc.CreateElement("search");
-                    search.InnerText = patch.Search;
-                    xmlPatch.AppendChild(search);
-
-                    XmlElement replace = doc.CreateElement("replace");
-                    replace.InnerText = Utils.MacroReplace(patch.Replace,ReplacementTypes.TextEscape);
-                    xmlPatch.AppendChild(replace);
-                }
-                
                 doc.Save(SavePatchfileDialog.FileName);
                 UnsavedChanges = false;
                 Logging.Patcher("[SavePatchXmlButton_Click]: Patch saved", LogLevel.Info);

@@ -39,11 +39,6 @@ namespace RelhaxModpack.UIComponents
         }
 
         /// <summary>
-        /// The event to subscribe to when the selection is changed
-        /// </summary>
-        public SelectionChangedEventHandler Handler;
-
-        /// <summary>
         /// Called from the database object to update the UI on a combobox selection change
         /// </summary>
         /// <param name="spc">The SelectablePakage that caused the update</param>
@@ -55,14 +50,8 @@ namespace RelhaxModpack.UIComponents
                 RelhaxComboBoxItem cbi = (RelhaxComboBoxItem)Items[i];
                 if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled)
                 {
-                    //unsubscribe before changing the selected item
-                    if (Handler != null)
-                        SelectionChanged -= Handler;
                     //change it
                     SelectedItem = cbi;
-                    //re-subscribe
-                    if (Handler != null)
-                        SelectionChanged += Handler;
                     //continue as to not uncheck this value, now that it's checked
                     continue;
                 }
@@ -72,9 +61,7 @@ namespace RelhaxModpack.UIComponents
             }
             if (!value)
             {
-                SelectionChanged -= Handler;
                 SelectedIndex = 0;
-                SelectionChanged += Handler;
             }
         }
 

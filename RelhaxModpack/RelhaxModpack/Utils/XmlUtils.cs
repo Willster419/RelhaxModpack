@@ -533,6 +533,9 @@ namespace RelhaxModpack
                     //https://stackoverflow.com/questions/18887061/getting-attribute-value-using-xelement
                     Name = categoryDocuments[i].Root.Attribute("Name").Value
                 };
+                XElement result = categoryDocuments[i].XPathSelectElement(@"/Category/Maintainers");
+                if (result != null)
+                    cat.Maintainers = result.Value.ToString();
 
                 //parse the list of dependencies from Xml for the categories into the category in list
                 Logging.Debug("[ParseDatabase1V1]: Parsing Dependency references for category {0}", cat.Name);
@@ -563,7 +566,7 @@ namespace RelhaxModpack
                 if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
                     throw new BadMemeException("Type of this list is not of IXmlSerializable");
 
-                IComponentWithID componentWithID = (IComponentWithID)listEntry;
+                IDatabaseComponent componentWithID = (IDatabaseComponent)listEntry;
 
                 //create attribute and element unknown and missing lists
                 List<string> unknownAttributes = new List<string>();
@@ -578,7 +581,7 @@ namespace RelhaxModpack
                     //check if the whitelist contains it
                     if (!listEntry.PropertiesForSerializationAttributes().Contains(attributeName))
                     {
-                        Logging.Debug("member {0} from Xml attribute does not exist in fieldInfo", attributeName);
+                        Logging.Debug("Member {0} from Xml attribute does not exist in fieldInfo", attributeName);
                         unknownAttributes.Add(attributeName);
                         continue;
                     }
@@ -2545,8 +2548,17 @@ namespace RelhaxModpack
                 XmlDocument xmlCategoryFile = new XmlDocument();
                 xmlDeclaration = xmlCategoryFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
                 xmlCategoryFile.AppendChild(xmlDeclaration);
+
                 XmlElement xmlCategoryFileRoot = xmlCategoryFile.CreateElement("Category");
-                xmlCategoryFileRoot.SetAttribute("Name", cat.Name);
+                xmlCategoryFileRoot.SetAttribute(nameof(cat.Name), cat.Name);
+
+                //create Maintainers element
+                if(!string.IsNullOrWhiteSpace(cat.Maintainers))
+                {
+                    XmlElement xmlCategoryMaintainers = xmlCategoryFile.CreateElement(nameof(cat.Maintainers));
+                    xmlCategoryMaintainers.InnerText = cat.Maintainers;
+                    xmlCategoryFileRoot.AppendChild(xmlCategoryMaintainers);
+                }
 
                 //need to incorporate the fact that categories have dependencies
                 if (cat.Dependencies.Count > 0)
@@ -2733,7 +2745,7 @@ namespace RelhaxModpack
                     NativeProcessingFile = Path.GetFileName(filename),
                     ActualPatchName = originalNameFromZip
                 };
-                Logging.Debug("adding patch from file: {0} -> original name: {1}", Path.GetFileName(filename), originalNameFromZip);
+                Logging.Debug("Adding patch from file: {0} -> original name: {1}", Path.GetFileName(filename), originalNameFromZip);
                 
                 //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
                 foreach (XmlNode property in patchNode.ChildNodes)
@@ -2750,6 +2762,9 @@ namespace RelhaxModpack
                             break;
                         case "patchPath":
                             p.PatchPath = property.InnerText.Trim();
+                            break;
+                        case "followPath":
+                            p.FollowPath = Utils.ParseBool(property.InnerText.Trim(), false);
                             break;
                         case "file":
                             p.File = property.InnerText.Trim();
@@ -2951,6 +2966,67 @@ namespace RelhaxModpack
                 }
                 atlases.Add(sc);
             }
+        }
+
+        public static XmlDocument SavePatchToXmlDocument(List<Patch> PatchesList)
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlElement patchHolder = doc.CreateElement("patchs");
+            doc.AppendChild(patchHolder);
+            int counter = 0;
+            foreach (Patch patch in PatchesList)
+            {
+                Logging.Patcher("[SavePatchToXmlDocument]: Saving patch {0} of {1}: {2}", LogLevel.Info, ++counter, PatchesList.Count, patch.ToString());
+                Logging.Patcher("{0}", LogLevel.Info, patch.DumpPatchInfoForLog);
+                XmlElement xmlPatch = doc.CreateElement("patch");
+                patchHolder.AppendChild(xmlPatch);
+
+                XmlElement version = doc.CreateElement("version");
+                version.InnerText = patch.Version.ToString();
+                xmlPatch.AppendChild(version);
+
+                XmlElement type = doc.CreateElement("type");
+                type.InnerText = patch.Type;
+                xmlPatch.AppendChild(type);
+
+                XmlElement mode = doc.CreateElement("mode");
+                mode.InnerText = patch.Mode;
+                xmlPatch.AppendChild(mode);
+
+                XmlElement patchPath = doc.CreateElement("patchPath");
+                patchPath.InnerText = patch.PatchPath;
+                xmlPatch.AppendChild(patchPath);
+
+                XmlElement followPath = doc.CreateElement("followPath");
+                followPath.InnerText = patch.Version == 1 ? false.ToString() : patch.FollowPath.ToString();
+                xmlPatch.AppendChild(followPath);
+
+                XmlElement file = doc.CreateElement("file");
+                file.InnerText = patch.File;
+                xmlPatch.AppendChild(file);
+
+                if (patch.Type.Equals("regex"))
+                {
+                    XmlElement line = doc.CreateElement("line");
+                    line.InnerText = string.Join(",", patch.Lines);
+                    xmlPatch.AppendChild(line);
+                }
+                else
+                {
+                    XmlElement line = doc.CreateElement("path");
+                    line.InnerText = patch.Path;
+                    xmlPatch.AppendChild(line);
+                }
+
+                XmlElement search = doc.CreateElement("search");
+                search.InnerText = patch.Search;
+                xmlPatch.AppendChild(search);
+
+                XmlElement replace = doc.CreateElement("replace");
+                replace.InnerText = Utils.MacroReplace(patch.Replace, ReplacementTypes.TextEscape);
+                xmlPatch.AppendChild(replace);
+            }
+            return doc;
         }
         #endregion
     }

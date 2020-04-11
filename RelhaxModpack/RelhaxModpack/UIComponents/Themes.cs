@@ -187,6 +187,15 @@ namespace RelhaxModpack.UIComponents
                 },
                 SelectedBrush = null
             },
+            RelhaxHyperlinkColorset = new ClassColorset()
+            {
+                ClassThemeDefinition = new RelhaxHyperlinkClassThemeDefinition(),
+                ForegroundBrush = new CustomBrush()
+                {
+                    IsValid = true,
+                    Brush = Brushes.Blue
+                }
+            },
             //empty definition to not apply any changes
             //colorSet object and xml object MUST exist for parsing to work!
             ControlColorset = new ClassColorset()
@@ -458,6 +467,15 @@ namespace RelhaxModpack.UIComponents
                     Brush = DarkThemeTextColor
                 }
             },
+            RelhaxHyperlinkColorset = new ClassColorset()
+            {
+                ClassThemeDefinition = new RelhaxHyperlinkClassThemeDefinition(),
+                ForegroundBrush = new CustomBrush()
+                {
+                    IsValid = true,
+                    Brush = Brushes.LightBlue
+                }
+            },
             ControlColorset = new ClassColorset()
             {
                 ClassThemeDefinition = new ControlClassThemeDefinition(),
@@ -599,6 +617,44 @@ namespace RelhaxModpack.UIComponents
                         {
                             IsValid = true,
                             Brush = DarkThemeBackground
+                        }
+                    }
+                },
+                {
+                    typeof(VersionInfo), new WindowColorset()
+                    {
+                        WindowType = typeof(VersionInfo),
+                        BackgroundBrush = new CustomBrush()
+                        {
+                            IsValid = true,
+                            Brush = DarkThemeBackground
+                        },
+                        ComponentColorsets = new Dictionary<string, ComponentColorset>()
+                        {
+                            {
+                                "VersionInfoNoButton", new ComponentColorset()
+                                {
+                                    ID = "VersionInfoNoButton",
+                                    ForegroundBrush = null,
+                                    BackgroundBrush = new CustomBrush()
+                                    {
+                                        IsValid = true,
+                                        Brush = Brushes.Red
+                                    }
+                                }
+                            },
+                            {
+                                "VersionInfoYesButton", new ComponentColorset()
+                                {
+                                    ID = "VersionInfoYesButton",
+                                    ForegroundBrush = null,
+                                    BackgroundBrush = new CustomBrush()
+                                    {
+                                        IsValid = true,
+                                        Brush = Brushes.Green
+                                    }
+                                }
+                            }
                         }
                     }
                 }

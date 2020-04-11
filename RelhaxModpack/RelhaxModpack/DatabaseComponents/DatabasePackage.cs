@@ -1,6 +1,7 @@
 ﻿using RelhaxModpack.DatabaseComponents;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace RelhaxModpack
@@ -8,7 +9,7 @@ namespace RelhaxModpack
     /// <summary>
     /// A database component is the base class for all other packages
     /// </summary>
-    public class DatabasePackage : IXmlSerializable, IComponentWithID
+    public class DatabasePackage : IDatabaseComponent, IXmlSerializable
     {
         #region Xml serialization
         /// <summary>
@@ -36,7 +37,8 @@ namespace RelhaxModpack
             nameof(PackageName),
             nameof(Enabled),
             nameof(InstallGroup),
-            nameof(PatchGroup)
+            nameof(PatchGroup),
+            //nameof(UID)
         };
 
         private static readonly List<string> PackagePropertiesToXmlParseElements = new List<string>()
@@ -52,7 +54,8 @@ namespace RelhaxModpack
             nameof(Triggers),
             nameof(DevURL),
             nameof(InternalNotes),
-            nameof(Author)
+            nameof(Author),
+            nameof(Maintainers)
         };
 
         /// <summary>
@@ -82,9 +85,29 @@ namespace RelhaxModpack
         public string PackageName { get; set; } = string.Empty;
 
         /// <summary>
+        /// Another non-changing, randomly generated unique 16 character identifier for each component in the database.
+        /// </summary>
+        /// <remarks>These fulfill the originally intended purpose of the PackageName defined back in OMC.
+        /// Once generated, the value should not be modified, and will only be removed when the package is removed.</remarks>
+        public string UID { get; set; } = string.Empty;
+
+        /// <summary>
         /// A method to keep track of the version of the package
         /// </summary>
         public string Version { get; set; } = string.Empty;
+
+        /// <summary>
+        /// A list of database managers who are known to maintain this component
+        /// </summary>
+        public string Maintainers { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Returns a list database managers who are known to maintain this component
+        /// </summary>
+        public List<string> MaintainersList
+        {
+            get { return Maintainers.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
+        }
 
         /// <summary>
         /// Used to determine when the package entry was last modified
@@ -151,7 +174,15 @@ namespace RelhaxModpack
         /// <summary>
         /// The list of triggers that this package can start (list of triggers that apply to this package)
         /// </summary>
-        public List<string> Triggers { get; set; } = new List<string>();
+        public string Triggers { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Returns a list of triggers that this component can start
+        /// </summary>
+        public List<string> TriggersList
+        {
+            get { return Triggers.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
+        }
 
         /// <summary>
         /// The URL link of where you can view the web page of the mod
@@ -170,6 +201,14 @@ namespace RelhaxModpack
         /// The level at which this package can be installed. It will be installed with other packages of the same install group at the same time
         /// </summary>
         public int InstallGroup { get; set; } = 0;
+
+        /// <summary>
+        /// The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
+        /// </summary>
+        public virtual int InstallGroupWithOffset
+        {
+            get { return InstallGroup; }
+        }
 
         /// <summary>
         /// The level at which the patches for this package can be installed. Patches will be executed with other patches of the same patch group
@@ -208,6 +247,11 @@ namespace RelhaxModpack
         /// Flag to determine if this package is the one currently downloading, used if "install while download" is true
         /// </summary>
         public bool IsCurrentlyDownloading { get; set; } = false;
+
+        /// <summary>
+        /// Flag to determine if this package failed to download from either download methods
+        /// </summary>
+        public bool DownloadFailed { get; set; } = false;
 
         //append extraction flag
         /// <summary>
@@ -283,18 +327,13 @@ namespace RelhaxModpack
             this.StartAddress = packageToCopy.StartAddress;
             this.EndAddress = packageToCopy.EndAddress;
             this.LogAtInstall = packageToCopy.LogAtInstall;
-            this.Triggers = new List<string>();
+            this.Triggers = packageToCopy.Triggers;
             this.DevURL = packageToCopy.DevURL;
             this.InstallGroup = packageToCopy.InstallGroup;
             this.PatchGroup = packageToCopy.PatchGroup;
+            this.Maintainers = packageToCopy.Maintainers;
             //don't call the property for enabled, just the internal field
             this._Enabled = packageToCopy._Enabled;
-
-            if (deep)
-            {
-                foreach (string s in packageToCopy.Triggers)
-                    this.Triggers.Add(s);
-            }
         }
         #endregion
     }
