@@ -1083,7 +1083,7 @@ namespace RelhaxModpack
                 }
 
                 //parse WoT root directory
-                Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
+                Logging.Debug("Started looking for WoT root directory");
                 string searchResult = string.Empty;
                 //only run the code if the user wants to auto find the WoT directory (which is default)
                 if(!ModpackSettings.ForceManuel)
@@ -1093,7 +1093,7 @@ namespace RelhaxModpack
 
                 if (string.IsNullOrEmpty(searchResult) || ModpackSettings.ForceManuel)
                 {
-                    Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
+                    Logging.Debug("Auto detect failed or user requests manual");
                     OpenFileDialog manualWoTFind = new OpenFileDialog()
                     {
                         InitialDirectory = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? Settings.ApplicationStartupPath : Settings.WoTDirectory,
@@ -1171,7 +1171,7 @@ namespace RelhaxModpack
                 //of the res_mods version folder i.e. 0.9.17.0.3
                 string versionTemp = XmlUtils.GetXmlStringFromXPath(versionXml, Settings.WoTVersionXmlXpath);
                 Settings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2).Trim();
-                Logging.Info("detected client version: {0}", Settings.WoTClientVersion);
+                Logging.Info("Detected client version: {0}", Settings.WoTClientVersion);
 
                 //determine if current detected version of the game is supported
                 //only if application distribution is not alpha and database distribution is not test
@@ -1227,7 +1227,7 @@ namespace RelhaxModpack
                         {
 #pragma warning disable CS0162
                             //log and inform the user
-                            Logging.Warning("current client version {0} does not exist in list: {1}", Settings.WoTClientVersion, string.Join(", ", supportedVersionsString));
+                            Logging.Warning("Current client version {0} does not exist in list: {1}", Settings.WoTClientVersion, string.Join(", ", supportedVersionsString));
                             MessageBox.Show(string.Format("{0}: {1}\n{2} {3}\n\n{4}:\n{5}",
                                 Translations.GetTranslatedString("detectedClientVersion"),//0
                                 Settings.WoTClientVersion,//1
@@ -1250,10 +1250,10 @@ namespace RelhaxModpack
                         {
                             //use index 0 of array, index 18 of string array
                             string lastInstalledDatabaseVersion = File.ReadAllText(installedfilesLogPath).Split('\n')[0];
-                            Logging.Debug("lastInstalledDatabaseVersion (pre trim): {0}", lastInstalledDatabaseVersion);
+                            Logging.Debug("LastInstalledDatabaseVersion (pre trim): {0}", lastInstalledDatabaseVersion);
                             if(!string.IsNullOrWhiteSpace(lastInstalledDatabaseVersion) && lastInstalledDatabaseVersion.Length >=18)
                                 lastInstalledDatabaseVersion = lastInstalledDatabaseVersion.Substring(18).Trim();
-                            Logging.Debug("lastInstalledDatabaseVersion (post trim): {0}", lastInstalledDatabaseVersion);
+                            Logging.Debug("LastInstalledDatabaseVersion (post trim): {0}", lastInstalledDatabaseVersion);
                             if (Settings.DatabaseVersion.Equals(lastInstalledDatabaseVersion))
                             {
                                 if (MessageBox.Show(Translations.GetTranslatedString("DatabaseVersionsSameBody"), Translations.GetTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
@@ -1268,7 +1268,7 @@ namespace RelhaxModpack
                         }
                         else
                         {
-                            Logging.Warning("installedRelhaxFiles.log does not exist, cannot notify if same database");
+                            Logging.Warning("InstalledRelhaxFiles.log does not exist, cannot notify if same database");
                         }
                     }
                     else if(ModpackSettings.NotifyIfSameDatabase)
@@ -1278,7 +1278,7 @@ namespace RelhaxModpack
                 }
             }
 
-            Logging.Debug("lastSupportedWoTVersion: {0}", lastSupportedWoTVersion);
+            Logging.Debug("LastSupportedWoTVersion: {0}", lastSupportedWoTVersion);
             //show the mod selection list
             modSelectionList = new ModSelectionList
             {
