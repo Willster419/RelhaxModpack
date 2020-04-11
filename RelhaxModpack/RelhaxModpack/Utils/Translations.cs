@@ -2653,7 +2653,7 @@ namespace RelhaxModpack
             Polish.Add("SelectionFileIssuesDisplay", "Błędy z zastosowaniem pliku kolekcji");
             French.Add("SelectionFileIssuesDisplay", TranslationNeeded);
             Spanish.Add("SelectionFileIssuesDisplay", TranslationNeeded);
-            Russian.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            Russian.Add("SelectionFileIssuesDisplay", "Ошибка применения файла предустановки");
 
             //Component: selectionFileIssues
             //alias of SelectionFileIssuesDisplay
@@ -2745,7 +2745,7 @@ namespace RelhaxModpack
             Polish.Add("VersionInfoAskText", "Czy chcesz zaktualizować teraz?");
             French.Add("VersionInfoAskText", "Voulez vous faire la mise à jour maintenant?");
             Spanish.Add("VersionInfoAskText", TranslationNeeded);
-            Russian.Add("VersionInfoAskText", TranslationNeeded);
+            Russian.Add("VersionInfoAskText", "Хотите обновить прямо сейчас?");
             #endregion
 
             #region Installer Messages
@@ -4048,7 +4048,7 @@ namespace RelhaxModpack
             Polish.Add("CleanGameCacheText", "Wyczyść pamięc podręczną gry");
             French.Add("CleanGameCacheText", TranslationNeeded);
             Spanish.Add("CleanGameCacheText", "Limpar caché del juego");
-            Russian.Add("CleanGameCacheText", TranslationNeeded);
+            Russian.Add("CleanGameCacheText", "Очистить кэш игры");
 
             //Component: cleanGameCacheProgress
             //
@@ -4057,7 +4057,7 @@ namespace RelhaxModpack
             Polish.Add("cleanGameCacheProgress", "Czyszczenie pamięci podręcznej gry");
             French.Add("cleanGameCacheProgress", TranslationNeeded);
             Spanish.Add("cleanGameCacheProgress", "Limpiando caché del juego");
-            Russian.Add("cleanGameCacheProgress", TranslationNeeded);
+            Russian.Add("cleanGameCacheProgress", "Удаляются файлы кэша игры");
 
             //Component: cleanGameCacheSuccess
             //
@@ -4075,7 +4075,7 @@ namespace RelhaxModpack
             Polish.Add("cleanGameCacheFail", "Nie udało się wyczyścić pamięci podręcznej gry");
             French.Add("cleanGameCacheFail", TranslationNeeded);
             Spanish.Add("cleanGameCacheFail", "No se ha podido limpar los archivos de caché del juego");
-            Russian.Add("cleanGameCacheFail", TranslationNeeded);
+            Russian.Add("cleanGameCacheFail", "Не удалось удалить файлы кэша игры");
             #endregion
 
             #region Add zip files Dialog
