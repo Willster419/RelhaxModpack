@@ -1753,6 +1753,7 @@ namespace RelhaxModpack.Windows
                 }
             }
 
+            ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
