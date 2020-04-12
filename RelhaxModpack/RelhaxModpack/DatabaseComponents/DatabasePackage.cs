@@ -38,7 +38,7 @@ namespace RelhaxModpack
             nameof(Enabled),
             nameof(InstallGroup),
             nameof(PatchGroup),
-            //nameof(UID)
+            nameof(UID)
         };
 
         private static readonly List<string> PackagePropertiesToXmlParseElements = new List<string>()
@@ -332,6 +332,7 @@ namespace RelhaxModpack
             this.InstallGroup = packageToCopy.InstallGroup;
             this.PatchGroup = packageToCopy.PatchGroup;
             this.Maintainers = packageToCopy.Maintainers;
+            this.UID = packageToCopy.UID;
             //don't call the property for enabled, just the internal field
             this._Enabled = packageToCopy._Enabled;
         }
