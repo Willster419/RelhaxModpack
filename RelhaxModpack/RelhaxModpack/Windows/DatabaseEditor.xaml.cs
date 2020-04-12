@@ -1382,6 +1382,9 @@ namespace RelhaxModpack.Windows
                     packageToMove = new DatabasePackage(packageToMove, false);
                 }
 
+                //also make a new UID for the package as well
+                packageToMove.UID = Utils.GenerateUID(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+
                 //the packageName needs to stay unique as well
                 int i = 0;
                 string origName = packageToMove.PackageName;
