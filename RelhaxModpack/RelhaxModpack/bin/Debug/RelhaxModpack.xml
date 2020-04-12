@@ -6093,6 +6093,11 @@
             Toggles if the user requests to add the package at a new level or in the same level as the referenced package
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.DatabaseTreeviewSelectedItem">
+            <summary>
+            The currently selected package in the editor's database tree view
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.EditorAddRemove.#ctor">
             <summary>
             Create an instance of the EditorAddRemove window
