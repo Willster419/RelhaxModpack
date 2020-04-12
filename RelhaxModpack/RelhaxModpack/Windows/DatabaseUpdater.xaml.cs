@@ -1777,7 +1777,8 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            XmlUtils.SaveDatabase1V1(Path.GetDirectoryName(SelectModInfoSave.FileName), docDuplicateCheck,globalDependenciesDuplicateCheck,dependenciesDuplicateCheck,parsedCategoryListDuplicateCheck);
+            string fullDatabasePath = Path.Combine(Path.GetDirectoryName(SelectModInfoSave.FileName), Settings.BetaDatabaseV2RootFilename);
+            XmlUtils.SaveDatabase(fullDatabasePath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Database saved");
             ToggleUI((TabController.SelectedItem as TabItem), true);
