@@ -2387,10 +2387,11 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// 
+        /// Generates a Unique IDentifier for a package using the constant defined number of string and character selections
+        /// while verifying that it's unique against a given list
         /// </summary>
-        /// <param name="allPackages"></param>
-        /// <returns></returns>
+        /// <param name="allPackages">A list of packages to test to make sure the UID is unique</param>
+        /// <returns>A guaranteed unique ID that does not exist in the list</returns>
         public static string GenerateUID(List<DatabasePackage> allPackages)
         {
             string UID = GenerateUID();
