@@ -1347,7 +1347,7 @@ namespace RelhaxModpack.Windows
             //make sure that the source and destination are not the same
             if (packageCurrentlyOver.Equals(packageToMove) && !addBelowItem)
             {
-                Logging.Editor("database packages detected to be the same, aborting dragDrop");
+                Logging.Editor("Package to add/move is the same as package currently over, aborting operation");
                 return;
             }
 
@@ -2196,6 +2196,9 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
+            if (cbi2.Package == null)
+                throw new BadMemeException("cbi2.Package is null");
+
             //make the window and show it
             EditorAddRemove addRemove = new EditorAddRemove()
             {
@@ -2204,7 +2207,8 @@ namespace RelhaxModpack.Windows
                 ParsedCategoryList = ParsedCategoryList,
                 EditOrAdd = false,
                 AddSameLevel = true,
-                SelectedPackage = null
+                SelectedPackage = null,
+                DatabaseTreeviewSelectedItem = cbi2.Package
             };
             if (!(bool)addRemove.ShowDialog())
                 return;
