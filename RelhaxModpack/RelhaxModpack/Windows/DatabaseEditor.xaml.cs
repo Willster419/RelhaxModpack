@@ -1467,7 +1467,9 @@ namespace RelhaxModpack.Windows
             SearchBox.Items.Clear();
 
             //rebuild the levels as well
+            Utils.BuildLinksRefrence(ParsedCategoryList, true);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+            Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //and keep focus over the item we just moved
             if (!realItemToMove.IsSelected)
