@@ -1390,7 +1390,7 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("New package name is {0}", LogLevel.Info, packageToMove.PackageName);
             }
 
-            Logging.Editor("for insert process, packageCurrentlyOver type is {0}, packageToMove type is {1}", LogLevel.Info, packageCurrentlyOver.GetType().Name, packageToMove.GetType().Name);
+            Logging.Editor("For insert process, packageCurrentlyOver type is {0}, packageToMove type is {1}", LogLevel.Info, packageCurrentlyOver.GetType().Name, packageToMove.GetType().Name);
             //insert packageToMove into corresponding list that it's over
             if (packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOverForInsert)
             {
@@ -1417,11 +1417,11 @@ namespace RelhaxModpack.Windows
                 GlobalDependencies.Insert(GlobalDependencies.IndexOf(packageCurrentlyOver) + 1, (DatabasePackage)packageToMove);
             }
 
-            //at this point if the destination is a selectale package, then it's refrences need to be updated
+            //at this point if the destination is a selectable package, then it's references need to be updated
             if (packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOver)
             {
-                Logging.Editor("packageCurrentlyOver is selectablePackage, updating refrences");
-                //packageToMove needs to be casted to a SelectablePackage to have it's refrences updated
+                Logging.Editor("PackageCurrentlyOver is selectablePackage, updating references");
+                //packageToMove needs to be casted to a SelectablePackage to have it's references updated
                 SelectablePackage packageToMoveCast = (SelectablePackage)packageToMove;
                 packageToMoveCast.TopParent = selectablePackageCurrentlyOver.TopParent;
                 packageToMoveCast.ParentCategory = selectablePackageCurrentlyOver.ParentCategory;
@@ -1437,7 +1437,7 @@ namespace RelhaxModpack.Windows
             }
 
             //and edit the tree view list
-            Logging.Editor("updating treeview");
+            Logging.Editor("Updating treeview");
             //same as before
             TreeViewItem realItemToMove = itemToMove;
             //if move, remove
@@ -1460,9 +1460,12 @@ namespace RelhaxModpack.Windows
             {
                 parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, realItemToMove);
             }
+
             SearchBox.Items.Clear();
+
             //rebuild the levels as well
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+
             //and keep focus over the item we just moved
             if (!realItemToMove.IsSelected)
             {
