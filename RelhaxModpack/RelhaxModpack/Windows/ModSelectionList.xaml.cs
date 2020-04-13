@@ -1898,13 +1898,73 @@ namespace RelhaxModpack.Windows
             return true;
         }
 
+        private void SaveSelectionV3(string savePath, bool silent)
+        {
+            Logging.Info(LogOptions.MethodName, "Saving selections document to {0}", savePath);
+
+            //create saved config xml layout
+            XDocument doc = new XDocument(
+                new XDeclaration("1.0", "utf-8", "yes"),
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion3V0),
+                new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
+                new XAttribute("dbVersion", Settings.DatabaseVersion),
+                new XAttribute("dbDistro", databaseVersion.ToString())));
+
+            //relhax mods root
+            doc.Element("mods").Add(new XElement("relhaxMods"));
+
+            //user mods root
+            doc.Element("mods").Add(new XElement("userMods"));
+
+            //do some cool xml stuff grumpel does
+            var nodeRelhax = doc.Descendants("relhaxMods").FirstOrDefault();
+            var nodeUserMods = doc.Descendants("userMods").FirstOrDefault();
+
+            //check relhax Mods
+            foreach (SelectablePackage package in Utils.GetFlatList(null, null, null, ParsedCategoryList))
+            {
+                //TODO: make these attributes, and have a list of attributes to save from DatabasePackage
+                /*
+                if (package.Checked)
+                {
+                    Logging.Info("Adding relhax mod " + package.PackageName);
+                    //add it to the list
+                    nodeRelhax.Add(new XElement("mod", package.PackageName));
+                }
+                else if (ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
+                {
+                    Logging.Info("Adding relhax mod {0} (not checked, but flagged for save)", package.Name);
+                    nodeRelhax.Add(new XElement("mod", package.PackageName));
+                }
+                */
+            }
+
+            //check user mods
+            foreach (SelectablePackage m in UserCategory.Packages)
+            {
+                if (m.Checked)
+                {
+                    Logging.Info("Adding user mod" + m.ZipFile);
+                    //TODO: make this attribute
+                    //add it to the list
+                    //nodeUserMods.Add(new XElement("mod", m.Name));
+                }
+            }
+            doc.Save(savePath);
+            if (!silent)
+            {
+                MessageBox.Show(Translations.GetTranslatedString("configSaveSuccess"));
+            }
+        }
+
         private void SaveSelectionV2(string savePath, bool silent)
         {
             Logging.Info("Saving selections to " + savePath);
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion),
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion2V0),
                 new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
                 new XAttribute("dbVersion", Settings.DatabaseVersion),
