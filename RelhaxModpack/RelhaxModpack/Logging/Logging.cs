@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -68,6 +69,17 @@ namespace RelhaxModpack
         /// The application is closing now
         /// </summary>
         ApplicationHalt
+    }
+
+    public enum LogOptions
+    {
+        None,
+
+        MethodName,
+
+        ClassName,
+
+        MethodAndClassName
     }
 
     /// <summary>
@@ -514,6 +526,26 @@ namespace RelhaxModpack
         public static void Info(string message, params object[] args)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Info, args);
+        }
+
+        public static void Info(LogOptions options, string message, params object[] args)
+        {
+            switch(options)
+            {
+                case LogOptions.ClassName:
+                    throw new NotImplementedException();
+
+                case LogOptions.MethodAndClassName:
+                    throw new NotImplementedException();
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Info, args);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.Application, LogLevel.Info, args);
+                    break;
+            }
         }
 
         /// <summary>

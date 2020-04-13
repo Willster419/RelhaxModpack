@@ -417,9 +417,15 @@ namespace RelhaxModpack
         public const string DatabaseOnlineVersionXpath = "//modInfoAlpha.xml/@version";
 
         /// <summary>
-        /// the latest config file version for saving the user's selection preferences
+        /// The old V2 config file version for saving the user's selection preferences
         /// </summary>
-        public const string ConfigFileVersion = "2.0";
+        [Obsolete("Selection file version 2.0 is deprecated")]
+        public const string ConfigFileVersion2V0 = "2.0";
+
+        /// <summary>
+        /// The latest config file version for saving the user's selection preferences
+        /// </summary>
+        public const string ConfigFileVersion3V0 = "3.0";
 
         /// <summary>
         /// The name of the WoT process used for detecting if it is running
