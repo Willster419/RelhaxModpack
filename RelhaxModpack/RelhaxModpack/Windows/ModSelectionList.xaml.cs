@@ -157,7 +157,7 @@ namespace RelhaxModpack.Windows
             if(ModpackSettings.SaveLastSelection)
             {
                 Logging.Debug("Saving selection from continue button, when saveLastSelection is true");
-                SaveSelection(Settings.LastInstalledConfigFilepath, true);
+                SaveSelectionV2(Settings.LastInstalledConfigFilepath, true);
             }
             continueInstallation = true;
             this.Close();
@@ -1634,7 +1634,7 @@ namespace RelhaxModpack.Windows
                 Title = Translations.GetTranslatedString("SelectSelectionFileToSave")
             };
             if((bool)selectSavePath.ShowDialog())
-                SaveSelection(selectSavePath.FileName,false);
+                SaveSelectionV2(selectSavePath.FileName,false);
         }
 
         private void OnLoadSelectionClick(object sender, RoutedEventArgs e)
@@ -1898,18 +1898,21 @@ namespace RelhaxModpack.Windows
             return true;
         }
 
-        private void SaveSelection(string savePath, bool silent)
+        private void SaveSelectionV2(string savePath, bool silent)
         {
             Logging.Info("Saving selections to " + savePath);
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date",
-                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", Settings.DatabaseVersion), new XAttribute("dbDistro", databaseVersion.ToString())));
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion),
+                new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
+                new XAttribute("dbVersion", Settings.DatabaseVersion),
+                new XAttribute("dbDistro", databaseVersion.ToString())));
 
             //relhax mods root
             doc.Element("mods").Add(new XElement("relhaxMods"));
+
             //user mods root
             doc.Element("mods").Add(new XElement("userMods"));
 
@@ -1938,7 +1941,7 @@ namespace RelhaxModpack.Windows
             {
                 if (m.Checked)
                 {
-                    Logging.Info("adding user mod" + m.ZipFile);
+                    Logging.Info("Adding user mod" + m.ZipFile);
                     //add it to the list
                     nodeUserMods.Add(new XElement("mod", m.Name));
                 }
@@ -1949,6 +1952,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show(Translations.GetTranslatedString("configSaveSuccess"));
             }
         }
+
         //checks for invalid structure in the selected packages
         //ex: a new mandatory option was added to a mod, but the user does not have it selected
         private List<SelectablePackage> IsValidStructure(List<Category> ParsedCategoryList)
