@@ -686,6 +686,12 @@
             </summary>
             <returns>The list of fields</returns>
         </member>
+        <member name="M:RelhaxModpack.DatabasePackage.AttributesToXmlParseSelectionFiles">
+            <summary>
+            Gets a list of property names that are used for saving/loading the selection V3 file format
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:RelhaxModpack.DatabasePackage.PackageName">
             <summary>
             A unique identifier for each component in the database. No two components will have the same PackageName
@@ -5478,9 +5484,14 @@
             The xpath string to get the database version info attribute from the document root
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.ConfigFileVersion">
+        <member name="F:RelhaxModpack.Settings.ConfigFileVersion2V0">
             <summary>
-            the latest config file version for saving the user's selection preferences
+            The old V2 config file version for saving the user's selection preferences
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ConfigFileVersion3V0">
+            <summary>
+            The latest config file version for saving the user's selection preferences
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.WoTProcessName">
