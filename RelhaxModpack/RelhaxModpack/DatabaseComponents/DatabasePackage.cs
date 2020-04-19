@@ -77,6 +77,25 @@ namespace RelhaxModpack
         }
         #endregion
 
+        #region Selection file processing
+        private static readonly List<string> PackagePropertiesToSaveForSelectionFile = new List<string>()
+        {
+            nameof(PackageName),
+            nameof(UID),
+            nameof(ZipFile),
+            nameof(Timestamp),
+            nameof(CRC),
+            nameof(Version)
+        };
+
+        /// <summary>
+        /// Gets a list of property names that are used for saving/loading the selection V3 file format
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> AttributesToXmlParseSelectionFiles()
+        { return new List<string>(PackagePropertiesToSaveForSelectionFile); }
+        #endregion
+
         #region Database Properties
 
         /// <summary>
