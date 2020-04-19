@@ -1997,9 +1997,11 @@ namespace RelhaxModpack.Windows
                 //need to add dependency information
                 Logging.Debug("Adding dependency information");
 
+                //recursivly get all dependency information
+                List<DatabaseLogic> logics = Utils.GetAllPackageDependencies(package);
                 XElement dependenciesHolder = new XElement("dependencies", new XAttribute("count", package.Dependencies.Count));
                 xpackage.Add(dependenciesHolder);
-                foreach(DatabaseLogic logic in package.Dependencies)
+                foreach(DatabaseLogic logic in logics)
                 {
                     if(logic.DependencyPackageRefrence == null)
                     {
@@ -2027,7 +2029,7 @@ namespace RelhaxModpack.Windows
                         }
 
                         //add the attribute to the element
-                        xmlDependency.Add(new XAttribute(propName, property.GetValue(package)));
+                        xmlDependency.Add(new XAttribute(propName, property.GetValue(dependency)));
                     }
                 }
 

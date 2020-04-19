@@ -2258,6 +2258,38 @@ namespace RelhaxModpack
                 listProperty.Add(listEntry);
             }
         }
+
+        public static List<DatabaseLogic> GetAllPackageDependencies(SelectablePackage package)
+        {
+            List<DatabaseLogic> dependencies = new List<DatabaseLogic>();
+
+            if (package.Dependencies.Count == 0)
+                return dependencies;
+
+            foreach(DatabaseLogic logic in package.Dependencies)
+            {
+                dependencies.Add(logic);
+                Dependency dep = logic.DependencyPackageRefrence as Dependency;
+                if (dep.Dependencies.Count != 0)
+                    GetAllPackageDependencies(dep, dependencies);
+            }
+
+            return dependencies;
+        }
+
+        private static void GetAllPackageDependencies(Dependency dependency, List<DatabaseLogic> dependencies)
+        {
+            if (dependency.Dependencies.Count == 0)
+                return;
+
+            foreach(DatabaseLogic logic in dependency.Dependencies)
+            {
+                dependencies.Add(logic);
+                Dependency dep = logic.DependencyPackageRefrence as Dependency;
+                if (dep.Dependencies.Count != 0)
+                    GetAllPackageDependencies(dep, dependencies);
+            }
+        }
         #endregion
 
         #region Generic Utils
