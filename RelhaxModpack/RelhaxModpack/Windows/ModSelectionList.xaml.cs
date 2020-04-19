@@ -13,6 +13,7 @@ using Microsoft.Win32;
 using RelhaxModpack.UIComponents;
 using System.Xml.Linq;
 using System.Windows.Threading;
+using System.Reflection;
 
 namespace RelhaxModpack.Windows
 {
@@ -1905,53 +1906,81 @@ namespace RelhaxModpack.Windows
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion3V0),
-                new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
-                new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", Settings.DatabaseVersion),
-                new XAttribute("dbDistro", databaseVersion.ToString())));
+                new XElement("packages",
+                    new XAttribute("ver", Settings.ConfigFileVersion3V0),
+                    new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                    new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
+                    new XAttribute("dbVersion", Settings.DatabaseVersion),
+                    new XAttribute("dbDistro", databaseVersion.ToString())));
 
             //relhax mods root
-            doc.Element("mods").Add(new XElement("relhaxMods"));
+            doc.Element("packages").Add(new XElement("relhaxPackages"));
 
             //user mods root
-            doc.Element("mods").Add(new XElement("userMods"));
+            doc.Element("packages").Add(new XElement("userPackages"));
 
             //do some cool xml stuff grumpel does
-            var nodeRelhax = doc.Descendants("relhaxMods").FirstOrDefault();
-            var nodeUserMods = doc.Descendants("userMods").FirstOrDefault();
+            XElement nodeRelhax = doc.Descendants("relhaxPackages").FirstOrDefault();
+            XElement nodeUserMods = doc.Descendants("userPackages").FirstOrDefault();
 
+            Logging.Debug("Starting selection save of Relhax packages");
             //check relhax Mods
             foreach (SelectablePackage package in Utils.GetFlatList(null, null, null, ParsedCategoryList))
             {
-                //TODO: make these attributes, and have a list of attributes to save from DatabasePackage
-                /*
+                XElement xpackage = null;
                 if (package.Checked)
                 {
-                    Logging.Info("Adding relhax mod " + package.PackageName);
-                    //add it to the list
-                    nodeRelhax.Add(new XElement("mod", package.PackageName));
+                    Logging.Info("Adding package {0}", package.PackageName);
+                    xpackage = new XElement("package");
                 }
                 else if (ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
                 {
-                    Logging.Info("Adding relhax mod {0} (not checked, but flagged for save)", package.Name);
-                    nodeRelhax.Add(new XElement("mod", package.PackageName));
+                    Logging.Info("Adding package {0} (not checked, but flagged for save)", package.Name);
+                    xpackage = new XElement("package");
                 }
-                */
+                else
+                {
+                    continue;
+                }
+
+                foreach (string propName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                {
+                    //get the property
+                    PropertyInfo property = null;
+                    try
+                    {
+                        property = package.GetType().GetProperty(propName);
+                    }
+                    catch { }
+
+                    if (property == null)
+                    {
+                        Logging.Error("Unable to get property '{0}' from DatabasePackage object, skipping!", propName);
+                        continue;
+                    }
+
+                    //add the attribute to the element
+                    xpackage.Add(new XAttribute(propName, property.GetValue(package)));
+                }
+                //add the element to the xml container element
+                nodeRelhax.Add(xpackage);
             }
 
             //check user mods
-            foreach (SelectablePackage m in UserCategory.Packages)
+            Logging.Debug("Starting save of user packages");
+            foreach (SelectablePackage package in UserCategory.Packages)
             {
-                if (m.Checked)
+                if (package.Checked)
                 {
-                    Logging.Info("Adding user mod" + m.ZipFile);
-                    //TODO: make this attribute
-                    //add it to the list
-                    //nodeUserMods.Add(new XElement("mod", m.Name));
+                    Logging.Info("Adding user package {0}", package.PackageName);
+                    nodeUserMods.Add(new XElement("package",new XAttribute("name",package.Name)));
                 }
             }
+
+            Logging.Debug("Saving document to disk");
             doc.Save(savePath);
+
+            Logging.Info("Selection save completed");
             if (!silent)
             {
                 MessageBox.Show(Translations.GetTranslatedString("configSaveSuccess"));
