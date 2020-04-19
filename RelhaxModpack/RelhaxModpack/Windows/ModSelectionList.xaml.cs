@@ -1930,6 +1930,26 @@ namespace RelhaxModpack.Windows
             return true;
         }
 
+        private void SaveV3PropertiesToXmlElement(DatabasePackage package, XElement packageXml, string propName)
+        {
+            //get the property
+            PropertyInfo property = null;
+            try
+            {
+                property = package.GetType().GetProperty(propName);
+            }
+            catch { }
+
+            if (property == null)
+            {
+                Logging.Error("Unable to get property '{0}' from DatabasePackage object, skipping!", propName);
+                return;
+            }
+
+            //add the attribute to the element
+            packageXml.Add(new XAttribute(propName, property.GetValue(package)));
+        }
+
         private void SaveSelectionV3(string savePath, bool silent)
         {
             Logging.Info(LogOptions.MethodName, "Saving selections document to {0}", savePath);
@@ -1944,15 +1964,29 @@ namespace RelhaxModpack.Windows
                     new XAttribute("dbVersion", Settings.DatabaseVersion),
                     new XAttribute("dbDistro", databaseVersion.ToString())));
 
+
+            //add global root
+            XElement nodeglobal = new XElement("globalPackages");
+            doc.Element("packages").Add(nodeglobal);
+
             //relhax mods root
-            doc.Element("packages").Add(new XElement("relhaxPackages"));
+            XElement nodeRelhax = new XElement("relhaxPackages");
+            doc.Element("packages").Add(nodeRelhax);
 
             //user mods root
-            doc.Element("packages").Add(new XElement("userPackages"));
+            XElement nodeUserMods = new XElement("userPackages");
+            doc.Element("packages").Add(nodeUserMods);
 
-            //do some cool xml stuff grumpel does
-            XElement nodeRelhax = doc.Descendants("relhaxPackages").FirstOrDefault();
-            XElement nodeUserMods = doc.Descendants("userPackages").FirstOrDefault();
+            //add global packages
+            Logging.Debug("Saving global dependencies to document");
+            foreach(DatabasePackage globalPackage in GlobalDependencies)
+            {
+                XElement xpackageGlobal = new XElement("package");
+                foreach (string propName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                {
+                    SaveV3PropertiesToXmlElement(globalPackage, xpackageGlobal, propName);
+                }
+            }
 
             //check relhax Mods
             Logging.Debug("Starting selection save of Relhax packages");
@@ -1976,31 +2010,16 @@ namespace RelhaxModpack.Windows
 
                 foreach (string propName in DatabasePackage.AttributesToXmlParseSelectionFiles())
                 {
-                    //get the property
-                    PropertyInfo property = null;
-                    try
-                    {
-                        property = package.GetType().GetProperty(propName);
-                    }
-                    catch { }
-
-                    if (property == null)
-                    {
-                        Logging.Error("Unable to get property '{0}' from DatabasePackage object, skipping!", propName);
-                        continue;
-                    }
-
-                    //add the attribute to the element
-                    xpackage.Add(new XAttribute(propName, property.GetValue(package)));
+                    SaveV3PropertiesToXmlElement(package, xpackage, propName);
                 }
 
                 //need to add dependency information
                 Logging.Debug("Adding dependency information");
 
-                //recursivly get all dependency information
+                //recursively get all dependency information
                 List<DatabaseLogic> logics = Utils.GetAllPackageDependencies(package);
                 XElement dependenciesHolder = new XElement("dependencies", new XAttribute("count", package.Dependencies.Count));
-                xpackage.Add(dependenciesHolder);
+
                 foreach(DatabaseLogic logic in logics)
                 {
                     if(logic.DependencyPackageRefrence == null)
@@ -2014,24 +2033,11 @@ namespace RelhaxModpack.Windows
 
                     foreach (string propName in DatabasePackage.AttributesToXmlParseSelectionFiles())
                     {
-                        //get the property
-                        PropertyInfo property = null;
-                        try
-                        {
-                            property = package.GetType().GetProperty(propName);
-                        }
-                        catch { }
-
-                        if (property == null)
-                        {
-                            Logging.Error("Unable to get property '{0}' from Dependency object, skipping!", propName);
-                            continue;
-                        }
-
-                        //add the attribute to the element
-                        xmlDependency.Add(new XAttribute(propName, property.GetValue(dependency)));
+                        SaveV3PropertiesToXmlElement(dependency, xmlDependency, propName);
                     }
+                    dependenciesHolder.Add(xmlDependency);
                 }
+                xpackage.Add(dependenciesHolder);
 
                 //add the element to the xml container element
                 nodeRelhax.Add(xpackage);
@@ -2049,6 +2055,8 @@ namespace RelhaxModpack.Windows
             }
 
             Logging.Debug("Saving document to disk");
+            if (File.Exists(savePath))
+                File.Delete(savePath);
             doc.Save(savePath);
 
             Logging.Info("Selection save completed");
