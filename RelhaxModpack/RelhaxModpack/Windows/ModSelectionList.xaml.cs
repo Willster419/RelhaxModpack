@@ -1746,6 +1746,9 @@ namespace RelhaxModpack.Windows
                 case "2.0":
                     return LoadSelectionV2(document, silent);
 
+                case "3.0":
+                    return LoadSelectionV3(document, silent);
+
                 default:
                     //log we don't know wtf it is
                     Logging.Warning("Unknown selection version: " + selectionVersion + ", aborting");
@@ -1753,6 +1756,34 @@ namespace RelhaxModpack.Windows
                         MessageBox.Show(string.Format(Translations.GetTranslatedString("unknownselectionFileFormat"),selectionVersion));
                     return false;
             }
+        }
+
+        private bool LoadSelectionV3(XmlDocument document, bool silent)
+        {
+            //first uncheck everyting
+            Utils.ClearSelections(ParsedCategoryList);
+
+            //get a list of all the mods currently in the selection
+            XmlNodeList xmlSelections = document.SelectNodes("/packages/relhaxPackages/package");
+            XmlNodeList xmluserSelections = document.SelectNodes("/packages/userPackages/package");
+
+            //logging
+            Logging.Debug("xmlSelections count: {0}", xmlSelections.Count);
+            Logging.Debug("xmluserSelections count: {0}", xmluserSelections.Count);
+
+            //save a list string of all the packagenames in the list for later
+            List<string> stringSelections = new List<string>();
+            List<string> stringUserSelections = new List<string>();
+            List<string> disabledMods = new List<string>();
+            List<SelectablePackage> brokenMods = null;
+
+            foreach (XmlNode node in xmlSelections)
+                stringSelections.Add(node.InnerText);
+            foreach (XmlNode node in xmluserSelections)
+                stringUserSelections.Add(node.InnerText);
+
+            //TODO
+            return true;
         }
 
         private bool LoadSelectionV2(XmlDocument document, bool silent)
@@ -1923,8 +1954,8 @@ namespace RelhaxModpack.Windows
             XElement nodeRelhax = doc.Descendants("relhaxPackages").FirstOrDefault();
             XElement nodeUserMods = doc.Descendants("userPackages").FirstOrDefault();
 
-            Logging.Debug("Starting selection save of Relhax packages");
             //check relhax Mods
+            Logging.Debug("Starting selection save of Relhax packages");
             foreach (SelectablePackage package in Utils.GetFlatList(null, null, null, ParsedCategoryList))
             {
                 XElement xpackage = null;
@@ -1962,6 +1993,44 @@ namespace RelhaxModpack.Windows
                     //add the attribute to the element
                     xpackage.Add(new XAttribute(propName, property.GetValue(package)));
                 }
+
+                //need to add dependency information
+                Logging.Debug("Adding dependency information");
+
+                XElement dependenciesHolder = new XElement("dependencies", new XAttribute("count", package.Dependencies.Count));
+                xpackage.Add(dependenciesHolder);
+                foreach(DatabaseLogic logic in package.Dependencies)
+                {
+                    if(logic.DependencyPackageRefrence == null)
+                    {
+                        Logging.Error("Failed to get reference for dependency '{0}' of package '{1}'", logic.PackageName, package.PackageName);
+                        break;
+                    }
+
+                    XElement xmlDependency = new XElement("dependency");
+                    DatabasePackage dependency = logic.DependencyPackageRefrence;
+
+                    foreach (string propName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                    {
+                        //get the property
+                        PropertyInfo property = null;
+                        try
+                        {
+                            property = package.GetType().GetProperty(propName);
+                        }
+                        catch { }
+
+                        if (property == null)
+                        {
+                            Logging.Error("Unable to get property '{0}' from Dependency object, skipping!", propName);
+                            continue;
+                        }
+
+                        //add the attribute to the element
+                        xmlDependency.Add(new XAttribute(propName, property.GetValue(package)));
+                    }
+                }
+
                 //add the element to the xml container element
                 nodeRelhax.Add(xpackage);
             }
