@@ -1758,6 +1758,56 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private bool IsSelectionV3PackageOutOfDate(DatabasePackage packageFromSelection, DatabasePackage packageFromDatabase)
+        {
+            /*
+            nameof(ZipFile),
+            nameof(Timestamp),
+            nameof(CRC),
+            nameof(Version)
+            */
+            Logging.Info("Comparing package: {0}", packageFromDatabase);
+
+            Logging.Debug("Selection zipfile: {0}", packageFromSelection.ZipFile);
+            Logging.Debug("Database zipfile:  {0}", packageFromDatabase.ZipFile);
+            if (!packageFromSelection.ZipFile.Equals(packageFromDatabase.ZipFile))
+            {
+                Logging.Info("ZipFile is out of date");
+                return true;
+            }
+
+            if (!packageFromSelection.CRC.Equals(packageFromDatabase.CRC))
+            {
+                Logging.Info("CRC is out of date");
+                return true;
+            }
+
+            if (!packageFromSelection.Version.Equals(packageFromDatabase.Version))
+            {
+                Logging.Info("Version is out of date");
+                return true;
+            }
+
+            if (!packageFromSelection.Timestamp.Equals(packageFromDatabase.Timestamp))
+            {
+                Logging.Info("Timestamp is out of date");
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsPackageNameOutOfDate(DatabasePackage packageFromSelection, DatabasePackage packageFromDatabase)
+        {
+            if (!packageFromSelection.PackageName.Equals(packageFromDatabase.PackageName))
+            {
+                Logging.Warning("The packageName is out of date. Selection = '{0}', Database = '{1}'", packageFromSelection.PackageName, packageFromDatabase.PackageName);
+                return true;
+            }
+            else
+                return false;
+        }
+
         private bool LoadSelectionV3(XmlDocument document, bool silent)
         {
             //first uncheck everyting
@@ -1766,24 +1816,165 @@ namespace RelhaxModpack.Windows
             //get a list of all the mods currently in the selection
             XmlNodeList xmlSelections = document.SelectNodes("/packages/relhaxPackages/package");
             XmlNodeList xmluserSelections = document.SelectNodes("/packages/userPackages/package");
+            XmlNodeList xmlGlobalSelections = document.SelectNodes("/packages/globalPackages/package");
 
             //logging
             Logging.Debug("xmlSelections count: {0}", xmlSelections.Count);
             Logging.Debug("xmluserSelections count: {0}", xmluserSelections.Count);
+            Logging.Debug("xmlGlobalSelections count: {0}", xmlGlobalSelections.Count);
 
             //save a list string of all the packagenames in the list for later
-            List<string> stringSelections = new List<string>();
-            List<string> stringUserSelections = new List<string>();
-            List<string> disabledMods = new List<string>();
-            List<SelectablePackage> brokenMods = null;
+            List<DatabasePackage> globalPackages = new List<DatabasePackage>();
+            List<Dependency> allDependenciesInSelectionFile = new List<Dependency>();
 
-            foreach (XmlNode node in xmlSelections)
-                stringSelections.Add(node.InnerText);
-            foreach (XmlNode node in xmluserSelections)
-                stringUserSelections.Add(node.InnerText);
+            List<SelectablePackage> packagesFromDatabase = Utils.GetFlatSelectablePackageList(ParsedCategoryList);
 
-            //TODO
+            List<SelectablePackage> brokenStructurePackages = null;
+            List<SelectablePackage> packagesFromSelection = new List<SelectablePackage>();
+            List<SelectablePackage> removedPackages = new List<SelectablePackage>();
+            List<SelectablePackage> disabledPackages = new List<SelectablePackage>();
+
+            //bools for determing if stuff is out of date
+            bool globalsOutOfDate = false;
+            bool packagesOutOfDate = false;
+            bool packageNamesOutOfDate = false;
+
+            //get all the globals and check if they are out of date
+            Logging.Debug("Parsing global packages from selection file");
+            foreach(XmlElement globalXml in xmlGlobalSelections)
+            {
+                DatabasePackage package = new DatabasePackage();
+
+                foreach (string propertyName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                {
+                    LoadV3PropertiesFromXml(package, globalXml, propertyName);
+                }
+
+                globalPackages.Add(package);
+            }
+
+            //foreach selection, build a package entry for it. compare it with db to check if it's been updated
+            Logging.Debug("Parsing selectablePackages from selection file");
+            foreach(XmlElement selection in xmlSelections)
+            {
+                SelectablePackage package = new SelectablePackage();
+                
+                //add properties to it
+                foreach(string propertyName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                {
+                    LoadV3PropertiesFromXml(package, selection, propertyName);
+                }
+
+                //get all the dependencies and save them off to a later list
+                XmlNodeList xmldependencies = document.SelectNodes("dependencies/dependency");
+                if (xmldependencies.Count > 0)
+                    Logging.Debug("Parsing dependencies used in package {0}", package.PackageName);
+                foreach (XmlElement dependencyXml in xmldependencies)
+                {
+                    Dependency dependency = new Dependency();
+
+                    foreach (string propertyName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                    {
+                        LoadV3PropertiesFromXml(dependency, dependencyXml, propertyName);
+                    }
+
+                    if(allDependenciesInSelectionFile.Find(dep => dep.UID.Equals(dependency.UID)) == null)
+                        allDependenciesInSelectionFile.Add(dependency);
+                }
+
+                packagesFromSelection.Add(package);
+            }
+
+            //select all the components based on the list from parsed selection file
+            Logging.Debug("Processing packages for selection");
+            foreach(SelectablePackage packageFromSelection in packagesFromSelection)
+            {
+                //get the package object from the parsed database list, based on UID property
+                SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
+
+                //if it's null, then the package was removed
+                if(packageFromDatabase == null)
+                {
+                    Logging.Info("Package {0} was removed from the database. UID={1}", packageFromSelection.PackageName, packageFromSelection.UID);
+                    removedPackages.Add(packageFromSelection);
+                    packagesOutOfDate = true;
+                    continue;
+                }
+
+                //if the package in the database was set invisible, then treat it as removed
+                //unless force visible is on
+
+
+                //if the package in the database was set disabled, then don't check it and packagesOutOfDate = true
+                //unless force enabled is on
+                //and inside that if keep disabled selections is on, then note for that
+            }
+
+            //parse user selections
+            //inside, check if file exists and if md5 is the same
+
+            //determine if packages are out of date
+            if (GlobalDependencies.Count != globalPackages.Count)
+                globalsOutOfDate = true;
+
+            if (!globalsOutOfDate)
+            {
+                //compare each package and check if it's out of date
+                foreach (DatabasePackage globalDependencyFromSelection in globalPackages)
+                {
+                    DatabasePackage globalDependency = GlobalDependencies.Find(pack => pack.UID.Equals(globalDependencyFromSelection.UID));
+                    if (globalDependencyFromSelection == null)
+                    {
+                        Logging.Info("Package {0} was not found in list database GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                        globalsOutOfDate = true;
+                        break;
+                    }
+                    if (IsSelectionV3PackageOutOfDate(globalDependencyFromSelection, globalDependency))
+                    {
+                        Logging.Info("Package {0} is out of date from list of GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                        globalsOutOfDate = true;
+                        break;
+                    }
+                }
+            }
+
+            //check if dependencies are out of date
+
+            //check if packages are out of date
+            //inside, additionally check if packageName is out of date (not included for if package itself is out of date)
+
+            //for each section out of date, update the selection xml file and resave (make sure to backup the old one as <name>_old.xml)
             return true;
+        }
+
+        private void LoadV3PropertiesFromXml(DatabasePackage package, XmlElement packageXml, string propertyName)
+        {
+            //get the propertyInfo of that name element
+            PropertyInfo property = null;
+            try
+            { property = package.GetType().GetProperty(propertyName); }
+            catch { }
+
+            if (property == null)
+            {
+                Logging.Error("Unable to get property '{0}' from SelectablePackage object, skipping!", propertyName);
+                return;
+            }
+
+            //get string value from xml
+            string propertyValue = packageXml.Attributes[propertyName].InnerXml;
+            if (string.IsNullOrEmpty(propertyValue))
+            {
+                Logging.Error("Xml property '{0}' from SelectablePackage is empty, skipping!", propertyName);
+                return;
+            }
+
+            //add the property value
+            if (!Utils.SetObjectProperty(package, property, propertyValue))
+            {
+                Logging.Error("Unable to set property '{0}' value from SelectablePackage object, skipping!", propertyName);
+                return;
+            }
         }
 
         private bool LoadSelectionV2(XmlDocument document, bool silent)
