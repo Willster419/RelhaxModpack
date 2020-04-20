@@ -2050,7 +2050,11 @@ namespace RelhaxModpack.Windows
                 if (package.Checked)
                 {
                     Logging.Info("Adding user package {0}", package.PackageName);
-                    nodeUserMods.Add(new XElement("package",new XAttribute("name",package.Name)));
+                    XElement packagee = new XElement("package", new XAttribute("name", package.Name));
+                    string zipFilepath = Path.Combine(Settings.RelhaxUserModsFolderPath, string.Format("{0}.zip", package.Name));
+                    string fileCRC = Utils.CreateMD5Hash(zipFilepath);
+                    packagee.Add(new XAttribute("crc", fileCRC));
+                    nodeUserMods.Add(packagee);
                 }
             }
 
