@@ -1761,13 +1761,7 @@ namespace RelhaxModpack.Windows
 
         private bool IsSelectionV3PackageOutOfDate(DatabasePackage packageFromSelection, DatabasePackage packageFromDatabase)
         {
-            /*
-            nameof(ZipFile),
-            nameof(Timestamp),
-            nameof(CRC),
-            nameof(Version)
-            */
-            Logging.Info("Comparing package: {0}", packageFromDatabase);
+            Logging.Info("Comparing package: {0}", packageFromDatabase.PackageName);
 
             Logging.Debug("Selection ZipFile: {0}", packageFromSelection.ZipFile);
             Logging.Debug("Database ZipFile:  {0}", packageFromDatabase.ZipFile);
@@ -1801,6 +1795,13 @@ namespace RelhaxModpack.Windows
                 return true;
             }
 
+            Logging.Debug("Selection Enabled: {0}", packageFromSelection.Enabled);
+            Logging.Debug("Database Enabled:  {0}", packageFromDatabase.Enabled);
+            if (!packageFromSelection.Enabled.Equals(packageFromDatabase.Enabled))
+            {
+                Logging.Info("Enabled is out of date");
+                return true;
+            }
             return false;
         }
 
@@ -1941,7 +1942,7 @@ namespace RelhaxModpack.Windows
                 {
                     if (!packageFromDatabase.Enabled)
                     {
-                        Logging.Info("Package {0} was disabled since last selection save, won't be checked");
+                        Logging.Info("Package {0} is disabled in database and still exists in selection. It won't be checked");
                         disabledPackages.Add(packageFromSelection);
                         //if setting is high for keeping disabled packages, then don't remove it from selection file
                         if (ModpackSettings.SaveDisabledMods)
@@ -2404,8 +2405,8 @@ namespace RelhaxModpack.Windows
 
 
             //add global root
-            XElement nodeglobal = new XElement("globalPackages");
-            doc.Element("packages").Add(nodeglobal);
+            XElement nodeGlobal = new XElement("globalPackages");
+            doc.Element("packages").Add(nodeGlobal);
 
             //relhax mods root
             XElement nodeRelhax = new XElement("relhaxPackages");
@@ -2424,7 +2425,7 @@ namespace RelhaxModpack.Windows
                 {
                     SaveV3PropertiesToXmlElement(globalPackage, xpackageGlobal, propName);
                 }
-                nodeglobal.Add(xpackageGlobal);
+                nodeGlobal.Add(xpackageGlobal);
             }
 
             //check relhax Mods
