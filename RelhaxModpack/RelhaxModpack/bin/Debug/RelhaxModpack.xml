@@ -510,6 +510,11 @@
             </summary>
             <returns>Try if any package is selected, false otherwise</returns>
         </member>
+        <member name="P:RelhaxModpack.Category.IsAnyPackageCheckedEnabledValid">
+            <summary>
+            Returns true if at least one package is enabled and checked from the root to the category
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.DatabaseComponents.IDatabaseComponent">
             <summary>
             An interface for all components in the database
@@ -673,18 +678,6 @@
             </summary>
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
-        </member>
-        <member name="M:RelhaxModpack.DatabasePackage.FieldsToXmlParseAttributes">
-            <summary>
-            Get the list of fields in the class that can be parsed as xml attributes
-            </summary>
-            <returns>The list of fields</returns>
-        </member>
-        <member name="M:RelhaxModpack.DatabasePackage.FieldsToXmlParseNodes">
-            <summary>
-            Get the list of fields in the class that can be parsed as xml elements
-            </summary>
-            <returns>The list of fields</returns>
         </member>
         <member name="M:RelhaxModpack.DatabasePackage.AttributesToXmlParseSelectionFiles">
             <summary>
@@ -915,18 +908,6 @@
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
-        <member name="M:RelhaxModpack.Dependency.FieldsToXmlParseAttributes">
-            <summary>
-            Gets a list of fields (including from base classes) that can be parsed as xml attributes
-            </summary>
-            <returns>The string list</returns>
-        </member>
-        <member name="M:RelhaxModpack.Dependency.FieldsToXmlParseNodes">
-            <summary>
-            Gets a list of fields (including from base classes) that can be parsed as xml elements
-            </summary>
-            <returns>The string list</returns>
-        </member>
         <member name="P:RelhaxModpack.Dependency.DatabasePackageLogic">
             <summary>
             List of linked mods and configs that use this dependency at install time
@@ -1121,18 +1102,6 @@
             </summary>
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
-        </member>
-        <member name="M:RelhaxModpack.SelectablePackage.FieldsToXmlParseAttributes">
-            <summary>
-            Gets a list of fields (including from base classes) that can be parsed as xml attributes
-            </summary>
-            <returns>The string list</returns>
-        </member>
-        <member name="M:RelhaxModpack.SelectablePackage.FieldsToXmlParseNodes">
-            <summary>
-            Gets a list of fields (including from base classes) that can be parsed as xml elements
-            </summary>
-            <returns>The string list</returns>
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.#ctor">
             <summary>
@@ -1426,6 +1395,12 @@
             Check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
             </summary>
             <returns>True if another package at this level is checked and enabled, false otherwise</returns>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.IsStructureValid">
+            <summary>
+            Returns true if the structure above and below this package is valid (all mandatory child options checked, parent checked), false otherwise
+            </summary>
+            <remarks>This assumes that the database linking/reference code has been run, otherwise a null exception will occur</remarks>
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
             <summary>
