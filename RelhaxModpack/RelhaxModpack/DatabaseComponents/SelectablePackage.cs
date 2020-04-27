@@ -523,6 +523,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         public override int InstallGroupWithOffset
         {
             get
