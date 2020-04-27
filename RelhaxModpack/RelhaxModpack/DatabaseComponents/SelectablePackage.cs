@@ -749,6 +749,67 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Returns true if the structure above and below this package is valid (all mandatory child options checked, parent checked), false otherwise
+        /// </summary>
+        /// <remarks>This assumes that the database linking/reference code has been run, otherwise a null exception will occur</remarks>
+        public bool IsStructureValid
+        {
+            get
+            {
+                if (this.Checked && !this.Parent.Checked)
+                    return false;
+
+                bool hasSingles = false;
+                bool singleSelected = false;
+                bool hasDD1 = false;
+                bool DD1Selected = false;
+                bool hasDD2 = false;
+                bool DD2Selected = false;
+
+                //first check if this package has any of these children type
+                foreach (SelectablePackage childPackage in this.Packages)
+                {
+                    if ((childPackage.Type == SelectionTypes.single1) && childPackage.Enabled)
+                    {
+                        hasSingles = true;
+                        //check if the child package is selected. it's fine to overwrite the bool cause we're
+                        //just wanting to know if *any* child packages of this type are checked
+                        if (childPackage.Checked)
+                            singleSelected = true;
+                    }
+                    else if ((childPackage.Type == SelectionTypes.single_dropdown1) && childPackage.Enabled)
+                    {
+                        hasDD1 = true;
+                        if (childPackage.Checked)
+                            DD1Selected = true;
+                    }
+                    else if (childPackage.Type == SelectionTypes.single_dropdown2 && childPackage.Enabled)
+                    {
+                        hasDD2 = true;
+                        if (childPackage.Checked)
+                            DD2Selected = true;
+                    }
+                }
+
+                //now make sure that for each of the above types, at least one is checked
+                if (hasSingles && !singleSelected)
+                {
+                    return false;
+                }
+                if (hasDD1 && !DD1Selected)
+                {
+                    return false;
+                }
+                if (hasDD2 && !DD2Selected)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
         /// </summary>
         /// <param name="packageToCopyFrom">The package to copy the information from</param>

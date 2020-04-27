@@ -165,6 +165,23 @@ namespace RelhaxModpack
 
             return false;
         }
+
+        /// <summary>
+        /// Returns true if at least one package is enabled and checked from the root to the category
+        /// </summary>
+        public bool IsAnyPackageCheckedEnabledValid
+        {
+            get
+            {
+                bool anyPackagesSelected = false;
+                foreach (SelectablePackage sp in this.Packages)
+                {
+                    if (sp.Enabled && sp.Checked)
+                        anyPackagesSelected = true;
+                }
+                return anyPackagesSelected;
+            }
+        }
         #endregion
     }
 }
