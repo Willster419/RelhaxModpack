@@ -548,6 +548,7 @@ namespace RelhaxModpack.Windows
                     InitDatabaseUI(ParsedCategoryList);
                     //link everything again now that the category exists
                     Utils.BuildLinksRefrence(ParsedCategoryList, false);
+                    Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
                     //initialize the user mods
                     InitUsermods();
                 });
@@ -1635,7 +1636,7 @@ namespace RelhaxModpack.Windows
                 Title = Translations.GetTranslatedString("SelectSelectionFileToSave")
             };
             if((bool)selectSavePath.ShowDialog())
-                SaveSelectionV2(selectSavePath.FileName,false);
+                SaveSelectionV3(selectSavePath.FileName,false);
         }
 
         private void OnLoadSelectionClick(object sender, RoutedEventArgs e)
@@ -2423,6 +2424,7 @@ namespace RelhaxModpack.Windows
                 {
                     SaveV3PropertiesToXmlElement(globalPackage, xpackageGlobal, propName);
                 }
+                nodeglobal.Add(xpackageGlobal);
             }
 
             //check relhax Mods
@@ -2455,6 +2457,7 @@ namespace RelhaxModpack.Windows
                 //recursively get all dependency information
                 List<DatabaseLogic> logics = Utils.GetAllPackageDependencies(package);
                 XElement dependenciesHolder = new XElement("dependencies", new XAttribute("count", package.Dependencies.Count));
+                List<DatabasePackage> dependencies = new List<DatabasePackage>();
 
                 foreach(DatabaseLogic logic in logics)
                 {
@@ -2467,11 +2470,17 @@ namespace RelhaxModpack.Windows
                     XElement xmlDependency = new XElement("dependency");
                     DatabasePackage dependency = logic.DependencyPackageRefrence;
 
-                    foreach (string propName in dependency.AttributesToXmlParseSelectionFiles())
+                    //make sure the dependency is not already in the list
+                    DatabasePackage selectedDependency = dependencies.Find(dep => dep.UID.Equals(dependency.UID));
+                    if (selectedDependency == null)
                     {
-                        SaveV3PropertiesToXmlElement(dependency, xmlDependency, propName);
+                        foreach (string propName in dependency.AttributesToXmlParseSelectionFiles())
+                        {
+                            SaveV3PropertiesToXmlElement(dependency, xmlDependency, propName);
+                        }
+                        dependenciesHolder.Add(xmlDependency);
+                        dependencies.Add(dependency);
                     }
-                    dependenciesHolder.Add(xmlDependency);
                 }
                 xpackage.Add(dependenciesHolder);
 
@@ -2487,8 +2496,7 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Info("Adding user package {0}", package.PackageName);
                     XElement packagee = new XElement("package", new XAttribute("name", package.Name));
-                    string zipFilepath = Path.Combine(Settings.RelhaxUserModsFolderPath, string.Format("{0}.zip", package.Name));
-                    string fileCRC = Utils.CreateMD5Hash(zipFilepath);
+                    string fileCRC = Utils.CreateMD5Hash(package.ZipFile);
                     packagee.Add(new XAttribute("crc", fileCRC));
                     nodeUserMods.Add(packagee);
                 }
