@@ -1681,7 +1681,7 @@ namespace RelhaxModpack.Windows
                         MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                         return;
                     }
-                    LoadSelection(doc,false);
+                    LoadSelection(doc,false, selectLoadPath.FileName);
                 }
             }
             else
@@ -1734,7 +1734,7 @@ namespace RelhaxModpack.Windows
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
 
-        private bool LoadSelection(XmlDocument document, bool silent)
+        private bool LoadSelection(XmlDocument document, bool silent, string loadPath = null)
         {
             //get the string version of the document, determine what to do from there
             string selectionVersion;
@@ -1747,7 +1747,7 @@ namespace RelhaxModpack.Windows
                     return LoadSelectionV2(document, silent);
 
                 case "3.0":
-                    return LoadSelectionV3(document, silent);
+                    return LoadSelectionV3(document, silent, loadPath);
 
                 default:
                     //log we don't know wtf it is
@@ -1768,26 +1768,32 @@ namespace RelhaxModpack.Windows
             */
             Logging.Info("Comparing package: {0}", packageFromDatabase);
 
-            Logging.Debug("Selection zipfile: {0}", packageFromSelection.ZipFile);
-            Logging.Debug("Database zipfile:  {0}", packageFromDatabase.ZipFile);
+            Logging.Debug("Selection ZipFile: {0}", packageFromSelection.ZipFile);
+            Logging.Debug("Database ZipFile:  {0}", packageFromDatabase.ZipFile);
             if (!packageFromSelection.ZipFile.Equals(packageFromDatabase.ZipFile))
             {
                 Logging.Info("ZipFile is out of date");
                 return true;
             }
 
+            Logging.Debug("Selection CRC: {0}", packageFromSelection.CRC);
+            Logging.Debug("Database CRC:  {0}", packageFromDatabase.CRC);
             if (!packageFromSelection.CRC.Equals(packageFromDatabase.CRC))
             {
                 Logging.Info("CRC is out of date");
                 return true;
             }
 
+            Logging.Debug("Selection Version: {0}", packageFromSelection.Version);
+            Logging.Debug("Database Version:  {0}", packageFromDatabase.Version);
             if (!packageFromSelection.Version.Equals(packageFromDatabase.Version))
             {
                 Logging.Info("Version is out of date");
                 return true;
             }
 
+            Logging.Debug("Selection Timestamp: {0}", packageFromSelection.Timestamp);
+            Logging.Debug("Database Timestamp:  {0}", packageFromDatabase.Timestamp);
             if (!packageFromSelection.Timestamp.Equals(packageFromDatabase.Timestamp))
             {
                 Logging.Info("Timestamp is out of date");
@@ -1808,9 +1814,9 @@ namespace RelhaxModpack.Windows
                 return false;
         }
 
-        private bool LoadSelectionV3(XmlDocument document, bool silent)
+        private bool LoadSelectionV3(XmlDocument document, bool silent, string loadPath)
         {
-            //first uncheck everyting
+            //first uncheck everything
             Utils.ClearSelections(ParsedCategoryList);
 
             //get a list of all the mods currently in the selection
@@ -1823,115 +1829,202 @@ namespace RelhaxModpack.Windows
             Logging.Debug("xmluserSelections count: {0}", xmluserSelections.Count);
             Logging.Debug("xmlGlobalSelections count: {0}", xmlGlobalSelections.Count);
 
-            //save a list string of all the packagenames in the list for later
-            List<DatabasePackage> globalPackages = new List<DatabasePackage>();
-            List<Dependency> allDependenciesInSelectionFile = new List<Dependency>();
+            //save a list of all the packages for later
+            List<DatabasePackage> globalPackagesFromSelection = new List<DatabasePackage>();
+            List<Dependency> allDependenciesFromSelection = new List<Dependency>();
+            List<DatabasePackage> userPackagesFromSelection = new List<DatabasePackage>();
+            List<SelectablePackage> packagesFromSelection = new List<SelectablePackage>();
 
             List<SelectablePackage> packagesFromDatabase = Utils.GetFlatSelectablePackageList(ParsedCategoryList);
 
-            List<SelectablePackage> brokenStructurePackages = null;
-            List<SelectablePackage> packagesFromSelection = new List<SelectablePackage>();
+            List<SelectablePackage> brokenStructurePackages = new List<SelectablePackage>();
             List<SelectablePackage> removedPackages = new List<SelectablePackage>();
             List<SelectablePackage> disabledPackages = new List<SelectablePackage>();
+            List<DatabasePackage> removedUserPackages = new List<DatabasePackage>();
 
-            //bools for determing if stuff is out of date
+            //bools for determining if stuff is out of date
             bool globalsOutOfDate = false;
+            bool packageDependenciesOutOfDate = false;
             bool packagesOutOfDate = false;
             bool packageNamesOutOfDate = false;
+            bool userOutOfDate = false;
 
             //get all the globals and check if they are out of date
             Logging.Debug("Parsing global packages from selection file");
-            foreach(XmlElement globalXml in xmlGlobalSelections)
+            foreach (XmlElement globalXml in xmlGlobalSelections)
             {
                 DatabasePackage package = new DatabasePackage();
 
-                foreach (string propertyName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                foreach (string propertyName in package.AttributesToXmlParseSelectionFiles())
                 {
                     LoadV3PropertiesFromXml(package, globalXml, propertyName);
                 }
 
-                globalPackages.Add(package);
+                globalPackagesFromSelection.Add(package);
             }
 
             //foreach selection, build a package entry for it. compare it with db to check if it's been updated
             Logging.Debug("Parsing selectablePackages from selection file");
-            foreach(XmlElement selection in xmlSelections)
+            foreach (XmlElement selection in xmlSelections)
             {
                 SelectablePackage package = new SelectablePackage();
-                
+
                 //add properties to it
-                foreach(string propertyName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                foreach (string propertyName in package.AttributesToXmlParseSelectionFiles())
                 {
                     LoadV3PropertiesFromXml(package, selection, propertyName);
                 }
 
                 //get all the dependencies and save them off to a later list
-                XmlNodeList xmldependencies = document.SelectNodes("dependencies/dependency");
-                if (xmldependencies.Count > 0)
-                    Logging.Debug("Parsing dependencies used in package {0}", package.PackageName);
+                XmlNodeList xmldependencies = selection.SelectNodes("dependencies/dependency");
+                Logging.Debug("Parsing dependencies used in package {0}", package.PackageName);
                 foreach (XmlElement dependencyXml in xmldependencies)
                 {
                     Dependency dependency = new Dependency();
 
-                    foreach (string propertyName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                    foreach (string propertyName in dependency.AttributesToXmlParseSelectionFiles())
                     {
                         LoadV3PropertiesFromXml(dependency, dependencyXml, propertyName);
                     }
 
-                    if(allDependenciesInSelectionFile.Find(dep => dep.UID.Equals(dependency.UID)) == null)
-                        allDependenciesInSelectionFile.Add(dependency);
+                    if (allDependenciesFromSelection.Find(dep => dep.UID.Equals(dependency.UID)) == null)
+                        allDependenciesFromSelection.Add(dependency);
                 }
 
                 packagesFromSelection.Add(package);
             }
 
+            //parse user selections
+            Logging.Debug("Parsing userPackages from selection file");
+            foreach (XmlElement userPackage in xmluserSelections)
+            {
+                DatabasePackage userPack = new DatabasePackage()
+                {
+                    PackageName = userPackage.Attributes["name"].InnerText,
+                    ZipFile = Path.Combine(Settings.RelhaxUserModsFolderPath, string.Format("{0}.zip", userPackage.Attributes["name"].InnerText)),
+                    CRC = userPackage.Attributes["crc"].InnerText
+                };
+                userPackagesFromSelection.Add(userPack);
+            }
+
             //select all the components based on the list from parsed selection file
             Logging.Debug("Processing packages for selection");
-            foreach(SelectablePackage packageFromSelection in packagesFromSelection)
+            foreach (SelectablePackage packageFromSelection in packagesFromSelection)
             {
                 //get the package object from the parsed database list, based on UID property
                 SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
 
                 //if it's null, then the package was removed
-                if(packageFromDatabase == null)
+                if (packageFromDatabase == null)
                 {
-                    Logging.Info("Package {0} was removed from the database. UID={1}", packageFromSelection.PackageName, packageFromSelection.UID);
+                    Logging.Info("Package {0} was removed from the database, since last selection save. UID={1}", packageFromSelection.PackageName, packageFromSelection.UID);
+                    removedPackages.Add(packageFromSelection);
+                    packagesOutOfDate = true;
+                    continue;
+                    //by not checking it in the database, then it won't be saved in the new save later
+                }
+
+                //if the package in the database was set invisible, then treat it as removed
+                //unless force visible is on
+                if (!ModpackSettings.ForceVisible && !packageFromDatabase.Visible)
+                {
+                    Logging.Info("Package {0} was hidden since last selection save, act as removed from the database. UID={1}", packageFromSelection.PackageName, packageFromSelection.UID);
                     removedPackages.Add(packageFromSelection);
                     packagesOutOfDate = true;
                     continue;
                 }
 
-                //if the package in the database was set invisible, then treat it as removed
-                //unless force visible is on
-
-
                 //if the package in the database was set disabled, then don't check it and packagesOutOfDate = true
                 //unless force enabled is on
-                //and inside that if keep disabled selections is on, then note for that
+                if (!ModpackSettings.ForceEnabled)
+                {
+                    if (!packageFromDatabase.Enabled)
+                    {
+                        Logging.Info("Package {0} was disabled since last selection save, won't be checked");
+                        disabledPackages.Add(packageFromSelection);
+                        //if setting is high for keeping disabled packages, then don't remove it from selection file
+                        if (ModpackSettings.SaveDisabledMods)
+                        {
+                            Logging.Info("SaveDisabledMods is true, keep this package in the selection file by flagging");
+                            packageFromDatabase.FlagForSelectionSave = true;
+
+                            //we also save this value to disk, so if we find it when loading, then it's not the first time
+                            //the user has had this package disabled
+                            if (packageFromSelection.FlagForSelectionSave)
+                            {
+                                Logging.Debug("PackageFromSelection FlagForSelectionSave high, not first time loading file with disabled components. Don't trigger out of date");
+                                continue;
+                            }
+                            else
+                            {
+                                Logging.Debug("PackageFromSelection FlagForSelectionSave low, first time loading file with disabled components. Can trigger out of date flag");
+                                packagesOutOfDate = true;
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            Logging.Info("SaveDisabledMods is false, remove this package from selection file (don't check it)");
+                            packagesOutOfDate = true;
+                            continue;
+                        }
+                    }
+                }
+
+                //getting here means the package is visible and enabled and not removed, so check it
+                Logging.Info("Checking package {0}", packageFromDatabase.PackageName);
+                if (packageFromDatabase.Enabled && packageFromDatabase.Visible)
+                    packageFromDatabase.Checked = true;
+                else
+                    Logging.Error("Package {0} was processed to be ready for selection, but is not! Enabled={1}, Visible={2}", packageFromDatabase.Enabled, packageFromDatabase.Visible);
             }
 
-            //parse user selections
-            //inside, check if file exists and if md5 is the same
+            //now that database packages are checked, check for the correct structure of mods
+            //brokenMods = IsValidStructure(ParsedCategoryList);
+            foreach(SelectablePackage checkedPackage in packagesFromDatabase.FindAll(pac => pac.Enabled && pac.Checked && pac.Visible))
+            {
+                if(!checkedPackage.IsStructureValid)
+                {
+                    Logging.Info("Package {0} reports that it is invalid structure, needs to be unchecked");
+                    brokenStructurePackages.Add(checkedPackage);
+                    checkedPackage.Checked = false;
+                    //but we still want to save it in the selection list (rather then remove and the user would need to manually find it again)
+                    checkedPackage.FlagForSelectionSave = true;
+
+                    //only trigger out of date if it's the firs time loading this file with the structure invalid
+                    SelectablePackage packageFromSelection = packagesFromSelection.Find(pc => pc.UID.Equals(checkedPackage.UID));
+                    if(packageFromSelection.FlagForSelectionSave)
+                    {
+                        Logging.Debug("PackageFromSelection FlagForSelectionSave high, not first time loading file with disabled components. Don't trigger out of date");
+                    }
+                    else
+                    {
+                        Logging.Debug("PackageFromSelection FlagForSelectionSave low, first time loading file with disabled components. Can trigger out of date flag");
+                        packagesOutOfDate = true;
+                    }
+                }
+            }
 
             //determine if packages are out of date
-            if (GlobalDependencies.Count != globalPackages.Count)
+            Logging.Debug("Processing global packages for selection");
+            if (GlobalDependencies.Count != globalPackagesFromSelection.Count)
                 globalsOutOfDate = true;
 
             if (!globalsOutOfDate)
             {
                 //compare each package and check if it's out of date
-                foreach (DatabasePackage globalDependencyFromSelection in globalPackages)
+                foreach (DatabasePackage globalDependencyFromSelection in globalPackagesFromSelection)
                 {
                     DatabasePackage globalDependency = GlobalDependencies.Find(pack => pack.UID.Equals(globalDependencyFromSelection.UID));
                     if (globalDependencyFromSelection == null)
                     {
-                        Logging.Info("Package {0} was not found in list database GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                        Logging.Info("Global package {0} was not found in list database GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
                         globalsOutOfDate = true;
                         break;
                     }
                     if (IsSelectionV3PackageOutOfDate(globalDependencyFromSelection, globalDependency))
                     {
-                        Logging.Info("Package {0} is out of date from list of GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                        Logging.Info("Global package {0} is out of date from list of GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
                         globalsOutOfDate = true;
                         break;
                     }
@@ -1939,11 +2032,162 @@ namespace RelhaxModpack.Windows
             }
 
             //check if dependencies are out of date
+            Logging.Debug("Processing dependencies from selection");
+            foreach (Dependency dependencyFromSelection in allDependenciesFromSelection)
+            {
+                Dependency dependencyFromDatabase = Dependencies.Find(dep => dep.UID.Equals(dependencyFromSelection.UID));
+                if (dependencyFromDatabase == null)
+                {
+                    Logging.Info("Dependency {0} was not found in the list of Dependencies. Setting dependenciesOutOfDate to true", dependencyFromSelection.PackageName);
+                    packageDependenciesOutOfDate = true;
+                    break;
+                }
+                if (IsSelectionV3PackageOutOfDate(dependencyFromSelection, dependencyFromDatabase))
+                {
+                    Logging.Info("Dependency {0} is out of date from list of Dependencies. Setting dependenciesOutOfDate to true", dependencyFromSelection.PackageName);
+                    globalsOutOfDate = true;
+                    break;
+                }
+            }
 
             //check if packages are out of date
-            //inside, additionally check if packageName is out of date (not included for if package itself is out of date)
+            Logging.Debug("Processing packages from selection");
+            if (!packagesOutOfDate)
+            {
+                foreach (SelectablePackage packageFromSelection in packagesFromSelection)
+                {
+                    //get the package object from the parsed database list, based on UID property
+                    SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
+                    if (packageFromDatabase == null)
+                        throw new BadMemeException("This should not happen, it was checked above this to be not null and the bool should have been flagged");
+                    if (IsSelectionV3PackageOutOfDate(packageFromSelection, packageFromDatabase))
+                    {
+                        Logging.Info("Package {0} is out of date from list of Packages. Setting packagesOutOfDate to true", packageFromSelection.PackageName);
+                        packagesOutOfDate = true;
+                    }
+                }
+            }
 
-            //for each section out of date, update the selection xml file and resave (make sure to backup the old one as <name>_old.xml)
+            //check if packageName is out of date (not included for if package itself is out of date)
+            foreach (SelectablePackage packageFromSelection in packagesFromSelection)
+            {
+                //get the package object from the parsed database list, based on UID property
+                SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
+                if (packageFromDatabase == null)
+                    continue;
+                if (IsSelectionV3PackageOutOfDate(packageFromSelection, packageFromDatabase))
+                {
+                    Logging.Info("PackageName {0} is old from database's name of {1}, flagging for remap", packageFromSelection.PackageName, packageFromDatabase.PackageName);
+                    packageNamesOutOfDate = true;
+                }
+            }
+
+            //check if user packages are out of date
+            //check if file exists and if md5 is the same
+            Logging.Debug("Processing user packages for selection");
+            foreach(DatabasePackage userPackage in userPackagesFromSelection)
+            {
+                SelectablePackage userPackageFromDatabase = UserCategory.Packages.Find(pac => pac.PackageName.Equals(userPackage.PackageName));
+                if(userPackageFromDatabase == null)
+                {
+                    Logging.Info("User package {0} was removed, set userOutOfDate");
+                    removedUserPackages.Add(userPackage);
+                    userOutOfDate = true;
+                    continue;
+                }
+                Logging.Info("Checking user package {0}", userPackage.PackageName);
+                userPackageFromDatabase.Enabled = true;
+                userPackageFromDatabase.Checked = true;
+
+                //check crc for up to date
+                if(!userPackage.CRC.Equals(Utils.CreateMD5Hash(userPackage.ZipFile)))
+                {
+                    Logging.Debug("Md5 hash values do not match, setting userOutOfDate");
+                    userOutOfDate = true;
+                }
+            }
+
+            //display counts of changes
+            Logging.Info("Removed packages:          {0}", removedPackages.Count);
+            Logging.Info("Removed user packages:     {0}", removedUserPackages.Count);
+            Logging.Info("Disabled packages:         {0}", disabledPackages.Count);
+            Logging.Info("Broken structure packages: {0}", brokenStructurePackages.Count);
+            
+            //if in some sort of auto-install mode, check if the user wants to be informed of selection issues
+            int totalBrokenCount = removedPackages.Count + removedUserPackages.Count + disabledPackages.Count + brokenStructurePackages.Count;
+
+            //save the xml document if the selection was out of date
+            if (globalsOutOfDate || packageDependenciesOutOfDate || packagesOutOfDate || packageNamesOutOfDate || userOutOfDate)
+            {
+                Logging.Info("The selection file is out of date, and is being updated (write new version to disk)");
+                Logging.Debug("globals={0}, dependencies={1}, packages={2}, packageNames={3}, user={4}", globalsOutOfDate, packageDependenciesOutOfDate, packagesOutOfDate, packageNamesOutOfDate, userOutOfDate);
+
+                //save the document via save v3
+                SaveSelectionV3(loadPath, silent);
+            }
+
+            if (totalBrokenCount > 0 && (AutoInstallMode || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
+            {
+                Logging.Info("Selection issues with auto or one click enabled, with message warning enabled. Show message.");
+                MessageBoxResult result = MessageBox.Show(
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"),
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"), MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.No)
+                {
+                    Logging.Info("User selected stop installation");
+                    return false;
+                }
+            }
+            else if (!silent)//only report issues if silent is false
+            {
+                SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay();
+                int totalCount = removedPackages.Count + removedUserPackages.Count + disabledPackages.Count + brokenStructurePackages.Count;
+                if (globalsOutOfDate || packageDependenciesOutOfDate || packagesOutOfDate)
+                    totalCount++;
+
+                if (disabledPackages.Count > 0)
+                {
+                    totalCount -= disabledPackages.Count;
+                    //disabled selections
+                    window.HeaderText = Translations.GetTranslatedString("modDeactivated");
+                    window.BodyText = string.Join(Environment.NewLine, disabledPackages.Select(package => package.CompletePath).ToArray());
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
+                    window.ShowDialog();
+                }
+                if (removedUserPackages.Count + removedPackages.Count > 0)
+                {
+                    totalCount -= removedUserPackages.Count + removedPackages.Count;
+                    //removed selections
+                    window.HeaderText = Translations.GetTranslatedString("modsNotFoundTechnical");
+                    window.BodyText = string.Join(Environment.NewLine, removedPackages.Concat(removedUserPackages).Select(package => package.CompletePath).ToArray());
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
+                    window.ShowDialog();
+                }
+                if (brokenStructurePackages.Count > 0)
+                {
+                    totalCount -= brokenStructurePackages.Count;
+                    //removed structure user selections
+                    window.HeaderText = Translations.GetTranslatedString("modsBrokenStructure");
+                    window.BodyText = string.Join(Environment.NewLine, brokenStructurePackages.Select(package => package.CompletePath).ToArray());
+                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
+                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
+                    window.ShowDialog();
+                }
+                if (globalsOutOfDate || packageDependenciesOutOfDate || packagesOutOfDate)
+                {
+                    //removed user selections
+                    window.HeaderText = Translations.GetTranslatedString("packagesUpdatedShouldInstall");
+                    window.BodyText = string.Empty;
+                    window.Title = Translations.GetTranslatedString("selectionFileUpdatedPackages");
+                    window.ButtonText = Translations.GetTranslatedString("close");
+                    window.ShowDialog();
+                }
+                window.Close();
+                window = null;
+            }
+
             return true;
         }
 
@@ -2034,6 +2278,7 @@ namespace RelhaxModpack.Windows
                     }
                 }
             }
+
             //do the same as above but for user mods
             foreach(SelectablePackage package in UserCategory.Packages)
             {
@@ -2045,6 +2290,7 @@ namespace RelhaxModpack.Windows
                     stringUserSelections.Remove(Path.GetFileNameWithoutExtension(package.ZipFile));
                 }
             }
+
             //now check for the correct structure of mods
             brokenMods = IsValidStructure(ParsedCategoryList);
             Logging.Info("Broken mods structure count: " + brokenMods.Count);
@@ -2173,7 +2419,7 @@ namespace RelhaxModpack.Windows
             foreach(DatabasePackage globalPackage in GlobalDependencies)
             {
                 XElement xpackageGlobal = new XElement("package");
-                foreach (string propName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                foreach (string propName in globalPackage.AttributesToXmlParseSelectionFiles())
                 {
                     SaveV3PropertiesToXmlElement(globalPackage, xpackageGlobal, propName);
                 }
@@ -2187,19 +2433,18 @@ namespace RelhaxModpack.Windows
                 if (package.Checked)
                 {
                     Logging.Info("Adding package {0}", package.PackageName);
-                    xpackage = new XElement("package");
                 }
                 else if (ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
                 {
                     Logging.Info("Adding package {0} (not checked, but flagged for save)", package.Name);
-                    xpackage = new XElement("package");
                 }
                 else
                 {
                     continue;
                 }
+                xpackage = new XElement("package");
 
-                foreach (string propName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                foreach (string propName in package.AttributesToXmlParseSelectionFiles())
                 {
                     SaveV3PropertiesToXmlElement(package, xpackage, propName);
                 }
@@ -2222,7 +2467,7 @@ namespace RelhaxModpack.Windows
                     XElement xmlDependency = new XElement("dependency");
                     DatabasePackage dependency = logic.DependencyPackageRefrence;
 
-                    foreach (string propName in DatabasePackage.AttributesToXmlParseSelectionFiles())
+                    foreach (string propName in dependency.AttributesToXmlParseSelectionFiles())
                     {
                         SaveV3PropertiesToXmlElement(dependency, xmlDependency, propName);
                     }
@@ -2253,6 +2498,8 @@ namespace RelhaxModpack.Windows
             if (File.Exists(savePath))
                 File.Delete(savePath);
             doc.Save(savePath);
+
+            //if the user is over-writing their previously 
 
             Logging.Info("Selection save completed");
             if (!silent)
