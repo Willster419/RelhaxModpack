@@ -1743,12 +1743,13 @@ namespace RelhaxModpack
         /// Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
         /// </summary>
         /// <param name="dependencies">The list of dependencies</param>
-        /// <param name="packages">The list of Selectable Packages</param>
         /// <param name="parsedCategoryList">The list of Categories</param>
         /// <returns>A list of calculated dependencies to install</returns>
-        public static List<Dependency> CalculateDependencies(List<Dependency> dependencies, List<SelectablePackage> packages, List<Category> parsedCategoryList)
+        public static List<Dependency> CalculateDependencies(List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
             //flat list is packages
+            List<SelectablePackage> flatListSelect = GetFlatSelectablePackageList(parsedCategoryList);
+
             //1- build the list of calling mods that need it
             List<Dependency> dependenciesToInstall = new List<Dependency>();
 
@@ -1788,7 +1789,7 @@ namespace RelhaxModpack
             Logging.Debug("Step 1 complete");
 
             Logging.Debug("Starting step 2 of 4 in dependency calculation: adding from selectable packages that use each dependency");
-            foreach(SelectablePackage package in packages)
+            foreach(SelectablePackage package in flatListSelect)
             {
                 //got though each logic property. if the package called is this dependency, then add it to it's list
                 foreach (DatabaseLogic logic in package.Dependencies)
@@ -1872,7 +1873,7 @@ namespace RelhaxModpack
                 }
             }
 
-            //3 - run calculations IN DEPENDENCY LIST ORDER FROM TOP DOWN
+            //4 - run calculations IN DEPENDENCY LIST ORDER FROM TOP DOWN
             List<Dependency> notProcessedDependnecies = new List<Dependency>(dependencies);
             Logging.Debug("Starting step 4 of 4 in dependency calculation: calculating dependencies from top down (perspective to list)");
             int calcNumber = 1;
@@ -1927,26 +1928,29 @@ namespace RelhaxModpack
                     //OR logic - if any mod/dependency is checked, then it's installed and can stop there
                     //because only one of them needs to be true
                     //same case goes for negatives - if mod is NOT checked and negateFlag
-                    if(!orLogic.WillBeInstalled)
+                    if (!orLogic.WillBeInstalled)
                     {
-                        Logging.Debug("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                        Logging.Debug("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName);
                         continue;
-                    }
-                    if(!orLogic.NotFlag)
-                    {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
-                        ORsPass = true;
-                        break;
-                    }
-                    else if (orLogic.NotFlag)
-                    {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
-                        ORsPass = true;
-                        break;
                     }
                     else
                     {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                        if (!orLogic.NotFlag)
+                        {
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                            ORsPass = true;
+                            break;
+                        }
+                        else if (orLogic.NotFlag)
+                        {
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                            ORsPass = true;
+                            break;
+                        }
+                        else
+                        {
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                        }
                     }
                 }
 
