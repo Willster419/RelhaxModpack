@@ -2395,26 +2395,33 @@ namespace RelhaxModpack.Windows
 
             //create saved config xml layout
             XDocument doc = new XDocument(
-                new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("packages",
+                new XDeclaration("1.0", "utf-8", "yes"));
+
+            //document root
+            XElement packagesRoot = new XElement("packages",
                     new XAttribute("ver", Settings.ConfigFileVersion3V0),
                     new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                     new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
                     new XAttribute("dbVersion", Settings.DatabaseVersion),
-                    new XAttribute("dbDistro", databaseVersion.ToString())));
+                    new XAttribute("dbDistro", databaseVersion.ToString()));
 
+            doc.Add(packagesRoot);
 
             //add global root
             XElement nodeGlobal = new XElement("globalPackages");
-            doc.Element("packages").Add(nodeGlobal);
+            packagesRoot.Add(nodeGlobal);
+
+            //add dependencies
+            XElement nodeDependencies = new XElement("dependencyPackages");
+            packagesRoot.Add(nodeDependencies);
 
             //relhax mods root
             XElement nodeRelhax = new XElement("relhaxPackages");
-            doc.Element("packages").Add(nodeRelhax);
+            packagesRoot.Add(nodeRelhax);
 
             //user mods root
             XElement nodeUserMods = new XElement("userPackages");
-            doc.Element("packages").Add(nodeUserMods);
+            packagesRoot.Add(nodeUserMods);
 
             //add global packages
             Logging.Debug("Saving global dependencies to document");
