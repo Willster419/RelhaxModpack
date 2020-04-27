@@ -2075,7 +2075,7 @@ namespace RelhaxModpack.Windows
                 SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
                 if (packageFromDatabase == null)
                     continue;
-                if (IsSelectionV3PackageOutOfDate(packageFromSelection, packageFromDatabase))
+                if (IsPackageNameOutOfDate(packageFromSelection, packageFromDatabase))
                 {
                     Logging.Info("PackageName {0} is old from database's name of {1}, flagging for remap", packageFromSelection.PackageName, packageFromDatabase.PackageName);
                     packageNamesOutOfDate = true;
