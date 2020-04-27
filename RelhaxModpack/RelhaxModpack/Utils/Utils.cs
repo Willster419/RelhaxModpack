@@ -1722,7 +1722,7 @@ namespace RelhaxModpack
             //get all categories where at least one dependency exists
             componentsWithDependencies_.AddRange(componentsWithDependencies.Where(cat => cat.Dependencies.Count > 0));
 
-            //get all packages and dependnecies where at least one dependency exists
+            //get all packages and dependencies where at least one dependency exists
             componentsWithDependencies_.AddRange(GetFlatList(null, dependencies, null, componentsWithDependencies).OfType<IComponentWithDependencies>().Where(component => component.Dependencies.Count > 0).ToList());
 
             foreach (IComponentWithDependencies componentWithDependencies in componentsWithDependencies_)
@@ -2263,15 +2263,27 @@ namespace RelhaxModpack
         {
             List<DatabaseLogic> dependencies = new List<DatabaseLogic>();
 
-            if (package.Dependencies.Count == 0)
-                return dependencies;
-
-            foreach(DatabaseLogic logic in package.Dependencies)
+            if (package.Dependencies.Count > 0)
             {
-                dependencies.Add(logic);
-                Dependency dep = logic.DependencyPackageRefrence as Dependency;
-                if (dep.Dependencies.Count != 0)
-                    GetAllPackageDependencies(dep, dependencies);
+                foreach (DatabaseLogic logic in package.Dependencies)
+                {
+                    dependencies.Add(logic);
+                    Dependency dep = logic.DependencyPackageRefrence as Dependency;
+                    if (dep.Dependencies.Count > 0)
+                        GetAllPackageDependencies(dep, dependencies);
+                }
+            }
+
+            if (package.ParentCategory.Dependencies.Count > 0)
+            {
+                foreach (DatabaseLogic logic in package.ParentCategory.Dependencies)
+                {
+                    if(!dependencies.Contains(logic))
+                        dependencies.Add(logic);
+                    Dependency dep = logic.DependencyPackageRefrence as Dependency;
+                    if (dep.Dependencies.Count > 0)
+                        GetAllPackageDependencies(dep, dependencies);
+                }
             }
 
             return dependencies;
