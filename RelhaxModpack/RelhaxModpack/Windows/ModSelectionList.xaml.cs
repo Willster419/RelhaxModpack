@@ -2439,7 +2439,7 @@ namespace RelhaxModpack.Windows
             Logging.Debug("Starting selection save of Relhax packages");
             foreach (SelectablePackage package in Utils.GetFlatList(null, null, null, ParsedCategoryList))
             {
-                XElement xpackage = null;
+                XElement xPackage = null;
                 if (package.Checked)
                 {
                     Logging.Info("Adding package {0}", package.PackageName);
@@ -2452,11 +2452,11 @@ namespace RelhaxModpack.Windows
                 {
                     continue;
                 }
-                xpackage = new XElement("package");
+                xPackage = new XElement("package");
 
                 foreach (string propName in package.AttributesToXmlParseSelectionFiles())
                 {
-                    SaveV3PropertiesToXmlElement(package, xpackage, propName);
+                    SaveV3PropertiesToXmlElement(package, xPackage, propName);
                 }
 
                 //need to add dependency information
@@ -2490,10 +2490,10 @@ namespace RelhaxModpack.Windows
                         dependencies.Add(dependency);
                     }
                 }
-                xpackage.Add(dependenciesHolder);
+                xPackage.Add(dependenciesHolder);
 
                 //add the element to the xml container element
-                nodeRelhax.Add(xpackage);
+                nodeRelhax.Add(xPackage);
             }
 
             //check user mods
