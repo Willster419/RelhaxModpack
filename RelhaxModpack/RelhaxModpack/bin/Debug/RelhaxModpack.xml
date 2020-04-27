@@ -1103,6 +1103,12 @@
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
+        <member name="M:RelhaxModpack.SelectablePackage.AttributesToXmlParseSelectionFiles">
+            <summary>
+            Defines a list of properties in the class to be serialized into xml attributes for selection files
+            </summary>
+            <returns>The base array, with SelectablePackage options concatenated</returns>
+        </member>
         <member name="M:RelhaxModpack.SelectablePackage.#ctor">
             <summary>
             Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
