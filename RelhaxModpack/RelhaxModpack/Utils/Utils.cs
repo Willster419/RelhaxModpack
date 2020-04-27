@@ -2862,7 +2862,7 @@ namespace RelhaxModpack
         public static string GetExecutingMethodName()
         {
             StackTrace st = new StackTrace();
-            StackFrame sf = st.GetFrame(1);
+            StackFrame sf = st.GetFrame(2);
 
             return sf.GetMethod().Name;
         }
