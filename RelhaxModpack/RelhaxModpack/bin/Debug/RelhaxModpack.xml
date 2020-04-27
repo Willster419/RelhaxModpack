@@ -7895,12 +7895,11 @@
             <param name="componentsWithDependencies">List of all DatabasePackage objects that have dependencies</param>
             <param name="dependencies">List of all Dependencies that exist in the database</param>
         </member>
-        <member name="M:RelhaxModpack.Utils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.SelectablePackage},System.Collections.Generic.List{RelhaxModpack.Category})">
+        <member name="M:RelhaxModpack.Utils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
             <summary>
             Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
             </summary>
             <param name="dependencies">The list of dependencies</param>
-            <param name="packages">The list of Selectable Packages</param>
             <param name="parsedCategoryList">The list of Categories</param>
             <returns>A list of calculated dependencies to install</returns>
         </member>
