@@ -87,18 +87,23 @@ namespace RelhaxModpack
             nameof(Dependencies),
             nameof(Packages)
         };
+        #endregion
+
         #region Selection file processing
         private static readonly List<string> SelectablePackagePropertiesToSaveForSelectionFile = new List<string>()
         {
             nameof(FlagForSelectionSave)
         };
 
+        /// <summary>
+        /// Defines a list of properties in the class to be serialized into xml attributes for selection files
+        /// </summary>
+        /// <returns>The base array, with SelectablePackage options concatenated</returns>
         public override string[] AttributesToXmlParseSelectionFiles()
         {
             return base.AttributesToXmlParseSelectionFiles().Concat(SelectablePackagePropertiesToSaveForSelectionFile.ToArray()).ToArray();
         }
         #endregion
-
 
         #region Database Properties
         /// <summary>
