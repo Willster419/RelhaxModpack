@@ -74,8 +74,8 @@ namespace RelhaxModpack
         /// Gets a list of property names that are used for saving/loading the selection V3 file format
         /// </summary>
         /// <returns></returns>
-        public static List<string> AttributesToXmlParseSelectionFiles()
-        { return new List<string>(PackagePropertiesToSaveForSelectionFile); }
+        public virtual string[] AttributesToXmlParseSelectionFiles()
+        { return PackagePropertiesToSaveForSelectionFile.ToArray(); }
         #endregion
 
         #region Database Properties
