@@ -57,24 +57,6 @@ namespace RelhaxModpack
             nameof(Author),
             nameof(Maintainers)
         };
-
-        /// <summary>
-        /// Get the list of fields in the class that can be parsed as xml attributes
-        /// </summary>
-        /// <returns>The list of fields</returns>
-        public static List<string> FieldsToXmlParseAttributes()
-        {
-            return new List<string>(PackagePropertiesToXmlParseAttributes);
-        }
-
-        /// <summary>
-        /// Get the list of fields in the class that can be parsed as xml elements
-        /// </summary>
-        /// <returns>The list of fields</returns>
-        public static List<string> FieldsToXmlParseNodes()
-        {
-            return new List<string>(PackagePropertiesToXmlParseElements);
-        }
         #endregion
 
         #region Selection file processing

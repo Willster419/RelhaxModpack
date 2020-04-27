@@ -36,25 +36,6 @@ namespace RelhaxModpack
         {
             nameof(Dependencies)
         };
-
-        /// <summary>
-        /// Gets a list of fields (including from base classes) that can be parsed as xml attributes
-        /// </summary>
-        /// <returns>The string list</returns>
-        new public static List<string> FieldsToXmlParseAttributes()
-        {
-            //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/versioning-with-the-override-and-new-keywords
-            return DatabasePackage.FieldsToXmlParseAttributes();
-        }
-
-        /// <summary>
-        /// Gets a list of fields (including from base classes) that can be parsed as xml elements
-        /// </summary>
-        /// <returns>The string list</returns>
-        new public static List<string> FieldsToXmlParseNodes()
-        {
-            return DatabasePackage.FieldsToXmlParseNodes().Concat(DependencyPropertiesToXmlParseElements).ToList();
-        }
         #endregion
 
         #region Database Properties

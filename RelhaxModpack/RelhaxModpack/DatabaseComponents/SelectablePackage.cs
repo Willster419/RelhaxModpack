@@ -87,25 +87,8 @@ namespace RelhaxModpack
             nameof(Dependencies),
             nameof(Packages)
         };
-
-        /// <summary>
-        /// Gets a list of fields (including from base classes) that can be parsed as xml attributes
-        /// </summary>
-        /// <returns>The string list</returns>
-        new public static List<string> FieldsToXmlParseAttributes()
-        {
-            return DatabasePackage.FieldsToXmlParseAttributes().Concat(SelectablePackagePropertiesToXmlParseAttributes).ToList();
-        }
-
-        /// <summary>
-        /// Gets a list of fields (including from base classes) that can be parsed as xml elements
-        /// </summary>
-        /// <returns>The string list</returns>
-        new public static List<string> FieldsToXmlParseNodes()
-        {
-            return DatabasePackage.FieldsToXmlParseNodes().Concat(SelectablePackagePropertiesToXmlParseElements).ToList();
-        }
         #endregion
+
 
         #region Database Properties
         /// <summary>
