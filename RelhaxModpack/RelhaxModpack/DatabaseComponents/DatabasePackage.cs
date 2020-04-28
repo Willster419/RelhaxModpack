@@ -67,7 +67,8 @@ namespace RelhaxModpack
             nameof(ZipFile),
             nameof(Timestamp),
             nameof(CRC),
-            nameof(Version)
+            nameof(Version),
+            nameof(Enabled)
         };
 
         /// <summary>
