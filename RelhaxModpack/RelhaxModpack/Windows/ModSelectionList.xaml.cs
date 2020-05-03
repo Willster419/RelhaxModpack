@@ -1738,9 +1738,15 @@ namespace RelhaxModpack.Windows
         private bool LoadSelection(XmlDocument document, bool silent, string loadPath = null)
         {
             //get the string version of the document, determine what to do from there
-            string selectionVersion;
+            string selectionVersion = XmlUtils.GetXmlStringFromXPath(document, "//mods/@ver");
             //attribute example: "//root/element/@attribute"
-            selectionVersion = XmlUtils.GetXmlStringFromXPath(document, "//mods/@ver");
+
+            string selectionVersionV3 = XmlUtils.GetXmlStringFromXPath(document, "/packages/@ver");
+            if(string.IsNullOrEmpty(selectionVersion))
+            {
+                selectionVersion = selectionVersionV3;
+            }
+
             Logging.Debug("SelectionVersion={0}", selectionVersion);
             switch(selectionVersion)
             {
@@ -2062,9 +2068,11 @@ namespace RelhaxModpack.Windows
                 }
 
                 //getting here means the package is visible and enabled and not removed, so check it
-                Logging.Info("Checking package {0}", packageFromDatabase.PackageName);
                 if (packageFromDatabase.Enabled && packageFromDatabase.Visible)
+                {
+                    Logging.Info("Checking package {0}", packageFromDatabase.PackageName);
                     packageFromDatabase.Checked = true;
+                }
                 else
                     Logging.Error("Package {0} was processed to be ready for selection, but is not! Enabled={1}, Visible={2}", packageFromDatabase.Enabled, packageFromDatabase.Visible);
             }
@@ -2075,7 +2083,7 @@ namespace RelhaxModpack.Windows
             {
                 if (!checkedPackage.IsStructureValid)
                 {
-                    Logging.Info("Package {0} reports that it is invalid structure, needs to be unchecked");
+                    Logging.Info("Package {0} reports that it is invalid structure, needs to be unchecked", checkedPackage.PackageName);
                     brokenStructurePackages.Add(checkedPackage);
                     checkedPackage.Checked = false;
                     //but we still want to save it in the selection list (rather then remove and the user would need to manually find it again)
@@ -2388,17 +2396,14 @@ namespace RelhaxModpack.Windows
 
             //get string value from xml
             string propertyValue = packageXml.Attributes[propertyName].InnerXml;
-            if (string.IsNullOrEmpty(propertyValue))
+            if (!string.IsNullOrEmpty(propertyValue))
             {
-                Logging.Error("Xml property '{0}' from SelectablePackage is empty, skipping!", propertyName);
-                return;
-            }
-
-            //add the property value
-            if (!Utils.SetObjectProperty(package, property, propertyValue))
-            {
-                Logging.Error("Unable to set property '{0}' value from SelectablePackage object, skipping!", propertyName);
-                return;
+                //add the property value
+                if (!Utils.SetObjectProperty(package, property, propertyValue))
+                {
+                    Logging.Error("Unable to set property '{0}' value from SelectablePackage object, skipping!", propertyName);
+                    return;
+                }
             }
         }
 

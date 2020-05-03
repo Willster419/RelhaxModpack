@@ -755,7 +755,7 @@ namespace RelhaxModpack
         {
             get
             {
-                if (this.Checked && !this.Parent.Checked)
+                if (this.Checked && (!this.Parent.Checked && this.Parent.Level != -1))
                     return false;
 
                 bool hasSingles = false;
