@@ -88,6 +88,22 @@ namespace RelhaxModpack
     }
 
     /// <summary>
+    /// Allows the old and new versions of a DatabasePackage to be saved temporarily for comparing differences between two database structures
+    /// </summary>
+    public struct DatabaseBeforeAfter2
+    {
+        /// <summary>
+        /// The package reference for the database before changes
+        /// </summary>
+        public DatabasePackage Before;
+
+        /// <summary>
+        /// The package reference for the database after changes
+        /// </summary>
+        public DatabasePackage After;
+    }
+
+    /// <summary>
     /// A structure object to contain the WoT client version and online folder version. Allows for LINQ searching
     /// </summary>
     public struct VersionInfos
