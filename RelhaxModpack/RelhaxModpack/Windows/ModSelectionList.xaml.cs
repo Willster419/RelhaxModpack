@@ -2182,7 +2182,7 @@ namespace RelhaxModpack.Windows
             //check if dependencies are out of date
             Logging.Debug("Processing dependencies from selection");
             Logging.Debug("First calculate dependencies from currently selected packages");
-            List<Dependency> dependenciesCalculatedFromLoadedSelection = Utils.CalculateDependencies(Dependencies, ParsedCategoryList);
+            List<Dependency> dependenciesCalculatedFromLoadedSelection = Utils.CalculateDependencies(Dependencies, ParsedCategoryList, true);
 
             Logging.Debug("Check if number if calculated dependencies == number of loaded dependencies from file");
             if (dependenciesCalculatedFromLoadedSelection.Count != dependenciesFromSelection.Count)
@@ -2564,7 +2564,7 @@ namespace RelhaxModpack.Windows
 
             //calculate dependencies for adding
             Logging.Debug("Running dependency calculation on database");
-            List<Dependency> dependenciesToInstall = Utils.CalculateDependencies(Dependencies, ParsedCategoryList);
+            List<Dependency> dependenciesToInstall = Utils.CalculateDependencies(Dependencies, ParsedCategoryList,true);
 
             Logging.Debug("Saving calculated dependencies to document");
             foreach (Dependency dependency in dependenciesToInstall)

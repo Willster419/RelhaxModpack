@@ -1760,8 +1760,9 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="dependencies">The list of dependencies</param>
         /// <param name="parsedCategoryList">The list of Categories</param>
+        /// <param name="suppressSomeLogging">Flag for it some of the more verbose logging should be suppressed</param>
         /// <returns>A list of calculated dependencies to install</returns>
-        public static List<Dependency> CalculateDependencies(List<Dependency> dependencies, List<Category> parsedCategoryList)
+        public static List<Dependency> CalculateDependencies(List<Dependency> dependencies, List<Category> parsedCategoryList, bool suppressSomeLogging)
         {
             //flat list is packages
             List<SelectablePackage> flatListSelect = GetFlatSelectablePackageList(parsedCategoryList);
@@ -1786,7 +1787,8 @@ namespace RelhaxModpack
                     {
                         if (logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.Debug("Category \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                            if(!suppressSomeLogging)
+                                Logging.Debug("Category \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
                                 category.Name, dependency.PackageName, logic.Logic, logic.NotFlag);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
@@ -1819,7 +1821,8 @@ namespace RelhaxModpack
                     {
                         if (logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.Debug("SelectablePackage \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                            if (!suppressSomeLogging)
+                                Logging.Debug("SelectablePackage \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
                                 package.PackageName, dependency.PackageName, logic.Logic, logic.NotFlag);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
@@ -1856,7 +1859,8 @@ namespace RelhaxModpack
                             continue;
                         if (logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.Debug("Dependency \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Dependency \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
                                 processingDependency.PackageName, dependency.PackageName, logic.Logic, logic.NotFlag);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
@@ -1898,7 +1902,9 @@ namespace RelhaxModpack
                 //first check if this dependency is referencing a dependency that has not yet been processed
                 //if so then note it in the log
                 Logging.Debug(string.Empty);
-                Logging.Debug("Calculating if dependency {0} will be installed, {1} of {2}", dependency.PackageName, calcNumber++, dependencies.Count);
+                if (!suppressSomeLogging)
+                    Logging.Debug("Calculating if dependency {0} will be installed, {1} of {2}", dependency.PackageName, calcNumber++, dependencies.Count);
+
                 foreach(DatabaseLogic login in dependency.DatabasePackageLogic)
                 {
                     List<Dependency> matches = notProcessedDependnecies.Where(dep => login.PackageName.Equals(dep.PackageName)).ToList();
@@ -1919,8 +1925,10 @@ namespace RelhaxModpack
                 List<DatabaseLogic> logicalAND = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.AND).ToList();
 
                 //debug logging
-                Logging.Debug("Logical OR count: {0}", localOR.Count);
-                Logging.Debug("Logical AND count: {0}", logicalAND.Count);
+                if (!suppressSomeLogging)
+                    Logging.Debug("Logical OR count: {0}", localOR.Count);
+                if (!suppressSomeLogging)
+                    Logging.Debug("Logical AND count: {0}", logicalAND.Count);
 
                 //if there are no logical ands, then only do ors, vise versa
                 bool ORsPass = localOR.Count > 0? false: true;
@@ -1930,7 +1938,8 @@ namespace RelhaxModpack
                 if(ORsPass && ANDSPass)
                 {
                     Logging.Warning("Logic ORs and ANDs already pass for dependency package {0} (nothing uses it?)", dependency.PackageName);
-                    Logging.Debug("Skip calculation logic and remove from not processed list");
+                    if (!suppressSomeLogging)
+                        Logging.Debug("Skip calculation logic and remove from not processed list");
 
                     //remove it from list of not processed dependencies
                     notProcessedDependnecies.RemoveAt(0);
@@ -1938,7 +1947,8 @@ namespace RelhaxModpack
                 }
 
                 //calc the ORs first
-                Logging.Debug("Processing OR logic");
+                if (!suppressSomeLogging)
+                    Logging.Debug("Processing OR logic");
                 foreach(DatabaseLogic orLogic in localOR)
                 {
                     //OR logic - if any mod/dependency is checked, then it's installed and can stop there
@@ -1946,47 +1956,55 @@ namespace RelhaxModpack
                     //same case goes for negatives - if mod is NOT checked and negateFlag
                     if (!orLogic.WillBeInstalled)
                     {
-                        Logging.Debug("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName);
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName);
                         continue;
                     }
                     else
                     {
                         if (!orLogic.NotFlag)
                         {
-                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
                             ORsPass = true;
                             break;
                         }
                         else if (orLogic.NotFlag)
                         {
-                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
                             ORsPass = true;
                             break;
                         }
                         else
                         {
-                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
                         }
                     }
                 }
 
                 //now calc the ands
-                Logging.Debug("Processing AND logic");
+                if (!suppressSomeLogging)
+                    Logging.Debug("Processing AND logic");
                 foreach(DatabaseLogic andLogic in logicalAND)
                 {
                     if (andLogic.WillBeInstalled && !andLogic.NotFlag)
                     {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
                         ANDSPass = true;
                     }
                     else if (!andLogic.WillBeInstalled && andLogic.NotFlag)
                     {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
                         ANDSPass = true;
                     }
                     else
                     {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, incorrect AND logic, set ANDSPass=false and stop processing!", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, incorrect AND logic, set ANDSPass=false and stop processing!", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
                         ANDSPass = false;
                         break;
                     }
@@ -2000,12 +2018,14 @@ namespace RelhaxModpack
                 }
                 else
                 {
-                    Logging.Debug("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!", final);
+                    if (!suppressSomeLogging)
+                        Logging.Debug("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!", final);
                 }
 
                 if (dependency.DatabasePackageLogic.Count > 0 && (ANDSPass && ORsPass))
                 {
-                    Logging.Debug("Updating future references (like logicalDependnecies) for if dependency was checked");
+                    if (!suppressSomeLogging)
+                        Logging.Debug("Updating future references (like logicalDependnecies) for if dependency was checked");
                     //update any dependencies that use it
                     foreach (DatabaseLogic callingLogic in dependency.Dependencies)
                     {
