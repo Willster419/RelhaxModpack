@@ -1911,18 +1911,20 @@ namespace RelhaxModpack.Windows
             Utils.ClearSelections(ParsedCategoryList);
 
             //get a list of all the mods currently in the selection
+            XmlNodeList xmlGlobalSelections = document.SelectNodes("/packages/globalPackages/package");
+            XmlNodeList xmlDependencySelections = document.SelectNodes("/packages/dependencyPackages/package");
             XmlNodeList xmlSelections = document.SelectNodes("/packages/relhaxPackages/package");
             XmlNodeList xmluserSelections = document.SelectNodes("/packages/userPackages/package");
-            XmlNodeList xmlGlobalSelections = document.SelectNodes("/packages/globalPackages/package");
 
             //logging
-            Logging.Debug("xmlSelections count: {0}", xmlSelections.Count);
-            Logging.Debug("xmluserSelections count: {0}", xmluserSelections.Count);
-            Logging.Debug("xmlGlobalSelections count: {0}", xmlGlobalSelections.Count);
+            Logging.Debug("xmlGlobalSelections count:     {0}", xmlGlobalSelections.Count);
+            Logging.Debug("xmlDependencySelections count: {0}", xmlDependencySelections.Count);
+            Logging.Debug("xmlSelections count:           {0}", xmlSelections.Count);
+            Logging.Debug("xmlUserSelections count:       {0}", xmluserSelections.Count);
 
             //save a list of all the packages for later
             List<DatabasePackage> globalPackagesFromSelection = new List<DatabasePackage>();
-            List<Dependency> allDependenciesFromSelection = new List<Dependency>();
+            List<Dependency> dependenciesFromSelection = new List<Dependency>();
             List<DatabasePackage> userPackagesFromSelection = new List<DatabasePackage>();
             List<SelectablePackage> packagesFromSelection = new List<SelectablePackage>();
 
@@ -1935,7 +1937,7 @@ namespace RelhaxModpack.Windows
 
             //bools for determining if stuff is out of date
             bool globalsOutOfDate = false;
-            bool packageDependenciesOutOfDate = false;
+            bool dependenciesOutOfDate = false;
             bool packagesOutOfDate = false;
             bool packageNamesOutOfDate = false;
             bool userOutOfDate = false;
@@ -1954,6 +1956,19 @@ namespace RelhaxModpack.Windows
                 globalPackagesFromSelection.Add(package);
             }
 
+            Logging.Debug("Parsing dependency packages from selection file");
+            foreach(XmlElement dependencyXml in xmlDependencySelections)
+            {
+                Dependency dependency = new Dependency();
+
+                foreach(string propertyName in dependency.AttributesToXmlParseSelectionFiles())
+                {
+                    LoadV3PropertiesFromXml(dependency, dependencyXml, propertyName);
+                }
+
+                dependenciesFromSelection.Add(dependency);
+            }
+
             //foreach selection, build a package entry for it. compare it with db to check if it's been updated
             Logging.Debug("Parsing selectablePackages from selection file");
             foreach (XmlElement selection in xmlSelections)
@@ -1964,22 +1979,6 @@ namespace RelhaxModpack.Windows
                 foreach (string propertyName in package.AttributesToXmlParseSelectionFiles())
                 {
                     LoadV3PropertiesFromXml(package, selection, propertyName);
-                }
-
-                //get all the dependencies and save them off to a later list
-                XmlNodeList xmldependencies = selection.SelectNodes("dependencies/dependency");
-                Logging.Debug("Parsing dependencies used in package {0}", package.PackageName);
-                foreach (XmlElement dependencyXml in xmldependencies)
-                {
-                    Dependency dependency = new Dependency();
-
-                    foreach (string propertyName in dependency.AttributesToXmlParseSelectionFiles())
-                    {
-                        LoadV3PropertiesFromXml(dependency, dependencyXml, propertyName);
-                    }
-
-                    if (allDependenciesFromSelection.Find(dep => dep.UID.Equals(dependency.UID)) == null)
-                        allDependenciesFromSelection.Add(dependency);
                 }
 
                 packagesFromSelection.Add(package);
@@ -2124,22 +2123,53 @@ namespace RelhaxModpack.Windows
 
             //check if dependencies are out of date
             Logging.Debug("Processing dependencies from selection");
-            foreach (Dependency dependencyFromSelection in allDependenciesFromSelection)
+            Logging.Debug("First calculate dependencies from currently selected packages");
+            List<Dependency> dependenciesCalculatedFromLoadedSelection = Utils.CalculateDependencies(Dependencies, ParsedCategoryList);
+
+            Logging.Debug("Check if number if calculated dependencies == number of loaded dependencies from file");
+            if (dependenciesCalculatedFromLoadedSelection.Count != dependenciesFromSelection.Count)
+                dependenciesOutOfDate = true;
+
+            //if count equal, then look for new ones in the newly calculated list that's not in the old list (added)
+            if (!dependenciesOutOfDate)
             {
-                Dependency dependencyFromDatabase = Dependencies.Find(dep => dep.UID.Equals(dependencyFromSelection.UID));
-                if (dependencyFromDatabase == null)
+                Logging.Debug("Number of dependencies is equal, check if any new ones exist in loaded list");
+                //UIDs of the above lists
+                List<string> UIDsDependenciesCalculatedFromLoadedSelection = dependenciesCalculatedFromLoadedSelection.Select(dep => dep.UID).ToList();
+                List<string> UIDsDependenciesFromSelection = dependenciesFromSelection.Select(dep => dep.UID).ToList();
+                
+                //list of UIDs that exist in the dependencies loaded but NOT in loaded list. If count > 0 it means one has been added
+                List<string> newUIDsInDependencesFromLoadedSelection = UIDsDependenciesCalculatedFromLoadedSelection.Except(UIDsDependenciesFromSelection).ToList();
+
+                Logging.Debug("New dependencies loaded from selection count: {0}", newUIDsInDependencesFromLoadedSelection.Count);
+
+                if (newUIDsInDependencesFromLoadedSelection.Count > 0)
+                    dependenciesOutOfDate = true;
+            }
+
+            //if nothing new found, check each old to see if it == new
+            if (!dependenciesOutOfDate)
+            {
+                foreach (Dependency dependencyFromSelection in dependenciesFromSelection)
                 {
-                    Logging.Info("Dependency {0} was not found in the list of Dependencies. Setting dependenciesOutOfDate to true", dependencyFromSelection.PackageName);
-                    packageDependenciesOutOfDate = true;
-                    break;
-                }
-                if (IsSelectionV3PackageOutOfDate(dependencyFromSelection, dependencyFromDatabase))
-                {
-                    Logging.Info("Dependency {0} is out of date from list of Dependencies. Setting dependenciesOutOfDate to true", dependencyFromSelection.PackageName);
-                    globalsOutOfDate = true;
-                    break;
+                    Dependency dependencyFromDatabase = Dependencies.Find(dep => dep.UID.Equals(dependencyFromSelection.UID));
+                    if (dependencyFromDatabase == null)
+                    {
+                        throw new BadMemeException("This should not happen, it was checked above this to be not null and the bool should have been flagged");
+                    }
+                    if (IsSelectionV3PackageOutOfDate(dependencyFromSelection, dependencyFromDatabase))
+                    {
+                        Logging.Info("Dependency {0} is out of date from list of Dependencies. Setting dependenciesOutOfDate to true", dependencyFromSelection.PackageName);
+                        globalsOutOfDate = true;
+                        break;
+                    }
                 }
             }
+
+            //reset database dependency calculation
+            Logging.Debug("Clear dependency calculations to prevent collision from install");
+            foreach (Dependency dependency in Dependencies)
+                dependency.DatabasePackageLogic.Clear();
 
             //check if packages are out of date
             Logging.Debug("Processing packages from selection");
@@ -2150,7 +2180,10 @@ namespace RelhaxModpack.Windows
                     //get the package object from the parsed database list, based on UID property
                     SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
                     if (packageFromDatabase == null)
+                    {
                         throw new BadMemeException("This should not happen, it was checked above this to be not null and the bool should have been flagged");
+                    }
+
                     if (IsSelectionV3PackageOutOfDate(packageFromSelection, packageFromDatabase))
                     {
                         Logging.Info("Package {0} is out of date from list of Packages. Setting packagesOutOfDate to true", packageFromSelection.PackageName);
@@ -2208,10 +2241,10 @@ namespace RelhaxModpack.Windows
             int totalBrokenCount = removedPackages.Count + removedUserPackages.Count + disabledPackages.Count + brokenStructurePackages.Count;
 
             //save the xml document if the selection was out of date
-            if (globalsOutOfDate || packageDependenciesOutOfDate || packagesOutOfDate || packageNamesOutOfDate || userOutOfDate)
+            if (globalsOutOfDate || dependenciesOutOfDate || packagesOutOfDate || packageNamesOutOfDate || userOutOfDate)
             {
                 Logging.Info("The selection file is out of date, and is being updated (write new version to disk)");
-                Logging.Debug("globals={0}, dependencies={1}, packages={2}, packageNames={3}, user={4}", globalsOutOfDate, packageDependenciesOutOfDate, packagesOutOfDate, packageNamesOutOfDate, userOutOfDate);
+                Logging.Debug("globals={0}, dependencies={1}, packages={2}, packageNames={3}, user={4}", globalsOutOfDate, dependenciesOutOfDate, packagesOutOfDate, packageNamesOutOfDate, userOutOfDate);
 
                 //save the document via save v3
                 SaveSelectionV3(loadPath, silent);
@@ -2233,7 +2266,7 @@ namespace RelhaxModpack.Windows
             {
                 SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay();
                 int totalCount = removedPackages.Count + removedUserPackages.Count + disabledPackages.Count + brokenStructurePackages.Count;
-                if (globalsOutOfDate || packageDependenciesOutOfDate || packagesOutOfDate)
+                if (globalsOutOfDate || dependenciesOutOfDate || packagesOutOfDate)
                     totalCount++;
 
                 if (disabledPackages.Count > 0)
@@ -2266,7 +2299,7 @@ namespace RelhaxModpack.Windows
                     window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
                     window.ShowDialog();
                 }
-                if (globalsOutOfDate || packageDependenciesOutOfDate || packagesOutOfDate)
+                if (globalsOutOfDate || dependenciesOutOfDate || packagesOutOfDate)
                 {
                     //removed user selections
                     window.HeaderText = Translations.GetTranslatedString("packagesUpdatedShouldInstall");
