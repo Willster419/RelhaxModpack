@@ -14,6 +14,7 @@ using RelhaxModpack.UIComponents;
 using System.Xml.Linq;
 using System.Windows.Threading;
 using System.Reflection;
+using System.Text;
 
 namespace RelhaxModpack.Windows
 {
@@ -1949,6 +1950,7 @@ namespace RelhaxModpack.Windows
             List<SelectablePackage> removedPackages = new List<SelectablePackage>();
             List<SelectablePackage> disabledPackages = new List<SelectablePackage>();
             List<DatabasePackage> removedUserPackages = new List<DatabasePackage>();
+            List<DatabasePackage> outOfDatePackages = new List<DatabasePackage>();
 
             //bools for determining if stuff is out of date
             bool globalsOutOfDate = false;
@@ -2124,24 +2126,20 @@ namespace RelhaxModpack.Windows
             if (GlobalDependencies.Count != globalPackagesFromSelection.Count)
                 globalsOutOfDate = true;
 
-            if (!globalsOutOfDate)
+            //compare each package and check if it's out of date
+            foreach (DatabasePackage globalDependencyFromSelection in globalPackagesFromSelection)
             {
-                //compare each package and check if it's out of date
-                foreach (DatabasePackage globalDependencyFromSelection in globalPackagesFromSelection)
+                DatabasePackage globalDependency = GlobalDependencies.Find(pack => pack.UID.Equals(globalDependencyFromSelection.UID));
+                if (globalDependencyFromSelection == null)
                 {
-                    DatabasePackage globalDependency = GlobalDependencies.Find(pack => pack.UID.Equals(globalDependencyFromSelection.UID));
-                    if (globalDependencyFromSelection == null)
-                    {
-                        Logging.Info("Global package {0} was not found in list database GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
-                        globalsOutOfDate = true;
-                        break;
-                    }
-                    if (IsSelectionV3PackageOutOfDate(globalDependencyFromSelection, globalDependency))
-                    {
-                        Logging.Info("Global package {0} is out of date from list of GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
-                        globalsOutOfDate = true;
-                        break;
-                    }
+                    Logging.Info("Global package {0} was not found in list database GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                    globalsOutOfDate = true;
+                }
+                if (IsSelectionV3PackageOutOfDate(globalDependencyFromSelection, globalDependency))
+                {
+                    Logging.Info("Global package {0} is out of date from list of GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                    globalsOutOfDate = true;
+                    outOfDatePackages.Add(globalDependencyFromSelection);
                 }
             }
 
@@ -2154,39 +2152,33 @@ namespace RelhaxModpack.Windows
             if (dependenciesCalculatedFromLoadedSelection.Count != dependenciesFromSelection.Count)
                 dependenciesOutOfDate = true;
 
-            //if count equal, then look for new ones in the newly calculated list that's not in the old list (added)
-            if (!dependenciesOutOfDate)
-            {
-                Logging.Debug("Number of dependencies is equal, check if any new ones exist in loaded list");
-                //UIDs of the above lists
-                List<string> UIDsDependenciesCalculatedFromLoadedSelection = dependenciesCalculatedFromLoadedSelection.Select(dep => dep.UID).ToList();
-                List<string> UIDsDependenciesFromSelection = dependenciesFromSelection.Select(dep => dep.UID).ToList();
+            Logging.Debug("Check if any new ones exist in loaded list");
+            //UIDs of the above lists
+            List<string> UIDsDependenciesCalculatedFromLoadedSelection = dependenciesCalculatedFromLoadedSelection.Select(dep => dep.UID).ToList();
+            List<string> UIDsDependenciesFromSelection = dependenciesFromSelection.Select(dep => dep.UID).ToList();
                 
-                //list of UIDs that exist in the dependencies loaded but NOT in loaded list. If count > 0 it means one has been added
-                List<string> newUIDsInDependencesFromLoadedSelection = UIDsDependenciesCalculatedFromLoadedSelection.Except(UIDsDependenciesFromSelection).ToList();
+            //list of UIDs that exist in the dependencies loaded but NOT in loaded list. If count > 0 it means one has been added
+            List<string> newUIDsInDependencesFromLoadedSelection = UIDsDependenciesCalculatedFromLoadedSelection.Except(UIDsDependenciesFromSelection).ToList();
 
-                Logging.Debug("New dependencies loaded from selection count: {0}", newUIDsInDependencesFromLoadedSelection.Count);
+            Logging.Debug("New dependencies loaded from selection count: {0}", newUIDsInDependencesFromLoadedSelection.Count);
 
-                if (newUIDsInDependencesFromLoadedSelection.Count > 0)
-                    dependenciesOutOfDate = true;
-            }
+            if (newUIDsInDependencesFromLoadedSelection.Count > 0)
+                dependenciesOutOfDate = true;
 
             //if nothing new found, check each old to see if it == new
-            if (!dependenciesOutOfDate)
+            foreach (Dependency dependencyFromSelection in dependenciesFromSelection)
             {
-                foreach (Dependency dependencyFromSelection in dependenciesFromSelection)
+                Dependency dependencyFromDatabase = Dependencies.Find(dep => dep.UID.Equals(dependencyFromSelection.UID));
+                if (dependencyFromDatabase == null)
                 {
-                    Dependency dependencyFromDatabase = Dependencies.Find(dep => dep.UID.Equals(dependencyFromSelection.UID));
-                    if (dependencyFromDatabase == null)
-                    {
-                        throw new BadMemeException("This should not happen, it was checked above this to be not null and the bool should have been flagged");
-                    }
-                    if (IsSelectionV3PackageOutOfDate(dependencyFromSelection, dependencyFromDatabase))
-                    {
-                        Logging.Info("Dependency {0} is out of date from list of Dependencies. Setting dependenciesOutOfDate to true", dependencyFromSelection.PackageName);
-                        globalsOutOfDate = true;
-                        break;
-                    }
+                    Logging.Debug("Dependency {0} was removed, continue", dependencyFromSelection.PackageName);
+                    continue;
+                }
+                if (IsSelectionV3PackageOutOfDate(dependencyFromSelection, dependencyFromDatabase))
+                {
+                    Logging.Info("Dependency {0} is out of date from list of Dependencies. Setting dependenciesOutOfDate to true", dependencyFromSelection.PackageName);
+                    globalsOutOfDate = true;
+                    outOfDatePackages.Add(dependencyFromSelection);
                 }
             }
 
@@ -2197,22 +2189,21 @@ namespace RelhaxModpack.Windows
 
             //check if packages are out of date
             Logging.Debug("Processing packages from selection");
-            if (!packagesOutOfDate)
+            foreach (SelectablePackage packageFromSelection in packagesFromSelection)
             {
-                foreach (SelectablePackage packageFromSelection in packagesFromSelection)
+                //get the package object from the parsed database list, based on UID property
+                SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
+                if (packageFromDatabase == null)
                 {
-                    //get the package object from the parsed database list, based on UID property
-                    SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
-                    if (packageFromDatabase == null)
-                    {
-                        throw new BadMemeException("This should not happen, it was checked above this to be not null and the bool should have been flagged");
-                    }
+                    Logging.Debug("SelectablePackage {0} was removed (checking for out of date), continue", packageFromSelection.PackageName);
+                    continue;
+                }
 
-                    if (IsSelectionV3PackageOutOfDate(packageFromSelection, packageFromDatabase))
-                    {
-                        Logging.Info("Package {0} is out of date from list of Packages. Setting packagesOutOfDate to true", packageFromSelection.PackageName);
-                        packagesOutOfDate = true;
-                    }
+                if (IsSelectionV3PackageOutOfDate(packageFromSelection, packageFromDatabase))
+                {
+                    Logging.Info("Package {0} is out of date from list of Packages. Setting packagesOutOfDate to true", packageFromSelection.PackageName);
+                    packagesOutOfDate = true;
+                    outOfDatePackages.Add(packageFromSelection);
                 }
             }
 
@@ -2222,7 +2213,10 @@ namespace RelhaxModpack.Windows
                 //get the package object from the parsed database list, based on UID property
                 SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
                 if (packageFromDatabase == null)
+                {
+                    Logging.Debug("SelectablePackage {0} was removed (checking for package rename), continue", packageFromSelection.PackageName);
                     continue;
+                }
                 if (IsPackageNameOutOfDate(packageFromSelection, packageFromDatabase))
                 {
                     Logging.Info("PackageName {0} is old from database's name of {1}, flagging for remap", packageFromSelection.PackageName, packageFromDatabase.PackageName);
@@ -2243,6 +2237,7 @@ namespace RelhaxModpack.Windows
                     userOutOfDate = true;
                     continue;
                 }
+
                 Logging.Info("Checking user package {0}", userPackage.PackageName);
                 userPackageFromDatabase.Enabled = true;
                 userPackageFromDatabase.Checked = true;
@@ -2260,9 +2255,10 @@ namespace RelhaxModpack.Windows
             Logging.Info("Removed user packages:     {0}", removedUserPackages.Count);
             Logging.Info("Disabled packages:         {0}", disabledPackages.Count);
             Logging.Info("Broken structure packages: {0}", brokenStructurePackages.Count);
+            Logging.Info("Out of date packages:      {0}", outOfDatePackages.Count);
 
             //if in some sort of auto-install mode, check if the user wants to be informed of selection issues
-            int totalBrokenCount = removedPackages.Count + removedUserPackages.Count + disabledPackages.Count + brokenStructurePackages.Count;
+            int totalBrokenCount = removedPackages.Count + removedUserPackages.Count + disabledPackages.Count + brokenStructurePackages.Count + outOfDatePackages.Count;
 
             //save the xml document if the selection was out of date
             if (globalsOutOfDate || dependenciesOutOfDate || packagesOutOfDate || packageNamesOutOfDate || userOutOfDate)
@@ -2295,52 +2291,49 @@ namespace RelhaxModpack.Windows
                     return false;
                 }
             }
-            else if (!silent)//only report issues if silent is false
+            else if (!silent && totalBrokenCount > 0)//only report issues if silent is false and if anything needs to be reported
             {
-                SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay();
-                int totalCount = removedPackages.Count + removedUserPackages.Count + disabledPackages.Count + brokenStructurePackages.Count;
-                if (globalsOutOfDate || dependenciesOutOfDate || packagesOutOfDate)
-                    totalCount++;
+                SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay
+                {
+                    Title = Translations.GetTranslatedString("selectionFileIssuesTitle"),
+                    HeaderText = Translations.GetTranslatedString("selectionFileIssuesHeader"),
+                    ButtonText = Translations.GetTranslatedString("close")
+                };
 
+                StringBuilder selectionMessagesBuilder = new StringBuilder();
+
+                //disabled selections
                 if (disabledPackages.Count > 0)
                 {
-                    totalCount -= disabledPackages.Count;
-                    //disabled selections
-                    window.HeaderText = Translations.GetTranslatedString("modDeactivated");
-                    window.BodyText = string.Join(Environment.NewLine, disabledPackages.Select(package => package.CompletePath).ToArray());
-                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
-                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
-                    window.ShowDialog();
+                    selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modDeactivated"));
+                    selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, disabledPackages.Select(package => package.CompletePath).ToArray()));
                 }
+
+                //removed selections, db and user
                 if (removedUserPackages.Count + removedPackages.Count > 0)
                 {
-                    totalCount -= removedUserPackages.Count + removedPackages.Count;
-                    //removed selections
-                    window.HeaderText = Translations.GetTranslatedString("modsNotFoundTechnical");
-                    window.BodyText = string.Join(Environment.NewLine, removedPackages.Concat(removedUserPackages).Select(package => package.CompletePath).ToArray());
-                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
-                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
-                    window.ShowDialog();
+                    selectionMessagesBuilder.AppendLine();
+                    selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modsNotFoundTechnical"));
+                    selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, removedPackages.Concat(removedUserPackages).Select(package => package.CompletePath).ToArray()));
                 }
+
+                //removed broken structure selection
                 if (brokenStructurePackages.Count > 0)
                 {
-                    totalCount -= brokenStructurePackages.Count;
-                    //removed structure user selections
-                    window.HeaderText = Translations.GetTranslatedString("modsBrokenStructure");
-                    window.BodyText = string.Join(Environment.NewLine, brokenStructurePackages.Select(package => package.CompletePath).ToArray());
-                    window.Title = Translations.GetTranslatedString("selectionFileIssues");
-                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
-                    window.ShowDialog();
+                    selectionMessagesBuilder.AppendLine();
+                    selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modsBrokenStructure"));
+                    selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, brokenStructurePackages.Select(package => package.CompletePath).ToArray()));
                 }
-                if (globalsOutOfDate || dependenciesOutOfDate || packagesOutOfDate)
+
+                //out of date selections
+                if(outOfDatePackages.Count > 0)
                 {
-                    //removed user selections
-                    window.HeaderText = Translations.GetTranslatedString("packagesUpdatedShouldInstall");
-                    window.BodyText = string.Empty;
-                    window.Title = Translations.GetTranslatedString("selectionFileUpdatedPackages");
-                    window.ButtonText = Translations.GetTranslatedString("close");
-                    window.ShowDialog();
+                    selectionMessagesBuilder.AppendLine();
+                    selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("packagesUpdatedShouldInstall"));
+                    selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, outOfDatePackages.Select(package => package.CompletePath).ToArray()));
                 }
+
+                window.ShowDialog();
                 window.Close();
                 window = null;
             }
