@@ -1913,6 +1913,15 @@ namespace RelhaxModpack.Windows
 
         private bool LoadSelectionV3(XmlDocument document, bool silent, string loadPath)
         {
+            //check if it's 'direct load' type
+            bool directLoad = false;
+            string directLoadString = XmlUtils.GetXmlStringFromXPath(document, "/packages/@directLoad");
+            if (!string.IsNullOrEmpty(directLoadString) && Utils.ParseBool(directLoadString, out bool result_, false))
+            {
+                directLoad = result_;
+                Logging.Debug("Parsed directLoad = {0}", directLoad);
+            }
+
             //first uncheck everything
             Utils.ClearSelections(ParsedCategoryList);
 
@@ -2103,6 +2112,13 @@ namespace RelhaxModpack.Windows
                 }
             }
 
+            //if direct load mode (like default checked), then don't run MaaS or any additional calculations
+            if(directLoad)
+            {
+                Logging.Debug("DirectLoad = true, stopping here");
+                return true;
+            }
+
             //determine if packages are out of date
             Logging.Debug("Processing global packages for selection");
             if (GlobalDependencies.Count != globalPackagesFromSelection.Count)
@@ -2255,6 +2271,15 @@ namespace RelhaxModpack.Windows
                 Logging.Debug("globals={0}, dependencies={1}, packages={2}, packageNames={3}, user={4}", globalsOutOfDate, dependenciesOutOfDate, packagesOutOfDate, packageNamesOutOfDate, userOutOfDate);
 
                 //save the document via save v3
+                document = null;
+                string filename = Path.GetFileNameWithoutExtension(loadPath);
+                string filenameBackup = filename + "_backup.xml";
+                string pathBackup = Path.Combine(Path.GetDirectoryName(loadPath), filenameBackup);
+
+                if (File.Exists(pathBackup))
+                    Utils.FileDelete(pathBackup, 3, 100);
+                Utils.FileMove(loadPath, pathBackup, 3, 100);
+
                 SaveSelectionV3(loadPath, silent);
             }
 
