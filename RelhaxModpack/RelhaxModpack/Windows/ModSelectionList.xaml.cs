@@ -2316,7 +2316,7 @@ namespace RelhaxModpack.Windows
                     Utils.FileDelete(pathBackup, 3, 100);
                 Utils.FileMove(loadPath, pathBackup, 3, 100);
 
-                SaveSelectionV3(loadPath, silent);
+                SaveSelectionV3(loadPath, true);
             }
 
             if (totalBrokenCount > 0 && (AutoInstallMode || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
@@ -2347,32 +2347,34 @@ namespace RelhaxModpack.Windows
                 {
                     selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modDeactivated"));
                     selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, disabledPackages.Select(package => package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine();
                 }
 
                 //removed selections, db and user
                 if (removedUserPackages.Count + removedPackages.Count > 0)
                 {
-                    selectionMessagesBuilder.AppendLine();
                     selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modsNotFoundTechnical"));
                     selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, removedPackages.Concat(removedUserPackages).Select(package => package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine();
                 }
 
                 //removed broken structure selection
                 if (brokenStructurePackages.Count > 0)
                 {
-                    selectionMessagesBuilder.AppendLine();
                     selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modsBrokenStructure"));
                     selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, brokenStructurePackages.Select(package => package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine();
                 }
 
                 //out of date selections
                 if(outOfDatePackages.Count > 0)
                 {
-                    selectionMessagesBuilder.AppendLine();
                     selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("packagesUpdatedShouldInstall"));
                     selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, outOfDatePackages.Select(package => package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine();
                 }
 
+                window.BodyText = selectionMessagesBuilder.ToString();
                 window.ShowDialog();
                 window.Close();
                 window = null;
