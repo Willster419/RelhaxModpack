@@ -831,6 +831,7 @@ namespace RelhaxModpack.Windows
             PackageEndAddressDisplay.Text = package.EndAddress;
             PackageVersionDisplay.Text = package.Version;
             PackageAuthorDisplay.Text = package.Author;
+            PackageUidDisplay.Text = package.UID;
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
 
             //locate and select the patchGroup and installGroup of the package
@@ -1052,7 +1053,7 @@ namespace RelhaxModpack.Windows
             //check if the to save packagename is unique
             if (!PackagePackageNameDisplay.Text.Equals(package.PackageName))
             {
-                Logging.Editor("packageName is new, checking if it is unique");
+                Logging.Editor("PackageName is new, checking if it is unique");
                 if (Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList), PackagePackageNameDisplay.Text))
                 {
                     MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
@@ -1063,7 +1064,7 @@ namespace RelhaxModpack.Windows
             //check if package was actually modified before saving all these delicious properties
             if (!PackageWasModified(package))
             {
-                Logging.Editor("package was not modified, don't apply anything");
+                Logging.Editor("Package was not modified, don't apply anything");
                 return true;
             }
 
@@ -1072,12 +1073,19 @@ namespace RelhaxModpack.Windows
             {
                 if (!package.ZipFile.Equals(PackageZipFileDisplay.Text) && !Path.GetExtension(PackageZipFileDisplay.Text).Equals(".zip"))
                 {
-                    MessageBox.Show("no zip in file extension, was this a mistake?");
+                    MessageBox.Show("No zip in file extension, was this a mistake?");
                     return false;
                 }
             }
 
-            Logging.Editor("package was modified, saving changes to memory and setting changes switch");
+            //check if package UID changed. it shouldn't
+            if(!package.UID.Equals(PackageUidDisplay.Text))
+            {
+                Logging.Editor("The package UID changed. Old = {0}, New = {1}", LogLevel.Error, package.UID, PackageUidDisplay);
+                return false;
+            }
+
+            Logging.Editor("Package was modified, saving changes to memory and setting changes switch");
 
             //save everything from the UI into the package
             //save package elements first

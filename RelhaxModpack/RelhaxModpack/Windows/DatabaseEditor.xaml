@@ -485,8 +485,13 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
+                            <!-- Patch Group -->
                             <RowDefinition Height="20"/>
+                            <!-- UID -->
                             <RowDefinition Height="20"/>
+                            <!-- Level -->
+                            <RowDefinition Height="20"/>
+                            <!-- Last Updated -->
                             <RowDefinition Height="20"/>
                             <!-- spacer -->
                             <RowDefinition Height="20"/>
@@ -520,8 +525,9 @@
                         <TextBlock x:Name="PakageTypeTextBlock" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageInstallGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Install Group" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackagePatchGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" Text="Patch Group" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="13" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageUidTextBlock" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" Text="UID:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="13" TextWrapping="Wrap" Text="Level:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="14" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
                         <TextBox x:Name="PackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackagePackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageStartAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
@@ -539,26 +545,27 @@
                         </ComboBox>
                         <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
                         <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="11" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
-                        <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
-                        <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="13" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                        <StackPanel Grid.Column="0" Grid.Row="15" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+                        <TextBlock x:Name="PackageUidDisplay" HorizontalAlignment="Stretch" Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" IsEnabled="True"/>
+                        <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="13" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+                        <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="14" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="0" Grid.Row="16" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Log At Install" Tag="LogAtInstallCB" x:Name="PackageLogAtInstallDisplay"/>
                             <CheckBox Content="Show In Search" x:Name="PackageShowInSearchListDisplay" Tag="PopularModCB" Margin="8,0,0,0"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="0" Grid.Row="16" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+                        <StackPanel Grid.Column="0" Grid.Row="17" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Popular" x:Name="PackagePopularModDisplay" Tag="PopularModCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Grey Area" x:Name="PackageGreyAreaModDisplay" Tag="PackageGreyAreaModDisplay" Margin="37,0,0,0"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="0" Grid.Row="17" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+                        <StackPanel Grid.Column="0" Grid.Row="18" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="42,0,0,0"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="0" Grid.Row="18" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+                        <StackPanel Grid.Column="0" Grid.Row="19" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Obfuscated" x:Name="PackageObfuscatedModDisplay" Tag="ObfuscatedCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Offset InstallGroup" x:Name="CategoryOffsetInstallGroupDisplay" Tag="OffsetInstallGroupCB" Margin="16,0,0,0"/>
                         </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="20" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" />
-                        <Button Grid.Column="0" Grid.Row="22" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="21" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="23" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" />
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
