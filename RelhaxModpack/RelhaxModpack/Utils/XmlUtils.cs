@@ -492,12 +492,39 @@ namespace RelhaxModpack
         public static bool ParseDatabase1V1FromStrings(string globalDependenciesXml, string dependneciesXml, List<string> categoriesXml,
             List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
+            Logging.Debug(LogOptions.MethodName, "Parsing global dependencies");
             XDocument globalDependenciesdoc = LoadXDocument(globalDependenciesXml, XmlLoadType.FromString);
+
+            Logging.Debug(LogOptions.MethodName, "Parsing dependencies");
             XDocument dependenciesdoc = LoadXDocument(dependneciesXml, XmlLoadType.FromString);
+
+            Logging.Debug(LogOptions.MethodName, "Parsing categories");
             List<XDocument> categoryDocuments = new List<XDocument>();
             foreach(string category in categoriesXml)
             {
                 categoryDocuments.Add(LoadXDocument(category, XmlLoadType.FromString));
+            }
+
+            //check if any of the databases failed to parse
+            if(globalDependenciesdoc == null)
+            {
+                Logging.Error("Failed to parse global dependencies xml");
+                return false;
+            }
+
+            if(dependenciesdoc == null)
+            {
+                Logging.Error("Failed to parse dependencies xml");
+                return false;
+            }
+
+            for(int i = 0; i < categoryDocuments.Count; i++)
+            {
+                if(categoryDocuments[i] == null)
+                {
+                    Logging.Error("Category document index {0} failed to parse", i);
+                    return false;
+                }
             }
 
             return ParseDatabase1V1(globalDependenciesdoc, globalDependencies, dependenciesdoc, dependencies, categoryDocuments, parsedCategoryList);
