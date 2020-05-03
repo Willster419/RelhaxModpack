@@ -7314,6 +7314,21 @@
             The package reference for the database after changes
             </summary>
         </member>
+        <member name="T:RelhaxModpack.DatabaseBeforeAfter2">
+            <summary>
+            Allows the old and new versions of a DatabasePackage to be saved temporarily for comparing differences between two database structures
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseBeforeAfter2.Before">
+            <summary>
+            The package reference for the database before changes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseBeforeAfter2.After">
+            <summary>
+            The package reference for the database after changes
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.VersionInfos">
             <summary>
             A structure object to contain the WoT client version and online folder version. Allows for LINQ searching
@@ -7895,12 +7910,13 @@
             <param name="componentsWithDependencies">List of all DatabasePackage objects that have dependencies</param>
             <param name="dependencies">List of all Dependencies that exist in the database</param>
         </member>
-        <member name="M:RelhaxModpack.Utils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category})">
+        <member name="M:RelhaxModpack.Utils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category},System.Boolean)">
             <summary>
             Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
             </summary>
             <param name="dependencies">The list of dependencies</param>
             <param name="parsedCategoryList">The list of Categories</param>
+            <param name="suppressSomeLogging">Flag for it some of the more verbose logging should be suppressed</param>
             <returns>A list of calculated dependencies to install</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.CreateOrderedInstallList(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
