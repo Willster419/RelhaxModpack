@@ -607,6 +607,7 @@ namespace RelhaxModpack.Windows
                     //process loading selections after loading UI
                     XmlDocument SelectionsDocument = null;
                     bool shouldLoadSomething = false;
+                    string shouldLoadSomethingFilepath = null;
                     bool loadSuccess = false;
                     //if test mode, don't load the "default_checked" document
                     if(databaseVersion == DatabaseVersions.Test)
@@ -621,6 +622,7 @@ namespace RelhaxModpack.Windows
                             //load the custom selection file
                             Logging.Info("Loading selection file from {0}",ModpackSettings.AutoOneclickSelectionFilePath);
                             SelectionsDocument = XmlUtils.LoadXmlDocument(ModpackSettings.AutoOneclickSelectionFilePath, XmlLoadType.FromFile);
+                            shouldLoadSomethingFilepath = ModpackSettings.AutoOneclickSelectionFilePath;
                             shouldLoadSomething = true;
                         }
                         else
@@ -636,6 +638,7 @@ namespace RelhaxModpack.Windows
                         string thePath = Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName);
                         Logging.Info("Loading selection file from {0}", thePath);
                         SelectionsDocument = XmlUtils.LoadXmlDocument(thePath, XmlLoadType.FromFile);
+                        shouldLoadSomethingFilepath = thePath;
                         shouldLoadSomething = true;
                     }
                     else if (ModpackSettings.SaveLastSelection)
@@ -644,12 +647,14 @@ namespace RelhaxModpack.Windows
                         {
                             Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
                             SelectionsDocument = XmlUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                            shouldLoadSomethingFilepath = null;
                             shouldLoadSomething = true;
                         }
                         else
                         {
                             Logging.Info("Loading selection file from {0}", Settings.LastInstalledConfigFilepath);
                             SelectionsDocument = XmlUtils.LoadXmlDocument(Settings.LastInstalledConfigFilepath, XmlLoadType.FromFile);
+                            shouldLoadSomethingFilepath = Settings.LastInstalledConfigFilepath;
                             shouldLoadSomething = true;
                         }
                     }
@@ -657,6 +662,7 @@ namespace RelhaxModpack.Windows
                     {
                         //load default checked mods
                         SelectionsDocument = XmlUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                        shouldLoadSomethingFilepath = null;
                         shouldLoadSomething = true;
                     }
 
@@ -665,7 +671,7 @@ namespace RelhaxModpack.Windows
                     {
                         if(SelectionsDocument != null)
                         {
-                            loadSuccess = LoadSelection(SelectionsDocument, true);
+                            loadSuccess = LoadSelection(SelectionsDocument, true, shouldLoadSomethingFilepath);
                         }
                         else
                         {
@@ -1651,12 +1657,14 @@ namespace RelhaxModpack.Windows
         {
             if(!e.LoadSelection)
                 return;
+
             if(string.IsNullOrWhiteSpace(e.FileToLoad))
             {
                 Logging.WriteToLog("DeveloperSelections returned a blank selection to load when e.LoadSelection = true",Logfiles.Application, LogLevel.Error);
                 MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                 return;
             }
+
             if(e.FileToLoad.Equals("LOCAL"))
             {
                 OpenFileDialog selectLoadPath = new OpenFileDialog()
@@ -1670,6 +1678,7 @@ namespace RelhaxModpack.Windows
                     Multiselect = false,
                     ValidateNames = true
                 };
+
                 if((bool)selectLoadPath.ShowDialog())
                 {
                     XmlDocument doc = new XmlDocument();
@@ -1703,12 +1712,14 @@ namespace RelhaxModpack.Windows
                         Close();
                     }
                 }
+
                 if (string.IsNullOrWhiteSpace(xmlString))
                 {
                     Logging.WriteToLog("xmlString is null or empty", Logfiles.Application, LogLevel.Error);
                     MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                     return;
                 }
+
                 XmlDocument doc = new XmlDocument();
                 try
                 {
@@ -1720,7 +1731,7 @@ namespace RelhaxModpack.Windows
                     MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                     return;
                 }
-                LoadSelection(doc,false);
+                LoadSelection(doc,false,null);
             }
         }
 
@@ -1736,7 +1747,7 @@ namespace RelhaxModpack.Windows
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
 
-        private bool LoadSelection(XmlDocument document, bool silent, string loadPath = null)
+        private bool LoadSelection(XmlDocument document, bool silent, string loadPath)
         {
             //get the string version of the document, determine what to do from there
             string selectionVersion = XmlUtils.GetXmlStringFromXPath(document, "//mods/@ver");
@@ -1752,7 +1763,7 @@ namespace RelhaxModpack.Windows
             switch(selectionVersion)
             {
                 case "2.0":
-                    return LoadSelectionV2(document, silent);
+                    return LoadSelectionV2(document, silent, loadPath);
 
                 case "3.0":
                     return LoadSelectionV3(document, silent, loadPath);
@@ -1766,9 +1777,16 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private bool LoadSelectionV2(XmlDocument document, bool silent)
+        private bool LoadSelectionV2(XmlDocument document, bool silent, string loadPath)
         {
-            //first uncheck everyting
+            //as of 2020-05-03, this format is deprecated. We'll still show it. For now.
+            if(!silent && !string.IsNullOrEmpty(loadPath))
+                MessageBox.Show(Translations.GetTranslatedString("SelectionFormatOldV2"));
+
+            if (!string.IsNullOrEmpty(loadPath))
+                Logging.Info("This selection file is V2 and will be upgraded to V3. A V2 backup will be created");
+
+            //first uncheck everything
             Utils.ClearSelections(ParsedCategoryList);
 
             //get a list of all the mods currently in the selection
@@ -1779,7 +1797,7 @@ namespace RelhaxModpack.Windows
             Logging.Debug("xmlSelections count: {0}", xmlSelections.Count);
             Logging.Debug("xmluserSelections count: {0}", xmluserSelections.Count);
 
-            //save a list string of all the packagenames in the list for later
+            //save a list string of all the package names in the list for later
             List<string> stringSelections = new List<string>();
             List<string> stringUserSelections = new List<string>();
             List<string> disabledMods = new List<string>();
@@ -1909,6 +1927,24 @@ namespace RelhaxModpack.Windows
                 Logging.Info("Silent = true, logging {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
                     disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
             }
+
+            //if not a developer selection file (we have a valid load path, so user, or last loaded, or auto/oneClick), then copy this to a backup file and save/overwrite
+            if(!string.IsNullOrEmpty(loadPath))
+            {
+                string backupFilename = string.Format("{0}_v2_backup.xml", Path.GetFileNameWithoutExtension(loadPath));
+                string backupFilepath = Path.Combine(Path.GetDirectoryName(loadPath), backupFilename);
+                Logging.Info("Saving old V2 format backup to {0}", backupFilepath);
+
+                if(File.Exists(backupFilepath))
+                {
+                    Logging.Debug("File already exists, delete to create new");
+                    File.Delete(backupFilepath);
+                }
+
+                Utils.FileMove(loadPath, backupFilepath, 3, 100);
+                SaveSelectionV3(loadPath, silent);
+            }
+
             return true;
         }
 
