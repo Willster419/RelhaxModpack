@@ -1784,7 +1784,9 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show(Translations.GetTranslatedString("SelectionFormatOldV2"));
 
             if (!string.IsNullOrEmpty(loadPath))
-                Logging.Info("This selection file is V2 and will be upgraded to V3. A V2 backup will be created");
+                Logging.Info(LogOptions.MethodAndClassName, "This selection file is V2 and will be upgraded to V3. A V2 backup will be created");
+            else
+                Logging.Info(LogOptions.MethodAndClassName, "This selection file is V2 but upgrade will be ignored");
 
             //first uncheck everything
             Utils.ClearSelections(ParsedCategoryList);
@@ -1820,14 +1822,14 @@ namespace RelhaxModpack.Windows
                     if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
                     {
                         package.ParentCategory.CategoryHeader.Checked = true;
-                        Logging.Info("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
+                        Logging.Info(LogOptions.MethodName, "Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
                     }
 
                     //also check if the mod only if it's enabled OR is command line settings force enabled
                     if (package.Enabled || ModpackSettings.ForceEnabled)
                     {
                         package.Checked = true;
-                        Logging.Info(string.Format("Checking package {0}", package.CompletePath));
+                        Logging.Info(LogOptions.MethodName, string.Format("Checking package {0}", package.CompletePath));
                     }
                     else
                     {
@@ -1837,7 +1839,7 @@ namespace RelhaxModpack.Windows
                             package.FlagForSelectionSave = true;
                         }
                         disabledMods.Add(package.CompletePath);
-                        Logging.Info(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
+                        Logging.Info(LogOptions.MethodName, string.Format("\"{0}\" is a disabled mod", package.CompletePath));
                     }
                 }
             }
@@ -1847,7 +1849,7 @@ namespace RelhaxModpack.Windows
             {
                 if (stringUserSelections.Contains(Path.GetFileNameWithoutExtension(package.ZipFile)) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolderPath, package.ZipFile)))
                 {
-                    Logging.Info(string.Format("Checking User Mod {0}", package.ZipFile));
+                    Logging.Info(LogOptions.MethodName, string.Format("Checking User Mod {0}", package.ZipFile));
                     package.Enabled = true;
                     package.Checked = true;
                     stringUserSelections.Remove(Path.GetFileNameWithoutExtension(package.ZipFile));
@@ -1856,19 +1858,19 @@ namespace RelhaxModpack.Windows
 
             //now check for the correct structure of mods
             brokenMods = IsValidStructure(ParsedCategoryList);
-            Logging.Info("Broken mods structure count: " + brokenMods.Count);
+            Logging.Info(LogOptions.MethodName, "Broken mods structure count: " + brokenMods.Count);
 
             //
             int totalBrokenCount = disabledMods.Count + brokenMods.Count + stringSelections.Count + stringUserSelections.Count;
             if (totalBrokenCount > 0 && (AutoInstallMode || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
             {
-                Logging.Info("Selection issues with auto or one click enabled, with message warning enabled. Show message.");
+                Logging.Info(LogOptions.MethodName, "Selection issues with auto or one click enabled, with message warning enabled. Show message.");
                 MessageBoxResult result = MessageBox.Show(
                     Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"),
                     Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"), MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.No)
                 {
-                    Logging.Info("User selected stop installation");
+                    Logging.Info(LogOptions.MethodName, "User selected stop installation");
                     return false;
                 }
             }
@@ -1876,7 +1878,7 @@ namespace RelhaxModpack.Windows
             //only report issues if silent is false. true means its doing something like auto selections or
             else if (!silent)
             {
-                Logging.Info("Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
+                Logging.Info(LogOptions.MethodName, "Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
                     disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
                 SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay();
                 int totalCount = disabledMods.Count + stringSelections.Count + stringUserSelections.Count + brokenMods.Count;
@@ -1924,7 +1926,7 @@ namespace RelhaxModpack.Windows
             }
             else
             {
-                Logging.Info("Silent = true, logging {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
+                Logging.Info(LogOptions.MethodName, "Silent = true, logging {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
                     disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
             }
 
@@ -1933,7 +1935,7 @@ namespace RelhaxModpack.Windows
             {
                 string backupFilename = string.Format("{0}_v2_backup.xml", Path.GetFileNameWithoutExtension(loadPath));
                 string backupFilepath = Path.Combine(Path.GetDirectoryName(loadPath), backupFilename);
-                Logging.Info("Saving old V2 format backup to {0}", backupFilepath);
+                Logging.Info(LogOptions.MethodName, "Saving old V2 format backup to {0}", backupFilepath);
 
                 if(File.Exists(backupFilepath))
                 {
@@ -2060,7 +2062,7 @@ namespace RelhaxModpack.Windows
                 //if it's null, then the package was removed
                 if (packageFromDatabase == null)
                 {
-                    Logging.Info("Package {0} was removed from the database, since last selection save. UID={1}", packageFromSelection.PackageName, packageFromSelection.UID);
+                    Logging.Info(LogOptions.MethodName, "Package {0} was removed from the database, since last selection save. UID={1}", packageFromSelection.PackageName, packageFromSelection.UID);
                     removedPackages.Add(packageFromSelection);
                     packagesOutOfDate = true;
                     continue;
@@ -2071,7 +2073,7 @@ namespace RelhaxModpack.Windows
                 //unless force visible is on
                 if (!ModpackSettings.ForceVisible && !packageFromDatabase.Visible)
                 {
-                    Logging.Info("Package {0} was hidden since last selection save, act as removed from the database. UID={1}", packageFromSelection.PackageName, packageFromSelection.UID);
+                    Logging.Info(LogOptions.MethodName, "Package {0} was hidden since last selection save, act as removed from the database. UID={1}", packageFromSelection.PackageName, packageFromSelection.UID);
                     removedPackages.Add(packageFromSelection);
                     packagesOutOfDate = true;
                     continue;
@@ -2083,12 +2085,12 @@ namespace RelhaxModpack.Windows
                 {
                     if (!packageFromDatabase.Enabled)
                     {
-                        Logging.Info("Package {0} is disabled in database and still exists in selection. It won't be checked");
+                        Logging.Info(LogOptions.MethodName, "Package {0} is disabled in database and still exists in selection. It won't be checked");
                         disabledPackages.Add(packageFromSelection);
                         //if setting is high for keeping disabled packages, then don't remove it from selection file
                         if (ModpackSettings.SaveDisabledMods)
                         {
-                            Logging.Info("SaveDisabledMods is true, keep this package in the selection file by flagging");
+                            Logging.Info(LogOptions.MethodName, "SaveDisabledMods is true, keep this package in the selection file by flagging");
                             packageFromDatabase.FlagForSelectionSave = true;
 
                             //we also save this value to disk, so if we find it when loading, then it's not the first time
@@ -2117,7 +2119,7 @@ namespace RelhaxModpack.Windows
                 //getting here means the package is visible and enabled and not removed, so check it
                 if (packageFromDatabase.Enabled && packageFromDatabase.Visible)
                 {
-                    Logging.Info("Checking package {0}", packageFromDatabase.PackageName);
+                    Logging.Info(LogOptions.MethodName, "Checking package {0}", packageFromDatabase.PackageName);
                     packageFromDatabase.Checked = true;
                 }
                 else
@@ -2168,12 +2170,12 @@ namespace RelhaxModpack.Windows
                 DatabasePackage globalDependency = GlobalDependencies.Find(pack => pack.UID.Equals(globalDependencyFromSelection.UID));
                 if (globalDependencyFromSelection == null)
                 {
-                    Logging.Info("Global package {0} was not found in list database GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                    Logging.Info(LogOptions.MethodName, "Global package {0} was not found in list database GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
                     globalsOutOfDate = true;
                 }
                 if (IsSelectionV3PackageOutOfDate(globalDependencyFromSelection, globalDependency))
                 {
-                    Logging.Info("Global package {0} is out of date from list of GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                    Logging.Info(LogOptions.MethodName, "Global package {0} is out of date from list of GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
                     globalsOutOfDate = true;
                     outOfDatePackages.Add(globalDependencyFromSelection);
                 }
@@ -2255,7 +2257,7 @@ namespace RelhaxModpack.Windows
                 }
                 if (IsPackageNameOutOfDate(packageFromSelection, packageFromDatabase))
                 {
-                    Logging.Info("PackageName {0} is old from database's name of {1}, flagging for remap", packageFromSelection.PackageName, packageFromDatabase.PackageName);
+                    Logging.Info(LogOptions.MethodName, "PackageName {0} is old from database's name of {1}, flagging for remap", packageFromSelection.PackageName, packageFromDatabase.PackageName);
                     packageNamesOutOfDate = true;
                 }
             }
@@ -2268,13 +2270,13 @@ namespace RelhaxModpack.Windows
                 SelectablePackage userPackageFromDatabase = UserCategory.Packages.Find(pac => pac.PackageName.Equals(userPackage.PackageName));
                 if (userPackageFromDatabase == null)
                 {
-                    Logging.Info("User package {0} was removed, set userOutOfDate");
+                    Logging.Info(LogOptions.MethodName, "User package {0} was removed, set userOutOfDate");
                     removedUserPackages.Add(userPackage);
                     userOutOfDate = true;
                     continue;
                 }
 
-                Logging.Info("Checking user package {0}", userPackage.PackageName);
+                Logging.Info(LogOptions.MethodName, "Checking user package {0}", userPackage.PackageName);
                 userPackageFromDatabase.Enabled = true;
                 userPackageFromDatabase.Checked = true;
 
@@ -2287,11 +2289,11 @@ namespace RelhaxModpack.Windows
             }
 
             //display counts of changes
-            Logging.Info("Removed packages:          {0}", removedPackages.Count);
-            Logging.Info("Removed user packages:     {0}", removedUserPackages.Count);
-            Logging.Info("Disabled packages:         {0}", disabledPackages.Count);
-            Logging.Info("Broken structure packages: {0}", brokenStructurePackages.Count);
-            Logging.Info("Out of date packages:      {0}", outOfDatePackages.Count);
+            Logging.Info(LogOptions.MethodName, "Removed packages:          {0}", removedPackages.Count);
+            Logging.Info(LogOptions.MethodName, "Removed user packages:     {0}", removedUserPackages.Count);
+            Logging.Info(LogOptions.MethodName, "Disabled packages:         {0}", disabledPackages.Count);
+            Logging.Info(LogOptions.MethodName, "Broken structure packages: {0}", brokenStructurePackages.Count);
+            Logging.Info(LogOptions.MethodName, "Out of date packages:      {0}", outOfDatePackages.Count);
 
             //if in some sort of auto-install mode, check if the user wants to be informed of selection issues
             int totalBrokenCount = removedPackages.Count + removedUserPackages.Count + disabledPackages.Count + brokenStructurePackages.Count + outOfDatePackages.Count;
@@ -2299,7 +2301,7 @@ namespace RelhaxModpack.Windows
             //save the xml document if the selection was out of date
             if (globalsOutOfDate || dependenciesOutOfDate || packagesOutOfDate || packageNamesOutOfDate || userOutOfDate)
             {
-                Logging.Info("The selection file is out of date, and is being updated (write new version to disk)");
+                Logging.Info(LogOptions.MethodName, "The selection file is out of date, and is being updated (write new version to disk)");
                 Logging.Debug("globals={0}, dependencies={1}, packages={2}, packageNames={3}, user={4}", globalsOutOfDate, dependenciesOutOfDate, packagesOutOfDate, packageNamesOutOfDate, userOutOfDate);
 
                 //save the document via save v3
@@ -2317,7 +2319,7 @@ namespace RelhaxModpack.Windows
 
             if (totalBrokenCount > 0 && (AutoInstallMode || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
             {
-                Logging.Info("Selection issues with auto or one click enabled, with message warning enabled. Show message.");
+                Logging.Info(LogOptions.MethodName, "Selection issues with auto or one click enabled, with message warning enabled. Show message.");
                 MessageBoxResult result = MessageBox.Show(
                     Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"),
                     Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"), MessageBoxButton.YesNo);
@@ -2627,7 +2629,7 @@ namespace RelhaxModpack.Windows
                 File.Delete(savePath);
             doc.Save(savePath);
             
-            Logging.Info("Selection save completed");
+            Logging.Info(LogOptions.MethodName, "Selection save completed");
             if (!silent)
             {
                 MessageBox.Show(Translations.GetTranslatedString("configSaveSuccess"));

@@ -1901,7 +1901,8 @@ namespace RelhaxModpack
             {
                 //first check if this dependency is referencing a dependency that has not yet been processed
                 //if so then note it in the log
-                Logging.Debug(string.Empty);
+                if (!suppressSomeLogging)
+                    Logging.Debug(string.Empty);
                 if (!suppressSomeLogging)
                     Logging.Debug("Calculating if dependency {0} will be installed, {1} of {2}", dependency.PackageName, calcNumber++, dependencies.Count);
 
@@ -2013,7 +2014,10 @@ namespace RelhaxModpack
                 string final = string.Format("Final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
                 if(ANDSPass && ORsPass)
                 {
-                    Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
+                    if (suppressSomeLogging)
+                        Logging.Info(LogOptions.MethodAndClassName, "Dependency {0} WILL be installed!", dependency.PackageName);
+                    else
+                        Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
                     dependenciesToInstall.Add(dependency);
                 }
                 else
@@ -2903,8 +2907,15 @@ namespace RelhaxModpack
         {
             StackTrace st = new StackTrace();
             StackFrame sf = st.GetFrame(2);
-
             return sf.GetMethod().Name;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string GetExecutingClassName()
+        {
+            StackTrace st = new StackTrace();
+            StackFrame sf = st.GetFrame(2);
+            return sf.GetMethod().DeclaringType.Name;
         }
         #endregion
 

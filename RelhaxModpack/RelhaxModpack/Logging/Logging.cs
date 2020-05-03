@@ -528,15 +528,39 @@ namespace RelhaxModpack
             WriteToLog(message, Logfiles.Application, LogLevel.Info, args);
         }
 
+        public static void Info(LogOptions options, string message)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", Utils.GetExecutingMethodName(), Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Info);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.Application, LogLevel.Info);
+                    break;
+            }
+        }
+
         public static void Info(LogOptions options, string message, params object[] args)
         {
             switch(options)
             {
                 case LogOptions.ClassName:
-                    throw new NotImplementedException();
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info, args);
+                    break;
 
                 case LogOptions.MethodAndClassName:
-                    throw new NotImplementedException();
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", Utils.GetExecutingMethodName(), Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info, args);
+                    break;
 
                 case LogOptions.MethodName:
                     WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Info, args);
