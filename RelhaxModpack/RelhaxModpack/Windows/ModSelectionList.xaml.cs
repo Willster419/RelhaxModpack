@@ -2189,6 +2189,7 @@ namespace RelhaxModpack.Windows
             Logging.Debug(LogOptions.MethodName, "Check if number if calculated dependencies == number of loaded dependencies from file");
             if (dependenciesCalculatedFromLoadedSelection.Count != dependenciesFromSelection.Count)
                 dependenciesOutOfDate = true;
+            Logging.Debug(LogOptions.MethodName, "Dependencies from selection count: {0}, calculated from loaded selection: {1}", dependenciesFromSelection.Count, dependenciesCalculatedFromLoadedSelection.Count);
 
             Logging.Debug(LogOptions.MethodName, "Check if any new ones exist in loaded list");
             //UIDs of the above lists
@@ -2215,7 +2216,7 @@ namespace RelhaxModpack.Windows
                 if (IsSelectionV3PackageOutOfDate(dependencyFromSelection, dependencyFromDatabase))
                 {
                     Logging.Info(LogOptions.MethodName, "Dependency {0} is out of date from list of Dependencies. Setting dependenciesOutOfDate to true", dependencyFromSelection.PackageName);
-                    globalsOutOfDate = true;
+                    dependenciesOutOfDate = true;
                     outOfDatePackages.Add(dependencyFromSelection);
                 }
             }
@@ -2240,7 +2241,7 @@ namespace RelhaxModpack.Windows
                 if (IsSelectionV3PackageOutOfDate(packageFromSelection, packageFromDatabase))
                 {
                     Logging.Info(LogOptions.MethodName, "Package {0} is out of date from list of Packages. Setting packagesOutOfDate to true", packageFromSelection.PackageName);
-                    dependenciesOutOfDate = true;
+                    packagesOutOfDate = true;
                     outOfDatePackages.Add(packageFromSelection);
                 }
             }
