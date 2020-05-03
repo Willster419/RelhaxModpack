@@ -1031,6 +1031,20 @@ namespace RelhaxModpack.Windows
                     ReportProgress(string.Format("Before package: PackageName = {0}, UID = {1}",beforeAfter.Before.PackageName, beforeAfter.Before.UID));
                     ReportProgress(string.Format("After package:  PackageName = {0}, UID = {1}", beforeAfter.After.PackageName, beforeAfter.After.UID));
                 }
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            //check if any packages are missing UIDs
+            List<DatabasePackage> packagesMissingUids = flatListCurrent.FindAll(pak => string.IsNullOrWhiteSpace(pak.UID));
+            if(packagesMissingUids.Count > 0)
+            {
+                ReportProgress("ERROR: The following packages don't have UIDs and need to be added!");
+                foreach (DatabasePackage package in packagesMissingUids)
+                {
+                    ReportProgress(string.Format("Package missing UID: {0}", package.PackageName));
+                }
+                ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
 
