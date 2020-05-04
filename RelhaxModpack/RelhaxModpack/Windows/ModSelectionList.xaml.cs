@@ -2341,12 +2341,13 @@ namespace RelhaxModpack.Windows
                 };
 
                 StringBuilder selectionMessagesBuilder = new StringBuilder();
+                string seperate = Environment.NewLine;
 
                 //disabled selections
                 if (disabledPackages.Count > 0)
                 {
                     selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modDeactivated"));
-                    selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, disabledPackages.Select(package => package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine(string.Join(seperate, disabledPackages.Select(package => "-  " + package.CompletePath).ToArray()));
                     selectionMessagesBuilder.AppendLine();
                 }
 
@@ -2354,7 +2355,7 @@ namespace RelhaxModpack.Windows
                 if (removedUserPackages.Count + removedPackages.Count > 0)
                 {
                     selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modsNotFoundTechnical"));
-                    selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, removedPackages.Concat(removedUserPackages).Select(package => package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine(string.Join(seperate, removedPackages.Concat(removedUserPackages).Select(package => "-  " + package.CompletePath).ToArray()));
                     selectionMessagesBuilder.AppendLine();
                 }
 
@@ -2362,7 +2363,7 @@ namespace RelhaxModpack.Windows
                 if (brokenStructurePackages.Count > 0)
                 {
                     selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modsBrokenStructure"));
-                    selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, brokenStructurePackages.Select(package => package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine(string.Join(seperate, brokenStructurePackages.Select(package => "-  " + package.CompletePath).ToArray()));
                     selectionMessagesBuilder.AppendLine();
                 }
 
@@ -2370,7 +2371,7 @@ namespace RelhaxModpack.Windows
                 if(outOfDatePackages.Count > 0)
                 {
                     selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("packagesUpdatedShouldInstall"));
-                    selectionMessagesBuilder.AppendLine(string.Join(Environment.NewLine, outOfDatePackages.Select(package => package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine(string.Join(seperate, outOfDatePackages.Select(package => "-  " + package.CompletePath).ToArray()));
                     selectionMessagesBuilder.AppendLine();
                 }
 
