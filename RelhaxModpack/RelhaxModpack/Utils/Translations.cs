@@ -2534,6 +2534,34 @@ namespace RelhaxModpack
             Spanish.Add("modsBrokenStructure", "Los siguientes paquetes han sido deshabilitados debido a modificaciones en la estructura de paquetes. Deberá volver a seleccionarlos si quiere instalarlos.");
             Russian.Add("modsBrokenStructure", "Данные пакеты были отключены в связи с изменениями в их структуре. Вам нужно проверить их самостоятельно, если хотите произвести установку.");
 
+            //Component: packagesUpdatedShouldInstall
+            //
+            English.Add("packagesUpdatedShouldInstall", "The following packages were updated since you last loaded this selection file. Your selection file has been updated with the changes (a one-time backup was also made). " +
+                "If this is your current installation, and you wish to keep it, it is recommended to install/update after seeing this message.");
+            German.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            Polish.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            French.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            Spanish.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            Russian.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+
+            //Component: selectionFileIssuesTitle
+            //
+            English.Add("selectionFileIssuesTitle", "Selection loading messages");
+            German.Add("selectionFileIssuesTitle", TranslationNeeded);
+            Polish.Add("selectionFileIssuesTitle", TranslationNeeded);
+            French.Add("selectionFileIssuesTitle", TranslationNeeded);
+            Spanish.Add("selectionFileIssuesTitle", TranslationNeeded);
+            Russian.Add("selectionFileIssuesTitle", TranslationNeeded);
+
+            //Component: selectionFileIssuesHeader
+            //
+            English.Add("selectionFileIssuesHeader", "Please read the following messages about loading your selection file");
+            German.Add("selectionFileIssuesHeader", TranslationNeeded);
+            Polish.Add("selectionFileIssuesHeader", TranslationNeeded);
+            French.Add("selectionFileIssuesHeader", TranslationNeeded);
+            Spanish.Add("selectionFileIssuesHeader", TranslationNeeded);
+            Russian.Add("selectionFileIssuesHeader", TranslationNeeded);
+
 
             //Component:
             //
