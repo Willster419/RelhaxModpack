@@ -2564,18 +2564,23 @@ namespace RelhaxModpack
             Spanish.Add("selectionFileIssuesHeader", "Por favor, lea los siguientes mensajes sobre la carga de su archivo de selección");
             Russian.Add("selectionFileIssuesHeader", "Пожалуйста, прочтите следующие сообщения, связанные с вашим файлом предустановки");
 
+            //Component: selectionFormatOldV2
+            //the message box to show up when your selection file is old (v2) and will be upgraded
+            English.Add("selectionFormatOldV2", "This selection file format is legacy (V2) and will be upgraded to V3. A V2 backup will be created.");
+            German.Add("selectionFormatOldV2", TranslationNeeded);
+            Polish.Add("selectionFormatOldV2", TranslationNeeded);
+            French.Add("selectionFormatOldV2", TranslationNeeded);
+            Spanish.Add("selectionFormatOldV2", TranslationNeeded);
+            Russian.Add("selectionFormatOldV2", TranslationNeeded);
 
             //Component:
             //
-            English.Add("oldSavedConfigFile", "The saved preferences file your are using is in an outdated format and will be inaccurate in the future. Convert it to the new format?" +
-                " (A backup of the old format will be made)");
-            German.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden?" +
-                " (Eine Sicherung des alten Formats erfolgt)");
+            English.Add("oldSavedConfigFile", "The saved preferences file your are using is in an outdated format and will be inaccurate in the future. Convert it to the new format? (A backup of the old format will be made)");
+            German.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden? (Eine Sicherung des alten Formats erfolgt)");
             Polish.Add("oldSavedConfigFile", "Używana konfiguracja jest w przestarzałym formacie i będzie niekompatybilna w przyszłości. Czy chcesz przekonwertować ją na nowy format?");
             French.Add("oldSavedConfigFile", "Le fichier de préférences que vous avez choisi est un format obsolète et sera inexact dans le futur. Convertir au nouveau format?");
             Spanish.Add("oldSavedConfigFile", "El archivo de configuración que está utilizando tiene un formato antiguo y no será preciso en el futuro. ¿Convertir al nuevo formato? (Se guardará una copia de seguridad del formato original)");
             Russian.Add("oldSavedConfigFile", "Сохранённый файл конфигурации использует устаревший формат и может некорректно работать в будущем. Хотите преобразовать его в новый? Бэкап старого будет так же сохранён.");
-
 
             //Component:
             //

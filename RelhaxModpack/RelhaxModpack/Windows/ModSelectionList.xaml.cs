@@ -1781,7 +1781,7 @@ namespace RelhaxModpack.Windows
         {
             //as of 2020-05-03, this format is deprecated. We'll still show it. For now.
             if(!silent && !string.IsNullOrEmpty(loadPath))
-                MessageBox.Show(Translations.GetTranslatedString("SelectionFormatOldV2"));
+                MessageBox.Show(Translations.GetTranslatedString("selectionFormatOldV2"));
 
             if (!string.IsNullOrEmpty(loadPath))
                 Logging.Info(LogOptions.MethodAndClassName, "This selection file is V2 and will be upgraded to V3. A V2 backup will be created");
