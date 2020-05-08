@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -68,6 +69,17 @@ namespace RelhaxModpack
         /// The application is closing now
         /// </summary>
         ApplicationHalt
+    }
+
+    public enum LogOptions
+    {
+        None,
+
+        MethodName,
+
+        ClassName,
+
+        MethodAndClassName
     }
 
     /// <summary>
@@ -497,6 +509,50 @@ namespace RelhaxModpack
             WriteToLog(message, Logfiles.Application, LogLevel.Debug, args);
         }
 
+        public static void Debug(LogOptions options, string message)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", Utils.GetExecutingMethodName(), Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Debug);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.Application, LogLevel.Debug);
+                    break;
+            }
+        }
+
+        public static void Debug(LogOptions options, string message, params object[] args)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug, args);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", Utils.GetExecutingMethodName(), Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug, args);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Debug, args);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.Application, LogLevel.Debug, args);
+                    break;
+            }
+        }
+
         /// <summary>
         /// Writes a information (info) level message to the application log
         /// </summary>
@@ -514,6 +570,50 @@ namespace RelhaxModpack
         public static void Info(string message, params object[] args)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Info, args);
+        }
+
+        public static void Info(LogOptions options, string message)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", Utils.GetExecutingMethodName(), Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Info);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.Application, LogLevel.Info);
+                    break;
+            }
+        }
+
+        public static void Info(LogOptions options, string message, params object[] args)
+        {
+            switch(options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info, args);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", Utils.GetExecutingMethodName(), Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info, args);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Info, args);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.Application, LogLevel.Info, args);
+                    break;
+            }
         }
 
         /// <summary>

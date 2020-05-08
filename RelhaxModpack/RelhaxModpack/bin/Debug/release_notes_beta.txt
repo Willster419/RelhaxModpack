@@ -1,3 +1,41 @@
+Beta Application version 1.0.4.2 (2020-04-11)
+https://www.virustotal.com/gui/file-analysis/YzAwODQwYTk1N2VjZGQyNWU3ZWVlZjMwMjcyYmExMzc6MTU4NjY0NTI2MA==/detection
+- Potential solution for fixing issues with process access rights. When getting WoT's process information.
+- Fixed bug of user mods not installing when it contained a patch file, complainig of a failed download.
+- Updated logging.
+- Updated Spanish (LordFelix) and Russian (DrWeb7_1) translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Beta Application version 1.0.4.1 (2020-04-05)
+https://www.virustotal.com/gui/file/3e4784017ea9ded6f196b2089a0d7dd0de49dd0535824357db8d59b4e63d6eee/detection
+- Fixed issue with editor not clearing UI when a text "filler" selection is selected
+- Added features to database updater tool: Check for duplicate packageNames, UIDs, add missing UIDs.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 1.0.4.0 (2020-04-05)
+https://www.virustotal.com/gui/file/6b6174cbd2aa27069c1e8f7119de4447821957bdab981661a47884dece853b48/detection
+- Added "Maintainers" internal database property for database managers to track who generally works on database sections.
+- Fixed issues with preview window not displaying correct package information when selecting from combobox bulk preview.
+- Adjusted display/preview window height to be 2/3 rather then 1/2.
+- Re-worked interface definitions to allow for more refrences being saved into class properties.
+- Fixed incorrect application of color to some hyperlinks in the application.
+- Re-worked messages for selection list issues (like listing disabled packages).
+- Fixed issues with the WG update utility for updating the WG game center.
+- Fixed no progress bar reporting during application update.
+- Added ability to clear game cache from diagnosstic utilities window.
+- Re-worked the version info dialog window (Arkhorse / TheIllusion).
+- Fixed bug with install group calculations based on offset max value.
+- Changed GameCenter Updater to use "game_info.xml" instead for which file to load.
+- Added feature to show a messageBox of first load of selectionList to inform users that they can right click to select a component. Added additional logic so that it will never show outside of a first load scenario.
+- Added/updated utility methods.
+- General code optimizations and cleanup.
+- Fixed/updated issues and features with the database updater.
+- Fixed/updated issues and features with the database editor.
+- Updated logging messages.
+- Updated documentation.
+- Updated translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.0.3.2 (2020-03-28)
 https://www.virustotal.com/gui/file/204c835f0c3447d88a31672ecab0dbe164c7043e72b49c43b3d74823c2760879/detection
 - Fixed incorrect application of color to some hyperlinks in the application.

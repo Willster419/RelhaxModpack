@@ -43,7 +43,7 @@ namespace RelhaxModpack
     /// <summary>
     /// A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
     /// </summary>
-    public class SelectablePackage : DatabasePackage, IComponentWithDependencies, IXmlSerializable
+    public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         #region Xml serialization
         /// <summary>
@@ -87,23 +87,21 @@ namespace RelhaxModpack
             nameof(Dependencies),
             nameof(Packages)
         };
+        #endregion
+
+        #region Selection file processing
+        private static readonly List<string> SelectablePackagePropertiesToSaveForSelectionFile = new List<string>()
+        {
+            nameof(FlagForSelectionSave)
+        };
 
         /// <summary>
-        /// Gets a list of fields (including from base classes) that can be parsed as xml attributes
+        /// Defines a list of properties in the class to be serialized into xml attributes for selection files
         /// </summary>
-        /// <returns>The string list</returns>
-        new public static List<string> FieldsToXmlParseAttributes()
+        /// <returns>The base array, with SelectablePackage options concatenated</returns>
+        public override string[] AttributesToXmlParseSelectionFiles()
         {
-            return DatabasePackage.FieldsToXmlParseAttributes().Concat(SelectablePackagePropertiesToXmlParseAttributes).ToList();
-        }
-
-        /// <summary>
-        /// Gets a list of fields (including from base classes) that can be parsed as xml elements
-        /// </summary>
-        /// <returns>The string list</returns>
-        new public static List<string> FieldsToXmlParseNodes()
-        {
-            return DatabasePackage.FieldsToXmlParseNodes().Concat(SelectablePackagePropertiesToXmlParseElements).ToList();
+            return base.AttributesToXmlParseSelectionFiles().Concat(SelectablePackagePropertiesToSaveForSelectionFile.ToArray()).ToArray();
         }
         #endregion
 
@@ -430,16 +428,14 @@ namespace RelhaxModpack
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
 
         /// <summary>
-        /// Property of Dependencies list to allow for interface implementation
-        /// </summary>
-        public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
-
-        /// <summary>
         /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
         /// Refer to examples for more information
         /// </summary>
         public string ConflictingPackages { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Returns a list of the ConflictingPackages string property
+        /// </summary>
         public List<string> ConflictingPackagesList
         {
             get { return ConflictingPackages.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).ToList(); }
@@ -527,6 +523,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The level at which this package will be installed, factoring if the category (if SelectablePackage) is set to offset the install group with the package level
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         public override int InstallGroupWithOffset
         {
             get
@@ -748,6 +745,67 @@ namespace RelhaxModpack
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Returns true if the structure above and below this package is valid (all mandatory child options checked, parent checked), false otherwise
+        /// </summary>
+        /// <remarks>This assumes that the database linking/reference code has been run, otherwise a null exception will occur</remarks>
+        public bool IsStructureValid
+        {
+            get
+            {
+                if (this.Checked && (!this.Parent.Checked && this.Parent.Level != -1))
+                    return false;
+
+                bool hasSingles = false;
+                bool singleSelected = false;
+                bool hasDD1 = false;
+                bool DD1Selected = false;
+                bool hasDD2 = false;
+                bool DD2Selected = false;
+
+                //first check if this package has any of these children type
+                foreach (SelectablePackage childPackage in this.Packages)
+                {
+                    if ((childPackage.Type == SelectionTypes.single1) && childPackage.Enabled)
+                    {
+                        hasSingles = true;
+                        //check if the child package is selected. it's fine to overwrite the bool cause we're
+                        //just wanting to know if *any* child packages of this type are checked
+                        if (childPackage.Checked)
+                            singleSelected = true;
+                    }
+                    else if ((childPackage.Type == SelectionTypes.single_dropdown1) && childPackage.Enabled)
+                    {
+                        hasDD1 = true;
+                        if (childPackage.Checked)
+                            DD1Selected = true;
+                    }
+                    else if (childPackage.Type == SelectionTypes.single_dropdown2 && childPackage.Enabled)
+                    {
+                        hasDD2 = true;
+                        if (childPackage.Checked)
+                            DD2Selected = true;
+                    }
+                }
+
+                //now make sure that for each of the above types, at least one is checked
+                if (hasSingles && !singleSelected)
+                {
+                    return false;
+                }
+                if (hasDD1 && !DD1Selected)
+                {
+                    return false;
+                }
+                if (hasDD2 && !DD2Selected)
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         /// <summary>

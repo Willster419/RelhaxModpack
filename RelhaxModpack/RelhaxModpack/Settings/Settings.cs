@@ -417,9 +417,15 @@ namespace RelhaxModpack
         public const string DatabaseOnlineVersionXpath = "//modInfoAlpha.xml/@version";
 
         /// <summary>
-        /// the latest config file version for saving the user's selection preferences
+        /// The old V2 config file version for saving the user's selection preferences
         /// </summary>
-        public const string ConfigFileVersion = "2.0";
+        [Obsolete("Selection file version 2.0 is deprecated")]
+        public const string ConfigFileVersion2V0 = "2.0";
+
+        /// <summary>
+        /// The latest config file version for saving the user's selection preferences
+        /// </summary>
+        public const string ConfigFileVersion3V0 = "3.0";
 
         /// <summary>
         /// The name of the WoT process used for detecting if it is running
@@ -500,6 +506,16 @@ namespace RelhaxModpack
         /// The default amount that the application will be scaled to. 100%
         /// </summary>
         public const double MinimumDisplayScale = 1.0F;
+
+        /// <summary>
+        /// The number of characters that make up a package UID
+        /// </summary>
+        public const int NumberUIDCharacters = 16;
+
+        /// <summary>
+        /// The array of character options that are used for generating the UID
+        /// </summary>
+        public const string UIDCharacters = @"abcdefghijklmnopqrstuvwxyz0123456789";
 
         /// <summary>
         /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk.

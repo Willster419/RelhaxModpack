@@ -336,7 +336,7 @@ namespace RelhaxModpack.Windows
             if(clearCache)
             {
                 Logging.Info("[Diagnostics]: Cleaning AppData cache success");
-                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheSucess");
+                DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheSuccess");
             }
             else
             {

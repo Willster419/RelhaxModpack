@@ -50,11 +50,14 @@ namespace RelhaxModpack
         #endregion
 
         /// <summary>
-        /// The name of the package that this object is attached to
+        /// The name of the package that *this* package is dependent on
         /// </summary>
-        public string PackageName { get; set; } = "";
+        public string PackageName { get; set; } = string.Empty;
 
-        //public bool Enabled { get; set; } = false;
+        /// <summary>
+        /// The UID of the package that *this* package is dependent on
+        /// </summary>
+        public string PackageUID { get; set; } = string.Empty;
 
         /// <summary>
         /// Flag to determine if this package will be installed
@@ -80,6 +83,16 @@ namespace RelhaxModpack
         public bool RefrenceLinked { get; set; } = false;
 
         /// <summary>
+        /// Gets or sets a refrence to the parent package this dependency came from
+        /// </summary>
+        public IComponentWithDependencies ParentPackageRefrence { get; set; } = null;
+
+        /// <summary>
+        /// Gets or sets a reference to the dependency object that this databaseLogic object links to
+        /// </summary>
+        public DatabasePackage DependencyPackageRefrence { get; set; } = null;
+
+        /// <summary>
         /// String representation of the object
         /// </summary>
         /// <returns>The name of the package this object attaches to</returns>
@@ -97,10 +110,14 @@ namespace RelhaxModpack
         {
             return new DatabaseLogic()
             {
-                Logic = databaseLogicToCopy.Logic,
-                NotFlag = databaseLogicToCopy.NotFlag,
                 PackageName = databaseLogicToCopy.PackageName,
-                WillBeInstalled = databaseLogicToCopy.WillBeInstalled
+                PackageUID = databaseLogicToCopy.PackageUID,
+                WillBeInstalled = databaseLogicToCopy.WillBeInstalled,
+                NotFlag = databaseLogicToCopy.NotFlag,
+                Logic = databaseLogicToCopy.Logic,
+                RefrenceLinked = databaseLogicToCopy.RefrenceLinked,
+                DependencyPackageRefrence = databaseLogicToCopy.DependencyPackageRefrence,
+                ParentPackageRefrence = databaseLogicToCopy.ParentPackageRefrence
             };
         }
     }

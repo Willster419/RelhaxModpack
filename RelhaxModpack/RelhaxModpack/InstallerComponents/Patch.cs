@@ -11,6 +11,31 @@ namespace RelhaxModpack
     public class Patch
     {
         /// <summary>
+        /// One of two string values used for regex type patches
+        /// </summary>
+        public const string TypeRegex1 = "regex";
+
+        /// <summary>
+        /// One of two string values used for regex type patches
+        /// </summary>
+        public const string TypeRegex2 = "regx";
+
+        /// <summary>
+        /// The string value used for xml type patches
+        /// </summary>
+        public const string TypeXml = "xml";
+
+        /// <summary>
+        /// The string value used for json type patches
+        /// </summary>
+        public const string TypeJson = "json";
+
+        /// <summary>
+        /// The string value used for xvm type legacy patches
+        /// </summary>
+        public const string TypeXvm = "xvm";
+
+        /// <summary>
         /// A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
         /// </summary>
         public string NativeProcessingFile = string.Empty;
@@ -119,6 +144,14 @@ namespace RelhaxModpack
         public override string ToString()
         {
             return FromEditor? string.Format("type={0} ,mode={1}, lines/path={2}", Type, Mode, Lines == null ? Path : string.Join(",", Lines)) : base.ToString();
+        }
+
+        /// <summary>
+        /// Gets a listbox style UI element display-ready text
+        /// </summary>
+        public string ListboxDisplay
+        {
+            get { return string.Format("type={0} ,mode={1}, lines/path={2}", Type, Mode, Lines == null ? Path : string.Join(",", Lines)); }
         }
 
         /// <summary>

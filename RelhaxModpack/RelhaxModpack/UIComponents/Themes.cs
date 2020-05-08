@@ -621,6 +621,28 @@ namespace RelhaxModpack.UIComponents
                     }
                 },
                 {
+                    typeof(Credits), new WindowColorset()
+                    {
+                        WindowType = typeof (Credits),
+                        BackgroundBrush = new CustomBrush()
+                        {
+                            IsValid = true,
+                            Brush = DarkThemeBackground
+                        }
+                    }
+                },
+                {
+                    typeof(SelectionFileIssuesDisplay), new WindowColorset()
+                    {
+                        WindowType = typeof (SelectionFileIssuesDisplay),
+                        BackgroundBrush = new CustomBrush()
+                        {
+                            IsValid = true,
+                            Brush = DarkThemeBackground
+                        }
+                    }
+                },
+                {
                     typeof(VersionInfo), new WindowColorset()
                     {
                         WindowType = typeof(VersionInfo),

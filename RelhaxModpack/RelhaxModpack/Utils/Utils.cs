@@ -88,6 +88,22 @@ namespace RelhaxModpack
     }
 
     /// <summary>
+    /// Allows the old and new versions of a DatabasePackage to be saved temporarily for comparing differences between two database structures
+    /// </summary>
+    public struct DatabaseBeforeAfter2
+    {
+        /// <summary>
+        /// The package reference for the database before changes
+        /// </summary>
+        public DatabasePackage Before;
+
+        /// <summary>
+        /// The package reference for the database after changes
+        /// </summary>
+        public DatabasePackage After;
+    }
+
+    /// <summary>
     /// A structure object to contain the WoT client version and online folder version. Allows for LINQ searching
     /// </summary>
     public struct VersionInfos
@@ -1519,18 +1535,49 @@ namespace RelhaxModpack
 
         #region Database Utils
         /// <summary>
+        /// Checks for any duplicate UID entries inside the provided lists
+        /// </summary>
+        /// <param name="globalDependencies">The list of global dependencies</param>
+        /// <param name="dependencies">The list of dependencies</param>
+        /// <param name="parsedCategoryList">The list of categories</param>
+        /// <returns>A list of packages with duplicate UIDs, or an empty list if no duplicates</returns>
+        public static List<DatabasePackage> CheckForDuplicateUIDsPackageList(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
+            List<DatabasePackage> duplicatesList = new List<DatabasePackage>();
+            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            foreach (DatabasePackage package in flatList)
+            {
+                List<DatabasePackage> packagesWithMatchingUID = flatList.FindAll(item => item.UID.Equals(package.UID));
+                //by default it will at least match itself
+                if (packagesWithMatchingUID.Count > 1)
+                    duplicatesList.Add(package);
+            }
+            return duplicatesList;
+        }
+
+        /// <summary>
+        /// Checks for any duplicate UID entries inside the provided lists
+        /// </summary>
+        /// <param name="globalDependencies">The list of global dependencies</param>
+        /// <param name="dependencies">The list of dependencies</param>
+        /// <param name="parsedCategoryList">The list of categories</param>
+        /// <returns>A list of duplicate UIDs, or an empty list if no duplicates</returns>
+        public static List<string> CheckForDuplicateUIDsStringsList(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
+            return CheckForDuplicateUIDsPackageList(globalDependencies, dependencies, parsedCategoryList).Select(package => package.UID).ToList();
+        }
+
+        /// <summary>
         /// Checks for any duplicate PackageName entries inside the provided lists
         /// </summary>
         /// <param name="globalDependencies">The list of global dependencies</param>
         /// <param name="dependencies">The list of dependencies</param>
         /// <param name="parsedCategoryList">The list of categories</param>
-        /// <param name="logicalDependencies">The list of logical dependencies</param>
         /// <returns>A list of duplicate packages, or an empty list if no duplicates</returns>
-        public static List<string> CheckForDuplicates(List<DatabasePackage> globalDependencies, List<Dependency> dependencies,
-            List<Category> parsedCategoryList, List<Dependency> logicalDependencies = null)
+        public static List<string> CheckForDuplicates(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
             List<string> duplicatesList = new List<string>();
-            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, logicalDependencies, parsedCategoryList);
+            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
             foreach(DatabasePackage package in flatList)
             {
                 List<DatabasePackage> packagesWithPackagename = flatList.Where(item => item.PackageName.Equals(package.PackageName)).ToList();
@@ -1680,15 +1727,46 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Links the databasePackage objects with dependencies objects to have those objects link references to the parent and the dependency object
+        /// </summary>
+        /// <param name="componentsWithDependencies">List of all DatabasePackage objects that have dependencies</param>
+        /// <param name="dependencies">List of all Dependencies that exist in the database</param>
+        public static void BuildDependencyPackageRefrences(List<Category> componentsWithDependencies, List<Dependency> dependencies)
+        {
+            List<IComponentWithDependencies> componentsWithDependencies_ = new List<IComponentWithDependencies>();
+
+            //get all categories where at least one dependency exists
+            componentsWithDependencies_.AddRange(componentsWithDependencies.Where(cat => cat.Dependencies.Count > 0));
+
+            //get all packages and dependencies where at least one dependency exists
+            componentsWithDependencies_.AddRange(GetFlatList(null, dependencies, null, componentsWithDependencies).OfType<IComponentWithDependencies>().Where(component => component.Dependencies.Count > 0).ToList());
+
+            foreach (IComponentWithDependencies componentWithDependencies in componentsWithDependencies_)
+            {
+                foreach(DatabaseLogic logic in componentWithDependencies.Dependencies)
+                {
+                    logic.ParentPackageRefrence = componentWithDependencies;
+                    logic.DependencyPackageRefrence = dependencies.Find(dependency => dependency.PackageName.Equals(logic.PackageName));
+                    if(logic.DependencyPackageRefrence == null)
+                    {
+                        Logging.Error("DatabaseLogic component from package {0} was unable to link to dependency {1} (does the dependency not exist or bad reference?)", componentWithDependencies.ComponentInternalName, logic.PackageName);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
         /// </summary>
         /// <param name="dependencies">The list of dependencies</param>
-        /// <param name="packages">The list of Selectable Packages</param>
         /// <param name="parsedCategoryList">The list of Categories</param>
+        /// <param name="suppressSomeLogging">Flag for it some of the more verbose logging should be suppressed</param>
         /// <returns>A list of calculated dependencies to install</returns>
-        public static List<Dependency> CalculateDependencies(List<Dependency> dependencies, List<SelectablePackage> packages, List<Category> parsedCategoryList)
+        public static List<Dependency> CalculateDependencies(List<Dependency> dependencies, List<Category> parsedCategoryList, bool suppressSomeLogging)
         {
             //flat list is packages
+            List<SelectablePackage> flatListSelect = GetFlatSelectablePackageList(parsedCategoryList);
+
             //1- build the list of calling mods that need it
             List<Dependency> dependenciesToInstall = new List<Dependency>();
 
@@ -1709,7 +1787,8 @@ namespace RelhaxModpack
                     {
                         if (logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.Debug("Category \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                            if(!suppressSomeLogging)
+                                Logging.Debug("Category \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
                                 category.Name, dependency.PackageName, logic.Logic, logic.NotFlag);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
@@ -1728,7 +1807,7 @@ namespace RelhaxModpack
             Logging.Debug("Step 1 complete");
 
             Logging.Debug("Starting step 2 of 4 in dependency calculation: adding from selectable packages that use each dependency");
-            foreach(SelectablePackage package in packages)
+            foreach(SelectablePackage package in flatListSelect)
             {
                 //got though each logic property. if the package called is this dependency, then add it to it's list
                 foreach (DatabaseLogic logic in package.Dependencies)
@@ -1742,7 +1821,8 @@ namespace RelhaxModpack
                     {
                         if (logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.Debug("SelectablePackage \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                            if (!suppressSomeLogging)
+                                Logging.Debug("SelectablePackage \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
                                 package.PackageName, dependency.PackageName, logic.Logic, logic.NotFlag);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
@@ -1779,7 +1859,8 @@ namespace RelhaxModpack
                             continue;
                         if (logic.PackageName.Equals(dependency.PackageName))
                         {
-                            Logging.Debug("Dependency \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Dependency \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
                                 processingDependency.PackageName, dependency.PackageName, logic.Logic, logic.NotFlag);
                             dependency.DatabasePackageLogic.Add(new DatabaseLogic()
                             {
@@ -1812,7 +1893,7 @@ namespace RelhaxModpack
                 }
             }
 
-            //3 - run calculations IN DEPENDENCY LIST ORDER FROM TOP DOWN
+            //4 - run calculations IN DEPENDENCY LIST ORDER FROM TOP DOWN
             List<Dependency> notProcessedDependnecies = new List<Dependency>(dependencies);
             Logging.Debug("Starting step 4 of 4 in dependency calculation: calculating dependencies from top down (perspective to list)");
             int calcNumber = 1;
@@ -1820,8 +1901,11 @@ namespace RelhaxModpack
             {
                 //first check if this dependency is referencing a dependency that has not yet been processed
                 //if so then note it in the log
-                Logging.Debug(string.Empty);
-                Logging.Debug("Calculating if dependency {0} will be installed, {1} of {2}", dependency.PackageName, calcNumber++, dependencies.Count);
+                if (!suppressSomeLogging)
+                    Logging.Debug(string.Empty);
+                if (!suppressSomeLogging)
+                    Logging.Debug("Calculating if dependency {0} will be installed, {1} of {2}", dependency.PackageName, calcNumber++, dependencies.Count);
+
                 foreach(DatabaseLogic login in dependency.DatabasePackageLogic)
                 {
                     List<Dependency> matches = notProcessedDependnecies.Where(dep => login.PackageName.Equals(dep.PackageName)).ToList();
@@ -1842,8 +1926,10 @@ namespace RelhaxModpack
                 List<DatabaseLogic> logicalAND = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.AND).ToList();
 
                 //debug logging
-                Logging.Debug("Logical OR count: {0}", localOR.Count);
-                Logging.Debug("Logical AND count: {0}", logicalAND.Count);
+                if (!suppressSomeLogging)
+                    Logging.Debug("Logical OR count: {0}", localOR.Count);
+                if (!suppressSomeLogging)
+                    Logging.Debug("Logical AND count: {0}", logicalAND.Count);
 
                 //if there are no logical ands, then only do ors, vise versa
                 bool ORsPass = localOR.Count > 0? false: true;
@@ -1853,7 +1939,8 @@ namespace RelhaxModpack
                 if(ORsPass && ANDSPass)
                 {
                     Logging.Warning("Logic ORs and ANDs already pass for dependency package {0} (nothing uses it?)", dependency.PackageName);
-                    Logging.Debug("Skip calculation logic and remove from not processed list");
+                    if (!suppressSomeLogging)
+                        Logging.Debug("Skip calculation logic and remove from not processed list");
 
                     //remove it from list of not processed dependencies
                     notProcessedDependnecies.RemoveAt(0);
@@ -1861,52 +1948,64 @@ namespace RelhaxModpack
                 }
 
                 //calc the ORs first
-                Logging.Debug("Processing OR logic");
+                if (!suppressSomeLogging)
+                    Logging.Debug("Processing OR logic");
                 foreach(DatabaseLogic orLogic in localOR)
                 {
                     //OR logic - if any mod/dependency is checked, then it's installed and can stop there
                     //because only one of them needs to be true
                     //same case goes for negatives - if mod is NOT checked and negateFlag
-                    if(!orLogic.WillBeInstalled)
+                    if (!orLogic.WillBeInstalled)
                     {
-                        Logging.Debug("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName);
                         continue;
-                    }
-                    if(!orLogic.NotFlag)
-                    {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
-                        ORsPass = true;
-                        break;
-                    }
-                    else if (orLogic.NotFlag)
-                    {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
-                        ORsPass = true;
-                        break;
                     }
                     else
                     {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                        if (!orLogic.NotFlag)
+                        {
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                            ORsPass = true;
+                            break;
+                        }
+                        else if (orLogic.NotFlag)
+                        {
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                            ORsPass = true;
+                            break;
+                        }
+                        else
+                        {
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                        }
                     }
                 }
 
                 //now calc the ands
-                Logging.Debug("Processing AND logic");
+                if (!suppressSomeLogging)
+                    Logging.Debug("Processing AND logic");
                 foreach(DatabaseLogic andLogic in logicalAND)
                 {
                     if (andLogic.WillBeInstalled && !andLogic.NotFlag)
                     {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
                         ANDSPass = true;
                     }
                     else if (!andLogic.WillBeInstalled && andLogic.NotFlag)
                     {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
                         ANDSPass = true;
                     }
                     else
                     {
-                        Logging.Debug("Package {0}, checked={1}, notFlag={2}, incorrect AND logic, set ANDSPass=false and stop processing!", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, incorrect AND logic, set ANDSPass=false and stop processing!", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
                         ANDSPass = false;
                         break;
                     }
@@ -1915,17 +2014,22 @@ namespace RelhaxModpack
                 string final = string.Format("Final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
                 if(ANDSPass && ORsPass)
                 {
-                    Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
+                    if (suppressSomeLogging)
+                        Logging.Info(LogOptions.MethodAndClassName, "Dependency {0} WILL be installed!", dependency.PackageName);
+                    else
+                        Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
                     dependenciesToInstall.Add(dependency);
                 }
                 else
                 {
-                    Logging.Debug("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!", final);
+                    if (!suppressSomeLogging)
+                        Logging.Debug("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!", final);
                 }
 
                 if (dependency.DatabasePackageLogic.Count > 0 && (ANDSPass && ORsPass))
                 {
-                    Logging.Debug("Updating future references (like logicalDependnecies) for if dependency was checked");
+                    if (!suppressSomeLogging)
+                        Logging.Debug("Updating future references (like logicalDependnecies) for if dependency was checked");
                     //update any dependencies that use it
                     foreach (DatabaseLogic callingLogic in dependency.Dependencies)
                     {
@@ -2089,7 +2193,7 @@ namespace RelhaxModpack
         /// <param name="componentWithID">The database component with the list property, for example SelectablePackage</param>
         /// <param name="listPropertyInfo">the property metadata/info about the list property, for example Medias</param>
         /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
-        public static void SetListEntries(IComponentWithID componentWithID, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
+        public static void SetListEntries(IDatabaseComponent componentWithID, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
         {
             //get the list interfaced component
             IList listProperty = listPropertyInfo.GetValue(componentWithID) as IList;
@@ -2196,6 +2300,50 @@ namespace RelhaxModpack
                 }
 
                 listProperty.Add(listEntry);
+            }
+        }
+
+        public static List<DatabaseLogic> GetAllPackageDependencies(SelectablePackage package)
+        {
+            List<DatabaseLogic> dependencies = new List<DatabaseLogic>();
+
+            if (package.Dependencies.Count > 0)
+            {
+                foreach (DatabaseLogic logic in package.Dependencies)
+                {
+                    dependencies.Add(logic);
+                    Dependency dep = logic.DependencyPackageRefrence as Dependency;
+                    if (dep.Dependencies.Count > 0)
+                        GetAllPackageDependencies(dep, dependencies);
+                }
+            }
+
+            if (package.ParentCategory.Dependencies.Count > 0)
+            {
+                foreach (DatabaseLogic logic in package.ParentCategory.Dependencies)
+                {
+                    if(!dependencies.Contains(logic))
+                        dependencies.Add(logic);
+                    Dependency dep = logic.DependencyPackageRefrence as Dependency;
+                    if (dep.Dependencies.Count > 0)
+                        GetAllPackageDependencies(dep, dependencies);
+                }
+            }
+
+            return dependencies;
+        }
+
+        private static void GetAllPackageDependencies(Dependency dependency, List<DatabaseLogic> dependencies)
+        {
+            if (dependency.Dependencies.Count == 0)
+                return;
+
+            foreach(DatabaseLogic logic in dependency.Dependencies)
+            {
+                dependencies.Add(logic);
+                Dependency dep = logic.DependencyPackageRefrence as Dependency;
+                if (dep.Dependencies.Count != 0)
+                    GetAllPackageDependencies(dep, dependencies);
             }
         }
         #endregion
@@ -2307,14 +2455,39 @@ namespace RelhaxModpack
         /// Creates a string of random characters
         /// </summary>
         /// <param name="length">The number of characters to create the random string</param>
+        /// <param name="chars">The list of characters to use for making the random string</param>
         /// <returns>The random string</returns>
         /// <remarks>See https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c </remarks>
-        public static string RandomString(int length)
+        public static string RandomString(int length, string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
         {
             Random random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        /// <summary>
+        /// Generates a Unique IDentifier for a package using the constant defined number of string and character selections
+        /// </summary>
+        /// <returns>a Unique IDentifier for a package</returns>
+        public static string GenerateUID()
+        {
+            return RandomString(Settings.NumberUIDCharacters, Settings.UIDCharacters);
+        }
+
+        /// <summary>
+        /// Generates a Unique IDentifier for a package using the constant defined number of string and character selections
+        /// while verifying that it's unique against a given list
+        /// </summary>
+        /// <param name="allPackages">A list of packages to test to make sure the UID is unique</param>
+        /// <returns>A guaranteed unique ID that does not exist in the list</returns>
+        public static string GenerateUID(List<DatabasePackage> allPackages)
+        {
+            string UID = GenerateUID();
+            while (allPackages.Find(package => package.UID.Equals(UID)) != null)
+            {
+                UID = GenerateUID();
+            }
+            return UID;
         }
 
         /// <summary>
@@ -2412,7 +2585,7 @@ namespace RelhaxModpack
             //first check to make sure wot path is legit
             if (string.IsNullOrEmpty(pathToMatch))
             {
-                Logging.Info("[GetProcess()] pathToMatch is empty, only checking for instance count > 0");
+                Logging.Info("[GetProcess()]: PathToMatch is empty, only checking for instance count > 0");
             }
 
             //get list of running instances of WoT
@@ -2426,28 +2599,166 @@ namespace RelhaxModpack
 
             //if not checking for path, we don't know which instance, only that there is one
             //so return
-            Logging.Debug("[GetProcess()] Process name to match: {0}. matching entries: {1}", processName, processes.Length.ToString());
-            if (string.IsNullOrEmpty(pathToMatch))
+            Logging.Debug("[GetProcess()]: Process name to match: '{0}'. Matching entries: {1}", processName, processes.Length.ToString());
+            if (string.IsNullOrEmpty(pathToMatch) || processes.Length == 1)
             {
-                Logging.Debug("[GetProcess()] processes.length = {0} and pathToMatch is empty, returning first entry", processes.Length.ToString());
+                Logging.Debug("[GetProcess()]: Processes.length = {0} and/or pathToMatch is empty, returning first entry", processes.Length.ToString());
                 return processes[0];
             }
 
             //else try to match the path
             foreach (Process p in processes)
             {
+                string processStartFilepath = string.Empty;
+
                 //get path of process start file
                 //https://stackoverflow.com/questions/5497064/how-to-get-the-full-path-of-running-process
-                string processStartFilepath = RemoveWoT32bit64bitPathIfExists(Path.GetDirectoryName(p.MainModule.FileName));
-                Logging.Debug("[GetProcess()] checking if path process {0} matching with path {1}", processStartFilepath, pathToMatch);
-                if (pathToMatch.Equals(processStartFilepath))
+                Logging.Debug("[GetProcess()]: Is this 64bit process? {0}", Environment.Is64BitProcess);
+                if(Environment.Is64BitProcess)
                 {
-                    Logging.Debug("[GetProcess()] Process name matched");
+                    try
+                    {
+                        ProcessModule module = p.MainModule;
+                        processStartFilepath = Path.GetDirectoryName(module.FileName);
+                    }
+                    catch(Win32Exception ex)
+                    {
+                        Logging.Error("[GetProcess()]: Failed to get process main module filename, but reported to be 64bit process!");
+                        Logging.Error(ex.ToString());
+                    }
+                }
+
+                if(string.IsNullOrEmpty(processStartFilepath))
+                {
+                    Logging.Debug("[GetProcess()]: ProcessStartFilepath is still empty, attempt alternate method");
+                    //http://stackoverflow.com/questions/3399819/access-denied-while-getting-process-path/3654195#3654195
+                    try
+                    {
+                        string processStartFilename = GetExecutablePathAboveVista(p.Id);
+                        Logging.Debug("[GetProcess()]: GetExecutablePathAboveVista() returned '{0}'", processStartFilename);
+                        processStartFilepath = Path.GetDirectoryName(processStartFilename);
+                    }
+                    catch (Win32Exception ex)
+                    {
+                        Logging.Error("[GetProcess()]: Failed to get process path using alternate method, return first listing");
+                        Logging.Error(ex.ToString());
+                        return processes[0];
+                    }
+                }
+
+                string processStartFilepathCorrected = RemoveWoT32bit64bitPathIfExists(processStartFilepath);
+                Logging.Debug("[GetProcess()]: Checking if path process {0} matching with path {1}", processStartFilepathCorrected, pathToMatch);
+                if (pathToMatch.Equals(processStartFilepathCorrected))
+                {
+                    Logging.Debug("[GetProcess()]: Process name matched");
                     return p;
                 }
-                Logging.Debug("[GetProcess()] Never matched path processes (count={0}) matching with path {1}", processes.Length.ToString(), pathToMatch);
+                Logging.Debug("[GetProcess()]: Never matched path processes (count={0}) matching with path {1}", processes.Length.ToString(), pathToMatch);
             }
             return null;
+        }
+
+        #region Kernel import p/invoke stuff
+        [DllImport("kernel32.dll")]
+        private static extern bool QueryFullProcessImageName(IntPtr hprocess, int dwFlags, StringBuilder lpExeName, out int size);
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr OpenProcess(ProcessAccessFlags dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool CloseHandle(IntPtr hHandle);
+
+        /// <summary>
+        /// An enumeration of desired access rights to ask for information when opening a process's info
+        /// </summary>
+        [Flags]
+        public enum ProcessAccessFlags : uint
+        {
+            //http://www.pinvoke.net/default.aspx/kernel32.openprocess
+            /// <summary>
+            /// All process info
+            /// </summary>
+            All = 0x001F0FFF,
+            /// <summary>
+            /// Terminate the process
+            /// </summary>
+            Terminate = 0x00000001,
+            /// <summary>
+            /// Create a thread from the process
+            /// </summary>
+            CreateThread = 0x00000002,
+            /// <summary>
+            /// View the process's virtual memory operations
+            /// </summary>
+            VirtualMemoryOperation = 0x00000008,
+            /// <summary>
+            /// View the process's virtual memory reads
+            /// </summary>
+            VirtualMemoryRead = 0x00000010,
+            /// <summary>
+            /// View the process's virtual memoty writes
+            /// </summary>
+            VirtualMemoryWrite = 0x00000020,
+            /// <summary>
+            /// Ability to create a duplicate process handle
+            /// </summary>
+            DuplicateHandle = 0x00000040,
+            /// <summary>
+            /// Ability for process to create processes
+            /// </summary>
+            CreateProcess = 0x000000080,
+            /// <summary>
+            /// Set quotas on the process
+            /// </summary>
+            SetQuota = 0x00000100,
+            /// <summary>
+            /// Set information about the process
+            /// </summary>
+            SetInformation = 0x00000200,
+            /// <summary>
+            /// Query information about the process
+            /// </summary>
+            QueryInformation = 0x00000400,
+            /// <summary>
+            /// Query information about the process that does not require administrator rights
+            /// </summary>
+            QueryLimitedInformation = 0x00001000,
+            /// <summary>
+            /// Synchronize rights
+            /// </summary>
+            Synchronize = 0x00100000
+        }
+        #endregion
+
+        /// <summary>
+        /// Gets the path to the application, including exe filename, based on the process ID
+        /// </summary>
+        /// <param name="ProcessId">The process ID from Process object</param>
+        /// <returns>The path to the process's exe</returns>
+        /// <remarks>This can throw a Win32Exception if the method fails.
+        /// It uses kernel32.dll p/invoke methods to perform the operation.
+        /// Does not work below windows vista.</remarks>
+        public static string GetExecutablePathAboveVista(int ProcessId)
+        {
+            var buffer = new StringBuilder(1024);
+            IntPtr hprocess = OpenProcess(ProcessAccessFlags.QueryLimitedInformation,
+                                          false, ProcessId);
+            if (hprocess != IntPtr.Zero)
+            {
+                try
+                {
+                    int size = buffer.Capacity;
+                    if (QueryFullProcessImageName(hprocess, 0, buffer, out size))
+                    {
+                        return buffer.ToString();
+                    }
+                }
+                finally
+                {
+                    CloseHandle(hprocess);
+                }
+            }
+            throw new Win32Exception(Marshal.GetLastWin32Error());
         }
 
         /// <summary>
@@ -2595,9 +2906,16 @@ namespace RelhaxModpack
         public static string GetExecutingMethodName()
         {
             StackTrace st = new StackTrace();
-            StackFrame sf = st.GetFrame(1);
-
+            StackFrame sf = st.GetFrame(2);
             return sf.GetMethod().Name;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string GetExecutingClassName()
+        {
+            StackTrace st = new StackTrace();
+            StackFrame sf = st.GetFrame(2);
+            return sf.GetMethod().DeclaringType.Name;
         }
         #endregion
 

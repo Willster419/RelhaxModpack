@@ -31,14 +31,28 @@ namespace RelhaxModpack.Windows
         private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //write that we're currently loading
-            DatabaseUpdateText.Text = ApplicationUpdateText.Text = Translations.GetTranslatedString("loading");
+            string loadingString = Translations.GetTranslatedString("loading");
+            DatabaseUpdateText.Text = ApplicationUpdateText.Text = loadingString;
             ViewNewsOnGoogleTranslate.TheHyperlink.Click += TheHyperlink_Click;
 
             //get the strings
             using (PatientWebClient client = new PatientWebClient())
             {
-                DatabaseUpdateText.Text = await client.DownloadStringTaskAsync(Settings.DatabaseNotesUrl);
-                ApplicationUpdateText.Text = await client.DownloadStringTaskAsync(Settings.ApplicationNotesBetaUrl);
+                try
+                {
+                    DatabaseUpdateText.Text = await client.DownloadStringTaskAsync(Settings.DatabaseNotesUrl);
+                    ApplicationUpdateText.Text = await client.DownloadStringTaskAsync(Settings.ApplicationNotesBetaUrl);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Error("Failed to get news information");
+                    Logging.Exception(ex.ToString());
+
+                    if (DatabaseUpdateText.Text.Equals(loadingString))
+                        DatabaseUpdateText.Text = Translations.GetTranslatedString("failedToGetNews");
+
+                    ApplicationUpdateText.Text = Translations.GetTranslatedString("failedToGetNews");
+                }
             }
         }
 
