@@ -176,8 +176,8 @@ namespace RelhaxModpack.Windows
                 Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@version");
                 string versionInfo = string.Format("{0}={1},  {2}={3}", nameof(Settings.WoTModpackOnlineFolderVersion)
                     , Settings.WoTModpackOnlineFolderVersion, nameof(Settings.WoTClientVersion), Settings.WoTClientVersion);
-                Logging.Updater(versionInfo);
                 ReportProgress(versionInfo);
+                ReportProgress("Database loaded");
             }
         }
 
