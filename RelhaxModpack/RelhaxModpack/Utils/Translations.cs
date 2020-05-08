@@ -2543,7 +2543,7 @@ namespace RelhaxModpack
             Polish.Add("packagesUpdatedShouldInstall", TranslationNeeded);
             French.Add("packagesUpdatedShouldInstall", TranslationNeeded);
             Spanish.Add("packagesUpdatedShouldInstall", TranslationNeeded);
-            Russian.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            Russian.Add("packagesUpdatedShouldInstall",  "Следующие пакеты были обновлены с момента последней загрузки данного файла предустановки. Файл предустановки был обновлён и изменён (его резервная копия так же была сделана). Если это ваша основная конфигурация и вы хотите её сохранить, рекомендуем вам установить/обновить моды после этого уведомления.");
 
             //Component: selectionFileIssuesTitle
             //
@@ -2552,7 +2552,7 @@ namespace RelhaxModpack
             Polish.Add("selectionFileIssuesTitle", TranslationNeeded);
             French.Add("selectionFileIssuesTitle", TranslationNeeded);
             Spanish.Add("selectionFileIssuesTitle", TranslationNeeded);
-            Russian.Add("selectionFileIssuesTitle", TranslationNeeded);
+            Russian.Add("selectionFileIssuesTitle", "Внимание"); // I don't think it's possible to translate that directly, so leaving it as "Warning" - DrWeb7_1
 
             //Component: selectionFileIssuesHeader
             //
@@ -2561,7 +2561,7 @@ namespace RelhaxModpack
             Polish.Add("selectionFileIssuesHeader", TranslationNeeded);
             French.Add("selectionFileIssuesHeader", TranslationNeeded);
             Spanish.Add("selectionFileIssuesHeader", TranslationNeeded);
-            Russian.Add("selectionFileIssuesHeader", TranslationNeeded);
+            Russian.Add("selectionFileIssuesHeader", "Пожалуйста, прочтите следующие сообщения, связанные с вашим файлом предустановки");
 
 
             //Component:
@@ -4095,7 +4095,7 @@ namespace RelhaxModpack
             Polish.Add("cleanGameCacheSuccess", "Czyszczenie pamięci podręcznej gry zakończone sukcesem");
             French.Add("cleanGameCacheSuccess", TranslationNeeded);
             Spanish.Add("cleanGameCacheSuccess", "Caché del juego limpiada con éxito");
-            Russian.Add("cleanGameCacheSuccess", TranslationNeeded);
+            Russian.Add("cleanGameCacheSuccess", "Кэш игры успешно очищен");
 
             //Component: cleanGameCacheFail
             //
