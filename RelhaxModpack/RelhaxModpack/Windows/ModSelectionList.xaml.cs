@@ -1944,7 +1944,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 Utils.FileMove(loadPath, backupFilepath, 3, 100);
-                SaveSelectionV3(loadPath, silent);
+                SaveSelectionV3(loadPath, true);
             }
 
             return true;
