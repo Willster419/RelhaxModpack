@@ -2538,7 +2538,8 @@ namespace RelhaxModpack
             //
             English.Add("packagesUpdatedShouldInstall", "The following packages were updated since you last loaded this selection file. Your selection file has been updated with the changes (a one-time backup was also made). " +
                 "If this is your current installation, and you wish to keep it, it is recommended to install/update after seeing this message.");
-            German.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            German.Add("packagesUpdatedShouldInstall", "Die folgenden Pakete bekamen ein Update seitdem du das letzte Mal diese Auswahldatei geladen hast. Die Datei wurde mit den Änderungen neu gespeichert (und ein einmaliges Backup wurde erstellt). " +
+                "Falls dies deine aktuelle Installation ist und du diese behalten möchtest, ist es empfehlenswert eine (Neu-)Installation auszuführen wenn du diese Nachricht liest.");
             Polish.Add("packagesUpdatedShouldInstall", TranslationNeeded);
             French.Add("packagesUpdatedShouldInstall", TranslationNeeded);
             Spanish.Add("packagesUpdatedShouldInstall", TranslationNeeded);
@@ -2547,7 +2548,7 @@ namespace RelhaxModpack
             //Component: selectionFileIssuesTitle
             //
             English.Add("selectionFileIssuesTitle", "Selection loading messages");
-            German.Add("selectionFileIssuesTitle", TranslationNeeded);
+            German.Add("selectionFileIssuesTitle", "Auswahl Ladenachrichten");
             Polish.Add("selectionFileIssuesTitle", TranslationNeeded);
             French.Add("selectionFileIssuesTitle", TranslationNeeded);
             Spanish.Add("selectionFileIssuesTitle", TranslationNeeded);
@@ -2556,7 +2557,7 @@ namespace RelhaxModpack
             //Component: selectionFileIssuesHeader
             //
             English.Add("selectionFileIssuesHeader", "Please read the following messages about loading your selection file");
-            German.Add("selectionFileIssuesHeader", TranslationNeeded);
+            German.Add("selectionFileIssuesHeader", "Bitte lies folgende Nachrichten über das Laden deiner Auswahldatei");
             Polish.Add("selectionFileIssuesHeader", TranslationNeeded);
             French.Add("selectionFileIssuesHeader", TranslationNeeded);
             Spanish.Add("selectionFileIssuesHeader", TranslationNeeded);
@@ -2677,7 +2678,7 @@ namespace RelhaxModpack
             //Component: SelectionFileIssuesDisplay
             //window title for when issues applying a user's selection
             English.Add("SelectionFileIssuesDisplay", "Errors applying selection file");
-            German.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            German.Add("SelectionFileIssuesDisplay", "Fehler beim Anwenden der Auswahldatei");
             Polish.Add("SelectionFileIssuesDisplay", "Błędy z zastosowaniem pliku kolekcji");
             French.Add("SelectionFileIssuesDisplay", TranslationNeeded);
             Spanish.Add("SelectionFileIssuesDisplay", TranslationNeeded);
@@ -2769,7 +2770,7 @@ namespace RelhaxModpack
             //Component: VersionInfoAskText
             // Text in the window with Yes and No buttons asking the user if he/she wants to update the application
             English.Add("VersionInfoAskText", "Do you wish to update now?");
-            German.Add("VersionInfoAskText", TranslationNeeded);
+            German.Add("VersionInfoAskText", "Willst du jetzt updaten?");
             Polish.Add("VersionInfoAskText", "Czy chcesz zaktualizować teraz?");
             French.Add("VersionInfoAskText", "Voulez vous faire la mise à jour maintenant?");
             Spanish.Add("VersionInfoAskText", TranslationNeeded);
@@ -4072,7 +4073,7 @@ namespace RelhaxModpack
             //Component: CleanGameCacheText
             // Text block for button to allow user to clear cache data from applicationData folders
             English.Add("CleanGameCacheText", "Clear game cache files");
-            German.Add("CleanGameCacheText", TranslationNeeded);
+            German.Add("CleanGameCacheText", "Lösche Cache des Spiels");
             Polish.Add("CleanGameCacheText", "Wyczyść pamięc podręczną gry");
             French.Add("CleanGameCacheText", TranslationNeeded);
             Spanish.Add("CleanGameCacheText", "Limpar caché del juego");
@@ -4081,7 +4082,7 @@ namespace RelhaxModpack
             //Component: cleanGameCacheProgress
             //
             English.Add("cleanGameCacheProgress", "Clearing game cache files");
-            German.Add("cleanGameCacheProgress", TranslationNeeded);
+            German.Add("cleanGameCacheProgress", "Lösche Spielcache");
             Polish.Add("cleanGameCacheProgress", "Czyszczenie pamięci podręcznej gry");
             French.Add("cleanGameCacheProgress", TranslationNeeded);
             Spanish.Add("cleanGameCacheProgress", "Limpiando caché del juego");
@@ -4090,7 +4091,7 @@ namespace RelhaxModpack
             //Component: cleanGameCacheSuccess
             //
             English.Add("cleanGameCacheSuccess", "Sucessfully cleared game cache files");
-            German.Add("cleanGameCacheSuccess", TranslationNeeded);
+            German.Add("cleanGameCacheSuccess", "Spielcache erfolgreich gelöscht");
             Polish.Add("cleanGameCacheSuccess", "Czyszczenie pamięci podręcznej gry zakończone sukcesem");
             French.Add("cleanGameCacheSuccess", TranslationNeeded);
             Spanish.Add("cleanGameCacheSuccess", "Caché del juego limpiada con éxito");
@@ -4099,7 +4100,7 @@ namespace RelhaxModpack
             //Component: cleanGameCacheFail
             //
             English.Add("cleanGameCacheFail", "Failed to clear game cache files");
-            German.Add("cleanGameCacheFail", TranslationNeeded);
+            German.Add("cleanGameCacheFail", "Konnte Cache-Dateien nicht löschen");
             Polish.Add("cleanGameCacheFail", "Nie udało się wyczyścić pamięci podręcznej gry");
             French.Add("cleanGameCacheFail", TranslationNeeded);
             Spanish.Add("cleanGameCacheFail", "No se ha podido limpar los archivos de caché del juego");
