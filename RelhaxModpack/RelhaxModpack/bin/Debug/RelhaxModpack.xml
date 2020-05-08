@@ -510,6 +510,11 @@
             </summary>
             <returns>Try if any package is selected, false otherwise</returns>
         </member>
+        <member name="P:RelhaxModpack.Category.IsAnyPackageCheckedEnabledValid">
+            <summary>
+            Returns true if at least one package is enabled and checked from the root to the category
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.DatabaseComponents.IDatabaseComponent">
             <summary>
             An interface for all components in the database
@@ -674,17 +679,11 @@
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
-        <member name="M:RelhaxModpack.DatabasePackage.FieldsToXmlParseAttributes">
+        <member name="M:RelhaxModpack.DatabasePackage.AttributesToXmlParseSelectionFiles">
             <summary>
-            Get the list of fields in the class that can be parsed as xml attributes
+            Gets a list of property names that are used for saving/loading the selection V3 file format
             </summary>
-            <returns>The list of fields</returns>
-        </member>
-        <member name="M:RelhaxModpack.DatabasePackage.FieldsToXmlParseNodes">
-            <summary>
-            Get the list of fields in the class that can be parsed as xml elements
-            </summary>
-            <returns>The list of fields</returns>
+            <returns></returns>
         </member>
         <member name="P:RelhaxModpack.DatabasePackage.PackageName">
             <summary>
@@ -909,18 +908,6 @@
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
-        <member name="M:RelhaxModpack.Dependency.FieldsToXmlParseAttributes">
-            <summary>
-            Gets a list of fields (including from base classes) that can be parsed as xml attributes
-            </summary>
-            <returns>The string list</returns>
-        </member>
-        <member name="M:RelhaxModpack.Dependency.FieldsToXmlParseNodes">
-            <summary>
-            Gets a list of fields (including from base classes) that can be parsed as xml elements
-            </summary>
-            <returns>The string list</returns>
-        </member>
         <member name="P:RelhaxModpack.Dependency.DatabasePackageLogic">
             <summary>
             List of linked mods and configs that use this dependency at install time
@@ -1116,17 +1103,11 @@
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
-        <member name="M:RelhaxModpack.SelectablePackage.FieldsToXmlParseAttributes">
+        <member name="M:RelhaxModpack.SelectablePackage.AttributesToXmlParseSelectionFiles">
             <summary>
-            Gets a list of fields (including from base classes) that can be parsed as xml attributes
+            Defines a list of properties in the class to be serialized into xml attributes for selection files
             </summary>
-            <returns>The string list</returns>
-        </member>
-        <member name="M:RelhaxModpack.SelectablePackage.FieldsToXmlParseNodes">
-            <summary>
-            Gets a list of fields (including from base classes) that can be parsed as xml elements
-            </summary>
-            <returns>The string list</returns>
+            <returns>The base array, with SelectablePackage options concatenated</returns>
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.#ctor">
             <summary>
@@ -1420,6 +1401,12 @@
             Check if the color change should be changed on or off, based on if any other packages at this level are enabled and checked
             </summary>
             <returns>True if another package at this level is checked and enabled, false otherwise</returns>
+        </member>
+        <member name="P:RelhaxModpack.SelectablePackage.IsStructureValid">
+            <summary>
+            Returns true if the structure above and below this package is valid (all mandatory child options checked, parent checked), false otherwise
+            </summary>
+            <remarks>This assumes that the database linking/reference code has been run, otherwise a null exception will occur</remarks>
         </member>
         <member name="M:RelhaxModpack.SelectablePackage.#ctor(RelhaxModpack.DatabasePackage,System.Boolean)">
             <summary>
@@ -5478,9 +5465,14 @@
             The xpath string to get the database version info attribute from the document root
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.ConfigFileVersion">
+        <member name="F:RelhaxModpack.Settings.ConfigFileVersion2V0">
             <summary>
-            the latest config file version for saving the user's selection preferences
+            The old V2 config file version for saving the user's selection preferences
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ConfigFileVersion3V0">
+            <summary>
+            The latest config file version for saving the user's selection preferences
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.WoTProcessName">
@@ -6091,6 +6083,11 @@
         <member name="F:RelhaxModpack.Windows.EditorAddRemove.AddSameLevel">
             <summary>
             Toggles if the user requests to add the package at a new level or in the same level as the referenced package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.EditorAddRemove.DatabaseTreeviewSelectedItem">
+            <summary>
+            The currently selected package in the editor's database tree view
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.EditorAddRemove.#ctor">
@@ -7317,6 +7314,21 @@
             The package reference for the database after changes
             </summary>
         </member>
+        <member name="T:RelhaxModpack.DatabaseBeforeAfter2">
+            <summary>
+            Allows the old and new versions of a DatabasePackage to be saved temporarily for comparing differences between two database structures
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseBeforeAfter2.Before">
+            <summary>
+            The package reference for the database before changes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.DatabaseBeforeAfter2.After">
+            <summary>
+            The package reference for the database after changes
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.VersionInfos">
             <summary>
             A structure object to contain the WoT client version and online folder version. Allows for LINQ searching
@@ -7898,13 +7910,13 @@
             <param name="componentsWithDependencies">List of all DatabasePackage objects that have dependencies</param>
             <param name="dependencies">List of all Dependencies that exist in the database</param>
         </member>
-        <member name="M:RelhaxModpack.Utils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.SelectablePackage},System.Collections.Generic.List{RelhaxModpack.Category})">
+        <member name="M:RelhaxModpack.Utils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Dependency},System.Collections.Generic.List{RelhaxModpack.Category},System.Boolean)">
             <summary>
             Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
             </summary>
             <param name="dependencies">The list of dependencies</param>
-            <param name="packages">The list of Selectable Packages</param>
             <param name="parsedCategoryList">The list of Categories</param>
+            <param name="suppressSomeLogging">Flag for it some of the more verbose logging should be suppressed</param>
             <returns>A list of calculated dependencies to install</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.CreateOrderedInstallList(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
@@ -8017,10 +8029,11 @@
         </member>
         <member name="M:RelhaxModpack.Utils.GenerateUID(System.Collections.Generic.List{RelhaxModpack.DatabasePackage})">
             <summary>
-            
+            Generates a Unique IDentifier for a package using the constant defined number of string and character selections
+            while verifying that it's unique against a given list
             </summary>
-            <param name="allPackages"></param>
-            <returns></returns>
+            <param name="allPackages">A list of packages to test to make sure the UID is unique</param>
+            <returns>A guaranteed unique ID that does not exist in the list</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.CompareVersions(System.String,System.String)">
             <summary>
@@ -8078,6 +8091,86 @@
             <param name="processName">The name of the process</param>
             <param name="pathToMatch">(Optional) The directory that the process is running from</param>
             <returns>The Process object that matches, or null if no matches</returns>
+        </member>
+        <member name="T:RelhaxModpack.Utils.ProcessAccessFlags">
+            <summary>
+            An enumeration of desired access rights to ask for information when opening a process's info
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.All">
+            <summary>
+            All process info
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.Terminate">
+            <summary>
+            Terminate the process
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.CreateThread">
+            <summary>
+            Create a thread from the process
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.VirtualMemoryOperation">
+            <summary>
+            View the process's virtual memory operations
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.VirtualMemoryRead">
+            <summary>
+            View the process's virtual memory reads
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.VirtualMemoryWrite">
+            <summary>
+            View the process's virtual memoty writes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.DuplicateHandle">
+            <summary>
+            Ability to create a duplicate process handle
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.CreateProcess">
+            <summary>
+            Ability for process to create processes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.SetQuota">
+            <summary>
+            Set quotas on the process
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.SetInformation">
+            <summary>
+            Set information about the process
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.QueryInformation">
+            <summary>
+            Query information about the process
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.QueryLimitedInformation">
+            <summary>
+            Query information about the process that does not require administrator rights
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.Synchronize">
+            <summary>
+            Synchronize rights
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetExecutablePathAboveVista(System.Int32)">
+            <summary>
+            Gets the path to the application, including exe filename, based on the process ID
+            </summary>
+            <param name="ProcessId">The process ID from Process object</param>
+            <returns>The path to the process's exe</returns>
+            <remarks>This can throw a Win32Exception if the method fails.
+            It uses kernel32.dll p/invoke methods to perform the operation.
+            Does not work below windows vista.</remarks>
         </member>
         <member name="M:RelhaxModpack.Utils.IsProcessRunning(System.String,System.String)">
             <summary>

@@ -1007,7 +1007,48 @@ namespace RelhaxModpack.Windows
             Utils.BuildLevelPerPackage(parsedCateogryListOld);
             List<DatabasePackage> flatListOld = Utils.GetFlatList(globalDependenciesOld, dependenciesOld, null, parsedCateogryListOld);
 
-            //download and load latest database.xml file from server
+            //check if any packages had a UID change, because this is not allowed
+            //check based on packageName, loop through new
+            //if it exists in old, make sure the UID did not change, else abort
+            List<DatabaseBeforeAfter2> packagesWithChangedUIDs = new List<DatabaseBeforeAfter2>();
+            foreach(DatabasePackage currentPackage in flatListCurrent)
+            {
+                DatabasePackage oldPackage = flatListOld.Find(pac => pac.PackageName.Equals(currentPackage.PackageName));
+                if(oldPackage != null)
+                {
+                    if(!oldPackage.UID.Equals(currentPackage.UID))
+                    {
+                        packagesWithChangedUIDs.Add(new DatabaseBeforeAfter2() { Before = oldPackage, After = currentPackage });
+                    }
+                }
+            }
+
+            if(packagesWithChangedUIDs.Count > 0)
+            {
+                ReportProgress("ERROR: The following packages have UIDs changed! This is not allowed!");
+                foreach (DatabaseBeforeAfter2 beforeAfter in packagesWithChangedUIDs)
+                {
+                    ReportProgress(string.Format("Before package: PackageName = {0}, UID = {1}",beforeAfter.Before.PackageName, beforeAfter.Before.UID));
+                    ReportProgress(string.Format("After package:  PackageName = {0}, UID = {1}", beforeAfter.After.PackageName, beforeAfter.After.UID));
+                }
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            //check if any packages are missing UIDs
+            List<DatabasePackage> packagesMissingUids = flatListCurrent.FindAll(pak => string.IsNullOrWhiteSpace(pak.UID));
+            if(packagesMissingUids.Count > 0)
+            {
+                ReportProgress("ERROR: The following packages don't have UIDs and need to be added!");
+                foreach (DatabasePackage package in packagesMissingUids)
+                {
+                    ReportProgress(string.Format("Package missing UID: {0}", package.PackageName));
+                }
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            //download and load latest zip file server database
             ReportProgress("Downloading database.xml of current WoT onlineFolder version from server");
             XmlDocument databaseXml = null;
             using (client = new WebClient())
@@ -1753,6 +1794,7 @@ namespace RelhaxModpack.Windows
                 }
             }
 
+            ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
@@ -1776,7 +1818,8 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            XmlUtils.SaveDatabase1V1(Path.GetDirectoryName(SelectModInfoSave.FileName), docDuplicateCheck,globalDependenciesDuplicateCheck,dependenciesDuplicateCheck,parsedCategoryListDuplicateCheck);
+            string fullDatabasePath = Path.Combine(Path.GetDirectoryName(SelectModInfoSave.FileName), Settings.BetaDatabaseV2RootFilename);
+            XmlUtils.SaveDatabase(fullDatabasePath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Database saved");
             ToggleUI((TabController.SelectedItem as TabItem), true);

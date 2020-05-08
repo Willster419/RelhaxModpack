@@ -1,3 +1,11 @@
+Beta Application version 1.0.4.2 (2020-04-11)
+https://www.virustotal.com/gui/file-analysis/YzAwODQwYTk1N2VjZGQyNWU3ZWVlZjMwMjcyYmExMzc6MTU4NjY0NTI2MA==/detection
+- Potential solution for fixing issues with process access rights. When getting WoT's process information.
+- Fixed bug of user mods not installing when it contained a patch file, complainig of a failed download.
+- Updated logging.
+- Updated Spanish (LordFelix) and Russian (DrWeb7_1) translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.0.4.1 (2020-04-05)
 https://www.virustotal.com/gui/file/3e4784017ea9ded6f196b2089a0d7dd0de49dd0535824357db8d59b4e63d6eee/detection
 - Fixed issue with editor not clearing UI when a text "filler" selection is selected

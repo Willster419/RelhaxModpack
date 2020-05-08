@@ -831,6 +831,7 @@ namespace RelhaxModpack.Windows
             PackageEndAddressDisplay.Text = package.EndAddress;
             PackageVersionDisplay.Text = package.Version;
             PackageAuthorDisplay.Text = package.Author;
+            PackageUidDisplay.Text = package.UID;
             PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
 
             //locate and select the patchGroup and installGroup of the package
@@ -1052,7 +1053,7 @@ namespace RelhaxModpack.Windows
             //check if the to save packagename is unique
             if (!PackagePackageNameDisplay.Text.Equals(package.PackageName))
             {
-                Logging.Editor("packageName is new, checking if it is unique");
+                Logging.Editor("PackageName is new, checking if it is unique");
                 if (Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList), PackagePackageNameDisplay.Text))
                 {
                     MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
@@ -1063,7 +1064,7 @@ namespace RelhaxModpack.Windows
             //check if package was actually modified before saving all these delicious properties
             if (!PackageWasModified(package))
             {
-                Logging.Editor("package was not modified, don't apply anything");
+                Logging.Editor("Package was not modified, don't apply anything");
                 return true;
             }
 
@@ -1072,12 +1073,19 @@ namespace RelhaxModpack.Windows
             {
                 if (!package.ZipFile.Equals(PackageZipFileDisplay.Text) && !Path.GetExtension(PackageZipFileDisplay.Text).Equals(".zip"))
                 {
-                    MessageBox.Show("no zip in file extension, was this a mistake?");
+                    MessageBox.Show("No zip in file extension, was this a mistake?");
                     return false;
                 }
             }
 
-            Logging.Editor("package was modified, saving changes to memory and setting changes switch");
+            //check if package UID changed. it shouldn't
+            if(!package.UID.Equals(PackageUidDisplay.Text))
+            {
+                Logging.Editor("The package UID changed. Old = {0}, New = {1}", LogLevel.Error, package.UID, PackageUidDisplay);
+                return false;
+            }
+
+            Logging.Editor("Package was modified, saving changes to memory and setting changes switch");
 
             //save everything from the UI into the package
             //save package elements first
@@ -1347,7 +1355,7 @@ namespace RelhaxModpack.Windows
             //make sure that the source and destination are not the same
             if (packageCurrentlyOver.Equals(packageToMove) && !addBelowItem)
             {
-                Logging.Editor("database packages detected to be the same, aborting dragDrop");
+                Logging.Editor("Package to add/move is the same as package currently over, aborting operation");
                 return;
             }
 
@@ -1382,6 +1390,9 @@ namespace RelhaxModpack.Windows
                     packageToMove = new DatabasePackage(packageToMove, false);
                 }
 
+                //also make a new UID for the package as well
+                packageToMove.UID = Utils.GenerateUID(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+
                 //the packageName needs to stay unique as well
                 int i = 0;
                 string origName = packageToMove.PackageName;
@@ -1390,7 +1401,7 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("New package name is {0}", LogLevel.Info, packageToMove.PackageName);
             }
 
-            Logging.Editor("for insert process, packageCurrentlyOver type is {0}, packageToMove type is {1}", LogLevel.Info, packageCurrentlyOver.GetType().Name, packageToMove.GetType().Name);
+            Logging.Editor("For insert process, packageCurrentlyOver type is {0}, packageToMove type is {1}", LogLevel.Info, packageCurrentlyOver.GetType().Name, packageToMove.GetType().Name);
             //insert packageToMove into corresponding list that it's over
             if (packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOverForInsert)
             {
@@ -1417,11 +1428,11 @@ namespace RelhaxModpack.Windows
                 GlobalDependencies.Insert(GlobalDependencies.IndexOf(packageCurrentlyOver) + 1, (DatabasePackage)packageToMove);
             }
 
-            //at this point if the destination is a selectale package, then it's refrences need to be updated
+            //at this point if the destination is a selectable package, then it's references need to be updated
             if (packageCurrentlyOver is SelectablePackage selectablePackageCurrentlyOver)
             {
-                Logging.Editor("packageCurrentlyOver is selectablePackage, updating refrences");
-                //packageToMove needs to be casted to a SelectablePackage to have it's refrences updated
+                Logging.Editor("PackageCurrentlyOver is selectablePackage, updating references");
+                //packageToMove needs to be casted to a SelectablePackage to have it's references updated
                 SelectablePackage packageToMoveCast = (SelectablePackage)packageToMove;
                 packageToMoveCast.TopParent = selectablePackageCurrentlyOver.TopParent;
                 packageToMoveCast.ParentCategory = selectablePackageCurrentlyOver.ParentCategory;
@@ -1437,7 +1448,7 @@ namespace RelhaxModpack.Windows
             }
 
             //and edit the tree view list
-            Logging.Editor("updating treeview");
+            Logging.Editor("Updating treeview");
             //same as before
             TreeViewItem realItemToMove = itemToMove;
             //if move, remove
@@ -1460,9 +1471,14 @@ namespace RelhaxModpack.Windows
             {
                 parentItemOver.Items.Insert(parentItemOver.Items.IndexOf(itemCurrentlyOver) + 1, realItemToMove);
             }
+
             SearchBox.Items.Clear();
+
             //rebuild the levels as well
+            Utils.BuildLinksRefrence(ParsedCategoryList, true);
             Utils.BuildLevelPerPackage(ParsedCategoryList);
+            Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
+
             //and keep focus over the item we just moved
             if (!realItemToMove.IsSelected)
             {
@@ -2188,6 +2204,9 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
+            if (cbi2.Package == null)
+                throw new BadMemeException("cbi2.Package is null");
+
             //make the window and show it
             EditorAddRemove addRemove = new EditorAddRemove()
             {
@@ -2196,7 +2215,8 @@ namespace RelhaxModpack.Windows
                 ParsedCategoryList = ParsedCategoryList,
                 EditOrAdd = false,
                 AddSameLevel = true,
-                SelectedPackage = null
+                SelectedPackage = null,
+                DatabaseTreeviewSelectedItem = cbi2.Package
             };
             if (!(bool)addRemove.ShowDialog())
                 return;

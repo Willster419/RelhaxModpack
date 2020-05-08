@@ -13,6 +13,8 @@ using Microsoft.Win32;
 using RelhaxModpack.UIComponents;
 using System.Xml.Linq;
 using System.Windows.Threading;
+using System.Reflection;
+using System.Text;
 
 namespace RelhaxModpack.Windows
 {
@@ -157,7 +159,7 @@ namespace RelhaxModpack.Windows
             if(ModpackSettings.SaveLastSelection)
             {
                 Logging.Debug("Saving selection from continue button, when saveLastSelection is true");
-                SaveSelection(Settings.LastInstalledConfigFilepath, true);
+                SaveSelectionV2(Settings.LastInstalledConfigFilepath, true);
             }
             continueInstallation = true;
             this.Close();
@@ -192,7 +194,7 @@ namespace RelhaxModpack.Windows
                 ParsedCategoryList = ParsedCategoryList,
                 Dependencies = Dependencies,
                 GlobalDependencies = GlobalDependencies,
-                UserMods = UserCategory.Packages,
+                UserMods = UserCategory?.Packages,
                 IsAutoInstall = AutoInstallMode
             });
         }
@@ -547,6 +549,7 @@ namespace RelhaxModpack.Windows
                     InitDatabaseUI(ParsedCategoryList);
                     //link everything again now that the category exists
                     Utils.BuildLinksRefrence(ParsedCategoryList, false);
+                    Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
                     //initialize the user mods
                     InitUsermods();
                 });
@@ -604,6 +607,7 @@ namespace RelhaxModpack.Windows
                     //process loading selections after loading UI
                     XmlDocument SelectionsDocument = null;
                     bool shouldLoadSomething = false;
+                    string shouldLoadSomethingFilepath = null;
                     bool loadSuccess = false;
                     //if test mode, don't load the "default_checked" document
                     if(databaseVersion == DatabaseVersions.Test)
@@ -618,6 +622,7 @@ namespace RelhaxModpack.Windows
                             //load the custom selection file
                             Logging.Info("Loading selection file from {0}",ModpackSettings.AutoOneclickSelectionFilePath);
                             SelectionsDocument = XmlUtils.LoadXmlDocument(ModpackSettings.AutoOneclickSelectionFilePath, XmlLoadType.FromFile);
+                            shouldLoadSomethingFilepath = ModpackSettings.AutoOneclickSelectionFilePath;
                             shouldLoadSomething = true;
                         }
                         else
@@ -633,6 +638,7 @@ namespace RelhaxModpack.Windows
                         string thePath = Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName);
                         Logging.Info("Loading selection file from {0}", thePath);
                         SelectionsDocument = XmlUtils.LoadXmlDocument(thePath, XmlLoadType.FromFile);
+                        shouldLoadSomethingFilepath = thePath;
                         shouldLoadSomething = true;
                     }
                     else if (ModpackSettings.SaveLastSelection)
@@ -641,12 +647,14 @@ namespace RelhaxModpack.Windows
                         {
                             Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
                             SelectionsDocument = XmlUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                            shouldLoadSomethingFilepath = null;
                             shouldLoadSomething = true;
                         }
                         else
                         {
                             Logging.Info("Loading selection file from {0}", Settings.LastInstalledConfigFilepath);
                             SelectionsDocument = XmlUtils.LoadXmlDocument(Settings.LastInstalledConfigFilepath, XmlLoadType.FromFile);
+                            shouldLoadSomethingFilepath = Settings.LastInstalledConfigFilepath;
                             shouldLoadSomething = true;
                         }
                     }
@@ -654,6 +662,7 @@ namespace RelhaxModpack.Windows
                     {
                         //load default checked mods
                         SelectionsDocument = XmlUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                        shouldLoadSomethingFilepath = null;
                         shouldLoadSomething = true;
                     }
 
@@ -662,7 +671,7 @@ namespace RelhaxModpack.Windows
                     {
                         if(SelectionsDocument != null)
                         {
-                            loadSuccess = LoadSelection(SelectionsDocument, true);
+                            loadSuccess = LoadSelection(SelectionsDocument, true, shouldLoadSomethingFilepath);
                         }
                         else
                         {
@@ -1634,7 +1643,7 @@ namespace RelhaxModpack.Windows
                 Title = Translations.GetTranslatedString("SelectSelectionFileToSave")
             };
             if((bool)selectSavePath.ShowDialog())
-                SaveSelection(selectSavePath.FileName,false);
+                SaveSelectionV3(selectSavePath.FileName,false);
         }
 
         private void OnLoadSelectionClick(object sender, RoutedEventArgs e)
@@ -1648,12 +1657,14 @@ namespace RelhaxModpack.Windows
         {
             if(!e.LoadSelection)
                 return;
+
             if(string.IsNullOrWhiteSpace(e.FileToLoad))
             {
                 Logging.WriteToLog("DeveloperSelections returned a blank selection to load when e.LoadSelection = true",Logfiles.Application, LogLevel.Error);
                 MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                 return;
             }
+
             if(e.FileToLoad.Equals("LOCAL"))
             {
                 OpenFileDialog selectLoadPath = new OpenFileDialog()
@@ -1667,6 +1678,7 @@ namespace RelhaxModpack.Windows
                     Multiselect = false,
                     ValidateNames = true
                 };
+
                 if((bool)selectLoadPath.ShowDialog())
                 {
                     XmlDocument doc = new XmlDocument();
@@ -1680,7 +1692,7 @@ namespace RelhaxModpack.Windows
                         MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                         return;
                     }
-                    LoadSelection(doc,false);
+                    LoadSelection(doc,false, selectLoadPath.FileName);
                 }
             }
             else
@@ -1700,12 +1712,14 @@ namespace RelhaxModpack.Windows
                         Close();
                     }
                 }
+
                 if (string.IsNullOrWhiteSpace(xmlString))
                 {
                     Logging.WriteToLog("xmlString is null or empty", Logfiles.Application, LogLevel.Error);
                     MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                     return;
                 }
+
                 XmlDocument doc = new XmlDocument();
                 try
                 {
@@ -1717,7 +1731,7 @@ namespace RelhaxModpack.Windows
                     MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                     return;
                 }
-                LoadSelection(doc,false);
+                LoadSelection(doc,false,null);
             }
         }
 
@@ -1733,17 +1747,26 @@ namespace RelhaxModpack.Windows
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
 
-        private bool LoadSelection(XmlDocument document, bool silent)
+        private bool LoadSelection(XmlDocument document, bool silent, string loadPath)
         {
             //get the string version of the document, determine what to do from there
-            string selectionVersion;
+            string selectionVersion = XmlUtils.GetXmlStringFromXPath(document, "//mods/@ver");
             //attribute example: "//root/element/@attribute"
-            selectionVersion = XmlUtils.GetXmlStringFromXPath(document, "//mods/@ver");
+
+            string selectionVersionV3 = XmlUtils.GetXmlStringFromXPath(document, "/packages/@ver");
+            if(string.IsNullOrEmpty(selectionVersion))
+            {
+                selectionVersion = selectionVersionV3;
+            }
+
             Logging.Debug("SelectionVersion={0}", selectionVersion);
             switch(selectionVersion)
             {
                 case "2.0":
-                    return LoadSelectionV2(document, silent);
+                    return LoadSelectionV2(document, silent, loadPath);
+
+                case "3.0":
+                    return LoadSelectionV3(document, silent, loadPath);
 
                 default:
                     //log we don't know wtf it is
@@ -1754,9 +1777,18 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private bool LoadSelectionV2(XmlDocument document, bool silent)
+        private bool LoadSelectionV2(XmlDocument document, bool silent, string loadPath)
         {
-            //first uncheck everyting
+            //as of 2020-05-03, this format is deprecated. We'll still show it. For now.
+            if(!silent && !string.IsNullOrEmpty(loadPath))
+                MessageBox.Show(Translations.GetTranslatedString("SelectionFormatOldV2"));
+
+            if (!string.IsNullOrEmpty(loadPath))
+                Logging.Info(LogOptions.MethodAndClassName, "This selection file is V2 and will be upgraded to V3. A V2 backup will be created");
+            else
+                Logging.Info(LogOptions.MethodAndClassName, "This selection file is V2 but upgrade will be ignored");
+
+            //first uncheck everything
             Utils.ClearSelections(ParsedCategoryList);
 
             //get a list of all the mods currently in the selection
@@ -1767,22 +1799,22 @@ namespace RelhaxModpack.Windows
             Logging.Debug("xmlSelections count: {0}", xmlSelections.Count);
             Logging.Debug("xmluserSelections count: {0}", xmluserSelections.Count);
 
-            //save a list string of all the packagenames in the list for later
+            //save a list string of all the package names in the list for later
             List<string> stringSelections = new List<string>();
             List<string> stringUserSelections = new List<string>();
             List<string> disabledMods = new List<string>();
             List<SelectablePackage> brokenMods = null;
 
-            foreach(XmlNode node in xmlSelections)
+            foreach (XmlNode node in xmlSelections)
                 stringSelections.Add(node.InnerText);
-            foreach(XmlNode node in xmluserSelections)
+            foreach (XmlNode node in xmluserSelections)
                 stringUserSelections.Add(node.InnerText);
 
             //check the mods in the actual list if it's in the list
-            foreach(SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
+            foreach (SelectablePackage package in Utils.GetFlatList(null, null, null, ParsedCategoryList))
             {
                 //also check to only "check" the mod if it is visible OR if the command line settings to force visible all components
-                if(stringSelections.Contains(package.PackageName) && (package.Visible || ModpackSettings.ForceVisible))
+                if (stringSelections.Contains(package.PackageName) && (package.Visible || ModpackSettings.ForceVisible))
                 {
                     stringSelections.Remove(package.PackageName);
 
@@ -1790,75 +1822,77 @@ namespace RelhaxModpack.Windows
                     if (package.Level == 0 && !package.ParentCategory.CategoryHeader.Checked)
                     {
                         package.ParentCategory.CategoryHeader.Checked = true;
-                        Logging.Info("Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
+                        Logging.Info(LogOptions.MethodName, "Checking top header " + package.ParentCategory.CategoryHeader.NameFormatted);
                     }
 
                     //also check if the mod only if it's enabled OR is command line settings force enabled
                     if (package.Enabled || ModpackSettings.ForceEnabled)
                     {
                         package.Checked = true;
-                        Logging.Info(string.Format("Checking package {0}",package.CompletePath));
+                        Logging.Info(LogOptions.MethodName, string.Format("Checking package {0}", package.CompletePath));
                     }
                     else
                     {
-                        if(ModpackSettings.SaveDisabledMods)
+                        if (ModpackSettings.SaveDisabledMods)
                         {
-                            Logging.Debug("SaveDisabledMods=True, flagging disabled mod {0} for future selection later",package.Name);
+                            Logging.Debug("SaveDisabledMods=True, flagging disabled mod {0} for future selection later", package.Name);
                             package.FlagForSelectionSave = true;
                         }
                         disabledMods.Add(package.CompletePath);
-                        Logging.Info(string.Format("\"{0}\" is a disabled mod", package.CompletePath));
+                        Logging.Info(LogOptions.MethodName, string.Format("\"{0}\" is a disabled mod", package.CompletePath));
                     }
                 }
             }
+
             //do the same as above but for user mods
-            foreach(SelectablePackage package in UserCategory.Packages)
+            foreach (SelectablePackage package in UserCategory.Packages)
             {
-                if(stringUserSelections.Contains(Path.GetFileNameWithoutExtension(package.ZipFile)) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolderPath,package.ZipFile)))
+                if (stringUserSelections.Contains(Path.GetFileNameWithoutExtension(package.ZipFile)) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolderPath, package.ZipFile)))
                 {
-                    Logging.Info(string.Format("Checking User Mod {0}",package.ZipFile));
+                    Logging.Info(LogOptions.MethodName, string.Format("Checking User Mod {0}", package.ZipFile));
                     package.Enabled = true;
                     package.Checked = true;
                     stringUserSelections.Remove(Path.GetFileNameWithoutExtension(package.ZipFile));
                 }
             }
+
             //now check for the correct structure of mods
             brokenMods = IsValidStructure(ParsedCategoryList);
-            Logging.Info("Broken mods structure count: " + brokenMods.Count);
+            Logging.Info(LogOptions.MethodName, "Broken mods structure count: " + brokenMods.Count);
 
             //
             int totalBrokenCount = disabledMods.Count + brokenMods.Count + stringSelections.Count + stringUserSelections.Count;
             if (totalBrokenCount > 0 && (AutoInstallMode || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
             {
-                Logging.Info("Selection issues with auto or one click enabled, with message warning enabled. Show message.");
-                MessageBoxResult  result = MessageBox.Show(
+                Logging.Info(LogOptions.MethodName, "Selection issues with auto or one click enabled, with message warning enabled. Show message.");
+                MessageBoxResult result = MessageBox.Show(
                     Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"),
                     Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"), MessageBoxButton.YesNo);
-                if(result == MessageBoxResult.No)
+                if (result == MessageBoxResult.No)
                 {
-                    Logging.Info("User selected stop installation");
+                    Logging.Info(LogOptions.MethodName, "User selected stop installation");
                     return false;
                 }
             }
 
             //only report issues if silent is false. true means its doing something like auto selections or
-            else if(!silent)
+            else if (!silent)
             {
-                Logging.Info("Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
+                Logging.Info(LogOptions.MethodName, "Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
                     disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
                 SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay();
                 int totalCount = disabledMods.Count + stringSelections.Count + stringUserSelections.Count + brokenMods.Count;
-                if(disabledMods.Count > 0)
+                if (disabledMods.Count > 0)
                 {
                     totalCount -= disabledMods.Count;
                     //disabled selections
                     window.HeaderText = Translations.GetTranslatedString("modDeactivated");
                     window.BodyText = string.Join(Environment.NewLine, disabledMods);
                     window.Title = Translations.GetTranslatedString("selectionFileIssues");
-                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0? "close" : "next");
+                    window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
                     window.ShowDialog();
                 }
-                if(stringSelections.Count > 0)
+                if (stringSelections.Count > 0)
                 {
                     totalCount -= stringSelections.Count;
                     //removed selections
@@ -1868,7 +1902,7 @@ namespace RelhaxModpack.Windows
                     window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
                     window.ShowDialog();
                 }
-                if(stringUserSelections.Count > 0)
+                if (stringUserSelections.Count > 0)
                 {
                     totalCount -= stringUserSelections.Count;
                     //removed user selections
@@ -1878,7 +1912,7 @@ namespace RelhaxModpack.Windows
                     window.ButtonText = Translations.GetTranslatedString(totalCount <= 0 ? "close" : "next");
                     window.ShowDialog();
                 }
-                if(brokenMods.Count > 0)
+                if (brokenMods.Count > 0)
                 {
                     //removed structure user selections
                     window.HeaderText = Translations.GetTranslatedString("modsBrokenStructure");
@@ -1892,24 +1926,563 @@ namespace RelhaxModpack.Windows
             }
             else
             {
-                Logging.Info("Silent = true, logging {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
+                Logging.Info(LogOptions.MethodName, "Silent = true, logging {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
                     disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
             }
+
+            //if not a developer selection file (we have a valid load path, so user, or last loaded, or auto/oneClick), then copy this to a backup file and save/overwrite
+            if(!string.IsNullOrEmpty(loadPath))
+            {
+                string backupFilename = string.Format("{0}_v2_backup.xml", Path.GetFileNameWithoutExtension(loadPath));
+                string backupFilepath = Path.Combine(Path.GetDirectoryName(loadPath), backupFilename);
+                Logging.Info(LogOptions.MethodName, "Saving old V2 format backup to {0}", backupFilepath);
+
+                if(File.Exists(backupFilepath))
+                {
+                    Logging.Debug("File already exists, delete to create new");
+                    File.Delete(backupFilepath);
+                }
+
+                Utils.FileMove(loadPath, backupFilepath, 3, 100);
+                SaveSelectionV3(loadPath, silent);
+            }
+
             return true;
         }
 
-        private void SaveSelection(string savePath, bool silent)
+        private bool LoadSelectionV3(XmlDocument document, bool silent, string loadPath)
+        {
+            //check if it's 'direct load' type
+            bool directLoad = false;
+            string directLoadString = XmlUtils.GetXmlStringFromXPath(document, "/packages/@directLoad");
+            if (!string.IsNullOrEmpty(directLoadString) && Utils.ParseBool(directLoadString, out bool result_, false))
+            {
+                directLoad = result_;
+                Logging.Debug(LogOptions.MethodName, "Parsed directLoad = {0}", directLoad);
+            }
+
+            //first uncheck everything
+            Utils.ClearSelections(ParsedCategoryList);
+
+            //get a list of all the mods currently in the selection
+            XmlNodeList xmlGlobalSelections = document.SelectNodes("/packages/globalPackages/package");
+            XmlNodeList xmlDependencySelections = document.SelectNodes("/packages/dependencyPackages/package");
+            XmlNodeList xmlSelections = document.SelectNodes("/packages/relhaxPackages/package");
+            XmlNodeList xmluserSelections = document.SelectNodes("/packages/userPackages/package");
+
+            //logging
+            Logging.Debug(LogOptions.MethodName, "xmlGlobalSelections count:     {0}", xmlGlobalSelections.Count);
+            Logging.Debug(LogOptions.MethodName, "xmlDependencySelections count: {0}", xmlDependencySelections.Count);
+            Logging.Debug(LogOptions.MethodName, "xmlSelections count:           {0}", xmlSelections.Count);
+            Logging.Debug(LogOptions.MethodName, "xmlUserSelections count:       {0}", xmluserSelections.Count);
+
+            //save a list of all the packages for later
+            List<DatabasePackage> globalPackagesFromSelection = new List<DatabasePackage>();
+            List<Dependency> dependenciesFromSelection = new List<Dependency>();
+            List<DatabasePackage> userPackagesFromSelection = new List<DatabasePackage>();
+            List<SelectablePackage> packagesFromSelection = new List<SelectablePackage>();
+
+            List<SelectablePackage> packagesFromDatabase = Utils.GetFlatSelectablePackageList(ParsedCategoryList);
+
+            List<SelectablePackage> brokenStructurePackages = new List<SelectablePackage>();
+            List<SelectablePackage> removedPackages = new List<SelectablePackage>();
+            List<SelectablePackage> disabledPackages = new List<SelectablePackage>();
+            List<DatabasePackage> removedUserPackages = new List<DatabasePackage>();
+            List<DatabasePackage> outOfDatePackages = new List<DatabasePackage>();
+
+            //bools for determining if stuff is out of date
+            bool globalsOutOfDate = false;
+            bool dependenciesOutOfDate = false;
+            bool packagesOutOfDate = false;
+            bool packageNamesOutOfDate = false;
+            bool userOutOfDate = false;
+
+            //get all the globals and check if they are out of date
+            Logging.Debug(LogOptions.MethodName, "Parsing global packages from selection file");
+            foreach (XmlElement globalXml in xmlGlobalSelections)
+            {
+                DatabasePackage package = new DatabasePackage();
+
+                foreach (string propertyName in package.AttributesToXmlParseSelectionFiles())
+                {
+                    LoadV3PropertiesFromXml(package, globalXml, propertyName);
+                }
+
+                globalPackagesFromSelection.Add(package);
+            }
+
+            Logging.Debug(LogOptions.MethodName, "Parsing dependency packages from selection file");
+            foreach(XmlElement dependencyXml in xmlDependencySelections)
+            {
+                Dependency dependency = new Dependency();
+
+                foreach(string propertyName in dependency.AttributesToXmlParseSelectionFiles())
+                {
+                    LoadV3PropertiesFromXml(dependency, dependencyXml, propertyName);
+                }
+
+                dependenciesFromSelection.Add(dependency);
+            }
+
+            //foreach selection, build a package entry for it. compare it with db to check if it's been updated
+            Logging.Debug(LogOptions.MethodName, "Parsing selectablePackages from selection file");
+            foreach (XmlElement selection in xmlSelections)
+            {
+                SelectablePackage package = new SelectablePackage();
+
+                //add properties to it
+                foreach (string propertyName in package.AttributesToXmlParseSelectionFiles())
+                {
+                    LoadV3PropertiesFromXml(package, selection, propertyName);
+                }
+
+                packagesFromSelection.Add(package);
+            }
+
+            //parse user selections
+            Logging.Debug(LogOptions.MethodName, "Parsing userPackages from selection file");
+            foreach (XmlElement userPackage in xmluserSelections)
+            {
+                DatabasePackage userPack = new DatabasePackage()
+                {
+                    PackageName = userPackage.Attributes["name"].InnerText,
+                    ZipFile = Path.Combine(Settings.RelhaxUserModsFolderPath, string.Format("{0}.zip", userPackage.Attributes["name"].InnerText)),
+                    CRC = userPackage.Attributes["crc"].InnerText
+                };
+                userPackagesFromSelection.Add(userPack);
+            }
+
+            //select all the components based on the list from parsed selection file
+            Logging.Debug(LogOptions.MethodName, "Processing packages for selection");
+            foreach (SelectablePackage packageFromSelection in packagesFromSelection)
+            {
+                //get the package object from the parsed database list, based on UID property
+                SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
+
+                //if it's null, then the package was removed
+                if (packageFromDatabase == null)
+                {
+                    Logging.Info(LogOptions.MethodName, "Package {0} was removed from the database, since last selection save. UID={1}", packageFromSelection.PackageName, packageFromSelection.UID);
+                    removedPackages.Add(packageFromSelection);
+                    packagesOutOfDate = true;
+                    continue;
+                    //by not checking it in the database, then it won't be saved in the new save later
+                }
+
+                //if the package in the database was set invisible, then treat it as removed
+                //unless force visible is on
+                if (!ModpackSettings.ForceVisible && !packageFromDatabase.Visible)
+                {
+                    Logging.Info(LogOptions.MethodName, "Package {0} was hidden since last selection save, act as removed from the database. UID={1}", packageFromSelection.PackageName, packageFromSelection.UID);
+                    removedPackages.Add(packageFromSelection);
+                    packagesOutOfDate = true;
+                    continue;
+                }
+
+                //if the package in the database was set disabled, then don't check it and packagesOutOfDate = true
+                //unless force enabled is on
+                if (!ModpackSettings.ForceEnabled)
+                {
+                    if (!packageFromDatabase.Enabled)
+                    {
+                        Logging.Info(LogOptions.MethodName, "Package {0} is disabled in database and still exists in selection. It won't be checked");
+                        disabledPackages.Add(packageFromSelection);
+                        //if setting is high for keeping disabled packages, then don't remove it from selection file
+                        if (ModpackSettings.SaveDisabledMods)
+                        {
+                            Logging.Info(LogOptions.MethodName, "SaveDisabledMods is true, keep this package in the selection file by flagging");
+                            packageFromDatabase.FlagForSelectionSave = true;
+
+                            //we also save this value to disk, so if we find it when loading, then it's not the first time
+                            //the user has had this package disabled
+                            if (packageFromSelection.FlagForSelectionSave)
+                            {
+                                Logging.Debug(LogOptions.MethodName, "PackageFromSelection FlagForSelectionSave high, not first time loading file with disabled components. Don't trigger out of date");
+                                continue;
+                            }
+                            else
+                            {
+                                Logging.Debug(LogOptions.MethodName, "PackageFromSelection FlagForSelectionSave low, first time loading file with disabled components. Can trigger out of date flag");
+                                packagesOutOfDate = true;
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            Logging.Info(LogOptions.MethodName, "SaveDisabledMods is false, remove this package from selection file (don't check it)");
+                            packagesOutOfDate = true;
+                            continue;
+                        }
+                    }
+                }
+
+                //getting here means the package is visible and enabled and not removed, so check it
+                if (packageFromDatabase.Enabled && packageFromDatabase.Visible)
+                {
+                    Logging.Info(LogOptions.MethodName, "Checking package {0}", packageFromDatabase.PackageName);
+                    packageFromDatabase.Checked = true;
+                }
+                else
+                    Logging.Error("Package {0} was processed to be ready for selection, but is not! Enabled={1}, Visible={2}", packageFromDatabase.Enabled, packageFromDatabase.Visible);
+            }
+
+            //now that database packages are checked, check for the correct structure of mods
+            //brokenMods = IsValidStructure(ParsedCategoryList);
+            foreach (SelectablePackage checkedPackage in packagesFromDatabase.FindAll(pac => pac.Enabled && pac.Checked && pac.Visible))
+            {
+                if (!checkedPackage.IsStructureValid)
+                {
+                    Logging.Info(LogOptions.MethodName, "Package {0} reports that it is invalid structure, needs to be unchecked", checkedPackage.PackageName);
+                    brokenStructurePackages.Add(checkedPackage);
+                    checkedPackage.Checked = false;
+                    //but we still want to save it in the selection list (rather then remove and the user would need to manually find it again)
+                    checkedPackage.FlagForSelectionSave = true;
+
+                    //only trigger out of date if it's the firs time loading this file with the structure invalid
+                    SelectablePackage packageFromSelection = packagesFromSelection.Find(pc => pc.UID.Equals(checkedPackage.UID));
+                    if (packageFromSelection.FlagForSelectionSave)
+                    {
+                        Logging.Debug(LogOptions.MethodName, "PackageFromSelection FlagForSelectionSave high, not first time loading file with disabled components. Don't trigger out of date");
+                    }
+                    else
+                    {
+                        Logging.Debug(LogOptions.MethodName, "PackageFromSelection FlagForSelectionSave low, first time loading file with disabled components. Can trigger out of date flag");
+                        packagesOutOfDate = true;
+                    }
+                }
+            }
+
+            //if direct load mode (like default checked), then don't run MaaS or any additional calculations
+            if(directLoad)
+            {
+                Logging.Debug(LogOptions.MethodName, "DirectLoad = true, stopping here");
+                return true;
+            }
+
+            //determine if packages are out of date
+            Logging.Debug(LogOptions.MethodName, "Processing global packages for selection");
+            if (GlobalDependencies.Count != globalPackagesFromSelection.Count)
+                globalsOutOfDate = true;
+
+            //compare each package and check if it's out of date
+            foreach (DatabasePackage globalDependencyFromSelection in globalPackagesFromSelection)
+            {
+                DatabasePackage globalDependency = GlobalDependencies.Find(pack => pack.UID.Equals(globalDependencyFromSelection.UID));
+                if (globalDependencyFromSelection == null)
+                {
+                    Logging.Info(LogOptions.MethodName, "Global package {0} was not found in list database GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                    globalsOutOfDate = true;
+                }
+                if (IsSelectionV3PackageOutOfDate(globalDependencyFromSelection, globalDependency))
+                {
+                    Logging.Info(LogOptions.MethodName, "Global package {0} is out of date from list of GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                    globalsOutOfDate = true;
+                    outOfDatePackages.Add(globalDependencyFromSelection);
+                }
+            }
+
+            //check if dependencies are out of date
+            Logging.Debug(LogOptions.MethodName, "Processing dependencies from selection");
+            Logging.Debug(LogOptions.MethodName, "First calculate dependencies from currently selected packages");
+            List<Dependency> dependenciesCalculatedFromLoadedSelection = Utils.CalculateDependencies(Dependencies, ParsedCategoryList, true);
+
+            Logging.Debug(LogOptions.MethodName, "Check if number if calculated dependencies == number of loaded dependencies from file");
+            if (dependenciesCalculatedFromLoadedSelection.Count != dependenciesFromSelection.Count)
+                dependenciesOutOfDate = true;
+            Logging.Debug(LogOptions.MethodName, "Dependencies from selection count: {0}, calculated from loaded selection: {1}", dependenciesFromSelection.Count, dependenciesCalculatedFromLoadedSelection.Count);
+
+            Logging.Debug(LogOptions.MethodName, "Check if any new ones exist in loaded list");
+            //UIDs of the above lists
+            List<string> UIDsDependenciesCalculatedFromLoadedSelection = dependenciesCalculatedFromLoadedSelection.Select(dep => dep.UID).ToList();
+            List<string> UIDsDependenciesFromSelection = dependenciesFromSelection.Select(dep => dep.UID).ToList();
+                
+            //list of UIDs that exist in the dependencies loaded but NOT in loaded list. If count > 0 it means one has been added
+            List<string> newUIDsInDependencesFromLoadedSelection = UIDsDependenciesCalculatedFromLoadedSelection.Except(UIDsDependenciesFromSelection).ToList();
+
+            Logging.Debug(LogOptions.MethodName, "New dependencies loaded from selection count: {0}", newUIDsInDependencesFromLoadedSelection.Count);
+
+            if (newUIDsInDependencesFromLoadedSelection.Count > 0)
+                dependenciesOutOfDate = true;
+
+            //if nothing new found, check each old to see if it == new
+            foreach (Dependency dependencyFromSelection in dependenciesFromSelection)
+            {
+                Dependency dependencyFromDatabase = Dependencies.Find(dep => dep.UID.Equals(dependencyFromSelection.UID));
+                if (dependencyFromDatabase == null)
+                {
+                    Logging.Debug(LogOptions.MethodName, "Dependency {0} was removed, continue", dependencyFromSelection.PackageName);
+                    continue;
+                }
+                if (IsSelectionV3PackageOutOfDate(dependencyFromSelection, dependencyFromDatabase))
+                {
+                    Logging.Info(LogOptions.MethodName, "Dependency {0} is out of date from list of Dependencies. Setting dependenciesOutOfDate to true", dependencyFromSelection.PackageName);
+                    dependenciesOutOfDate = true;
+                    outOfDatePackages.Add(dependencyFromSelection);
+                }
+            }
+
+            //reset database dependency calculation
+            Logging.Debug(LogOptions.MethodName, "Clear dependency calculations to prevent collision from install");
+            foreach (Dependency dependency in Dependencies)
+                dependency.DatabasePackageLogic.Clear();
+
+            //check if packages are out of date
+            Logging.Debug(LogOptions.MethodName, "Processing packages from selection");
+            foreach (SelectablePackage packageFromSelection in packagesFromSelection)
+            {
+                //get the package object from the parsed database list, based on UID property
+                SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
+                if (packageFromDatabase == null)
+                {
+                    Logging.Debug(LogOptions.MethodName, "SelectablePackage {0} was removed (checking for out of date), continue", packageFromSelection.PackageName);
+                    continue;
+                }
+
+                if (IsSelectionV3PackageOutOfDate(packageFromSelection, packageFromDatabase))
+                {
+                    Logging.Info(LogOptions.MethodName, "Package {0} is out of date from list of Packages. Setting packagesOutOfDate to true", packageFromSelection.PackageName);
+                    packagesOutOfDate = true;
+                    outOfDatePackages.Add(packageFromSelection);
+                }
+            }
+
+            //check if packageName is out of date (not included for if package itself is out of date)
+            foreach (SelectablePackage packageFromSelection in packagesFromSelection)
+            {
+                //get the package object from the parsed database list, based on UID property
+                SelectablePackage packageFromDatabase = packagesFromDatabase.Find(pack => pack.UID.Equals(packageFromSelection.UID));
+                if (packageFromDatabase == null)
+                {
+                    Logging.Debug(LogOptions.MethodName, "SelectablePackage {0} was removed (checking for package rename), continue", packageFromSelection.PackageName);
+                    continue;
+                }
+                if (IsPackageNameOutOfDate(packageFromSelection, packageFromDatabase))
+                {
+                    Logging.Info(LogOptions.MethodName, "PackageName {0} is old from database's name of {1}, flagging for remap", packageFromSelection.PackageName, packageFromDatabase.PackageName);
+                    packageNamesOutOfDate = true;
+                }
+            }
+
+            //check if user packages are out of date
+            //check if file exists and if md5 is the same
+            Logging.Debug(LogOptions.MethodName, "Processing user packages for selection");
+            foreach (DatabasePackage userPackage in userPackagesFromSelection)
+            {
+                SelectablePackage userPackageFromDatabase = UserCategory.Packages.Find(pac => pac.PackageName.Equals(userPackage.PackageName));
+                if (userPackageFromDatabase == null)
+                {
+                    Logging.Info(LogOptions.MethodName, "User package {0} was removed, set userOutOfDate");
+                    removedUserPackages.Add(userPackage);
+                    userOutOfDate = true;
+                    continue;
+                }
+
+                Logging.Info(LogOptions.MethodName, "Checking user package {0}", userPackage.PackageName);
+                userPackageFromDatabase.Enabled = true;
+                userPackageFromDatabase.Checked = true;
+
+                //check crc for up to date
+                if (!userPackage.CRC.Equals(Utils.CreateMD5Hash(userPackage.ZipFile)))
+                {
+                    Logging.Debug(LogOptions.MethodName, "Md5 hash values do not match, setting userOutOfDate");
+                    userOutOfDate = true;
+                }
+            }
+
+            //display counts of changes
+            Logging.Info(LogOptions.MethodName, "Summary of package changes");
+            Logging.Info(LogOptions.MethodName, "Removed packages:          {0}", removedPackages.Count);
+            Logging.Info(LogOptions.MethodName, "Removed user packages:     {0}", removedUserPackages.Count);
+            Logging.Info(LogOptions.MethodName, "Disabled packages:         {0}", disabledPackages.Count);
+            Logging.Info(LogOptions.MethodName, "Broken structure packages: {0}", brokenStructurePackages.Count);
+            Logging.Info(LogOptions.MethodName, "Out of date packages:      {0}", outOfDatePackages.Count);
+
+            //if in some sort of auto-install mode, check if the user wants to be informed of selection issues
+            int totalBrokenCount = removedPackages.Count + removedUserPackages.Count + disabledPackages.Count + brokenStructurePackages.Count + outOfDatePackages.Count;
+
+            //save the xml document if the selection was out of date
+            if (globalsOutOfDate || dependenciesOutOfDate || packagesOutOfDate || packageNamesOutOfDate || userOutOfDate)
+            {
+                Logging.Info(LogOptions.MethodName, "The selection file is out of date, and is being updated (write new version to disk)");
+                Logging.Debug("globals={0}, dependencies={1}, packages={2}, packageNames={3}, user={4}", globalsOutOfDate, dependenciesOutOfDate, packagesOutOfDate, packageNamesOutOfDate, userOutOfDate);
+
+                //save the document via save v3
+                document = null;
+                string filename = Path.GetFileNameWithoutExtension(loadPath);
+                string filenameBackup = filename + "_backup.xml";
+                string pathBackup = Path.Combine(Path.GetDirectoryName(loadPath), filenameBackup);
+
+                if (File.Exists(pathBackup))
+                    Utils.FileDelete(pathBackup, 3, 100);
+                Utils.FileMove(loadPath, pathBackup, 3, 100);
+
+                SaveSelectionV3(loadPath, true);
+            }
+
+            if (totalBrokenCount > 0 && (AutoInstallMode || ModpackSettings.OneClickInstall) && ModpackSettings.AutoOneclickShowWarningOnSelectionsFail)
+            {
+                Logging.Info(LogOptions.MethodName, "Selection issues with auto or one click enabled, with message warning enabled. Show message.");
+                MessageBoxResult result = MessageBox.Show(
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueBody"),
+                    Translations.GetTranslatedString("AutoOneclickSelectionErrorsContinueHeader"), MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.No)
+                {
+                    Logging.Info("User selected stop installation");
+                    return false;
+                }
+            }
+            else if (!silent && totalBrokenCount > 0)//only report issues if silent is false and if anything needs to be reported
+            {
+                SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay
+                {
+                    Title = Translations.GetTranslatedString("selectionFileIssuesTitle"),
+                    HeaderText = Translations.GetTranslatedString("selectionFileIssuesHeader"),
+                    ButtonText = Translations.GetTranslatedString("close")
+                };
+
+                StringBuilder selectionMessagesBuilder = new StringBuilder();
+                string seperate = Environment.NewLine;
+
+                //disabled selections
+                if (disabledPackages.Count > 0)
+                {
+                    selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modDeactivated"));
+                    selectionMessagesBuilder.AppendLine(string.Join(seperate, disabledPackages.Select(package => "-  " + package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine();
+                }
+
+                //removed selections, db and user
+                if (removedUserPackages.Count + removedPackages.Count > 0)
+                {
+                    selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modsNotFoundTechnical"));
+                    selectionMessagesBuilder.AppendLine(string.Join(seperate, removedPackages.Concat(removedUserPackages).Select(package => "-  " + package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine();
+                }
+
+                //removed broken structure selection
+                if (brokenStructurePackages.Count > 0)
+                {
+                    selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("modsBrokenStructure"));
+                    selectionMessagesBuilder.AppendLine(string.Join(seperate, brokenStructurePackages.Select(package => "-  " + package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine();
+                }
+
+                //out of date selections
+                if(outOfDatePackages.Count > 0)
+                {
+                    selectionMessagesBuilder.AppendLine(Translations.GetTranslatedString("packagesUpdatedShouldInstall"));
+                    selectionMessagesBuilder.AppendLine(string.Join(seperate, outOfDatePackages.Select(package => "-  " + package.CompletePath).ToArray()));
+                    selectionMessagesBuilder.AppendLine();
+                }
+
+                window.BodyText = selectionMessagesBuilder.ToString();
+                window.ShowDialog();
+                window.Close();
+                window = null;
+            }
+
+            return true;
+        }
+
+        private bool IsSelectionV3PackageOutOfDate(DatabasePackage packageFromSelection, DatabasePackage packageFromDatabase)
+        {
+            Logging.Info(LogOptions.MethodAndClassName, "Comparing package: {0}", packageFromDatabase.PackageName);
+
+            Logging.Debug("Selection ZipFile: {0}", packageFromSelection.ZipFile);
+            Logging.Debug("Database ZipFile:  {0}", packageFromDatabase.ZipFile);
+            if (!packageFromSelection.ZipFile.Equals(packageFromDatabase.ZipFile))
+            {
+                Logging.Info(LogOptions.MethodAndClassName, "ZipFile is out of date");
+                return true;
+            }
+
+            Logging.Debug("Selection CRC: {0}", packageFromSelection.CRC);
+            Logging.Debug("Database CRC:  {0}", packageFromDatabase.CRC);
+            if (!packageFromSelection.CRC.Equals(packageFromDatabase.CRC))
+            {
+                Logging.Info(LogOptions.MethodAndClassName, "CRC is out of date");
+                return true;
+            }
+
+            Logging.Debug("Selection Version: {0}", packageFromSelection.Version);
+            Logging.Debug("Database Version:  {0}", packageFromDatabase.Version);
+            if (!packageFromSelection.Version.Equals(packageFromDatabase.Version))
+            {
+                Logging.Info(LogOptions.MethodAndClassName, "Version is out of date");
+                return true;
+            }
+
+            Logging.Debug("Selection Timestamp: {0}", packageFromSelection.Timestamp);
+            Logging.Debug("Database Timestamp:  {0}", packageFromDatabase.Timestamp);
+            if (!packageFromSelection.Timestamp.Equals(packageFromDatabase.Timestamp))
+            {
+                Logging.Info(LogOptions.MethodAndClassName, "Timestamp is out of date");
+                return true;
+            }
+
+            Logging.Debug("Selection Enabled: {0}", packageFromSelection.Enabled);
+            Logging.Debug("Database Enabled:  {0}", packageFromDatabase.Enabled);
+            if (!packageFromSelection.Enabled.Equals(packageFromDatabase.Enabled))
+            {
+                Logging.Info(LogOptions.MethodAndClassName, "Enabled is out of date");
+                return true;
+            }
+            return false;
+        }
+
+        private bool IsPackageNameOutOfDate(DatabasePackage packageFromSelection, DatabasePackage packageFromDatabase)
+        {
+            if (!packageFromSelection.PackageName.Equals(packageFromDatabase.PackageName))
+            {
+                Logging.Warning("The packageName is out of date. Selection = '{0}', Database = '{1}'", packageFromSelection.PackageName, packageFromDatabase.PackageName);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private void LoadV3PropertiesFromXml(DatabasePackage package, XmlElement packageXml, string propertyName)
+        {
+            //get the propertyInfo of that name element
+            PropertyInfo property = null;
+            try
+            { property = package.GetType().GetProperty(propertyName); }
+            catch { }
+
+            if (property == null)
+            {
+                Logging.Error("Unable to get property '{0}' from SelectablePackage object, skipping!", propertyName);
+                return;
+            }
+
+            //get string value from xml
+            string propertyValue = packageXml.Attributes[propertyName].InnerXml;
+            if (!string.IsNullOrEmpty(propertyValue))
+            {
+                //add the property value
+                if (!Utils.SetObjectProperty(package, property, propertyValue))
+                {
+                    Logging.Error("Unable to set property '{0}' value from SelectablePackage object, skipping!", propertyName);
+                    return;
+                }
+            }
+        }
+
+        private void SaveSelectionV2(string savePath, bool silent)
         {
             Logging.Info("Saving selections to " + savePath);
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion), new XAttribute("date",
-                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", Settings.DatabaseVersion), new XAttribute("dbDistro", databaseVersion.ToString())));
+                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion2V0),
+                new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
+                new XAttribute("dbVersion", Settings.DatabaseVersion),
+                new XAttribute("dbDistro", databaseVersion.ToString())));
 
             //relhax mods root
             doc.Element("mods").Add(new XElement("relhaxMods"));
+
             //user mods root
             doc.Element("mods").Add(new XElement("userMods"));
 
@@ -1918,7 +2491,7 @@ namespace RelhaxModpack.Windows
             var nodeUserMods = doc.Descendants("userMods").FirstOrDefault();
 
             //check relhax Mods
-            foreach (SelectablePackage package in Utils.GetFlatList(null,null,null,ParsedCategoryList))
+            foreach (SelectablePackage package in Utils.GetFlatList(null, null, null, ParsedCategoryList))
             {
                 if (package.Checked)
                 {
@@ -1938,7 +2511,7 @@ namespace RelhaxModpack.Windows
             {
                 if (m.Checked)
                 {
-                    Logging.Info("adding user mod" + m.ZipFile);
+                    Logging.Info("Adding user mod" + m.ZipFile);
                     //add it to the list
                     nodeUserMods.Add(new XElement("mod", m.Name));
                 }
@@ -1949,6 +2522,145 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show(Translations.GetTranslatedString("configSaveSuccess"));
             }
         }
+
+        private void SaveSelectionV3(string savePath, bool silent)
+        {
+            Logging.Info(LogOptions.MethodName, "Saving selections document to {0}", savePath);
+
+            //create saved config xml layout
+            XDocument doc = new XDocument(
+                new XDeclaration("1.0", "utf-8", "yes"));
+
+            //document root
+            XElement packagesRoot = new XElement("packages",
+                new XAttribute("ver", Settings.ConfigFileVersion3V0),
+                new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
+                new XAttribute("dbVersion", Settings.DatabaseVersion),
+                new XAttribute("dbDistro", databaseVersion.ToString()));
+
+            doc.Add(packagesRoot);
+
+            //add global root
+            XElement nodeGlobal = new XElement("globalPackages");
+            packagesRoot.Add(nodeGlobal);
+
+            //add dependencies
+            XElement nodeDependencies = new XElement("dependencyPackages");
+            packagesRoot.Add(nodeDependencies);
+
+            //relhax mods root
+            XElement nodeRelhax = new XElement("relhaxPackages");
+            packagesRoot.Add(nodeRelhax);
+
+            //user mods root
+            XElement nodeUserMods = new XElement("userPackages");
+            packagesRoot.Add(nodeUserMods);
+
+            //add global packages
+            Logging.Debug("Saving global dependencies to document");
+            foreach(DatabasePackage globalPackage in GlobalDependencies)
+            {
+                XElement xpackageGlobal = new XElement("package");
+                foreach (string propName in globalPackage.AttributesToXmlParseSelectionFiles())
+                {
+                    SaveV3PropertiesToXmlElement(globalPackage, xpackageGlobal, propName);
+                }
+                nodeGlobal.Add(xpackageGlobal);
+            }
+
+            //calculate dependencies for adding
+            Logging.Debug("Running dependency calculation on database");
+            List<Dependency> dependenciesToInstall = Utils.CalculateDependencies(Dependencies, ParsedCategoryList,true);
+
+            Logging.Debug("Saving calculated dependencies to document");
+            foreach (Dependency dependency in dependenciesToInstall)
+            {
+                XElement xpackageGlobal = new XElement("package");
+                foreach (string propName in dependency.AttributesToXmlParseSelectionFiles())
+                {
+                    SaveV3PropertiesToXmlElement(dependency, xpackageGlobal, propName);
+                }
+                nodeDependencies.Add(xpackageGlobal);
+            }
+
+            //reset database dependency calculation
+            foreach (Dependency dependency in Dependencies)
+                dependency.DatabasePackageLogic.Clear();
+
+            //check relhax Mods
+            Logging.Debug("Starting selection save of Relhax packages");
+            foreach (SelectablePackage package in Utils.GetFlatList(null, null, null, ParsedCategoryList))
+            {
+                XElement xPackage = null;
+                if (package.Checked)
+                {
+                    Logging.Info("Adding package {0}", package.PackageName);
+                }
+                else if (ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
+                {
+                    Logging.Info("Adding package {0} (not checked, but flagged for save)", package.Name);
+                }
+                else
+                {
+                    continue;
+                }
+                xPackage = new XElement("package");
+
+                foreach (string propName in package.AttributesToXmlParseSelectionFiles())
+                {
+                    SaveV3PropertiesToXmlElement(package, xPackage, propName);
+                }
+
+                //add the element to the xml container element
+                nodeRelhax.Add(xPackage);
+            }
+
+            //check user mods
+            Logging.Debug("Starting save of user packages");
+            foreach (SelectablePackage package in UserCategory.Packages)
+            {
+                if (package.Checked)
+                {
+                    Logging.Info("Adding user package {0}", package.PackageName);
+                    XElement packagee = new XElement("package", new XAttribute("name", package.Name));
+                    packagee.Add(new XAttribute("crc", Utils.CreateMD5Hash(package.ZipFile)));
+                    nodeUserMods.Add(packagee);
+                }
+            }
+
+            Logging.Debug("Saving document to disk");
+            if (File.Exists(savePath))
+                File.Delete(savePath);
+            doc.Save(savePath);
+            
+            Logging.Info(LogOptions.MethodName, "Selection save completed");
+            if (!silent)
+            {
+                MessageBox.Show(Translations.GetTranslatedString("configSaveSuccess"));
+            }
+        }
+
+        private void SaveV3PropertiesToXmlElement(DatabasePackage package, XElement packageXml, string propName)
+        {
+            //get the property
+            PropertyInfo property = null;
+            try
+            {
+                property = package.GetType().GetProperty(propName);
+            }
+            catch { }
+
+            if (property == null)
+            {
+                Logging.Error("Unable to get property '{0}' from DatabasePackage object, skipping!", propName);
+                return;
+            }
+
+            //add the attribute to the element
+            packageXml.Add(new XAttribute(propName, property.GetValue(package)));
+        }
+
         //checks for invalid structure in the selected packages
         //ex: a new mandatory option was added to a mod, but the user does not have it selected
         private List<SelectablePackage> IsValidStructure(List<Category> ParsedCategoryList)

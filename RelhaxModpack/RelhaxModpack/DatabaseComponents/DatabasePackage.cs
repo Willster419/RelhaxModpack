@@ -38,7 +38,7 @@ namespace RelhaxModpack
             nameof(Enabled),
             nameof(InstallGroup),
             nameof(PatchGroup),
-            //nameof(UID)
+            nameof(UID)
         };
 
         private static readonly List<string> PackagePropertiesToXmlParseElements = new List<string>()
@@ -57,24 +57,26 @@ namespace RelhaxModpack
             nameof(Author),
             nameof(Maintainers)
         };
+        #endregion
+
+        #region Selection file processing
+        private static readonly List<string> PackagePropertiesToSaveForSelectionFile = new List<string>()
+        {
+            nameof(PackageName),
+            nameof(UID),
+            nameof(ZipFile),
+            nameof(Timestamp),
+            nameof(CRC),
+            nameof(Version),
+            nameof(Enabled)
+        };
 
         /// <summary>
-        /// Get the list of fields in the class that can be parsed as xml attributes
+        /// Gets a list of property names that are used for saving/loading the selection V3 file format
         /// </summary>
-        /// <returns>The list of fields</returns>
-        public static List<string> FieldsToXmlParseAttributes()
-        {
-            return new List<string>(PackagePropertiesToXmlParseAttributes);
-        }
-
-        /// <summary>
-        /// Get the list of fields in the class that can be parsed as xml elements
-        /// </summary>
-        /// <returns>The list of fields</returns>
-        public static List<string> FieldsToXmlParseNodes()
-        {
-            return new List<string>(PackagePropertiesToXmlParseElements);
-        }
+        /// <returns></returns>
+        public virtual string[] AttributesToXmlParseSelectionFiles()
+        { return PackagePropertiesToSaveForSelectionFile.ToArray(); }
         #endregion
 
         #region Database Properties
@@ -332,6 +334,7 @@ namespace RelhaxModpack
             this.InstallGroup = packageToCopy.InstallGroup;
             this.PatchGroup = packageToCopy.PatchGroup;
             this.Maintainers = packageToCopy.Maintainers;
+            this.UID = packageToCopy.UID;
             //don't call the property for enabled, just the internal field
             this._Enabled = packageToCopy._Enabled;
         }

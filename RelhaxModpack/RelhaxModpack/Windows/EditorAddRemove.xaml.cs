@@ -51,6 +51,11 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool AddSameLevel = true;
 
+        /// <summary>
+        /// The currently selected package in the editor's database tree view
+        /// </summary>
+        public DatabasePackage DatabaseTreeviewSelectedItem = null;
+
         //private
         private const string GlobalDependenciesCategoryHeader = "--Global Dependencies--";
         private const string DependenciesCategoryHeader = "--Dependencies--";
@@ -71,6 +76,7 @@ namespace RelhaxModpack.Windows
             CategoryComboBox.Items.Add(DependenciesCategoryHeader);
             foreach (Category cat in ParsedCategoryList)
                 CategoryComboBox.Items.Add(cat);
+
             PackageComboBox.Items.Clear();
             //edit or add info
             if(EditOrAdd)
@@ -102,19 +108,34 @@ namespace RelhaxModpack.Windows
                 if(s.Equals(GlobalDependenciesCategoryHeader))
                 {
                     foreach (DatabasePackage package in GlobalDependencies)
-                        PackageComboBox.Items.Add(new EditorComboBoxItem(package));
+                    {
+                        if (!package.Equals(DatabaseTreeviewSelectedItem))
+                            PackageComboBox.Items.Add(new EditorComboBoxItem(package));
+                        else
+                            Logging.Editor("Skipping adding {0} because it is currently selected", LogLevel.Info, DatabaseTreeviewSelectedItem.PackageName);
+                    }
                 }
                 else if (s.Equals(DependenciesCategoryHeader))
                 {
                     foreach (DatabasePackage package in Dependencies)
-                        PackageComboBox.Items.Add(new EditorComboBoxItem(package));
+                    {
+                        if (!package.Equals(DatabaseTreeviewSelectedItem))
+                            PackageComboBox.Items.Add(new EditorComboBoxItem(package));
+                        else
+                            Logging.Editor("Skipping adding {0} because it is currently selected", LogLevel.Info, DatabaseTreeviewSelectedItem.PackageName);
+                    }
                 }
             }
             else if(CategoryComboBox.SelectedItem is Category cat)
             {
                 PackageComboBox.Items.Clear();
                 foreach (DatabasePackage package in cat.GetFlatPackageList())
-                    PackageComboBox.Items.Add(new EditorComboBoxItem(package));
+                {
+                    if (!package.Equals(DatabaseTreeviewSelectedItem))
+                        PackageComboBox.Items.Add(new EditorComboBoxItem(package));
+                    else
+                        Logging.Editor("Skipping adding {0} because it is currently selected", LogLevel.Info, DatabaseTreeviewSelectedItem.PackageName);
+                }
             }
         }
 

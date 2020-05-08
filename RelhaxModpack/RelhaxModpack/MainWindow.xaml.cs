@@ -1352,7 +1352,7 @@ namespace RelhaxModpack
             List<SelectablePackage> flatListSelect = Utils.GetFlatSelectablePackageList(parsedCategoryList);
 
             Logging.Debug("Starting Utils.CalculateDependencies()");
-            List<Dependency> dependneciesToInstall = new List<Dependency>(Utils.CalculateDependencies(dependencies, flatListSelect, parsedCategoryList));
+            List<Dependency> dependneciesToInstall = new List<Dependency>(Utils.CalculateDependencies(dependencies, parsedCategoryList, false));
             Logging.Debug("Finished Utils.CalculateDependencies()");
 
             //make a flat list of all packages to install (including those without a zip file) for statistic data gathering
