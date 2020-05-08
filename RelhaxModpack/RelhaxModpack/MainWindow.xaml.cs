@@ -873,7 +873,7 @@ namespace RelhaxModpack
             //only true alpha build version will get here
             if (version == ApplicationVersions.Alpha)
             {
-                Logging.Debug("application version is {0} on (true) alpha build, skipping update check");
+                Logging.Debug("Application version is {0} on (true) alpha build, skipping update check", applicationBuildVersion);
                 return true;
             }
 

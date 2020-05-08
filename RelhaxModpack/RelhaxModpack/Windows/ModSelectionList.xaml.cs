@@ -2085,7 +2085,7 @@ namespace RelhaxModpack.Windows
                 {
                     if (!packageFromDatabase.Enabled)
                     {
-                        Logging.Info(LogOptions.MethodName, "Package {0} is disabled in database and still exists in selection. It won't be checked");
+                        Logging.Info(LogOptions.MethodName, "Package {0} is disabled in database and still exists in selection. It won't be checked", packageFromDatabase.PackageName);
                         disabledPackages.Add(packageFromSelection);
                         //if setting is high for keeping disabled packages, then don't remove it from selection file
                         if (ModpackSettings.SaveDisabledMods)
