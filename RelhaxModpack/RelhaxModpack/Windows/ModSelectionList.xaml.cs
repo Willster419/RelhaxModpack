@@ -158,8 +158,8 @@ namespace RelhaxModpack.Windows
             //check if we should save last config and if so, then do so
             if(ModpackSettings.SaveLastSelection)
             {
-                Logging.Debug("Saving selection from continue button, when saveLastSelection is true");
-                SaveSelectionV2(Settings.LastInstalledConfigFilepath, true);
+                Logging.Debug("Saving selection from continue button, when saveLastSelection is true (save format V3)");
+                SaveSelectionV3(Settings.LastInstalledConfigFilepath, true);
             }
             continueInstallation = true;
             this.Close();
