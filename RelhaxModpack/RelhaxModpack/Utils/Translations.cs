@@ -2542,7 +2542,8 @@ namespace RelhaxModpack
                 "Falls dies deine aktuelle Installation ist und du diese behalten möchtest, ist es empfehlenswert eine (Neu-)Installation auszuführen wenn du diese Nachricht liest.");
             Polish.Add("packagesUpdatedShouldInstall", TranslationNeeded);
             French.Add("packagesUpdatedShouldInstall", TranslationNeeded);
-            Spanish.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            Spanish.Add("packagesUpdatedShouldInstall", "Los siguientes paquetes han sido actualizados desde la última carga de este archivo de selección. Su archivo de selección ha sido actualizado con los cambios (y se ha creado una copia de seguridad de un sólo uso). " +
+                "Si ésta es su instalación actual, y quiere conservarla, se recomienda instalar/actualizar después de ver este mensaje.");
             Russian.Add("packagesUpdatedShouldInstall", TranslationNeeded);
 
             //Component: selectionFileIssuesTitle
@@ -2551,7 +2552,7 @@ namespace RelhaxModpack
             German.Add("selectionFileIssuesTitle", "Auswahl Ladenachrichten");
             Polish.Add("selectionFileIssuesTitle", TranslationNeeded);
             French.Add("selectionFileIssuesTitle", TranslationNeeded);
-            Spanish.Add("selectionFileIssuesTitle", TranslationNeeded);
+            Spanish.Add("selectionFileIssuesTitle", "Mensajes de carga de la selección");
             Russian.Add("selectionFileIssuesTitle", TranslationNeeded);
 
             //Component: selectionFileIssuesHeader
@@ -2560,7 +2561,7 @@ namespace RelhaxModpack
             German.Add("selectionFileIssuesHeader", "Bitte lies folgende Nachrichten über das Laden deiner Auswahldatei");
             Polish.Add("selectionFileIssuesHeader", TranslationNeeded);
             French.Add("selectionFileIssuesHeader", TranslationNeeded);
-            Spanish.Add("selectionFileIssuesHeader", TranslationNeeded);
+            Spanish.Add("selectionFileIssuesHeader", "Por favor, lea los siguientes mensajes sobre la carga de su archivo de selección");
             Russian.Add("selectionFileIssuesHeader", TranslationNeeded);
 
 
@@ -2681,7 +2682,7 @@ namespace RelhaxModpack
             German.Add("SelectionFileIssuesDisplay", "Fehler beim Anwenden der Auswahldatei");
             Polish.Add("SelectionFileIssuesDisplay", "Błędy z zastosowaniem pliku kolekcji");
             French.Add("SelectionFileIssuesDisplay", TranslationNeeded);
-            Spanish.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            Spanish.Add("SelectionFileIssuesDisplay", "Errores al aplicar el archivo de selección");
             Russian.Add("SelectionFileIssuesDisplay", "Ошибка применения файла предустановки");
 
             //Component: selectionFileIssues
@@ -2773,7 +2774,7 @@ namespace RelhaxModpack
             German.Add("VersionInfoAskText", "Willst du jetzt updaten?");
             Polish.Add("VersionInfoAskText", "Czy chcesz zaktualizować teraz?");
             French.Add("VersionInfoAskText", "Voulez vous faire la mise à jour maintenant?");
-            Spanish.Add("VersionInfoAskText", TranslationNeeded);
+            Spanish.Add("VersionInfoAskText", "¿Quiere actualizar ahora?");
             Russian.Add("VersionInfoAskText", "Хотите обновить прямо сейчас?");
             #endregion
 
