@@ -54,6 +54,12 @@ namespace RelhaxModpack.Windows
         /// Flag to determine if the current installation is started from auto install mode
         /// </summary>
         public bool IsAutoInstall = false;
+
+        /// <summary>
+        /// Flag to determind if the current installation loaded with selection file
+        /// format V3+ is out of date with what the database has
+        /// </summary>
+        public bool IsSelectionOutOfDate = false;
     }
 
     /// <summary>
@@ -609,8 +615,11 @@ namespace RelhaxModpack.Windows
                     bool shouldLoadSomething = false;
                     string shouldLoadSomethingFilepath = null;
                     bool loadSuccess = false;
+                    bool isAutoInstall = AutoInstallMode || !string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName);
+                    bool selectionFileOutOfDate = false;
+
                     //if test mode, don't load the "default_checked" document
-                    if(databaseVersion == DatabaseVersions.Test)
+                    if (databaseVersion == DatabaseVersions.Test)
                     {
                         Logging.Debug("Test mode is active, don't load default_checked selection");
                     }
@@ -671,7 +680,7 @@ namespace RelhaxModpack.Windows
                     {
                         if(SelectionsDocument != null)
                         {
-                            loadSuccess = LoadSelection(SelectionsDocument, true, shouldLoadSomethingFilepath);
+                            loadSuccess = LoadSelection(SelectionsDocument, true, shouldLoadSomethingFilepath, out selectionFileOutOfDate);
                         }
                         else
                         {
@@ -708,7 +717,8 @@ namespace RelhaxModpack.Windows
                             Dependencies = Dependencies,
                             GlobalDependencies = GlobalDependencies,
                             UserMods = UserCategory.Packages,
-                            IsAutoInstall = AutoInstallMode
+                            IsAutoInstall = isAutoInstall,
+                            IsSelectionOutOfDate = selectionFileOutOfDate
                         });
                     }
                     else
@@ -1692,7 +1702,7 @@ namespace RelhaxModpack.Windows
                         MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                         return;
                     }
-                    LoadSelection(doc,false, selectLoadPath.FileName);
+                    LoadSelection(doc,false, selectLoadPath.FileName, out bool selectionFileOutOfDate);
                 }
             }
             else
@@ -1731,7 +1741,7 @@ namespace RelhaxModpack.Windows
                     MessageBox.Show(Translations.GetTranslatedString("failedLoadSelection"));
                     return;
                 }
-                LoadSelection(doc,false,null);
+                LoadSelection(doc,false,null, out bool selectionFileOutOfDate);
             }
         }
 
@@ -1747,7 +1757,7 @@ namespace RelhaxModpack.Windows
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
 
-        private bool LoadSelection(XmlDocument document, bool silent, string loadPath)
+        private bool LoadSelection(XmlDocument document, bool silent, string loadPath, out bool selectionFileOutOfDate)
         {
             //get the string version of the document, determine what to do from there
             string selectionVersion = XmlUtils.GetXmlStringFromXPath(document, "//mods/@ver");
@@ -1759,14 +1769,18 @@ namespace RelhaxModpack.Windows
                 selectionVersion = selectionVersionV3;
             }
 
+            selectionFileOutOfDate = false;
+
             Logging.Debug("SelectionVersion={0}", selectionVersion);
             switch(selectionVersion)
             {
                 case "2.0":
+                    //assume it is out of date, used for auto install, to trigger the installation
+                    selectionFileOutOfDate = true;
                     return LoadSelectionV2(document, silent, loadPath);
 
                 case "3.0":
-                    return LoadSelectionV3(document, silent, loadPath);
+                    return LoadSelectionV3(document, silent, loadPath, out selectionFileOutOfDate);
 
                 default:
                     //log we don't know wtf it is
@@ -1950,7 +1964,7 @@ namespace RelhaxModpack.Windows
             return true;
         }
 
-        private bool LoadSelectionV3(XmlDocument document, bool silent, string loadPath)
+        private bool LoadSelectionV3(XmlDocument document, bool silent, string loadPath, out bool selectionFileOutOfDate)
         {
             //check if it's 'direct load' type
             bool directLoad = false;
@@ -2156,6 +2170,7 @@ namespace RelhaxModpack.Windows
             if(directLoad)
             {
                 Logging.Debug(LogOptions.MethodName, "DirectLoad = true, stopping here");
+                selectionFileOutOfDate = false;
                 return true;
             }
 
@@ -2328,6 +2343,7 @@ namespace RelhaxModpack.Windows
                 if (result == MessageBoxResult.No)
                 {
                     Logging.Info("User selected stop installation");
+                    selectionFileOutOfDate = false;
                     return false;
                 }
             }
@@ -2381,6 +2397,7 @@ namespace RelhaxModpack.Windows
                 window = null;
             }
 
+            selectionFileOutOfDate = globalsOutOfDate || dependenciesOutOfDate || packagesOutOfDate || userOutOfDate;
             return true;
         }
 

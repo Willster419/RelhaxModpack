@@ -1332,9 +1332,17 @@ namespace RelhaxModpack
         {
             if (e.ContinueInstallation)
             {
-                OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),
-                    new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods),e.IsAutoInstall);
-                modSelectionList = null;
+                if (e.IsAutoInstall && !e.IsSelectionOutOfDate)
+                {
+                    Logging.Info("Returning from an auto install check, selection is not out of date, so no need to install");
+                    ToggleUIButtons(true);
+                }
+                else
+                {
+                    OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),
+                        new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods), e.IsAutoInstall);
+                    modSelectionList = null;
+                }
             }
             else
             {
