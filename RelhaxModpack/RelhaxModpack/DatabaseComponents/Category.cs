@@ -3,13 +3,14 @@ using RelhaxModpack.UIComponents;
 using RelhaxModpack.DatabaseComponents;
 using System.Windows.Controls;
 using System;
+using System.Linq;
 
 namespace RelhaxModpack
 {
     /// <summary>
     /// a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
     /// </summary>
-    public class Category : IComponentWithDependencies, IXmlSerializable
+    public class Category : IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         #region Xml serialization
         /// <summary>
@@ -29,7 +30,7 @@ namespace RelhaxModpack
         /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public string[] PropertiesForSerializationElements()
         {
-            return new string[] { nameof(Dependencies) };
+            return new string[] { nameof(Dependencies), nameof(Maintainers) };
         }
         #endregion
 
@@ -50,10 +51,18 @@ namespace RelhaxModpack
         public bool OffsetInstallGroups { get; set; } = true;
 
         /// <summary>
-        /// A list of database managers who are known to maintain this category
+        /// A list of database managers who are known to maintain this component
         /// </summary>
         public string Maintainers { get; set; } = string.Empty;
-        
+
+        /// <summary>
+        /// Returns a list database managers who are known to maintain this component
+        /// </summary>
+        public List<string> MaintainersList
+        {
+            get { return Maintainers.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
+        }
+
         /// <summary>
         /// The list of packages contained in this category
         /// </summary>
@@ -88,14 +97,14 @@ namespace RelhaxModpack
         /// The package created at selection list building that represents the header of this category
         /// </summary>
         public SelectablePackage CategoryHeader { get; set; } = null;
+
+        /// <summary>
+        /// Reference for the UI element of this package in the database editor
+        /// </summary>
+        public TreeViewItem EditorTreeViewItem { get; set; } = null;
         #endregion
 
         #region Other Properties and Methods
-        /// <summary>
-        /// Property of Dependencies list to allow for interface implementation
-        /// </summary>
-        public List<DatabaseLogic> DependenciesProp { get { return Dependencies; } set { Dependencies = value; } }
-
         /// <summary>
         /// Sorts the Categories by their name property. Currently not implemented.
         /// </summary>
@@ -155,6 +164,23 @@ namespace RelhaxModpack
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Returns true if at least one package is enabled and checked from the root to the category
+        /// </summary>
+        public bool IsAnyPackageCheckedEnabledValid
+        {
+            get
+            {
+                bool anyPackagesSelected = false;
+                foreach (SelectablePackage sp in this.Packages)
+                {
+                    if (sp.Enabled && sp.Checked)
+                        anyPackagesSelected = true;
+                }
+                return anyPackagesSelected;
+            }
         }
         #endregion
     }

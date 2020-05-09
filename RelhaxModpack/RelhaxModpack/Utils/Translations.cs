@@ -2534,18 +2534,53 @@ namespace RelhaxModpack
             Spanish.Add("modsBrokenStructure", "Los siguientes paquetes han sido deshabilitados debido a modificaciones en la estructura de paquetes. Deberá volver a seleccionarlos si quiere instalarlos.");
             Russian.Add("modsBrokenStructure", "Данные пакеты были отключены в связи с изменениями в их структуре. Вам нужно проверить их самостоятельно, если хотите произвести установку.");
 
+            //Component: packagesUpdatedShouldInstall
+            //
+            English.Add("packagesUpdatedShouldInstall", "The following packages were updated since you last loaded this selection file. Your selection file has been updated with the changes (a one-time backup was also made). " +
+                "If this is your current installation, and you wish to keep it, it is recommended to install/update after seeing this message.");
+            German.Add("packagesUpdatedShouldInstall", "Die folgenden Pakete bekamen ein Update seitdem du das letzte Mal diese Auswahldatei geladen hast. Die Datei wurde mit den Änderungen neu gespeichert (und ein einmaliges Backup wurde erstellt). " +
+                "Falls dies deine aktuelle Installation ist und du diese behalten möchtest, ist es empfehlenswert eine (Neu-)Installation auszuführen wenn du diese Nachricht liest.");
+            Polish.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            French.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            Spanish.Add("packagesUpdatedShouldInstall", "Los siguientes paquetes han sido actualizados desde la última carga de este archivo de selección. Su archivo de selección ha sido actualizado con los cambios (y se ha creado una copia de seguridad de un sólo uso). " +
+                "Si ésta es su instalación actual, y quiere conservarla, se recomienda instalar/actualizar después de ver este mensaje.");
+            Russian.Add("packagesUpdatedShouldInstall",  "Следующие пакеты были обновлены с момента последней загрузки данного файла предустановки. Файл предустановки был обновлён и изменён (его резервная копия так же была сделана). Если это ваша основная конфигурация и вы хотите её сохранить, рекомендуем вам установить/обновить моды после этого уведомления.");
+
+            //Component: selectionFileIssuesTitle
+            //
+            English.Add("selectionFileIssuesTitle", "Selection loading messages");
+            German.Add("selectionFileIssuesTitle", "Auswahl Ladenachrichten");
+            Polish.Add("selectionFileIssuesTitle", TranslationNeeded);
+            French.Add("selectionFileIssuesTitle", TranslationNeeded);
+            Spanish.Add("selectionFileIssuesTitle", "Mensajes de carga de la selección");
+            Russian.Add("selectionFileIssuesTitle", "Внимание"); // I don't think it's possible to translate that directly, so leaving it as "Warning" - DrWeb7_1
+
+            //Component: selectionFileIssuesHeader
+            //
+            English.Add("selectionFileIssuesHeader", "Please read the following messages about loading your selection file");
+            German.Add("selectionFileIssuesHeader", "Bitte lies folgende Nachrichten über das Laden deiner Auswahldatei");
+            Polish.Add("selectionFileIssuesHeader", TranslationNeeded);
+            French.Add("selectionFileIssuesHeader", TranslationNeeded);
+            Spanish.Add("selectionFileIssuesHeader", "Por favor, lea los siguientes mensajes sobre la carga de su archivo de selección");
+            Russian.Add("selectionFileIssuesHeader", "Пожалуйста, прочтите следующие сообщения, связанные с вашим файлом предустановки");
+
+            //Component: selectionFormatOldV2
+            //the message box to show up when your selection file is old (v2) and will be upgraded
+            English.Add("selectionFormatOldV2", "This selection file format is legacy (V2) and will be upgraded to V3. A V2 backup will be created.");
+            German.Add("selectionFormatOldV2", TranslationNeeded);
+            Polish.Add("selectionFormatOldV2", TranslationNeeded);
+            French.Add("selectionFormatOldV2", TranslationNeeded);
+            Spanish.Add("selectionFormatOldV2", TranslationNeeded);
+            Russian.Add("selectionFormatOldV2", TranslationNeeded);
 
             //Component:
             //
-            English.Add("oldSavedConfigFile", "The saved preferences file your are using is in an outdated format and will be inaccurate in the future. Convert it to the new format?" +
-                " (A backup of the old format will be made)");
-            German.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden?" +
-                " (Eine Sicherung des alten Formats erfolgt)");
+            English.Add("oldSavedConfigFile", "The saved preferences file your are using is in an outdated format and will be inaccurate in the future. Convert it to the new format? (A backup of the old format will be made)");
+            German.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden? (Eine Sicherung des alten Formats erfolgt)");
             Polish.Add("oldSavedConfigFile", "Używana konfiguracja jest w przestarzałym formacie i będzie niekompatybilna w przyszłości. Czy chcesz przekonwertować ją na nowy format?");
             French.Add("oldSavedConfigFile", "Le fichier de préférences que vous avez choisi est un format obsolète et sera inexact dans le futur. Convertir au nouveau format?");
             Spanish.Add("oldSavedConfigFile", "El archivo de configuración que está utilizando tiene un formato antiguo y no será preciso en el futuro. ¿Convertir al nuevo formato? (Se guardará una copia de seguridad del formato original)");
             Russian.Add("oldSavedConfigFile", "Сохранённый файл конфигурации использует устаревший формат и может некорректно работать в будущем. Хотите преобразовать его в новый? Бэкап старого будет так же сохранён.");
-
 
             //Component:
             //
@@ -2649,11 +2684,11 @@ namespace RelhaxModpack
             //Component: SelectionFileIssuesDisplay
             //window title for when issues applying a user's selection
             English.Add("SelectionFileIssuesDisplay", "Errors applying selection file");
-            German.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            German.Add("SelectionFileIssuesDisplay", "Fehler beim Anwenden der Auswahldatei");
             Polish.Add("SelectionFileIssuesDisplay", "Błędy z zastosowaniem pliku kolekcji");
             French.Add("SelectionFileIssuesDisplay", TranslationNeeded);
-            Spanish.Add("SelectionFileIssuesDisplay", TranslationNeeded);
-            Russian.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            Spanish.Add("SelectionFileIssuesDisplay", "Errores al aplicar el archivo de selección");
+            Russian.Add("SelectionFileIssuesDisplay", "Ошибка применения файла предустановки");
 
             //Component: selectionFileIssues
             //alias of SelectionFileIssuesDisplay
@@ -2741,11 +2776,11 @@ namespace RelhaxModpack
             //Component: VersionInfoAskText
             // Text in the window with Yes and No buttons asking the user if he/she wants to update the application
             English.Add("VersionInfoAskText", "Do you wish to update now?");
-            German.Add("VersionInfoAskText", TranslationNeeded);
+            German.Add("VersionInfoAskText", "Willst du jetzt updaten?");
             Polish.Add("VersionInfoAskText", "Czy chcesz zaktualizować teraz?");
             French.Add("VersionInfoAskText", "Voulez vous faire la mise à jour maintenant?");
-            Spanish.Add("VersionInfoAskText", TranslationNeeded);
-            Russian.Add("VersionInfoAskText", TranslationNeeded);
+            Spanish.Add("VersionInfoAskText", "¿Quiere actualizar ahora?");
+            Russian.Add("VersionInfoAskText", "Хотите обновить прямо сейчас?");
             #endregion
 
             #region Installer Messages
@@ -3166,6 +3201,16 @@ namespace RelhaxModpack
                 " dans un autre dossier et réessayer");
             Spanish.Add("moveOutOfTanksLocation", "El modpack no puede ser ejecutado desde el directorio de World_of_Tanks. Por favor, mueva la aplicación y vuelva a intentarlo.");
             Russian.Add("moveOutOfTanksLocation", "Модпак не может быть запущен из папки с игрой. Пожалуйста, переместите его в другую папку и попробуйте ещё раз.");
+
+            //Component: moveAppOutOfDownloads
+            // Many users download the application right from the website and run it in the downloads folder. This is not reccomended
+            English.Add("moveAppOutOfDownloads", "The application detected that it is launched from the 'Downloads' folder. This is not reccommended because the application creates several folders and files" +
+                "that may be difficult to find in a large 'Downloads' folder. You should move the application and and 'Relhax' files to a new folder.");
+            German.Add("moveAppOutOfDownloads", TranslationNeeded);
+            Polish.Add("moveAppOutOfDownloads", TranslationNeeded);
+            French.Add("moveAppOutOfDownloads", TranslationNeeded);
+            Spanish.Add("moveAppOutOfDownloads", TranslationNeeded);
+            Russian.Add("moveAppOutOfDownloads", TranslationNeeded);
 
             //Component: Current database is same as last installed database (body)
             //
@@ -4044,34 +4089,38 @@ namespace RelhaxModpack
             //Component: CleanGameCacheText
             // Text block for button to allow user to clear cache data from applicationData folders
             English.Add("CleanGameCacheText", "Clear game cache files");
-            German.Add("CleanGameCacheText", TranslationNeeded);
+            German.Add("CleanGameCacheText", "Lösche Cache des Spiels");
             Polish.Add("CleanGameCacheText", "Wyczyść pamięc podręczną gry");
             French.Add("CleanGameCacheText", TranslationNeeded);
-            Spanish.Add("CleanGameCacheText", TranslationNeeded);
+            Spanish.Add("CleanGameCacheText", "Limpar caché del juego");
+            Russian.Add("CleanGameCacheText", "Очистить кэш игры");
 
             //Component: cleanGameCacheProgress
             //
             English.Add("cleanGameCacheProgress", "Clearing game cache files");
-            German.Add("cleanGameCacheProgress", TranslationNeeded);
+            German.Add("cleanGameCacheProgress", "Lösche Spielcache");
             Polish.Add("cleanGameCacheProgress", "Czyszczenie pamięci podręcznej gry");
             French.Add("cleanGameCacheProgress", TranslationNeeded);
-            Spanish.Add("cleanGameCacheProgress", TranslationNeeded);
+            Spanish.Add("cleanGameCacheProgress", "Limpiando caché del juego");
+            Russian.Add("cleanGameCacheProgress", "Удаляются файлы кэша игры");
 
             //Component: cleanGameCacheSuccess
             //
             English.Add("cleanGameCacheSuccess", "Sucessfully cleared game cache files");
-            German.Add("cleanGameCacheSuccess", TranslationNeeded);
+            German.Add("cleanGameCacheSuccess", "Spielcache erfolgreich gelöscht");
             Polish.Add("cleanGameCacheSuccess", "Czyszczenie pamięci podręcznej gry zakończone sukcesem");
             French.Add("cleanGameCacheSuccess", TranslationNeeded);
-            Spanish.Add("cleanGameCacheSuccess", TranslationNeeded);
+            Spanish.Add("cleanGameCacheSuccess", "Caché del juego limpiada con éxito");
+            Russian.Add("cleanGameCacheSuccess", "Кэш игры успешно очищен");
 
             //Component: cleanGameCacheFail
             //
             English.Add("cleanGameCacheFail", "Failed to clear game cache files");
-            German.Add("cleanGameCacheFail", TranslationNeeded);
+            German.Add("cleanGameCacheFail", "Konnte Cache-Dateien nicht löschen");
             Polish.Add("cleanGameCacheFail", "Nie udało się wyczyścić pamięci podręcznej gry");
             French.Add("cleanGameCacheFail", TranslationNeeded);
-            Spanish.Add("cleanGameCacheFail", TranslationNeeded);
+            Spanish.Add("cleanGameCacheFail", "No se ha podido limpar los archivos de caché del juego");
+            Russian.Add("cleanGameCacheFail", "Не удалось удалить файлы кэша игры");
             #endregion
 
             #region Add zip files Dialog

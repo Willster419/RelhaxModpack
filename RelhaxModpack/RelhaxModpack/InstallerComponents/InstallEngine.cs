@@ -1230,7 +1230,7 @@ namespace RelhaxModpack.InstallerComponents
 
                 backupZip.Save();
             }
-            Logging.Debug("finished backupMods()");
+            Logging.Debug("Finished backupMods()");
             return true;
         }
 
@@ -1514,7 +1514,7 @@ namespace RelhaxModpack.InstallerComponents
                 List<DatabasePackage> packages = new List<DatabasePackage>(OrderedPackagesToInstall[i]);
 
                 //if a group does not have any packages in it, then we can skip
-                Logging.Debug("number of packages in this group: {0}", packages.Count);
+                Logging.Debug("Number of packages in this group: {0}", packages.Count);
                 if(packages.Count > 0)
                 {
                     //set it for the progress report
@@ -1523,11 +1523,11 @@ namespace RelhaxModpack.InstallerComponents
                     //get the size of any packages where the size is invalid before sorting
                     foreach (DatabasePackage packa in packages.Where(pack => pack.Size == 0 && !string.IsNullOrWhiteSpace(pack.ZipFile)))
                     {
-                        Logging.Debug("package {0} has size 0 and zipfile entry, getting size", packa.PackageName);
+                        Logging.Debug("Package {0} has size 0 and zipfile entry, getting size", packa.PackageName);
                         string zipFile = Path.Combine(Settings.RelhaxDownloadsFolderPath, packa.ZipFile);
                         if (File.Exists(zipFile))
                             packa.Size = (ulong)Utils.GetFilesize(zipFile);
-                        Logging.Debug("size parsed to {0}", packa.Size.ToString());
+                        Logging.Debug("Size parsed to {0}", packa.Size.ToString());
                     }
                     CancellationToken.ThrowIfCancellationRequested();
 
@@ -1547,7 +1547,7 @@ namespace RelhaxModpack.InstallerComponents
                     }
 
                     //assign each package one at a time into a package thread
-                    Logging.Debug("starting package assignment to each thread");
+                    Logging.Debug("Starting package assignment to each thread");
                     for (int j = 0; j < packages.Count; j++)
                     {
                         int threadSelector = j % numThreads;
@@ -1584,7 +1584,7 @@ namespace RelhaxModpack.InstallerComponents
                         //if number of threads to use > number of packages, then skip making threads that won't be used
                         if (packageThreads[k].Count > 0)
                         {
-                            Logging.Info("thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count);
+                            Logging.Info("Thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count);
                             tasks[k] = Task.Run(() =>
                             {
                                 int temp = k;
@@ -1592,22 +1592,22 @@ namespace RelhaxModpack.InstallerComponents
                                 ExtractFiles(packageThreads[temp], temp);
                                 Prog.CompletedThreads++;
                             });
-                            Logging.Debug("thread {0} started, waiting for thread ID value to be locked", k);
+                            Logging.Debug("Thread {0} started, waiting for thread ID value to be locked", k);
                             while (!valueLocked) ;
                             valueLocked = false;
-                            Logging.Debug("thread {0} ID value locked, starting next task", k);
+                            Logging.Debug("Thread {0} ID value locked, starting next task", k);
                             //also save the task to a list to use for cancel later
                             InstallerCreatedTasks.Add(tasks[k]);
                         }
                         else
                         {
-                            Logging.Info("thread {0} skipped, no packages to extract (number of threads to use > number of packages in group)",k);
+                            Logging.Info("Thread {0} skipped, no packages to extract (number of threads to use > number of packages in group)",k);
                             tasks[k] = null;
                         }
                     }
 
                     //and log it all
-                    Logging.Debug("all threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)", i);
+                    Logging.Debug("All threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)", i);
                     Task.WaitAll(tasks.Where(task => task != null).ToArray());
                     CancellationToken.ThrowIfCancellationRequested();
                 }
