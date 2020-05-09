@@ -2540,7 +2540,8 @@ namespace RelhaxModpack
                 "If this is your current installation, and you wish to keep it, it is recommended to install/update after seeing this message.");
             German.Add("packagesUpdatedShouldInstall", "Die folgenden Pakete bekamen ein Update seitdem du das letzte Mal diese Auswahldatei geladen hast. Die Datei wurde mit den Änderungen neu gespeichert (und ein einmaliges Backup wurde erstellt). " +
                 "Falls dies deine aktuelle Installation ist und du diese behalten möchtest, ist es empfehlenswert eine (Neu-)Installation auszuführen wenn du diese Nachricht liest.");
-            Polish.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            Polish.Add("packagesUpdatedShouldInstall", "Od czasu ostatniego użycia tego pliku kolekcji, poniższe pakiety zostały zaktualizowane. Twój plik kolekcji został automatycznie zaktualizowany (utworzono też jego jednorazową kopię zapasową)." +
+                "Jeśli jest to Twoja bieżąca instalacja i chcesz ją zachować, zaleca się instalację/aktualizację po tej wiadomości.");
             French.Add("packagesUpdatedShouldInstall", TranslationNeeded);
             Spanish.Add("packagesUpdatedShouldInstall", "Los siguientes paquetes han sido actualizados desde la última carga de este archivo de selección. Su archivo de selección ha sido actualizado con los cambios (y se ha creado una copia de seguridad de un sólo uso). " +
                 "Si ésta es su instalación actual, y quiere conservarla, se recomienda instalar/actualizar después de ver este mensaje.");
@@ -2550,7 +2551,7 @@ namespace RelhaxModpack
             //
             English.Add("selectionFileIssuesTitle", "Selection loading messages");
             German.Add("selectionFileIssuesTitle", "Auswahl Ladenachrichten");
-            Polish.Add("selectionFileIssuesTitle", TranslationNeeded);
+            Polish.Add("selectionFileIssuesTitle", "Uwaga"); // Following RU pattern.
             French.Add("selectionFileIssuesTitle", TranslationNeeded);
             Spanish.Add("selectionFileIssuesTitle", "Mensajes de carga de la selección");
             Russian.Add("selectionFileIssuesTitle", "Внимание"); // I don't think it's possible to translate that directly, so leaving it as "Warning" - DrWeb7_1
@@ -2559,7 +2560,7 @@ namespace RelhaxModpack
             //
             English.Add("selectionFileIssuesHeader", "Please read the following messages about loading your selection file");
             German.Add("selectionFileIssuesHeader", "Bitte lies folgende Nachrichten über das Laden deiner Auswahldatei");
-            Polish.Add("selectionFileIssuesHeader", TranslationNeeded);
+            Polish.Add("selectionFileIssuesHeader", "Proszę zapoznać się z poniższymi komunikatami dotyczącymi Twojego pliku kolekcji");
             French.Add("selectionFileIssuesHeader", TranslationNeeded);
             Spanish.Add("selectionFileIssuesHeader", "Por favor, lea los siguientes mensajes sobre la carga de su archivo de selección");
             Russian.Add("selectionFileIssuesHeader", "Пожалуйста, прочтите следующие сообщения, связанные с вашим файлом предустановки");
@@ -2568,7 +2569,7 @@ namespace RelhaxModpack
             //the message box to show up when your selection file is old (v2) and will be upgraded
             English.Add("selectionFormatOldV2", "This selection file format is legacy (V2) and will be upgraded to V3. A V2 backup will be created.");
             German.Add("selectionFormatOldV2", TranslationNeeded);
-            Polish.Add("selectionFormatOldV2", TranslationNeeded);
+            Polish.Add("selectionFormatOldV2", "Format tego pliku kolekcji jest przestarzały (V2), zostanie stworzona jego kopia zapasowa i zostanie on zaktualizowany do V3.");
             French.Add("selectionFormatOldV2", TranslationNeeded);
             Spanish.Add("selectionFormatOldV2", TranslationNeeded);
             Russian.Add("selectionFormatOldV2", TranslationNeeded);
@@ -3204,10 +3205,12 @@ namespace RelhaxModpack
 
             //Component: moveAppOutOfDownloads
             // Many users download the application right from the website and run it in the downloads folder. This is not reccomended
-            English.Add("moveAppOutOfDownloads", "The application detected that it is launched from the 'Downloads' folder. This is not reccommended because the application creates several folders and files" +
-                "that may be difficult to find in a large 'Downloads' folder. You should move the application and and 'Relhax' files to a new folder.");
+            English.Add("moveAppOutOfDownloads", "The application detected that it is launched from the 'Downloads' folder. This is not recommended because the application creates several folders and files" +
+                "that may be difficult to find in a large 'Downloads' folder. You should move the application and 'Relhax' files to a new folder.");
             German.Add("moveAppOutOfDownloads", TranslationNeeded);
-            Polish.Add("moveAppOutOfDownloads", TranslationNeeded);
+            Polish.Add("moveAppOutOfDownloads", "Wykryto, że aplikacja została uruchomiona z folderu 'Pobrane'." +
+                "Nie jest to zalecane z racji tworzenia przez aplikację wielu plików i folderów, które mogą być trudne do znalezienia w folderze 'Pobrane' z dużą ilością plików." +
+                "Zaleca się przeniesienie aplikacji i oraz jej plików do nowego/osobnego folderu.");
             French.Add("moveAppOutOfDownloads", TranslationNeeded);
             Spanish.Add("moveAppOutOfDownloads", TranslationNeeded);
             Russian.Add("moveAppOutOfDownloads", TranslationNeeded);
