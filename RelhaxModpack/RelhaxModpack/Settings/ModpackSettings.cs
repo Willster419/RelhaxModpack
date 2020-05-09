@@ -115,6 +115,11 @@ namespace RelhaxModpack
         public static bool AtlasLibrariesCanBeLoaded = false;
 
         /// <summary>
+        /// Show a warning (once) if the user launched the application right from the downloads folder
+        /// </summary>
+        public static bool InformIfApplicationInDownloadsFolder = true;
+
+        /// <summary>
         /// Toggle if the program should notify the user if the database version is the same as the last installed version
         /// </summary>
         public static bool NotifyIfSameDatabase = false;

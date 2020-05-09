@@ -1031,6 +1031,38 @@ namespace RelhaxModpack
             ToggleUIButtons(false);
             string lastSupportedWoTVersion = string.Empty;
 
+            if(ModpackSettings.InformIfApplicationInDownloadsFolder)
+            { 
+                //inform user if application is in the downloads folder. it is not recommended
+                string usersDownloadFolder = string.Empty;
+
+                try
+                {
+                    usersDownloadFolder = Utils.GetSpecialFolderPath(KnownFolder.Downloads);
+                }
+                catch(Exception ex)
+                {
+                    Logging.Warning("Failed to get downloads folder via shell32, attempt manual");
+                    Logging.Warning(ex.ToString());
+                    usersDownloadFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+                }
+
+                if(!Directory.Exists(usersDownloadFolder))
+                {
+                    Logging.Error("Failed to detect user's downloads folder");
+                }
+                else
+                {
+                    string applicationStartUpPathNoDir = Settings.ApplicationStartupPath.Substring(0, Settings.ApplicationStartupPath.Length - 1);
+                    if (usersDownloadFolder.Equals(applicationStartUpPathNoDir))
+                    {
+                        MessageBox.Show(Translations.GetTranslatedString("moveAppOutOfDownloads"));
+                        ModpackSettings.InformIfApplicationInDownloadsFolder = false;
+                    }
+                }
+                ModpackSettings.InformIfApplicationInDownloadsFolder = false;
+            }
+
             //settings for export mode
             if (ModpackSettings.ExportMode)
             {
