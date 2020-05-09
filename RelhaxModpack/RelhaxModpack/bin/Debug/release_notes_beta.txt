@@ -1,3 +1,15 @@
+Application version 1.1.0.1 (2020-05-08)
+https://www.virustotal.com/gui/file-analysis/NjQxMzRkOWM5ZGQ1NTcxNjBiNzRiODNlZGJjMzViYzU6MTU4ODk4NTUxNg==/detection
+- Well that was quick.
+- Fixed bug of save selection confirmation window showing when the load selection V3 method is saving/updating the selection entries.
+- Added one-time check if user launched the application from the downloads folder. This is not a reccomended place to contain the modpack.
+- Added check in database updater when determining if supported_clients.xml needs to be updated on server.
+- Updated logging.
+- Fixed minor issues with printing output of database updater.
+- Added forgotten translations entries.
+- Updated documentation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.1.0.0 (2020-05-07)
 https://www.virustotal.com/gui/file/9eb1d7fda45b74f09ba21fa2c017de720d7042ea225c680b5ac2c2ace961968e/detection
 - Update selection file format to 3.0. This allows us to track changes in each selected package
