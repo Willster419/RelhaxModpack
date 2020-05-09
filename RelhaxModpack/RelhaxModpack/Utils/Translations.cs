@@ -3202,6 +3202,16 @@ namespace RelhaxModpack
             Spanish.Add("moveOutOfTanksLocation", "El modpack no puede ser ejecutado desde el directorio de World_of_Tanks. Por favor, mueva la aplicación y vuelva a intentarlo.");
             Russian.Add("moveOutOfTanksLocation", "Модпак не может быть запущен из папки с игрой. Пожалуйста, переместите его в другую папку и попробуйте ещё раз.");
 
+            //Component: moveAppOutOfDownloads
+            // Many users download the application right from the website and run it in the downloads folder. This is not reccomended
+            English.Add("moveAppOutOfDownloads", "The application detected that it is launched from the 'Downloads' folder. This is not reccommended because the application creates several folders and files" +
+                "that may be difficult to find in a large 'Downloads' folder. You should move the application and and 'Relhax' files to a new folder.");
+            German.Add("moveAppOutOfDownloads", TranslationNeeded);
+            Polish.Add("moveAppOutOfDownloads", TranslationNeeded);
+            French.Add("moveAppOutOfDownloads", TranslationNeeded);
+            Spanish.Add("moveAppOutOfDownloads", TranslationNeeded);
+            Russian.Add("moveAppOutOfDownloads", TranslationNeeded);
+
             //Component: Current database is same as last installed database (body)
             //
             English.Add("DatabaseVersionsSameBody", "The database has not changed since your last installation. Therefore there are no updates to your current mods selection." +
