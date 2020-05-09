@@ -1,4 +1,4 @@
-Application version 1.1.0.1 (2020-05-08)
+Application version 1.1.0.2 (2020-05-08)
 https://www.virustotal.com/gui/file-analysis/NjQxMzRkOWM5ZGQ1NTcxNjBiNzRiODNlZGJjMzViYzU6MTU4ODk4NTUxNg==/detection
 - Well that was quick.
 - Fixed bug of save selection confirmation window showing when the load selection V3 method is saving/updating the selection entries.
