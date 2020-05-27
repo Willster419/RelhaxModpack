@@ -3204,8 +3204,8 @@ namespace RelhaxModpack
 
             //Component: moveAppOutOfDownloads
             // Many users download the application right from the website and run it in the downloads folder. This is not reccomended
-            English.Add("moveAppOutOfDownloads", "The application detected that it is launched from the 'Downloads' folder. This is not reccommended because the application creates several folders and files" +
-                "that may be difficult to find in a large 'Downloads' folder. You should move the application and 'Relhax' files to a new folder.");
+            English.Add("moveAppOutOfDownloads", "The application detected that it is launched from the 'Downloads' folder. This is not reccommended because the application creates several folders and files " +
+                "that may be difficult to find in a large 'Downloads' folder. You should move the application and all 'Relhax' files and folders to a new folder.");
             German.Add("moveAppOutOfDownloads", TranslationNeeded);
             Polish.Add("moveAppOutOfDownloads", TranslationNeeded);
             French.Add("moveAppOutOfDownloads", TranslationNeeded);
