@@ -4736,6 +4736,11 @@
             Flag to track when/if the user has MSVCP2013 installed to load the atlas image processing libraries
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.InformIfApplicationInDownloadsFolder">
+            <summary>
+            Show a warning (once) if the user launched the application right from the downloads folder
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.NotifyIfSameDatabase">
             <summary>
             Toggle if the program should notify the user if the database version is the same as the last installed version
@@ -6719,6 +6724,12 @@
             Flag to determine if the current installation is started from auto install mode
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.IsSelectionOutOfDate">
+            <summary>
+            Flag to determind if the current installation loaded with selection file
+            format V3+ is out of date with what the database has
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.SelectionListClosedDelegate">
             <summary>
             The delegate to invoke when calling back to the sender for the SelectionClosed event
@@ -7379,6 +7390,68 @@
         <member name="F:RelhaxModpack.RegistrySearch.Searchpath">
             <summary>
             The absolute folder path to the desired registry entries
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.KnownFolder">
+            <summary>
+            Standard folders registered with the system. These folders are installed with Windows Vista
+            and later operating systems, and a computer will have only folders appropriate to it
+            installed.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.Contacts">
+            <summary>
+            The user's Contacts folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.Desktop">
+            <summary>
+            The user's Desktop folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.Documents">
+            <summary>
+            The user's Documents folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.Downloads">
+            <summary>
+            The user's Downloads folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.Favorites">
+            <summary>
+            The user's Favorites folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.Links">
+            <summary>
+            The user's Links folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.Music">
+            <summary>
+            The user's Music folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.Pictures">
+            <summary>
+            The user's Pictures folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.SavedGames">
+            <summary>
+            The user's Pictures folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.SavedSearches">
+            <summary>
+            The user's SavedGames folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.KnownFolder.Videos">
+            <summary>
+            The user's Videos folder
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utils">
@@ -8348,6 +8421,28 @@
             <param name="address">The complete path to the FTP file</param>
             <param name="credentials">The FTP server credentials</param>
             <returns>The size of the file in bytes</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetSpecialFolderPath(RelhaxModpack.KnownFolder)">
+            <summary>
+            Gets the current path to the specified known folder as currently configured. This does
+            not require the folder to be existent.
+            </summary>
+            <param name="knownFolder">The known folder which current path will be returned.</param>
+            <returns>The default path of the known folder.</returns>
+            <exception cref="T:System.Runtime.InteropServices.ExternalException">Thrown if the path
+                could not be retrieved.</exception>
+        </member>
+        <member name="M:RelhaxModpack.Utils.GetSpecialFolderPath(RelhaxModpack.KnownFolder,System.Boolean)">
+            <summary>
+            Gets the current path to the specified known folder as currently configured. This does
+            not require the folder to be existent.
+            </summary>
+            <param name="knownFolder">The known folder which current path will be returned.</param>
+            <param name="defaultUser">Specifies if the paths of the default user (user profile
+                template) will be used. This requires administrative rights.</param>
+            <returns>The default path of the known folder.</returns>
+            <exception cref="T:System.Runtime.InteropServices.ExternalException">Thrown if the path
+                could not be retrieved.</exception>
         </member>
         <member name="T:RelhaxModpack.XmlLoadType">
             <summary>

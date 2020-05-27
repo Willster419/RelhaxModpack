@@ -1,3 +1,40 @@
+Application version 1.1.0.2 (2020-05-08)
+https://www.virustotal.com/gui/file-analysis/NjQxMzRkOWM5ZGQ1NTcxNjBiNzRiODNlZGJjMzViYzU6MTU4ODk4NTUxNg==/detection
+- Well that was quick.
+- Fixed bug of save selection confirmation window showing when the load selection V3 method is saving/updating the selection entries.
+- Added one-time check if user launched the application from the downloads folder. This is not a reccomended place to contain the modpack.
+- Added check in database updater when determining if supported_clients.xml needs to be updated on server.
+- Updated logging.
+- Fixed minor issues with printing output of database updater.
+- Added forgotten translations entries.
+- Updated documentation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Application version 1.1.0.0 (2020-05-07)
+https://www.virustotal.com/gui/file/9eb1d7fda45b74f09ba21fa2c017de720d7042ea225c680b5ac2c2ace961968e/detection
+- Update selection file format to 3.0. This allows us to track changes in each selected package
+  - We can use this to determine if the database updates apply to your selection, or if you don't need to update (if the update didn't affect any of your installed packages)
+  - This also allows us to determine during auto-update if your installation need to be updated.
+  - This makes us the first and only modpack to impliment a full "Mods as a Service" model in our application.
+  - Like WG Game Center, if you leave the application running in the background, it will determine if need to and auto-update your mods when we publish a new database version.
+  - Note that this will not apply to the developer selections, or default checked packages.
+- Update database format to version 2.1.
+- Fixed issue with editor not clearing UI when a text "filler" selection is selected
+- Added features to database updater tool: Check for duplicate packageNames, UIDs, add missing UIDs.
+- Added logging features to print the method and class name to make log reading easier.
+- Fixed bug of news reader crashing when unable to connect ot github.
+- Fixed UI bug of themes not being applied to the credits window.
+- Fixed bug with process access rights, when getting WoT's process information.
+- Fixed bug of user mods not installing when it contained a patch file, complainig of a failed download.
+- Added display of package UID in editor.
+- Updated theme definitions.
+- Fixed bug with editor add/copy package button trying to allow a package to copy from its own location.
+- Updated logging.
+- Minor general code cleanup and optimizations.
+- Updated documentation.
+- Updated Spanish (LordFelix) and Russian (DrWeb7_1) and German (Elektrosmoker) translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.0.4.0 (2020-04-05)
 https://www.virustotal.com/gui/file/6b6174cbd2aa27069c1e8f7119de4447821957bdab981661a47884dece853b48/detection
 - Added "Maintainers" internal database property for database managers to track who generally works on database sections.

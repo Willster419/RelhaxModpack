@@ -176,8 +176,8 @@ namespace RelhaxModpack.Windows
                 Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@version");
                 string versionInfo = string.Format("{0}={1},  {2}={3}", nameof(Settings.WoTModpackOnlineFolderVersion)
                     , Settings.WoTModpackOnlineFolderVersion, nameof(Settings.WoTClientVersion), Settings.WoTClientVersion);
-                Logging.Updater(versionInfo);
                 ReportProgress(versionInfo);
+                ReportProgress("Database loaded");
             }
         }
 
@@ -1358,7 +1358,7 @@ namespace RelhaxModpack.Windows
             }
             if (!File.Exists(SelectModInfo.FileName))
             {
-                ReportProgress("SelectMofInfo file selected does not exist:" + SelectModInfo.FileName);
+                ReportProgress("SelectModInfo file selected does not exist:" + SelectModInfo.FileName);
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
@@ -1436,11 +1436,42 @@ namespace RelhaxModpack.Windows
 
             //check if supported_clients.xml needs to be updated for a new version
             ReportProgress("Checking if supported_clients.xml needs to be updated for new WoT version");
+            bool needsToBeUpdated = false;
+            XmlDocument supportedClients = null;
+
+            ReportProgress("Checking if latest WoT version is the same as this database supports");
             ReportProgress("Old version = " + LastSupportedTanksVersion + ", new version = " + Settings.WoTClientVersion);
             if (!LastSupportedTanksVersion.Equals(Settings.WoTClientVersion))
             {
+                ReportProgress("Last supported version does not match");
+                needsToBeUpdated = true;
+            }
+
+            ReportProgress("Checking if the number of versions entries is the same count");
+            if(!needsToBeUpdated)
+            {
+                ReportProgress("Downloading supported_clients.xml from bigmods to check");
+                string bigmodsSupportedClients = string.Empty;
+                using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+                {
+                     bigmodsSupportedClients = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients);
+                }
+
+                int numBigmodsSupportedClients = XmlUtils.GetXmlNodesFromXPath(bigmodsSupportedClients, "//versions", Settings.SupportedClients).Count;
+                supportedClients = XmlUtils.LoadXmlDocument(SupportedClientsPath, XmlLoadType.FromFile);
+                int numSupportedClients = XmlUtils.GetXmlNodesFromXPath(supportedClients, "//versions").Count;
+                ReportProgress(string.Format("BigmodsSupportedCount: {0}, LocalSupportedCount: {1}", numBigmodsSupportedClients, numSupportedClients));
+
+                if(numBigmodsSupportedClients != numSupportedClients)
+                {
+                    ReportProgress("Version count does not match");
+                    needsToBeUpdated = true;
+                }
+            }
+
+            if(needsToBeUpdated)
+            {
                 ReportProgress("DOES need to be updated/uploaded");
-                XmlDocument supportedClients = XmlUtils.LoadXmlDocument(SupportedClientsPath, XmlLoadType.FromFile);
                 XmlNode versionRoot = supportedClients.SelectSingleNode("//versions");
                 XmlElement supported_client = supportedClients.CreateElement("version");
                 supported_client.InnerText = Settings.WoTClientVersion;
@@ -1448,7 +1479,7 @@ namespace RelhaxModpack.Windows
                 versionRoot.AppendChild(supported_client);
                 supportedClients.Save(SupportedClientsPath);
 
-                ReportProgress("Uploading new supported_clients.xml");
+                ReportProgress("Uploading new" + Settings.SupportedClients);
                 using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
                 {
                     await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients, SupportedClientsPath);
@@ -1459,6 +1490,7 @@ namespace RelhaxModpack.Windows
             {
                 ReportProgress("DOES NOT need to be updated/uploaded");
             }
+
             SetProgress(100);
             ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);

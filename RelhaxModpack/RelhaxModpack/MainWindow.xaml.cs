@@ -873,7 +873,7 @@ namespace RelhaxModpack
             //only true alpha build version will get here
             if (version == ApplicationVersions.Alpha)
             {
-                Logging.Debug("application version is {0} on (true) alpha build, skipping update check");
+                Logging.Debug("Application version is {0} on (true) alpha build, skipping update check", applicationBuildVersion);
                 return true;
             }
 
@@ -1030,6 +1030,38 @@ namespace RelhaxModpack
             ResetUI();
             ToggleUIButtons(false);
             string lastSupportedWoTVersion = string.Empty;
+
+            if(ModpackSettings.InformIfApplicationInDownloadsFolder)
+            { 
+                //inform user if application is in the downloads folder. it is not recommended
+                string usersDownloadFolder = string.Empty;
+
+                try
+                {
+                    usersDownloadFolder = Utils.GetSpecialFolderPath(KnownFolder.Downloads);
+                }
+                catch(Exception ex)
+                {
+                    Logging.Warning("Failed to get downloads folder via shell32, attempt manual");
+                    Logging.Warning(ex.ToString());
+                    usersDownloadFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+                }
+
+                if(!Directory.Exists(usersDownloadFolder))
+                {
+                    Logging.Error("Failed to detect user's downloads folder");
+                }
+                else
+                {
+                    string applicationStartUpPathNoDir = Settings.ApplicationStartupPath.Substring(0, Settings.ApplicationStartupPath.Length - 1);
+                    if (usersDownloadFolder.Equals(applicationStartUpPathNoDir))
+                    {
+                        MessageBox.Show(Translations.GetTranslatedString("moveAppOutOfDownloads"));
+                        ModpackSettings.InformIfApplicationInDownloadsFolder = false;
+                    }
+                }
+                ModpackSettings.InformIfApplicationInDownloadsFolder = false;
+            }
 
             //settings for export mode
             if (ModpackSettings.ExportMode)
@@ -1300,9 +1332,17 @@ namespace RelhaxModpack
         {
             if (e.ContinueInstallation)
             {
-                OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),
-                    new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods),e.IsAutoInstall);
-                modSelectionList = null;
+                if (e.IsAutoInstall && !e.IsSelectionOutOfDate)
+                {
+                    Logging.Info("Returning from an auto install check, selection is not out of date, so no need to install");
+                    ToggleUIButtons(true);
+                }
+                else
+                {
+                    OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),
+                        new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods), e.IsAutoInstall);
+                    modSelectionList = null;
+                }
             }
             else
             {
