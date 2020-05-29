@@ -2572,7 +2572,7 @@ namespace RelhaxModpack
             Polish.Add("selectionFormatOldV2", "Format tego pliku kolekcji jest przestarzały (V2), zostanie stworzona jego kopia zapasowa i zostanie on zaktualizowany do V3.");
             French.Add("selectionFormatOldV2", TranslationNeeded);
             Spanish.Add("selectionFormatOldV2", TranslationNeeded);
-            Russian.Add("selectionFormatOldV2", TranslationNeeded);
+            Russian.Add("selectionFormatOldV2", "Этот файл предустановки сохранён в устаревшем формате (v2) и будет обновлён до v3. Резервная копия старого файла также будет сделана.");
 
             //Component:
             //
@@ -3205,15 +3205,15 @@ namespace RelhaxModpack
 
             //Component: moveAppOutOfDownloads
             // Many users download the application right from the website and run it in the downloads folder. This is not reccomended
-            English.Add("moveAppOutOfDownloads", "The application detected that it is launched from the 'Downloads' folder. This is not recommended because the application creates several folders and files" +
-                "that may be difficult to find in a large 'Downloads' folder. You should move the application and 'Relhax' files to a new folder.");
+            English.Add("moveAppOutOfDownloads", "The application detected that it is launched from the 'Downloads' folder. This is not recommended because the application creates several folders and files " +
+                "that may be difficult to find in a large 'Downloads' folder. You should move the application and all 'Relhax' files and folders into a new folder.");
             German.Add("moveAppOutOfDownloads", TranslationNeeded);
             Polish.Add("moveAppOutOfDownloads", "Wykryto, że aplikacja została uruchomiona z folderu 'Pobrane'." +
                 "Nie jest to zalecane z racji tworzenia przez aplikację wielu plików i folderów, które mogą być trudne do znalezienia w folderze 'Pobrane' z dużą ilością plików." +
                 "Zaleca się przeniesienie aplikacji i oraz jej plików do nowego/osobnego folderu.");
             French.Add("moveAppOutOfDownloads", TranslationNeeded);
             Spanish.Add("moveAppOutOfDownloads", TranslationNeeded);
-            Russian.Add("moveAppOutOfDownloads", TranslationNeeded);
+            Russian.Add("moveAppOutOfDownloads", "Приложение было запущено из папки \"Загрузки\". Мы не рекомендуем использовать эту папку, поскольку приложение создаёт несколько папок и файлов, поиск которых может быть затруднительным в папке с загрузками. Вы должны переместить приложение и файлы/папки Relhax в другое расположение.");
 
             //Component: Current database is same as last installed database (body)
             //
