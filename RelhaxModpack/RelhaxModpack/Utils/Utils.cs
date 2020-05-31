@@ -3507,6 +3507,34 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Delete a folder on an FTP server
+        /// </summary>
+        /// <param name="address">The complete path to the FTP file to delete</param>
+        /// <param name="credentials">The FTP server credentials</param>
+        public static void FTPDeleteFolder(string address, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.RemoveDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
+            { }
+        }
+
+        /// <summary>
+        /// Delete a folder on an FTP server
+        /// </summary>
+        /// <param name="address">The complete path to the FTP file to delete</param>
+        /// <param name="credentials">The FTP server credentials</param>
+        public static async Task FTPDeleteFolderAsync(string address, ICredentials credentials)
+        {
+            WebRequest folderRequest = WebRequest.Create(address);
+            folderRequest.Method = WebRequestMethods.Ftp.RemoveDirectory;
+            folderRequest.Credentials = credentials;
+            using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
+            { }
+        }
+
+        /// <summary>
         /// Get a file size of an FTP file
         /// </summary>
         /// <param name="address">The complete path to the FTP file</param>
