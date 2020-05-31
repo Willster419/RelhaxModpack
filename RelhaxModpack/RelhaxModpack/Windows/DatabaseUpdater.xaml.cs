@@ -71,9 +71,9 @@ namespace RelhaxModpack.Windows
         private bool authorized = false;
         //open
         private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
-        private OpenFileDialog SelectV1Application = new OpenFileDialog() { Title = "Find V1 application to upload", Filter = "*.exe|*.exe" };
         private OpenFileDialog SelectV2Application = new OpenFileDialog() { Title = "Find V2 application to upload", Filter = "*.exe|*.exe" };
         private OpenFileDialog SelectManagerInfoXml = new OpenFileDialog() { Title = "Find " + Settings.ManagerVersion, Filter = Settings.ManagerVersion + "|" + Settings.ManagerVersion };
+        private OpenFileDialog SelectSupportedClientsXml = new OpenFileDialog() { Title = "Find " + Settings.SupportedClients, Filter = Settings.SupportedClients + "|" + Settings.SupportedClients};
         //save
         private SaveFileDialog SelectModInfoSave = new SaveFileDialog() { Filter = "*.xml|*.xml" };
         #endregion
@@ -351,6 +351,20 @@ namespace RelhaxModpack.Windows
                 ReportProgress("Parsing to lists");
                 return XmlUtils.ParseDatabase1V1FromStrings(globalDependencies1V1, dependnecies1V1, categoriesStrings1V1, globalDependencies, dependencies, parsedCategoryList);
             }
+        }
+
+        private async void RunPhpScriptCreateModInfo(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Starting update database step 5");
+            ReportProgress("Running script to create mod info data file(s)");
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateModInfoPHP, 100000);
+        }
+
+        private async void RunPhpScriptCreateManagerInfo(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Starting Update database step 6");
+            ReportProgress("Running script to create manager info data file");
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 100000);
         }
         #endregion
 
@@ -1492,20 +1506,6 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
-        private async void UpdateDatabaseV2Step5_Click(object sender, RoutedEventArgs e)
-        {
-            ReportProgress("Starting update database step 5");
-            ReportProgress("Running script to create mod info data file(s)");
-            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateModInfoPHP, 100000);
-        }
-
-        private async void UpdateDatabaseV2Step6_Click(object sender, RoutedEventArgs e)
-        {
-            ReportProgress("Starting Update database step 6");
-            ReportProgress("Running script to create manager info data file");
-            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 100000);
-        }
-
         private void UpdateDatabasestep8_NA_ENG_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.worldoftanks.com/index.php?/topic/535868-");
@@ -1863,32 +1863,91 @@ namespace RelhaxModpack.Windows
 
         private void LoadDatabaseUpdateSupportedClientsButton_Click(object sender, RoutedEventArgs e)
         {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Loading database");
 
+            OnLoadModInfo(null, null);
+
+            ReportProgress("Database loaded");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
         private void LoadSupportedClientsDocumentButton_Click(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress(string.Format("Loading {0}", Settings.SupportedClients));
 
+            ReportProgress("Done");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
         private void CheckClientsToRemoveFromDocumentButton_Click(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Remove clients from xml and server");
 
+            //checks
+            if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(SelectModInfo.FileName))
+            {
+                ReportProgress("SelectModInfo filename is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(SelectSupportedClientsXml.FileName))
+            {
+                ReportProgress("SelectSupportedClientsXml Filename is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            //get list of WoT online folders
+
+            //check any online folder clients where no matching server folder name and remove
+
+            ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
         private void CheckClientsToAddToDocumentButton_Click(object sender, RoutedEventArgs e)
         {
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Add clients to and upload supported_clients.xml");
+            
+            //checks
+            if (string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
 
-        }
+            if (string.IsNullOrEmpty(SelectModInfo.FileName))
+            {
+                ReportProgress("SelectModInfo filename is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
 
-        private void RunScriptCreateModInfo_Click(object sender, RoutedEventArgs e)
-        {
+            if (string.IsNullOrEmpty(SelectSupportedClientsXml.FileName))
+            {
+                ReportProgress("SelectSupportedClientsXml Filename is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
 
-        }
+            //get list of all wot (full) client versions from document
 
-        private void RunScriptCreateManagerInfo_Click(object sender, RoutedEventArgs e)
-        {
+            //if loaded database is new, then add it to the document
 
+            ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion
     }
