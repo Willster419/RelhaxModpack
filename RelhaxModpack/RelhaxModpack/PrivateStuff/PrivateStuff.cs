@@ -36,18 +36,7 @@ namespace RelhaxModpack
         #endregion
 
         #region wotmods FTP all addresses
-        public const string FTPModpackRoot = null;
-        public const string FTPRescourcesRoot = null;
-        public const string FTPManagerInfoRoot = null;
-        public const string ModInfosLocation = null;
-        public const string ModInfoBackupsFolderLocation = null;
         public const string KeyAddress = null;
-        #endregion
-
-        #region wotmods HTTP all addresses
-        public const string CreateUpdatePackagesPHP = null;
-        public const string CreateManagerInfoPHP = null;
-        public const string CreateModInfoPHP = null;
         #endregion
 
         #region server credentials
