@@ -230,9 +230,53 @@ namespace RelhaxModpack.Windows
 
         #region Util methods
 
+        private async Task<XmlDocument> ParseVersionInfoXmlDoc(string pathToSupportedClients)
+        {
+            XmlDocument doc = null;
+            if (string.IsNullOrEmpty(pathToSupportedClients))
+            {
+                ReportProgress("Loading supported clients from online");
+                using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+                {
+                    string xml = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients);
+                    doc = XmlUtils.LoadXmlDocument(xml, XmlLoadType.FromString);
+                }
+            }
+            else
+            {
+                ReportProgress("Loading supported clients document from " + pathToSupportedClients);
+                doc = XmlUtils.LoadXmlDocument(SelectSupportedClientsXml.FileName, XmlLoadType.FromFile);
+            }
+
+            return doc;
+        }
+
+        private async Task<List<VersionInfos>> ParseVersionInfoXml(string pathToSupportedClients)
+        {
+            List<VersionInfos> versionInfosList = new List<VersionInfos>();
+            ReportProgress("Loading and parsing " + Settings.SupportedClients);
+
+            //load xml document
+            XmlDocument doc = await ParseVersionInfoXmlDoc(pathToSupportedClients);
+
+            //parse each online folder to list type string
+            ReportProgress("Parsing " + Settings.SupportedClients);
+            XmlNodeList supportedClients = XmlUtils.GetXmlNodesFromXPath(doc, "//versions/version");
+            foreach (XmlNode node in supportedClients)
+            {
+                VersionInfos newVersionInfo = new VersionInfos()
+                {
+                    WoTOnlineFolderVersion = node.Attributes["folder"].Value,
+                    WoTClientVersion = node.InnerText
+                };
+                versionInfosList.Add(newVersionInfo);
+            }
+            return versionInfosList;
+        }
+
         private void OnLoadModInfo(object sender, RoutedEventArgs e)
         {
-            if (SelectModInfo.ShowDialog() == true)
+            if ((bool)SelectModInfo.ShowDialog())
             {
                 LogOutput.Text = "Loading database...";
                 //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
@@ -244,6 +288,8 @@ namespace RelhaxModpack.Windows
                 ReportProgress(versionInfo);
                 ReportProgress("Database loaded");
             }
+            else
+                ReportProgress("Canceled loading database");
         }
 
         private void ReportProgress(string message)
@@ -588,7 +634,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Cleaning online folders
-        List<VersionInfos> VersionInfosList;
+        List<VersionInfos> VersionInfosListClean;
         VersionInfos selectedVersionInfos;
         bool cancelDelete = false;
 
@@ -596,29 +642,9 @@ namespace RelhaxModpack.Windows
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
             ReportProgress("Running Clean online folders step 1");
-            ReportProgress("Downloading and parsing " + Settings.SupportedClients);
-            //download supported_clients
-            XmlDocument doc = null;
-            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
-            {
-                string xml = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients);
-                doc = XmlUtils.LoadXmlDocument(xml, XmlLoadType.FromString);
-            }
-            //parse each online folder to list type string
-            ReportProgress("Parsing " + Settings.SupportedClients);
-            CleanFoldersOnlineStep2b.Items.Clear();
-            XmlNodeList supportedClients = XmlUtils.GetXmlNodesFromXPath(doc, "//versions/version");
-            VersionInfosList = new List<VersionInfos>();
-            foreach (XmlNode node in supportedClients)
-            {
-                VersionInfos newVersionInfo = new VersionInfos()
-                {
-                    WoTOnlineFolderVersion = node.Attributes["folder"].Value,
-                    WoTClientVersion = node.InnerText
-                };
-                VersionInfosList.Add(newVersionInfo);
-                CleanFoldersOnlineStep2b.Items.Add(newVersionInfo);
-            }
+
+            VersionInfosListClean = await ParseVersionInfoXml(string.Empty);
+
             ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
@@ -633,7 +659,7 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
-            if(VersionInfosList == null)
+            if(VersionInfosListClean == null)
             {
                 ReportProgress("VersionsInfoList == null");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -645,7 +671,7 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
-            if(VersionInfosList.Count == 0)
+            if(VersionInfosListClean.Count == 0)
             {
                 ReportProgress("VersionsInfosList count = 0");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -657,7 +683,7 @@ namespace RelhaxModpack.Windows
 
             //make a new list where it only has versions who's online folder match the selected one from the combobox
             List<VersionInfos> specificVersions = 
-                VersionInfosList.Where(info => info.WoTOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion)).ToList();
+                VersionInfosListClean.Where(info => info.WoTOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion)).ToList();
             List<string> allUsedZipFiles = new List<string>();
             specificVersions.Add(new VersionInfos { WoTClientVersion = "GITHUB" });
 
@@ -1878,11 +1904,18 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), false);
             ReportProgress(string.Format("Loading {0}", Settings.SupportedClients));
 
+            if(!(bool)SelectSupportedClientsXml.ShowDialog())
+            {
+                ReportProgress("Canceled");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
             ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
-        private void CheckClientsToRemoveFromDocumentButton_Click(object sender, RoutedEventArgs e)
+        private async void CheckClientsToRemoveFromDocumentButton_Click(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
             ReportProgress("Remove clients from xml and server");
@@ -1909,14 +1942,53 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            //get list of WoT online folders
+            //parse supported_clients.xml
+            XmlDocument supportedClients = await ParseVersionInfoXmlDoc(SelectSupportedClientsXml.FileName);
+
+            //get list of WoT online folders (ftp)
+            ReportProgress("Getting a list of supported WoT clients by major version from the ftp server's folder list");
+            string[] foldersList = await Utils.FTPListFilesFoldersAsync(PrivateStuff.BigmodsFTPRootWoT, PrivateStuff.BigmodsNetworkCredential);
 
             //check any online folder clients where no matching server folder name and remove
+            bool anyEntriesRemoved = false;
+            XmlNodeList supportedClientsXmlList = XmlUtils.GetXmlNodesFromXPath(supportedClients, "//versions/version");
+            for(int i = 0; i < supportedClientsXmlList.Count;)
+            {
+                XmlElement version = supportedClientsXmlList[i] as XmlElement;
+                string onlineFolderVersion = version.Attributes["folder"].InnerText;
 
+                if(!foldersList.Contains(onlineFolderVersion))
+                {
+                    ReportProgress(string.Format("Version {0} (online folder {1}) is not supported and will be removed", version.InnerText, onlineFolderVersion));
+                    supportedClients.RemoveChild(version);
+                    ReportProgress("Also removing the folder on the server");
+                    await Utils.FTPDeleteFolderAsync(PrivateStuff.BigmodsFTPModpackDatabase + version.InnerText, PrivateStuff.BigmodsNetworkCredential);
+                    anyEntriesRemoved = true;
+                }
+                else
+                {
+                    ReportProgress(string.Format("Version {0} (online folder {1}) exists", version.InnerText, onlineFolderVersion));
+                    i++;
+                }
+            }
+
+            if (anyEntriesRemoved)
+            {
+                ReportProgress("Entries removed, saving file back to disk and upload");
+                supportedClients.Save(SelectSupportedClientsXml.FileName);
+
+                //FTP upload TODO
+            }
+            else
+            {
+                ReportProgress("No entries removed");
+            }
+
+            ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
-        private void CheckClientsToAddToDocumentButton_Click(object sender, RoutedEventArgs e)
+        private async void CheckClientsToAddToDocumentButton_Click(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
             ReportProgress("Add clients to and upload supported_clients.xml");
@@ -1943,10 +2015,27 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            //get list of all wot (full) client versions from document
+            //parse supported_clients.xml
+            XmlDocument supportedClients = await ParseVersionInfoXmlDoc(SelectSupportedClientsXml.FileName);
 
-            //if loaded database is new, then add it to the document
+            //if loaded database's wot version is new, then add it to the document
+            // "/versions/version[text()='1.8.0.1']"
+            XmlNode selectedVersion = XmlUtils.GetXmlNodeFromXPath(supportedClients, @"/versions/version[text()='1.8.0.1']");
+            if(selectedVersion == null)
+            {
+                ReportProgress("Does not exist in the document, adding");
 
+
+                ReportProgress("Saving and uploading document");
+
+            }
+            else
+            {
+                //does exist, no further action needed
+                ReportProgress("Already exists");
+            }
+
+            ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion
