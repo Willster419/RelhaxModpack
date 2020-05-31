@@ -65,33 +65,17 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Editable values
+        #region Variables
         private string KeyFilename = "key.txt";//can be overridden by command line argument
         private WebClient client;
         private bool authorized = false;
+        //open
         private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
-        private SaveFileDialog SelectModInfoSave = new SaveFileDialog() { Filter = "*.xml|*.xml" };
         private OpenFileDialog SelectV1Application = new OpenFileDialog() { Title = "Find V1 application to upload", Filter = "*.exe|*.exe" };
         private OpenFileDialog SelectV2Application = new OpenFileDialog() { Title = "Find V2 application to upload", Filter = "*.exe|*.exe" };
-        private OpenFileDialog SelectManagerInfoXml = new OpenFileDialog() { Title = "Find manager_version.xml", Filter = "manager_version.xml|manager_version.xml" };
-        #endregion
-
-        #region Stuff for parts 3 and 4 to share
-        //the version number of the last supported WoT client, used for making backup online folder
-        private string LastSupportedTanksVersion = "";
-        #endregion
-
-        #region Stuff for Cleaning online folders
-        List<VersionInfos> VersionInfosList;
-        VersionInfos selectedVersionInfos;
-        bool cancelDelete = false;
-        #endregion
-
-        #region Stuff for checking for duplicate PNs and UIDs
-        List<Category> parsedCategoryListDuplicateCheck;
-        List<DatabasePackage> globalDependenciesDuplicateCheck;
-        List<Dependency> dependenciesDuplicateCheck;
-        XmlDocument docDuplicateCheck;
+        private OpenFileDialog SelectManagerInfoXml = new OpenFileDialog() { Title = "Find " + Settings.ManagerVersion, Filter = Settings.ManagerVersion + "|" + Settings.ManagerVersion };
+        //save
+        private SaveFileDialog SelectModInfoSave = new SaveFileDialog() { Filter = "*.xml|*.xml" };
         #endregion
 
         #region Password auth stuff
@@ -155,7 +139,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Boring stuff
+        #region Standard class stuff
         private bool loading = true;
         /// <summary>
         /// Create an instance of the DatabaseUpdater window
@@ -165,21 +149,26 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
         }
 
-        private void OnLoadModInfo(object sender, RoutedEventArgs e)
+        private void OnApplicationClose(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (SelectModInfo.ShowDialog() == true)
+            //if strings are not empty and file exists, delete them
+            //for all the class level strings
+            Logging.Updater("Deleting trash files...");
+            string[] filesToDelete = new string[]
             {
-                LogOutput.Text = "Loading database...";
-                //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
-                //for the folder version: //modInfoAlpha.xml/@version
-                Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@onlineFolder");
-                Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, "//modInfoAlpha.xml/@version");
-                string versionInfo = string.Format("{0}={1},  {2}={3}", nameof(Settings.WoTModpackOnlineFolderVersion)
-                    , Settings.WoTModpackOnlineFolderVersion, nameof(Settings.WoTClientVersion), Settings.WoTClientVersion);
-                ReportProgress(versionInfo);
-                ReportProgress("Database loaded");
+                DatabaseXml,
+                TrashXML,
+                MissingPackagesTxt
+            };
+            foreach (string s in filesToDelete)
+            {
+                if (!string.IsNullOrWhiteSpace(s) && File.Exists(s))
+                    File.Delete(s);
             }
         }
+        #endregion
+
+        #region UI Interaction methods
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -207,24 +196,6 @@ namespace RelhaxModpack.Windows
         private void CancelDownloadButon_Click(object sender, RoutedEventArgs e)
         {
             client.CancelAsync();
-        }
-
-        private void OnApplicationClose(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            //if strings are not empty and file exists, delete them
-            //for all the class level strings
-            Logging.Updater("Deleting trash files...");
-            string[] filesToDelete = new string[]
-            {
-                DatabaseXml,
-                TrashXML,
-                MissingPackagesTxt
-            };
-            foreach (string s in filesToDelete)
-            {
-                if (!string.IsNullOrWhiteSpace(s) && File.Exists(s))
-                    File.Delete(s);
-            }
         }
 
         private void PaswordTextbox_KeyDown(object sender, KeyEventArgs e)
@@ -258,12 +229,30 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Util methods
+
+        private void OnLoadModInfo(object sender, RoutedEventArgs e)
+        {
+            if (SelectModInfo.ShowDialog() == true)
+            {
+                LogOutput.Text = "Loading database...";
+                //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+                //for the folder version: //modInfoAlpha.xml/@version
+                Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, Settings.DatabaseOnlineFolderXpath);
+                Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, Settings.DatabaseOnlineVersionXpath);
+                string versionInfo = string.Format("{0} = {1},  {2} = {3}", nameof(Settings.WoTModpackOnlineFolderVersion)
+                    , Settings.WoTModpackOnlineFolderVersion, nameof(Settings.WoTClientVersion), Settings.WoTClientVersion);
+                ReportProgress(versionInfo);
+                ReportProgress("Database loaded");
+            }
+        }
+
         private void ReportProgress(string message)
         {
             //reports to the log file and the console otuptu
             Logging.Updater(message);
             LogOutput.AppendText(message + "\n");
         }
+
         private async Task RunPhpScript(NetworkCredential credentials, string URL, int timeoutMilliseconds)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
@@ -585,6 +574,10 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Cleaning online folders
+        List<VersionInfos> VersionInfosList;
+        VersionInfos selectedVersionInfos;
+        bool cancelDelete = false;
+
         private async void CleanFoldersOnlineStep1_Click(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
@@ -837,8 +830,11 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion
-        
+
         #region Database Updating V2
+        //the version number of the last supported WoT client, used for making backup online folder
+        private string LastSupportedTanksVersion = "";
+
         private async void UpdateDatabaseV2Step2_Click(object sender, RoutedEventArgs e)
         {
             ReportProgress("Starting Update database step 2...");
@@ -1695,6 +1691,11 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region DatabasePackage and UIDs checks
+        List<Category> parsedCategoryListDuplicateCheck;
+        List<DatabasePackage> globalDependenciesDuplicateCheck;
+        List<Dependency> dependenciesDuplicateCheck;
+        XmlDocument docDuplicateCheck;
+
         private void AnotherLoadDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
             //init UI
@@ -1855,6 +1856,39 @@ namespace RelhaxModpack.Windows
 
             ReportProgress("Database saved");
             ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+        #endregion
+
+        #region Supported_Clients updating
+
+        private void LoadDatabaseUpdateSupportedClientsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LoadSupportedClientsDocumentButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CheckClientsToRemoveFromDocumentButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CheckClientsToAddToDocumentButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RunScriptCreateModInfo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RunScriptCreateManagerInfo_Click(object sender, RoutedEventArgs e)
+        {
+
         }
         #endregion
     }
