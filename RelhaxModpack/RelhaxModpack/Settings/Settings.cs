@@ -409,12 +409,12 @@ namespace RelhaxModpack
         /// <summary>
         /// The xpath string to get the onlineFolder attribute from the document root
         /// </summary>
-        public const string DatabaseOnlineFolderXpath = "//modInfoAlpha.xml/@onlineFolder";
+        public const string DatabaseOnlineFolderXpath = "/modInfoAlpha.xml/@onlineFolder";
 
         /// <summary>
         /// The xpath string to get the database version info attribute from the document root
         /// </summary>
-        public const string DatabaseOnlineVersionXpath = "//modInfoAlpha.xml/@version";
+        public const string DatabaseOnlineVersionXpath = "/modInfoAlpha.xml/@version";
 
         /// <summary>
         /// The old V2 config file version for saving the user's selection preferences
