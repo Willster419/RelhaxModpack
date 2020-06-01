@@ -8406,6 +8406,20 @@
             <param name="address">The complete path to the FTP file to delete</param>
             <param name="credentials">The FTP server credentials</param>
         </member>
+        <member name="M:RelhaxModpack.Utils.FTPDeleteFolder(System.String,System.Net.ICredentials)">
+            <summary>
+            Delete a folder on an FTP server
+            </summary>
+            <param name="address">The complete path to the FTP file to delete</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utils.FTPDeleteFolderAsync(System.String,System.Net.ICredentials)">
+            <summary>
+            Delete a folder on an FTP server
+            </summary>
+            <param name="address">The complete path to the FTP file to delete</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
         <member name="M:RelhaxModpack.Utils.FTPGetFilesize(System.String,System.Net.ICredentials)">
             <summary>
             Get a file size of an FTP file
