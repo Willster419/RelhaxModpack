@@ -1472,55 +1472,13 @@ namespace RelhaxModpack.Windows
 
             //check if supported_clients.xml needs to be updated for a new version
             ReportProgress("Checking if supported_clients.xml needs to be updated for new WoT version");
-            bool needsToBeUpdated = false;
-            XmlDocument supportedClients = null;
 
             ReportProgress("Checking if latest WoT version is the same as this database supports");
             ReportProgress("Old version = " + LastSupportedTanksVersion + ", new version = " + Settings.WoTClientVersion);
             if (!LastSupportedTanksVersion.Equals(Settings.WoTClientVersion))
             {
                 ReportProgress("Last supported version does not match");
-                needsToBeUpdated = true;
-            }
-
-            ReportProgress("Checking if the number of versions entries is the same count");
-            if(!needsToBeUpdated)
-            {
-                ReportProgress("Downloading supported_clients.xml from bigmods to check");
-                string bigmodsSupportedClients = string.Empty;
-                using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
-                {
-                     bigmodsSupportedClients = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients);
-                }
-
-                int numBigmodsSupportedClients = XmlUtils.GetXmlNodesFromXPath(bigmodsSupportedClients, "//versions", Settings.SupportedClients).Count;
-                supportedClients = XmlUtils.LoadXmlDocument(SupportedClientsPath, XmlLoadType.FromFile);
-                int numSupportedClients = XmlUtils.GetXmlNodesFromXPath(supportedClients, "//versions").Count;
-                ReportProgress(string.Format("BigmodsSupportedCount: {0}, LocalSupportedCount: {1}", numBigmodsSupportedClients, numSupportedClients));
-
-                if(numBigmodsSupportedClients != numSupportedClients)
-                {
-                    ReportProgress("Version count does not match");
-                    needsToBeUpdated = true;
-                }
-            }
-
-            if(needsToBeUpdated)
-            {
-                ReportProgress("DOES need to be updated/uploaded");
-                XmlNode versionRoot = supportedClients.SelectSingleNode("//versions");
-                XmlElement supported_client = supportedClients.CreateElement("version");
-                supported_client.InnerText = Settings.WoTClientVersion;
-                supported_client.SetAttribute("folder", Settings.WoTModpackOnlineFolderVersion);
-                versionRoot.AppendChild(supported_client);
-                supportedClients.Save(SupportedClientsPath);
-
-                ReportProgress("Uploading new" + Settings.SupportedClients);
-                using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
-                {
-                    await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients, SupportedClientsPath);
-                }
-                ReportProgress("Updated");
+                MessageBox.Show("Old database client version != new client version.\nPlease update the " + Settings.SupportedClients + " document after publishing the database");
             }
             else
             {
@@ -1894,8 +1852,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Loading database");
 
             OnLoadModInfo(null, null);
-
-            ReportProgress("Database loaded");
+            
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
@@ -1952,7 +1909,7 @@ namespace RelhaxModpack.Windows
             //check any online folder clients where no matching server folder name and remove
             bool anyEntriesRemoved = false;
             XmlNodeList supportedClientsXmlList = XmlUtils.GetXmlNodesFromXPath(supportedClients, "//versions/version");
-            for(int i = 0; i < supportedClientsXmlList.Count;)
+            for(int i = 0; i < supportedClientsXmlList.Count; i++)
             {
                 XmlElement version = supportedClientsXmlList[i] as XmlElement;
                 string onlineFolderVersion = version.Attributes["folder"].InnerText;
@@ -1960,15 +1917,19 @@ namespace RelhaxModpack.Windows
                 if(!foldersList.Contains(onlineFolderVersion))
                 {
                     ReportProgress(string.Format("Version {0} (online folder {1}) is not supported and will be removed", version.InnerText, onlineFolderVersion));
-                    supportedClients.RemoveChild(version);
-                    ReportProgress("Also removing the folder on the server");
-                    await Utils.FTPDeleteFolderAsync(PrivateStuff.BigmodsFTPModpackDatabase + version.InnerText, PrivateStuff.BigmodsNetworkCredential);
+                    version.ParentNode.RemoveChild(version);
+                    ReportProgress("Also removing the folder on the server if exists");
+                    string[] databaseVersions = (await Utils.FTPListFilesFoldersAsync(PrivateStuff.BigmodsFTPModpackDatabase, PrivateStuff.BigmodsNetworkCredential));
+                    if (databaseVersions.Contains(version.InnerText))
+                    {
+                        string folderUrl = PrivateStuff.BigmodsFTPModpackDatabase + version.InnerText + "/";
+                        await Utils.FTPDeleteFolderAsync(folderUrl, PrivateStuff.BigmodsNetworkCredential);
+                    }
                     anyEntriesRemoved = true;
                 }
                 else
                 {
                     ReportProgress(string.Format("Version {0} (online folder {1}) exists", version.InnerText, onlineFolderVersion));
-                    i++;
                 }
             }
 
@@ -1977,7 +1938,10 @@ namespace RelhaxModpack.Windows
                 ReportProgress("Entries removed, saving file back to disk and upload");
                 supportedClients.Save(SelectSupportedClientsXml.FileName);
 
-                //FTP upload TODO
+                using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+                {
+                    await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients, SelectSupportedClientsXml.FileName);
+                }
             }
             else
             {
@@ -2020,14 +1984,29 @@ namespace RelhaxModpack.Windows
 
             //if loaded database's wot version is new, then add it to the document
             // "/versions/version[text()='1.8.0.1']"
-            XmlNode selectedVersion = XmlUtils.GetXmlNodeFromXPath(supportedClients, @"/versions/version[text()='1.8.0.1']");
+            string xpathString = string.Format(@"/versions/version[text()='{0}']",Settings.WoTClientVersion);
+            XmlNode selectedVersion = XmlUtils.GetXmlNodeFromXPath(supportedClients, xpathString);
             if(selectedVersion == null)
             {
                 ReportProgress("Does not exist in the document, adding");
+                //select the document root node
+                XmlNode versionRoot = supportedClients.SelectSingleNode("/versions");
 
+                //create the version element and set attributes and text
+                XmlElement supported_client = supportedClients.CreateElement("version");
+                supported_client.InnerText = Settings.WoTClientVersion;
+                supported_client.SetAttribute("folder", Settings.WoTModpackOnlineFolderVersion);
 
-                ReportProgress("Saving and uploading document");
+                //add element to document at the end
+                versionRoot.AppendChild(supported_client);
 
+                ReportProgress("Entry added, saving file back to disk and upload");
+                supportedClients.Save(SelectSupportedClientsXml.FileName);
+
+                using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
+                {
+                    await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Settings.SupportedClients, SelectSupportedClientsXml.FileName);
+                }
             }
             else
             {
