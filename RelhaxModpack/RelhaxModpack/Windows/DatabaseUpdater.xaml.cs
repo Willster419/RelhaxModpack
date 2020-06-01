@@ -1141,7 +1141,7 @@ namespace RelhaxModpack.Windows
             //used for disabled, removed, added mods
             ReportProgress("Getting list of added and removed packages");
             Utils.AllowUIToUpdate();
-            PackageComparerByPackageName pc = new PackageComparerByPackageName();
+            PackageComparerByUID pc = new PackageComparerByUID();
 
             //if in before but not after = removed
             removedPackages = flatListOld.Except(flatListCurrent, pc).ToList();
@@ -1149,155 +1149,99 @@ namespace RelhaxModpack.Windows
             //if not in before but after = added
             addedPackages = flatListCurrent.Except(flatListOld, pc).ToList();
 
+            ReportProgress("Getting list of packages old and new minus removed and added");
+            Utils.AllowUIToUpdate();
+
+            //first start by getting the list of all current packages, then filter out removed and added packages
+            //make a copy of the current flat list
+            List<DatabasePackage> packagesNotRemovedOrAdded = new List<DatabasePackage>(flatListCurrent);
+
+            //remove any added or removed packages from the new list to check for other stuff
+            packagesNotRemovedOrAdded = packagesNotRemovedOrAdded.Except(removedPackages, pc).Except(addedPackages, pc).ToList();
+
+            //we only want of type SelectablePackage 
+            //https://stackoverflow.com/questions/3842714/linq-selection-by-type-of-an-object
+            List<SelectablePackage> selectablePackagesNotRemovedOrAdded = packagesNotRemovedOrAdded.OfType<SelectablePackage>().ToList();
+
+            //remove any added or removed packages from the new list to check for other stuff
+            List<DatabasePackage> oldPackagesNotRemovedOrAdded = new List<DatabasePackage>(flatListOld);
+            oldPackagesNotRemovedOrAdded = oldPackagesNotRemovedOrAdded.Except(removedPackages, pc).Except(addedPackages, pc).ToList();
+            List<SelectablePackage> selectablePackagesOld = oldPackagesNotRemovedOrAdded.OfType<SelectablePackage>().ToList();
+
             //get the list of renamed packages
             //a renamed package will have the same internal name, but a different display name
-            //first start by getting the list of all current packages, then filter out removed and added packages
             ReportProgress("Getting list of renamed packages");
             Utils.AllowUIToUpdate();
-            List<DatabasePackage> renamedPackagesTemp = new List<DatabasePackage>(flatListCurrent);
-            renamedPackagesTemp = renamedPackagesTemp.Except(removedPackages, pc).Except(addedPackages, pc).ToList();
-            //https://stackoverflow.com/questions/3842714/linq-selection-by-type-of-an-object
-            List<SelectablePackage> selectablePackagesOld = flatListOld.OfType<SelectablePackage>().ToList();
-            List<SelectablePackage> potentialRenamedPackages = renamedPackagesTemp.OfType<SelectablePackage>().ToList();
-            foreach (SelectablePackage selectablePackage in potentialRenamedPackages)
+            foreach (SelectablePackage selectablePackage in selectablePackagesNotRemovedOrAdded)
             {
-                List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.PackageName.Equals(selectablePackage.PackageName)).ToList();
-                if (results.Count == 0)
+                SelectablePackage oldPackageWithMatchingUID = selectablePackagesOld.Find(pack => pack.UID.Equals(selectablePackage.UID));
+                if (oldPackageWithMatchingUID == null)
                     continue;
-                SelectablePackage result = results[0];
-                if (!selectablePackage.NameFormatted.Equals(result.NameFormatted))
+
+                if (!selectablePackage.NameFormatted.Equals(oldPackageWithMatchingUID.NameFormatted))
                 {
-                    Logging.Updater("Package rename-> old:{0}, new:{1}", LogLevel.Info, result.PackageName, selectablePackage.PackageName);
-                    renamedPackages.Add(new DatabaseBeforeAfter() { Before = result, After = selectablePackage });
+                    Logging.Updater("Package rename-> old:{0}, new:{1}", LogLevel.Info, oldPackageWithMatchingUID.PackageName, selectablePackage.PackageName);
+                    renamedPackages.Add(new DatabaseBeforeAfter() { Before = oldPackageWithMatchingUID, After = selectablePackage });
                 }
             }
 
             //list of moved packages
-            //a moved package will have a different completePackagePath and different completePath, but still have the same internalName
+            //a moved package will have a different UIDPath (the UID's don't change, so any change detected would imply a structure level change)
             ReportProgress("Getting list of moved packages");
             Utils.AllowUIToUpdate();
-            foreach (SelectablePackage selectablePackage in potentialRenamedPackages)
+            foreach (SelectablePackage selectablePackage in selectablePackagesNotRemovedOrAdded)
             {
-                List<SelectablePackage> results = selectablePackagesOld.Where(pack => pack.PackageName.Equals(selectablePackage.PackageName)).ToList();
-                if (results.Count == 0)
+                SelectablePackage oldPackageWithMatchingUID = selectablePackagesOld.Find(pack => pack.UID.Equals(selectablePackage.UID));
+                if (oldPackageWithMatchingUID == null)
                     continue;
-                SelectablePackage result = results[0];
-                bool completeNamePathChanged = !result.CompletePath.Equals(selectablePackage.CompletePath);
-                bool completePackageNamePathChanged = !result.CompletePackageNamePath.Equals(selectablePackage.CompletePackageNamePath);
-                if (completeNamePathChanged && completePackageNamePathChanged)
+
+                if (!selectablePackage.CompleteUIDPath.Equals(oldPackageWithMatchingUID.CompleteUIDPath))
                 {
                     Logging.Updater("Package moved: {0}", LogLevel.Info, selectablePackage.PackageName);
-                    movedPackages.Add(new DatabaseBeforeAfter { Before = result, After = selectablePackage });
+                    movedPackages.Add(new DatabaseBeforeAfter { Before = oldPackageWithMatchingUID, After = selectablePackage });
                 }
             }
 
             SetProgress(85);
 
-            //move them to lists of selectablePackageType as well
-            List<SelectablePackage> actualMovedPackages = movedPackages.Select(intt => intt.After).ToList();
-            actualMovedPackages.AddRange(movedPackages.Select(intt => intt.Before).ToList());
-            actualMovedPackages = actualMovedPackages.Distinct().ToList();
-
-            //remove any packages that say are added and removed, but actually just had internal structure changed
-            addedPackages = addedPackages.Except(actualMovedPackages, pc).ToList();
-            removedPackages = removedPackages.Except(actualMovedPackages, pc).ToList();
-
-            //if a package was internally renamed, it will show up in the added and removed list
-            //a internal renamed package will have a different completePackagePath but the same completePath (assuming it wasn't renamed as well), and different internalName
-            //first get the list of *selectable* Packages for added and removed
-            ReportProgress("Getting list for internal renamed");
+            //if a package was internally renamed, the packageName won't match
+            ReportProgress("Getting list of internal renamed packages");
             Utils.AllowUIToUpdate();
-            List<SelectablePackage> addedSelectablePackages = addedPackages.OfType<SelectablePackage>().ToList();
-            List<SelectablePackage> removedSelectablePackages = removedPackages.OfType<SelectablePackage>().ToList();
+            foreach (SelectablePackage selectablePackage in selectablePackagesNotRemovedOrAdded)
+            {
+                SelectablePackage oldPackageWithMatchingUID = selectablePackagesOld.Find(pack => pack.UID.Equals(selectablePackage.UID));
+                if (oldPackageWithMatchingUID == null)
+                    continue;
 
-            //get a string list of completePath and completePackagePath
-            List<string> completePathDetect = addedSelectablePackages.Select(pack => pack.CompletePath).ToList();
-            completePathDetect.AddRange(removedSelectablePackages.Select(pack => pack.CompletePath).ToList());
-            completePathDetect = completePathDetect.Distinct().ToList();
-
+                if (!selectablePackage.PackageName.Equals(oldPackageWithMatchingUID.PackageName))
+                {
+                    Logging.Updater("Package internal renamed: {0}", LogLevel.Info, selectablePackage.PackageName);
+                    movedPackages.Add(new DatabaseBeforeAfter { Before = oldPackageWithMatchingUID, After = selectablePackage });
+                }
+            }
+            
             SetProgress(90);
 
-            Logging.Updater(string.Format("CompletePath count compare of add and remove is {0}", completePathDetect.Count));
-            if (completePathDetect.Count > 0)
-            {
-                foreach (string completePathDet in completePathDetect)
-                {
-                    List<SelectablePackage> addResultList = addedSelectablePackages.Where(pack => pack.CompletePath.Equals(completePathDet)).ToList();
-                    List<SelectablePackage> removeResultList = removedSelectablePackages.Where(pack => pack.CompletePath.Equals(completePathDet)).ToList();
-                    if (addResultList.Count > 0 && removeResultList.Count > 0)
-                    {
-                        SelectablePackage addResult = addResultList[0];
-                        SelectablePackage removeResult = removeResultList[0];
-                        internallyRenamed.Add(new DatabaseBeforeAfter() { Before = removeResult, After = addResult });
-                        addedPackages.Remove(addedPackages.Where(pack => pack.PackageName.Equals(addResult.PackageName)).ToList()[0]);
-                        removedPackages.Remove(removedPackages.Where(pack => pack.PackageName.Equals(removeResult.PackageName)).ToList()[0]);
-                    }
-                }
-            }
-
-            //get a string list of name (without macro)
-            List<string> nameWithMacro = addedSelectablePackages.Select(pack => pack.NameFormatted).ToList();
-            nameWithMacro.AddRange(removedSelectablePackages.Select(pack => pack.NameFormatted).ToList());
-            nameWithMacro = nameWithMacro.Distinct().ToList();
-            Logging.Updater(string.Format("Name count compare of add and remove is {0}", completePathDetect.Count));
-            if (nameWithMacro.Count > 0)
-            {
-                //if the name exists in both, then it was moved and renamed
-                foreach (string name in nameWithMacro)
-                {
-                    List<SelectablePackage> addResultList = addedSelectablePackages.Where(pack => pack.NameFormatted.Equals(name)).ToList();
-                    List<SelectablePackage> removeResultList = removedSelectablePackages.Where(pack => pack.NameFormatted.Equals(name)).ToList();
-                    if (addResultList.Count > 0 && removeResultList.Count > 0)
-                    {
-                        SelectablePackage addResult = addResultList[0];
-                        SelectablePackage removeResult = removeResultList[0];
-                        movedPackages.Add(new DatabaseBeforeAfter() { Before = removeResult, After = addResult });
-                        renamedPackages.Add(new DatabaseBeforeAfter() { Before = removeResult, After = addResult });
-
-                        for (int i = 0; i < addedPackages.Count; i++)
-                        {
-                            if (addedPackages[i] is SelectablePackage selectablePackage)
-                            {
-                                if (selectablePackage.NameFormatted.Equals(addResult.NameFormatted))
-                                {
-                                    addedPackages.RemoveAt(i);
-                                    break;
-                                }
-                            }
-                        }
-
-                        for (int i = 0; i < removedPackages.Count; i++)
-                        {
-                            if (removedPackages[i] is SelectablePackage selectablePackage)
-                            {
-                                if (selectablePackage.NameFormatted.Equals(removeResult.NameFormatted))
-                                {
-                                    removedPackages.RemoveAt(i);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            SetProgress(95);
-
+            ReportProgress("Getting list of disabled packages");
             //list of disabled packages before
-            List<DatabasePackage> disabledBefore = flatListOld.Where(p => !p.Enabled).ToList();
+            List<DatabasePackage> disabledBefore = oldPackagesNotRemovedOrAdded.Where(p => !p.Enabled).ToList();
 
             //list of disabled packages after
-            List<DatabasePackage> disabledAfter = flatListCurrent.Where(p => !p.Enabled).ToList();
+            List<DatabasePackage> disabledAfter = packagesNotRemovedOrAdded.Where(p => !p.Enabled).ToList();
 
-            //compare except with after.before
+            //compare except with after -> before
             disabledPackages = disabledAfter.Except(disabledBefore, pc).ToList();
 
+            //any final list processing
             //also need to remove and removed and added and disabled from updated
             updatedPackages = updatedPackages.Except(removedPackages, pc).ToList();
             updatedPackages = updatedPackages.Except(disabledPackages, pc).ToList();
             updatedPackages = updatedPackages.Except(addedPackages, pc).ToList();
 
+            SetProgress(95);
+
             //put them to stringBuilder and write text to disk
+            ReportProgress("Building databaseUpdate.txt");
             StringBuilder numberBuilder = new StringBuilder();
             numberBuilder.AppendLine(string.Format("Number of Added packages: {0}", addedPackages.Count));
             numberBuilder.AppendLine(string.Format("Number of Updated packages: {0}", updatedPackages.Count));
@@ -1369,12 +1313,12 @@ namespace RelhaxModpack.Windows
             ReportProgress("Database text processed and written to disk");
 
             //save new modInfo.xml
-            ReportProgress("Updating databases");
+            ReportProgress("Updating database");
             File.Delete(SelectModInfo.FileName);
             XmlUtils.SaveDatabase(SelectModInfo.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
-            ReportProgress("Ready for step 4");
+            ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
