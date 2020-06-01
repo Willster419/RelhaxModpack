@@ -62,4 +62,33 @@ namespace RelhaxModpack
             return package.NameFormatted.GetHashCode();
         }
     }
+
+    /// <summary>
+    /// Enables comparison of Packages by their Unique ID (UID) property
+    /// </summary>
+    public class PackageComparerByUID : IEqualityComparer<DatabasePackage>
+    {
+        /// <summary>
+        /// Determines if PackageName of package x is before or after PackageName of Package y
+        /// </summary>
+        /// <param name="x">The first package</param>
+        /// <param name="y">The second package</param>
+        /// <returns>1,0,-1 from string PackageName comparison</returns>
+        public bool Equals(DatabasePackage x, DatabasePackage y)
+        {
+            if (string.IsNullOrWhiteSpace(x.UID) && string.IsNullOrWhiteSpace(y.UID))
+                return true;
+            return x.UID.Equals(y.UID);
+        }
+
+        /// <summary>
+        /// Returns the hash code of the PackageName of the Package
+        /// </summary>
+        /// <param name="package">The package to get the hash code</param>
+        /// <returns>The hash code of the PackageName of the Package</returns>
+        public int GetHashCode(DatabasePackage package)
+        {
+            return package.UID.GetHashCode();
+        }
+    }
 }

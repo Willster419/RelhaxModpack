@@ -593,6 +593,30 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Provides a complete tree style path to the package using its UID, starting with the category
+        /// </summary>
+        public override string CompleteUIDPath
+        {
+            get
+            {
+                if (ParentCategory == null)
+                {
+                    return base.CompletePackageNamePath;
+                }
+                //level is taken care of in createModStructure, so use that
+                List<string> parentPackages = new List<string>();
+                SelectablePackage package = this;
+                while (package != null && package.Level > -1)
+                {
+                    parentPackages.Add(package.UID);
+                    package = package.Parent;
+                }
+                parentPackages.Reverse();
+                return string.Join("->", parentPackages);
+            }
+        }
+
+        /// <summary>
         /// Determines if the UI package structure to this package is of all visible components.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
