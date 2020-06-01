@@ -3451,7 +3451,7 @@ namespace RelhaxModpack
                 using (StreamReader reader = new StreamReader(responseStream))
                 {
                     string temp = reader.ReadToEnd();
-                    return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+                    return temp.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 }
             }
         }
@@ -3473,7 +3473,7 @@ namespace RelhaxModpack
                 using (StreamReader reader = new StreamReader(responseStream))
                 {
                     string temp = reader.ReadToEnd();
-                    return temp.Split(new[] { "\r\n" }, StringSplitOptions.None);
+                    return temp.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 }
             }
         }
@@ -3516,6 +3516,21 @@ namespace RelhaxModpack
             WebRequest folderRequest = WebRequest.Create(address);
             folderRequest.Method = WebRequestMethods.Ftp.RemoveDirectory;
             folderRequest.Credentials = credentials;
+            List<string> files = FTPListFilesFolders(address, credentials).ToList();
+            files.RemoveAll(m => m.Equals("..") || m.Equals("."));
+            if (files.Count > 0)
+            {
+                string address_ = address;
+                if (address.Last().Equals('/'))
+                    address_ = address;
+                else
+                    address_ = address + "/";
+
+                foreach (string filename in files)
+                {
+                    FTPDeleteFile(address_ + filename, credentials);
+                }
+            }
             using (FtpWebResponse response = (FtpWebResponse)folderRequest.GetResponse())
             { }
         }
@@ -3530,6 +3545,23 @@ namespace RelhaxModpack
             WebRequest folderRequest = WebRequest.Create(address);
             folderRequest.Method = WebRequestMethods.Ftp.RemoveDirectory;
             folderRequest.Credentials = credentials;
+            //https://stopbyte.com/t/how-to-remove-a-non-empty-folder-on-an-ftp/294/2
+            //must be done recursively cause it won't delete non-empty folders
+            List<string> files = (await FTPListFilesFoldersAsync(address, credentials)).ToList();
+            files.RemoveAll(m => m.Equals("..") || m.Equals("."));
+            if(files.Count > 0)
+            {
+                string address_ = address;
+                if (address.Last().Equals('/'))
+                    address_ = address;
+                else
+                    address_ = address + "/";
+
+                foreach (string filename in files)
+                {
+                    await FTPDeleteFileAsync(address_ + filename, credentials);
+                }
+            }
             using (FtpWebResponse response = (FtpWebResponse)await folderRequest.GetResponseAsync())
             { }
         }
