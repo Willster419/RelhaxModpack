@@ -1237,6 +1237,22 @@ namespace RelhaxModpack.Windows
             updatedPackages = updatedPackages.Except(removedPackages, pc).ToList();
             updatedPackages = updatedPackages.Except(disabledPackages, pc).ToList();
             updatedPackages = updatedPackages.Except(addedPackages, pc).ToList();
+            //should remove any packages from the added list that were actually moved or renamed
+            addedPackages = addedPackages.Except(movedPackages.Select(pack => pack.After)).ToList();
+            addedPackages = addedPackages.Except(renamedPackages.Select(pack => pack.After)).ToList();
+            //don't included any added packages that are disabled
+            List<DatabasePackage> addedPackagesTemp = new List<DatabasePackage>();
+            foreach(DatabasePackage package in addedPackages)
+            {
+                if (package is SelectablePackage sPack)
+                {
+                    if (sPack.Visible)
+                        addedPackagesTemp.Add(package);
+                }
+                else
+                    addedPackagesTemp.Add(package);
+            }
+            addedPackages = addedPackagesTemp;
 
             SetProgress(95);
 
