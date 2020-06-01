@@ -307,6 +307,12 @@ namespace RelhaxModpack
         { get { return PackageName; } }
 
         /// <summary>
+        /// Provides a complete tree style path to the package using its UID, starting with the category
+        /// </summary>
+        public virtual string CompleteUIDPath
+        { get { return UID; } }
+
+        /// <summary>
         /// Creates an instance of the DatabasePackage class
         /// </summary>
         public DatabasePackage()
