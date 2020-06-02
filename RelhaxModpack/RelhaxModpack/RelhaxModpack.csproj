@@ -208,6 +208,7 @@
     <Compile Include="Utilities\Regression.cs" />
     <Compile Include="Atlases\RelhaxFreeImageLibrary.cs" />
     <Compile Include="Atlases\RelhaxNvTexLibrary.cs" />
+    <Compile Include="Utilities\ShortcutUtils.cs" />
     <Compile Include="Windows\AskCloseWoT.xaml.cs">
       <DependentUpon>AskCloseWoT.xaml</DependentUpon>
     </Compile>

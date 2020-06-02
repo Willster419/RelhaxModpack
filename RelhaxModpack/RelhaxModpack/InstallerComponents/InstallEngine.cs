@@ -1712,7 +1712,7 @@ namespace RelhaxModpack.InstallerComponents
 
                             if (shortcut.Enabled)
                             {
-                                Utils.CreateShortcut(shortcut, shortcutBuilder);
+                                ShortcutUtils.CreateShortcut(shortcut, shortcutBuilder);
                             }
                         }
 
