@@ -11,6 +11,7 @@ using System.IO;
 using System.Windows.Media;
 using System.Text;
 using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {

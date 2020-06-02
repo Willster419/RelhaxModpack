@@ -11,7 +11,7 @@ using System.IO;
 using System.Globalization;
 using RelhaxModpack.Xml;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Utilities
 {
     /// <summary>
     /// Exit codes during a patch operation
@@ -39,6 +39,10 @@ namespace RelhaxModpack
     /// </summary>
     public static class PatchUtils
     {
+        /// <summary>
+        /// Provides the ability to insert a 'null' value into json configurations
+        /// </summary>
+        private const string PatchJsonNullEscape = "[null]";
 
         private static PatchExitCode PatchExitCodeForJson = PatchExitCode.Error;
 
@@ -1297,7 +1301,7 @@ namespace RelhaxModpack
             else if (result.Value is bool b)
                 jsonValue = b.ToString().ToLower();
             else if (result.Value == null)
-                jsonValue = Utils.PatchJsonNullEscape;
+                jsonValue = PatchJsonNullEscape;
             else
                 jsonValue = result.Value.ToString();
             return jsonValue;
@@ -1306,7 +1310,7 @@ namespace RelhaxModpack
         private static void UpdateJsonValue(JValue jvalue, string value)
         {
             //determine what type value should be used for the json item based on attempted parsing
-            if (value.Equals(Utils.PatchJsonNullEscape))
+            if (value.Equals(PatchJsonNullEscape))
                 jvalue.Value = null;
             else if (Utils.ParseBool(value, out bool resultBool))
                 jvalue.Value = resultBool;
@@ -1316,7 +1320,7 @@ namespace RelhaxModpack
                 jvalue.Value = resultFloat;
             else
                 jvalue.Value = value;
-            Logging.Debug("[PatchUtils]: Json value parsed as data type {0}", jvalue.Value == null? Utils.PatchJsonNullEscape : jvalue.Value.GetType().ToString());
+            Logging.Debug("[PatchUtils]: Json value parsed as data type {0}", jvalue.Value == null? PatchJsonNullEscape : jvalue.Value.GetType().ToString());
         }
 
         private static JValue CreateJsonValue(string value)

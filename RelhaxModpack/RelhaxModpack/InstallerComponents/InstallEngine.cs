@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using RelhaxModpack.Atlases;
 using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.InstallerComponents
 {
@@ -652,7 +653,7 @@ namespace RelhaxModpack.InstallerComponents
                 Directory.CreateDirectory(logsFilepath);
             //delete the backup
             if (File.Exists(backupInstallLogfile))
-                Utils.FileDelete(backupInstallLogfile);
+                FileUtils.FileDelete(backupInstallLogfile);
             //move current to backup
             if (File.Exists(installLogfile))
                 File.Move(installLogfile, backupInstallLogfile);
@@ -988,7 +989,7 @@ namespace RelhaxModpack.InstallerComponents
             bool success = true;
             if (Directory.Exists(resModsFolder))
             {
-                string[] filesFromResMods = Utils.DirectorySearch(resModsFolder, SearchOption.AllDirectories, true);
+                string[] filesFromResMods = FileUtils.DirectorySearch(resModsFolder, SearchOption.AllDirectories, true);
                 if (filesFromResMods != null && filesFromResMods.Count() > 0)
                 {
                     ListOfAllItems.AddRange(filesFromResMods.ToList());
@@ -1002,7 +1003,7 @@ namespace RelhaxModpack.InstallerComponents
             CancellationToken.ThrowIfCancellationRequested();
             if (Directory.Exists(modsFolder))
             {
-                string[] filesFromMods = Utils.DirectorySearch(modsFolder, SearchOption.AllDirectories, true);
+                string[] filesFromMods = FileUtils.DirectorySearch(modsFolder, SearchOption.AllDirectories, true);
                 if (filesFromMods != null && filesFromMods.Count() > 0)
                 {
                     ListOfAllItems.AddRange(filesFromMods.ToList());
@@ -1024,7 +1025,7 @@ namespace RelhaxModpack.InstallerComponents
                 if (Directory.Exists(folderPath))
                 {
                     Logging.Debug("adding installer created folder {0}", folder);
-                    ListOfAllItems.AddRange(Utils.DirectorySearch(folderPath, SearchOption.AllDirectories, true));
+                    ListOfAllItems.AddRange(FileUtils.DirectorySearch(folderPath, SearchOption.AllDirectories, true));
                 }
             }
 
@@ -1052,7 +1053,7 @@ namespace RelhaxModpack.InstallerComponents
                 string backupUninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
                 string uninstallLogfile = Path.Combine(Settings.WoTDirectory, "logs", Logging.UninstallLogFilename);
                 if (File.Exists(backupUninstallLogfile))
-                    Utils.FileDelete(backupUninstallLogfile);
+                    FileUtils.FileDelete(backupUninstallLogfile);
                 if (File.Exists(uninstallLogfile))
                     File.Move(uninstallLogfile, backupUninstallLogfile);
 
@@ -1081,7 +1082,7 @@ namespace RelhaxModpack.InstallerComponents
                 Progress.Report(Prog);
                 if (File.Exists(file))
                 {
-                    if (!Utils.FileDelete(file))
+                    if (!FileUtils.FileDelete(file))
                     {
                         success = false;
                         Logging.Error("failed to delete the file {0}", file);
@@ -1105,7 +1106,7 @@ namespace RelhaxModpack.InstallerComponents
                     CancellationToken.ThrowIfCancellationRequested();
                     if (File.Exists(file))
                     {
-                        if (!Utils.FileDelete(file))
+                        if (!FileUtils.FileDelete(file))
                         {
                             success = false;
                             Logging.Error("failed to delete the file {0}", file);
@@ -1124,11 +1125,11 @@ namespace RelhaxModpack.InstallerComponents
             Prog.UninstallStatus = UninstallerExitCodes.PerformFinalClearup;
             Progress.Report(Prog);
             if (Directory.Exists(resModsFolder))
-                if (!Utils.DirectoryDelete(resModsFolder, true))
+                if (!FileUtils.DirectoryDelete(resModsFolder, true))
                     success = false;
             CancellationToken.ThrowIfCancellationRequested();
             if (Directory.Exists(modsFolder))
-                if (!Utils.DirectoryDelete(modsFolder, true))
+                if (!FileUtils.DirectoryDelete(modsFolder, true))
                     success = false;
             CancellationToken.ThrowIfCancellationRequested();
 
@@ -1141,7 +1142,7 @@ namespace RelhaxModpack.InstallerComponents
                 CancellationToken.ThrowIfCancellationRequested();
                 if (Directory.Exists(folder))
                 {
-                    if (!Utils.ProcessEmptyDirectories(folder, false))
+                    if (!FileUtils.ProcessEmptyDirectories(folder, false))
                         success = false;
                     if (logToUninstaller)
                         Logging.WriteToLog(folder, Logfiles.Uninstaller, LogLevel.Info);
@@ -1206,8 +1207,8 @@ namespace RelhaxModpack.InstallerComponents
                 Progress.Report(Prog);
 
                 //get the list of mods to add to the zip
-                List<string> filesToAdd = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList();
-                filesToAdd.AddRange(Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
+                List<string> filesToAdd = FileUtils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList();
+                filesToAdd.AddRange(FileUtils.DirectorySearch(Path.Combine(Settings.WoTDirectory, "res_mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
 
                 //add them to the zip. also get the string to be the path in the zip file, meaning that the root path in the zip file starts at "World_of_Tanks"
                 foreach(string file in filesToAdd)
@@ -1217,7 +1218,7 @@ namespace RelhaxModpack.InstallerComponents
 
                 //clear the list and repeat the process for the appDataFolder
                 filesToAdd.Clear();
-                filesToAdd.AddRange(Utils.DirectorySearch(Settings.AppDataFolder, SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
+                filesToAdd.AddRange(FileUtils.DirectorySearch(Settings.AppDataFolder, SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
                 foreach (string file in filesToAdd)
                 {
                     backupZip.AddFile(file, Path.GetDirectoryName(Path.Combine("appData", file.Substring(Settings.AppDataFolder.Length + 1))));
@@ -1342,7 +1343,7 @@ namespace RelhaxModpack.InstallerComponents
                     //get the list of files to replace
                     Logging.Info("Search root: {0}", macroRootPath);
                     Logging.Info("Search term: {0}", searchPattern);
-                    string[] filesToSave = Utils.DirectorySearch(macroRootPath, SearchOption.AllDirectories, false, searchPattern, 5, 3, false);
+                    string[] filesToSave = FileUtils.DirectorySearch(macroRootPath, SearchOption.AllDirectories, false, searchPattern, 5, 3, false);
 
                     //check if we have files to move
                     if(filesToSave.Count() == 0)
@@ -1448,7 +1449,7 @@ namespace RelhaxModpack.InstallerComponents
 
                 if (File.Exists(s))
                 {
-                    if (!Utils.FileDelete(s))
+                    if (!FileUtils.FileDelete(s))
                     {
                         Logging.Warning("Unable to delete the logfile {0}", Path.GetFileName(s));
                     }
@@ -1527,7 +1528,7 @@ namespace RelhaxModpack.InstallerComponents
                         Logging.Debug("Package {0} has size 0 and zipfile entry, getting size", packa.PackageName);
                         string zipFile = Path.Combine(Settings.RelhaxDownloadsFolderPath, packa.ZipFile);
                         if (File.Exists(zipFile))
-                            packa.Size = (ulong)Utils.GetFilesize(zipFile);
+                            packa.Size = (ulong)FileUtils.GetFilesize(zipFile);
                         Logging.Debug("Size parsed to {0}", packa.Size.ToString());
                     }
                     CancellationToken.ThrowIfCancellationRequested();
@@ -1882,7 +1883,7 @@ namespace RelhaxModpack.InstallerComponents
                     (int)InstallStopWatch.Elapsed.TotalMilliseconds));
 
             //check for any font files to install at all
-            string[] fontsToInstall = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
+            string[] fontsToInstall = FileUtils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
 
             //filter out fontReg
             fontsToInstall = fontsToInstall.Where(filename => !filename.Contains(".exe")).ToArray();
@@ -1896,7 +1897,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     Logging.Debug("checking system installed fonts to remove duplicates");
 
-                    string[] fontscurrentlyInstalled = Utils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly, false, @"*",5,3,false);
+                    string[] fontscurrentlyInstalled = FileUtils.DirectorySearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly, false, @"*",5,3,false);
                     string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
 
                     //remove any fonts whos filename match what is already installed
@@ -2018,7 +2019,7 @@ namespace RelhaxModpack.InstallerComponents
             List<string> zipFilesInDatabase = allFlatList.Select(package => package.ZipFile).ToList();
 
             //get a list of all files in the download cache folder
-            List<string> zipFilesInCache = Utils.DirectorySearch(Settings.RelhaxDownloadsFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip").ToList();
+            List<string> zipFilesInCache = FileUtils.DirectorySearch(Settings.RelhaxDownloadsFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip").ToList();
             if(zipFilesInCache == null)
             {
                 Logging.Error("failed to get list of zip files in download cache, skipping this step");
@@ -2047,7 +2048,7 @@ namespace RelhaxModpack.InstallerComponents
                     Progress.Report(Prog);
                     CancellationToken.ThrowIfCancellationRequested();
 
-                    Utils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolderPath, zipfile));
+                    FileUtils.FileDelete(Path.Combine(Settings.RelhaxDownloadsFolderPath, zipfile));
                 }
             }
             return true;
@@ -2075,7 +2076,7 @@ namespace RelhaxModpack.InstallerComponents
                 bool deleteSuccess = false;
                 if (directoryExists)
                 {
-                    deleteSuccess = Utils.DirectoryDelete(folderPath, true);
+                    deleteSuccess = FileUtils.DirectoryDelete(folderPath, true);
                     if (!deleteSuccess)
                     {
                         success = false;
@@ -2495,7 +2496,7 @@ namespace RelhaxModpack.InstallerComponents
             }
 
             //get the list of all patches in the directory
-            string[] patch_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.PatchFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
+            string[] patch_files = FileUtils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.PatchFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (patch_files == null)
                 Logging.WriteToLog("Failed to parse patches from patch directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
             else
@@ -2514,7 +2515,7 @@ namespace RelhaxModpack.InstallerComponents
                             Logging.WriteToLog("patch file does not exist?? " + completePath, Logfiles.Application, LogLevel.Warning);
                             continue;
                         }
-                        Utils.ApplyNormalFileProperties(completePath);
+                        FileUtils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
                         XmlUtils.AddPatchesFromFile(patches, completePath, OriginalPatchNames[Path.GetFileName(filename)]);
                     }
@@ -2537,7 +2538,7 @@ namespace RelhaxModpack.InstallerComponents
 
             //get a list of all files in the dedicated shortcuts directory
             //foreach one add it to the patch list
-            string[] shortcut_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
+            string[] shortcut_files = FileUtils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (shortcut_files == null)
                 Logging.WriteToLog("Failed to parse shortcuts from directory", Logfiles.Application, LogLevel.Error);
             else if (shortcut_files.Count() == 0)
@@ -2553,7 +2554,7 @@ namespace RelhaxModpack.InstallerComponents
                 {
                     completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
                     //apply "normal" file properties just in case the user's wot install directory is special
-                    Utils.ApplyNormalFileProperties(completePath);
+                    FileUtils.ApplyNormalFileProperties(completePath);
                     //ok NOW actually add the file to the patch list
                     Logging.Info("Adding shortcuts from shortcutFile {1}", Logfiles.Application, filename);
                     XmlUtils.AddShortcutsFromFile(shortcuts, filename);
@@ -2577,7 +2578,7 @@ namespace RelhaxModpack.InstallerComponents
 
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
-            string[] unpack_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
+            string[] unpack_files = FileUtils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.XmlUnpackFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (unpack_files == null)
                 Logging.WriteToLog("Failed to parse xml unpacks from unpack directory", Logfiles.Application, LogLevel.Error);
             else
@@ -2626,7 +2627,7 @@ namespace RelhaxModpack.InstallerComponents
 
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
-            string[] atlas_files = Utils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.AtlasCreationFoldername), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
+            string[] atlas_files = FileUtils.DirectorySearch(Path.Combine(Settings.WoTDirectory, Settings.AtlasCreationFoldername), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (atlas_files == null)
                 Logging.WriteToLog("Failed to parse atlases from atlas directory", Logfiles.Application, LogLevel.Error);
             else
@@ -2640,7 +2641,7 @@ namespace RelhaxModpack.InstallerComponents
                     {
                         completePath = Path.Combine(Settings.WoTDirectory, Settings.ShortcutFolderName, filename);
                         //apply "normal" file properties just in case the user's wot install directory is special
-                        Utils.ApplyNormalFileProperties(completePath);
+                        FileUtils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
                         Logging.Info("Adding atlas entries from file {1}", Logfiles.Application, filename);
                         XmlUtils.AddAtlasFromFile(atlases, filename);
@@ -2734,7 +2735,7 @@ namespace RelhaxModpack.InstallerComponents
                     if(ModpackSettings.BackupModFolder && !string.IsNullOrEmpty(backupZipfileNameForCancelDeletion))
                     {
                         if (File.Exists(backupZipfileNameForCancelDeletion))
-                            Utils.FileDelete(backupZipfileNameForCancelDeletion);
+                            FileUtils.FileDelete(backupZipfileNameForCancelDeletion);
                     }
                 }
                 else

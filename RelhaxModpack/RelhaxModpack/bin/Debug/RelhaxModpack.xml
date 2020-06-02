@@ -103,6 +103,11 @@
             A utility class for Atlas file processing
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Atlases.AtlasUtils.MSVCPLink">
+            <summary>
+            The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Atlases.AtlasUtils.FreeImageLibrary">
             <summary>
             The manager instance of the FreeImage Library
@@ -3514,6 +3519,285 @@
             <param name="item">The item to test</param>
             <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
         </member>
+        <member name="T:RelhaxModpack.Utilities.KnownFolder">
+            <summary>
+            Standard folders registered with the system. These folders are installed with Windows Vista
+            and later operating systems, and a computer will have only folders appropriate to it
+            installed.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.Contacts">
+            <summary>
+            The user's Contacts folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.Desktop">
+            <summary>
+            The user's Desktop folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.Documents">
+            <summary>
+            The user's Documents folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.Downloads">
+            <summary>
+            The user's Downloads folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.Favorites">
+            <summary>
+            The user's Favorites folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.Links">
+            <summary>
+            The user's Links folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.Music">
+            <summary>
+            The user's Music folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.Pictures">
+            <summary>
+            The user's Pictures folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.SavedGames">
+            <summary>
+            The user's Pictures folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.SavedSearches">
+            <summary>
+            The user's SavedGames folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.KnownFolder.Videos">
+            <summary>
+            The user's Videos folder
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.FileUtils">
+            <summary>
+            A Utility class to deal with Files and Folders
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.FileUtils.SizeSuffixes">
+            <summary>
+            A list of file size constructs from bytes to Yotabytes
+            </summary>
+            <remarks>{ "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" }</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.FileUtils.BYTES_TO_MBYTES">
+            <summary>
+            Multiply by this to convert bytes to megabytes
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.CreateMD5Hash(System.String)">
+            <summary>
+            Creates an MD5 hash calculation of the input file
+            </summary>
+            <param name="inputFile">The path to the file to calculate</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.CreateMD5Hash(System.IO.Stream)">
+            <summary>
+            Creates an MD5 hash calculation from and stream object
+            </summary>
+            <param name="stream">The stream object to calculate from</param>
+            <returns>The MD5 calculated hash</returns>
+            <exception cref="T:System.ArgumentNullException"/>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.CreateMD5HashAsync(System.String)">
+            <summary>
+            Creates an MD5 hash calculation of the input file
+            </summary>
+            <param name="inputFile">The path to the file to calculate</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.CreateMD5HashAsync(System.IO.Stream)">
+            <summary>
+            Creates an MD5 hash calculation from and stream object
+            </summary>
+            <param name="stream">The stream object to calculate from</param>
+            <returns>The MD5 calculated hash</returns>
+            <exception cref="T:System.ArgumentNullException"/>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.GetStringFromZip(System.String,System.String,System.String)">
+            <summary>
+            Gets a zip file entry in the form of a string
+            </summary>
+            <param name="zipFilename">The path to the file in the zip</param>
+            <param name="archivedFilename">the path to the zip file</param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.GetStringFromZip(Ionic.Zip.ZipFile,System.String,System.String)">
+            <summary>
+            Gets the string contents of a text based file inside a zip file
+            </summary>
+            <param name="zip">The zipfile to extract the entry from</param>
+            <param name="archivedFilename">The archive path to the entry</param>
+            <param name="password">The password to use when extracting the entry. Leave blank for no password</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.ProcessEmptyDirectories(System.String,System.Boolean,System.UInt32,System.UInt32)">
+            <summary>
+            Deletes any empty directories from a given path
+            </summary>
+            <param name="startLocation">The location to start from. Includes deleting empty directories from this point</param>
+            <param name="recursive">Toggle to check inside the starting location for empty folders</param>
+            <param name="numRetrys">The number of times the method should retry after receiving an exception</param>
+            <param name="timeout">The time to wait between retries</param>
+            <returns>True if the operation completed successfully, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.SizeSuffix(System.UInt64,System.UInt32,System.Boolean,System.Boolean)">
+            <summary>
+            Calculates and returns the size magnitude of the file (kilo, mega, giga...)
+            </summary>
+            <param name="value">The file size in bytes</param>
+            <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
+            <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
+            <param name="ignoreSizeWarningIf0">If set to true, the application log will not show values about the passed in value for size calculation being 0. 
+            File of 0 size, for example.</param>
+            <returns>The string representation to decimalPlaces of the file size optionally with the bytes parameter</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.GetFilesize(System.String)">
+            <summary>
+            Gets the size of the file in bytes
+            </summary>
+            <param name="filepath">The string path to the file</param>
+            <returns>The size of the file in bytes</returns>
+            <remarks>This is a wrapper for the FileInfo.Length property</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.GetValidFilename(System.String)">
+            <summary>
+            Checks if a filename has invalid characters and replaces them with underscores
+            </summary>
+            <param name="fileName">The filename to replace characters from</param>
+            <returns>The filename with valid characters</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.FileMove(System.String,System.String,System.UInt32,System.UInt32)">
+            <summary>
+            Attempts to move a file from source to destination with numRetrys, with a file timeout of timeout
+            </summary>
+            <param name="source">The source file to move</param>
+            <param name="destination">The destination of the file to move</param>
+            <param name="numRetrys">The number of fail retries if it failes to move the file</param>
+            <param name="timeout">The timeout, in milliseconds, to wait between faliures</param>
+            <returns>True if the file was moved, false otherwise</returns>
+            <remarks>This method does NOT work to move a file across physical drives. 
+            This method does NOT check if the destination file already exists.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.FileDelete(System.String,System.UInt32,System.UInt32)">
+            <summary>
+            Tries to delete a file from the given path
+            </summary>
+            <param name="file">The file to delete</param>
+            <param name="numRetrys">The number of retires if an exception is encountered</param>
+            <param name="timeout">The number of milliseconds between retries</param>
+            <returns>True is the file operation was successful, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.DirectoryDelete(System.String,System.Boolean,System.Boolean,System.UInt32,System.UInt32,System.String)">
+            <summary>
+            Deletes files in a directory
+            </summary>
+            <param name="folderPath">The directory to delete files in</param>
+            <param name="deleteSubfolders">Toggle if the method should recursively look inside directory</param>
+            <param name="deleteRoot">Toggle if the method should delete the folderPath directory</param>
+            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+            <param name="timeout">The time in milliseconds between retries</param>
+            <param name="pattern">The pattern of files to search for in a directory</param>
+            <returns>True if the complete operation was a success, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.DirectoryDeleteAsync(System.String,System.Boolean,System.Boolean,System.UInt32,System.UInt32,System.String)">
+            <summary>
+            Async wrapper around DirectoryDelete() method. Deletes files in a directory
+            </summary>
+            <param name="folderPath">The directory to delete files in</param>
+            <param name="deleteSubfolders">Toggle if the method should recursively look inside directory</param>
+            <param name="deleteRoot">Toggle if the method should delete the folderPath directory</param>
+            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+            <param name="timeout">The time in milliseconds between retries</param>
+            <param name="pattern">The pattern of files to search for in a directory</param>
+            <returns>True if the complete operation was a success, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.DirectoryMove(System.String,System.String,System.Boolean,System.UInt32,System.UInt32,System.String)">
+            <summary>
+            Move a directory and its files to a new location. Works across drive letters.
+            </summary>
+            <param name="source">The source path of the directory to move from</param>
+            <param name="destination">The destination path of the directory to move to</param>
+            <param name="recursive">Toggle if the sub-folders and files should be moved as well</param>
+            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+            <param name="timeout">The time in milliseconds between retries</param>
+            <param name="pattern">The pattern of files to search for in a directory</param>
+            <remarks>The DirectoryMove method works across drive letters and other physical separate drives because it deletes and re-creates folders rather then trying to move them</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.DirectoryCopy(System.String,System.String,System.Boolean,System.UInt32,System.UInt32,System.String)">
+            <summary>
+            Copy a directory and its files to a new location
+            </summary>
+            <param name="source">The source path of the directory to move from</param>
+            <param name="destination">The destination path of the directory to move to</param>
+            <param name="recursive">Toggle if the sub-folders and files should be moved as well</param>
+            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+            <param name="timeout">The time in milliseconds between retries</param>
+            <param name="pattern">The pattern of files to search for in a directory</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.DirectorySearch(System.String,System.IO.SearchOption,System.Boolean,System.String,System.UInt32,System.UInt32,System.Boolean)">
+            <summary>
+            Return a list of files from a directory
+            </summary>
+            <param name="directoryPath">The directory to search for files</param>
+            <param name="option">Specifies to search this top directory or subdirectories to the Directory.GetFiles() method</param>
+            <param name="includeDirectoryRoot">Toggle if the directoryPath should be included in the list of files</param>
+            <param name="searchPattern">The search pattern for finding files in a directory</param>
+            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+            <param name="timeout">The time in milliseconds between retries</param>
+            <param name="applyFolderProperties">Toggle if the "Normal" file property as assigned to these files at the same time</param>
+            <returns>The list of files if the search operation was successful, otherwise null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.ApplyNormalFileProperties(System.String)">
+            <summary>
+            Applies the "Normal" file attribute to a file
+            </summary>
+            <param name="file">The file to apply normal attributes to</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.RemoveWoT32bit64bitPathIfExists(System.String)">
+            <summary>
+            Removes the directory character and Wots 'win32' and/or 'win64' directories if it exists in the string
+            </summary>
+            <param name="wotPath">The path to the WoT exe</param>
+            <returns>The absolute directory path to the World_of_Tanks folder</returns>
+            <remarks>This is for in case the user specifies the WoT exe inside the win32 and/or win64 folders</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.GetSpecialFolderPath(RelhaxModpack.Utilities.KnownFolder)">
+            <summary>
+            Gets the current path to the specified known folder as currently configured. This does
+            not require the folder to be existent.
+            </summary>
+            <param name="knownFolder">The known folder which current path will be returned.</param>
+            <returns>The default path of the known folder.</returns>
+            <exception cref="T:System.Runtime.InteropServices.ExternalException">Thrown if the path
+                could not be retrieved.</exception>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.GetSpecialFolderPath(RelhaxModpack.Utilities.KnownFolder,System.Boolean)">
+            <summary>
+            Gets the current path to the specified known folder as currently configured. This does
+            not require the folder to be existent.
+            </summary>
+            <param name="knownFolder">The known folder which current path will be returned.</param>
+            <param name="defaultUser">Specifies if the paths of the default user (user profile
+                template) will be used. This requires administrative rights.</param>
+            <returns>The default path of the known folder.</returns>
+            <exception cref="T:System.Runtime.InteropServices.ExternalException">Thrown if the path
+                could not be retrieved.</exception>
+        </member>
         <member name="T:RelhaxModpack.Utilities.FtpUtils">
             <summary>
             A Utility class for handling FTP connections
@@ -3592,6 +3876,73 @@
             <param name="address">The complete path to the FTP file</param>
             <param name="credentials">The FTP server credentials</param>
             <returns>The size of the file in bytes</returns>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.PatchExitCode">
+            <summary>
+            Exit codes during a patch operation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.PatchExitCode.Success">
+            <summary>
+            The patch operation succeeded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.PatchExitCode.Warning">
+            <summary>
+            The patch operation succeeded, but with warnings
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.PatchExitCode.Error">
+            <summary>
+            The patch operation did not succeeded
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.PatchUtils">
+            <summary>
+            A class for handling patch operations
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.PatchUtils.PatchJsonNullEscape">
+            <summary>
+            Provides the ability to insert a 'null' value into json configurations
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.PatchUtils.RunPatch(RelhaxModpack.Patch)">
+            <summary>
+            Run a patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.PatchUtils.XMLPatch(RelhaxModpack.Patch)">
+            <summary>
+            Run an XML patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.PatchUtils.RegxPatch(RelhaxModpack.Patch,System.Int32[])">
+            <summary>
+            Run a regex patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <param name="lines">The lines to patch on the file.</param>
+            <returns>The operation exit code</returns>
+            <remarks>Can be used to "batch patch" an xml or json file. See Database examples.
+            Use -1 to indicate the whole file is being patched. Use 0 to check every line.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.PatchUtils.JsonPatch(RelhaxModpack.Patch)">
+            <summary>
+            Run a Json patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.PatchUtils.GetXvmFolderName">
+            <summary>
+            Gets the absolute path to the Xvm configuration folder
+            </summary>
+            <returns>The absolute path of the Xvm configuration folder if it exists, otherwise returns "default"</returns>
         </member>
         <member name="T:RelhaxModpack.Atlas">
             <summary>
@@ -7202,68 +7553,6 @@
         <member name="F:RelhaxModpack.CiInfo.BuildTag">
             <summary>String of the build number and build date/time, and other useful info.</summary> 
         </member>
-        <member name="T:RelhaxModpack.PatchExitCode">
-            <summary>
-            Exit codes during a patch operation
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.PatchExitCode.Success">
-            <summary>
-            The patch operation succeeded
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.PatchExitCode.Warning">
-            <summary>
-            The patch operation succeeded, but with warnings
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.PatchExitCode.Error">
-            <summary>
-            The patch operation did not succeeded
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.PatchUtils">
-            <summary>
-            A class for handling patch operations
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.PatchUtils.RunPatch(RelhaxModpack.Patch)">
-            <summary>
-            Run a patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.PatchUtils.XMLPatch(RelhaxModpack.Patch)">
-            <summary>
-            Run an XML patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.PatchUtils.RegxPatch(RelhaxModpack.Patch,System.Int32[])">
-            <summary>
-            Run a regex patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <param name="lines">The lines to patch on the file.</param>
-            <returns>The operation exit code</returns>
-            <remarks>Can be used to "batch patch" an xml or json file. See Database examples.
-            Use -1 to indicate the whole file is being patched. Use 0 to check every line.</remarks>
-        </member>
-        <member name="M:RelhaxModpack.PatchUtils.JsonPatch(RelhaxModpack.Patch)">
-            <summary>
-            Run a Json patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.PatchUtils.GetXvmFolderName">
-            <summary>
-            Gets the absolute path to the Xvm configuration folder
-            </summary>
-            <returns>The absolute path of the Xvm configuration folder if it exists, otherwise returns "default"</returns>
-        </member>
         <member name="T:RelhaxModpack.PatientWebClient">
             <summary>
             A WebClient that allows the use to set a custom timeout value
@@ -7523,68 +7812,6 @@
             The absolute folder path to the desired registry entries
             </summary>
         </member>
-        <member name="T:RelhaxModpack.KnownFolder">
-            <summary>
-            Standard folders registered with the system. These folders are installed with Windows Vista
-            and later operating systems, and a computer will have only folders appropriate to it
-            installed.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.Contacts">
-            <summary>
-            The user's Contacts folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.Desktop">
-            <summary>
-            The user's Desktop folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.Documents">
-            <summary>
-            The user's Documents folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.Downloads">
-            <summary>
-            The user's Downloads folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.Favorites">
-            <summary>
-            The user's Favorites folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.Links">
-            <summary>
-            The user's Links folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.Music">
-            <summary>
-            The user's Music folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.Pictures">
-            <summary>
-            The user's Pictures folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.SavedGames">
-            <summary>
-            The user's Pictures folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.SavedSearches">
-            <summary>
-            The user's SavedGames folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.KnownFolder.Videos">
-            <summary>
-            The user's Videos folder
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Utils">
             <summary>
             A utility class for static functions used in various places in the modpack
@@ -7598,22 +7825,6 @@
         <member name="F:RelhaxModpack.Utils.TO_MINUETS">
             <summary>
             Multiply by this value to convert seconds to minuets
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.SizeSuffixes">
-            <summary>
-            A list of file size constructs from bytes to Yotabytes
-            </summary>
-            <remarks>{ "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" }</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Utils.BYTES_TO_MBYTES">
-            <summary>
-            Multiply by this to convert bytes to megabytes
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.MSVCPLink">
-            <summary>
-            The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utils.FilePathDict">
@@ -7639,11 +7850,6 @@
         <member name="F:RelhaxModpack.Utils.TextEscapeDict">
             <summary>
             The dictionary to store literal versions of characters with their escaped versions
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.PatchJsonNullEscape">
-            <summary>
-            Provides the ability to insert a 'null' value into json configurations
             </summary>
         </member>
         <member name="M:RelhaxModpack.Utils.GetAssemblyName(System.String)">
@@ -7733,185 +7939,6 @@
             </summary>
             <param name="window">The window to apply scaling to</param>
             <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.CreateMD5Hash(System.String)">
-            <summary>
-            Creates an MD5 hash calculation of the input file
-            </summary>
-            <param name="inputFile">The path to the file to calculate</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.CreateMD5Hash(System.IO.Stream)">
-            <summary>
-            Creates an MD5 hash calculation from and stream object
-            </summary>
-            <param name="stream">The stream object to calculate from</param>
-            <returns>The MD5 calculated hash</returns>
-            <exception cref="T:System.ArgumentNullException"/>
-        </member>
-        <member name="M:RelhaxModpack.Utils.CreateMD5HashAsync(System.String)">
-            <summary>
-            Creates an MD5 hash calculation of the input file
-            </summary>
-            <param name="inputFile">The path to the file to calculate</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.CreateMD5HashAsync(System.IO.Stream)">
-            <summary>
-            Creates an MD5 hash calculation from and stream object
-            </summary>
-            <param name="stream">The stream object to calculate from</param>
-            <returns>The MD5 calculated hash</returns>
-            <exception cref="T:System.ArgumentNullException"/>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetStringFromZip(System.String,System.String,System.String)">
-            <summary>
-            Gets a zip file entry in the form of a string
-            </summary>
-            <param name="zipFilename">The path to the file in the zip</param>
-            <param name="archivedFilename">the path to the zip file</param>
-            <param name="password"></param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetStringFromZip(Ionic.Zip.ZipFile,System.String,System.String)">
-            <summary>
-            Gets the string contents of a text based file inside a zip file
-            </summary>
-            <param name="zip">The zipfile to extract the entry from</param>
-            <param name="archivedFilename">The archive path to the entry</param>
-            <param name="password">The password to use when extracting the entry. Leave blank for no password</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.ProcessEmptyDirectories(System.String,System.Boolean,System.UInt32,System.UInt32)">
-            <summary>
-            Deletes any empty directories from a given path
-            </summary>
-            <param name="startLocation">The location to start from. Includes deleting empty directories from this point</param>
-            <param name="recursive">Toggle to check inside the starting location for empty folders</param>
-            <param name="numRetrys">The number of times the method should retry after receiving an exception</param>
-            <param name="timeout">The time to wait between retries</param>
-            <returns>True if the operation completed successfully, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.SizeSuffix(System.UInt64,System.UInt32,System.Boolean,System.Boolean)">
-            <summary>
-            Calculates and returns the size magnitude of the file (kilo, mega, giga...)
-            </summary>
-            <param name="value">The file size in bytes</param>
-            <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
-            <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
-            <param name="ignoreSizeWarningIf0">If set to true, the application log will not show values about the passed in value for size calculation being 0. 
-            File of 0 size, for example.</param>
-            <returns>The string representation to decimalPlaces of the file size optionally with the bytes parameter</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetFilesize(System.String)">
-            <summary>
-            Gets the size of the file in bytes
-            </summary>
-            <param name="filepath">The string path to the file</param>
-            <returns>The size of the file in bytes</returns>
-            <remarks>This is a wrapper for the FileInfo.Length property</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetValidFilename(System.String)">
-            <summary>
-            Checks if a filename has invalid characters and replaces them with underscores
-            </summary>
-            <param name="fileName">The filename to replace characters from</param>
-            <returns>The filename with valid characters</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FileMove(System.String,System.String,System.UInt32,System.UInt32)">
-            <summary>
-            Attempts to move a file from source to destination with numRetrys, with a file timeout of timeout
-            </summary>
-            <param name="source">The source file to move</param>
-            <param name="destination">The destination of the file to move</param>
-            <param name="numRetrys">The number of fail retries if it failes to move the file</param>
-            <param name="timeout">The timeout, in milliseconds, to wait between faliures</param>
-            <returns>True if the file was moved, false otherwise</returns>
-            <remarks>This method does NOT work to move a file across physical drives. 
-            This method does NOT check if the destination file already exists.</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FileDelete(System.String,System.UInt32,System.UInt32)">
-            <summary>
-            Tries to delete a file from the given path
-            </summary>
-            <param name="file">The file to delete</param>
-            <param name="numRetrys">The number of retires if an exception is encountered</param>
-            <param name="timeout">The number of milliseconds between retries</param>
-            <returns>True is the file operation was successful, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.DirectoryDelete(System.String,System.Boolean,System.Boolean,System.UInt32,System.UInt32,System.String)">
-            <summary>
-            Deletes files in a directory
-            </summary>
-            <param name="folderPath">The directory to delete files in</param>
-            <param name="deleteSubfolders">Toggle if the method should recursively look inside directory</param>
-            <param name="deleteRoot">Toggle if the method should delete the folderPath directory</param>
-            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
-            <param name="timeout">The time in milliseconds between retries</param>
-            <param name="pattern">The pattern of files to search for in a directory</param>
-            <returns>True if the complete operation was a success, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.DirectoryDeleteAsync(System.String,System.Boolean,System.Boolean,System.UInt32,System.UInt32,System.String)">
-            <summary>
-            Async wrapper around DirectoryDelete() method. Deletes files in a directory
-            </summary>
-            <param name="folderPath">The directory to delete files in</param>
-            <param name="deleteSubfolders">Toggle if the method should recursively look inside directory</param>
-            <param name="deleteRoot">Toggle if the method should delete the folderPath directory</param>
-            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
-            <param name="timeout">The time in milliseconds between retries</param>
-            <param name="pattern">The pattern of files to search for in a directory</param>
-            <returns>True if the complete operation was a success, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.DirectoryMove(System.String,System.String,System.Boolean,System.UInt32,System.UInt32,System.String)">
-            <summary>
-            Move a directory and its files to a new location. Works across drive letters.
-            </summary>
-            <param name="source">The source path of the directory to move from</param>
-            <param name="destination">The destination path of the directory to move to</param>
-            <param name="recursive">Toggle if the sub-folders and files should be moved as well</param>
-            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
-            <param name="timeout">The time in milliseconds between retries</param>
-            <param name="pattern">The pattern of files to search for in a directory</param>
-            <remarks>The DirectoryMove method works across drive letters and other physical separate drives because it deletes and re-creates folders rather then trying to move them</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Utils.DirectoryCopy(System.String,System.String,System.Boolean,System.UInt32,System.UInt32,System.String)">
-            <summary>
-            Copy a directory and its files to a new location
-            </summary>
-            <param name="source">The source path of the directory to move from</param>
-            <param name="destination">The destination path of the directory to move to</param>
-            <param name="recursive">Toggle if the sub-folders and files should be moved as well</param>
-            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
-            <param name="timeout">The time in milliseconds between retries</param>
-            <param name="pattern">The pattern of files to search for in a directory</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.DirectorySearch(System.String,System.IO.SearchOption,System.Boolean,System.String,System.UInt32,System.UInt32,System.Boolean)">
-            <summary>
-            Return a list of files from a directory
-            </summary>
-            <param name="directoryPath">The directory to search for files</param>
-            <param name="option">Specifies to search this top directory or subdirectories to the Directory.GetFiles() method</param>
-            <param name="includeDirectoryRoot">Toggle if the directoryPath should be included in the list of files</param>
-            <param name="searchPattern">The search pattern for finding files in a directory</param>
-            <param name="numRetrys">The number of retires to delete a file entry before failing</param>
-            <param name="timeout">The time in milliseconds between retries</param>
-            <param name="applyFolderProperties">Toggle if the "Normal" file property as assigned to these files at the same time</param>
-            <returns>The list of files if the search operation was successful, otherwise null</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.ApplyNormalFileProperties(System.String)">
-            <summary>
-            Applies the "Normal" file attribute to a file
-            </summary>
-            <param name="file">The file to apply normal attributes to</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.RemoveWoT32bit64bitPathIfExists(System.String)">
-            <summary>
-            Removes the directory character and Wots 'win32' and/or 'win64' directories if it exists in the string
-            </summary>
-            <param name="wotPath">The path to the WoT exe</param>
-            <returns>The absolute directory path to the World_of_Tanks folder</returns>
-            <remarks>This is for in case the user specifies the WoT exe inside the win32 and/or win64 folders</remarks>
         </member>
         <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean)">
             <summary>
@@ -8470,28 +8497,6 @@
             Clear the WoT appdata cache folder
             </summary>
             <returns>True if clearing operation was sucessfull, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetSpecialFolderPath(RelhaxModpack.KnownFolder)">
-            <summary>
-            Gets the current path to the specified known folder as currently configured. This does
-            not require the folder to be existent.
-            </summary>
-            <param name="knownFolder">The known folder which current path will be returned.</param>
-            <returns>The default path of the known folder.</returns>
-            <exception cref="T:System.Runtime.InteropServices.ExternalException">Thrown if the path
-                could not be retrieved.</exception>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetSpecialFolderPath(RelhaxModpack.KnownFolder,System.Boolean)">
-            <summary>
-            Gets the current path to the specified known folder as currently configured. This does
-            not require the folder to be existent.
-            </summary>
-            <param name="knownFolder">The known folder which current path will be returned.</param>
-            <param name="defaultUser">Specifies if the paths of the default user (user profile
-                template) will be used. This requires administrative rights.</param>
-            <returns>The default path of the known folder.</returns>
-            <exception cref="T:System.Runtime.InteropServices.ExternalException">Thrown if the path
-                could not be retrieved.</exception>
         </member>
         <member name="T:RelhaxModpack.Xml.XmlLoadType">
             <summary>

@@ -9,6 +9,7 @@ using TeximpNet.Unmanaged;
 using Ionic.Zip;
 using RelhaxModpack.Atlases;
 using TeximpNet;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack
 {
@@ -58,7 +59,7 @@ namespace RelhaxModpack
                     return false;
                 }
                 Logging.Info("Teximpnet library file exists, checking if latest via Hash comparison not exist, extracting: {0}", EmbeddedFilename);
-                string extractedHash = Utils.CreateMD5Hash(Filepath);
+                string extractedHash = FileUtils.CreateMD5Hash(Filepath);
                 Logging.Debug("{0} hash local:    {1}", EmbeddedFilename, extractedHash);
 
                 //file exists, but is it up to date?
@@ -68,7 +69,7 @@ namespace RelhaxModpack
                 using (ZipFile zout = ZipFile.Read(stream))
                 using (Stream dllStream = zout[0].OpenReader())
                 {
-                    embeddedHash = Utils.CreateMD5Hash(dllStream);
+                    embeddedHash = FileUtils.CreateMD5Hash(dllStream);
                 }
                 Logging.Debug("{0} hash internal: {1}", EmbeddedFilename, embeddedHash);
                 return extractedHash.Equals(embeddedHash);

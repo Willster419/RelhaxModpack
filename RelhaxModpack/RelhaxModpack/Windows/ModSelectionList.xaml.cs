@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using System.Reflection;
 using System.Text;
 using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -353,7 +354,7 @@ namespace RelhaxModpack.Windows
                                 //save zip file into memory for later
                                 zipfile = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL)));
                                 //extract modinfo xml string
-                                modInfoXml = Utils.GetStringFromZip(zipfile, "database.xml");
+                                modInfoXml = FileUtils.GetStringFromZip(zipfile, "database.xml");
                             }
                         }
                         catch (Exception)
@@ -421,17 +422,17 @@ namespace RelhaxModpack.Windows
 
                         string globalDependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file");
                         Logging.Debug("Found xml entry: {0}", globalDependencyFilename);
-                        string globalDependencyXmlString = Utils.GetStringFromZip(zipfile, globalDependencyFilename);
+                        string globalDependencyXmlString = FileUtils.GetStringFromZip(zipfile, globalDependencyFilename);
 
                         string dependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file");
                         Logging.Debug("Found xml entry: {0}", dependencyFilename);
-                        string dependenicesXmlString = Utils.GetStringFromZip(zipfile, dependencyFilename);
+                        string dependenicesXmlString = FileUtils.GetStringFromZip(zipfile, dependencyFilename);
 
                         foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
                         {
                             string categoryFilename = categoryNode.Attributes["file"].Value;
                             Logging.Debug("Found xml entry: {0}", categoryFilename);
-                            categoriesXml.Add(Utils.GetStringFromZip(zipfile, categoryFilename));
+                            categoriesXml.Add(FileUtils.GetStringFromZip(zipfile, categoryFilename));
                         }
                         zipfile.Dispose();
                         zipfile = null;
@@ -656,7 +657,7 @@ namespace RelhaxModpack.Windows
                         if (!File.Exists(Settings.LastInstalledConfigFilepath))
                         {
                             Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
-                            SelectionsDocument = XmlUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                            SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                             shouldLoadSomethingFilepath = null;
                             shouldLoadSomething = true;
                         }
@@ -671,7 +672,7 @@ namespace RelhaxModpack.Windows
                     else
                     {
                         //load default checked mods
-                        SelectionsDocument = XmlUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                        SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                         shouldLoadSomethingFilepath = null;
                         shouldLoadSomething = true;
                     }
@@ -763,7 +764,7 @@ namespace RelhaxModpack.Windows
         private void InitUsermods()
         {
             //get a list of all zip files in the folder
-            string[] zipFilesUserMods = Utils.DirectorySearch(Settings.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
+            string[] zipFilesUserMods = FileUtils.DirectorySearch(Settings.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
 
             //init database components
             UserCategory = new Category()
@@ -1958,7 +1959,7 @@ namespace RelhaxModpack.Windows
                     File.Delete(backupFilepath);
                 }
 
-                Utils.FileMove(loadPath, backupFilepath, 3, 100);
+                FileUtils.FileMove(loadPath, backupFilepath, 3, 100);
                 SaveSelectionV3(loadPath, true);
             }
 
@@ -2298,7 +2299,7 @@ namespace RelhaxModpack.Windows
                 userPackageFromDatabase.Checked = true;
 
                 //check crc for up to date
-                if (!userPackage.CRC.Equals(Utils.CreateMD5Hash(userPackage.ZipFile)))
+                if (!userPackage.CRC.Equals(FileUtils.CreateMD5Hash(userPackage.ZipFile)))
                 {
                     Logging.Debug(LogOptions.MethodName, "Md5 hash values do not match, setting userOutOfDate");
                     userOutOfDate = true;
@@ -2329,8 +2330,8 @@ namespace RelhaxModpack.Windows
                 string pathBackup = Path.Combine(Path.GetDirectoryName(loadPath), filenameBackup);
 
                 if (File.Exists(pathBackup))
-                    Utils.FileDelete(pathBackup, 3, 100);
-                Utils.FileMove(loadPath, pathBackup, 3, 100);
+                    FileUtils.FileDelete(pathBackup, 3, 100);
+                FileUtils.FileMove(loadPath, pathBackup, 3, 100);
 
                 SaveSelectionV3(loadPath, true);
             }
@@ -2642,7 +2643,7 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Info("Adding user package {0}", package.PackageName);
                     XElement packagee = new XElement("package", new XAttribute("name", package.Name));
-                    packagee.Add(new XAttribute("crc", Utils.CreateMD5Hash(package.ZipFile)));
+                    packagee.Add(new XAttribute("crc", FileUtils.CreateMD5Hash(package.ZipFile)));
                     nodeUserMods.Add(packagee);
                 }
             }
@@ -2933,7 +2934,7 @@ namespace RelhaxModpack.Windows
             if (hash == "-1")   //file not found in database
             {
                 //create Md5Hash from file
-                hash = Utils.CreateMD5Hash(inputFile);
+                hash = FileUtils.CreateMD5Hash(inputFile);
 
                 if (hash == "-1")
                 {

@@ -179,7 +179,7 @@ namespace RelhaxModpack.Windows
             if (File.Exists(downloadPathCurrent))
             {
                 Logging.Editor("Current filename already exists, hashing for version");
-                string hash = await Utils.CreateMD5HashAsync(downloadPathCurrent);
+                string hash = await FileUtils.CreateMD5HashAsync(downloadPathCurrent);
                 Logging.Editor("Database MD5: {0}", LogLevel.Info, package.CRC);
                 Logging.Editor("Download MD5: {0}", LogLevel.Info, hash);
                 if (hash.Equals(package.CRC))
@@ -427,11 +427,11 @@ namespace RelhaxModpack.Windows
                         updateInstructions.WotmodOldFilenameInZip = entry.FileName;
                     }
                 }
-                updateInstructions.WotmodDatabaseMD5 = await Utils.CreateMD5HashAsync(wotmodEntry.OpenReader());
+                updateInstructions.WotmodDatabaseMD5 = await FileUtils.CreateMD5HashAsync(wotmodEntry.OpenReader());
             }
 
             //compare md5 of file in database zip to md5 of downloaded file
-            updateInstructions.WotmodDownloadedMD5 = await Utils.CreateMD5HashAsync(downloadInstructions.DownloadedFileLocation);
+            updateInstructions.WotmodDownloadedMD5 = await FileUtils.CreateMD5HashAsync(downloadInstructions.DownloadedFileLocation);
             Logging.Editor("MD5 of download wotmod: {0}", LogLevel.Info, updateInstructions.WotmodDownloadedMD5);
             Logging.Editor("MD5 of database wotmod: {0}", LogLevel.Info, updateInstructions.WotmodDatabaseMD5);
 

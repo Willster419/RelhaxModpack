@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Controls;
 using System.Text;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack
 {
@@ -692,7 +693,7 @@ namespace RelhaxModpack
                 {
                     nameDisplay = string.Format("{0} ({1})", nameDisplay, Translations.GetTranslatedString("updated"));
                     if (Size > 0)
-                        nameDisplay = string.Format("{0} ({1})", nameDisplay, Utils.SizeSuffix(Size, 1, true));
+                        nameDisplay = string.Format("{0} ({1})", nameDisplay, FileUtils.SizeSuffix(Size, 1, true));
                 }
                 //escape character fix
                 return nameDisplay.Replace("_","__");

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,6 +16,11 @@ namespace RelhaxModpack.Atlases
     /// </summary>
     public static class AtlasUtils
     {
+        /// <summary>
+        /// The link to the Microsoft Visual C++ dll package required by the atlas processing libraries
+        /// </summary>
+        public const string MSVCPLink = "https://www.microsoft.com/en-us/download/details.aspx?id=40784";
+
         /// <summary>
         /// The manager instance of the FreeImage Library
         /// </summary>
@@ -141,7 +147,7 @@ namespace RelhaxModpack.Atlases
                         continue;
                     }
 
-                    ModContourIconFilesList.AddRange(Utils.DirectorySearch(realFolder, SearchOption.TopDirectoryOnly, false, "*", 5, 3, false));
+                    ModContourIconFilesList.AddRange(FileUtils.DirectorySearch(realFolder, SearchOption.TopDirectoryOnly, false, "*", 5, 3, false));
                 }
 
                 //filter the list to just image files

@@ -12,6 +12,7 @@ using System.Net;
 using System.Xml;
 using System.Windows.Threading;
 using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -860,7 +861,7 @@ namespace RelhaxModpack.Windows
             {
                 GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                 {
-                    Text = string.Format("File={0}, Size={1}", pfp.Filename, Utils.SizeSuffix(pfp.Size, 1, true, false)),
+                    Text = string.Format("File={0}, Size={1}", pfp.Filename, FileUtils.SizeSuffix(pfp.Size, 1, true, false)),
                     Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
                 });
             }
@@ -942,8 +943,8 @@ namespace RelhaxModpack.Windows
         #region UI events
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            GcDownloadStep4DownloadingSizes.Text = string.Format("{0} {1} {2}", Utils.SizeSuffix((ulong)e.BytesReceived,1,true,false),
-                Translations.GetTranslatedString("of"), Utils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true, false));
+            GcDownloadStep4DownloadingSizes.Text = string.Format("{0} {1} {2}", FileUtils.SizeSuffix((ulong)e.BytesReceived,1,true,false),
+                Translations.GetTranslatedString("of"), FileUtils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true, false));
             GcDownloadStep4SingleFileProgress.Maximum = e.TotalBytesToReceive;
             GcDownloadStep4SingleFileProgress.Value = e.BytesReceived;
         }

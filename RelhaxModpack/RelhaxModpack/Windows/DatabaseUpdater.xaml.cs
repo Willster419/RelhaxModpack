@@ -342,7 +342,7 @@ namespace RelhaxModpack.Windows
             foreach (string s in zipsToHash.FileNames)
             {
                 ReportProgress(string.Format("hash of {0}:", Path.GetFileName(s)));
-                ReportProgress(await Utils.CreateMD5HashAsync(s));
+                ReportProgress(await FileUtils.CreateMD5HashAsync(s));
             }
             ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -743,19 +743,19 @@ namespace RelhaxModpack.Windows
                     using (Ionic.Zip.ZipFile zipfile = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL))))
                     {
                         //extract modinfo xml string
-                        string modInfoXml = Utils.GetStringFromZip(zipfile, "database.xml");
+                        string modInfoXml = FileUtils.GetStringFromZip(zipfile, "database.xml");
                         doc = XmlUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromString);
 
                         string globalDependencyFilename = XmlUtils.GetXmlStringFromXPath(doc, "/modInfoAlpha.xml/globalDependencies/@file");
-                        globalDependencyXmlString = Utils.GetStringFromZip(zipfile, globalDependencyFilename);
+                        globalDependencyXmlString = FileUtils.GetStringFromZip(zipfile, globalDependencyFilename);
 
                         string dependencyFilename = XmlUtils.GetXmlStringFromXPath(doc, "/modInfoAlpha.xml/dependencies/@file");
-                        dependenicesXmlString = Utils.GetStringFromZip(zipfile, dependencyFilename);
+                        dependenicesXmlString = FileUtils.GetStringFromZip(zipfile, dependencyFilename);
 
                         foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(doc, "//modInfoAlpha.xml/categories/category"))
                         {
                             string categoryFilename = categoryNode.Attributes["file"].Value;
-                            categoriesXml.Add(Utils.GetStringFromZip(zipfile, categoryFilename));
+                            categoriesXml.Add(FileUtils.GetStringFromZip(zipfile, categoryFilename));
                         }
                     }
                 }

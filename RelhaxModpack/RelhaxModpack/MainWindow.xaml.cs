@@ -24,6 +24,7 @@ using Microsoft.WindowsAPICodePack.Taskbar;
 using System.Windows.Threading;
 using RelhaxModpack.Atlases;
 using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack
 {
@@ -546,9 +547,9 @@ namespace RelhaxModpack
                         if (MessageBox.Show(string.Format("{0}\n{1}", Translations.GetTranslatedString("missingMSVCPLibraries"), Translations.GetTranslatedString("openLinkToMSVCP")),
                             Translations.GetTranslatedString("missingMSVCPLibrariesHeader"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         {
-                            if (!Utils.StartProcess(Utils.MSVCPLink))
+                            if (!Utils.StartProcess(AtlasUtils.MSVCPLink))
                             {
-                                Logging.Error("failed to open url to MSVCP: {0}", Utils.MSVCPLink);
+                                Logging.Error("failed to open url to MSVCP: {0}", AtlasUtils.MSVCPLink);
                             }
                         }
                     }
@@ -768,7 +769,7 @@ namespace RelhaxModpack
                 }
                 //only get if from the downloaded version
                 //get the version info string
-                string xmlString = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.ManagerVersion);
+                string xmlString = FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.ManagerVersion);
                 if (string.IsNullOrEmpty(xmlString))
                 {
                     Logging.WriteToLog("Failed to get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
@@ -979,7 +980,7 @@ namespace RelhaxModpack
             }
 
             //extract the batch script to update the application
-            string batchScript = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.RelicBatchUpdateScriptServer);
+            string batchScript = FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.RelicBatchUpdateScriptServer);
             Logging.Debug("Writing batch script to disk");
             File.WriteAllText(Settings.RelicBatchUpdateScript, batchScript);
 
@@ -1014,8 +1015,8 @@ namespace RelhaxModpack
 
             //set the update progress bar
             ChildProgressBar.Value = e.ProgressPercentage;
-            float MBDownloaded = (float)e.BytesReceived / (float)Utils.BYTES_TO_MBYTES;
-            float MBTotal = (float)e.TotalBytesToReceive / (float)Utils.BYTES_TO_MBYTES;
+            float MBDownloaded = (float)e.BytesReceived / (float)FileUtils.BYTES_TO_MBYTES;
+            float MBTotal = (float)e.TotalBytesToReceive / (float)FileUtils.BYTES_TO_MBYTES;
             MBDownloaded = (float)Math.Round(MBDownloaded, 2);
             MBTotal = (float)Math.Round(MBTotal, 2);
             string downloadMessage = string.Format("{0} {1}MB {2} {3}MB", Translations.GetTranslatedString("downloadingUpdate"),
@@ -1040,7 +1041,7 @@ namespace RelhaxModpack
 
                 try
                 {
-                    usersDownloadFolder = Utils.GetSpecialFolderPath(KnownFolder.Downloads);
+                    usersDownloadFolder = FileUtils.GetSpecialFolderPath(KnownFolder.Downloads);
                 }
                 catch(Exception ex)
                 {
@@ -1213,7 +1214,7 @@ namespace RelhaxModpack
                 if (databaseVersion != DatabaseVersions.Test)
                 {
                     //make an array of all the supported versions
-                    string supportedClientsXML = Utils.GetStringFromZip(Settings.ManagerInfoZipfile, "supported_clients.xml");
+                    string supportedClientsXML = FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, "supported_clients.xml");
                     if (string.IsNullOrWhiteSpace(supportedClientsXML))
                     {
                         Logging.Info("Failed to parse supported_clients.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
@@ -2322,8 +2323,8 @@ namespace RelhaxModpack
             //https://stackoverflow.com/questions/9869346/double-string-format
             //"2MB of 8MB at 1 MB/S"
             string line3 = string.Format("{0} {1} {2} {3} {4}/s",
-                Utils.SizeSuffix((ulong)e.BytesReceived, 1, true), Translations.GetTranslatedString("of"), Utils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true),
-                Translations.GetTranslatedString("at"), Utils.SizeSuffix((ulong)downloadRateDisplay,1,true, true));
+                FileUtils.SizeSuffix((ulong)e.BytesReceived, 1, true), Translations.GetTranslatedString("of"), FileUtils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true),
+                Translations.GetTranslatedString("at"), FileUtils.SizeSuffix((ulong)downloadRateDisplay,1,true, true));
 
             //"4 seconds"
             //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings
@@ -2593,7 +2594,7 @@ namespace RelhaxModpack
             //display the backup file sizes (if requested)
             if (displayBackupModsSize)
                 BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"),
-                    backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                    backupFiles.Count(), FileUtils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
         }
         #endregion
 
@@ -3388,13 +3389,13 @@ namespace RelhaxModpack
             if (Directory.Exists(newPath) && newPath.Equals(Settings.RelhaxUserSelectionsFolderPath))
             {
                 Logging.Warning("new folder {0} already exists, copy files over and delete old folder", Path.GetFileName(newPath));
-                foreach (string file in Utils.DirectorySearch(oldPath, SearchOption.TopDirectoryOnly, false, "*.xml", 5, 3, false))
+                foreach (string file in FileUtils.DirectorySearch(oldPath, SearchOption.TopDirectoryOnly, false, "*.xml", 5, 3, false))
                 {
                     string newFilePath = Path.Combine(Settings.RelhaxUserSelectionsFolderPath, Path.GetFileName(file));
                     if (!File.Exists(newFilePath))
                         File.Copy(file, newFilePath);
                 }
-                Utils.DirectoryDelete(oldPath, true);
+                FileUtils.DirectoryDelete(oldPath, true);
                 return;
             }
 
@@ -3455,20 +3456,20 @@ namespace RelhaxModpack
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("backupModsSizeCalculating"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("backupModsSizeCalculating"), backupFiles.Count(), FileUtils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
                     });
                 }
 
                 backupFolderTotalSize = 0;
-                backupFiles = Utils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
+                backupFiles = FileUtils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
                 foreach (string file in backupFiles)
                 {
-                    backupFolderTotalSize += Utils.GetFilesize(file);
+                    backupFolderTotalSize += FileUtils.GetFilesize(file);
                 }
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), Utils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                    BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), FileUtils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
                 });
                 Logging.Debug("completed async task of getting file sizes of backups");
             });
