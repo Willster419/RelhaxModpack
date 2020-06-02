@@ -275,7 +275,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Common\Translations.cs" />
-    <Compile Include="Utilities\Utils.cs" />
+    <Compile Include="Utilities\CommonUtils.cs" />
     <Compile Include="Windows\AddPicturesZip.xaml.cs">
       <DependentUpon>AddPicturesZip.xaml</DependentUpon>
     </Compile>
