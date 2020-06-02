@@ -15,6 +15,9 @@ using RelhaxModpack.Database;
 using System.Net;
 using System.Threading.Tasks;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Atlases;
+using RelhaxModpack.Patches;
+using RelhaxModpack.Shortcuts;
 
 namespace RelhaxModpack.Xml
 {

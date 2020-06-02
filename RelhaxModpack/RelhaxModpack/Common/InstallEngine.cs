@@ -16,8 +16,10 @@ using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Database;
 using Trigger = RelhaxModpack.Database.Trigger;
+using RelhaxModpack.Patches;
+using RelhaxModpack.Shortcuts;
 
-namespace RelhaxModpack.InstallerComponents
+namespace RelhaxModpack
 {
     #region Event stuff
     /// <summary>

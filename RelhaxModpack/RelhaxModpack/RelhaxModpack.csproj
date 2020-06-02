@@ -174,12 +174,12 @@
     <Compile Include="Utilities\FileUtils.cs" />
     <Compile Include="Utilities\FtpUtils.cs" />
     <Compile Include="Common\GlobalSuppressions.cs" />
-    <Compile Include="InstallerComponents\Atlas.cs" />
-    <Compile Include="InstallerComponents\InstallEngine.cs" />
-    <Compile Include="InstallerComponents\Patch.cs" />
-    <Compile Include="InstallerComponents\Shortcut.cs" />
-    <Compile Include="InstallerComponents\Texture.cs" />
-    <Compile Include="InstallerComponents\XmlUnpack.cs" />
+    <Compile Include="Atlases\Atlas.cs" />
+    <Compile Include="Common\InstallEngine.cs" />
+    <Compile Include="Patches\Patch.cs" />
+    <Compile Include="Shortcuts\Shortcut.cs" />
+    <Compile Include="Atlases\Texture.cs" />
+    <Compile Include="Xml\XmlUnpack.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
     <Compile Include="PrivateStuff\PrivateStuff.cs" />
@@ -206,10 +206,10 @@
     </Compile>
     <Compile Include="Utilities\MacroUtils.cs" />
     <Compile Include="Utilities\RegistryUtils.cs" />
-    <Compile Include="Common\Regression.cs" />
+    <Compile Include="Patches\Regression.cs" />
     <Compile Include="Atlases\RelhaxFreeImageLibrary.cs" />
     <Compile Include="Atlases\RelhaxNvTexLibrary.cs" />
-    <Compile Include="Utilities\ShortcutUtils.cs" />
+    <Compile Include="Shortcuts\ShortcutUtils.cs" />
     <Compile Include="Windows\AskCloseWoT.xaml.cs">
       <DependentUpon>AskCloseWoT.xaml</DependentUpon>
     </Compile>
@@ -270,7 +270,7 @@
     </Compile>
     <Compile Include="Common\BadMemeException.cs" />
     <Compile Include="Common\CiInfo.cs" />
-    <Compile Include="Utilities\PatchUtils.cs" />
+    <Compile Include="Patches\PatchUtils.cs" />
     <Compile Include="Common\PatientWebClient.cs">
       <SubType>Component</SubType>
     </Compile>

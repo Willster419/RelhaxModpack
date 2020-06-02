@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Shortcuts
 {
     /// <summary>
     /// Represents instructions on how to create a shortcut

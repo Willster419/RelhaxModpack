@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Linq;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Patches
 {
     /// <summary>
     /// A patch is an instruction object of how to modify a text file. Can be a json, xml, or plain text file

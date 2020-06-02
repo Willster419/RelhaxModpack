@@ -12,14 +12,10 @@ using RelhaxModpack.UI;
 using System.Xml;
 using System.Diagnostics;
 using Ionic.Zip;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Net.Http;
-using System.Timers;
 using System.Threading;
 using Microsoft.Win32;
 using System.Text;
-using RelhaxModpack.InstallerComponents;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using System.Windows.Threading;
 using RelhaxModpack.Atlases;
@@ -1823,7 +1819,7 @@ namespace RelhaxModpack
                 //standard progress
                 switch (e.InstallStatus)
                 {
-                    case InstallerComponents.InstallerExitCodes.BackupModsError:
+                    case InstallerExitCodes.BackupModsError:
                         line1 = Translations.GetTranslatedString("installBackupMods");
                         if (string.IsNullOrEmpty(e.ParrentCurrentProgress))
                         {
@@ -1834,25 +1830,25 @@ namespace RelhaxModpack
                             line2 = e.ParrentCurrentProgress;
                         }
                         break;
-                    case InstallerComponents.InstallerExitCodes.BackupDataError:
+                    case InstallerExitCodes.BackupDataError:
                         //filename is name of file in package to backup
                         //parrentCurrentProgress is name of package
                         line1 = Translations.GetTranslatedString("installBackupData");
                         line2 = e.Filename;
                         line3 = e.ParrentCurrentProgress;
                         break;
-                    case InstallerComponents.InstallerExitCodes.ClearCacheError:
+                    case InstallerExitCodes.ClearCacheError:
                         line1 = Translations.GetTranslatedString("installClearCache");
                         break;
-                    case InstallerComponents.InstallerExitCodes.ClearLogsError:
+                    case InstallerExitCodes.ClearLogsError:
                         line1 = Translations.GetTranslatedString("installClearLogs");
                         line2 = Path.GetFileName(e.Filename);
                         break;
-                    case InstallerComponents.InstallerExitCodes.CleanModsError:
+                    case InstallerExitCodes.CleanModsError:
                         line1 = Translations.GetTranslatedString("installCleanMods");
                         line2 = e.Filename;
                         break;
-                    case InstallerComponents.InstallerExitCodes.ExtractionError:
+                    case InstallerExitCodes.ExtractionError:
                         if(ModpackSettings.MulticoreExtraction && !ModpackSettings.AdvancedInstalProgress)
                         {
                             ChildProgressBar.Maximum = e.TotalInstallGroups;
@@ -1903,7 +1899,7 @@ namespace RelhaxModpack
                             }
                         }
                         break;
-                    case InstallerComponents.InstallerExitCodes.UserExtractionError:
+                    case InstallerExitCodes.UserExtractionError:
                         ChildProgressBar.Maximum = e.BytesTotal;
                         ChildProgressBar.Value = e.BytesProcessed;
                         line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("extractingUserMod"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
@@ -1913,7 +1909,7 @@ namespace RelhaxModpack
                             Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                         line4 = e.EntryFilename;
                         break;
-                    case InstallerComponents.InstallerExitCodes.RestoreUserdataError:
+                    case InstallerExitCodes.RestoreUserdataError:
                         //filename is name of file in package to backup
                         //parrentCurrentProgress is name of package
                         line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installRestoreUserdata"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
@@ -1921,30 +1917,30 @@ namespace RelhaxModpack
                         line2 = e.Filename;
                         line3 = e.ParrentCurrentProgress;
                         break;
-                    case InstallerComponents.InstallerExitCodes.XmlUnpackError:
+                    case InstallerExitCodes.XmlUnpackError:
                         line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installXmlUnpack"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
-                    case InstallerComponents.InstallerExitCodes.PatchError:
+                    case InstallerExitCodes.PatchError:
                         line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installPatchFiles"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = e.Filename;
                         break;
-                    case InstallerComponents.InstallerExitCodes.ShortcutsError:
+                    case InstallerExitCodes.ShortcutsError:
                         line1 = Translations.GetTranslatedString("installShortcuts");
                         line2 = e.Filename;
                         break;
-                    case InstallerComponents.InstallerExitCodes.ContourIconAtlasError:
+                    case InstallerExitCodes.ContourIconAtlasError:
                         line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installContourIconAtlas"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                             Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                         line2 = string.Format("{0} {1} {2} {3}", e.ChildCurrent.ToString(), Translations.GetTranslatedString("of"), e.ChildTotal.ToString(),
                             Translations.GetTranslatedString("stepsComplete"));
                         break;
-                    case InstallerComponents.InstallerExitCodes.FontInstallError:
+                    case InstallerExitCodes.FontInstallError:
                         line1 = Translations.GetTranslatedString("installFonts");
                         break;
-                    case InstallerComponents.InstallerExitCodes.CleanupError:
+                    case InstallerExitCodes.CleanupError:
                         line1 = Translations.GetTranslatedString("installCleanup");
                         break;
                 }
@@ -2230,11 +2226,11 @@ namespace RelhaxModpack
             cancellationTokenSource = new CancellationTokenSource();
 
             //create and run uninstall engine
-            installEngine = new InstallerComponents.InstallEngine
+            installEngine = new InstallEngine
             {
                 CancellationToken = cancellationTokenSource.Token
             };
-            InstallerComponents.RelhaxInstallFinishedEventArgs results = await installEngine.RunUninstallationAsync(progress);
+            RelhaxInstallFinishedEventArgs results = await installEngine.RunUninstallationAsync(progress);
             installEngine.Dispose();
             installEngine = null;
 
@@ -2246,7 +2242,7 @@ namespace RelhaxModpack
 
             //report results
             ChildProgressBar.Value = ChildProgressBar.Maximum;
-            if (results.ExitCode == InstallerComponents.InstallerExitCodes.Success)
+            if (results.ExitCode == InstallerExitCodes.Success)
             {
                 InstallProgressTextBox.Text = Translations.GetTranslatedString("uninstallFinished");
                 MessageBox.Show(Translations.GetTranslatedString("uninstallFinished"));
@@ -2266,11 +2262,11 @@ namespace RelhaxModpack
                 ChildProgressBar.Maximum = e.ChildTotal;
             if (ChildProgressBar.Value != e.ChildCurrent)
                 ChildProgressBar.Value = e.ChildCurrent;
-            if (e.UninstallStatus == InstallerComponents.UninstallerExitCodes.GettingFilelistError)
+            if (e.UninstallStatus == UninstallerExitCodes.GettingFilelistError)
             {
                 InstallProgressTextBox.Text = Translations.GetTranslatedString("scanningModsFolders");
             }
-            else if (e.UninstallStatus == InstallerComponents.UninstallerExitCodes.UninstallError)
+            else if (e.UninstallStatus == UninstallerExitCodes.UninstallError)
             {
                 InstallProgressTextBox.Text = string.Format("{0} {1} {2} {3}{4}{5}", Translations.GetTranslatedString("uninstallingFile"), e.ChildCurrent,
                     Translations.GetTranslatedString("of"), e.ChildTotal, Environment.NewLine, e.Filename);

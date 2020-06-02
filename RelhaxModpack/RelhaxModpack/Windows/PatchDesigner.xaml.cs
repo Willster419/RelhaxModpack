@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Text;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Patches;
 
 namespace RelhaxModpack.Windows
 {

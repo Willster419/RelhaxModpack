@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Atlases
 {
     /// <summary>
     /// A class that serves as a description of an atlas file with processing instructions

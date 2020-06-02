@@ -431,6 +431,82 @@
             Extracts the embedded compressed library to the location in the Filepath property
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Atlases.Atlas">
+            <summary>
+            A class that serves as a description of an atlas file with processing instructions
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.Pkg">
+            <summary>
+            Path and name to the package file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.AtlasFile">
+            <summary>
+            FileName of the atlas image file to extract
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.MapFile">
+            <summary>
+            FileName of the atlas map file to extract
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.DirectoryInArchive">
+            <summary>
+            Path inside the pkg file to the filename to process
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.AtlasSaveDirectory">
+            <summary>
+            Path to place the generated atlas file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.AtlasWidth">
+            <summary>
+            Width of the new atlases file. 0 = get from original atlas file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.AtlasHeight">
+            <summary>
+            Height of the new atlases file. 0 = get from original atlas file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.Padding">
+            <summary>
+            Padding of the new atlases file (amount of pixels as a border between each image)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.PowOf2">
+            <summary>
+            Creating an atlas file only with log base 2 numbers (16, 32, 64, etc.)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.Square">
+            <summary>
+            Creating an atlas file only in a square (same width and height of atlas)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.FastImagePacker">
+            <summary>
+            allow to accept first successful image optimization layout
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.ImageFolderList">
+            <summary>
+            List of folders that could contain images to replace original images
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.TextureList">
+            <summary>
+            The list of textures in each atlas
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.Atlas.ToString">
+            <summary>
+            Returns a string representation of the object
+            </summary>
+            <returns>The atlas file name</returns>
+        </member>
         <member name="T:RelhaxModpack.Database.Category">
             <summary>
             a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
@@ -4304,85 +4380,6 @@
             </summary>
             <returns>The location of wgc.exe if found, else null</returns>
         </member>
-        <member name="T:RelhaxModpack.Utilities.ShortcutUtils">
-            <summary>
-            A utility class to handle creating of shortcuts
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Utilities.ShortcutUtils.CreateShortcut(RelhaxModpack.Shortcut,System.Text.StringBuilder)">
-            <summary>
-            Creates a shortcut on the user's desktop
-            </summary>
-            <param name="shortcut">The shortcut parameters</param>
-            <param name="sb">The StringBuilder to log the path to the created file</param>
-        </member>
-        <member name="T:RelhaxModpack.Utilities.PatchExitCode">
-            <summary>
-            Exit codes during a patch operation
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.PatchExitCode.Success">
-            <summary>
-            The patch operation succeeded
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.PatchExitCode.Warning">
-            <summary>
-            The patch operation succeeded, but with warnings
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.PatchExitCode.Error">
-            <summary>
-            The patch operation did not succeeded
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Utilities.PatchUtils">
-            <summary>
-            A class for handling patch operations
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.PatchUtils.PatchJsonNullEscape">
-            <summary>
-            Provides the ability to insert a 'null' value into json configurations
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Utilities.PatchUtils.RunPatch(RelhaxModpack.Patch)">
-            <summary>
-            Run a patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utilities.PatchUtils.XMLPatch(RelhaxModpack.Patch)">
-            <summary>
-            Run an XML patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utilities.PatchUtils.RegxPatch(RelhaxModpack.Patch,System.Int32[])">
-            <summary>
-            Run a regex patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <param name="lines">The lines to patch on the file.</param>
-            <returns>The operation exit code</returns>
-            <remarks>Can be used to "batch patch" an xml or json file. See Database examples.
-            Use -1 to indicate the whole file is being patched. Use 0 to check every line.</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Utilities.PatchUtils.JsonPatch(RelhaxModpack.Patch)">
-            <summary>
-            Run a Json patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utilities.PatchUtils.GetXvmFolderName">
-            <summary>
-            Gets the absolute path to the Xvm configuration folder
-            </summary>
-            <returns>The absolute path of the Xvm configuration folder if it exists, otherwise returns "default"</returns>
-        </member>
         <member name="T:RelhaxModpack.Utilities.CommonUtils">
             <summary>
             A utility class for static functions used in various places in the modpack
@@ -4772,361 +4769,285 @@
             </summary>
             <returns>True if clearing operation was sucessfull, false otherwise</returns>
         </member>
-        <member name="T:RelhaxModpack.Atlas">
-            <summary>
-            A class that serves as a description of an atlas file with processing instructions
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.Pkg">
-            <summary>
-            Path and name to the package file
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.AtlasFile">
-            <summary>
-            FileName of the atlas image file to extract
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.MapFile">
-            <summary>
-            FileName of the atlas map file to extract
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.DirectoryInArchive">
-            <summary>
-            Path inside the pkg file to the filename to process
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.AtlasSaveDirectory">
-            <summary>
-            Path to place the generated atlas file
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.AtlasWidth">
-            <summary>
-            Width of the new atlases file. 0 = get from original atlas file
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.AtlasHeight">
-            <summary>
-            Height of the new atlases file. 0 = get from original atlas file
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.Padding">
-            <summary>
-            Padding of the new atlases file (amount of pixels as a border between each image)
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.PowOf2">
-            <summary>
-            Creating an atlas file only with log base 2 numbers (16, 32, 64, etc.)
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.Square">
-            <summary>
-            Creating an atlas file only in a square (same width and height of atlas)
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.FastImagePacker">
-            <summary>
-            allow to accept first successful image optimization layout
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.ImageFolderList">
-            <summary>
-            List of folders that could contain images to replace original images
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlas.TextureList">
-            <summary>
-            The list of textures in each atlas
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Atlas.ToString">
-            <summary>
-            Returns a string representation of the object
-            </summary>
-            <returns>The atlas file name</returns>
-        </member>
-        <member name="T:RelhaxModpack.InstallerComponents.InstallerExitCodes">
+        <member name="T:RelhaxModpack.InstallerExitCodes">
             <summary>
             Possible points at which the installer can fail
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.Success">
+        <member name="F:RelhaxModpack.InstallerExitCodes.Success">
             <summary>
             No fail
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.DownloadModsError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.DownloadModsError">
             <summary>
             Error with downloading mods
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.BackupModsError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.BackupModsError">
             <summary>
             Error with backup of mods to the RelhaxBackup folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.BackupDataError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.BackupDataError">
             <summary>
             Error with backing up of user cache data to temporary folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.ClearCacheError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.ClearCacheError">
             <summary>
             Error with clearing WoT app data cache
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.ClearLogsError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.ClearLogsError">
             <summary>
             Error with clearing game and mod logs
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.CleanModsError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.CleanModsError">
             <summary>
             Error with cleaning mods and res_mods folders
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.ExtractionError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.ExtractionError">
             <summary>
             Error with mods extraction/installation
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.UserExtractionError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.UserExtractionError">
             <summary>
             Error with user mods extraction
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.RestoreUserdataError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.RestoreUserdataError">
             <summary>
             Error with restoring user cache data from temporary folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.XmlUnpackError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.XmlUnpackError">
             <summary>
             Error with copying/extracting and unpacking binary xml files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.PatchError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.PatchError">
             <summary>
             Error with patching configuration files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.ShortcutsError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.ShortcutsError">
             <summary>
             Error with creating shortcuts
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.ContourIconAtlasError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.ContourIconAtlasError">
             <summary>
             Error with creating the contour icon atlas files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.FontInstallError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.FontInstallError">
             <summary>
             Error with installing fonts (starting the fontReg process)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.TrimDownloadCacheError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.TrimDownloadCacheError">
             <summary>
             Error with deleting old download files from the RelhaxDownloads folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.CleanupError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.CleanupError">
             <summary>
             Error with cleanup of temporary and leftover files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallerExitCodes.UnknownError">
+        <member name="F:RelhaxModpack.InstallerExitCodes.UnknownError">
             <summary>
             An unknown error has occurred
             </summary>
         </member>
-        <member name="T:RelhaxModpack.InstallerComponents.UninstallerExitCodes">
+        <member name="T:RelhaxModpack.UninstallerExitCodes">
             <summary>
             Possible points at which the uninstaller can fail
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.UninstallerExitCodes.GettingFilelistError">
+        <member name="F:RelhaxModpack.UninstallerExitCodes.GettingFilelistError">
             <summary>
             Error with getting the file lists (from folder scan and/or from log file)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.UninstallerExitCodes.UninstallError">
+        <member name="F:RelhaxModpack.UninstallerExitCodes.UninstallError">
             <summary>
             Error with deleting of files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.UninstallerExitCodes.ProcessingEmptyFolders">
+        <member name="F:RelhaxModpack.UninstallerExitCodes.ProcessingEmptyFolders">
             <summary>
             Error with deleting of empty folders
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.UninstallerExitCodes.PerformFinalClearup">
+        <member name="F:RelhaxModpack.UninstallerExitCodes.PerformFinalClearup">
             <summary>
             Error with cleanup of temporary and leftover files
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.UninstallerExitCodes.Success">
+        <member name="F:RelhaxModpack.UninstallerExitCodes.Success">
             <summary>
             No error occurred
             </summary>
         </member>
-        <member name="T:RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs">
+        <member name="T:RelhaxModpack.RelhaxInstallFinishedEventArgs">
             <summary>
             Event arguments for when the installer finishes or is ended prematurely
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs.ExitCode">
+        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.ExitCode">
             <summary>
             The exit code from the installer thread
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs.ErrorMessage">
+        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.ErrorMessage">
             <summary>
             The error message description
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs.ParsedCategoryList">
+        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.ParsedCategoryList">
             <summary>
             Reference to list of parsed categories
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs.Dependencies">
+        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.Dependencies">
             <summary>
             Reference to list of parsed dependencies
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs.GlobalDependencies">
+        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.GlobalDependencies">
             <summary>
             Reference to list of dependencies
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.RelhaxInstallFinishedEventArgs.InstallFailedSteps">
+        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.InstallFailedSteps">
             <summary>
             A list of all the steps that the installer failed at when returning back to the MainWindow
             </summary>
             <remarks>The installer creates many threads to complete different parts of the installation.
             One of more of these may fail and should be logged when the installer cleanly exists and returns to the MainWindow</remarks>
         </member>
-        <member name="T:RelhaxModpack.InstallerComponents.RelhaxZipFile">
+        <member name="T:RelhaxModpack.RelhaxZipFile">
             <summary>
             A wrapper class around the Ionic.Zip.Zipfile with the purpose of saving the thread ID that the zip file belongs to
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.RelhaxZipFile.ThreadID">
+        <member name="F:RelhaxModpack.RelhaxZipFile.ThreadID">
             <summary>
             The ID number of the thread that the zip file belongs to
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.RelhaxZipFile.IsUserMod">
+        <member name="F:RelhaxModpack.RelhaxZipFile.IsUserMod">
             <summary>
             Flag for if this zip file is a user mod
             </summary>
             <remarks>User mods are treated slightly differently then regular mods. They have no valid threadID, and should not be deleted if the extraction fails.</remarks>
         </member>
-        <member name="M:RelhaxModpack.InstallerComponents.RelhaxZipFile.#ctor(System.String)">
+        <member name="M:RelhaxModpack.RelhaxZipFile.#ctor(System.String)">
             <summary>
             Constructor for making a RelhaxZipFile
             </summary>
             <param name="fileName">The name of the file to send to the base constructor. File must already exist.</param>
         </member>
-        <member name="T:RelhaxModpack.InstallerComponents.InstallEngine">
+        <member name="T:RelhaxModpack.InstallEngine">
             <summary>
             The install engine is the root component to the entire installation process. It manages install tasks, threading, and resource usage from start to finish.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.OrderedPackagesToInstall">
+        <member name="F:RelhaxModpack.InstallEngine.OrderedPackagesToInstall">
             <summary>
             List of packages that have zip files to install and are enabled (and checked if selectable) and ordered into installGroups
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.PackagesToInstall">
+        <member name="F:RelhaxModpack.InstallEngine.PackagesToInstall">
             <summary>
             List of packages that have zip files to install and are enabled (and checked if selectable)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.FlatListSelectablePackages">
+        <member name="F:RelhaxModpack.InstallEngine.FlatListSelectablePackages">
             <summary>
             Flat list of all selectable packages
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.UserPackagesToInstall">
+        <member name="F:RelhaxModpack.InstallEngine.UserPackagesToInstall">
             <summary>
             List of user packages placed in the RelhaxUserMods folder and selected for installation
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.ParsedCategoryList">
+        <member name="F:RelhaxModpack.InstallEngine.ParsedCategoryList">
             <summary>
             A reference for the list of parsed categories
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.Dependencies">
+        <member name="F:RelhaxModpack.InstallEngine.Dependencies">
             <summary>
             A reference for the list of parsed dependencies
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.GlobalDependencies">
+        <member name="F:RelhaxModpack.InstallEngine.GlobalDependencies">
             <summary>
             A reference for the list of parsed globally installed dependencies
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.TriggerContouricons">
+        <member name="F:RelhaxModpack.InstallEngine.TriggerContouricons">
             <summary>
             The event name for starting the contour icon atlas building
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.TriggerInstallFonts">
+        <member name="F:RelhaxModpack.InstallEngine.TriggerInstallFonts">
             <summary>
             The event name for starting the installation of fonts
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.TriggerCreateShortcuts">
+        <member name="F:RelhaxModpack.InstallEngine.TriggerCreateShortcuts">
             <summary>
             The event name for starting the creation of shortcuts
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.CompleteTriggerList">
+        <member name="F:RelhaxModpack.InstallEngine.CompleteTriggerList">
             <summary>
             A list of all current trigger event names
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.Triggers">
+        <member name="F:RelhaxModpack.InstallEngine.Triggers">
             <summary>
             A list of all current trigger event objects. For more information, see the trigger class
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.CancellationToken">
+        <member name="F:RelhaxModpack.InstallEngine.CancellationToken">
             <summary>
             The token used for handling and checking for cancellation requests
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallerComponents.InstallEngine.DisableTriggersForInstall">
+        <member name="F:RelhaxModpack.InstallEngine.DisableTriggersForInstall">
             <summary>
             Flag for if the install engine should honor the user setting or if installing user packages, disable triggers anyways
             </summary>
         </member>
-        <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.#ctor">
+        <member name="M:RelhaxModpack.InstallEngine.#ctor">
             <summary>
             Creates an instance of the installation engine. Properties should be assigned at this step
             </summary>
         </member>
-        <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.RunInstallationAsync(System.IProgress{RelhaxModpack.UI.RelhaxInstallerProgress})">
+        <member name="M:RelhaxModpack.InstallEngine.RunInstallationAsync(System.IProgress{RelhaxModpack.UI.RelhaxInstallerProgress})">
             <summary>
             Run an asynchronous installation
             </summary>
             <param name="progress">The progress reporter object</param>
             <returns>A RelhaxInstallFinishedEventArgs object contain installation data for if the installation succeed or ended prematurely</returns>
         </member>
-        <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.RunUninstallationAsync(System.IProgress{RelhaxModpack.UI.RelhaxInstallerProgress})">
+        <member name="M:RelhaxModpack.InstallEngine.RunUninstallationAsync(System.IProgress{RelhaxModpack.UI.RelhaxInstallerProgress})">
             <summary>
             Run an asynchronous uninstallation
             </summary>
             <param name="progress">The progress reporter object</param>
             <returns>A RelhaxInstallFinishedEventArgs object contain uninstallation data for if the uninstallation succeed or ended prematurely</returns>
         </member>
-        <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.UninstallMods(RelhaxModpack.UninstallModes,System.Boolean)">
+        <member name="M:RelhaxModpack.InstallEngine.UninstallMods(RelhaxModpack.UninstallModes,System.Boolean)">
             <summary>
             Deletes mod files from the current game client
             </summary>
@@ -5134,192 +5055,349 @@
             <param name="logToUninstaller">if to </param>
             <returns>true if the uninstall processes completed, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.Dispose(System.Boolean)">
+        <member name="M:RelhaxModpack.InstallEngine.Dispose(System.Boolean)">
             <summary>
             Dispose of the Installation engine
             </summary>
             <param name="disposing">Flag to indicate if the engine should additionally dispose of managed resources</param>
         </member>
-        <member name="M:RelhaxModpack.InstallerComponents.InstallEngine.Dispose">
+        <member name="M:RelhaxModpack.InstallEngine.Dispose">
             <summary>
             This code added to correctly implement the disposable pattern.
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Patch">
+        <member name="T:RelhaxModpack.Patches.Patch">
             <summary>
             A patch is an instruction object of how to modify a text file. Can be a json, xml, or plain text file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.TypeRegex1">
+        <member name="F:RelhaxModpack.Patches.Patch.TypeRegex1">
             <summary>
             One of two string values used for regex type patches
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.TypeRegex2">
+        <member name="F:RelhaxModpack.Patches.Patch.TypeRegex2">
             <summary>
             One of two string values used for regex type patches
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.TypeXml">
+        <member name="F:RelhaxModpack.Patches.Patch.TypeXml">
             <summary>
             The string value used for xml type patches
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.TypeJson">
+        <member name="F:RelhaxModpack.Patches.Patch.TypeJson">
             <summary>
             The string value used for json type patches
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.TypeXvm">
+        <member name="F:RelhaxModpack.Patches.Patch.TypeXvm">
             <summary>
             The string value used for xvm type legacy patches
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.NativeProcessingFile">
+        <member name="F:RelhaxModpack.Patches.Patch.NativeProcessingFile">
             <summary>
             A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.ActualPatchName">
+        <member name="F:RelhaxModpack.Patches.Patch.ActualPatchName">
             <summary>
             the actual name of the original patch before processed
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.Type">
+        <member name="F:RelhaxModpack.Patches.Patch.Type">
             <summary>
             The type of patch, xml or regex (direct text replacement)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.Mode">
+        <member name="F:RelhaxModpack.Patches.Patch.Mode">
             <summary>
             If not regex, the mode that the xml patcher should use.<para/>Examples: add xml node, remove xml node, edit xml node
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.PatchPath">
+        <member name="F:RelhaxModpack.Patches.Patch.PatchPath">
             <summary>
             The starting path to the file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.File">
+        <member name="F:RelhaxModpack.Patches.Patch.File">
             <summary>
             The path to the file, relative to patchPath
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.CompletePath">
+        <member name="F:RelhaxModpack.Patches.Patch.CompletePath">
             <summary>
             The complete path to the file, saved at parse time
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.FollowPathEditorCompletePath">
+        <member name="F:RelhaxModpack.Patches.Patch.FollowPathEditorCompletePath">
             <summary>
             Saves the complete path for if in editor mode, otherwise not used
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.Version">
+        <member name="F:RelhaxModpack.Patches.Patch.Version">
             <summary>
             The version of the patch for parsing. Allows for multiple variations. Default to 1
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.Path">
+        <member name="F:RelhaxModpack.Patches.Patch.Path">
             <summary>
             If xml or json, the xml xpath or json jsonpath to the node
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.Lines">
+        <member name="F:RelhaxModpack.Patches.Patch.Lines">
             <summary>
             If regex, the optional specific lines in the text file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.Search">
+        <member name="F:RelhaxModpack.Patches.Patch.Search">
             <summary>
             The node inner text (xml) or regex criteria to search for
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.Replace">
+        <member name="F:RelhaxModpack.Patches.Patch.Replace">
             <summary>
             The text to replace the found search text with
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.FollowPath">
+        <member name="F:RelhaxModpack.Patches.Patch.FollowPath">
             <summary>
             For json patches, if it should use the new method of separating the path for getting the xvm references
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patch.FromEditor">
+        <member name="F:RelhaxModpack.Patches.Patch.FromEditor">
             <summary>
             If from editor/patch designer, enable verbose logging for the duration of that patch
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Patch.DumpPatchInfoForLog">
+        <member name="P:RelhaxModpack.Patches.Patch.DumpPatchInfoForLog">
             <summary>
             Collects all patch information for logging
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Patch.ToString">
+        <member name="M:RelhaxModpack.Patches.Patch.ToString">
             <summary>
             The string representation of the object
             </summary>
             <returns>The type, mode and lines/path if in editor mode. Else, the base ToString()</returns>
         </member>
-        <member name="P:RelhaxModpack.Patch.ListboxDisplay">
+        <member name="P:RelhaxModpack.Patches.Patch.ListboxDisplay">
             <summary>
             Gets a listbox style UI element display-ready text
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Patch.IsValidForSave">
+        <member name="P:RelhaxModpack.Patches.Patch.IsValidForSave">
             <summary>
             Gets a value that determines if all required properties are filed out to be saved to a patch file
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Patch.GetInvalidPatchesForSave(RelhaxModpack.Patch[])">
+        <member name="M:RelhaxModpack.Patches.Patch.GetInvalidPatchesForSave(RelhaxModpack.Patches.Patch[])">
             <summary>
             Returns a list of patch objects that are not ready to be written to a patch file
             </summary>
             <param name="patchList">The list of patches to check</param>
             <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
-            <seealso cref="P:RelhaxModpack.Patch.IsValidForSave"/>
+            <seealso cref="P:RelhaxModpack.Patches.Patch.IsValidForSave"/>
         </member>
-        <member name="M:RelhaxModpack.Patch.GetInvalidPatchesForSave(System.Collections.Generic.List{RelhaxModpack.Patch})">
+        <member name="M:RelhaxModpack.Patches.Patch.GetInvalidPatchesForSave(System.Collections.Generic.List{RelhaxModpack.Patches.Patch})">
             <summary>
             Returns a list of patch objects that are not ready to be written to a patch file
             </summary>
             <param name="patchList">The list of patches to check</param>
             <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
-            <seealso cref="P:RelhaxModpack.Patch.IsValidForSave"/>
+            <seealso cref="P:RelhaxModpack.Patches.Patch.IsValidForSave"/>
         </member>
-        <member name="M:RelhaxModpack.Patch.GetInvalidPatchesForSave(System.Windows.Controls.ItemCollection)">
+        <member name="M:RelhaxModpack.Patches.Patch.GetInvalidPatchesForSave(System.Windows.Controls.ItemCollection)">
             <summary>
             Returns a list of patch objects that are not ready to be written to a patch file
             </summary>
             <param name="patchList">The list of patches to check</param>
             <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
-            <seealso cref="P:RelhaxModpack.Patch.IsValidForSave"/>
+            <seealso cref="P:RelhaxModpack.Patches.Patch.IsValidForSave"/>
         </member>
-        <member name="T:RelhaxModpack.Shortcut">
+        <member name="T:RelhaxModpack.Patches.PatchRegressionTypes">
+            <summary>
+            The types of patch regression tests that can be performed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.PatchRegressionTypes.json">
+            <summary>
+            Json regression (standard, non-XVM)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.PatchRegressionTypes.xml">
+            <summary>
+            Xml regression
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.PatchRegressionTypes.regex">
+            <summary>
+            Regex regression
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.PatchRegressionTypes.followPath">
+            <summary>
+            Json regression (XVM style)
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Patches.UnitTest">
+            <summary>
+            Represents a patch operation with a description and desired assertion condition
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.UnitTest.Patch">
+            <summary>
+            The patch operation object
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.UnitTest.Description">
+            <summary>
+            A description of what the patch should do
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.UnitTest.ShouldPass">
+            <summary>
+            Determines if the patch should pass or fail the test
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Patches.Regression">
+            <summary>
+            A regression object is an entire regression test suite. Manages the unit tests and runs the test assertions
+            </summary>
+            <remarks>A regression test is designed to only test one type of patch i.e. a series of XML patches.
+            The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
+            the results. Results are logged to a new logfile each time a regression run is started</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Patches.Regression.#ctor(RelhaxModpack.Patches.PatchRegressionTypes,System.Collections.Generic.List{RelhaxModpack.Patches.UnitTest})">
+            <summary>
+            Make a regression object
+            </summary>
+            <param name="regressionType">The type of regressions to run</param>
+            <param name="unitTestsToRun">The list of unit tests to run</param>
+        </member>
+        <member name="M:RelhaxModpack.Patches.Regression.RunRegressions">
+            <summary>
+            Run a complete regression test based on the list of unit tests
+            </summary>
+            <returns>Returns false if a setup error occurred, true otherwise</returns>
+            <remarks>The return value of the method does NOT related to the success of the Unit Tests</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Patches.Regression.Dispose(System.Boolean)">
+            <summary>
+            Dispose of managed resources
+            </summary>
+            <param name="disposing">For redundant calls</param>
+        </member>
+        <member name="M:RelhaxModpack.Patches.Regression.Dispose">
+            <summary>
+            Dispose of managed resources
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Patches.PatchExitCode">
+            <summary>
+            Exit codes during a patch operation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.PatchExitCode.Success">
+            <summary>
+            The patch operation succeeded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.PatchExitCode.Warning">
+            <summary>
+            The patch operation succeeded, but with warnings
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.PatchExitCode.Error">
+            <summary>
+            The patch operation did not succeeded
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Patches.PatchUtils">
+            <summary>
+            A class for handling patch operations
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patches.PatchUtils.PatchJsonNullEscape">
+            <summary>
+            Provides the ability to insert a 'null' value into json configurations
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Patches.PatchUtils.RunPatch(RelhaxModpack.Patches.Patch)">
+            <summary>
+            Run a patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patches.PatchUtils.XMLPatch(RelhaxModpack.Patches.Patch)">
+            <summary>
+            Run an XML patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patches.PatchUtils.RegxPatch(RelhaxModpack.Patches.Patch,System.Int32[])">
+            <summary>
+            Run a regex patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <param name="lines">The lines to patch on the file.</param>
+            <returns>The operation exit code</returns>
+            <remarks>Can be used to "batch patch" an xml or json file. See Database examples.
+            Use -1 to indicate the whole file is being patched. Use 0 to check every line.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Patches.PatchUtils.JsonPatch(RelhaxModpack.Patches.Patch)">
+            <summary>
+            Run a Json patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patches.PatchUtils.GetXvmFolderName">
+            <summary>
+            Gets the absolute path to the Xvm configuration folder
+            </summary>
+            <returns>The absolute path of the Xvm configuration folder if it exists, otherwise returns "default"</returns>
+        </member>
+        <member name="T:RelhaxModpack.Shortcuts.Shortcut">
             <summary>
             Represents instructions on how to create a shortcut
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Shortcut.Path">
+        <member name="F:RelhaxModpack.Shortcuts.Shortcut.Path">
             <summary>
             The target of the shortcut
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Shortcut.Name">
+        <member name="F:RelhaxModpack.Shortcuts.Shortcut.Name">
             <summary>
             The name for the shortcut
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Shortcut.Enabled">
+        <member name="F:RelhaxModpack.Shortcuts.Shortcut.Enabled">
             <summary>
             Flag for in the installer to actually create the shortcut
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Shortcut.ToString">
+        <member name="M:RelhaxModpack.Shortcuts.Shortcut.ToString">
             <summary>
             String representation of the object
             </summary>
             <returns>The name and target of the shortcut</returns>
+        </member>
+        <member name="T:RelhaxModpack.Shortcuts.ShortcutUtils">
+            <summary>
+            A utility class to handle creating of shortcuts
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Shortcuts.ShortcutUtils.CreateShortcut(RelhaxModpack.Shortcuts.Shortcut,System.Text.StringBuilder)">
+            <summary>
+            Creates a shortcut on the user's desktop
+            </summary>
+            <param name="shortcut">The shortcut parameters</param>
+            <param name="sb">The StringBuilder to log the path to the created file</param>
         </member>
         <member name="T:RelhaxModpack.Texture">
             <summary>
@@ -5356,56 +5434,372 @@
             The actual bitmap in memory of the image
             </summary>
         </member>
-        <member name="T:RelhaxModpack.XmlUnpack">
+        <member name="T:RelhaxModpack.Xml.XmlUnpack">
             <summary>
             Represents a set of xml instructions for extracting and copying xml files into another location. Includes xml binary decompression
             </summary>
         </member>
-        <member name="P:RelhaxModpack.XmlUnpack.NativeProcessingFile">
+        <member name="P:RelhaxModpack.Xml.XmlUnpack.NativeProcessingFile">
             <summary>
             A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
             </summary>
         </member>
-        <member name="P:RelhaxModpack.XmlUnpack.ActualPatchName">
+        <member name="P:RelhaxModpack.Xml.XmlUnpack.ActualPatchName">
             <summary>
             The actual name of the original file before processed
             </summary>
         </member>
-        <member name="P:RelhaxModpack.XmlUnpack.Pkg">
+        <member name="P:RelhaxModpack.Xml.XmlUnpack.Pkg">
             <summary>
             Path and name to the package file
             </summary>
         </member>
-        <member name="P:RelhaxModpack.XmlUnpack.FileName">
+        <member name="P:RelhaxModpack.Xml.XmlUnpack.FileName">
             <summary>
             Name of the file to extract
             </summary>
         </member>
-        <member name="P:RelhaxModpack.XmlUnpack.DirectoryInArchive">
+        <member name="P:RelhaxModpack.Xml.XmlUnpack.DirectoryInArchive">
             <summary>
             Path inside the pkg file to the filename to process
             </summary>
         </member>
-        <member name="P:RelhaxModpack.XmlUnpack.ExtractDirectory">
+        <member name="P:RelhaxModpack.Xml.XmlUnpack.ExtractDirectory">
             <summary>
             Path to place the extracted or copied file
             </summary>
         </member>
-        <member name="P:RelhaxModpack.XmlUnpack.NewFileName">
+        <member name="P:RelhaxModpack.Xml.XmlUnpack.NewFileName">
             <summary>
             Filename with replaced macros for destination writing
             </summary>
         </member>
-        <member name="P:RelhaxModpack.XmlUnpack.DumpInfoToLog">
+        <member name="P:RelhaxModpack.Xml.XmlUnpack.DumpInfoToLog">
             <summary>
             Collect all properties of the extraction instructions to dump into the log file
             </summary>
         </member>
-        <member name="M:RelhaxModpack.XmlUnpack.ToString">
+        <member name="M:RelhaxModpack.Xml.XmlUnpack.ToString">
             <summary>
             A string representation of the object
             </summary>
             <returns>The native name of the unpack instruction file and file target</returns>
+        </member>
+        <member name="T:RelhaxModpack.Xml.XmlLoadType">
+            <summary>
+            Xml document load type enumeration
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Xml.XmlLoadType.FromFile">
+            <summary>
+            loading Xml from a file on disk
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Xml.XmlLoadType.FromString">
+            <summary>
+            loading Xml from a text string
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Xml.DatabaseXmlVersion">
+            <summary>
+            The enumeration representations of the Xml database saving format
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Xml.DatabaseXmlVersion.Legacy">
+            <summary>
+            The Legacy format. All in one document
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Xml.DatabaseXmlVersion.OnePointOne">
+            <summary>
+            The 1.1 format. A root file, a file for the global and standard dependencies, and a file for each categories
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Xml.XmlUtils">
+            <summary>
+            Utility class for dealing with Xml features and functions
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.IsValidXml(System.String)">
+            <summary>
+            Check to make sure an Xml file is valid
+            </summary>
+            <param name="filePath">The path to the Xml file</param>
+            <returns>True if valid Xml, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.IsValidXml(System.String,System.String)">
+            <summary>
+            Check to make sure an Xml file is valid
+            </summary>
+            <param name="xmlString">The Xml text string</param>
+            <param name="fileName">the name of the file, used for debugging purposes</param>
+            <returns>True if valid Xml, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlStringFromXPath(System.String,System.String)">
+            <summary>
+            Get an Xml element attribute given an Xml path
+            </summary>
+            <param name="file">The path to the Xml file</param>
+            <param name="xpath">The xpath search string</param>
+            <returns>The value from the xpath search, otherwise null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlStringFromXPath(System.String,System.String,System.String)">
+            <summary>
+            Get an Xml element attribute given an Xml path
+            </summary>
+            <param name="xmlString">The Xml text string</param>
+            <param name="xpath">The xpath search string</param>
+            <param name="filename"></param>
+            <returns>The value from the xpath search, otherwise null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlStringFromXPath(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Get an Xml element attribute given an Xml path
+            </summary>
+            <param name="doc">The Xml document object to check</param>
+            <param name="xpath">The xpath search string</param>
+            <returns>The value from the xpath search, otherwise null</returns>
+            <remarks>
+            The following are Xml attribute examples
+            element example: "//root/element"
+            attribute example: "//root/element/@attribute"
+            for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
+            for the folder version: //modInfoAlpha.xml/@version
+            </remarks>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodeFromXPath(System.String,System.String)">
+            <summary>
+            Get an Xml node value given an Xml path
+            </summary>
+            <param name="file">The path to the Xml file</param>
+            <param name="xpath">The xpath search string</param>
+            <returns>The Xml node object of the search result, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodeFromXPath(System.String,System.String,System.String)">
+            <summary>
+            Get an Xml node value given an Xml path
+            </summary>
+            <param name="xmlString">The Xml string to parse</param>
+            <param name="xpath">The xpath search string</param>
+            <param name="filename">The name of the file, used for logging purposes</param>
+            <returns>The Xml node object of the search result, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodeFromXPath(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Get an Xml node value given an Xml path
+            </summary>
+            <param name="doc">The XmlDocument object to search</param>
+            <param name="xpath">The xpath string</param>
+            <returns>The Xml node object of the search result, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodesFromXPath(System.String,System.String)">
+            <summary>
+            Get a List of Xml nodes that match given an Xml path
+            </summary>
+            <param name="file">The path to the Xml file</param>
+            <param name="xpath">The xpath string</param>
+            <returns>The node list of matching results, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodesFromXPath(System.String,System.String,System.String)">
+            <summary>
+            Get a List of Xml nodes that match given an Xml path
+            </summary>
+            <param name="xmlString">The xml document in a string</param>
+            <param name="filename">The name of the document for logging purposes</param>
+            <param name="xpath">The xpath string</param>
+            <returns>The node list of matching results, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodesFromXPath(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Get a List of Xml nodes that match given an Xml path
+            </summary>
+            <param name="doc">The XmlDocument to search</param>
+            <param name="xpath">The xml path string</param>
+            <returns>The node list of matching results, or null</returns>
+            <remarks>XmlElement and XmlAttribute inherit from XmlNode</remarks> 
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabaseRoot1V1Document">
+            <summary>
+            Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
+            </summary>
+            <returns>the XmlDocument object of the root database file</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabase1V1FilesList(System.Xml.XmlDocument)">
+            <summary>
+            Get a list of all URLs to each xml document file of the database
+            </summary>
+            <param name="rootDocument">The root 'database.xml' document object</param>
+            <returns>The list of URLs</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabase1V1FilesList">
+            <summary>
+            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
+            </summary>
+            <returns>The list of URLs</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabase1V1FilesListAsync">
+            <summary>
+            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
+            </summary>
+            <returns>The list of URLs</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase(System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.String)">
+            <summary>
+            Parse the Xml database of any type into lists in memory
+            </summary>
+            <param name="modInfoDocument">The root document. Can either be the entire document (Legacy) or the file with database header information only (OnePointOne)</param>
+            <param name="globalDependencies">The global dependencies list</param>
+            <param name="dependencies">The dependencies list</param>
+            <param name="parsedCategoryList">The category list</param>
+            <param name="location">The folder path to the OnePointOne+ additional xml files as part of the database</param>
+            <returns>True if database parsing was a success, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase1V1FromFiles(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Parse a database into the version 1.1 format from files on the disk
+            </summary>
+            <param name="rootPath">The path to the folder that contains all the xml database files</param>
+            <param name="rootDocument">The root document object</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase1V1FromStrings(System.String,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Parse a database into version 1.1 from string representations of the Xml files
+            </summary>
+            <param name="globalDependenciesXml">The Xml string of the global dependencies document</param>
+            <param name="dependneciesXml">The Xml string of the dependencies document</param>
+            <param name="categoriesXml">The list of Xml strings of the categories document</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Parse a database into version 1.1 from XDocument objects
+            </summary>
+            <param name="globalDependenciesDoc">The Xml document of global dependencies</param>
+            <param name="globalDependenciesList">The list of global dependencies</param>
+            <param name="dependenciesDoc">The Xml document of dependencies</param>
+            <param name="dependenciesList">The list of dependencies</param>
+            <param name="categoryDocuments">The list of xml documents of the category Xml documents</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.DocumentToXDocument(System.Xml.XmlDocument)">
+            <summary>
+            Convert an XmlDocument to an XDocument
+            </summary>
+            <param name="doc">The XmlDocument to convert</param>
+            <returns>The converted XDocument</returns>
+            <remarks>See https://blogs.msdn.microsoft.com/xmlteam/2009/03/31/converting-from-xmldocument-to-xdocument/ </remarks>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.LoadXDocument(System.String,RelhaxModpack.Xml.XmlLoadType)">
+            <summary>
+            Load an Xml document to an XDocument object
+            </summary>
+            <param name="fileOrXml">The filepath or string representation of the Xml document</param>
+            <param name="type">The type to define if fileOrXml is a file path or the Xml string</param>
+            <returns>A parsed XDocument of the Xml document</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.LoadXmlDocument(System.String,RelhaxModpack.Xml.XmlLoadType)">
+            <summary>
+            Load an Xml document to an XmlDocument object
+            </summary>
+            <param name="fileOrXml">The filepath or string representation of the Xml document</param>
+            <param name="type">The type to define if fileOrXml is a file path or the Xml string</param>
+            <returns>A parsed XmlDocument of the Xml document</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.UnpackXmlFile(RelhaxModpack.Xml.XmlUnpack,System.Text.StringBuilder)">
+            <summary>
+            Copies an xml file from an archive or directory path and unpacks it from binary Xml to human-readable Xml
+            </summary>
+            <param name="xmlUnpack">The Xml unpack instructions object</param>
+            <param name="unpackBuilder">The stringBuilder to log the generated files location for the install log</param>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabaseLegacy(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.Boolean)">
+            <summary>
+            Parses the database Xml document from the legacy format into memory
+            </summary>
+            <param name="doc">The document to parse from</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="logicalDependencies">The list of logical dependencies</param>
+            <param name="parsedCatagoryList">The list of categories</param>
+            <param name="buildRefrences">Flag for if the list references (like level, parent, topParent) should be built as well</param>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabaseLegacy(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Saves the current mod database into the legacy document format
+            </summary>
+            <param name="saveLocation">The file save location</param>
+            <param name="doc">The XmlDocument to save into</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCatagoryList">The list of categories</param>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabase(System.String,System.String,System.String,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},RelhaxModpack.Xml.DatabaseXmlVersion)">
+            <summary>
+            Save the database to an Xml version
+            </summary>
+            <param name="saveLocation">The folder path to save the files into</param>
+            <param name="gameVersion">The version of the game that this database supports</param>
+            <param name="onlineFolderVersion">The online folder for the zip file location of this database</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCatagoryList">The list of categories</param>
+            <param name="versionToSaveAs">The Xml version of the database to save as</param>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabase1V1(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Save the database to the Xml version 1.1 standard
+            </summary>
+            <param name="savePath">The path to save all the xml files to</param>
+            <param name="doc">The root XmlDocument to save the header information to</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCatagoryList">The list of categories</param>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabaseList1V1(System.Collections.IList,System.Xml.XmlElement,System.Xml.XmlDocument,System.String)">
+            <summary>
+            Saves a list of packages to a document
+            </summary>
+            <param name="packagesToSave">The generic list of packages to save</param>
+            <param name="documentRootElement">The element that will be holding this list</param>
+            <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
+            <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.AddPatchesFromFile(System.Collections.Generic.List{RelhaxModpack.Patches.Patch},System.String,System.String)">
+            <summary>
+            Parse a list of patch instructions from an Xml file into patch objects
+            </summary>
+            <param name="patches">The list of patches to parse into</param>
+            <param name="filename">The name of the file to parse from</param>
+            <param name="originalNameFromZip">The original name when extracted from the zip file during install time</param>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.AddShortcutsFromFile(System.Collections.Generic.List{RelhaxModpack.Shortcuts.Shortcut},System.String)">
+            <summary>
+            Parse a list of shortcut instructions from an Xml file into shortcut objects
+            </summary>
+            <param name="shortcuts">The list of shortcuts to parse into</param>
+            <param name="filename">The name of the file to parse from</param>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.AddXmlUnpackFromFile(System.Collections.Generic.List{RelhaxModpack.Xml.XmlUnpack},System.String)">
+            <summary>
+            Parse a list of Xml unpack instructions from an Xml file into XmlUnpack objects
+            </summary>
+            <param name="xmlUnpacks">The list of XmlUnpacks to parse into</param>
+            <param name="filename">The name of the file to parse from</param>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.AddAtlasFromFile(System.Collections.Generic.List{RelhaxModpack.Atlases.Atlas},System.String)">
+            <summary>
+            Parse a list of Xml atlas creation instructions from an Xml file into Atlas objects
+            </summary>
+            <param name="atlases">The list of Atlases to parse into</param>
+            <param name="filename">The name of the file to parse from</param>
         </member>
         <member name="T:RelhaxModpack.Logfile">
             <summary>
@@ -6983,84 +7377,6 @@
             <param name="savePath">The path to save the xml file to</param>
             <param name="mainWindow">If method is called from MainWindow, use itself for getting its color properties</param>
         </member>
-        <member name="T:RelhaxModpack.PatchRegressionTypes">
-            <summary>
-            The types of patch regression tests that can be performed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.PatchRegressionTypes.json">
-            <summary>
-            Json regression (standard, non-XVM)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.PatchRegressionTypes.xml">
-            <summary>
-            Xml regression
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.PatchRegressionTypes.regex">
-            <summary>
-            Regex regression
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.PatchRegressionTypes.followPath">
-            <summary>
-            Json regression (XVM style)
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UnitTest">
-            <summary>
-            Represents a patch operation with a description and desired assertion condition
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UnitTest.Patch">
-            <summary>
-            The patch operation object
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UnitTest.Description">
-            <summary>
-            A description of what the patch should do
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UnitTest.ShouldPass">
-            <summary>
-            Determines if the patch should pass or fail the test
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Regression">
-            <summary>
-            A regression object is an entire regression test suite. Manages the unit tests and runs the test assertions
-            </summary>
-            <remarks>A regression test is designed to only test one type of patch i.e. a series of XML patches.
-            The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
-            the results. Results are logged to a new logfile each time a regression run is started</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Regression.#ctor(RelhaxModpack.PatchRegressionTypes,System.Collections.Generic.List{RelhaxModpack.UnitTest})">
-            <summary>
-            Make a regression object
-            </summary>
-            <param name="regressionType">The type of regressions to run</param>
-            <param name="unitTestsToRun">The list of unit tests to run</param>
-        </member>
-        <member name="M:RelhaxModpack.Regression.RunRegressions">
-            <summary>
-            Run a complete regression test based on the list of unit tests
-            </summary>
-            <returns>Returns false if a setup error occurred, true otherwise</returns>
-            <remarks>The return value of the method does NOT related to the success of the Unit Tests</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Regression.Dispose(System.Boolean)">
-            <summary>
-            Dispose of managed resources
-            </summary>
-            <param name="disposing">For redundant calls</param>
-        </member>
-        <member name="M:RelhaxModpack.Regression.Dispose">
-            <summary>
-            Dispose of managed resources
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.RelhaxFreeImageLibrary">
             <summary>
             A wrapper class around the TexImpNet FreeImage library class
@@ -7799,7 +8115,7 @@
             </summary>
             <param name="reporter">The task to toggle</param>
         </member>
-        <member name="M:RelhaxModpack.Windows.AdvancedProgress.ToggleComplete(RelhaxModpack.InstallerComponents.InstallerExitCodes)">
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.ToggleComplete(RelhaxModpack.InstallerExitCodes)">
             <summary>
             Toggle a reporting task to the complete state
             </summary>
@@ -8528,322 +8844,6 @@
             <summary>
             Loads all translation dictionaries. Should only be done once (at application start)
             </summary>
-        </member>
-        <member name="T:RelhaxModpack.Xml.XmlLoadType">
-            <summary>
-            Xml document load type enumeration
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Xml.XmlLoadType.FromFile">
-            <summary>
-            loading Xml from a file on disk
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Xml.XmlLoadType.FromString">
-            <summary>
-            loading Xml from a text string
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Xml.DatabaseXmlVersion">
-            <summary>
-            The enumeration representations of the Xml database saving format
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Xml.DatabaseXmlVersion.Legacy">
-            <summary>
-            The Legacy format. All in one document
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Xml.DatabaseXmlVersion.OnePointOne">
-            <summary>
-            The 1.1 format. A root file, a file for the global and standard dependencies, and a file for each categories
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Xml.XmlUtils">
-            <summary>
-            Utility class for dealing with Xml features and functions
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.IsValidXml(System.String)">
-            <summary>
-            Check to make sure an Xml file is valid
-            </summary>
-            <param name="filePath">The path to the Xml file</param>
-            <returns>True if valid Xml, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.IsValidXml(System.String,System.String)">
-            <summary>
-            Check to make sure an Xml file is valid
-            </summary>
-            <param name="xmlString">The Xml text string</param>
-            <param name="fileName">the name of the file, used for debugging purposes</param>
-            <returns>True if valid Xml, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlStringFromXPath(System.String,System.String)">
-            <summary>
-            Get an Xml element attribute given an Xml path
-            </summary>
-            <param name="file">The path to the Xml file</param>
-            <param name="xpath">The xpath search string</param>
-            <returns>The value from the xpath search, otherwise null</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlStringFromXPath(System.String,System.String,System.String)">
-            <summary>
-            Get an Xml element attribute given an Xml path
-            </summary>
-            <param name="xmlString">The Xml text string</param>
-            <param name="xpath">The xpath search string</param>
-            <param name="filename"></param>
-            <returns>The value from the xpath search, otherwise null</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlStringFromXPath(System.Xml.XmlDocument,System.String)">
-            <summary>
-            Get an Xml element attribute given an Xml path
-            </summary>
-            <param name="doc">The Xml document object to check</param>
-            <param name="xpath">The xpath search string</param>
-            <returns>The value from the xpath search, otherwise null</returns>
-            <remarks>
-            The following are Xml attribute examples
-            element example: "//root/element"
-            attribute example: "//root/element/@attribute"
-            for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
-            for the folder version: //modInfoAlpha.xml/@version
-            </remarks>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodeFromXPath(System.String,System.String)">
-            <summary>
-            Get an Xml node value given an Xml path
-            </summary>
-            <param name="file">The path to the Xml file</param>
-            <param name="xpath">The xpath search string</param>
-            <returns>The Xml node object of the search result, or null</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodeFromXPath(System.String,System.String,System.String)">
-            <summary>
-            Get an Xml node value given an Xml path
-            </summary>
-            <param name="xmlString">The Xml string to parse</param>
-            <param name="xpath">The xpath search string</param>
-            <param name="filename">The name of the file, used for logging purposes</param>
-            <returns>The Xml node object of the search result, or null</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodeFromXPath(System.Xml.XmlDocument,System.String)">
-            <summary>
-            Get an Xml node value given an Xml path
-            </summary>
-            <param name="doc">The XmlDocument object to search</param>
-            <param name="xpath">The xpath string</param>
-            <returns>The Xml node object of the search result, or null</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodesFromXPath(System.String,System.String)">
-            <summary>
-            Get a List of Xml nodes that match given an Xml path
-            </summary>
-            <param name="file">The path to the Xml file</param>
-            <param name="xpath">The xpath string</param>
-            <returns>The node list of matching results, or null</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodesFromXPath(System.String,System.String,System.String)">
-            <summary>
-            Get a List of Xml nodes that match given an Xml path
-            </summary>
-            <param name="xmlString">The xml document in a string</param>
-            <param name="filename">The name of the document for logging purposes</param>
-            <param name="xpath">The xpath string</param>
-            <returns>The node list of matching results, or null</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodesFromXPath(System.Xml.XmlDocument,System.String)">
-            <summary>
-            Get a List of Xml nodes that match given an Xml path
-            </summary>
-            <param name="doc">The XmlDocument to search</param>
-            <param name="xpath">The xml path string</param>
-            <returns>The node list of matching results, or null</returns>
-            <remarks>XmlElement and XmlAttribute inherit from XmlNode</remarks> 
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabaseRoot1V1Document">
-            <summary>
-            Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
-            </summary>
-            <returns>the XmlDocument object of the root database file</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabase1V1FilesList(System.Xml.XmlDocument)">
-            <summary>
-            Get a list of all URLs to each xml document file of the database
-            </summary>
-            <param name="rootDocument">The root 'database.xml' document object</param>
-            <returns>The list of URLs</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabase1V1FilesList">
-            <summary>
-            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
-            </summary>
-            <returns>The list of URLs</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabase1V1FilesListAsync">
-            <summary>
-            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
-            </summary>
-            <returns>The list of URLs</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase(System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.String)">
-            <summary>
-            Parse the Xml database of any type into lists in memory
-            </summary>
-            <param name="modInfoDocument">The root document. Can either be the entire document (Legacy) or the file with database header information only (OnePointOne)</param>
-            <param name="globalDependencies">The global dependencies list</param>
-            <param name="dependencies">The dependencies list</param>
-            <param name="parsedCategoryList">The category list</param>
-            <param name="location">The folder path to the OnePointOne+ additional xml files as part of the database</param>
-            <returns>True if database parsing was a success, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase1V1FromFiles(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Parse a database into the version 1.1 format from files on the disk
-            </summary>
-            <param name="rootPath">The path to the folder that contains all the xml database files</param>
-            <param name="rootDocument">The root document object</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase1V1FromStrings(System.String,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Parse a database into version 1.1 from string representations of the Xml files
-            </summary>
-            <param name="globalDependenciesXml">The Xml string of the global dependencies document</param>
-            <param name="dependneciesXml">The Xml string of the dependencies document</param>
-            <param name="categoriesXml">The list of Xml strings of the categories document</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Parse a database into version 1.1 from XDocument objects
-            </summary>
-            <param name="globalDependenciesDoc">The Xml document of global dependencies</param>
-            <param name="globalDependenciesList">The list of global dependencies</param>
-            <param name="dependenciesDoc">The Xml document of dependencies</param>
-            <param name="dependenciesList">The list of dependencies</param>
-            <param name="categoryDocuments">The list of xml documents of the category Xml documents</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.DocumentToXDocument(System.Xml.XmlDocument)">
-            <summary>
-            Convert an XmlDocument to an XDocument
-            </summary>
-            <param name="doc">The XmlDocument to convert</param>
-            <returns>The converted XDocument</returns>
-            <remarks>See https://blogs.msdn.microsoft.com/xmlteam/2009/03/31/converting-from-xmldocument-to-xdocument/ </remarks>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.LoadXDocument(System.String,RelhaxModpack.Xml.XmlLoadType)">
-            <summary>
-            Load an Xml document to an XDocument object
-            </summary>
-            <param name="fileOrXml">The filepath or string representation of the Xml document</param>
-            <param name="type">The type to define if fileOrXml is a file path or the Xml string</param>
-            <returns>A parsed XDocument of the Xml document</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.LoadXmlDocument(System.String,RelhaxModpack.Xml.XmlLoadType)">
-            <summary>
-            Load an Xml document to an XmlDocument object
-            </summary>
-            <param name="fileOrXml">The filepath or string representation of the Xml document</param>
-            <param name="type">The type to define if fileOrXml is a file path or the Xml string</param>
-            <returns>A parsed XmlDocument of the Xml document</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.UnpackXmlFile(RelhaxModpack.XmlUnpack,System.Text.StringBuilder)">
-            <summary>
-            Copies an xml file from an archive or directory path and unpacks it from binary Xml to human-readable Xml
-            </summary>
-            <param name="xmlUnpack">The Xml unpack instructions object</param>
-            <param name="unpackBuilder">The stringBuilder to log the generated files location for the install log</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabaseLegacy(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.Boolean)">
-            <summary>
-            Parses the database Xml document from the legacy format into memory
-            </summary>
-            <param name="doc">The document to parse from</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="logicalDependencies">The list of logical dependencies</param>
-            <param name="parsedCatagoryList">The list of categories</param>
-            <param name="buildRefrences">Flag for if the list references (like level, parent, topParent) should be built as well</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabaseLegacy(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Saves the current mod database into the legacy document format
-            </summary>
-            <param name="saveLocation">The file save location</param>
-            <param name="doc">The XmlDocument to save into</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCatagoryList">The list of categories</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabase(System.String,System.String,System.String,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},RelhaxModpack.Xml.DatabaseXmlVersion)">
-            <summary>
-            Save the database to an Xml version
-            </summary>
-            <param name="saveLocation">The folder path to save the files into</param>
-            <param name="gameVersion">The version of the game that this database supports</param>
-            <param name="onlineFolderVersion">The online folder for the zip file location of this database</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCatagoryList">The list of categories</param>
-            <param name="versionToSaveAs">The Xml version of the database to save as</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabase1V1(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Save the database to the Xml version 1.1 standard
-            </summary>
-            <param name="savePath">The path to save all the xml files to</param>
-            <param name="doc">The root XmlDocument to save the header information to</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCatagoryList">The list of categories</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabaseList1V1(System.Collections.IList,System.Xml.XmlElement,System.Xml.XmlDocument,System.String)">
-            <summary>
-            Saves a list of packages to a document
-            </summary>
-            <param name="packagesToSave">The generic list of packages to save</param>
-            <param name="documentRootElement">The element that will be holding this list</param>
-            <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
-            <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.AddPatchesFromFile(System.Collections.Generic.List{RelhaxModpack.Patch},System.String,System.String)">
-            <summary>
-            Parse a list of patch instructions from an Xml file into patch objects
-            </summary>
-            <param name="patches">The list of patches to parse into</param>
-            <param name="filename">The name of the file to parse from</param>
-            <param name="originalNameFromZip">The original name when extracted from the zip file during install time</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.AddShortcutsFromFile(System.Collections.Generic.List{RelhaxModpack.Shortcut},System.String)">
-            <summary>
-            Parse a list of shortcut instructions from an Xml file into shortcut objects
-            </summary>
-            <param name="shortcuts">The list of shortcuts to parse into</param>
-            <param name="filename">The name of the file to parse from</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.AddXmlUnpackFromFile(System.Collections.Generic.List{RelhaxModpack.XmlUnpack},System.String)">
-            <summary>
-            Parse a list of Xml unpack instructions from an Xml file into XmlUnpack objects
-            </summary>
-            <param name="xmlUnpacks">The list of XmlUnpacks to parse into</param>
-            <param name="filename">The name of the file to parse from</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.AddAtlasFromFile(System.Collections.Generic.List{RelhaxModpack.Atlas},System.String)">
-            <summary>
-            Parse a list of Xml atlas creation instructions from an Xml file into Atlas objects
-            </summary>
-            <param name="atlases">The list of Atlases to parse into</param>
-            <param name="filename">The name of the file to parse from</param>
         </member>
         <member name="T:RelhaxModpack.ReturnCodes">
             <summary>

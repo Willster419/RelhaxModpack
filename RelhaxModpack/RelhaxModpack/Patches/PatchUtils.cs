@@ -10,8 +10,9 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Globalization;
 using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities;
 
-namespace RelhaxModpack.Utilities
+namespace RelhaxModpack.Patches
 {
     /// <summary>
     /// Exit codes during a patch operation

@@ -102,7 +102,7 @@ namespace RelhaxModpack.Windows
 
             //load the trigger box with trigger options
             LoadedTriggersComboBox.Items.Clear();
-            foreach (Trigger t in InstallerComponents.InstallEngine.Triggers)
+            foreach (Trigger t in InstallEngine.Triggers)
             {
                 LoadedTriggersComboBox.Items.Add(t.Name);
             }
@@ -116,7 +116,7 @@ namespace RelhaxModpack.Windows
 
             //set the items for the triggers combobox. this only needs to be done once anyways
             LoadedTriggersComboBox.Items.Clear();
-            foreach (string s in InstallerComponents.InstallEngine.CompleteTriggerList)
+            foreach (string s in InstallEngine.CompleteTriggerList)
                 LoadedTriggersComboBox.Items.Add(s);
             Init = false;
 

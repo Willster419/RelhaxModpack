@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using RelhaxModpack.Utilities;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Patches
 {
     /// <summary>
     /// The types of patch regression tests that can be performed

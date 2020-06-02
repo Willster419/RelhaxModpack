@@ -1,4 +1,4 @@
-﻿namespace RelhaxModpack
+﻿namespace RelhaxModpack.Xml
 {
     /// <summary>
     /// Represents a set of xml instructions for extracting and copying xml files into another location. Includes xml binary decompression

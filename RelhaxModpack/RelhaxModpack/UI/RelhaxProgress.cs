@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RelhaxModpack.InstallerComponents;
-
-namespace RelhaxModpack.UI
+﻿namespace RelhaxModpack.UI
 {
     /// <summary>
     /// The base class for reporting async progress to any UI receiver task.

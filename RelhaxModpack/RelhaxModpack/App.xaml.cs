@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using RelhaxModpack.Patches;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Windows;
 using RelhaxModpack.Xml;

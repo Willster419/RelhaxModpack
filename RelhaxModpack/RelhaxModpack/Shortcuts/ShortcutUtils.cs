@@ -1,11 +1,12 @@
 ﻿using IWshRuntimeLibrary;
+using RelhaxModpack.Utilities;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using File = System.IO.File;
 
-namespace RelhaxModpack.Utilities
+namespace RelhaxModpack.Shortcuts
 {
     /// <summary>
     /// A utility class to handle creating of shortcuts
