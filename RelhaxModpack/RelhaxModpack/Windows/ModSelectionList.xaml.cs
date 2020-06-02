@@ -10,11 +10,14 @@ using System.Xml;
 using System.Net;
 using System.IO;
 using Microsoft.Win32;
-using RelhaxModpack.UIComponents;
+using RelhaxModpack.UI;
 using System.Xml.Linq;
 using System.Windows.Threading;
 using System.Reflection;
 using System.Text;
+using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities;
+using RelhaxModpack.Database;
 
 namespace RelhaxModpack.Windows
 {
@@ -352,7 +355,7 @@ namespace RelhaxModpack.Windows
                                 //save zip file into memory for later
                                 zipfile = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL)));
                                 //extract modinfo xml string
-                                modInfoXml = Utils.GetStringFromZip(zipfile, "database.xml");
+                                modInfoXml = FileUtils.GetStringFromZip(zipfile, "database.xml");
                             }
                         }
                         catch (Exception)
@@ -420,17 +423,17 @@ namespace RelhaxModpack.Windows
 
                         string globalDependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file");
                         Logging.Debug("Found xml entry: {0}", globalDependencyFilename);
-                        string globalDependencyXmlString = Utils.GetStringFromZip(zipfile, globalDependencyFilename);
+                        string globalDependencyXmlString = FileUtils.GetStringFromZip(zipfile, globalDependencyFilename);
 
                         string dependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file");
                         Logging.Debug("Found xml entry: {0}", dependencyFilename);
-                        string dependenicesXmlString = Utils.GetStringFromZip(zipfile, dependencyFilename);
+                        string dependenicesXmlString = FileUtils.GetStringFromZip(zipfile, dependencyFilename);
 
                         foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
                         {
                             string categoryFilename = categoryNode.Attributes["file"].Value;
                             Logging.Debug("Found xml entry: {0}", categoryFilename);
-                            categoriesXml.Add(Utils.GetStringFromZip(zipfile, categoryFilename));
+                            categoriesXml.Add(FileUtils.GetStringFromZip(zipfile, categoryFilename));
                         }
                         zipfile.Dispose();
                         zipfile = null;
@@ -449,7 +452,7 @@ namespace RelhaxModpack.Windows
                         //create download url list
                         List<string> downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList();
 
-                        string[] downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
+                        string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 
                         //parse into strings
                         Logging.Debug("Tasks finished, extracting task results");
@@ -483,9 +486,9 @@ namespace RelhaxModpack.Windows
                 }
 
                 //map and link all references inside the package objects for use later
-                Utils.BuildLinksRefrence(ParsedCategoryList, false);
-                Utils.BuildLevelPerPackage(ParsedCategoryList);
-                List<DatabasePackage> flatList = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
+                DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
+                DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+                List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
 
                 //check db cache of local files in download zip folder
                 loadProgress.ChildCurrent++;
@@ -538,13 +541,13 @@ namespace RelhaxModpack.Windows
                 Md5HashDocument.Save(Settings.MD5HashDatabaseXmlFile);
 
                 //sort the database for UI display
-                Utils.SortDatabase(ParsedCategoryList);
+                DatabaseUtils.SortDatabase(ParsedCategoryList);
 
                 //build UI
                 loadProgress.ChildCurrent = 0;
                 loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
                 progress.Report(loadProgress);
-                Utils.AllowUIToUpdate();
+                UiUtils.AllowUIToUpdate();
 
                 //run UI init code
                 //note that this will syncronously stop the task, and schedule on the UI thread
@@ -554,8 +557,8 @@ namespace RelhaxModpack.Windows
                     //initialize the categories lists
                     InitDatabaseUI(ParsedCategoryList);
                     //link everything again now that the category exists
-                    Utils.BuildLinksRefrence(ParsedCategoryList, false);
-                    Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
+                    DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
+                    DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
                     //initialize the user mods
                     InitUsermods();
                 });
@@ -568,20 +571,20 @@ namespace RelhaxModpack.Windows
                     loadProgress.ChildCurrent++;
                     loadProgress.ReportMessage = string.Format("{0} {1}", Translations.GetTranslatedString("loading"), cat.Name);
                     progress.Report(loadProgress);
-                    Utils.AllowUIToUpdate();
+                    UiUtils.AllowUIToUpdate();
 
                     //then schedule the UI work
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         AddPackage(cat.Packages);
                     });
-                    Utils.AllowUIToUpdate();
+                    UiUtils.AllowUIToUpdate();
                 }
 
                 //perform any final loading to do
                 loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
                 progress.Report(loadProgress);
-                Utils.AllowUIToUpdate();
+                UiUtils.AllowUIToUpdate();
 
                 //then schedule the UI work
                 Application.Current.Dispatcher.Invoke(() =>
@@ -655,7 +658,7 @@ namespace RelhaxModpack.Windows
                         if (!File.Exists(Settings.LastInstalledConfigFilepath))
                         {
                             Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
-                            SelectionsDocument = XmlUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                            SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                             shouldLoadSomethingFilepath = null;
                             shouldLoadSomething = true;
                         }
@@ -670,7 +673,7 @@ namespace RelhaxModpack.Windows
                     else
                     {
                         //load default checked mods
-                        SelectionsDocument = XmlUtils.LoadXmlDocument(Utils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                        SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                         shouldLoadSomethingFilepath = null;
                         shouldLoadSomething = true;
                     }
@@ -762,7 +765,7 @@ namespace RelhaxModpack.Windows
         private void InitUsermods()
         {
             //get a list of all zip files in the folder
-            string[] zipFilesUserMods = Utils.DirectorySearch(Settings.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
+            string[] zipFilesUserMods = FileUtils.DirectorySearch(Settings.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
 
             //init database components
             UserCategory = new Category()
@@ -1068,7 +1071,7 @@ namespace RelhaxModpack.Windows
                         ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFCheckBox, true);
                         break;
                 }
-                //filters out the null UIComponents like if dropdown
+                //filters out the null UI like if dropdown
                 if(package.UIComponent != null)
                 {
                     if (package.UIComponent is RadioButton rb)
@@ -1165,8 +1168,28 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region UI Interaction With Database
+        /// <summary>
+        /// Clears all selections in the given lists by setting the checked properties to false
+        /// </summary>
+        /// <param name="ParsedCategoryList">The list of Categories</param>
+        private void ClearSelections(List<Category> ParsedCategoryList)
+        {
+            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, null, ParsedCategoryList))
+            {
+                if (ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
+                {
+                    Logging.Debug("SaveDisabledMods=True and package {0} FlagForSelectionSave is high, setting to low", package.Name);
+                    package.FlagForSelectionSave = false;
+                }
+                package.Checked = false;
+            }
+            foreach (Category category in ParsedCategoryList)
+                if (category.CategoryHeader != null && category.CategoryHeader.Checked)
+                    category.CategoryHeader.Checked = false;
+        }
+
         //generic handler to disable the auto check like in forms, but for WPF
-        void OnWPFComponentCheck(object sender, RoutedEventArgs e)
+        private void OnWPFComponentCheck(object sender, RoutedEventArgs e)
         {
             if (LoadingUI)
                 return;
@@ -1189,7 +1212,7 @@ namespace RelhaxModpack.Windows
         }
 
         //when a single/single1 mod is selected
-        void OnSinglePackageClick(object sender, EventArgs e)
+        private void OnSinglePackageClick(object sender, EventArgs e)
         {
             if (LoadingUI)
                 return;
@@ -1223,7 +1246,7 @@ namespace RelhaxModpack.Windows
         }
 
         //when a single_dropdown mod is selected
-        void OnSingleDDPackageClick(object sender, EventArgs e)
+        private void OnSingleDDPackageClick(object sender, EventArgs e)
         {
             if (LoadingUI)
                 return;
@@ -1259,7 +1282,7 @@ namespace RelhaxModpack.Windows
             PropagateChecked(spc, SelectionPropagationDirection.PropagateUp);
         }
 
-        void OnUserPackageClick(object sender, EventArgs e)
+        private void OnUserPackageClick(object sender, EventArgs e)
         {
             if (LoadingUI)
                 return;
@@ -1274,7 +1297,7 @@ namespace RelhaxModpack.Windows
         }
 
         //when a multi mod is selected
-        void OnMultiPackageClick(object sender, EventArgs e)
+        private void OnMultiPackageClick(object sender, EventArgs e)
         {
             if (LoadingUI)
                 return;
@@ -1308,7 +1331,7 @@ namespace RelhaxModpack.Windows
         //propagates the change back up the selection tree
         //can be sent from any component
         //true = up, false = down
-        void PropagateChecked(SelectablePackage spc, SelectionPropagationDirection direction)
+        private void PropagateChecked(SelectablePackage spc, SelectionPropagationDirection direction)
         {
             //the parent of the package we just checked
             SelectablePackage parent;
@@ -1420,7 +1443,7 @@ namespace RelhaxModpack.Windows
 
         //propagates the change back up the selection tree
         //NOTE: the only component that can propagate up for a not checked is a multi
-        void PropagateUpNotChecked(SelectablePackage spc)
+        private void PropagateUpNotChecked(SelectablePackage spc)
         {
             if (spc.Level == -1)
                 return;
@@ -1439,7 +1462,7 @@ namespace RelhaxModpack.Windows
         }
 
         //propagates the change down the selection tree
-        void PropagateDownNotChecked(SelectablePackage spc)
+        private void PropagateDownNotChecked(SelectablePackage spc)
         {
             foreach (SelectablePackage childPackage in spc.Packages)
             {
@@ -1546,7 +1569,7 @@ namespace RelhaxModpack.Windows
 
                     tracker++;
                 }
-                Utils.AllowUIToUpdate();
+                UiUtils.AllowUIToUpdate();
 
                 //check to see if a specific item is highlighted
                 //if so, it means that the user wants to preview a specific version
@@ -1749,8 +1772,8 @@ namespace RelhaxModpack.Windows
         {
             Logging.Info("Clearing selections");
             //clear in lists
-            Utils.ClearSelections(ParsedCategoryList);
-            Utils.ClearSelections(new List<Category>() { UserCategory});
+            ClearSelections(ParsedCategoryList);
+            ClearSelections(new List<Category>() { UserCategory});
             //update selection list UI
             ModTabGroups_SelectionChanged(null, null);
             Logging.Info("Selections cleared");
@@ -1803,7 +1826,7 @@ namespace RelhaxModpack.Windows
                 Logging.Info(LogOptions.MethodAndClassName, "This selection file is V2 but upgrade will be ignored");
 
             //first uncheck everything
-            Utils.ClearSelections(ParsedCategoryList);
+            ClearSelections(ParsedCategoryList);
 
             //get a list of all the mods currently in the selection
             XmlNodeList xmlSelections = document.SelectNodes("//mods/relhaxMods/mod");
@@ -1825,7 +1848,7 @@ namespace RelhaxModpack.Windows
                 stringUserSelections.Add(node.InnerText);
 
             //check the mods in the actual list if it's in the list
-            foreach (SelectablePackage package in Utils.GetFlatList(null, null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, null, ParsedCategoryList))
             {
                 //also check to only "check" the mod if it is visible OR if the command line settings to force visible all components
                 if (stringSelections.Contains(package.PackageName) && (package.Visible || ModpackSettings.ForceVisible))
@@ -1957,7 +1980,7 @@ namespace RelhaxModpack.Windows
                     File.Delete(backupFilepath);
                 }
 
-                Utils.FileMove(loadPath, backupFilepath, 3, 100);
+                FileUtils.FileMove(loadPath, backupFilepath, 3, 100);
                 SaveSelectionV3(loadPath, true);
             }
 
@@ -1969,14 +1992,14 @@ namespace RelhaxModpack.Windows
             //check if it's 'direct load' type
             bool directLoad = false;
             string directLoadString = XmlUtils.GetXmlStringFromXPath(document, "/packages/@directLoad");
-            if (!string.IsNullOrEmpty(directLoadString) && Utils.ParseBool(directLoadString, out bool result_, false))
+            if (!string.IsNullOrEmpty(directLoadString) && CommonUtils.ParseBool(directLoadString, out bool result_, false))
             {
                 directLoad = result_;
                 Logging.Debug(LogOptions.MethodName, "Parsed directLoad = {0}", directLoad);
             }
 
             //first uncheck everything
-            Utils.ClearSelections(ParsedCategoryList);
+            ClearSelections(ParsedCategoryList);
 
             //get a list of all the mods currently in the selection
             XmlNodeList xmlGlobalSelections = document.SelectNodes("/packages/globalPackages/package");
@@ -1996,7 +2019,7 @@ namespace RelhaxModpack.Windows
             List<DatabasePackage> userPackagesFromSelection = new List<DatabasePackage>();
             List<SelectablePackage> packagesFromSelection = new List<SelectablePackage>();
 
-            List<SelectablePackage> packagesFromDatabase = Utils.GetFlatSelectablePackageList(ParsedCategoryList);
+            List<SelectablePackage> packagesFromDatabase = DatabaseUtils.GetFlatSelectablePackageList(ParsedCategoryList);
 
             List<SelectablePackage> brokenStructurePackages = new List<SelectablePackage>();
             List<SelectablePackage> removedPackages = new List<SelectablePackage>();
@@ -2199,7 +2222,7 @@ namespace RelhaxModpack.Windows
             //check if dependencies are out of date
             Logging.Debug(LogOptions.MethodName, "Processing dependencies from selection");
             Logging.Debug(LogOptions.MethodName, "First calculate dependencies from currently selected packages");
-            List<Dependency> dependenciesCalculatedFromLoadedSelection = Utils.CalculateDependencies(Dependencies, ParsedCategoryList, true);
+            List<Dependency> dependenciesCalculatedFromLoadedSelection = DatabaseUtils.CalculateDependencies(Dependencies, ParsedCategoryList, true);
 
             Logging.Debug(LogOptions.MethodName, "Check if number if calculated dependencies == number of loaded dependencies from file");
             if (dependenciesCalculatedFromLoadedSelection.Count != dependenciesFromSelection.Count)
@@ -2297,7 +2320,7 @@ namespace RelhaxModpack.Windows
                 userPackageFromDatabase.Checked = true;
 
                 //check crc for up to date
-                if (!userPackage.CRC.Equals(Utils.CreateMD5Hash(userPackage.ZipFile)))
+                if (!userPackage.CRC.Equals(FileUtils.CreateMD5Hash(userPackage.ZipFile)))
                 {
                     Logging.Debug(LogOptions.MethodName, "Md5 hash values do not match, setting userOutOfDate");
                     userOutOfDate = true;
@@ -2328,8 +2351,8 @@ namespace RelhaxModpack.Windows
                 string pathBackup = Path.Combine(Path.GetDirectoryName(loadPath), filenameBackup);
 
                 if (File.Exists(pathBackup))
-                    Utils.FileDelete(pathBackup, 3, 100);
-                Utils.FileMove(loadPath, pathBackup, 3, 100);
+                    FileUtils.FileDelete(pathBackup, 3, 100);
+                FileUtils.FileMove(loadPath, pathBackup, 3, 100);
 
                 SaveSelectionV3(loadPath, true);
             }
@@ -2477,7 +2500,7 @@ namespace RelhaxModpack.Windows
             if (!string.IsNullOrEmpty(propertyValue))
             {
                 //add the property value
-                if (!Utils.SetObjectProperty(package, property, propertyValue))
+                if (!DatabaseUtils.SetObjectProperty(package, property, propertyValue))
                 {
                     Logging.Error("Unable to set property '{0}' value from SelectablePackage object, skipping!", propertyName);
                     return;
@@ -2508,7 +2531,7 @@ namespace RelhaxModpack.Windows
             var nodeUserMods = doc.Descendants("userMods").FirstOrDefault();
 
             //check relhax Mods
-            foreach (SelectablePackage package in Utils.GetFlatList(null, null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, null, ParsedCategoryList))
             {
                 if (package.Checked)
                 {
@@ -2588,7 +2611,7 @@ namespace RelhaxModpack.Windows
 
             //calculate dependencies for adding
             Logging.Debug("Running dependency calculation on database");
-            List<Dependency> dependenciesToInstall = Utils.CalculateDependencies(Dependencies, ParsedCategoryList,true);
+            List<Dependency> dependenciesToInstall = DatabaseUtils.CalculateDependencies(Dependencies, ParsedCategoryList,true);
 
             Logging.Debug("Saving calculated dependencies to document");
             foreach (Dependency dependency in dependenciesToInstall)
@@ -2607,7 +2630,7 @@ namespace RelhaxModpack.Windows
 
             //check relhax Mods
             Logging.Debug("Starting selection save of Relhax packages");
-            foreach (SelectablePackage package in Utils.GetFlatList(null, null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, null, ParsedCategoryList))
             {
                 XElement xPackage = null;
                 if (package.Checked)
@@ -2641,7 +2664,7 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Info("Adding user package {0}", package.PackageName);
                     XElement packagee = new XElement("package", new XAttribute("name", package.Name));
-                    packagee.Add(new XAttribute("crc", Utils.CreateMD5Hash(package.ZipFile)));
+                    packagee.Add(new XAttribute("crc", FileUtils.CreateMD5Hash(package.ZipFile)));
                     nodeUserMods.Add(packagee);
                 }
             }
@@ -2818,13 +2841,13 @@ namespace RelhaxModpack.Windows
                     if((bool)SearchThisTabOnlyCB.IsChecked)
                     {
                         TabItem selected = (TabItem)ModTabGroups.SelectedItem;
-                        searchComponents.AddRange(Utils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
+                        searchComponents.AddRange(DatabaseUtils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
                             term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.IsStructureVisible && term.ShowInSearchList && term.ParentCategory.TabPage.Equals(selected)));
                     }
                     else
                     {
                         //get a list of components that match the search term
-                        searchComponents.AddRange(Utils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
+                        searchComponents.AddRange(DatabaseUtils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
                             term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.IsStructureVisible && term.ShowInSearchList));
                     }
                 }
@@ -2932,7 +2955,7 @@ namespace RelhaxModpack.Windows
             if (hash == "-1")   //file not found in database
             {
                 //create Md5Hash from file
-                hash = Utils.CreateMD5Hash(inputFile);
+                hash = FileUtils.CreateMD5Hash(inputFile);
 
                 if (hash == "-1")
                 {

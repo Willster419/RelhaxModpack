@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
-using RelhaxModpack.DatabaseComponents;
-using RelhaxModpack.UIComponents;
+using RelhaxModpack.Database;
+using RelhaxModpack.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +16,9 @@ using Microsoft.WindowsAPICodePack;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Threading;
 using System.Text.RegularExpressions;
+using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities;
+using Trigger = RelhaxModpack.Database.Trigger;
 
 namespace RelhaxModpack.Windows
 {
@@ -99,7 +102,7 @@ namespace RelhaxModpack.Windows
 
             //load the trigger box with trigger options
             LoadedTriggersComboBox.Items.Clear();
-            foreach (Trigger t in InstallerComponents.InstallEngine.Triggers)
+            foreach (Trigger t in InstallEngine.Triggers)
             {
                 LoadedTriggersComboBox.Items.Add(t.Name);
             }
@@ -113,7 +116,7 @@ namespace RelhaxModpack.Windows
 
             //set the items for the triggers combobox. this only needs to be done once anyways
             LoadedTriggersComboBox.Items.Clear();
-            foreach (string s in InstallerComponents.InstallEngine.CompleteTriggerList)
+            foreach (string s in InstallEngine.CompleteTriggerList)
                 LoadedTriggersComboBox.Items.Add(s);
             Init = false;
 
@@ -123,7 +126,7 @@ namespace RelhaxModpack.Windows
                 {
                     Task.Run(async () =>
                     {
-                        if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                        if (!await CommonUtils.IsManagerUptoDate(CommonUtils.GetApplicationVersion()))
                         {
                             MessageBox.Show("Your application is out of date. Please launch the application normally to update");
                         }
@@ -188,12 +191,12 @@ namespace RelhaxModpack.Windows
 
         private int GetMaxPatchGroups()
         {
-            return Utils.GetMaxPatchGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+            return DatabaseUtils.GetMaxPatchGroupNumber(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
         }
 
         private int GetMaxInstallGroups()
         {
-            return Utils.GetMaxInstallGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+            return DatabaseUtils.GetMaxInstallGroupNumber(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
         }
 
         private SelectablePackage GetSelectablePackage(object obj)
@@ -297,9 +300,9 @@ namespace RelhaxModpack.Windows
             //load the install and patch groups
             InstallGroupsTreeView.Items.Clear();
             //make a flat list (can be used in patchGroup as well)
-            List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
+            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
             //make an array of group headers
-            TreeViewItem[] installGroupHeaders = new TreeViewItem[Utils.GetMaxInstallGroupNumberWithOffset(allFlatList) + 1];
+            TreeViewItem[] installGroupHeaders = new TreeViewItem[DatabaseUtils.GetMaxInstallGroupNumberWithOffset(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal install group number
             //hey while we're at it let's add the items to the instal group dispaly box
             PackageInstallGroupDisplay.Items.Clear();
@@ -327,8 +330,8 @@ namespace RelhaxModpack.Windows
             //do the same for patchgroups
             PatchGroupsTreeView.Items.Clear();
             //make a flat list (can be used in patchGroup as well)
-            List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
-            TreeViewItem[] patchGroupHeaders = new TreeViewItem[Utils.GetMaxPatchGroupNumber(allFlatList) + 1];
+            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
+            TreeViewItem[] patchGroupHeaders = new TreeViewItem[DatabaseUtils.GetMaxPatchGroupNumber(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal patch group number
             PackagePatchGroupDisplay.Items.Clear();
             for (int i = 0; i < patchGroupHeaders.Count(); i++)
@@ -468,7 +471,7 @@ namespace RelhaxModpack.Windows
         {
             AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
             {
-                Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
+                Packages = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
                 WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
             };
@@ -529,7 +532,7 @@ namespace RelhaxModpack.Windows
             List<Control> controlsToDisable = new List<Control>();
             foreach (TabItem tabItem in RightTab.Items)
             {
-                foreach (FrameworkElement element in Utils.GetAllWindowComponentsLogical(tabItem, false))
+                foreach (FrameworkElement element in UiUtils.GetAllWindowComponentsLogical(tabItem, false))
                 {
                     //if it's a common element used in the panel, then disable it
                     if (element is CheckBox || element is ComboBox || element is Button || element is TextBox || element is ListBox)
@@ -582,7 +585,7 @@ namespace RelhaxModpack.Windows
             {
                 if (package == null)
                 {
-                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(DependenciesTab, false))
                     {
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
@@ -612,12 +615,12 @@ namespace RelhaxModpack.Windows
                     ZipDownload.IsEnabled = true;
                     ZipUload.IsEnabled = true;
                     //all have internal notes and triggers
-                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(TriggersTab, false))
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(TriggersTab, false))
                     {
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
                     }
-                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(InternalNotesTab, false))
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(InternalNotesTab, false))
                     {
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
@@ -625,13 +628,13 @@ namespace RelhaxModpack.Windows
                     if (package is Dependency dependency || package is SelectablePackage spackage)
                     {
                         //dependency and selectable package both have dependencies
-                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
+                        foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(DependenciesTab, false))
                         {
                             if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                 control.IsEnabled = true;
                         }
                         //conflicting packages gets used for showing elements that are used by the dependency
-                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(ConflictingPackagesTab, false))
+                        foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(ConflictingPackagesTab, false))
                         {
                             if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                 control.IsEnabled = true;
@@ -647,22 +650,22 @@ namespace RelhaxModpack.Windows
                             PackageGreyAreaModDisplay.IsEnabled = true;
                             PackageObfuscatedModDisplay.IsEnabled = true;
                             //enable remaining tabs
-                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DescriptionTab, false))
+                            foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(DescriptionTab, false))
                             {
                                 if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                     control.IsEnabled = true;
                             }
-                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(UpdateNotesTab, false))
+                            foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(UpdateNotesTab, false))
                             {
                                 if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                     control.IsEnabled = true;
                             }
-                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(MediasTab, false))
+                            foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(MediasTab, false))
                             {
                                 if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                     control.IsEnabled = true;
                             }
-                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(UserDatasTab, false))
+                            foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(UserDatasTab, false))
                             {
                                 if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                     control.IsEnabled = true;
@@ -832,7 +835,7 @@ namespace RelhaxModpack.Windows
             PackageVersionDisplay.Text = package.Version;
             PackageAuthorDisplay.Text = package.Author;
             PackageUidDisplay.Text = package.UID;
-            PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
+            PackageLastUpdatedDisplay.Text = CommonUtils.ConvertFiletimeTimestampToDate(package.Timestamp);
 
             //locate and select the patchGroup and installGroup of the package
             //if it can't, then extend the number of options until its there
@@ -878,7 +881,7 @@ namespace RelhaxModpack.Windows
             PackageEnabledDisplay.IsChecked = package.Enabled;
 
             //devURL
-            PackageDevURLDisplay.Text = Utils.MacroReplace(package.DevURL,ReplacementTypes.TextUnescape);
+            PackageDevURLDisplay.Text = MacroUtils.MacroReplace(package.DevURL,ReplacementTypes.TextUnescape);
 
             //internal notes
             PackageInternalNotesDisplay.Text = package.InternalNotesEscaped;
@@ -915,7 +918,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 //check selectablePackages that use this dependency
-                foreach (SelectablePackage selectablePackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
+                foreach (SelectablePackage selectablePackage in DatabaseUtils.GetFlatSelectablePackageList(ParsedCategoryList))
                 {
                     foreach (DatabaseLogic logic in selectablePackage.Dependencies)
                         if (logic.PackageName.Equals(dependency.PackageName))
@@ -1054,7 +1057,7 @@ namespace RelhaxModpack.Windows
             if (!PackagePackageNameDisplay.Text.Equals(package.PackageName))
             {
                 Logging.Editor("PackageName is new, checking if it is unique");
-                if (Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList), PackagePackageNameDisplay.Text))
+                if (DatabaseUtils.IsDuplicateName(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList), PackagePackageNameDisplay.Text))
                 {
                     MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
                     return false;
@@ -1095,14 +1098,14 @@ namespace RelhaxModpack.Windows
             package.EndAddress = PackageEndAddressDisplay.Text;
 
             //devURL is separated by newlines for array list, so it's not necessary to escape
-            package.DevURL = Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
+            package.DevURL = MacroUtils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
             package.Version = PackageVersionDisplay.Text;
             package.Author = PackageAuthorDisplay.Text;
             package.InstallGroup = (int)PackageInstallGroupDisplay.SelectedItem;
             package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
-            package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
+            package.InternalNotes = MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
             package.Triggers = string.Join(",", PackageTriggersDisplay.Items.Cast<string>());
 
             //if the zipfile was updated, then update the last modified date
@@ -1110,8 +1113,8 @@ namespace RelhaxModpack.Windows
             {
                 package.CRC = "f";
                 package.ZipFile = PackageZipFileDisplay.Text;
-                package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
-                PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
+                package.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
+                PackageLastUpdatedDisplay.Text = CommonUtils.ConvertFiletimeTimestampToDate(package.Timestamp);
             }
 
             //this gets dependencies and selectable packages
@@ -1134,8 +1137,8 @@ namespace RelhaxModpack.Windows
                 selectablePackage.Visible = (bool)PackageVisibleDisplay.IsChecked;
                 selectablePackage.Name = PackageNameDisplay.Text;
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
-                selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
-                selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.Description = MacroUtils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.UpdateComment = MacroUtils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
                 selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items.Cast<string>());
 
                 selectablePackage.UserFiles.Clear();
@@ -1279,7 +1282,7 @@ namespace RelhaxModpack.Windows
                 return true;
 
             //devURL is separated by newlines for array list, so it's not necessary to escape
-            if (!package.DevURL.Equals(Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape)))
+            if (!package.DevURL.Equals(MacroUtils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape)))
                 return true;
             if (!package.Version.Equals(PackageVersionDisplay.Text))
                 return true;
@@ -1293,7 +1296,7 @@ namespace RelhaxModpack.Windows
                 return true;
             if (!package.Enabled.Equals((bool)PackageEnabledDisplay.IsChecked))
                 return true;
-            if (!package.InternalNotes.Equals(Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape)))
+            if (!package.InternalNotes.Equals(MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape)))
                 return true;
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
                 return true;
@@ -1391,12 +1394,12 @@ namespace RelhaxModpack.Windows
                 }
 
                 //also make a new UID for the package as well
-                packageToMove.UID = Utils.GenerateUID(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+                packageToMove.UID = CommonUtils.GenerateUID(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
 
                 //the packageName needs to stay unique as well
                 int i = 0;
                 string origName = packageToMove.PackageName;
-                while (Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => package.PackageName.Equals(packageToMove.PackageName)).Count() > 0)
+                while (DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => package.PackageName.Equals(packageToMove.PackageName)).Count() > 0)
                     packageToMove.PackageName = string.Format("{0}_{1}", origName, i++);
                 Logging.Editor("New package name is {0}", LogLevel.Info, packageToMove.PackageName);
             }
@@ -1475,9 +1478,9 @@ namespace RelhaxModpack.Windows
             SearchBox.Items.Clear();
 
             //rebuild the levels as well
-            Utils.BuildLinksRefrence(ParsedCategoryList, true);
-            Utils.BuildLevelPerPackage(ParsedCategoryList);
-            Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, true);
+            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //and keep focus over the item we just moved
             if (!realItemToMove.IsSelected)
@@ -1893,7 +1896,7 @@ namespace RelhaxModpack.Windows
 
                 //update the package crc and timestamp values
                 e.Package.CRC = "f";
-                e.Package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                e.Package.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
 
                 if (selectedItem.Equals(e.Package))
                 {
@@ -2041,9 +2044,9 @@ namespace RelhaxModpack.Windows
             }
 
             //build internal database links
-            Utils.BuildLinksRefrence(ParsedCategoryList, true);
-            Utils.BuildLevelPerPackage(ParsedCategoryList);
-            Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, true);
+            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
@@ -2083,9 +2086,9 @@ namespace RelhaxModpack.Windows
             }
 
             //build internal database links
-            Utils.BuildLinksRefrence(ParsedCategoryList, true);
-            Utils.BuildLevelPerPackage(ParsedCategoryList);
-            Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, true);
+            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
@@ -2765,7 +2768,7 @@ namespace RelhaxModpack.Windows
                 foreach (string searchTerm in SearchBox.Text.Split('*'))
                 {
                     //get a list of components that match the search term
-                    searchComponents.AddRange(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(term => term.PackageName.ToLower().Contains(searchTerm.ToLower())));
+                    searchComponents.AddRange(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(term => term.PackageName.ToLower().Contains(searchTerm.ToLower())));
                 }
 
                 //remove duplicates

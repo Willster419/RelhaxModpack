@@ -4,7 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using RelhaxModpack.Patches;
+using RelhaxModpack.Utilities;
 using RelhaxModpack.Windows;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack
 {
@@ -112,8 +115,8 @@ namespace RelhaxModpack
                 Shutdown((int)ReturnCodes.LogfileError);
             }
             Logging.WriteHeader(Logfiles.Application);
-            Logging.Info(string.Format("| Relhax Modpack version {0}", Utils.GetApplicationVersion()));
-            Logging.Info(string.Format("| Build version {0}, from date {1}", Settings.ApplicationVersion.ToString(), Utils.GetCompileTime()));
+            Logging.Info(string.Format("| Relhax Modpack version {0}", CommonUtils.GetApplicationVersion()));
+            Logging.Info(string.Format("| Build version {0}, from date {1}", Settings.ApplicationVersion.ToString(), CommonUtils.GetCompileTime()));
             Logging.Info(string.Format("| Running on OS {0}", Environment.OSVersion.ToString()));
             //parse command line arguments here
             //get the command line args for testing of auto install

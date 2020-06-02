@@ -14,6 +14,8 @@ using System.Net;
 using System.IO;
 using System.Timers;
 using System.Windows.Threading;
+using RelhaxModpack.Utilities;
+using RelhaxModpack.Database;
 
 namespace RelhaxModpack.Windows
 {
@@ -156,7 +158,7 @@ namespace RelhaxModpack.Windows
                         //before uploading, make sure it doesn't exist first
                         ProgressHeader.Text = "Checking if file exists on server...";
                         Logging.Editor("Checking if {0} already exists on the server in folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
-                        string[] listOfFilesOnServer = await Utils.FTPListFilesFoldersAsync(ZipFilePathOnline, Credential);
+                        string[] listOfFilesOnServer = await FtpUtils.FtpListFilesFoldersAsync(ZipFilePathOnline, Credential);
                         if (listOfFilesOnServer.Contains(ZipFileName) && MessageBox.Show("File already exists, overwrite?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                         {
                             Logging.Editor("DOES exist and user said don't overwrite, aborting");
@@ -207,7 +209,7 @@ namespace RelhaxModpack.Windows
                         Logging.Editor("STARTING FTP DOWNLOAD");
                         try
                         {
-                            FTPDownloadFilesize = await Utils.FTPGetFilesizeAsync(CompleteFTPPath, Credential);
+                            FTPDownloadFilesize = await FtpUtils.FtpGetFilesizeAsync(CompleteFTPPath, Credential);
                             await client.DownloadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
                             Logging.Editor("FTP DOWNLOAD COMPLETE ({0})", LogLevel.Info, ZipFileName);
                         }
@@ -265,7 +267,7 @@ namespace RelhaxModpack.Windows
                     case true:
                         //delete file on server
                         Logging.Editor("deleting file on server");
-                        await Utils.FTPDeleteFileAsync(CompleteFTPPath, Credential);
+                        await FtpUtils.FtpDeleteFileAsync(CompleteFTPPath, Credential);
                         break;
                     case false:
                         Logging.Editor("deleting file on disk");

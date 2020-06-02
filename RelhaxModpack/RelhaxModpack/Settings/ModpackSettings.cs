@@ -8,6 +8,7 @@ using System.Xml;
 using System.Windows;
 using System.Reflection;
 using System.Globalization;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack
 {
@@ -436,7 +437,7 @@ namespace RelhaxModpack
                         ModSelectionView = (SelectionView)int.Parse(setting.InnerText);
                         break;
                     case "BetaApplication":
-                        if(Utils.ParseBool(setting.InnerText, false))
+                        if(CommonUtils.ParseBool(setting.InnerText, false))
                         {
                             ApplicationDistroVersion = ApplicationVersions.Beta;
                         }
@@ -446,7 +447,7 @@ namespace RelhaxModpack
                         }
                         break;
                     case "BetaDatabase":
-                        if (Utils.ParseBool(setting.InnerText, false))
+                        if (CommonUtils.ParseBool(setting.InnerText, false))
                         {
                             DatabaseDistroVersion = DatabaseVersions.Beta;
                         }
@@ -456,10 +457,10 @@ namespace RelhaxModpack
                         }
                         break;
                     case "SuperExtraction":
-                        MulticoreExtraction = Utils.ParseBool(setting.InnerText, false);
+                        MulticoreExtraction = CommonUtils.ParseBool(setting.InnerText, false);
                         break;
                     case "InstantExtraction":
-                        InstallWhileDownloading = Utils.ParseBool(setting.InnerText, false);
+                        InstallWhileDownloading = CommonUtils.ParseBool(setting.InnerText, false);
                         break;
                 }
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Utilities;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
@@ -514,15 +515,15 @@ namespace RelhaxModpack
             switch (options)
             {
                 case LogOptions.ClassName:
-                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug);
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug);
                     break;
 
                 case LogOptions.MethodAndClassName:
-                    WriteToLog(string.Format("[{0}@{1}]: {2}", Utils.GetExecutingMethodName(), Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug);
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug);
                     break;
 
                 case LogOptions.MethodName:
-                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Debug);
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Debug);
                     break;
 
                 case LogOptions.None:
@@ -536,15 +537,15 @@ namespace RelhaxModpack
             switch (options)
             {
                 case LogOptions.ClassName:
-                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug, args);
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug, args);
                     break;
 
                 case LogOptions.MethodAndClassName:
-                    WriteToLog(string.Format("[{0}@{1}]: {2}", Utils.GetExecutingMethodName(), Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug, args);
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug, args);
                     break;
 
                 case LogOptions.MethodName:
-                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Debug, args);
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Debug, args);
                     break;
 
                 case LogOptions.None:
@@ -577,15 +578,15 @@ namespace RelhaxModpack
             switch (options)
             {
                 case LogOptions.ClassName:
-                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info);
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info);
                     break;
 
                 case LogOptions.MethodAndClassName:
-                    WriteToLog(string.Format("[{0}@{1}]: {2}", Utils.GetExecutingMethodName(), Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info);
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info);
                     break;
 
                 case LogOptions.MethodName:
-                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Info);
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Info);
                     break;
 
                 case LogOptions.None:
@@ -599,15 +600,15 @@ namespace RelhaxModpack
             switch(options)
             {
                 case LogOptions.ClassName:
-                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info, args);
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info, args);
                     break;
 
                 case LogOptions.MethodAndClassName:
-                    WriteToLog(string.Format("[{0}@{1}]: {2}", Utils.GetExecutingMethodName(), Utils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info, args);
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Info, args);
                     break;
 
                 case LogOptions.MethodName:
-                    WriteToLog(string.Format("[{0}]: {1}", Utils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Info, args);
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Info, args);
                     break;
 
                 case LogOptions.None:

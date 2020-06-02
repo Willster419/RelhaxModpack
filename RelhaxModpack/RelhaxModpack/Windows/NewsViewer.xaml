@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
-                    xmlns:ui="clr-namespace:RelhaxModpack.UIComponents"
-                    mc:Ignorable="d"
+        xmlns:ui="clr-namespace:RelhaxModpack.UI"
+        mc:Ignorable="d"
         Title="News Viewer" Height="450" Width="420" MinWidth="420" MinHeight="450" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
     <Grid Tag="NewViewGrid">

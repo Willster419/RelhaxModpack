@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.IO;
 using System.Net;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -110,7 +111,7 @@ namespace RelhaxModpack.Windows
         private async Task OpenFolderAsync(TreeViewItem itemToOpen)
         {
             itemToOpen.Items.Clear();
-            string[] folders = await Utils.FTPListFilesFoldersAsync(itemToOpen.Tag as string, Credential);
+            string[] folders = await FtpUtils.FtpListFilesFoldersAsync(itemToOpen.Tag as string, Credential);
             foreach(string s in folders)
             {
                 if (string.IsNullOrWhiteSpace(s))
