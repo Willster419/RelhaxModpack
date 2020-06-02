@@ -8,7 +8,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using RelhaxModpack.UIComponents;
+using RelhaxModpack.UI;
 using System.IO;
 using System.Net;
 using System.Windows.Threading;

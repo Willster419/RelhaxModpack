@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using RelhaxModpack.Windows;
-using RelhaxModpack.UIComponents;
+using RelhaxModpack.UI;
 using System.Xml;
 using System.Diagnostics;
 using Ionic.Zip;

@@ -31,7 +31,7 @@ using System.Windows.Media.Imaging;
 using System.Web;
 using RelhaxModpack.DatabaseComponents;
 using System.Runtime.CompilerServices;
-using RelhaxModpack.UIComponents;
+using RelhaxModpack.UI;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 

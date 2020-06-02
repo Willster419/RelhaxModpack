@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:RelhaxModpack"
-             xmlns:localUI="clr-namespace:RelhaxModpack.UIComponents"
+             xmlns:localUI="clr-namespace:RelhaxModpack.UI"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              StartupUri="MainWindow.xaml"
              Activated="Application_Activated"
@@ -17,12 +17,12 @@
                     <localUI:CustomBrushConverter x:Key="CustomToBrushConverter"/>
                 </ResourceDictionary>
                 <!-- <ResourceDictionary Source="RelhaxThemes.xaml"/> -->
-                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxButtonStyleDictionary.xaml"/>
-                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxCheckboxStyleDictionary.xaml"/>
-                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxComboboxStyleDictionary.xaml"/>
-                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxRadioButtonStyleDictionary.xaml"/>
-                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxTabItemStyleDictionary.xaml"/>
-                <ResourceDictionary Source="UIComponents/StyleDictionaries/RelhaxSelectionListTabItemStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UI/StyleDictionaries/RelhaxButtonStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UI/StyleDictionaries/RelhaxCheckboxStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UI/StyleDictionaries/RelhaxComboboxStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UI/StyleDictionaries/RelhaxRadioButtonStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UI/StyleDictionaries/RelhaxTabItemStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UI/StyleDictionaries/RelhaxSelectionListTabItemStyleDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

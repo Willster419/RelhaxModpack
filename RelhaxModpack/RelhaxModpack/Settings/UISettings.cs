@@ -14,8 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Reflection;
 using System.ComponentModel;
 using System.Windows.Data;
-using RelhaxModpack.UIComponents;
-using RelhaxModpack.UIComponents.ClassThemeDefinitions;
+using RelhaxModpack.UI;
+using RelhaxModpack.UI.ClassThemeDefinitions;
 using RelhaxModpack.Xml;
 
 namespace RelhaxModpack
@@ -77,9 +77,9 @@ namespace RelhaxModpack
         public static void ApplyCustomStyles(Window window)
         {
             //get the list
-            List<FrameworkElement> UIComponents = Utils.GetAllWindowComponentsLogical(window, false);
-            UIComponents = UIComponents.Where(component => component.Tag is string ID && !string.IsNullOrEmpty(ID)).ToList();
-            foreach (FrameworkElement element in UIComponents)
+            List<FrameworkElement> UI = Utils.GetAllWindowComponentsLogical(window, false);
+            UI = UI.Where(component => component.Tag is string ID && !string.IsNullOrEmpty(ID)).ToList();
+            foreach (FrameworkElement element in UI)
             {
                 if (element is Button button)
                 {

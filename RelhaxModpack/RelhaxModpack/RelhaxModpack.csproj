@@ -142,33 +142,33 @@
     <Compile Include="DatabaseComponents\Trigger.cs" />
     <Compile Include="DatabaseComponents\UpdateInstructions.cs" />
     <Compile Include="DatabaseComponents\UserFile.cs" />
-    <Compile Include="UIComponents\BoundUISettings.cs" />
-    <Compile Include="UIComponents\ClassColorset.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\BorderClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\ButtonClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\CheckboxClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\ComboboxClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\ControlClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\IClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\PanelClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\ProgressbarClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\RadioButtonClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\RelhaxHyperlinkClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\TabItemClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ClassThemeDefinitions\TextBlockClassThemeDefinition.cs" />
-    <Compile Include="UIComponents\ComponentColorset.cs" />
-    <Compile Include="UIComponents\CustomBrush.cs" />
-    <Compile Include="UIComponents\CustomBrushConverter.cs" />
-    <Compile Include="UIComponents\RelhaxComboBoxItem.xaml.cs">
+    <Compile Include="UI\BoundUISettings.cs" />
+    <Compile Include="UI\ClassColorset.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\BorderClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\ButtonClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\CheckboxClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\ComboboxClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\ControlClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\IClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\PanelClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\ProgressbarClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\RadioButtonClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\RelhaxHyperlinkClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\TabItemClassThemeDefinition.cs" />
+    <Compile Include="UI\ClassThemeDefinitions\TextBlockClassThemeDefinition.cs" />
+    <Compile Include="UI\ComponentColorset.cs" />
+    <Compile Include="UI\CustomBrush.cs" />
+    <Compile Include="UI\CustomBrushConverter.cs" />
+    <Compile Include="UI\RelhaxComboBoxItem.xaml.cs">
       <DependentUpon>RelhaxComboBoxItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\RelhaxHyperlink.xaml.cs">
+    <Compile Include="UI\RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\Theme.cs" />
-    <Compile Include="UIComponents\Themes.cs" />
-    <Compile Include="UIComponents\WindowColorset.cs" />
-    <Compile Include="UIComponents\ZoomBorder.cs" />
+    <Compile Include="UI\Theme.cs" />
+    <Compile Include="UI\Themes.cs" />
+    <Compile Include="UI\WindowColorset.cs" />
+    <Compile Include="UI\ZoomBorder.cs" />
     <Compile Include="Utilities\FileUtils.cs" />
     <Compile Include="Utilities\FtpUtils.cs" />
     <Compile Include="Utilities\GlobalSuppressions.cs" />
@@ -187,19 +187,19 @@
     <Compile Include="Settings\CommandLineSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\UISettings.cs" />
-    <Compile Include="UIComponents\EditorComboBoxItem.cs" />
-    <Compile Include="UIComponents\EditorSearchBoxItem.cs" />
-    <Compile Include="UIComponents\LinkButton.cs" />
-    <Compile Include="UIComponents\RelhaxInstallTaskReporter.xaml.cs">
+    <Compile Include="UI\EditorComboBoxItem.cs" />
+    <Compile Include="UI\EditorSearchBoxItem.cs" />
+    <Compile Include="UI\LinkButton.cs" />
+    <Compile Include="UI\RelhaxInstallTaskReporter.xaml.cs">
       <DependentUpon>RelhaxInstallTaskReporter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\RelhaxWPFCheckBox.xaml.cs">
+    <Compile Include="UI\RelhaxWPFCheckBox.xaml.cs">
       <DependentUpon>RelhaxWPFCheckBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\RelhaxWPFComboBox.xaml.cs">
+    <Compile Include="UI\RelhaxWPFComboBox.xaml.cs">
       <DependentUpon>RelhaxWPFComboBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\RelhaxWPFRadioButton.xaml.cs">
+    <Compile Include="UI\RelhaxWPFRadioButton.xaml.cs">
       <DependentUpon>RelhaxWPFRadioButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Regression.cs" />
@@ -241,7 +241,7 @@
     <Compile Include="Windows\FirstLoadAcknowledgments.xaml.cs">
       <DependentUpon>FirstLoadAcknowledgments.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\IPackageUIComponent.cs" />
+    <Compile Include="UI\IPackageUIComponent.cs" />
     <Compile Include="Windows\GameCenterUpdateDownloader.xaml.cs">
       <DependentUpon>GameCenterUpdateDownloader.xaml</DependentUpon>
     </Compile>
@@ -257,9 +257,9 @@
     <Compile Include="Windows\RelhaxMediaPlayer.xaml.cs">
       <DependentUpon>RelhaxMediaPlayer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\RelhaxProgress.cs" />
-    <Compile Include="UIComponents\StretchingTreeView.cs" />
-    <Compile Include="UIComponents\StretchingTreeViewItem.cs" />
+    <Compile Include="UI\RelhaxProgress.cs" />
+    <Compile Include="UI\StretchingTreeView.cs" />
+    <Compile Include="UI\StretchingTreeViewItem.cs" />
     <Compile Include="Windows\AdvancedProgress.xaml.cs">
       <DependentUpon>AdvancedProgress.xaml</DependentUpon>
     </Compile>
@@ -298,7 +298,7 @@
     <Compile Include="Windows\ProgressIndicator.xaml.cs">
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIComponents\RelhaxWindow.cs" />
+    <Compile Include="UI\RelhaxWindow.cs" />
     <Compile Include="Windows\SelectionFileIssuesDisplay.xaml.cs">
       <DependentUpon>SelectionFileIssuesDisplay.xaml</DependentUpon>
     </Compile>
@@ -330,51 +330,51 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UIComponents\RelhaxComboBoxItem.xaml">
+    <Page Include="UI\RelhaxComboBoxItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\StyleDictionaries\RelhaxRadioButtonStyleDictionary.xaml">
+    <Page Include="UI\StyleDictionaries\RelhaxRadioButtonStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\StyleDictionaries\RelhaxCheckboxStyleDictionary.xaml">
+    <Page Include="UI\StyleDictionaries\RelhaxCheckboxStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\StyleDictionaries\RelhaxComboboxStyleDictionary.xaml">
+    <Page Include="UI\StyleDictionaries\RelhaxComboboxStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\RelhaxHyperlink.xaml">
+    <Page Include="UI\RelhaxHyperlink.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\RelhaxInstallTaskReporter.xaml">
+    <Page Include="UI\RelhaxInstallTaskReporter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\StyleDictionaries\RelhaxButtonStyleDictionary.xaml">
+    <Page Include="UI\StyleDictionaries\RelhaxButtonStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\StyleDictionaries\RelhaxSelectionListTabItemStyleDictionary.xaml">
+    <Page Include="UI\StyleDictionaries\RelhaxSelectionListTabItemStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\StyleDictionaries\RelhaxTabItemStyleDictionary.xaml">
+    <Page Include="UI\StyleDictionaries\RelhaxTabItemStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\RelhaxWPFCheckBox.xaml">
+    <Page Include="UI\RelhaxWPFCheckBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\RelhaxWPFComboBox.xaml">
+    <Page Include="UI\RelhaxWPFComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\RelhaxWPFRadioButton.xaml">
+    <Page Include="UI\RelhaxWPFRadioButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

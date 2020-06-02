@@ -368,7 +368,7 @@ namespace RelhaxModpack
                     }
                 }
                 //RelhaxHyperlink has text stored at the child textbox
-                else if (control is UIComponents.RelhaxHyperlink link)
+                else if (control is UI.RelhaxHyperlink link)
                 {
                     link.Text = GetTranslatedString(componentName);
                     if (applyToolTips)

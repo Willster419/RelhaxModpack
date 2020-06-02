@@ -1,4 +1,4 @@
-﻿using RelhaxModpack.UIComponents;
+﻿using RelhaxModpack.UI;
 using RelhaxModpack.DatabaseComponents;
 using System;
 using System.Collections.Generic;

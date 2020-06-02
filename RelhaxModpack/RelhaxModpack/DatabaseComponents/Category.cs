@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using RelhaxModpack.UIComponents;
+using RelhaxModpack.UI;
 using RelhaxModpack.DatabaseComponents;
 using System.Windows.Controls;
 using System;

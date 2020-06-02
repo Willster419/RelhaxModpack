@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.IO;
 using RelhaxModpack.InstallerComponents;
-using RelhaxModpack.UIComponents;
+using RelhaxModpack.UI;
 
 namespace RelhaxModpack.Windows
 {   ///I exist as a branch

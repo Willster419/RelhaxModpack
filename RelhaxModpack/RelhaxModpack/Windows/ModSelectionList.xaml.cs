@@ -10,7 +10,7 @@ using System.Xml;
 using System.Net;
 using System.IO;
 using Microsoft.Win32;
-using RelhaxModpack.UIComponents;
+using RelhaxModpack.UI;
 using System.Xml.Linq;
 using System.Windows.Threading;
 using System.Reflection;
@@ -1070,7 +1070,7 @@ namespace RelhaxModpack.Windows
                         ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFCheckBox, true);
                         break;
                 }
-                //filters out the null UIComponents like if dropdown
+                //filters out the null UI like if dropdown
                 if(package.UIComponent != null)
                 {
                     if (package.UIComponent is RadioButton rb)

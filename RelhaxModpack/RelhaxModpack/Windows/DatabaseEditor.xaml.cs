@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 using RelhaxModpack.DatabaseComponents;
-using RelhaxModpack.UIComponents;
+using RelhaxModpack.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
