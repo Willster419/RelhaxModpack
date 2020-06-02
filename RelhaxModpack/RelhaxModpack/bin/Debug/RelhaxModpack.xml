@@ -4,127 +4,149 @@
         <name>RelhaxModpack</name>
     </assembly>
     <members>
-        <member name="T:RelhaxModpack.AtlasesCreator.FailCode">
+        <member name="T:RelhaxModpack.Atlases.FailCode">
             <summary>
             List of possible areas in the Atlas creation process where it could fail
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.None">
+        <member name="F:RelhaxModpack.Atlases.FailCode.None">
             <summary>
             No error occurred
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.ImageImporter">
+        <member name="F:RelhaxModpack.Atlases.FailCode.ImageImporter">
             <summary>
             Failed to import the DDS image file to a bitmap object
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.ImageExporter">
+        <member name="F:RelhaxModpack.Atlases.FailCode.ImageExporter">
             <summary>
             Failed to export the bitmap object to a DDS image file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.MapImporter">
+        <member name="F:RelhaxModpack.Atlases.FailCode.MapImporter">
             <summary>
             Failed to load and parse the WG xml atlas map
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.MapExporter">
+        <member name="F:RelhaxModpack.Atlases.FailCode.MapExporter">
             <summary>
             Failed to parse and save the WG xml atlas map
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.NoImages">
+        <member name="F:RelhaxModpack.Atlases.FailCode.NoImages">
             <summary>
             No images to build for the atlas
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.ImageNameCollision">
+        <member name="F:RelhaxModpack.Atlases.FailCode.ImageNameCollision">
             <summary>
             Duplicate image names in list of images to pack
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.FailedToPackImage">
+        <member name="F:RelhaxModpack.Atlases.FailCode.FailedToPackImage">
             <summary>
             Failed to pack the images into one large image (most likely they don't fit into the provided dimensions)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.FailCode.FailedToCreateBitmapAtlas">
+        <member name="F:RelhaxModpack.Atlases.FailCode.FailedToCreateBitmapAtlas">
             <summary>
             Failed to create the atlas bitmap object
             </summary>
         </member>
-        <member name="T:RelhaxModpack.AtlasesCreator.AtlasProgressDelegate">
+        <member name="T:RelhaxModpack.Atlases.AtlasProgressDelegate">
             <summary>
             The delegate to invoke when calling back to the sender for the AtlasProgres event
             </summary>
             <param name="sender">The sending Atlas Creator</param>
             <param name="e">Event arguments</param>
         </member>
-        <member name="T:RelhaxModpack.AtlasesCreator.AtlasCreator">
+        <member name="T:RelhaxModpack.Atlases.AtlasCreator">
             <summary>
             Represents the entire process of building an atlas image
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.Atlas">
+        <member name="F:RelhaxModpack.Atlases.AtlasCreator.Atlas">
             <summary>
             The object of atlas arguments for building the image
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.AtlasCreator.Token">
+        <member name="F:RelhaxModpack.Atlases.AtlasCreator.Token">
             <summary>
             The token for handling a cancel call from the user
             </summary>
         </member>
-        <member name="E:RelhaxModpack.AtlasesCreator.AtlasCreator.OnAtlasProgres">
+        <member name="E:RelhaxModpack.Atlases.AtlasCreator.OnAtlasProgres">
             <summary>
             The event when atlas child progress occurs
             </summary>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.CreateAtlas">
+        <member name="M:RelhaxModpack.Atlases.AtlasCreator.CreateAtlas">
             <summary>
             Create the atlas image
             </summary>
             <returns>Success code if complete, any other FailCode otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.Dispose(System.Boolean)">
+        <member name="M:RelhaxModpack.Atlases.AtlasCreator.Dispose(System.Boolean)">
             <summary>
             Dispose of the Atlas Creator (mostly disposing image data)
             </summary>
             <param name="disposing">Set to true to dispose managed objects as well as unmanaged</param>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasCreator.Dispose">
+        <member name="M:RelhaxModpack.Atlases.AtlasCreator.Dispose">
             <summary>
             Dispose of the Atlas Creator (mostly disposing image data)
             </summary>
         </member>
-        <member name="T:RelhaxModpack.AtlasesCreator.AtlasUtils">
+        <member name="T:RelhaxModpack.Atlases.AtlasUtils">
             <summary>
             A utility class for Atlas file processing
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.ParseModTexturesTask">
+        <member name="F:RelhaxModpack.Atlases.AtlasUtils.FreeImageLibrary">
+            <summary>
+            The manager instance of the FreeImage Library
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Atlases.AtlasUtils.NvTexLibrary">
+            <summary>
+            The manager instance of the Nvidia Texture Tools Library
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.AtlasUtils.TestLibrary(RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary,System.String,System.Boolean)">
+            <summary>
+            Test the ability to load an unmanaged library
+            </summary>
+            <returns>True if library loaded, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.AtlasUtils.TestLoadAtlasLibraries(System.Boolean)">
+            <summary>
+            Test the ability to load and unload all the atlas image processing libraries
+            </summary>
+            <returns>True if both libraries loaded, false otherwise</returns>
+        </member>
+        <member name="F:RelhaxModpack.Atlases.AtlasUtils.ParseModTexturesTask">
             <summary>
             The task of parsing all mod png images from multiple folders into a flat list of png bitmaps
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.ModContourIconImages">
+        <member name="F:RelhaxModpack.Atlases.AtlasUtils.ModContourIconImages">
             <summary>
             The list of parsed mod png images into textures
             </summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.AtlasLoaderLockObject">
+        <member name="F:RelhaxModpack.Atlases.AtlasUtils.AtlasLoaderLockObject">
             <summary>
             Lock object used in AtlasCreator for critical sections that can't be done at the same time
             </summary>
             <remarks>Each atlas file is created by its own thread. However, the DDS loading and saving API used can't be used more then once at a time</remarks>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.AtlasUtils.AtlasBuilders">
+        <member name="F:RelhaxModpack.Atlases.AtlasUtils.AtlasBuilders">
             <summary>
             A list of Atlas creating thread engines
             </summary>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.LoadModContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+        <member name="M:RelhaxModpack.Atlases.AtlasUtils.LoadModContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
             <summary>
             Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
             </summary>
@@ -132,22 +154,22 @@
             <param name="token">The cancellation token</param>
             <returns>The list of textures</returns>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.DisposeparseModTextures">
+        <member name="M:RelhaxModpack.Atlases.AtlasUtils.DisposeparseModTextures">
             <summary>
             Dispose of all textures in the shared mod texture list
             </summary>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.VerifyImageLibsLoaded">
+        <member name="M:RelhaxModpack.Atlases.AtlasUtils.VerifyImageLibsLoaded">
             <summary>
             Verifies the Atlas processing libraries are loaded. If not, they are loaded.
             </summary>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.AtlasUtils.DisposeOfAllAtlasResources">
+        <member name="M:RelhaxModpack.Atlases.AtlasUtils.DisposeOfAllAtlasResources">
             <summary>
             Disposes of all statically used AtlasUtils resources, including releasing the mod texture list
             </summary>
         </member>
-        <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker">
+        <member name="T:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker">
             <summary>Rectangle packer using an algorithm by Javier Arevalo</summary>
             <remarks>
               <para>
@@ -193,7 +215,7 @@
               </para>
             </remarks>
         </member>
-        <member name="T:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.AnchorRankComparer">
+        <member name="T:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.AnchorRankComparer">
             <summary>Compares the 'rank' of anchoring points</summary>
             <remarks>
               Anchoring points are potential locations for the placement of new rectangles.
@@ -204,40 +226,40 @@
               the upper left for new rectangles.
             </remarks>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.AnchorRankComparer.Default">
+        <member name="F:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.AnchorRankComparer.Default">
             <summary>Provides a default instance for the anchor rank comparer</summary>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.AnchorRankComparer.Compare(System.Drawing.Point,System.Drawing.Point)">
+        <member name="M:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.AnchorRankComparer.Compare(System.Drawing.Point,System.Drawing.Point)">
             <summary>Compares the rank of two anchors against each other</summary>
             <param name="left">Left anchor point that will be compared</param>
             <param name="right">Right anchor point that will be compared</param>
             <returns>The relation of the two anchor point's ranks to each other</returns>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.actualPackingAreaHeight">
+        <member name="F:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.actualPackingAreaHeight">
             <summary>Current height of the packing area</summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.actualPackingAreaWidth">
+        <member name="F:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.actualPackingAreaWidth">
             <summary>Current width of the packing area</summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.anchors">
+        <member name="F:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.anchors">
             <summary>Anchoring points where new rectangles can potentially be placed</summary>
         </member>
-        <member name="F:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.packedRectangles">
+        <member name="F:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.packedRectangles">
             <summary>Rectangles contained in the packing area</summary>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.#ctor(System.Int32,System.Int32)">
+        <member name="M:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.#ctor(System.Int32,System.Int32)">
             <summary>Initializes a new rectangle packer</summary>
             <param name="packingAreaWidth">Maximum width of the packing area</param>
             <param name="packingAreaHeight">Maximum height of the packing area</param>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.TryPack(System.Int32,System.Int32,System.Drawing.Point@)">
+        <member name="M:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.TryPack(System.Int32,System.Int32,System.Drawing.Point@)">
             <summary>Tries to allocate space for a rectangle in the packing area</summary>
             <param name="rectangleWidth">Width of the rectangle to allocate</param>
             <param name="rectangleHeight">Height of the rectangle to allocate</param>
             <param name="placement">Output parameter receiving the rectangle's placement</param>
             <returns>True if space for the rectangle could be allocated</returns>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.OptimizePlacement(System.Drawing.Point@,System.Int32,System.Int32)">
+        <member name="M:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.OptimizePlacement(System.Drawing.Point@,System.Int32,System.Int32)">
             <summary>
               Optimizes the rectangle's placement by moving it either left or up to fill
               any gaps resulting from rectangles blocking the anchors of the most optimal
@@ -247,7 +269,7 @@
             <param name="rectangleWidth">Width of the rectangle to be optimized</param>
             <param name="rectangleHeight">Height of the rectangle to be optimized</param>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.SelectAnchorRecursive(System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.SelectAnchorRecursive(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
               Searches for a free anchor and recursively enlarges the packing area
               if none can be found.
@@ -261,7 +283,7 @@
               does not fit in the packing area anymore.
             </returns>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.FindFirstFreeAnchor(System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.FindFirstFreeAnchor(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>Locates the first free anchor at which the rectangle fits</summary>
             <param name="rectangleWidth">Width of the rectangle to be placed</param>
             <param name="rectangleHeight">Height of the rectangle to be placed</param>
@@ -269,7 +291,7 @@
             <param name="testedPackingAreaHeight">Total height of the packing area</param>
             <returns>The index of the first free anchor or -1 if none is found</returns>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.IsFree(System.Drawing.Rectangle@,System.Int32,System.Int32)">
+        <member name="M:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.IsFree(System.Drawing.Rectangle@,System.Int32,System.Int32)">
             <summary>
               Determines whether the rectangle can be placed in the packing area
               at its current location.
@@ -279,7 +301,7 @@
             <param name="testedPackingAreaHeight">Total height of the packing area</param>
             <returns>True if the rectangle can be placed at its current position</returns>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ArevaloRectanglePacker.InsertAnchor(System.Drawing.Point)">
+        <member name="M:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker.InsertAnchor(System.Drawing.Point)">
             <summary>Inserts a new anchor point into the anchor list</summary>
             <param name="anchor">Anchor point that will be inserted</param>
             <remarks>
@@ -287,12 +309,12 @@
               depending on the distance from the top left corner in the packing area.
             </remarks>
         </member>
-        <member name="T:RelhaxModpack.AtlasesCreator.Packing.ImagePacker">
+        <member name="T:RelhaxModpack.Atlases.Packing.ImagePacker">
             <summary>
             Handles packing a list of small bitmap objects into one large bitmap object 
             </summary>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.ImagePacker.PackImage(System.Collections.Generic.IEnumerable{RelhaxModpack.Texture},System.Boolean,System.Boolean,System.Boolean,System.Int32,System.Int32,System.Int32,System.Drawing.Bitmap@,System.Collections.Generic.Dictionary{System.String,System.Drawing.Rectangle}@)">
+        <member name="M:RelhaxModpack.Atlases.Packing.ImagePacker.PackImage(System.Collections.Generic.IEnumerable{RelhaxModpack.Texture},System.Boolean,System.Boolean,System.Boolean,System.Int32,System.Int32,System.Int32,System.Drawing.Bitmap@,System.Collections.Generic.Dictionary{System.String,System.Drawing.Rectangle}@)">
             <summary>
             Packs a collection of images into a single image.
             </summary>
@@ -307,7 +329,7 @@
             <param name="outputMap">The resulting output map of placement rectangles for the images.</param>
             <returns>0 if the packing was successful, error code otherwise.</returns>
         </member>
-        <member name="T:RelhaxModpack.AtlasesCreator.Packing.OutOfSpaceException">
+        <member name="T:RelhaxModpack.Atlases.Packing.OutOfSpaceException">
             <summary>Insufficient space left in packing area to contain a given object</summary>
             <remarks>
               An exception being sent to you from deep space. Erm, no, wait, it's an exception
@@ -315,11 +337,11 @@
               the object you tried to pack into the remaining packing area.
             </remarks>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.OutOfSpaceException.#ctor(System.String)">
+        <member name="M:RelhaxModpack.Atlases.Packing.OutOfSpaceException.#ctor(System.String)">
             <summary>Initializes the exception with an error message</summary>
             <param name="message">Error message describing the cause of the exception</param>
         </member>
-        <member name="T:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker">
+        <member name="T:RelhaxModpack.Atlases.Packing.RectanglePacker">
             <summary>Base class for rectangle packing algorithms</summary>
             <remarks>
               <para>
@@ -333,73 +355,73 @@
               </para>
             </remarks>
         </member>
-        <member name="P:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.PackingAreaWidth">
+        <member name="P:RelhaxModpack.Atlases.Packing.RectanglePacker.PackingAreaWidth">
             <summary>Maximum width the packing area is allowed to have</summary>
         </member>
-        <member name="P:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.PackingAreaHeight">
+        <member name="P:RelhaxModpack.Atlases.Packing.RectanglePacker.PackingAreaHeight">
             <summary>Maximum height the packing area is allowed to have</summary>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.#ctor(System.Int32,System.Int32)">
+        <member name="M:RelhaxModpack.Atlases.Packing.RectanglePacker.#ctor(System.Int32,System.Int32)">
             <summary>Initializes a new rectangle packer</summary>
             <param name="packingAreaWidth">Width of the packing area</param>
             <param name="packingAreaHeight">Height of the packing area</param>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.Pack(System.Int32,System.Int32)">
+        <member name="M:RelhaxModpack.Atlases.Packing.RectanglePacker.Pack(System.Int32,System.Int32)">
             <summary>Allocates space for a rectangle in the packing area</summary>
             <param name="rectangleWidth">Width of the rectangle to allocate</param>
             <param name="rectangleHeight">Height of the rectangle to allocate</param>
             <returns>The location at which the rectangle has been placed</returns>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.Packing.RectanglePacker.TryPack(System.Int32,System.Int32,System.Drawing.Point@)">
+        <member name="M:RelhaxModpack.Atlases.Packing.RectanglePacker.TryPack(System.Int32,System.Int32,System.Drawing.Point@)">
             <summary>Tries to allocate space for a rectangle in the packing area</summary>
             <param name="rectangleWidth">Width of the rectangle to allocate</param>
             <param name="rectangleHeight">Height of the rectangle to allocate</param>
             <param name="placement">Output parameter receiving the rectangle's placement</param>
             <returns>True if space for the rectangle could be allocated</returns>
         </member>
-        <member name="T:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary">
+        <member name="T:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary">
             <summary>
             Represents an interface that all unmanaged libraries in the Modpack use. Allows for one method of testing.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.EmbeddedFilename">
+        <member name="P:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.EmbeddedFilename">
             <summary>
             Gets the name of the embedded zip file containing the dll, 32 or 64 bit version
             </summary>
         </member>
-        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.ExtractedFilename">
+        <member name="P:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.ExtractedFilename">
             <summary>
             Gets the name of the dll file inside the embedded zip file, 32 or 64bit version
             </summary>
         </member>
-        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Filepath">
+        <member name="P:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.Filepath">
             <summary>
             Gets the absolute path to the dll file
             </summary>
         </member>
-        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.IsExtracted">
+        <member name="P:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.IsExtracted">
             <summary>
             Determines if the file is extracted to the Filepath property location
             </summary>
         </member>
-        <member name="P:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.IsLoaded">
+        <member name="P:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.IsLoaded">
             <summary>
             Determines if the library is loaded into memory
             </summary>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Load">
+        <member name="M:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.Load">
             <summary>
             Attempts to load the library using the Filepath property
             </summary>
             <returns>True if the library load was successful</returns>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Unload">
+        <member name="M:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.Unload">
             <summary>
             Attempts to unload the library
             </summary>
             <returns>True if the library was unloaded, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary.Extract">
+        <member name="M:RelhaxModpack.Atlases.IRelhaxUnmanagedLibrary.Extract">
             <summary>
             Extracts the embedded compressed library to the location in the Filepath property
             </summary>
@@ -3491,6 +3513,85 @@
             </summary>
             <param name="item">The item to test</param>
             <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.FtpUtils">
+            <summary>
+            A Utility class for handling FTP connections
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.FtpMakeFolder(System.String,System.Net.ICredentials)">
+            <summary>
+            Create an FTP folder
+            </summary>
+            <param name="addressWithDirectory">The complete path to the folder to create</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.FtpMakeFolderAsync(System.String,System.Net.ICredentials)">
+            <summary>
+            Create an FTP folder
+            </summary>
+            <param name="addressWithDirectory">The complete path to the folder to create</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.FtpListFilesFolders(System.String,System.Net.ICredentials)">
+            <summary>
+            Get a list of files currently in an FTP folder
+            </summary>
+            <param name="address">The complete path to the FTP folder</param>
+            <param name="credentials">The FTP server credentials</param>
+            <returns>The list of files on the server, as well as the current directory "." and parent directory ".." characters</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.FtpListFilesFoldersAsync(System.String,System.Net.ICredentials)">
+            <summary>
+            Get a list of files currently in an FTP folder
+            </summary>
+            <param name="address">The complete path to the FTP folder</param>
+            <param name="credentials">The FTP server credentials</param>
+            <returns>The list of files on the server, as well as the current directory "." and parent directory ".." characters</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.FtpDeleteFile(System.String,System.Net.ICredentials)">
+            <summary>
+            Delete a file on an FTP server
+            </summary>
+            <param name="address">The complete path to the FTP file to delete</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.FtpDeleteFileAsync(System.String,System.Net.ICredentials)">
+            <summary>
+            Delete a file on an FTP server
+            </summary>
+            <param name="address">The complete path to the FTP file to delete</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.FtpDeleteFolder(System.String,System.Net.ICredentials)">
+            <summary>
+            Delete a folder on an FTP server
+            </summary>
+            <param name="address">The complete path to the FTP file to delete</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.FtpDeleteFolderAsync(System.String,System.Net.ICredentials)">
+            <summary>
+            Delete a folder on an FTP server
+            </summary>
+            <param name="address">The complete path to the FTP file to delete</param>
+            <param name="credentials">The FTP server credentials</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.FtpGetFilesize(System.String,System.Net.ICredentials)">
+            <summary>
+            Get a file size of an FTP file
+            </summary>
+            <param name="address">The complete path to the FTP file</param>
+            <param name="credentials">The FTP server credentials</param>
+            <returns>The size of the file in bytes</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FtpUtils.FtpGetFilesizeAsync(System.String,System.Net.ICredentials)">
+            <summary>
+            Get a file size of an FTP file
+            </summary>
+            <param name="address">The complete path to the FTP file</param>
+            <param name="credentials">The FTP server credentials</param>
+            <returns>The size of the file in bytes</returns>
         </member>
         <member name="T:RelhaxModpack.Atlas">
             <summary>
@@ -7545,28 +7646,6 @@
             Provides the ability to insert a 'null' value into json configurations
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.FreeImageLibrary">
-            <summary>
-            The manager instance of the FreeImage Library
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.NvTexLibrary">
-            <summary>
-            The manager instance of the Nvidia Texture Tools Library
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Utils.TestLibrary(RelhaxModpack.AtlasesCreator.IRelhaxUnmanagedLibrary,System.String,System.Boolean)">
-            <summary>
-            Test the ability to load an unmanaged library
-            </summary>
-            <returns>True if library loaded, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.TestLoadAtlasLibraries(System.Boolean)">
-            <summary>
-            Test the ability to load and unload all the atlas image processing libraries
-            </summary>
-            <returns>True if both libraries loaded, false otherwise</returns>
-        </member>
         <member name="M:RelhaxModpack.Utils.GetAssemblyName(System.String)">
             <summary>
             Get a complete assembly name based on a matching keyword
@@ -8391,80 +8470,6 @@
             Clear the WoT appdata cache folder
             </summary>
             <returns>True if clearing operation was sucessfull, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FTPMakeFolder(System.String,System.Net.ICredentials)">
-            <summary>
-            Create an FTP folder
-            </summary>
-            <param name="addressWithDirectory">The complete path to the folder to create</param>
-            <param name="credentials">The FTP server credentials</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FTPMakeFolderAsync(System.String,System.Net.ICredentials)">
-            <summary>
-            Create an FTP folder
-            </summary>
-            <param name="addressWithDirectory">The complete path to the folder to create</param>
-            <param name="credentials">The FTP server credentials</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FTPListFilesFolders(System.String,System.Net.ICredentials)">
-            <summary>
-            Get a list of files currently in an FTP folder
-            </summary>
-            <param name="address">The complete path to the FTP folder</param>
-            <param name="credentials">The FTP server credentials</param>
-            <returns>The list of files on the server, as well as the current directory "." and parent directory ".." characters</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FTPListFilesFoldersAsync(System.String,System.Net.ICredentials)">
-            <summary>
-            Get a list of files currently in an FTP folder
-            </summary>
-            <param name="address">The complete path to the FTP folder</param>
-            <param name="credentials">The FTP server credentials</param>
-            <returns>The list of files on the server, as well as the current directory "." and parent directory ".." characters</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FTPDeleteFile(System.String,System.Net.ICredentials)">
-            <summary>
-            Delete a file on an FTP server
-            </summary>
-            <param name="address">The complete path to the FTP file to delete</param>
-            <param name="credentials">The FTP server credentials</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FTPDeleteFileAsync(System.String,System.Net.ICredentials)">
-            <summary>
-            Delete a file on an FTP server
-            </summary>
-            <param name="address">The complete path to the FTP file to delete</param>
-            <param name="credentials">The FTP server credentials</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FTPDeleteFolder(System.String,System.Net.ICredentials)">
-            <summary>
-            Delete a folder on an FTP server
-            </summary>
-            <param name="address">The complete path to the FTP file to delete</param>
-            <param name="credentials">The FTP server credentials</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FTPDeleteFolderAsync(System.String,System.Net.ICredentials)">
-            <summary>
-            Delete a folder on an FTP server
-            </summary>
-            <param name="address">The complete path to the FTP file to delete</param>
-            <param name="credentials">The FTP server credentials</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FTPGetFilesize(System.String,System.Net.ICredentials)">
-            <summary>
-            Get a file size of an FTP file
-            </summary>
-            <param name="address">The complete path to the FTP file</param>
-            <param name="credentials">The FTP server credentials</param>
-            <returns>The size of the file in bytes</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.FTPGetFilesizeAsync(System.String,System.Net.ICredentials)">
-            <summary>
-            Get a file size of an FTP file
-            </summary>
-            <param name="address">The complete path to the FTP file</param>
-            <param name="credentials">The FTP server credentials</param>
-            <returns>The size of the file in bytes</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.GetSpecialFolderPath(RelhaxModpack.KnownFolder)">
             <summary>
