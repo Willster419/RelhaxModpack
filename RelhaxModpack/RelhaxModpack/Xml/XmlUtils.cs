@@ -2581,7 +2581,6 @@ namespace RelhaxModpack.Xml
                 xmlCategoryFile.AppendChild(xmlDeclaration);
 
                 XmlElement xmlCategoryFileRoot = xmlCategoryFile.CreateElement("Category");
-                xmlCategoryFileRoot.SetAttribute(nameof(cat.Name), cat.Name);
 
                 //save attributes for category
                 SavePropertiesToXmlAttributes(cat, xmlCategoryFileRoot, cat);
