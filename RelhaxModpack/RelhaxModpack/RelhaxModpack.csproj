@@ -120,13 +120,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AtlasesCreator\AtlasCreator.cs" />
-    <Compile Include="AtlasesCreator\AtlasUtils.cs" />
-    <Compile Include="AtlasesCreator\Packing\ArevaloRectanglePacker.cs" />
-    <Compile Include="AtlasesCreator\Packing\ImagePacker.cs" />
-    <Compile Include="AtlasesCreator\Packing\OutOfSpaceException.cs" />
-    <Compile Include="AtlasesCreator\Packing\RectanglePacker.cs" />
-    <Compile Include="AtlasesCreator\IRelhaxUnmanagedLibrary.cs" />
+    <Compile Include="Atlases\AtlasCreator.cs" />
+    <Compile Include="Atlases\AtlasUtils.cs" />
+    <Compile Include="Atlases\Packing\ArevaloRectanglePacker.cs" />
+    <Compile Include="Atlases\Packing\ImagePacker.cs" />
+    <Compile Include="Atlases\Packing\OutOfSpaceException.cs" />
+    <Compile Include="Atlases\Packing\RectanglePacker.cs" />
+    <Compile Include="Atlases\IRelhaxUnmanagedLibrary.cs" />
     <Compile Include="DatabaseComponents\Category.cs" />
     <Compile Include="DatabaseComponents\IDatabaseComponent.cs" />
     <Compile Include="DatabaseComponents\DatabaseLogic.cs" />
@@ -203,8 +203,8 @@
       <DependentUpon>RelhaxWPFRadioButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Regression.cs" />
-    <Compile Include="AtlasesCreator\RelhaxFreeImageLibrary.cs" />
-    <Compile Include="AtlasesCreator\RelhaxNvTexLibrary.cs" />
+    <Compile Include="Atlases\RelhaxFreeImageLibrary.cs" />
+    <Compile Include="Atlases\RelhaxNvTexLibrary.cs" />
     <Compile Include="Windows\AskCloseWoT.xaml.cs">
       <DependentUpon>AskCloseWoT.xaml</DependentUpon>
     </Compile>
