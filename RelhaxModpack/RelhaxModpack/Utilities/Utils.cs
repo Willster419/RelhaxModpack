@@ -20,9 +20,8 @@ using System.Web;
 using RelhaxModpack.Database;
 using System.Runtime.CompilerServices;
 using RelhaxModpack.Xml;
-using RelhaxModpack.Utilities;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Utilities
 {
 
     /// <summary>

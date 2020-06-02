@@ -13,6 +13,7 @@ using System.IO;
 using System.Net;
 using System.Windows.Threading;
 using RelhaxModpack.Database;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {

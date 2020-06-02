@@ -8,6 +8,7 @@ using System.Xml;
 using System.Windows;
 using System.Reflection;
 using System.Globalization;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack
 {

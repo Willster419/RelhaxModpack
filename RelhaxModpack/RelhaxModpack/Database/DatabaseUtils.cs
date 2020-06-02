@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Xml;
+﻿using RelhaxModpack.Utilities;
+using RelhaxModpack.Xml;
 using System;
 using System.Collections;
 using System.Collections.Generic;
