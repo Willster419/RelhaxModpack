@@ -63,7 +63,6 @@ namespace RelhaxModpack
             return Assembly.GetExecutingAssembly().GetManifestResourceNames().FirstOrDefault(rn => rn.Contains(keyword));
         }
 
-        #region Application Utils
         /// <summary>
         /// Return the entire assembly version
         /// </summary>
@@ -182,9 +181,7 @@ namespace RelhaxModpack
             bool outOfDate = (CompareVersions(currentVersion, applicationOnlineVersion) == -1);
             return !outOfDate;
         }
-        #endregion
 
-        #region Data type from string processing/parsing
         /// <summary>
         /// Try to parse a boolean value based on string input
         /// </summary>
@@ -339,44 +336,6 @@ namespace RelhaxModpack
             if (Enum.TryParse(input, true, out TEnum result))
                 return result;
             else return defaultValue;
-        }
-        #endregion
-
-        #region Generic Utils
-        /// <summary>
-        /// Get all xml strings for the V2 database file format from the selected beta database github branch
-        /// </summary>
-        /// <returns>all xml files in string form of the V2 database</returns>
-        public static string GetBetaDatabase1V1ForStringCompare(bool loadMode)
-        {
-            List<string> downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList();
-
-            string[] downloadStrings = null;
-
-            if (loadMode)
-            {
-                Task t = Task.Run(() => { downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs); } );
-
-                while(!t.IsCompleted)
-                {
-                    Thread.Sleep(100);
-                }
-            }
-            else
-            {
-                downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
-            }
-
-            return string.Join(string.Empty, downloadStrings);
-        }
-
-        /// <summary>
-        /// Get all xml strings for the V2 database file format from the selected beta database github branch
-        /// </summary>
-        /// <returns>all xml files in string form of the V2 database</returns>
-        public async static Task<string> GetBetaDatabase1V1ForStringCompareAsync()
-        {
-            return await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
         }
 
         /// <summary>
@@ -859,63 +818,16 @@ namespace RelhaxModpack
             return sf.GetMethod().Name;
         }
 
+        /// <summary>
+        /// Gets the name of the class above this
+        /// </summary>
+        /// <returns>The name of the calling class on this method call</returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static string GetExecutingClassName()
         {
             StackTrace st = new StackTrace();
             StackFrame sf = st.GetFrame(2);
             return sf.GetMethod().DeclaringType.Name;
-        }
-        #endregion
-
-        #region Install Utils
-        /// <summary>
-        /// Copies a file from one path or in an archive to a destination
-        /// </summary>
-        /// <param name="package">The zip archive to extract the file from</param>
-        /// <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
-        /// <param name="destinationCompletePath">The complete path to copy the destination file to</param>
-        public static void Unpack(string package, string sourceCompletePath, string destinationCompletePath)
-        {
-            string destinationFilename = Path.GetFileName(destinationCompletePath);
-            string destinationDirectory = Path.GetDirectoryName(destinationCompletePath);
-
-            //if the package entry is empty, then it's just a file copy
-            if (string.IsNullOrWhiteSpace(package))
-            {
-                if (File.Exists(sourceCompletePath))
-                    File.Copy(sourceCompletePath, destinationCompletePath);
-                Logging.Info("file copied");
-            }
-            else
-            {
-                if (!File.Exists(package))
-                {
-                    Logging.Error("packagefile does not exist, skipping");
-                    return;
-                }
-                using (ZipFile zip = new ZipFile(package))
-                {
-                    //get the files that match the specified path from the Xml entry
-                    string zipPath = sourceCompletePath.Replace(@"\", @"/");
-                    ZipEntry[] matchingEntries = zip.Where(zipp => zipp.FileName.Equals(zipPath)).ToArray();
-                    Logging.Debug("matching zip entries: {0}", matchingEntries.Count());
-                    if (matchingEntries.Count() > 0)
-                    {
-                        foreach (ZipEntry entry in matchingEntries)
-                        {
-                            //change the name to the destination
-                            entry.FileName = destinationFilename;
-
-                            //extract to disk and log
-                            entry.Extract(destinationDirectory, ExtractExistingFileAction.DoNotOverwrite);
-                            Logging.Info("entry extracted: {0}", destinationFilename);
-                        }
-                    }
-                    else
-                        Logging.Warning("no matching zip entries for file: {0}", zipPath);
-                }
-            }
         }
 
         /// <summary>
@@ -1025,6 +937,5 @@ namespace RelhaxModpack
             }
             return true;
         }
-        #endregion
     }
 }

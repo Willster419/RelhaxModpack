@@ -804,7 +804,7 @@ namespace RelhaxModpack.Xml
                 return true;
             }
 
-            Utils.Unpack(xmlUnpack.Pkg, sourceCompletePath, destinationCompletePath);
+            FileUtils.Unpack(xmlUnpack.Pkg, sourceCompletePath, destinationCompletePath);
             unpackBuilder.AppendLine(destinationCompletePath);
 
             Logging.Info("unpacking Xml binary file (if binary)");

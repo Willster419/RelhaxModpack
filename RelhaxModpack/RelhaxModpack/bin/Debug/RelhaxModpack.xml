@@ -780,6 +780,18 @@
             <param name="listPropertyInfo">the property metadata/info about the list property, for example Medias</param>
             <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
         </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1ForStringCompare(System.Boolean)">
+            <summary>
+            Get all xml strings for the V2 database file format from the selected beta database github branch
+            </summary>
+            <returns>all xml files in string form of the V2 database</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1ForStringCompareAsync">
+            <summary>
+            Get all xml strings for the V2 database file format from the selected beta database github branch
+            </summary>
+            <returns>all xml files in string form of the V2 database</returns>
+        </member>
         <member name="T:RelhaxModpack.Database.IDatabaseComponent">
             <summary>
             An interface for all components in the database
@@ -4065,6 +4077,14 @@
             <param name="wotPath">The path to the WoT exe</param>
             <returns>The absolute directory path to the World_of_Tanks folder</returns>
             <remarks>This is for in case the user specifies the WoT exe inside the win32 and/or win64 folders</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.Unpack(System.String,System.String,System.String)">
+            <summary>
+            Copies a file from one path or in an archive to a destination
+            </summary>
+            <param name="package">The zip archive to extract the file from</param>
+            <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
+            <param name="destinationCompletePath">The complete path to copy the destination file to</param>
         </member>
         <member name="M:RelhaxModpack.Utilities.FileUtils.GetSpecialFolderPath(RelhaxModpack.Utilities.KnownFolder)">
             <summary>
@@ -8271,18 +8291,6 @@
             <returns>The parsed or default enumeration value</returns>
             <remarks>see https://stackoverflow.com/questions/10685794/how-to-use-generic-tryparse-with-enum </remarks>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetBetaDatabase1V1ForStringCompare(System.Boolean)">
-            <summary>
-            Get all xml strings for the V2 database file format from the selected beta database github branch
-            </summary>
-            <returns>all xml files in string form of the V2 database</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetBetaDatabase1V1ForStringCompareAsync">
-            <summary>
-            Get all xml strings for the V2 database file format from the selected beta database github branch
-            </summary>
-            <returns>all xml files in string form of the V2 database</returns>
-        </member>
         <member name="M:RelhaxModpack.Utils.DownloadStringsFromUrls(System.Collections.Generic.List{System.String})">
             <summary>
             Downloads an array of strings from a list of download URLs all at the same time
@@ -8509,13 +8517,11 @@
             <remarks>This is mostly used for in logging, to log the name of the method
             See https://stackoverflow.com/a/2652481/3128017 </remarks>
         </member>
-        <member name="M:RelhaxModpack.Utils.Unpack(System.String,System.String,System.String)">
+        <member name="M:RelhaxModpack.Utils.GetExecutingClassName">
             <summary>
-            Copies a file from one path or in an archive to a destination
+            Gets the name of the class above this
             </summary>
-            <param name="package">The zip archive to extract the file from</param>
-            <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
-            <param name="destinationCompletePath">The complete path to copy the destination file to</param>
+            <returns>The name of the calling class on this method call</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.ClearCache">
             <summary>

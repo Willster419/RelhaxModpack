@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.Atlases.Packing;
+using RelhaxModpack.Utilities;
 using RelhaxModpack.Xml;
 using System;
 using System.Collections.Generic;
@@ -137,7 +138,7 @@ namespace RelhaxModpack.Atlases
             Logging.Debug("[atlas file {0}]: atlas file unpack", Path.GetFileName(Atlas.AtlasFile));
             lock(AtlasUtils.AtlasLoaderLockObject)
             {
-                Utils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), tempAtlasImageFile);
+                FileUtils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), tempAtlasImageFile);
             }
             OnAtlasProgres?.Invoke(this,null);
             Token.ThrowIfCancellationRequested();
@@ -145,7 +146,7 @@ namespace RelhaxModpack.Atlases
             Logging.Debug("[atlas file {0}]: map file unpack", Path.GetFileName(Atlas.AtlasFile));
             lock (AtlasUtils.AtlasLoaderLockObject)
             {
-                Utils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), tempAtlasMapFile);
+                FileUtils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), tempAtlasMapFile);
             }
             OnAtlasProgres?.Invoke(this, null);
             Token.ThrowIfCancellationRequested();

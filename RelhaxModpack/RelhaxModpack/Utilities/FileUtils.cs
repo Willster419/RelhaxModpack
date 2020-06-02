@@ -805,6 +805,55 @@ namespace RelhaxModpack.Utilities
         {
             return wotPath.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
         }
+
+        /// <summary>
+        /// Copies a file from one path or in an archive to a destination
+        /// </summary>
+        /// <param name="package">The zip archive to extract the file from</param>
+        /// <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
+        /// <param name="destinationCompletePath">The complete path to copy the destination file to</param>
+        public static void Unpack(string package, string sourceCompletePath, string destinationCompletePath)
+        {
+            string destinationFilename = Path.GetFileName(destinationCompletePath);
+            string destinationDirectory = Path.GetDirectoryName(destinationCompletePath);
+
+            //if the package entry is empty, then it's just a file copy
+            if (string.IsNullOrWhiteSpace(package))
+            {
+                if (File.Exists(sourceCompletePath))
+                    File.Copy(sourceCompletePath, destinationCompletePath);
+                Logging.Info("file copied");
+            }
+            else
+            {
+                if (!File.Exists(package))
+                {
+                    Logging.Error("packagefile does not exist, skipping");
+                    return;
+                }
+                using (ZipFile zip = new ZipFile(package))
+                {
+                    //get the files that match the specified path from the Xml entry
+                    string zipPath = sourceCompletePath.Replace(@"\", @"/");
+                    ZipEntry[] matchingEntries = zip.Where(zipp => zipp.FileName.Equals(zipPath)).ToArray();
+                    Logging.Debug("matching zip entries: {0}", matchingEntries.Count());
+                    if (matchingEntries.Count() > 0)
+                    {
+                        foreach (ZipEntry entry in matchingEntries)
+                        {
+                            //change the name to the destination
+                            entry.FileName = destinationFilename;
+
+                            //extract to disk and log
+                            entry.Extract(destinationDirectory, ExtractExistingFileAction.DoNotOverwrite);
+                            Logging.Info("entry extracted: {0}", destinationFilename);
+                        }
+                    }
+                    else
+                        Logging.Warning("no matching zip entries for file: {0}", zipPath);
+                }
+            }
+        }
         #endregion
 
         #region Special Folder stuff

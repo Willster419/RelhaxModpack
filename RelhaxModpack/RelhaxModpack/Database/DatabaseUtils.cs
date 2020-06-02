@@ -1,9 +1,12 @@
-﻿using System;
+﻿using RelhaxModpack.Xml;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
@@ -879,6 +882,42 @@ namespace RelhaxModpack.Database
 
                 listProperty.Add(listEntry);
             }
+        }
+
+        /// <summary>
+        /// Get all xml strings for the V2 database file format from the selected beta database github branch
+        /// </summary>
+        /// <returns>all xml files in string form of the V2 database</returns>
+        public static string GetBetaDatabase1V1ForStringCompare(bool loadMode)
+        {
+            List<string> downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList();
+
+            string[] downloadStrings = null;
+
+            if (loadMode)
+            {
+                Task t = Task.Run(() => { downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs); });
+
+                while (!t.IsCompleted)
+                {
+                    Thread.Sleep(100);
+                }
+            }
+            else
+            {
+                downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
+            }
+
+            return string.Join(string.Empty, downloadStrings);
+        }
+
+        /// <summary>
+        /// Get all xml strings for the V2 database file format from the selected beta database github branch
+        /// </summary>
+        /// <returns>all xml files in string form of the V2 database</returns>
+        public async static Task<string> GetBetaDatabase1V1ForStringCompareAsync()
+        {
+            return await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
         }
     }
 }

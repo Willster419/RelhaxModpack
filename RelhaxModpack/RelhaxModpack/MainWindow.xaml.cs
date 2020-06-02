@@ -2832,11 +2832,11 @@ namespace RelhaxModpack
                     if (loading)
                     {
                         if (string.IsNullOrEmpty(oldBetaDB))
-                            oldBetaDB = Utils.GetBetaDatabase1V1ForStringCompare(true);
+                            oldBetaDB = DatabaseUtils.GetBetaDatabase1V1ForStringCompare(true);
                     }
                     else
                     {
-                        oldBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
+                        oldBetaDB = await DatabaseUtils.GetBetaDatabase1V1ForStringCompareAsync();
                     }
                     newBetaDB = oldBetaDB;
                 }
@@ -3078,11 +3078,11 @@ namespace RelhaxModpack
                 if (loading)
                 {
                     if (string.IsNullOrEmpty(oldBetaDB))
-                        oldBetaDB = Utils.GetBetaDatabase1V1ForStringCompare(true);
+                        oldBetaDB = DatabaseUtils.GetBetaDatabase1V1ForStringCompare(true);
                 }
                 else
                 {
-                    oldBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
+                    oldBetaDB = await DatabaseUtils.GetBetaDatabase1V1ForStringCompareAsync();
                 }
                 newBetaDB = oldBetaDB;
             }
@@ -3183,12 +3183,12 @@ namespace RelhaxModpack
             if (string.IsNullOrEmpty(oldBetaDB))
             {
                 Logging.Debug("[AutoInstallTimer_ElapsedBeta]: oldBetaDB is null/empty, set this first");
-                oldBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
+                oldBetaDB = await DatabaseUtils.GetBetaDatabase1V1ForStringCompareAsync();
                 newBetaDB = oldBetaDB;
             }
             else
             {
-                newBetaDB = await Utils.GetBetaDatabase1V1ForStringCompareAsync();
+                newBetaDB = await DatabaseUtils.GetBetaDatabase1V1ForStringCompareAsync();
             }
 
             Logging.Debug("[AutoInstallTimer_ElapsedBeta]: comparing old and new beta databases");
