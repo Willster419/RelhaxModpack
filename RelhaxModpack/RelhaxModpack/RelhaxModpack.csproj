@@ -173,7 +173,7 @@
     <Compile Include="UI\ZoomBorder.cs" />
     <Compile Include="Utilities\FileUtils.cs" />
     <Compile Include="Utilities\FtpUtils.cs" />
-    <Compile Include="Utilities\GlobalSuppressions.cs" />
+    <Compile Include="Common\GlobalSuppressions.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />
     <Compile Include="InstallerComponents\Patch.cs" />
@@ -206,7 +206,7 @@
     </Compile>
     <Compile Include="Utilities\MacroUtils.cs" />
     <Compile Include="Utilities\RegistryUtils.cs" />
-    <Compile Include="Utilities\Regression.cs" />
+    <Compile Include="Common\Regression.cs" />
     <Compile Include="Atlases\RelhaxFreeImageLibrary.cs" />
     <Compile Include="Atlases\RelhaxNvTexLibrary.cs" />
     <Compile Include="Utilities\ShortcutUtils.cs" />
@@ -268,13 +268,13 @@
     <Compile Include="Windows\AdvancedProgress.xaml.cs">
       <DependentUpon>AdvancedProgress.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\BadMemeException.cs" />
-    <Compile Include="Utilities\CiInfo.cs" />
+    <Compile Include="Common\BadMemeException.cs" />
+    <Compile Include="Common\CiInfo.cs" />
     <Compile Include="Utilities\PatchUtils.cs" />
-    <Compile Include="Utilities\PatientWebClient.cs">
+    <Compile Include="Common\PatientWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Utilities\Translations.cs" />
+    <Compile Include="Common\Translations.cs" />
     <Compile Include="Utilities\Utils.cs" />
     <Compile Include="Windows\AddPicturesZip.xaml.cs">
       <DependentUpon>AddPicturesZip.xaml</DependentUpon>
@@ -610,16 +610,16 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>echo namespace RelhaxModpack &gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo { &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo     ///^&lt;summary^&gt;Info about the continuous integration server build that produced this binary.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo     public static class CiInfo &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo     { &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo         //https://stackoverflow.com/questions/4450231/can-i-make-a-constant-from-a-compile-time-env-variable-in-csharp/4453285 &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo         ///^&lt;summary^&gt;String of the build number and build date/time, and other useful info.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo         public const string BuildTag = "%25DATE%25 %25TIME%25"; &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo     } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
-echo } &gt;&gt; "$(ProjectDir)\Utils\CiInfo.cs"
+    <PreBuildEvent>echo namespace RelhaxModpack &gt; "$(ProjectDir)\Common\CiInfo.cs"
+echo { &gt;&gt; "$(ProjectDir)\Common\CiInfo.cs"
+echo     ///^&lt;summary^&gt;Info about the continuous integration server build that produced this binary.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\Common\CiInfo.cs"
+echo     public static class CiInfo &gt;&gt; "$(ProjectDir)\Common\CiInfo.cs"
+echo     { &gt;&gt; "$(ProjectDir)\Common\CiInfo.cs"
+echo         //https://stackoverflow.com/questions/4450231/can-i-make-a-constant-from-a-compile-time-env-variable-in-csharp/4453285 &gt;&gt; "$(ProjectDir)\Common\CiInfo.cs"
+echo         ///^&lt;summary^&gt;String of the build number and build date/time, and other useful info.^&lt;/summary^&gt; &gt;&gt; "$(ProjectDir)\Common\CiInfo.cs"
+echo         public const string BuildTag = "%25DATE%25 %25TIME%25"; &gt;&gt; "$(ProjectDir)\Common\CiInfo.cs"
+echo     } &gt;&gt; "$(ProjectDir)\Common\CiInfo.cs"
+echo } &gt;&gt; "$(ProjectDir)\Common\CiInfo.cs"
 if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
