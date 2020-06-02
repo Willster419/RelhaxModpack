@@ -2583,8 +2583,11 @@ namespace RelhaxModpack.Xml
                 XmlElement xmlCategoryFileRoot = xmlCategoryFile.CreateElement("Category");
                 xmlCategoryFileRoot.SetAttribute(nameof(cat.Name), cat.Name);
 
+                //save attributes for category
+                SavePropertiesToXmlAttributes(cat, xmlCategoryFileRoot, cat);
+
                 //create Maintainers element
-                if(!string.IsNullOrWhiteSpace(cat.Maintainers))
+                if (!string.IsNullOrWhiteSpace(cat.Maintainers))
                 {
                     XmlElement xmlCategoryMaintainers = xmlCategoryFile.CreateElement(nameof(cat.Maintainers));
                     xmlCategoryMaintainers.InnerText = cat.Maintainers;
@@ -2630,7 +2633,7 @@ namespace RelhaxModpack.Xml
             Type listObjectType = packagesToSave.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
                 .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
 
-            if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
+            if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntryWithDefaultValues))
                 throw new BadMemeException("Type of this list is not of IXmlSerializable");
 
             //parse for each package type
@@ -2644,16 +2647,11 @@ namespace RelhaxModpack.Xml
                 XmlElement PackageHolder = docToMakeElementsFrom.CreateElement(nameToSaveElementsBy);
 
                 //iterate through each of the attributes and nodes in the arrays to allow for listing in custom order
-                foreach(string attributeToSave in listEntry.PropertiesForSerializationAttributes())
-                {
-                    PropertyInfo propertyOfPackage = listEntry.GetType().GetProperty(attributeToSave);
-                    //attributs are value types, so just set it
-                    PackageHolder.SetAttribute(propertyOfPackage.Name, propertyOfPackage.GetValue(packageToSaveOfAnyType).ToString());
-                }
+                SavePropertiesToXmlAttributes(listEntryWithDefaultValues, PackageHolder, packageToSaveOfAnyType);
 
-                foreach (string elementToSave in listEntry.PropertiesForSerializationElements())
+                foreach (string elementToSave in listEntryWithDefaultValues.PropertiesForSerializationElements())
                 {
-                    PropertyInfo propertyOfPackage = listEntry.GetType().GetProperty(elementToSave);
+                    PropertyInfo propertyOfPackage = listEntryWithDefaultValues.GetType().GetProperty(elementToSave);
 
                     //check if it's a package list of packages
                     if (packageOnlyUsedForNames != null && propertyOfPackage.Name.Equals(nameof(packageOnlyUsedForNames.Packages)) && packageOnlyUsedForNames.Packages.Count > 0)
@@ -2662,7 +2660,7 @@ namespace RelhaxModpack.Xml
                         SaveDatabaseList1V1(packageOnlyUsedForNames.Packages, packagesHolder, docToMakeElementsFrom, nameToSaveElementsBy);
                         PackageHolder.AppendChild(packagesHolder);
                     }
-                    //if it is a list type like media or
+                    //if it is a list type like media or something that is actually a node to contain a list
                     else if (typeof(IEnumerable).IsAssignableFrom(propertyOfPackage.PropertyType) && !propertyOfPackage.PropertyType.Equals(typeof(string)))
                     {
                         //get the list type to allow for itterate
@@ -2727,12 +2725,12 @@ namespace RelhaxModpack.Xml
                         }
                         PackageHolder.AppendChild(elementFieldHolder);
                     }
-                    //
+                    //else the inner text of the node is only set/added if it's not default
                     else
                     {
                         XmlElement element = docToMakeElementsFrom.CreateElement(propertyOfPackage.Name);
                         element.InnerText = propertyOfPackage.GetValue(packageToSaveOfAnyType).ToString();
-                        string defaultFieldValue = propertyOfPackage.GetValue(listEntry).ToString();
+                        string defaultFieldValue = propertyOfPackage.GetValue(listEntryWithDefaultValues).ToString();
                         //only save node values when they are not default
                         if (!element.InnerText.Equals(defaultFieldValue))
                         {
@@ -2743,6 +2741,17 @@ namespace RelhaxModpack.Xml
                 }
                 //save them to the holder
                 documentRootElement.AppendChild(PackageHolder);
+            }
+        }
+
+        private static void SavePropertiesToXmlAttributes(IXmlSerializable listEntry, XmlElement elementContainer, IDatabaseComponent componentToSave)
+        {
+            //iterate through each of the attributes and nodes in the arrays to allow for listing in custom order
+            foreach (string attributeToSave in listEntry.PropertiesForSerializationAttributes())
+            {
+                PropertyInfo propertyOfPackage = listEntry.GetType().GetProperty(attributeToSave);
+                //attributs are value types, so just set it
+                elementContainer.SetAttribute(propertyOfPackage.Name, propertyOfPackage.GetValue(componentToSave).ToString());
             }
         }
         #endregion
