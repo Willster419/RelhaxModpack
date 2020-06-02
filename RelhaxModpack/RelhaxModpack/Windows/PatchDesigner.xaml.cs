@@ -10,6 +10,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Windows.Media;
 using System.Text;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack.Windows
 {

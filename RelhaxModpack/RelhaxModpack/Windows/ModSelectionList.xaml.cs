@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using System.Windows.Threading;
 using System.Reflection;
 using System.Text;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack.Windows
 {

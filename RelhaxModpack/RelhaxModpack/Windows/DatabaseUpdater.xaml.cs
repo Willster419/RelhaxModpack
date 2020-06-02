@@ -12,6 +12,7 @@ using System.IO;
 using Microsoft.Win32;
 using System.Xml;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack.Windows
 {

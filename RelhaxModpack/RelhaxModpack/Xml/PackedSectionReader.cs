@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace RelhaxModpack.XmlBinary
+namespace RelhaxModpack.Xml
 {
     //https://stackoverflow.com/questions/22536518/is-it-possible-to-disable-specific-compiler-warnings
 #pragma warning disable CS1591

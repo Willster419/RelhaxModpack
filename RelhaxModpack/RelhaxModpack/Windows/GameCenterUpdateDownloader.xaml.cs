@@ -11,6 +11,7 @@ using System.Web;
 using System.Net;
 using System.Xml;
 using System.Windows.Threading;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack.Windows
 {

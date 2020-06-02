@@ -23,6 +23,7 @@ using RelhaxModpack.InstallerComponents;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using System.Windows.Threading;
 using RelhaxModpack.Atlases;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack
 {

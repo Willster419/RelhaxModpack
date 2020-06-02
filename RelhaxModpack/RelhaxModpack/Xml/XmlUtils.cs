@@ -10,12 +10,12 @@ using System.Windows;
 using System.Reflection;
 using System.Text;
 using Ionic.Zip;
-using RelhaxModpack.XmlBinary;
+using RelhaxModpack.Xml;
 using RelhaxModpack.DatabaseComponents;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Xml
 {
     /// <summary>
     /// Xml document load type enumeration

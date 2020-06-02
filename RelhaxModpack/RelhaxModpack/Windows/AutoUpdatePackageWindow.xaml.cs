@@ -20,6 +20,7 @@ using System.Reflection;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack.Windows
 {

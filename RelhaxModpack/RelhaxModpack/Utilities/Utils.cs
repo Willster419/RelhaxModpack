@@ -32,6 +32,7 @@ using System.Web;
 using RelhaxModpack.DatabaseComponents;
 using System.Runtime.CompilerServices;
 using RelhaxModpack.UIComponents;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack
 {

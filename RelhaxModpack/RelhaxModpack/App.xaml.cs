@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using RelhaxModpack.Windows;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack
 {

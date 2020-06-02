@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using RelhaxModpack.UIComponents;
 using RelhaxModpack.UIComponents.ClassThemeDefinitions;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack
 {

@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.Atlases.Packing;
+using RelhaxModpack.Xml;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

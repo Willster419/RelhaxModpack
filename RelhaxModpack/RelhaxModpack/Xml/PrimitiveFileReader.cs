@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml;
 
-namespace RelhaxModpack.XmlBinary
+namespace RelhaxModpack.Xml
 {
 #pragma warning disable CS1591
     public class PrimitiveFileReader

@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.IO;
 using System.Globalization;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack
 {

@@ -16,6 +16,7 @@ using Microsoft.WindowsAPICodePack;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Threading;
 using System.Text.RegularExpressions;
+using RelhaxModpack.Xml;
 
 namespace RelhaxModpack.Windows
 {
