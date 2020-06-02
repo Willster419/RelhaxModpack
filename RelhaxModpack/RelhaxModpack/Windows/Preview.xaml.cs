@@ -63,7 +63,10 @@ namespace RelhaxModpack.Windows
             if (Medias == null || InvokedPackage == null)
             {
                 Logging.Error("Preview Medias list or InvokedPackage null: MediasNull?={0}, InvokedPacakgeNull?={1}", Medias==null, InvokedPackage==null);
-                MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
+                if(EditorMode)
+                    MessageBox.Show(string.Format("Preview Medias list or InvokedPackage null: MediasNull?={0}, InvokedPacakgeNull?={1}", Medias == null, InvokedPackage == null));
+                else
+                    MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                 Close();
                 return;
             }
@@ -147,7 +150,9 @@ namespace RelhaxModpack.Windows
             }
             else
             {
-                if(ComboBoxItemsInsideMode)
+                if (EditorMode)
+                    Title = "EDITOR_TEST_MODE";
+                else if (ComboBoxItemsInsideMode)
                     Title = string.Format("{0}: ({1})", Translations.GetTranslatedString("dropDownItemsInside"), Translations.GetTranslatedString("none"));
                 else
                     Title = InvokedPackage.NameFormatted;

@@ -44,7 +44,7 @@ namespace RelhaxModpack.Windows
         private bool AlreadyLoggedScroll = false;
         private bool Init = true;
         private object SelectedItem = null;
-        private Preview Preview;
+        private Preview Preview = null;
         private bool UnsavedChanges = false;
         private DispatcherTimer DragDropTimer = null;
         private DispatcherTimer ReselectOldItem = null;
@@ -2330,10 +2330,17 @@ namespace RelhaxModpack.Windows
 
             if (PackageMediasDisplay.SelectedItem is Media media)
             {
+                media.SelectablePackageParent = GetSelectablePackage(SelectedItem);
+                if (Preview != null)
+                {
+                    Preview = null;
+                }
                 Preview = new Preview()
                 {
                     Medias = new List<Media>() { media },
-                    EditorMode = true
+                    EditorMode = true,
+                    ComboBoxItemsInsideMode = false,
+                    InvokedPackage = GetSelectablePackage(SelectedItem)
                 };
                 try
                 {
@@ -2345,7 +2352,7 @@ namespace RelhaxModpack.Windows
                 }
             }
             else
-                throw new BadMemeException("no");
+                throw new BadMemeException("How is the type not Media. Something is wrong here.");
         }
 
         private void MediaPreviewEditMediaButton_Click(object sender, RoutedEventArgs e)
@@ -2365,7 +2372,8 @@ namespace RelhaxModpack.Windows
             Media testMedia = new Media()
             {
                 URL = MediaTypesURL.Text,
-                MediaType = (MediaType)MediaTypesList.SelectedItem
+                MediaType = (MediaType)MediaTypesList.SelectedItem,
+                SelectablePackageParent = GetSelectablePackage(SelectedItem)
             };
 
             if (Preview != null)
@@ -2375,7 +2383,9 @@ namespace RelhaxModpack.Windows
             Preview = new Preview()
             {
                 Medias = new List<Media>() { testMedia },
-                EditorMode = true
+                EditorMode = true,
+                ComboBoxItemsInsideMode = false,
+                InvokedPackage = GetSelectablePackage(SelectedItem)
             };
             try
             {
