@@ -4046,6 +4046,18 @@
             </summary>
             <returns>The location of wgc.exe if found, else null</returns>
         </member>
+        <member name="T:RelhaxModpack.Utilities.ShortcutUtils">
+            <summary>
+            A utility class to handle creating of shortcuts
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.ShortcutUtils.CreateShortcut(RelhaxModpack.Shortcut,System.Text.StringBuilder)">
+            <summary>
+            Creates a shortcut on the user's desktop
+            </summary>
+            <param name="shortcut">The shortcut parameters</param>
+            <param name="sb">The StringBuilder to log the path to the created file</param>
+        </member>
         <member name="T:RelhaxModpack.Utilities.PatchExitCode">
             <summary>
             Exit codes during a patch operation
@@ -8491,13 +8503,6 @@
             <returns>The name of the calling method on this method</returns>
             <remarks>This is mostly used for in logging, to log the name of the method
             See https://stackoverflow.com/a/2652481/3128017 </remarks>
-        </member>
-        <member name="M:RelhaxModpack.Utils.CreateShortcut(RelhaxModpack.Shortcut,System.Text.StringBuilder)">
-            <summary>
-            Creates a shortcut on the user's desktop
-            </summary>
-            <param name="shortcut">The shortcut parameters</param>
-            <param name="sb">The StringBuilder to log the path to the created file</param>
         </member>
         <member name="M:RelhaxModpack.Utils.Unpack(System.String,System.String,System.String)">
             <summary>
