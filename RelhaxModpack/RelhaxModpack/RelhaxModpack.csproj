@@ -201,8 +201,8 @@
       <DependentUpon>RelhaxWPFRadioButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Regression.cs" />
-    <Compile Include="Utilities\RelhaxFreeImageLibrary.cs" />
-    <Compile Include="Utilities\RelhaxNvTexLibrary.cs" />
+    <Compile Include="AtlasesCreator\RelhaxFreeImageLibrary.cs" />
+    <Compile Include="AtlasesCreator\RelhaxNvTexLibrary.cs" />
     <Compile Include="Windows\AskCloseWoT.xaml.cs">
       <DependentUpon>AskCloseWoT.xaml</DependentUpon>
     </Compile>
