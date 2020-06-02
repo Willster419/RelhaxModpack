@@ -169,7 +169,7 @@
     <Compile Include="UIComponents\Themes.cs" />
     <Compile Include="UIComponents\WindowColorset.cs" />
     <Compile Include="UIComponents\ZoomBorder.cs" />
-    <Compile Include="Utils\GlobalSuppressions.cs" />
+    <Compile Include="Utilities\GlobalSuppressions.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />
     <Compile Include="InstallerComponents\Patch.cs" />
@@ -200,9 +200,9 @@
     <Compile Include="UIComponents\RelhaxWPFRadioButton.xaml.cs">
       <DependentUpon>RelhaxWPFRadioButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\Regression.cs" />
-    <Compile Include="Utils\RelhaxFreeImageLibrary.cs" />
-    <Compile Include="Utils\RelhaxNvTexLibrary.cs" />
+    <Compile Include="Utilities\Regression.cs" />
+    <Compile Include="Utilities\RelhaxFreeImageLibrary.cs" />
+    <Compile Include="Utilities\RelhaxNvTexLibrary.cs" />
     <Compile Include="Windows\AskCloseWoT.xaml.cs">
       <DependentUpon>AskCloseWoT.xaml</DependentUpon>
     </Compile>
@@ -261,14 +261,14 @@
     <Compile Include="Windows\AdvancedProgress.xaml.cs">
       <DependentUpon>AdvancedProgress.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\BadMemeException.cs" />
-    <Compile Include="Utils\CiInfo.cs" />
-    <Compile Include="Utils\PatchUtils.cs" />
-    <Compile Include="Utils\PatientWebClient.cs">
+    <Compile Include="Utilities\BadMemeException.cs" />
+    <Compile Include="Utilities\CiInfo.cs" />
+    <Compile Include="Utilities\PatchUtils.cs" />
+    <Compile Include="Utilities\PatientWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Utils\Translations.cs" />
-    <Compile Include="Utils\Utils.cs" />
+    <Compile Include="Utilities\Translations.cs" />
+    <Compile Include="Utilities\Utils.cs" />
     <Compile Include="Windows\AddPicturesZip.xaml.cs">
       <DependentUpon>AddPicturesZip.xaml</DependentUpon>
     </Compile>
@@ -309,10 +309,10 @@
     <Compile Include="Windows\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\XmlBinary\PackedSectionReader.cs" />
-    <Compile Include="Utils\XmlBinary\PrimitiveFileReader.cs" />
-    <Compile Include="Utils\XmlBinary\XmlBinaryHandler.cs" />
-    <Compile Include="Utils\XmlUtils.cs" />
+    <Compile Include="Utilities\XmlBinary\PackedSectionReader.cs" />
+    <Compile Include="Utilities\XmlBinary\PrimitiveFileReader.cs" />
+    <Compile Include="Utilities\XmlBinary\XmlBinaryHandler.cs" />
+    <Compile Include="Utilities\XmlUtils.cs" />
     <Compile Include="Windows\AutoUpdateFilesInspector.xaml.cs">
       <DependentUpon>AutoUpdateFilesInspector.xaml</DependentUpon>
     </Compile>
