@@ -14,6 +14,7 @@ using RelhaxModpack.Xml;
 using RelhaxModpack.DatabaseComponents;
 using System.Net;
 using System.Threading.Tasks;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Xml
 {
@@ -2732,7 +2733,7 @@ namespace RelhaxModpack.Xml
                         //only save node values when they are not default
                         if (!element.InnerText.Equals(defaultFieldValue))
                         {
-                            element.InnerText = Utils.MacroReplace(element.InnerText, ReplacementTypes.TextEscape);
+                            element.InnerText = MacroUtils.MacroReplace(element.InnerText, ReplacementTypes.TextEscape);
                             PackageHolder.AppendChild(element);
                         }
                     }
@@ -3050,7 +3051,7 @@ namespace RelhaxModpack.Xml
                 xmlPatch.AppendChild(search);
 
                 XmlElement replace = doc.CreateElement("replace");
-                replace.InnerText = Utils.MacroReplace(patch.Replace, ReplacementTypes.TextEscape);
+                replace.InnerText = MacroUtils.MacroReplace(patch.Replace, ReplacementTypes.TextEscape);
                 xmlPatch.AppendChild(replace);
             }
             return doc;

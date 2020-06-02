@@ -1325,7 +1325,7 @@ namespace RelhaxModpack.InstallerComponents
                     Logging.Debug("Parsed path with macro: {0}", searchPattern);
 
                     //if the directory to search does not exist, then make it, just in case
-                    string searchPatternDirectoryPath = Path.GetDirectoryName(Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath));
+                    string searchPatternDirectoryPath = Path.GetDirectoryName(MacroUtils.MacroReplace(searchPattern, ReplacementTypes.FilePath));
                     if (!Directory.Exists(searchPatternDirectoryPath))
                     {
                         Logging.Debug("Directory {0} does not exist, creating", searchPatternDirectoryPath);
@@ -1335,9 +1335,9 @@ namespace RelhaxModpack.InstallerComponents
                     //at this point it will have a macro, so grab it
                     //replace the macro to make the complete path
                     string macro = searchPattern.Split('}')[0] + "}";
-                    string macroRootPath = Utils.MacroReplace(macro,ReplacementTypes.FilePath) + Path.DirectorySeparatorChar;
+                    string macroRootPath = MacroUtils.MacroReplace(macro,ReplacementTypes.FilePath) + Path.DirectorySeparatorChar;
                     searchPattern = searchPattern.Split('}')[1].Substring(1);
-                    searchPattern = Utils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
+                    searchPattern = MacroUtils.MacroReplace(searchPattern, ReplacementTypes.FilePath);
                     Logging.Debug("Path macro: {0} parsed to -> {1}", macro, macroRootPath);
 
                     //get the list of files to replace
@@ -1799,12 +1799,12 @@ namespace RelhaxModpack.InstallerComponents
                         atlasBuilder.AppendLine("/*   Atlases   */");
 
                         //replace macros
-                        atlasData.Pkg = Utils.MacroReplace(atlasData.Pkg, ReplacementTypes.FilePath);
-                        atlasData.AtlasSaveDirectory = Utils.MacroReplace(atlasData.AtlasSaveDirectory, ReplacementTypes.FilePath);
+                        atlasData.Pkg = MacroUtils.MacroReplace(atlasData.Pkg, ReplacementTypes.FilePath);
+                        atlasData.AtlasSaveDirectory = MacroUtils.MacroReplace(atlasData.AtlasSaveDirectory, ReplacementTypes.FilePath);
                         for (int j = 0; j < atlasData.ImageFolderList.Count; j++)
                         {
                             CancellationToken.ThrowIfCancellationRequested();
-                            atlasData.ImageFolderList[j] = Utils.MacroReplace(atlasData.ImageFolderList[j], ReplacementTypes.FilePath);
+                            atlasData.ImageFolderList[j] = MacroUtils.MacroReplace(atlasData.ImageFolderList[j], ReplacementTypes.FilePath);
                         }
 
                         CancellationToken.ThrowIfCancellationRequested();
@@ -2239,8 +2239,8 @@ namespace RelhaxModpack.InstallerComponents
                                 {
                                     XvmFolderName = PatchUtils.GetXvmFolderName().Trim();
                                     //also add it to the filepath replace
-                                    if (!Utils.FilePathDict.ContainsKey(@"xvmConfigFolderName"))
-                                        Utils.FilePathDict.Add(@"xvmConfigFolderName", XvmFolderName);
+                                    if (!MacroUtils.FilePathDict.ContainsKey(@"xvmConfigFolderName"))
+                                        MacroUtils.FilePathDict.Add(@"xvmConfigFolderName", XvmFolderName);
                                 }
                                 zipEntryName = zipEntryName.Replace("configs/xvm/xvmConfigFolderName", string.Format("configs/xvm/{0}",XvmFolderName));
                             }
@@ -2602,11 +2602,11 @@ namespace RelhaxModpack.InstallerComponents
             //perform macro replacement on all xml unpack entries
             foreach(XmlUnpack xmlUnpack in XmlUnpacks)
             {
-                xmlUnpack.DirectoryInArchive = Utils.MacroReplace(xmlUnpack.DirectoryInArchive, ReplacementTypes.FilePath);
-                xmlUnpack.FileName = Utils.MacroReplace(xmlUnpack.FileName, ReplacementTypes.FilePath);
-                xmlUnpack.ExtractDirectory = Utils.MacroReplace(xmlUnpack.ExtractDirectory, ReplacementTypes.FilePath);
-                xmlUnpack.NewFileName = Utils.MacroReplace(xmlUnpack.NewFileName, ReplacementTypes.FilePath);
-                xmlUnpack.Pkg = Utils.MacroReplace(xmlUnpack.Pkg, ReplacementTypes.FilePath);
+                xmlUnpack.DirectoryInArchive = MacroUtils.MacroReplace(xmlUnpack.DirectoryInArchive, ReplacementTypes.FilePath);
+                xmlUnpack.FileName = MacroUtils.MacroReplace(xmlUnpack.FileName, ReplacementTypes.FilePath);
+                xmlUnpack.ExtractDirectory = MacroUtils.MacroReplace(xmlUnpack.ExtractDirectory, ReplacementTypes.FilePath);
+                xmlUnpack.NewFileName = MacroUtils.MacroReplace(xmlUnpack.NewFileName, ReplacementTypes.FilePath);
+                xmlUnpack.Pkg = MacroUtils.MacroReplace(xmlUnpack.Pkg, ReplacementTypes.FilePath);
             }
 
             return XmlUnpacks;

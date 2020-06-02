@@ -1387,7 +1387,7 @@ namespace RelhaxModpack
             }
 
             //build macro hash for install
-            Utils.BuildFilepathMacroList();
+            MacroUtils.BuildFilepathMacroList();
 
             //perform dependency calculations
             //get a flat list of packages to install

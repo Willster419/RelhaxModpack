@@ -3877,6 +3877,84 @@
             <param name="credentials">The FTP server credentials</param>
             <returns>The size of the file in bytes</returns>
         </member>
+        <member name="T:RelhaxModpack.Utilities.ReplacementTypes">
+            <summary>
+            The types of text macro replacements
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.FilePath">
+            <summary>
+            Replacing macros with file paths
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.PatchArguementsReplace">
+            <summary>
+            Replacing patch arguments of the patch object
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.PatchFiles">
+            <summary>
+            Replacing modpack created macros (like [quote]) with the corresponding characters
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.TextEscape">
+            <summary>
+            Replacing literal interpretations of special characters like newline and tab with escaped versions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.TextUnescape">
+            <summary>
+            Replacing escaped versions of special characters like newline and tab with the literal interpretations
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.ZipFilePath">
+            <summary>
+            Replacing zip path macros with absolute extraction paths
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.MacroUtils">
+            <summary>
+            A utility class to handle macros
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.MacroUtils.FilePathDict">
+            <summary>
+            The dictionary to store filepath macros
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.MacroUtils.PatchArguementsReplaceDict">
+            <summary>
+            The dictionary to store patch argument (replace) macros
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.MacroUtils.PatchFilesDict">
+            <summary>
+            The dictionary to store patch file replacement macros
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.MacroUtils.TextUnscapeDict">
+            <summary>
+            The dictionary to store escaped text characters with the literal versions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.MacroUtils.TextEscapeDict">
+            <summary>
+            The dictionary to store literal versions of characters with their escaped versions
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.MacroUtils.BuildFilepathMacroList">
+            <summary>
+            Builds the Filepath macro dictionary with settings that should be parsed from the Settings class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.MacroUtils.MacroReplace(System.String,RelhaxModpack.Utilities.ReplacementTypes)">
+            <summary>
+            Performs a replacement of macros using the specified macro replace operation
+            </summary>
+            <param name="inputString">The string to replace the macros of</param>
+            <param name="type">The type of macro replace operation</param>
+            <returns>The replaced string</returns>
+        </member>
         <member name="T:RelhaxModpack.Utilities.PatchExitCode">
             <summary>
             Exit codes during a patch operation
@@ -7695,41 +7773,6 @@
             Loads all translation dictionaries. Should only be done once (at application start)
             </summary>
         </member>
-        <member name="T:RelhaxModpack.ReplacementTypes">
-            <summary>
-            The types of text macro replacements
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ReplacementTypes.FilePath">
-            <summary>
-            Replacing macros with file paths
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ReplacementTypes.PatchArguementsReplace">
-            <summary>
-            Replacing patch arguments of the patch object
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ReplacementTypes.PatchFiles">
-            <summary>
-            Replacing modpack created macros (like [quote]) with the corresponding characters
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ReplacementTypes.TextEscape">
-            <summary>
-            Replacing literal interpretations of special characters like newline and tab with escaped versions
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ReplacementTypes.TextUnescape">
-            <summary>
-            Replacing escaped versions of special characters like newline and tab with the literal interpretations
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ReplacementTypes.ZipFilePath">
-            <summary>
-            Replacing zip path macros with absolute extraction paths
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.DatabaseBeforeAfter">
             <summary>
             Allows the old and new versions of a SelectablePackage to be saved temporarily for comparing differences between two database structures
@@ -7825,31 +7868,6 @@
         <member name="F:RelhaxModpack.Utils.TO_MINUETS">
             <summary>
             Multiply by this value to convert seconds to minuets
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.FilePathDict">
-            <summary>
-            The dictionary to store filepath macros
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.PatchArguementsReplaceDict">
-            <summary>
-            The dictionary to store patch argument (replace) macros
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.PatchFilesDict">
-            <summary>
-            The dictionary to store patch file replacement macros
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.TextUnscapeDict">
-            <summary>
-            The dictionary to store escaped text characters with the literal versions
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utils.TextEscapeDict">
-            <summary>
-            The dictionary to store literal versions of characters with their escaped versions
             </summary>
         </member>
         <member name="M:RelhaxModpack.Utils.GetAssemblyName(System.String)">
@@ -8444,19 +8462,6 @@
             <returns>The name of the calling method on this method</returns>
             <remarks>This is mostly used for in logging, to log the name of the method
             See https://stackoverflow.com/a/2652481/3128017 </remarks>
-        </member>
-        <member name="M:RelhaxModpack.Utils.BuildFilepathMacroList">
-            <summary>
-            Builds the Filepath macro dictionary with settings that should be parsed from the Settings class
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Utils.MacroReplace(System.String,RelhaxModpack.ReplacementTypes)">
-            <summary>
-            Performs a replacement of macros using the specified macro replace operation
-            </summary>
-            <param name="inputString">The string to replace the macros of</param>
-            <param name="type">The type of macro replace operation</param>
-            <returns>The replaced string</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.AutoFindWoTDirectory">
             <summary>

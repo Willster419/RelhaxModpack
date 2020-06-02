@@ -61,10 +61,10 @@ namespace RelhaxModpack.Utilities
                 if(CommandLineSettings.ApplicationMode == ApplicationMode.Patcher)
                 {
                     string patchPathStart = string.Empty;
-                    if(Utils.FilePathDict.ContainsKey(@"{app}"))
+                    if(MacroUtils.FilePathDict.ContainsKey(@"{app}"))
                     {
                         Logging.Info("[PatchUtils]: {{app}} key found - using path replace macro ({0})", Settings.ApplicationStartupPath);
-                        patchPathStart = Utils.MacroReplace(@"{app}", ReplacementTypes.FilePath);
+                        patchPathStart = MacroUtils.MacroReplace(@"{app}", ReplacementTypes.FilePath);
                     }
                     else
                     {
@@ -74,11 +74,11 @@ namespace RelhaxModpack.Utilities
 
                     if(p.File.Contains("versiondir"))
                     {
-                        if (Utils.FilePathDict.ContainsKey(@"versiondir"))
+                        if (MacroUtils.FilePathDict.ContainsKey(@"versiondir"))
                         {
                             Logging.Info("[PatchUtils]: 'versiondir' key found, replacing path with supplied tanks version");
 
-                            p.File = Utils.MacroReplace(p.File, ReplacementTypes.FilePath);
+                            p.File = MacroUtils.MacroReplace(p.File, ReplacementTypes.FilePath);
                         }
                     }
 
@@ -113,7 +113,7 @@ namespace RelhaxModpack.Utilities
                             //https://stackoverflow.com/questions/91362/how-to-escape-braces-curly-brackets-in-a-format-string-in-net
                             p.PatchPath = string.Format("{{{0}}}", p.PatchPath);
                         }
-                        p.PatchPath = Utils.MacroReplace(p.PatchPath, ReplacementTypes.FilePath);
+                        p.PatchPath = MacroUtils.MacroReplace(p.PatchPath, ReplacementTypes.FilePath);
                     }
 
                     //check for that dumb filepath thing i did a while back
@@ -130,10 +130,10 @@ namespace RelhaxModpack.Utilities
                     }
 
                     //also check for if "xvmConfigFolderName" exists yet in the file path macro location
-                    if(!Utils.FilePathDict.ContainsKey(@"xvmConfigFolderName"))
-                        Utils.FilePathDict.Add(@"xvmConfigFolderName", GetXvmFolderName().Trim());
+                    if(!MacroUtils.FilePathDict.ContainsKey(@"xvmConfigFolderName"))
+                        MacroUtils.FilePathDict.Add(@"xvmConfigFolderName", GetXvmFolderName().Trim());
 
-                    p.File = Utils.MacroReplace(p.File, ReplacementTypes.FilePath);
+                    p.File = MacroUtils.MacroReplace(p.File, ReplacementTypes.FilePath);
                     p.CompletePath = Path.Combine(p.PatchPath, p.File);
                 }
             }
@@ -314,7 +314,7 @@ namespace RelhaxModpack.Utilities
                         if (i == replacePathSplit.Count() - 2)
                         {
                             string textToAddIntoNode = replacePathSplit[replacePathSplit.Count() - 1];
-                            textToAddIntoNode = Utils.MacroReplace(textToAddIntoNode, ReplacementTypes.PatchArguementsReplace);
+                            textToAddIntoNode = MacroUtils.MacroReplace(textToAddIntoNode, ReplacementTypes.PatchArguementsReplace);
                             Logging.Debug("[PatchUtils]: adding text: {0}", textToAddIntoNode);
                             addElementToMake.InnerText = textToAddIntoNode;
                         }
@@ -495,7 +495,7 @@ namespace RelhaxModpack.Utilities
         private static PatchExitCode RegxPatch(Patch p, int[] lines)
         {
             //replace all "fake escape characters" with real escape characters
-            p.Search = Utils.MacroReplace(p.Search, ReplacementTypes.TextUnescape);
+            p.Search = MacroUtils.MacroReplace(p.Search, ReplacementTypes.TextUnescape);
 
             //legacy compatibility: if the replace text has "newline", then replace it with "\n" and log the warning
             if(p.Replace.Contains("newline"))
@@ -740,7 +740,7 @@ namespace RelhaxModpack.Utilities
             }
 
             //un-escape the string with all ref metadata and xvm references
-            file = Utils.MacroReplace(root.ToString(), ReplacementTypes.PatchFiles);
+            file = MacroUtils.MacroReplace(root.ToString(), ReplacementTypes.PatchFiles);
 
             //always have a newline at the end
             file = file.Trim() + Environment.NewLine;
@@ -795,7 +795,7 @@ namespace RelhaxModpack.Utilities
 
             //last item in array is item to add
             string valueToAdd = addPathArray[addPathArray.Count - 1];
-            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguementsReplace);
+            valueToAdd = MacroUtils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguementsReplace);
 
             //then remove it
             addPathArray.RemoveAt(addPathArray.Count - 1);
@@ -1054,7 +1054,7 @@ namespace RelhaxModpack.Utilities
             valueToAdd = valueToAdd.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
 
             //and run the result through the un-escape
-            valueToAdd = Utils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguementsReplace);
+            valueToAdd = MacroUtils.MacroReplace(valueToAdd, ReplacementTypes.PatchArguementsReplace);
 
             JArray array = JsonArrayGet(p, root);
             if (array == null)

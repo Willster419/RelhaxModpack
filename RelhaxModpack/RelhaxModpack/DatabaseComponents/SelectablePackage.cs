@@ -169,7 +169,7 @@ namespace RelhaxModpack
         /// <seealso cref="UpdateComment"/>
         public string UpdateCommentEscaped
         {
-            get { return Utils.MacroReplace(UpdateComment, ReplacementTypes.TextUnescape); }
+            get { return MacroUtils.MacroReplace(UpdateComment, ReplacementTypes.TextUnescape); }
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace RelhaxModpack
         /// <seealso cref="Description"/>
         public string DescriptionEscaped
         {
-            get { return Utils.MacroReplace(Description, ReplacementTypes.TextUnescape); }
+            get { return MacroUtils.MacroReplace(Description, ReplacementTypes.TextUnescape); }
         }
 
         /// <summary>

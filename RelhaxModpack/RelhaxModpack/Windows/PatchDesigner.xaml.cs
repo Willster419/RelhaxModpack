@@ -496,7 +496,7 @@ namespace RelhaxModpack.Windows
                                     return;
                                 }
                                 completePathForPatchFile = PatchSettings.AppMacro + FileToPatchTextbox.Text;
-                                completePathForPatchFile = Utils.MacroReplace(completePathForPatchFile, ReplacementTypes.ZipFilePath);
+                                completePathForPatchFile = MacroUtils.MacroReplace(completePathForPatchFile, ReplacementTypes.ZipFilePath);
                             }
                             else
                             {

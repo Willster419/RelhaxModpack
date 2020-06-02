@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -196,7 +197,7 @@ namespace RelhaxModpack
         /// </summary>
         public string[] DevURLList
         {
-            get { return Utils.MacroReplace(DevURL, ReplacementTypes.TextUnescape).Replace("\r", string.Empty).Split('\n'); }
+            get { return MacroUtils.MacroReplace(DevURL, ReplacementTypes.TextUnescape).Replace("\r", string.Empty).Split('\n'); }
         }
 
         /// <summary>
@@ -227,7 +228,7 @@ namespace RelhaxModpack
         /// </summary>
         public string InternalNotesEscaped
         {
-            get { return Utils.MacroReplace(InternalNotes, ReplacementTypes.TextUnescape); }
+            get { return MacroUtils.MacroReplace(InternalNotes, ReplacementTypes.TextUnescape); }
         }
 
         /// <summary>

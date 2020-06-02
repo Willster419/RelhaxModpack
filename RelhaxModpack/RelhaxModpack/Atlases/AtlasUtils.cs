@@ -137,7 +137,7 @@ namespace RelhaxModpack.Atlases
                 List<string> ModContourIconFilesList = new List<string>();
                 foreach (string folder in allModFolderPaths)
                 {
-                    string realFolder = Utils.MacroReplace(folder, ReplacementTypes.FilePath);
+                    string realFolder = MacroUtils.MacroReplace(folder, ReplacementTypes.FilePath);
                     Logging.Info("[ParseModTexturesTask]: checking for mod contour icon images in directory {0}", realFolder);
                     token.ThrowIfCancellationRequested();
 

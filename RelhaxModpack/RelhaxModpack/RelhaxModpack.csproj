@@ -202,6 +202,7 @@
     <Compile Include="UI\RelhaxWPFRadioButton.xaml.cs">
       <DependentUpon>RelhaxWPFRadioButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\MacroUtils.cs" />
     <Compile Include="Utilities\Regression.cs" />
     <Compile Include="Atlases\RelhaxFreeImageLibrary.cs" />
     <Compile Include="Atlases\RelhaxNvTexLibrary.cs" />

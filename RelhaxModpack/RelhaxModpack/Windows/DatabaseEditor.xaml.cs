@@ -17,6 +17,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Threading;
 using System.Text.RegularExpressions;
 using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -879,7 +880,7 @@ namespace RelhaxModpack.Windows
             PackageEnabledDisplay.IsChecked = package.Enabled;
 
             //devURL
-            PackageDevURLDisplay.Text = Utils.MacroReplace(package.DevURL,ReplacementTypes.TextUnescape);
+            PackageDevURLDisplay.Text = MacroUtils.MacroReplace(package.DevURL,ReplacementTypes.TextUnescape);
 
             //internal notes
             PackageInternalNotesDisplay.Text = package.InternalNotesEscaped;
@@ -1096,14 +1097,14 @@ namespace RelhaxModpack.Windows
             package.EndAddress = PackageEndAddressDisplay.Text;
 
             //devURL is separated by newlines for array list, so it's not necessary to escape
-            package.DevURL = Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
+            package.DevURL = MacroUtils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
             package.Version = PackageVersionDisplay.Text;
             package.Author = PackageAuthorDisplay.Text;
             package.InstallGroup = (int)PackageInstallGroupDisplay.SelectedItem;
             package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
-            package.InternalNotes = Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
+            package.InternalNotes = MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
             package.Triggers = string.Join(",", PackageTriggersDisplay.Items.Cast<string>());
 
             //if the zipfile was updated, then update the last modified date
@@ -1135,8 +1136,8 @@ namespace RelhaxModpack.Windows
                 selectablePackage.Visible = (bool)PackageVisibleDisplay.IsChecked;
                 selectablePackage.Name = PackageNameDisplay.Text;
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
-                selectablePackage.Description = Utils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
-                selectablePackage.UpdateComment = Utils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.Description = MacroUtils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
+                selectablePackage.UpdateComment = MacroUtils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
                 selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items.Cast<string>());
 
                 selectablePackage.UserFiles.Clear();
@@ -1280,7 +1281,7 @@ namespace RelhaxModpack.Windows
                 return true;
 
             //devURL is separated by newlines for array list, so it's not necessary to escape
-            if (!package.DevURL.Equals(Utils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape)))
+            if (!package.DevURL.Equals(MacroUtils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape)))
                 return true;
             if (!package.Version.Equals(PackageVersionDisplay.Text))
                 return true;
@@ -1294,7 +1295,7 @@ namespace RelhaxModpack.Windows
                 return true;
             if (!package.Enabled.Equals((bool)PackageEnabledDisplay.IsChecked))
                 return true;
-            if (!package.InternalNotes.Equals(Utils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape)))
+            if (!package.InternalNotes.Equals(MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape)))
                 return true;
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
                 return true;
