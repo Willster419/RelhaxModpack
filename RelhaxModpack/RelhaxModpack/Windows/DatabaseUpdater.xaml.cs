@@ -793,7 +793,6 @@ namespace RelhaxModpack.Windows
 
                     //download latest modInfo xml
                     byte[] zip;
-                    MemoryStream stream = null;
                     using (WebClient client = new WebClient())
                     {
                         zip = await client.DownloadDataTaskAsync(modInfoxmlURL);
