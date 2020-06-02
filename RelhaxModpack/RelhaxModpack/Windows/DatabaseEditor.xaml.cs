@@ -948,6 +948,7 @@ namespace RelhaxModpack.Windows
                 PackageNameDisplay.Text = selectablePackage.Name;
                 PackageTypeDisplay.SelectedItem = selectablePackage.Type;
                 PackageLevelDisplay.Text = selectablePackage.Level.ToString();
+                PackageCalculatedLevelDisplay.Text = selectablePackage.InstallGroupWithOffset.ToString();
                 PackageVisibleDisplay.IsChecked = selectablePackage.Visible;
                 PackageDescriptionDisplay.Text = selectablePackage.DescriptionEscaped;
                 PackageUpdateNotesDisplay.Text = selectablePackage.UpdateCommentEscaped;
