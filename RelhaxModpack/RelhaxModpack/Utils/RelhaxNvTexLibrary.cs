@@ -1,5 +1,5 @@
 ﻿using Ionic.Zip;
-using RelhaxModpack.AtlasesCreator;
+using RelhaxModpack.Atlases;
 using System;
 using System.Collections.Generic;
 using System.IO;

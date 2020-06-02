@@ -8,13 +8,88 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack.AtlasesCreator
+namespace RelhaxModpack.Atlases
 {
     /// <summary>
     /// A utility class for Atlas file processing
     /// </summary>
     public static class AtlasUtils
     {
+        /// <summary>
+        /// The manager instance of the FreeImage Library
+        /// </summary>
+        public static RelhaxFreeImageLibrary FreeImageLibrary = new RelhaxFreeImageLibrary();
+
+        /// <summary>
+        /// The manager instance of the Nvidia Texture Tools Library
+        /// </summary>
+        public static RelhaxNvTexLibrary NvTexLibrary = new RelhaxNvTexLibrary();
+
+        /// <summary>
+        /// Test the ability to load an unmanaged library
+        /// </summary>
+        /// <returns>True if library loaded, false otherwise</returns>
+        public static bool TestLibrary(IRelhaxUnmanagedLibrary library, string name, bool unload)
+        {
+            Logging.Info("testing {0} library", name);
+            bool libraryLoaded;
+            if (!library.IsLoaded)
+            {
+                if (library.Load())
+                {
+                    Logging.Info("library loaded successfully");
+                    libraryLoaded = true;
+                }
+                else
+                {
+                    Logging.Error("library failed to load");
+                    libraryLoaded = false;
+                }
+            }
+            else
+            {
+                Logging.Info("library already loaded");
+                libraryLoaded = true;
+            }
+
+            if (unload && library.IsLoaded)
+            {
+                Logging.Info("unload requested and library is loaded, unloading");
+                if (library.Unload())
+                {
+                    Logging.Info("library unloaded successfully");
+                }
+                else
+                {
+                    Logging.Error("library failed to unload library");
+                    libraryLoaded = false;
+                }
+            }
+            return libraryLoaded;
+        }
+
+        /// <summary>
+        /// Test the ability to load and unload all the atlas image processing libraries
+        /// </summary>
+        /// <returns>True if both libraries loaded, false otherwise</returns>
+        public static bool TestLoadAtlasLibraries(bool unload)
+        {
+            bool freeImageLoaded = TestLibrary(FreeImageLibrary, "FreeImage", true);
+            bool nvttLoaded = TestLibrary(NvTexLibrary, "nvtt", true);
+
+            if (nvttLoaded && freeImageLoaded)
+            {
+                Logging.Info("TestLoadAtlasLibraries(): both libraries loaded");
+                return true;
+            }
+            else
+            {
+                Logging.Error("TestLoadAtlasLibraries(): failed to load one or more atlas processing libraries: freeImage={0}, nvtt={1}",
+                    freeImageLoaded.ToString(), nvttLoaded.ToString());
+                return false;
+            }
+        }
+
         /// <summary>
         /// The task of parsing all mod png images from multiple folders into a flat list of png bitmaps
         /// </summary>
@@ -146,19 +221,19 @@ namespace RelhaxModpack.AtlasesCreator
         /// </summary>
         public static void VerifyImageLibsLoaded()
         {
-            if (!Utils.FreeImageLibrary.IsLoaded)
+            if (!FreeImageLibrary.IsLoaded)
             {
                 Logging.Info("freeimage library is not loaded, loading");
-                Utils.FreeImageLibrary.Load();
+                FreeImageLibrary.Load();
                 Logging.Info("freeimage library loaded");
             }
             else
                 Logging.Info("freeimage library is loaded");
 
-            if (!Utils.NvTexLibrary.IsLoaded)
+            if (!NvTexLibrary.IsLoaded)
             {
                 Logging.Info("nvtt library is not loaded, loading");
-                Utils.NvTexLibrary.Load();
+                NvTexLibrary.Load();
                 Logging.Info("nvtt library loaded");
             }
             else

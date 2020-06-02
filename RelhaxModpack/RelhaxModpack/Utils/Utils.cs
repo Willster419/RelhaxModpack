@@ -22,7 +22,7 @@ using System.Xml.Linq;
 using IWshRuntimeLibrary;
 using File = System.IO.File;
 using System.Windows.Threading;
-using RelhaxModpack.AtlasesCreator;
+using RelhaxModpack.Atlases;
 using System.Drawing;
 using Size = System.Drawing.Size;
 using RelhaxModpack.Windows;
@@ -309,82 +309,6 @@ namespace RelhaxModpack
         public const string PatchJsonNullEscape = "[null]";
         #endregion
 
-        #region Unmanaged Library stuff
-        /// <summary>
-        /// The manager instance of the FreeImage Library
-        /// </summary>
-        public static RelhaxFreeImageLibrary FreeImageLibrary = new RelhaxFreeImageLibrary();
-
-        /// <summary>
-        /// The manager instance of the Nvidia Texture Tools Library
-        /// </summary>
-        public static RelhaxNvTexLibrary NvTexLibrary = new RelhaxNvTexLibrary();
-
-        /// <summary>
-        /// Test the ability to load an unmanaged library
-        /// </summary>
-        /// <returns>True if library loaded, false otherwise</returns>
-        public static bool TestLibrary(IRelhaxUnmanagedLibrary library, string name, bool unload)
-        {
-            Logging.Info("testing {0} library", name);
-            bool libraryLoaded;
-            if (!library.IsLoaded)
-            {
-                if (library.Load())
-                {
-                    Logging.Info("library loaded successfully");
-                    libraryLoaded = true;
-                }
-                else
-                {
-                    Logging.Error("library failed to load");
-                    libraryLoaded = false;
-                }
-            }
-            else
-            {
-                Logging.Info("library already loaded");
-                libraryLoaded = true;
-            }
-
-            if(unload && library.IsLoaded)
-            {
-                Logging.Info("unload requested and library is loaded, unloading");
-                if (library.Unload())
-                {
-                    Logging.Info("library unloaded successfully");
-                }
-                else
-                {
-                    Logging.Error("library failed to unload library");
-                    libraryLoaded = false;
-                }
-            }
-            return libraryLoaded;
-        }
-
-        /// <summary>
-        /// Test the ability to load and unload all the atlas image processing libraries
-        /// </summary>
-        /// <returns>True if both libraries loaded, false otherwise</returns>
-        public static bool TestLoadAtlasLibraries(bool unload)
-        {
-            bool freeImageLoaded = TestLibrary(FreeImageLibrary, "FreeImage", true);
-            bool nvttLoaded = TestLibrary(NvTexLibrary, "nvtt", true);
-
-            if(nvttLoaded && freeImageLoaded)
-            {
-                Logging.Info("TestLoadAtlasLibraries(): both libraries loaded");
-                return true;
-            }
-            else
-            {
-                Logging.Error("TestLoadAtlasLibraries(): failed to load one or more atlas processing libraries: freeImage={0}, nvtt={1}",
-                    freeImageLoaded.ToString(), nvttLoaded.ToString());
-                return false;
-            }
-        }
-
         /// <summary>
         /// Get a complete assembly name based on a matching keyword
         /// </summary>
@@ -394,8 +318,6 @@ namespace RelhaxModpack
         {
             return Assembly.GetExecutingAssembly().GetManifestResourceNames().FirstOrDefault(rn => rn.Contains(keyword));
         }
-
-        #endregion
 
         #region Application Utils
         /// <summary>

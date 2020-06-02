@@ -11,7 +11,7 @@ using System.Windows;
 using Ionic.Zip;
 using System.Text.RegularExpressions;
 using System.Threading;
-using RelhaxModpack.AtlasesCreator;
+using RelhaxModpack.Atlases;
 
 namespace RelhaxModpack.InstallerComponents
 {

@@ -1,4 +1,4 @@
-﻿using RelhaxModpack.AtlasesCreator.Packing;
+﻿using RelhaxModpack.Atlases.Packing;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +14,7 @@ using System.Xml.XPath;
 using TeximpNet;
 using TeximpNet.Compression;
 
-namespace RelhaxModpack.AtlasesCreator
+namespace RelhaxModpack.Atlases
 {
     /// <summary>
     /// List of possible areas in the Atlas creation process where it could fail

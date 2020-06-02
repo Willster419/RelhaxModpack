@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack.AtlasesCreator.Packing
+namespace RelhaxModpack.Atlases.Packing
 {
     /// <summary>
     /// Handles packing a list of small bitmap objects into one large bitmap object 

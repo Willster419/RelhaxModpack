@@ -7,7 +7,7 @@ using System.IO;
 using System.Reflection;
 using TeximpNet.Unmanaged;
 using Ionic.Zip;
-using RelhaxModpack.AtlasesCreator;
+using RelhaxModpack.Atlases;
 using TeximpNet;
 
 namespace RelhaxModpack
