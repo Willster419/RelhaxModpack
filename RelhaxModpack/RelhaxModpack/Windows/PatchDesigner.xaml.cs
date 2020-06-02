@@ -121,7 +121,7 @@ namespace RelhaxModpack.Windows
             {
                 Task.Run(async () =>
                 {
-                    if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                    if (!await CommonUtils.IsManagerUptoDate(CommonUtils.GetApplicationVersion()))
                     {
                         MessageBox.Show("Your application is out of date. Please launch the application normally to update");
                     }

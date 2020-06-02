@@ -252,7 +252,7 @@ namespace RelhaxModpack.Windows
                 if (MessageBox.Show(string.Format("{0}\n{1}", Translations.GetTranslatedString("missingMSVCPLibraries"), Translations.GetTranslatedString("openLinkToMSVCP")),
                                 Translations.GetTranslatedString("missingMSVCPLibrariesHeader"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    if (!Utils.StartProcess(AtlasUtils.MSVCPLink))
+                    if (!CommonUtils.StartProcess(AtlasUtils.MSVCPLink))
                     {
                         Logging.Error("failed to open url to MSVCP: {0}", AtlasUtils.MSVCPLink);
                     }
@@ -334,7 +334,7 @@ namespace RelhaxModpack.Windows
             Logging.Info("[Diagnostics]: Cleaning AppData cache");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheProgress");
 
-            bool clearCache = await Task.Run(() => Utils.ClearCache());
+            bool clearCache = await Task.Run(() => CommonUtils.ClearCache());
 
             if(clearCache)
             {

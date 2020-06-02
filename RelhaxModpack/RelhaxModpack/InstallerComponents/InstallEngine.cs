@@ -1409,7 +1409,7 @@ namespace RelhaxModpack.InstallerComponents
             //check for cancel
             CancellationToken.ThrowIfCancellationRequested();
 
-            return Utils.ClearCache();
+            return CommonUtils.ClearCache();
         }
 
         private bool ClearLogs()

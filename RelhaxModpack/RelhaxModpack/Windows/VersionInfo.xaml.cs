@@ -89,7 +89,7 @@ namespace RelhaxModpack.Windows
 
         private void TheHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            Utils.OpenInGoogleTranslate(ApplicationUpdateNotes.Text);
+            CommonUtils.OpenInGoogleTranslate(ApplicationUpdateNotes.Text);
         }
     }
 }

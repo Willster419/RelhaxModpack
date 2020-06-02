@@ -1048,7 +1048,7 @@ namespace RelhaxModpack.Utilities
             string indexString = valueToAdd.Split(new string[] { @"[index=" }, StringSplitOptions.None)[1];
 
             //split off the end brace, default is index 0 (add it to array at bottom if none provided)
-            int index = Utils.ParseInt(indexString.Split(']')[0], -1);
+            int index = CommonUtils.ParseInt(indexString.Split(']')[0], -1);
 
             //and get it out of the valueToAdd
             valueToAdd = valueToAdd.Split(new string[] { @"[index=" }, StringSplitOptions.None)[0];
@@ -1312,11 +1312,11 @@ namespace RelhaxModpack.Utilities
             //determine what type value should be used for the json item based on attempted parsing
             if (value.Equals(PatchJsonNullEscape))
                 jvalue.Value = null;
-            else if (Utils.ParseBool(value, out bool resultBool))
+            else if (CommonUtils.ParseBool(value, out bool resultBool))
                 jvalue.Value = resultBool;
-            else if (Utils.ParseInt(value, out int resultInt))
+            else if (CommonUtils.ParseInt(value, out int resultInt))
                 jvalue.Value = resultInt;
-            else if (Utils.ParseFloat(value, out float resultFloat))
+            else if (CommonUtils.ParseFloat(value, out float resultFloat))
                 jvalue.Value = resultFloat;
             else
                 jvalue.Value = value;
@@ -1327,11 +1327,11 @@ namespace RelhaxModpack.Utilities
         {
             //determine what type value should be used for the json item based on attempted parsing
             JValue jvalue = null;
-            if (Utils.ParseBool(value, out bool resultBool))
+            if (CommonUtils.ParseBool(value, out bool resultBool))
                 jvalue = new JValue(resultBool);
-            else if (Utils.ParseInt(value, out int resultInt))
+            else if (CommonUtils.ParseInt(value, out int resultInt))
                 jvalue = new JValue(resultInt);
-            else if (Utils.ParseFloat(value, out float resultFloat))
+            else if (CommonUtils.ParseFloat(value, out float resultFloat))
                 jvalue = new JValue(resultFloat);
             else
                 jvalue = new JValue(value);

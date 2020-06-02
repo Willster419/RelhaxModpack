@@ -633,7 +633,7 @@ namespace RelhaxModpack.Windows
         private async void UpdateApplicationV2CreateManagerInfoBigmods(object sender, RoutedEventArgs e)
         {
             ReportProgress("Running script to create manager info (bigmods)...");
-            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 30 * Utils.TO_SECONDS);
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateManagerInfoPHP, 30 * CommonUtils.TO_SECONDS);
         }
         #endregion
 
@@ -723,7 +723,7 @@ namespace RelhaxModpack.Windows
                         await Task.Run(() =>
                         {
                             downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList(doc);
-                            string[] downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
+                            string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 
                             globalDependencyXmlString = downloadStrings[0];
                             dependenicesXmlString = downloadStrings[1];
@@ -884,7 +884,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Starting Update database step 2...");
             ReportProgress("Running script to update online hash database...");
             //a PatientWebClient should allow a timeout value of 5 mins (or more)
-            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateDatabasePHP, 30 * Utils.TO_SECONDS * Utils.TO_MINUETS);
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateDatabasePHP, 30 * CommonUtils.TO_SECONDS * CommonUtils.TO_MINUETS);
         }
 
         private async void UpdateDatabaseV2Step3_Click(object sender, RoutedEventArgs e)
@@ -1121,7 +1121,7 @@ namespace RelhaxModpack.Windows
                         updatedPackages.Add(package);
                     }
                     //legacy compatibility check: size parameters need to be updated
-                    ulong fakeSize = Utils.ParseuLong(databaseEntry.Attributes["size"].Value, 0);
+                    ulong fakeSize = CommonUtils.ParseuLong(databaseEntry.Attributes["size"].Value, 0);
                     if (package.Size == 0 || fakeSize == 0 || package.Size != fakeSize)
                     {
                         //update the current size of the package
@@ -1769,7 +1769,7 @@ namespace RelhaxModpack.Windows
                 {
                     await Task.Run(() =>
                     {
-                        packageToAddUID.UID = Utils.GenerateUID(allPackages);
+                        packageToAddUID.UID = CommonUtils.GenerateUID(allPackages);
                     });
                     ReportProgress(string.Format("Package {0} got generated UID {1}", packageToAddUID.PackageName, packageToAddUID.UID));
                 }

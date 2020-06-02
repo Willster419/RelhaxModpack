@@ -126,7 +126,7 @@ namespace RelhaxModpack.Windows
                 {
                     Task.Run(async () =>
                     {
-                        if (!await Utils.IsManagerUptoDate(Utils.GetApplicationVersion()))
+                        if (!await CommonUtils.IsManagerUptoDate(CommonUtils.GetApplicationVersion()))
                         {
                             MessageBox.Show("Your application is out of date. Please launch the application normally to update");
                         }
@@ -835,7 +835,7 @@ namespace RelhaxModpack.Windows
             PackageVersionDisplay.Text = package.Version;
             PackageAuthorDisplay.Text = package.Author;
             PackageUidDisplay.Text = package.UID;
-            PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
+            PackageLastUpdatedDisplay.Text = CommonUtils.ConvertFiletimeTimestampToDate(package.Timestamp);
 
             //locate and select the patchGroup and installGroup of the package
             //if it can't, then extend the number of options until its there
@@ -1113,8 +1113,8 @@ namespace RelhaxModpack.Windows
             {
                 package.CRC = "f";
                 package.ZipFile = PackageZipFileDisplay.Text;
-                package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
-                PackageLastUpdatedDisplay.Text = Utils.ConvertFiletimeTimestampToDate(package.Timestamp);
+                package.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
+                PackageLastUpdatedDisplay.Text = CommonUtils.ConvertFiletimeTimestampToDate(package.Timestamp);
             }
 
             //this gets dependencies and selectable packages
@@ -1394,7 +1394,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 //also make a new UID for the package as well
-                packageToMove.UID = Utils.GenerateUID(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+                packageToMove.UID = CommonUtils.GenerateUID(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
 
                 //the packageName needs to stay unique as well
                 int i = 0;
@@ -1896,7 +1896,7 @@ namespace RelhaxModpack.Windows
 
                 //update the package crc and timestamp values
                 e.Package.CRC = "f";
-                e.Package.Timestamp = Utils.GetCurrentUniversalFiletimeTimestamp();
+                e.Package.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
 
                 if (selectedItem.Equals(e.Package))
                 {

@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
-using static RelhaxModpack.Utils;
+using static RelhaxModpack.CommonUtils;
 
 namespace RelhaxModpack.Windows
 {

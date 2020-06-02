@@ -8140,55 +8140,55 @@
             Loads all translation dictionaries. Should only be done once (at application start)
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Utils">
+        <member name="T:RelhaxModpack.CommonUtils">
             <summary>
             A utility class for static functions used in various places in the modpack
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.TO_SECONDS">
+        <member name="F:RelhaxModpack.CommonUtils.TO_SECONDS">
             <summary>
             Multiply by this value to convert milliseconds to seconds
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.TO_MINUETS">
+        <member name="F:RelhaxModpack.CommonUtils.TO_MINUETS">
             <summary>
             Multiply by this value to convert seconds to minuets
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetAssemblyName(System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.GetAssemblyName(System.String)">
             <summary>
             Get a complete assembly name based on a matching keyword
             </summary>
             <param name="keyword">The keyword to match</param>
             <returns>The first matching assembly name, or null if no matches</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetApplicationVersion">
+        <member name="M:RelhaxModpack.CommonUtils.GetApplicationVersion">
             <summary>
             Return the entire assembly version
             </summary>
             <returns>The entire assembly version string (major, minor, build, revision)</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetCompileTime">
+        <member name="M:RelhaxModpack.CommonUtils.GetCompileTime">
             <summary>
             Return the date and time in EN-US form, the time that the application was built
             </summary>
             <returns>the application build date and time in EN-US form</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetManagerInfoDocumentAsync(System.Boolean)">
+        <member name="M:RelhaxModpack.CommonUtils.GetManagerInfoDocumentAsync(System.Boolean)">
             <summary>
             Get the XmlDocument object of the managerInfo zip file
             </summary>
             <param name="overwrite">If the managerInfo zip file should be force refreshed</param>
             <returns>An xmlDocument object of manager_version.xml</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetManagerInfoZipfileAsync(System.Boolean)">
+        <member name="M:RelhaxModpack.CommonUtils.GetManagerInfoZipfileAsync(System.Boolean)">
             <summary>
             Download and store the latest managerInfo zip file
             </summary>
             <param name="overwrite">Set to true to force a download of the latest version</param>
             <returns>The mangerInfo zip file in the Ionic.Zipfile object</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.IsManagerUptoDate(System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.IsManagerUptoDate(System.String)">
             <summary>
             Compares if the current application version is the same as the version checked from online
             </summary>
@@ -8196,7 +8196,7 @@
             <returns>True if the manager string versions are the same, false otherwise</returns>
             <remarks>IsManagerUptoDate will return false if it fails to get the latest managerInfo zip file</remarks>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseBool(System.String,System.Boolean)">
             <summary>
             Try to parse a boolean value based on string input
             </summary>
@@ -8204,7 +8204,7 @@
             <param name="defaultValue">The default value to use if parsing fails</param>
             <returns>The bool value of the input string, or the default value if parsing fails</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean@,System.Boolean)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseBool(System.String,System.Boolean@,System.Boolean)">
             <summary>
             Try to parse a boolean value based on string input
             </summary>
@@ -8213,7 +8213,7 @@
             <param name="defaultValue">The default value for result, if parse fails</param>
             <returns>Returns if the TryParse() worked</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseInt(System.String,System.Int32)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseInt(System.String,System.Int32)">
             <summary>
             Try to parse an integer value based on string input
             </summary>
@@ -8221,7 +8221,7 @@
             <param name="defaultValue">The default value to use if parsing fails</param>
             <returns>The int value of the input string, or the default value if parsing fails</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseInt(System.String,System.Int32@,System.Int32)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseInt(System.String,System.Int32@,System.Int32)">
             <summary>
             Try to parse an integer value based on string input
             </summary>
@@ -8230,7 +8230,7 @@
             <param name="defaultValue">The default value for result, if parse fails</param>
             <returns>Returns if the TryParse() worked</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseFloat(System.String,System.Single)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseFloat(System.String,System.Single)">
             <summary>
             Try to parse a float value based on string input
             </summary>
@@ -8238,7 +8238,7 @@
             <param name="defaultValue">The default value to use if parsing fails</param>
             <returns>The float value of the input string, or the default value if parsing fails</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseFloat(System.String,System.Single@,System.Single)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseFloat(System.String,System.Single@,System.Single)">
             <summary>
             Try to parse a float value based on string input
             </summary>
@@ -8247,7 +8247,7 @@
             <param name="defaultValue">The default value for result, if parse fails</param>
             <returns>Returns if the TryParse() worked</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseLong(System.String,System.Int64)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseLong(System.String,System.Int64)">
             <summary>
             Try to parse a long value based on string input
             </summary>
@@ -8255,7 +8255,7 @@
             <param name="defaultValue">The default value to use if parsing fails</param>
             <returns>The float value of the input string, or the default value if parsing fails</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseLong(System.String,System.Int64@,System.Int64)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseLong(System.String,System.Int64@,System.Int64)">
             <summary>
             Try to parse a long value based on string input
             </summary>
@@ -8264,7 +8264,7 @@
             <param name="defaultValue">The default value for result, if parse fails</param>
             <returns>Returns if the TryParse() worked</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseuLong(System.String,System.UInt64)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseuLong(System.String,System.UInt64)">
             <summary>
             Try to parse an unsigned long value based on string input
             </summary>
@@ -8272,7 +8272,7 @@
             <param name="defaultValue">The default value to use if parsing fails</param>
             <returns>The float value of the input string, or the default value if parsing fails</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseuLong(System.String,System.UInt64@,System.UInt64)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseuLong(System.String,System.UInt64@,System.UInt64)">
             <summary>
             Try to parse an unsigned long value based on string input
             </summary>
@@ -8281,7 +8281,7 @@
             <param name="defaultValue">The default value for result, if parse fails</param>
             <returns>Returns if the TryParse() worked</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ParseEnum``1(System.String,``0)">
+        <member name="M:RelhaxModpack.CommonUtils.ParseEnum``1(System.String,``0)">
             <summary>
             Tries to parse an enumeration of a given type
             </summary>
@@ -8291,28 +8291,28 @@
             <returns>The parsed or default enumeration value</returns>
             <remarks>see https://stackoverflow.com/questions/10685794/how-to-use-generic-tryparse-with-enum </remarks>
         </member>
-        <member name="M:RelhaxModpack.Utils.DownloadStringsFromUrls(System.Collections.Generic.List{System.String})">
+        <member name="M:RelhaxModpack.CommonUtils.DownloadStringsFromUrls(System.Collections.Generic.List{System.String})">
             <summary>
             Downloads an array of strings from a list of download URLs all at the same time
             </summary>
             <param name="downloadURLs">the list of string URLs to download</param>
             <returns>An array of downloaded strings, or empty for each string that failed to download</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.DownloadStringsFromUrlsAsync(System.Collections.Generic.List{System.String})">
+        <member name="M:RelhaxModpack.CommonUtils.DownloadStringsFromUrlsAsync(System.Collections.Generic.List{System.String})">
             <summary>
             Downloads an array of strings from a list of download URLs all at the same time
             </summary>
             <param name="downloadURLs">the list of string URLs to download</param>
             <returns>An array of downloaded strings, or empty for each string that failed to download</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.BitmapToImageSource(System.Drawing.Bitmap)">
+        <member name="M:RelhaxModpack.CommonUtils.BitmapToImageSource(System.Drawing.Bitmap)">
             <summary>
             Converts a Bitmap object to a BitmapImage object
             </summary>
             <param name="bitmap">The Bitmap object to convert</param>
             <returns>The BitmapImage object</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.RandomString(System.Int32,System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.RandomString(System.Int32,System.String)">
             <summary>
             Creates a string of random characters
             </summary>
@@ -8321,13 +8321,13 @@
             <returns>The random string</returns>
             <remarks>See https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c </remarks>
         </member>
-        <member name="M:RelhaxModpack.Utils.GenerateUID">
+        <member name="M:RelhaxModpack.CommonUtils.GenerateUID">
             <summary>
             Generates a Unique IDentifier for a package using the constant defined number of string and character selections
             </summary>
             <returns>a Unique IDentifier for a package</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.GenerateUID(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage})">
+        <member name="M:RelhaxModpack.CommonUtils.GenerateUID(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage})">
             <summary>
             Generates a Unique IDentifier for a package using the constant defined number of string and character selections
             while verifying that it's unique against a given list
@@ -8335,7 +8335,7 @@
             <param name="allPackages">A list of packages to test to make sure the UID is unique</param>
             <returns>A guaranteed unique ID that does not exist in the list</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.CompareVersions(System.String,System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.CompareVersions(System.String,System.String)">
             <summary>
             Compare versions of form "1,2,3,4" or "1.2.3.4". Throws FormatException
             in case of invalid version. See function comments for more informations and samples.
@@ -8357,34 +8357,34 @@
             6,5,4,3     | 6.5.4.3 =  0
             </remarks>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetCurrentUniversalFiletimeTimestamp">
+        <member name="M:RelhaxModpack.CommonUtils.GetCurrentUniversalFiletimeTimestamp">
             <summary>
             Gets the current time in the form of universal time
             </summary>
             <returns>the universal time of now</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ConvertFiletimeTimestampToDate(System.Int64)">
+        <member name="M:RelhaxModpack.CommonUtils.ConvertFiletimeTimestampToDate(System.Int64)">
             <summary>
             Converts a timestamp value to a string representation
             </summary>
             <param name="timestamp">The timestamp to convert</param>
             <returns>The string representation of the timestamp</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.Base64Encode(System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.Base64Encode(System.String)">
             <summary>
             Encode a plain text string into base64 UTF8 encoding
             </summary>
             <param name="plainText">The plain text string</param>
             <returns>The UTF8 base64 encoded version</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.Base64Decode(System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.Base64Decode(System.String)">
             <summary>
             Decode a base64 UTF8 encoded string into plain text
             </summary>
             <param name="base64EncodedData">The base64 stirng</param>
             <returns>The plain text version</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetProcess(System.String,System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.GetProcess(System.String,System.String)">
             <summary>
             Checks if a process is running on the system
             </summary>
@@ -8392,77 +8392,77 @@
             <param name="pathToMatch">(Optional) The directory that the process is running from</param>
             <returns>The Process object that matches, or null if no matches</returns>
         </member>
-        <member name="T:RelhaxModpack.Utils.ProcessAccessFlags">
+        <member name="T:RelhaxModpack.CommonUtils.ProcessAccessFlags">
             <summary>
             An enumeration of desired access rights to ask for information when opening a process's info
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.All">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.All">
             <summary>
             All process info
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.Terminate">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.Terminate">
             <summary>
             Terminate the process
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.CreateThread">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.CreateThread">
             <summary>
             Create a thread from the process
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.VirtualMemoryOperation">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.VirtualMemoryOperation">
             <summary>
             View the process's virtual memory operations
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.VirtualMemoryRead">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.VirtualMemoryRead">
             <summary>
             View the process's virtual memory reads
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.VirtualMemoryWrite">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.VirtualMemoryWrite">
             <summary>
             View the process's virtual memoty writes
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.DuplicateHandle">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.DuplicateHandle">
             <summary>
             Ability to create a duplicate process handle
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.CreateProcess">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.CreateProcess">
             <summary>
             Ability for process to create processes
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.SetQuota">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.SetQuota">
             <summary>
             Set quotas on the process
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.SetInformation">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.SetInformation">
             <summary>
             Set information about the process
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.QueryInformation">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.QueryInformation">
             <summary>
             Query information about the process
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.QueryLimitedInformation">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.QueryLimitedInformation">
             <summary>
             Query information about the process that does not require administrator rights
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utils.ProcessAccessFlags.Synchronize">
+        <member name="F:RelhaxModpack.CommonUtils.ProcessAccessFlags.Synchronize">
             <summary>
             Synchronize rights
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetExecutablePathAboveVista(System.Int32)">
+        <member name="M:RelhaxModpack.CommonUtils.GetExecutablePathAboveVista(System.Int32)">
             <summary>
             Gets the path to the application, including exe filename, based on the process ID
             </summary>
@@ -8472,7 +8472,7 @@
             It uses kernel32.dll p/invoke methods to perform the operation.
             Does not work below windows vista.</remarks>
         </member>
-        <member name="M:RelhaxModpack.Utils.IsProcessRunning(System.String,System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.IsProcessRunning(System.String,System.String)">
             <summary>
             Wrapper for IsProcessRunning() to return boolean type
             </summary>
@@ -8480,28 +8480,28 @@
             <param name="pathToMatch">(Optional) The directory that the process is running from</param>
             <returns>True if match, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.StartProcess(System.Diagnostics.ProcessStartInfo)">
+        <member name="M:RelhaxModpack.CommonUtils.StartProcess(System.Diagnostics.ProcessStartInfo)">
             <summary>
             Start a process
             </summary>
             <param name="startInfo">The ProcessStartInfo parameters object</param>
             <returns>True if process start was successful, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.StartProcess(System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.StartProcess(System.String)">
             <summary>
             Start a process
             </summary>
             <param name="command">The entire command as a string style commandline</param>
             <returns>True if process start was successful, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.OpenInGoogleTranslate(System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.OpenInGoogleTranslate(System.String)">
             <summary>
             Opens the selected text in Google translate web page
             </summary>
             <param name="message">The text to translate</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.EmptyNullStringCheck(System.String,System.String)">
+        <member name="M:RelhaxModpack.CommonUtils.EmptyNullStringCheck(System.String,System.String)">
             <summary>
             Tests if an input string is null or empty
             </summary>
@@ -8509,7 +8509,7 @@
             <param name="emptyNullReturn">The emptyNullReturn value if the string is null or empty, stringToTest otherwise</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetExecutingMethodName">
+        <member name="M:RelhaxModpack.CommonUtils.GetExecutingMethodName">
             <summary>
             Gets the name of the method above this
             </summary>
@@ -8517,13 +8517,13 @@
             <remarks>This is mostly used for in logging, to log the name of the method
             See https://stackoverflow.com/a/2652481/3128017 </remarks>
         </member>
-        <member name="M:RelhaxModpack.Utils.GetExecutingClassName">
+        <member name="M:RelhaxModpack.CommonUtils.GetExecutingClassName">
             <summary>
             Gets the name of the class above this
             </summary>
             <returns>The name of the calling class on this method call</returns>
         </member>
-        <member name="M:RelhaxModpack.Utils.ClearCache">
+        <member name="M:RelhaxModpack.CommonUtils.ClearCache">
             <summary>
             Clear the WoT appdata cache folder
             </summary>

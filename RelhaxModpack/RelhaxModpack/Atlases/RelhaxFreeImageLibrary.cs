@@ -64,7 +64,7 @@ namespace RelhaxModpack
 
                 //file exists, but is it up to date?
                 string embeddedHash = string.Empty;
-                string resourceName = Utils.GetAssemblyName(EmbeddedFilename);
+                string resourceName = CommonUtils.GetAssemblyName(EmbeddedFilename);
                 using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
                 using (ZipFile zout = ZipFile.Read(stream))
                 using (Stream dllStream = zout[0].OpenReader())
@@ -132,7 +132,7 @@ namespace RelhaxModpack
             if (File.Exists(Filepath))
                 File.Delete(Filepath);
             //https://stackoverflow.com/questions/38381684/reading-zip-file-from-byte-array-using-ionic-zip
-            string resourceName = Utils.GetAssemblyName(EmbeddedFilename);
+            string resourceName = CommonUtils.GetAssemblyName(EmbeddedFilename);
             Logging.Info("Extracting unmanaged teximpnet library: {0}", EmbeddedFilename);
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
             using (ZipFile zout = ZipFile.Read(stream))

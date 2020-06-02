@@ -865,16 +865,16 @@ namespace RelhaxModpack.Xml
                             d.EndAddress = globs.Value;
                             break;
                         case "logAtInstall":
-                            d.LogAtInstall = Utils.ParseBool(globs.Value,true);
+                            d.LogAtInstall = CommonUtils.ParseBool(globs.Value,true);
                             break;
                         case "devURL":
                             d.DevURL = globs.Value;
                             break;
                         case "enabled":
-                            d.Enabled = Utils.ParseBool(globs.Value, false);
+                            d.Enabled = CommonUtils.ParseBool(globs.Value, false);
                             break;
                         case "appendExtraction":
-                            d.AppendExtraction = Utils.ParseBool(globs.Value.Trim(), false);
+                            d.AppendExtraction = CommonUtils.ParseBool(globs.Value.Trim(), false);
                             break;
                         case "packageName":
                             d.PackageName = globs.Value.Trim();
@@ -947,16 +947,16 @@ namespace RelhaxModpack.Xml
                             d.EndAddress = globs.Value;
                             break;
                         case "logAtInstall":
-                            d.LogAtInstall = Utils.ParseBool(globs.Value, true);
+                            d.LogAtInstall = CommonUtils.ParseBool(globs.Value, true);
                             break;
                         case "devURL":
                             d.DevURL = globs.Value;
                             break;
                         case "enabled":
-                            d.Enabled = Utils.ParseBool(globs.Value, false);
+                            d.Enabled = CommonUtils.ParseBool(globs.Value, false);
                             break;
                         case "appendExtraction":
-                            d.AppendExtraction = Utils.ParseBool(globs.Value.Trim(), false);
+                            d.AppendExtraction = CommonUtils.ParseBool(globs.Value.Trim(), false);
                             break;
                         case "packageName":
                             d.PackageName = globs.Value.Trim();
@@ -995,7 +995,7 @@ namespace RelhaxModpack.Xml
                                             }
                                             break;
                                         case "negateFlag":
-                                            ld.NotFlag = Utils.ParseBool(logDependencyNode.Value, true);
+                                            ld.NotFlag = CommonUtils.ParseBool(logDependencyNode.Value, true);
                                             break;
                                         default:
                                             Logging.Warning(string.Format("modInfo.Xml incomprehensible node \"{0}\" => (line {1})",
@@ -1011,7 +1011,7 @@ namespace RelhaxModpack.Xml
                                     string.Join(",", logDepNodeList), ((IXmlLineInfo)logDependencyHolder).LineNumber));
                                 if (ld.PackageName.Equals(""))
                                 {
-                                    ld.PackageName = Utils.RandomString(30);
+                                    ld.PackageName = CommonUtils.RandomString(30);
                                     Logging.Info("PackageName is random generated: " + ld.PackageName);              // to avoid exceptions
                                 }
                                 d.Dependencies.Add(ld);
@@ -1077,13 +1077,13 @@ namespace RelhaxModpack.Xml
                             d.EndAddress = globs.Value;
                             break;
                         case "logAtInstall":
-                            d.LogAtInstall = Utils.ParseBool(globs.Value, true);
+                            d.LogAtInstall = CommonUtils.ParseBool(globs.Value, true);
                             break;
                         case "devURL":
                             d.DevURL = globs.Value;
                             break;
                         case "enabled":
-                            d.Enabled = Utils.ParseBool(globs.Value, false);
+                            d.Enabled = CommonUtils.ParseBool(globs.Value, false);
                             break;
                         case "packageName":
                             d.PackageName = globs.Value.Trim();
@@ -1139,7 +1139,7 @@ namespace RelhaxModpack.Xml
                             cat.Name = catagoryNode.Value;
                             break;
                         case "installGroup":
-                            cat.InstallGroup = Utils.ParseInt(catagoryNode.Value.Trim(), 0);
+                            cat.InstallGroup = CommonUtils.ParseInt(catagoryNode.Value.Trim(), 0);
                             break;
                         case "packages":
                             foreach (XElement modHolder in catagoryNode.Elements())
@@ -1178,7 +1178,7 @@ namespace RelhaxModpack.Xml
                                                     m.EndAddress = modNode.Value;
                                                     break;
                                                 case "logAtInstall":
-                                                    m.LogAtInstall = Utils.ParseBool(modNode.Value, true);
+                                                    m.LogAtInstall = CommonUtils.ParseBool(modNode.Value, true);
                                                     break;
                                                 case "crc":
                                                     m.CRC = modNode.Value;
@@ -1207,10 +1207,10 @@ namespace RelhaxModpack.Xml
                                                     }
                                                     break;
                                                 case "enabled":
-                                                    m.Enabled = Utils.ParseBool(modNode.Value, false);
+                                                    m.Enabled = CommonUtils.ParseBool(modNode.Value, false);
                                                     break;
                                                 case "visible":
-                                                    m.Visible = Utils.ParseBool(modNode.Value, true);
+                                                    m.Visible = CommonUtils.ParseBool(modNode.Value, true);
                                                     break;
                                                 case "packageName":
                                                     m.PackageName = modNode.Value.Trim();
@@ -1224,7 +1224,7 @@ namespace RelhaxModpack.Xml
                                                     }
                                                     break;
                                                 case "size":
-                                                    m.Size = Utils.ParseuLong(modNode.Value, 0);
+                                                    m.Size = CommonUtils.ParseuLong(modNode.Value, 0);
                                                     break;
                                                 case "description":
                                                     m.Description = ConvertFromXmlSaveFormat(modNode.Value);
@@ -1251,11 +1251,11 @@ namespace RelhaxModpack.Xml
                                                                     Pattern = innerText
                                                                 };
                                                                 if (userDataNode.Attribute("before") != null)
-                                                                    uf.PlaceBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
+                                                                    uf.PlaceBeforeExtraction = CommonUtils.ParseBool(userDataNode.Attribute("before").Value, false);
                                                                 if (userDataNode.Attribute("pre") != null)
-                                                                    uf.PlaceBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("pre").Value, false);
+                                                                    uf.PlaceBeforeExtraction = CommonUtils.ParseBool(userDataNode.Attribute("pre").Value, false);
                                                                 if (userDataNode.Attribute("system") != null)
-                                                                    uf.SystemInitiated = Utils.ParseBool(userDataNode.Attribute("system").Value, false);
+                                                                    uf.SystemInitiated = CommonUtils.ParseBool(userDataNode.Attribute("system").Value, false);
                                                                 m.UserFiles.Add(uf);
                                                                 break;
                                                             default:
@@ -1289,7 +1289,7 @@ namespace RelhaxModpack.Xml
                                                                             med.URL = innerText;
                                                                             break;
                                                                         case "type":
-                                                                            int innerValue = Utils.ParseInt(pictureNode.Value, 1);
+                                                                            int innerValue = CommonUtils.ParseInt(pictureNode.Value, 1);
                                                                             switch (innerValue)
                                                                             {
                                                                                 case 1:
@@ -1574,16 +1574,16 @@ namespace RelhaxModpack.Xml
                                     c.EndAddress = configNode.Value;
                                     break;
                                 case "logAtInstall":
-                                    c.LogAtInstall = Utils.ParseBool(configNode.Value, true);
+                                    c.LogAtInstall = CommonUtils.ParseBool(configNode.Value, true);
                                     break;
                                 case "crc":
                                     c.CRC = configNode.Value;
                                     break;
                                 case "enabled":
-                                    c.Enabled = Utils.ParseBool(configNode.Value, false);
+                                    c.Enabled = CommonUtils.ParseBool(configNode.Value, false);
                                     break;
                                 case "visible":
-                                    c.Visible = Utils.ParseBool(configNode.Value, true);
+                                    c.Visible = CommonUtils.ParseBool(configNode.Value, true);
                                     break;
                                 case "packageName":
                                     c.PackageName = configNode.Value.Trim();
@@ -1597,7 +1597,7 @@ namespace RelhaxModpack.Xml
                                     }
                                     break;
                                 case "size":
-                                    c.Size = Utils.ParseuLong(configNode.Value, 0);
+                                    c.Size = CommonUtils.ParseuLong(configNode.Value, 0);
                                     break;
                                 case "updateComment":
                                     c.UpdateComment = ConvertFromXmlSaveFormat(configNode.Value);
@@ -1650,11 +1650,11 @@ namespace RelhaxModpack.Xml
                                                     Pattern = innerText
                                                 };
                                                 if (userDataNode.Attribute("before") != null)
-                                                    uf.PlaceBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("before").Value, false);
+                                                    uf.PlaceBeforeExtraction = CommonUtils.ParseBool(userDataNode.Attribute("before").Value, false);
                                                 if (userDataNode.Attribute("pre") != null)
-                                                    uf.PlaceBeforeExtraction = Utils.ParseBool(userDataNode.Attribute("pre").Value, false);
+                                                    uf.PlaceBeforeExtraction = CommonUtils.ParseBool(userDataNode.Attribute("pre").Value, false);
                                                 if (userDataNode.Attribute("system") != null)
-                                                    uf.SystemInitiated = Utils.ParseBool(userDataNode.Attribute("system").Value, false);
+                                                    uf.SystemInitiated = CommonUtils.ParseBool(userDataNode.Attribute("system").Value, false);
                                                 c.UserFiles.Add(uf);
                                                 break;
                                             default:
@@ -1688,7 +1688,7 @@ namespace RelhaxModpack.Xml
                                                             med.URL = innerText;
                                                             break;
                                                         case "type":
-                                                            switch (Utils.ParseInt(pictureNode.Value, 1))
+                                                            switch (CommonUtils.ParseInt(pictureNode.Value, 1))
                                                             {
                                                                 case 1:
                                                                     med.MediaType = MediaType.Picture;
@@ -1761,7 +1761,7 @@ namespace RelhaxModpack.Xml
                                                 string.Join(",", depNodeList), c.Name, c.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber));
                                         if (d.PackageName.Equals(""))
                                         {
-                                            d.PackageName = Utils.RandomString(30);
+                                            d.PackageName = CommonUtils.RandomString(30);
                                             Logging.Info("PackageName is random generated: " + d.PackageName);
                                         }              // to avoid exceptions
                                         c.Dependencies.Add(d);
@@ -1806,7 +1806,7 @@ namespace RelhaxModpack.Xml
                                                 string.Join(",", depNodeList), c.Name, c.ZipFile, ((IXmlLineInfo)dependencyHolder).LineNumber));
                                         if (d.PackageName.Equals(""))
                                         {
-                                            d.PackageName = Utils.RandomString(30);
+                                            d.PackageName = CommonUtils.RandomString(30);
                                             Logging.Info("PackageName is random generated: " + d.PackageName);
                                         }              // to avoid exceptions
                                         c.Dependencies.Add(d);
@@ -2792,7 +2792,7 @@ namespace RelhaxModpack.Xml
                             p.PatchPath = property.InnerText.Trim();
                             break;
                         case "followPath":
-                            p.FollowPath = Utils.ParseBool(property.InnerText.Trim(), false);
+                            p.FollowPath = CommonUtils.ParseBool(property.InnerText.Trim(), false);
                             break;
                         case "file":
                             p.File = property.InnerText.Trim();
@@ -2801,7 +2801,7 @@ namespace RelhaxModpack.Xml
                             p.Path = property.InnerText.Trim();
                             break;
                         case "version":
-                            p.Version = Utils.ParseInt(property.InnerText.Trim(), 1);
+                            p.Version = CommonUtils.ParseInt(property.InnerText.Trim(), 1);
                             break;
                         case "line":
                             if (!string.IsNullOrWhiteSpace(property.InnerText.Trim()))
@@ -2859,7 +2859,7 @@ namespace RelhaxModpack.Xml
                             sc.Name = property.InnerText.Trim();
                             break;
                         case "enabled":
-                            sc.Enabled = Utils.ParseBool(property.InnerText.Trim(), false);
+                            sc.Enabled = CommonUtils.ParseBool(property.InnerText.Trim(), false);
                             break;
                     }
                 }
@@ -2964,22 +2964,22 @@ namespace RelhaxModpack.Xml
                             sc.MapFile = property.InnerText.Trim();
                             break;
                         case "powOf2":
-                            sc.PowOf2 = Utils.ParseBool(property.InnerText.Trim(), false);
+                            sc.PowOf2 = CommonUtils.ParseBool(property.InnerText.Trim(), false);
                             break;
                         case "square":
-                            sc.Square = Utils.ParseBool(property.InnerText.Trim(), false);
+                            sc.Square = CommonUtils.ParseBool(property.InnerText.Trim(), false);
                             break;
                         case "fastImagePacker":
-                            sc.FastImagePacker = Utils.ParseBool(property.InnerText.Trim(), false);
+                            sc.FastImagePacker = CommonUtils.ParseBool(property.InnerText.Trim(), false);
                             break;
                         case "padding":
-                            sc.Padding = Utils.ParseInt(property.InnerText.Trim(), 1);
+                            sc.Padding = CommonUtils.ParseInt(property.InnerText.Trim(), 1);
                             break;
                         case "atlasWidth":
-                            sc.AtlasWidth = Utils.ParseInt(property.InnerText.Trim(), 2400);
+                            sc.AtlasWidth = CommonUtils.ParseInt(property.InnerText.Trim(), 2400);
                             break;
                         case "atlasHeight":
-                            sc.AtlasHeight = Utils.ParseInt(property.InnerText.Trim(), 8192);
+                            sc.AtlasHeight = CommonUtils.ParseInt(property.InnerText.Trim(), 8192);
                             break;
                         case "atlasSaveDirectory":
                             sc.AtlasSaveDirectory = property.InnerText.Trim();

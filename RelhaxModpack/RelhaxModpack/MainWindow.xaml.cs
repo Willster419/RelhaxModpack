@@ -334,7 +334,7 @@ namespace RelhaxModpack
 
                     //start to download the manager info file as well
                     Logging.Info("Starting task GetManagerInfoZipfileAsync()");
-                    DownloadManagerInfoZip = Utils.GetManagerInfoZipfileAsync(false);
+                    DownloadManagerInfoZip = CommonUtils.GetManagerInfoZipfileAsync(false);
 
                     //set the UI for a download
                     ResetUI();
@@ -548,7 +548,7 @@ namespace RelhaxModpack
                         if (MessageBox.Show(string.Format("{0}\n{1}", Translations.GetTranslatedString("missingMSVCPLibraries"), Translations.GetTranslatedString("openLinkToMSVCP")),
                             Translations.GetTranslatedString("missingMSVCPLibrariesHeader"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         {
-                            if (!Utils.StartProcess(AtlasUtils.MSVCPLink))
+                            if (!CommonUtils.StartProcess(AtlasUtils.MSVCPLink))
                             {
                                 Logging.Error("failed to open url to MSVCP: {0}", AtlasUtils.MSVCPLink);
                             }
@@ -759,14 +759,14 @@ namespace RelhaxModpack
             XmlDocument doc;
             if (refreshModInfo)
             {
-                doc = await Utils.GetManagerInfoDocumentAsync(true);
+                doc = await CommonUtils.GetManagerInfoDocumentAsync(true);
             }
             else
             {
                 if (Settings.ManagerInfoZipfile == null)
                 {
                     Logging.Debug("CheckForDatabaseUpdates(false), but Settings.ModInfoZipfile is null. getting latest modInfo");
-                    Settings.ManagerInfoZipfile = await Utils.GetManagerInfoZipfileAsync(false);
+                    Settings.ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(false);
                 }
                 //only get if from the downloaded version
                 //get the version info string
@@ -872,7 +872,7 @@ namespace RelhaxModpack
             }
 
             //declare these out here so the logger can access them
-            string applicationBuildVersion = Utils.GetApplicationVersion();
+            string applicationBuildVersion = CommonUtils.GetApplicationVersion();
 
             //only true alpha build version will get here
             if (version == ApplicationVersions.Alpha)
@@ -891,7 +891,7 @@ namespace RelhaxModpack
             }
             else
             {
-                outOfDate = !(await Utils.IsManagerUptoDate(applicationBuildVersion));
+                outOfDate = !(await CommonUtils.IsManagerUptoDate(applicationBuildVersion));
             }
 
             if (!outOfDate)
@@ -971,7 +971,7 @@ namespace RelhaxModpack
             if(Settings.ManagerInfoZipfile == null)
             {
                 Logging.Warning("Settings.ManagerInfoZipfile is null, getting now");
-                Settings.ManagerInfoZipfile = await Utils.GetManagerInfoZipfileAsync(false);
+                Settings.ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(false);
                 if (Settings.ManagerInfoZipfile == null)
                 {
                     MessageBox.Show(Translations.GetTranslatedString("failedToExtractUpdateArchive"));
@@ -1368,7 +1368,7 @@ namespace RelhaxModpack
             stopwatch.Restart();
 
             //check if wot is running
-            while (Utils.IsProcessRunning(Settings.WoTProcessName, Settings.WoTDirectory))
+            while (CommonUtils.IsProcessRunning(Settings.WoTProcessName, Settings.WoTDirectory))
             {
                 //create window to determine if cancel, wait, kill TODO
                 AskCloseWoT askCloseWoT = new AskCloseWoT();
@@ -2196,7 +2196,7 @@ namespace RelhaxModpack
             }
 
             //check if wot is running
-            while (Utils.IsProcessRunning(Settings.WoTProcessName, Settings.WoTDirectory))
+            while (CommonUtils.IsProcessRunning(Settings.WoTProcessName, Settings.WoTDirectory))
             {
                 //create window to determine if cancel, wait, kill TODO
                 AskCloseWoT askCloseWoT = new AskCloseWoT();
@@ -2514,7 +2514,7 @@ namespace RelhaxModpack
         private void AutoSyncFrequencyTexbox_TextChanged(object sender, TextChangedEventArgs e)
         {
             //check the time parsed value
-            int timeToUse = Utils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
+            int timeToUse = CommonUtils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
             if (timeToUse < 1)
             {
                 Logging.Debug("Invalid time specified, must be above 0. not saving");
@@ -2584,7 +2584,7 @@ namespace RelhaxModpack
         private void ApplyCustomUILocalizations(bool displayBackupModsSize)
         {
             //set the application information text box
-            ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + Utils.GetApplicationVersion();
+            ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + CommonUtils.GetApplicationVersion();
 
             //set the database information text box
             DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
@@ -3088,7 +3088,7 @@ namespace RelhaxModpack
             }
 
             //check the time parsed value
-            int timeToUse = Utils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
+            int timeToUse = CommonUtils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
             if (timeToUse == 0)
             {
                 Logging.Warning("[AutoInstallCB_Click]: Invalid time specified, must be above 0. using 1");

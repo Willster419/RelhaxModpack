@@ -314,7 +314,7 @@ namespace RelhaxModpack.Windows
                             {
                                 ClipToBounds = true
                             };
-                            pictureViewer.Source = Utils.BitmapToImageSource(Properties.Resources.error_loading_picture);
+                            pictureViewer.Source = CommonUtils.BitmapToImageSource(Properties.Resources.error_loading_picture);
                             MainPreviewBorder.Child = pictureViewer;
                         }
                     }
@@ -356,7 +356,7 @@ namespace RelhaxModpack.Windows
                         {
                             Logging.Exception("failed to load picture");
                             Logging.Exception(ex.ToString());
-                            pictureViewer.Source = Utils.BitmapToImageSource(Properties.Resources.error_loading_picture);
+                            pictureViewer.Source = CommonUtils.BitmapToImageSource(Properties.Resources.error_loading_picture);
                         }
                     }
                     //put the zoom border inside the main preview one. already set, might as well use it

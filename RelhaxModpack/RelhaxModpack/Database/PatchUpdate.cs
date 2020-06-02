@@ -20,11 +20,11 @@ namespace RelhaxModpack.Database
             {
                 StringBuilder builder = new StringBuilder();
                 builder.Append(Environment.NewLine);
-                builder.AppendFormat("{0}{1}: {2}{3}", Settings.LogSpacingLineup, nameof(PatchesToUpdate), Utils.EmptyNullStringCheck(PatchesToUpdate), Environment.NewLine);
-                builder.AppendFormat("{0}{1}: {2}{3}", Settings.LogSpacingLineup, nameof(XPath), Utils.EmptyNullStringCheck(XPath), Environment.NewLine);
-                builder.AppendFormat("{0}{1}: {2}{3}", Settings.LogSpacingLineup, nameof(Search), Utils.EmptyNullStringCheck(Search), Environment.NewLine);
-                builder.AppendFormat("{0}{1}: {2}{3}", Settings.LogSpacingLineup, nameof(SearchReturnFirst), Utils.EmptyNullStringCheck(SearchReturnFirst.ToString()), Environment.NewLine);
-                builder.AppendFormat("{0}{1}: {2}{3}", Settings.LogSpacingLineup, nameof(Replace), Utils.EmptyNullStringCheck(Replace), Environment.NewLine);
+                builder.AppendFormat("{0}{1}: {2}{3}", Settings.LogSpacingLineup, nameof(PatchesToUpdate), CommonUtils.EmptyNullStringCheck(PatchesToUpdate), Environment.NewLine);
+                builder.AppendFormat("{0}{1}: {2}{3}", Settings.LogSpacingLineup, nameof(XPath), CommonUtils.EmptyNullStringCheck(XPath), Environment.NewLine);
+                builder.AppendFormat("{0}{1}: {2}{3}", Settings.LogSpacingLineup, nameof(Search), CommonUtils.EmptyNullStringCheck(Search), Environment.NewLine);
+                builder.AppendFormat("{0}{1}: {2}{3}", Settings.LogSpacingLineup, nameof(SearchReturnFirst), CommonUtils.EmptyNullStringCheck(SearchReturnFirst.ToString()), Environment.NewLine);
+                builder.AppendFormat("{0}{1}: {2}{3}", Settings.LogSpacingLineup, nameof(Replace), CommonUtils.EmptyNullStringCheck(Replace), Environment.NewLine);
 
                 return builder.ToString();
             }

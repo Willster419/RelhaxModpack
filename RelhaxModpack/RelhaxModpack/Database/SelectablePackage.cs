@@ -181,7 +181,7 @@ namespace RelhaxModpack.Database
             {
               return string.Format("{0}\n{1}", string.IsNullOrWhiteSpace(this.UpdateComment) ?
                 Translations.GetTranslatedString("noUpdateInfo") : this.UpdateCommentEscaped,
-                this.Timestamp == 0 ? Translations.GetTranslatedString("noTimestamp") : Utils.ConvertFiletimeTimestampToDate(this.Timestamp));
+                this.Timestamp == 0 ? Translations.GetTranslatedString("noTimestamp") : CommonUtils.ConvertFiletimeTimestampToDate(this.Timestamp));
             }
         }
 
@@ -705,7 +705,7 @@ namespace RelhaxModpack.Database
         {
             get
             {
-                return Utils.ConvertFiletimeTimestampToDate(Timestamp);
+                return CommonUtils.ConvertFiletimeTimestampToDate(Timestamp);
             }
         }
 

@@ -58,7 +58,7 @@ namespace RelhaxModpack.Windows
 
         private void TheHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            Utils.OpenInGoogleTranslate(database_Update_Tab.IsSelected ? DatabaseUpdateText.Text : ApplicationUpdateText.Text);
+            CommonUtils.OpenInGoogleTranslate(database_Update_Tab.IsSelected ? DatabaseUpdateText.Text : ApplicationUpdateText.Text);
         }
     }
 }

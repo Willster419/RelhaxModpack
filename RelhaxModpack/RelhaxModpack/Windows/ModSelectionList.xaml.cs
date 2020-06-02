@@ -452,7 +452,7 @@ namespace RelhaxModpack.Windows
                         //create download url list
                         List<string> downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList();
 
-                        string[] downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
+                        string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 
                         //parse into strings
                         Logging.Debug("Tasks finished, extracting task results");
@@ -1992,7 +1992,7 @@ namespace RelhaxModpack.Windows
             //check if it's 'direct load' type
             bool directLoad = false;
             string directLoadString = XmlUtils.GetXmlStringFromXPath(document, "/packages/@directLoad");
-            if (!string.IsNullOrEmpty(directLoadString) && Utils.ParseBool(directLoadString, out bool result_, false))
+            if (!string.IsNullOrEmpty(directLoadString) && CommonUtils.ParseBool(directLoadString, out bool result_, false))
             {
                 directLoad = result_;
                 Logging.Debug(LogOptions.MethodName, "Parsed directLoad = {0}", directLoad);

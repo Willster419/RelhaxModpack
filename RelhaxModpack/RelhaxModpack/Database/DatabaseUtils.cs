@@ -896,7 +896,7 @@ namespace RelhaxModpack.Database
 
             if (loadMode)
             {
-                Task t = Task.Run(() => { downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs); });
+                Task t = Task.Run(() => { downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs); });
 
                 while (!t.IsCompleted)
                 {
@@ -905,7 +905,7 @@ namespace RelhaxModpack.Database
             }
             else
             {
-                downloadStrings = Utils.DownloadStringsFromUrls(downloadURLs);
+                downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
             }
 
             return string.Join(string.Empty, downloadStrings);

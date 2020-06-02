@@ -28,7 +28,7 @@ namespace RelhaxModpack
     /// <summary>
     /// A utility class for static functions used in various places in the modpack
     /// </summary>
-    public static class Utils
+    public static class CommonUtils
     {
         /// <summary>
         /// Multiply by this value to convert milliseconds to seconds
