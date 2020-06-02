@@ -11,6 +11,7 @@ using System.Net;
 using System.IO;
 using Microsoft.Win32;
 using System.Xml;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -843,7 +844,7 @@ namespace RelhaxModpack.Windows
             CleanFoldersOnlineCancelStep3.IsEnabled = true;
             List<string> filesToDelete;
             filesToDelete = CleanZipFoldersTextbox.Text.Split('\n').ToList();
-            string[] filesActuallyInFolder = await Utils.FTPListFilesFoldersAsync(
+            string[] filesActuallyInFolder = await FtpUtils.FtpListFilesFoldersAsync(
                 PrivateStuff.BigmodsFTPRootWoT + selectedVersionInfos.WoTOnlineFolderVersion,PrivateStuff.BigmodsNetworkCredential);
             int count = 1;
             foreach(string s in filesToDelete)
@@ -861,7 +862,7 @@ namespace RelhaxModpack.Windows
                     continue;
                 }
                 ReportProgress(string.Format("Deleting file {0} of {1}, {2}", count++, filesToDelete.Count, s));
-                await Utils.FTPDeleteFileAsync(string.Format("{0}{1}/{2}",
+                await FtpUtils.FtpDeleteFileAsync(string.Format("{0}{1}/{2}",
                     PrivateStuff.BigmodsFTPRootWoT, selectedVersionInfos.WoTOnlineFolderVersion, s), PrivateStuff.BigmodsNetworkCredential);
             }
             CleanZipFoldersTextbox.Clear();
@@ -1376,11 +1377,11 @@ namespace RelhaxModpack.Windows
 
                 //check if ftp folder exists
                 ReportProgress(string.Format("Checking if FTP folder '{0}' exists", Settings.WoTClientVersion));
-                string[] folders = await Utils.FTPListFilesFoldersAsync(PrivateStuff.BigmodsFTPModpackDatabase, PrivateStuff.BigmodsNetworkCredential);
+                string[] folders = await FtpUtils.FtpListFilesFoldersAsync(PrivateStuff.BigmodsFTPModpackDatabase, PrivateStuff.BigmodsNetworkCredential);
                 if (!folders.Contains(Settings.WoTClientVersion))
                 {
                     ReportProgress("Does not exist, making");
-                    await Utils.FTPMakeFolderAsync(databaseFtpPath, PrivateStuff.BigmodsNetworkCredential);
+                    await FtpUtils.FtpMakeFolderAsync(databaseFtpPath, PrivateStuff.BigmodsNetworkCredential);
                 }
                 else
                 {
@@ -1496,7 +1497,7 @@ namespace RelhaxModpack.Windows
                 ReportProgress(string.Format("New filename parsed as '{0}', checking it doesn't exist on server", newFileName));
 
                 //make sure name isn't on server already
-                string[] filesOnServer = await Utils.FTPListFilesFoldersAsync(PrivateStuff.BigmodsFTPModpackInstallStats, PrivateStuff.BigmodsNetworkCredential);
+                string[] filesOnServer = await FtpUtils.FtpListFilesFoldersAsync(PrivateStuff.BigmodsFTPModpackInstallStats, PrivateStuff.BigmodsNetworkCredential);
                 if(filesOnServer.Contains(newFileName))
                 {
                     ReportProgress("Already exists, abort");
@@ -1864,7 +1865,7 @@ namespace RelhaxModpack.Windows
 
             //get list of WoT online folders (ftp)
             ReportProgress("Getting a list of supported WoT clients by major version from the ftp server's folder list");
-            string[] foldersList = await Utils.FTPListFilesFoldersAsync(PrivateStuff.BigmodsFTPRootWoT, PrivateStuff.BigmodsNetworkCredential);
+            string[] foldersList = await FtpUtils.FtpListFilesFoldersAsync(PrivateStuff.BigmodsFTPRootWoT, PrivateStuff.BigmodsNetworkCredential);
 
             //check any online folder clients where no matching server folder name and remove
             bool anyEntriesRemoved = false;
@@ -1879,11 +1880,11 @@ namespace RelhaxModpack.Windows
                     ReportProgress(string.Format("Version {0} (online folder {1}) is not supported and will be removed", version.InnerText, onlineFolderVersion));
                     version.ParentNode.RemoveChild(version);
                     ReportProgress("Also removing the folder on the server if exists");
-                    string[] databaseVersions = (await Utils.FTPListFilesFoldersAsync(PrivateStuff.BigmodsFTPModpackDatabase, PrivateStuff.BigmodsNetworkCredential));
+                    string[] databaseVersions = (await FtpUtils.FtpListFilesFoldersAsync(PrivateStuff.BigmodsFTPModpackDatabase, PrivateStuff.BigmodsNetworkCredential));
                     if (databaseVersions.Contains(version.InnerText))
                     {
                         string folderUrl = PrivateStuff.BigmodsFTPModpackDatabase + version.InnerText + "/";
-                        await Utils.FTPDeleteFolderAsync(folderUrl, PrivateStuff.BigmodsNetworkCredential);
+                        await FtpUtils.FtpDeleteFolderAsync(folderUrl, PrivateStuff.BigmodsNetworkCredential);
                     }
                     anyEntriesRemoved = true;
                 }

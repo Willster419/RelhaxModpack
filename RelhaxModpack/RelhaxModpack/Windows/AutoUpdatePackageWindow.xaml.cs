@@ -19,6 +19,7 @@ using RelhaxModpack.DatabaseComponents;
 using System.Reflection;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -197,7 +198,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Editor("Download needed, starting");
                 string completeDownloadURL = string.Format("{0}{1}/{2}", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion, package.ZipFile);
-                databaseFtpDownloadsize = await Utils.FTPGetFilesizeAsync(completeDownloadURL, Credential);
+                databaseFtpDownloadsize = await FtpUtils.FtpGetFilesizeAsync(completeDownloadURL, Credential);
                 await databaseClient.DownloadFileTaskAsync(completeDownloadURL, downloadPathCurrent);
                 Logging.Editor("Download completed");
                 AutoUpdateProgressBar.Value = AutoUpdateProgressBar.Minimum;

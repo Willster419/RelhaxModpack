@@ -22,6 +22,7 @@ using System.Text;
 using RelhaxModpack.InstallerComponents;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using System.Windows.Threading;
+using RelhaxModpack.Atlases;
 
 namespace RelhaxModpack
 {
@@ -536,7 +537,7 @@ namespace RelhaxModpack
                 {
                     await Task.Delay(1000);
 
-                    ModpackSettings.AtlasLibrariesCanBeLoaded = Utils.TestLoadAtlasLibraries(true);
+                    ModpackSettings.AtlasLibrariesCanBeLoaded = AtlasUtils.TestLoadAtlasLibraries(true);
 
                     //if after test, it fails, inform the user
                     if (!ModpackSettings.AtlasLibrariesCanBeLoaded)

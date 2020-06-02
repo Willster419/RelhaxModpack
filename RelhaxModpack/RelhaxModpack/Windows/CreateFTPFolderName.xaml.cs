@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.IO;
 using Path = System.IO.Path;
 using System.Net;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -83,7 +84,7 @@ namespace RelhaxModpack.Windows
             CreatingFolderTextBlock.Visibility = Visibility.Visible;
             try
             {
-                await Utils.FTPMakeFolderAsync(string.Format("{0}{1}", FTPPath, folderName), Credential);
+                await FtpUtils.FtpMakeFolderAsync(string.Format("{0}{1}", FTPPath, folderName), Credential);
             }
             catch(Exception ex)
             {

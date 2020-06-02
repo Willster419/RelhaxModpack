@@ -169,6 +169,7 @@
     <Compile Include="UIComponents\Themes.cs" />
     <Compile Include="UIComponents\WindowColorset.cs" />
     <Compile Include="UIComponents\ZoomBorder.cs" />
+    <Compile Include="Utilities\FtpUtils.cs" />
     <Compile Include="Utilities\GlobalSuppressions.cs" />
     <Compile Include="InstallerComponents\Atlas.cs" />
     <Compile Include="InstallerComponents\InstallEngine.cs" />

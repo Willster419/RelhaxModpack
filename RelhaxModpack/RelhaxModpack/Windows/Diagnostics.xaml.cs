@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using Ionic.Zip;
+using RelhaxModpack.Atlases;
 
 namespace RelhaxModpack.Windows
 {
@@ -238,7 +239,7 @@ namespace RelhaxModpack.Windows
             Logging.Info("Diagnostics: Test load image libraries");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibraries");
             Utils.AllowUIToUpdate();
-            if (Utils.TestLoadAtlasLibraries(true))
+            if (AtlasUtils.TestLoadAtlasLibraries(true))
             {
                 DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibrariesSuccess");
                 Logging.Info("Diagnostics: Test load image libraries pass");
