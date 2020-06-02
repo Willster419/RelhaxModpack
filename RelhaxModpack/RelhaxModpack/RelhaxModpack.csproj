@@ -309,9 +309,9 @@
     <Compile Include="Windows\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\XmlBinary\PackedSectionReader.cs" />
-    <Compile Include="Utilities\XmlBinary\PrimitiveFileReader.cs" />
-    <Compile Include="Utilities\XmlBinary\XmlBinaryHandler.cs" />
+    <Compile Include="XmlBinary\PackedSectionReader.cs" />
+    <Compile Include="XmlBinary\PrimitiveFileReader.cs" />
+    <Compile Include="XmlBinary\XmlBinaryHandler.cs" />
     <Compile Include="Utilities\XmlUtils.cs" />
     <Compile Include="Windows\AutoUpdateFilesInspector.xaml.cs">
       <DependentUpon>AutoUpdateFilesInspector.xaml</DependentUpon>
