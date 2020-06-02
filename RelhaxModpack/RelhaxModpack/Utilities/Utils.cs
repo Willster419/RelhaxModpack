@@ -23,7 +23,6 @@ using RelhaxModpack.Xml;
 
 namespace RelhaxModpack.Utilities
 {
-
     /// <summary>
     /// A utility class for static functions used in various places in the modpack
     /// </summary>
