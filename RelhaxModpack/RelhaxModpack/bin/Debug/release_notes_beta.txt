@@ -1,4 +1,4 @@
-Application version 1.1.0.5 (2020-06-02)
+Beta Application version 1.1.0.5 (2020-06-02)
 https://www.virustotal.com/gui/file/477df2d0002a77c419c0c4bc08b9877c4972587b7aabd011a579ebb284b88302/detection
 - Removed half-baked method of updating the supported_clients xml document during the database publish/release process.
   - Now during the publish process, it will inform you if the supported_clients xml document needs to be updated.
