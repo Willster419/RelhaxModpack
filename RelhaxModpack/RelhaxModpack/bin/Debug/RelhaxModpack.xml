@@ -4007,6 +4007,45 @@
             <param name="type">The type of macro replace operation</param>
             <returns>The replaced string</returns>
         </member>
+        <member name="T:RelhaxModpack.Utilities.RegistrySearch">
+            <summary>
+            A structure to help with searching for inside the registry by providing a base area to start, and a string search path
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.RegistrySearch.Root">
+            <summary>
+            Where to base the search in the registry (current_user, local_machiene, etc.)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.RegistrySearch.Searchpath">
+            <summary>
+            The absolute folder path to the desired registry entries
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.RegistryUtils">
+            <summary>
+            A utility class to handle registry requests
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.RegistryUtils.AutoFindWoTDirectory">
+            <summary>
+            Checks the registry to get the latest location of where WoT is installed
+            </summary>
+            <returns>True if operation success</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.RegistryUtils.GetRegistryKeys(RelhaxModpack.Utilities.RegistrySearch)">
+            <summary>
+            Gets all registry keys that exist in the given search base and path
+            </summary>
+            <param name="search">The RegistrySearch structure to specify where to search and where to base the search</param>
+            <returns>The RegistryKey object of the folder in registry, or null if the search failed</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.RegistryUtils.AutoFindWgcDirectory">
+            <summary>
+            Finds the location of the Wargaming Game center installation directory from the registry
+            </summary>
+            <returns>The location of wgc.exe if found, else null</returns>
+        </member>
         <member name="T:RelhaxModpack.Utilities.PatchExitCode">
             <summary>
             Exit codes during a patch operation
@@ -7892,21 +7931,6 @@
             The called dependency from the component
             </summary>
         </member>
-        <member name="T:RelhaxModpack.RegistrySearch">
-            <summary>
-            A structure to help with searching for inside the registry by providing a base area to start, and a string search path
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.RegistrySearch.Root">
-            <summary>
-            Where to base the search in the registry (current_user, local_machiene, etc.)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.RegistrySearch.Searchpath">
-            <summary>
-            The absolute folder path to the desired registry entries
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Utils">
             <summary>
             A utility class for static functions used in various places in the modpack
@@ -8467,25 +8491,6 @@
             <returns>The name of the calling method on this method</returns>
             <remarks>This is mostly used for in logging, to log the name of the method
             See https://stackoverflow.com/a/2652481/3128017 </remarks>
-        </member>
-        <member name="M:RelhaxModpack.Utils.AutoFindWoTDirectory">
-            <summary>
-            Checks the registry to get the latest location of where WoT is installed
-            </summary>
-            <returns>True if operation success</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetRegistryKeys(RelhaxModpack.RegistrySearch)">
-            <summary>
-            Gets all registry keys that exist in the given search base and path
-            </summary>
-            <param name="search">The RegistrySearch structure to specify where to search and where to base the search</param>
-            <returns>The RegistryKey object of the folder in registry, or null if the search failed</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.AutoFindWgcDirectory">
-            <summary>
-            Finds the location of the Wargaming Game center installation directory from the registry
-            </summary>
-            <returns>The location of wgc.exe if found, else null</returns>
         </member>
         <member name="M:RelhaxModpack.Utils.CreateShortcut(RelhaxModpack.Shortcut,System.Text.StringBuilder)">
             <summary>

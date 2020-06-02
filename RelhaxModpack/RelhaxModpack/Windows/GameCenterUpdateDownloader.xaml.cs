@@ -272,7 +272,7 @@ namespace RelhaxModpack.Windows
                 if (string.IsNullOrWhiteSpace(WgcSavedpath))
                 {
                     Logging.Debug("WgcSavedPath is null, getting from registry");
-                    WgcSavedpath = Utils.AutoFindWgcDirectory();
+                    WgcSavedpath = RegistryUtils.AutoFindWgcDirectory();
                     Logging.Debug("WgcSavedPath retrieved as '{0}'", WgcSavedpath);
                 }
                 if(!string.IsNullOrWhiteSpace(WgcSavedpath))

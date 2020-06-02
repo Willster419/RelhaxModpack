@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using RelhaxModpack.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,7 +37,7 @@ namespace RelhaxModpack.Windows
 
         private void InstallationCompleteStartGameCenterButton_Click(object sender, RoutedEventArgs e)
         {
-            string actualLocation = Utils.AutoFindWgcDirectory();
+            string actualLocation = RegistryUtils.AutoFindWgcDirectory();
             if(string.IsNullOrEmpty(actualLocation) || !Utils.StartProcess(actualLocation))
             {
                 Logging.Error("could not start wgc process using command line '{0}'",actualLocation);
