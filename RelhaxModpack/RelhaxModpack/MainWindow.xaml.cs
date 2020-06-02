@@ -1392,11 +1392,11 @@ namespace RelhaxModpack
 
             //perform dependency calculations
             //get a flat list of packages to install
-            List<DatabasePackage> flatList = Utils.GetFlatList(null, null, null, parsedCategoryList);
-            List<SelectablePackage> flatListSelect = Utils.GetFlatSelectablePackageList(parsedCategoryList);
+            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(null, null, null, parsedCategoryList);
+            List<SelectablePackage> flatListSelect = DatabaseUtils.GetFlatSelectablePackageList(parsedCategoryList);
 
             Logging.Debug("Starting Utils.CalculateDependencies()");
-            List<Dependency> dependneciesToInstall = new List<Dependency>(Utils.CalculateDependencies(dependencies, parsedCategoryList, false));
+            List<Dependency> dependneciesToInstall = new List<Dependency>(DatabaseUtils.CalculateDependencies(dependencies, parsedCategoryList, false));
             Logging.Debug("Finished Utils.CalculateDependencies()");
 
             //make a flat list of all packages to install (including those without a zip file) for statistic data gathering
@@ -1465,7 +1465,7 @@ namespace RelhaxModpack
             }
 
             //perform list install order calculations
-            List<DatabasePackage>[] orderedPackagesToInstall = Utils.CreateOrderedInstallList(packagesToInstall);
+            List<DatabasePackage>[] orderedPackagesToInstall = DatabaseUtils.CreateOrderedInstallList(packagesToInstall);
 
             //we now have a list of enabled, checked and actual zip file mods that we are going to install based on install groups
             //log the time to process lists

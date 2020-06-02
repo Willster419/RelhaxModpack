@@ -191,12 +191,12 @@ namespace RelhaxModpack.Windows
 
         private int GetMaxPatchGroups()
         {
-            return Utils.GetMaxPatchGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+            return DatabaseUtils.GetMaxPatchGroupNumber(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
         }
 
         private int GetMaxInstallGroups()
         {
-            return Utils.GetMaxInstallGroupNumber(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+            return DatabaseUtils.GetMaxInstallGroupNumber(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
         }
 
         private SelectablePackage GetSelectablePackage(object obj)
@@ -300,9 +300,9 @@ namespace RelhaxModpack.Windows
             //load the install and patch groups
             InstallGroupsTreeView.Items.Clear();
             //make a flat list (can be used in patchGroup as well)
-            List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
+            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
             //make an array of group headers
-            TreeViewItem[] installGroupHeaders = new TreeViewItem[Utils.GetMaxInstallGroupNumberWithOffset(allFlatList) + 1];
+            TreeViewItem[] installGroupHeaders = new TreeViewItem[DatabaseUtils.GetMaxInstallGroupNumberWithOffset(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal install group number
             //hey while we're at it let's add the items to the instal group dispaly box
             PackageInstallGroupDisplay.Items.Clear();
@@ -330,8 +330,8 @@ namespace RelhaxModpack.Windows
             //do the same for patchgroups
             PatchGroupsTreeView.Items.Clear();
             //make a flat list (can be used in patchGroup as well)
-            List<DatabasePackage> allFlatList = Utils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
-            TreeViewItem[] patchGroupHeaders = new TreeViewItem[Utils.GetMaxPatchGroupNumber(allFlatList) + 1];
+            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
+            TreeViewItem[] patchGroupHeaders = new TreeViewItem[DatabaseUtils.GetMaxPatchGroupNumber(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal patch group number
             PackagePatchGroupDisplay.Items.Clear();
             for (int i = 0; i < patchGroupHeaders.Count(); i++)
@@ -471,7 +471,7 @@ namespace RelhaxModpack.Windows
         {
             AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
             {
-                Packages = Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
+                Packages = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
                 WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
             };
@@ -918,7 +918,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 //check selectablePackages that use this dependency
-                foreach (SelectablePackage selectablePackage in Utils.GetFlatSelectablePackageList(ParsedCategoryList))
+                foreach (SelectablePackage selectablePackage in DatabaseUtils.GetFlatSelectablePackageList(ParsedCategoryList))
                 {
                     foreach (DatabaseLogic logic in selectablePackage.Dependencies)
                         if (logic.PackageName.Equals(dependency.PackageName))
@@ -1057,7 +1057,7 @@ namespace RelhaxModpack.Windows
             if (!PackagePackageNameDisplay.Text.Equals(package.PackageName))
             {
                 Logging.Editor("PackageName is new, checking if it is unique");
-                if (Utils.IsDuplicateName(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList), PackagePackageNameDisplay.Text))
+                if (DatabaseUtils.IsDuplicateName(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList), PackagePackageNameDisplay.Text))
                 {
                     MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
                     return false;
@@ -1394,12 +1394,12 @@ namespace RelhaxModpack.Windows
                 }
 
                 //also make a new UID for the package as well
-                packageToMove.UID = Utils.GenerateUID(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+                packageToMove.UID = Utils.GenerateUID(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
 
                 //the packageName needs to stay unique as well
                 int i = 0;
                 string origName = packageToMove.PackageName;
-                while (Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => package.PackageName.Equals(packageToMove.PackageName)).Count() > 0)
+                while (DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => package.PackageName.Equals(packageToMove.PackageName)).Count() > 0)
                     packageToMove.PackageName = string.Format("{0}_{1}", origName, i++);
                 Logging.Editor("New package name is {0}", LogLevel.Info, packageToMove.PackageName);
             }
@@ -1478,9 +1478,9 @@ namespace RelhaxModpack.Windows
             SearchBox.Items.Clear();
 
             //rebuild the levels as well
-            Utils.BuildLinksRefrence(ParsedCategoryList, true);
-            Utils.BuildLevelPerPackage(ParsedCategoryList);
-            Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, true);
+            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //and keep focus over the item we just moved
             if (!realItemToMove.IsSelected)
@@ -2044,9 +2044,9 @@ namespace RelhaxModpack.Windows
             }
 
             //build internal database links
-            Utils.BuildLinksRefrence(ParsedCategoryList, true);
-            Utils.BuildLevelPerPackage(ParsedCategoryList);
-            Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, true);
+            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
@@ -2086,9 +2086,9 @@ namespace RelhaxModpack.Windows
             }
 
             //build internal database links
-            Utils.BuildLinksRefrence(ParsedCategoryList, true);
-            Utils.BuildLevelPerPackage(ParsedCategoryList);
-            Utils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, true);
+            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
@@ -2768,7 +2768,7 @@ namespace RelhaxModpack.Windows
                 foreach (string searchTerm in SearchBox.Text.Split('*'))
                 {
                     //get a list of components that match the search term
-                    searchComponents.AddRange(Utils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(term => term.PackageName.ToLower().Contains(searchTerm.ToLower())));
+                    searchComponents.AddRange(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(term => term.PackageName.ToLower().Contains(searchTerm.ToLower())));
                 }
 
                 //remove duplicates
