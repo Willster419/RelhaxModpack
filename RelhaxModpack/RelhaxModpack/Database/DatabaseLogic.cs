@@ -1,10 +1,10 @@
-﻿using RelhaxModpack.DatabaseComponents;
+﻿using RelhaxModpack.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// An enumerated representation of "and" and "or" logic

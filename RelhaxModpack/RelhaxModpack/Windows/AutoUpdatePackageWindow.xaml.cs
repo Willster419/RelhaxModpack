@@ -15,7 +15,7 @@ using System.IO;
 using System.Net;
 using Ionic.Zip;
 using System.Xml;
-using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.Database;
 using System.Reflection;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;

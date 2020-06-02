@@ -14,6 +14,7 @@ using System.Xml;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Xml;
 using RelhaxModpack.UI;
+using RelhaxModpack.Database;
 
 namespace RelhaxModpack.Windows
 {

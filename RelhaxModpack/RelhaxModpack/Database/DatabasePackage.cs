@@ -1,11 +1,11 @@
-﻿using RelhaxModpack.DatabaseComponents;
+﻿using RelhaxModpack.Database;
 using RelhaxModpack.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// A database component is the base class for all other packages

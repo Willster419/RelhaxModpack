@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using RelhaxModpack.UI;
-using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.Database;
 using System.Windows.Controls;
 using System;
 using System.Linq;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages

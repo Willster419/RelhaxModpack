@@ -1,9 +1,12 @@
-﻿namespace RelhaxModpack.UI
+﻿using RelhaxModpack.Database;
+using System.Windows.Controls;
+
+namespace RelhaxModpack.UI
 {
     /// <summary>
     /// The EditorSearchBoxItem class is a wrapper class for displaying DatabaseObjects as combo box items. The ToString() allows for display of any string property
     /// </summary>
-    public class EditorSearchBoxItem : System.Windows.Controls.ComboBoxItem
+    public class EditorSearchBoxItem : ComboBoxItem
     {
         /// <summary>
         /// The DatabasePackage object that is being wrapped around

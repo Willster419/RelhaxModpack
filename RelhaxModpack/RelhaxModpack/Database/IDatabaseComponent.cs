@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace RelhaxModpack.DatabaseComponents
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// An interface for all components in the database

@@ -1,14 +1,12 @@
 ﻿using RelhaxModpack.UI;
-using RelhaxModpack.DatabaseComponents;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Controls;
 using System.Text;
 using RelhaxModpack.Utilities;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// The types of UI selections for building the selection tree

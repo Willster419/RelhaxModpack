@@ -1,11 +1,11 @@
-﻿using RelhaxModpack.DatabaseComponents;
+﻿using RelhaxModpack.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// Represents a trigger object used in the installer as an event starter.

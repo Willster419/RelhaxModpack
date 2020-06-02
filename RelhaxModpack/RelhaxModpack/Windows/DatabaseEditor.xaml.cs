@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.Database;
 using RelhaxModpack.UI;
 using System;
 using System.Collections.Generic;
@@ -18,6 +18,7 @@ using System.Windows.Threading;
 using System.Text.RegularExpressions;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
+using Trigger = RelhaxModpack.Database.Trigger;
 
 namespace RelhaxModpack.Windows
 {

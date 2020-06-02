@@ -14,6 +14,8 @@ using System.Threading;
 using RelhaxModpack.Atlases;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Database;
+using Trigger = RelhaxModpack.Database.Trigger;
 
 namespace RelhaxModpack.InstallerComponents
 {

@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Text;
 using Ionic.Zip;
 using RelhaxModpack.Xml;
-using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.Database;
 using System.Net;
 using System.Threading.Tasks;
 using RelhaxModpack.Utilities;

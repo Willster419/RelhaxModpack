@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using RelhaxModpack.Database;
+using System.Windows.Media;
 
 namespace RelhaxModpack.UI
 {

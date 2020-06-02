@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System;
-using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.Database;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// Represents a package with logical calculations. A dependency is only installed when a selectable package is checked

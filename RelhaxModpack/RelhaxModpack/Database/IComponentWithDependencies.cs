@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack.DatabaseComponents
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// Provides an interface for Categories and packages to share commonality since they both can have dependencies

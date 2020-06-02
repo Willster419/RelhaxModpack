@@ -1,10 +1,10 @@
-﻿using RelhaxModpack.DatabaseComponents;
+﻿using RelhaxModpack.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// A structure that is used to track the relative path of a user file (like session stats),

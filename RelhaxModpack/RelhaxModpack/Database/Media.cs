@@ -1,6 +1,6 @@
-﻿using RelhaxModpack.DatabaseComponents;
+﻿using RelhaxModpack.Database;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// The supported types of media formats supported for preview in the application

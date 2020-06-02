@@ -29,7 +29,7 @@ using RelhaxModpack.Windows;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System.Web;
-using RelhaxModpack.DatabaseComponents;
+using RelhaxModpack.Database;
 using System.Runtime.CompilerServices;
 using RelhaxModpack.UI;
 using RelhaxModpack.Xml;

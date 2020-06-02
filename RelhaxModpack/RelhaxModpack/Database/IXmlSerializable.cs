@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack.DatabaseComponents
+namespace RelhaxModpack.Database
 {
     /// <summary>
     /// Represents an interface that when implemented, will specify which properties of a class

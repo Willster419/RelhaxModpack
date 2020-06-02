@@ -15,6 +15,7 @@ using System.IO;
 using System.Timers;
 using System.Windows.Threading;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Database;
 
 namespace RelhaxModpack.Windows
 {

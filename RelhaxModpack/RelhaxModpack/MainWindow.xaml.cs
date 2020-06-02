@@ -25,6 +25,7 @@ using System.Windows.Threading;
 using RelhaxModpack.Atlases;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Database;
 
 namespace RelhaxModpack
 {
