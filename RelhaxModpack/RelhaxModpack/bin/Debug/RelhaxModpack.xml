@@ -2857,6 +2857,58 @@
             The custom theme to be loaded from xml by the user
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UI.UiUtils">
+            <summary>
+            A utility class to handle UI interaction
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UI.UiUtils.GetAllWindowComponentsVisual(System.Windows.Window,System.Boolean)">
+            <summary>
+            Get a list of all visual components in the window
+            </summary>
+            <param name="window">The window to get the list of</param>
+            <param name="includeWindow">if the list should include the window itself</param>
+            <returns>A list of type FrameowrkElement of all components</returns>
+        </member>
+        <member name="M:RelhaxModpack.UI.UiUtils.GetAllWindowComponentsLogical(System.Windows.Window,System.Boolean)">
+            <summary>
+            Get a list of all logical components in the window
+            </summary>
+            <param name="window">The window to get the list of</param>
+            <param name="includeWindow">if the list should include the window itself</param>
+            <returns>A list of type FrameowrkElement of all components</returns>
+        </member>
+        <member name="M:RelhaxModpack.UI.UiUtils.GetAllWindowComponentsLogical(System.Windows.FrameworkElement,System.Boolean)">
+            <summary>
+            Get a list of all logical components in the window
+            </summary>
+            <param name="rootElement">The element to get the list of logical items from</param>
+            <param name="addRoot">If this rootElement should be added to the list</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.UI.UiUtils.PointWithinScreen(System.Int32,System.Int32)">
+            <summary>Checks if a point is inside the possible monitor space</summary>
+            <param name="x">The x coordinate of the point</param>
+            <param name="y">The y coordinate of the point</param>
+        </member>
+        <member name="M:RelhaxModpack.UI.UiUtils.PointWithinScreen(System.Drawing.Point)">
+            <summary>Checks if a point is inside the possible monitor space</summary>
+            <param name="p">The point to check</param>
+        </member>
+        <member name="M:RelhaxModpack.UI.UiUtils.AllowUIToUpdate">
+            <summary>
+            Injects a Dispatcher frame followed by an idle backgrouned operation to allow for the UI to update during an intensive operation on the UI thread
+            </summary>
+            <remarks>See https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread 
+            <para>and https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this</para></remarks>
+        </member>
+        <member name="M:RelhaxModpack.UI.UiUtils.ApplyApplicationScale(System.Windows.Window,System.Double)">
+            <summary>
+            Applies vector based application scaling to the specified window
+            </summary>
+            <param name="window">The window to apply scaling to</param>
+            <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
+        </member>
         <member name="T:RelhaxModpack.UI.WindowColorset">
             <summary>
             Contains all color definitions to apply for that window, including the list of individual component color definitions
@@ -7910,53 +7962,6 @@
             <param name="currentVersion">The string representation of the latest modpack application version</param>
             <returns>True if the manager string versions are the same, false otherwise</returns>
             <remarks>IsManagerUptoDate will return false if it fails to get the latest managerInfo zip file</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetAllWindowComponentsVisual(System.Windows.Window,System.Boolean)">
-            <summary>
-            Get a list of all visual components in the window
-            </summary>
-            <param name="window">The window to get the list of</param>
-            <param name="includeWindow">if the list should include the window itself</param>
-            <returns>A list of type FrameowrkElement of all components</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetAllWindowComponentsLogical(System.Windows.Window,System.Boolean)">
-            <summary>
-            Get a list of all logical components in the window
-            </summary>
-            <param name="window">The window to get the list of</param>
-            <param name="includeWindow">if the list should include the window itself</param>
-            <returns>A list of type FrameowrkElement of all components</returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.GetAllWindowComponentsLogical(System.Windows.FrameworkElement,System.Boolean)">
-            <summary>
-            Get a list of all logical components in the window
-            </summary>
-            <param name="rootElement">The element to get the list of logical items from</param>
-            <param name="addRoot">If this rootElement should be added to the list</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Int32,System.Int32)">
-            <summary>Checks if a point is inside the possible monitor space</summary>
-            <param name="x">The x coordinate of the point</param>
-            <param name="y">The y coordinate of the point</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.PointWithinScreen(System.Drawing.Point)">
-            <summary>Checks if a point is inside the possible monitor space</summary>
-            <param name="p">The point to check</param>
-        </member>
-        <member name="M:RelhaxModpack.Utils.AllowUIToUpdate">
-            <summary>
-            Injects a Dispatcher frame followed by an idle backgrouned operation to allow for the UI to update during an intensive operation on the UI thread
-            </summary>
-            <remarks>See https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread 
-            <para>and https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this</para></remarks>
-        </member>
-        <member name="M:RelhaxModpack.Utils.ApplyApplicationScale(System.Windows.Window,System.Double)">
-            <summary>
-            Applies vector based application scaling to the specified window
-            </summary>
-            <param name="window">The window to apply scaling to</param>
-            <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
         </member>
         <member name="M:RelhaxModpack.Utils.ParseBool(System.String,System.Boolean)">
             <summary>

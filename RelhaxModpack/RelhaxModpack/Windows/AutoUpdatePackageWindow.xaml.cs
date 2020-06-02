@@ -21,6 +21,7 @@ using HtmlAgilityPack;
 using System.Text.RegularExpressions;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Xml;
+using RelhaxModpack.UI;
 
 namespace RelhaxModpack.Windows
 {
@@ -461,7 +462,7 @@ namespace RelhaxModpack.Windows
                 {
                     Logging.Editor("Processing patch {0} of {1}", LogLevel.Info, ++patchesCount, updateInstructions.PatchUpdates.Count);
                     Logging.Editor(patchUpdate.PatchUpdateInformation);
-                    Utils.AllowUIToUpdate();
+                    UiUtils.AllowUIToUpdate();
                     if(!ProcessUpdatePatch(patchUpdate, databaseZip, package.PackageName))
                     {
                         Logging.Editor("Failed to process update patch {0}", LogLevel.Error, patchesCount);

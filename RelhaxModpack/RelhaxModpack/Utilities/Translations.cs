@@ -1,3 +1,4 @@
+using RelhaxModpack.UI;
 using RelhaxModpack.Windows;
 using System;
 using System.Collections.Generic;
@@ -325,7 +326,7 @@ namespace RelhaxModpack
             }
 
             //Get a list of all visual class controls curently presend and loaded in the window
-            List<FrameworkElement> allWindowControls = Utils.GetAllWindowComponentsVisual(window, false);
+            List<FrameworkElement> allWindowControls = UiUtils.GetAllWindowComponentsVisual(window, false);
             foreach (FrameworkElement v in allWindowControls)
             {
                 TranslateComponent(v, true);

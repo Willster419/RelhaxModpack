@@ -13,6 +13,7 @@ using Microsoft.Win32;
 using System.Xml;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Xml;
+using RelhaxModpack.UI;
 
 namespace RelhaxModpack.Windows
 {
@@ -357,19 +358,19 @@ namespace RelhaxModpack.Windows
 
         private void ToggleUI(TabItem tab, bool toggle)
         {
-            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(tab, false))
+            foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(tab, false))
             {
                 if (control is Button butt)
                     butt.IsEnabled = toggle;
             }
             SetProgress(JobProgressBar.Minimum);
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
         }
 
         private void SetProgress(double prog)
         {
             JobProgressBar.Value = prog;
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
         }
 
         private async Task<bool> LoadDatabase1V1FromBigmods(string lastWoTClientVersion, List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
@@ -1100,7 +1101,7 @@ namespace RelhaxModpack.Windows
 
             //update the crc values, also makes list of updated mods
             ReportProgress("Downloaded, comparing crc values for list of updated mods");
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
             foreach (DatabasePackage package in flatListCurrent)
             {
                 if (string.IsNullOrEmpty(package.ZipFile))
@@ -1142,7 +1143,7 @@ namespace RelhaxModpack.Windows
             //do list magic to get all added, removed, disabled, etc package lists
             //used for disabled, removed, added mods
             ReportProgress("Getting list of added and removed packages");
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
             PackageComparerByUID pc = new PackageComparerByUID();
 
             //if in before but not after = removed
@@ -1152,7 +1153,7 @@ namespace RelhaxModpack.Windows
             addedPackages = flatListCurrent.Except(flatListOld, pc).ToList();
 
             ReportProgress("Getting list of packages old and new minus removed and added");
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
 
             //first start by getting the list of all current packages, then filter out removed and added packages
             //make a copy of the current flat list
@@ -1173,7 +1174,7 @@ namespace RelhaxModpack.Windows
             //get the list of renamed packages
             //a renamed package will have the same internal name, but a different display name
             ReportProgress("Getting list of renamed packages");
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
             foreach (SelectablePackage selectablePackage in selectablePackagesNotRemovedOrAdded)
             {
                 SelectablePackage oldPackageWithMatchingUID = selectablePackagesOld.Find(pack => pack.UID.Equals(selectablePackage.UID));
@@ -1190,7 +1191,7 @@ namespace RelhaxModpack.Windows
             //list of moved packages
             //a moved package will have a different UIDPath (the UID's don't change, so any change detected would imply a structure level change)
             ReportProgress("Getting list of moved packages");
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
             foreach (SelectablePackage selectablePackage in selectablePackagesNotRemovedOrAdded)
             {
                 SelectablePackage oldPackageWithMatchingUID = selectablePackagesOld.Find(pack => pack.UID.Equals(selectablePackage.UID));
@@ -1208,7 +1209,7 @@ namespace RelhaxModpack.Windows
 
             //if a package was internally renamed, the packageName won't match
             ReportProgress("Getting list of internal renamed packages");
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
             foreach (SelectablePackage selectablePackage in selectablePackagesNotRemovedOrAdded)
             {
                 SelectablePackage oldPackageWithMatchingUID = selectablePackagesOld.Find(pack => pack.UID.Equals(selectablePackage.UID));
@@ -1557,7 +1558,7 @@ namespace RelhaxModpack.Windows
                 if(node == null)
                 {
                     ReportProgress(string.Format("Package '{0}' does not exist, adding to install stats",package.PackageName));
-                    Utils.AllowUIToUpdate();
+                    UiUtils.AllowUIToUpdate();
                     XmlElement element = installStats.CreateElement("package");
                     XmlAttribute nameAttribute = installStats.CreateAttribute("name");
                     nameAttribute.Value = package.PackageName;

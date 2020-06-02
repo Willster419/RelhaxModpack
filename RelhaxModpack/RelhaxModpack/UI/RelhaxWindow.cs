@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -76,7 +77,7 @@ namespace RelhaxModpack.Windows
                 //if current scale is not target(modpackSetting), then update
                 if (ModpackSettings.DisplayScale != currentScale)
                 {
-                    Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                    UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
                 }
             }
         }

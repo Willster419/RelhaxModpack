@@ -113,7 +113,7 @@ namespace RelhaxModpack.Windows
             else
             {
                 //if the saved preview window point is within the screen, then load it to there
-                if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
+                if (UiUtils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
                 {
                     //set for manual window location setting
                     WindowStartupLocation = WindowStartupLocation.Manual;
@@ -485,7 +485,7 @@ namespace RelhaxModpack.Windows
                 ModpackSettings.PreviewFullscreen = WindowState == WindowState.Maximized ? true : false;
                 ModpackSettings.PreviewHeight = (int)Height;
                 ModpackSettings.PreviewWidth = (int)Width;
-                if (Utils.PointWithinScreen((int)Left, (int)Top))
+                if (UiUtils.PointWithinScreen((int)Left, (int)Top))
                 {
                     ModpackSettings.PreviewX = (int)Left;
                     ModpackSettings.PreviewY = (int)Top;

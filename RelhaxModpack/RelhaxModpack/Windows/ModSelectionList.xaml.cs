@@ -546,7 +546,7 @@ namespace RelhaxModpack.Windows
                 loadProgress.ChildCurrent = 0;
                 loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
                 progress.Report(loadProgress);
-                Utils.AllowUIToUpdate();
+                UiUtils.AllowUIToUpdate();
 
                 //run UI init code
                 //note that this will syncronously stop the task, and schedule on the UI thread
@@ -570,20 +570,20 @@ namespace RelhaxModpack.Windows
                     loadProgress.ChildCurrent++;
                     loadProgress.ReportMessage = string.Format("{0} {1}", Translations.GetTranslatedString("loading"), cat.Name);
                     progress.Report(loadProgress);
-                    Utils.AllowUIToUpdate();
+                    UiUtils.AllowUIToUpdate();
 
                     //then schedule the UI work
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         AddPackage(cat.Packages);
                     });
-                    Utils.AllowUIToUpdate();
+                    UiUtils.AllowUIToUpdate();
                 }
 
                 //perform any final loading to do
                 loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
                 progress.Report(loadProgress);
-                Utils.AllowUIToUpdate();
+                UiUtils.AllowUIToUpdate();
 
                 //then schedule the UI work
                 Application.Current.Dispatcher.Invoke(() =>
@@ -1548,7 +1548,7 @@ namespace RelhaxModpack.Windows
 
                     tracker++;
                 }
-                Utils.AllowUIToUpdate();
+                UiUtils.AllowUIToUpdate();
 
                 //check to see if a specific item is highlighted
                 //if so, it means that the user wants to preview a specific version

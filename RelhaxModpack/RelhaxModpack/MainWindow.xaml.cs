@@ -164,7 +164,7 @@ namespace RelhaxModpack
             };
             progressIndicator.Show();
             progressIndicator.UpdateProgress(0);
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
 
             //load the supported translations into combobox
             //disconnect event handler before translation is applied
@@ -186,7 +186,7 @@ namespace RelhaxModpack
             LanguagesSelector.SelectionChanged += OnLanguageSelectionChanged;
 
             //load and apply modpack settings
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
             Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), ModpackSettings.PropertiesToExclude, null);
 
             //apply translation settings
@@ -251,7 +251,7 @@ namespace RelhaxModpack
             //verify folder structure for all folders in the directory
             //this also serves as checking write permissions from the current working directory
             progressIndicator.UpdateProgress(3, Translations.GetTranslatedString("verDirStructure"));
-            Utils.AllowUIToUpdate();
+            UiUtils.AllowUIToUpdate();
             Logging.Info("Verifying folder structure");
             foreach (string s in Settings.FoldersToCheck)
             {
@@ -412,7 +412,7 @@ namespace RelhaxModpack
                 else if (Settings.FirstLoadToV2)
                 {
                     progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("upgradingStructure"));
-                    Utils.AllowUIToUpdate();
+                    UiUtils.AllowUIToUpdate();
                     Logging.Info("starting upgrade to V2");
 
                     //process libraries folder
@@ -501,7 +501,7 @@ namespace RelhaxModpack
             //if current scale is not target, then update
             if (ModpackSettings.DisplayScale != currentScale)
             {
-                Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
             }
 
             //apply to slider
@@ -2363,7 +2363,7 @@ namespace RelhaxModpack
         private void ToggleUIButtons(bool toggle)
         {
             Logging.Debug("The main window UI was toggled: {0}", toggle.ToString());
-            List<FrameworkElement> controlsToToggle = Utils.GetAllWindowComponentsLogical(this, false);
+            List<FrameworkElement> controlsToToggle = UiUtils.GetAllWindowComponentsLogical(this, false);
             //any to remove here
             if (controlsToToggle.Contains(CancelDownloadInstallButton))
                 controlsToToggle.Remove(CancelDownloadInstallButton);
@@ -2568,12 +2568,12 @@ namespace RelhaxModpack
                 ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
                 double oldTempValue = ModpackSettings.DisplayScale;
                 ModpackSettings.DisplayScale = ApplyCustomScalingSlider.Value;
-                Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
                 ScalingConfirmation confirmation = new ScalingConfirmation();
                 if(!(bool)confirmation.ShowDialog())
                 {
                     ModpackSettings.DisplayScale = oldTempValue;
-                    Utils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                    UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
                     ApplyCustomScalingSlider.Value = ModpackSettings.DisplayScale;
                     ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
                 }

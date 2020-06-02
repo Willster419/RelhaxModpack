@@ -531,7 +531,7 @@ namespace RelhaxModpack.Windows
             List<Control> controlsToDisable = new List<Control>();
             foreach (TabItem tabItem in RightTab.Items)
             {
-                foreach (FrameworkElement element in Utils.GetAllWindowComponentsLogical(tabItem, false))
+                foreach (FrameworkElement element in UiUtils.GetAllWindowComponentsLogical(tabItem, false))
                 {
                     //if it's a common element used in the panel, then disable it
                     if (element is CheckBox || element is ComboBox || element is Button || element is TextBox || element is ListBox)
@@ -584,7 +584,7 @@ namespace RelhaxModpack.Windows
             {
                 if (package == null)
                 {
-                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(DependenciesTab, false))
                     {
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
@@ -614,12 +614,12 @@ namespace RelhaxModpack.Windows
                     ZipDownload.IsEnabled = true;
                     ZipUload.IsEnabled = true;
                     //all have internal notes and triggers
-                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(TriggersTab, false))
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(TriggersTab, false))
                     {
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
                     }
-                    foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(InternalNotesTab, false))
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(InternalNotesTab, false))
                     {
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
@@ -627,13 +627,13 @@ namespace RelhaxModpack.Windows
                     if (package is Dependency dependency || package is SelectablePackage spackage)
                     {
                         //dependency and selectable package both have dependencies
-                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DependenciesTab, false))
+                        foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(DependenciesTab, false))
                         {
                             if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                 control.IsEnabled = true;
                         }
                         //conflicting packages gets used for showing elements that are used by the dependency
-                        foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(ConflictingPackagesTab, false))
+                        foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(ConflictingPackagesTab, false))
                         {
                             if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                 control.IsEnabled = true;
@@ -649,22 +649,22 @@ namespace RelhaxModpack.Windows
                             PackageGreyAreaModDisplay.IsEnabled = true;
                             PackageObfuscatedModDisplay.IsEnabled = true;
                             //enable remaining tabs
-                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(DescriptionTab, false))
+                            foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(DescriptionTab, false))
                             {
                                 if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                     control.IsEnabled = true;
                             }
-                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(UpdateNotesTab, false))
+                            foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(UpdateNotesTab, false))
                             {
                                 if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                     control.IsEnabled = true;
                             }
-                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(MediasTab, false))
+                            foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(MediasTab, false))
                             {
                                 if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                     control.IsEnabled = true;
                             }
-                            foreach (FrameworkElement control in Utils.GetAllWindowComponentsLogical(UserDatasTab, false))
+                            foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(UserDatasTab, false))
                             {
                                 if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                     control.IsEnabled = true;

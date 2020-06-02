@@ -167,6 +167,7 @@
     </Compile>
     <Compile Include="UI\Theme.cs" />
     <Compile Include="UI\Themes.cs" />
+    <Compile Include="UI\UiUtils.cs" />
     <Compile Include="UI\WindowColorset.cs" />
     <Compile Include="UI\ZoomBorder.cs" />
     <Compile Include="Utilities\FileUtils.cs" />
