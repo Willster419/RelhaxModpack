@@ -20,6 +20,8 @@ using System.Web;
 using RelhaxModpack.Database;
 using System.Runtime.CompilerServices;
 using RelhaxModpack.Xml;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace RelhaxModpack.Utilities
 {
@@ -165,6 +167,115 @@ namespace RelhaxModpack.Utilities
             //when strA < strB, it returns -1
             bool outOfDate = (CompareVersions(currentVersion, applicationOnlineVersion) == -1);
             return !outOfDate;
+        }
+
+        public static List<string> GetListOfGithubRepoBranches()
+        {
+            //declare objects to use
+            string jsonText = string.Empty;
+
+            //check if we're windows 7 to enable TLS options needed by github
+            CheckAndEnableTLS();
+
+            //get the list of branches
+            using (PatientWebClient client = new PatientWebClient() { Timeout = 3000 })
+            {
+
+                try
+                {
+                    Logging.Debug("[GetListOfGithubRepoBranches]: downloading branch list as json from github API");
+                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                    jsonText = client.DownloadString(Settings.BetaDatabaseBranchesURL);
+                }
+                catch (WebException wex)
+                {
+                    Logging.Exception(wex.ToString());
+                }
+            }
+
+            //parse from json to list
+            return ParseBranchesJsonToList(jsonText);
+        }
+
+        public static async Task<List<string>> GetListOfGithubRepoBranchesAsync()
+        {
+            //declare objects to use
+            string jsonText = string.Empty;
+
+            //check if we're windows 7 to enable TLS options needed by github
+            CheckAndEnableTLS();
+
+            //get the list of branches
+            using (PatientWebClient client = new PatientWebClient() { Timeout = 3000 })
+            {
+                
+                try
+                {
+                    Logging.Debug("[GetListOfGithubRepoBranchesAsync]: downloading branch list as json from github API");
+                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
+                    jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
+                }
+                catch (WebException wex)
+                {
+                    Logging.Exception(wex.ToString());
+                }
+            }
+
+            //parse from json to list
+            return ParseBranchesJsonToList(jsonText);
+        }
+
+        public static List<string> ParseBranchesJsonToList(string jsonText)
+        {
+            JArray root = null;
+            List<string> branches = new List<string>
+            {
+                "master"
+            };
+
+            if (!string.IsNullOrWhiteSpace(jsonText))
+            {
+                try
+                {
+                    Logging.Debug("[ParseBranchesJsonToList]: parsing json branches");
+                    root = JArray.Parse(jsonText);
+                }
+                catch (JsonException jex)
+                {
+                    Logging.Exception(jex.ToString());
+                }
+                if (root != null)
+                {
+                    //parse the string into a json array object
+                    foreach (JObject branch in root.Children())
+                    {
+                        JValue value = (JValue)branch["name"];
+                        string branchName = value.Value.ToString();
+                        Logging.Debug("[ParseBranchesJsonToList]: Adding branch {0}", branchName);
+                        if (!branches.Contains(branchName))
+                            branches.Add(branchName);
+                    }
+                }
+            }
+
+            return branches;
+        }
+
+        public static void CheckAndEnableTLS()
+        {
+            //if windows 7, enable TLS 1.1 and 1.2
+            //https://stackoverflow.com/questions/47017973/could-not-establish-secure-channel-for-ssl-tls-c-sharp-web-service-client
+            //https://docs.microsoft.com/en-us/dotnet/api/system.net.servicepointmanager.securityprotocol?view=netframework-4.8#System_Net_ServicePointManager_SecurityProtocol
+            //https://docs.microsoft.com/en-us/dotnet/framework/network-programming/tls
+            if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
+            {
+                Logging.Debug("[CheckAndEnableTLS]: Windows 7 detected, enabling TLS 1.1 and 1.2");
+                System.Net.ServicePointManager.SecurityProtocol =
+                    SecurityProtocolType.Ssl3 |
+                    SecurityProtocolType.Tls |
+                    SecurityProtocolType.Tls11 |
+                    SecurityProtocolType.Tls12;
+            }
         }
 
         /// <summary>

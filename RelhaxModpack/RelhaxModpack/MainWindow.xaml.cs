@@ -2715,68 +2715,12 @@ namespace RelhaxModpack
                 UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
                 UseBetaDatabaseBranches.IsEnabled = false;
 
-                //declare objects to use
-                string jsonText = string.Empty;
-                JArray root = null;
-                List<string> branches = new List<string>
-                {
-                    "master"
-                };
+                List<string> branches = null;
 
-                //get the list of branches
-                using (PatientWebClient client = new PatientWebClient() { Timeout = 3000 })
-                {
-                    //if windows 7, enable TLS 1.1 and 1.2
-                    //https://stackoverflow.com/questions/47017973/could-not-establish-secure-channel-for-ssl-tls-c-sharp-web-service-client
-                    //https://docs.microsoft.com/en-us/dotnet/api/system.net.servicepointmanager.securityprotocol?view=netframework-4.8#System_Net_ServicePointManager_SecurityProtocol
-                    //https://docs.microsoft.com/en-us/dotnet/framework/network-programming/tls
-                    if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
-                    {
-                        Logging.Debug("[OnUseBetaDatabaseChanged]: Windows 7 detected, enabling TLS 1.1 and 1.2");
-                        System.Net.ServicePointManager.SecurityProtocol =
-                            SecurityProtocolType.Ssl3 |
-                            SecurityProtocolType.Tls |
-                            SecurityProtocolType.Tls11 |
-                            SecurityProtocolType.Tls12;
-                    }
-                    try
-                    {
-                        Logging.Debug("[OnUseBetaDatabaseChanged]: downloading branch list as json from github API");
-                        client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                        if(loading)
-                            jsonText = client.DownloadString(Settings.BetaDatabaseBranchesURL);
-                        else
-                            jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
-                    }
-                    catch (WebException wex)
-                    {
-                        Logging.Exception(wex.ToString());
-                    }
-                }
-                if (!string.IsNullOrWhiteSpace(jsonText))
-                {
-                    try
-                    {
-                        Logging.Debug("[OnUseBetaDatabaseChanged]: parsing json branches");
-                        root = JArray.Parse(jsonText);
-                    }
-                    catch (JsonException jex)
-                    {
-                        Logging.Exception(jex.ToString());
-                    }
-                    if(root != null)
-                    {
-                        //parse the string into a json array object
-                        foreach (JObject branch in root.Children())
-                        {
-                            JValue value = (JValue)branch["name"];
-                            string branchName = value.Value.ToString();
-                            Logging.Debug("[OnUseBetaDatabaseChanged]: Adding branch {0}", branchName);
-                            if (!branches.Contains(branchName))
-                                branches.Add(branchName);
-                        }
-                    }
-                }
+                if (loading)
+                    branches = CommonUtils.GetListOfGithubRepoBranches();
+                else
+                    branches = await CommonUtils.GetListOfGithubRepoBranchesAsync();
 
                 Logging.Debug("[OnUseBetaDatabaseChanged]: Updating UI with new branches list");
                 //clear current list
