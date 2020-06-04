@@ -738,8 +738,7 @@ namespace RelhaxModpack.Windows
                 if (t.IsFaulted)
                 {
                     Logging.Exception(t.Exception.ToString());
-                    MessageBox.Show(Translations.GetTranslatedString("failedToLoadSelectionList"),
-                        Translations.GetTranslatedString("critical"));
+                    MessageBox.Show(Translations.GetTranslatedString("databaseReadFailed"), Translations.GetTranslatedString("critical"));
                     loadingProgress.Close();
                     loadingProgress = null;
                     this.Close();
