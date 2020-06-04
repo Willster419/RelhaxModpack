@@ -1327,6 +1327,8 @@ namespace RelhaxModpack.Windows
                     return true;
                 if (selectablePackage.Visible != ((bool)PackageVisibleDisplay.IsChecked))
                     return true;
+                if (selectablePackage.FromWGmods != ((bool)PackageFromWGmodsDisplay.IsChecked))
+                    return true;
 
                 if (!selectablePackage.Name.Equals(PackageNameDisplay.Text))
                     return true;
