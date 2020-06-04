@@ -85,7 +85,7 @@ namespace RelhaxModpack.UI
         {
             if (iconsSet)
                 return;
-            iconsSet = true;
+
             Grid templateGrid = sender as Grid;
             if (Package.ObfuscatedMod)
             {
@@ -124,6 +124,18 @@ namespace RelhaxModpack.UI
                 templateGrid.Children.Add(img);
                 Grid.SetColumn(img, templateGrid.ColumnDefinitions.Count - 1);
             }
+            if (Package.FromWGmods)
+            {
+                Image img = new Image()
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 16,
+                    Height = 16,
+                    Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/wgmods_package.png", UriKind.Relative))
+                };
+            }
+
+            iconsSet = true;
         }
     }
 }

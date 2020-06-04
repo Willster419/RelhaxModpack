@@ -129,6 +129,16 @@ namespace RelhaxModpack.UI
                 };
                 thePanel.Children.Add(img);
             }
+            if (package.FromWGmods)
+            {
+                Image img = new Image()
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 16,
+                    Height = 16,
+                    Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/wgmods_package.png", UriKind.Relative))
+                };
+            }
         }
     }
 }
