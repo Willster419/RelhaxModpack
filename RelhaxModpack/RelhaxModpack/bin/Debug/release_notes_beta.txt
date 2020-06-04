@@ -1,3 +1,11 @@
+Beta Application version 1.1.0.6 (2020-06-03)
+https://www.virustotal.com/gui/file-analysis/NzJlYjQyMzZhOWQ3MDU2NGNjMmQ0N2E5MGJmZDMyZTE6MTU5MTI5ODUzNQ==/detection
+- Added new package property'FromWGmods'. Allows us to display if the source for updating the package is from the official WoT mod portal (wgmods.net).
+- Fixed a bug with loading the selection list where if a non-UI thread tried to handle exceptions, it would in itself cause an exception.
+- Other database editor fixes.
+- Updated translations (all languages).
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.1.0.5 (2020-06-02)
 https://www.virustotal.com/gui/file/477df2d0002a77c419c0c4bc08b9877c4972587b7aabd011a579ebb284b88302/detection
 - Removed half-baked method of updating the supported_clients xml document during the database publish/release process.
