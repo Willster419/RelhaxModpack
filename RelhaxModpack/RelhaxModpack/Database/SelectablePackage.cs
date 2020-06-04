@@ -220,6 +220,9 @@ namespace RelhaxModpack.Database
                 if (this.PopularMod)
                     descriptionBuilder.AppendFormat("-- {0} --\n", Translations.GetTranslatedString("popularInDescription"));
 
+                if (this.FromWGmods)
+                    descriptionBuilder.AppendFormat("-- {0} --\n", Translations.GetTranslatedString("fromWgmodsInDescription"));
+
                 if(string.IsNullOrWhiteSpace(Description))
                     return string.Format("{0}\n{1}", descriptionBuilder.ToString(), Translations.GetTranslatedString("noDescription"));
 
