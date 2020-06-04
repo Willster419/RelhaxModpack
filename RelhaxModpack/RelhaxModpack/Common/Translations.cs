@@ -4303,12 +4303,12 @@ namespace RelhaxModpack
 
             //Component: fromWgmodsInDescription
             //
-            English.Add("fromWgmodsInDescription", "This package is downloaded directly from the WGmods portal (wgmods.net)");
-            German.Add("fromWgmodsInDescription", TranslationNeeded);
-            Polish.Add("fromWgmodsInDescription", TranslationNeeded);
-            French.Add("fromWgmodsInDescription", TranslationNeeded);
-            Spanish.Add("fromWgmodsInDescription", TranslationNeeded);
-            Russian.Add("fromWgmodsInDescription", TranslationNeeded);
+            English.Add("fromWgmodsInDescription", "The source of this package is the WGmods portal (wgmods.net)");
+            German.Add("fromWgmodsInDescription", "Die Quelle dieses Pakets ist das WGmods Portal (wgmods.net)");
+            Polish.Add("fromWgmodsInDescription", "Ten pakiet pochodzi z portalu WGMods (wgmods.net)");
+            French.Add("fromWgmodsInDescription", "La source de cet archive est disponible sur le site WGMods Portal (wgmods.net)");
+            Spanish.Add("fromWgmodsInDescription", "La fuente de este paquete es el portal de WGmods (wgmods.net)");
+            Russian.Add("fromWgmodsInDescription", "Портал WGMods (wgmods.net) используется в качестве источника для этого пакета");
             #endregion
 
             #region Developer Selection Window
