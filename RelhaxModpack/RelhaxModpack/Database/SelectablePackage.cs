@@ -79,6 +79,7 @@ namespace RelhaxModpack.Database
             nameof(PopularMod),
             nameof(GreyAreaMod),
             nameof(ObfuscatedMod),
+            nameof(FromWGmods),
             nameof(ShowInSearchList),
             nameof(Medias),
             nameof(UserFiles),
