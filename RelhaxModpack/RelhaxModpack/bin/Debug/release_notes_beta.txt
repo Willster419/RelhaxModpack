@@ -1,6 +1,6 @@
 Beta Application version 1.1.0.6 (2020-06-03)
 https://www.virustotal.com/gui/file-analysis/NzJlYjQyMzZhOWQ3MDU2NGNjMmQ0N2E5MGJmZDMyZTE6MTU5MTI5ODUzNQ==/detection
-- Added new package property'FromWGmods'. Allows us to display if the source for updating the package is from the official WoT mod portal (wgmods.net).
+- Added new package property 'FromWGmods'. Allows us to display if the source for updating the package is from the official WoT mod portal (wgmods.net).
 - Fixed a bug with loading the selection list where if a non-UI thread tried to handle exceptions, it would in itself cause an exception.
 - Other database editor fixes.
 - Updated translations (all languages).
