@@ -4300,6 +4300,15 @@ namespace RelhaxModpack
             French.Add("encryptedInDescription", TranslationNeeded);
             Spanish.Add("encryptedInDescription", "Este paquete está encriptado y no se puede verificar que no contenga virus.");
             Russian.Add("encryptedInDescription", "Этот пакет зашифрован.\nПроверка на вирусы невозможна");
+
+            //Component: fromWgmodsInDescription
+            //
+            English.Add("fromWgmodsInDescription", "This package is downloaded directly from the WGmods portal (wgmods.net)");
+            German.Add("fromWgmodsInDescription", TranslationNeeded);
+            Polish.Add("fromWgmodsInDescription", TranslationNeeded);
+            French.Add("fromWgmodsInDescription", TranslationNeeded);
+            Spanish.Add("fromWgmodsInDescription", TranslationNeeded);
+            Russian.Add("fromWgmodsInDescription", TranslationNeeded);
             #endregion
 
             #region Developer Selection Window
