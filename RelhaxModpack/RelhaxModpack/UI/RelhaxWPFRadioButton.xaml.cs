@@ -126,6 +126,7 @@ namespace RelhaxModpack.UI
             }
             if (Package.FromWGmods)
             {
+                templateGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(16) });
                 Image img = new Image()
                 {
                     VerticalAlignment = VerticalAlignment.Top,
@@ -133,6 +134,8 @@ namespace RelhaxModpack.UI
                     Height = 16,
                     Source = new BitmapImage(new Uri(@"/RelhaxModpack;component/Resources/Images/wgmods_package.png", UriKind.Relative))
                 };
+                templateGrid.Children.Add(img);
+                Grid.SetColumn(img, templateGrid.ColumnDefinitions.Count - 1);
             }
 
             iconsSet = true;
