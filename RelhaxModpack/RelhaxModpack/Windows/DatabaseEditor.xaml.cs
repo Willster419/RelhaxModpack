@@ -944,6 +944,7 @@ namespace RelhaxModpack.Windows
                 PackagePopularModDisplay.IsChecked = selectablePackage.PopularMod;
                 PackageGreyAreaModDisplay.IsChecked = selectablePackage.GreyAreaMod;
                 PackageObfuscatedModDisplay.IsChecked = selectablePackage.ObfuscatedMod;
+                PackageFromWGmodsDisplay.IsChecked = selectablePackage.FromWGmods;
                 PackageShowInSearchListDisplay.IsChecked = selectablePackage.ShowInSearchList;
                 PackageNameDisplay.Text = selectablePackage.Name;
                 PackageTypeDisplay.SelectedItem = selectablePackage.Type;
@@ -1135,6 +1136,7 @@ namespace RelhaxModpack.Windows
                 selectablePackage.PopularMod = (bool)PackagePopularModDisplay.IsChecked;
                 selectablePackage.ObfuscatedMod = (bool)PackageObfuscatedModDisplay.IsChecked;
                 selectablePackage.GreyAreaMod = (bool)PackageGreyAreaModDisplay.IsChecked;
+                selectablePackage.FromWGmods = (bool)PackageFromWGmodsDisplay.IsChecked;
                 selectablePackage.Visible = (bool)PackageVisibleDisplay.IsChecked;
                 selectablePackage.Name = PackageNameDisplay.Text;
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
