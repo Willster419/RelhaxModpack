@@ -649,6 +649,7 @@ namespace RelhaxModpack.Windows
                             PackageShowInSearchListDisplay.IsEnabled = true;
                             PackageGreyAreaModDisplay.IsEnabled = true;
                             PackageObfuscatedModDisplay.IsEnabled = true;
+                            PackageFromWGmodsDisplay.IsEnabled = true;
                             //enable remaining tabs
                             foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(DescriptionTab, false))
                             {
