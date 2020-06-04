@@ -734,30 +734,36 @@ namespace RelhaxModpack.Windows
                 return true;
             }).ContinueWith((t) =>
             {
-                //https://stackoverflow.com/questions/32067034/how-to-handle-task-run-exception
-                if (t.IsFaulted)
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Logging.Exception(t.Exception.ToString());
-                    MessageBox.Show(Translations.GetTranslatedString("databaseReadFailed"), Translations.GetTranslatedString("critical"));
-                    loadingProgress.Close();
-                    loadingProgress = null;
-                    this.Close();
-                }
-                else
-                {
-                    //hook for if first load, show a message box that you can right click a component for selection view
-                    if (!Settings.FirstLoad)
+                    //https://stackoverflow.com/questions/32067034/how-to-handle-task-run-exception
+                    if (t.IsFaulted)
                     {
-                        ModpackSettings.DisplaySelectionPreviewMessage = false;
+                        Logging.Exception(t.Exception.ToString());
+                        MessageBox.Show(Translations.GetTranslatedString("databaseReadFailed"), Translations.GetTranslatedString("critical"));
+
+                        if (loadingProgress != null)
+                            loadingProgress.Close();
+                        loadingProgress = null;
+
+                        this.Close();
                     }
-                    if (Settings.FirstLoad && ModpackSettings.DisplaySelectionPreviewMessage)
+                    else
                     {
-                        ModpackSettings.DisplaySelectionPreviewMessage = false;
-                        this.Dispatcher.InvokeAsync(() => {
-                            MessageBox.Show(this, Translations.GetTranslatedString("HelpLabel"));
-                        });
+                        //hook for if first load, show a message box that you can right click a component for selection view
+                        if (!Settings.FirstLoad)
+                        {
+                            ModpackSettings.DisplaySelectionPreviewMessage = false;
+                        }
+                        if (Settings.FirstLoad && ModpackSettings.DisplaySelectionPreviewMessage)
+                        {
+                            ModpackSettings.DisplaySelectionPreviewMessage = false;
+                            this.Dispatcher.InvokeAsync(() => {
+                                MessageBox.Show(this, Translations.GetTranslatedString("HelpLabel"));
+                            });
+                        }
                     }
-                }
+                });
             });
         }
 
