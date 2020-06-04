@@ -238,9 +238,14 @@ namespace RelhaxModpack.Database
         public bool GreyAreaMod { get; set; } = false;
 
         /// <summary>
-        /// Flag to determine if the if the package is obfuscated/encrypted and can't be checked for viruses or malware
+        /// Flag to determine if the package is obfuscated/encrypted and can't be checked for viruses or malware
         /// </summary>
         public bool ObfuscatedMod { get; set; } = false;
+
+        /// <summary>
+        /// Flag to determine if the package is from the offical WoT mod portal
+        /// </summary>
+        public bool FromWGmods { get; set; } = false;
 
         /// <summary>
         /// Flag to determine any packages of this package should be sorted (by name)
