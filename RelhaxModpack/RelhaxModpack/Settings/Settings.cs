@@ -441,7 +441,7 @@ namespace RelhaxModpack
         /// The current distribution version of the application.
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
-        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Stable;
+        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Alpha;
 
         /// <summary>
         /// Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed)
