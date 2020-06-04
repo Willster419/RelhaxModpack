@@ -1576,7 +1576,12 @@
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.ObfuscatedMod">
             <summary>
-            Flag to determine if the if the package is obfuscated/encrypted and can't be checked for viruses or malware
+            Flag to determine if the package is obfuscated/encrypted and can't be checked for viruses or malware
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.SelectablePackage.FromWGmods">
+            <summary>
+            Flag to determine if the package is from the offical WoT mod portal
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.SortChildPackages">
