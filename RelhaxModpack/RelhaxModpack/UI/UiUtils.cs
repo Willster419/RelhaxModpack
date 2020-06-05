@@ -140,7 +140,7 @@ namespace RelhaxModpack.UI
         /// Injects a Dispatcher frame followed by an idle backgrouned operation to allow for the UI to update during an intensive operation on the UI thread
         /// </summary>
         /// <remarks>See https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread 
-        /// <para>and https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this</para></remarks>
+        /// <para>and https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this </para></remarks>
         public static void AllowUIToUpdate()
         {
             DispatcherFrame frame = new DispatcherFrame();
