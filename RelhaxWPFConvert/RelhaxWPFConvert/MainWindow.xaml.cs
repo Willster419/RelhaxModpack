@@ -33,6 +33,8 @@ using System.Xml.Linq;
 using HtmlAgilityPack;
 using System.Text;
 using Microsoft.Win32;
+using System.Linq;
+using FontFamily = System.Windows.Media.FontFamily;
 
 namespace RelhaxWPFConvert
 {
@@ -607,6 +609,7 @@ namespace RelhaxWPFConvert
             }
         }
 
+        #region browser testing
         private async void AutoUpdateWGClickIE_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(AutoUpdateWGURLTextboxIE.Text))
@@ -687,5 +690,41 @@ namespace RelhaxWPFConvert
                     Key.SetValue(exeName + ".exe", registryToSet, RegistryValueKind.DWord);
             }
         }
+        #endregion
+
+        #region font selecting testing
+        private void FontSelectionCombobox_Loaded_1(object sender, RoutedEventArgs e)
+        {
+            string fontsfolder = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
+            List<Typeface> fonts = Fonts.GetTypefaces(fontsfolder).ToList();
+            FontSelectionCombobox.Items.Clear();
+            foreach(Typeface font in fonts)
+            {
+                FontSelectionCombobox.Items.Add(new TextBlock()
+                {
+                    FontFamily = font.FontFamily,
+                    FontStretch = font.Stretch,
+                    FontStyle = font.Style,
+                    FontWeight = font.Weight,
+                    Text = font.FontFamily.ToString()
+                });
+            }
+        }
+
+        private void FontSelectionCombobox_Loaded_2(object sender, RoutedEventArgs e)
+        {
+            string fontsfolder = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
+            List<FontFamily> fonts = Fonts.GetFontFamilies(fontsfolder).ToList();
+            FontSelectionCombobox.Items.Clear();
+            foreach (FontFamily font in fonts)
+            {
+                FontSelectionCombobox.Items.Add(new TextBlock()
+                {
+                    FontFamily = font,
+                    Text = font.Source.Split('#')[1]
+                });
+            }
+        }
+        #endregion
     }
 }

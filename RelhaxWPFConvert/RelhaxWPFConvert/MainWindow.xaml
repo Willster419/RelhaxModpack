@@ -299,6 +299,8 @@
                     </FlowDocument>
                 </RichTextBox>
                 <TextBlock HorizontalAlignment="Left" Margin="167,10,0,0" TextWrapping="Wrap" Text="Flow Document with tag/ID testing" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="474,10,0,0" TextWrapping="Wrap" Text="Font selector" VerticalAlignment="Top"/>
+                <ComboBox x:Name="FontSelectionCombobox" HorizontalAlignment="Left" Margin="474,32,0,0" VerticalAlignment="Top" Width="255" Loaded="FontSelectionCombobox_Loaded_2"/>
             </Grid>
         </TabItem>
     </TabControl>
