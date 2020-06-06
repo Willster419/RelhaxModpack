@@ -1331,6 +1331,15 @@ namespace RelhaxModpack
             Spanish.Add("ApplyCustomScalingText", "Escalado de la aplicación");
             Russian.Add("ApplyCustomScalingText", "Мастшабирование приложения");
 
+            //Component: EnableCustomFontCheckboxText
+            //
+            English.Add("EnableCustomFontCheckboxText", "Enable custom font");
+            German.Add("EnableCustomFontCheckboxText", TranslationNeeded);
+            Polish.Add("EnableCustomFontCheckboxText", TranslationNeeded);
+            French.Add("EnableCustomFontCheckboxText", TranslationNeeded);
+            Spanish.Add("EnableCustomFontCheckboxText", TranslationNeeded);
+            Russian.Add("EnableCustomFontCheckboxText", TranslationNeeded);
+
             //Component: LauchEditorText
             //button for launching the editor from the main application window
             English.Add("LauchEditorText", "Launch Database Editor");
