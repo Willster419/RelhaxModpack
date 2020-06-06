@@ -189,6 +189,10 @@
                                     IsEnabled="True" HorizontalAlignment="Stretch" DockPanel.Dock="Left" PreviewMouseUp="ApplyCustomScalingSlider_MouseUp"
                                     SmallChange="0.25" IsSnapToTickEnabled="True" LargeChange="0.25" TickFrequency="0.25" ToolTipService.ShowOnDisabled="True"/>
                         </DockPanel>
+                        <CheckBox x:Name="EnableCustomFontCheckbox" Tag="EnableCustomFontCheckbox" IsEnabled="True" ToolTipService.ShowOnDisabled="True" Click="EnableCustomFontCheckbox_Click">
+                            <TextBlock x:Name="EnableCustomFontCheckboxText" Text="Enable custom font" TextWrapping="Wrap"/>
+                        </CheckBox>
+                        <ComboBox x:Name="CustomFontSelector" Tag="CustomFontSelector" Margin="20,0,0,0" IsEnabled="True" ToolTipService.ShowOnDisabled="True" SelectionChanged="CustomFontSelector_SelectionChanged"/>
                     </StackPanel>
                 </Grid>
             </TabItem>

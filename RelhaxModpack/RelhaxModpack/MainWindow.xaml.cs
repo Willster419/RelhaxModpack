@@ -22,6 +22,7 @@ using RelhaxModpack.Atlases;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Database;
+using System.Windows.Media;
 
 namespace RelhaxModpack
 {
@@ -229,6 +230,47 @@ namespace RelhaxModpack
 
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
+
+            //apply custom font if enabled and exists
+            if (ModpackSettings.EnableCustomFont)
+            {
+                Logging.Debug(LogOptions.MethodName, "Attempting to apply font {0}", ModpackSettings.CustomFontName);
+                string fontsfolder = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
+                List<FontFamily> fonts = Fonts.GetFontFamilies(fontsfolder).ToList();
+                List<string> fontNames = fonts.Select(font => font.Source.Split('#')[1]).ToList();
+                string fontName = fontNames.Find(match => match.Equals(ModpackSettings.CustomFontName));
+                if (string.IsNullOrEmpty(fontName))
+                {
+                    Logging.Error("Custom font {0} not found on system, disable custom font selection", fontName);
+                    ModpackSettings.CustomFontName = string.Empty;
+                    ModpackSettings.EnableCustomFont = false;
+                    EnableCustomFontCheckbox.IsEnabled = false;
+                    CustomFontSelector.IsEnabled = false;
+                    CustomFontSelector.SelectedItem = null;
+                }
+                else
+                {
+                    Logging.Debug("Custom font {0} found on system, applying", fontName);
+
+                    //run the checked code to ensure that the font is selected
+                    EnableCustomFontCheckbox_Click(null, null);
+
+                    //select the fontName that matches in the checkbox
+                    bool selected = false;
+                    foreach(TextBlock block in CustomFontSelector.Items)
+                    {
+                        if(block.FontFamily.Source.Split('#')[1].Equals(ModpackSettings.CustomFontName))
+                        {
+                            CustomFontSelector.SelectedItem = block;
+                            selected = true;
+                            CustomFontSelector_SelectionChanged(null, null);
+                            break;
+                        }
+                    }
+                    if (!selected)
+                        throw new BadMemeException("The font was never set in the selector combobox");
+                }
+            }
 
             //save database version to temp and process if command line test mode
             databaseVersion = ModpackSettings.DatabaseDistroVersion;
@@ -3196,6 +3238,7 @@ namespace RelhaxModpack
             AdvancedInstallationProgress.IsChecked = ModpackSettings.AdvancedInstalProgress;
             ShowOptionsCollapsedLegacyCB.IsChecked = ModpackSettings.ShowOptionsCollapsedLegacy;
             AutoOneclickShowWarningOnSelectionsFailButton.IsChecked = ModpackSettings.AutoOneclickShowWarningOnSelectionsFail;
+            EnableCustomFontCheckbox.IsChecked = ModpackSettings.EnableCustomFont;
 
             //apply auto sync time unit and amount
             AutoSyncFrequencyTexbox.Text = ModpackSettings.AutoInstallFrequencyInterval.ToString();
@@ -3376,6 +3419,39 @@ namespace RelhaxModpack
             {
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Application.Current.Shutdown((int)ReturnCodes.LogfileError);
+            }
+        }
+
+        private void CustomFontSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FontFamily selectedFont = (CustomFontSelector.SelectedItem as TextBlock).FontFamily;
+            UiUtils.CustomFontFamily = selectedFont;
+            ModpackSettings.CustomFontName = selectedFont.Source.Split('#')[1];
+            UiUtils.ApplyFontToWindow(this, selectedFont);
+        }
+
+        private void EnableCustomFontCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+            if((bool)EnableCustomFontCheckbox.IsChecked)
+            {
+                ModpackSettings.EnableCustomFont = true;
+                string fontsfolder = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
+                List<FontFamily> fonts = Fonts.GetFontFamilies(fontsfolder).ToList();
+                CustomFontSelector.Items.Clear();
+                foreach (FontFamily font in fonts)
+                {
+                    CustomFontSelector.Items.Add(new TextBlock()
+                    {
+                        FontFamily = font,
+                        Text = font.Source.Split('#')[1]
+                    });
+                }
+                CustomFontSelector.IsEnabled = true;
+            }
+            else
+            {
+                ModpackSettings.EnableCustomFont = false;
+                CustomFontSelector.IsEnabled = false;
             }
         }
 

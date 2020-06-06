@@ -58,19 +58,28 @@ namespace RelhaxModpack.Windows
             //get the original width and height
             OriginalHeight = Height;
             OriginalWidth = Width;
+
             //deal with the translations
             if (LocalizeWindow)
             {
                 Translations.LocalizeWindow(this, ApplyToolTips);
             }
+
             //apply UI color changes
             if(ApplyColorSettings)
             {
                 UISettings.ApplyCustomStyles(this);
                 UISettings.ApplyUIColorSettings(this);
             }
+
+            //apply font changes
+            if(ModpackSettings.EnableCustomFont)
+            {
+                UiUtils.ApplyFontToWindow(this, UiUtils.CustomFontFamily);
+            }
+
             //deal with scaling
-            if(ApplyScaling)
+            if (ApplyScaling)
             {
                 //get current scaling of window (like from display settings)
                 double currentScale = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;

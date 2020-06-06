@@ -297,6 +297,11 @@ namespace RelhaxModpack
         public static bool AutoOneclickShowWarningOnSelectionsFail = false;
 
         /// <summary>
+        /// Toggle if the application should apply a custom font to the MainWindow and all windows of RelhaxWindow with 
+        /// </summary>
+        public static bool EnableCustomFont = false;
+
+        /// <summary>
         /// The time, in a specified unit, to check for anew data base version
         /// </summary>
         public static int AutoInstallFrequencyInterval = 10;
@@ -346,6 +351,12 @@ namespace RelhaxModpack
         /// </summary>
         /// <remarks>Used for both auto and one click installation modes</remarks>
         public static string AutoOneclickSelectionFilePath = string.Empty;
+
+        /// <summary>
+        /// The name of the font to use for the MainWindow and all windows that are of RelhaxWindow type
+        /// </summary>
+        /// <remarks>If the font name is not found in the system folder, this is reset to empty</remarks>
+        public static string CustomFontName = string.Empty;
 
         /// <summary>
         /// The Uninstall mode to use when uninstalling or installing with the clean install option

@@ -86,6 +86,7 @@ namespace RelhaxModpack.UI
                     GetAllWindowComponentsVisual(subV, allWindowComponents);
             }
         }
+
         //Gets any logical components that are not currently shown (like elements behind a tab)
         private static void GetAllWindowComponentsLogical(FrameworkElement v, List<FrameworkElement> allWindowComponents)
         {
@@ -191,6 +192,37 @@ namespace RelhaxModpack.UI
             }
             else
                 throw new BadMemeException("you should probably make me a RelhaxWindow if you want to use this feature");
+        }
+
+        private static FontFamily DefaultFontFamily = null;
+
+        public static FontFamily CustomFontFamily = null;
+
+        /// <summary>
+        /// Applies the given FontFamily font type to the window
+        /// </summary>
+        /// <param name="window">The window to apply the font to</param>
+        /// <param name="font">The font to apply to the window</param>
+        /// <exception cref="ArgumentNullException">When any argument is null</exception>
+        public static void ApplyFontToWindow(Window window, FontFamily font)
+        {
+            if (window == null)
+                throw new ArgumentNullException(nameof(window));
+            if (font == null)
+                throw new ArgumentNullException(nameof(font));
+
+            if(DefaultFontFamily == null)
+            {
+                DefaultFontFamily = window.FontFamily;
+            }
+
+            Logging.Debug(LogOptions.MethodName, "Applying font {0} to window {1}", font.Source.Split('#')[1], window.Title);
+            window.FontFamily = font;
+            foreach(FrameworkElement element in GetAllWindowComponentsLogical(window,true))
+            {
+                if(element is Control control)
+                    control.FontFamily = font;
+            }
         }
     }
 }
