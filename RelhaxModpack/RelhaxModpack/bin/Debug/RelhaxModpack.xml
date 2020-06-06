@@ -3231,7 +3231,7 @@
             Injects a Dispatcher frame followed by an idle backgrouned operation to allow for the UI to update during an intensive operation on the UI thread
             </summary>
             <remarks>See https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread 
-            <para>and https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this</para></remarks>
+            <para>and https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this </para></remarks>
         </member>
         <member name="M:RelhaxModpack.UI.UiUtils.ApplyApplicationScale(System.Windows.Window,System.Double)">
             <summary>
@@ -3239,6 +3239,14 @@
             </summary>
             <param name="window">The window to apply scaling to</param>
             <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
+        </member>
+        <member name="M:RelhaxModpack.UI.UiUtils.ApplyFontToWindow(System.Windows.Window,System.Windows.Media.FontFamily)">
+            <summary>
+            Applies the given FontFamily font type to the window
+            </summary>
+            <param name="window">The window to apply the font to</param>
+            <param name="font">The font to apply to the window</param>
+            <exception cref="T:System.ArgumentNullException">When any argument is null</exception>
         </member>
         <member name="T:RelhaxModpack.UI.WindowColorset">
             <summary>
@@ -6626,6 +6634,11 @@
             Toggle if during auto or one click load if the application should inform if any selection errors during selection file load
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.EnableCustomFont">
+            <summary>
+            Toggle if the application should apply a custom font to the MainWindow and all windows of RelhaxWindow with 
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.AutoInstallFrequencyInterval">
             <summary>
             The time, in a specified unit, to check for anew data base version
@@ -6676,6 +6689,12 @@
             The path to the auto or one click selection file
             </summary>
             <remarks>Used for both auto and one click installation modes</remarks>
+        </member>
+        <member name="F:RelhaxModpack.ModpackSettings.CustomFontName">
+            <summary>
+            The name of the font to use for the MainWindow and all windows that are of RelhaxWindow type
+            </summary>
+            <remarks>If the font name is not found in the system folder, this is reset to empty</remarks>
         </member>
         <member name="F:RelhaxModpack.ModpackSettings.UninstallMode">
             <summary>
