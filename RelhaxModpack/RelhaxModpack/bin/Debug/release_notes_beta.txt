@@ -1,3 +1,11 @@
+Beta Application version 1.1.0.7 (2020-06-07)
+https://www.virustotal.com/gui/file-analysis/MTY5MGEwYjcwZmU4NzI2YzcyMTJmNjc5OGVkNDEzZWU6MTU5MTU0NzUzMg==/detection
+- Added ability to select custom font to use with the application. Yes that means you can select Comic Sans.
+- Disabled custom themes in RelhaxColorPicker.
+- Updated translations.
+- Updated in-code documentation.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.1.0.6 (2020-06-03)
 https://www.virustotal.com/gui/file-analysis/NzJlYjQyMzZhOWQ3MDU2NGNjMmQ0N2E5MGJmZDMyZTE6MTU5MTI5ODUzNQ==/detection
 - Added new package property 'FromWGmods'. Allows us to display if the source for updating the package is from the official WoT mod portal (wgmods.net).
