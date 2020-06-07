@@ -1334,7 +1334,7 @@ namespace RelhaxModpack
             //Component: EnableCustomFontCheckboxText
             //
             English.Add("EnableCustomFontCheckboxText", "Enable custom font");
-            German.Add("EnableCustomFontCheckboxText", TranslationNeeded);
+            German.Add("EnableCustomFontCheckboxText", "Aktiviere eigene Schriftarten");
             Polish.Add("EnableCustomFontCheckboxText", "Użyj własnej czcionki");
             French.Add("EnableCustomFontCheckboxText", TranslationNeeded);
             Spanish.Add("EnableCustomFontCheckboxText", "Habilitar fuente personalizada");
@@ -1343,7 +1343,7 @@ namespace RelhaxModpack
             //Component: EnableCustomFontCheckboxTextDescription
             //
             English.Add("EnableCustomFontCheckboxTextDescription", "Enable using a custom font installed on your system inside most application windows");
-            German.Add("EnableCustomFontCheckboxTextDescription", TranslationNeeded);
+            German.Add("EnableCustomFontCheckboxTextDescription", "Aktiviere eine deiner installierten Schriftarten für die Anzeige des Textes im Programm");
             Polish.Add("EnableCustomFontCheckboxTextDescription", "Pozwala wybrać czcionkę używaną w większości okien spośród listy zainstalowanych w systemie czcionek");
             French.Add("EnableCustomFontCheckboxTextDescription", TranslationNeeded);
             Spanish.Add("EnableCustomFontCheckboxTextDescription", "Habilita una fuente personalizada instalada en su sistema en la mayoría de las ventanas de la aplicación");
