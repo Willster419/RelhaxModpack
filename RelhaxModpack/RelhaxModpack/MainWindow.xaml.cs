@@ -226,18 +226,20 @@ namespace RelhaxModpack
 
             //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
             //note: in wpf, the enabled trigger will occur in the loading event, so this will launch the checked events
+            //setting a isChecked checkbox will not launch the click event
             ApplySettingsToUI();
 
             //check command line settings
             CommandLineSettings.ParseCommandLineConflicts();
 
-            //apply custom font if enabled and exists
+            //run the checked code to ensure that the font is loaded into the custom selector
+            EnableCustomFontCheckbox_Click(null, null);
+
+            //apply custom font if enabled and exists. if not, it should have already been taken care of in EnableCustomFontCheckbox_Click()
             if (ModpackSettings.EnableCustomFont)
             {
                 Logging.Debug(LogOptions.MethodName, "Attempting to apply font {0}", ModpackSettings.CustomFontName);
-                string fontsfolder = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
-                List<FontFamily> fonts = Fonts.GetFontFamilies(fontsfolder).ToList();
-                List<string> fontNames = fonts.Select(font => font.Source.Split('#')[1]).ToList();
+                List<string> fontNames = CustomFontSelector.Items.SourceCollection.Cast<TextBlock>().Select(font => font.FontFamily.Source.Split('#')[1]).ToList();
                 string fontName = fontNames.Find(match => match.Equals(ModpackSettings.CustomFontName));
                 if (string.IsNullOrEmpty(fontName))
                 {
@@ -251,9 +253,6 @@ namespace RelhaxModpack
                 else
                 {
                     Logging.Debug("Custom font {0} found on system, applying", fontName);
-
-                    //run the checked code to ensure that the font is selected
-                    EnableCustomFontCheckbox_Click(null, null);
 
                     //select the fontName that matches in the checkbox
                     bool selected = false;
@@ -3424,10 +3423,17 @@ namespace RelhaxModpack
 
         private void CustomFontSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FontFamily selectedFont = (CustomFontSelector.SelectedItem as TextBlock).FontFamily;
-            UiUtils.CustomFontFamily = selectedFont;
-            ModpackSettings.CustomFontName = selectedFont.Source.Split('#')[1];
-            UiUtils.ApplyFontToWindow(this, selectedFont);
+            if(CustomFontSelector.SelectedItem == null)
+            {
+                UiUtils.ApplyFontToWindow(this, UiUtils.DefaultFontFamily);
+            }
+            else
+            {
+                FontFamily selectedFont = (CustomFontSelector.SelectedItem as TextBlock).FontFamily;
+                UiUtils.CustomFontFamily = selectedFont;
+                ModpackSettings.CustomFontName = selectedFont.Source.Split('#')[1];
+                UiUtils.ApplyFontToWindow(this, selectedFont);
+            }
         }
 
         private void EnableCustomFontCheckbox_Click(object sender, RoutedEventArgs e)
@@ -3435,9 +3441,11 @@ namespace RelhaxModpack
             if((bool)EnableCustomFontCheckbox.IsChecked)
             {
                 ModpackSettings.EnableCustomFont = true;
+
                 string fontsfolder = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
                 List<FontFamily> fonts = Fonts.GetFontFamilies(fontsfolder).ToList();
                 CustomFontSelector.Items.Clear();
+
                 foreach (FontFamily font in fonts)
                 {
                     CustomFontSelector.Items.Add(new TextBlock()
@@ -3451,7 +3459,13 @@ namespace RelhaxModpack
             else
             {
                 ModpackSettings.EnableCustomFont = false;
+                CustomFontSelector.SelectedIndex = -1;
                 CustomFontSelector.IsEnabled = false;
+
+                if (UiUtils.DefaultFontFamily == null)
+                    UiUtils.DefaultFontFamily = this.FontFamily;
+
+                UiUtils.ApplyFontToWindow(this, UiUtils.DefaultFontFamily);
             }
         }
 
