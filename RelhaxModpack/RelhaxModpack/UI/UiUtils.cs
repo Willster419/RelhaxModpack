@@ -194,7 +194,7 @@ namespace RelhaxModpack.UI
                 throw new BadMemeException("you should probably make me a RelhaxWindow if you want to use this feature");
         }
 
-        private static FontFamily DefaultFontFamily = null;
+        public static FontFamily DefaultFontFamily = null;
 
         public static FontFamily CustomFontFamily = null;
 
@@ -216,7 +216,14 @@ namespace RelhaxModpack.UI
                 DefaultFontFamily = window.FontFamily;
             }
 
-            Logging.Debug(LogOptions.MethodName, "Applying font {0} to window {1}", font.Source.Split('#')[1], window.Title);
+            string[] fontName = font.Source.Split('#');
+            string fontname_ = string.Empty;
+            if (fontName.Length > 1)
+                fontname_ = fontName[1];
+            else
+                fontname_ = fontName[0];
+
+            Logging.Debug(LogOptions.MethodName, "Applying font '{0}' to window {1}", fontname_, window.Title);
             window.FontFamily = font;
             foreach(FrameworkElement element in GetAllWindowComponentsLogical(window,true))
             {
