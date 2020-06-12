@@ -1207,18 +1207,10 @@ namespace RelhaxModpack.Windows
                 return;
             if (sender is RelhaxWPFCheckBox cb)
             {
-                if ((bool)cb.IsChecked)
-                    cb.IsChecked = false;
-                else if (!(bool)cb.IsChecked)
-                    cb.IsChecked = true;
                 OnMultiPackageClick(sender, e);
             }
             else if (sender is RelhaxWPFRadioButton rb)
             {
-                if ((bool)rb.IsChecked)
-                    rb.IsChecked = false;
-                else if (!(bool)rb.IsChecked)
-                    rb.IsChecked = true;
                 OnSinglePackageClick(sender, e);
             }
         }
