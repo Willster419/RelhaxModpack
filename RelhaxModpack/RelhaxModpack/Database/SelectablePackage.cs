@@ -304,15 +304,7 @@ namespace RelhaxModpack.Database
                     if (Enabled && dropDownSelectionType > -1 && IsStructureEnabled)
                     {
                         //go to the parent array list above this that holds the combobox and run the UI code
-                        switch (ModpackSettings.ModSelectionView)
-                        {
-                            case SelectionView.DefaultV2:
-                                Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
-                                break;
-                            case SelectionView.Legacy:
-                                Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
-                                break;
-                        }
+                        Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
                     }
                 }
 
