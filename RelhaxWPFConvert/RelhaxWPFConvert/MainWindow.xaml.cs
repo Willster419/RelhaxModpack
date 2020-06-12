@@ -726,5 +726,34 @@ namespace RelhaxWPFConvert
             }
         }
         #endregion
+
+        #region i hate comboboxes
+        bool loaded = false;
+
+        private void SelectionTestingCombobox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if(!loaded)
+            {
+                //select the first item when loading
+                SelectionTestingCombobox.SelectedIndex = 0;
+                loaded = true;
+            }
+        }
+
+        private void ComboBoxItem_Selected(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ComboBoxItem_Unselected(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SelectionTestingCombobox_DropDownOpened(object sender, EventArgs e)
+        {
+            SelectionTestingCombobox.SelectedIndex = -1;
+        }
+        #endregion
     }
 }
