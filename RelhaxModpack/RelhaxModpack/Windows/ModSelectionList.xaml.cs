@@ -1013,7 +1013,7 @@ namespace RelhaxModpack.Windows
                     media.SelectablePackageParent = package;
                 }
 
-                //special code for the borders and stackpanels
+                //special code for the borders and stackpanels for child UI component display
                 //if the child container for sub options hsa yet to be made AND there are sub options, make it
                 if (package.ChildBorder == null && package.Packages.Count > 0)
                 {
@@ -1037,6 +1037,8 @@ namespace RelhaxModpack.Windows
                             break;
                     }
                 }
+
+                //create a UI component for this package
                 switch(package.Type)
                 {
                     case SelectionTypes.single1:
@@ -1076,9 +1078,11 @@ namespace RelhaxModpack.Windows
                         ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFCheckBox, true);
                         break;
                 }
-                //filters out the null UI like if dropdown
+
+                //attach events for user interaction
                 if(package.UIComponent != null)
                 {
+                    //user selecting packages (Click) and previewing (MouseDown)
                     if (package.UIComponent is RadioButton rb)
                     {
                         rb.MouseDown += Generic_MouseDown;
@@ -1089,6 +1093,8 @@ namespace RelhaxModpack.Windows
                         cb.MouseDown += Generic_MouseDown;
                         cb.Click += OnWPFComponentCheck;
                     }
+
+                    //user right clicking packages for preview
                     switch (ModpackSettings.ModSelectionView)
                     {
                         case SelectionView.DefaultV2:
@@ -1111,7 +1117,8 @@ namespace RelhaxModpack.Windows
                             break;
                     }
                 }
-                //howerver
+
+                //process child packages
                 if (package.Packages.Count > 0)
                 {
                     if(ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
