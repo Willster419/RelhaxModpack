@@ -129,17 +129,17 @@ namespace RelhaxModpack.Windows
 
         //private
         private bool continueInstallation  = false;
-        private ProgressIndicator loadingProgress;
+        private ProgressIndicator loadingProgress = null;
         private bool LoadingUI = false;
         private Category UserCategory = null;
-        private Preview p;
+        private Preview p = null;
         private const int FLASH_TICK_INTERVAL = 250;
         private const int NUM_FLASH_TICKS = 5;
         private int numTicks = 0;
         private Brush OriginalBrush = null;
         private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
         private DispatcherTimer FlashTimer = null;
-        private XDocument Md5HashDocument;
+        private XDocument Md5HashDocument = null;
         private DatabaseVersions databaseVersion;
 
         #region Boring stuff
@@ -336,7 +336,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 //get the Xml database loaded into a string based on database version type (from server download, from github, from testfile
-                string modInfoXml = "";
+                string modInfoXml = string.Empty;
                 Ionic.Zip.ZipFile zipfile = null;
                 switch (databaseVersion)
                 {
@@ -550,8 +550,8 @@ namespace RelhaxModpack.Windows
                 UiUtils.AllowUIToUpdate();
 
                 //run UI init code
-                //note that this will syncronously stop the task, and schedule on the UI thread
-                //the working theory is that the reporting code should be scudeuled and therefore occur before the UI thread begins work
+                //note that this will synchronously stop the task, and schedule on the UI thread
+                //the working theory is that the reporting code should be scheduled and therefore occur before the UI thread begins work
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     //initialize the categories lists
@@ -563,7 +563,7 @@ namespace RelhaxModpack.Windows
                     InitUsermods();
                 });
 
-                //for each category, report category progres then schedule to load it
+                //for each category, report category progress then schedule to load it
                 loadProgress.ChildTotal = ParsedCategoryList.Count;
                 foreach (Category cat in ParsedCategoryList)
                 {
@@ -596,7 +596,7 @@ namespace RelhaxModpack.Windows
                     InstallingTo.Text = string.Format(Translations.GetTranslatedString("InstallingTo"), Settings.WoTDirectory);
                     InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
 
-                    //determind if the collapse and expand buttons should be visible
+                    //determined if the collapse and expand buttons should be visible
                     switch (ModpackSettings.ModSelectionView)
                     {
                         case SelectionView.DefaultV2:
