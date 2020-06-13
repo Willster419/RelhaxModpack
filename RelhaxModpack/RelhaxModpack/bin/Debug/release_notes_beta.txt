@@ -1,3 +1,10 @@
+Beta Application version 1.1.0.8 (2020-06-13)
+https://www.virustotal.com/gui/file/c603f966ebaec077e7d995719e6e481da1b388ae5cd0970efc11ab73908c25ee/detection
+- Fixed the bug with drop down combobox selections not selecting the item that you click on. (Thanks Silvers of the NA server for reporting)
+- Fixed bugs with selecting font from the MainWindow.
+- Removed redundant code in ModSelectionList and code optimizations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.1.0.7 (2020-06-07)
 https://www.virustotal.com/gui/file-analysis/MTY5MGEwYjcwZmU4NzI2YzcyMTJmNjc5OGVkNDEzZWU6MTU5MTU0NzUzMg==/detection
 - Added ability to select custom font to use with the application. Yes that means you can select Comic Sans.
