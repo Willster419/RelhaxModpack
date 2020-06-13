@@ -18,6 +18,13 @@ using System.Windows.Shapes;
 namespace RelhaxModpack.UI
 {
     /// <summary>
+    /// Fires when the SelectionChanged event fires, but verifies that it's from user interaction (mouse of space bar/enter)
+    /// </summary>
+    /// <param name="source">The source of causing the event</param>
+    /// <param name="e">The parameters from the SelectionChanged event</param>
+    public delegate void OnSelectionCommitted(object source, SelectionChangedEventArgs e);
+
+    /// <summary>
     /// Interaction logic for RelhaxWPFComboBox.xaml
     /// </summary>
     public partial class RelhaxWPFComboBox : ComboBox
@@ -29,6 +36,55 @@ namespace RelhaxModpack.UI
         /// So, a flag is used to prevent the ComboBox being added multiple times to the window</remarks>
         public bool AddedToList { get; set; } = false;
 
+        /// <summary>
+        /// Gets or sets the selected index property in the base class without invoking the selectionChanged event
+        /// </summary>
+        /// <seealso cref="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
+        public new int SelectedIndex
+        {
+            get
+            {
+                return base.SelectedIndex;
+            }
+            set
+            {
+                this.SelectionFromUser = false;
+                base.SelectedIndex = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the selected item property in the base class without invoking the selectionChanged event
+        /// </summary>
+        /// <seealso cref="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
+        public new object SelectedItem
+        {
+            get
+            {
+                return base.SelectedItem;
+            }
+            set
+            {
+                this.SelectionFromUser = false;
+                base.SelectedItem = value;
+            }
+        }
+
+        /// <summary>
+        /// Event to fire when the selection changes from user interaction (mouse of space bar/enter)
+        /// </summary>
+        public event OnSelectionCommitted SelectionCommitted;
+
+        //keeps track of the actual selected value
+        private int SelectedIndexBackup = -1;
+
+        //toggle to verify that the init load selection code only happens once
+        private bool DefaultSelectionSet = false;
+
+        //flag to determine if the selection commit event should fire
+        //this needs to be set to false right before any selected properties are set
+        private bool SelectionFromUser = true;
+
         private StackPanel thePanel = null;
 
         /// <summary>
@@ -37,8 +93,13 @@ namespace RelhaxModpack.UI
         public RelhaxWPFComboBox()
         {
             InitializeComponent();
+            this.Loaded += Combobox_Loaded;
+            this.SelectionChanged += Combobox_SelectionChanged;
+            this.DropDownOpened += Combobox_DropDownOpened;
+            this.DropDownClosed += Combobox_DropDownClosed;
         }
 
+        #region SelectionChanged event suppression
         /// <summary>
         /// Called from the database object to update the UI on a combobox selection change
         /// </summary>
@@ -52,20 +113,61 @@ namespace RelhaxModpack.UI
                 if (cbi.Package.Equals(spc) && value && cbi.Package.Enabled)
                 {
                     //change it
-                    SelectedItem = cbi;
+                    this.SelectedIndex = i;
                     //continue as to not uncheck this value, now that it's checked
                     continue;
                 }
+
                 //if value is false it will uncheck all the packages
                 if (cbi.Package.Enabled && cbi.Package.Checked)
                     cbi.Package.Checked = false;
             }
+
             if (!value)
             {
-                SelectedIndex = 0;
+                //reset to first selection option
+                this.SelectedIndex = 0;
             }
         }
 
+        private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!SelectionFromUser)
+            {
+                SelectionFromUser = true;
+                return;
+            }
+
+            SelectionCommitted?.Invoke(this, e);
+        }
+
+        private void Combobox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!DefaultSelectionSet)
+            {
+                SelectedIndex = 0;
+                DefaultSelectionSet = true;
+            }
+        }
+
+        private void Combobox_DropDownOpened(object sender, EventArgs e)
+        {
+            //set selection to nothing, but back it up first
+            SelectedIndexBackup = this.SelectedIndex;
+            this.SelectedIndex = -1;
+        }
+
+        private void Combobox_DropDownClosed(object sender, EventArgs e)
+        {
+            if (this.SelectedIndex == -1)
+            {
+                //a selection was not chosen, the user must have clicked out, so set the original back
+                this.SelectedIndex = SelectedIndexBackup;
+            }
+        }
+        #endregion
+
+        #region Image attach code
         private void TemplateRootPanel_Loaded(object sender, RoutedEventArgs e)
         {
             if (thePanel == null)
@@ -140,5 +242,6 @@ namespace RelhaxModpack.UI
                 };
             }
         }
+        #endregion
     }
 }

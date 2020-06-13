@@ -1147,13 +1147,13 @@ namespace RelhaxModpack.Windows
                     AddedToList = false
                 };
                 ToolTipService.SetShowOnDisabled(package.Parent.RelhaxWPFComboBoxList[boxIndex], true);
+                package.Parent.RelhaxWPFComboBoxList[boxIndex].SelectionCommitted += OnSingleDDPackageClick;
             }
             RelhaxComboBoxItem cbi = new RelhaxComboBoxItem(package, package.NameDisplay)
             {
                 IsEnabled = package.IsStructureEnabled,
                 Content = package.NameDisplay
             };
-            cbi.PreviewMouseLeftButtonDown += OnSingleDDPackageClick;
             package.Parent.RelhaxWPFComboBoxList[boxIndex].Items.Add(cbi);
             if (!package.Parent.RelhaxWPFComboBoxList[boxIndex].AddedToList)
             {
@@ -1255,14 +1255,11 @@ namespace RelhaxModpack.Windows
             if (LoadingUI)
                 return;
 
-            SelectablePackage spc = null;
+            RelhaxWPFComboBox relhaxWPFComboBox = sender as RelhaxWPFComboBox;
 
-            RelhaxComboBoxItem cb2 = sender as RelhaxComboBoxItem;
-            spc = cb2.Package;
+            RelhaxComboBoxItem cb2 = relhaxWPFComboBox.SelectedItem as RelhaxComboBoxItem;
 
-            //null means that no mouse is over it
-            if (spc == null)
-                return;
+            SelectablePackage spc = cb2.Package;
 
             if (!spc.IsStructureEnabled)
                 return;
@@ -1274,7 +1271,8 @@ namespace RelhaxModpack.Windows
                 //uncheck all packages of the same type
                 if (childPackage.Type.Equals(spc.Type))
                 {
-                    childPackage.Checked = false;
+                    if(childPackage.Checked)
+                        childPackage.Checked = false;
                 }
             }
 
