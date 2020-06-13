@@ -309,6 +309,12 @@
                     <ComboBoxItem Content="Item 3" Selected="ComboBoxItem_Selected" Unselected="ComboBoxItem_Unselected"/>
                     <ComboBoxItem Content="Item 4" Selected="ComboBoxItem_Selected" Unselected="ComboBoxItem_Unselected"/>
                 </ComboBox>
+                <local:ComboboxWithSelectionCommit x:Name="SelectionTestingComboboxWithCommit" HorizontalAlignment="Left" Margin="474,102,0,0" VerticalAlignment="Top" Width="120" SelectionCommitted="SelectionTestingComboboxWithCommit_SelectionCommitted">
+                    <ComboBoxItem Content="Item 1" />
+                    <ComboBoxItem Content="Item 2" IsEnabled="False" />
+                    <ComboBoxItem Content="Item 3" />
+                    <ComboBoxItem Content="Item 4" />
+                </local:ComboboxWithSelectionCommit>
             </Grid>
         </TabItem>
     </TabControl>

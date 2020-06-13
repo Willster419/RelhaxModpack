@@ -781,6 +781,11 @@ namespace RelhaxWPFConvert
 
             }
         }
+
+        private void SelectionTestingComboboxWithCommit_SelectionCommitted(object source, SelectionChangedEventArgs e)
+        {
+
+        }
         #endregion
     }
 }
