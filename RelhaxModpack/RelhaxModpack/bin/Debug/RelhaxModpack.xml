@@ -3533,6 +3533,13 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UI.OnSelectionCommitted">
+            <summary>
+            Fires when the SelectionChanged event fires, but verifies that it's from user interaction (mouse of space bar/enter)
+            </summary>
+            <param name="source">The source of causing the event</param>
+            <param name="e">The parameters from the SelectionChanged event</param>
+        </member>
         <member name="T:RelhaxModpack.UI.RelhaxWPFComboBox">
             <summary>
             Interaction logic for RelhaxWPFComboBox.xaml
@@ -3547,6 +3554,23 @@
             </summary>
             <remarks>Many components of 'single_dropDown' exist in the Combobox, and therefore the UI generation code gets run for each object.
             So, a flag is used to prevent the ComboBox being added multiple times to the window</remarks>
+        </member>
+        <member name="P:RelhaxModpack.UI.RelhaxWPFComboBox.SelectedIndex">
+            <summary>
+            Gets or sets the selected index property in the base class without invoking the selectionChanged event
+            </summary>
+            <seealso cref="!:https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
+        </member>
+        <member name="P:RelhaxModpack.UI.RelhaxWPFComboBox.SelectedItem">
+            <summary>
+            Gets or sets the selected item property in the base class without invoking the selectionChanged event
+            </summary>
+            <seealso cref="!:https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier"/>
+        </member>
+        <member name="E:RelhaxModpack.UI.RelhaxWPFComboBox.SelectionCommitted">
+            <summary>
+            Event to fire when the selection changes from user interaction (mouse of space bar/enter)
+            </summary>
         </member>
         <member name="M:RelhaxModpack.UI.RelhaxWPFComboBox.#ctor">
             <summary>
