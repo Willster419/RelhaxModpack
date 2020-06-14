@@ -1296,7 +1296,7 @@ namespace RelhaxModpack
                         Settings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
 
                         //if it's not alpha, show the warning messages
-                        if (Settings.ApplicationVersion != ApplicationVersions.Alpha)
+                        if ((Settings.ApplicationVersion != ApplicationVersions.Alpha) || (!Settings.TrueAlpha))
                         {
 #pragma warning disable CS0162
                             //log and inform the user
