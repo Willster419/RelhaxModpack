@@ -568,6 +568,10 @@ namespace RelhaxModpack.Windows
                     {
                         lbox.Items.Clear();
                     }
+                    else if(element.Name.Equals(nameof(PackageLevelDisplay)) || element.Name.Equals(nameof(PackageCalculatedLevelDisplay)))
+                    {
+                        (element as TextBlock).Text = string.Empty;
+                    }
                 }
             }
 
