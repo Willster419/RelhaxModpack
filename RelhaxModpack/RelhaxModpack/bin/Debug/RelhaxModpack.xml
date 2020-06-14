@@ -3934,66 +3934,136 @@
             <param name="item">The item to test</param>
             <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
         </member>
-        <member name="T:RelhaxModpack.Utilities.KnownFolder">
+        <member name="T:RelhaxModpack.Utilities.Enums.DatabaseXmlVersion">
+            <summary>
+            The enumeration representations of the Xml database saving format
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseXmlVersion.Legacy">
+            <summary>
+            The Legacy format. All in one document
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseXmlVersion.OnePointOne">
+            <summary>
+            The 1.1 format. A root file, a file for the global and standard dependencies, and a file for each categories
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.KnownFolder">
             <summary>
             Standard folders registered with the system. These folders are installed with Windows Vista
             and later operating systems, and a computer will have only folders appropriate to it
             installed.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.Contacts">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.Contacts">
             <summary>
             The user's Contacts folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.Desktop">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.Desktop">
             <summary>
             The user's Desktop folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.Documents">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.Documents">
             <summary>
             The user's Documents folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.Downloads">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.Downloads">
             <summary>
             The user's Downloads folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.Favorites">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.Favorites">
             <summary>
             The user's Favorites folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.Links">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.Links">
             <summary>
             The user's Links folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.Music">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.Music">
             <summary>
             The user's Music folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.Pictures">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.Pictures">
             <summary>
             The user's Pictures folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.SavedGames">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.SavedGames">
             <summary>
             The user's Pictures folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.SavedSearches">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.SavedSearches">
             <summary>
             The user's SavedGames folder
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.KnownFolder.Videos">
+        <member name="F:RelhaxModpack.Utilities.Enums.KnownFolder.Videos">
             <summary>
             The user's Videos folder
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.KnownFolderFlags">
+            <Summary>
+             Enums for Known Folder Flags
+            </Summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.ReplacementTypes">
+            <summary>
+            The types of text macro replacements
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ReplacementTypes.FilePath">
+            <summary>
+            Replacing macros with file paths
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ReplacementTypes.PatchArguementsReplace">
+            <summary>
+            Replacing patch arguments of the patch object
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ReplacementTypes.PatchFiles">
+            <summary>
+            Replacing modpack created macros (like [quote]) with the corresponding characters
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ReplacementTypes.TextEscape">
+            <summary>
+            Replacing literal interpretations of special characters like newline and tab with escaped versions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ReplacementTypes.TextUnescape">
+            <summary>
+            Replacing escaped versions of special characters like newline and tab with the literal interpretations
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ReplacementTypes.ZipFilePath">
+            <summary>
+            Replacing zip path macros with absolute extraction paths
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.XmlLoadType">
+            <summary>
+            Xml document load type enumeration
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.XmlLoadType.FromFile">
+            <summary>
+            loading Xml from a file on disk
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.XmlLoadType.FromString">
+            <summary>
+            loading Xml from a text string
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.FileUtils">
@@ -4199,7 +4269,7 @@
             <param name="sourceCompletePath">The complete path to the file. Could be a path on disk, or a path in a zip archive</param>
             <param name="destinationCompletePath">The complete path to copy the destination file to</param>
         </member>
-        <member name="M:RelhaxModpack.Utilities.FileUtils.GetSpecialFolderPath(RelhaxModpack.Utilities.KnownFolder)">
+        <member name="M:RelhaxModpack.Utilities.FileUtils.GetSpecialFolderPath(RelhaxModpack.Utilities.Enums.KnownFolder)">
             <summary>
             Gets the current path to the specified known folder as currently configured. This does
             not require the folder to be existent.
@@ -4209,7 +4279,7 @@
             <exception cref="T:System.Runtime.InteropServices.ExternalException">Thrown if the path
                 could not be retrieved.</exception>
         </member>
-        <member name="M:RelhaxModpack.Utilities.FileUtils.GetSpecialFolderPath(RelhaxModpack.Utilities.KnownFolder,System.Boolean)">
+        <member name="M:RelhaxModpack.Utilities.FileUtils.GetSpecialFolderPath(RelhaxModpack.Utilities.Enums.KnownFolder,System.Boolean)">
             <summary>
             Gets the current path to the specified known folder as currently configured. This does
             not require the folder to be existent.
@@ -4300,41 +4370,6 @@
             <param name="credentials">The FTP server credentials</param>
             <returns>The size of the file in bytes</returns>
         </member>
-        <member name="T:RelhaxModpack.Utilities.ReplacementTypes">
-            <summary>
-            The types of text macro replacements
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.FilePath">
-            <summary>
-            Replacing macros with file paths
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.PatchArguementsReplace">
-            <summary>
-            Replacing patch arguments of the patch object
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.PatchFiles">
-            <summary>
-            Replacing modpack created macros (like [quote]) with the corresponding characters
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.TextEscape">
-            <summary>
-            Replacing literal interpretations of special characters like newline and tab with escaped versions
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.TextUnescape">
-            <summary>
-            Replacing escaped versions of special characters like newline and tab with the literal interpretations
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ReplacementTypes.ZipFilePath">
-            <summary>
-            Replacing zip path macros with absolute extraction paths
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Utilities.MacroUtils">
             <summary>
             A utility class to handle macros
@@ -4370,7 +4405,7 @@
             Builds the Filepath macro dictionary with settings that should be parsed from the Settings class
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Utilities.MacroUtils.MacroReplace(System.String,RelhaxModpack.Utilities.ReplacementTypes)">
+        <member name="M:RelhaxModpack.Utilities.MacroUtils.MacroReplace(System.String,RelhaxModpack.Utilities.Enums.ReplacementTypes)">
             <summary>
             Performs a replacement of macros using the specified macro replace operation
             </summary>
@@ -5522,36 +5557,6 @@
             </summary>
             <returns>The native name of the unpack instruction file and file target</returns>
         </member>
-        <member name="T:RelhaxModpack.Xml.XmlLoadType">
-            <summary>
-            Xml document load type enumeration
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Xml.XmlLoadType.FromFile">
-            <summary>
-            loading Xml from a file on disk
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Xml.XmlLoadType.FromString">
-            <summary>
-            loading Xml from a text string
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Xml.DatabaseXmlVersion">
-            <summary>
-            The enumeration representations of the Xml database saving format
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Xml.DatabaseXmlVersion.Legacy">
-            <summary>
-            The Legacy format. All in one document
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Xml.DatabaseXmlVersion.OnePointOne">
-            <summary>
-            The 1.1 format. A root file, a file for the global and standard dependencies, and a file for each categories
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Xml.XmlUtils">
             <summary>
             Utility class for dealing with Xml features and functions
@@ -5734,7 +5739,7 @@
             <returns>The converted XDocument</returns>
             <remarks>See https://blogs.msdn.microsoft.com/xmlteam/2009/03/31/converting-from-xmldocument-to-xdocument/ </remarks>
         </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.LoadXDocument(System.String,RelhaxModpack.Xml.XmlLoadType)">
+        <member name="M:RelhaxModpack.Xml.XmlUtils.LoadXDocument(System.String,RelhaxModpack.Utilities.Enums.XmlLoadType)">
             <summary>
             Load an Xml document to an XDocument object
             </summary>
@@ -5742,7 +5747,7 @@
             <param name="type">The type to define if fileOrXml is a file path or the Xml string</param>
             <returns>A parsed XDocument of the Xml document</returns>
         </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.LoadXmlDocument(System.String,RelhaxModpack.Xml.XmlLoadType)">
+        <member name="M:RelhaxModpack.Xml.XmlUtils.LoadXmlDocument(System.String,RelhaxModpack.Utilities.Enums.XmlLoadType)">
             <summary>
             Load an Xml document to an XmlDocument object
             </summary>
@@ -5778,7 +5783,7 @@
             <param name="dependencies">The list of dependencies</param>
             <param name="parsedCatagoryList">The list of categories</param>
         </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabase(System.String,System.String,System.String,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},RelhaxModpack.Xml.DatabaseXmlVersion)">
+        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabase(System.String,System.String,System.String,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},RelhaxModpack.Utilities.Enums.DatabaseXmlVersion)">
             <summary>
             Save the database to an Xml version
             </summary>

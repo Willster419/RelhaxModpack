@@ -23,6 +23,7 @@ using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Database;
 using System.Windows.Media;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack
 {

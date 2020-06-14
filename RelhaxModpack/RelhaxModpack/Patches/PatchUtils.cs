@@ -11,6 +11,7 @@ using System.IO;
 using System.Globalization;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Patches
 {

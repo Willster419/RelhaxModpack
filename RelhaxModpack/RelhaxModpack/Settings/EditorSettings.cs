@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Xml;
+﻿using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Xml;
 using System;
 using System.Collections.Generic;
 using System.Linq;

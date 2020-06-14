@@ -1,5 +1,6 @@
 ﻿using RelhaxModpack.Database;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

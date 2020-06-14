@@ -18,40 +18,10 @@ using RelhaxModpack.Utilities;
 using RelhaxModpack.Atlases;
 using RelhaxModpack.Patches;
 using RelhaxModpack.Shortcuts;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Xml
 {
-    /// <summary>
-    /// Xml document load type enumeration
-    /// </summary>
-    public enum XmlLoadType
-    {
-        /// <summary>
-        /// loading Xml from a file on disk
-        /// </summary>
-        FromFile,
-        /// <summary>
-        /// loading Xml from a text string
-        /// </summary>
-        FromString
-    }
-
-    /// <summary>
-    /// The enumeration representations of the Xml database saving format
-    /// </summary>
-    public enum DatabaseXmlVersion
-    {
-        /// <summary>
-        /// The Legacy format. All in one document
-        /// </summary>
-        Legacy,
-
-        /// <summary>
-        /// The 1.1 format. A root file, a file for the global and standard dependencies, and a file for each categories
-        /// </summary>
-        OnePointOne
-    }
-
     /// <summary>
     /// Utility class for dealing with Xml features and functions
     /// </summary>

@@ -17,6 +17,7 @@ using System.Windows.Data;
 using RelhaxModpack.UI;
 using RelhaxModpack.UI.ClassThemeDefinitions;
 using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack
 {

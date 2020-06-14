@@ -1,5 +1,6 @@
 ﻿using IWshRuntimeLibrary;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;

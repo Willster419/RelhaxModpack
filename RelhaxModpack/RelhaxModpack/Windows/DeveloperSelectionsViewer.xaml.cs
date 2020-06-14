@@ -15,6 +15,7 @@ using System.IO;
 using System.Xml;
 using RelhaxModpack.UI;
 using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Windows
 {

@@ -1,5 +1,6 @@
 ﻿using RelhaxModpack.Atlases.Packing;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Xml;
 using System;
 using System.Collections.Generic;

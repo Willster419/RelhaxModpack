@@ -171,6 +171,11 @@
     <Compile Include="UI\UiUtils.cs" />
     <Compile Include="UI\WindowColorset.cs" />
     <Compile Include="UI\ZoomBorder.cs" />
+    <Compile Include="Utilities\Enums\DatabaseXmlVersion.cs" />
+    <Compile Include="Utilities\Enums\KnownFolder.cs" />
+    <Compile Include="Utilities\Enums\KnownFolderFlags.cs" />
+    <Compile Include="Utilities\Enums\ReplacementTypes.cs" />
+    <Compile Include="Utilities\Enums\XmlLoadType.cs" />
     <Compile Include="Utilities\FileUtils.cs" />
     <Compile Include="Utilities\FtpUtils.cs" />
     <Compile Include="Common\GlobalSuppressions.cs" />
@@ -532,6 +537,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

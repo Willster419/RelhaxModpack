@@ -7,62 +7,10 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Utilities
 {
-    /// <summary>
-    /// Standard folders registered with the system. These folders are installed with Windows Vista
-    /// and later operating systems, and a computer will have only folders appropriate to it
-    /// installed.
-    /// </summary>
-    public enum KnownFolder
-    {
-        /// <summary>
-        /// The user's Contacts folder
-        /// </summary>
-        Contacts,
-        /// <summary>
-        /// The user's Desktop folder
-        /// </summary>
-        Desktop,
-        /// <summary>
-        /// The user's Documents folder
-        /// </summary>
-        Documents,
-        /// <summary>
-        /// The user's Downloads folder
-        /// </summary>
-        Downloads,
-        /// <summary>
-        /// The user's Favorites folder
-        /// </summary>
-        Favorites,
-        /// <summary>
-        /// The user's Links folder
-        /// </summary>
-        Links,
-        /// <summary>
-        /// The user's Music folder
-        /// </summary>
-        Music,
-        /// <summary>
-        /// The user's Pictures folder
-        /// </summary>
-        Pictures,
-        /// <summary>
-        /// The user's Pictures folder
-        /// </summary>
-        SavedGames,
-        /// <summary>
-        /// The user's SavedGames folder
-        /// </summary>
-        SavedSearches,
-        /// <summary>
-        /// The user's Videos folder
-        /// </summary>
-        Videos
-    }
-
     /// <summary>
     /// A Utility class to deal with Files and Folders
     /// </summary>
@@ -918,21 +866,6 @@ namespace RelhaxModpack.Utilities
 
         [DllImport("Shell32.dll")]
         private static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)]Guid rfid, uint dwFlags, IntPtr hToken, out IntPtr ppszPath);
-
-        [Flags]
-        private enum KnownFolderFlags : uint
-        {
-            SimpleIDList = 0x00000100,
-            NotParentRelative = 0x00000200,
-            DefaultPath = 0x00000400,
-            Init = 0x00000800,
-            NoAlias = 0x00001000,
-            DontUnexpand = 0x00002000,
-            DontVerify = 0x00004000,
-            Create = 0x00008000,
-            NoAppcontainerRedirection = 0x00010000,
-            AliasOnly = 0x80000000
-        }
         #endregion
     }
 }

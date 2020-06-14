@@ -22,6 +22,7 @@ using System.Runtime.CompilerServices;
 using RelhaxModpack.Xml;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Utilities
 {

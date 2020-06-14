@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 using Trigger = RelhaxModpack.Database.Trigger;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Windows
 {

@@ -18,6 +18,7 @@ using RelhaxModpack.Database;
 using Trigger = RelhaxModpack.Database.Trigger;
 using RelhaxModpack.Patches;
 using RelhaxModpack.Shortcuts;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack
 {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Text;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Database
 {
