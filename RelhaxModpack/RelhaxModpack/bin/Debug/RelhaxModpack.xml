@@ -3085,22 +3085,22 @@
         </member>
         <member name="P:RelhaxModpack.UI.Theme.SelectionListNotActiveHasSelectionsBackgroundColor">
             <summary>
-            The color definition for background of a not active tab header, when no components are selected
+            The color definition for background of a not active tab header, when at least one component is selected
             </summary>
         </member>
         <member name="P:RelhaxModpack.UI.Theme.SelectionListNotActiveHasSelectionsTextColor">
             <summary>
-            The color definition for text of a not active tab header, when no components are selected
+            The color definition for text of a not active tab header, when at least one component is selected
             </summary>
         </member>
         <member name="P:RelhaxModpack.UI.Theme.SelectionListNotActiveHasNoSelectionsBackgroundColor">
             <summary>
-            The color definition for background of a not active tab header, when at least one component is selected
+            The color definition for background of a not active tab header, when no components are selected
             </summary>
         </member>
         <member name="P:RelhaxModpack.UI.Theme.SelectionListNotActiveHasNoSelectionsTextColor">
             <summary>
-            The color definition for text of a not active tab header, when at least one component is selected
+            The color definition for text of a not active tab header, when no components are selected
             </summary>
         </member>
         <member name="P:RelhaxModpack.UI.Theme.RadioButtonColorset">
