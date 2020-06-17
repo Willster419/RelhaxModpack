@@ -613,9 +613,14 @@
             </summary>
             <returns>Try if any package is selected, false otherwise</returns>
         </member>
-        <member name="P:RelhaxModpack.Database.Category.IsAnyPackageCheckedEnabledValid">
+        <member name="M:RelhaxModpack.Database.Category.IsAnyPackageCheckedEnabled">
             <summary>
-            Returns true if at least one package is enabled and checked from the root to the category
+            Returns true if at least one package is enabled and checked from the first level of packages in the category
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.Category.IsAnyPackageCheckedEnabledVisible">
+            <summary>
+            Returns true if at least one package is enabled and checked and visible from the first level of packages in the category
             </summary>
         </member>
         <member name="T:RelhaxModpack.Database.DatabaseBeforeAfter">
