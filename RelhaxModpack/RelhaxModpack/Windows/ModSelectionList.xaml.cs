@@ -2191,6 +2191,12 @@ namespace RelhaxModpack.Windows
                 }
             }
 
+            //set the top level package checkboxes to checked if a component inside them is checked
+            foreach(Category category in ParsedCategoryList)
+            {
+                category.CategoryHeader.Checked = category.IsAnyPackageCheckedEnabledVisible();
+            }
+
             //if direct load mode (like default checked), then don't run MaaS or any additional calculations
             if(directLoad)
             {
