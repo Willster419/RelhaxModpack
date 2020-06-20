@@ -22,8 +22,6 @@ namespace RelhaxModpack
         public const string BigmodsFTPModpackResources = null;
         public const string BigmodsFTPModpackManager = null;
         public const string BigmodsFTPModpackDatabase = null;
-        public const string BigmodsFTPModpackPrivate = null;
-        public const string BigmodsFTPModpackUpdaterKey = null;
         #endregion
 
         #region bigmods FTP user addresses
@@ -38,6 +36,7 @@ namespace RelhaxModpack
         public const string BigmodsCreateManagerInfoPHP = null;
         public const string BigmodsCreateUpdatePackagesPHP = null;
         public const string BigmodsCreateModInfoPHP = null;
+        public const string BigmodsModpackUpdaterKey = null;
         #endregion
 
         #region server credentials

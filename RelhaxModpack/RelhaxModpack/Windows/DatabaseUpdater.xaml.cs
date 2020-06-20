@@ -120,12 +120,12 @@ namespace RelhaxModpack.Windows
             AuthStatusTextblock.Text = "Current status: Checking...";
             AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Yellow);
             //compare local password to online version
-            using (client = new WebClient() { Credentials = PrivateStuff.WotmodsNetworkCredential })
+            using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredentialPrivate })
             {
-                string onlinePassword = await client.DownloadStringTaskAsync(PrivateStuff.KeyAddress);
+                string onlinePassword = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsModpackUpdaterKey);
                 if (onlinePassword.Equals(key))
                 {
-                    Logging.Updater("authorized, keys match");
+                    Logging.Updater("Authorized, keys match");
                     AuthStatusTextblock.Text = "Current status: Authorized";
                     AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Green);
                     authorized = true;
@@ -133,7 +133,7 @@ namespace RelhaxModpack.Windows
                 }
                 else
                 {
-                    Logging.Updater("not authorized, keys do not match");
+                    Logging.Updater("Not authorized, keys do not match");
                     AuthStatusTextblock.Text = "Current status: Denied";
                     AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Red);
                     authorized = false;
