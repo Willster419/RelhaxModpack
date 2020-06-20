@@ -11,7 +11,9 @@ namespace RelhaxModpack
         public const ulong DiscordAnnouncementsChannelID = 0;
         #endregion
 
+        //https://stackoverflow.com/questions/9418404/cant-connect-to-ftp-553-file-name-not-allowed
         #region bigmods FTP modpack addresses
+        //path of modpack acct is <REDACTED>
         public const string BigmodsFTPModpackRoot = null;
         public const string BigmodsFTPModpackInstallStats = null;
         public const string BigmodsFTPModpackMedias = null;
@@ -20,9 +22,12 @@ namespace RelhaxModpack
         public const string BigmodsFTPModpackResources = null;
         public const string BigmodsFTPModpackManager = null;
         public const string BigmodsFTPModpackDatabase = null;
+        public const string BigmodsFTPModpackPrivate = null;
+        public const string BigmodsFTPModpackUpdaterKey = null;
         #endregion
 
-        #region bigmods FTP all addresses
+        #region bigmods FTP user addresses
+        //path of users acct is <REDACTED>
         public const string BigmodsFTPUsersRoot = null;
         public const string BigmodsFTPUsersMedias = null;
         #endregion
@@ -35,14 +40,10 @@ namespace RelhaxModpack
         public const string BigmodsCreateModInfoPHP = null;
         #endregion
 
-        #region wotmods FTP all addresses
-        public const string KeyAddress = null;
-        #endregion
-
         #region server credentials
         public static NetworkCredential BigmodsNetworkCredentialScripts = null;
+        public static NetworkCredential BigmodsNetworkCredentialPrivate = null;
         public static NetworkCredential BigmodsNetworkCredential = null;
-        public static NetworkCredential WotmodsNetworkCredential = null;
         #endregion
     }
 #pragma warning restore CS1591
