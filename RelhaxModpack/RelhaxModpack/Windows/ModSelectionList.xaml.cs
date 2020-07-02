@@ -2508,7 +2508,7 @@ namespace RelhaxModpack.Windows
             if (!string.IsNullOrEmpty(propertyValue))
             {
                 //add the property value
-                if (!DatabaseUtils.SetObjectProperty(package, property, propertyValue))
+                if (!CommonUtils.SetObjectProperty(package, property, propertyValue))
                 {
                     Logging.Error("Unable to set property '{0}' value from SelectablePackage object, skipping!", propertyName);
                     return;
