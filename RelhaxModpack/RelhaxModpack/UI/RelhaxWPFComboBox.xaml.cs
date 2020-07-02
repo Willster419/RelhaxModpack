@@ -78,9 +78,6 @@ namespace RelhaxModpack.UI
         //keeps track of the actual selected value
         private int SelectedIndexBackup = -1;
 
-        //toggle to verify that the init load selection code only happens once
-        private bool DefaultSelectionSet = false;
-
         //flag to determine if the selection commit event should fire
         //this needs to be set to false right before any selected properties are set
         private bool SelectionFromUser = true;
@@ -93,7 +90,7 @@ namespace RelhaxModpack.UI
         public RelhaxWPFComboBox()
         {
             InitializeComponent();
-            this.Loaded += Combobox_Loaded;
+            SelectedIndex = 0;
             this.SelectionChanged += Combobox_SelectionChanged;
             this.DropDownOpened += Combobox_DropDownOpened;
             this.DropDownClosed += Combobox_DropDownClosed;
@@ -139,15 +136,6 @@ namespace RelhaxModpack.UI
             }
 
             SelectionCommitted?.Invoke(this, e);
-        }
-
-        private void Combobox_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!DefaultSelectionSet)
-            {
-                SelectedIndex = 0;
-                DefaultSelectionSet = true;
-            }
         }
 
         private void Combobox_DropDownOpened(object sender, EventArgs e)
