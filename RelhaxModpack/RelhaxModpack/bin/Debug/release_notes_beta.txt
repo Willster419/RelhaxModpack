@@ -1,3 +1,29 @@
+Application version 1.1.1.0 (2020-07-03)
+https://www.virustotal.com/gui/file-analysis/YTQ5YTlmN2MxNjE0NDZiNjhjMmQ4ZjM0ODRkMTk1ZTc6MTU5MzgwODc4NA==/detection
+- Fixed the bug with drop down combobox selections not selecting the item that you click on. (Thanks Silvers of the NA server for reporting)
+- Fixed bugs with selecting font from the MainWindow.
+- Removed redundant code in ModSelectionList and code optimizations.
+- Added ability to select custom font to use with the application. Yes that means you can select Comic Sans.
+- Disabled custom themes in RelhaxColorPicker.
+- Updated translations.
+- Updated in-code documentation.
+- Added new package property 'FromWGmods'. Allows us to display if the source for updating the package is from the official WoT mod portal (wgmods.net).
+- Fixed a bug with loading the selection list where if a non-UI thread tried to handle exceptions, it would in itself cause an exception.
+- Other database editor fixes.
+- Updated translations (all languages).
+- Removed half-baked method of updating the supported_clients xml document during the database publish/release process.
+  - Now during the publish process, it will inform you if the supported_clients xml document needs to be updated.
+- Significantly improved and moved the code to maintain the supported_clients xml document to it's own tool process.
+- Re-worked the database serialization code to promote reuse.
+- Fixed bug with categories not being serialized properly to the xml database.
+- Added showing calculated package offset values for installation in the editor.
+- Fixed a bug with the editor not showing test previews after the preview window re-work.
+- Refactored the code base to make more sense when looking at the source and doesn't lead you to question my organizational abilities as a developer.
+- Fixed potential future issues with database xpath search queries.
+- Updated Polish (Nullmaruzero) and Russian (DrWeb7_1) translations.
+- General code cleanup and optimizations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.1.0.8 (2020-06-13)
 https://www.virustotal.com/gui/file/c603f966ebaec077e7d995719e6e481da1b388ae5cd0970efc11ab73908c25ee/detection
 - Fixed the bug with drop down combobox selections not selecting the item that you click on. (Thanks Silvers of the NA server for reporting)
