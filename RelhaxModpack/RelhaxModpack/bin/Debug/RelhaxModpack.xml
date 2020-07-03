@@ -835,32 +835,6 @@
             <param name="listToCheck">The list of DatabasePackages</param>
             <returns>The maximum PatchGroup number</returns>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SetObjectProperty(System.Object,System.Reflection.PropertyInfo,System.String)">
-            <summary>
-            Attempts to set a property value of a class or structure object instance with the string valueToSet
-            </summary>
-            <param name="componentWithProperty">The class or structure object instance to have property set</param>
-            <param name="propertyInfoFromComponent">The property information/metadata of the property to set on the object</param>
-            <param name="valueToSet">The string version of the value to set</param>
-            <returns>False if the value could not be set, true otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SetObjectValue(System.Type,System.String,System.Object@)">
-            <summary>
-            Attempts to create an instance of a value type object and set it's value based on valueToSet for objectType
-            </summary>
-            <param name="objectType">The type of value object to create</param>
-            <param name="valueToSet">The string version of the value to set</param>
-            <param name="newObject">The new value type object created</param>
-            <returns>False if the value could not be set, true otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SetListEntries(RelhaxModpack.Database.IDatabaseComponent,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
-            <summary>
-            Creates all database entries in a list property, parsing each list entry object by xmlListItems
-            </summary>
-            <param name="componentWithID">The database component with the list property, for example SelectablePackage</param>
-            <param name="listPropertyInfo">the property metadata/info about the list property, for example Medias</param>
-            <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
-        </member>
         <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1ForStringCompare(System.Boolean)">
             <summary>
             Get all xml strings for the V2 database file format from the selected beta database github branch
@@ -4810,6 +4784,32 @@
             Clear the WoT appdata cache folder
             </summary>
             <returns>True if clearing operation was sucessfull, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetObjectProperty(System.Object,System.Reflection.PropertyInfo,System.String)">
+            <summary>
+            Attempts to set a property value of a class or structure object instance with the string valueToSet
+            </summary>
+            <param name="componentWithProperty">The class or structure object instance to have property set</param>
+            <param name="propertyInfoFromComponent">The property information/metadata of the property to set on the object</param>
+            <param name="valueToSet">The string version of the value to set</param>
+            <returns>False if the value could not be set, true otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetObjectValue(System.Type,System.String,System.Object@)">
+            <summary>
+            Attempts to create an instance of a value type object and set it's value based on valueToSet for objectType
+            </summary>
+            <param name="objectType">The type of value object to create</param>
+            <param name="valueToSet">The string version of the value to set</param>
+            <param name="newObject">The new value type object created</param>
+            <returns>False if the value could not be set, true otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetListEntries(RelhaxModpack.Database.IDatabaseComponent,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
+            <summary>
+            Creates all database entries in a list property, parsing each list entry object by xmlListItems
+            </summary>
+            <param name="componentWithID">The database component with the list property, for example SelectablePackage</param>
+            <param name="listPropertyInfo">The property metadata/info about the list property, for example Medias</param>
+            <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
         </member>
         <member name="T:RelhaxModpack.InstallerExitCodes">
             <summary>
