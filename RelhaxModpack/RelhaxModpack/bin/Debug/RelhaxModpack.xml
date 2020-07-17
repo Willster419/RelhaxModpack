@@ -5843,6 +5843,12 @@
             <param name="atlases">The list of Atlases to parse into</param>
             <param name="filename">The name of the file to parse from</param>
         </member>
+        <member name="T:RelhaxModpack.LoggingMessageWrite">
+            <summary>
+            Delegate for allowing method callback when the logfile writes to disk
+            </summary>
+            <param name="message">The formatted message that was written to the logfile</param>
+        </member>
         <member name="T:RelhaxModpack.Logfile">
             <summary>
             Represents an instance of a log file used for writing important logging information to a log
@@ -5873,6 +5879,11 @@
             The fileStream object to write/create the log file. Requires disposal support
             </summary>
         </member>
+        <member name="E:RelhaxModpack.Logfile.OnLogfileWrite">
+            <summary>
+            The event for when the logfile is written to
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Logfile.#ctor(System.String,System.String)">
             <summary>
             Create an instance of the log file
@@ -5892,7 +5903,6 @@
             </summary>
             <param name="message">The line to write</param>
             <param name="logLevel">The level of severity of the log message</param>
-            <returns>The formatted string that was written</returns>
         </member>
         <member name="M:RelhaxModpack.Logfile.Write(System.String)">
             <summary>
@@ -5981,12 +5991,6 @@
             The application is closing now
             </summary>
         </member>
-        <member name="T:RelhaxModpack.LoggingUIThreadReport">
-            <summary>
-            Delegate for allowing method callback with the written formatted message as the return value
-            </summary>
-            <param name="message">The formatted message that was written to the logfile</param>
-        </member>
         <member name="T:RelhaxModpack.Logging">
             <summary>
             A static constant reference to common logging variables and common log references
@@ -6062,11 +6066,6 @@
             Provides a reference to an instance of an uninstall log file
             </summary>
         </member>
-        <member name="E:RelhaxModpack.Logging.OnLoggingUIThreadReport">
-            <summary>
-            Event for subscribing as a callback event for when the logfile writes
-            </summary>
-        </member>
         <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Logfiles,System.String)">
             <summary>
             Initialize the logging system for the application
@@ -6074,6 +6073,13 @@
             <param name="logfile">The log file to initialize</param>
             <param name="logfilePath">The custom path of where to initialize the file</param>
             <returns>True if successful initialization, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Logging.GetLogfile(RelhaxModpack.Logfiles)">
+            <summary>
+            Get the instance of the logfile type
+            </summary>
+            <param name="logfile">The logfile enumeration type you would like</param>
+            <returns>The instance of the log file</returns>
         </member>
         <member name="M:RelhaxModpack.Logging.IsLogDisposed(RelhaxModpack.Logfiles)">
             <summary>
