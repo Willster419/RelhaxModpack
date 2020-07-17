@@ -37,37 +37,37 @@ namespace RelhaxModpack.Atlases
         /// <returns>True if library loaded, false otherwise</returns>
         public static bool TestLibrary(IRelhaxUnmanagedLibrary library, string name, bool unload)
         {
-            Logging.Info("testing {0} library", name);
+            Logging.Info("Testing {0} library", name);
             bool libraryLoaded;
             if (!library.IsLoaded)
             {
                 if (library.Load())
                 {
-                    Logging.Info("library loaded successfully");
+                    Logging.Info("Library loaded successfully");
                     libraryLoaded = true;
                 }
                 else
                 {
-                    Logging.Error("library failed to load");
+                    Logging.Error("Library failed to load");
                     libraryLoaded = false;
                 }
             }
             else
             {
-                Logging.Info("library already loaded");
+                Logging.Info("Library already loaded");
                 libraryLoaded = true;
             }
 
             if (unload && library.IsLoaded)
             {
-                Logging.Info("unload requested and library is loaded, unloading");
+                Logging.Info("Unload requested and library is loaded, unloading");
                 if (library.Unload())
                 {
-                    Logging.Info("library unloaded successfully");
+                    Logging.Info("Library unloaded successfully");
                 }
                 else
                 {
-                    Logging.Error("library failed to unload library");
+                    Logging.Error("Failed to unload library");
                     libraryLoaded = false;
                 }
             }
@@ -229,21 +229,21 @@ namespace RelhaxModpack.Atlases
         {
             if (!FreeImageLibrary.IsLoaded)
             {
-                Logging.Info("freeimage library is not loaded, loading");
+                Logging.Info("Freeimage library is not loaded, loading");
                 FreeImageLibrary.Load();
-                Logging.Info("freeimage library loaded");
+                Logging.Info("Freeimage library loaded");
             }
             else
-                Logging.Info("freeimage library is loaded");
+                Logging.Info("Freeimage library is loaded");
 
             if (!NvTexLibrary.IsLoaded)
             {
-                Logging.Info("nvtt library is not loaded, loading");
+                Logging.Info("Nvtt library is not loaded, loading");
                 NvTexLibrary.Load();
-                Logging.Info("nvtt library loaded");
+                Logging.Info("Nvtt library loaded");
             }
             else
-                Logging.Info("nvtt library is loaded");
+                Logging.Info("Nvtt library is loaded");
         }
 
         /// <summary>
