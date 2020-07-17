@@ -13,6 +13,16 @@ namespace RelhaxUnitTests
 {
     public static class UnitTestHelper
     {
+        public static Logfiles[] LogFilesWithPresetFilenames =
+        {
+            Logfiles.Application,
+            Logfiles.Editor,
+            Logfiles.PatchDesigner,
+            Logfiles.Updater
+        };
+
+        public static Logfiles[] AllLogFiles = LogFilesWithPresetFilenames.Concat(new Logfiles[] { Logfiles.Installer, Logfiles.Uninstaller }).ToArray();
+
         /// <summary>
         /// The Startup root path of the application. Does not include the application name
         /// </summary>

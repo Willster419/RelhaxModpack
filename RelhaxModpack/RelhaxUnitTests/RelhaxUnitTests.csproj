@@ -58,9 +58,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="UnitTestLogBase.cs" />
     <Compile Include="UnitTestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="All_ordered.playlist" />
+    <None Include="Logging.playlist" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

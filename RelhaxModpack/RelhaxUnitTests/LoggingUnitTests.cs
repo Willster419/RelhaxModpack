@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RelhaxModpack;
 using System.Collections;
 using System.Linq;
+using System.Diagnostics;
 
 namespace RelhaxUnitTests
 {
@@ -25,22 +26,15 @@ namespace RelhaxUnitTests
         [TestMethod]
         public void AllLogfilesTest()
         {
-            Logfiles[] logFilesWithPresetFilenames =
+            foreach (Logfiles logfile in UnitTestHelper.AllLogFiles)
             {
-                Logfiles.Application,
-                Logfiles.Editor,
-                Logfiles.PatchDesigner,
-                Logfiles.Updater
-            };
-
-            Logfiles[] allLogFiles = logFilesWithPresetFilenames.Concat(new Logfiles[] { Logfiles.Installer, Logfiles.Uninstaller }).ToArray();
-
-            foreach (Logfiles logfile in allLogFiles)
-            {
-                //create it
-                Assert.IsTrue(Logging.Init(logfile, logFilesWithPresetFilenames.Contains(logfile) ? null: logfile.ToString() ));
-                Assert.IsFalse(Logging.IsLogDisposed(logfile));
-                Assert.IsTrue(Logging.IsLogOpen(logfile));
+                //create it (if not already open)
+                if (!Logging.IsLogOpen(logfile))
+                {
+                    Assert.IsTrue(Logging.Init(logfile, UnitTestHelper.LogFilesWithPresetFilenames.Contains(logfile) ? null : logfile.ToString()));
+                    Assert.IsFalse(Logging.IsLogDisposed(logfile));
+                    Assert.IsTrue(Logging.IsLogOpen(logfile));
+                }
 
                 //write to it
                 Logging.WriteToLog("Successfully able to write to the logfile '{0}' with the method '{1}'", logfile, LogLevel.Info, logfile.ToString(), nameof(Logging.WriteToLog));
