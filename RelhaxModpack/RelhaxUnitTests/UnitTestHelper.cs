@@ -34,32 +34,49 @@ namespace RelhaxUnitTests
         public static bool DeleteLogFiles = true;
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static string CreateLogPath()
+        public static Logfile CreateLogfile()
         {
-            string logfilePath = ApplicationStartupPath;
+            Logfile file = null;
+
+            //get the method and class name
+            //frame 0 -> this method
+            //frame 1 -> the unit test
+            StackTrace st = new StackTrace();
+            StackFrame sf = st.GetFrame(1);
+            MethodBase mb = sf.GetMethod();
+            string methodName = mb.Name;
+            string className = mb.DeclaringType.Name;
 
             //the output folders should look like the following:
             //<appPath>\LogOutput\UnitTestClass\UnitTestMethod\yyyy-mm-dd_HH-mm-ss.log
-            logfilePath = Path.Combine(logfilePath, LogOutputRootFolder);
-
-            //get the name of the unit test method executing
-            //frame 0 -> this method name
-            //frame 1 -> the name of the above method (log creation method)
-            //frame 2 -> the name of the test method
-            StackTrace st = new StackTrace();
-            StackFrame sf = st.GetFrame(2);
-            MethodBase mb = sf.GetMethod();
-
-            //the method name
-            logfilePath = Path.Combine(logfilePath, mb.Name);
-
-            //the class name
-            logfilePath = Path.Combine(logfilePath, mb.DeclaringType.Name);
-
-            //the date and type stamp
+            string pathTwoUp = Path.GetDirectoryName(Path.GetDirectoryName(ApplicationStartupPath));
+            string logfilePath = Path.Combine(pathTwoUp, LogOutputRootFolder, className, methodName);
             logfilePath = Path.Combine(logfilePath, string.Format("{0}.log", DateTime.Now.ToString(UnittestLogfileTimestamp)));
 
-            return logfilePath;
+            //create folder. it technically shouldn't exist yet (the whole time moving forward thing)
+            if (!Directory.Exists(Path.GetDirectoryName(logfilePath)))
+                Directory.CreateDirectory(Path.GetDirectoryName(logfilePath));
+
+            //instance and init the logfile
+            file = new Logfile(logfilePath, RelhaxModpack.Logging.ApplicationLogfileTimestamp);
+            if (!file.Init())
+            throw new BadMemeException("Unable to create log file. Something happened.");
+
+            return file;
+        }
+
+        public static void DestroyLogfile(ref Logfile file, bool forceDelete = false)
+        {
+            if (file != null)
+            {
+                string logfilePath = file.Filepath;
+                file.Dispose();
+                file = null;
+                if ((DeleteLogFiles || forceDelete) && File.Exists(logfilePath))
+                {
+                    File.Delete(logfilePath);
+                }
+            }
         }
     }
 }

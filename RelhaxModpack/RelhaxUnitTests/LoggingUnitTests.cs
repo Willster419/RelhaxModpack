@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RelhaxModpack;
 
 namespace RelhaxUnitTests
 {
@@ -7,10 +8,16 @@ namespace RelhaxUnitTests
     public class LoggingUnitTests
     {
         [TestMethod]
-        [UnitTestLogging()]
-        public void TestMethod1()
+        public void BaseLogfileTest()
         {
-            Console.WriteLine("Test");
+            Logfile log = UnitTestHelper.CreateLogfile();
+            Assert.IsNotNull(log);
+
+            Assert.IsTrue(log.CanWrite);
+            log.Write("Successfully able to write to the log file");
+
+            UnitTestHelper.DestroyLogfile(ref log, false);
+            Assert.IsNull(log);
         }
     }
 }
