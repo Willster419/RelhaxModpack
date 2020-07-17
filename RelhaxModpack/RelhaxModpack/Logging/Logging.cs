@@ -84,12 +84,6 @@ namespace RelhaxModpack
     }
 
     /// <summary>
-    /// Delegate for allowing method callback with the written formatted message as the return value
-    /// </summary>
-    /// <param name="message">The formatted message that was written to the logfile</param>
-    public delegate void LoggingUIThreadReport(string message);
-
-    /// <summary>
     /// A static constant reference to common logging variables and common log references
     /// </summary>
     public static class Logging
@@ -173,14 +167,6 @@ namespace RelhaxModpack
         private static bool FailedToWriteToLogWindowShown = false;
 
         /// <summary>
-        /// Event for subscribing as a callback event for when the logfile writes
-        /// </summary>
-#pragma warning disable CA1009
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
-        public static event LoggingUIThreadReport OnLoggingUIThreadReport;
-#pragma warning restore CA1009
-
-        /// <summary>
         /// Initialize the logging system for the application
         /// </summary>
         /// <param name="logfile">The log file to initialize</param>
@@ -252,6 +238,41 @@ namespace RelhaxModpack
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Get the instance of the logfile type
+        /// </summary>
+        /// <param name="logfile">The logfile enumeration type you would like</param>
+        /// <returns>The instance of the log file</returns>
+        public static Logfile GetLogfile(Logfiles logfile)
+        {
+            Logfile fileToGet = null;
+
+            //assign it here first to make sure it's null
+            switch (logfile)
+            {
+                case Logfiles.Application:
+                    fileToGet = ApplicationLogfile;
+                    break;
+                case Logfiles.Installer:
+                    fileToGet = InstallLogfile;
+                    break;
+                case Logfiles.Uninstaller:
+                    fileToGet = UninstallLogfile;
+                    break;
+                case Logfiles.Editor:
+                    fileToGet = EditorLogfile;
+                    break;
+                case Logfiles.PatchDesigner:
+                    fileToGet = PatcherLogfile;
+                    break;
+                case Logfiles.Updater:
+                    fileToGet = UpdaterLogfile;
+                    break;
+            }
+
+            return fileToGet;
         }
 
         /// <summary>
@@ -468,15 +489,7 @@ namespace RelhaxModpack
                 }
                 return;
             }
-            if (logfiles == Logfiles.PatchDesigner || logfiles == Logfiles.Editor)
-            {
-                string temp = fileToWriteTo.Write(message, logLevel);
-                OnLoggingUIThreadReport?.Invoke(temp);
-            }
-            else
-            {
-                fileToWriteTo.Write(message, logLevel);
-            }
+            fileToWriteTo.Write(message, logLevel);
         }
 
         /// <summary>
