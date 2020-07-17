@@ -19,6 +19,11 @@ namespace RelhaxUnitTests
         public static readonly string ApplicationStartupPath = AppDomain.CurrentDomain.BaseDirectory;
 
         /// <summary>
+        /// The root file structure of the source project
+        /// </summary>
+        public static readonly string ApplicationProjectRoot = Path.GetDirectoryName(Path.GetDirectoryName(ApplicationStartupPath));
+
+        /// <summary>
         /// The string of the root folder to place unit tests
         /// </summary>
         public const string LogOutputRootFolder = "LogOutput";
@@ -49,8 +54,7 @@ namespace RelhaxUnitTests
 
             //the output folders should look like the following:
             //<appPath>\LogOutput\UnitTestClass\UnitTestMethod\yyyy-mm-dd_HH-mm-ss.log
-            string pathTwoUp = Path.GetDirectoryName(Path.GetDirectoryName(ApplicationStartupPath));
-            string logfilePath = Path.Combine(pathTwoUp, LogOutputRootFolder, className, methodName);
+            string logfilePath = Path.Combine(ApplicationProjectRoot, LogOutputRootFolder, className, methodName);
             logfilePath = Path.Combine(logfilePath, string.Format("{0}.log", DateTime.Now.ToString(UnittestLogfileTimestamp)));
 
             //create folder. it technically shouldn't exist yet (the whole time moving forward thing)
