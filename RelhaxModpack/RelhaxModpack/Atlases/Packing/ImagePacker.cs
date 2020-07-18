@@ -156,15 +156,15 @@ namespace RelhaxModpack.Atlases.Packing
             Bitmap outputImage = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
 
             // draw all the images into the output image
-            foreach (var image in files)
+            foreach (Texture texture in files)
             {
-                Rectangle location = imagePlacement[image];
+                Rectangle location = imagePlacement[texture];
 
                 // copy pixels over to avoid anti-aliasing or any other side effects of drawing
                 // the sub-images to the output image using Graphics
-                for (int x = 0; x < image.AtlasImage.Width; x++)
-                    for (int y = 0; y < image.AtlasImage.Height; y++)
-                        outputImage.SetPixel(location.X + x, location.Y + y, image.AtlasImage.GetPixel(x, y));
+                for (int x = 0; x < texture.AtlasImage.Width; x++)
+                    for (int y = 0; y < texture.AtlasImage.Height; y++)
+                        outputImage.SetPixel(location.X + x, location.Y + y, texture.AtlasImage.GetPixel(x, y));
             }
             return outputImage;
         }
