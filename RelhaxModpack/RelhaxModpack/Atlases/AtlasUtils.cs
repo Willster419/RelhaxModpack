@@ -85,12 +85,12 @@ namespace RelhaxModpack.Atlases
 
             if (nvttLoaded && freeImageLoaded)
             {
-                Logging.Info("TestLoadAtlasLibraries(): both libraries loaded");
+                Logging.Info(LogOptions.MethodName, "Both libraries loaded");
                 return true;
             }
             else
             {
-                Logging.Error("TestLoadAtlasLibraries(): failed to load one or more atlas processing libraries: freeImage={0}, nvtt={1}",
+                Logging.Error(LogOptions.MethodName, "Failed to load one or more atlas processing libraries: freeImage={0}, nvtt={1}",
                     freeImageLoaded.ToString(), nvttLoaded.ToString());
                 return false;
             }
@@ -129,21 +129,21 @@ namespace RelhaxModpack.Atlases
         {
             ParseModTexturesTask = Task.Run(() =>
             {
-                Logging.Info("[ParseModTexturesTask]: mod contour icon images task starting");
+                Logging.Info(LogOptions.MethodName, "Custom contour icon images task starting");
                 modParseStopwatch.Restart();
 
                 //parse each folder list to create a list of all mod contour icons
-                Logging.Debug("[ParseModTexturesTask]: mod contour icon images folder count: {0}", allModFolderPaths.Count);
+                Logging.Debug(LogOptions.MethodName, "Custom contour icon images folder count: {0}", allModFolderPaths.Count);
                 List<string> ModContourIconFilesList = new List<string>();
                 foreach (string folder in allModFolderPaths)
                 {
                     string realFolder = MacroUtils.MacroReplace(folder, ReplacementTypes.FilePath);
-                    Logging.Info("[ParseModTexturesTask]: checking for mod contour icon images in directory {0}", realFolder);
+                    Logging.Info(LogOptions.MethodName, "Checking for custom contour icon images in directory {0}", realFolder);
                     token.ThrowIfCancellationRequested();
 
                     if (!Directory.Exists(realFolder))
                     {
-                        Logging.Warning("[ParseModTexturesTask]: directory {0} does not exist, skipping", realFolder);
+                        Logging.Warning(LogOptions.MethodName, "Directory {0} does not exist, skipping", realFolder);
                         continue;
                     }
 
@@ -152,6 +152,7 @@ namespace RelhaxModpack.Atlases
 
                 //filter the list to just image files
                 //{ "*.jpg", "*.png", "*.bmp" }
+                Logging.Debug(LogOptions.MethodName, "List created, filtering for only png,jpg,bmp image files", allModFolderPaths.Count);
                 ModContourIconFilesList = ModContourIconFilesList.Where(filepath =>
                 {
                     if (Path.GetExtension(filepath).ToLower().Contains("png"))
@@ -167,20 +168,20 @@ namespace RelhaxModpack.Atlases
                 ModContourIconFilesList = ModContourIconFilesList.Distinct().ToList();
                 if(ModContourIconFilesList.Count == 0)
                 {
-                    Logging.Warning("[ParseModTexturesTask]: 0 Mod contour icons to parse!");
+                    Logging.Warning(LogOptions.MethodName, "Total of 0 custom contour icons found to parse (Is this the intent?)");
                     return;
                 }
 
                 //just in case, dispose of the old one
                 DisposeparseModTextures();
                 ModContourIconImages = new List<Texture>();
-
+                Logging.Debug(LogOptions.MethodName, "Loading custom images into data lists for atlas creator", allModFolderPaths.Count);
                 foreach (string modContourIconFilePath in ModContourIconFilesList)
                 {
                     token.ThrowIfCancellationRequested();
 
                     //load the bitmap as well
-                    Bitmap modContourIconImage = Image.FromFile(modContourIconFilePath) as Bitmap;
+                    Bitmap modContourIconImage = new Bitmap(modContourIconFilePath);
 
                     //don't care about the x an y for the mod textures
                     ModContourIconImages.Add(new Texture()
@@ -194,7 +195,7 @@ namespace RelhaxModpack.Atlases
                     });
                     modContourIconImage = null;
                 }
-                Logging.Info("[ParseModTexturesTask]: mod images parsing completed in {0} msec", modParseStopwatch.ElapsedMilliseconds);
+                Logging.Info(LogOptions.MethodName, "Custom images parsing task completed in {0} msec", modParseStopwatch.ElapsedMilliseconds);
                 modParseStopwatch.Stop();
             });
             return ParseModTexturesTask;
@@ -229,21 +230,21 @@ namespace RelhaxModpack.Atlases
         {
             if (!FreeImageLibrary.IsLoaded)
             {
-                Logging.Info("Freeimage library is not loaded, loading");
+                Logging.Info(LogOptions.MethodName, "Freeimage library is not loaded, loading");
                 FreeImageLibrary.Load();
-                Logging.Info("Freeimage library loaded");
+                Logging.Info(LogOptions.MethodName, "Freeimage library loaded");
             }
             else
-                Logging.Info("Freeimage library is loaded");
+                Logging.Info(LogOptions.MethodName, "Freeimage library is loaded");
 
             if (!NvTexLibrary.IsLoaded)
             {
-                Logging.Info("Nvtt library is not loaded, loading");
+                Logging.Info(LogOptions.MethodName, "Nvtt library is not loaded, loading");
                 NvTexLibrary.Load();
-                Logging.Info("Nvtt library loaded");
+                Logging.Info(LogOptions.MethodName, "Nvtt library loaded");
             }
             else
-                Logging.Info("Nvtt library is loaded");
+                Logging.Info(LogOptions.MethodName, "Nvtt library is loaded");
         }
 
         /// <summary>
