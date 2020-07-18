@@ -195,6 +195,10 @@ namespace RelhaxModpack.Atlases
                     try
                     {
                         texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
+                        //do a quick lock on the bits to ensure that the image data is deep copied
+                        //https://stackoverflow.com/a/13935966/3128017
+                        BitmapData data = texture.AtlasImage.LockBits(new Rectangle(0, 0, texture.AtlasImage.Width, texture.AtlasImage.Height), ImageLockMode.ReadOnly, texture.AtlasImage.PixelFormat);
+                        texture.AtlasImage.UnlockBits(data);
                     }
                     catch (Exception ex)
                     {
