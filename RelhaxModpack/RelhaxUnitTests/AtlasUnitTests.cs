@@ -19,7 +19,6 @@ namespace RelhaxUnitTests
     {
         public bool powerTwo;
         public bool squareImage;
-        public bool fastPacker;
     }
 
     [TestClass]
@@ -28,14 +27,15 @@ namespace RelhaxUnitTests
         private AtlasCreator AtlasCreator = new AtlasCreator();
         List<PackerSettings> PackerSettingsToTest = new List<PackerSettings>()
         {
-            new PackerSettings(){powerTwo = true, squareImage = true, fastPacker = true },
-            new PackerSettings(){powerTwo = false, squareImage = true, fastPacker = true },
-            new PackerSettings(){powerTwo = true, squareImage = false, fastPacker = true },
-            new PackerSettings(){powerTwo = false, squareImage = false, fastPacker = true },
-            new PackerSettings(){powerTwo = true, squareImage = true, fastPacker = false },
-            new PackerSettings(){powerTwo = false, squareImage = true, fastPacker = false },
-            new PackerSettings(){powerTwo = true, squareImage = false, fastPacker = false },
-            new PackerSettings(){powerTwo = false, squareImage = false, fastPacker = false },
+            new PackerSettings(){powerTwo = false, squareImage = false},
+            new PackerSettings(){powerTwo = true, squareImage = false},
+            new PackerSettings(){powerTwo = false, squareImage = true},
+            new PackerSettings(){powerTwo = true, squareImage = true},
+        };
+        string[] AtlasFiles = new string[]
+        {
+            "vehicleMarkerAtlas",
+            "battleAtlas",
         };
 
         [TestMethod]
@@ -150,66 +150,69 @@ namespace RelhaxUnitTests
             Assert.IsNotNull(log);
             Assert.IsTrue(log.CanWrite);
 
-            string testAtlasOut = Path.Combine(UnitTestHelper.ResourcesFolder, "atlas_out", "battleAtlas.dds");
-            string testMapOut = Path.Combine(UnitTestHelper.ResourcesFolder, "atlas_out", "battleAtlas.xml");
-            string testMapIn = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.xml");
-
-            AtlasCreator.Atlas = new Atlas()
-            {
-                AtlasFile = "battleAtlas.dds",
-                AtlasHeight = 0, //default
-                AtlasWidth = 0, //default
-                AtlasSaveDirectory = Path.GetDirectoryName(testAtlasOut),
-                DirectoryInArchive = UnitTestHelper.ResourcesFolder, //set the full path without fileanme when it's a copy
-                FastImagePacker = false, //changed later
-                PowOf2 = true, //changed later
-                Square = true, //changed later
-                Padding = 1, //default
-                Pkg = string.Empty, //set this to do a file copy rather then unpack
-                //TODO: make a registry check test to then do this with WoT?
-            };
             //make sure atlas packer's relhax temp folder exists
             if (!Directory.Exists(Settings.RelhaxTempFolderPath))
                 Directory.CreateDirectory(Settings.RelhaxTempFolderPath);
 
-            foreach(PackerSettings settings in PackerSettingsToTest)
+            foreach(string atlasPrefix in AtlasFiles)
             {
-                if (Directory.Exists(AtlasCreator.Atlas.AtlasSaveDirectory))
-                    Directory.Delete(AtlasCreator.Atlas.AtlasSaveDirectory, true);
-                Directory.CreateDirectory(AtlasCreator.Atlas.AtlasSaveDirectory);
+                string testAtlasOut = Path.Combine(UnitTestHelper.ResourcesFolder, "atlas_out", string.Format("{0}.dds",atlasPrefix));
+                string testMapOut = Path.Combine(UnitTestHelper.ResourcesFolder, "atlas_out", string.Format("{0}.xml", atlasPrefix));
+                string testMapIn = Path.Combine(UnitTestHelper.ResourcesFolder, string.Format("{0}.xml", atlasPrefix));
 
-                log.Write("Asserting to start the loading of mod textures");
-                List<string> modIconsLocation = new List<string>() { UnitTestHelper.ResourcesFolder };
-                CancellationToken token = new CancellationToken();
-                AtlasUtils.LoadModContourIconsAsync(modIconsLocation, token);
+                AtlasCreator.Atlas = new Atlas()
+                {
+                    AtlasFile = "battleAtlas.dds",
+                    AtlasHeight = 0, //auto-size
+                    AtlasWidth = 0, //auto-size
+                    AtlasSaveDirectory = Path.GetDirectoryName(testAtlasOut),
+                    DirectoryInArchive = UnitTestHelper.ResourcesFolder, //set the full path without fileanme when it's a copy
+                    FastImagePacker = true, //don't change this
+                    PowOf2 = true, //changed later
+                    Square = true, //changed later
+                    Padding = 1, //also don't change this
+                    Pkg = string.Empty, //set this to do a file copy rather then unpack
+                };
 
-                log.Write("Asserting to create the atlas using the following settings:");
-                log.Write(string.Format("{0}={1}, {2}={3}, {4}={5}", "powerTwo", settings.powerTwo, "squareImage", settings.squareImage, "fastPacker", settings.fastPacker));
-                AtlasCreator.Atlas.PowOf2 = settings.powerTwo;
-                AtlasCreator.Atlas.Square = settings.squareImage;
-                AtlasCreator.Atlas.FastImagePacker = settings.fastPacker;
+                foreach (PackerSettings settings in PackerSettingsToTest)
+                {
+                    if (Directory.Exists(AtlasCreator.Atlas.AtlasSaveDirectory))
+                        Directory.Delete(AtlasCreator.Atlas.AtlasSaveDirectory, true);
+                    Directory.CreateDirectory(AtlasCreator.Atlas.AtlasSaveDirectory);
 
-                //actually run the packer
-                FailCode code = AtlasCreator.CreateAtlas();
-                log.Write(string.Format("Packer fail code: {0}", code.ToString()));
-                Assert.AreEqual(FailCode.None, code);
-                Assert.IsTrue(File.Exists(testAtlasOut));
-                Assert.IsTrue(File.Exists(testMapOut));
+                    log.Write("Asserting to start the loading of mod textures");
+                    List<string> modIconsLocation = new List<string>() { UnitTestHelper.ResourcesFolder };
+                    CancellationToken token = new CancellationToken();
+                    AtlasUtils.LoadModContourIconsAsync(modIconsLocation, token);
 
-                //check the number of texture elements. should not have changed
-                log.Write("Asserting created map file has correct number of textures");
-                XmlDocument textureDocument = new XmlDocument();
-                textureDocument.Load(testMapIn);
-                int numSubTexturesIn = textureDocument.SelectNodes("//SubTexture").Count;
+                    log.Write(string.Format("Asserting to create the atlas '{0}' using the following settings:",atlasPrefix));
+                    log.Write(string.Format("{0}={1}, {2}={3}", "powerTwo", settings.powerTwo, "squareImage", settings.squareImage));
+                    AtlasCreator.Atlas.PowOf2 = settings.powerTwo;
+                    AtlasCreator.Atlas.Square = settings.squareImage;
+                    AtlasCreator.Atlas.FastImagePacker = true;
 
-                textureDocument = new XmlDocument();
-                textureDocument.Load(testMapOut);
-                int numSubTexturesOut = textureDocument.SelectNodes("//SubTexture").Count;
-                log.Write(string.Format("Expected node textures: {0}, actual {1}", numSubTexturesIn, numSubTexturesOut));
-                Assert.AreEqual(numSubTexturesIn, numSubTexturesOut);
+                    //actually run the packer
+                    FailCode code = AtlasCreator.CreateAtlas();
+                    log.Write(string.Format("Packer fail code: {0}", code.ToString()));
+                    Assert.AreEqual(FailCode.None, code);
+                    Assert.IsTrue(File.Exists(testAtlasOut));
+                    Assert.IsTrue(File.Exists(testMapOut));
 
-                //dispose of the mod contour icons
-                AtlasUtils.DisposeparseModTextures();
+                    //check the number of texture elements. should not have changed
+                    log.Write("Asserting created map file has correct number of textures");
+                    XmlDocument textureDocument = new XmlDocument();
+                    textureDocument.Load(testMapIn);
+                    int numSubTexturesIn = textureDocument.SelectNodes("//SubTexture").Count;
+
+                    textureDocument = new XmlDocument();
+                    textureDocument.Load(testMapOut);
+                    int numSubTexturesOut = textureDocument.SelectNodes("//SubTexture").Count;
+                    log.Write(string.Format("Expected node textures: {0}, actual {1}", numSubTexturesIn, numSubTexturesOut));
+                    Assert.AreEqual(numSubTexturesIn, numSubTexturesOut);
+
+                    //dispose of the mod contour icons
+                    AtlasUtils.DisposeparseModTextures();
+                }
             }
 
             Directory.Delete(AtlasCreator.Atlas.AtlasSaveDirectory, true);
