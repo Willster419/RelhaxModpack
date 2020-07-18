@@ -22,7 +22,7 @@ namespace RelhaxUnitTests
     }
 
     [TestClass]
-    public class AtlasUnitTests : UnitTestLogBase
+    public class Set02_AtlasUnitTests : UnitTestLogBase
     {
         private AtlasCreator AtlasCreator = new AtlasCreator();
         List<PackerSettings> PackerSettingsToTest = new List<PackerSettings>()
@@ -39,7 +39,7 @@ namespace RelhaxUnitTests
         };
 
         [TestMethod]
-        public void LoadLibrariesTest()
+        public void Test01_LoadLibrariesTest()
         {
             Logfile log = UnitTestHelper.CreateLogfile();
             Assert.IsNotNull(log);
@@ -84,45 +84,7 @@ namespace RelhaxUnitTests
         }
 
         [TestMethod]
-        public void DdsTest()
-        {
-            Logfile log = UnitTestHelper.CreateLogfile();
-            Assert.IsNotNull(log);
-            Assert.IsTrue(log.CanWrite);
-
-            Bitmap LoadedImage = null;
-
-            string testFileIn = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.dds");
-            Assert.IsTrue(File.Exists(testFileIn));
-
-            log.Write("Asserting to load the dds file 'battleAtlas.dds' to Bitmap");
-            LoadedImage = AtlasCreator.UnitTestLoadDDS(testFileIn);
-            log.Write(string.Format("Load status: {0}", LoadedImage != null));
-            Assert.IsNotNull(LoadedImage);
-            log.Write(string.Format("Width expected: {0}, actual: {1}",4096,LoadedImage.Width));
-            Assert.AreEqual(4096, LoadedImage.Width);
-            log.Write(string.Format("Height expected: {0}, actual: {1}", 4512, LoadedImage.Height));
-            Assert.AreEqual(4512, LoadedImage.Height);
-
-            string testFileOut = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas2.dds");
-            if (File.Exists(testFileOut))
-                File.Delete(testFileOut);
-
-            AtlasCreator.Atlas = new Atlas() { AtlasFile = testFileOut };
-            log.Write("Asserting to write the Bitmap to dds");
-            Assert.IsTrue(AtlasCreator.UnitTestSaveDDS(testFileOut, ref LoadedImage));
-            log.Write(string.Format("File written: {0}", File.Exists(testFileOut)));
-            Assert.IsTrue(File.Exists(testFileOut));
-            File.Delete(testFileOut);
-            LoadedImage.Dispose();
-            LoadedImage = null;
-
-            UnitTestHelper.DestroyLogfile(ref log, false);
-            Assert.IsNull(log);
-        }
-
-        [TestMethod]
-        public void TextureLoadTest()
+        public void Test02_TextureLoadTest()
         {
             Logfile log = UnitTestHelper.CreateLogfile();
             Assert.IsNotNull(log);
@@ -151,7 +113,45 @@ namespace RelhaxUnitTests
         }
 
         [TestMethod]
-        public void FullAtlasTest()
+        public void Test03_DdsTest()
+        {
+            Logfile log = UnitTestHelper.CreateLogfile();
+            Assert.IsNotNull(log);
+            Assert.IsTrue(log.CanWrite);
+
+            Bitmap loadedImage = null;
+
+            string testFileIn = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.dds");
+            Assert.IsTrue(File.Exists(testFileIn));
+
+            log.Write("Asserting to load the dds file 'battleAtlas.dds' to Bitmap");
+            loadedImage = AtlasCreator.UnitTestLoadDDS(testFileIn);
+            log.Write(string.Format("Load status: {0}", loadedImage != null));
+            Assert.IsNotNull(loadedImage);
+            log.Write(string.Format("Width expected: {0}, actual: {1}",4096,loadedImage.Width));
+            Assert.AreEqual(4096, loadedImage.Width);
+            log.Write(string.Format("Height expected: {0}, actual: {1}", 4512, loadedImage.Height));
+            Assert.AreEqual(4512, loadedImage.Height);
+
+            string testFileOut = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas2.dds");
+            if (File.Exists(testFileOut))
+                File.Delete(testFileOut);
+
+            AtlasCreator.Atlas = new Atlas() { AtlasFile = testFileOut };
+            log.Write("Asserting to write the Bitmap to dds");
+            Assert.IsTrue(AtlasCreator.UnitTestSaveDDS(testFileOut, ref loadedImage));
+            log.Write(string.Format("File written: {0}", File.Exists(testFileOut)));
+            Assert.IsTrue(File.Exists(testFileOut));
+            File.Delete(testFileOut);
+            loadedImage.Dispose();
+            loadedImage = null;
+
+            UnitTestHelper.DestroyLogfile(ref log, false);
+            Assert.IsNull(log);
+        }
+
+        [TestMethod]
+        public void Test04_FullAtlasTest()
         {
             Logfile log = UnitTestHelper.CreateLogfile();
             Assert.IsNotNull(log);

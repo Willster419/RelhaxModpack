@@ -8,10 +8,10 @@ using System.Diagnostics;
 namespace RelhaxUnitTests
 {
     [TestClass]
-    public class LoggingUnitTests
+    public class Set01_LoggingUnitTests
     {
         [TestMethod]
-        public void BaseLogfileTest()
+        public void Test01_BaseLogfileTest()
         {
             Logfile log = UnitTestHelper.CreateLogfile();
             Assert.IsNotNull(log);
@@ -24,7 +24,7 @@ namespace RelhaxUnitTests
         }
 
         [TestMethod]
-        public void AllLogfilesTest()
+        public void Test02_AllLogFilesTest()
         {
             foreach (Logfiles logfile in UnitTestHelper.AllLogFiles)
             {
