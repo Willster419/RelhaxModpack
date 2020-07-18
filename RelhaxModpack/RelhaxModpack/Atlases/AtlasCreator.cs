@@ -266,20 +266,21 @@ namespace RelhaxModpack.Atlases
             for (int i = 0; i < Atlas.TextureList.Count; i++)
             {
                 Token.ThrowIfCancellationRequested();
+                Texture tex = Atlas.TextureList[i];
 
                 //get the matching texture, if it exists
-                Texture[] originalResults = AtlasUtils.ModContourIconImages.Where(texturee => texturee.Name.Equals(Atlas.TextureList[i].Name)).ToArray();
-                if (originalResults.Count() == 0)
+                Texture textureResult = AtlasUtils.ModContourIconImages.Find(texturee => texturee.Name.Equals(tex.Name));
+                if (textureResult == null)
                     continue;
-                Texture textureResult = originalResults[originalResults.Count() - 1];
+
                 //here means the count is one, replace the WG original subtexture with the mod one
-                Atlas.TextureList[i].AtlasImage.Dispose();
-                Atlas.TextureList[i].AtlasImage = null;
-                Atlas.TextureList[i].AtlasImage = textureResult.AtlasImage;
-                Atlas.TextureList[i].X = 0;
-                Atlas.TextureList[i].Y = 0;
-                Atlas.TextureList[i].Height = textureResult.AtlasImage.Height;
-                Atlas.TextureList[i].Width = textureResult.AtlasImage.Width;
+                tex.AtlasImage.Dispose();
+                tex.AtlasImage = null;
+                tex.AtlasImage = textureResult.AtlasImage;
+                tex.X = 0;
+                tex.Y = 0;
+                tex.Height = textureResult.AtlasImage.Height;
+                tex.Width = textureResult.AtlasImage.Width;
             }
             OnAtlasProgres?.Invoke(this, null);
             stopwatch.Stop();
