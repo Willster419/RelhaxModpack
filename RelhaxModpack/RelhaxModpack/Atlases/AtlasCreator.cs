@@ -64,6 +64,11 @@ namespace RelhaxModpack.Atlases
         FailedToPackImage,
 
         /// <summary>
+        /// Failed to compress an atlas that requires over the 2GB process limit on 32bit systems
+        /// </summary>
+        OutOfMemory32bit,
+
+        /// <summary>
         /// Failed to create the atlas bitmap object
         /// </summary>
         FailedToCreateBitmapAtlas
@@ -81,6 +86,13 @@ namespace RelhaxModpack.Atlases
     /// </summary>
     public class AtlasCreator : IDisposable
     {
+        /// <summary>
+        /// The (arbitrary, guessing) limit of atlas size that the DDS compressor can process without exceeding 2GB
+        /// </summary>
+        /// <remarks>In 32bit windows OSs, the maximum amount of memory that a process can have is 2GB.
+        /// Exceeding that in the compressor will trigger a AccessViolationException</remarks>
+        public static int MAX_ALTAS_SIZE_32BIT = 8000 * 8000;
+
         /// <summary>
         /// The object of atlas arguments for building the image
         /// </summary>
@@ -101,8 +113,8 @@ namespace RelhaxModpack.Atlases
         private Bitmap atlasImage = null;
         private Bitmap outputAtlasImage = null;
 
-        private string tempAtlasImageFile;
-        private string tempAtlasMapFile;
+        private string tempAtlasImageFile = string.Empty;
+        private string tempAtlasMapFile = string.Empty;
 
         /// <summary>
         /// Create the atlas image
@@ -314,6 +326,20 @@ namespace RelhaxModpack.Atlases
 
             //save it to the class for disposal
             outputAtlasImage = outputImage;
+
+            //check if we're on a 32bit process. if we are and the atlas size is above the 2GB (estimated) limit, then return an error code.
+            //honestly why are you on a 32bit system to begin with. it's 2020. like come on.
+            if(!Environment.Is64BitProcess)
+            {
+                Logging.Warning("This is a 32bit process, need to check if the atlas file is too large to process");
+                int outputImageArea = outputImage.Width * outputImage.Height;
+                if(outputImageArea > MAX_ALTAS_SIZE_32BIT)
+                {
+                    Logging.Error("The output image is dimensions: W={0}, H={1}, Area={2}. Maximum area for processing on a 32bit system is {3} (W={4}, H={5}).",
+                        outputImage.Width, outputImage.Height, outputImageArea, MAX_ALTAS_SIZE_32BIT, 8000, 8000);
+                    return FailCode.OutOfMemory32bit;
+                }
+            }
 
             //export the atlas file
             //delete one if it exists
