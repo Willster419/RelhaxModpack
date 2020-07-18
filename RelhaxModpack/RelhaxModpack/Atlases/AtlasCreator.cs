@@ -504,6 +504,17 @@ namespace RelhaxModpack.Atlases
         }
         #endregion
 
+        #region Unit testing stuff
+        public List<Texture> UnitTestLoadMapFile(string mapFile)
+        { return LoadMapFile(mapFile); }
+
+        public Bitmap UnitTestLoadDDS(string filename)
+        { return LoadDDS(filename); }
+
+        public bool UnitTestSaveDDS(string filename, ref Bitmap image)
+        { return SaveDDS(filename, ref image); }
+        #endregion
+
         #region IDisposable Support
         private void DisposeCleanup()
         {
