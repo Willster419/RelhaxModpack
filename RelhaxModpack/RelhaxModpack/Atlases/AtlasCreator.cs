@@ -174,7 +174,7 @@ namespace RelhaxModpack.Atlases
             OnAtlasProgres?.Invoke(this, null);
             Token.ThrowIfCancellationRequested();
 
-            //get the size from grumpel code
+            //get the size for size parsing later
             originalAtlasSize = atlasImage.Size;
 
             //copy the subtexture bitmap data to each texture bitmap data
@@ -222,35 +222,21 @@ namespace RelhaxModpack.Atlases
             Atlas.AtlasFile = Path.Combine(Atlas.AtlasSaveDirectory, Atlas.AtlasFile);
             Atlas.MapFile = Path.Combine(Atlas.AtlasSaveDirectory, Atlas.MapFile);
 
-            // if the arguments in width and/or height of the atlases-creator-config-xml-file are 0 (or below) or not given, work with the original file dimensions to get working width and height
-            if ((Atlas.AtlasHeight < 1) | (Atlas.AtlasWidth < 1))
+            //if the max width and height wern't given, then use 1.2x width and height of the original
+            if ((Atlas.AtlasHeight < 1) || (Atlas.AtlasWidth < 1))
             {
-                //fix atlas width and size parameters if they are wrong
-                if (Atlas.AtlasWidth < 1)
-                    throw new BadMemeException("grumpel...");
-
-                if (Atlas.AtlasHeight < 1)
-                    throw new BadMemeException("grumpel...");
-
-                //
-                if ((originalAtlasSize.Height * originalAtlasSize.Width) == (Atlas.AtlasWidth * Atlas.AtlasHeight))
-                {
-                    Atlas.AtlasHeight = (int)(Atlas.AtlasHeight * 1.5);
-                }
-                else
-                {
-                    // this is to be sure that the image size that will be created, is at least the original size
-                    while ((originalAtlasSize.Height * originalAtlasSize.Width) > (Atlas.AtlasWidth * Atlas.AtlasHeight))
-                        Atlas.AtlasHeight = (int)(Atlas.AtlasHeight * 1.2);
-                }
+                Logging.Debug("Atlas width and/or height were not provided, using a 1.2x multiplier instead");
+                Atlas.AtlasHeight = (int)(originalAtlasSize.Height * 1.2);
+                Atlas.AtlasWidth = (int)(originalAtlasSize.Width * 1.2);
             }
-
-            //
-            if ((originalAtlasSize.Height * originalAtlasSize.Width) > (Atlas.AtlasWidth * Atlas.AtlasHeight))
+            else if ((originalAtlasSize.Height * originalAtlasSize.Width) > (Atlas.AtlasWidth * Atlas.AtlasHeight))
             {
                 Logging.Warning("[atlas file {0}]: max possible size is smaller then original size", Path.GetFileName(Atlas.AtlasFile));
                 Logging.Warning("original h x w:     {1} x {2}", originalAtlasSize.Height, originalAtlasSize.Width);
                 Logging.Warning("max possible h x w: {3} x {4}", Atlas.AtlasHeight, Atlas.AtlasWidth);
+                Logging.Warning("using a 1.2x multiplier instead");
+                Atlas.AtlasHeight = (int)(originalAtlasSize.Height * 1.2);
+                Atlas.AtlasWidth = (int)(originalAtlasSize.Width * 1.2);
             }
             else
             {
@@ -327,7 +313,7 @@ namespace RelhaxModpack.Atlases
             //delete one if it exists
             if (File.Exists(Atlas.AtlasFile))
             {
-                Logging.Info("[atlas file {0}]: File already exists, deleting", Path.GetFileName(Atlas.AtlasFile));
+                Logging.Info("[atlas file {0}]: File already exists before write, deleting", Path.GetFileName(Atlas.AtlasFile));
                 File.Delete(Atlas.AtlasFile);
             }
 
