@@ -523,6 +523,11 @@ namespace RelhaxModpack
             WriteToLog(message, Logfiles.Application, LogLevel.Debug, args);
         }
 
+        /// <summary>
+        /// Writes an debug level message to the application log
+        /// </summary>
+        /// <param name="options">Log append options to include class name, method name, or both</param>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
         public static void Debug(LogOptions options, string message)
         {
             switch (options)
@@ -545,6 +550,12 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Writes an debug (info) level message to the application log
+        /// </summary>
+        /// <param name="options">Log append options to include class name, method name, or both</param>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
         public static void Debug(LogOptions options, string message, params object[] args)
         {
             switch (options)
@@ -568,7 +579,7 @@ namespace RelhaxModpack
         }
 
         /// <summary>
-        /// Writes a information (info) level message to the application log
+        /// Writes an information (info) level message to the application log
         /// </summary>
         /// <param name="message">The message</param>
         public static void Info(string message)
@@ -586,6 +597,11 @@ namespace RelhaxModpack
             WriteToLog(message, Logfiles.Application, LogLevel.Info, args);
         }
 
+        /// <summary>
+        /// Writes an information (info) level message to the application log
+        /// </summary>
+        /// <param name="options">Log append options to include class name, method name, or both</param>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
         public static void Info(LogOptions options, string message)
         {
             switch (options)
@@ -608,6 +624,12 @@ namespace RelhaxModpack
             }
         }
 
+        /// <summary>
+        /// Writes an information (info) level message to the application log
+        /// </summary>
+        /// <param name="options">Log append options to include class name, method name, or both</param>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
         public static void Info(LogOptions options, string message, params object[] args)
         {
             switch(options)
@@ -650,6 +672,61 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Writes a warning level message to the application log
+        /// </summary>
+        /// <param name="options">Log append options to include class name, method name, or both</param>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
+        public static void Warning(LogOptions options, string message)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Warning);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Warning);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Warning);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.Application, LogLevel.Warning);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Writes a warning level message to the application log
+        /// </summary>
+        /// <param name="options">Log append options to include class name, method name, or both</param>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
+        public static void Warning(LogOptions options, string message, params object[] args)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Warning, args);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Warning, args);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Warning, args);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.Application, LogLevel.Warning, args);
+                    break;
+            }
+        }
+
+        /// <summary>
         /// Writes an error level message to the application log
         /// </summary>
         /// <param name="message">The message</param>
@@ -666,6 +743,61 @@ namespace RelhaxModpack
         public static void Error(string message, params object[] args)
         {
             WriteToLog(message, Logfiles.Application, LogLevel.Error, args);
+        }
+
+        /// <summary>
+        /// Writes an error level message to the application log
+        /// </summary>
+        /// <param name="options">Log append options to include class name, method name, or both</param>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
+        public static void Error(LogOptions options, string message)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Error);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Error);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Error);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.Application, LogLevel.Error);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Writes an error level message to the application log
+        /// </summary>
+        /// <param name="options">Log append options to include class name, method name, or both</param>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
+        public static void Error(LogOptions options, string message, params object[] args)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Error, args);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Error, args);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), Logfiles.Application, LogLevel.Error, args);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.Application, LogLevel.Error, args);
+                    break;
+            }
         }
 
         /// <summary>
