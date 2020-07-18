@@ -34,6 +34,11 @@ namespace RelhaxUnitTests
         public static readonly string ApplicationProjectRoot = Path.GetDirectoryName(Path.GetDirectoryName(ApplicationStartupPath));
 
         /// <summary>
+        /// The absolute location to the 'Resources' folder
+        /// </summary>
+        public static readonly string ResourcesFolder = Path.Combine(ApplicationProjectRoot, "Resources");
+
+        /// <summary>
         /// The string of the root folder to place unit tests
         /// </summary>
         public const string LogOutputRootFolder = "LogOutput";
