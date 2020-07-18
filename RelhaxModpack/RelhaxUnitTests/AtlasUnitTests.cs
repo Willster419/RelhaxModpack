@@ -47,6 +47,13 @@ namespace RelhaxUnitTests
 
             IRelhaxUnmanagedLibrary[] libraries = { AtlasUtils.FreeImageLibrary, AtlasUtils.NvTexLibrary };
 
+            //unload them if already loaded, just in case
+            foreach (IRelhaxUnmanagedLibrary library in libraries)
+            {
+                if (library.IsLoaded)
+                    library.Unload();
+            }
+
             //delete the library folders if they exist
             if (Directory.Exists(Settings.RelhaxLibrariesFolderPath))
                 Directory.Delete(Settings.RelhaxLibrariesFolderPath, true);
