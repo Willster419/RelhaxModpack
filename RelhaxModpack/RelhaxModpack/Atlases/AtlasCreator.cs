@@ -117,7 +117,18 @@ namespace RelhaxModpack.Atlases
         private string tempAtlasMapFile = string.Empty;
 
         /// <summary>
-        /// Create the atlas image
+        /// Create the atlas image and map xml
+        /// </summary>
+        /// <param name="atlas">The atlas arguments object</param>
+        /// <returns>Success code if complete, any other FailCode otherwise</returns>
+        public FailCode CreateAtlas(Atlas atlas)
+        {
+            this.Atlas = atlas;
+            return CreateAtlas();
+        }
+
+        /// <summary>
+        /// Create the atlas image and map xml
         /// </summary>
         /// <returns>Success code if complete, any other FailCode otherwise</returns>
         public FailCode CreateAtlas()
