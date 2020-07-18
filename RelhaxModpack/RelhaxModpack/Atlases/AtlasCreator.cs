@@ -269,10 +269,11 @@ namespace RelhaxModpack.Atlases
                 Texture tex = Atlas.TextureList[i];
 
                 //get the matching texture, if it exists
-                Texture textureResult = AtlasUtils.ModContourIconImages.Find(texturee => texturee.Name.Equals(tex.Name));
-                if (textureResult == null)
+                Texture[] originalResults = AtlasUtils.ModContourIconImages.Where(texturee => texturee.Name.Equals(Atlas.TextureList[i].Name)).ToArray();
+                if (originalResults.Count() == 0)
                     continue;
 
+                Texture textureResult = originalResults[originalResults.Count() - 1];
                 //here means the count is one, replace the WG original subtexture with the mod one
                 tex.AtlasImage.Dispose();
                 tex.AtlasImage = null;
@@ -499,7 +500,7 @@ namespace RelhaxModpack.Atlases
         { return LoadDDS(filename); }
 
         public bool UnitTestSaveDDS(string filename, ref Bitmap image)
-        { return SaveDDS(filename, ref image); }
+        { return SaveDDS(filename, image); }
         #endregion
 
         #region IDisposable Support
