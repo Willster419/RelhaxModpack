@@ -59,15 +59,5 @@ namespace RelhaxUnitTests.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap relic_512x512 {
-            get {
-                object obj = ResourceManager.GetObject("relic_512x512", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }
