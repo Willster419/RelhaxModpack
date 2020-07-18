@@ -190,6 +190,7 @@ namespace RelhaxUnitTests
                     AtlasCreator.Atlas.PowOf2 = settings.powerTwo;
                     AtlasCreator.Atlas.Square = settings.squareImage;
                     AtlasCreator.Atlas.FastImagePacker = true;
+                    AtlasCreator.Atlas.AtlasFile = Path.GetFileName(testAtlasOut);
 
                     //actually run the packer
                     FailCode code = AtlasCreator.CreateAtlas();
