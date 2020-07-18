@@ -49,6 +49,11 @@
             Failed to pack the images into one large image (most likely they don't fit into the provided dimensions)
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Atlases.FailCode.OutOfMemory32bit">
+            <summary>
+            Failed to compress an atlas that requires over the 2GB process limit on 32bit systems
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Atlases.FailCode.FailedToCreateBitmapAtlas">
             <summary>
             Failed to create the atlas bitmap object
@@ -66,6 +71,13 @@
             Represents the entire process of building an atlas image
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Atlases.AtlasCreator.MAX_ATLAS_SIZE_32BIT">
+            <summary>
+            The (arbitrary, guessing) limit of atlas size that the DDS compressor can process without exceeding 2GB
+            </summary>
+            <remarks>In 32bit windows OSs, the maximum amount of memory that a process can have is 2GB.
+            Exceeding that in the compressor will trigger a AccessViolationException</remarks>
+        </member>
         <member name="F:RelhaxModpack.Atlases.AtlasCreator.Atlas">
             <summary>
             The object of atlas arguments for building the image
@@ -81,9 +93,16 @@
             The event when atlas child progress occurs
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Atlases.AtlasCreator.CreateAtlas(RelhaxModpack.Atlases.Atlas)">
+            <summary>
+            Create the atlas image and map xml
+            </summary>
+            <param name="atlas">The atlas arguments object</param>
+            <returns>Success code if complete, any other FailCode otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.Atlases.AtlasCreator.CreateAtlas">
             <summary>
-            Create the atlas image
+            Create the atlas image and map xml
             </summary>
             <returns>Success code if complete, any other FailCode otherwise</returns>
         </member>
@@ -438,68 +457,105 @@
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.Pkg">
             <summary>
-            Path and name to the package file
+            Complete path to the package file
             </summary>
+            <remarks>This is loaded from the xml file. The package itself is a non-compressed zip file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasFile">
             <summary>
-            FileName of the atlas image file to extract
+            File name of the atlas image file to extract
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.MapFile">
             <summary>
-            FileName of the atlas map file to extract
+            File name of the atlas map file to extract
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.DirectoryInArchive">
             <summary>
-            Path inside the pkg file to the filename to process
+            Path inside the pkg file to the filename to process. If Pkg is empty, this is the path to the atlas and map file
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasSaveDirectory">
             <summary>
-            Path to place the generated atlas file
+            Path to place the generated atlas image file and xml map
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasWidth">
             <summary>
             Width of the new atlases file. 0 = get from original atlas file
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasHeight">
             <summary>
             Height of the new atlases file. 0 = get from original atlas file
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.Padding">
             <summary>
             Padding of the new atlases file (amount of pixels as a border between each image)
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.PowOf2">
             <summary>
             Creating an atlas file only with log base 2 numbers (16, 32, 64, etc.)
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.Square">
             <summary>
             Creating an atlas file only in a square (same width and height of atlas)
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.FastImagePacker">
             <summary>
             allow to accept first successful image optimization layout
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.ImageFolderList">
             <summary>
             List of folders that could contain images to replace original images
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.TextureList">
             <summary>
             The list of textures in each atlas
             </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.TempAtlasImageFilePath">
+            <summary>
+            The file path where the original atlas image file will be extracted/copied to
+            </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.TempAtlasMapFilePath">
+            <summary>
+            The file path where the original atlas map file will be extracted/copied to
+            </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.AtlasImageFilePath">
+            <summary>
+            The file path where the created atlas image file will be placed
+            </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.AtlasMapFilePath">
+            <summary>
+            The file path where the created map file will be placed
+            </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
         </member>
         <member name="M:RelhaxModpack.Atlases.Atlas.ToString">
             <summary>
@@ -6155,9 +6211,24 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
+        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.LogOptions,System.String)">
+            <summary>
+            Writes an debug level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes an debug (info) level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
         <member name="M:RelhaxModpack.Logging.Info(System.String)">
             <summary>
-            Writes a information (info) level message to the application log
+            Writes an information (info) level message to the application log
             </summary>
             <param name="message">The message</param>
         </member>
@@ -6165,6 +6236,21 @@
             <summary>
             Writes an information (info) level message to the application log
             </summary>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.LogOptions,System.String)">
+            <summary>
+            Writes an information (info) level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes an information (info) level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
@@ -6181,6 +6267,21 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
+        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.LogOptions,System.String)">
+            <summary>
+            Writes a warning level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes a warning level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
         <member name="M:RelhaxModpack.Logging.Error(System.String)">
             <summary>
             Writes an error level message to the application log
@@ -6191,6 +6292,21 @@
             <summary>
             Writes a error level message to the application log
             </summary>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.LogOptions,System.String)">
+            <summary>
+            Writes an error level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes an error level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
