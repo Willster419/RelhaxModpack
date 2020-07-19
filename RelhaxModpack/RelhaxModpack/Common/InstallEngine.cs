@@ -1781,11 +1781,11 @@ namespace RelhaxModpack
                 }
 
                 //start the task to parse the mod contour icons into bitmap lists
-                AtlasUtils.LoadModContourIconsAsync(textureFolders, CancellationToken);
+                AtlasUtils.LoadCustomContourIconsAsync(textureFolders, CancellationToken);
 
                 //make an array to hold all the atlas builder tasks and the mod contour icon parsing task
                 AtlasTasks = new Task[atlases.Count+1];
-                AtlasTasks[AtlasTasks.Count() - 1] = AtlasUtils.ParseModTexturesTask;
+                AtlasTasks[AtlasTasks.Count() - 1] = AtlasUtils.ParseCustomTexturesTask;
 
                 for (int i = 0; i < atlases.Count; i++)
                 {

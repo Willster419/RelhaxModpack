@@ -99,25 +99,25 @@ namespace RelhaxModpack.Atlases
         /// <summary>
         /// The task of parsing all mod png images from multiple folders into a flat list of png bitmaps
         /// </summary>
-        public static Task ParseModTexturesTask;
+        public static Task ParseCustomTexturesTask { get; private set; } = null;
 
         /// <summary>
         /// The list of parsed mod png images into textures
         /// </summary>
-        public static List<Texture> ModContourIconImages;
+        public static List<Texture> CustomContourIconImages { get; private set; } = null;
 
         /// <summary>
         /// Lock object used in AtlasCreator for critical sections that can't be done at the same time
         /// </summary>
         /// <remarks>Each atlas file is created by its own thread. However, the DDS loading and saving API used can't be used more then once at a time</remarks>
-        public static object AtlasLoaderLockObject = new object();
+        public static object AtlasLoaderLockObject { get; } = new object();
 
         /// <summary>
         /// A list of Atlas creating thread engines
         /// </summary>
         public static List<AtlasCreator> AtlasBuilders = null;
 
-        private static Stopwatch modParseStopwatch = new Stopwatch();
+        private static Stopwatch ParseStopwatch = new Stopwatch();
 
         /// <summary>
         /// Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
@@ -125,12 +125,12 @@ namespace RelhaxModpack.Atlases
         /// <param name="allModFolderPaths">The list of absolute paths containing mod contour icon images to be loaded</param>
         /// <param name="token">The cancellation token</param>
         /// <returns>The list of textures</returns>
-        public static Task LoadModContourIconsAsync(List<string> allModFolderPaths, CancellationToken token)
+        public static Task LoadCustomContourIconsAsync(List<string> allModFolderPaths, CancellationToken token)
         {
-            ParseModTexturesTask = Task.Run(() =>
+            ParseCustomTexturesTask = Task.Run(() =>
             {
                 Logging.Info(LogOptions.MethodName, "Custom contour icon images task starting");
-                modParseStopwatch.Restart();
+                ParseStopwatch.Restart();
 
                 //parse each folder list to create a list of all mod contour icons
                 Logging.Debug(LogOptions.MethodName, "Custom contour icon images folder count: {0}", allModFolderPaths.Count);
@@ -174,7 +174,7 @@ namespace RelhaxModpack.Atlases
 
                 //just in case, dispose of the old one
                 DisposeparseModTextures();
-                ModContourIconImages = new List<Texture>();
+                CustomContourIconImages = new List<Texture>();
                 Logging.Debug(LogOptions.MethodName, "Loading custom images into data lists for atlas creator", allModFolderPaths.Count);
                 foreach (string modContourIconFilePath in ModContourIconFilesList)
                 {
@@ -184,7 +184,7 @@ namespace RelhaxModpack.Atlases
                     Bitmap modContourIconImage = new Bitmap(modContourIconFilePath);
 
                     //don't care about the x an y for the mod textures
-                    ModContourIconImages.Add(new Texture()
+                    CustomContourIconImages.Add(new Texture()
                     {
                         Name = Path.GetFileNameWithoutExtension(modContourIconFilePath),
                         Height = modContourIconImage.Height,
@@ -195,10 +195,10 @@ namespace RelhaxModpack.Atlases
                     });
                     modContourIconImage = null;
                 }
-                Logging.Info(LogOptions.MethodName, "Custom images parsing task completed in {0} msec", modParseStopwatch.ElapsedMilliseconds);
-                modParseStopwatch.Stop();
+                Logging.Info(LogOptions.MethodName, "Custom images parsing task completed in {0} msec", ParseStopwatch.ElapsedMilliseconds);
+                ParseStopwatch.Stop();
             });
-            return ParseModTexturesTask;
+            return ParseCustomTexturesTask;
         }
 
         /// <summary>
@@ -206,9 +206,9 @@ namespace RelhaxModpack.Atlases
         /// </summary>
         public static void DisposeparseModTextures()
         {
-            if (ModContourIconImages != null)
+            if (CustomContourIconImages != null)
             {
-                foreach (Texture tex in ModContourIconImages)
+                foreach (Texture tex in CustomContourIconImages)
                 {
                     if (tex != null)
                     {
@@ -219,7 +219,7 @@ namespace RelhaxModpack.Atlases
                         }
                     }
                 }
-                ModContourIconImages = null;
+                CustomContourIconImages = null;
             }
         }
 
