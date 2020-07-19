@@ -83,7 +83,7 @@ namespace RelhaxModpack.Atlases
                 }
             }
             image.UnlockBits(bmpData);
-            Logging.Debug("[atlas file {0}]: Processing status: {1}", success);
+            Logging.Debug("[atlas file {0}]: Processing status: {1}", atlasFilename, success);
 
             //dispose image if was requested
             if (disposeImage)
