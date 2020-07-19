@@ -106,6 +106,29 @@
             </summary>
             <returns>Success code if complete, any other FailCode otherwise</returns>
         </member>
+        <member name="P:RelhaxModpack.Atlases.AtlasCreator.ParseCustomTexturesTask">
+            <summary>
+            The task of parsing all custom png images from multiple folders into a flat list of png bitmaps
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.AtlasCreator.CustomContourIconImages">
+            <summary>
+            The list of parsed custom png images into textures
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.AtlasCreator.LoadCustomContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Loads all custom textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
+            </summary>
+            <param name="CustomFolderPaths">The list of absolute paths containing custom contour icon images to be loaded</param>
+            <param name="token">The cancellation token</param>
+            <returns>The list of textures</returns>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.AtlasCreator.DisposeParsedCustomTextures">
+            <summary>
+            Dispose of all textures in the shared custom texture list
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Atlases.AtlasCreator.Dispose(System.Boolean)">
             <summary>
             Dispose of the Atlas Creator (mostly disposing image data)
@@ -149,16 +172,6 @@
             </summary>
             <returns>True if both libraries loaded, false otherwise</returns>
         </member>
-        <member name="P:RelhaxModpack.Atlases.AtlasUtils.ParseCustomTexturesTask">
-            <summary>
-            The task of parsing all mod png images from multiple folders into a flat list of png bitmaps
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Atlases.AtlasUtils.CustomContourIconImages">
-            <summary>
-            The list of parsed mod png images into textures
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Atlases.AtlasUtils.AtlasLoaderLockObject">
             <summary>
             Lock object used in AtlasCreator for critical sections that can't be done at the same time
@@ -170,19 +183,6 @@
             A list of Atlas creating thread engines
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Atlases.AtlasUtils.LoadCustomContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
-            <summary>
-            Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
-            </summary>
-            <param name="allModFolderPaths">The list of absolute paths containing mod contour icon images to be loaded</param>
-            <param name="token">The cancellation token</param>
-            <returns>The list of textures</returns>
-        </member>
-        <member name="M:RelhaxModpack.Atlases.AtlasUtils.DisposeparseModTextures">
-            <summary>
-            Dispose of all textures in the shared mod texture list
-            </summary>
-        </member>
         <member name="M:RelhaxModpack.Atlases.AtlasUtils.VerifyImageLibsLoaded">
             <summary>
             Verifies the Atlas processing libraries are loaded. If not, they are loaded.
@@ -190,7 +190,7 @@
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasUtils.DisposeOfAllAtlasResources">
             <summary>
-            Disposes of all statically used AtlasUtils resources, including releasing the mod texture list
+            Disposes of all statically used AtlasUtils resources, including releasing the custom texture list
             </summary>
         </member>
         <member name="T:RelhaxModpack.Atlases.ImageHandler">
