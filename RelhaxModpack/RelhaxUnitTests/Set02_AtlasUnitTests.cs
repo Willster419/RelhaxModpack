@@ -12,6 +12,8 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using RelhaxModpack.Atlases.Packing;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Reflection;
 
 namespace RelhaxUnitTests
 {
@@ -83,31 +85,104 @@ namespace RelhaxUnitTests
         }
 
         [TestMethod]
-        public void Test02_TextureLoadTest()
+        public void Test02_TextureTest()
         {
             Logfile log = UnitTestHelper.CreateLogfile();
             Assert.IsNotNull(log);
             Assert.IsTrue(log.CanWrite);
 
+            //create objects
             List<Texture> texturelist = null;
-            AtlasCreator atlasCreator = new AtlasCreator();
+            XmlNodeList xmlTextureList = null;
+            MapHandler mapHandler = new MapHandler();
+            ImagePacker imagePacker = new ImagePacker();
+            XmlDocument textureDocument = new XmlDocument();
+
+            //setup paths
             string testFileIn = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.xml");
             Assert.IsTrue(File.Exists(testFileIn));
             string testFileOut = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas2.xml");
             if (File.Exists(testFileOut))
                 File.Delete(testFileOut);
 
-            XmlDocument textureDocument = new XmlDocument();
+            //load sub-texture count to xml
             textureDocument.Load(testFileIn);
-            int numSubTextures = textureDocument.SelectNodes("//SubTexture").Count;
+            xmlTextureList = textureDocument.SelectNodes("//SubTexture");
+            int numSubTextures = xmlTextureList.Count;
 
+            //load texture list
             log.Write("Asserting to load a xml texture file to Texture list");
-            texturelist = atlasCreator.UnitTestLoadMapFile(testFileIn);
+            texturelist = mapHandler.LoadMapFile(testFileIn);
             log.Write(string.Format("Texture class load status: {0}", texturelist != null));
             Assert.IsNotNull(texturelist);
+
+            //compare texture count
             log.Write(string.Format("Xml node textures: {0}, parsed: {1}", numSubTextures, texturelist.Count));
             Assert.AreEqual(numSubTextures, texturelist.Count);
-            atlasCreator.Dispose();
+
+            //for the packer, need to create bitmaps. we won't use them
+            foreach (Texture tex in texturelist)
+            {
+                tex.AtlasImage = new Bitmap(1, 1);
+            }
+
+            //compare each individual texture
+            log.Write("Asserting each texture matches from xml to texture list");
+            for (int i = 0; i < texturelist.Count; i++)
+            {
+                Texture texture = texturelist[i];
+                XmlElement xmlTexture = xmlTextureList[i] as XmlElement;
+
+                //properties match lowercase xml properties names
+                foreach (string property in texture.PropertiesForSerializationElements())
+                {
+                    string xmlValue = (xmlTexture.SelectSingleNode(property.ToLower()) as XmlElement).InnerText;
+                    //PropertyInfo property = listObjectType.GetProperty(attributeName);
+                    string textureValue = typeof(Texture).GetProperty(property).GetValue(texture) as string;
+                    Assert.AreEqual(xmlValue, textureValue);
+                }
+            }
+
+            //pack textures
+            FailCode code = imagePacker.PackImage(texturelist, true, false, true, 8192, 8192, 1, out Bitmap map, out Dictionary<string, Rectangle> imageSizes);
+            log.Write(string.Format("Packer fail code: {0}", code.ToString()));
+            Assert.AreEqual(FailCode.None, code);
+
+            //for the packer, need to dispose bitmaps
+            map.Dispose();
+            foreach (Texture tex in texturelist)
+            {
+                tex.AtlasImage.Dispose();
+            }
+
+            //save to new xml file
+            mapHandler.SaveMapfile(testFileOut, imageSizes);
+            Assert.IsTrue(File.Exists(testFileOut));
+
+            //compare texture count
+            textureDocument = new XmlDocument();
+            textureDocument.Load(testFileOut);
+            xmlTextureList = textureDocument.SelectNodes("//SubTexture");
+            numSubTextures = xmlTextureList.Count;
+            log.Write(string.Format("Xml node textures: {0}, parsed: {1}", numSubTextures, imageSizes.Count));
+            Assert.AreEqual(numSubTextures, imageSizes.Count);
+
+            //compare each individual texture
+            log.Write("Asserting each texture matches from xml to dictionary");
+            for (int i = 0; i < xmlTextureList.Count; i++)
+            {
+                XmlElement xmlTexture = xmlTextureList[i] as XmlElement;
+                string textureName = xmlTexture.SelectSingleNode(nameof(Texture.Name).ToLower()).InnerText;
+                Rectangle imageSize = imageSizes[textureName];
+                Assert.IsNotNull(imageSize);
+
+                Assert.AreEqual((xmlTexture.SelectSingleNode(nameof(imageSize.X).ToLower()) as XmlElement).InnerText, imageSize.X.ToString());
+                Assert.AreEqual((xmlTexture.SelectSingleNode(nameof(imageSize.Y).ToLower()) as XmlElement).InnerText, imageSize.Y.ToString());
+                Assert.AreEqual((xmlTexture.SelectSingleNode(nameof(imageSize.Width).ToLower()) as XmlElement).InnerText, imageSize.Width.ToString());
+                Assert.AreEqual((xmlTexture.SelectSingleNode(nameof(imageSize.Height).ToLower()) as XmlElement).InnerText, imageSize.Height.ToString());
+            }
+
+            File.Delete(testFileOut);
 
             UnitTestHelper.DestroyLogfile(ref log, false);
             Assert.IsNull(log);
@@ -120,14 +195,14 @@ namespace RelhaxUnitTests
             Assert.IsNotNull(log);
             Assert.IsTrue(log.CanWrite);
 
-            Bitmap loadedImage = null;
-            AtlasCreator atlasCreator = new AtlasCreator();
+            Bitmap loadedImage;
+            ImageHandler handler = new ImageHandler();
 
             string testFileIn = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.dds");
             Assert.IsTrue(File.Exists(testFileIn));
 
-            log.Write("Asserting to load the dds file 'battleAtlas.dds' to Bitmap");
-            loadedImage = atlasCreator.UnitTestLoadDDS(testFileIn);
+            log.Write("Asserting to load the DDS file 'battleAtlas.dds' to Bitmap");
+            loadedImage = handler.LoadDDS(testFileIn);
             log.Write(string.Format("Load status: {0}", loadedImage != null));
             Assert.IsNotNull(loadedImage);
             log.Write(string.Format("Width expected: {0}, actual: {1}",4096,loadedImage.Width));
@@ -139,22 +214,42 @@ namespace RelhaxUnitTests
             if (File.Exists(testFileOut))
                 File.Delete(testFileOut);
 
-            atlasCreator.Atlas = new Atlas() { AtlasFile = testFileOut };
-            log.Write("Asserting to write the Bitmap to dds");
-            Assert.IsTrue(atlasCreator.UnitTestSaveDDS(testFileOut, ref loadedImage));
+            log.Write("Asserting to write the Bitmap to DDS");
+            Assert.IsTrue(handler.SaveDDS(testFileOut,loadedImage,true));
             log.Write(string.Format("File written: {0}", File.Exists(testFileOut)));
             Assert.IsTrue(File.Exists(testFileOut));
             File.Delete(testFileOut);
-            loadedImage.Dispose();
-            loadedImage = null;
-            atlasCreator.Dispose();
 
             UnitTestHelper.DestroyLogfile(ref log, false);
             Assert.IsNull(log);
         }
 
         [TestMethod]
-        public void Test04_FullAtlasTest()
+        public void Test04_CustomIconsLoadingTest()
+        {
+            Logfile log = UnitTestHelper.CreateLogfile();
+            Assert.IsNotNull(log);
+            Assert.IsTrue(log.CanWrite);
+
+            log.Write("Asserting to start the loading of mod textures");
+            List<string> modIconsLocation = new List<string>() { UnitTestHelper.ResourcesFolder };
+            CancellationToken token = new CancellationToken();
+            Task loadCustomContourIconsTask = AtlasUtils.LoadCustomContourIconsAsync(modIconsLocation, token);
+            Assert.IsNotNull(loadCustomContourIconsTask);
+
+            //wait
+            loadCustomContourIconsTask.Wait();
+            Assert.IsTrue(loadCustomContourIconsTask.Status == TaskStatus.RanToCompletion);
+
+            //dispose of the mod contour icons
+            AtlasUtils.DisposeparseModTextures();
+
+            UnitTestHelper.DestroyLogfile(ref log, false);
+            Assert.IsNull(log);
+        }
+
+        [TestMethod]
+        public void Test05_FullAtlasTest()
         {
             Logfile log = UnitTestHelper.CreateLogfile();
             Assert.IsNotNull(log);
@@ -195,7 +290,7 @@ namespace RelhaxUnitTests
                     log.Write("Asserting to start the loading of mod textures");
                     List<string> modIconsLocation = new List<string>() { UnitTestHelper.ResourcesFolder };
                     CancellationToken token = new CancellationToken();
-                    AtlasUtils.LoadModContourIconsAsync(modIconsLocation, token);
+                    AtlasUtils.LoadCustomContourIconsAsync(modIconsLocation, token);
 
                     log.Write(string.Format("Asserting to create the atlas '{0}' using the following settings:",atlasPrefix));
                     log.Write(string.Format("{0}={1}, {2}={3}", "powerTwo", settings.powerTwo, "squareImage", settings.squareImage));
