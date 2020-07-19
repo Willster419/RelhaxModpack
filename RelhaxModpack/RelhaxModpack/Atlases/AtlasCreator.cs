@@ -109,6 +109,8 @@ namespace RelhaxModpack.Atlases
         public event AtlasProgressDelegate OnAtlasProgres;
 
         private ImagePacker imagePacker = new ImagePacker();
+        private ImageHandler imageHandler = new ImageHandler();
+        private MapHandler mapHandler = new MapHandler();
         private Stopwatch stopwatch = new Stopwatch();
         private Bitmap atlasImage = null;
         private Bitmap outputAtlasImage = null;
@@ -201,7 +203,7 @@ namespace RelhaxModpack.Atlases
             //parse the xml map file into the list of sub-textures
             Logging.Info("[atlas file {0}]: Parsing map file", Atlas.AtlasFile);
             Logging.Debug("[atlas file {0}]: Using map file path: {1}", Atlas.AtlasFile, Atlas.TempAtlasMapFilePath);
-            Atlas.TextureList = LoadMapFile(Atlas.TempAtlasMapFilePath);
+            Atlas.TextureList = mapHandler.LoadMapFile(Atlas.TempAtlasMapFilePath);
             OnAtlasProgres?.Invoke(this, null);
             Token.ThrowIfCancellationRequested();
             stopwatch.Stop();
@@ -215,7 +217,7 @@ namespace RelhaxModpack.Atlases
             lock (AtlasUtils.AtlasLoaderLockObject)
             {
                 //the native library can only be used once at a time
-                atlasImage = LoadDDS(Atlas.TempAtlasImageFilePath);
+                atlasImage = imageHandler.LoadDDS(Atlas.TempAtlasImageFilePath);
             }
             OnAtlasProgres?.Invoke(this, null);
             Token.ThrowIfCancellationRequested();
@@ -297,19 +299,19 @@ namespace RelhaxModpack.Atlases
 
             //wait for parsing of mod/custom images task here
             Logging.Info("[atlas file {0}]: Waiting for mod texture parse task", Atlas.AtlasFile);
-            AtlasUtils.ParseModTexturesTask.Wait();
+            AtlasUtils.ParseCustomTexturesTask.Wait();
             Logging.Info("[atlas file {0}]: Mod texture parse task complete, continue execution", Atlas.AtlasFile);
             OnAtlasProgres?.Invoke(this, null);
             Token.ThrowIfCancellationRequested();
 
             //check if any custom mod contour icons were parsed. if not, then there's no need to make a new one
-            if (AtlasUtils.ModContourIconImages.Count > 0)
+            if (AtlasUtils.CustomContourIconImages.Count > 0)
             {
-                Logging.Info("[atlas file {0}]: {1} custom icons parsed", Atlas.AtlasFile, AtlasUtils.ModContourIconImages.Count);
+                Logging.Info("[atlas file {0}]: {1} custom icons parsed", Atlas.AtlasFile, AtlasUtils.CustomContourIconImages.Count);
             }
             else
             {
-                Logging.Warning("[atlas file {0}]: 0 custom icons parsed for atlas file {1}, no need to make a custom atlas (is this the intent?)", AtlasUtils.ModContourIconImages.Count, Atlas.AtlasFile);
+                Logging.Warning("[atlas file {0}]: 0 custom icons parsed for atlas file {1}, no need to make a custom atlas (is this the intent?)", AtlasUtils.CustomContourIconImages.Count, Atlas.AtlasFile);
                 return FailCode.None;
             }
             totalMillisecondsToCreateImage += stopwatch.ElapsedMilliseconds;
@@ -323,7 +325,7 @@ namespace RelhaxModpack.Atlases
                 Texture tex = Atlas.TextureList[i];
 
                 //get the matching texture, if it exists
-                Texture[] originalResults = AtlasUtils.ModContourIconImages.Where(texturee => texturee.Name.Equals(Atlas.TextureList[i].Name)).ToArray();
+                Texture[] originalResults = AtlasUtils.CustomContourIconImages.Where(texturee => texturee.Name.Equals(Atlas.TextureList[i].Name)).ToArray();
                 if (originalResults.Count() == 0)
                     continue;
 
@@ -391,7 +393,7 @@ namespace RelhaxModpack.Atlases
                 Logging.Info("[atlas file {0}]: File already exists before write, deleting", Atlas.AtlasFile);
                 File.Delete(Atlas.AtlasImageFilePath);
             }
-            if(!SaveDDS(Atlas.AtlasImageFilePath, outputImage))
+            if(!imageHandler.SaveDDS(Atlas.AtlasImageFilePath, outputImage))
             {
                 Logging.Error("[atlas file {0}]: Failed to create atlas image: {1}", Atlas.AtlasFile, Atlas.AtlasFile);
                 return FailCode.ImageExporter;
@@ -405,7 +407,7 @@ namespace RelhaxModpack.Atlases
             Logging.Info("[atlas file {0}]: Atlas map creation starting", Atlas.AtlasFile);
             if (File.Exists(Atlas.AtlasMapFilePath))
                 File.Delete(Atlas.AtlasMapFilePath);
-            SaveMapfile(Atlas.AtlasMapFilePath, outputMap);
+            mapHandler.SaveMapfile(Atlas.AtlasMapFilePath, outputMap);
             stopwatch.Stop();
             Logging.Info("[atlas file {0}]: Atlas map creation completed in {1} msec", Atlas.AtlasFile, stopwatch.ElapsedMilliseconds);
             totalMillisecondsToCreateImage += stopwatch.ElapsedMilliseconds;
@@ -416,166 +418,6 @@ namespace RelhaxModpack.Atlases
             
             return FailCode.None;
         }
-
-        #region Atlas image handling
-        private Bitmap LoadDDS(string filename)
-        {
-            //check to make sure file exists
-            if (!File.Exists(filename))
-            {
-                Logging.Error("Image file does not exist at path {0}", filename);
-                return null;
-            }
-
-            //check to make sure file is a DDS file
-            if (!TeximpNet.DDS.DDSFile.IsDDSFile(filename))
-            {
-                Logging.Error("Image is not a DDS file: {0}", filename);
-            }
-
-            //load the image into freeImage format
-            Surface surface = Surface.LoadFromFile(filename, ImageLoadFlags.Default);
-
-            //flip it because it's upside down because reasons.
-            surface.FlipVertically();
-
-            //copy the bitmap data to a Bitmap object via the graphics class to ensure a deep copy
-            //https://stackoverflow.com/questions/2433481/is-passing-system-drawing-bitmap-across-class-libraries-unreliable
-            Bitmap temp = new Bitmap(surface.Width, surface.Height, surface.Pitch, PixelFormat.Format32bppArgb, surface.DataPtr);
-            Bitmap copy = new Bitmap(temp.Width, temp.Height);
-            copy.SetResolution(temp.HorizontalResolution, temp.VerticalResolution);
-            using (Graphics graphics = Graphics.FromImage(copy))
-            {
-                graphics.DrawImageUnscaled(temp, 0, 0);
-            }
-            temp.Dispose();
-            return copy;
-        }
-
-        private bool SaveDDS(string filename, Bitmap image)
-        {
-            // Lock the bitmap's bits. 
-            //https://stackoverflow.com/questions/28655133/difference-between-bitmap-and-bitmapdata
-            //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.imaging.bitmapdata.scan0?view=netframework-4.8#System_Drawing_Imaging_BitmapData_Scan0
-            Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
-            Logging.Debug("[atlas file {0}]: Locking bits of image {1} x {2} size", Atlas.AtlasFile, image.Width, image.Height);
-            BitmapData bmpData = image.LockBits(rect, ImageLockMode.ReadOnly, image.PixelFormat);
-            Logging.Debug("[atlas file {0}]: Bits locked, creating Surface and Compressor objects", Atlas.AtlasFile);
-
-            //create surface object for processing
-            //and compress to DDS
-            bool success = true;
-            using (Surface surfaceFromRawData = Surface.LoadFromRawData(bmpData.Scan0, image.Width, image.Height, bmpData.Stride, true))
-            using (Compressor compressor = new Compressor())
-            {
-                compressor.Compression.Format = CompressionFormat.DXT5;
-                compressor.Input.AlphaMode = AlphaMode.None;
-                compressor.Input.GenerateMipmaps = false;
-                compressor.Input.ConvertToNormalMap = false;
-
-                Logging.Debug("[atlas file {0}]: Attempting to set image data", Atlas.AtlasFile);
-                if(compressor.Input.SetData(surfaceFromRawData))
-                {
-                    Logging.Debug("[atlas file {0}]: Image data set, attempting to process for compression", Atlas.AtlasFile);
-                    success = compressor.Process(filename);
-                }
-                else
-                {
-                    success = false;
-                }
-            }
-            image.UnlockBits(bmpData);
-
-            return success;
-        }
-        #endregion
-
-        #region Map handling
-        // parses a xmlAtlasesFile to the process queue
-        private List<Texture> LoadMapFile(string mapFile)
-        {
-            //check to make sure file exists first
-            if (!File.Exists(mapFile))
-            {
-                Logging.Error("Texture list does not exist in {0}", mapFile);
-                return null;
-            }
-
-            //make the texture list to return later
-            List<Texture> TextureList = new List<Texture>();
-
-            //load the xml file
-            XDocument doc = XmlUtils.LoadXDocument(mapFile, XmlLoadType.FromFile);
-            if (doc == null)
-            {
-                Logging.Error("Failed to load xml texture list in {0}", mapFile);
-                return null;
-            }
-
-            //parse the xml values into the texture type
-            foreach (XElement xmlTexture in doc.XPathSelectElements("/root/SubTexture"))
-            {
-                Texture texture = new Texture();
-                foreach (XElement item in xmlTexture.Elements())
-                {
-                    switch (item.Name.ToString().ToLower())
-                    {
-                        case "name":
-                            texture.Name = item.Value.ToString().Trim();
-                            break;
-                        case "x":
-                            texture.X = int.Parse("0" + item.Value.ToString().Trim());
-                            break;
-                        case "y":
-                            texture.Y = int.Parse("0" + item.Value.ToString().Trim());
-                            break;
-                        case "width":
-                            texture.Width = int.Parse("0" + item.Value.ToString().Trim());
-                            break;
-                        case "height":
-                            texture.Height = int.Parse("0" + item.Value.ToString().Trim());
-                            break;
-                        default:
-                            Logging.Error("Unexpected Item found. Name: {0}  Value: {1}", item.Name.ToString(), item.Value);
-                            break;
-                    }
-                }
-                TextureList.Add(texture);
-            }
-            return TextureList;
-        }
-
-        private void SaveMapfile(string filename, Dictionary<string, Rectangle> map)
-        {
-            using (StreamWriter writer = new StreamWriter(filename))
-            {
-                writer.WriteLine("<root createdBy=\"Relhax Modpack\" date=\"{0:yyyy-MM-dd HH:mm:ss.fff}\">", System.DateTime.Now);
-                foreach (var entry in map.OrderBy(key => key.Key))
-                {
-                    Rectangle r = entry.Value;
-                    writer.WriteLine(string.Format("\t<SubTexture>"));
-                    writer.WriteLine(string.Format("\t\t<name> {0} </name>", Path.GetFileNameWithoutExtension(entry.Key)));
-                    writer.WriteLine(string.Format("\t\t<x> {0} </x>", r.X));
-                    writer.WriteLine(string.Format("\t\t<y> {0} </y>", r.Y));
-                    writer.WriteLine(string.Format("\t\t<width> {0} </width>", r.Width));
-                    writer.WriteLine(string.Format("\t\t<height> {0} </height>", r.Height));
-                    writer.WriteLine(string.Format("\t</SubTexture>"));
-                }
-                writer.WriteLine("</root>");
-            }
-        }
-        #endregion
-
-        #region Unit testing stuff
-        public List<Texture> UnitTestLoadMapFile(string mapFile)
-        { return LoadMapFile(mapFile); }
-
-        public Bitmap UnitTestLoadDDS(string filename)
-        { return LoadDDS(filename); }
-
-        public bool UnitTestSaveDDS(string filename, ref Bitmap image)
-        { return SaveDDS(filename, image); }
-        #endregion
 
         #region IDisposable Support
         private void Cleanup()

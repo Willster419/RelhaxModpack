@@ -122,6 +122,8 @@
     </ApplicationDefinition>
     <Compile Include="Atlases\AtlasCreator.cs" />
     <Compile Include="Atlases\AtlasUtils.cs" />
+    <Compile Include="Atlases\ImageHandler.cs" />
+    <Compile Include="Atlases\MapHandler.cs" />
     <Compile Include="Atlases\Packing\ArevaloRectanglePacker.cs" />
     <Compile Include="Atlases\Packing\ImagePacker.cs" />
     <Compile Include="Atlases\Packing\OutOfSpaceException.cs" />
