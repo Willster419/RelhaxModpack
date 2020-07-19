@@ -299,19 +299,19 @@ namespace RelhaxModpack.Atlases
 
             //wait for parsing of mod/custom images task here
             Logging.Info("[atlas file {0}]: Waiting for mod texture parse task", Atlas.AtlasFile);
-            AtlasUtils.ParseCustomTexturesTask.Wait();
+            ParseCustomTexturesTask.Wait();
             Logging.Info("[atlas file {0}]: Mod texture parse task complete, continue execution", Atlas.AtlasFile);
             OnAtlasProgres?.Invoke(this, null);
             Token.ThrowIfCancellationRequested();
 
             //check if any custom mod contour icons were parsed. if not, then there's no need to make a new one
-            if (AtlasUtils.CustomContourIconImages.Count > 0)
+            if (CustomContourIconImages.Count > 0)
             {
-                Logging.Info("[atlas file {0}]: {1} custom icons parsed", Atlas.AtlasFile, AtlasUtils.CustomContourIconImages.Count);
+                Logging.Info("[atlas file {0}]: {1} custom icons parsed", Atlas.AtlasFile, CustomContourIconImages.Count);
             }
             else
             {
-                Logging.Warning("[atlas file {0}]: 0 custom icons parsed for atlas file {1}, no need to make a custom atlas (is this the intent?)", AtlasUtils.CustomContourIconImages.Count, Atlas.AtlasFile);
+                Logging.Warning("[atlas file {0}]: 0 custom icons parsed for atlas file {1}, no need to make a custom atlas (is this the intent?)", CustomContourIconImages.Count, Atlas.AtlasFile);
                 return FailCode.None;
             }
             totalMillisecondsToCreateImage += stopwatch.ElapsedMilliseconds;
@@ -325,7 +325,7 @@ namespace RelhaxModpack.Atlases
                 Texture tex = Atlas.TextureList[i];
 
                 //get the matching texture, if it exists
-                Texture[] originalResults = AtlasUtils.CustomContourIconImages.Where(texturee => texturee.Name.Equals(Atlas.TextureList[i].Name)).ToArray();
+                Texture[] originalResults = CustomContourIconImages.Where(texturee => texturee.Name.Equals(Atlas.TextureList[i].Name)).ToArray();
                 if (originalResults.Count() == 0)
                     continue;
 
@@ -418,6 +418,124 @@ namespace RelhaxModpack.Atlases
             
             return FailCode.None;
         }
+
+        #region Atlas custom icons parsing
+        /// <summary>
+        /// The task of parsing all custom png images from multiple folders into a flat list of png bitmaps
+        /// </summary>
+        public static Task ParseCustomTexturesTask { get; private set; } = null;
+
+        /// <summary>
+        /// The list of parsed custom png images into textures
+        /// </summary>
+        public static List<Texture> CustomContourIconImages { get; private set; } = null;
+
+        private static Stopwatch ParseStopwatch = new Stopwatch();
+
+        /// <summary>
+        /// Loads all custom textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
+        /// </summary>
+        /// <param name="CustomFolderPaths">The list of absolute paths containing custom contour icon images to be loaded</param>
+        /// <param name="token">The cancellation token</param>
+        /// <returns>The list of textures</returns>
+        public static Task LoadCustomContourIconsAsync(List<string> CustomFolderPaths, CancellationToken token)
+        {
+            ParseCustomTexturesTask = Task.Run(() =>
+            {
+                Logging.Info(LogOptions.MethodName, "Custom contour icon images task starting");
+                ParseStopwatch.Restart();
+
+                //parse each folder list to create a list of all custom contour icons
+                Logging.Debug(LogOptions.MethodName, "Custom contour icon images folder count: {0}", CustomFolderPaths.Count);
+                List<string> customContourIconFilesList = new List<string>();
+                foreach (string folder in CustomFolderPaths)
+                {
+                    string realFolder = MacroUtils.MacroReplace(folder, ReplacementTypes.FilePath);
+                    Logging.Info(LogOptions.MethodName, "Checking for custom contour icon images in directory {0}", realFolder);
+                    token.ThrowIfCancellationRequested();
+
+                    if (!Directory.Exists(realFolder))
+                    {
+                        Logging.Warning(LogOptions.MethodName, "Directory {0} does not exist, skipping", realFolder);
+                        continue;
+                    }
+
+                    customContourIconFilesList.AddRange(FileUtils.DirectorySearch(realFolder, SearchOption.TopDirectoryOnly, false, "*", 5, 3, false));
+                }
+
+                //filter the list to just image files
+                //{ "*.jpg", "*.png", "*.bmp" }
+                Logging.Debug(LogOptions.MethodName, "List created, filtering for only png,jpg,bmp image files", CustomFolderPaths.Count);
+                customContourIconFilesList = customContourIconFilesList.Where(filepath =>
+                {
+                    if (Path.GetExtension(filepath).ToLower().Contains("png"))
+                        return true;
+                    else if (Path.GetExtension(filepath).ToLower().Contains("jpg"))
+                        return true;
+                    else if (Path.GetExtension(filepath).ToLower().Contains("bmp"))
+                        return true;
+                    else
+                        return false;
+
+                }).ToList();
+                customContourIconFilesList = customContourIconFilesList.Distinct().ToList();
+                if (customContourIconFilesList.Count == 0)
+                {
+                    Logging.Warning(LogOptions.MethodName, "Total of 0 custom contour icons found to parse (Is this the intent?)");
+                    return;
+                }
+
+                //just in case, dispose of the old one
+                DisposeParsedCustomTextures();
+                CustomContourIconImages = new List<Texture>();
+                Logging.Debug(LogOptions.MethodName, "Loading custom images into data lists for atlas creator", CustomFolderPaths.Count);
+                foreach (string customContourIconFilePath in customContourIconFilesList)
+                {
+                    token.ThrowIfCancellationRequested();
+
+                    //load the bitmap as well
+                    Bitmap customContourIconImage = new Bitmap(customContourIconFilePath);
+
+                    //don't care about the x an y for the custom textures
+                    CustomContourIconImages.Add(new Texture()
+                    {
+                        Name = Path.GetFileNameWithoutExtension(customContourIconFilePath),
+                        Height = customContourIconImage.Height,
+                        Width = customContourIconImage.Width,
+                        X = 0,
+                        Y = 0,
+                        AtlasImage = customContourIconImage
+                    });
+                    customContourIconImage = null;
+                }
+                Logging.Info(LogOptions.MethodName, "Custom images parsing task completed in {0} msec", ParseStopwatch.ElapsedMilliseconds);
+                ParseStopwatch.Stop();
+            });
+            return ParseCustomTexturesTask;
+        }
+
+        /// <summary>
+        /// Dispose of all textures in the shared custom texture list
+        /// </summary>
+        public static void DisposeParsedCustomTextures()
+        {
+            if (CustomContourIconImages != null)
+            {
+                foreach (Texture tex in CustomContourIconImages)
+                {
+                    if (tex != null)
+                    {
+                        if (tex.AtlasImage != null)
+                        {
+                            tex.AtlasImage.Dispose();
+                            tex.AtlasImage = null;
+                        }
+                    }
+                }
+                CustomContourIconImages = null;
+            }
+        }
+        #endregion
 
         #region IDisposable Support
         private void Cleanup()
