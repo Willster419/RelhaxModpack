@@ -580,7 +580,7 @@ namespace RelhaxModpack.Atlases
         #region IDisposable Support
         private void Cleanup()
         {
-            Logging.Info("[atlas file {0}]: Disposing resources from DisposeCleanup()", Atlas.AtlasFile);
+            Logging.Debug(LogOptions.ClassName, "Disposing resources");
             //dispose main atlas image
             if (atlasImage != null)
             {
@@ -613,10 +613,13 @@ namespace RelhaxModpack.Atlases
             }
 
             //delete the temp files if they exist
-            if (File.Exists(Atlas.TempAtlasImageFilePath))
-                File.Delete(Atlas.TempAtlasImageFilePath);
-            if (File.Exists(Atlas.TempAtlasMapFilePath))
-                File.Delete(Atlas.TempAtlasMapFilePath);
+            if (Atlas != null)
+            {
+                if (File.Exists(Atlas.TempAtlasImageFilePath))
+                    File.Delete(Atlas.TempAtlasImageFilePath);
+                if (File.Exists(Atlas.TempAtlasMapFilePath))
+                    File.Delete(Atlas.TempAtlasMapFilePath);
+            }
         }
 
         private bool disposedValue = false; // To detect redundant calls
