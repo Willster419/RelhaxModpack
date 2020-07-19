@@ -19,8 +19,15 @@ namespace RelhaxUnitTests
 {
     public struct PackerSettings
     {
-        public bool powerTwo;
-        public bool squareImage;
+        public bool PowerTwo;
+        public bool SquareImage;
+    }
+
+    public struct ImageHandlerSettings
+    {
+        public string Filename;
+        public int Height;
+        public int Width;
     }
 
     [TestClass]
@@ -28,10 +35,10 @@ namespace RelhaxUnitTests
     {
         List<PackerSettings> PackerSettingsToTest = new List<PackerSettings>()
         {
-            new PackerSettings(){powerTwo = false, squareImage = false},
-            new PackerSettings(){powerTwo = true, squareImage = false},
-            new PackerSettings(){powerTwo = false, squareImage = true},
-            new PackerSettings(){powerTwo = true, squareImage = true},
+            new PackerSettings(){PowerTwo = false, SquareImage = false},
+            new PackerSettings(){PowerTwo = true, SquareImage = false},
+            new PackerSettings(){PowerTwo = false, SquareImage = true},
+            new PackerSettings(){PowerTwo = true, SquareImage = true},
         };
         string[] AtlasFiles = new string[]
         {
@@ -134,12 +141,18 @@ namespace RelhaxUnitTests
                 XmlElement xmlTexture = xmlTextureList[i] as XmlElement;
 
                 //properties match lowercase xml properties names
-                foreach (string property in texture.PropertiesForSerializationElements())
+                foreach (string propertyName in texture.PropertiesForSerializationElements())
                 {
-                    string xmlValue = (xmlTexture.SelectSingleNode(property.ToLower()) as XmlElement).InnerText;
+                    XmlElement element = xmlTexture.SelectSingleNode(propertyName.ToLower()) as XmlElement;
+                    Assert.IsNotNull(element);
+                    string xmlValue = element.InnerText.Trim();
+                    //for reference
                     //PropertyInfo property = listObjectType.GetProperty(attributeName);
-                    string textureValue = typeof(Texture).GetProperty(property).GetValue(texture) as string;
-                    Assert.AreEqual(xmlValue, textureValue);
+                    PropertyInfo property = typeof(Texture).GetProperty(propertyName);
+                    Assert.IsNotNull(property);
+                    object value = property.GetValue(texture);
+                    Assert.IsNotNull(value);
+                    Assert.AreEqual(xmlValue, value.ToString());
                 }
             }
 
@@ -172,14 +185,25 @@ namespace RelhaxUnitTests
             for (int i = 0; i < xmlTextureList.Count; i++)
             {
                 XmlElement xmlTexture = xmlTextureList[i] as XmlElement;
-                string textureName = xmlTexture.SelectSingleNode(nameof(Texture.Name).ToLower()).InnerText;
+                Assert.IsNotNull(xmlTexture);
+                string textureName = xmlTexture.SelectSingleNode(nameof(Texture.Name).ToLower()).InnerText.Trim();
                 Rectangle imageSize = imageSizes[textureName];
                 Assert.IsNotNull(imageSize);
 
-                Assert.AreEqual((xmlTexture.SelectSingleNode(nameof(imageSize.X).ToLower()) as XmlElement).InnerText, imageSize.X.ToString());
-                Assert.AreEqual((xmlTexture.SelectSingleNode(nameof(imageSize.Y).ToLower()) as XmlElement).InnerText, imageSize.Y.ToString());
-                Assert.AreEqual((xmlTexture.SelectSingleNode(nameof(imageSize.Width).ToLower()) as XmlElement).InnerText, imageSize.Width.ToString());
-                Assert.AreEqual((xmlTexture.SelectSingleNode(nameof(imageSize.Height).ToLower()) as XmlElement).InnerText, imageSize.Height.ToString());
+                string[] propertiesToCheck = { nameof(imageSize.X), nameof(imageSize.Y), nameof(imageSize.Width), nameof(imageSize.Height) };
+                foreach(string propertyName in propertiesToCheck)
+                {
+                    XmlElement xmlProperty = xmlTexture.SelectSingleNode(propertyName.ToLower()) as XmlElement;
+                    Assert.IsNotNull(xmlProperty);
+
+                    PropertyInfo property = imageSize.GetType().GetProperty(propertyName);
+                    Assert.IsNotNull(property);
+                    object propertyValue = property.GetValue(imageSize);
+                    Assert.IsNotNull(propertyValue);
+                    Assert.IsTrue(propertyValue is int);
+
+                    Assert.AreEqual(xmlProperty.InnerText.Trim(), propertyValue.ToString());
+                }
             }
 
             File.Delete(testFileOut);
@@ -195,30 +219,42 @@ namespace RelhaxUnitTests
             Assert.IsNotNull(log);
             Assert.IsTrue(log.CanWrite);
 
-            Bitmap loadedImage;
-            ImageHandler handler = new ImageHandler();
+            ImageHandlerSettings[] imageHandlerSettings =
+            {
+                new ImageHandlerSettings(){ Filename="vehicleMarkerAtlas.dds", Height=1024, Width=2048 },
+                new ImageHandlerSettings(){ Filename="battleAtlas.dds", Height=4512, Width=4096 }
+            };
 
-            string testFileIn = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.dds");
-            Assert.IsTrue(File.Exists(testFileIn));
+            string outputPath = Path.Combine(UnitTestHelper.ResourcesFolder, "dds_test_out");
+            if (!Directory.Exists(outputPath))
+                Directory.CreateDirectory(outputPath);
 
-            log.Write("Asserting to load the DDS file 'battleAtlas.dds' to Bitmap");
-            loadedImage = handler.LoadDDS(testFileIn);
-            log.Write(string.Format("Load status: {0}", loadedImage != null));
-            Assert.IsNotNull(loadedImage);
-            log.Write(string.Format("Width expected: {0}, actual: {1}",4096,loadedImage.Width));
-            Assert.AreEqual(4096, loadedImage.Width);
-            log.Write(string.Format("Height expected: {0}, actual: {1}", 4512, loadedImage.Height));
-            Assert.AreEqual(4512, loadedImage.Height);
+            foreach (ImageHandlerSettings settings in imageHandlerSettings)
+            {
+                ImageHandler handler = new ImageHandler();
+                string testFileIn = Path.Combine(UnitTestHelper.ResourcesFolder, settings.Filename);
+                string testFileOut = Path.Combine(outputPath, settings.Filename);
+                Assert.IsTrue(File.Exists(testFileIn));
+                if (File.Exists(testFileOut))
+                    File.Delete(testFileOut);
 
-            string testFileOut = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas2.dds");
-            if (File.Exists(testFileOut))
+                log.Write("Asserting to load the DDS file 'battleAtlas.dds' to Bitmap");
+                Bitmap loadedImage = handler.LoadDDS(testFileIn);
+                log.Write(string.Format("Load status: {0}", loadedImage != null));
+                Assert.IsNotNull(loadedImage);
+                log.Write(string.Format("Width expected: {0}, actual: {1}", settings.Width, loadedImage.Width));
+                Assert.AreEqual(settings.Width, loadedImage.Width);
+                log.Write(string.Format("Height expected: {0}, actual: {1}", settings.Height, loadedImage.Height));
+                Assert.AreEqual(settings.Height, loadedImage.Height);
+
+                log.Write("Asserting to write the Bitmap to DDS");
+                Assert.IsTrue(handler.SaveDDS(testFileOut, loadedImage, true));
+                log.Write(string.Format("File written: {0}", File.Exists(testFileOut)));
+                Assert.IsTrue(File.Exists(testFileOut));
                 File.Delete(testFileOut);
+            }
 
-            log.Write("Asserting to write the Bitmap to DDS");
-            Assert.IsTrue(handler.SaveDDS(testFileOut,loadedImage,true));
-            log.Write(string.Format("File written: {0}", File.Exists(testFileOut)));
-            Assert.IsTrue(File.Exists(testFileOut));
-            File.Delete(testFileOut);
+            Directory.Delete(outputPath, true);
 
             UnitTestHelper.DestroyLogfile(ref log, false);
             Assert.IsNull(log);
@@ -234,15 +270,28 @@ namespace RelhaxUnitTests
             log.Write("Asserting to start the loading of mod textures");
             List<string> modIconsLocation = new List<string>() { UnitTestHelper.ResourcesFolder };
             CancellationToken token = new CancellationToken();
-            Task loadCustomContourIconsTask = AtlasUtils.LoadCustomContourIconsAsync(modIconsLocation, token);
+            Task loadCustomContourIconsTask = AtlasCreator.LoadCustomContourIconsAsync(modIconsLocation, token);
             Assert.IsNotNull(loadCustomContourIconsTask);
+            Assert.IsNotNull(AtlasUtils.AtlasLoaderLockObject);
 
             //wait
             loadCustomContourIconsTask.Wait();
+            log.Write(string.Format("Task status: {0}", loadCustomContourIconsTask.Status.ToString()));
             Assert.IsTrue(loadCustomContourIconsTask.Status == TaskStatus.RanToCompletion);
 
+            log.Write("Asserting each texture start point is (0,0) and width, height = image width, height");
+            Assert.IsNotNull(AtlasCreator.CustomContourIconImages);
+            foreach (Texture texture in AtlasCreator.CustomContourIconImages)
+            {
+                Assert.IsNotNull(texture.AtlasImage);
+                Assert.IsTrue(texture.X == 0);
+                Assert.IsTrue(texture.Y == 0);
+                Assert.IsTrue(texture.Width == texture.AtlasImage.Width);
+                Assert.IsTrue(texture.Height == texture.AtlasImage.Height);
+            }
+
             //dispose of the mod contour icons
-            AtlasUtils.DisposeparseModTextures();
+            AtlasCreator.DisposeParsedCustomTextures();
 
             UnitTestHelper.DestroyLogfile(ref log, false);
             Assert.IsNull(log);
@@ -269,11 +318,11 @@ namespace RelhaxUnitTests
 
                 atlasCreator.Atlas = new Atlas()
                 {
-                    AtlasFile = "battleAtlas.dds",
+                    AtlasFile = "battleAtlas.dds", //changed later
                     AtlasHeight = 0, //auto-size
                     AtlasWidth = 0, //auto-size
                     AtlasSaveDirectory = Path.GetDirectoryName(testAtlasOut),
-                    DirectoryInArchive = UnitTestHelper.ResourcesFolder, //set the full path without fileanme when it's a copy
+                    DirectoryInArchive = UnitTestHelper.ResourcesFolder, //set the full path without filename when it's a copy
                     FastImagePacker = true, //don't change this
                     PowOf2 = true, //changed later
                     Square = true, //changed later
@@ -290,12 +339,12 @@ namespace RelhaxUnitTests
                     log.Write("Asserting to start the loading of mod textures");
                     List<string> modIconsLocation = new List<string>() { UnitTestHelper.ResourcesFolder };
                     CancellationToken token = new CancellationToken();
-                    AtlasUtils.LoadCustomContourIconsAsync(modIconsLocation, token);
+                    AtlasCreator.LoadCustomContourIconsAsync(modIconsLocation, token);
 
                     log.Write(string.Format("Asserting to create the atlas '{0}' using the following settings:",atlasPrefix));
-                    log.Write(string.Format("{0}={1}, {2}={3}", "powerTwo", settings.powerTwo, "squareImage", settings.squareImage));
-                    atlasCreator.Atlas.PowOf2 = settings.powerTwo;
-                    atlasCreator.Atlas.Square = settings.squareImage;
+                    log.Write(string.Format("{0}={1}, {2}={3}", "powerTwo", settings.PowerTwo, "squareImage", settings.SquareImage));
+                    atlasCreator.Atlas.PowOf2 = settings.PowerTwo;
+                    atlasCreator.Atlas.Square = settings.SquareImage;
                     atlasCreator.Atlas.FastImagePacker = true;
                     atlasCreator.Atlas.AtlasFile = Path.GetFileName(testAtlasOut);
 
@@ -319,7 +368,7 @@ namespace RelhaxUnitTests
                     Assert.AreEqual(numSubTexturesIn, numSubTexturesOut);
 
                     //dispose of the mod contour icons
-                    AtlasUtils.DisposeparseModTextures();
+                    AtlasCreator.DisposeParsedCustomTextures();
                 }
             }
 
