@@ -149,17 +149,17 @@
             </summary>
             <returns>True if both libraries loaded, false otherwise</returns>
         </member>
-        <member name="F:RelhaxModpack.Atlases.AtlasUtils.ParseModTexturesTask">
+        <member name="P:RelhaxModpack.Atlases.AtlasUtils.ParseModTexturesTask">
             <summary>
             The task of parsing all mod png images from multiple folders into a flat list of png bitmaps
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Atlases.AtlasUtils.ModContourIconImages">
+        <member name="P:RelhaxModpack.Atlases.AtlasUtils.ModContourIconImages">
             <summary>
             The list of parsed mod png images into textures
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Atlases.AtlasUtils.AtlasLoaderLockObject">
+        <member name="P:RelhaxModpack.Atlases.AtlasUtils.AtlasLoaderLockObject">
             <summary>
             Lock object used in AtlasCreator for critical sections that can't be done at the same time
             </summary>
@@ -170,7 +170,7 @@
             A list of Atlas creating thread engines
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Atlases.AtlasUtils.LoadModContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+        <member name="M:RelhaxModpack.Atlases.AtlasUtils.LoadCustomContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
             <summary>
             Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
             </summary>
@@ -191,6 +191,16 @@
         <member name="M:RelhaxModpack.Atlases.AtlasUtils.DisposeOfAllAtlasResources">
             <summary>
             Disposes of all statically used AtlasUtils resources, including releasing the mod texture list
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Atlases.ImageHandler">
+            <summary>
+            Class for handling loading and saving of DDS atlas files
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Atlases.MapHandler">
+            <summary>
+            Class for handling of xml atlas map files (WG style)
             </summary>
         </member>
         <member name="T:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker">
