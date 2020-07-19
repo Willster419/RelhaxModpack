@@ -149,12 +149,12 @@
             </summary>
             <returns>True if both libraries loaded, false otherwise</returns>
         </member>
-        <member name="P:RelhaxModpack.Atlases.AtlasUtils.ParseModTexturesTask">
+        <member name="P:RelhaxModpack.Atlases.AtlasUtils.ParseCustomTexturesTask">
             <summary>
             The task of parsing all mod png images from multiple folders into a flat list of png bitmaps
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Atlases.AtlasUtils.ModContourIconImages">
+        <member name="P:RelhaxModpack.Atlases.AtlasUtils.CustomContourIconImages">
             <summary>
             The list of parsed mod png images into textures
             </summary>
@@ -5516,31 +5516,37 @@
             <summary>
             The file name of where this texture came from
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.X">
             <summary>
             The x position of the texture in the atlas image
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.Y">
             <summary>
             The y position of the texture in the atlas image
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.Width">
             <summary>
             The width of the texture in the atlas image
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.Height">
             <summary>
             The height of the texture in the atlas image
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.AtlasImage">
             <summary>
             The actual bitmap in memory of the image
             </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
         </member>
         <member name="T:RelhaxModpack.Xml.XmlUnpack">
             <summary>
