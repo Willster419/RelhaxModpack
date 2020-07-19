@@ -24,7 +24,6 @@ namespace RelhaxUnitTests
     [TestClass]
     public class Set02_AtlasUnitTests : UnitTestLogBase
     {
-        private AtlasCreator AtlasCreator = new AtlasCreator();
         List<PackerSettings> PackerSettingsToTest = new List<PackerSettings>()
         {
             new PackerSettings(){powerTwo = false, squareImage = false},
@@ -90,7 +89,8 @@ namespace RelhaxUnitTests
             Assert.IsNotNull(log);
             Assert.IsTrue(log.CanWrite);
 
-            List<Texture> Texturelist = null;
+            List<Texture> texturelist = null;
+            AtlasCreator atlasCreator = new AtlasCreator();
             string testFileIn = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.xml");
             Assert.IsTrue(File.Exists(testFileIn));
             string testFileOut = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas2.xml");
@@ -102,11 +102,12 @@ namespace RelhaxUnitTests
             int numSubTextures = textureDocument.SelectNodes("//SubTexture").Count;
 
             log.Write("Asserting to load a xml texture file to Texture list");
-            Texturelist = AtlasCreator.UnitTestLoadMapFile(testFileIn);
-            log.Write(string.Format("Texture class load status: {0}", Texturelist != null));
-            Assert.IsNotNull(Texturelist);
-            log.Write(string.Format("Xml node textures: {0}, parsed: {1}", numSubTextures, Texturelist.Count));
-            Assert.AreEqual(numSubTextures, Texturelist.Count);
+            texturelist = atlasCreator.UnitTestLoadMapFile(testFileIn);
+            log.Write(string.Format("Texture class load status: {0}", texturelist != null));
+            Assert.IsNotNull(texturelist);
+            log.Write(string.Format("Xml node textures: {0}, parsed: {1}", numSubTextures, texturelist.Count));
+            Assert.AreEqual(numSubTextures, texturelist.Count);
+            atlasCreator.Dispose();
 
             UnitTestHelper.DestroyLogfile(ref log, false);
             Assert.IsNull(log);
@@ -120,12 +121,13 @@ namespace RelhaxUnitTests
             Assert.IsTrue(log.CanWrite);
 
             Bitmap loadedImage = null;
+            AtlasCreator atlasCreator = new AtlasCreator();
 
             string testFileIn = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.dds");
             Assert.IsTrue(File.Exists(testFileIn));
 
             log.Write("Asserting to load the dds file 'battleAtlas.dds' to Bitmap");
-            loadedImage = AtlasCreator.UnitTestLoadDDS(testFileIn);
+            loadedImage = atlasCreator.UnitTestLoadDDS(testFileIn);
             log.Write(string.Format("Load status: {0}", loadedImage != null));
             Assert.IsNotNull(loadedImage);
             log.Write(string.Format("Width expected: {0}, actual: {1}",4096,loadedImage.Width));
@@ -137,14 +139,15 @@ namespace RelhaxUnitTests
             if (File.Exists(testFileOut))
                 File.Delete(testFileOut);
 
-            AtlasCreator.Atlas = new Atlas() { AtlasFile = testFileOut };
+            atlasCreator.Atlas = new Atlas() { AtlasFile = testFileOut };
             log.Write("Asserting to write the Bitmap to dds");
-            Assert.IsTrue(AtlasCreator.UnitTestSaveDDS(testFileOut, ref loadedImage));
+            Assert.IsTrue(atlasCreator.UnitTestSaveDDS(testFileOut, ref loadedImage));
             log.Write(string.Format("File written: {0}", File.Exists(testFileOut)));
             Assert.IsTrue(File.Exists(testFileOut));
             File.Delete(testFileOut);
             loadedImage.Dispose();
             loadedImage = null;
+            atlasCreator.Dispose();
 
             UnitTestHelper.DestroyLogfile(ref log, false);
             Assert.IsNull(log);
@@ -160,14 +163,16 @@ namespace RelhaxUnitTests
             //make sure atlas packer's relhax temp folder exists
             if (!Directory.Exists(Settings.RelhaxTempFolderPath))
                 Directory.CreateDirectory(Settings.RelhaxTempFolderPath);
+            AtlasCreator atlasCreator = null;
 
-            foreach(string atlasPrefix in AtlasFiles)
+            foreach (string atlasPrefix in AtlasFiles)
+            using (atlasCreator = new AtlasCreator())
             {
                 string testAtlasOut = Path.Combine(UnitTestHelper.ResourcesFolder, "atlas_out", string.Format("{0}.dds",atlasPrefix));
                 string testMapOut = Path.Combine(UnitTestHelper.ResourcesFolder, "atlas_out", string.Format("{0}.xml", atlasPrefix));
                 string testMapIn = Path.Combine(UnitTestHelper.ResourcesFolder, string.Format("{0}.xml", atlasPrefix));
 
-                AtlasCreator.Atlas = new Atlas()
+                atlasCreator.Atlas = new Atlas()
                 {
                     AtlasFile = "battleAtlas.dds",
                     AtlasHeight = 0, //auto-size
@@ -183,9 +188,9 @@ namespace RelhaxUnitTests
 
                 foreach (PackerSettings settings in PackerSettingsToTest)
                 {
-                    if (Directory.Exists(AtlasCreator.Atlas.AtlasSaveDirectory))
-                        Directory.Delete(AtlasCreator.Atlas.AtlasSaveDirectory, true);
-                    Directory.CreateDirectory(AtlasCreator.Atlas.AtlasSaveDirectory);
+                    if (Directory.Exists(atlasCreator.Atlas.AtlasSaveDirectory))
+                        Directory.Delete(atlasCreator.Atlas.AtlasSaveDirectory, true);
+                    Directory.CreateDirectory(atlasCreator.Atlas.AtlasSaveDirectory);
 
                     log.Write("Asserting to start the loading of mod textures");
                     List<string> modIconsLocation = new List<string>() { UnitTestHelper.ResourcesFolder };
@@ -194,13 +199,13 @@ namespace RelhaxUnitTests
 
                     log.Write(string.Format("Asserting to create the atlas '{0}' using the following settings:",atlasPrefix));
                     log.Write(string.Format("{0}={1}, {2}={3}", "powerTwo", settings.powerTwo, "squareImage", settings.squareImage));
-                    AtlasCreator.Atlas.PowOf2 = settings.powerTwo;
-                    AtlasCreator.Atlas.Square = settings.squareImage;
-                    AtlasCreator.Atlas.FastImagePacker = true;
-                    AtlasCreator.Atlas.AtlasFile = Path.GetFileName(testAtlasOut);
+                    atlasCreator.Atlas.PowOf2 = settings.powerTwo;
+                    atlasCreator.Atlas.Square = settings.squareImage;
+                    atlasCreator.Atlas.FastImagePacker = true;
+                    atlasCreator.Atlas.AtlasFile = Path.GetFileName(testAtlasOut);
 
                     //actually run the packer
-                    FailCode code = AtlasCreator.CreateAtlas();
+                    FailCode code = atlasCreator.CreateAtlas();
                     log.Write(string.Format("Packer fail code: {0}", code.ToString()));
                     Assert.AreEqual(FailCode.None, code);
                     Assert.IsTrue(File.Exists(testAtlasOut));
@@ -223,7 +228,7 @@ namespace RelhaxUnitTests
                 }
             }
 
-            Directory.Delete(AtlasCreator.Atlas.AtlasSaveDirectory, true);
+            Directory.Delete(atlasCreator.Atlas.AtlasSaveDirectory, true);
 
             UnitTestHelper.DestroyLogfile(ref log, false);
             Assert.IsNull(log);
