@@ -108,15 +108,14 @@ namespace RelhaxModpack.Atlases.Packing
             if (outputImage == null)
                 return FailCode.FailedToCreateBitmapAtlas;
 
-            
+            // make our map file
             outputMap = GenerateMapData(imagePlacement, imageSizes);
-
 
             // clear our dictionaries just to free up some memory
             imageSizes.Clear();
             imagePlacement.Clear();
 
-            return 0;
+            return FailCode.None;
         }
 
         private Dictionary<string, Rectangle> GenerateMapData(Dictionary<Texture, Rectangle> imagePlacement, Dictionary<Texture, Size> imageSizes)
@@ -320,8 +319,7 @@ namespace RelhaxModpack.Atlases.Packing
                 Size size = imageSizes[image];
 
                 // pack the image
-                Point origin;
-                if (!rectanglePacker.TryPack(size.Width + padding, size.Height + padding, out origin))
+                if (!rectanglePacker.TryPack(size.Width + padding, size.Height + padding, out Point origin))
                 {
                     return false;
                 }
