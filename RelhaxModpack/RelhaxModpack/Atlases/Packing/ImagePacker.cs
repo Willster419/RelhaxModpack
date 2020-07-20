@@ -413,39 +413,5 @@ namespace RelhaxModpack.Atlases.Packing
                 stopwatch.Restart();
             }
         }
-
-        #region Old or not to be used methods
-        //copy a small bitmap into a larger bitmap. allows for copying textures into an atlas
-        private void CopyTextureIntoAtlasGDI(ref Bitmap atlas, ref Bitmap texture, Rectangle locationOnAtlas)
-        {
-            Rectangle actualLocationToCopyOntoAtlas = new Rectangle(locationOnAtlas.X, locationOnAtlas.Y, texture.Width, texture.Height);
-
-            using (Graphics g = Graphics.FromImage(atlas))
-            {
-                g.DrawImage(texture, actualLocationToCopyOntoAtlas);
-            }
-        }
-
-        private void CopyTextureIntoAtlasPixelCopy(ref Bitmap atlas, ref Bitmap texture, Rectangle locationOnAtlas)
-        {
-            for (int x = 0; x < texture.Width; x++)
-                for (int y = 0; y < texture.Height; y++)
-                    atlas.SetPixel(locationOnAtlas.X + x, locationOnAtlas.Y + y, texture.GetPixel(x, y));
-        }
-
-        private Bitmap GenerateAtlasImageDataOld(List<Texture> files, Dictionary<Texture, Rectangle> imagePlacement, int outputWidth, int outputHeight)
-        {
-            Bitmap outputImage = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
-
-            // draw all the images into the output image
-            foreach (Texture texture in files)
-            {
-                //CopyTextureIntoAtlasGDI(ref outputImage, ref texture.AtlasImage, imagePlacement[texture]);
-                CopyTextureIntoAtlasPixelCopy(ref outputImage, ref texture.AtlasImage, imagePlacement[texture]);
-            }
-
-            return outputImage;
-        }
-        #endregion
     }
 }
