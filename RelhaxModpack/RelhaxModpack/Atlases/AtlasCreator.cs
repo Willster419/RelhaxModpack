@@ -153,7 +153,7 @@ namespace RelhaxModpack.Atlases
             if(string.IsNullOrEmpty(Atlas.TempAtlasMapFilePath))
                 Atlas.TempAtlasMapFilePath = Path.Combine(Settings.RelhaxTempFolderPath, Atlas.MapFile);
 
-            //prepare the filesystem
+            //prepare the temp and output directories (lock to prevent multiple threads creating folders. Could get messy.
             lock (AtlasUtils.AtlasLoaderLockObject)
             {
                 //create temp directory if it does not already exist
@@ -175,8 +175,6 @@ namespace RelhaxModpack.Atlases
             stopwatch.Restart();
 
             //extract the map and atlas files
-            //because of the potential to use the same package for multiple threads, it's safer to do one at a time
-            //but it's fine cause these are quick so no big deal
             Logging.Info("[atlas file {0}]: Unpack of atlas and map starting", Atlas.AtlasFile);
             Logging.Debug("[atlas file {0}]: Atlas file unpack: pkg={1}, sourcePath={2}, dest={3}",
                 Path.GetFileName(Atlas.AtlasFile), Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), Atlas.TempAtlasImageFilePath);
@@ -189,6 +187,7 @@ namespace RelhaxModpack.Atlases
 
             Logging.Debug("[atlas file {0}]: Map file unpack: pkg={1}, sourcePath={2}, dest={3}",
                 Path.GetFileName(Atlas.AtlasFile), Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), Atlas.TempAtlasMapFilePath);
+            //because of the potential to use the same package for multiple threads, it's safer to do one at a time
             lock (AtlasUtils.AtlasLoaderLockObject)
             {
                 FileUtils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), Atlas.TempAtlasMapFilePath);
@@ -214,9 +213,9 @@ namespace RelhaxModpack.Atlases
             //using the parsed size and location definitions from above, copy each individual sub-texture to the texture list
             Logging.Info("[atlas file {0}]: Parsing atlas to bitmap data", Atlas.AtlasFile);
             Logging.Debug("[atlas file {0}]: Using atlas file {1}", Atlas.AtlasFile, Atlas.TempAtlasImageFilePath);
+            //the native library can only be used once at a time
             lock (AtlasUtils.AtlasLoaderLockObject)
             {
-                //the native library can only be used once at a time
                 atlasImage = imageHandler.LoadDDS(Atlas.TempAtlasImageFilePath);
             }
             OnAtlasProgres?.Invoke(this, null);
