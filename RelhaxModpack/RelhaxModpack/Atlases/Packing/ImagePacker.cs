@@ -168,16 +168,69 @@ namespace RelhaxModpack.Atlases.Packing
 
         private Bitmap GenerateAtlasImageData(List<Texture> files, Dictionary<Texture, Rectangle> imagePlacement, int outputWidth, int outputHeight)
         {
-            Bitmap outputImage = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
+            Bitmap atlas = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
 
-            // draw all the images into the output image
+            //lock the bits and copy the atlas to bytes
+            BitmapData atlasData = atlas.LockBits(new Rectangle(0, 0, atlas.Width, atlas.Height), ImageLockMode.WriteOnly, atlas.PixelFormat);
+            int atlasByteDepth = Math.Abs(atlasData.Stride) * atlas.Height;
+            byte[] atlasByte = new byte[atlasByteDepth];
+            Marshal.Copy(atlasData.Scan0, atlasByte, 0, atlasByteDepth);
+
+            //loop through each texture to copy it's data over
             foreach (Texture texture in files)
             {
-                CopyTextureIntoAtlasGDI(ref outputImage, ref texture.AtlasImage, imagePlacement[texture]);
-                //CopyTextureIntoAtlasPixelCopy(ref outputImage, ref texture.AtlasImage, imagePlacement[texture]);
+                CopyTextureIntoAtlasLock(ref atlasByte, ref texture.AtlasImage, imagePlacement[texture], atlasData.Stride);
             }
 
-            return outputImage;
+            //copy back and unlock
+            Marshal.Copy(atlasByte, 0, atlasData.Scan0, atlasByteDepth);
+            atlas.UnlockBits(atlasData);
+
+            //for debugging, verify the image is bit for bit accurate
+            //https://online-image-comparison.com/
+            //http://onlinemd5.com/
+            //atlas.Save(@"C:\Users\Willster419\Desktop\custom2.png",ImageFormat.Png);
+
+            return atlas;
+        }
+
+        private void CopyTextureIntoAtlasLock(ref byte[] atlasByte, ref Bitmap texture, Rectangle locationOnAtlas, int atlasStride)
+        {
+            //define the area of the atlas that we actually want to copy over (don't copy padding)
+            Rectangle actualLocationToCopyOntoAtlas = new Rectangle(locationOnAtlas.X, locationOnAtlas.Y, texture.Width, texture.Height);
+
+            //lock the texture and get type data
+            BitmapData textureData = texture.LockBits(new Rectangle(0, 0, texture.Width, texture.Height), ImageLockMode.ReadOnly, texture.PixelFormat);
+            int textureByteDepth = Math.Abs(textureData.Stride) * actualLocationToCopyOntoAtlas.Height;
+            byte[] textureByte = new byte[textureByteDepth];
+            Marshal.Copy(textureData.Scan0, textureByte, 0, textureByteDepth);
+
+            /*
+             * 4 places in the array = 1 pixel. the alpha, red, green, blue
+             * so to get pixel 3 (1 based), it would be byte indexes 8 to 11
+             * the formula here is base ((pixel-1) * 4) to ((pixel-1) * 4) + 4
+             * 
+             * the amount that you want to copy for each row is width * 4
+             * and will loop for texture height
+             * 
+             * to get the starting point, multiply stride * (Y + loop), then X * 4
+            */
+
+            int tempTextureCount = 0;
+            for (int row = 0; row < actualLocationToCopyOntoAtlas.Height; row++)
+            {
+                int atlasStartingPoint = ((actualLocationToCopyOntoAtlas.Y + row) * atlasStride) + (actualLocationToCopyOntoAtlas.X * 4);
+                int ammountToCopy = textureData.Stride;
+                //https://stackoverflow.com/questions/1866236/add-offset-to-intptr
+                //Marshal.Copy(textureByte, 0, IntPtr.Add(atlasData.Scan0, atlasStartingPoint), ammountToCopy);
+                for (int j = 0; j < ammountToCopy; j++)
+                {
+                    atlasByte[atlasStartingPoint + j] = textureByte[tempTextureCount++];
+                }
+            }
+
+            //unlock and we're done
+            texture.UnlockBits(textureData);
         }
 
         // This method does some trickery type stuff where we perform the TestPackingImages method over and over, 
@@ -361,6 +414,7 @@ namespace RelhaxModpack.Atlases.Packing
             }
         }
 
+        #region Old or not to be used methods
         //copy a small bitmap into a larger bitmap. allows for copying textures into an atlas
         private void CopyTextureIntoAtlasGDI(ref Bitmap atlas, ref Bitmap texture, Rectangle locationOnAtlas)
         {
@@ -379,48 +433,19 @@ namespace RelhaxModpack.Atlases.Packing
                     atlas.SetPixel(locationOnAtlas.X + x, locationOnAtlas.Y + y, texture.GetPixel(x, y));
         }
 
-        private void CopyTextureIntoAtlasLock(ref Bitmap atlas, ref Bitmap texture, Rectangle locationOnAtlas)
+        private Bitmap GenerateAtlasImageDataOld(List<Texture> files, Dictionary<Texture, Rectangle> imagePlacement, int outputWidth, int outputHeight)
         {
-            //lock the area of the atlas that we're gunna copy and the texture
-            Rectangle actualLocationToCopyOntoAtlas = new Rectangle(locationOnAtlas.X, locationOnAtlas.Y, texture.Width, texture.Height);
-            BitmapData atlasData = atlas.LockBits(actualLocationToCopyOntoAtlas, ImageLockMode.WriteOnly, atlas.PixelFormat);
-            BitmapData textureData = texture.LockBits(new Rectangle(0, 0, texture.Width, texture.Height), ImageLockMode.ReadOnly, texture.PixelFormat);
+            Bitmap outputImage = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
 
-            //create byte array to copy data over
-            int bytes = Math.Abs(textureData.Stride) * texture.Height;
-            byte[] imageData = new byte[bytes];
+            // draw all the images into the output image
+            foreach (Texture texture in files)
+            {
+                //CopyTextureIntoAtlasGDI(ref outputImage, ref texture.AtlasImage, imagePlacement[texture]);
+                CopyTextureIntoAtlasPixelCopy(ref outputImage, ref texture.AtlasImage, imagePlacement[texture]);
+            }
 
-            //copy data from pointer to byte
-            Marshal.Copy(textureData.Scan0, imageData, 0, bytes);
-
-            //copy the data from byte to pointer
-            Marshal.Copy(imageData, 0, atlasData.Scan0, bytes);
-
-            //unlock and we're done
-            atlas.UnlockBits(atlasData);
-            texture.UnlockBits(textureData);
+            return outputImage;
         }
-
-        private void CopyTextureIntoAtlasLockNotWork(ref Bitmap atlas, ref Bitmap texture, Rectangle locationOnAtlas)
-        {
-            //lock the area of the atlas that we're gunna copy and the texture
-            Rectangle actualLocationToCopyOntoAtlas = new Rectangle(locationOnAtlas.X, locationOnAtlas.Y, texture.Width, texture.Height);
-            BitmapData atlasData = atlas.LockBits(actualLocationToCopyOntoAtlas, ImageLockMode.WriteOnly, atlas.PixelFormat);
-            BitmapData textureData = texture.LockBits(new Rectangle(0, 0, texture.Width, texture.Height), ImageLockMode.ReadOnly, texture.PixelFormat);
-
-            //create byte array to copy data over
-            int bytes = Math.Abs(textureData.Stride) * texture.Height;
-            byte[] imageData = new byte[bytes];
-
-            //copy data from pointer to byte
-            Marshal.Copy(textureData.Scan0, imageData, 0, bytes);
-
-            //copy the data from byte to pointer
-            Marshal.Copy(imageData, 0, atlasData.Scan0, bytes);
-
-            //unlock and we're done
-            atlas.UnlockBits(atlasData);
-            texture.UnlockBits(textureData);
-        }
+        #endregion
     }
 }
