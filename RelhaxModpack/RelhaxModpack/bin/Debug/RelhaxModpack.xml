@@ -198,10 +198,40 @@
             Class for handling loading and saving of DDS atlas files
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Atlases.ImageHandler.LoadDDS(System.String)">
+            <summary>
+            Loads a DDS image into a Bitmap object
+            </summary>
+            <param name="filename">The relative or absolute location of the DDS file</param>
+            <returns>The Bitmap of the DDS file, or null if it failed</returns>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.ImageHandler.SaveDDS(System.String,System.Drawing.Bitmap,System.Boolean)">
+            <summary>
+            Saves a Bitmap image into a DDS file of DXT5 compression
+            </summary>
+            <param name="savePath">The path to save the file</param>
+            <param name="image">The bitmap to save</param>
+            <param name="disposeImage">Set to true to dispose of the inputted bitmap after it's saved</param>
+            <returns></returns>
+        </member>
         <member name="T:RelhaxModpack.Atlases.MapHandler">
             <summary>
             Class for handling of xml atlas map files (WG style)
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.MapHandler.LoadMapFile(System.String)">
+            <summary>
+            Loads a WG atlas map file into a texture list
+            </summary>
+            <param name="mapFile">The map file to load</param>
+            <returns>The texture list of success, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.MapHandler.SaveMapfile(System.String,System.Collections.Generic.Dictionary{System.String,System.Drawing.Rectangle})">
+            <summary>
+            Saves a map dictionary to the WG map xml file
+            </summary>
+            <param name="filename">The location to save the file</param>
+            <param name="map">The Dictionary of image name (key) and location (value)</param>
         </member>
         <member name="T:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker">
             <summary>Rectangle packer using an algorithm by Javier Arevalo</summary>
@@ -348,7 +378,7 @@
             Handles packing a list of small bitmap objects into one large bitmap object 
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Atlases.Packing.ImagePacker.PackImage(System.Collections.Generic.IEnumerable{RelhaxModpack.Texture},System.Boolean,System.Boolean,System.Boolean,System.Int32,System.Int32,System.Int32,System.Drawing.Bitmap@,System.Collections.Generic.Dictionary{System.String,System.Drawing.Rectangle}@)">
+        <member name="M:RelhaxModpack.Atlases.Packing.ImagePacker.PackImage(System.Collections.Generic.IEnumerable{RelhaxModpack.Texture},System.Boolean,System.Boolean,System.Boolean,System.Int32,System.Int32,System.Int32,System.String,System.Drawing.Bitmap@,System.Collections.Generic.Dictionary{System.String,System.Drawing.Rectangle}@)">
             <summary>
             Packs a collection of images into a single image.
             </summary>
@@ -359,6 +389,7 @@
             <param name="maximumWidth">The maximum width of the output image.</param>
             <param name="maximumHeight">The maximum height of the output image.</param>
             <param name="imagePadding">The amount of blank space to insert in between individual images.</param>
+            <param name="atlasImageName">The name of the Atlas image. Used for logging and can be null.</param>
             <param name="outputImage">The resulting output image.</param>
             <param name="outputMap">The resulting output map of placement rectangles for the images.</param>
             <returns>0 if the packing was successful, error code otherwise.</returns>
