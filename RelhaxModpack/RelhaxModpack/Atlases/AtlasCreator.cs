@@ -251,44 +251,21 @@ namespace RelhaxModpack.Atlases
             //copy the sub-texture bitmap data to each texture bitmap data
             stopwatch.Start();
             Logging.Info("[atlas file {0}]: Parsing bitmap data", Atlas.AtlasFile);
-            lock (AtlasUtils.AtlasLoaderLockObject)
+            //get the overall size of the bitmap
+            Rectangle rect = new Rectangle(0, 0, atlasImage.Width, atlasImage.Height);
+            foreach (Texture texture in Atlas.TextureList)
             {
-                //lock the atlas image into memory
-                Rectangle rect = new Rectangle(0, 0, atlasImage.Width, atlasImage.Height);
-                BitmapData atlasLock = atlasImage.LockBits(rect, ImageLockMode.ReadOnly, atlasImage.PixelFormat);
-                foreach (Texture texture in Atlas.TextureList)
-                {
-                    Token.ThrowIfCancellationRequested();
-                    //copy the texture bitmap data into the texture bitmap object
-                    //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.clone?redirectedfrom=MSDN&view=netframework-4.8#System_Drawing_Bitmap_Clone_System_Drawing_Rectangle_System_Drawing_Imaging_PixelFormat_
-                    //rectangle of desired area to clone
-                    Rectangle textureRect = new Rectangle(texture.X, texture.Y, texture.Width, texture.Height);
-                    //copy the bitmap
-                    try
-                    {
-                        texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
-                        //do a quick lock on the bits to ensure that the image data is deep copied
-                        //https://stackoverflow.com/a/13935966/3128017
-                        BitmapData data = texture.AtlasImage.LockBits(new Rectangle(0, 0, texture.AtlasImage.Width, texture.AtlasImage.Height), ImageLockMode.ReadOnly, texture.AtlasImage.PixelFormat);
-                        texture.AtlasImage.UnlockBits(data);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logging.Exception("Failed to clone atlas image data");
-                        Logging.Exception(ex.ToString());
-                        try
-                        {
-                            atlasImage.UnlockBits(atlasLock);
-                            atlasImage.Dispose();
-                        }
-                        catch
-                        { }
-                        return FailCode.ImageImporter;
-                    }
-                }
-                atlasImage.UnlockBits(atlasLock);
-                atlasImage.Dispose();
+                Rectangle textureRect = new Rectangle(texture.X, texture.Y, texture.Width, texture.Height);
+                //copy the texture bitmap data from the atlas bitmap into the texture bitmap
+                //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.clone?redirectedfrom=MSDN&view=netframework-4.8#System_Drawing_Bitmap_Clone_System_Drawing_Rectangle_System_Drawing_Imaging_PixelFormat
+                texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
+                //do a quick lock on the bits to ensure that the image data is deep copied. Clone() seems to only shallow copy
+                //https://stackoverflow.com/a/13935966/3128017
+                BitmapData data = texture.AtlasImage.LockBits(new Rectangle(0, 0, texture.AtlasImage.Width, texture.AtlasImage.Height), ImageLockMode.ReadOnly, texture.AtlasImage.PixelFormat);
+                texture.AtlasImage.UnlockBits(data);
             }
+            //dispose of the original cause now we're done with it
+            atlasImage.Dispose();
             OnAtlasProgres?.Invoke(this, null);
             Token.ThrowIfCancellationRequested();
             stopwatch.Stop();
