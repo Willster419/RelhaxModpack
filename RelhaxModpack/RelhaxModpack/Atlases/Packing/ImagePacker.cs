@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace RelhaxModpack.Atlases.Packing
 {
@@ -25,6 +26,10 @@ namespace RelhaxModpack.Atlases.Packing
         private readonly Dictionary<Texture, Size> imageSizes = new Dictionary<Texture, Size>();
         private readonly Dictionary<Texture, Rectangle> imagePlacement = new Dictionary<Texture, Rectangle>();
 
+        //for diagnostics timing
+        private readonly Stopwatch stopwatch = new Stopwatch();
+        private long imagePackingMilliseconds = 0;
+
         /// <summary>
         /// Packs a collection of images into a single image.
         /// </summary>
@@ -35,6 +40,7 @@ namespace RelhaxModpack.Atlases.Packing
         /// <param name="maximumWidth">The maximum width of the output image.</param>
         /// <param name="maximumHeight">The maximum height of the output image.</param>
         /// <param name="imagePadding">The amount of blank space to insert in between individual images.</param>
+        /// <param name="atlasImageName">The name of the Atlas image. Used for logging and can be null.</param>
         /// <param name="outputImage">The resulting output image.</param>
         /// <param name="outputMap">The resulting output map of placement rectangles for the images.</param>
         /// <returns>0 if the packing was successful, error code otherwise.</returns>
@@ -46,6 +52,7 @@ namespace RelhaxModpack.Atlases.Packing
             int maximumWidth,
             int maximumHeight,
             int imagePadding,
+            string atlasImageName,
             out Bitmap outputImage,
             out Dictionary<string, Rectangle> outputMap)
         {
@@ -60,10 +67,14 @@ namespace RelhaxModpack.Atlases.Packing
             outputImage = null;
             outputMap = null;
 
+            imagePackingMilliseconds = 0;
+
             // make sure our dictionaries are cleared before starting
             imageSizes.Clear();
             imagePlacement.Clear();
 
+            stopwatch.Restart();
+            LogStatus("Preparing for packing", atlasImageName, false);
             // get the sizes of all the images
             int i = 0;
             foreach (var image in files)
@@ -96,20 +107,24 @@ namespace RelhaxModpack.Atlases.Packing
                     //same size? go alphabetical i guess
                     return f1.Name.CompareTo(f2.Name);
                 });
+            LogStatus(string.Format("Preparing completed in {0} msec", stopwatch.ElapsedMilliseconds), atlasImageName, true);
 
-            // try to pack the images
+            LogStatus("Packing images into atlas", atlasImageName, false);
             if (!PackImageRectangles())
             {
                 return FailCode.FailedToPackImage;
             }
+            LogStatus(string.Format("Packing images completed in {0} msec", stopwatch.ElapsedMilliseconds), atlasImageName, true);
 
-            // make our output image
+            LogStatus("Generating atlas bitmap", atlasImageName, false);
             outputImage = GenerateAtlasImageData(files, imagePlacement, outputWidth, outputHeight);
             if (outputImage == null)
                 return FailCode.FailedToCreateBitmapAtlas;
+            LogStatus(string.Format("Generating atlas bitmap completed in {0} msec", stopwatch.ElapsedMilliseconds), atlasImageName, true);
 
-            // make our map file
+            LogStatus("Generating atlas map data", atlasImageName, false);
             outputMap = GenerateMapData(imagePlacement, imageSizes);
+            LogStatus(string.Format("Generating atlas map data completed in {0} msec", stopwatch.ElapsedMilliseconds), atlasImageName, true);
 
             // clear our dictionaries just to free up some memory
             imageSizes.Clear();
@@ -337,6 +352,16 @@ namespace RelhaxModpack.Atlases.Packing
             for (int i = 1; i < sizeof(int) * 8; i <<= 1)
                 k = k | k >> i;
             return k + 1;
+        }
+
+        private void LogStatus(string message, string atlasFilename, bool logTime)
+        {
+            Logging.Debug(LogOptions.ClassName, "{0}{1}", string.IsNullOrEmpty(atlasFilename) ? string.Empty : string.Format("[atlas file {0}]: ", atlasFilename), message);
+            if (logTime)
+            {
+                imagePackingMilliseconds += stopwatch.ElapsedMilliseconds;
+                stopwatch.Restart();
+            }
         }
     }
 }
