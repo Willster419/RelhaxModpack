@@ -5573,7 +5573,7 @@
             </summary>
             <remarks>This is loaded from the xml file</remarks>
         </member>
-        <member name="P:RelhaxModpack.Texture.AtlasImage">
+        <member name="F:RelhaxModpack.Texture.AtlasImage">
             <summary>
             The actual bitmap in memory of the image
             </summary>
