@@ -537,7 +537,7 @@ namespace RelhaxModpack
             //first check if the file even exists
             if (!File.Exists(xmlfile))
             {
-                Logging.Warning("Xml settings file {0} does not exist, using defaults set in class{1}{2}", xmlfile, SettingsClass.GetType().ToString(), Environment.NewLine);
+                Logging.Info("Xml settings file {0} does not exist, using defaults set in class '{1}'", xmlfile, SettingsClass.Name.ToString());
                 return false;
             }
             //get all fields from the class
