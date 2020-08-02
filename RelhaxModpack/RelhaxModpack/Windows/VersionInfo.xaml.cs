@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Net;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -89,7 +90,7 @@ namespace RelhaxModpack.Windows
 
         private void TheHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            Utils.OpenInGoogleTranslate(ApplicationUpdateNotes.Text);
+            CommonUtils.OpenInGoogleTranslate(ApplicationUpdateNotes.Text);
         }
     }
 }

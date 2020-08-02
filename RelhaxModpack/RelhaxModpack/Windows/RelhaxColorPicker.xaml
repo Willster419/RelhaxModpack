@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
-        xmlns:UI ="clr-namespace:RelhaxModpack.UIComponents"
+        xmlns:UI ="clr-namespace:RelhaxModpack.UI"
         mc:Ignorable="d"
         Title="Color Picker" Height="620" Width="600" ResizeMode="CanMinimize" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
+        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="True">
     <local:RelhaxWindow.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </local:RelhaxWindow.Resources>

@@ -8,10 +8,12 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using RelhaxModpack.UIComponents;
+using RelhaxModpack.UI;
 using System.IO;
 using System.Net;
 using System.Windows.Threading;
+using RelhaxModpack.Database;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -61,7 +63,10 @@ namespace RelhaxModpack.Windows
             if (Medias == null || InvokedPackage == null)
             {
                 Logging.Error("Preview Medias list or InvokedPackage null: MediasNull?={0}, InvokedPacakgeNull?={1}", Medias==null, InvokedPackage==null);
-                MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
+                if(EditorMode)
+                    MessageBox.Show(string.Format("Preview Medias list or InvokedPackage null: MediasNull?={0}, InvokedPacakgeNull?={1}", Medias == null, InvokedPackage == null));
+                else
+                    MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
                 Close();
                 return;
             }
@@ -113,7 +118,7 @@ namespace RelhaxModpack.Windows
             else
             {
                 //if the saved preview window point is within the screen, then load it to there
-                if (Utils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
+                if (UiUtils.PointWithinScreen(ModpackSettings.PreviewX, ModpackSettings.PreviewY))
                 {
                     //set for manual window location setting
                     WindowStartupLocation = WindowStartupLocation.Manual;
@@ -145,7 +150,9 @@ namespace RelhaxModpack.Windows
             }
             else
             {
-                if(ComboBoxItemsInsideMode)
+                if (EditorMode)
+                    Title = "EDITOR_TEST_MODE";
+                else if (ComboBoxItemsInsideMode)
                     Title = string.Format("{0}: ({1})", Translations.GetTranslatedString("dropDownItemsInside"), Translations.GetTranslatedString("none"));
                 else
                     Title = InvokedPackage.NameFormatted;
@@ -313,7 +320,7 @@ namespace RelhaxModpack.Windows
                             {
                                 ClipToBounds = true
                             };
-                            pictureViewer.Source = Utils.BitmapToImageSource(Properties.Resources.error_loading_picture);
+                            pictureViewer.Source = CommonUtils.BitmapToImageSource(Properties.Resources.error_loading_picture);
                             MainPreviewBorder.Child = pictureViewer;
                         }
                     }
@@ -355,7 +362,7 @@ namespace RelhaxModpack.Windows
                         {
                             Logging.Exception("failed to load picture");
                             Logging.Exception(ex.ToString());
-                            pictureViewer.Source = Utils.BitmapToImageSource(Properties.Resources.error_loading_picture);
+                            pictureViewer.Source = CommonUtils.BitmapToImageSource(Properties.Resources.error_loading_picture);
                         }
                     }
                     //put the zoom border inside the main preview one. already set, might as well use it
@@ -485,7 +492,7 @@ namespace RelhaxModpack.Windows
                 ModpackSettings.PreviewFullscreen = WindowState == WindowState.Maximized ? true : false;
                 ModpackSettings.PreviewHeight = (int)Height;
                 ModpackSettings.PreviewWidth = (int)Width;
-                if (Utils.PointWithinScreen((int)Left, (int)Top))
+                if (UiUtils.PointWithinScreen((int)Left, (int)Top))
                 {
                     ModpackSettings.PreviewX = (int)Left;
                     ModpackSettings.PreviewY = (int)Top;

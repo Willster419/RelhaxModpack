@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.Windows;
+using RelhaxModpack.Utilities;
 using System.Collections.Generic;
 using System.IO;
 
@@ -175,7 +176,7 @@ namespace RelhaxModpack
                             Logging.Info(@"macro not started with '{', adding");
                             macroName = string.Format("{{{0}}}", macroName);
                         }
-                        Utils.FilePathDict.Add(macroName, macroValue);
+                        MacroUtils.FilePathDict.Add(macroName, macroValue);
                         break;
                     default:
                         if (ApplicationMode == ApplicationMode.Patcher)

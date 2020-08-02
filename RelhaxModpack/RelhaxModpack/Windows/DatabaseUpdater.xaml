@@ -41,9 +41,9 @@
                         <Button x:Name="UpdateDatabaseV2Step4" Content="Step 4: Upload changed" HorizontalContentAlignment="Left"
                                 Click="UpdateDatabaseV2Step4_Click"/>
                         <Button x:Name="UpdateDatabaseV2Step5" Content="Step 5: Run script CreateModInfo.php"
-                                HorizontalContentAlignment="Left" Click="UpdateDatabaseV2Step5_Click"/>
+                                HorizontalContentAlignment="Left" Click="RunPhpScriptCreateModInfo"/>
                         <Button x:Name="UpdateDatabaseV2Step6" Content="Step 6: Run script CreateManagerInfo.php"
-                                HorizontalContentAlignment="Left" Click="UpdateDatabaseV2Step6_Click"/>
+                                HorizontalContentAlignment="Left" Click="RunPhpScriptCreateManagerInfo"/>
                         <TextBox x:Name="UpdateDatabaseV2Step7" Height="35" TextWrapping="Wrap"
                                  Text="Step 7: Commit repository changes update with message: &quot;Published Database&quot;" IsReadOnly="True"/>
                         <StackPanel Orientation="Horizontal">
@@ -105,8 +105,8 @@
             <TabItem x:Name="StatisticsToolsTab" Header="Other DB Tools">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -141,6 +141,28 @@
                             </Button>
                             <Button x:Name="SaveDatabaseDuplicateCheckButton" Grid.Column="1" Margin="0,2,2,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="SaveDatabaseDuplicateCheckButton_Click">
                                 <TextBlock Text="Save Database (V2)" TextWrapping="Wrap"/>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="0" Grid.Row="1">
+                        <StackPanel Orientation="Vertical">
+                            <Button x:Name="LoadDatabaseUpdateSupportedClientsButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseUpdateSupportedClientsButton_Click">
+                                <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
+                            </Button>
+                            <Button x:Name="LoadSupportedClientsDocumentButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadSupportedClientsDocumentButton_Click">
+                                <TextBlock Text="Load Supported Clients xml" TextWrapping="Wrap"/>
+                            </Button>
+                            <Button x:Name="CheckClientsToRemoveFromDocumentButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="CheckClientsToRemoveFromDocumentButton_Click">
+                                <TextBlock Text="Remove clients from xml and server" TextWrapping="Wrap"/>
+                            </Button>
+                            <Button x:Name="CheckClientsToAddToDocumentButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="CheckClientsToAddToDocumentButton_Click">
+                                <TextBlock Text="Add clients to and upload supported_clients.xml" TextWrapping="Wrap"/>
+                            </Button>
+                            <Button x:Name="RunScriptCreateModInfo" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="RunPhpScriptCreateModInfo">
+                                <TextBlock Text="Run script CreateManagerInfo.php"/>
+                            </Button>
+                            <Button x:Name="RunScriptCreateManagerInfo" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="RunPhpScriptCreateManagerInfo">
+                                <TextBlock Text="Run script CreateModInfo.php"/>
                             </Button>
                         </StackPanel>
                     </Border>

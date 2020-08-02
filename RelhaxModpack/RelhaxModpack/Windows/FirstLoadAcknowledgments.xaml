@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
-        xmlns:ui="clr-namespace:RelhaxModpack.UIComponents"
+        xmlns:ui="clr-namespace:RelhaxModpack.UI"
         mc:Ignorable="d"
         Title="First Load Acknowledgments" Height="260" Width="600" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">

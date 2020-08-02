@@ -8,6 +8,9 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using Ionic.Zip;
+using RelhaxModpack.Atlases;
+using RelhaxModpack.Utilities;
+using RelhaxModpack.UI;
 
 namespace RelhaxModpack.Windows
 {
@@ -204,8 +207,8 @@ namespace RelhaxModpack.Windows
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCache");
             try
             {
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.zip");
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
+                await FileUtils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.zip");
+                await FileUtils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
@@ -222,7 +225,7 @@ namespace RelhaxModpack.Windows
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase");
             try
             {
-                await Utils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
+                await FileUtils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
@@ -237,8 +240,8 @@ namespace RelhaxModpack.Windows
         {
             Logging.Info("Diagnostics: Test load image libraries");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibraries");
-            Utils.AllowUIToUpdate();
-            if (Utils.TestLoadAtlasLibraries(true))
+            UiUtils.AllowUIToUpdate();
+            if (AtlasUtils.TestLoadAtlasLibraries(true))
             {
                 DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibrariesSuccess");
                 Logging.Info("Diagnostics: Test load image libraries pass");
@@ -249,9 +252,9 @@ namespace RelhaxModpack.Windows
                 if (MessageBox.Show(string.Format("{0}\n{1}", Translations.GetTranslatedString("missingMSVCPLibraries"), Translations.GetTranslatedString("openLinkToMSVCP")),
                                 Translations.GetTranslatedString("missingMSVCPLibrariesHeader"), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    if (!Utils.StartProcess(Utils.MSVCPLink))
+                    if (!CommonUtils.StartProcess(AtlasUtils.MSVCPLink))
                     {
-                        Logging.Error("failed to open url to MSVCP: {0}", Utils.MSVCPLink);
+                        Logging.Error("failed to open url to MSVCP: {0}", AtlasUtils.MSVCPLink);
                     }
                 }
                 Logging.Info("Diagnostics: Test load image libraries fail");
@@ -287,7 +290,7 @@ namespace RelhaxModpack.Windows
                     continue;
                 }
                 int count = 0;
-                string[] files = Utils.DirectorySearch(folderPath, SearchOption.AllDirectories, true);
+                string[] files = FileUtils.DirectorySearch(folderPath, SearchOption.AllDirectories, true);
                 if (files != null)
                     count = files.Count();
                 Logging.Debug("Added {0} files", count);
@@ -304,7 +307,7 @@ namespace RelhaxModpack.Windows
                 DiagnosticsStatusTextBox.Text = string.Format("{0} {1} {2} {3}",
                     Translations.GetTranslatedString("deletingFile"), (i + 1), Translations.GetTranslatedString("of"), filesToDelete.Count);
 
-                await Task.Run(() => Utils.FileDelete(filesToDelete[i]));
+                await Task.Run(() => FileUtils.FileDelete(filesToDelete[i]));
             }
 
             //fully delete the folders now
@@ -313,7 +316,7 @@ namespace RelhaxModpack.Windows
             foreach (string folderPath in locationsToCheck)
             {
                 if(Directory.Exists(folderPath))
-                    if (!Utils.DirectoryDelete(folderPath, true))
+                    if (!FileUtils.DirectoryDelete(folderPath, true))
                         locationsFailedToDelete.Add(folderPath);
             }
 
@@ -331,7 +334,7 @@ namespace RelhaxModpack.Windows
             Logging.Info("[Diagnostics]: Cleaning AppData cache");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheProgress");
 
-            bool clearCache = await Task.Run(() => Utils.ClearCache());
+            bool clearCache = await Task.Run(() => CommonUtils.ClearCache());
 
             if(clearCache)
             {

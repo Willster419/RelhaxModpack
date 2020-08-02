@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using NAudio.Wave;
 using System.Windows.Threading;
 
-namespace RelhaxModpack.UIComponents
+namespace RelhaxModpack.UI
 {
     /// <summary>
     /// Interaction logic for RelhaxMediaPlayer.xaml

@@ -200,3 +200,4 @@ FakesAssemblies/
 /RelhaxModpack/RelhaxModpack/relhaxmodpackprivatesettings
 /RelhaxDocumentation/RelhaxDocumentation/Help
 *.code-workspace
+/RelhaxModpack/RelhaxUnitTests/Resources/atlas_out

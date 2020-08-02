@@ -6,6 +6,12 @@ using System.Windows;
 namespace RelhaxModpack
 {
     /// <summary>
+    /// Delegate for allowing method callback when the logfile writes to disk
+    /// </summary>
+    /// <param name="message">The formatted message that was written to the logfile</param>
+    public delegate void LoggingMessageWrite(string message);
+
+    /// <summary>
     /// Represents an instance of a log file used for writing important logging information to a log
     /// </summary>
     public class Logfile : IDisposable
@@ -35,6 +41,11 @@ namespace RelhaxModpack
         /// </summary>
         private FileStream fileStream;
 
+        /// <summary>
+        /// The event for when the logfile is written to
+        /// </summary>
+        public event LoggingMessageWrite OnLogfileWrite;
+
         private object lockerObject = new object();
 
         /// <summary>
@@ -44,7 +55,7 @@ namespace RelhaxModpack
         /// <param name="timestamp">the date and time format to write for each log line</param>
         public Logfile(string filePath, string timestamp)
         {
-            Filepath = filePath;
+            Filepath = filePath ?? throw new ArgumentNullException(nameof(filePath));
             Filename = Path.GetFileName(Filepath);
             Timestamp = timestamp;
         }
@@ -78,12 +89,11 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="message">The line to write</param>
         /// <param name="logLevel">The level of severity of the log message</param>
-        /// <returns>The formatted string that was written</returns>
-        public string Write(string message, LogLevel logLevel)
+        public void Write(string message, LogLevel logLevel)
         {
             //only alpha and beta application distributions should log debug messages
             if (Settings.ApplicationVersion == ApplicationVersions.Stable && logLevel == LogLevel.Debug && !ModpackSettings.VerboseLogging)
-                return string.Empty;
+                return;
 
             string logMessageLevel = string.Empty;
             switch(logLevel)
@@ -112,7 +122,7 @@ namespace RelhaxModpack
             string formattedDateTime = DateTime.Now.ToString(Timestamp);
             message = string.Format("{0}   {1}{2}", formattedDateTime, logMessageLevel, message);
             Write(message);
-            return message;
+            OnLogfileWrite?.Invoke(message);
         }
 
         /// <summary>

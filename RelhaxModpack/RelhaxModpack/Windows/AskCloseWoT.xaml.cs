@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -64,7 +65,7 @@ namespace RelhaxModpack.Windows
         {
             AskCloseWoTResult = AskCloseWoTResult.Retry;
             Logging.Info("Getting WoT process(es)");
-            Process WoTProcess = Utils.GetProcess(Settings.WoTProcessName, Settings.WoTDirectory);
+            Process WoTProcess = CommonUtils.GetProcess(Settings.WoTProcessName, Settings.WoTDirectory);
             if(WoTProcess == null)
             {
                 Logging.Error("Failed to get process (null result)");

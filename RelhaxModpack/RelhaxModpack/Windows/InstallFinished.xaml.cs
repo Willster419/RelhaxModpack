@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using RelhaxModpack.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +23,7 @@ namespace RelhaxModpack.Windows
 
         private void InstallationCompleteStartWoTButton_Click(object sender, RoutedEventArgs e)
         {
-            if(!Utils.StartProcess(new ProcessStartInfo()
+            if(!CommonUtils.StartProcess(new ProcessStartInfo()
             {
                 WorkingDirectory = Settings.WoTDirectory,
                 FileName = Path.Combine(Settings.WoTDirectory, "WorldOfTanks.exe")
@@ -36,8 +37,8 @@ namespace RelhaxModpack.Windows
 
         private void InstallationCompleteStartGameCenterButton_Click(object sender, RoutedEventArgs e)
         {
-            string actualLocation = Utils.AutoFindWgcDirectory();
-            if(string.IsNullOrEmpty(actualLocation) || !Utils.StartProcess(actualLocation))
+            string actualLocation = RegistryUtils.AutoFindWgcDirectory();
+            if(string.IsNullOrEmpty(actualLocation) || !CommonUtils.StartProcess(actualLocation))
             {
                 Logging.Error("could not start wgc process using command line '{0}'",actualLocation);
                 MessageBox.Show(Translations.GetTranslatedString("CouldNotStartProcess"));
@@ -52,7 +53,7 @@ namespace RelhaxModpack.Windows
 
         private void InstallationCompleteOpenXVMButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!Utils.StartProcess(string.Format("https://www.modxvm.com/{0}/", Translations.GetTranslatedString("xvmUrlLocalisation"))))
+            if (!CommonUtils.StartProcess(string.Format("https://www.modxvm.com/{0}/", Translations.GetTranslatedString("xvmUrlLocalisation"))))
             {
                 MessageBox.Show(Translations.GetTranslatedString("CouldNotStartProcess"));
             }
