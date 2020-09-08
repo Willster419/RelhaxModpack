@@ -167,20 +167,31 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Returns true if at least one package is enabled and checked from the root to the category
+        /// Returns true if at least one package is enabled and checked from the first level of packages in the category
         /// </summary>
-        public bool IsAnyPackageCheckedEnabledValid
+        public bool IsAnyPackageCheckedEnabled()
         {
-            get
+            bool anyPackages = false;
+            foreach (SelectablePackage sp in this.Packages)
             {
-                bool anyPackagesSelected = false;
-                foreach (SelectablePackage sp in this.Packages)
-                {
-                    if (sp.Enabled && sp.Checked)
-                        anyPackagesSelected = true;
-                }
-                return anyPackagesSelected;
+                if (sp.Enabled && sp.Checked)
+                    anyPackages = true;
             }
+            return anyPackages;
+        }
+
+        /// <summary>
+        /// Returns true if at least one package is enabled and checked and visible from the first level of packages in the category
+        /// </summary>
+        public bool IsAnyPackageCheckedEnabledVisible()
+        {
+            bool anyPackages = false;
+            foreach (SelectablePackage sp in this.Packages)
+            {
+                if (sp.Enabled && sp.Checked && sp.Visible)
+                    anyPackages = true;
+            }
+            return anyPackages;
         }
         #endregion
     }

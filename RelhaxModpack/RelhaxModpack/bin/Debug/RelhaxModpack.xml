@@ -49,6 +49,11 @@
             Failed to pack the images into one large image (most likely they don't fit into the provided dimensions)
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Atlases.FailCode.OutOfMemory32bit">
+            <summary>
+            Failed to compress an atlas that requires over the 2GB process limit on 32bit systems
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Atlases.FailCode.FailedToCreateBitmapAtlas">
             <summary>
             Failed to create the atlas bitmap object
@@ -66,6 +71,13 @@
             Represents the entire process of building an atlas image
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Atlases.AtlasCreator.MAX_ATLAS_SIZE_32BIT">
+            <summary>
+            The (arbitrary, guessing) limit of atlas size that the DDS compressor can process without exceeding 2GB
+            </summary>
+            <remarks>In 32bit windows OSs, the maximum amount of memory that a process can have is 2GB.
+            Exceeding that in the compressor will trigger a AccessViolationException</remarks>
+        </member>
         <member name="F:RelhaxModpack.Atlases.AtlasCreator.Atlas">
             <summary>
             The object of atlas arguments for building the image
@@ -81,11 +93,41 @@
             The event when atlas child progress occurs
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Atlases.AtlasCreator.CreateAtlas(RelhaxModpack.Atlases.Atlas)">
+            <summary>
+            Create the atlas image and map xml
+            </summary>
+            <param name="atlas">The atlas arguments object</param>
+            <returns>Success code if complete, any other FailCode otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.Atlases.AtlasCreator.CreateAtlas">
             <summary>
-            Create the atlas image
+            Create the atlas image and map xml
             </summary>
             <returns>Success code if complete, any other FailCode otherwise</returns>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.AtlasCreator.ParseCustomTexturesTask">
+            <summary>
+            The task of parsing all custom png images from multiple folders into a flat list of png bitmaps
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.AtlasCreator.CustomContourIconImages">
+            <summary>
+            The list of parsed custom png images into textures
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.AtlasCreator.LoadCustomContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Loads all custom textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
+            </summary>
+            <param name="CustomFolderPaths">The list of absolute paths containing custom contour icon images to be loaded</param>
+            <param name="token">The cancellation token</param>
+            <returns>The list of textures</returns>
+        </member>
+        <member name="M:RelhaxModpack.Atlases.AtlasCreator.DisposeParsedCustomTextures">
+            <summary>
+            Dispose of all textures in the shared custom texture list
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasCreator.Dispose(System.Boolean)">
             <summary>
@@ -130,17 +172,7 @@
             </summary>
             <returns>True if both libraries loaded, false otherwise</returns>
         </member>
-        <member name="F:RelhaxModpack.Atlases.AtlasUtils.ParseModTexturesTask">
-            <summary>
-            The task of parsing all mod png images from multiple folders into a flat list of png bitmaps
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.AtlasUtils.ModContourIconImages">
-            <summary>
-            The list of parsed mod png images into textures
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.AtlasUtils.AtlasLoaderLockObject">
+        <member name="P:RelhaxModpack.Atlases.AtlasUtils.AtlasLoaderLockObject">
             <summary>
             Lock object used in AtlasCreator for critical sections that can't be done at the same time
             </summary>
@@ -151,19 +183,6 @@
             A list of Atlas creating thread engines
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Atlases.AtlasUtils.LoadModContourIconsAsync(System.Collections.Generic.List{System.String},System.Threading.CancellationToken)">
-            <summary>
-            Loads all mod textures from disk into texture objects. This is done on a separate thread so it is not done redundantly multiple times on each atlas thread
-            </summary>
-            <param name="allModFolderPaths">The list of absolute paths containing mod contour icon images to be loaded</param>
-            <param name="token">The cancellation token</param>
-            <returns>The list of textures</returns>
-        </member>
-        <member name="M:RelhaxModpack.Atlases.AtlasUtils.DisposeparseModTextures">
-            <summary>
-            Dispose of all textures in the shared mod texture list
-            </summary>
-        </member>
         <member name="M:RelhaxModpack.Atlases.AtlasUtils.VerifyImageLibsLoaded">
             <summary>
             Verifies the Atlas processing libraries are loaded. If not, they are loaded.
@@ -171,7 +190,17 @@
         </member>
         <member name="M:RelhaxModpack.Atlases.AtlasUtils.DisposeOfAllAtlasResources">
             <summary>
-            Disposes of all statically used AtlasUtils resources, including releasing the mod texture list
+            Disposes of all statically used AtlasUtils resources, including releasing the custom texture list
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Atlases.ImageHandler">
+            <summary>
+            Class for handling loading and saving of DDS atlas files
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Atlases.MapHandler">
+            <summary>
+            Class for handling of xml atlas map files (WG style)
             </summary>
         </member>
         <member name="T:RelhaxModpack.Atlases.Packing.ArevaloRectanglePacker">
@@ -438,68 +467,105 @@
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.Pkg">
             <summary>
-            Path and name to the package file
+            Complete path to the package file
             </summary>
+            <remarks>This is loaded from the xml file. The package itself is a non-compressed zip file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasFile">
             <summary>
-            FileName of the atlas image file to extract
+            File name of the atlas image file to extract
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.MapFile">
             <summary>
-            FileName of the atlas map file to extract
+            File name of the atlas map file to extract
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.DirectoryInArchive">
             <summary>
-            Path inside the pkg file to the filename to process
+            Path inside the pkg file to the filename to process. If Pkg is empty, this is the path to the atlas and map file
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasSaveDirectory">
             <summary>
-            Path to place the generated atlas file
+            Path to place the generated atlas image file and xml map
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasWidth">
             <summary>
             Width of the new atlases file. 0 = get from original atlas file
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasHeight">
             <summary>
             Height of the new atlases file. 0 = get from original atlas file
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.Padding">
             <summary>
             Padding of the new atlases file (amount of pixels as a border between each image)
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.PowOf2">
             <summary>
             Creating an atlas file only with log base 2 numbers (16, 32, 64, etc.)
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.Square">
             <summary>
             Creating an atlas file only in a square (same width and height of atlas)
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.FastImagePacker">
             <summary>
             allow to accept first successful image optimization layout
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.ImageFolderList">
             <summary>
             List of folders that could contain images to replace original images
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.TextureList">
             <summary>
             The list of textures in each atlas
             </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.TempAtlasImageFilePath">
+            <summary>
+            The file path where the original atlas image file will be extracted/copied to
+            </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.TempAtlasMapFilePath">
+            <summary>
+            The file path where the original atlas map file will be extracted/copied to
+            </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.AtlasImageFilePath">
+            <summary>
+            The file path where the created atlas image file will be placed
+            </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Atlases.Atlas.AtlasMapFilePath">
+            <summary>
+            The file path where the created map file will be placed
+            </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
         </member>
         <member name="M:RelhaxModpack.Atlases.Atlas.ToString">
             <summary>
@@ -613,9 +679,14 @@
             </summary>
             <returns>Try if any package is selected, false otherwise</returns>
         </member>
-        <member name="P:RelhaxModpack.Database.Category.IsAnyPackageCheckedEnabledValid">
+        <member name="M:RelhaxModpack.Database.Category.IsAnyPackageCheckedEnabled">
             <summary>
-            Returns true if at least one package is enabled and checked from the root to the category
+            Returns true if at least one package is enabled and checked from the first level of packages in the category
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.Category.IsAnyPackageCheckedEnabledVisible">
+            <summary>
+            Returns true if at least one package is enabled and checked and visible from the first level of packages in the category
             </summary>
         </member>
         <member name="T:RelhaxModpack.Database.DatabaseBeforeAfter">
@@ -829,32 +900,6 @@
             </summary>
             <param name="listToCheck">The list of DatabasePackages</param>
             <returns>The maximum PatchGroup number</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SetObjectProperty(System.Object,System.Reflection.PropertyInfo,System.String)">
-            <summary>
-            Attempts to set a property value of a class or structure object instance with the string valueToSet
-            </summary>
-            <param name="componentWithProperty">The class or structure object instance to have property set</param>
-            <param name="propertyInfoFromComponent">The property information/metadata of the property to set on the object</param>
-            <param name="valueToSet">The string version of the value to set</param>
-            <returns>False if the value could not be set, true otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SetObjectValue(System.Type,System.String,System.Object@)">
-            <summary>
-            Attempts to create an instance of a value type object and set it's value based on valueToSet for objectType
-            </summary>
-            <param name="objectType">The type of value object to create</param>
-            <param name="valueToSet">The string version of the value to set</param>
-            <param name="newObject">The new value type object created</param>
-            <returns>False if the value could not be set, true otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SetListEntries(RelhaxModpack.Database.IDatabaseComponent,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
-            <summary>
-            Creates all database entries in a list property, parsing each list entry object by xmlListItems
-            </summary>
-            <param name="componentWithID">The database component with the list property, for example SelectablePackage</param>
-            <param name="listPropertyInfo">the property metadata/info about the list property, for example Medias</param>
-            <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1ForStringCompare(System.Boolean)">
             <summary>
@@ -3085,22 +3130,22 @@
         </member>
         <member name="P:RelhaxModpack.UI.Theme.SelectionListNotActiveHasSelectionsBackgroundColor">
             <summary>
-            The color definition for background of a not active tab header, when no components are selected
+            The color definition for background of a not active tab header, when at least one component is selected
             </summary>
         </member>
         <member name="P:RelhaxModpack.UI.Theme.SelectionListNotActiveHasSelectionsTextColor">
             <summary>
-            The color definition for text of a not active tab header, when no components are selected
+            The color definition for text of a not active tab header, when at least one component is selected
             </summary>
         </member>
         <member name="P:RelhaxModpack.UI.Theme.SelectionListNotActiveHasNoSelectionsBackgroundColor">
             <summary>
-            The color definition for background of a not active tab header, when at least one component is selected
+            The color definition for background of a not active tab header, when no components are selected
             </summary>
         </member>
         <member name="P:RelhaxModpack.UI.Theme.SelectionListNotActiveHasNoSelectionsTextColor">
             <summary>
-            The color definition for text of a not active tab header, when at least one component is selected
+            The color definition for text of a not active tab header, when no components are selected
             </summary>
         </member>
         <member name="P:RelhaxModpack.UI.Theme.RadioButtonColorset">
@@ -4841,6 +4886,32 @@
             </summary>
             <returns>True if clearing operation was sucessfull, false otherwise</returns>
         </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetObjectProperty(System.Object,System.Reflection.PropertyInfo,System.String)">
+            <summary>
+            Attempts to set a property value of a class or structure object instance with the string valueToSet
+            </summary>
+            <param name="componentWithProperty">The class or structure object instance to have property set</param>
+            <param name="propertyInfoFromComponent">The property information/metadata of the property to set on the object</param>
+            <param name="valueToSet">The string version of the value to set</param>
+            <returns>False if the value could not be set, true otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetObjectValue(System.Type,System.String,System.Object@)">
+            <summary>
+            Attempts to create an instance of a value type object and set it's value based on valueToSet for objectType
+            </summary>
+            <param name="objectType">The type of value object to create</param>
+            <param name="valueToSet">The string version of the value to set</param>
+            <param name="newObject">The new value type object created</param>
+            <returns>False if the value could not be set, true otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetListEntries(RelhaxModpack.Database.IDatabaseComponent,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
+            <summary>
+            Creates all database entries in a list property, parsing each list entry object by xmlListItems
+            </summary>
+            <param name="componentWithID">The database component with the list property, for example SelectablePackage</param>
+            <param name="listPropertyInfo">The property metadata/info about the list property, for example Medias</param>
+            <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
+        </member>
         <member name="T:RelhaxModpack.InstallerExitCodes">
             <summary>
             Possible points at which the installer can fail
@@ -5480,31 +5551,37 @@
             <summary>
             The file name of where this texture came from
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.X">
             <summary>
             The x position of the texture in the atlas image
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.Y">
             <summary>
             The y position of the texture in the atlas image
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.Width">
             <summary>
             The width of the texture in the atlas image
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.Height">
             <summary>
             The height of the texture in the atlas image
             </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="P:RelhaxModpack.Texture.AtlasImage">
             <summary>
             The actual bitmap in memory of the image
             </summary>
+            <remarks>This is *not* loaded from the xml file and is used internally</remarks>
         </member>
         <member name="T:RelhaxModpack.Xml.XmlUnpack">
             <summary>
@@ -5843,6 +5920,12 @@
             <param name="atlases">The list of Atlases to parse into</param>
             <param name="filename">The name of the file to parse from</param>
         </member>
+        <member name="T:RelhaxModpack.LoggingMessageWrite">
+            <summary>
+            Delegate for allowing method callback when the logfile writes to disk
+            </summary>
+            <param name="message">The formatted message that was written to the logfile</param>
+        </member>
         <member name="T:RelhaxModpack.Logfile">
             <summary>
             Represents an instance of a log file used for writing important logging information to a log
@@ -5873,6 +5956,11 @@
             The fileStream object to write/create the log file. Requires disposal support
             </summary>
         </member>
+        <member name="E:RelhaxModpack.Logfile.OnLogfileWrite">
+            <summary>
+            The event for when the logfile is written to
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Logfile.#ctor(System.String,System.String)">
             <summary>
             Create an instance of the log file
@@ -5892,7 +5980,6 @@
             </summary>
             <param name="message">The line to write</param>
             <param name="logLevel">The level of severity of the log message</param>
-            <returns>The formatted string that was written</returns>
         </member>
         <member name="M:RelhaxModpack.Logfile.Write(System.String)">
             <summary>
@@ -5981,12 +6068,6 @@
             The application is closing now
             </summary>
         </member>
-        <member name="T:RelhaxModpack.LoggingUIThreadReport">
-            <summary>
-            Delegate for allowing method callback with the written formatted message as the return value
-            </summary>
-            <param name="message">The formatted message that was written to the logfile</param>
-        </member>
         <member name="T:RelhaxModpack.Logging">
             <summary>
             A static constant reference to common logging variables and common log references
@@ -6062,11 +6143,6 @@
             Provides a reference to an instance of an uninstall log file
             </summary>
         </member>
-        <member name="E:RelhaxModpack.Logging.OnLoggingUIThreadReport">
-            <summary>
-            Event for subscribing as a callback event for when the logfile writes
-            </summary>
-        </member>
         <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Logfiles,System.String)">
             <summary>
             Initialize the logging system for the application
@@ -6074,6 +6150,13 @@
             <param name="logfile">The log file to initialize</param>
             <param name="logfilePath">The custom path of where to initialize the file</param>
             <returns>True if successful initialization, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Logging.GetLogfile(RelhaxModpack.Logfiles)">
+            <summary>
+            Get the instance of the logfile type
+            </summary>
+            <param name="logfile">The logfile enumeration type you would like</param>
+            <returns>The instance of the log file</returns>
         </member>
         <member name="M:RelhaxModpack.Logging.IsLogDisposed(RelhaxModpack.Logfiles)">
             <summary>
@@ -6149,9 +6232,24 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
+        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.LogOptions,System.String)">
+            <summary>
+            Writes an debug level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes an debug (info) level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
         <member name="M:RelhaxModpack.Logging.Info(System.String)">
             <summary>
-            Writes a information (info) level message to the application log
+            Writes an information (info) level message to the application log
             </summary>
             <param name="message">The message</param>
         </member>
@@ -6159,6 +6257,21 @@
             <summary>
             Writes an information (info) level message to the application log
             </summary>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.LogOptions,System.String)">
+            <summary>
+            Writes an information (info) level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes an information (info) level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
@@ -6175,6 +6288,21 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
+        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.LogOptions,System.String)">
+            <summary>
+            Writes a warning level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes a warning level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
         <member name="M:RelhaxModpack.Logging.Error(System.String)">
             <summary>
             Writes an error level message to the application log
@@ -6185,6 +6313,21 @@
             <summary>
             Writes a error level message to the application log
             </summary>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+            <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.LogOptions,System.String)">
+            <summary>
+            Writes an error level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.LogOptions,System.String,System.Object[])">
+            <summary>
+            Writes an error level message to the application log
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>

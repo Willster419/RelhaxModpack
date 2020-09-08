@@ -769,8 +769,12 @@ namespace RelhaxModpack.Utilities
             if (string.IsNullOrWhiteSpace(package))
             {
                 if (File.Exists(sourceCompletePath))
+                {
                     File.Copy(sourceCompletePath, destinationCompletePath);
-                Logging.Info("file copied");
+                    Logging.Info("file copied");
+                }
+                else
+                    Logging.Error("the file at path '{0} does not exist", sourceCompletePath);
             }
             else
             {

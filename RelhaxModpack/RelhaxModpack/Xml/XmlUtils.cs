@@ -541,7 +541,7 @@ namespace RelhaxModpack.Xml
                 //parse the list of dependencies from Xml for the categories into the category in list
                 Logging.Debug("[ParseDatabase1V1]: Parsing Dependency references for category {0}", cat.Name);
                 IEnumerable<XElement> listOfDependencies = categoryDocuments[i].XPathSelectElements("//Category/Dependencies/Dependency");
-                DatabaseUtils.SetListEntries(cat, cat.GetType().GetProperty(nameof(cat.Dependencies)), listOfDependencies);
+                CommonUtils.SetListEntries(cat, cat.GetType().GetProperty(nameof(cat.Dependencies)), listOfDependencies);
 
                 //parse the list of packages
                 Logging.Debug("[ParseDatabase1V1]: Parsing Packages for category {0}", cat.Name);
@@ -600,7 +600,7 @@ namespace RelhaxModpack.Xml
 
                     missingAttributes.Remove(attributeName);
 
-                    if(!DatabaseUtils.SetObjectProperty(listEntry,property,attribute.Value))
+                    if(!CommonUtils.SetObjectProperty(listEntry,property,attribute.Value))
                     {
                         Logging.Error("Failed to set member {0}, default (if exists) was used instead, PackageName: {1}, LineNumber {2}",
                             attributeName, componentWithID.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
@@ -654,9 +654,9 @@ namespace RelhaxModpack.Xml
                     //https://stackoverflow.com/questions/4115968/how-to-tell-whether-a-type-is-a-list-or-array-or-ienumerable-or
                     else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && !property.PropertyType.Equals(typeof(string)))
                     {
-                        DatabaseUtils.SetListEntries(componentWithID, property, xmlPackageNode.Element(element.Name).Elements());
+                        CommonUtils.SetListEntries(componentWithID, property, xmlPackageNode.Element(element.Name).Elements());
                     }
-                    else if (!DatabaseUtils.SetObjectProperty(componentWithID,property,element.Value))
+                    else if (!CommonUtils.SetObjectProperty(componentWithID,property,element.Value))
                     {
                         Logging.Error("Failed to set member {0}, default (if exists) was used instead, PackageName: {1}, LineNumber {2}",
                             element.Name.LocalName, componentWithID.ComponentInternalName, ((IXmlLineInfo)element).LineNumber);

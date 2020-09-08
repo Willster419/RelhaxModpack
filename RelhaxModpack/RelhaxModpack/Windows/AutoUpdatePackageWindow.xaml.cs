@@ -106,7 +106,7 @@ namespace RelhaxModpack.Windows
 
             //attach logfile reporting
             LogfileTextbox.Clear();
-            Logging.OnLoggingUIThreadReport += Logging_OnLoggingUIThreadReport;
+            Logging.GetLogfile(Logfiles.Editor).OnLogfileWrite += Logging_OnLoggingUIThreadReport;
         }
 
         private void Logging_OnLoggingUIThreadReport(string message)

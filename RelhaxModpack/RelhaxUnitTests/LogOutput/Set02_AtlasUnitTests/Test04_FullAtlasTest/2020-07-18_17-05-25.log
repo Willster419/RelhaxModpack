@@ -1,0 +1,48 @@
+Asserting to start the loading of mod textures
+Asserting to create the atlas 'vehicleMarkerAtlas' using the following settings:
+powerTwo=False, squareImage=False
+Packer fail code: None
+Asserting created map file has correct number of textures
+Expected node textures: 934, actual 934
+Asserting to start the loading of mod textures
+Asserting to create the atlas 'vehicleMarkerAtlas' using the following settings:
+powerTwo=True, squareImage=False
+Packer fail code: None
+Asserting created map file has correct number of textures
+Expected node textures: 934, actual 934
+Asserting to start the loading of mod textures
+Asserting to create the atlas 'vehicleMarkerAtlas' using the following settings:
+powerTwo=False, squareImage=True
+Packer fail code: None
+Asserting created map file has correct number of textures
+Expected node textures: 934, actual 934
+Asserting to start the loading of mod textures
+Asserting to create the atlas 'vehicleMarkerAtlas' using the following settings:
+powerTwo=True, squareImage=True
+Packer fail code: None
+Asserting created map file has correct number of textures
+Expected node textures: 934, actual 934
+Asserting to start the loading of mod textures
+Asserting to create the atlas 'battleAtlas' using the following settings:
+powerTwo=False, squareImage=False
+Packer fail code: None
+Asserting created map file has correct number of textures
+Expected node textures: 1500, actual 1500
+Asserting to start the loading of mod textures
+Asserting to create the atlas 'battleAtlas' using the following settings:
+powerTwo=True, squareImage=False
+Packer fail code: None
+Asserting created map file has correct number of textures
+Expected node textures: 1500, actual 1500
+Asserting to start the loading of mod textures
+Asserting to create the atlas 'battleAtlas' using the following settings:
+powerTwo=False, squareImage=True
+Packer fail code: None
+Asserting created map file has correct number of textures
+Expected node textures: 1500, actual 1500
+Asserting to start the loading of mod textures
+Asserting to create the atlas 'battleAtlas' using the following settings:
+powerTwo=True, squareImage=True
+Packer fail code: None
+Asserting created map file has correct number of textures
+Expected node textures: 1500, actual 1500

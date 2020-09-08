@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack
 {   [Serializable]
-    class BadMemeException : Exception
+    public class BadMemeException : Exception
     {
         public BadMemeException(string message) : base(message)
         {

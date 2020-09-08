@@ -58,22 +58,22 @@ namespace RelhaxModpack.UI
         public CustomBrush SelectionListActiveTabHeaderTextColor { get; set; } = null;
 
         /// <summary>
-        /// The color definition for background of a not active tab header, when no components are selected
+        /// The color definition for background of a not active tab header, when at least one component is selected
         /// </summary>
         public CustomBrush SelectionListNotActiveHasSelectionsBackgroundColor { get; set; } = null;
 
         /// <summary>
-        /// The color definition for text of a not active tab header, when no components are selected
+        /// The color definition for text of a not active tab header, when at least one component is selected
         /// </summary>
         public CustomBrush SelectionListNotActiveHasSelectionsTextColor { get; set; } = null;
 
         /// <summary>
-        /// The color definition for background of a not active tab header, when at least one component is selected
+        /// The color definition for background of a not active tab header, when no components are selected
         /// </summary>
         public CustomBrush SelectionListNotActiveHasNoSelectionsBackgroundColor { get; set; } = null;
 
         /// <summary>
-        /// The color definition for text of a not active tab header, when at least one component is selected
+        /// The color definition for text of a not active tab header, when no components are selected
         /// </summary>
         public CustomBrush SelectionListNotActiveHasNoSelectionsTextColor { get; set; } = null;
 

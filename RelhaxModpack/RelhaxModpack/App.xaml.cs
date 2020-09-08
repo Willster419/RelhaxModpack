@@ -121,7 +121,7 @@ namespace RelhaxModpack
             //parse command line arguments here
             //get the command line args for testing of auto install
             CommandLineSettings.ParseCommandLine(Environment.GetCommandLineArgs());
-            Logging.Debug("starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
+            Logging.Debug("Starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
             //switch into application modes based on mode enum
             switch(CommandLineSettings.ApplicationMode)
             {

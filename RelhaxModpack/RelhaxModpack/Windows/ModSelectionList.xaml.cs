@@ -2192,6 +2192,12 @@ namespace RelhaxModpack.Windows
                 }
             }
 
+            //set the top level package checkboxes to checked if a component inside them is checked
+            foreach(Category category in ParsedCategoryList)
+            {
+                category.CategoryHeader.Checked = category.IsAnyPackageCheckedEnabledVisible();
+            }
+
             //if direct load mode (like default checked), then don't run MaaS or any additional calculations
             if(directLoad)
             {
@@ -2503,7 +2509,7 @@ namespace RelhaxModpack.Windows
             if (!string.IsNullOrEmpty(propertyValue))
             {
                 //add the property value
-                if (!DatabaseUtils.SetObjectProperty(package, property, propertyValue))
+                if (!CommonUtils.SetObjectProperty(package, property, propertyValue))
                 {
                     Logging.Error("Unable to set property '{0}' value from SelectablePackage object, skipping!", propertyName);
                     return;

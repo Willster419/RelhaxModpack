@@ -1,0 +1,6 @@
+Asserting to load the dds file 'battleAtlas.dds' to Bitmap
+Load status: True
+Width expected: 4096, actual: 4096
+Height expected: 4512, actual: 4512
+Asserting to write the Bitmap to dds
+File written: True

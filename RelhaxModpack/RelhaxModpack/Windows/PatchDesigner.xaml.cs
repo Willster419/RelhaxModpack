@@ -110,7 +110,7 @@ namespace RelhaxModpack.Windows
             PatchesList.Items.Clear();
 
             //attach the log output to the logfile
-            Logging.OnLoggingUIThreadReport += Logging_OnLoggingUIThreadReport;
+            Logging.GetLogfile(Logfiles.PatchDesigner).OnLogfileWrite += Logging_OnLoggingUIThreadReport;
 
             //save current brushes
             PatchFilePathBrush = PatchFilePathTextbox.Background;
