@@ -6837,6 +6837,11 @@
             Toggle if the application should apply a custom font to the MainWindow and all windows of RelhaxWindow with 
             </summary>
         </member>
+        <member name="F:RelhaxModpack.ModpackSettings.ValidFrameworkVersion">
+            <summary>
+            Flag to enable a check if the user is running the minimum required .NET Framework version for this application
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.ModpackSettings.AutoInstallFrequencyInterval">
             <summary>
             The time, in a specified unit, to check for anew data base version
@@ -7320,6 +7325,21 @@
         <member name="F:RelhaxModpack.Settings.LogsFolder">
             <summary>
             The name of the logs folder used for WG CEF browser and Relhax Modpack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.MinimumDotNetFrameworkVersionRequired">
+            <summary>
+            The minimum release value of the user's installed .NET framework to use the modpack
+            </summary>
+            <remarks>It varies for OS. For example:
+            On Windows 10 May 2019 Update and Windows 10 November 2019 Update: 528040
+            On Windows 10 May 2020 Update: 528372
+            On all other Windows operating systems(including other Windows 10 operating systems): 528049
+            See: https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed </remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.DotNetFrameworkLatestDownloadURL">
+            <summary>
+            URL to get the latest version of the .NET Framework
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.BigmodsDatabaseRootEscaped">
@@ -8058,14 +8078,14 @@
             FirstLoadAcknowledgments
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.FirstLoadAcknowledgments.#ctor">
-            <summary>
-            Create an instance of the FirstLoadAcknowledgments window
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Windows.FirstLoadAcknowledgments.UserAgreed">
             <summary>
             Gets and sets is the user has agreed to the Acknowledgments before allowing him/her to use the application
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.FirstLoadAcknowledgments.#ctor">
+            <summary>
+            Create an instance of the FirstLoadAcknowledgments window
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.FirstLoadAcknowledgments.InitializeComponent">

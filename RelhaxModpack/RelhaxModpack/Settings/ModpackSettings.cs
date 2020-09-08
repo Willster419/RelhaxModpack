@@ -302,6 +302,11 @@ namespace RelhaxModpack
         public static bool EnableCustomFont = false;
 
         /// <summary>
+        /// Flag to enable a check if the user is running the minimum required .NET Framework version for this application
+        /// </summary>
+        public static bool ValidFrameworkVersion = false;
+
+        /// <summary>
         /// The time, in a specified unit, to check for anew data base version
         /// </summary>
         public static int AutoInstallFrequencyInterval = 10;
