@@ -21,7 +21,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for DatabaseUpdater.xaml
     /// </summary>
-    public partial class DatabaseUpdater : RelhaxWindow
+    public partial class ModpackToolbox : RelhaxWindow
     {
         #region Constants and statics
         private const string DatabaseUpdateFilename = "databaseUpdate.txt";
@@ -148,7 +148,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseUpdater window
         /// </summary>
-        public DatabaseUpdater()
+        public ModpackToolbox()
         {
             InitializeComponent();
         }

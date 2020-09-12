@@ -150,8 +150,8 @@ namespace RelhaxModpack
                         Logging.Info("database-updater, loading in database update mode");
                         break;
                     case "updater-hardcode-path":
-                        Logging.Info("updater-hardcode-path, forcing folder path as {0}", DatabaseUpdater.HardCodeRepoPath);
-                        DatabaseUpdater.UseHardCodePath = true;
+                        Logging.Info("updater-hardcode-path, forcing folder path as {0}", ModpackToolbox.HardCodeRepoPath);
+                        ModpackToolbox.UseHardCodePath = true;
                         break;
                     case "database-editor":
                         ApplicationMode = ApplicationMode.Editor;

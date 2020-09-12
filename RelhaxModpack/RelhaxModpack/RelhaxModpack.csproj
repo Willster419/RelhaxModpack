@@ -287,8 +287,8 @@
     <Compile Include="Windows\DatabaseEditorDownload.xaml.cs">
       <DependentUpon>DatabaseEditorDownload.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DatabaseUpdater.xaml.cs">
-      <DependentUpon>DatabaseUpdater.xaml</DependentUpon>
+    <Compile Include="Windows\ModpackToolbox.xaml.cs">
+      <DependentUpon>ModpackToolbox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\InstallFinished.xaml.cs">
       <DependentUpon>InstallFinished.xaml</DependentUpon>
@@ -413,7 +413,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DatabaseUpdater.xaml">
+    <Page Include="Windows\ModpackToolbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

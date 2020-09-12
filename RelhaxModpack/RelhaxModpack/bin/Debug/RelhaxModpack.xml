@@ -8506,15 +8506,15 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.DatabaseUpdater">
+        <member name="T:RelhaxModpack.Windows.ModpackToolbox">
             <summary>
             Interaction logic for DatabaseUpdater.xaml
             </summary>
             <summary>
-            DatabaseUpdater
+            ModpackToolbox
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseUpdater.HardCodeRepoPath">
+        <member name="F:RelhaxModpack.Windows.ModpackToolbox.HardCodeRepoPath">
             <summary>
             The current path for Willster419's database repository
             </summary>
@@ -8523,17 +8523,17 @@
             During debug, this can be set to have the updater (in the repository path) assume that it's in the database repository.
             </remarks>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseUpdater.UseHardCodePath">
+        <member name="F:RelhaxModpack.Windows.ModpackToolbox.UseHardCodePath">
             <summary>
             Flag to use the 
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseUpdater.#ctor">
+        <member name="M:RelhaxModpack.Windows.ModpackToolbox.#ctor">
             <summary>
             Create an instance of the DatabaseUpdater window
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseUpdater.InitializeComponent">
+        <member name="M:RelhaxModpack.Windows.ModpackToolbox.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>

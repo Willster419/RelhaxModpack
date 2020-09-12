@@ -185,7 +185,7 @@ namespace RelhaxModpack
             switch(CommandLineSettings.ApplicationMode)
             {
                 case ApplicationMode.Updater:
-                    DatabaseUpdater updater = new DatabaseUpdater();
+                    ModpackToolbox updater = new ModpackToolbox();
                     CloseApplicationLog(true);
 
                     //start updater logging system
