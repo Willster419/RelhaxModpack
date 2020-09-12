@@ -19,14 +19,6 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class Diagnostics : RelhaxWindow
     {
-        //list of files who need to be seperated by 32bit and 64bit versions
-        private string[] specialName32And64Versions = new string[]
-        {
-            Settings.PythonLog,
-            Settings.XvmLog,
-            Settings.PmodLog
-        };
-
         /// <summary>
         /// Create an instance of the Diagnostics window
         /// </summary>
@@ -62,7 +54,7 @@ namespace RelhaxModpack.Windows
 
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("Diagnostics: Selecting WoT install");
+            Logging.Info(LogOptions.ClassName, "Selecting WoT install");
             //show a standard WoT selection window from manual find WoT.exe
             OpenFileDialog manualWoTFind = new OpenFileDialog()
             {
@@ -78,11 +70,11 @@ namespace RelhaxModpack.Windows
             {
                 Settings.WoTDirectory = Path.GetDirectoryName(manualWoTFind.FileName);
                 Settings.WoTDirectory = Settings.WoTDirectory.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
-                Logging.Info("Diagnostics: Selected WoT install -> {0}",Settings.WoTDirectory);
+                Logging.Info(LogOptions.ClassName, "Selected WoT install -> {0}",Settings.WoTDirectory);
             }
             else
             {
-                Logging.Info("Diagnostics: User canceled selection");
+                Logging.Info(LogOptions.ClassName, "User canceled selection");
             }
 
             //check to make sure a selected tanks installation is selected
@@ -95,7 +87,7 @@ namespace RelhaxModpack.Windows
                 return;
 
             //setup UI
-            Logging.Info("started collection of log files");
+            Logging.Info(LogOptions.ClassName, "Started collection of log files");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("collectionLogInfo");
 
             //create the list of files to collect (should always collect these)
@@ -145,11 +137,11 @@ namespace RelhaxModpack.Windows
                     filesToCollect.Add(s);
 
             //check in the list to make sure that the entries are valid and paths exist
-            Logging.Info("Filtering list of files to collect by if file exists");
+            Logging.Info(LogOptions.ClassName, "Filtering list of files to collect by if file exists");
             filesToCollect = filesToCollect.Where(fileEntry => !string.IsNullOrWhiteSpace(fileEntry) && File.Exists(fileEntry)).ToList();
             try
             {
-                Logging.Info("creating diagnostic zip file and adding logs");
+                Logging.Info(LogOptions.ClassName, "Creating diagnostic zip file and adding logs");
                 using (ZipFile zip = new ZipFile())
                 {
                     foreach (string s in filesToCollect)
@@ -171,26 +163,26 @@ namespace RelhaxModpack.Windows
                         */
 
                         //run a loop to check if the file already exists in the zip with the same name, if it does then pad it until it does not
-                        Logging.Info("Attempting to add filename {0} in zip entry", fileNameToAdd);
+                        Logging.Info(LogOptions.ClassName, "Attempting to add filename {0} in zip entry", fileNameToAdd);
                         while (zip.ContainsEntry(fileNameToAdd))
                         {
                             fileNameToAdd = string.Format("{0}_{1}.{2}", Path.GetFileNameWithoutExtension(fileNameToAdd), duplicate++, Path.GetExtension(fileNameToAdd));
-                            Logging.Info("exists, using filename {0}", fileNameToAdd);
+                            Logging.Info(LogOptions.ClassName, "Exists, using filename {0}", fileNameToAdd);
                         }
-                        Logging.Debug("new name for zip: {0}", fileNameToAdd);
+                        Logging.Info(LogOptions.ClassName, "New name for zip: {0}", fileNameToAdd);
 
                         //and the file to the zip file and grab the entry reference
                         ZipEntry entry = zip.AddFile(s);
                         //then use it to modify the name of the entry in the zip file
                         //this moves it out of all the sub-folders up to the root directory
                         entry.FileName = Path.GetFileName(fileNameToAdd);
-                        Logging.Info("file {0} added, entry name in zip = {1}", fileNameToAdd, entry.FileName);
+                        Logging.Info(LogOptions.ClassName, "File {0} added, entry name in zip = {1}", fileNameToAdd, entry.FileName);
                     }
                     string zipSavePath = Path.Combine(
                         Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
                         string.Format("RelhaxModpackLogs_{0}.zip", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")));
                     zip.Save(zipSavePath);
-                    Logging.Info("zip file saved to {0}", zipSavePath);
+                    Logging.Info(LogOptions.ClassName, "Zip file saved to {0}", zipSavePath);
                     DiagnosticsStatusTextBox.Text = string.Format("zip file saved to {0}", zipSavePath);
                 }
             }
@@ -203,7 +195,7 @@ namespace RelhaxModpack.Windows
 
         private async void ClearDownloadCache_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("Diagnostics: Deleting download cache");
+            Logging.Info(LogOptions.ClassName, "Deleting download cache");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCache");
             try
             {
@@ -216,12 +208,12 @@ namespace RelhaxModpack.Windows
                 Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
-            Logging.Info("Diagnostics: Deleted download cache");
+            Logging.Info(LogOptions.ClassName, "Deleted download cache");
         }
 
         private async void ClearDownloadCacheDatabase_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("Diagnostics: Deleting database cache file");
+            Logging.Info(LogOptions.ClassName, "Deleting database cache file");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase");
             try
             {
@@ -233,18 +225,18 @@ namespace RelhaxModpack.Windows
                 Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheDatabaseComplete");
-            Logging.Info("Diagnostics: Deleted database cache file");
+            Logging.Info(LogOptions.ClassName, "Deleted database cache file");
         }
 
         private void TestLoadImageLibrariesButton_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("Diagnostics: Test load image libraries");
+            Logging.Info(LogOptions.ClassName, "Test load image libraries");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibraries");
             UiUtils.AllowUIToUpdate();
             if (AtlasUtils.TestLoadAtlasLibraries(true))
             {
                 DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("loadingAtlasImageLibrariesSuccess");
-                Logging.Info("Diagnostics: Test load image libraries pass");
+                Logging.Info(LogOptions.ClassName, "Test load image libraries pass");
             }
             else
             {
@@ -254,10 +246,10 @@ namespace RelhaxModpack.Windows
                 {
                     if (!CommonUtils.StartProcess(AtlasUtils.MSVCPLink))
                     {
-                        Logging.Error("failed to open url to MSVCP: {0}", AtlasUtils.MSVCPLink);
+                        Logging.Error(LogOptions.ClassName, "Failed to open url to MSVCP: {0}", AtlasUtils.MSVCPLink);
                     }
                 }
-                Logging.Info("Diagnostics: Test load image libraries fail");
+                Logging.Info(LogOptions.ClassName, "Test load image libraries fail");
             }
         }
 
@@ -283,7 +275,7 @@ namespace RelhaxModpack.Windows
             List<string> filesToDelete = new List<string>();
             foreach(string folderPath in locationsToCheck)
             {
-                Logging.Debug("Processing folder {0}", folderPath);
+                Logging.Debug(LogOptions.ClassName, "Processing folder {0}", folderPath);
                 if(!Directory.Exists(folderPath))
                 {
                     Logging.Debug("Directory does not exist");
@@ -293,11 +285,11 @@ namespace RelhaxModpack.Windows
                 string[] files = FileUtils.DirectorySearch(folderPath, SearchOption.AllDirectories, true);
                 if (files != null)
                     count = files.Count();
-                Logging.Debug("Added {0} files", count);
+                Logging.Debug(LogOptions.ClassName, "Added {0} files", count);
                 filesToDelete.AddRange(files);
             }
 
-            Logging.Debug("Deleting files");
+            Logging.Debug(LogOptions.ClassName, "Deleting files");
             for(int i = 0; i < filesToDelete.Count; i++)
             {
                 //check to make sure it's a file
@@ -311,7 +303,7 @@ namespace RelhaxModpack.Windows
             }
 
             //fully delete the folders now
-            Logging.Debug("Complete delete of folders");
+            Logging.Debug(LogOptions.ClassName, "Complete delete of folders");
             List<string> locationsFailedToDelete = new List<string>();
             foreach (string folderPath in locationsToCheck)
             {
@@ -322,7 +314,7 @@ namespace RelhaxModpack.Windows
 
             if(locationsFailedToDelete.Count > 0)
             {
-                Logging.Error("Failed to delete the folders: {0}", string.Join(",", locationsFailedToDelete));
+                Logging.Error(LogOptions.ClassName, "Failed to delete the folders: {0}", string.Join(",", locationsFailedToDelete));
                 MessageBox.Show(string.Format("{0}, {1}", Translations.GetTranslatedString("folderDeleteFailed"), string.Join(",\n", locationsFailedToDelete)));
             }
 
@@ -331,19 +323,19 @@ namespace RelhaxModpack.Windows
 
         private async void ClearGameCacheButton_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("[Diagnostics]: Cleaning AppData cache");
+            Logging.Info(LogOptions.ClassName, "Cleaning AppData cache");
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheProgress");
 
             bool clearCache = await Task.Run(() => CommonUtils.ClearCache());
 
             if(clearCache)
             {
-                Logging.Info("[Diagnostics]: Cleaning AppData cache success");
+                Logging.Info(LogOptions.ClassName, "Cleaning AppData cache success");
                 DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheSuccess");
             }
             else
             {
-                Logging.Info("[Diagnostics]: Cleaning AppData cache fail");
+                Logging.Info(LogOptions.ClassName, "Cleaning AppData cache fail");
                 DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheFail");
             }
         }
