@@ -604,11 +604,13 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
 if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuffNull.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\TeximpNet.1.4.2\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.4.2\build\TeximpNet.targets')" />
+  <Import Project="..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\TeximpNet.1.4.2\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.4.2\build\TeximpNet.targets'))" />
+    <Error Condition="!Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
   </Target>
   <!-- Copy the nuget dlls to the project's dll directory by overiding a predefined target -->
   <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/how-to-extend-the-visual-studio-build-process?view=vs-2019 -->
@@ -620,17 +622,67 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <Message Text="Copying dlls" />
     <!-- Create a property of the dll output directory -->
     <PropertyGroup>
-      <BuildDir>Resources\DLL</BuildDir>
+      <DllOutputDir>Resources\DLL</DllOutputDir>
     </PropertyGroup>
     <!-- <Message Text="@(Filtered)" /> -->
     <!-- Get the dlls to include by determining if they have a hint path. Any with it are nuget dlls to include-->
     <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/makedir-task?view=vs-2019 -->
-    <MakeDir Directories="$(OutputDirectory)" />
+    <MakeDir Directories="$(DllOutputDir)" />
     <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/copy-task?view=vs-2019 -->
-    <Copy SourceFiles="@(Filtered)" DestinationFolder="$(OutputDirectory)" />
+    <Copy SourceFiles="@(Filtered)" DestinationFolder="$(DllOutputDir)" />
   </Target>
-  <Target Name="CopyAndZipImageLibs" AfterTargets="BeforeBuild">
-    <!-- Copy the freeimage and nvtt dlls out to the application's resources location -->
+  <Target Name="ZipImageLibs" AfterTargets="BeforeBuild">
+    <ItemGroup>
+      <!-- relative path is project root. Get the teximp path -->
+      <!-- Get all items that have a hint path (nuget only) -->
+      <NugetItems Include="%(Reference.HintPath)" Condition=" '%(Reference.HintPath)' != '' " />
+      <!-- Get only TeximpNet item -->
+      <!-- example return: "TeximpNugetRoot__: C:\Users\Willster419\Tanks Stuff\RelhaxModpack\RelhaxModpack\packages\TeximpNet.1.4.2\lib\net40\TeximpNet.dll" -->
+      <TeximpNugetFullpath Include="%(NugetItems.Fullpath)" Condition=" '%(Filename)%(Extension)' == 'TeximpNet.dll' " />
+    </ItemGroup>
+    <PropertyGroup>
+      <!-- get the vector of 1 (item) and convert it to a scalar -->
+      <!-- example return: TeximpNugetPathProp: "C:\Users\Willster419\Tanks Stuff\RelhaxModpack\RelhaxModpack\packages\TeximpNet.1.4.2\lib\net40\TeximpNet.dll" -->
+      <TeximpNugetPathProp>%(TeximpNugetFullpath.Identity)</TeximpNugetPathProp>
+      <!-- go up in the paths until we're at the teximpnet nuget root -->
+      <TeximpNugetPathUp1>$([System.IO.Path]::GetDirectoryName($(TeximpNugetPathProp)))</TeximpNugetPathUp1>
+      <TeximpNugetPathUp2>$([System.IO.Path]::GetDirectoryName($(TeximpNugetPathUp1)))</TeximpNugetPathUp2>
+      <TeximpNugetPathUp3>$([System.IO.Path]::GetDirectoryName($(TeximpNugetPathUp2)))</TeximpNugetPathUp3>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- define the 32 and 64bit freeimage and nvtt libraries -->
+      <FreeImage32 Include="$(TeximpNugetPathUp3)\runtimes\win-x86\native\FreeImage.dll"/>
+      <FreeImage64 Include="$(TeximpNugetPathUp3)\runtimes\win-x64\native\FreeImage.dll"/>
+      <NVTT32 Include="$(TeximpNugetPathUp3)\runtimes\win-x86\native\nvtt.dll"/>
+      <NVTT64 Include="$(TeximpNugetPathUp3)\runtimes\win-x64\native\nvtt.dll"/>
+    </ItemGroup>
+    <PropertyGroup>
+      <!-- define the paths of the 32 and 64bit freeimage and nvtt libraries -->
+      <FreeImage32Path>$([System.IO.Path]::GetDirectoryName(%(FreeImage32.Identity)))</FreeImage32Path>
+      <FreeImage64Path>$([System.IO.Path]::GetDirectoryName(%(FreeImage64.Identity)))</FreeImage64Path>
+      <NVTT32Path>$([System.IO.Path]::GetDirectoryName(%(NVTT32.Identity)))</NVTT32Path>
+      <NVTT64Path>$([System.IO.Path]::GetDirectoryName(%(NVTT64.Identity)))</NVTT64Path>
+    </PropertyGroup>
+    <!-- Create the zip files -->
+    <Message Text="Copying FreeImage and NVTT" />
+    <Message Text="TeximpNugetFullpath: @(TeximpNugetFullpath)" />
+    <Message Text="TeximpNugetPathProp: $(TeximpNugetPathProp)" />
+    <Message Text="TeximpNugetPathUp1: $(TeximpNugetPathUp1)" />
+    <Message Text="TeximpNugetPathUp2: $(TeximpNugetPathUp2)" />
+    <Message Text="TeximpNugetPathUp3: $(TeximpNugetPathUp3)" />
+    <Message Text="DllOutputDir: $(DllOutputDir)" />
+    <Message Text="FreeImage32: @(FreeImage32)" />
+    <Message Text="FreeImage64: @(FreeImage64)" />
+    <Message Text="NVTT32: @(NVTT32)" />
+    <Message Text="NVTT64: @(NVTT64)" />
+    <Message Text="FreeImage32Path: $(FreeImage32Path)" />
+    <Message Text="FreeImage64Path: $(FreeImage64Path)" />
+    <Message Text="NVTT32Path: $(NVTT32Path)" />
+    <Message Text="NVTT64Path: $(NVTT64Path)" />
+    <MSBuild.Community.Tasks.Zip Files="@(FreeImage32)" ZipFileName="$(DllOutputDir)\FreeImage32.zip" WorkingDirectory="$(FreeImage32Path)"/>
+    <MSBuild.Community.Tasks.Zip Files="@(FreeImage64)" ZipFileName="$(DllOutputDir)\FreeImage64.zip" WorkingDirectory="$(FreeImage64Path)"/>
+    <MSBuild.Community.Tasks.Zip Files="@(NVTT32)" ZipFileName="$(DllOutputDir)\nvtt32.zip" WorkingDirectory="$(NVTT32Path)"/>
+    <MSBuild.Community.Tasks.Zip Files="@(NVTT64)" ZipFileName="$(DllOutputDir)\nvtt64.zip" WorkingDirectory="$(NVTT64Path)"/>
   </Target>
   <!-- Then include the newly copied files as embeded resources -->
   <ItemGroup>
