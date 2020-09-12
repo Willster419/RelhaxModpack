@@ -70,22 +70,21 @@
     <ApplicationIcon>Resources\modpack_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetZip, Version=1.13.5.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.13.5\lib\net40\DotNetZip.dll</HintPath>
+    <Reference Include="CustomMarshalers" />
+    <Reference Include="DotNetZip, Version=1.13.8.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.13.8\lib\net40\DotNetZip.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.11.18.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.18\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.3.3, Culture=neutral, PublicKeyToken=8985beaab7ea3f04, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft-WindowsAPICodePack-Core.1.1.3.3\lib\net452\Microsoft.WindowsAPICodePack.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.4.0, Culture=neutral, PublicKeyToken=8985beaab7ea3f04, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft-WindowsAPICodePack-Core.1.1.4\lib\net48\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.3.3, Culture=neutral, PublicKeyToken=8985beaab7ea3f04, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft-WindowsAPICodePack-Shell.1.1.3.3\lib\net452\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.4.0, Culture=neutral, PublicKeyToken=8985beaab7ea3f04, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft-WindowsAPICodePack-Shell.1.1.4\lib\net48\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
     <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
@@ -108,12 +107,13 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TeximpNet, Version=1.4.2.0, Culture=neutral, PublicKeyToken=978ca55aa4aa29a3, processorArchitecture=MSIL">
-      <HintPath>..\packages\TeximpNet.1.4.2\lib\net40\TeximpNet.dll</HintPath>
+    <Reference Include="TeximpNet, Version=1.4.3.0, Culture=neutral, PublicKeyToken=978ca55aa4aa29a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\TeximpNet.1.4.3\lib\net40\TeximpNet.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -603,14 +603,13 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <PostBuildEvent>if exist "$(TargetDir)sign_modpack.bat" call "$(TargetDir)sign_modpack.bat"
 if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuffNull.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\TeximpNet.1.4.2\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.4.2\build\TeximpNet.targets')" />
   <Import Project="..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\TeximpNet.1.4.2\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.4.2\build\TeximpNet.targets'))" />
     <Error Condition="!Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
+    <Error Condition="!Exists('..\packages\TeximpNet.1.4.3\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.4.3\build\TeximpNet.targets'))" />
   </Target>
   <!-- Copy the nuget dlls to the project's dll directory by overiding a predefined target -->
   <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/how-to-extend-the-visual-studio-build-process?view=vs-2019 -->
@@ -651,10 +650,10 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     </PropertyGroup>
     <ItemGroup>
       <!-- define the 32 and 64bit freeimage and nvtt libraries -->
-      <FreeImage32 Include="$(TeximpNugetPathUp3)\runtimes\win-x86\native\FreeImage.dll"/>
-      <FreeImage64 Include="$(TeximpNugetPathUp3)\runtimes\win-x64\native\FreeImage.dll"/>
-      <NVTT32 Include="$(TeximpNugetPathUp3)\runtimes\win-x86\native\nvtt.dll"/>
-      <NVTT64 Include="$(TeximpNugetPathUp3)\runtimes\win-x64\native\nvtt.dll"/>
+      <FreeImage32 Include="$(TeximpNugetPathUp3)\runtimes\win-x86\native\FreeImage.dll" />
+      <FreeImage64 Include="$(TeximpNugetPathUp3)\runtimes\win-x64\native\FreeImage.dll" />
+      <NVTT32 Include="$(TeximpNugetPathUp3)\runtimes\win-x86\native\nvtt.dll" />
+      <NVTT64 Include="$(TeximpNugetPathUp3)\runtimes\win-x64\native\nvtt.dll" />
     </ItemGroup>
     <PropertyGroup>
       <!-- define the paths of the 32 and 64bit freeimage and nvtt libraries -->
@@ -679,10 +678,10 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <Message Text="FreeImage64Path: $(FreeImage64Path)" />
     <Message Text="NVTT32Path: $(NVTT32Path)" />
     <Message Text="NVTT64Path: $(NVTT64Path)" />
-    <MSBuild.Community.Tasks.Zip Files="@(FreeImage32)" ZipFileName="$(DllOutputDir)\FreeImage32.zip" WorkingDirectory="$(FreeImage32Path)"/>
-    <MSBuild.Community.Tasks.Zip Files="@(FreeImage64)" ZipFileName="$(DllOutputDir)\FreeImage64.zip" WorkingDirectory="$(FreeImage64Path)"/>
-    <MSBuild.Community.Tasks.Zip Files="@(NVTT32)" ZipFileName="$(DllOutputDir)\nvtt32.zip" WorkingDirectory="$(NVTT32Path)"/>
-    <MSBuild.Community.Tasks.Zip Files="@(NVTT64)" ZipFileName="$(DllOutputDir)\nvtt64.zip" WorkingDirectory="$(NVTT64Path)"/>
+    <MSBuild.Community.Tasks.Zip Files="@(FreeImage32)" ZipFileName="$(DllOutputDir)\FreeImage32.zip" WorkingDirectory="$(FreeImage32Path)" />
+    <MSBuild.Community.Tasks.Zip Files="@(FreeImage64)" ZipFileName="$(DllOutputDir)\FreeImage64.zip" WorkingDirectory="$(FreeImage64Path)" />
+    <MSBuild.Community.Tasks.Zip Files="@(NVTT32)" ZipFileName="$(DllOutputDir)\nvtt32.zip" WorkingDirectory="$(NVTT32Path)" />
+    <MSBuild.Community.Tasks.Zip Files="@(NVTT64)" ZipFileName="$(DllOutputDir)\nvtt64.zip" WorkingDirectory="$(NVTT64Path)" />
   </Target>
   <!-- Then include the newly copied files as embeded resources -->
   <ItemGroup>
@@ -700,4 +699,5 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <EmbeddedResource Include="Resources\DLL\nvtt32.zip" />
     <EmbeddedResource Include="Resources\DLL\nvtt64.zip" />
   </ItemGroup>
+  <Import Project="..\packages\TeximpNet.1.4.3\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.4.3\build\TeximpNet.targets')" />
 </Project>
