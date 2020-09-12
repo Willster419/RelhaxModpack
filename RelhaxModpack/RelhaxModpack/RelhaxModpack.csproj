@@ -528,7 +528,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Resource Include="Resources\Licences\WindowsAPICodePack.txt" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -540,29 +539,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <EmbeddedResource Include="Resources\DLL\FreeImage32.zip" />
-    <EmbeddedResource Include="Resources\DLL\FreeImage64.zip" />
-    <EmbeddedResource Include="Resources\DLL\nvtt32.zip" />
-    <EmbeddedResource Include="Resources\DLL\nvtt64.zip" />
-    <Resource Include="Resources\Images\popular_icon.png" />
-    <Resource Include="Resources\Images\grey_area_mod.png" />
-    <Resource Include="Resources\Images\error_loading_picture.png" />
-    <EmbeddedResource Include="Resources\DLL\DotNetZip.dll" />
-    <EmbeddedResource Include="Resources\DLL\Microsoft.WindowsAPICodePack.dll" />
-    <EmbeddedResource Include="Resources\DLL\Microsoft.WindowsAPICodePack.Shell.dll" />
-    <EmbeddedResource Include="Resources\DLL\NAudio.dll" />
-    <EmbeddedResource Include="Resources\DLL\Newtonsoft.Json.dll" />
-    <EmbeddedResource Include="Resources\DLL\TeximpNet.dll" />
-    <EmbeddedResource Include="Resources\DLL\HtmlAgilityPack.dll" />
-    <Resource Include="Resources\Images\obfuscated_package_icon.png" />
-    <Resource Include="Resources\Licences\Json.NET.txt" />
-    <Resource Include="Resources\Licences\DotNetZip.txt" />
-    <Resource Include="Resources\Licences\HtmlAgilityPack.txt" />
-    <Resource Include="Resources\Licences\modpack_license_agrement.txt" />
-    <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\modpack_icon.ico" />
+    <None Include="Properties\RelhaxModpack.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -579,8 +558,6 @@
   <ItemGroup>
     <Resource Include="Resources\Images\play_pause.png" />
     <Resource Include="Resources\Images\stop2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\discord brand.png" />
     <Resource Include="Resources\Images\donation.png" />
     <Resource Include="Resources\Images\EMail.png" />
@@ -592,17 +569,21 @@
     <Resource Include="Resources\Images\report.png" />
     <Resource Include="Resources\Images\twitter brand.png" />
     <Resource Include="Resources\Images\WoT brand light grey.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Resources\Images\wgmods_logo_full.png" />
+    <Resource Include="Resources\Images\wgmods_package.png" />
+    <Resource Include="Resources\Images\popular_icon.png" />
+    <Resource Include="Resources\Images\grey_area_mod.png" />
+    <Resource Include="Resources\Images\error_loading_picture.png" />
+    <Resource Include="Resources\Images\obfuscated_package_icon.png" />
+    <Resource Include="Resources\Licences\Json.NET.txt" />
+    <Resource Include="Resources\Licences\DotNetZip.txt" />
+    <Resource Include="Resources\Licences\HtmlAgilityPack.txt" />
+    <Resource Include="Resources\Licences\modpack_license_agrement.txt" />
+    <Resource Include="Resources\Licences\WindowsAPICodePack.txt" />
     <Resource Include="Resources\Licences\NAudio.txt" />
     <Resource Include="Resources\Licences\SpriteSheetPacker.txt" />
     <Resource Include="Resources\Licences\TeximpNet.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\wgmods_logo_full.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\wgmods_package.png" />
+    <Resource Include="Resources\modpack_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -629,4 +610,42 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\TeximpNet.1.4.2\build\TeximpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TeximpNet.1.4.2\build\TeximpNet.targets'))" />
   </Target>
+  <!-- Copy the nuget dlls to the project's dll directory by overiding a predefined target -->
+  <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/how-to-extend-the-visual-studio-build-process?view=vs-2019 -->
+  <Target Name="BeforeBuild">
+    <!-- Item group of only dlls from nuget -->
+    <ItemGroup>
+      <Filtered Include="%(Reference.HintPath)" Condition=" '%(Reference.HintPath)' != '' " />
+    </ItemGroup>
+    <Message Text="Copying dlls" />
+    <!-- Create a property of the dll output directory -->
+    <PropertyGroup>
+      <BuildDir>Resources\DLL</BuildDir>
+    </PropertyGroup>
+    <!-- <Message Text="@(Filtered)" /> -->
+    <!-- Get the dlls to include by determining if they have a hint path. Any with it are nuget dlls to include-->
+    <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/makedir-task?view=vs-2019 -->
+    <MakeDir Directories="$(OutputDirectory)" />
+    <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/copy-task?view=vs-2019 -->
+    <Copy SourceFiles="@(Filtered)" DestinationFolder="$(OutputDirectory)" />
+  </Target>
+  <Target Name="CopyAndZipImageLibs" AfterTargets="BeforeBuild">
+    <!-- Copy the freeimage and nvtt dlls out to the application's resources location -->
+  </Target>
+  <!-- Then include the newly copied files as embeded resources -->
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\DLL\DotNetZip.dll" />
+    <EmbeddedResource Include="Resources\DLL\Microsoft.WindowsAPICodePack.dll" />
+    <EmbeddedResource Include="Resources\DLL\Microsoft.WindowsAPICodePack.Shell.dll" />
+    <EmbeddedResource Include="Resources\DLL\NAudio.dll" />
+    <EmbeddedResource Include="Resources\DLL\Newtonsoft.Json.dll" />
+    <EmbeddedResource Include="Resources\DLL\TeximpNet.dll" />
+    <EmbeddedResource Include="Resources\DLL\HtmlAgilityPack.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\DLL\FreeImage32.zip" />
+    <EmbeddedResource Include="Resources\DLL\FreeImage64.zip" />
+    <EmbeddedResource Include="Resources\DLL\nvtt32.zip" />
+    <EmbeddedResource Include="Resources\DLL\nvtt64.zip" />
+  </ItemGroup>
 </Project>
