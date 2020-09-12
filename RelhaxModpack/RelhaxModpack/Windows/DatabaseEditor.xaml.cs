@@ -380,8 +380,6 @@ namespace RelhaxModpack.Windows
             DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
             FtpUpDownAutoCloseTimoutSlider.Value = EditorSettings.FTPUploadDownloadWindowTimeout;
             FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
-            SaveDatabaseLegacySetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy ? true : false;
-            SaveDatabaseOnePointOneSetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.OnePointOne ? true : false;
             SelectAutoUpdateWorkDirectoryTextbox.Text = EditorSettings.AutoUpdaterWorkDirectory;
         }
         #endregion
@@ -457,14 +455,6 @@ namespace RelhaxModpack.Windows
                 AddDatabaseObjectButton.IsEnabled = false;
             }
 
-        }
-
-        private void SaveDatabaseSetting_Checked(object sender, RoutedEventArgs e)
-        {
-            if ((bool)SaveDatabaseLegacySetting.IsChecked)
-                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
-            else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
-                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
         }
 
         private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
@@ -1948,17 +1938,8 @@ namespace RelhaxModpack.Windows
             }
 
             //actually save
-            switch (EditorSettings.SaveAsDatabaseVersion)
-            {
-                case DatabaseXmlVersion.Legacy:
-                    XmlUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);
-                    break;
-                case DatabaseXmlVersion.OnePointOne:
-                    XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), Settings.BetaDatabaseV2RootFilename),
+            XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), Settings.BetaDatabaseV2RootFilename),
                         Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
-                    break;
-            }
 
             UnsavedChanges = false;
         }
@@ -1980,7 +1961,7 @@ namespace RelhaxModpack.Windows
                     DefaultExt = "xml",
                     InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
                     Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
-                    Title = string.Format("Save Database: version = {0}", EditorSettings.SaveAsDatabaseVersion.ToString())
+                    Title = string.Format("Save Database")
                 };
 
             //then show it and only continue if a selection was committed
@@ -1993,17 +1974,8 @@ namespace RelhaxModpack.Windows
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
 
             //actually save
-            switch (EditorSettings.SaveAsDatabaseVersion)
-            {
-                case DatabaseXmlVersion.Legacy:
-                    XmlUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);
-                    break;
-                case DatabaseXmlVersion.OnePointOne:
-                    XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
+            XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
                         Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
-                    break;
-            }
 
             UnsavedChanges = false;
         }
