@@ -675,11 +675,11 @@ namespace RelhaxModpack
 
             //Component: failedToGetDotNetFrameworkVersion
             //
-            English.Add("failedToGetDotNetFrameworkVersion", "Failed to get the installed .NET Framework version. This could indicate a permissions problem or antivirus could be blocking it");
+            English.Add("failedToGetDotNetFrameworkVersion", "Failed to get the installed .NET Framework version. This could indicate a permissions problem or your antivirus software could be blocking it.");
             German.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
             Polish.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
             French.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
-            Spanish.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+            Spanish.Add("failedToGetDotNetFrameworkVersion", "No se ha podido obtener la versión de la instalación de .Net Framework. Esto puede indicar un problema de permisos, o un antivirus puede estar bloqueando la obtención.");
             Russian.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
 
             //Component: invalidDotNetFrameworkVersion
@@ -689,7 +689,8 @@ namespace RelhaxModpack
             German.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
             Polish.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
             French.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
-            Spanish.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
+            Spanish.Add("invalidDotNetFrameworkVersion", "La versión instalada de .NET Framework es anterior a 4.8. Relhax Modpack requiere la versión 4.8 o superior para funcionar." +
+                " ¿Quiere abrir un vínculo para obtener la última versión de .NET Framework?");
             Russian.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
             #endregion
 
