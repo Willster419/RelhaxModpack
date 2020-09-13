@@ -3,6 +3,7 @@ using RelhaxModpack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Security.Cryptography;
 using System.Linq;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxUnitTests
 {

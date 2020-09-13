@@ -9110,7 +9110,7 @@
             <param name="languageToCheck">The language dictionary to check in</param>
             <returns>True is the entry exists, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Translations.ExistsAndValid(System.String,RelhaxModpack.Languages)">
+        <member name="M:RelhaxModpack.Translations.ExistsAndValid(System.String,RelhaxModpack.Utilities.Enums.Languages)">
             <summary>
             Checks that an entry exists and that the translated entry is not a TODO
             </summary>

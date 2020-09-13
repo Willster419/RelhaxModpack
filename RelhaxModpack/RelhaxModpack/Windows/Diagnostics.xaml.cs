@@ -12,6 +12,7 @@ using RelhaxModpack.Atlases;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.UI;
 using System.Text;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Windows
 {
