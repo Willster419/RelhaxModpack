@@ -89,7 +89,13 @@ namespace RelhaxModpack
             "GcDownloadStep4DownloadingSizes",
             "TaskName"
         };
-        private const string TranslationNeeded = "TODO";
+
+        /// <summary>
+        /// The entry to use when a translation is needed
+        /// </summary>
+        /// <remarks>When designing UI, i'll add the translation entries, but for the not english languages, i'll set
+        /// this value so the application knows to return the english phrase and log the error.</remarks>
+        public const string TranslationNeeded = "TODO";
 
         /// <summary>
         /// An array of all currently supported languages in the modpack
@@ -267,9 +273,15 @@ namespace RelhaxModpack
         /// <returns></returns>
         public static string GetTranslatedString(string componentName)
         {
+            if (!TranslationsLoaded)
+            {
+                Logging.Error(LogOptions.MethodAndClassName, "Translations have not been loaded");
+                return null;
+            }
+
             string s;
             //check if componentName key exists in current language
-            if(CurrentLanguage.ContainsKey(componentName))
+            if (CurrentLanguage.ContainsKey(componentName))
             {
                 s = CurrentLanguage[componentName];
                 //if the value is TODO, check if we have it in english (unless it is english)
@@ -319,11 +331,18 @@ namespace RelhaxModpack
         /// <returns>True if it exists in the currently selected language, or false otherwise</returns>
         public static bool ExistsInCurrentLanguage(string componentName, bool logError)
         {
-            if(CurrentLanguage == null)
+            if (!TranslationsLoaded)
             {
-                Logging.Error("CurrentLanguage is null, using english for default");
+                Logging.Error(LogOptions.MethodAndClassName, "Translations have not been loaded");
+                return false;
+            }
+
+            if (CurrentLanguage == null)
+            {
+                Logging.Warning(LogOptions.MethodAndClassName, "CurrentLanguage is null, using english for default");
                 return Exists(componentName, Languages.English);
             }
+
             if(!CurrentLanguage.ContainsKey(componentName))
             {
                 if(logError)
@@ -341,6 +360,12 @@ namespace RelhaxModpack
         /// <returns>True is the entry exists, false otherwise</returns>
         public static bool Exists(string componentName, Languages languageToCheck)
         {
+            if (!TranslationsLoaded)
+            {
+                Logging.Error(LogOptions.MethodAndClassName, "Translations have not been loaded");
+                return false;
+            }
+
             Dictionary<string, string> DictToCheck = null;
             switch (languageToCheck)
             {
@@ -372,6 +397,12 @@ namespace RelhaxModpack
         /// <returns>True if the component (key) exists and the entry is not TODO</returns>
         public static bool ExistsAndValid(string componentName, Languages langaugeToCheck)
         {
+            if(!TranslationsLoaded)
+            {
+                Logging.Error(LogOptions.MethodAndClassName, "Translations have not been loaded");
+                return false;
+            }
+
             if (!Exists(componentName, langaugeToCheck))
                 return false;
             return !GetLanguageDictionaries(langaugeToCheck)[componentName].Equals(TranslationNeeded);
