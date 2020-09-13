@@ -384,6 +384,12 @@ namespace RelhaxModpack
                 case Languages.Polish:
                     DictToCheck = Polish;
                     break;
+                case Languages.Russian:
+                    DictToCheck = Russian;
+                    break;
+                default:
+                    DictToCheck = null;
+                    break;
             }
 
             return DictToCheck.ContainsKey(componentName);
