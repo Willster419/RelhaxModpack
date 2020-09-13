@@ -3,11 +3,11 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("RelhaxUnitTests")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Unit testing components of the Relhax Modpack")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("RelhaxUnitTests")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright © 2020 Willard Wider")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
