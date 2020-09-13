@@ -9003,6 +9003,20 @@
             Handles all localization for the application User Interface
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Translations.TranslationNeeded">
+            <summary>
+            The entry to use when a translation is needed
+            </summary>
+            <remarks>When designing UI, i'll add the translation entries, but for the not english languages, i'll set
+            this value so the application knows to return the english phrase and log the error.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Translations.SupportedLanguages">
+            <summary>
+            An array of all currently supported languages in the modpack
+            </summary>
+            <remarks>A supported language means that it has translation infrastructure and
+            does not imply that all translations exist</remarks>
+        </member>
         <member name="P:RelhaxModpack.Translations.TranslationsLoaded">
             <summary>
             Get if the translation dictionaries have been loaded yet
@@ -9075,7 +9089,7 @@
             <param name="componentName">The key value of the string phrase</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Translations.Exists(System.String,System.Boolean)">
+        <member name="M:RelhaxModpack.Translations.ExistsInCurrentLanguage(System.String,System.Boolean)">
             <summary>
             Determines if a key exists in the currently selected language, or in english if no language is selected
             </summary>
@@ -9083,13 +9097,21 @@
             <param name="logError">Flag to log an error in the logfile if it does not exist</param>
             <returns>True if it exists in the currently selected language, or false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages,System.Boolean)">
+        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages)">
             <summary>
             Checks is a component (key value) exists in the given language (dictionary)
             </summary>
             <param name="componentName">The keyword phrase to check</param>
             <param name="languageToCheck">The language dictionary to check in</param>
-            <param name="logError">Flag for if to log if the component was not found</param>
+            <returns>True is the entry exists, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Translations.ExistsAndValid(System.String,RelhaxModpack.Languages)">
+            <summary>
+            Checks that an entry exists and that the translated entry is not a TODO
+            </summary>
+            <param name="componentName">The language entry (key) to see if exists</param>
+            <param name="langaugeToCheck">The language of which dictionary to check</param>
+            <returns>True if the component (key) exists and the entry is not TODO</returns>
         </member>
         <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
             <summary>
