@@ -42,8 +42,7 @@ namespace RelhaxModpack
         /// </summary>
         public string Filepath
         {
-            get
-            { return Path.Combine(Settings.RelhaxLibrariesFolderPath, ExtractedFilename); }
+            get { return Path.Combine(Settings.RelhaxLibrariesFolderPath, ExtractedFilename); }
         }
 
         /// <summary>
@@ -58,6 +57,7 @@ namespace RelhaxModpack
                     Logging.Info("Teximpnet library file does not exist, extracting: {0}", EmbeddedFilename);
                     return false;
                 }
+
                 Logging.Info("Teximpnet library file exists, checking if latest via Hash comparison not exist, extracting: {0}", EmbeddedFilename);
                 string extractedHash = FileUtils.CreateMD5Hash(Filepath);
                 Logging.Debug("{0} hash local:    {1}", EmbeddedFilename, extractedHash);
@@ -81,8 +81,7 @@ namespace RelhaxModpack
         /// </summary>
         public bool IsLoaded
         {
-            get
-            { return library.IsLibraryLoaded; }
+            get { return library.IsLibraryLoaded; }
         }
 
         /// <summary>
@@ -93,6 +92,7 @@ namespace RelhaxModpack
         {
             if (!IsExtracted)
                 Extract();
+
             try
             {
                 return library.LoadLibrary(Filepath);
@@ -129,8 +129,10 @@ namespace RelhaxModpack
                 Logging.Warning("Unmanaged library {0} is already extracted", EmbeddedFilename);
                 return;
             }
+
             if (File.Exists(Filepath))
                 File.Delete(Filepath);
+
             //https://stackoverflow.com/questions/38381684/reading-zip-file-from-byte-array-using-ionic-zip
             string resourceName = CommonUtils.GetAssemblyName(EmbeddedFilename);
             Logging.Info("Extracting unmanaged teximpnet library: {0}", EmbeddedFilename);
