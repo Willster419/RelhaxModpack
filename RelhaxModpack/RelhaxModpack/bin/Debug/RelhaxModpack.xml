@@ -9044,12 +9044,29 @@
             </summary>
             <param name="language">The language to switch to</param>
         </member>
+        <member name="M:RelhaxModpack.Translations.GetLanguageDictionaries(RelhaxModpack.Languages)">
+            <summary>
+            Gets the language dictionary of the enumerated name of the language
+            </summary>
+            <param name="language">The english-named enumeration of the language</param>
+            <returns>The key-value language dictionary</returns>
+        </member>
         <member name="M:RelhaxModpack.Translations.GetLanguageNativeName(RelhaxModpack.Languages)">
             <summary>
             Get the native language name of the english enumerated name of the language
             </summary>
             <param name="language">The english-named enumeration of the language</param>
             <returns>The name of the requested language in it's native language</returns>
+        </member>
+        <member name="M:RelhaxModpack.Translations.UnloadTranslations">
+            <summary>
+            Unloads the translation hashes
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.ReloadTranslations">
+            <summary>
+            Reloads the translation hashes
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Translations.GetTranslatedString(System.String)">
             <summary>
