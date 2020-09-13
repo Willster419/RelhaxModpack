@@ -90,7 +90,6 @@ namespace RelhaxModpack
             "TaskName"
         };
         private const string TranslationNeeded = "TODO";
-        private static readonly string Blank = string.Empty;
 
         /// <summary>
         /// Get if the translation dictionaries have been loaded yet
@@ -169,6 +168,32 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Gets the language dictionary of the enumerated name of the language
+        /// </summary>
+        /// <param name="language">The english-named enumeration of the language</param>
+        /// <returns>The key-value language dictionary</returns>
+        public static Dictionary<string, string> GetLanguageDictionaries(Languages language)
+        {
+            switch (language)
+            {
+                case Languages.English:
+                    return English;
+                case Languages.French:
+                    return French;
+                case Languages.German:
+                    return German;
+                case Languages.Polish:
+                    return Polish;
+                case Languages.Spanish:
+                    return Spanish;
+                case Languages.Russian:
+                    return Russian;
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
         /// Get the native language name of the english enumerated name of the language
         /// </summary>
         /// <param name="language">The english-named enumeration of the language</param>
@@ -192,6 +217,32 @@ namespace RelhaxModpack
                 default:
                     return null;
             }
+        }
+
+        /// <summary>
+        /// Unloads the translation hashes
+        /// </summary>
+        public static void UnloadTranslations()
+        {
+            Logging.Debug(LogOptions.MethodName, "Unloading all language hashes and setting {0} to false", nameof(TranslationsLoaded));
+            Dictionary<string, string>[] dics = { English, French, German, Polish, Spanish, Russian };
+            foreach (Dictionary<string, string> dictionary in dics)
+            {
+                dictionary.Clear();
+            }
+            TranslationsLoaded = false;
+            Logging.Debug(LogOptions.MethodName, "Unloaded all language hashes");
+        }
+
+        /// <summary>
+        /// Reloads the translation hashes
+        /// </summary>
+        public static void ReloadTranslations()
+        {
+            Logging.Debug(LogOptions.MethodName, "Reloading all language hashes");
+            UnloadTranslations();
+            LoadTranslations();
+            Logging.Debug(LogOptions.MethodName, "Reloaded all language hashes");
         }
 
         /// <summary>
@@ -432,6 +483,13 @@ namespace RelhaxModpack
         /// </summary>
         public static void LoadTranslations()
         {
+            Logging.Debug(LogOptions.MethodName, "Loading all translations");
+            if(TranslationsLoaded)
+            {
+                Logging.Warning(LogOptions.MethodName, "Translations already loaded, use ReloadTranslations()");
+                return;
+            }
+
             //Syntax is as follows:
             //languageName.Add("componentName","TranslatedString");
 
@@ -5743,6 +5801,7 @@ namespace RelhaxModpack
             #endregion
 
             //apply the bool that all translations were applied
+            Logging.Debug(LogOptions.MethodName, "All translations loaded");
             TranslationsLoaded = true;
         }
         #endregion
