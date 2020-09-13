@@ -2085,7 +2085,7 @@ namespace RelhaxModpack.Windows
             translationsBuilder.Append("ID");
             foreach(TranslationStruct translationStruct in langauges)
             {
-                translationsBuilder.AppendFormat(",{0}", translationStruct.LanguageName);
+                translationsBuilder.AppendFormat("\t{0}", translationStruct.LanguageName);
             }
             translationsBuilder.Append(Environment.NewLine);
 
@@ -2095,10 +2095,11 @@ namespace RelhaxModpack.Windows
                 translationsBuilder.AppendFormat("{0}", key);
                 foreach(TranslationStruct translationStruct in langauges)
                 {
+                    //if it doesn't exist, then mark it. Also need to use tabs, so escape them in the csv with "\t"
                     if (translationStruct.Dict.ContainsKey(key))
-                        translationsBuilder.AppendFormat(",{0}", translationStruct.Dict[key]);
+                        translationsBuilder.AppendFormat("\t{0}", MacroUtils.MacroReplace(translationStruct.Dict[key],ReplacementTypes.TextEscape));
                     else
-                        translationsBuilder.AppendFormat(",MISSING_TRANSLATION");
+                        translationsBuilder.AppendFormat("\tMISSING_TRANSLATION");
                 }
                 translationsBuilder.Append(Environment.NewLine);
             }
@@ -2107,6 +2108,7 @@ namespace RelhaxModpack.Windows
             if (File.Exists(TranslationsCsv))
                 File.Delete(TranslationsCsv);
             File.WriteAllText(TranslationsCsv, translationsBuilder.ToString());
+            ReportProgress("Done");
 
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
