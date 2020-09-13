@@ -698,7 +698,10 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <MSBuild.Community.Tasks.Zip Files="$(NVTT64CopyPath)" ZipFileName="$(DllOutputDir)\nvtt64.zip" WorkingDirectory="$(DllOutputDir)" />
     <!-- Delete the dlls after zipping -->
     <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/delete-task?view=vs-2019 -->
-    <Delete Files="$(FreeImage32CopyPath) $(FreeImage64CopyPath) $(NVTT32CopyPath) $(NVTT64CopyPath)" />
+    <Delete Files="$(FreeImage32CopyPath)" />
+    <Delete Files="$(FreeImage64CopyPath)" />
+    <Delete Files="$(NVTT32CopyPath)" />
+    <Delete Files="$(NVTT64CopyPath)" />
   </Target>
   <!-- Then include the newly copied files as embeded resources -->
   <ItemGroup>
