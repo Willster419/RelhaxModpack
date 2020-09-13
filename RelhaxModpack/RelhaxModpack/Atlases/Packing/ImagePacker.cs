@@ -196,33 +196,55 @@ namespace RelhaxModpack.Atlases.Packing
 
         private void CopyTextureIntoAtlasLock(ref byte[] atlasByte, ref Bitmap texture, Rectangle locationOnAtlas, int atlasStride)
         {
-            //define the area of the atlas that we actually want to copy over (don't copy padding)
+            //define the area on the atlas that we actually want to copy over based on the texture (but don't copy padding)
             Rectangle actualLocationToCopyOntoAtlas = new Rectangle(locationOnAtlas.X, locationOnAtlas.Y, texture.Width, texture.Height);
 
-            //lock the texture and get type data
+            //lock the texture and get bitmap lock data
             BitmapData textureData = texture.LockBits(new Rectangle(0, 0, texture.Width, texture.Height), ImageLockMode.ReadOnly, texture.PixelFormat);
-            int textureByteDepth = Math.Abs(textureData.Stride) * actualLocationToCopyOntoAtlas.Height;
-            byte[] textureByte = new byte[textureByteDepth];
-            Marshal.Copy(textureData.Scan0, textureByte, 0, textureByteDepth);
 
             /*
-             * 4 places in the array = 1 pixel. the alpha, red, green, blue
+             * each of the 4 image channels (alpha, red, green, blue) is a byte, which is included into one pixel.
+             * the row of pixels is represented as the width, and if each pixel has 4 bytes,
+             * then the 'true' width is (width * 4), also called the stride.
+             * 
+             * we want to copy the texture's image data to a byte array, so get the stride * height to ensure it all fits.
+            */
+
+            int textureByteDepth = Math.Abs(textureData.Stride) * actualLocationToCopyOntoAtlas.Height;
+            byte[] textureByte = new byte[textureByteDepth];
+            //           source           , destination, start index, length
+            Marshal.Copy(textureData.Scan0, textureByte, 0          , textureByteDepth);
+
+            /*
+             * as stated above, 4 places in the array = 1 pixel.
              * so to get pixel 3 (1 based), it would be byte indexes 8 to 11
              * the formula here is base ((pixel-1) * 4) to ((pixel-1) * 4) + 4
              * 
              * the amount that you want to copy for each row is width * 4
              * and will loop for texture height
              * 
-             * to get the starting point, multiply stride * (Y + loop), then X * 4
+             * to get the starting point of where to replace the atlas data
+             * in the byte array,  (stride * (Y + row_loop)) + (X * 4)
+             * where:
+             * Y = starting row of the top-left of the texture that we want to replace
+             * X = into the row of the atlas image of the starting point of the top-left
+             *     of the texture we want to replace
             */
 
+            //use a counter for indexing into texture's byte array when copying data to the atlas byte array
             int tempTextureCount = 0;
             for (int row = 0; row < actualLocationToCopyOntoAtlas.Height; row++)
             {
+                //get the starting point for indexing into the atlas data's byte array using formula above
                 int atlasStartingPoint = ((actualLocationToCopyOntoAtlas.Y + row) * atlasStride) + (actualLocationToCopyOntoAtlas.X * 4);
+
+                //we're copying an whole row, which is texture width * 4 aka stride
                 int ammountToCopy = textureData.Stride;
-                //https://stackoverflow.com/questions/1866236/add-offset-to-intptr
-                //Marshal.Copy(textureByte, 0, IntPtr.Add(atlasData.Scan0, atlasStartingPoint), ammountToCopy);
+
+                //now that we have the starting point on the atlas byte array,
+                //and we know how much to copy, copy the bytes over
+                //using the tempTextureCount is for tracking each stride
+                //we copy from the texture
                 for (int j = 0; j < ammountToCopy; j++)
                 {
                     atlasByte[atlasStartingPoint + j] = textureByte[tempTextureCount++];
