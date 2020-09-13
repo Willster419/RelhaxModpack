@@ -332,6 +332,21 @@ namespace RelhaxModpack
         /// The name of the logs folder used for WG CEF browser and Relhax Modpack
         /// </summary>
         public const string LogsFolder = "logs";
+
+        /// <summary>
+        /// The minimum release value of the user's installed .NET framework to use the modpack
+        /// </summary>
+        /// <remarks>It varies for OS. For example:
+        /// On Windows 10 May 2019 Update and Windows 10 November 2019 Update: 528040
+        /// On Windows 10 May 2020 Update: 528372
+        /// On all other Windows operating systems(including other Windows 10 operating systems): 528049
+        /// See: https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed </remarks>
+        public const int MinimumDotNetFrameworkVersionRequired = 528040;
+
+        /// <summary>
+        /// URL to get the latest version of the .NET Framework
+        /// </summary>
+        public const string DotNetFrameworkLatestDownloadURL = "https://dotnet.microsoft.com/download/dotnet-framework";
         #endregion
 
         #region URLs
@@ -537,7 +552,7 @@ namespace RelhaxModpack
             //first check if the file even exists
             if (!File.Exists(xmlfile))
             {
-                Logging.Warning("Xml settings file {0} does not exist, using defaults set in class{1}{2}", xmlfile, SettingsClass.GetType().ToString(), Environment.NewLine);
+                Logging.Info("Xml settings file {0} does not exist, using defaults set in class '{1}'", xmlfile, SettingsClass.Name.ToString());
                 return false;
             }
             //get all fields from the class

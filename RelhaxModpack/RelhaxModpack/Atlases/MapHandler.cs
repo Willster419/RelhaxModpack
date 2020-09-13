@@ -17,7 +17,11 @@ namespace RelhaxModpack.Atlases
     /// </summary>
     public class MapHandler
     {
-        // parses a xmlAtlasesFile to the process queue
+        /// <summary>
+        /// Loads a WG atlas map file into a texture list
+        /// </summary>
+        /// <param name="mapFile">The map file to load</param>
+        /// <returns>The texture list of success, false otherwise</returns>
         public List<Texture> LoadMapFile(string mapFile)
         {
             //check to make sure file exists first
@@ -71,6 +75,11 @@ namespace RelhaxModpack.Atlases
             return TextureList;
         }
 
+        /// <summary>
+        /// Saves a map dictionary to the WG map xml file
+        /// </summary>
+        /// <param name="filename">The location to save the file</param>
+        /// <param name="map">The Dictionary of image name (key) and location (value)</param>
         public void SaveMapfile(string filename, Dictionary<string, Rectangle> map)
         {
             using (StreamWriter writer = new StreamWriter(filename))

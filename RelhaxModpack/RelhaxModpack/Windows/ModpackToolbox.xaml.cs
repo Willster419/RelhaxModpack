@@ -22,7 +22,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for DatabaseUpdater.xaml
     /// </summary>
-    public partial class DatabaseUpdater : RelhaxWindow
+    public partial class ModpackToolbox : RelhaxWindow
     {
         #region Constants and statics
         private const string DatabaseUpdateFilename = "databaseUpdate.txt";
@@ -33,6 +33,7 @@ namespace RelhaxModpack.Windows
         private const string RepoLatestDatabaseFolder = "latest_database";
         private const string UpdaterErrorExceptionCatcherLogfile = "UpdaterErrorCatcher.log";
         private const string InstallStatisticsXml = "install_statistics.xml";
+        private const string TranslationsCsv = "translations.csv";
 
         /// <summary>
         /// The current path for Willster419's database repository
@@ -149,7 +150,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseUpdater window
         /// </summary>
-        public DatabaseUpdater()
+        public ModpackToolbox()
         {
             InitializeComponent();
         }
@@ -299,7 +300,7 @@ namespace RelhaxModpack.Windows
 
         private void ReportProgress(string message)
         {
-            //reports to the log file and the console otuptu
+            //reports to the log file and the console output
             Logging.Updater(message);
             LogOutput.AppendText(message + "\n");
         }
@@ -1869,7 +1870,6 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Supported_Clients updating
-
         private void LoadDatabaseUpdateSupportedClientsButton_Click(object sender, RoutedEventArgs e)
         {
             //init UI
@@ -2040,6 +2040,77 @@ namespace RelhaxModpack.Windows
             }
 
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+        #endregion
+
+        #region Translations
+        private struct TranslationStruct
+        {
+            public TranslationStruct(string languageName, Dictionary<string,string> dict)
+            {
+                LanguageName = languageName;
+                Dict = dict;
+            }
+
+            public string LanguageName { get; }
+            public Dictionary<string, string> Dict { get; }
+
+            public override string ToString() => $"({LanguageName})";
+        }
+
+        private void WriteTranslationsToCsvButton_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Loading translations if not loaded");
+
+            if (!Translations.TranslationsLoaded)
+                Translations.LoadTranslations();
+
+            //create arrays of all languages and hashes
+            TranslationStruct[] langauges =
+            {
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.English), Translations.GetLanguageDictionaries(Languages.English)),
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.French), Translations.GetLanguageDictionaries(Languages.French)),
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.German), Translations.GetLanguageDictionaries(Languages.German)),
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.Russian), Translations.GetLanguageDictionaries(Languages.Russian)),
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.Polish), Translations.GetLanguageDictionaries(Languages.Polish)),
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.Spanish), Translations.GetLanguageDictionaries(Languages.Spanish)),
+            };
+
+            ReportProgress("Building the csv");
+            StringBuilder translationsBuilder = new StringBuilder();
+
+            //apply the header
+            translationsBuilder.Append("ID");
+            foreach(TranslationStruct translationStruct in langauges)
+            {
+                translationsBuilder.AppendFormat("\t{0}", translationStruct.LanguageName);
+            }
+            translationsBuilder.Append(Environment.NewLine);
+
+            //apply each element. Use English as the method to get the key
+            foreach(string key in Translations.GetLanguageDictionaries(Languages.English).Keys)
+            {
+                translationsBuilder.AppendFormat("{0}", key);
+                foreach(TranslationStruct translationStruct in langauges)
+                {
+                    //if it doesn't exist, then mark it. Also need to use tabs, so escape them in the csv with "\t"
+                    if (translationStruct.Dict.ContainsKey(key))
+                        translationsBuilder.AppendFormat("\t{0}", MacroUtils.MacroReplace(translationStruct.Dict[key],ReplacementTypes.TextEscape));
+                    else
+                        translationsBuilder.AppendFormat("\tMISSING_TRANSLATION");
+                }
+                translationsBuilder.Append(Environment.NewLine);
+            }
+
+            ReportProgress("Writing csv to disk");
+            if (File.Exists(TranslationsCsv))
+                File.Delete(TranslationsCsv);
+            File.WriteAllText(TranslationsCsv, translationsBuilder.ToString());
+            ReportProgress("Done");
+
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion

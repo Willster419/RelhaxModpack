@@ -410,12 +410,6 @@
                             <Slider x:Name="FtpUpDownAutoCloseTimoutSlider" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsEnabled="True" ValueChanged="FtpUpDownAutoCloseTimoutSlider_ValueChanged" IsSnapToTickEnabled="True"/>
                             <TextBlock x:Name="FtpUpDownAutoCloseTimoutDisplayLabel" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="Test" Grid.Column="1"/>
                         </Grid>
-                        <TextBlock x:Name="SaveAsDatabaseType" HorizontalAlignment="Stretch"  Grid.Row="9" TextWrapping="Wrap" Text="&quot;Save&quot;/&quot;Save as&quot; buttons save as database type:" VerticalAlignment="Center"
-                                   ToolTip="As of writing this tooltip, this setting should be kept on &quot;1.1&quot;"/>
-                        <StackPanel HorizontalAlignment="Left" Grid.Column="1" Grid.Row="9" VerticalAlignment="Center">
-                            <RadioButton x:Name="SaveDatabaseLegacySetting" Content="Legacy" Checked="SaveDatabaseSetting_Checked" />
-                            <RadioButton x:Name="SaveDatabaseOnePointOneSetting" Content="1.1" Checked="SaveDatabaseSetting_Checked" />
-                        </StackPanel>
                         <Button x:Name="SelectAutoUpdateWorkDirectoryButton" HorizontalAlignment="Stretch" Grid.Row="10" VerticalAlignment="Center" Click="SelectAutoUpdateWorkDirectoryButton_Click"
                                 ToolTip="Select the folder to use for the auto update feature (work in progress)">
                             <TextBlock x:Name="SelectAutoUpdateWorkDirectoryTextblock" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"

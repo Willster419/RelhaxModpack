@@ -9,7 +9,7 @@
         LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid x:Name="MainLayoutGrid">
         <TextBlock x:Name="ExceptionCaptureHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="ExceptionCaptureHeader"
-                   Text="The application as encountered an exception and needs to close. Please send this exception data (as well as `relhax.log` file to the developer"/>
+                   Text="The application as encountered an exception and needs to close. Please send this exception data (as well as `relhax.log`) file to the developer"/>
         <TextBox x:Name="ExceptionCaptureText" HorizontalAlignment="Stretch"  Margin="10,31,10,10" TextWrapping="Wrap" VerticalAlignment="Stretch" IsReadOnly="True" Tag="ExceptionCaptureText"/>
     </Grid>
 </local:RelhaxWindow>

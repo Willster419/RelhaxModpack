@@ -54,8 +54,28 @@ namespace RelhaxModpack
             "GcDownloadStep4DownloadingSizes",
             "TaskName"
         };
-        private const string TranslationNeeded = "TODO";
-        private static readonly string Blank = string.Empty;
+
+        /// <summary>
+        /// The entry to use when a translation is needed
+        /// </summary>
+        /// <remarks>When designing UI, i'll add the translation entries, but for the not english languages, i'll set
+        /// this value so the application knows to return the english phrase and log the error.</remarks>
+        public const string TranslationNeeded = "TODO";
+
+        /// <summary>
+        /// An array of all currently supported languages in the modpack
+        /// </summary>
+        /// <remarks>A supported language means that it has translation infrastructure and
+        /// does not imply that all translations exist</remarks>
+        public static readonly Languages[] SupportedLanguages =
+        {
+            Languages.English,
+            Languages.French,
+            Languages.German,
+            Languages.Polish,
+            Languages.Russian,
+            Languages.Spanish
+        };
 
         /// <summary>
         /// Get if the translation dictionaries have been loaded yet
@@ -134,6 +154,32 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Gets the language dictionary of the enumerated name of the language
+        /// </summary>
+        /// <param name="language">The english-named enumeration of the language</param>
+        /// <returns>The key-value language dictionary</returns>
+        public static Dictionary<string, string> GetLanguageDictionaries(Languages language)
+        {
+            switch (language)
+            {
+                case Languages.English:
+                    return English;
+                case Languages.French:
+                    return French;
+                case Languages.German:
+                    return German;
+                case Languages.Polish:
+                    return Polish;
+                case Languages.Spanish:
+                    return Spanish;
+                case Languages.Russian:
+                    return Russian;
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
         /// Get the native language name of the english enumerated name of the language
         /// </summary>
         /// <param name="language">The english-named enumeration of the language</param>
@@ -160,15 +206,47 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Unloads the translation hashes
+        /// </summary>
+        public static void UnloadTranslations()
+        {
+            Logging.Debug(LogOptions.MethodName, "Unloading all language hashes and setting {0} to false", nameof(TranslationsLoaded));
+            Dictionary<string, string>[] dics = { English, French, German, Polish, Spanish, Russian };
+            foreach (Dictionary<string, string> dictionary in dics)
+            {
+                dictionary.Clear();
+            }
+            TranslationsLoaded = false;
+            Logging.Debug(LogOptions.MethodName, "Unloaded all language hashes");
+        }
+
+        /// <summary>
+        /// Reloads the translation hashes
+        /// </summary>
+        public static void ReloadTranslations()
+        {
+            Logging.Debug(LogOptions.MethodName, "Reloading all language hashes");
+            UnloadTranslations();
+            LoadTranslations();
+            Logging.Debug(LogOptions.MethodName, "Reloaded all language hashes");
+        }
+
+        /// <summary>
         /// Get a localized string in the currently selected language
         /// </summary>
         /// <param name="componentName">The key value of the string phrase</param>
         /// <returns></returns>
         public static string GetTranslatedString(string componentName)
         {
+            if (!TranslationsLoaded)
+            {
+                Logging.Error(LogOptions.MethodAndClassName, "Translations have not been loaded");
+                return null;
+            }
+
             string s;
             //check if componentName key exists in current language
-            if(CurrentLanguage.ContainsKey(componentName))
+            if (CurrentLanguage.ContainsKey(componentName))
             {
                 s = CurrentLanguage[componentName];
                 //if the value is TODO, check if we have it in english (unless it is english)
@@ -216,18 +294,24 @@ namespace RelhaxModpack
         /// <param name="componentName">The key of the component to look up</param>
         /// <param name="logError">Flag to log an error in the logfile if it does not exist</param>
         /// <returns>True if it exists in the currently selected language, or false otherwise</returns>
-        public static bool Exists(string componentName, bool logError)
+        public static bool ExistsInCurrentLanguage(string componentName, bool logError)
         {
-            if(CurrentLanguage == null)
+            if (!TranslationsLoaded)
             {
-                Logging.Error("CurrentLanguage is null, using english for default");
-                return Exists(componentName, Languages.English, true);
+                Logging.Error(LogOptions.MethodAndClassName, "Translations have not been loaded");
+                return false;
             }
+
+            if (CurrentLanguage == null)
+            {
+                Logging.Warning(LogOptions.MethodAndClassName, "CurrentLanguage is null, using english for default");
+                return Exists(componentName, Languages.English);
+            }
+
             if(!CurrentLanguage.ContainsKey(componentName))
             {
                 if(logError)
-                    Logging.WriteToLog(string.Format("Missing translation: key={0}, value=TODO, language={1}",
-                            componentName, ModpackSettings.Language.ToString()), Logfiles.Application, LogLevel.Error);
+                    Logging.Error("Missing translation: key={0}, value=MISSING_TRANSLATION, language={1}", componentName, ModpackSettings.Language.ToString());
                 return false;
             }
             return true;
@@ -238,9 +322,15 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="componentName">The keyword phrase to check</param>
         /// <param name="languageToCheck">The language dictionary to check in</param>
-        /// <param name="logError">Flag for if to log if the component was not found</param>
-        public static bool Exists(string componentName, Languages languageToCheck, bool logError)
+        /// <returns>True is the entry exists, false otherwise</returns>
+        public static bool Exists(string componentName, Languages languageToCheck)
         {
+            if (!TranslationsLoaded)
+            {
+                Logging.Error(LogOptions.MethodAndClassName, "Translations have not been loaded");
+                return false;
+            }
+
             Dictionary<string, string> DictToCheck = null;
             switch (languageToCheck)
             {
@@ -259,8 +349,34 @@ namespace RelhaxModpack
                 case Languages.Polish:
                     DictToCheck = Polish;
                     break;
+                case Languages.Russian:
+                    DictToCheck = Russian;
+                    break;
+                default:
+                    DictToCheck = null;
+                    break;
             }
+
             return DictToCheck.ContainsKey(componentName);
+        }
+
+        /// <summary>
+        /// Checks that an entry exists and that the translated entry is not a TODO
+        /// </summary>
+        /// <param name="componentName">The language entry (key) to see if exists</param>
+        /// <param name="langaugeToCheck">The language of which dictionary to check</param>
+        /// <returns>True if the component (key) exists and the entry is not TODO</returns>
+        public static bool ExistsAndValid(string componentName, Languages langaugeToCheck)
+        {
+            if(!TranslationsLoaded)
+            {
+                Logging.Error(LogOptions.MethodAndClassName, "Translations have not been loaded");
+                return false;
+            }
+
+            if (!Exists(componentName, langaugeToCheck))
+                return false;
+            return !GetLanguageDictionaries(langaugeToCheck)[componentName].Equals(TranslationNeeded);
         }
         #endregion
 
@@ -277,7 +393,7 @@ namespace RelhaxModpack
             string typeName = window.GetType().Name;
             if (window is RelhaxWindow)
             {
-                if (Exists(typeName, true))
+                if (ExistsInCurrentLanguage(typeName, true))
                     window.Title = GetTranslatedString(typeName);
             }
             else if (window is MainWindow)
@@ -329,7 +445,7 @@ namespace RelhaxModpack
                         headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name);
                     if (applyToolTips)
                     {
-                        if (Exists(headeredContentControl.Name + "Description",false))
+                        if (ExistsInCurrentLanguage(headeredContentControl.Name + "Description",false))
                             headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description");
                     }
                 }
@@ -339,7 +455,7 @@ namespace RelhaxModpack
                     link.Text = GetTranslatedString(componentName);
                     if (applyToolTips)
                     {
-                        if (Exists(componentName + "Description",false))
+                        if (ExistsInCurrentLanguage(componentName + "Description",false))
                             link.ToolTip = GetTranslatedString(componentName + "Description");
                     }
                 }
@@ -352,7 +468,7 @@ namespace RelhaxModpack
                         contentControl.Content = GetTranslatedString(contentControl.Name);
                     if (applyToolTips)
                     {
-                        if (Exists(contentControl.Name + "Description", false))
+                        if (ExistsInCurrentLanguage(contentControl.Name + "Description", false))
                             contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description");
                     }
                 }
@@ -362,7 +478,7 @@ namespace RelhaxModpack
                     textBox.Text = GetTranslatedString(textBox.Name);
                     if (applyToolTips)
                     {
-                        if (Exists(textBox.Name + "Description", false))
+                        if (ExistsInCurrentLanguage(textBox.Name + "Description", false))
                             textBox.ToolTip = GetTranslatedString(textBox.Name + "Description");
                     }
                 }
@@ -374,7 +490,7 @@ namespace RelhaxModpack
                 //apply tool tips?
                 if (applyToolTips)
                 {
-                    if (Exists(textBlock.Name + "Description", false))
+                    if (ExistsInCurrentLanguage(textBlock.Name + "Description", false))
                         textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description");
                 }
             }
@@ -397,6 +513,13 @@ namespace RelhaxModpack
         /// </summary>
         public static void LoadTranslations()
         {
+            Logging.Debug(LogOptions.MethodName, "Loading all translations");
+            if(TranslationsLoaded)
+            {
+                Logging.Warning(LogOptions.MethodName, "Translations already loaded, use ReloadTranslations()");
+                return;
+            }
+
             //Syntax is as follows:
             //languageName.Add("componentName","TranslatedString");
 
@@ -637,6 +760,26 @@ namespace RelhaxModpack
             French.Add("failedToParse", "Echec de l'analyse");
             Spanish.Add("failedToParse", "No se ha podido analizar el archivo");
             Russian.Add("failedToParse", "Сбой обработки файла");
+
+            //Component: failedToGetDotNetFrameworkVersion
+            //
+            English.Add("failedToGetDotNetFrameworkVersion", "Failed to get the installed .NET Framework version. This could indicate a permissions problem or your antivirus software could be blocking it.");
+            German.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+            Polish.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+            French.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+            Spanish.Add("failedToGetDotNetFrameworkVersion", "No se ha podido obtener la versión de la instalación de .Net Framework. Esto puede indicar un problema de permisos, o un antivirus puede estar bloqueando la obtención.");
+            Russian.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+
+            //Component: invalidDotNetFrameworkVersion
+            //
+            English.Add("invalidDotNetFrameworkVersion", "The installed version of the .NET Framework is less then 4.8. Relhax Modpack requires version 4.8 or above to operate. Would you like to open a link" +
+                "to get the latest version of the .NET Framework?");
+            German.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
+            Polish.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
+            French.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
+            Spanish.Add("invalidDotNetFrameworkVersion", "La versión instalada de .NET Framework es anterior a 4.8. Relhax Modpack requiere la versión 4.8 o superior para funcionar." +
+                " ¿Quiere abrir un vínculo para obtener la última versión de .NET Framework?");
+            Russian.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
             #endregion
 
             #region Tray Icon
@@ -4108,6 +4251,42 @@ namespace RelhaxModpack
             French.Add("cleanGameCacheFail", TranslationNeeded);
             Spanish.Add("cleanGameCacheFail", "No se ha podido limpar los archivos de caché del juego");
             Russian.Add("cleanGameCacheFail", "Не удалось удалить файлы кэша игры");
+
+            //Component: TrimRelhaxLogfileText
+            // Text block for allowing the user to trim relhax.log logfile to the last 3 launches (assuming header/footer entries exist)
+            English.Add("TrimRelhaxLogfileText", "Trim the Relhax log file to the last 3 launches");
+            German.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            Polish.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            French.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            Spanish.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            Russian.Add("TrimRelhaxLogfileText", TranslationNeeded);
+
+            //Component: trimRelhaxLogProgress
+            //
+            English.Add("trimRelhaxLogProgress", "Trimming the Relhax log file");
+            German.Add("trimRelhaxLogProgress", TranslationNeeded);
+            Polish.Add("trimRelhaxLogProgress", TranslationNeeded);
+            French.Add("trimRelhaxLogProgress", TranslationNeeded);
+            Spanish.Add("trimRelhaxLogProgress", TranslationNeeded);
+            Russian.Add("trimRelhaxLogProgress", TranslationNeeded);
+
+            //Component: trimRelhaxLogSuccess
+            //
+            English.Add("trimRelhaxLogSuccess", "Sucessfully trimmed the Relhax log file");
+            German.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            Polish.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            French.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            Spanish.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            Russian.Add("trimRelhaxLogSuccess", TranslationNeeded);
+
+            //Component: trimRelhaxLogFail
+            //
+            English.Add("trimRelhaxLogFail", "Failed to trim the Relhax log file");
+            German.Add("trimRelhaxLogFail", TranslationNeeded);
+            Polish.Add("trimRelhaxLogFail", TranslationNeeded);
+            French.Add("trimRelhaxLogFail", TranslationNeeded);
+            Spanish.Add("trimRelhaxLogFail", TranslationNeeded);
+            Russian.Add("trimRelhaxLogFail", TranslationNeeded);
             #endregion
 
             #region Add zip files Dialog
@@ -5652,6 +5831,7 @@ namespace RelhaxModpack
             #endregion
 
             //apply the bool that all translations were applied
+            Logging.Debug(LogOptions.MethodName, "All translations loaded");
             TranslationsLoaded = true;
         }
         #endregion

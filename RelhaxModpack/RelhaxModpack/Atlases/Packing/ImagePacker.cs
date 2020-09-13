@@ -5,6 +5,8 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Atlases.Packing
@@ -26,6 +28,10 @@ namespace RelhaxModpack.Atlases.Packing
         private readonly Dictionary<Texture, Size> imageSizes = new Dictionary<Texture, Size>();
         private readonly Dictionary<Texture, Rectangle> imagePlacement = new Dictionary<Texture, Rectangle>();
 
+        //for diagnostics timing
+        private readonly Stopwatch stopwatch = new Stopwatch();
+        private long imagePackingMilliseconds = 0;
+
         /// <summary>
         /// Packs a collection of images into a single image.
         /// </summary>
@@ -36,6 +42,7 @@ namespace RelhaxModpack.Atlases.Packing
         /// <param name="maximumWidth">The maximum width of the output image.</param>
         /// <param name="maximumHeight">The maximum height of the output image.</param>
         /// <param name="imagePadding">The amount of blank space to insert in between individual images.</param>
+        /// <param name="atlasImageName">The name of the Atlas image. Used for logging and can be null.</param>
         /// <param name="outputImage">The resulting output image.</param>
         /// <param name="outputMap">The resulting output map of placement rectangles for the images.</param>
         /// <returns>0 if the packing was successful, error code otherwise.</returns>
@@ -47,6 +54,7 @@ namespace RelhaxModpack.Atlases.Packing
             int maximumWidth,
             int maximumHeight,
             int imagePadding,
+            string atlasImageName,
             out Bitmap outputImage,
             out Dictionary<string, Rectangle> outputMap)
         {
@@ -61,10 +69,14 @@ namespace RelhaxModpack.Atlases.Packing
             outputImage = null;
             outputMap = null;
 
+            imagePackingMilliseconds = 0;
+
             // make sure our dictionaries are cleared before starting
             imageSizes.Clear();
             imagePlacement.Clear();
 
+            stopwatch.Restart();
+            LogStatus("Preparing for packing", atlasImageName, false);
             // get the sizes of all the images
             int i = 0;
             foreach (var image in files)
@@ -97,20 +109,24 @@ namespace RelhaxModpack.Atlases.Packing
                     //same size? go alphabetical i guess
                     return f1.Name.CompareTo(f2.Name);
                 });
+            LogStatus(string.Format("Preparing completed in {0} msec", stopwatch.ElapsedMilliseconds), atlasImageName, true);
 
-            // try to pack the images
+            LogStatus("Packing images into atlas", atlasImageName, false);
             if (!PackImageRectangles())
             {
                 return FailCode.FailedToPackImage;
             }
+            LogStatus(string.Format("Packing images completed in {0} msec", stopwatch.ElapsedMilliseconds), atlasImageName, true);
 
-            // make our output image
+            LogStatus("Generating atlas bitmap", atlasImageName, false);
             outputImage = GenerateAtlasImageData(files, imagePlacement, outputWidth, outputHeight);
             if (outputImage == null)
                 return FailCode.FailedToCreateBitmapAtlas;
+            LogStatus(string.Format("Generating atlas bitmap completed in {0} msec", stopwatch.ElapsedMilliseconds), atlasImageName, true);
 
-            // make our map file
+            LogStatus("Generating atlas map data", atlasImageName, false);
             outputMap = GenerateMapData(imagePlacement, imageSizes);
+            LogStatus(string.Format("Generating atlas map data completed in {0} msec", stopwatch.ElapsedMilliseconds), atlasImageName, true);
 
             // clear our dictionaries just to free up some memory
             imageSizes.Clear();
@@ -153,20 +169,91 @@ namespace RelhaxModpack.Atlases.Packing
 
         private Bitmap GenerateAtlasImageData(List<Texture> files, Dictionary<Texture, Rectangle> imagePlacement, int outputWidth, int outputHeight)
         {
-            Bitmap outputImage = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
+            Bitmap atlas = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
 
-            // draw all the images into the output image
+            //lock the bits and copy the atlas to bytes
+            BitmapData atlasData = atlas.LockBits(new Rectangle(0, 0, atlas.Width, atlas.Height), ImageLockMode.WriteOnly, atlas.PixelFormat);
+            int atlasByteDepth = Math.Abs(atlasData.Stride) * atlas.Height;
+            byte[] atlasByte = new byte[atlasByteDepth];
+            Marshal.Copy(atlasData.Scan0, atlasByte, 0, atlasByteDepth);
+
+            //loop through each texture to copy it's data over
             foreach (Texture texture in files)
             {
-                Rectangle location = imagePlacement[texture];
-
-                // copy pixels over to avoid anti-aliasing or any other side effects of drawing
-                // the sub-images to the output image using Graphics
-                for (int x = 0; x < texture.AtlasImage.Width; x++)
-                    for (int y = 0; y < texture.AtlasImage.Height; y++)
-                        outputImage.SetPixel(location.X + x, location.Y + y, texture.AtlasImage.GetPixel(x, y));
+                CopyTextureIntoAtlasLock(ref atlasByte, ref texture.AtlasImage, imagePlacement[texture], atlasData.Stride);
             }
-            return outputImage;
+
+            //copy back and unlock
+            Marshal.Copy(atlasByte, 0, atlasData.Scan0, atlasByteDepth);
+            atlas.UnlockBits(atlasData);
+
+            //for debugging, verify the image is bit for bit accurate
+            //https://online-image-comparison.com/
+            //http://onlinemd5.com/
+            //atlas.Save(@"C:\Users\Willster419\Desktop\custom2.png",ImageFormat.Png);
+
+            return atlas;
+        }
+
+        private void CopyTextureIntoAtlasLock(ref byte[] atlasByte, ref Bitmap texture, Rectangle locationOnAtlas, int atlasStride)
+        {
+            //define the area on the atlas that we actually want to copy over based on the texture (but don't copy padding)
+            Rectangle actualLocationToCopyOntoAtlas = new Rectangle(locationOnAtlas.X, locationOnAtlas.Y, texture.Width, texture.Height);
+
+            //lock the texture and get bitmap lock data
+            BitmapData textureData = texture.LockBits(new Rectangle(0, 0, texture.Width, texture.Height), ImageLockMode.ReadOnly, texture.PixelFormat);
+
+            /*
+             * each of the 4 image channels (alpha, red, green, blue) is a byte, which is included into one pixel.
+             * the row of pixels is represented as the width, and if each pixel has 4 bytes,
+             * then the 'true' width is (width * 4), also called the stride.
+             * 
+             * we want to copy the texture's image data to a byte array, so get the stride * height to ensure it all fits.
+            */
+
+            int textureByteDepth = Math.Abs(textureData.Stride) * actualLocationToCopyOntoAtlas.Height;
+            byte[] textureByte = new byte[textureByteDepth];
+            //           source           , destination, start index, length
+            Marshal.Copy(textureData.Scan0, textureByte, 0          , textureByteDepth);
+
+            /*
+             * as stated above, 4 places in the array = 1 pixel.
+             * so to get pixel 3 (1 based), it would be byte indexes 8 to 11
+             * the formula here is base ((pixel-1) * 4) to ((pixel-1) * 4) + 4
+             * 
+             * the amount that you want to copy for each row is width * 4
+             * and will loop for texture height
+             * 
+             * to get the starting point of where to replace the atlas data
+             * in the byte array,  (stride * (Y + row_loop)) + (X * 4)
+             * where:
+             * Y = starting row of the top-left of the texture that we want to replace
+             * X = into the row of the atlas image of the starting point of the top-left
+             *     of the texture we want to replace
+            */
+
+            //use a counter for indexing into texture's byte array when copying data to the atlas byte array
+            int tempTextureCount = 0;
+            for (int row = 0; row < actualLocationToCopyOntoAtlas.Height; row++)
+            {
+                //get the starting point for indexing into the atlas data's byte array using formula above
+                int atlasStartingPoint = ((actualLocationToCopyOntoAtlas.Y + row) * atlasStride) + (actualLocationToCopyOntoAtlas.X * 4);
+
+                //we're copying an whole row, which is texture width * 4 aka stride
+                int ammountToCopy = textureData.Stride;
+
+                //now that we have the starting point on the atlas byte array,
+                //and we know how much to copy, copy the bytes over
+                //using the tempTextureCount is for tracking each stride
+                //we copy from the texture
+                for (int j = 0; j < ammountToCopy; j++)
+                {
+                    atlasByte[atlasStartingPoint + j] = textureByte[tempTextureCount++];
+                }
+            }
+
+            //unlock and we're done
+            texture.UnlockBits(textureData);
         }
 
         // This method does some trickery type stuff where we perform the TestPackingImages method over and over, 
@@ -338,6 +425,16 @@ namespace RelhaxModpack.Atlases.Packing
             for (int i = 1; i < sizeof(int) * 8; i <<= 1)
                 k = k | k >> i;
             return k + 1;
+        }
+
+        private void LogStatus(string message, string atlasFilename, bool logTime)
+        {
+            Logging.Debug(LogOptions.ClassName, "{0}{1}", string.IsNullOrEmpty(atlasFilename) ? string.Empty : string.Format("[atlas file {0}]: ", atlasFilename), message);
+            if (logTime)
+            {
+                imagePackingMilliseconds += stopwatch.ElapsedMilliseconds;
+                stopwatch.Restart();
+            }
         }
     }
 }

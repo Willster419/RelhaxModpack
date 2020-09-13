@@ -116,7 +116,7 @@ namespace RelhaxModpack.Utilities
             }
             if (dictionary == null)
             {
-                Logging.Error("macro replace dictionary is null! type={0}", type.ToString());
+                Logging.Error("Macro replace dictionary is null! type={0}", type.ToString());
                 return inputString;
             }
             for (int i = 0; i < dictionary.Count; i++)
@@ -125,7 +125,7 @@ namespace RelhaxModpack.Utilities
                 string replace = dictionary.ElementAt(i).Value;
                 //https://stackoverflow.com/questions/444798/case-insensitive-containsstring
                 //it's an option, not actually used here cause it would be a lot of work to implement
-                //could also try regex, may be easlier to ignore case, but then might have to make it an option
+                //could also try regex, may be easier to ignore case, but then might have to make it an option
                 //so for now, no
                 if (inputString.Contains(key))
                     inputString = inputString.Replace(key, replace);

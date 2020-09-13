@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
-    x:Class="RelhaxModpack.Windows.DatabaseUpdater"
+        x:Class="RelhaxModpack.Windows.ModpackToolbox"
         mc:Ignorable="d"
-        Title="DatabaseUpdater" Height="480" Width="1200" MinHeight="300" MinWidth="400"
+        Title="Modpack Toolbox" Height="480" Width="1200" MinHeight="300" MinWidth="400"
         Loaded="RelhaxWindow_Loaded" Closing="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -163,6 +163,13 @@
                             </Button>
                             <Button x:Name="RunScriptCreateManagerInfo" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="RunPhpScriptCreateManagerInfo">
                                 <TextBlock Text="Run script CreateModInfo.php"/>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1" Grid.Row="1">
+                        <StackPanel Orientation="Vertical">
+                            <Button x:Name="WriteTranslationsToCsvButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="WriteTranslationsToCsvButton_Click">
+                                <TextBlock Text="Create CSV of Translations"/>
                             </Button>
                         </StackPanel>
                     </Border>

@@ -158,7 +158,7 @@ namespace RelhaxUnitTests
             }
 
             //pack textures
-            FailCode code = imagePacker.PackImage(texturelist, true, false, true, 8192, 8192, 1, out Bitmap map, out Dictionary<string, Rectangle> imageSizes);
+            FailCode code = imagePacker.PackImage(texturelist, true, false, true, 8192, 8192, 1, "battleAtlas.dds", out Bitmap map, out Dictionary<string, Rectangle> imageSizes);
             log.Write(string.Format("Packer fail code: {0}", code.ToString()));
             Assert.AreEqual(FailCode.None, code);
 
