@@ -656,14 +656,21 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
       <NVTT64 Include="$(TeximpNugetPathUp3)\runtimes\win-x64\native\nvtt.dll" />
     </ItemGroup>
     <PropertyGroup>
-      <!-- define the paths of the 32 and 64bit freeimage and nvtt libraries -->
+      <!-- define the paths of the 32 and 64bit freeimage and nvtt libraries inside teximpnet nuget path -->
       <FreeImage32Path>$([System.IO.Path]::GetDirectoryName(%(FreeImage32.Identity)))</FreeImage32Path>
       <FreeImage64Path>$([System.IO.Path]::GetDirectoryName(%(FreeImage64.Identity)))</FreeImage64Path>
       <NVTT32Path>$([System.IO.Path]::GetDirectoryName(%(NVTT32.Identity)))</NVTT32Path>
       <NVTT64Path>$([System.IO.Path]::GetDirectoryName(%(NVTT64.Identity)))</NVTT64Path>
     </PropertyGroup>
-    <!-- Create the zip files -->
+    <PropertyGroup>
+      <!-- define the destination copy paths for the freeimage and nvtt dlls -->
+      <FreeImage32CopyPath>$(DllOutputDir)\FreeImage32.zip</FreeImage32CopyPath>
+      <FreeImage64CopyPath>$(DllOutputDir)\FreeImage64.zip</FreeImage64CopyPath>
+      <NVTT32CopyPath>$(DllOutputDir)\nvtt32.zip</NVTT32CopyPath>
+      <NVTT64CopyPath>$(DllOutputDir)\nvtt64.zip</NVTT64CopyPath>
+    </PropertyGroup>
     <Message Text="Copying FreeImage and NVTT" />
+    <!-- 
     <Message Text="TeximpNugetFullpath: @(TeximpNugetFullpath)" />
     <Message Text="TeximpNugetPathProp: $(TeximpNugetPathProp)" />
     <Message Text="TeximpNugetPathUp1: $(TeximpNugetPathUp1)" />
@@ -678,10 +685,20 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <Message Text="FreeImage64Path: $(FreeImage64Path)" />
     <Message Text="NVTT32Path: $(NVTT32Path)" />
     <Message Text="NVTT64Path: $(NVTT64Path)" />
-    <MSBuild.Community.Tasks.Zip Files="@(FreeImage32)" ZipFileName="$(DllOutputDir)\FreeImage32.zip" WorkingDirectory="$(FreeImage32Path)" />
-    <MSBuild.Community.Tasks.Zip Files="@(FreeImage64)" ZipFileName="$(DllOutputDir)\FreeImage64.zip" WorkingDirectory="$(FreeImage64Path)" />
-    <MSBuild.Community.Tasks.Zip Files="@(NVTT32)" ZipFileName="$(DllOutputDir)\nvtt32.zip" WorkingDirectory="$(NVTT32Path)" />
-    <MSBuild.Community.Tasks.Zip Files="@(NVTT64)" ZipFileName="$(DllOutputDir)\nvtt64.zip" WorkingDirectory="$(NVTT64Path)" />
+    -->
+    <!-- Copy the files out to the DLL directory so we can rename them -->
+    <Copy SourceFiles="@(FreeImage32)" DestinationFiles="$(FreeImage32CopyPath)" />
+    <Copy SourceFiles="@(FreeImage64)" DestinationFiles="$(FreeImage64CopyPath)" />
+    <Copy SourceFiles="@(NVTT32)" DestinationFiles="$(NVTT32CopyPath)" />
+    <Copy SourceFiles="@(NVTT64)" DestinationFiles="$(NVTT64CopyPath)" />
+    <!-- Create the zip files -->
+    <MSBuild.Community.Tasks.Zip Files="$(FreeImage32CopyPath)" ZipFileName="$(DllOutputDir)\FreeImage32.zip" WorkingDirectory="$(DllOutputDir)" />
+    <MSBuild.Community.Tasks.Zip Files="$(FreeImage64CopyPath)" ZipFileName="$(DllOutputDir)\FreeImage64.zip" WorkingDirectory="$(DllOutputDir)" />
+    <MSBuild.Community.Tasks.Zip Files="$(NVTT32CopyPath)" ZipFileName="$(DllOutputDir)\nvtt32.zip" WorkingDirectory="$(DllOutputDir)" />
+    <MSBuild.Community.Tasks.Zip Files="$(NVTT64CopyPath)" ZipFileName="$(DllOutputDir)\nvtt64.zip" WorkingDirectory="$(DllOutputDir)" />
+    <!-- Delete the dlls after zipping -->
+    <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/delete-task?view=vs-2019 -->
+    <Delete Files="$(FreeImage32CopyPath) $(FreeImage64CopyPath) $(NVTT32CopyPath) $(NVTT64CopyPath)" />
   </Target>
   <!-- Then include the newly copied files as embeded resources -->
   <ItemGroup>
