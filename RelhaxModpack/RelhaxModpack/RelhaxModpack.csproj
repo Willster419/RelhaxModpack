@@ -664,10 +664,10 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     </PropertyGroup>
     <PropertyGroup>
       <!-- define the destination copy paths for the freeimage and nvtt dlls -->
-      <FreeImage32CopyPath>$(DllOutputDir)\FreeImage32.zip</FreeImage32CopyPath>
-      <FreeImage64CopyPath>$(DllOutputDir)\FreeImage64.zip</FreeImage64CopyPath>
-      <NVTT32CopyPath>$(DllOutputDir)\nvtt32.zip</NVTT32CopyPath>
-      <NVTT64CopyPath>$(DllOutputDir)\nvtt64.zip</NVTT64CopyPath>
+      <FreeImage32CopyPath>$(DllOutputDir)\FreeImage32.dll</FreeImage32CopyPath>
+      <FreeImage64CopyPath>$(DllOutputDir)\FreeImage64.dll</FreeImage64CopyPath>
+      <NVTT32CopyPath>$(DllOutputDir)\nvtt32.dll</NVTT32CopyPath>
+      <NVTT64CopyPath>$(DllOutputDir)\nvtt64.dll</NVTT64CopyPath>
     </PropertyGroup>
     <Message Text="Copying FreeImage and NVTT" />
     <!-- 
