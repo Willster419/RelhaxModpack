@@ -7,6 +7,7 @@
     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     xmlns:RelhaxModpack="clr-namespace:RelhaxModpack"
     xmlns:database="clr-namespace:RelhaxModpack.Database"
+    xmlns:enums="clr-namespace:RelhaxModpack.Utilities.Enums"
     x:Name="relhaxWindow"
     x:Class="RelhaxModpack.Windows.DatabaseEditor"
     mc:Ignorable="d"
@@ -546,11 +547,11 @@
                         <TextBox x:Name="PackageAuthorDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageMaintainersDisplay" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" ToolTip="Comma separated values of Database managers of this component"/>
                         <ComboBox x:Name="PackageTypeDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center">
-                            <database:SelectionTypes>none</database:SelectionTypes>
-                            <database:SelectionTypes>single1</database:SelectionTypes>
-                            <database:SelectionTypes>single_dropdown1</database:SelectionTypes>
-                            <database:SelectionTypes>single_dropdown2</database:SelectionTypes>
-                            <database:SelectionTypes>multi</database:SelectionTypes>
+                            <enums:SelectionTypes>none</enums:SelectionTypes>
+                            <enums:SelectionTypes>single1</enums:SelectionTypes>
+                            <enums:SelectionTypes>single_dropdown1</enums:SelectionTypes>
+                            <enums:SelectionTypes>single_dropdown2</enums:SelectionTypes>
+                            <enums:SelectionTypes>multi</enums:SelectionTypes>
                         </ComboBox>
                         <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
                         <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="11" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
@@ -622,10 +623,10 @@
                         <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="230,511,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
                         <Button Content="Remove Media" x:Name="MediaRemoveMediaButton" Tag="MediaRemoveMediaButton" HorizontalAlignment="Left" Margin="10,486,0,0" VerticalAlignment="Top" Width="467" Click="MediaRemoveMediaButton_Click"/>
                         <ComboBox x:Name="MediaTypesList" HorizontalAlignment="Left" Margin="0,205,0,0" VerticalAlignment="Top" Width="477" Height="20">
-                            <database:MediaType>Picture</database:MediaType>
-                            <database:MediaType>Webpage</database:MediaType>
-                            <database:MediaType>MediaFile</database:MediaType>
-                            <database:MediaType>HTML</database:MediaType>
+                            <enums:MediaType>Picture</enums:MediaType>
+                            <enums:MediaType>Webpage</enums:MediaType>
+                            <enums:MediaType>MediaFile</enums:MediaType>
+                            <enums:MediaType>HTML</enums:MediaType>
                         </ComboBox>
                         <TextBox x:Name="MediaTypesURL" HorizontalAlignment="Stretch" Height="173" Margin="0,258,0,0" VerticalAlignment="Top"
                                  TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>

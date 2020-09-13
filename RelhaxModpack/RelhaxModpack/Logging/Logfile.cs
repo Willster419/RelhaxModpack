@@ -2,6 +2,7 @@
 using System.Text;
 using System.IO;
 using System.Windows;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack
 {

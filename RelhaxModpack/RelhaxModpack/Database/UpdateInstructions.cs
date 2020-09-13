@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Database
 {
-    public enum UpdateTypes
-    {
-        zip,
-        wotmod
-    }
     public class UpdateInstructions
     {
         public string InstructionsVersion { get; set; }

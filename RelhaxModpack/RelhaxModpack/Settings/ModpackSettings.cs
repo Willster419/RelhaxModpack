@@ -9,82 +9,10 @@ using System.Windows;
 using System.Reflection;
 using System.Globalization;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack
 {
-    /// <summary>
-    /// The type of selection view for how to display the selection tree
-    /// </summary>
-    public enum SelectionView
-    {
-        /// <summary>
-        /// OMC style
-        /// </summary>
-        Legacy = 1,
-
-        /// <summary>
-        /// Default WPF V2 style
-        /// </summary>
-        DefaultV2 = 0
-    };
-
-    /// <summary>
-    /// The types on uninstall mods the application supports
-    /// </summary>
-    public enum UninstallModes
-    {
-        /// <summary>
-        /// Default uninstall method to uninstall all modifications done by the application
-        /// </summary>
-        Default = 0,
-
-        /// <summary>
-        /// Quick uninstall method to remove 
-        /// </summary>
-        Quick = 1
-    }
-    /// <summary>
-    /// Database distribution levels
-    /// </summary>
-    public enum DatabaseVersions
-    {
-        /// <summary>
-        /// The stable public database
-        /// </summary>
-        Stable,
-
-        /// <summary>
-        /// The unstable public beta database
-        /// </summary>
-        Beta,
-
-        /// <summary>
-        /// The unstable private testing database.
-        /// </summary>
-        Test
-    }
-
-    /// <summary>
-    /// The list of different types of themes in the application
-    /// </summary>
-    public enum UIThemes
-    {
-        /// <summary>
-        /// The default application theme
-        /// </summary>
-        Default,
-
-        /// <summary>
-        /// The dark application theme
-        /// </summary>
-        Dark,
-
-        /// <summary>
-        /// A custom application theme from the UISettings.xml
-        /// </summary>
-        Custom
-    }
-
     /// <summary>
     /// Provides access to all settings used in the modpack.
     /// </summary>

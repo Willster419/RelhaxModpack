@@ -14,6 +14,7 @@ using RelhaxModpack.Atlases.Packing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Reflection;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxUnitTests
 {

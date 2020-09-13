@@ -10,37 +10,6 @@ using RelhaxModpack.Utilities.Enums;
 namespace RelhaxModpack.Database
 {
     /// <summary>
-    /// The types of UI selections for building the selection tree
-    /// </summary>
-    public enum SelectionTypes
-    {
-        /// <summary>
-        /// Used as catch-all for any mis-assigned selection types
-        /// </summary>
-        none,
-
-        /// <summary>
-        /// A radio button selection (only one of many), can have children
-        /// </summary>
-        single1,
-
-        /// <summary>
-        /// A combobox selection (only one of many), cannot have children
-        /// </summary>
-        single_dropdown1,
-
-        /// <summary>
-        /// Another combobox selection (only one of many), cannot have children
-        /// </summary>
-        single_dropdown2,
-
-        /// <summary>
-        /// A checkbox selection (many of many), can have children
-        /// </summary>
-        multi
-    }
-
-    /// <summary>
     /// A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
     /// </summary>
     public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable

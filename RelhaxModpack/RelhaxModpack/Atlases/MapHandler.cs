@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Atlases
 {

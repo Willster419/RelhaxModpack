@@ -1,88 +1,9 @@
 ﻿using RelhaxModpack.Utilities;
-using System;
-using System.IO;
 using System.Windows;
-using System.Windows.Threading;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack
 {
-    /// <summary>
-    /// The different log files currently used in the modpack
-    /// </summary>
-    public enum Logfiles
-    {
-        /// <summary>
-        /// The default modpack log file
-        /// </summary>
-        Application,
-
-        /// <summary>
-        /// The log file for when installing mods
-        /// </summary>
-        Installer,
-
-        /// <summary>
-        /// The log file for when uninstalling mods
-        /// </summary>
-        Uninstaller,
-
-        /// <summary>
-        /// The log file for the editor
-        /// </summary>
-        Editor,
-
-        /// <summary>
-        /// The log file for the patcher
-        /// </summary>
-        PatchDesigner,
-
-        /// <summary>
-        /// The log file for the database update tool
-        /// </summary>
-        Updater
-    }
-    /// <summary>
-    /// The level of severity of the log message
-    /// </summary>
-    public enum LogLevel
-    {
-        /// <summary>
-        /// Debug message
-        /// </summary>
-        Debug,
-        /// <summary>
-        /// Informational message
-        /// </summary>
-        Info,
-        /// <summary>
-        /// A problem, but can be worked around
-        /// </summary>
-        Warning,
-        /// <summary>
-        /// Something is wrong, something may not work
-        /// </summary>
-        Error,
-        /// <summary>
-        /// Something is wrong, something will not work
-        /// </summary>
-        Exception,
-        /// <summary>
-        /// The application is closing now
-        /// </summary>
-        ApplicationHalt
-    }
-
-    public enum LogOptions
-    {
-        None,
-
-        MethodName,
-
-        ClassName,
-
-        MethodAndClassName
-    }
-
     /// <summary>
     /// A static constant reference to common logging variables and common log references
     /// </summary>

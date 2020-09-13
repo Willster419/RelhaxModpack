@@ -4,61 +4,6 @@
         <name>RelhaxModpack</name>
     </assembly>
     <members>
-        <member name="T:RelhaxModpack.Atlases.FailCode">
-            <summary>
-            List of possible areas in the Atlas creation process where it could fail
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.FailCode.None">
-            <summary>
-            No error occurred
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.FailCode.ImageImporter">
-            <summary>
-            Failed to import the DDS image file to a bitmap object
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.FailCode.ImageExporter">
-            <summary>
-            Failed to export the bitmap object to a DDS image file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.FailCode.MapImporter">
-            <summary>
-            Failed to load and parse the WG xml atlas map
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.FailCode.MapExporter">
-            <summary>
-            Failed to parse and save the WG xml atlas map
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.FailCode.NoImages">
-            <summary>
-            No images to build for the atlas
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.FailCode.ImageNameCollision">
-            <summary>
-            Duplicate image names in list of images to pack
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.FailCode.FailedToPackImage">
-            <summary>
-            Failed to pack the images into one large image (most likely they don't fit into the provided dimensions)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.FailCode.OutOfMemory32bit">
-            <summary>
-            Failed to compress an atlas that requires over the 2GB process limit on 32bit systems
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Atlases.FailCode.FailedToCreateBitmapAtlas">
-            <summary>
-            Failed to create the atlas bitmap object
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Atlases.AtlasProgressDelegate">
             <summary>
             The delegate to invoke when calling back to the sender for the AtlasProgres event
@@ -1338,36 +1283,6 @@
             <returns>A list of string property names</returns>
             <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         </member>
-        <member name="T:RelhaxModpack.Database.MediaType">
-            <summary>
-            The supported types of media formats supported for preview in the application
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.MediaType.Unknown">
-            <summary>
-            Catch-all case for unknown media when parsing
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.MediaType.Picture">
-            <summary>
-            A direct link to a picture
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.MediaType.Webpage">
-            <summary>
-            A direct link to a website (like for embedding a web player)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.MediaType.MediaFile">
-            <summary>
-            A direct link to an audio file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.MediaType.HTML">
-            <summary>
-            Raw HTML code to display in embedded browser
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Database.Media">
             <summary>
             A media object is a preview-able component stored in a list in SelectablePackages
@@ -1476,36 +1391,6 @@
             </summary>
             <param name="package">The package to get the hash code</param>
             <returns>The hash code of the PackageName of the Package</returns>
-        </member>
-        <member name="T:RelhaxModpack.Database.SelectionTypes">
-            <summary>
-            The types of UI selections for building the selection tree
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.SelectionTypes.none">
-            <summary>
-            Used as catch-all for any mis-assigned selection types
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.SelectionTypes.single1">
-            <summary>
-            A radio button selection (only one of many), can have children
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.SelectionTypes.single_dropdown1">
-            <summary>
-            A combobox selection (only one of many), cannot have children
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.SelectionTypes.single_dropdown2">
-            <summary>
-            Another combobox selection (only one of many), cannot have children
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.SelectionTypes.multi">
-            <summary>
-            A checkbox selection (many of many), can have children
-            </summary>
         </member>
         <member name="T:RelhaxModpack.Database.SelectablePackage">
             <summary>
@@ -3979,6 +3864,76 @@
             <param name="item">The item to test</param>
             <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.ApplicationMode">
+            <summary>
+            The primary functional modes the application can run in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplicationMode.Default">
+            <summary>
+            The default mode of modpack installer. This is the primary focus of the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplicationMode.Editor">
+            <summary>
+            The database editor mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplicationMode.Updater">
+            <summary>
+            The updater mode. Used for updating the database, application, and other various functions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplicationMode.PatchDesigner">
+            <summary>
+            The patch designer mode. Allow the user to create and test patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplicationMode.Patcher">
+            <summary>
+            The patch runner mode. Can be used in command line mode, used for patching files given patch file instructions
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.ApplyBehavior">
+            <summary>
+            The different ways that the apply and save database buttons can interact
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplyBehavior.Default">
+            <summary>
+            Default behavior. The buttons do not interact.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplyBehavior.ApplyTriggersSave">
+            <summary>
+            When you click the apply button, it also saves the database after, to the default save location.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplyBehavior.SaveTriggersApply">
+            <summary>
+            When you click the save button, it also clicks the apply button before saving.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.DatabaseVersions">
+            <summary>
+            Database distribution levels
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseVersions.Stable">
+            <summary>
+            The stable public database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseVersions.Beta">
+            <summary>
+            The unstable public beta database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseVersions.Test">
+            <summary>
+            The unstable private testing database.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.DatabaseXmlVersion">
             <summary>
             The enumeration representations of the Xml database saving format
@@ -3992,6 +3947,61 @@
         <member name="F:RelhaxModpack.Utilities.Enums.DatabaseXmlVersion.OnePointOne">
             <summary>
             The 1.1 format. A root file, a file for the global and standard dependencies, and a file for each categories
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.FailCode">
+            <summary>
+            List of possible areas in the Atlas creation process where it could fail
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.FailCode.None">
+            <summary>
+            No error occurred
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.FailCode.ImageImporter">
+            <summary>
+            Failed to import the DDS image file to a bitmap object
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.FailCode.ImageExporter">
+            <summary>
+            Failed to export the bitmap object to a DDS image file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.FailCode.MapImporter">
+            <summary>
+            Failed to load and parse the WG xml atlas map
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.FailCode.MapExporter">
+            <summary>
+            Failed to parse and save the WG xml atlas map
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.FailCode.NoImages">
+            <summary>
+            No images to build for the atlas
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.FailCode.ImageNameCollision">
+            <summary>
+            Duplicate image names in list of images to pack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.FailCode.FailedToPackImage">
+            <summary>
+            Failed to pack the images into one large image (most likely they don't fit into the provided dimensions)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.FailCode.OutOfMemory32bit">
+            <summary>
+            Failed to compress an atlas that requires over the 2GB process limit on 32bit systems
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.FailCode.FailedToCreateBitmapAtlas">
+            <summary>
+            Failed to create the atlas bitmap object
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.KnownFolder">
@@ -4061,6 +4071,186 @@
              Enums for Known Folder Flags
             </Summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.Languages">
+            <summary>
+            List of all supported Languages in the modpack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Languages.English">
+            <summary>
+            The English language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Languages.German">
+            <summary>
+            The German language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Languages.Polish">
+            <summary>
+            The Polish language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Languages.French">
+            <summary>
+            The French language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Languages.Spanish">
+            <summary>
+            The Spanish language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Languages.Russian">
+            <summary>
+            The Russian language
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.Logfiles">
+            <summary>
+            The different log files currently used in the modpack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Logfiles.Application">
+            <summary>
+            The default modpack log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Logfiles.Installer">
+            <summary>
+            The log file for when installing mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Logfiles.Uninstaller">
+            <summary>
+            The log file for when uninstalling mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Logfiles.Editor">
+            <summary>
+            The log file for the editor
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Logfiles.PatchDesigner">
+            <summary>
+            The log file for the patcher
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.Logfiles.Updater">
+            <summary>
+            The log file for the database update tool
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.LogLevel">
+            <summary>
+            The level of severity of the log message
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.LogLevel.Debug">
+            <summary>
+            Debug message
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.LogLevel.Info">
+            <summary>
+            Informational message
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.LogLevel.Warning">
+            <summary>
+            A problem, but can be worked around
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.LogLevel.Error">
+            <summary>
+            Something is wrong, something may not work
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.LogLevel.Exception">
+            <summary>
+            Something is wrong, something will not work
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.LogLevel.ApplicationHalt">
+            <summary>
+            The application is closing now
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.MediaType">
+            <summary>
+            The supported types of media formats supported for preview in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.MediaType.Unknown">
+            <summary>
+            Catch-all case for unknown media when parsing
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.MediaType.Picture">
+            <summary>
+            A direct link to a picture
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.MediaType.Webpage">
+            <summary>
+            A direct link to a website (like for embedding a web player)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.MediaType.MediaFile">
+            <summary>
+            A direct link to an audio file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.MediaType.HTML">
+            <summary>
+            Raw HTML code to display in embedded browser
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.PatchExitCode">
+            <summary>
+            Exit codes during a patch operation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PatchExitCode.Success">
+            <summary>
+            The patch operation succeeded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PatchExitCode.Warning">
+            <summary>
+            The patch operation succeeded, but with warnings
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PatchExitCode.Error">
+            <summary>
+            The patch operation did not succeeded
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.PatchRegressionTypes">
+            <summary>
+            The types of patch regression tests that can be performed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PatchRegressionTypes.json">
+            <summary>
+            Json regression (standard, non-XVM)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PatchRegressionTypes.xml">
+            <summary>
+            Xml regression
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PatchRegressionTypes.regex">
+            <summary>
+            Regex regression
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PatchRegressionTypes.followPath">
+            <summary>
+            Json regression (XVM style)
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.ReplacementTypes">
             <summary>
             The types of text macro replacements
@@ -4094,6 +4284,86 @@
         <member name="F:RelhaxModpack.Utilities.Enums.ReplacementTypes.ZipFilePath">
             <summary>
             Replacing zip path macros with absolute extraction paths
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.SelectionTypes">
+            <summary>
+            The types of UI selections for building the selection tree
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SelectionTypes.none">
+            <summary>
+            Used as catch-all for any mis-assigned selection types
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SelectionTypes.single1">
+            <summary>
+            A radio button selection (only one of many), can have children
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SelectionTypes.single_dropdown1">
+            <summary>
+            A combobox selection (only one of many), cannot have children
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SelectionTypes.single_dropdown2">
+            <summary>
+            Another combobox selection (only one of many), cannot have children
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SelectionTypes.multi">
+            <summary>
+            A checkbox selection (many of many), can have children
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.SelectionView">
+            <summary>
+            The type of selection view for how to display the selection tree
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SelectionView.Legacy">
+            <summary>
+            OMC style
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SelectionView.DefaultV2">
+            <summary>
+            Default WPF V2 style
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.UIThemes">
+            <summary>
+            The list of different types of themes in the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.UIThemes.Default">
+            <summary>
+            The default application theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.UIThemes.Dark">
+            <summary>
+            The dark application theme
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.UIThemes.Custom">
+            <summary>
+            A custom application theme from the UISettings.xml
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.UninstallModes">
+            <summary>
+            The types on uninstall mods the application supports
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.UninstallModes.Default">
+            <summary>
+            Default uninstall method to uninstall all modifications done by the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.UninstallModes.Quick">
+            <summary>
+            Quick uninstall method to remove 
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.XmlLoadType">
@@ -5190,7 +5460,7 @@
             <param name="progress">The progress reporter object</param>
             <returns>A RelhaxInstallFinishedEventArgs object contain uninstallation data for if the uninstallation succeed or ended prematurely</returns>
         </member>
-        <member name="M:RelhaxModpack.InstallEngine.UninstallMods(RelhaxModpack.UninstallModes,System.Boolean)">
+        <member name="M:RelhaxModpack.InstallEngine.UninstallMods(RelhaxModpack.Utilities.Enums.UninstallModes,System.Boolean)">
             <summary>
             Deletes mod files from the current game client
             </summary>
@@ -5359,31 +5629,6 @@
             <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
             <seealso cref="P:RelhaxModpack.Patches.Patch.IsValidForSave"/>
         </member>
-        <member name="T:RelhaxModpack.Patches.PatchRegressionTypes">
-            <summary>
-            The types of patch regression tests that can be performed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.PatchRegressionTypes.json">
-            <summary>
-            Json regression (standard, non-XVM)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.PatchRegressionTypes.xml">
-            <summary>
-            Xml regression
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.PatchRegressionTypes.regex">
-            <summary>
-            Regex regression
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.PatchRegressionTypes.followPath">
-            <summary>
-            Json regression (XVM style)
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Patches.UnitTest">
             <summary>
             Represents a patch operation with a description and desired assertion condition
@@ -5412,7 +5657,7 @@
             The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
             the results. Results are logged to a new logfile each time a regression run is started</remarks>
         </member>
-        <member name="M:RelhaxModpack.Patches.Regression.#ctor(RelhaxModpack.Patches.PatchRegressionTypes,System.Collections.Generic.List{RelhaxModpack.Patches.UnitTest})">
+        <member name="M:RelhaxModpack.Patches.Regression.#ctor(RelhaxModpack.Utilities.Enums.PatchRegressionTypes,System.Collections.Generic.List{RelhaxModpack.Patches.UnitTest})">
             <summary>
             Make a regression object
             </summary>
@@ -5435,26 +5680,6 @@
         <member name="M:RelhaxModpack.Patches.Regression.Dispose">
             <summary>
             Dispose of managed resources
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Patches.PatchExitCode">
-            <summary>
-            Exit codes during a patch operation
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.PatchExitCode.Success">
-            <summary>
-            The patch operation succeeded
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.PatchExitCode.Warning">
-            <summary>
-            The patch operation succeeded, but with warnings
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.PatchExitCode.Error">
-            <summary>
-            The patch operation did not succeeded
             </summary>
         </member>
         <member name="T:RelhaxModpack.Patches.PatchUtils">
@@ -5974,7 +6199,7 @@
             </summary>
             <returns>True if successful initialization, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Logfile.Write(System.String,RelhaxModpack.LogLevel)">
+        <member name="M:RelhaxModpack.Logfile.Write(System.String,RelhaxModpack.Utilities.Enums.LogLevel)">
             <summary>
             Writes a line of text to the log file with the date and timestamp, and severity level of the message
             </summary>
@@ -5996,76 +6221,6 @@
         <member name="M:RelhaxModpack.Logfile.Dispose">
             <summary>
             Dispose Managed and Unmanaged resources used for the log files
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Logfiles">
-            <summary>
-            The different log files currently used in the modpack
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Logfiles.Application">
-            <summary>
-            The default modpack log file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Logfiles.Installer">
-            <summary>
-            The log file for when installing mods
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Logfiles.Uninstaller">
-            <summary>
-            The log file for when uninstalling mods
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Logfiles.Editor">
-            <summary>
-            The log file for the editor
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Logfiles.PatchDesigner">
-            <summary>
-            The log file for the patcher
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Logfiles.Updater">
-            <summary>
-            The log file for the database update tool
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.LogLevel">
-            <summary>
-            The level of severity of the log message
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.LogLevel.Debug">
-            <summary>
-            Debug message
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.LogLevel.Info">
-            <summary>
-            Informational message
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.LogLevel.Warning">
-            <summary>
-            A problem, but can be worked around
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.LogLevel.Error">
-            <summary>
-            Something is wrong, something may not work
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.LogLevel.Exception">
-            <summary>
-            Something is wrong, something will not work
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.LogLevel.ApplicationHalt">
-            <summary>
-            The application is closing now
             </summary>
         </member>
         <member name="T:RelhaxModpack.Logging">
@@ -6143,7 +6298,7 @@
             Provides a reference to an instance of an uninstall log file
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Logfiles,System.String)">
+        <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Utilities.Enums.Logfiles,System.String)">
             <summary>
             Initialize the logging system for the application
             </summary>
@@ -6151,40 +6306,40 @@
             <param name="logfilePath">The custom path of where to initialize the file</param>
             <returns>True if successful initialization, false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Logging.GetLogfile(RelhaxModpack.Logfiles)">
+        <member name="M:RelhaxModpack.Logging.GetLogfile(RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Get the instance of the logfile type
             </summary>
             <param name="logfile">The logfile enumeration type you would like</param>
             <returns>The instance of the log file</returns>
         </member>
-        <member name="M:RelhaxModpack.Logging.IsLogDisposed(RelhaxModpack.Logfiles)">
+        <member name="M:RelhaxModpack.Logging.IsLogDisposed(RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Checks if the logfile is disposed
             </summary>
             <param name="file">The logfile to check</param>
             <returns>True if the logfile object is null</returns>
         </member>
-        <member name="M:RelhaxModpack.Logging.IsLogOpen(RelhaxModpack.Logfiles)">
+        <member name="M:RelhaxModpack.Logging.IsLogOpen(RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Checks if the logfile is instanced and can be written to using the CanWrite property
             </summary>
             <param name="file">The logfile to check</param>
             <returns>True if the logfile is open and available to be written to</returns>
         </member>
-        <member name="M:RelhaxModpack.Logging.DisposeLogging(RelhaxModpack.Logfiles)">
+        <member name="M:RelhaxModpack.Logging.DisposeLogging(RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Dispose of the application logging subsystem
             </summary>
             <param name="logfile">The logfile to dispose</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.WriteHeader(RelhaxModpack.Logfiles)">
+        <member name="M:RelhaxModpack.Logging.WriteHeader(RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Writes the ApplicationlogStartStop constant to the logfile
             </summary>
             <param name="logfile">The logfile to write the header on</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.TryWriteToLog(System.String,RelhaxModpack.Logfiles,RelhaxModpack.LogLevel)">
+        <member name="M:RelhaxModpack.Logging.TryWriteToLog(System.String,RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogLevel)">
             <summary>
             Attempts to write to a specified logfile. No error is logged if it cannot
             </summary>
@@ -6193,7 +6348,7 @@
             <param name="logfile">The logfile to write to</param>
             <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.TryWriteToLog(System.String,RelhaxModpack.Logfiles,RelhaxModpack.LogLevel,System.Object[])">
+        <member name="M:RelhaxModpack.Logging.TryWriteToLog(System.String,RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogLevel,System.Object[])">
             <summary>
             Attempts to write to a specified logfile. No error is logged if it cannot
             </summary>
@@ -6202,7 +6357,7 @@
             <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.WriteToLog(System.String,RelhaxModpack.Logfiles,RelhaxModpack.LogLevel)">
+        <member name="M:RelhaxModpack.Logging.WriteToLog(System.String,RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogLevel)">
             <summary>
             Writes a message to a logfile instance, if it exists
             </summary>
@@ -6210,7 +6365,7 @@
             <param name="logfiles">The logfile to write to</param>
             <param name="logLevel">The level of severity of the message. If not Application log, this parameter is ignored</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.WriteToLog(System.String,RelhaxModpack.Logfiles,RelhaxModpack.LogLevel,System.Object[])">
+        <member name="M:RelhaxModpack.Logging.WriteToLog(System.String,RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.LogLevel,System.Object[])">
             <summary>
             Writes a message to a logfile instance, if it exists
             </summary>
@@ -6232,14 +6387,14 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.LogOptions,System.String)">
+        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.Utilities.Enums.LogOptions,System.String)">
             <summary>
             Writes an debug level message to the application log
             </summary>
             <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.LogOptions,System.String,System.Object[])">
+        <member name="M:RelhaxModpack.Logging.Debug(RelhaxModpack.Utilities.Enums.LogOptions,System.String,System.Object[])">
             <summary>
             Writes an debug (info) level message to the application log
             </summary>
@@ -6260,14 +6415,14 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.LogOptions,System.String)">
+        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.Utilities.Enums.LogOptions,System.String)">
             <summary>
             Writes an information (info) level message to the application log
             </summary>
             <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.LogOptions,System.String,System.Object[])">
+        <member name="M:RelhaxModpack.Logging.Info(RelhaxModpack.Utilities.Enums.LogOptions,System.String,System.Object[])">
             <summary>
             Writes an information (info) level message to the application log
             </summary>
@@ -6288,14 +6443,14 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.LogOptions,System.String)">
+        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.Utilities.Enums.LogOptions,System.String)">
             <summary>
             Writes a warning level message to the application log
             </summary>
             <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.LogOptions,System.String,System.Object[])">
+        <member name="M:RelhaxModpack.Logging.Warning(RelhaxModpack.Utilities.Enums.LogOptions,System.String,System.Object[])">
             <summary>
             Writes a warning level message to the application log
             </summary>
@@ -6316,14 +6471,14 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.LogOptions,System.String)">
+        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.Utilities.Enums.LogOptions,System.String)">
             <summary>
             Writes an error level message to the application log
             </summary>
             <param name="options">Log append options to include class name, method name, or both</param>
             <param name="message">The formatted string to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.LogOptions,System.String,System.Object[])">
+        <member name="M:RelhaxModpack.Logging.Error(RelhaxModpack.Utilities.Enums.LogOptions,System.String,System.Object[])">
             <summary>
             Writes an error level message to the application log
             </summary>
@@ -6370,14 +6525,14 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Editor(System.String,RelhaxModpack.LogLevel)">
+        <member name="M:RelhaxModpack.Logging.Editor(System.String,RelhaxModpack.Utilities.Enums.LogLevel)">
             <summary>
             Writes a message to the Editor logfile
             </summary>
             <param name="message">The message</param>
             <param name="level">The level of severity included into the string format</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Editor(System.String,RelhaxModpack.LogLevel,System.Object[])">
+        <member name="M:RelhaxModpack.Logging.Editor(System.String,RelhaxModpack.Utilities.Enums.LogLevel,System.Object[])">
             <summary>
             Writes a message to the Editor logfile
             </summary>
@@ -6385,14 +6540,14 @@
             <param name="level">The level of severity included into the string format</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Updater(System.String,RelhaxModpack.LogLevel)">
+        <member name="M:RelhaxModpack.Logging.Updater(System.String,RelhaxModpack.Utilities.Enums.LogLevel)">
             <summary>
             Writes a message to the Updater logfile
             </summary>
             <param name="message">The message</param>
             <param name="level">The level of severity included into the string format</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Updater(System.String,RelhaxModpack.LogLevel,System.Object[])">
+        <member name="M:RelhaxModpack.Logging.Updater(System.String,RelhaxModpack.Utilities.Enums.LogLevel,System.Object[])">
             <summary>
             Writes a message to the Updater logfile
             </summary>
@@ -6400,14 +6555,14 @@
             <param name="level">The level of severity included into the string format</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Patcher(System.String,RelhaxModpack.LogLevel)">
+        <member name="M:RelhaxModpack.Logging.Patcher(System.String,RelhaxModpack.Utilities.Enums.LogLevel)">
             <summary>
             Writes a message to the Patcher logfile
             </summary>
             <param name="message">The message</param>
             <param name="level">The level of severity included into the string format</param>
         </member>
-        <member name="M:RelhaxModpack.Logging.Patcher(System.String,RelhaxModpack.LogLevel,System.Object[])">
+        <member name="M:RelhaxModpack.Logging.Patcher(System.String,RelhaxModpack.Utilities.Enums.LogLevel,System.Object[])">
             <summary>
             Writes a message to the Patcher logfile
             </summary>
@@ -6447,26 +6602,6 @@
         <member name="F:RelhaxModpack.PatchSettings.ApplyBehavior">
             <summary>
             Controls how the save patch and apply button interact with each other. See ApplyBehavior enumeration for interaction definitions.
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.ApplyBehavior">
-            <summary>
-            The different ways that the apply and save database buttons can interact
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplyBehavior.Default">
-            <summary>
-            Default behavior. The buttons do not interact.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplyBehavior.ApplyTriggersSave">
-            <summary>
-            When you click the apply button, it also saves the database after, to the default save location.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplyBehavior.SaveTriggersApply">
-            <summary>
-            When you click the save button, it also clicks the apply button before saving.
             </summary>
         </member>
         <member name="T:RelhaxModpack.EditorSettings">
@@ -6527,76 +6662,6 @@
         <member name="M:RelhaxModpack.EditorSettings.#ctor">
             <summary>
             Create an instance of the EditorSettings class. Settings should be set via property initialization style.
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.SelectionView">
-            <summary>
-            The type of selection view for how to display the selection tree
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectionView.Legacy">
-            <summary>
-            OMC style
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.SelectionView.DefaultV2">
-            <summary>
-            Default WPF V2 style
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UninstallModes">
-            <summary>
-            The types on uninstall mods the application supports
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UninstallModes.Default">
-            <summary>
-            Default uninstall method to uninstall all modifications done by the application
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UninstallModes.Quick">
-            <summary>
-            Quick uninstall method to remove 
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.DatabaseVersions">
-            <summary>
-            Database distribution levels
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.DatabaseVersions.Stable">
-            <summary>
-            The stable public database
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.DatabaseVersions.Beta">
-            <summary>
-            The unstable public beta database
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.DatabaseVersions.Test">
-            <summary>
-            The unstable private testing database.
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UIThemes">
-            <summary>
-            The list of different types of themes in the application
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIThemes.Default">
-            <summary>
-            The default application theme
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIThemes.Dark">
-            <summary>
-            The dark application theme
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UIThemes.Custom">
-            <summary>
-            A custom application theme from the UISettings.xml
             </summary>
         </member>
         <member name="T:RelhaxModpack.ModpackSettings">
@@ -6903,36 +6968,6 @@
             Check for old poorly named settings that don't directly match setting property names
             </summary>
             <param name="settings">The node that holds all the settings nodes</param>
-        </member>
-        <member name="T:RelhaxModpack.ApplicationMode">
-            <summary>
-            The primary functional modes the application can run in
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplicationMode.Default">
-            <summary>
-            The default mode of modpack installer. This is the primary focus of the application
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplicationMode.Editor">
-            <summary>
-            The database editor mode
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplicationMode.Updater">
-            <summary>
-            The updater mode. Used for updating the database, application, and other various functions
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplicationMode.PatchDesigner">
-            <summary>
-            The patch designer mode. Allow the user to create and test patches
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplicationMode.Patcher">
-            <summary>
-            The patch runner mode. Can be used in command line mode, used for patching files given patch file instructions
-            </summary>
         </member>
         <member name="T:RelhaxModpack.CommandLineSettings">
             <summary>
@@ -8917,41 +8952,6 @@
             <returns>The WebRequest object</returns>
             <remarks>Overrides the GetWebRequest() method to expose the WebRequest object. In doing so, you can set a custom timeout.</remarks>
         </member>
-        <member name="T:RelhaxModpack.Languages">
-            <summary>
-            List of all supported Languages in the modpack
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Languages.English">
-            <summary>
-            The English language
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Languages.German">
-            <summary>
-            The German language
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Languages.Polish">
-            <summary>
-            The Polish language
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Languages.French">
-            <summary>
-            The French language
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Languages.Spanish">
-            <summary>
-            The Spanish language
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Languages.Russian">
-            <summary>
-            The Russian language
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Translations">
             <summary>
             Handles all localization for the application User Interface
@@ -8992,13 +8992,13 @@
             Russian language string identifier in national language
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Translations.SetLanguage(RelhaxModpack.Languages)">
+        <member name="M:RelhaxModpack.Translations.SetLanguage(RelhaxModpack.Utilities.Enums.Languages)">
             <summary>
             Sets the language dictionary to use when returning a localized string
             </summary>
             <param name="language">The language to switch to</param>
         </member>
-        <member name="M:RelhaxModpack.Translations.GetLanguageNativeName(RelhaxModpack.Languages)">
+        <member name="M:RelhaxModpack.Translations.GetLanguageNativeName(RelhaxModpack.Utilities.Enums.Languages)">
             <summary>
             Get the native language name of the english enumerated name of the language
             </summary>
@@ -9020,7 +9020,7 @@
             <param name="logError">Flag to log an error in the logfile if it does not exist</param>
             <returns>True if it exists in the currently selected language, or false otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Languages,System.Boolean)">
+        <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Utilities.Enums.Languages,System.Boolean)">
             <summary>
             Checks is a component (key value) exists in the given language (dictionary)
             </summary>

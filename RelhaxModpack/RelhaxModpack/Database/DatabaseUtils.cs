@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Database
 {
