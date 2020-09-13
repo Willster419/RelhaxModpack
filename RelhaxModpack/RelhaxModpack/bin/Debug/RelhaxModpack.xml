@@ -7905,6 +7905,11 @@
             Diagnostics
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.Diagnostics.RelhaxLogfileTrimLength">
+            <summary>
+            The number of log file entries that should be kept after the trim operation
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.Diagnostics.#ctor">
             <summary>
             Create an instance of the Diagnostics window

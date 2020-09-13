@@ -11,6 +11,7 @@ using Ionic.Zip;
 using RelhaxModpack.Atlases;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.UI;
+using System.Text;
 
 namespace RelhaxModpack.Windows
 {
@@ -19,6 +20,11 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class Diagnostics : RelhaxWindow
     {
+        /// <summary>
+        /// The number of log file entries that should be kept after the trim operation
+        /// </summary>
+        private int RelhaxLogfileTrimLength = 3;
+
         /// <summary>
         /// Create an instance of the Diagnostics window
         /// </summary>
@@ -338,6 +344,70 @@ namespace RelhaxModpack.Windows
                 Logging.Info(LogOptions.ClassName, "Cleaning AppData cache fail");
                 DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleanGameCacheFail");
             }
+        }
+
+        private void TrimRelhaxLogfileButton_Click(object sender, RoutedEventArgs e)
+        {
+            Logging.Info(LogOptions.ClassName, "Trimming relhax.log (this file)");
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("trimRelhaxLogProgress");
+
+            //turn off the logfile to trim it now
+            Logging.Debug(LogOptions.ClassName, "Shutdown of the logfile for trimming");
+
+            string logfilePath = Logging.GetLogfile(Logfiles.Application).Filepath;
+
+            Logging.DisposeLogging(Logfiles.Application);
+
+            //load the logfile into a string
+            string entireLogfile = File.ReadAllText(logfilePath);
+
+            //split it into an array based on the start/stop text
+            string[] entireLogfileArray = entireLogfile.Split(new string[] { Logging.ApplicationlogStartStop }, StringSplitOptions.RemoveEmptyEntries);
+
+            //filter out any entries that are whitespace or empty, to get the true number of log start/stop entries
+            string[] entireLogfileArrayTrimmed = entireLogfileArray.ToList().FindAll(entry => !string.IsNullOrWhiteSpace(entry)).ToArray();
+
+            //calculate how far back the unfiltered int tracker should go. It shouldn't count whitespace versions
+            int withWhitespaceCounter = 0;
+            int withoutWhitespaceCounter = 0;
+            for(int i = entireLogfileArray.Length-1; i > 0; i--)
+            {
+                withWhitespaceCounter++;
+                if (!string.IsNullOrWhiteSpace(entireLogfileArray[i]))
+                    withoutWhitespaceCounter++;
+                if (withoutWhitespaceCounter >= this.RelhaxLogfileTrimLength)
+                    break;
+            }
+
+            //if the number of trimmed elements is greater then 3, then we can filter it
+            bool trimmed = false;
+            if(entireLogfileArrayTrimmed.Length > this.RelhaxLogfileTrimLength)
+            {
+                //currently hard-set to get the last 3 entries
+                trimmed = true;
+                StringBuilder newLogfileBuilder = new StringBuilder();
+                for (int i = entireLogfileArray.Length - withWhitespaceCounter; i < entireLogfileArray.Length; i++)
+                {
+                    newLogfileBuilder.Append(Logging.ApplicationlogStartStop);
+                    newLogfileBuilder.Append(entireLogfileArray[i]);
+                    if (i != entireLogfileArray.Length - 1 && string.IsNullOrWhiteSpace(entireLogfileArray[i + 1]))
+                    {
+                        newLogfileBuilder.Append(Logging.ApplicationlogStartStop + Environment.NewLine);
+                        i++;
+                    }
+                }
+
+                //write it back to disk
+                File.Delete(logfilePath);
+                File.WriteAllText(logfilePath, newLogfileBuilder.ToString());
+            }
+
+            //DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("trimRelhaxLogFail");
+
+            //restore the logfile
+            Logging.Init(Logfiles.Application);
+            DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("trimRelhaxLogSuccess");
+            Logging.Info(LogOptions.ClassName, "Successfully trimmed the log file ({0})", trimmed? string.Format("Trimmed to {0} entries", this.RelhaxLogfileTrimLength) : "No trim required");
         }
     }
 }

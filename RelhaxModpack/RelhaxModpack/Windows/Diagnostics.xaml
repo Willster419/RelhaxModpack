@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Diagnostics" Height="370" Width="525" ResizeMode="CanMinimize"
+        Title="Diagnostics" Height="420" Width="525" ResizeMode="CanMinimize"
         Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
     <Grid Tag="DiagnosticsGrid">
         <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="42" Margin="10,10,10,0" TextWrapping="Wrap"
@@ -14,8 +14,9 @@
                    Text="Currently Selected Installation:" VerticalAlignment="Top" Height="34" ToolTipService.ShowOnDisabled="True"/>
         <TextBox Tag="DiagnosticsStatusTextBox" x:Name="DiagnosticsStatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="12,0,8,10" TextWrapping="Wrap"
                  VerticalAlignment="Bottom" IsReadOnly="True"/>
-        <Grid HorizontalAlignment="Stretch" Height="173" Margin="12,96,8,0" VerticalAlignment="Top" >
+        <Grid HorizontalAlignment="Stretch" Margin="12,96,8,65" VerticalAlignment="Stretch" >
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -58,6 +59,11 @@
                     Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
                 <TextBlock x:Name="CleanGameCacheText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
                            Text="Clear game cache files"/>
+            </Button>
+            <Button Tag="TrimRelhaxLogfile" x:Name="TrimRelhaxLogfileButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="TrimRelhaxLogfileButton_Click"
+                    Grid.Row="4" Grid.Column="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
+                <TextBlock x:Name="TrimRelhaxLogfileText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
+                           Text="Trim the Relhax log file to the last 3 launches"/>
             </Button>
         </Grid>
     </Grid>

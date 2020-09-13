@@ -4163,6 +4163,42 @@ namespace RelhaxModpack
             French.Add("cleanGameCacheFail", TranslationNeeded);
             Spanish.Add("cleanGameCacheFail", "No se ha podido limpar los archivos de caché del juego");
             Russian.Add("cleanGameCacheFail", "Не удалось удалить файлы кэша игры");
+
+            //Component: TrimRelhaxLogfileText
+            // Text block for allowing the user to trim relhax.log logfile to the last 3 launches (assuming header/footer entries exist)
+            English.Add("TrimRelhaxLogfileText", "Trim the Relhax log file to the last 3 launches");
+            German.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            Polish.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            French.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            Spanish.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            Russian.Add("TrimRelhaxLogfileText", TranslationNeeded);
+
+            //Component: trimRelhaxLogProgress
+            //
+            English.Add("trimRelhaxLogProgress", "Trimming the Relhax log file");
+            German.Add("trimRelhaxLogProgress", TranslationNeeded);
+            Polish.Add("trimRelhaxLogProgress", TranslationNeeded);
+            French.Add("trimRelhaxLogProgress", TranslationNeeded);
+            Spanish.Add("trimRelhaxLogProgress", TranslationNeeded);
+            Russian.Add("trimRelhaxLogProgress", TranslationNeeded);
+
+            //Component: trimRelhaxLogSuccess
+            //
+            English.Add("trimRelhaxLogSuccess", "Sucessfully trimmed the Relhax log file");
+            German.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            Polish.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            French.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            Spanish.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            Russian.Add("trimRelhaxLogSuccess", TranslationNeeded);
+
+            //Component: trimRelhaxLogFail
+            //
+            English.Add("trimRelhaxLogFail", "Failed to trim the Relhax log file");
+            German.Add("trimRelhaxLogFail", TranslationNeeded);
+            Polish.Add("trimRelhaxLogFail", TranslationNeeded);
+            French.Add("trimRelhaxLogFail", TranslationNeeded);
+            Spanish.Add("trimRelhaxLogFail", TranslationNeeded);
+            Russian.Add("trimRelhaxLogFail", TranslationNeeded);
             #endregion
 
             #region Add zip files Dialog
