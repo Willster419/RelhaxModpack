@@ -765,7 +765,7 @@ namespace RelhaxModpack
             //
             English.Add("failedToGetDotNetFrameworkVersion", "Failed to get the installed .NET Framework version. This could indicate a permissions problem or your antivirus software could be blocking it.");
             German.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
-            Polish.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+            Polish.Add("failedToGetDotNetFrameworkVersion", "Brak zainstalowanego .NET Framework. Może to oznaczać problem z prawami dostępu lub konflikt z oprogramowaniem antywirusowym blokującym dostęp.");
             French.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
             Spanish.Add("failedToGetDotNetFrameworkVersion", "No se ha podido obtener la versión de la instalación de .Net Framework. Esto puede indicar un problema de permisos, o un antivirus puede estar bloqueando la obtención.");
             Russian.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
@@ -775,7 +775,8 @@ namespace RelhaxModpack
             English.Add("invalidDotNetFrameworkVersion", "The installed version of the .NET Framework is less then 4.8. Relhax Modpack requires version 4.8 or above to operate. Would you like to open a link" +
                 "to get the latest version of the .NET Framework?");
             German.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
-            Polish.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
+            Polish.Add("invalidDotNetFrameworkVersion", "Zainstalowana wersja .NET Framework jest za stara. Modpack wymaga .NET Framework w wersji 4.8 lub wyższej." +
+                "Czy chcesz przejść do strony pobierania najnowszej wersji .NET Framework?");
             French.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
             Spanish.Add("invalidDotNetFrameworkVersion", "La versión instalada de .NET Framework es anterior a 4.8. Relhax Modpack requiere la versión 4.8 o superior para funcionar." +
                 " ¿Quiere abrir un vínculo para obtener la última versión de .NET Framework?");
@@ -4256,7 +4257,7 @@ namespace RelhaxModpack
             // Text block for allowing the user to trim relhax.log logfile to the last 3 launches (assuming header/footer entries exist)
             English.Add("TrimRelhaxLogfileText", "Trim the Relhax log file to the last 3 launches");
             German.Add("TrimRelhaxLogfileText", TranslationNeeded);
-            Polish.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            Polish.Add("TrimRelhaxLogfileText", "Zachowaj w pliku dziennika tylko 3 ostatnie uruchomienia");
             French.Add("TrimRelhaxLogfileText", TranslationNeeded);
             Spanish.Add("TrimRelhaxLogfileText", TranslationNeeded);
             Russian.Add("TrimRelhaxLogfileText", TranslationNeeded);
@@ -4265,7 +4266,7 @@ namespace RelhaxModpack
             //
             English.Add("trimRelhaxLogProgress", "Trimming the Relhax log file");
             German.Add("trimRelhaxLogProgress", TranslationNeeded);
-            Polish.Add("trimRelhaxLogProgress", TranslationNeeded);
+            Polish.Add("trimRelhaxLogProgress", "Ograniczanie zakresu pliku dziennika");
             French.Add("trimRelhaxLogProgress", TranslationNeeded);
             Spanish.Add("trimRelhaxLogProgress", TranslationNeeded);
             Russian.Add("trimRelhaxLogProgress", TranslationNeeded);
@@ -4274,7 +4275,7 @@ namespace RelhaxModpack
             //
             English.Add("trimRelhaxLogSuccess", "Sucessfully trimmed the Relhax log file");
             German.Add("trimRelhaxLogSuccess", TranslationNeeded);
-            Polish.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            Polish.Add("trimRelhaxLogSuccess", "Ograniczanie zakresu pliku dziennika zakończone powodzeniem");
             French.Add("trimRelhaxLogSuccess", TranslationNeeded);
             Spanish.Add("trimRelhaxLogSuccess", TranslationNeeded);
             Russian.Add("trimRelhaxLogSuccess", TranslationNeeded);
@@ -4283,7 +4284,7 @@ namespace RelhaxModpack
             //
             English.Add("trimRelhaxLogFail", "Failed to trim the Relhax log file");
             German.Add("trimRelhaxLogFail", TranslationNeeded);
-            Polish.Add("trimRelhaxLogFail", TranslationNeeded);
+            Polish.Add("trimRelhaxLogFail", "Nie udało się ograniczyć zakresu pliku dziennika");
             French.Add("trimRelhaxLogFail", TranslationNeeded);
             Spanish.Add("trimRelhaxLogFail", TranslationNeeded);
             Russian.Add("trimRelhaxLogFail", TranslationNeeded);
