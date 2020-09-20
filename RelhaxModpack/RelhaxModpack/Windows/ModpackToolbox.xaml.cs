@@ -85,7 +85,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Password auth stuff
-        private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //check if key filename was changed from command line
             if (!string.IsNullOrWhiteSpace(CommandLineSettings.UpdateKeyFileName))
@@ -97,7 +97,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Updater("File for auth exists, attempting authorization");
                 Logging.Updater(KeyFilename);
-                AttemptAuthFromFile(KeyFilename);
+                await AttemptAuthFromFile(KeyFilename);
             }
             else
             {
@@ -106,21 +106,36 @@ namespace RelhaxModpack.Windows
             loading = false;
         }
 
-        private void PasswordButton_Click(object sender, RoutedEventArgs e)
+        private async void LoadPasswordFromText_Click(object sender, RoutedEventArgs e)
         {
-            AttemptAuthFromString(PaswordTextbox.Text);
+            await AttemptAuthFromString(PaswordTextbox.Text);
         }
 
-        private async Task<bool> AttemptAuthFromFile(string filepath)
+        private async Task AttemptAuthFromFile(string filepath)
         {
-            Logging.Updater("attempting authorization", LogLevel.Info, filepath);
-            return await AttemptAuthFromString(File.ReadAllText(filepath));
+            Logging.Updater("Attempting authorization from file {0}", LogLevel.Info, filepath);
+            await AttemptAuthFromString(File.ReadAllText(filepath));
         }
 
-        private async Task<bool> AttemptAuthFromString(string key)
+        private async Task AttemptAuthFromString(string key)
         {
             AuthStatusTextblock.Text = "Current status: Checking...";
-            AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Yellow);
+            AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Orange);
+
+            //if the user is already authorized, then no reason to check again
+            if(authorized)
+            {
+                Logging.Updater("User is already authorized");
+                AuthStatusTextblock.Text = "Current status: Authorized";
+                AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Green);
+                authorized = true;
+                return;
+            }
+
+            //disable the buttons
+            LoadPasswordFromFileButton.IsEnabled = false;
+            LoadPasswordFromTextButton.IsEnabled = false;
+
             //compare local password to online version
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredentialPrivate })
             {
@@ -131,7 +146,6 @@ namespace RelhaxModpack.Windows
                     AuthStatusTextblock.Text = "Current status: Authorized";
                     AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Green);
                     authorized = true;
-                    return true;
                 }
                 else
                 {
@@ -139,9 +153,12 @@ namespace RelhaxModpack.Windows
                     AuthStatusTextblock.Text = "Current status: Denied";
                     AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Red);
                     authorized = false;
-                    return false;
                 }
             }
+
+            //enable the buttons again
+            LoadPasswordFromFileButton.IsEnabled = true;
+            LoadPasswordFromTextButton.IsEnabled = true;
         }
         #endregion
 
@@ -207,7 +224,7 @@ namespace RelhaxModpack.Windows
         private void PaswordTextbox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-                PasswordButton_Click(null, null);
+                LoadPasswordFromText_Click(null, null);
         }
 
         private void ClearLogButton_Click(object sender, RoutedEventArgs e)
