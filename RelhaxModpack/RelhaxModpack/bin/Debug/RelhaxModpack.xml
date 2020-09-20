@@ -8669,17 +8669,17 @@
             ModSelectionList
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.ModSelectionList.ParsedCategoryList">
+        <member name="P:RelhaxModpack.Windows.ModSelectionList.ParsedCategoryList">
             <summary>
             The list of categories
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.ModSelectionList.GlobalDependencies">
+        <member name="P:RelhaxModpack.Windows.ModSelectionList.GlobalDependencies">
             <summary>
             The list of global dependencies
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.ModSelectionList.Dependencies">
+        <member name="P:RelhaxModpack.Windows.ModSelectionList.Dependencies">
             <summary>
             The list of dependencies
             </summary>
@@ -8689,16 +8689,21 @@
             The event that a caller can subscribe to wait for when the selection window actually closes, with arguments for the installation
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.ModSelectionList.AutoInstallMode">
+        <member name="P:RelhaxModpack.Windows.ModSelectionList.AutoInstallMode">
             <summary>
             Flag to determine if the current installation is started from auto install mode
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.ModSelectionList.LastSupportedWoTClientVersion">
+        <member name="P:RelhaxModpack.Windows.ModSelectionList.LastSupportedWoTClientVersion">
             <summary>
             The latest supported formatted version of WoT, in full version format (e.g. 1.7.0.1) 
             </summary>
             <remarks>This is used for patch days when a user is installing for a WoT version not yet supported</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Windows.ModSelectionList.LoadingUI">
+            <summary>
+            Flag to indicate if the window is loading application specific UI
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.ModSelectionList.#ctor">
             <summary>
