@@ -96,21 +96,20 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class ModSelectionList : RelhaxWindow
     {
-        //public
         /// <summary>
         /// The list of categories
         /// </summary>
-        public List<Category> ParsedCategoryList;
+        public List<Category> ParsedCategoryList { get; set; } = null;
 
         /// <summary>
         /// The list of global dependencies
         /// </summary>
-        public List<DatabasePackage> GlobalDependencies;
+        public List<DatabasePackage> GlobalDependencies { get; set; } = null;
 
         /// <summary>
         /// The list of dependencies
         /// </summary>
-        public List<Dependency> Dependencies;
+        public List<Dependency> Dependencies { get; set; } = null;
 
         /// <summary>
         /// The event that a caller can subscribe to wait for when the selection window actually closes, with arguments for the installation
@@ -120,18 +119,21 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Flag to determine if the current installation is started from auto install mode
         /// </summary>
-        public bool AutoInstallMode = false;
+        public bool AutoInstallMode { get; set; } = false;
 
         /// <summary>
         /// The latest supported formatted version of WoT, in full version format (e.g. 1.7.0.1) 
         /// </summary>
         /// <remarks>This is used for patch days when a user is installing for a WoT version not yet supported</remarks>
-        public string LastSupportedWoTClientVersion = string.Empty;
+        public string LastSupportedWoTClientVersion { get; set; } = string.Empty;
 
-        //private
+        /// <summary>
+        /// Flag to indicate if the window is loading application specific UI
+        /// </summary>
+        public bool LoadingUI { get; private set; } = false;
+
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress = null;
-        private bool LoadingUI = false;
         private Category UserCategory = null;
         private Preview p = null;
         private const int FLASH_TICK_INTERVAL = 250;
