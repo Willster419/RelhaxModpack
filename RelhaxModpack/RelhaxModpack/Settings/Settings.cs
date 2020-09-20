@@ -456,7 +456,7 @@ namespace RelhaxModpack
         /// The current distribution version of the application.
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
-        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Beta;
+        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Alpha;
 
         /// <summary>
         /// Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed)
@@ -544,9 +544,9 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="xmlfile">The path to the file</param>
         /// <param name="SettingsClass">The type of the settings class to load into</param>
-        /// <param name="propertiesToExclude">A string list of properties (in the class) to not look for</param>
-        /// <param name="classInstance">The actual object to append the xml settings to</param>
-        /// <returns></returns>
+        /// <param name="propertiesToExclude">A string list of properties (in the class) to not look for. If none, you can pass in null</param>
+        /// <param name="classInstance">The object to append the xml settings to. If the settings class is static, pass in null</param>
+        /// <returns>Success if loading, false otherwise</returns>
         public static bool LoadSettings(string xmlfile, Type SettingsClass, string[] propertiesToExclude, object classInstance)
         {
             //first check if the file even exists
