@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelhaxModpack", "RelhaxModp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelhaxUnitTests", "RelhaxUnitTests\RelhaxUnitTests.csproj", "{F7B9D482-002D-4498-86F2-9844FE5C688A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelhaxUnitTestsInstaller", "RelhaxInstallerUnitTester\RelhaxUnitTestsInstaller.csproj", "{87BE375D-F137-40B9-8136-F5302A181E32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F7B9D482-002D-4498-86F2-9844FE5C688A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7B9D482-002D-4498-86F2-9844FE5C688A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7B9D482-002D-4498-86F2-9844FE5C688A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87BE375D-F137-40B9-8136-F5302A181E32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87BE375D-F137-40B9-8136-F5302A181E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87BE375D-F137-40B9-8136-F5302A181E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87BE375D-F137-40B9-8136-F5302A181E32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
