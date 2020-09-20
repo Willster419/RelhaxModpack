@@ -372,7 +372,7 @@ namespace RelhaxModpack.Windows
             loadProgress.ChildCurrent = 0;
             loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
             progressIndicator.Report(loadProgress);
-            Dispatcher.Invoke(() => LoadModSelectionListUiComponents(loadProgress), DispatcherPriority.Normal);
+            Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() => LoadModSelectionListUiComponents(loadProgress)));
         }
 
         private bool ModSelectionLoadDatabase()
