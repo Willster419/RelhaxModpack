@@ -77,7 +77,7 @@ namespace RelhaxInstallerUnitTester
             {
                 SelectionList = new ModSelectionList()
                 {
-                    ApplyColorSettings = false,
+                    ApplyColorSettings = false, //not cross-thread safe
                     ApplyScaling = false,
                     ApplyToolTips = true,
                     AutoInstallMode = false,
@@ -103,7 +103,6 @@ namespace RelhaxInstallerUnitTester
             thread.IsBackground = true;
             thread.Start();
 
-
             while (SelectionList == null)
                 await Task.Delay(100);
             
@@ -112,17 +111,40 @@ namespace RelhaxInstallerUnitTester
 
             while (SelectionList.LoadingUI)
                 await Task.Delay(1000);
+        }
 
-            List<FrameworkElement> elements = null;
-            FrameworkElement buttonElement = null;
+        [TestMethod]
+        public void Test04_CreateRandomSelectionListTest()
+        {
+            SelectionList.OnSelectionListReturn += SelectionList_OnSelectionListReturn;
 
+            log.Write("Selecting 100 components");
             SelectionList.Dispatcher.Invoke(() =>
             {
-                elements = UiUtils.GetAllWindowComponentsLogical(SelectionList, false);
-                buttonElement = elements.Find(element => element.Tag != null && element.Tag.Equals("CancelButton"));
+                List <SelectablePackage> flatList = DatabaseUtils.GetFlatSelectablePackageList(SelectionList.ParsedCategoryList);
+                Random random = new Random();
+                for (int i = 0; i < 100; i++)
+                {
+                    int selectIndex = random.Next(0, flatList.Count);
+                    SelectablePackage package = flatList[selectIndex];
+                    log.Write(string.Format("Index {0} selects package {1}", selectIndex, package.PackageName));
+                    package.Checked = true;
+                }
+
+                //click the continue button
+                List<FrameworkElement> elements = UiUtils.GetAllWindowComponentsLogical(SelectionList, false);
+                FrameworkElement buttonElement = elements.Find(element => element.Tag != null && element.Tag.Equals("ContinueButton"));
                 Button clearSelectionsButton = buttonElement as Button;
                 clearSelectionsButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             });
+        }
+
+        private void SelectionList_OnSelectionListReturn(object sender, SelectionListEventArgs e)
+        {
+            Assert.IsTrue(e.ContinueInstallation);
+            Assert.IsTrue(e.GlobalDependencies.Count > 0);
+            Assert.IsTrue(e.Dependencies.Count > 0);
+            Assert.IsTrue(e.ParsedCategoryList.Count > 0);
         }
 
         [ClassInitialize]
