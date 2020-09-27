@@ -422,22 +422,6 @@ namespace RelhaxModpack.Utilities
         }
 
         /// <summary>
-        /// Tries to parse an enumeration of a given type
-        /// </summary>
-        /// <typeparam name="TEnum">The type of enumeration to parse as</typeparam>
-        /// <param name="input">The input string to parse</param>
-        /// <param name="defaultValue">The default value if the enumeration parse fails</param>
-        /// <returns>The parsed or default enumeration value</returns>
-        /// <remarks>see https://stackoverflow.com/questions/10685794/how-to-use-generic-tryparse-with-enum </remarks>
-        public static TEnum ParseEnum<TEnum>(string input, TEnum defaultValue)
-            where TEnum : struct, IConvertible
-        {
-            if (Enum.TryParse(input, true, out TEnum result))
-                return result;
-            else return defaultValue;
-        }
-
-        /// <summary>
         /// Downloads an array of strings from a list of download URLs all at the same time
         /// </summary>
         /// <param name="downloadURLs">the list of string URLs to download</param>
