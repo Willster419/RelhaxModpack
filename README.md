@@ -78,7 +78,7 @@ You can download the modpack from this link:
 
 http://adf.ly/1l28oP (donate link)
 
-http://wotmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe (direct link)
+http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe (direct link)
 
 https://wgmods.net/392/ (WG mods link)
 
