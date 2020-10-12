@@ -275,6 +275,7 @@ namespace RelhaxModpack.Windows
                         File.Delete(ZipFilePathDisk);
                         break;
                 }
+                Close();
             }
         }
 
