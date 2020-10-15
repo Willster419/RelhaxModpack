@@ -2986,5 +2986,20 @@ namespace RelhaxModpack.Windows
             }, System.Windows.Threading.DispatcherPriority.Background);
         }
         #endregion
+
+        private void PackageTagsDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void TagAddSelectedTag_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TagRemoveTag_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
