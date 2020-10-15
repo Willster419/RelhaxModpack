@@ -567,7 +567,7 @@ namespace RelhaxModpack.Xml
                 if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
                     throw new BadMemeException("Type of this list is not of IXmlSerializable");
 
-                IDatabaseComponent componentWithID = (IDatabaseComponent)listEntry;
+                IDatabaseComponent databasePackageObject = (IDatabaseComponent)listEntry;
 
                 //create attribute and element unknown and missing lists
                 List<string> unknownAttributes = new List<string>();
@@ -594,16 +594,16 @@ namespace RelhaxModpack.Xml
                     if (property == null)
                     {
                         Logging.Error("Property (xml attribute) {0} exists in array for serialization, but not in class design!, ", attributeName);
-                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", databasePackageObject.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                         continue;
                     }
 
                     missingAttributes.Remove(attributeName);
 
-                    if(!CommonUtils.SetObjectProperty(listEntry,property,attribute.Value))
+                    if(!CommonUtils.SetObjectProperty(databasePackageObject, property, attribute.Value))
                     {
                         Logging.Error("Failed to set member {0}, default (if exists) was used instead, PackageName: {1}, LineNumber {2}",
-                            attributeName, componentWithID.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
+                            attributeName, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                     }
                 }
 
@@ -611,12 +611,12 @@ namespace RelhaxModpack.Xml
                 foreach(string unknownAttribute in unknownAttributes)
                 {
                     Logging.Error("Unknown Attribute from Xml node not in whitelist or memberInfo: {0}, PackageName: {1}, LineNumber {2}",
-                        unknownAttribute, componentWithID.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
+                        unknownAttribute, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                 }
                 foreach(string missingAttribute in missingAttributes)
                 {
                     Logging.Error("Missing required attribute not in xmlInfo: {0}, PackageName: {1}, LineNumber {2}",
-                        missingAttribute, componentWithID.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
+                        missingAttribute, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                 }
 
                 //now deal with element values. no need to log what isn't set (elements are optional)
@@ -639,12 +639,12 @@ namespace RelhaxModpack.Xml
                     if (property == null)
                     {
                         Logging.Error("Property (xml attribute) {0} exists in array for serialization, but not in class design!, ", elementName);
-                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)element).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", databasePackageObject.ComponentInternalName, ((IXmlLineInfo)element).LineNumber);
                         continue;
                     }
 
                     //if it's a package entry, we need to recursivly procsses it
-                    if (componentWithID is SelectablePackage throwAwayPackage && elementName.Equals(nameof(throwAwayPackage.Packages)))
+                    if (databasePackageObject is SelectablePackage throwAwayPackage && elementName.Equals(nameof(throwAwayPackage.Packages)))
                     {
                         //need hard code special case for Packages
                         ParseDatabase1V1Packages(element.Elements().ToList(), throwAwayPackage.Packages);
@@ -654,12 +654,12 @@ namespace RelhaxModpack.Xml
                     //https://stackoverflow.com/questions/4115968/how-to-tell-whether-a-type-is-a-list-or-array-or-ienumerable-or
                     else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && !property.PropertyType.Equals(typeof(string)))
                     {
-                        CommonUtils.SetListEntries(componentWithID, property, xmlPackageNode.Element(element.Name).Elements());
+                        CommonUtils.SetListEntries(databasePackageObject, property, xmlPackageNode.Element(element.Name).Elements());
                     }
-                    else if (!CommonUtils.SetObjectProperty(componentWithID,property,element.Value))
+                    else if (!CommonUtils.SetObjectProperty(databasePackageObject, property, element.Value))
                     {
                         Logging.Error("Failed to set member {0}, default (if exists) was used instead, PackageName: {1}, LineNumber {2}",
-                            element.Name.LocalName, componentWithID.ComponentInternalName, ((IXmlLineInfo)element).LineNumber);
+                            element.Name.LocalName, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)element).LineNumber);
                     }
                 }
 
@@ -668,11 +668,11 @@ namespace RelhaxModpack.Xml
                 {
                     //log it here
                     Logging.Error("Unknown Element from Xml node not in whitelist or memberInfo: {0}, PackageName: {1}, LineNumber {2}",
-                        unknownelement, componentWithID.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
+                        unknownelement, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)xmlPackageNode).LineNumber);
                 }
 
                 //add it to the internal memory list
-                genericPackageList.Add(componentWithID);
+                genericPackageList.Add(databasePackageObject);
             }
             return true;
         }
@@ -2720,14 +2720,14 @@ namespace RelhaxModpack.Xml
             }
         }
 
-        private static void SavePropertiesToXmlAttributes(IXmlSerializable listEntry, XmlElement elementContainer, IDatabaseComponent componentToSave)
+        private static void SavePropertiesToXmlAttributes(IXmlSerializable databasePackageOfDefaultValues, XmlElement packageElement, IDatabaseComponent packageToSave)
         {
             //iterate through each of the attributes and nodes in the arrays to allow for listing in custom order
-            foreach (string attributeToSave in listEntry.PropertiesForSerializationAttributes())
+            foreach (string attributeToSave in databasePackageOfDefaultValues.PropertiesForSerializationAttributes())
             {
-                PropertyInfo propertyOfPackage = listEntry.GetType().GetProperty(attributeToSave);
+                PropertyInfo propertyOfPackage = databasePackageOfDefaultValues.GetType().GetProperty(attributeToSave);
                 //attributs are value types, so just set it
-                elementContainer.SetAttribute(propertyOfPackage.Name, propertyOfPackage.GetValue(componentToSave).ToString());
+                packageElement.SetAttribute(propertyOfPackage.Name, propertyOfPackage.GetValue(packageToSave).ToString());
             }
         }
         #endregion

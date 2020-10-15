@@ -1024,16 +1024,16 @@ namespace RelhaxModpack.Utilities
         /// <summary>
         /// Attempts to set a property value of a class or structure object instance with the string valueToSet
         /// </summary>
-        /// <param name="componentWithProperty">The class or structure object instance to have property set</param>
-        /// <param name="propertyInfoFromComponent">The property information/metadata of the property to set on the object</param>
+        /// <param name="objectToSetValueOn">The class or structure object instance to have property set</param>
+        /// <param name="propertyInfoOfObject">The property information/metadata of the property to set on the object</param>
         /// <param name="valueToSet">The string version of the value to set</param>
         /// <returns>False if the value could not be set, true otherwise</returns>
-        public static bool SetObjectProperty(object componentWithProperty, PropertyInfo propertyInfoFromComponent, string valueToSet)
+        public static bool SetObjectProperty(object objectToSetValueOn, PropertyInfo propertyInfoOfObject, string valueToSet)
         {
             try
             {
-                var converter = TypeDescriptor.GetConverter(propertyInfoFromComponent.PropertyType);
-                propertyInfoFromComponent.SetValue(componentWithProperty, converter.ConvertFrom(valueToSet));
+                var converter = TypeDescriptor.GetConverter(propertyInfoOfObject.PropertyType);
+                propertyInfoOfObject.SetValue(objectToSetValueOn, converter.ConvertFrom(valueToSet));
                 return true;
             }
             catch (Exception ex)
@@ -1055,7 +1055,7 @@ namespace RelhaxModpack.Utilities
             try
             {
                 newObject = Activator.CreateInstance(objectType);
-                var converter = TypeDescriptor.GetConverter(objectType);
+                TypeConverter converter = TypeDescriptor.GetConverter(objectType);
                 newObject = converter.ConvertFrom(valueToSet);
                 return true;
             }
@@ -1070,13 +1070,13 @@ namespace RelhaxModpack.Utilities
         /// <summary>
         /// Creates all database entries in a list property, parsing each list entry object by xmlListItems
         /// </summary>
-        /// <param name="componentWithID">The database component with the list property, for example SelectablePackage</param>
+        /// <param name="databasePackageObject">The database package object with the list property, for example SelectablePackage</param>
         /// <param name="listPropertyInfo">The property metadata/info about the list property, for example Medias</param>
         /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
-        public static void SetListEntries(IDatabaseComponent componentWithID, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
+        public static void SetListEntries(IDatabaseComponent databasePackageObject, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
         {
             //get the list interfaced component
-            IList listProperty = listPropertyInfo.GetValue(componentWithID) as IList;
+            IList listProperty = listPropertyInfo.GetValue(databasePackageObject) as IList;
 
             //we now have the empty list, now get type of list it is
             //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
@@ -1125,7 +1125,7 @@ namespace RelhaxModpack.Utilities
                     if (property == null)
                     {
                         Logging.Error("Property (xml attribute) {0} exists in array for serialization, but not in class design!, ", listEntryAttribute.Name.LocalName);
-                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
                         continue;
                     }
 
@@ -1135,7 +1135,7 @@ namespace RelhaxModpack.Utilities
                     if (!SetObjectProperty(listEntry, property, listEntryAttribute.Value))
                     {
                         Logging.Error("Failed to set property {0} for element in IList", property.Name);
-                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
                     }
                 }
 
@@ -1152,7 +1152,7 @@ namespace RelhaxModpack.Utilities
                     if (property == null)
                     {
                         Logging.Error("Property (xml element) {0} exists in array for serialization, but not in class design!, ", listEntryElement.Name.LocalName);
-                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
                         continue;
                     }
 
@@ -1161,22 +1161,22 @@ namespace RelhaxModpack.Utilities
                     if (!SetObjectProperty(listEntry, property, listEntryElement.Value))
                     {
                         Logging.Error("Failed to set property {0} for element in IList", property.Name);
-                        Logging.Error("Package: {0}, line: {1}", componentWithID.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
                     }
                 }
 
                 //logging unknown and missings
                 foreach (string missingAttribute in missingAttributes)
                 {
-                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", missingAttribute, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", missingAttribute, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
                 }
                 foreach (string unknownAttribute in unknownAttributes)
                 {
-                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
                 }
                 foreach (string unknownElement in unknownElements)
                 {
-                    Logging.Error("Unknown xml element: {0}, package: {1}, line: {2}", unknownElement, componentWithID.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Unknown xml element: {0}, package: {1}, line: {2}", unknownElement, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
                 }
 
                 listProperty.Add(listEntry);
