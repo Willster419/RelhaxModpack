@@ -1085,18 +1085,12 @@ namespace RelhaxModpack.Windows
             }
 
             ReportProgress("Checking for duplicate database UID entries");
-            List<DatabasePackage> duplicatesList = DatabaseUtils.CheckForDuplicateUIDsPackageList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck);
-            if (duplicatesList.Count == 0)
-            {
-                ReportProgress("No duplicates");
-            }
-            else
+            List<DatabasePackage> duplicatesList = DatabaseUtils.CheckForDuplicateUIDsPackageList(globalDependencies, dependencies, parsedCategoryList);
+            if (duplicatesList.Count > 0)
             {
                 ReportProgress("ERROR: The following packages are duplicate UIDs:");
                 foreach (DatabasePackage package in duplicatesList)
                     ReportProgress(string.Format("PackageName: {0}, UID: {1}", package.PackageName, package.UID));
-                ToggleUI((TabController.SelectedItem as TabItem), true);
-                return;
             }
 
             ReportProgress("No duplicates found");
@@ -1191,9 +1185,12 @@ namespace RelhaxModpack.Windows
                     ReportProgress(string.Format("After package:  PackageName = {0}, UID = {1}", beforeAfter.After.PackageName, beforeAfter.After.UID));
                     string dialog = string.Format("Package {01} had a UID change:\nBefore: {1}\nAfter{2}\nIs this known?",
                         beforeAfter.Before.PackageName, beforeAfter.Before.UID, beforeAfter.After.UID);
+
                     if (MessageBox.Show(dialog, "Interesting", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    {
                         ToggleUI((TabController.SelectedItem as TabItem), true);
-                    return;
+                        return;
+                    }
                 }
             }
 
