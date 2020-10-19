@@ -1076,6 +1076,22 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
+
+            ReportProgress("Checking for duplicate database UID entries");
+            List<DatabasePackage> duplicatesList = DatabaseUtils.CheckForDuplicateUIDsPackageList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck);
+            if (duplicatesList.Count == 0)
+            {
+                ReportProgress("No duplicates");
+            }
+            else
+            {
+                ReportProgress("ERROR: The following packages are duplicate UIDs:");
+                foreach (DatabasePackage package in duplicatesList)
+                    ReportProgress(string.Format("PackageName: {0}, UID: {1}", package.PackageName, package.UID));
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
             ReportProgress("No duplicates found");
 
             SetProgress(30);
@@ -1161,14 +1177,17 @@ namespace RelhaxModpack.Windows
 
             if(packagesWithChangedUIDs.Count > 0)
             {
-                ReportProgress("ERROR: The following packages have UIDs changed! This is not allowed!");
+                ReportProgress("A package had a UID change");
                 foreach (DatabaseBeforeAfter2 beforeAfter in packagesWithChangedUIDs)
                 {
                     ReportProgress(string.Format("Before package: PackageName = {0}, UID = {1}",beforeAfter.Before.PackageName, beforeAfter.Before.UID));
                     ReportProgress(string.Format("After package:  PackageName = {0}, UID = {1}", beforeAfter.After.PackageName, beforeAfter.After.UID));
+                    string dialog = string.Format("Package {01} had a UID change:\nBefore: {1}\nAfter{2}\nIs this known?",
+                        beforeAfter.Before.PackageName, beforeAfter.Before.UID, beforeAfter.After.UID);
+                    if (MessageBox.Show(dialog, "Interesting", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                        ToggleUI((TabController.SelectedItem as TabItem), true);
+                    return;
                 }
-                ToggleUI((TabController.SelectedItem as TabItem), true);
-                return;
             }
 
             //check if any packages are missing UIDs
