@@ -126,6 +126,10 @@ namespace RelhaxModpack
                         Logging.Info(LogOptions.ClassName, "{0}, forcing folder path as {1}", commandArg, ModpackToolbox.HardCodeRepoPath);
                         ModpackToolbox.UseHardCodePath = true;
                         break;
+                    case "toolbox-hardcode-path":
+                        Logging.Info(LogOptions.ClassName, "{0}, forcing folder path as {1}", commandArg, ModpackToolbox.HardCodeRepoPath);
+                        ModpackToolbox.UseHardCodePath = true;
+                        break;
                     case "database-editor":
                         ApplicationMode = ApplicationMode.Editor;
                         Logging.Info(LogOptions.ClassName, "{0}, loading in database edit mode", commandArg);
