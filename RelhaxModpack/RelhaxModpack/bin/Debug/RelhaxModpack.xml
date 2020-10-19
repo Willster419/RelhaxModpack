@@ -839,13 +839,12 @@
             <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
             <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetFlatList(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetFlatList(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
             <summary>
             Returns a flat list of the given recursive lists, in the order that the parameters are stated
             </summary>
             <param name="globalDependnecies">The list of global dependences</param>
             <param name="dependencies">The list of dependencies</param>
-            <param name="logicalDependencies">The list of logical dependencies</param>
             <param name="parsedCategoryList">The list of Categories</param>
             <returns>The flat list</returns>
             <remarks>In the case of Categories, the flat list has the sub-level packages added at the level of the parent</remarks>
