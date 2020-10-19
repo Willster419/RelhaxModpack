@@ -108,6 +108,13 @@ namespace RelhaxModpack.Windows
                 LoadedTriggersComboBox.Items.Add(t.Name);
             }
 
+            //load the tag box with tag options
+            LoadedTagsComboBox.Items.Clear();
+            foreach (PackageTags packageTag in CommonUtils.GetEnumList<PackageTags>())
+            {
+                LoadedTagsComboBox.Items.Add(packageTag);
+            }
+
             //init timers
             ReselectOldItem = new DispatcherTimer(TimeSpan.FromMilliseconds(50), DispatcherPriority.Normal, AwesomeHack_Tick, this.Dispatcher) { IsEnabled = false };
             DragDropTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, OnDragDropTimerTick, this.Dispatcher) { IsEnabled = false };
@@ -538,10 +545,11 @@ namespace RelhaxModpack.Windows
                     }
                     else if (element is ComboBox cbox)
                     {
+                        //don't clear these, they are static. just un-select anything that could be selected
                         if (cbox.Name.Equals(nameof(PackageInstallGroupDisplay)) || cbox.Name.Equals(nameof(PackagePatchGroupDisplay)) ||
                             cbox.Name.Equals(nameof(LoadedDependenciesList)) || cbox.Name.Equals(nameof(LoadedTriggersComboBox)) ||
                             cbox.Name.Equals(nameof(LoadedLogicsList)) || cbox.Name.Equals(nameof(PackageTypeDisplay)) ||
-                            cbox.Name.Equals(nameof(MediaTypesList)))
+                            cbox.Name.Equals(nameof(MediaTypesList)) || cbox.Name.Equals(nameof(LoadedTagsComboBox)))
                         {
                             cbox.SelectedIndex = -1;
                             continue;
@@ -609,6 +617,7 @@ namespace RelhaxModpack.Windows
                     ApplyButton.IsEnabled = true;
                     ZipDownload.IsEnabled = true;
                     ZipUload.IsEnabled = true;
+
                     //all have internal notes and triggers
                     foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(TriggersTab, false))
                     {
@@ -620,6 +629,12 @@ namespace RelhaxModpack.Windows
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
                     }
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(TagsTab, false))
+                    {
+                        if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                            control.IsEnabled = true;
+                    }
+
                     if (package is Dependency dependency || package is SelectablePackage spackage)
                     {
                         //dependency and selectable package both have dependencies
@@ -628,12 +643,14 @@ namespace RelhaxModpack.Windows
                             if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                 control.IsEnabled = true;
                         }
+
                         //conflicting packages gets used for showing elements that are used by the dependency
                         foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(ConflictingPackagesTab, false))
                         {
                             if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                 control.IsEnabled = true;
                         }
+
                         if (package is SelectablePackage)
                         {
                             //enable remaining elements on basic tab
@@ -645,6 +662,7 @@ namespace RelhaxModpack.Windows
                             PackageGreyAreaModDisplay.IsEnabled = true;
                             PackageObfuscatedModDisplay.IsEnabled = true;
                             PackageFromWGmodsDisplay.IsEnabled = true;
+
                             //enable remaining tabs
                             foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(DescriptionTab, false))
                             {
@@ -886,6 +904,10 @@ namespace RelhaxModpack.Windows
             foreach (string s in package.TriggersList)
                 PackageTriggersDisplay.Items.Add(s);
 
+            //tags (list was cleared like triggers from ResetRightPanels()
+            foreach (PackageTags packageTag in package.Tags)
+                PackageTagsDisplay.Items.Add(packageTag);
+
             //then handle if dependency
             if (package is Dependency dependency)
             {
@@ -1105,6 +1127,8 @@ namespace RelhaxModpack.Windows
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
             package.InternalNotes = MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
             package.Triggers = string.Join(",", PackageTriggersDisplay.Items.Cast<string>());
+            package.Tags.Clear();
+            package.Tags.AddRange(PackageTagsDisplay.Items.Cast<PackageTags>());
 
             //if the zipfile was updated, then update the last modified date
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
@@ -1196,6 +1220,27 @@ namespace RelhaxModpack.Windows
                 i++;
             }
 
+            return false;
+        }
+
+        private bool TagsWereModified(PackageTagsList packageTagsList)
+        {
+            //first check if the list counts differ
+            if (packageTagsList.Count() != PackageTagsDisplay.Items.Count)
+                return true;
+
+            //the order could have changed, which is still worth noting
+            //check between the UI box and the package to save, tag by tag
+            int i = 0;
+            foreach (PackageTags packageTag in PackageTagsDisplay.Items)
+            {
+                if (!packageTag.Equals(packageTagsList[i]))
+                    return true;
+
+                i++;
+            }
+
+            //welp guess they're equal
             return false;
         }
 
@@ -1301,6 +1346,9 @@ namespace RelhaxModpack.Windows
                 return true;
 
             if (TriggersWereModified(package.TriggersList))
+                return true;
+
+            if (TagsWereModified(package.Tags))
                 return true;
 
             if (package is IComponentWithDependencies componentWithDependencies)
@@ -2659,6 +2707,47 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
+        #region Tags modify buttons
+        private void TagAddSelectedTag_Click(object sender, RoutedEventArgs e)
+        {
+            //verify that a tag from the list is selected
+            if (LoadedTagsComboBox.SelectedIndex == -1)
+            {
+                MessageBox.Show("No tag selected to add");
+                return;
+            }
+
+            //verify that tag to add does not already exist in it
+            foreach (PackageTags packageTag in PackageTagsDisplay.Items)
+            {
+                if (packageTag.Equals((PackageTags)LoadedTagsComboBox.SelectedItem))
+                {
+                    MessageBox.Show("Tag already exists in package");
+                    return;
+                }
+            }
+
+            //valid add
+            Logging.Editor("Adding tag '{0}'", LogLevel.Info, LoadedTagsComboBox.SelectedItem);
+            PackageTagsDisplay.Items.Add(LoadedTagsComboBox.SelectedItem);
+            UnsavedChanges = true;
+        }
+
+        private void TagRemoveTag_Click(object sender, RoutedEventArgs e)
+        {
+            if (PackageTagsDisplay.SelectedItem == null)
+            {
+                MessageBox.Show("No tag selected to remove");
+                return;
+            }
+
+            //valid remove
+            Logging.Editor("Removing tag from PackageTagsDisplay: '{0}'", LogLevel.Info, PackageTagsDisplay.SelectedItem);
+            PackageTagsDisplay.Items.Remove(PackageTagsDisplay.SelectedItem);
+            UnsavedChanges = true;
+        }
+        #endregion
+
         #region Settings tab events
         private void BigmodsUsernameSetting_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -2986,20 +3075,5 @@ namespace RelhaxModpack.Windows
             }, System.Windows.Threading.DispatcherPriority.Background);
         }
         #endregion
-
-        private void PackageTagsDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void TagAddSelectedTag_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void TagRemoveTag_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
