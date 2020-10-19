@@ -956,13 +956,20 @@ namespace RelhaxModpack.Windows
                 }
                 if(!filesActuallyInFolder.Contains(s))
                 {
-                    ReportProgress(string.Format("skipping file {0}, does not exist", s));
+                    ReportProgress(string.Format("Skipping file {0}, does not exist", s));
                     count++;
                     continue;
                 }
                 ReportProgress(string.Format("Deleting file {0} of {1}, {2}", count++, filesToDelete.Count, s));
-                await FtpUtils.FtpDeleteFileAsync(string.Format("{0}{1}/{2}",
-                    PrivateStuff.BigmodsFTPRootWoT, selectedVersionInfos.WoTOnlineFolderVersion, s), PrivateStuff.BigmodsNetworkCredential);
+                try
+                {
+                    await FtpUtils.FtpDeleteFileAsync(string.Format("{0}{1}/{2}",
+                        PrivateStuff.BigmodsFTPRootWoT, selectedVersionInfos.WoTOnlineFolderVersion, s), PrivateStuff.BigmodsNetworkCredential);
+                }
+                catch
+                {
+                    ReportProgress("Failed to delete file");
+                }
             }
             CleanZipFoldersTextbox.Clear();
             CleanFoldersOnlineCancelStep3.Visibility = Visibility.Hidden;
