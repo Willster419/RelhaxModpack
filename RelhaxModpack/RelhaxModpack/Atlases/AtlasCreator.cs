@@ -1,5 +1,6 @@
 ﻿using RelhaxModpack.Atlases.Packing;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Xml;
 using System;
 using System.Collections.Generic;
@@ -18,62 +19,6 @@ using TeximpNet.Compression;
 
 namespace RelhaxModpack.Atlases
 {
-    /// <summary>
-    /// List of possible areas in the Atlas creation process where it could fail
-    /// </summary>
-    public enum FailCode
-    {
-        /// <summary>
-        /// No error occurred
-        /// </summary>
-        None = 0,
-
-        /// <summary>
-        /// Failed to import the DDS image file to a bitmap object
-        /// </summary>
-        ImageImporter,
-
-        /// <summary>
-        /// Failed to export the bitmap object to a DDS image file
-        /// </summary>
-        ImageExporter,
-
-        /// <summary>
-        /// Failed to load and parse the WG xml atlas map
-        /// </summary>
-        MapImporter,
-
-        /// <summary>
-        /// Failed to parse and save the WG xml atlas map
-        /// </summary>
-        MapExporter,
-
-        /// <summary>
-        /// No images to build for the atlas
-        /// </summary>
-        NoImages,
-
-        /// <summary>
-        /// Duplicate image names in list of images to pack
-        /// </summary>
-        ImageNameCollision,
-
-        /// <summary>
-        /// Failed to pack the images into one large image (most likely they don't fit into the provided dimensions)
-        /// </summary>
-        FailedToPackImage,
-
-        /// <summary>
-        /// Failed to compress an atlas that requires over the 2GB process limit on 32bit systems
-        /// </summary>
-        OutOfMemory32bit,
-
-        /// <summary>
-        /// Failed to create the atlas bitmap object
-        /// </summary>
-        FailedToCreateBitmapAtlas
-    }
-
     /// <summary>
     /// The delegate to invoke when calling back to the sender for the AtlasProgres event
     /// </summary>
@@ -153,7 +98,7 @@ namespace RelhaxModpack.Atlases
             if(string.IsNullOrEmpty(Atlas.TempAtlasMapFilePath))
                 Atlas.TempAtlasMapFilePath = Path.Combine(Settings.RelhaxTempFolderPath, Atlas.MapFile);
 
-            //prepare the filesystem
+            //prepare the temp and output directories (lock to prevent multiple threads creating folders. Could get messy.
             lock (AtlasUtils.AtlasLoaderLockObject)
             {
                 //create temp directory if it does not already exist
@@ -175,8 +120,6 @@ namespace RelhaxModpack.Atlases
             stopwatch.Restart();
 
             //extract the map and atlas files
-            //because of the potential to use the same package for multiple threads, it's safer to do one at a time
-            //but it's fine cause these are quick so no big deal
             Logging.Info("[atlas file {0}]: Unpack of atlas and map starting", Atlas.AtlasFile);
             Logging.Debug("[atlas file {0}]: Atlas file unpack: pkg={1}, sourcePath={2}, dest={3}",
                 Path.GetFileName(Atlas.AtlasFile), Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.AtlasFile), Atlas.TempAtlasImageFilePath);
@@ -189,6 +132,7 @@ namespace RelhaxModpack.Atlases
 
             Logging.Debug("[atlas file {0}]: Map file unpack: pkg={1}, sourcePath={2}, dest={3}",
                 Path.GetFileName(Atlas.AtlasFile), Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), Atlas.TempAtlasMapFilePath);
+            //because of the potential to use the same package for multiple threads, it's safer to do one at a time
             lock (AtlasUtils.AtlasLoaderLockObject)
             {
                 FileUtils.Unpack(Atlas.Pkg, Path.Combine(Atlas.DirectoryInArchive, Atlas.MapFile), Atlas.TempAtlasMapFilePath);
@@ -214,9 +158,9 @@ namespace RelhaxModpack.Atlases
             //using the parsed size and location definitions from above, copy each individual sub-texture to the texture list
             Logging.Info("[atlas file {0}]: Parsing atlas to bitmap data", Atlas.AtlasFile);
             Logging.Debug("[atlas file {0}]: Using atlas file {1}", Atlas.AtlasFile, Atlas.TempAtlasImageFilePath);
+            //the native library can only be used once at a time
             lock (AtlasUtils.AtlasLoaderLockObject)
             {
-                //the native library can only be used once at a time
                 atlasImage = imageHandler.LoadDDS(Atlas.TempAtlasImageFilePath);
             }
             OnAtlasProgres?.Invoke(this, null);
@@ -252,44 +196,21 @@ namespace RelhaxModpack.Atlases
             //copy the sub-texture bitmap data to each texture bitmap data
             stopwatch.Start();
             Logging.Info("[atlas file {0}]: Parsing bitmap data", Atlas.AtlasFile);
-            lock (AtlasUtils.AtlasLoaderLockObject)
+            //get the overall size of the bitmap
+            Rectangle rect = new Rectangle(0, 0, atlasImage.Width, atlasImage.Height);
+            foreach (Texture texture in Atlas.TextureList)
             {
-                //lock the atlas image into memory
-                Rectangle rect = new Rectangle(0, 0, atlasImage.Width, atlasImage.Height);
-                BitmapData atlasLock = atlasImage.LockBits(rect, ImageLockMode.ReadOnly, atlasImage.PixelFormat);
-                foreach (Texture texture in Atlas.TextureList)
-                {
-                    Token.ThrowIfCancellationRequested();
-                    //copy the texture bitmap data into the texture bitmap object
-                    //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.clone?redirectedfrom=MSDN&view=netframework-4.8#System_Drawing_Bitmap_Clone_System_Drawing_Rectangle_System_Drawing_Imaging_PixelFormat_
-                    //rectangle of desired area to clone
-                    Rectangle textureRect = new Rectangle(texture.X, texture.Y, texture.Width, texture.Height);
-                    //copy the bitmap
-                    try
-                    {
-                        texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
-                        //do a quick lock on the bits to ensure that the image data is deep copied
-                        //https://stackoverflow.com/a/13935966/3128017
-                        BitmapData data = texture.AtlasImage.LockBits(new Rectangle(0, 0, texture.AtlasImage.Width, texture.AtlasImage.Height), ImageLockMode.ReadOnly, texture.AtlasImage.PixelFormat);
-                        texture.AtlasImage.UnlockBits(data);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logging.Exception("Failed to clone atlas image data");
-                        Logging.Exception(ex.ToString());
-                        try
-                        {
-                            atlasImage.UnlockBits(atlasLock);
-                            atlasImage.Dispose();
-                        }
-                        catch
-                        { }
-                        return FailCode.ImageImporter;
-                    }
-                }
-                atlasImage.UnlockBits(atlasLock);
-                atlasImage.Dispose();
+                Rectangle textureRect = new Rectangle(texture.X, texture.Y, texture.Width, texture.Height);
+                //copy the texture bitmap data from the atlas bitmap into the texture bitmap
+                //https://docs.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.clone?redirectedfrom=MSDN&view=netframework-4.8#System_Drawing_Bitmap_Clone_System_Drawing_Rectangle_System_Drawing_Imaging_PixelFormat
+                texture.AtlasImage = atlasImage.Clone(textureRect, atlasImage.PixelFormat);
+                //do a quick lock on the bits to ensure that the image data is deep copied. Clone() seems to only shallow copy
+                //https://stackoverflow.com/a/13935966/3128017
+                BitmapData data = texture.AtlasImage.LockBits(new Rectangle(0, 0, texture.AtlasImage.Width, texture.AtlasImage.Height), ImageLockMode.ReadOnly, texture.AtlasImage.PixelFormat);
+                texture.AtlasImage.UnlockBits(data);
             }
+            //dispose of the original cause now we're done with it
+            atlasImage.Dispose();
             OnAtlasProgres?.Invoke(this, null);
             Token.ThrowIfCancellationRequested();
             stopwatch.Stop();
@@ -348,7 +269,7 @@ namespace RelhaxModpack.Atlases
             Logging.Info("[atlas file {0}]: Atlas image packing starting", Atlas.AtlasFile);
             FailCode result = imagePacker.PackImage(Atlas.TextureList, Atlas.PowOf2, Atlas.Square, Atlas.FastImagePacker, Atlas.AtlasWidth, Atlas.AtlasHeight,
 #pragma warning disable IDE0068 // Use recommended dispose pattern
-                Atlas.Padding, out Bitmap outputImage, out Dictionary<string, Rectangle> outputMap);
+                Atlas.Padding, Atlas.AtlasFile, out Bitmap outputImage, out Dictionary<string, Rectangle> outputMap);
 #pragma warning restore IDE0068 // Use recommended dispose pattern
             OnAtlasProgres?.Invoke(this, null);
             if (result != 0)

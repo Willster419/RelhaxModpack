@@ -3,45 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Utilities
 {
-    /// <summary>
-    /// The types of text macro replacements
-    /// </summary>
-    public enum ReplacementTypes
-    {
-        /// <summary>
-        /// Replacing macros with file paths
-        /// </summary>
-        FilePath,
-
-        /// <summary>
-        /// Replacing patch arguments of the patch object
-        /// </summary>
-        PatchArguementsReplace,
-
-        /// <summary>
-        /// Replacing modpack created macros (like [quote]) with the corresponding characters
-        /// </summary>
-        PatchFiles,
-
-        /// <summary>
-        /// Replacing literal interpretations of special characters like newline and tab with escaped versions
-        /// </summary>
-        TextEscape,
-
-        /// <summary>
-        /// Replacing escaped versions of special characters like newline and tab with the literal interpretations
-        /// </summary>
-        TextUnescape,
-
-        /// <summary>
-        /// Replacing zip path macros with absolute extraction paths
-        /// </summary>
-        ZipFilePath
-    }
-
     /// <summary>
     /// A utility class to handle macros
     /// </summary>
@@ -151,7 +116,7 @@ namespace RelhaxModpack.Utilities
             }
             if (dictionary == null)
             {
-                Logging.Error("macro replace dictionary is null! type={0}", type.ToString());
+                Logging.Error("Macro replace dictionary is null! type={0}", type.ToString());
                 return inputString;
             }
             for (int i = 0; i < dictionary.Count; i++)
@@ -160,7 +125,7 @@ namespace RelhaxModpack.Utilities
                 string replace = dictionary.ElementAt(i).Value;
                 //https://stackoverflow.com/questions/444798/case-insensitive-containsstring
                 //it's an option, not actually used here cause it would be a lot of work to implement
-                //could also try regex, may be easlier to ignore case, but then might have to make it an option
+                //could also try regex, may be easier to ignore case, but then might have to make it an option
                 //so for now, no
                 if (inputString.Contains(key))
                     inputString = inputString.Replace(key, replace);

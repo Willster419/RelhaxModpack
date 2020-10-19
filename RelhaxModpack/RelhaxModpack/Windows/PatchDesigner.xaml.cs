@@ -13,6 +13,7 @@ using System.Text;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Patches;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Windows
 {

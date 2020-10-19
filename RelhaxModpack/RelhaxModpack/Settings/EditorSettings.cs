@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Xml;
+﻿using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Xml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,27 +8,6 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack
 {
-    /// <summary>
-    /// The different ways that the apply and save database buttons can interact
-    /// </summary>
-    public enum ApplyBehavior
-    {
-        /// <summary>
-        /// Default behavior. The buttons do not interact.
-        /// </summary>
-        Default,
-
-        /// <summary>
-        /// When you click the apply button, it also saves the database after, to the default save location.
-        /// </summary>
-        ApplyTriggersSave,
-
-        /// <summary>
-        /// When you click the save button, it also clicks the apply button before saving.
-        /// </summary>
-        SaveTriggersApply
-    }
-
     /// <summary>
     /// The settings used in the editor window
     /// </summary>
@@ -72,11 +52,6 @@ namespace RelhaxModpack
         /// The timeout, in seconds, until the FTP upload or download window will close. Set to 0 to disable timeout.
         /// </summary>
         public uint FTPUploadDownloadWindowTimeout = 0;
-
-        /// <summary>
-        /// The form to save the database in when "save as" is pressed
-        /// </summary>
-        public DatabaseXmlVersion SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
 
         /// <summary>
         /// The directory where the auto updater will download, modify, and upload files to/from

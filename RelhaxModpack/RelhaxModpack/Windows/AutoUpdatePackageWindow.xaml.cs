@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Xml;
 using RelhaxModpack.UI;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Windows
 {

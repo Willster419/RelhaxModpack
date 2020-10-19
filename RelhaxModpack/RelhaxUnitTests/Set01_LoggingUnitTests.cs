@@ -4,6 +4,7 @@ using RelhaxModpack;
 using System.Collections;
 using System.Linq;
 using System.Diagnostics;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxUnitTests
 {

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.UI
 {
@@ -152,9 +153,9 @@ namespace RelhaxModpack.UI
             }), null);
 
             Dispatcher.PushFrame(frame);
+
             //EDIT:
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
-                                          new Action(delegate { }));
+            Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, new Action(delegate { }));
         }
 
         /// <summary>

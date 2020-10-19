@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 using Trigger = RelhaxModpack.Database.Trigger;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Windows
 {
@@ -107,6 +108,13 @@ namespace RelhaxModpack.Windows
                 LoadedTriggersComboBox.Items.Add(t.Name);
             }
 
+            //load the tag box with tag options
+            LoadedTagsComboBox.Items.Clear();
+            foreach (PackageTags packageTag in CommonUtils.GetEnumList<PackageTags>())
+            {
+                LoadedTagsComboBox.Items.Add(packageTag);
+            }
+
             //init timers
             ReselectOldItem = new DispatcherTimer(TimeSpan.FromMilliseconds(50), DispatcherPriority.Normal, AwesomeHack_Tick, this.Dispatcher) { IsEnabled = false };
             DragDropTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, OnDragDropTimerTick, this.Dispatcher) { IsEnabled = false };
@@ -191,12 +199,12 @@ namespace RelhaxModpack.Windows
 
         private int GetMaxPatchGroups()
         {
-            return DatabaseUtils.GetMaxPatchGroupNumber(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+            return DatabaseUtils.GetMaxPatchGroupNumber(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList));
         }
 
         private int GetMaxInstallGroups()
         {
-            return DatabaseUtils.GetMaxInstallGroupNumber(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+            return DatabaseUtils.GetMaxInstallGroupNumber(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList));
         }
 
         private SelectablePackage GetSelectablePackage(object obj)
@@ -300,7 +308,7 @@ namespace RelhaxModpack.Windows
             //load the install and patch groups
             InstallGroupsTreeView.Items.Clear();
             //make a flat list (can be used in patchGroup as well)
-            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
+            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, dependnecies, parsedCategoryList);
             //make an array of group headers
             TreeViewItem[] installGroupHeaders = new TreeViewItem[DatabaseUtils.GetMaxInstallGroupNumberWithOffset(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal install group number
@@ -330,7 +338,7 @@ namespace RelhaxModpack.Windows
             //do the same for patchgroups
             PatchGroupsTreeView.Items.Clear();
             //make a flat list (can be used in patchGroup as well)
-            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, dependnecies, null, parsedCategoryList);
+            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, dependnecies, parsedCategoryList);
             TreeViewItem[] patchGroupHeaders = new TreeViewItem[DatabaseUtils.GetMaxPatchGroupNumber(allFlatList) + 1];
             //for each group header, get the list of packages that have an equal patch group number
             PackagePatchGroupDisplay.Items.Clear();
@@ -380,8 +388,6 @@ namespace RelhaxModpack.Windows
             DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
             FtpUpDownAutoCloseTimoutSlider.Value = EditorSettings.FTPUploadDownloadWindowTimeout;
             FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
-            SaveDatabaseLegacySetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.Legacy ? true : false;
-            SaveDatabaseOnePointOneSetting.IsChecked = EditorSettings.SaveAsDatabaseVersion == DatabaseXmlVersion.OnePointOne ? true : false;
             SelectAutoUpdateWorkDirectoryTextbox.Text = EditorSettings.AutoUpdaterWorkDirectory;
         }
         #endregion
@@ -459,19 +465,11 @@ namespace RelhaxModpack.Windows
 
         }
 
-        private void SaveDatabaseSetting_Checked(object sender, RoutedEventArgs e)
-        {
-            if ((bool)SaveDatabaseLegacySetting.IsChecked)
-                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.Legacy;
-            else if ((bool)SaveDatabaseOnePointOneSetting.IsChecked)
-                EditorSettings.SaveAsDatabaseVersion = DatabaseXmlVersion.OnePointOne;
-        }
-
         private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
         {
             AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
             {
-                Packages = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList),
+                Packages = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList),
                 WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
             };
@@ -547,10 +545,11 @@ namespace RelhaxModpack.Windows
                     }
                     else if (element is ComboBox cbox)
                     {
+                        //don't clear these, they are static. just un-select anything that could be selected
                         if (cbox.Name.Equals(nameof(PackageInstallGroupDisplay)) || cbox.Name.Equals(nameof(PackagePatchGroupDisplay)) ||
                             cbox.Name.Equals(nameof(LoadedDependenciesList)) || cbox.Name.Equals(nameof(LoadedTriggersComboBox)) ||
                             cbox.Name.Equals(nameof(LoadedLogicsList)) || cbox.Name.Equals(nameof(PackageTypeDisplay)) ||
-                            cbox.Name.Equals(nameof(MediaTypesList)))
+                            cbox.Name.Equals(nameof(MediaTypesList)) || cbox.Name.Equals(nameof(LoadedTagsComboBox)))
                         {
                             cbox.SelectedIndex = -1;
                             continue;
@@ -618,6 +617,7 @@ namespace RelhaxModpack.Windows
                     ApplyButton.IsEnabled = true;
                     ZipDownload.IsEnabled = true;
                     ZipUload.IsEnabled = true;
+
                     //all have internal notes and triggers
                     foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(TriggersTab, false))
                     {
@@ -629,6 +629,12 @@ namespace RelhaxModpack.Windows
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
                     }
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(TagsTab, false))
+                    {
+                        if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                            control.IsEnabled = true;
+                    }
+
                     if (package is Dependency dependency || package is SelectablePackage spackage)
                     {
                         //dependency and selectable package both have dependencies
@@ -637,12 +643,14 @@ namespace RelhaxModpack.Windows
                             if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                 control.IsEnabled = true;
                         }
+
                         //conflicting packages gets used for showing elements that are used by the dependency
                         foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(ConflictingPackagesTab, false))
                         {
                             if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                                 control.IsEnabled = true;
                         }
+
                         if (package is SelectablePackage)
                         {
                             //enable remaining elements on basic tab
@@ -654,6 +662,7 @@ namespace RelhaxModpack.Windows
                             PackageGreyAreaModDisplay.IsEnabled = true;
                             PackageObfuscatedModDisplay.IsEnabled = true;
                             PackageFromWGmodsDisplay.IsEnabled = true;
+
                             //enable remaining tabs
                             foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(DescriptionTab, false))
                             {
@@ -895,6 +904,10 @@ namespace RelhaxModpack.Windows
             foreach (string s in package.TriggersList)
                 PackageTriggersDisplay.Items.Add(s);
 
+            //tags (list was cleared like triggers from ResetRightPanels()
+            foreach (PackageTags packageTag in package.Tags)
+                PackageTagsDisplay.Items.Add(packageTag);
+
             //then handle if dependency
             if (package is Dependency dependency)
             {
@@ -1064,7 +1077,7 @@ namespace RelhaxModpack.Windows
             if (!PackagePackageNameDisplay.Text.Equals(package.PackageName))
             {
                 Logging.Editor("PackageName is new, checking if it is unique");
-                if (DatabaseUtils.IsDuplicateName(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList), PackagePackageNameDisplay.Text))
+                if (DatabaseUtils.IsDuplicateName(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList), PackagePackageNameDisplay.Text))
                 {
                     MessageBox.Show(string.Format("Duplicate packageName: {0} is already used", PackagePackageNameDisplay.Text));
                     return false;
@@ -1114,6 +1127,8 @@ namespace RelhaxModpack.Windows
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
             package.InternalNotes = MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
             package.Triggers = string.Join(",", PackageTriggersDisplay.Items.Cast<string>());
+            package.Tags.Clear();
+            package.Tags.AddRange(PackageTagsDisplay.Items.Cast<PackageTags>());
 
             //if the zipfile was updated, then update the last modified date
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
@@ -1205,6 +1220,27 @@ namespace RelhaxModpack.Windows
                 i++;
             }
 
+            return false;
+        }
+
+        private bool TagsWereModified(PackageTagsList packageTagsList)
+        {
+            //first check if the list counts differ
+            if (packageTagsList.Count() != PackageTagsDisplay.Items.Count)
+                return true;
+
+            //the order could have changed, which is still worth noting
+            //check between the UI box and the package to save, tag by tag
+            int i = 0;
+            foreach (PackageTags packageTag in PackageTagsDisplay.Items)
+            {
+                if (!packageTag.Equals(packageTagsList[i]))
+                    return true;
+
+                i++;
+            }
+
+            //welp guess they're equal
             return false;
         }
 
@@ -1312,6 +1348,9 @@ namespace RelhaxModpack.Windows
             if (TriggersWereModified(package.TriggersList))
                 return true;
 
+            if (TagsWereModified(package.Tags))
+                return true;
+
             if (package is IComponentWithDependencies componentWithDependencies)
             {
                 if (DependenciesWereModified(componentWithDependencies.Dependencies))
@@ -1404,12 +1443,12 @@ namespace RelhaxModpack.Windows
                 }
 
                 //also make a new UID for the package as well
-                packageToMove.UID = CommonUtils.GenerateUID(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList));
+                packageToMove.UID = CommonUtils.GenerateUID(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList));
 
                 //the packageName needs to stay unique as well
                 int i = 0;
                 string origName = packageToMove.PackageName;
-                while (DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => package.PackageName.Equals(packageToMove.PackageName)).Count() > 0)
+                while (DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList).Where(package => package.PackageName.Equals(packageToMove.PackageName)).Count() > 0)
                     packageToMove.PackageName = string.Format("{0}_{1}", origName, i++);
                 Logging.Editor("New package name is {0}", LogLevel.Info, packageToMove.PackageName);
             }
@@ -1948,17 +1987,8 @@ namespace RelhaxModpack.Windows
             }
 
             //actually save
-            switch (EditorSettings.SaveAsDatabaseVersion)
-            {
-                case DatabaseXmlVersion.Legacy:
-                    XmlUtils.SaveDatabase(DefaultSaveLocationSetting.Text, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);
-                    break;
-                case DatabaseXmlVersion.OnePointOne:
-                    XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), Settings.BetaDatabaseV2RootFilename),
+            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), Settings.BetaDatabaseV2RootFilename),
                         Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
-                    break;
-            }
 
             UnsavedChanges = false;
         }
@@ -1980,7 +2010,7 @@ namespace RelhaxModpack.Windows
                     DefaultExt = "xml",
                     InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
                     Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
-                    Title = string.Format("Save Database: version = {0}", EditorSettings.SaveAsDatabaseVersion.ToString())
+                    Title = string.Format("Save Database")
                 };
 
             //then show it and only continue if a selection was committed
@@ -1993,17 +2023,8 @@ namespace RelhaxModpack.Windows
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
 
             //actually save
-            switch (EditorSettings.SaveAsDatabaseVersion)
-            {
-                case DatabaseXmlVersion.Legacy:
-                    XmlUtils.SaveDatabase(SaveDatabaseDialog.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
-                GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.Legacy);
-                    break;
-                case DatabaseXmlVersion.OnePointOne:
-                    XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
+            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
                         Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
-                    break;
-            }
 
             UnsavedChanges = false;
         }
@@ -2047,7 +2068,7 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("doc is null from LoadXmlDocument(fileToload, xmlType)");
                 return;
             }
-            if (!XmlUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(fileToLoad)))
+            if (!DatabaseUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(fileToLoad)))
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;
@@ -2089,7 +2110,7 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("doc is null from LoadXmlDocument(fileToload, xmlType)");
                 return;
             }
-            if (!XmlUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+            if (!DatabaseUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;
@@ -2686,6 +2707,47 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
+        #region Tags modify buttons
+        private void TagAddSelectedTag_Click(object sender, RoutedEventArgs e)
+        {
+            //verify that a tag from the list is selected
+            if (LoadedTagsComboBox.SelectedIndex == -1)
+            {
+                MessageBox.Show("No tag selected to add");
+                return;
+            }
+
+            //verify that tag to add does not already exist in it
+            foreach (PackageTags packageTag in PackageTagsDisplay.Items)
+            {
+                if (packageTag.Equals((PackageTags)LoadedTagsComboBox.SelectedItem))
+                {
+                    MessageBox.Show("Tag already exists in package");
+                    return;
+                }
+            }
+
+            //valid add
+            Logging.Editor("Adding tag '{0}'", LogLevel.Info, LoadedTagsComboBox.SelectedItem);
+            PackageTagsDisplay.Items.Add(LoadedTagsComboBox.SelectedItem);
+            UnsavedChanges = true;
+        }
+
+        private void TagRemoveTag_Click(object sender, RoutedEventArgs e)
+        {
+            if (PackageTagsDisplay.SelectedItem == null)
+            {
+                MessageBox.Show("No tag selected to remove");
+                return;
+            }
+
+            //valid remove
+            Logging.Editor("Removing tag from PackageTagsDisplay: '{0}'", LogLevel.Info, PackageTagsDisplay.SelectedItem);
+            PackageTagsDisplay.Items.Remove(PackageTagsDisplay.SelectedItem);
+            UnsavedChanges = true;
+        }
+        #endregion
+
         #region Settings tab events
         private void BigmodsUsernameSetting_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -2788,7 +2850,7 @@ namespace RelhaxModpack.Windows
                 foreach (string searchTerm in SearchBox.Text.Split('*'))
                 {
                     //get a list of components that match the search term
-                    searchComponents.AddRange(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(term => term.PackageName.ToLower().Contains(searchTerm.ToLower())));
+                    searchComponents.AddRange(DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList).Where(term => term.PackageName.ToLower().Contains(searchTerm.ToLower())));
                 }
 
                 //remove duplicates

@@ -5,40 +5,10 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Text;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Database
 {
-    /// <summary>
-    /// The types of UI selections for building the selection tree
-    /// </summary>
-    public enum SelectionTypes
-    {
-        /// <summary>
-        /// Used as catch-all for any mis-assigned selection types
-        /// </summary>
-        none,
-
-        /// <summary>
-        /// A radio button selection (only one of many), can have children
-        /// </summary>
-        single1,
-
-        /// <summary>
-        /// A combobox selection (only one of many), cannot have children
-        /// </summary>
-        single_dropdown1,
-
-        /// <summary>
-        /// Another combobox selection (only one of many), cannot have children
-        /// </summary>
-        single_dropdown2,
-
-        /// <summary>
-        /// A checkbox selection (many of many), can have children
-        /// </summary>
-        multi
-    }
-
     /// <summary>
     /// A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
     /// </summary>
@@ -114,6 +84,7 @@ namespace RelhaxModpack.Database
             InstallGroup = 4;
             PatchGroup = 4;
         }
+
         /// <summary>
         /// The display name of the package
         /// </summary>
@@ -172,7 +143,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Gets a user display formatted version of the UpdateCommentEscaped property, with a timestamp (if available). If no comment, a translated 'noComment' entry is returned
+        /// Gets a user display formatted version of the UpdateCommentEscaped property, with a time stamp (if available). If no comment, a translated 'noComment' entry is returned
         /// </summary>
         /// <seealso cref="UpdateCommentEscaped"/>
         /// <seealso cref="UpdateComment"/>

@@ -15,13 +15,14 @@ using RelhaxModpack.Utilities;
 using RelhaxModpack.Xml;
 using RelhaxModpack.UI;
 using RelhaxModpack.Database;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Windows
 {
     /// <summary>
     /// Interaction logic for DatabaseUpdater.xaml
     /// </summary>
-    public partial class DatabaseUpdater : RelhaxWindow
+    public partial class ModpackToolbox : RelhaxWindow
     {
         #region Constants and statics
         private const string DatabaseUpdateFilename = "databaseUpdate.txt";
@@ -32,6 +33,7 @@ namespace RelhaxModpack.Windows
         private const string RepoLatestDatabaseFolder = "latest_database";
         private const string UpdaterErrorExceptionCatcherLogfile = "UpdaterErrorCatcher.log";
         private const string InstallStatisticsXml = "install_statistics.xml";
+        private const string TranslationsCsv = "translations.csv";
 
         /// <summary>
         /// The current path for Willster419's database repository
@@ -83,7 +85,7 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Password auth stuff
-        private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //check if key filename was changed from command line
             if (!string.IsNullOrWhiteSpace(CommandLineSettings.UpdateKeyFileName))
@@ -95,7 +97,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Updater("File for auth exists, attempting authorization");
                 Logging.Updater(KeyFilename);
-                AttemptAuthFromFile(KeyFilename);
+                await AttemptAuthFromFile(KeyFilename);
             }
             else
             {
@@ -104,21 +106,36 @@ namespace RelhaxModpack.Windows
             loading = false;
         }
 
-        private void PasswordButton_Click(object sender, RoutedEventArgs e)
+        private async void LoadPasswordFromText_Click(object sender, RoutedEventArgs e)
         {
-            AttemptAuthFromString(PaswordTextbox.Text);
+            await AttemptAuthFromString(PaswordTextbox.Text);
         }
 
-        private async Task<bool> AttemptAuthFromFile(string filepath)
+        private async Task AttemptAuthFromFile(string filepath)
         {
-            Logging.Updater("attempting authorization", LogLevel.Info, filepath);
-            return await AttemptAuthFromString(File.ReadAllText(filepath));
+            Logging.Updater("Attempting authorization from file {0}", LogLevel.Info, filepath);
+            await AttemptAuthFromString(File.ReadAllText(filepath));
         }
 
-        private async Task<bool> AttemptAuthFromString(string key)
+        private async Task AttemptAuthFromString(string key)
         {
             AuthStatusTextblock.Text = "Current status: Checking...";
-            AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Yellow);
+            AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Orange);
+
+            //if the user is already authorized, then no reason to check again
+            if(authorized)
+            {
+                Logging.Updater("User is already authorized");
+                AuthStatusTextblock.Text = "Current status: Authorized";
+                AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Green);
+                authorized = true;
+                return;
+            }
+
+            //disable the buttons
+            LoadPasswordFromFileButton.IsEnabled = false;
+            LoadPasswordFromTextButton.IsEnabled = false;
+
             //compare local password to online version
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredentialPrivate })
             {
@@ -129,7 +146,6 @@ namespace RelhaxModpack.Windows
                     AuthStatusTextblock.Text = "Current status: Authorized";
                     AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Green);
                     authorized = true;
-                    return true;
                 }
                 else
                 {
@@ -137,9 +153,12 @@ namespace RelhaxModpack.Windows
                     AuthStatusTextblock.Text = "Current status: Denied";
                     AuthStatusTextblock.Foreground = new SolidColorBrush(Colors.Red);
                     authorized = false;
-                    return false;
                 }
             }
+
+            //enable the buttons again
+            LoadPasswordFromFileButton.IsEnabled = true;
+            LoadPasswordFromTextButton.IsEnabled = true;
         }
         #endregion
 
@@ -148,7 +167,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseUpdater window
         /// </summary>
-        public DatabaseUpdater()
+        public ModpackToolbox()
         {
             InitializeComponent();
         }
@@ -205,7 +224,7 @@ namespace RelhaxModpack.Windows
         private void PaswordTextbox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-                PasswordButton_Click(null, null);
+                LoadPasswordFromText_Click(null, null);
         }
 
         private void ClearLogButton_Click(object sender, RoutedEventArgs e)
@@ -298,7 +317,7 @@ namespace RelhaxModpack.Windows
 
         private void ReportProgress(string message)
         {
-            //reports to the log file and the console otuptu
+            //reports to the log file and the console output
             Logging.Updater(message);
             LogOutput.AppendText(message + "\n");
         }
@@ -399,7 +418,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 ReportProgress("Parsing to lists");
-                return XmlUtils.ParseDatabase1V1FromStrings(globalDependencies1V1, dependnecies1V1, categoriesStrings1V1, globalDependencies, dependencies, parsedCategoryList);
+                return DatabaseUtils.ParseDatabase1V1FromStrings(globalDependencies1V1, dependnecies1V1, categoriesStrings1V1, globalDependencies, dependencies, parsedCategoryList);
             }
         }
 
@@ -422,34 +441,42 @@ namespace RelhaxModpack.Windows
         private void SaveDatabaseText(bool @internal)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
+
             //true = internal, false = user
             string notApplicable = "n/a";
+
             //list creation and parsing
             List<Category> parsecCateogryList = new List<Category>();
             List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
             List<Dependency> dependencies = new List<Dependency>();
+
             XmlDocument doc = new XmlDocument();
             doc.Load(SelectModInfo.FileName);
-            XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList, Path.GetDirectoryName(SelectModInfo.FileName));
+            DatabaseUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList, Path.GetDirectoryName(SelectModInfo.FileName));
+
             //link stuff in memory or something
             DatabaseUtils.BuildLinksRefrence(parsecCateogryList, false);
+
             //create variables
             StringBuilder sb = new StringBuilder();
             string saveLocation = @internal ? System.IO.Path.Combine(Settings.ApplicationStartupPath, "database_internal.csv") :
                 Path.Combine(Settings.ApplicationStartupPath, "database_user.csv");
+
             //global dependencies
-            string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tDevURL\tEnabled\tVisible\tVersion" : "Category\tMod\tDevURL";
+            string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tTags\tDevURL\tEnabled\tVisible\tVersion" : "Category\tMod\tDevURL";
             sb.AppendLine(header);
+
             if(@internal)
             {
                 foreach (DatabasePackage dp in globalDependencies)
                 {
-                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",
                         dp.PackageName,
                         "GlobalDependencies",
                         string.Empty,
                         "0",
                         string.IsNullOrWhiteSpace(dp.ZipFile) ? notApplicable : dp.ZipFile,
+                        dp.Tags.ToString(),
                         string.IsNullOrWhiteSpace(dp.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + dp.DevURLList[0].Trim() + "\",\"link\")",
                         dp.Enabled,
                         string.Empty,
@@ -458,18 +485,20 @@ namespace RelhaxModpack.Windows
                 }
                 foreach (Dependency dep in dependencies)
                 {
-                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",
                         dep.PackageName,
                         "Dependencies",
                         string.Empty,
                         "0",
                         string.IsNullOrWhiteSpace(dep.ZipFile) ? notApplicable : dep.ZipFile,
+                        dep.Tags.ToString(),
                         string.IsNullOrWhiteSpace(dep.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + dep.DevURLList[0].Trim() + "\",\"link\")",
                         dep.Enabled,
                         string.Empty,
                         dep.Version));
                 }
             }
+
             foreach (Category cat in parsecCateogryList)
             {
                 List<SelectablePackage> flatlist = cat.GetFlatPackageList();
@@ -488,12 +517,13 @@ namespace RelhaxModpack.Windows
                     }
                     else
                     {
-                        sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                        sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",
                             sp.PackageName,
                             sp.ParentCategory.Name,
                             sp.NameFormatted,
                             sp.Level,
                             string.IsNullOrWhiteSpace(sp.ZipFile) ? notApplicable : sp.ZipFile,
+                            sp.Tags.ToString(),
                             string.IsNullOrWhiteSpace(sp.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + sp.DevURLList[0].Trim() + "\",\"link\")",
                             sp.Enabled,
                             sp.Visible,
@@ -501,6 +531,7 @@ namespace RelhaxModpack.Windows
                     }
                 }
             }
+
             try
             {
                 File.WriteAllText(saveLocation, sb.ToString());
@@ -513,27 +544,32 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
             }
         }
+
         private void DatabaseOutputStep2a_Click(object sender, RoutedEventArgs e)
         {
             ReportProgress("Generation of internal csv...");
+
             //check
             if (string.IsNullOrEmpty(Settings.WoTClientVersion) || string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("Database not loaded");
                 return;
             }
+
             SaveDatabaseText(true);
         }
 
         private void DatabaseOutputStep2b_Click(object sender, RoutedEventArgs e)
         {
             ReportProgress("Generation of user csv...");
+
             //check
             if (string.IsNullOrEmpty(Settings.WoTClientVersion) || string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("Database not loaded");
                 return;
             }
+
             SaveDatabaseText(false);
         }
         #endregion
@@ -820,7 +856,7 @@ namespace RelhaxModpack.Windows
                 }
                 
                 //parse into lists
-                if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, globalDependencies, dependencies, parsedCategoryList))
+                if (!DatabaseUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, globalDependencies, dependencies, parsedCategoryList))
                 {
                     ReportProgress("Failed to parse modInfo to lists");
                     ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -831,7 +867,7 @@ namespace RelhaxModpack.Windows
                 DatabaseUtils.BuildLevelPerPackage(parsedCategoryList);
 
                 //if the list of zip files does not already have it, then add it
-                flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+                flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, parsedCategoryList);
                 foreach (DatabasePackage package in flatList)
                     if(!string.IsNullOrWhiteSpace(package.ZipFile) && !allUsedZipFiles.Contains(package.ZipFile))
                             allUsedZipFiles.Add(package.ZipFile);
@@ -1014,7 +1050,7 @@ namespace RelhaxModpack.Windows
 
             ReportProgress("Parsing database 1.1 document");
             //parse main database
-            if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
+            if (!DatabaseUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
                 globalDependencies, dependencies, parsedCategoryList))
             {
                 ReportProgress("Failed to parse database");
@@ -1027,7 +1063,7 @@ namespace RelhaxModpack.Windows
             //bulid link refrences (parent/child, levels, etc)
             DatabaseUtils.BuildLinksRefrence(parsedCategoryList, true);
             DatabaseUtils.BuildLevelPerPackage(parsedCategoryList);
-            List<DatabasePackage> flatListCurrent = DatabaseUtils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            List<DatabasePackage> flatListCurrent = DatabaseUtils.GetFlatList(globalDependencies, dependencies, parsedCategoryList);
 
             //check for duplicates
             ReportProgress("Checking for duplicate database packageName entries");
@@ -1040,6 +1076,22 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
+
+            ReportProgress("Checking for duplicate database UID entries");
+            List<DatabasePackage> duplicatesList = DatabaseUtils.CheckForDuplicateUIDsPackageList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck);
+            if (duplicatesList.Count == 0)
+            {
+                ReportProgress("No duplicates");
+            }
+            else
+            {
+                ReportProgress("ERROR: The following packages are duplicate UIDs:");
+                foreach (DatabasePackage package in duplicatesList)
+                    ReportProgress(string.Format("PackageName: {0}, UID: {1}", package.PackageName, package.UID));
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
             ReportProgress("No duplicates found");
 
             SetProgress(30);
@@ -1105,7 +1157,7 @@ namespace RelhaxModpack.Windows
             //build link references of old document
             DatabaseUtils.BuildLinksRefrence(parsedCateogryListOld, true);
             DatabaseUtils.BuildLevelPerPackage(parsedCateogryListOld);
-            List<DatabasePackage> flatListOld = DatabaseUtils.GetFlatList(globalDependenciesOld, dependenciesOld, null, parsedCateogryListOld);
+            List<DatabasePackage> flatListOld = DatabaseUtils.GetFlatList(globalDependenciesOld, dependenciesOld, parsedCateogryListOld);
 
             //check if any packages had a UID change, because this is not allowed
             //check based on packageName, loop through new
@@ -1125,14 +1177,17 @@ namespace RelhaxModpack.Windows
 
             if(packagesWithChangedUIDs.Count > 0)
             {
-                ReportProgress("ERROR: The following packages have UIDs changed! This is not allowed!");
+                ReportProgress("A package had a UID change");
                 foreach (DatabaseBeforeAfter2 beforeAfter in packagesWithChangedUIDs)
                 {
                     ReportProgress(string.Format("Before package: PackageName = {0}, UID = {1}",beforeAfter.Before.PackageName, beforeAfter.Before.UID));
                     ReportProgress(string.Format("After package:  PackageName = {0}, UID = {1}", beforeAfter.After.PackageName, beforeAfter.After.UID));
+                    string dialog = string.Format("Package {01} had a UID change:\nBefore: {1}\nAfter{2}\nIs this known?",
+                        beforeAfter.Before.PackageName, beforeAfter.Before.UID, beforeAfter.After.UID);
+                    if (MessageBox.Show(dialog, "Interesting", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                        ToggleUI((TabController.SelectedItem as TabItem), true);
+                    return;
                 }
-                ToggleUI((TabController.SelectedItem as TabItem), true);
-                return;
             }
 
             //check if any packages are missing UIDs
@@ -1395,7 +1450,7 @@ namespace RelhaxModpack.Windows
             //save new modInfo.xml
             ReportProgress("Updating database");
             File.Delete(SelectModInfo.FileName);
-            XmlUtils.SaveDatabase(SelectModInfo.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+            DatabaseUtils.SaveDatabase(SelectModInfo.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Done");
@@ -1608,7 +1663,7 @@ namespace RelhaxModpack.Windows
 
             ReportProgress("Preparing lists for merge");
             XmlDocument installStats = XmlUtils.LoadXmlDocument(currentInstallStatsXml, XmlLoadType.FromString);
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, parsedCategoryList);
 
             //replace any non existent entries in installStats with empty entries where installCount = 0
             foreach(DatabasePackage package in flatList)
@@ -1668,7 +1723,7 @@ namespace RelhaxModpack.Windows
             }
 
             ReportProgress("Creating new xml document");
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, parsedCategoryList);
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             doc.AppendChild(xmlDeclaration);
@@ -1717,7 +1772,7 @@ namespace RelhaxModpack.Windows
             globalDependenciesDuplicateCheck = new List<DatabasePackage>();
             dependenciesDuplicateCheck = new List<Dependency>();
             docDuplicateCheck = XmlUtils.LoadXmlDocument(SelectModInfo.FileName, XmlLoadType.FromFile);
-            XmlUtils.ParseDatabase(docDuplicateCheck, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, Path.GetDirectoryName(SelectModInfo.FileName));
+            DatabaseUtils.ParseDatabase(docDuplicateCheck, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, Path.GetDirectoryName(SelectModInfo.FileName));
 
             //link stuff in memory
             DatabaseUtils.BuildLinksRefrence(parsedCategoryListDuplicateCheck, false);
@@ -1821,7 +1876,7 @@ namespace RelhaxModpack.Windows
             }
 
             //create a flat list
-            List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, null, parsedCategoryListDuplicateCheck);
+            List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck);
 
             foreach (DatabasePackage packageToAddUID in allPackages)
             {
@@ -1860,7 +1915,7 @@ namespace RelhaxModpack.Windows
             }
 
             string fullDatabasePath = Path.Combine(Path.GetDirectoryName(SelectModInfoSave.FileName), Settings.BetaDatabaseV2RootFilename);
-            XmlUtils.SaveDatabase(fullDatabasePath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, DatabaseXmlVersion.OnePointOne);
+            DatabaseUtils.SaveDatabase(fullDatabasePath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Database saved");
             ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -1868,7 +1923,6 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Supported_Clients updating
-
         private void LoadDatabaseUpdateSupportedClientsButton_Click(object sender, RoutedEventArgs e)
         {
             //init UI
@@ -2039,6 +2093,77 @@ namespace RelhaxModpack.Windows
             }
 
             ReportProgress("Done");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+        #endregion
+
+        #region Translations
+        private struct TranslationStruct
+        {
+            public TranslationStruct(string languageName, Dictionary<string,string> dict)
+            {
+                LanguageName = languageName;
+                Dict = dict;
+            }
+
+            public string LanguageName { get; }
+            public Dictionary<string, string> Dict { get; }
+
+            public override string ToString() => $"({LanguageName})";
+        }
+
+        private void WriteTranslationsToCsvButton_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Loading translations if not loaded");
+
+            if (!Translations.TranslationsLoaded)
+                Translations.LoadTranslations();
+
+            //create arrays of all languages and hashes
+            TranslationStruct[] langauges =
+            {
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.English), Translations.GetLanguageDictionaries(Languages.English)),
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.French), Translations.GetLanguageDictionaries(Languages.French)),
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.German), Translations.GetLanguageDictionaries(Languages.German)),
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.Russian), Translations.GetLanguageDictionaries(Languages.Russian)),
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.Polish), Translations.GetLanguageDictionaries(Languages.Polish)),
+                new TranslationStruct(Translations.GetLanguageNativeName(Languages.Spanish), Translations.GetLanguageDictionaries(Languages.Spanish)),
+            };
+
+            ReportProgress("Building the csv");
+            StringBuilder translationsBuilder = new StringBuilder();
+
+            //apply the header
+            translationsBuilder.Append("ID");
+            foreach(TranslationStruct translationStruct in langauges)
+            {
+                translationsBuilder.AppendFormat("\t{0}", translationStruct.LanguageName);
+            }
+            translationsBuilder.Append(Environment.NewLine);
+
+            //apply each element. Use English as the method to get the key
+            foreach(string key in Translations.GetLanguageDictionaries(Languages.English).Keys)
+            {
+                translationsBuilder.AppendFormat("{0}", key);
+                foreach(TranslationStruct translationStruct in langauges)
+                {
+                    //if it doesn't exist, then mark it. Also need to use tabs, so escape them in the csv with "\t"
+                    if (translationStruct.Dict.ContainsKey(key))
+                        translationsBuilder.AppendFormat("\t{0}", MacroUtils.MacroReplace(translationStruct.Dict[key],ReplacementTypes.TextEscape));
+                    else
+                        translationsBuilder.AppendFormat("\tMISSING_TRANSLATION");
+                }
+                translationsBuilder.Append(Environment.NewLine);
+            }
+
+            ReportProgress("Writing csv to disk");
+            if (File.Exists(TranslationsCsv))
+                File.Delete(TranslationsCsv);
+            File.WriteAllText(TranslationsCsv, translationsBuilder.ToString());
+            ReportProgress("Done");
+
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion

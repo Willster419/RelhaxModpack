@@ -1,5 +1,5 @@
-﻿using RelhaxModpack.Database;
-using RelhaxModpack.Utilities;
+﻿using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +37,7 @@ namespace RelhaxModpack.Database
         {
             nameof(PackageName),
             nameof(Enabled),
+            nameof(Tags),
             nameof(InstallGroup),
             nameof(PatchGroup),
             nameof(UID)
@@ -256,12 +257,10 @@ namespace RelhaxModpack.Database
         /// </summary>
         public bool DownloadFailed { get; set; } = false;
 
-        //append extraction flag
         /// <summary>
-        /// Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
+        /// The list of tags that this package contains (like patches, scripts, etc)
         /// </summary>
-        [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
-        public bool AppendExtraction = false;
+        public PackageTagsList Tags { get; set; }  = new PackageTagsList();
         #endregion
 
         #region UI Properties

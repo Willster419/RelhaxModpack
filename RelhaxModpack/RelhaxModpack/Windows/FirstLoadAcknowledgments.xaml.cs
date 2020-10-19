@@ -10,14 +10,17 @@ namespace RelhaxModpack.Windows
     public partial class FirstLoadAcknowledgments : RelhaxWindow
     {
         /// <summary>
-        /// Create an instance of the FirstLoadAcknowledgments window
-        /// </summary>
-        public FirstLoadAcknowledgments() => InitializeComponent();
-
-        /// <summary>
         /// Gets and sets is the user has agreed to the Acknowledgments before allowing him/her to use the application
         /// </summary>
         public bool UserAgreed { get; private set; } = false;
+
+        /// <summary>
+        /// Create an instance of the FirstLoadAcknowledgments window
+        /// </summary>
+        public FirstLoadAcknowledgments()
+        {
+            InitializeComponent();
+        }
 
         private void Link_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
             //Link clicking event that opens the browser

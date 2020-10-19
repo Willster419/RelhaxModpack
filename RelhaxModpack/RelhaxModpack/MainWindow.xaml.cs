@@ -23,6 +23,7 @@ using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Database;
 using System.Windows.Media;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack
 {
@@ -1429,7 +1430,7 @@ namespace RelhaxModpack
 
             //perform dependency calculations
             //get a flat list of packages to install
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(null, null, null, parsedCategoryList);
+            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(null, null, parsedCategoryList);
             List<SelectablePackage> flatListSelect = DatabaseUtils.GetFlatSelectablePackageList(parsedCategoryList);
 
             Logging.Debug("Starting Utils.CalculateDependencies()");

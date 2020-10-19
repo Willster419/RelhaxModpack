@@ -62,6 +62,6 @@ namespace RelhaxModpack
         /// The actual bitmap in memory of the image
         /// </summary>
         /// <remarks>This is *not* loaded from the xml file and is used internally</remarks>
-        public Bitmap AtlasImage { get; set; }
+        public Bitmap AtlasImage = null;
     }
 }

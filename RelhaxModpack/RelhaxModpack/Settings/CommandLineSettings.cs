@@ -2,41 +2,10 @@
 using RelhaxModpack.Utilities;
 using System.Collections.Generic;
 using System.IO;
-
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack
 {
-    /// <summary>
-    /// The primary functional modes the application can run in
-    /// </summary>
-    public enum ApplicationMode
-    {
-        /// <summary>
-        /// The default mode of modpack installer. This is the primary focus of the application
-        /// </summary>
-        Default,
-
-        /// <summary>
-        /// The database editor mode
-        /// </summary>
-        Editor,
-
-        /// <summary>
-        /// The updater mode. Used for updating the database, application, and other various functions
-        /// </summary>
-        Updater,
-
-        /// <summary>
-        /// The patch designer mode. Allow the user to create and test patches
-        /// </summary>
-        PatchDesigner,
-
-        /// <summary>
-        /// The patch runner mode. Can be used in command line mode, used for patching files given patch file instructions
-        /// </summary>
-        Patcher
-    }
-    
     /// <summary>
     /// Handles all parsing and usage of command line arguments
     /// </summary>
@@ -105,7 +74,7 @@ namespace RelhaxModpack
         /// <param name="args">A string array of command line arguments</param>
         public static void ParseCommandLine(string[] args)
         {
-            Logging.Info("command line: " + string.Join(" ", args));
+            Logging.Info(LogOptions.ClassName, "Command line: " + string.Join(" ", args));
             for (int i = 0; i < args.Length; i++)
             {
                 string commandArg = args[i];
@@ -116,56 +85,60 @@ namespace RelhaxModpack
                 {
                     //start with settings for application configurations
                     case "test":
-                        Logging.Info("test, loading in test mode");
+                        Logging.Info(LogOptions.ClassName, "{0}, loading in test mode", commandArg);
                         TestMode = true;
                         break;
                     case "skip-update":
-                        Logging.Info("skip-update, skipping updating");
+                        Logging.Info(LogOptions.ClassName, "{0}, skipping updating", commandArg);
                         SkipUpdate = true;
                         break;
                     case "silent-start":
-                        Logging.Info("silent-start, loading in background");
+                        Logging.Info(LogOptions.ClassName, "{0}, loading in background", commandArg);
                         SilentStart = true;
                         break;
                     case "auto-install":
                         AutoInstallFileName = args[++i];
-                        Logging.Info("auto-install, attempting to launch installation using user configuration file: " + AutoInstallFileName);
+                        Logging.Info(LogOptions.ClassName, "{0}, attempting to launch installation using user configuration file {1}", commandArg, AutoInstallFileName);
                         break;
                     case "updateKeyFile":
                         //get key file
                         UpdateKeyFileName = args[++i];
-                        Logging.Info("updateKeyFile, loading keyfile " + UpdateKeyFileName);
+                        Logging.Info(LogOptions.ClassName, "{0}, loading keyfile {1}", commandArg, UpdateKeyFileName);
                         break;
                     case "editorAutoLoad":
                         EditorAutoLoadFileName = args[++i];
-                        Logging.Info("editorAutoLoad, loading database from " + EditorAutoLoadFileName);
+                        Logging.Info(LogOptions.ClassName, "{0}, loading database from {1}", commandArg, EditorAutoLoadFileName);
                         break;
                     //now check for different startup modes
                     case "patch-designer":
                         ApplicationMode = ApplicationMode.PatchDesigner;
-                        Logging.Info("patch-designer, loading in patch design mode");
+                        Logging.Info(LogOptions.ClassName, "{0}, loading in patch design mode", commandArg);
                         break;
                     case "database-updater":
                         ApplicationMode = ApplicationMode.Updater;
-                        Logging.Info("database-updater, loading in database update mode");
+                        Logging.Info(LogOptions.ClassName, "{0}, loading in database update mode", commandArg);
+                        break;
+                    case "modpack-toolbox":
+                        ApplicationMode = ApplicationMode.Updater;
+                        Logging.Info(LogOptions.ClassName, "{0}, loading in database update mode", commandArg);
                         break;
                     case "updater-hardcode-path":
-                        Logging.Info("updater-hardcode-path, forcing folder path as {0}", DatabaseUpdater.HardCodeRepoPath);
-                        DatabaseUpdater.UseHardCodePath = true;
+                        Logging.Info(LogOptions.ClassName, "{0}, forcing folder path as {1}", commandArg, ModpackToolbox.HardCodeRepoPath);
+                        ModpackToolbox.UseHardCodePath = true;
                         break;
                     case "database-editor":
                         ApplicationMode = ApplicationMode.Editor;
-                        Logging.Info("database-editor, loading in database edit mode");
+                        Logging.Info(LogOptions.ClassName, "{0}, loading in database edit mode", commandArg);
                         break;
                     case "patcher":
                         ApplicationMode = ApplicationMode.Patcher;
-                        Logging.Info("patcher, loading in patch mode");
+                        Logging.Info(LogOptions.ClassName, "{0}, loading in patch mode", commandArg);
                         PatchFilenames.Add(args[++i].Trim());
                         break;
                     case "macro":
                         string macroName = args[++i];
                         string macroValue = args[++i];
-                        Logging.Info("parsing macro '{0}' with value '{1}'",macroName,macroValue);
+                        Logging.Info(LogOptions.ClassName, "{0}, parsing macro '{1}' with value '{2}'", commandArg, macroName, macroValue);
                         /*
                         FilePathDict.Add(@"{versiondir}", Settings.WoTClientVersion);
                         FilePathDict.Add(@"{appdata}", Settings.AppDataFolder);
@@ -173,7 +146,7 @@ namespace RelhaxModpack
                         */
                         if(!macroName[0].Equals('{'))
                         {
-                            Logging.Info(@"macro not started with '{', adding");
+                            Logging.Info(LogOptions.ClassName, @"macro not started with '{', adding");
                             macroName = string.Format("{{{0}}}", macroName);
                         }
                         MacroUtils.FilePathDict.Add(macroName, macroValue);
@@ -181,7 +154,7 @@ namespace RelhaxModpack
                     default:
                         if (ApplicationMode == ApplicationMode.Patcher)
                         {
-                            Logging.Info("adding patch: {0}", commandArg.Trim());
+                            Logging.Info(LogOptions.ClassName, "Adding patch: {0}", commandArg.Trim());
                             PatchFilenames.Add(commandArg.Trim());
                         }
                         break;

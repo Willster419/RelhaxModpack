@@ -4,10 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using Microsoft.Win32;
 using RelhaxModpack.Patches;
+using RelhaxModpack.Properties;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Windows;
 using RelhaxModpack.Xml;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack
 {
@@ -107,6 +110,7 @@ namespace RelhaxModpack
                     return Assembly.Load(assemblyData);
                 }
             };
+
             //init logging here
             //"The application failed to open a logfile. Either check your file permissions or move the application to a folder with write access"
             if (!Logging.Init(Logfiles.Application))
@@ -114,19 +118,75 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Shutdown((int)ReturnCodes.LogfileError);
             }
+
             Logging.WriteHeader(Logfiles.Application);
             Logging.Info(string.Format("| Relhax Modpack version {0}", CommonUtils.GetApplicationVersion()));
             Logging.Info(string.Format("| Build version {0}, from date {1}", Settings.ApplicationVersion.ToString(), CommonUtils.GetCompileTime()));
             Logging.Info(string.Format("| Running on OS {0}", Environment.OSVersion.ToString()));
+
             //parse command line arguments here
             //get the command line args for testing of auto install
             CommandLineSettings.ParseCommandLine(Environment.GetCommandLineArgs());
+
+            if (!ModpackSettings.ValidFrameworkVersion)
+            {
+                //https://github.com/Willster419/RelhaxModpack/issues/90
+                //try getting .net framework information
+                //https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed
+                //https://docs.microsoft.com/en-us/dotnet/api/system.environment.version?view=netcore-3.1
+                //https://stackoverflow.com/questions/19096841/how-to-get-the-version-of-the-net-framework-being-targeted
+                Logging.Debug(".NET Framework version information");
+                int frameworkVersion = -1;
+                try
+                {
+                    RegistryKey key = RegistryUtils.GetRegistryKeys(new RegistrySearch() { Root = Registry.LocalMachine, Searchpath = @"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" });
+                    Logging.Debug("Registry: {0}", key.Name);
+                    foreach (string subkey in key.GetValueNames())
+                    {
+                        object value = key.GetValue(subkey);
+                        Logging.Debug("Registry: Subkey={0}, Value={1}", subkey, value.ToString());
+                        if (subkey.ToLower().Equals("release"))
+                        {
+                            if (int.TryParse(value.ToString(), out int result))
+                                frameworkVersion = result;
+                            else
+                                Logging.Error("Unable to parse release value: {0}", value);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex.ToString());
+                }
+
+                Logging.Info("Minimum required .NET Framework version: {0}, Installed: {1}", Settings.MinimumDotNetFrameworkVersionRequired, frameworkVersion);
+
+                if (frameworkVersion == -1)
+                {
+                    Logging.Error("Failed to get .NET Framework version from the registry");
+                    MessageBox.Show("failedToGetDotNetFrameworkVersion");
+                }
+                else if (frameworkVersion < Settings.MinimumDotNetFrameworkVersionRequired)
+                {
+                    Logging.Error("Invalid .NET Framework version (less then 4.8)");
+                    if (MessageBox.Show("invalidDotNetFrameworkVersion","",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        CommonUtils.StartProcess(Settings.DotNetFrameworkLatestDownloadURL);
+                    }
+                }
+                else
+                {
+                    Logging.Info("Valid .NET Framework version");
+                    ModpackSettings.ValidFrameworkVersion = true;
+                }
+            }
+
             Logging.Debug("Starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
             //switch into application modes based on mode enum
             switch(CommandLineSettings.ApplicationMode)
             {
                 case ApplicationMode.Updater:
-                    DatabaseUpdater updater = new DatabaseUpdater();
+                    ModpackToolbox updater = new ModpackToolbox();
                     CloseApplicationLog(true);
 
                     //start updater logging system
