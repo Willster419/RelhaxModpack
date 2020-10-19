@@ -481,7 +481,7 @@ namespace RelhaxModpack.Windows
                     zipfile = null;
 
                     //parse into lists
-                    if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
+                    if (!DatabaseUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
                     {
                         Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                         MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
@@ -492,7 +492,7 @@ namespace RelhaxModpack.Windows
                 case DatabaseVersions.Beta:
                     Logging.Debug("Init beta db download resources");
                     //create download url list
-                    List<string> downloadURLs = XmlUtils.GetBetaDatabase1V1FilesList();
+                    List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList();
 
                     string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 
@@ -509,7 +509,7 @@ namespace RelhaxModpack.Windows
 
                     //parse into lists
                     Logging.Debug("Sending strings to db parser");
-                    if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList))
+                    if (!DatabaseUtils.ParseDatabase1V1FromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList))
                     {
                         Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                         MessageBox.Show(Translations.GetTranslatedString("failedToParse") + "database V2");
@@ -518,7 +518,7 @@ namespace RelhaxModpack.Windows
                     break;
                 //test
                 case DatabaseVersions.Test:
-                    if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(ModpackSettings.CustomModInfoPath), modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
+                    if (!DatabaseUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(ModpackSettings.CustomModInfoPath), modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
                     {
                         Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                         MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");

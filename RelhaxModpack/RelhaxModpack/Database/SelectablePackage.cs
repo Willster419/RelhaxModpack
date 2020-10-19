@@ -84,6 +84,7 @@ namespace RelhaxModpack.Database
             InstallGroup = 4;
             PatchGroup = 4;
         }
+
         /// <summary>
         /// The display name of the package
         /// </summary>
@@ -142,7 +143,7 @@ namespace RelhaxModpack.Database
         }
 
         /// <summary>
-        /// Gets a user display formatted version of the UpdateCommentEscaped property, with a timestamp (if available). If no comment, a translated 'noComment' entry is returned
+        /// Gets a user display formatted version of the UpdateCommentEscaped property, with a time stamp (if available). If no comment, a translated 'noComment' entry is returned
         /// </summary>
         /// <seealso cref="UpdateCommentEscaped"/>
         /// <seealso cref="UpdateComment"/>

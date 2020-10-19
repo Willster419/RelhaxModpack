@@ -737,6 +737,108 @@
             A utility class for working with database components
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabaseRoot1V1Document">
+            <summary>
+            Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
+            </summary>
+            <returns>the XmlDocument object of the root database file</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesList(System.Xml.XmlDocument)">
+            <summary>
+            Get a list of all URLs to each xml document file of the database
+            </summary>
+            <param name="rootDocument">The root 'database.xml' document object</param>
+            <returns>The list of URLs</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesList">
+            <summary>
+            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
+            </summary>
+            <returns>The list of URLs</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesListAsync">
+            <summary>
+            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
+            </summary>
+            <returns>The list of URLs</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.ParseDatabase(System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.String)">
+            <summary>
+            Parse the Xml database of any type into lists in memory
+            </summary>
+            <param name="modInfoDocument">The root document. Can either be the entire document (Legacy) or the file with database header information only (OnePointOne)</param>
+            <param name="globalDependencies">The global dependencies list</param>
+            <param name="dependencies">The dependencies list</param>
+            <param name="parsedCategoryList">The category list</param>
+            <param name="location">The folder path to the OnePointOne+ additional xml files as part of the database</param>
+            <returns>True if database parsing was a success, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.ParseDatabase1V1FromFiles(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Parse a database into the version 1.1 format from files on the disk
+            </summary>
+            <param name="rootPath">The path to the folder that contains all the xml database files</param>
+            <param name="rootDocument">The root document object</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.ParseDatabase1V1FromStrings(System.String,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Parse a database into version 1.1 from string representations of the Xml files
+            </summary>
+            <param name="globalDependenciesXml">The Xml string of the global dependencies document</param>
+            <param name="dependneciesXml">The Xml string of the dependencies document</param>
+            <param name="categoriesXml">The list of Xml strings of the categories document</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.ParseDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Parse a database into version 1.1 from XDocument objects
+            </summary>
+            <param name="globalDependenciesDoc">The Xml document of global dependencies</param>
+            <param name="globalDependenciesList">The list of global dependencies</param>
+            <param name="dependenciesDoc">The Xml document of dependencies</param>
+            <param name="dependenciesList">The list of dependencies</param>
+            <param name="categoryDocuments">The list of xml documents of the category Xml documents</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.SaveDatabase(System.String,System.String,System.String,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},RelhaxModpack.Utilities.Enums.DatabaseXmlVersion)">
+            <summary>
+            Save the database to an Xml version
+            </summary>
+            <param name="saveLocation">The folder path to save the files into</param>
+            <param name="gameVersion">The version of the game that this database supports</param>
+            <param name="onlineFolderVersion">The online folder for the zip file location of this database</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCatagoryList">The list of categories</param>
+            <param name="versionToSaveAs">The Xml version of the database to save as</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.SaveDatabase1V1(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Save the database to the Xml version 1.1 standard
+            </summary>
+            <param name="savePath">The path to save all the xml files to</param>
+            <param name="doc">The root XmlDocument to save the header information to</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCatagoryList">The list of categories</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.SaveDatabaseList1V1(System.Collections.IList,System.Xml.XmlElement,System.Xml.XmlDocument,System.String)">
+            <summary>
+            Saves a list of packages to a document
+            </summary>
+            <param name="packagesToSave">The generic list of packages to save</param>
+            <param name="documentRootElement">The element that will be holding this list</param>
+            <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
+            <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
+        </member>
         <member name="M:RelhaxModpack.Database.DatabaseUtils.GetFlatList(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
             <summary>
             Returns a flat list of the given recursive lists, in the order that the parameters are stated
@@ -1189,11 +1291,6 @@
             The list of tags that this package contains (like patches, scripts, etc)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Database.DatabasePackage.AppendExtraction">
-            <summary>
-            Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.EditorTreeViewItem">
             <summary>
             Reference for the UI element of this package in the database editor
@@ -1270,11 +1367,6 @@
         <member name="P:RelhaxModpack.Database.Dependency.Dependencies">
             <summary>
             List of dependencies this dependency calls on
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.Dependency.wasLogicalDependencyLegacy">
-            <summary>
-            When loading from legacy database type and is was of type "logicalDependency"
             </summary>
         </member>
         <member name="M:RelhaxModpack.Database.Dependency.#ctor">
@@ -1551,7 +1643,7 @@
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.UpdateCommentFormatted">
             <summary>
-            Gets a user display formatted version of the UpdateCommentEscaped property, with a timestamp (if available). If no comment, a translated 'noComment' entry is returned
+            Gets a user display formatted version of the UpdateCommentEscaped property, with a time stamp (if available). If no comment, a translated 'noComment' entry is returned
             </summary>
             <seealso cref="P:RelhaxModpack.Database.SelectablePackage.UpdateCommentEscaped"/>
             <seealso cref="P:RelhaxModpack.Database.SelectablePackage.UpdateComment"/>
@@ -6126,77 +6218,6 @@
             <returns>The node list of matching results, or null</returns>
             <remarks>XmlElement and XmlAttribute inherit from XmlNode</remarks> 
         </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabaseRoot1V1Document">
-            <summary>
-            Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
-            </summary>
-            <returns>the XmlDocument object of the root database file</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabase1V1FilesList(System.Xml.XmlDocument)">
-            <summary>
-            Get a list of all URLs to each xml document file of the database
-            </summary>
-            <param name="rootDocument">The root 'database.xml' document object</param>
-            <returns>The list of URLs</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabase1V1FilesList">
-            <summary>
-            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
-            </summary>
-            <returns>The list of URLs</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.GetBetaDatabase1V1FilesListAsync">
-            <summary>
-            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
-            </summary>
-            <returns>The list of URLs</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase(System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.String)">
-            <summary>
-            Parse the Xml database of any type into lists in memory
-            </summary>
-            <param name="modInfoDocument">The root document. Can either be the entire document (Legacy) or the file with database header information only (OnePointOne)</param>
-            <param name="globalDependencies">The global dependencies list</param>
-            <param name="dependencies">The dependencies list</param>
-            <param name="parsedCategoryList">The category list</param>
-            <param name="location">The folder path to the OnePointOne+ additional xml files as part of the database</param>
-            <returns>True if database parsing was a success, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase1V1FromFiles(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Parse a database into the version 1.1 format from files on the disk
-            </summary>
-            <param name="rootPath">The path to the folder that contains all the xml database files</param>
-            <param name="rootDocument">The root document object</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase1V1FromStrings(System.String,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Parse a database into version 1.1 from string representations of the Xml files
-            </summary>
-            <param name="globalDependenciesXml">The Xml string of the global dependencies document</param>
-            <param name="dependneciesXml">The Xml string of the dependencies document</param>
-            <param name="categoriesXml">The list of Xml strings of the categories document</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Parse a database into version 1.1 from XDocument objects
-            </summary>
-            <param name="globalDependenciesDoc">The Xml document of global dependencies</param>
-            <param name="globalDependenciesList">The list of global dependencies</param>
-            <param name="dependenciesDoc">The Xml document of dependencies</param>
-            <param name="dependenciesList">The list of dependencies</param>
-            <param name="categoryDocuments">The list of xml documents of the category Xml documents</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
-        </member>
         <member name="M:RelhaxModpack.Xml.XmlUtils.DocumentToXDocument(System.Xml.XmlDocument)">
             <summary>
             Convert an XmlDocument to an XDocument
@@ -6227,58 +6248,6 @@
             </summary>
             <param name="xmlUnpack">The Xml unpack instructions object</param>
             <param name="unpackBuilder">The stringBuilder to log the generated files location for the install log</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.ParseDatabaseLegacy(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.Boolean)">
-            <summary>
-            Parses the database Xml document from the legacy format into memory
-            </summary>
-            <param name="doc">The document to parse from</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="logicalDependencies">The list of logical dependencies</param>
-            <param name="parsedCatagoryList">The list of categories</param>
-            <param name="buildRefrences">Flag for if the list references (like level, parent, topParent) should be built as well</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabaseLegacy(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Saves the current mod database into the legacy document format
-            </summary>
-            <param name="saveLocation">The file save location</param>
-            <param name="doc">The XmlDocument to save into</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCatagoryList">The list of categories</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabase(System.String,System.String,System.String,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},RelhaxModpack.Utilities.Enums.DatabaseXmlVersion)">
-            <summary>
-            Save the database to an Xml version
-            </summary>
-            <param name="saveLocation">The folder path to save the files into</param>
-            <param name="gameVersion">The version of the game that this database supports</param>
-            <param name="onlineFolderVersion">The online folder for the zip file location of this database</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCatagoryList">The list of categories</param>
-            <param name="versionToSaveAs">The Xml version of the database to save as</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabase1V1(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Save the database to the Xml version 1.1 standard
-            </summary>
-            <param name="savePath">The path to save all the xml files to</param>
-            <param name="doc">The root XmlDocument to save the header information to</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCatagoryList">The list of categories</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.SaveDatabaseList1V1(System.Collections.IList,System.Xml.XmlElement,System.Xml.XmlDocument,System.String)">
-            <summary>
-            Saves a list of packages to a document
-            </summary>
-            <param name="packagesToSave">The generic list of packages to save</param>
-            <param name="documentRootElement">The element that will be holding this list</param>
-            <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
-            <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
         </member>
         <member name="M:RelhaxModpack.Xml.XmlUtils.AddPatchesFromFile(System.Collections.Generic.List{RelhaxModpack.Patches.Patch},System.String,System.String)">
             <summary>

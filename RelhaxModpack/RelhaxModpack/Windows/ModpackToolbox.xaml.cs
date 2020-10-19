@@ -418,7 +418,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 ReportProgress("Parsing to lists");
-                return XmlUtils.ParseDatabase1V1FromStrings(globalDependencies1V1, dependnecies1V1, categoriesStrings1V1, globalDependencies, dependencies, parsedCategoryList);
+                return DatabaseUtils.ParseDatabase1V1FromStrings(globalDependencies1V1, dependnecies1V1, categoriesStrings1V1, globalDependencies, dependencies, parsedCategoryList);
             }
         }
 
@@ -452,7 +452,7 @@ namespace RelhaxModpack.Windows
 
             XmlDocument doc = new XmlDocument();
             doc.Load(SelectModInfo.FileName);
-            XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList, Path.GetDirectoryName(SelectModInfo.FileName));
+            DatabaseUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList, Path.GetDirectoryName(SelectModInfo.FileName));
 
             //link stuff in memory or something
             DatabaseUtils.BuildLinksRefrence(parsecCateogryList, false);
@@ -856,7 +856,7 @@ namespace RelhaxModpack.Windows
                 }
                 
                 //parse into lists
-                if (!XmlUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, globalDependencies, dependencies, parsedCategoryList))
+                if (!DatabaseUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, globalDependencies, dependencies, parsedCategoryList))
                 {
                     ReportProgress("Failed to parse modInfo to lists");
                     ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -1050,7 +1050,7 @@ namespace RelhaxModpack.Windows
 
             ReportProgress("Parsing database 1.1 document");
             //parse main database
-            if (!XmlUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
+            if (!DatabaseUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
                 globalDependencies, dependencies, parsedCategoryList))
             {
                 ReportProgress("Failed to parse database");
@@ -1431,7 +1431,7 @@ namespace RelhaxModpack.Windows
             //save new modInfo.xml
             ReportProgress("Updating database");
             File.Delete(SelectModInfo.FileName);
-            XmlUtils.SaveDatabase(SelectModInfo.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
+            DatabaseUtils.SaveDatabase(SelectModInfo.FileName, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion,
                 globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Done");
@@ -1753,7 +1753,7 @@ namespace RelhaxModpack.Windows
             globalDependenciesDuplicateCheck = new List<DatabasePackage>();
             dependenciesDuplicateCheck = new List<Dependency>();
             docDuplicateCheck = XmlUtils.LoadXmlDocument(SelectModInfo.FileName, XmlLoadType.FromFile);
-            XmlUtils.ParseDatabase(docDuplicateCheck, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, Path.GetDirectoryName(SelectModInfo.FileName));
+            DatabaseUtils.ParseDatabase(docDuplicateCheck, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, Path.GetDirectoryName(SelectModInfo.FileName));
 
             //link stuff in memory
             DatabaseUtils.BuildLinksRefrence(parsedCategoryListDuplicateCheck, false);
@@ -1896,7 +1896,7 @@ namespace RelhaxModpack.Windows
             }
 
             string fullDatabasePath = Path.Combine(Path.GetDirectoryName(SelectModInfoSave.FileName), Settings.BetaDatabaseV2RootFilename);
-            XmlUtils.SaveDatabase(fullDatabasePath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, DatabaseXmlVersion.OnePointOne);
+            DatabaseUtils.SaveDatabase(fullDatabasePath, Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Database saved");
             ToggleUI((TabController.SelectedItem as TabItem), true);

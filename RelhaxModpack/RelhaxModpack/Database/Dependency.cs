@@ -48,12 +48,6 @@ namespace RelhaxModpack.Database
         /// List of dependencies this dependency calls on
         /// </summary>
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
-
-        /// <summary>
-        /// When loading from legacy database type and is was of type "logicalDependency"
-        /// </summary>
-        [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
-        public bool wasLogicalDependencyLegacy = false;
         #endregion
 
         #region Other Properties and Methods
@@ -79,11 +73,8 @@ namespace RelhaxModpack.Database
             PatchGroup = 2;
             if (packageToCopyFrom is Dependency dep)
             {
-#pragma warning disable CS0618 // Type or member is obsolete
-                this.wasLogicalDependencyLegacy = dep.wasLogicalDependencyLegacy;
                 this.DatabasePackageLogic = new List<DatabaseLogic>();
                 this.Dependencies = new List<DatabaseLogic>();
-#pragma warning restore CS0618 // Type or member is obsolete
 
                 if (deep)
                 {

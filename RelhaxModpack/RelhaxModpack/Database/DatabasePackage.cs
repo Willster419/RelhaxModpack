@@ -261,13 +261,6 @@ namespace RelhaxModpack.Database
         /// The list of tags that this package contains (like patches, scripts, etc)
         /// </summary>
         public PackageTagsList Tags { get; set; }  = new PackageTagsList();
-
-        //append extraction flag
-        /// <summary>
-        /// Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
-        /// </summary>
-        [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
-        public bool AppendExtraction = false;
         #endregion
 
         #region UI Properties

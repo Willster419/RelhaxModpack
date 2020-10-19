@@ -1987,7 +1987,7 @@ namespace RelhaxModpack.Windows
             }
 
             //actually save
-            XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), Settings.BetaDatabaseV2RootFilename),
+            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), Settings.BetaDatabaseV2RootFilename),
                         Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             UnsavedChanges = false;
@@ -2023,7 +2023,7 @@ namespace RelhaxModpack.Windows
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
 
             //actually save
-            XmlUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
+            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
                         Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             UnsavedChanges = false;
@@ -2068,7 +2068,7 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("doc is null from LoadXmlDocument(fileToload, xmlType)");
                 return;
             }
-            if (!XmlUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(fileToLoad)))
+            if (!DatabaseUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(fileToLoad)))
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;
@@ -2110,7 +2110,7 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("doc is null from LoadXmlDocument(fileToload, xmlType)");
                 return;
             }
-            if (!XmlUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
+            if (!DatabaseUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
             {
                 MessageBox.Show("Failed to load the database, check the logfile");
                 return;

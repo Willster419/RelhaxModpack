@@ -26,7 +26,8 @@ namespace RelhaxModpack
             //put blacklist fields here
             nameof(PropertiesToExclude)
         };
-        #region Saveable modpack settings
+
+        #region Save-able modpack settings
         /// <summary>
         /// The custom path to the ModInfo.xml file if loading in test mode
         /// </summary>
