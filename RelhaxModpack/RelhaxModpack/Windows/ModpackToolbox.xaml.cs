@@ -441,24 +441,31 @@ namespace RelhaxModpack.Windows
         private void SaveDatabaseText(bool @internal)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
+
             //true = internal, false = user
             string notApplicable = "n/a";
+
             //list creation and parsing
             List<Category> parsecCateogryList = new List<Category>();
             List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
             List<Dependency> dependencies = new List<Dependency>();
+
             XmlDocument doc = new XmlDocument();
             doc.Load(SelectModInfo.FileName);
             XmlUtils.ParseDatabase(doc, globalDependencies, dependencies, parsecCateogryList, Path.GetDirectoryName(SelectModInfo.FileName));
+
             //link stuff in memory or something
             DatabaseUtils.BuildLinksRefrence(parsecCateogryList, false);
+
             //create variables
             StringBuilder sb = new StringBuilder();
             string saveLocation = @internal ? System.IO.Path.Combine(Settings.ApplicationStartupPath, "database_internal.csv") :
                 Path.Combine(Settings.ApplicationStartupPath, "database_user.csv");
+
             //global dependencies
             string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tDevURL\tEnabled\tVisible\tVersion" : "Category\tMod\tDevURL";
             sb.AppendLine(header);
+
             if(@internal)
             {
                 foreach (DatabasePackage dp in globalDependencies)
@@ -489,6 +496,7 @@ namespace RelhaxModpack.Windows
                         dep.Version));
                 }
             }
+
             foreach (Category cat in parsecCateogryList)
             {
                 List<SelectablePackage> flatlist = cat.GetFlatPackageList();
@@ -520,6 +528,7 @@ namespace RelhaxModpack.Windows
                     }
                 }
             }
+
             try
             {
                 File.WriteAllText(saveLocation, sb.ToString());
@@ -532,27 +541,32 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
             }
         }
+
         private void DatabaseOutputStep2a_Click(object sender, RoutedEventArgs e)
         {
             ReportProgress("Generation of internal csv...");
+
             //check
             if (string.IsNullOrEmpty(Settings.WoTClientVersion) || string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("Database not loaded");
                 return;
             }
+
             SaveDatabaseText(true);
         }
 
         private void DatabaseOutputStep2b_Click(object sender, RoutedEventArgs e)
         {
             ReportProgress("Generation of user csv...");
+
             //check
             if (string.IsNullOrEmpty(Settings.WoTClientVersion) || string.IsNullOrEmpty(Settings.WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("Database not loaded");
                 return;
             }
+
             SaveDatabaseText(false);
         }
         #endregion
