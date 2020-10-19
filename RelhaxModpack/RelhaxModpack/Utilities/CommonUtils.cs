@@ -1182,5 +1182,18 @@ namespace RelhaxModpack.Utilities
                 listProperty.Add(listEntry);
             }
         }
+
+        /// <summary>
+        /// Gets a list of all types that can exist in an enumeration
+        /// </summary>
+        /// <typeparam name="T">The type of the enumeration to get a list of</typeparam>
+        /// <returns>A list of all enumeration values of that type</returns>
+        /// <remarks>See https://stackoverflow.com/a/801058/3128017 </remarks>
+        public static List<T> GetEnumList<T>()
+        {
+            T[] array = (T[])Enum.GetValues(typeof(T));
+            List<T> list = new List<T>(array);
+            return list;
+        }
     }
 }
