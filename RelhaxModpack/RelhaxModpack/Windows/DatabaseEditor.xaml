@@ -663,11 +663,11 @@
                 </TabItem>
                 <TabItem x:Name="TagsTab" Header="Tags">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox x:Name="PackageTagsDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageTagsDisplay_SelectionChanged"/>
+                        <ListBox x:Name="PackageTagsDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top"/>
                         <Button Content="Add Tag" x:Name="TagAddSelectedTag" Tag="TagAddSelectedTag" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="467" Click="TagAddSelectedTag_Click"/>
                         <Button Content="Remove Tag" x:Name="TagRemoveTag" Tag="TagRemoveTag" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="467" Click="TagRemoveTag_Click"/>
                         <ComboBox x:Name="LoadedTagsComboBox" HorizontalAlignment="Stretch" Margin="0,184,0,0" VerticalAlignment="Top" Height="20"/>
-                        <RichTextBox x:Name="CurrentTags" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsReadOnly="True" Height="125">
+                        <RichTextBox x:Name="CurrentTags" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsReadOnly="True" Height="278">
                             <RichTextBox.Resources>
                                 <Style TargetType="{x:Type Paragraph}">
                                     <Setter Property="Margin" Value="0" />
@@ -675,21 +675,22 @@
                             </RichTextBox.Resources>
                             <FlowDocument>
                                 <Paragraph>Current tags:</Paragraph>
-                                <Paragraph>Patch - patch instructions</Paragraph>
-                                <Paragraph>XmlUnpack - xml unpack instructions</Paragraph>
-                                <Paragraph>Script - python scripts</Paragraph>
-                                <Paragraph>Atlas - Atlas pre-built atlas files</Paragraph>
+                                <Paragraph>Patch - Patch instructions</Paragraph>
+                                <Paragraph>XmlUnpack - Xml unpack instructions</Paragraph>
+                                <Paragraph>Script - Python scripts</Paragraph>
+                                <Paragraph>Atlas - Pre-built atlas files</Paragraph>
                                 <Paragraph>AtlasBuilder - Atlas png files and/or instructions for building</Paragraph>
                                 <Paragraph>ImagePNG - PNG images</Paragraph>
                                 <Paragraph>ImageDDS - DDS images</Paragraph>
                                 <Paragraph>GuiFlash - Action script shockwave flash (swf) files</Paragraph>
                                 <Paragraph>GuiLoginVideo - Login video files</Paragraph>
-                                <Paragraph>ConfigurationFileXml - Mod configuration file, xml data type</Paragraph>
-                                <Paragraph>ConfigurationFileJson - Mod configuration file, json data type</Paragraph>
-                                <Paragraph>ConfigurationFileXC - Mod configuration file, XVM</Paragraph>
-                                <Paragraph>ConfigurationFileOther - Mod configuration file, Other</Paragraph>
+                                <Paragraph>ConfigurationFileXml - Configuration files, xml data type</Paragraph>
+                                <Paragraph>ConfigurationFileJson - Configuration files, json data type</Paragraph>
+                                <Paragraph>ConfigurationFileXC - Configuration files, XVM</Paragraph>
+                                <Paragraph>ConfigurationFileOther - Configuration files, Other</Paragraph>
                                 <Paragraph>SoundBank - Sound bank (bnk/pck) files</Paragraph>
-                                <Paragraph>OtherFiles - Other files</Paragraph>
+                                <Paragraph>DependencyLink - The package is a link for dependency, or is a logical link</Paragraph>
+                                <Paragraph>OtherFiles - Misc files</Paragraph>
                             </FlowDocument>
                         </RichTextBox>
                     </Grid>
