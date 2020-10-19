@@ -61,7 +61,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Set03_TranslationsTest.cs" />
+    <Compile Include="Set03_TranslationsUnitTests.cs" />
     <Compile Include="UnitTestLogBase.cs" />
     <Compile Include="UnitTestHelper.cs" />
   </ItemGroup>

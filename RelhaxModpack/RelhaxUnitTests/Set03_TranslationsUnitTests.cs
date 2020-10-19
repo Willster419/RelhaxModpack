@@ -8,7 +8,7 @@ using RelhaxModpack.Utilities.Enums;
 namespace RelhaxUnitTests
 {
     [TestClass]
-    public class Set03_TranslationsTest : UnitTestLogBase
+    public class Set03_TranslationsUnitTests : UnitTestLogBase
     {
         [TestMethod]
         public void Test01_LoadTranslationsTest()
