@@ -356,7 +356,7 @@ namespace RelhaxModpack.Windows
             //check local download cache (files, milliseconds to seconds)
             //NO UI THREAD REQUIRED
             //UI PROGRESS REPORTING
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList);
+            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList);
             ModSelectionCheckMd5Hashes(progressIndicator, loadProgress, flatList);
 
             //sort the database for UI display (~3ms)
@@ -1205,7 +1205,7 @@ namespace RelhaxModpack.Windows
         /// <param name="ParsedCategoryList">The list of Categories</param>
         private void ClearSelections(List<Category> ParsedCategoryList)
         {
-            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, ParsedCategoryList))
             {
                 if (ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
                 {
@@ -1869,7 +1869,7 @@ namespace RelhaxModpack.Windows
                 stringUserSelections.Add(node.InnerText);
 
             //check the mods in the actual list if it's in the list
-            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, ParsedCategoryList))
             {
                 //also check to only "check" the mod if it is visible OR if the command line settings to force visible all components
                 if (stringSelections.Contains(package.PackageName) && (package.Visible || ModpackSettings.ForceVisible))
@@ -2558,7 +2558,7 @@ namespace RelhaxModpack.Windows
             var nodeUserMods = doc.Descendants("userMods").FirstOrDefault();
 
             //check relhax Mods
-            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, ParsedCategoryList))
             {
                 if (package.Checked)
                 {
@@ -2657,7 +2657,7 @@ namespace RelhaxModpack.Windows
 
             //check relhax Mods
             Logging.Debug("Starting selection save of Relhax packages");
-            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, ParsedCategoryList))
             {
                 XElement xPackage = null;
                 if (package.Checked)

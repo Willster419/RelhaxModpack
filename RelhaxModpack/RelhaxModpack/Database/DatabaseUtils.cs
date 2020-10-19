@@ -813,22 +813,19 @@ namespace RelhaxModpack.Database
         /// </summary>
         /// <param name="globalDependnecies">The list of global dependences</param>
         /// <param name="dependencies">The list of dependencies</param>
-        /// <param name="logicalDependencies">The list of logical dependencies</param>
         /// <param name="parsedCategoryList">The list of Categories</param>
         /// <returns>The flat list</returns>
         /// <remarks>In the case of Categories, the flat list has the sub-level packages added at the level of the parent</remarks>
-        public static List<DatabasePackage> GetFlatList(List<DatabasePackage> globalDependnecies = null, List<Dependency> dependencies = null,
-            List<Dependency> logicalDependencies = null, List<Category> parsedCategoryList = null)
+        public static List<DatabasePackage> GetFlatList(List<DatabasePackage> globalDependnecies = null, List<Dependency> dependencies = null, List<Category> parsedCategoryList = null)
         {
-            if (globalDependnecies == null && dependencies == null && logicalDependencies == null && parsedCategoryList == null)
+            if (globalDependnecies == null && dependencies == null  && parsedCategoryList == null)
                 return null;
+
             List<DatabasePackage> flatList = new List<DatabasePackage>();
             if (globalDependnecies != null)
                 flatList.AddRange(globalDependnecies);
             if (dependencies != null)
                 flatList.AddRange(dependencies);
-            if (logicalDependencies != null)
-                flatList.AddRange(logicalDependencies);
             if (parsedCategoryList != null)
                 foreach (Category cat in parsedCategoryList)
                     flatList.AddRange(cat.GetFlatPackageList());
@@ -861,7 +858,7 @@ namespace RelhaxModpack.Database
         public static List<DatabasePackage> CheckForDuplicateUIDsPackageList(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
             List<DatabasePackage> duplicatesList = new List<DatabasePackage>();
-            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, parsedCategoryList);
             foreach (DatabasePackage package in flatList)
             {
                 List<DatabasePackage> packagesWithMatchingUID = flatList.FindAll(item => item.UID.Equals(package.UID));
@@ -894,7 +891,7 @@ namespace RelhaxModpack.Database
         public static List<string> CheckForDuplicates(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
             List<string> duplicatesList = new List<string>();
-            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            List<DatabasePackage> flatList = GetFlatList(globalDependencies, dependencies, parsedCategoryList);
             foreach (DatabasePackage package in flatList)
             {
                 List<DatabasePackage> packagesWithPackagename = flatList.Where(item => item.PackageName.Equals(package.PackageName)).ToList();
@@ -1056,7 +1053,7 @@ namespace RelhaxModpack.Database
             componentsWithDependencies_.AddRange(componentsWithDependencies.Where(cat => cat.Dependencies.Count > 0));
 
             //get all packages and dependencies where at least one dependency exists
-            componentsWithDependencies_.AddRange(GetFlatList(null, dependencies, null, componentsWithDependencies).OfType<IComponentWithDependencies>().Where(component => component.Dependencies.Count > 0).ToList());
+            componentsWithDependencies_.AddRange(GetFlatList(null, dependencies, componentsWithDependencies).OfType<IComponentWithDependencies>().Where(component => component.Dependencies.Count > 0).ToList());
 
             foreach (IComponentWithDependencies componentWithDependencies in componentsWithDependencies_)
             {

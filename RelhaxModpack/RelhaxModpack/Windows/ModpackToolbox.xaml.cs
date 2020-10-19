@@ -867,7 +867,7 @@ namespace RelhaxModpack.Windows
                 DatabaseUtils.BuildLevelPerPackage(parsedCategoryList);
 
                 //if the list of zip files does not already have it, then add it
-                flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+                flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, parsedCategoryList);
                 foreach (DatabasePackage package in flatList)
                     if(!string.IsNullOrWhiteSpace(package.ZipFile) && !allUsedZipFiles.Contains(package.ZipFile))
                             allUsedZipFiles.Add(package.ZipFile);
@@ -1063,7 +1063,7 @@ namespace RelhaxModpack.Windows
             //bulid link refrences (parent/child, levels, etc)
             DatabaseUtils.BuildLinksRefrence(parsedCategoryList, true);
             DatabaseUtils.BuildLevelPerPackage(parsedCategoryList);
-            List<DatabasePackage> flatListCurrent = DatabaseUtils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            List<DatabasePackage> flatListCurrent = DatabaseUtils.GetFlatList(globalDependencies, dependencies, parsedCategoryList);
 
             //check for duplicates
             ReportProgress("Checking for duplicate database packageName entries");
@@ -1141,7 +1141,7 @@ namespace RelhaxModpack.Windows
             //build link references of old document
             DatabaseUtils.BuildLinksRefrence(parsedCateogryListOld, true);
             DatabaseUtils.BuildLevelPerPackage(parsedCateogryListOld);
-            List<DatabasePackage> flatListOld = DatabaseUtils.GetFlatList(globalDependenciesOld, dependenciesOld, null, parsedCateogryListOld);
+            List<DatabasePackage> flatListOld = DatabaseUtils.GetFlatList(globalDependenciesOld, dependenciesOld, parsedCateogryListOld);
 
             //check if any packages had a UID change, because this is not allowed
             //check based on packageName, loop through new
@@ -1644,7 +1644,7 @@ namespace RelhaxModpack.Windows
 
             ReportProgress("Preparing lists for merge");
             XmlDocument installStats = XmlUtils.LoadXmlDocument(currentInstallStatsXml, XmlLoadType.FromString);
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, parsedCategoryList);
 
             //replace any non existent entries in installStats with empty entries where installCount = 0
             foreach(DatabasePackage package in flatList)
@@ -1704,7 +1704,7 @@ namespace RelhaxModpack.Windows
             }
 
             ReportProgress("Creating new xml document");
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, null, parsedCategoryList);
+            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, parsedCategoryList);
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             doc.AppendChild(xmlDeclaration);
@@ -1857,7 +1857,7 @@ namespace RelhaxModpack.Windows
             }
 
             //create a flat list
-            List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, null, parsedCategoryListDuplicateCheck);
+            List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck);
 
             foreach (DatabasePackage packageToAddUID in allPackages)
             {

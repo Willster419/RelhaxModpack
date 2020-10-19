@@ -2018,7 +2018,7 @@ namespace RelhaxModpack
             CancellationToken.ThrowIfCancellationRequested();
 
             //get a list of all packages in the database with zip files
-            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, null, ParsedCategoryList).Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
+            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList).Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
 
             //convert it to a list of strings
             List<string> zipFilesInDatabase = allFlatList.Select(package => package.ZipFile).ToList();
