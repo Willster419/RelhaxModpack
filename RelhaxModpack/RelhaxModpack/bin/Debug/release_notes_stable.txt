@@ -1,3 +1,26 @@
+Application version 1.2.0.0 (2020-10-19)
+https://www.virustotal.com/gui/file-analysis/OTU5ODg1ZjAzZWEzYjIxMTQ3MDgxZTY3MjQyYTcyYTA6MTYwMzA5MzUxNA==/detection
+- Added a unit tests project to the code base solution. This will allow us to unit test individual software features and help catch bugs in the application before they get released to beta.
+- Added database property and editor code-behind for adding tags to packages to classify what type of package it is (does it have patches, scripts, images, etc.)
+- Re-worked the `ModSelectionList` loading code to be organized into loading sections and what thread each loading section  happens on.
+- The algorithm for modifying atlas image data was re-written and saw a 96% time reduction. The entire time of atlas creation has been reduced by about 15-25%, depending on your system configuration.
+- Added a check to ensure the user has the .NET Framework version 4.8 or later installed. If not the user is prompted to download the latest .NET Framework.
+- Re-worked the shortcut code to use one imported COM reference. Allows us to remove the COM reference for `IWshRuntimeLibrary`
+- Lots of refactoring and code re-organization to match what is more common in c# projects. Big thanks to 'hrobohboy' for joining the application development team and taking on code cleanup and testing frameworks.
+- Modified build script to copy nuget packages to a custom location to be embedded into the application. This means that when a nuget package is updated, the update is automatically included into the next application build.
+- Updated several of our 3rd party APIs, including `DotNetZip`, `TexImpNet`, and `HtmlAgilitypack`.
+- Renamed `DatabaseUpdater` to `ModpackToolbox`.
+  -  Added feature to export translations to a tab-delimited csv file, with text escaped.
+- Removed setting to save database as legacy in the editor. No one uses it.
+- Added several utility methods to the `Translations` class. Useful for the translators.
+- Created another unit testing project for UI testing and automated mod testing.
+- Several comment and logfile writing improvements.
+- Fixed issues with UI when running authorization section of `ModpackToolbox`.
+- Re-worked descriptions and parameter names on several common utility methods to make more sense. Which is always good.
+- Removed legacy database methods no longer used
+- Removed unused code.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.1.1.0 (2020-07-03)
 https://www.virustotal.com/gui/file-analysis/YTQ5YTlmN2MxNjE0NDZiNjhjMmQ4ZjM0ODRkMTk1ZTc6MTU5MzgwODc4NA==/detection
 - Fixed the bug with drop down combobox selections not selecting the item that you click on. (Thanks Silvers of the NA server for reporting)
