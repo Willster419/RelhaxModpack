@@ -1184,6 +1184,11 @@
             Flag to determine if this package failed to download from either download methods
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Database.DatabasePackage.Tags">
+            <summary>
+            The list of tags that this package contains (like patches, scripts, etc)
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Database.DatabasePackage.AppendExtraction">
             <summary>
             Determines if this package should be put into a list that will be installed last. Used for when the package is possibly overwriting files, for example
@@ -1422,6 +1427,51 @@
             </summary>
             <param name="package">The package to get the hash code</param>
             <returns>The hash code of the PackageName of the Package</returns>
+        </member>
+        <member name="T:RelhaxModpack.Database.PackageTagsList">
+            <summary>
+            A PackageTagsList class is a child class of List of type PackageTags enum. Allows for string representation for database serialization
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.PackageTagsList.#ctor">
+            <summary>
+            Creates a PackageTagsList object
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.PackageTagsList.#ctor(System.Collections.Generic.List{RelhaxModpack.Utilities.Enums.PackageTags})">
+            <summary>
+            Creates a PackageTagsList object with the given list of type PackageTags
+            </summary>
+            <param name="packageTags">The list with elements to add from</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.PackageTagsList.ToString">
+            <summary>
+            Create a string representation of the enumerations from the list
+            </summary>
+            <returns>A comma separated list of the string names of the enumerations</returns>
+        </member>
+        <member name="T:RelhaxModpack.Database.PackageTagsListConverter">
+            <summary>
+            Allows conversion of a string representation of PackageTagsList
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.PackageTagsListConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <summary>
+            Determines if this converter can convert the supplied type
+            </summary>
+            <param name="context">The container property and descriptor. Can be null if unknown</param>
+            <param name="sourceType">The type of source to convert from</param>
+            <returns>True is the type is of string or can be converted from base, false otherwise</returns>
+            <remarks>See https://www.cyotek.com/blog/creating-a-custom-typeconverter-part-1 </remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.PackageTagsListConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
+            <summary>
+            Converts the string representation of a PackageTagsList to a PackageTagsList
+            </summary>
+            <param name="context">The container property and descriptor. Can be null if unknown</param>
+            <param name="culture">The culture to account for when converting, like including the location of where this program is being run</param>
+            <param name="value">The string value of PackageTagsList</param>
+            <returns></returns>
         </member>
         <member name="T:RelhaxModpack.Database.SelectablePackage">
             <summary>
@@ -4237,6 +4287,91 @@
             Raw HTML code to display in embedded browser
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.PackageTags">
+            <summary>
+            An enumeration to categorize the contents of a package, or its purpose
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.Patch">
+            <summary>
+            The package contains patching instructions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.XmlUnpack">
+            <summary>
+            The package contains Xml unpacking instructions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.Script">
+            <summary>
+            The package contains python scripts
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.Atlas">
+            <summary>
+            The package contains pre-built atlas files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.AtlasBuilder">
+            <summary>
+            The package contains atlas creation instructions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.ImagePNG">
+            <summary>
+            The package contains PNG image files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.ImageDDS">
+            <summary>
+            The package contains DDS image files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.GuiFlash">
+            <summary>
+            The package contains ActionScript swf files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.GuiLoginVideo">
+            <summary>
+            The package contains GUI login video files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.ConfigurationFileXml">
+            <summary>
+            The package contains xml configuration files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.ConfigurationFileJson">
+            <summary>
+            The package contains json configuration files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.ConfigurationFileXC">
+            <summary>
+            The package contains XVM (xc) configuration files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.ConfigurationFileOther">
+            <summary>
+            The package contains configuration files of an other format
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.SoundBank">
+            <summary>
+            The package contains sound bank (bnk/pck) files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.DependencyLink">
+            <summary>
+            The package is used as a dependency link or a dependency with logical requirements
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.PackageTags.OtherFiles">
+            <summary>
+            The package contains misc files
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.PatchExitCode">
             <summary>
             Exit codes during a patch operation
@@ -4939,16 +5074,6 @@
             <param name="defaultValue">The default value for result, if parse fails</param>
             <returns>Returns if the TryParse() worked</returns>
         </member>
-        <member name="M:RelhaxModpack.Utilities.CommonUtils.ParseEnum``1(System.String,``0)">
-            <summary>
-            Tries to parse an enumeration of a given type
-            </summary>
-            <typeparam name="TEnum">The type of enumeration to parse as</typeparam>
-            <param name="input">The input string to parse</param>
-            <param name="defaultValue">The default value if the enumeration parse fails</param>
-            <returns>The parsed or default enumeration value</returns>
-            <remarks>see https://stackoverflow.com/questions/10685794/how-to-use-generic-tryparse-with-enum </remarks>
-        </member>
         <member name="M:RelhaxModpack.Utilities.CommonUtils.DownloadStringsFromUrls(System.Collections.Generic.List{System.String})">
             <summary>
             Downloads an array of strings from a list of download URLs all at the same time
@@ -5191,8 +5316,8 @@
             <summary>
             Attempts to set a property value of a class or structure object instance with the string valueToSet
             </summary>
-            <param name="componentWithProperty">The class or structure object instance to have property set</param>
-            <param name="propertyInfoFromComponent">The property information/metadata of the property to set on the object</param>
+            <param name="objectToSetValueOn">The class or structure object instance to have property set</param>
+            <param name="propertyInfoOfObject">The property information/metadata of the property to set on the object</param>
             <param name="valueToSet">The string version of the value to set</param>
             <returns>False if the value could not be set, true otherwise</returns>
         </member>
@@ -5209,9 +5334,17 @@
             <summary>
             Creates all database entries in a list property, parsing each list entry object by xmlListItems
             </summary>
-            <param name="componentWithID">The database component with the list property, for example SelectablePackage</param>
+            <param name="databasePackageObject">The database package object with the list property, for example SelectablePackage</param>
             <param name="listPropertyInfo">The property metadata/info about the list property, for example Medias</param>
             <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.GetEnumList``1">
+            <summary>
+            Gets a list of all types that can exist in an enumeration
+            </summary>
+            <typeparam name="T">The type of the enumeration to get a list of</typeparam>
+            <returns>A list of all enumeration values of that type</returns>
+            <remarks>See https://stackoverflow.com/a/801058/3128017 </remarks>
         </member>
         <member name="T:RelhaxModpack.InstallerExitCodes">
             <summary>
