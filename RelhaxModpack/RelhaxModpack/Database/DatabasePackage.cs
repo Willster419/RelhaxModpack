@@ -1,5 +1,4 @@
-﻿using RelhaxModpack.Database;
-using RelhaxModpack.Utilities;
+﻿using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
@@ -38,6 +37,7 @@ namespace RelhaxModpack.Database
         {
             nameof(PackageName),
             nameof(Enabled),
+            nameof(Tags),
             nameof(InstallGroup),
             nameof(PatchGroup),
             nameof(UID)
@@ -256,6 +256,11 @@ namespace RelhaxModpack.Database
         /// Flag to determine if this package failed to download from either download methods
         /// </summary>
         public bool DownloadFailed { get; set; } = false;
+
+        /// <summary>
+        /// The list of tags that this package contains (like patches, scripts, etc)
+        /// </summary>
+        public PackageTagsList Tags { get; set; }  = new PackageTagsList();
 
         //append extraction flag
         /// <summary>

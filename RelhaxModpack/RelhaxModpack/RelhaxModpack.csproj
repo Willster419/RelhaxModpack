@@ -140,6 +140,8 @@
     <Compile Include="Database\IXmlSerializable.cs" />
     <Compile Include="Database\Media.cs" />
     <Compile Include="Database\PackageComparer.cs" />
+    <Compile Include="Database\PackageTagsList.cs" />
+    <Compile Include="Database\PackageTagsListConverter.cs" />
     <Compile Include="Database\PatchUpdate.cs" />
     <Compile Include="Database\SelectablePackage.cs" />
     <Compile Include="Database\Trigger.cs" />
@@ -186,6 +188,7 @@
     <Compile Include="Utilities\Enums\LogLevel.cs" />
     <Compile Include="Utilities\Enums\LogOptions.cs" />
     <Compile Include="Utilities\Enums\MediaType.cs" />
+    <Compile Include="Utilities\Enums\PackageTags.cs" />
     <Compile Include="Utilities\Enums\PatchExitCode.cs" />
     <Compile Include="Utilities\Enums\PatchRegressionTypes.cs" />
     <Compile Include="Utilities\Enums\ReplacementTypes.cs" />
