@@ -73,7 +73,7 @@ namespace RelhaxUnitTests
             DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
             DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
 
-            TestDatabaseEntries(GlobalDependencies, Dependencies, ParsedCategoryList);
+            TestDatabaseEntries(GlobalDependencies, Dependencies, ParsedCategoryList, false);
         }
 
         [TestMethod]
@@ -115,7 +115,7 @@ namespace RelhaxUnitTests
             DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
             DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
 
-            TestDatabaseEntries(GlobalDependencies, Dependencies, ParsedCategoryList);
+            TestDatabaseEntries(GlobalDependencies, Dependencies, ParsedCategoryList, true);
 
             GlobalDependenciesForSave = GlobalDependencies;
             DependenciesForSave = Dependencies;
@@ -156,24 +156,25 @@ namespace RelhaxUnitTests
             DatabaseUtils.SaveDatabase1V1(databaseSavePath, rootDoc, GlobalDependenciesForSave, DependenciesForSave, ParsedCategoryListForSave);
 
             Assert.IsTrue(File.Exists(Path.Combine(databaseSavePath, Settings.BetaDatabaseV2RootFilename)));
+            XmlDocument loadDoc = XmlUtils.LoadXmlDocument(Path.Combine(databaseSavePath, Settings.BetaDatabaseV2RootFilename), XmlLoadType.FromFile);
+            Assert.IsNotNull(loadDoc);
 
-            foreach(string path in allCategoriesXml)
+            foreach (string path in allCategoriesXml)
             {
-                Assert.IsTrue(File.Exists(Path.Combine(databaseSavePath, path)));
+                string endPath = path.Split('/').Last();
+                Assert.IsTrue(File.Exists(Path.Combine(databaseSavePath, endPath)));
+                loadDoc = XmlUtils.LoadXmlDocument(Path.Combine(databaseSavePath, endPath), XmlLoadType.FromFile);
+                Assert.IsNotNull(loadDoc);
             }
+
+            if (Directory.Exists(databaseSavePath))
+                Directory.Delete(databaseSavePath, true);
         }
 
-        private void TestDatabaseEntries(List<DatabasePackage> GlobalDependencies, List<Dependency> Dependencies, List<Category> ParsedCategoryList)
+        private void TestDatabaseEntries(List<DatabasePackage> GlobalDependencies, List<Dependency> Dependencies, List<Category> ParsedCategoryList, bool checkDuplicates)
         {
             List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList);
             Assert.IsNotNull(allPackages);
-
-            int selectPackages = 0;
-            foreach (Category category in ParsedCategoryList)
-                foreach (SelectablePackage packageInCat in category.Packages)
-                    selectPackages++;
-
-            Assert.IsTrue(allPackages.Count == GlobalDependencies.Count + Dependencies.Count + selectPackages);
 
             foreach (DatabasePackage package in allPackages)
             {
@@ -188,10 +189,18 @@ namespace RelhaxUnitTests
 
             List<SelectablePackage> selectablePackages = DatabaseUtils.GetFlatSelectablePackageList(ParsedCategoryList);
             Assert.IsNotNull(selectablePackages);
-            Assert.IsTrue(selectablePackages.Count == selectPackages);
 
-            Assert.IsTrue(DatabaseUtils.CheckForDuplicates(GlobalDependencies, Dependencies, ParsedCategoryList).Count == 0);
-            Assert.IsTrue(DatabaseUtils.CheckForDuplicateUIDsStringsList(GlobalDependencies, Dependencies, ParsedCategoryList).Count == 0);
+            if (checkDuplicates)
+            {
+                List<string> duplicatesPackageNames = null;
+                List<DatabasePackage> duplicatesUID = null;
+
+                duplicatesPackageNames = DatabaseUtils.CheckForDuplicates(GlobalDependencies, Dependencies, ParsedCategoryList);
+                duplicatesUID = DatabaseUtils.CheckForDuplicateUIDsPackageList(GlobalDependencies, Dependencies, ParsedCategoryList);
+
+                Assert.IsTrue(duplicatesPackageNames.Count == 0);
+                Assert.IsTrue(duplicatesUID.Count == 0);
+            }
         }
     }
 }
