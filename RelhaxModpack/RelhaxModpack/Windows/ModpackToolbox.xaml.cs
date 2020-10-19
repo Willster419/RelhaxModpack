@@ -1183,7 +1183,7 @@ namespace RelhaxModpack.Windows
                 {
                     ReportProgress(string.Format("Before package: PackageName = {0}, UID = {1}",beforeAfter.Before.PackageName, beforeAfter.Before.UID));
                     ReportProgress(string.Format("After package:  PackageName = {0}, UID = {1}", beforeAfter.After.PackageName, beforeAfter.After.UID));
-                    string dialog = string.Format("Package {01} had a UID change:\nBefore: {1}\nAfter{2}\nIs this known?",
+                    string dialog = string.Format("Package {0} had a UID change:\nBefore: {1}\nAfter{2}\nIs this known?",
                         beforeAfter.Before.PackageName, beforeAfter.Before.UID, beforeAfter.After.UID);
 
                     if (MessageBox.Show(dialog, "Interesting", MessageBoxButton.YesNo) == MessageBoxResult.No)
