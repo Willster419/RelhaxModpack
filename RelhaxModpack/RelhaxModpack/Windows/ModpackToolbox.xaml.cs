@@ -463,19 +463,20 @@ namespace RelhaxModpack.Windows
                 Path.Combine(Settings.ApplicationStartupPath, "database_user.csv");
 
             //global dependencies
-            string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tDevURL\tEnabled\tVisible\tVersion" : "Category\tMod\tDevURL";
+            string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tTags\tDevURL\tEnabled\tVisible\tVersion" : "Category\tMod\tDevURL";
             sb.AppendLine(header);
 
             if(@internal)
             {
                 foreach (DatabasePackage dp in globalDependencies)
                 {
-                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",
                         dp.PackageName,
                         "GlobalDependencies",
                         string.Empty,
                         "0",
                         string.IsNullOrWhiteSpace(dp.ZipFile) ? notApplicable : dp.ZipFile,
+                        dp.Tags.ToString(),
                         string.IsNullOrWhiteSpace(dp.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + dp.DevURLList[0].Trim() + "\",\"link\")",
                         dp.Enabled,
                         string.Empty,
@@ -484,12 +485,13 @@ namespace RelhaxModpack.Windows
                 }
                 foreach (Dependency dep in dependencies)
                 {
-                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                    sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",
                         dep.PackageName,
                         "Dependencies",
                         string.Empty,
                         "0",
                         string.IsNullOrWhiteSpace(dep.ZipFile) ? notApplicable : dep.ZipFile,
+                        dep.Tags.ToString(),
                         string.IsNullOrWhiteSpace(dep.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + dep.DevURLList[0].Trim() + "\",\"link\")",
                         dep.Enabled,
                         string.Empty,
@@ -515,12 +517,13 @@ namespace RelhaxModpack.Windows
                     }
                     else
                     {
-                        sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                        sb.AppendLine(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",
                             sp.PackageName,
                             sp.ParentCategory.Name,
                             sp.NameFormatted,
                             sp.Level,
                             string.IsNullOrWhiteSpace(sp.ZipFile) ? notApplicable : sp.ZipFile,
+                            sp.Tags.ToString(),
                             string.IsNullOrWhiteSpace(sp.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + sp.DevURLList[0].Trim() + "\",\"link\")",
                             sp.Enabled,
                             sp.Visible,
