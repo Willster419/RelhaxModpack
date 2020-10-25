@@ -64,20 +64,29 @@ The goal of this project is to redefine what a modpack installer is, from the te
 <samp><sup>(Click to expand)</sup></samp>
 
 ### What does the modpack look like?
-![MainWindow](https://i.imgur.com/tR0Nn2M.png "Main Window")
+<details>
+	<summary>Main Window</summary>
+	<p align="center"><img src=".github/readme_resources/en/main_window_1.png" alt="Main Window 1"/></p>
+	<p align="center"><img src=".github/readme_resources/en/main_window_2.png" alt="Main Window 2"/></p>
+	<p align="center"><img src=".github/readme_resources/en/main_window_3.png" alt="Main Window 3"/></p>
+</details>
 
-![MainWindow](https://i.imgur.com/SQTj4pk.png "Main Window2")
+<details>
+	<summary>Mod Selection List</summary>
+		<figure>
+				<p align="center"><img src=".github/readme_resources/en/selection_lists.png" alt="Mod Selection List"/></p>
+			</figcaption>Prefer the <abbr title="Odem Mortis Community">OMC</abbr> style selection view? No problem!<figcaption>
+		</figure>
+</details>
 
-![MainWindow](https://i.imgur.com/LsVbDkS.png "Main Window3")
+<details>
+	<summary>Mod Preview & Description Window</summary>
+	<p align="center"><img src=".github/readme_resources/en/mod_preview_1.png" alt="Mod Preview 1"/></p>
+	<p align="center"><img src=".github/readme_resources/en/mod_preview_2.png" alt="Mod Preview 2"/></p>
+</details>
+<samp><sup>(Click to expand)</sup></samp>
 
-![ModSelection](https://i.imgur.com/n1T8OQI.png "Mod Selection")
-
-### Prefer the <abbr title="Odem Mortis Community">OMC</abbr> style selection view?
-![ModSelectionOld](https://i.imgur.com/gh3hdNO.png "Mod Selection Legacy")
-
-![ModSelectionOld](https://i.imgur.com/5jafeBd.png "Preview")
-
-![ModSelectionOld](https://i.imgur.com/A5zf8LI.png "Preview2")
+***
 
 ### Additional Information
 
