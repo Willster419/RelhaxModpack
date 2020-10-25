@@ -775,11 +775,11 @@ namespace RelhaxModpack
             English.Add("invalidDotNetFrameworkVersion", "The installed version of the .NET Framework is less then 4.8. Relhax Modpack requires version 4.8 or above to operate. Would you like to open a link" +
                 "to get the latest version of the .NET Framework?");
             German.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
-            Polish.Add("invalidDotNetFrameworkVersion", "Zainstalowana wersja .NET Framework jest za stara. Modpack wymaga .NET Framework w wersji 4.8 lub wyższej." +
+            Polish.Add("invalidDotNetFrameworkVersion", "Zainstalowana wersja .NET Framework jest za stara. Modpack wymaga .NET Framework w wersji 4.8 lub wyższej.\n" +
                 "Czy chcesz przejść do strony pobierania najnowszej wersji .NET Framework?");
-            French.Add("invalidDotNetFrameworkVersion", "La version installée du .NET Framework est inférieure à la 4,8. Relhax Modpack nécessite la version 4.8 ou supérieure pour fonctionner." +
-								"Souhaitez-vous ouvrir un lien pour obtenir la dernière version du .NET Framework?");
-            Spanish.Add("invalidDotNetFrameworkVersion", "La versión instalada de .NET Framework es anterior a 4.8. Relhax Modpack requiere la versión 4.8 o superior para funcionar." +
+            French.Add("invalidDotNetFrameworkVersion", "La version installée de .NET Framework est inférieur à la 4.8. Relhax Modpack nécessite la version 4.8 ou supérieur afin d'opérer. " +
+                "Voulez-vous ouvrir un lien pour installer la dernière version ?");
+            Spanish.Add("invalidDotNetFrameworkVersion", "La versión instalada de .NET Framework es anterior a 4.8. Relhax Modpack requiere la versión 4.8 o superior para funcionar. " +
                 " ¿Quiere abrir un vínculo para obtener la última versión de .NET Framework?");
             Russian.Add("invalidDotNetFrameworkVersion", "На вашем компьютере установлена версия .NET Framework ниже 4.8. Для работы Relhax Modpack требуется версия 4.8 или выше. Хотите перейти на страницу загрузки актуальной версии?");
             #endregion
@@ -2672,7 +2672,7 @@ namespace RelhaxModpack
             Polish.Add("packagesUpdatedShouldInstall", "Od czasu ostatniego użycia tego pliku kolekcji, poniższe pakiety zostały zaktualizowane. Twój plik kolekcji został automatycznie zaktualizowany (utworzono też jego jednorazową kopię zapasową)." +
                 "Jeśli jest to Twoja bieżąca instalacja i chcesz ją zachować, zaleca się instalację/aktualizację po tej wiadomości.");
             French.Add("packagesUpdatedShouldInstall", "Les packages suivants ont été mis à jour depuis le dernier chargement de ce fichier de sélection. Votre fichier de sélection a été mis à jour avec les modifications (une sauvegarde ponctuelle a également été effectuée)." +
-            "S'il s'agit de votre installation actuelle et que vous souhaitez la conserver, il est recommandé d'installer / mettre à jour après avoir vu ce message.");
+                "S'il s'agit de votre installation actuelle et que vous souhaitez la conserver, il est recommandé d'installer / mettre à jour après avoir vu ce message.");
             Spanish.Add("packagesUpdatedShouldInstall", "Los siguientes paquetes han sido actualizados desde la última carga de este archivo de selección. Su archivo de selección ha sido actualizado con los cambios (y se ha creado una copia de seguridad de un sólo uso). " +
                 "Si ésta es su instalación actual, y quiere conservarla, se recomienda instalar/actualizar después de ver este mensaje.");
             Russian.Add("packagesUpdatedShouldInstall",  "Следующие пакеты были обновлены с момента последней загрузки данного файла предустановки. Файл предустановки был обновлён и изменён (его резервная копия так же была сделана). Если это ваша основная конфигурация и вы хотите её сохранить, рекомендуем вам установить/обновить моды после этого уведомления.");
