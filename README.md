@@ -1,23 +1,17 @@
-#### Available Languages:
-**[[ <ins>EN</ins> ](README.md) ] | [ DE ] | [[ PL ](README.pl.md)] | [ FR ] | [ ES ] | [ RU ]**
+##### Available Languages:
+[[ <ins>ENGLISH</ins> ](README.md) ] | [ Deutch ] | [[ Polski ](README.pl.md)] | [ Français ] | [ Español ] | [ Pусский ]
 
-<img src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico"
-  width="128"
-  height="128"
-  style="float:left;">
- 
-# The Relhax Modpack
+<img align="left" width="128" height="128" src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico" alt="Relhax Modpack icon">
+
+## The Relhax Modpack
 The fastest WoT modpack installer in the world. A refresh of OMC modpack.
 
-**[Skip to download link](https://github.com/Willster419/RelhaxModpack#download)**
+**> [Skip to download](https://github.com/Willster419/RelhaxModpack#download)**
 
-**[Virustotal scan](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)**
-
-[Visit our Website!](https://relhaxmodpack.com/)
-
-[License Information](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)
-
-[Discord Support Server](https://discordapp.com/invite/58fdPvK)
+|               |               |               |               |
+|:-------------:|:-------------:|:-------------:|:-------------:|
+|[Virustotal Scan](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)|[Visit our Website!](https://relhaxmodpack.com/)|**[Discord Support Server](https://discordapp.com/invite/58fdPvK)**|[License Information](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
+|		
 
 ### Description and reason for development
   This project is in dedication of the RELIC Gaming Community, as well as the OMC modpack dev team (which includes me, :)). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the OMC modpack over the years will not be forgotten.
