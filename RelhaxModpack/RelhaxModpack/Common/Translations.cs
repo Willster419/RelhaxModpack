@@ -593,7 +593,7 @@ namespace RelhaxModpack
             Spanish.Add("abort", "Abortar");
             Russian.Add("abort", "Отменить");
 
-            // REFERRERS: extractionErrorHeader; GcDownloadStep1ValueError; 
+            // REFERRERS: extractionErrorHeader; GcDownloadStep1ValueError;
             English.Add("error", "Error");
             German.Add("error", "Fehler");
             Polish.Add("error", "Błąd");
@@ -777,7 +777,8 @@ namespace RelhaxModpack
             German.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
             Polish.Add("invalidDotNetFrameworkVersion", "Zainstalowana wersja .NET Framework jest za stara. Modpack wymaga .NET Framework w wersji 4.8 lub wyższej." +
                 "Czy chcesz przejść do strony pobierania najnowszej wersji .NET Framework?");
-            French.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
+            French.Add("invalidDotNetFrameworkVersion", "La version installée du .NET Framework est inférieure à la 4,8. Relhax Modpack nécessite la version 4.8 ou supérieure pour fonctionner." +
+								"Souhaitez-vous ouvrir un lien pour obtenir la dernière version du .NET Framework?");
             Spanish.Add("invalidDotNetFrameworkVersion", "La versión instalada de .NET Framework es anterior a 4.8. Relhax Modpack requiere la versión 4.8 o superior para funcionar." +
                 " ¿Quiere abrir un vínculo para obtener la última versión de .NET Framework?");
             Russian.Add("invalidDotNetFrameworkVersion", "На вашем компьютере установлена версия .NET Framework ниже 4.8. Для работы Relhax Modpack требуется версия 4.8 или выше. Хотите перейти на страницу загрузки актуальной версии?");
@@ -2515,7 +2516,7 @@ namespace RelhaxModpack
 
             //Component: FirstTimeUserModsWarning
             //
-            English.Add("FirstTimeUserModsWarning", "This tab is for selecting zip files you place in the \"RelhaxUserMods\" folder. They must be zip files, and should use a root directory folder of the \"World_of_Tanks\" directory"); 
+            English.Add("FirstTimeUserModsWarning", "This tab is for selecting zip files you place in the \"RelhaxUserMods\" folder. They must be zip files, and should use a root directory folder of the \"World_of_Tanks\" directory");
             German.Add("FirstTimeUserModsWarning", "Auf dieser Registerkarte kannst du ZIP-Dateien auswählen, welche du zuvor im Ordner \"RelhaxUserMods\" hinterlegst. Es müssen Zip-Dateien sein und sollten als Stammverzeichnisordner einen Ordner des Verzeichnisses \"World_of_Tanks\" beinhalten (zB: mods, oder res_mods)");
             Polish.Add("FirstTimeUserModsWarning", "Ta zakładka umożliwia wybór modów, które możesz umieścić w folderze \"RelhaxUserMods\"" +
                 " Muszą to być archiwa ZIP używające struktury folderów takiej samej jak folder gry (domyślnie: World_of_Tanks)."); //? Ain't sure about how the root directory thing. ASSUMED: As in the same folder structure. @Nullmaruzero
@@ -2816,7 +2817,7 @@ namespace RelhaxModpack
             English.Add("SelectionFileIssuesDisplay", "Errors applying selection file");
             German.Add("SelectionFileIssuesDisplay", "Fehler beim Anwenden der Auswahldatei");
             Polish.Add("SelectionFileIssuesDisplay", "Błędy z zastosowaniem pliku kolekcji");
-            French.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            French.Add("SelectionFileIssuesDisplay", "Erreurs lors de l'application du fichier de sélection");
             Spanish.Add("SelectionFileIssuesDisplay", "Errores al aplicar el archivo de selección");
             Russian.Add("SelectionFileIssuesDisplay", "Ошибка применения файла предустановки");
 
@@ -4278,7 +4279,7 @@ namespace RelhaxModpack
             English.Add("trimRelhaxLogSuccess", "Sucessfully trimmed the Relhax log file");
             German.Add("trimRelhaxLogSuccess", TranslationNeeded);
             Polish.Add("trimRelhaxLogSuccess", "Ograniczanie zakresu pliku dziennika zakończone powodzeniem");
-            French.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            French.Add("trimRelhaxLogSuccess", "Ajustement du fichier journal Relhax avec succès");
             Spanish.Add("trimRelhaxLogSuccess", TranslationNeeded);
             Russian.Add("trimRelhaxLogSuccess", TranslationNeeded);
 
