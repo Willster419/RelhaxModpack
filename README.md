@@ -1,8 +1,10 @@
 #### Available Languages:
 **[[ <ins>EN</ins> ](README.md) ] | [ DE ] | [[ PL ](README.pl.md)] | [ FR ] | [ ES ] | [ RU ]**
 
+<img src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico"
+  style="float:left;">
 # The Relhax Modpack
-The fastest WoT modpack installer in the world. A refresh of OMC modpack
+The fastest WoT modpack installer in the world. A refresh of OMC modpack.
 
 **[Skip to download link](https://github.com/Willster419/RelhaxModpack#download)**
 
