@@ -1,5 +1,5 @@
 ##### Available Languages:
-[[ <ins>ENGLISH</ins> ](README.md) ] | [ Deutch ] | [[ Polski ](README.pl.md)] | [ Français ] | [ Español ] | [ Pусский ]
+[[ **<ins>English</ins>** ](README.md) ] | [ Deutch ] | [[ Polski ](README.pl.md)] | [ Français ] | [ Español ] | [ Pусский ]
 
 <img align="left" width="128" height="128" src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico" alt="Relhax Modpack icon">
 
