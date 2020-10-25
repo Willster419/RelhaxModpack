@@ -2,7 +2,7 @@
 <img align="left" width="128" height="128" src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico">
 
 ## Relhax Modpack
-***Modpack z najszybszym instalatorem świata. Następca Modpacka OMC.***
+***Modpack <abbr title="World of Tanks">WoT</abbr> z najszybszym instalatorem świata. Następca Modpacka OMC.***
 
 **> [Przejdź do pobierania](https://github.com/Willster419/RelhaxModpack#download)**
 
@@ -18,7 +18,7 @@
 When I looked at the current modpack installers, they all look the same: in size, in UI, and were all made with the inno setup creator. Many describe these installers as "clunky and slow". Trying to get that perfect mod setup can sometimes take hours. Have you ever had a "modpack setup night"?
 
 The goal of this project is to redefine what a modpack installer is, from the templace UI to the install engine. Instead of using inno setup, I decided to create my own install engine from scratch in Microsoft's C# programming language. Some of the UI features in this modpack are new(tab category view), and some are kept in line with previous modpacks (right click to preview).
-  
+
 ## Modpack Features
 ### Why would you use this modpack over Aslain's/OMC's/any other inno setup template modpack?
 - Improved UI:
@@ -43,7 +43,7 @@ The goal of this project is to redefine what a modpack installer is, from the te
   - The loading and installation times of this modpack vs. inno setup modpacks have been reduced by up to  **89%** and **60%** on a standard hard drive using the standard extraction mode. The times are even further reduced for those with WoT installed on an SSD using the multicore extraction mode.
 - Automation:
   - The modpack and be set at command line with a "/auto-install config_file_name.xml" switch to automatically install the modpack, with your preference of mods selected. In this situation, you could install without any interaction, and update all your mods in seconds.
-  
+
 ### What does the modpack look like?
 ![MainWindow](https://i.imgur.com/tR0Nn2M.png "Main Window")
 
@@ -61,7 +61,7 @@ The goal of this project is to redefine what a modpack installer is, from the te
 ![ModSelectionOld](https://i.imgur.com/A5zf8LI.png "Preview2")
 
 ### Additional Information
-  
+
 **If you come across a bug or feature request please take one of these actions:**
 - Record it here:
 http://forums.relhaxmodpack.com/
@@ -111,15 +111,15 @@ https://docs.google.com/presentation/d/1H-6YLcEP3XfxeEhF21grP7Ypfw2im300201bz0NA
 
 #### *How can I use the "auto-install" option?*
    From the advanced settings tab, load a selection file and check the "auto installation" checkbox in advanced settings. The modpack will automatically check with the server (beta or stable database) for a new db version, and if one is found, an installation is started.
-  
+
 #### (1)Performance measurements:
 Hard drive used is a Toshiba 5400 RPM 2.5 inch laptop hard drive, 8MB cache
 ##### Time from program execution to mod selection on a hard drive:
 
   OMC: 48 seconds
-  
+
   Aslains: 24 seconds
-  
+
   Relhax: 5 seconds - **Time reduced by 89% from OMC and 80% from Aslains**
 
 
@@ -128,12 +128,12 @@ Hard drive used is a Toshiba 5400 RPM 2.5 inch laptop hard drive, 8MB cache
 Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent)
 
   OMC: 10 seconds
-  
+
   Aslains: 9 seconds
-  
+
   Relhax: 4 seconds - **Time reduced by 60% from OMC and 56% from Aslains
-  
-  
+
+
 ---
 The Relhax Modpack ~ *"Would you rather spend time on your mods, or your gameplay?"* ~
 
