@@ -1,11 +1,8 @@
 #### Dostępne wersje językowe:
 **[[ EN ](README.md) ] | [ DE ] | [[ <ins>PL</ins> ](README.pl.md)] | [ FR ] | [ ES ] | [ RU ]**
 
-<img src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico"
-  width="128"
-  height="128"
-  style="float:left;">
- 
+<img align="left" width="80" height="80" src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico" alt="Relhax Modpack icon">
+
 # Relhax Modpack
 Modpack z najszybszym instalatorem świata. Następca OMC Modpack.
 
