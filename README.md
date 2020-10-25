@@ -20,7 +20,7 @@ When I looked at the current modpack installers, they all look the same: in size
 The goal of this project is to redefine what a modpack installer is, from the templace UI to the install engine. Instead of using inno setup, I decided to create my own install engine from scratch in Microsoft's C# programming language. Some of the UI features in this modpack are new (tab category view), and some are kept in line with previous modpacks (right click to preview).
 
 ## Modpack Features
-#### Why would you use this modpack over Aslain's/<abbr title="Odem Mortis Community">OMC</abbr>'s/any other inno setup template modpack?
+#### Why would you use this modpack over any other inno setup template modpack?
 <details>
 <summary><b>Improved UI</b> — {TODO: One-liner summary}...</summary>
 	<ul>
