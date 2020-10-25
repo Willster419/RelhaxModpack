@@ -11,7 +11,7 @@ The fastest WoT modpack installer in the world. A refresh of OMC modpack.
 |               |               |               |               |
 |:-------------:|:-------------:|:-------------:|:-------------:|
 |[Virustotal Scan](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)|[Visit our Website!](https://relhaxmodpack.com/)|**[Discord Support Server](https://discordapp.com/invite/58fdPvK)**|[License Information](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
-|		
+|				|				|				|				|
 
 ### Description and reason for development
   This project is in dedication of the RELIC Gaming Community, as well as the OMC modpack dev team (which includes me, :)). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the OMC modpack over the years will not be forgotten.
