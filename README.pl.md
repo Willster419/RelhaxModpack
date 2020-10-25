@@ -1,5 +1,5 @@
 #### Dostępne wersje językowe:
-[[EN](README.md)] | [DE] | **[[PL](README.pl.md)]** | [FR] | [ES] | [RU]
+**[[EN](README.md)] | [DE] | [_[PL]_(README.pl.md)] | [FR] | [ES] | [RU]**
 
 # The Relhax Modpack
 The fastest WoT modpack installer in the world. A refresh of OMC modpack
