@@ -1,6 +1,5 @@
-###### DOSTĘPNE JĘZYKI: [**English**](README.md), Deutch, [<ins>Polski</ins>](README.pl.md), Français, Español, Pусский.
-***
-<img align="left" width="128" height="128" src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico" alt="Relhax Modpack icon">
+<sup>**DOSTĘPNE JĘZYKI:** [**English**](README.md), Deutch, [<ins>Polski</ins>](README.pl.md), Français, Español, Pусский.</sup>
+<img align="left" width="128" height="128" src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico">
 
 ## Relhax Modpack
 ***Modpack z najszybszym instalatorem świata. Następca Modpacka OMC.***
