@@ -10,7 +10,7 @@
 |               |               |               |               |
 |:-------------:|:-------------:|:-------------:|:-------------:|
 |[Skan Virustotal](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)|[Strona WWW](https://relhaxmodpack.com/)|**[Nasz Serwer Discord](https://discordapp.com/invite/58fdPvK)**|[Licencja](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
-|![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=85c6cc&label=Relhax%20Modpack)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=4c6f74&label=Total%20Downloads)|![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Our%20Discord)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=Licence)|
+|![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=85c6cc&label=Relhax%20Modpack)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=4c6f74&label=Łączne%20Pobrania)|![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Nasz%20Discord)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=Licencja)|
 |||||
 ### Description and reason for development
   This project is in dedication of the RELIC Gaming Community, as well as the OMC modpack dev team (which includes me, :)). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the OMC modpack over the years will not be forgotten.
