@@ -768,7 +768,7 @@ namespace RelhaxModpack
             Polish.Add("failedToGetDotNetFrameworkVersion", "Brak zainstalowanego .NET Framework. Może to oznaczać problem z prawami dostępu lub konflikt z oprogramowaniem antywirusowym blokującym dostęp.");
             French.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
             Spanish.Add("failedToGetDotNetFrameworkVersion", "No se ha podido obtener la versión de la instalación de .Net Framework. Esto puede indicar un problema de permisos, o un antivirus puede estar bloqueando la obtención.");
-            Russian.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+            Russian.Add("failedToGetDotNetFrameworkVersion", "Не удалось определить установленную версию .NET Framework. Вероятно, это вызвано недостаточными привилегиями или блокировкой работы антивирусным ПО.");
 
             //Component: invalidDotNetFrameworkVersion
             //
@@ -780,7 +780,7 @@ namespace RelhaxModpack
             French.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
             Spanish.Add("invalidDotNetFrameworkVersion", "La versión instalada de .NET Framework es anterior a 4.8. Relhax Modpack requiere la versión 4.8 o superior para funcionar." +
                 " ¿Quiere abrir un vínculo para obtener la última versión de .NET Framework?");
-            Russian.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
+            Russian.Add("invalidDotNetFrameworkVersion", "На вашем компьютере установлена версия .NET Framework ниже 4.8. Для работы Relhax Modpack требуется версия 4.8 или выше. Хотите перейти на страницу загрузки актуальной версии?");
             #endregion
 
             #region Tray Icon
