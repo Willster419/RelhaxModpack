@@ -3,7 +3,7 @@
 <img align="left" width="128" height="128" src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico" alt="Relhax Modpack icon">
 
 ## Relhax Modpack
-Modpack z najszybszym instalatorem świata. Następca OMC Modpack.
+***Modpack z najszybszym instalatorem świata. Następca Modpacka OMC.***
 
 **> [Przejdź do pobierania](https://github.com/Willster419/RelhaxModpack#download)**
 
@@ -11,7 +11,7 @@ Modpack z najszybszym instalatorem świata. Następca OMC Modpack.
 |:-------------:|:-------------:|:-------------:|:-------------:|
 |[Skan Virustotal](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)|[Strona WWW](https://relhaxmodpack.com/)|**[Nasz Serwer Discord](https://discordapp.com/invite/58fdPvK)**|[Licencja](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
 |				|				|				|				|
-
+***
 ### Description and reason for development
   This project is in dedication of the RELIC Gaming Community, as well as the OMC modpack dev team (which includes me, :)). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the OMC modpack over the years will not be forgotten.
 
