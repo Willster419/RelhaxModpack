@@ -13,7 +13,7 @@
 |||||
 ***
 ### Description and reason for development
-  This project is in dedication of the RELIC Gaming Community, as well as the <abbr title="Odem Mortis Community">OMC</abbr> modpack dev team (which includes me, :)). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the <abbr title="Odem Mortis Community">OMC</abbr> modpack over the years will not be forgotten.
+  This project is in dedication of the RELIC Gaming Community, as well as the <abbr title="Odem Mortis Community">OMC</abbr> modpack dev team (which includes me, :wink: ). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the <abbr title="Odem Mortis Community">OMC</abbr> modpack over the years will not be forgotten.
 
 When I looked at the current modpack installers, they all look the same: in size, in UI, and were all made with the inno setup creator. Many describe these installers as "clunky and slow". Trying to get that perfect mod setup can sometimes take hours. Have you ever had a "modpack setup night"?
 
@@ -51,8 +51,8 @@ The goal of this project is to redefine what a modpack installer is, from the te
 <details>
 <summary><b>Performance</b> — {TODO: One-liner summary}...</summary>
   <ul>
-		<li>For the first time in modpack history, the installation process is multi-threaded, meaning that it can install multiple mods at once. The install process is optimized for 8 core systems.</li>
-		<li>The loading and installation times of this modpack vs. inno setup modpacks have been reduced by up to  **89%** and **60%** on a standard hard drive using the standard extraction mode. The times are even further reduced for those with WoT installed on an SSD using the multicore extraction mode.</li>
+		<li>For the first time in modpack history, the installation process is multi-threaded, meaning that it can install multiple mods at once. The install process is optimized for 8-core systems.</li>
+		<li>The loading and installation times of this modpack vs. Inno setup modpacks have been reduced by up to  <b><ins>89%</b></ins> and <b><ins>60%</b></ins> on a standard hard drive using the standard extraction mode. The times are even further reduced for those with WoT installed on an SSD using the multicore extraction mode.</li>
 	</ul>
 </details>
 <details>
@@ -93,7 +93,7 @@ The goal of this project is to redefine what a modpack installer is, from the te
 **If you come across a bug or feature request please take one of these actions:**
 - Record it here:
 http://forums.relhaxmodpack.com/
-- (If you have a github account) open an issue.
+- (If you have a GitHub account) open an issue.
 
 **When you do, please attach the diagnostic zip file you create by clicking diagnostic utilities->create zip file**
 
