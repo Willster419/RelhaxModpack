@@ -21,9 +21,8 @@ The goal of this project is to redefine what a modpack installer is, from the te
 
 ## Modpack Features
 #### Why would you use this modpack over Aslain's/<abbr title="Odem Mortis Community">OMC</abbr>'s/any other inno setup template modpack?
-<samp>(Click to expand)</samp>
 <details>
-<summary>Improved UI — {TODO: One-liner summary}...</summary>
+<summary><b>Improved UI</b> — {TODO: One-liner summary}...</summary>
 	<ul>
 		<li>Instead of a giant unscrollable list of hard-to-find mods to select from, the mods are presented in tabs, each tab page being a mod catagory. Xvm has a tab page, garage stats have a page, damagelogs have a page, etc. Mods per tab are sorted alphabetically</li>
 		<li>For the first time in modpack history, there is a search feature where you can search for "that one mod" you want.</li>
@@ -42,7 +41,7 @@ The goal of this project is to redefine what a modpack installer is, from the te
 		</ul>
 </details>
 <details>
-<summary>Persistence — Mod selections can be saved...</summary>
+<summary><b>Persistence</b> — Mod selections can be saved...</summary>
   <ul>
 		<li>Like <abbr title="Odem Mortis Community">OMC</abbr> and Aslains, your mods selection can be saved.</li>
 		<li>Unlike Aslains, you can save as many mod selections as you want, and save them where ever you like</li>
@@ -50,18 +49,19 @@ The goal of this project is to redefine what a modpack installer is, from the te
 	</ul>
 </details>
 <details>
-<summary>Performance — {TODO: One-liner summary}...</summary>
+<summary><b>Performance</b> — {TODO: One-liner summary}...</summary>
   <ul>
 		<li>For the first time in modpack history, the installation process is multi-threaded, meaning that it can install multiple mods at once. The install process is optimized for 8 core systems.</li>
 		<li>The loading and installation times of this modpack vs. inno setup modpacks have been reduced by up to  **89%** and **60%** on a standard hard drive using the standard extraction mode. The times are even further reduced for those with WoT installed on an SSD using the multicore extraction mode.</li>
 	</ul>
 </details>
 <details>
-<summary>Automation — {TODO: One-liner summary}...</summary>
+<summary><b>Automation</b> — {TODO: One-liner summary}...</summary>
 	<ul>
 		<li>The modpack and be set at command line with a "/auto-install config_file_name.xml" switch to automatically install the modpack, with your preference of mods selected. In this situation, you could install without any interaction, and update all your mods in seconds.</li>
 	</ul>
 </details>
+<samp><sup>(Click to expand)</sup></samp>
 
 ### What does the modpack look like?
 ![MainWindow](https://i.imgur.com/tR0Nn2M.png "Main Window")
