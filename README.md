@@ -10,6 +10,7 @@
 |:-------------:|:-------------:|:-------------:|:-------------:|
 |![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=85c6cc&label=Version)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=4c6f74&label=Downloads)|![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Discord)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=License)|
 <p align="center"><small><i>The Relhax Modpack ~ Would you rather spend time on your mods, or your gameplay?</i></small></p>
+
 ***
 ## Description and reason for development
 *This project is in dedication of the RELIC Gaming Community, as well as the <abbr title="Odem Mortis Community">OMC</abbr> modpack dev team (which includes me, :wink: ). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the <abbr title="Odem Mortis Community">OMC</abbr> modpack over the years will not be forgotten.*
