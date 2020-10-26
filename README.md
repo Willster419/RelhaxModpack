@@ -105,6 +105,7 @@ Latest release notes can be found [here](https://github.com/Willster419/RelhaxMo
 You can download the modpack in couple of ways:
 |[Adf.ly Donation Link](http://adf.ly/1l28oP)|[Direct Download Link](http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe)|[Official <abbr title="Wargaming Mods">WGMods</abbr> Portal](https://wgmods.net/392/)|
 |:---:|:---:|:---:|
+
 **If you can spare a few dollars and like the Modpack, please [consider donating via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2)!**
 
 ## Credits
@@ -112,7 +113,7 @@ You can download the modpack in couple of ways:
  - Rkk1945 For helping with code edits and resource support, along with helping with the closed alpha test.
  - All the Modpack team members for helping to add mods as quickly as possible.
  - Those who helped provide feedback during open alpha and beta testing.
-
+***
 ## FAQ — Frequently Asked Questions
 
 **Why is there such a difference in install times?**
