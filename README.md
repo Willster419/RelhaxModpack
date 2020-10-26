@@ -5,7 +5,7 @@
 ## The Relhax Modpack
 <sup>***The fastest <abbr title="World of Tanks">WoT</abbr> modpack installer in the world. A refresh of <abbr title="Odem Mortis Community">OMC</abbr> modpack.***</sup><br>
 
-|[Virustotal Scan](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)|[Our Website!](https://relhaxmodpack.com/)|[—DOWNLOAD—](#download)|[Discord & Support](https://discordapp.com/invite/58fdPvK)|[License](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
+|[Virustotal](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)|[Our Website!](https://relhaxmodpack.com/)|[DOWNLOAD](#download)|[Our Discord](https://discordapp.com/invite/58fdPvK)|[License](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
 |:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
 |![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=85c6cc&label=Version)|![](https://img.shields.io/website?color=4c6f74&down_message=Offline&label=Website&up_message=Online&url=https%3A%2F%2Frelhaxmodpack.com)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=272727&label=Downloads)|![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Discord)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=License)|
 <p align="center"><small><i>The Relhax Modpack ~ Would you rather spend time on your mods, or your gameplay?</i></small></p>
