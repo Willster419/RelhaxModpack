@@ -4,11 +4,12 @@
 
 ## The Relhax Modpack
 ***The fastest <abbr title="World of Tanks">WoT</abbr> modpack installer in the world. A refresh of <abbr title="Odem Mortis Community">OMC</abbr> modpack.***<br/>
-**> [Skip to download](#download)**
+**[-> Skip to download](#download)**
 
 |[Virustotal Scan](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)|[Visit our Website!](https://relhaxmodpack.com/)|**[Discord Support Server](https://discordapp.com/invite/58fdPvK)**|[License Information](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
 |:-------------:|:-------------:|:-------------:|:-------------:|
 |![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=85c6cc&label=Version)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=4c6f74&label=Downloads)|![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Discord)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=License)|
+<p align="center"><small><i>The Relhax Modpack ~ Would you rather spend time on your mods, or your gameplay?</i></small></p>
 ***
 ## Description and reason for development
 *This project is in dedication of the RELIC Gaming Community, as well as the <abbr title="Odem Mortis Community">OMC</abbr> modpack dev team (which includes me, :wink: ). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the <abbr title="Odem Mortis Community">OMC</abbr> modpack over the years will not be forgotten.*
@@ -59,7 +60,7 @@
 		<li>The modpack and be set at command line with a "/auto-install config_file_name.xml" switch to automatically install the modpack, with your preference of mods selected. In this situation, you could install without any interaction, and update all your mods in seconds.</li>
 	</ul>
 </details>
-<samp><sup>↖ Click to expand</sup></samp>
+<samp><sup>Click to expand</sup></samp>
 
 ### What does the modpack look like?
 <details>
@@ -82,7 +83,7 @@
 	<p align="center"><img src=".github/readme_resources/en/mod_preview_1.png" alt="Mod Preview 1"/></p>
 	<p align="center"><img src=".github/readme_resources/en/mod_preview_2.png" alt="Mod Preview 2"/></p>
 </details>
-<samp><sup>↖ Click to expand</sup></samp>
+<samp><sup>Click to expand</sup></samp>
 
 ***
 
@@ -160,7 +161,6 @@ Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent)
 
 
 ---
-The Relhax Modpack ~ *"Would you rather spend time on your mods, or your gameplay?"* ~
 
 Disclaimer:
 
