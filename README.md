@@ -3,12 +3,11 @@
 <img align="left" width="128" height="128" src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico">
 
 ## The Relhax Modpack
-***The fastest <abbr title="World of Tanks">WoT</abbr> modpack installer in the world. A refresh of <abbr title="Odem Mortis Community">OMC</abbr> modpack.***<br/>
-**[-> Skip to download](#download)**
+<sup>***The fastest <abbr title="World of Tanks">WoT</abbr> modpack installer in the world. A refresh of <abbr title="Odem Mortis Community">OMC</abbr> modpack.***</sup><br>
 
-|[Virustotal Scan](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)|[Visit our Website!](https://relhaxmodpack.com/)|**[Discord Support Server](https://discordapp.com/invite/58fdPvK)**|[License Information](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
-|:-------------:|:-------------:|:-------------:|:-------------:|
-|![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=85c6cc&label=Version)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=4c6f74&label=Downloads)|![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Discord)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=License)|
+|[Virustotal Scan](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection)|[Visit our Website!](https://relhaxmodpack.com/)|[—DOWNLOAD—](#download)|[Discord Support Server](https://discordapp.com/invite/58fdPvK)|[License Information](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
+|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+|![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=85c6cc&label=Version)|![](https://img.shields.io/tokei/lines/github/Willster419/RelhaxModpack?color=4c6f74&label=Lines%20of%20Code)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=272727&label=Downloads)|![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Discord)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=License)|
 <p align="center"><small><i>The Relhax Modpack ~ Would you rather spend time on your mods, or your gameplay?</i></small></p>
 
 ***
