@@ -2701,7 +2701,7 @@ namespace RelhaxModpack
             German.Add("selectionFormatOldV2", TranslationNeeded);
             Polish.Add("selectionFormatOldV2", "Format tego pliku kolekcji jest przestarzały (V2), zostanie stworzona jego kopia zapasowa i zostanie on zaktualizowany do V3.");
             French.Add("selectionFormatOldV2", "Ce format de fichier de sélection est hérité (V2) et sera mis à niveau vers la V3. Une sauvegarde de la V2 sera créée.");
-            Spanish.Add("selectionFormatOldV2", TranslationNeeded);
+            Spanish.Add("selectionFormatOldV2", "Este formato de archivo de selección es de legado (V2) y será actualizado a V3. Una copia de seguridad de tipo V2 será creada.");
             Russian.Add("selectionFormatOldV2", "Этот файл предустановки сохранён в устаревшем формате (v2) и будет обновлён до v3. Резервная копия старого файла также будет сделана.");
 
             //Component:
@@ -3342,9 +3342,10 @@ namespace RelhaxModpack
                 "Nie jest to zalecane z racji tworzenia przez aplikację wielu plików i folderów, które mogą być trudne do znalezienia w przypadku folderu 'Pobrane' z dużą ilością plików. " +
                 "Zaleca się przeniesienie aplikacji wraz z plikami do nowego/osobnego folderu.");
             French.Add("moveAppOutOfDownloads", "L'application a détecté qu'elle est lancée à partir du dossier 'Téléchargements'. Ceci n'est pas recommandé car l'application crée plusieurs dossiers et fichiers " +
-            "qui peut être difficile à trouver dans un grand dossier 'Téléchargements'. Vous devriez déplacer l'application et tous les fichiers ainsi que dossiers 'Relhax' dans un nouveau dossier.");
-            Spanish.Add("moveAppOutOfDownloads", TranslationNeeded);
-            Russian.Add("moveAppOutOfDownloads", "Приложение было запущено из папки \"Загрузки\". Мы не рекомендуем использовать эту папку, поскольку приложение создаёт несколько папок и файлов, поиск которых может быть затруднительным в папке с загрузками. Вы должны переместить приложение и файлы/папки Relhax в другое расположение.");
+            		"qui peut être difficile à trouver dans un grand dossier 'Téléchargements'. Vous devriez déplacer l'application et tous les fichiers ainsi que dossiers 'Relhax' dans un nouveau dossier.");
+						Spanish.Add("moveAppOutOfDownloads", "La aplicación ha detectado que está siendo ejecutanda desde la carpeta 'Descargas'. Esto no se recomienda dado que la aplicación crea varios archivos y carpetas " +
+								"que pueden ser difíciles de encontrar en una carpeta 'Descargas' grande. Recomendamos que mueva la aplicación y todos los archivos y carpetas 'Relhax' a una nueva carpeta.");
+						Russian.Add("moveAppOutOfDownloads", "Приложение было запущено из папки \"Загрузки\". Мы не рекомендуем использовать эту папку, поскольку приложение создаёт несколько папок и файлов, поиск которых может быть затруднительным в папке с загрузками. Вы должны переместить приложение и файлы/папки Relhax в другое расположение.");
 
             //Component: Current database is same as last installed database (body)
             //
@@ -4262,7 +4263,7 @@ namespace RelhaxModpack
             German.Add("TrimRelhaxLogfileText", TranslationNeeded);
             Polish.Add("TrimRelhaxLogfileText", "Zachowaj w pliku dziennika tylko 3 ostatnie uruchomienia");
             French.Add("TrimRelhaxLogfileText", "Ajustez le fichier journal Relhax aux 3 derniers lancements");
-            Spanish.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            Spanish.Add("TrimRelhaxLogfileText", "Recortar el archivo de registro relhax.log a las últimas 3 ejecuciones (asumiendo que existan entradas de encabezamiento/pie de página.");
             Russian.Add("TrimRelhaxLogfileText", "Обрезать лог-файл Relhax до последних трёх запусков");
 
             //Component: trimRelhaxLogProgress
@@ -4271,7 +4272,7 @@ namespace RelhaxModpack
             German.Add("trimRelhaxLogProgress", TranslationNeeded);
             Polish.Add("trimRelhaxLogProgress", "Ograniczanie zakresu pliku dziennika");
             French.Add("trimRelhaxLogProgress", "Découpage du fichier journal Relhax");
-            Spanish.Add("trimRelhaxLogProgress", TranslationNeeded);
+            Spanish.Add("trimRelhaxLogProgress", "Recortando el archivo de registro de Relhax.");
             Russian.Add("trimRelhaxLogProgress", "Обрезка лог-файла...");
 
             //Component: trimRelhaxLogSuccess
@@ -4280,7 +4281,7 @@ namespace RelhaxModpack
             German.Add("trimRelhaxLogSuccess", TranslationNeeded);
             Polish.Add("trimRelhaxLogSuccess", "Ograniczanie zakresu pliku dziennika zakończone powodzeniem");
             French.Add("trimRelhaxLogSuccess", "Ajustement du fichier journal Relhax avec succès");
-            Spanish.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            Spanish.Add("trimRelhaxLogSuccess", "Archivo de registro de Relhax recortado correctamente.");
             Russian.Add("trimRelhaxLogSuccess", "Лог-файл Relhax успешно обрезан");
 
             //Component: trimRelhaxLogFail
@@ -4289,7 +4290,7 @@ namespace RelhaxModpack
             German.Add("trimRelhaxLogFail", TranslationNeeded);
             Polish.Add("trimRelhaxLogFail", "Nie udało się ograniczyć zakresu pliku dziennika");
             French.Add("trimRelhaxLogFail", "Échec de la découpe du fichier journal Relhax");
-            Spanish.Add("trimRelhaxLogFail", TranslationNeeded);
+            Spanish.Add("trimRelhaxLogFail", "No se ha podido recortar correctamente el archivo de registro de Relhax.");
             Russian.Add("trimRelhaxLogFail", "Не удалось обрезать лог-файл Relhax");
             #endregion
 
