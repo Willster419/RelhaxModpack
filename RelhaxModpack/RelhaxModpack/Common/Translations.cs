@@ -4263,7 +4263,7 @@ namespace RelhaxModpack
             Polish.Add("TrimRelhaxLogfileText", "Zachowaj w pliku dziennika tylko 3 ostatnie uruchomienia");
             French.Add("TrimRelhaxLogfileText", "Ajustez le fichier journal Relhax aux 3 derniers lancements");
             Spanish.Add("TrimRelhaxLogfileText", TranslationNeeded);
-            Russian.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            Russian.Add("TrimRelhaxLogfileText", "Обрезать лог-файл Relhax до последних трёх запусков");
 
             //Component: trimRelhaxLogProgress
             //
@@ -4272,7 +4272,7 @@ namespace RelhaxModpack
             Polish.Add("trimRelhaxLogProgress", "Ograniczanie zakresu pliku dziennika");
             French.Add("trimRelhaxLogProgress", "Découpage du fichier journal Relhax");
             Spanish.Add("trimRelhaxLogProgress", TranslationNeeded);
-            Russian.Add("trimRelhaxLogProgress", TranslationNeeded);
+            Russian.Add("trimRelhaxLogProgress", "Обрезка лог-файла...");
 
             //Component: trimRelhaxLogSuccess
             //
@@ -4281,7 +4281,7 @@ namespace RelhaxModpack
             Polish.Add("trimRelhaxLogSuccess", "Ograniczanie zakresu pliku dziennika zakończone powodzeniem");
             French.Add("trimRelhaxLogSuccess", "Ajustement du fichier journal Relhax avec succès");
             Spanish.Add("trimRelhaxLogSuccess", TranslationNeeded);
-            Russian.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            Russian.Add("trimRelhaxLogSuccess", "Лог-файл Relhax успешно обрезан");
 
             //Component: trimRelhaxLogFail
             //
@@ -4290,7 +4290,7 @@ namespace RelhaxModpack
             Polish.Add("trimRelhaxLogFail", "Nie udało się ograniczyć zakresu pliku dziennika");
             French.Add("trimRelhaxLogFail", "Échec de la découpe du fichier journal Relhax");
             Spanish.Add("trimRelhaxLogFail", TranslationNeeded);
-            Russian.Add("trimRelhaxLogFail", TranslationNeeded);
+            Russian.Add("trimRelhaxLogFail", "Не удалось обрезать лог-файл Relhax");
             #endregion
 
             #region Add zip files Dialog
