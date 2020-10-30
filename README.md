@@ -108,7 +108,7 @@ Latest release notes can be found [here](https://github.com/Willster419/RelhaxMo
 
 _When you do, please attach the diagnostic .zip file you create by clicking <kbd>Diagnostic Utilities -> Create ZIP file</kbd>_.
 
-<p align="center"><b><ins><pre>If you want to help develop the modpack,<wbr>I would be glad for the help and I will help set you up with an environment!</pre></ins></b></p>
+<p align="center"><b><ins><pre>If you want to help develop the modpack,<br>I would be glad for the help and I will help set you up with an environment!</pre></ins></b></p>
 
 ## Download
 
