@@ -116,14 +116,14 @@ You can download the modpack in couple of ways, via:
 |[Adf.ly Sponsored Link](http://adf.ly/1l28oP)|[Official <abbr title="Wargaming Mods">WGMods</abbr> Portal](https://wgmods.net/392/)|[Direct Download Link](http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe)|[GitHub Releases](https://github.com/Willster419/RelhaxModpack/releases)
 |:---:|:---:|:---:|:---:|
 
-**If you can spare a few dollars and like the Modpack, [please consider donating via Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2)**
+**If you can spare a few dollars and like the Modpack, [please consider donating on Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2)**
 
 ## Credits
 
-- <abbr title="Odem Mortis Community">OMC</abbr> Modpack for giving me an internal structure to start with and improve upon, along with several premade zip files to start with.
-- Rkk1945 For helping with code edits and resource support, along with helping with the closed alpha test.
-- All the Modpack team members for helping to add mods as quickly as possible.
-- Those who helped provide feedback during open alpha and beta testing.
+- <b><abbr title="Odem Mortis Community">OMC</abbr> Modpack</b> — <i>For giving me an internal structure to start with and improve upon, along with several premade zip files to start with.</i>
+- <b>Rkk1945</b> — <i>For helping with code edits and resource support, along with helping with the closed alpha test.</i>
+- <i>All the Modpack team members for helping to add mods as quickly as possible.</i>
+- <i>Those who helped provide feedback during open alpha and beta testing.</i>
 
 ---
 
@@ -216,6 +216,7 @@ _From the advanced settings tab, load a selection file and check the "auto insta
 ***
 ##### Disclaimer
 
-*There are no "Hacks" or illegal mods in the modpack, the name is used for artistic license. This modpack complies with WG's fair play policy. We try to keep up to date as much as we can with their policy, but this is by no means an official guarantee.*
+*There are no "Hacks" or illegal mods in the modpack, the name is used for artistic license.*
+*This modpack complies with WG's fair play policy. We try to keep up to date as much as we can with their policy, but this is by no means an official guarantee.*
 ***
 <sup>Readme Design by [@Nullmaruzero](https://github.com/Nullmaruzero/)</sup>
