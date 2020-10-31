@@ -98,7 +98,7 @@ _The goal of this project is to redefine what a modpack installer is, from the t
 
 ### Additional Information
 
-Latest release notes can be found [here](https://github.com/Willster419/RelhaxModpack/commits/master)
+Latest release notes can be found [here](https://github.com/Willster419/RelhaxModpack/commits/master).
 
 **If you come across a bug or feature request please take one of these actions:**
 
@@ -116,7 +116,7 @@ You can download the modpack in couple of ways, via:
 |[Adf.ly Sponsored Link](http://adf.ly/1l28oP)|[Official <abbr title="Wargaming Mods">WGMods</abbr> Portal](https://wgmods.net/392/)|[Direct Download Link](http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe)|[GitHub Releases](https://github.com/Willster419/RelhaxModpack/releases)
 |:---:|:---:|:---:|:---:|
 
-**If you can spare a few dollars and like the Modpack, [please consider donating via Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2)!**
+**If you can spare a few dollars and like the Modpack, [please consider donating via Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2)**
 
 ## Credits
 
