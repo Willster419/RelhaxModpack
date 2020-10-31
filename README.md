@@ -164,7 +164,7 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     <tr>
       <th><abbr title="Odem Mortis Community">OMC</abbr></th>
       <th>Aslain's</th>
-			<th>Relhax Modpack</th>
+			<th><ins>Relhax Modpack</ins></th>
     </tr>
   </thead>
   <tbody>
@@ -182,7 +182,7 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     </tr>
   </tfoot>
 </table>
-<p align="center"><sub>Less is better (seconds)</sub></p>
+<p align="left"><sub>Less is better (seconds)</sub></p>
 
 
 #### Time from mod selection to install completion (installing the same number or similar mods) on a hard drive
@@ -193,7 +193,7 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     <tr>
       <th><abbr title="Odem Mortis Community">OMC</abbr></th>
       <th>Aslain's</th>
-			<th>Relhax Modpack</th>
+			<th><ins>Relhax Modpack</ins></th>
     </tr>
   </thead>
   <tbody>
@@ -211,7 +211,7 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     </tr>
   </tfoot>
 </table>
-<p align="center"><sub>Less is better (seconds)</sub></p>
+<p align="left"><sub>Less is better (seconds)</sub></p>
 
 ***
 Disclaimer:
