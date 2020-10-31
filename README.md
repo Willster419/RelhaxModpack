@@ -182,7 +182,7 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     </tr>
   </tfoot>
 </table>
-<p align="left"><sub>Less is better (seconds)</sub></p>
+<sub>Less is better (seconds)</sub>
 
 
 #### Time from mod selection to install completion (installing the same number or similar mods) on a hard drive
@@ -211,7 +211,7 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     </tr>
   </tfoot>
 </table>
-<p align="left"><sub>Less is better (seconds)</sub></p>
+<sub>Less is better (seconds)</sub>
 
 ***
 ##### Disclaimer
