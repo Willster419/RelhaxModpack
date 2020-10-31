@@ -216,7 +216,7 @@ _From the advanced settings tab, load a selection file and check the "auto insta
 ***
 ##### Disclaimer
 
-*There are no "Hacks" or illegal mods in the modpack, the name is used for artistic license.*
+*There are no "Hacks" or illegal mods in the modpack, the name is used for artistic license.*<br>
 *This modpack complies with WG's fair play policy. We try to keep up to date as much as we can with their policy, but this is by no means an official guarantee.*
 ***
 <sup>Readme Design by [@Nullmaruzero](https://github.com/Nullmaruzero/)</sup>
