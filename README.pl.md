@@ -13,5 +13,5 @@
 |||||
 ***
 
-[This file is under construction, will be updated after Project Maintainer's approval.]
+[This file is under construction, will be updated after Project Maintainer's approval.]</br>
 [Ten plik zostanie zaktualizowany po akceptacji ze strony Lidera Projektu.]
