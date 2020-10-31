@@ -155,7 +155,7 @@ _From the advanced settings tab, load a selection file and check the "auto insta
 ***
 
 ### Benchmarks
-<sup>``Hard drive used is a Toshiba 5400 RPM 2.5 inch laptop hard drive, 8MB cache.``</sup>
+``Hard drive used in benchmark is a Toshiba 5400 RPM 2.5 inch [laptop hard drive], 8MB cache.``
 
 
 <table>
@@ -171,14 +171,14 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     <tr>
       <td>48 seconds</td>
       <td>24 seconds</td>
-			<td>05 seconds</td>
+			<td><mark>05 seconds</mark></td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
       <td>+89% compared to Relhax</td>
       <td>+80% compared to Relhax</td>
-			<td>---</td>
+			<td><b>N/A</b></td>
     </tr>
   </tfoot>
 </table>
@@ -198,14 +198,14 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     <tr>
       <td>10 seconds</td>
       <td>09 seconds</td>
-			<td>04 seconds</td>
+			<td><mark>04 seconds</mark></td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
       <td>+60% compared to Relhax</td>
       <td>+56% compared to Relhax</td>
-			<td>---</td>
+			<td><b>N/A</b></td>
     </tr>
   </tfoot>
 </table>
