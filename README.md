@@ -154,10 +154,12 @@ _From the advanced settings tab, load a selection file and check the "auto insta
 
 ***
 
-#### Time from program execution to mod selection on a hard drive
+### Benchmarks
+<sup>``Hard drive used is a Toshiba 5400 RPM 2.5 inch laptop hard drive, 8MB cache.``</sup>
+
 
 <table>
-	<sup>(1)</sup>Performance measurements:
+	<sup>(1)</sup>Performance measurements: <ins>Time from program execution to mod selection on a hard drive.</ins>
   <thead>
     <tr>
       <th><abbr title="Odem Mortis Community">OMC</abbr></th>
@@ -179,13 +181,12 @@ _From the advanced settings tab, load a selection file and check the "auto insta
 			<td>---</td>
     </tr>
   </tfoot>
-	Hard drive used is a Toshiba 5400 RPM 2.5 inch laptop hard drive, 8MB cache.
 </table>
 
 #### Time from mod selection to install completion (installing the same number or similar mods) on a hard drive
 
 <table>
-	<sup>(1)</sup>Performance measurements:
+	<sup>(1)</sup>Performance measurements: <ins>	Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent).</ins>
   <thead>
     <tr>
       <th><abbr title="Odem Mortis Community">OMC</abbr></th>
@@ -207,7 +208,6 @@ _From the advanced settings tab, load a selection file and check the "auto insta
 			<td>---</td>
     </tr>
   </tfoot>
-	Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent).
 </table>
 
 ***
