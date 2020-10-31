@@ -137,7 +137,7 @@ _While Inno setup single-threaded (as far as I can tell), mine is not. What does
 - _The install is not frozen when the ui thread is blocked, like moving the window for example_
 - _The extraction is limited to your hard drive speed, not the processor GUI reporting speed._
 
-_This can be further exploited. If several mods do not interact with each other, (no file over-writes), why not install the mods at the same time? Concurrent installation can reduce install time by up to 80% (Depends on HDD/SSD performance)._
+_This can be further exploited. If several mods do not interact with each other, (no file over-writes), why not install the mods at the same time? Concurrent installation can reduce install time by up to <b>80%</b> (Depends on HDD/SSD performance)._
 _If you want more information, I encourage you to review [this presentation](https://docs.google.com/presentation/d/1H-6YLcEP3XfxeEhF21grP7Ypfw2im300201bz0NAuJI/edit#slide=id.g7bf2f002c6_0_83)._
 
 **I have a perfect selection of mods that I want. Can I save this selection?**
@@ -171,22 +171,24 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     <tr>
       <td>48 seconds</td>
       <td>24 seconds</td>
-			<td><mark>05 seconds</mark></td>
+			<td><mark><b>05 seconds</mark></td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
-      <td>+89% compared to Relhax</td>
-      <td>+80% compared to Relhax</td>
+      <td>+89% vs Relhax</td>
+      <td>+80% vs Relhax</td>
 			<td><b>N/A</b></td>
     </tr>
   </tfoot>
 </table>
+<p align="center"><sub>Less is better (seconds)</sub></p>
+
 
 #### Time from mod selection to install completion (installing the same number or similar mods) on a hard drive
 
 <table>
-	<sup>(1)</sup>Performance measurements: <ins>	Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent).</ins>
+	<sup>(1)</sup>Performance measurements: <ins>Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent).</ins>
   <thead>
     <tr>
       <th><abbr title="Odem Mortis Community">OMC</abbr></th>
@@ -198,17 +200,18 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     <tr>
       <td>10 seconds</td>
       <td>09 seconds</td>
-			<td><mark>04 seconds</mark></td>
+			<td><mark><b>04 seconds</mark></td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
-      <td>+60% compared to Relhax</td>
-      <td>+56% compared to Relhax</td>
+      <td>+60% vs to Relhax</td>
+      <td>+56% vs Relhax</td>
 			<td><b>N/A</b></td>
     </tr>
   </tfoot>
 </table>
+<p align="center"><sub>Less is better (seconds)</sub></p>
 
 ***
 Disclaimer:
