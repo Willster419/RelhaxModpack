@@ -1,6 +1,6 @@
 ##### SUPPORTED LANGUAGES: [**<ins>English</ins>**](README.md), Deutch, [Polski](README.pl.md), Français, Español, Pусский.</sup>
 
----
+***
 
 <img align="left" width="128" height="128" src="https://raw.githubusercontent.com/Willster419/RelhaxModpack/master/RelhaxModpack/RelhaxModpack/Resources/modpack_icon.ico">
 
@@ -8,9 +8,9 @@
 
 **_The fastest <abbr title="World of Tanks">WoT</abbr> modpack installer in the world. A refresh of <abbr title="Odem Mortis Community">OMC</abbr> modpack._**<br>
 
-| [Virustotal](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection) |                                                [Our Website!](https://relhaxmodpack.com/)                                                 |                                           [DOWNLOAD](#download)                                           |               [Our Discord](https://discordapp.com/invite/58fdPvK)                |           [License](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)           |
-| :------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------: |
-|             ![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=4c6f74&label=Version)              | ![](https://img.shields.io/website?color=85c6cc&down_message=Offline&label=Website&up_message=Online&url=https%3A%2F%2Frelhaxmodpack.com) | ![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=4c6f74&label=Downloads) | ![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Discord) | ![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=License) |
+| [Virustotal](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection) |                                                [Our Website!](https://relhaxmodpack.com/)                                                 |                                           [—> DOWNLOAD <—](#download)                                           |               [Our Discord](https://discordapp.com/invite/58fdPvK)|[License](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
+| :---: | :---: | :---: | :---: | :---: |
+|![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=4c6f74&label=Version)|![](https://img.shields.io/website?color=85c6cc&down_message=Offline&label=Website&up_message=Online&url=https%3A%2F%2Frelhaxmodpack.com)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=4c6f74&label=Downloads)|![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Discord)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=License)|
 
 <p align="center"><sub><i>The Relhax Modpack ~ Would you rather spend time on your mods, or your gameplay?</i></sub></p>
 
@@ -18,7 +18,7 @@
 
 ## Description and reason for development
 
-_This project is in dedication of the RELIC Gaming Community, as well as the <abbr title="Odem Mortis Community">OMC</abbr> modpack dev team (which includes me, :wink: ). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the <abbr title="Odem Mortis Community">OMC</abbr> modpack over the years will not be forgotten._
+_This project is in dedication of the RELIC Gaming Community, as well as the <abbr title="Odem Mortis Community">OMC</abbr> modpack dev team (includes me, :wink: ). A big thank you to them and their original work, especially to grumpelumpf. He gave the idea and design of the database driver approach, and is the reason why this modpack is where it is today. His work done on the <abbr title="Odem Mortis Community">OMC</abbr> modpack over the years will not be forgotten._
 
 _When I looked at the current modpack installers, they all look the same: in size, in UI, and were all made with the inno setup creator. Many describe these installers as "clunky and slow". Trying to get that perfect mod setup can sometimes take hours. Have you ever had a "modpack setup night"?_
 
@@ -108,15 +108,15 @@ Latest release notes can be found [here](https://github.com/Willster419/RelhaxMo
 
 _When you do, please attach the diagnostic .zip file you create by clicking <kbd>Diagnostic Utilities -> Create ZIP file</kbd>_.
 
-<p align="center"><b><ins><pre>If you want to help develop the modpack,<br>I would be glad for the help and I will help set you up with an environment!</pre></ins></b></p>
+<p align="center"><b><ins><pre>If you want to help develop the modpack,<br>I would be glad for the help and I will help set you up with an environment! Thank you!</pre></ins></b></p>
 
 ## Download
 
-You can download the modpack in couple of ways:
-|[Adf.ly Donation Link](http://adf.ly/1l28oP)|[Direct Download Link](http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe)|[Official <abbr title="Wargaming Mods">WGMods</abbr> Portal](https://wgmods.net/392/)|
-|:---:|:---:|:---:|
+You can download the modpack in couple of ways, via:
+|[Adf.ly Sponsored Link](http://adf.ly/1l28oP)|[Official <abbr title="Wargaming Mods">WGMods</abbr> Portal](https://wgmods.net/392/)|[Direct Download Link](http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe)|[GitHub Releases](https://github.com/Willster419/RelhaxModpack/releases)
+|:---:|:---:|:---:|:---:|
 
-**If you can spare a few dollars and like the Modpack, please [consider donating via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2)!**
+**If you can spare a few dollars and like the Modpack, [please consider donating via Paypal!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=76KNV8KXKYNG2)!**
 
 ## Credits
 
@@ -131,7 +131,7 @@ You can download the modpack in couple of ways:
 
 **Why is there such a difference in install times?**
 
-_While inno setup single-threaded (as far as I can tell), mine is not. What does that mean? Looking at mod zip extraction, for example, when a file is extracted, it is reported to the GUI in a synchronous manner. This means that the modpack can only extract as fast as it can pump events to the GUI for each entry extracted in a zip file. This is where multi-threading come in. You can create a separate thread and have it only extract, and asynchronously report the progress to the GUI. This means three things:_
+_While Inno setup single-threaded (as far as I can tell), mine is not. What does that mean? Looking at mod zip extraction, for example, when a file is extracted, it is reported to the GUI in a synchronous manner. This means that the modpack can only extract as fast as it can pump events to the GUI for each entry extracted in a zip file. This is where multi-threading come in. You can create a separate thread and have it only extract, and asynchronously report the progress to the GUI. This means three things:_
 
 - _The GUI is not laggy during install_
 - _The install is not frozen when the ui thread is blocked, like moving the window for example_
@@ -152,30 +152,67 @@ _No :smile:. You can put your mods in the "RelHaxUserMods folder", and the insta
 
 _From the advanced settings tab, load a selection file and check the "auto installation" checkbox in advanced settings. The modpack will automatically check with the server (beta or stable database) for a new db version, and if one is found, an installation is started._
 
-#### (1)Performance measurements:
+***
 
-Hard drive used is a Toshiba 5400 RPM 2.5 inch laptop hard drive, 8MB cache
+#### Time from program execution to mod selection on a hard drive
 
-##### Time from program execution to mod selection on a hard drive:
+<table>
+	<sup>(1)</sup>Performance measurements:
+  <thead>
+    <tr>
+      <th><abbr title="Odem Mortis Community">OMC</abbr></th>
+      <th>Aslain's</th>
+			<th>Relhax Modpack</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>48 seconds</td>
+      <td>24 seconds</td>
+			<td>05 seconds</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>+89% compared to Relhax</td>
+      <td>+80% compared to Relhax</td>
+			<td>---</td>
+    </tr>
+  </tfoot>
+	Hard drive used is a Toshiba 5400 RPM 2.5 inch laptop hard drive, 8MB cache.
+</table>
 
-<abbr title="Odem Mortis Community">OMC</abbr>: 48 seconds
+#### Time from mod selection to install completion (installing the same number or similar mods) on a hard drive
 
-Aslains: 24 seconds
+<table>
+	<sup>(1)</sup>Performance measurements:
+  <thead>
+    <tr>
+      <th><abbr title="Odem Mortis Community">OMC</abbr></th>
+      <th>Aslain's</th>
+			<th>Relhax Modpack</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10 seconds</td>
+      <td>09 seconds</td>
+			<td>04 seconds</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>+60% compared to Relhax</td>
+      <td>+56% compared to Relhax</td>
+			<td>---</td>
+    </tr>
+  </tfoot>
+	Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent).
+</table>
 
-Relhax: 5 seconds - **Time reduced by 89% from OMC and 80% from Aslains**
-
-##### Time from mod selection to install completion (installing the same number or similar mods) on a hard drive:
-
-Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent)
-
-<abbr title="Odem Mortis Community">OMC</abbr>: 10 seconds
-
-Aslains: 9 seconds
-
-Relhax: 4 seconds - \*\*Time reduced by 60% from OMC and 56% from Aslains
-
----
-
+***
 Disclaimer:
 
 There are no "Hacks" or illegal mods in the modpack, the name is used for artistic license. This modpack complies with WG's fair play policy. We try to keep up to date as much as we can with their policy, but this is by no means an official guarantee.
+***
+<sup>Readme Design by @Nullmaruzero</sup>
