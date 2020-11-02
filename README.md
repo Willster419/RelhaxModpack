@@ -176,8 +176,8 @@ _From the advanced settings tab, load a selection file and check the "auto insta
   </tbody>
   <tfoot>
     <tr>
-      <td>+89% vs <i>Relhax</i></td>
-      <td>+80% vs <i>Relhax</i></td>
+      <td>+90% vs <i>Relhax</i></td>
+      <td>+79% vs <i>Relhax</i></td>
 			<td><b>N/A</b></td>
     </tr>
   </tfoot>
