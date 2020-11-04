@@ -764,7 +764,7 @@ namespace RelhaxModpack
             //Component: failedToGetDotNetFrameworkVersion
             //
             English.Add("failedToGetDotNetFrameworkVersion", "Failed to get the installed .NET Framework version. This could indicate a permissions problem or your antivirus software could be blocking it.");
-            German.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+            German.Add("failedToGetDotNetFrameworkVersion", "Fehler beim Abrufen der installierten .NET Framework-Version. Dies könnte auf ein Berechtigungsproblem hinweisen oder von Antivirensoftware blockiert werden.");
             Polish.Add("failedToGetDotNetFrameworkVersion", "Brak zainstalowanego .NET Framework. Może to oznaczać problem z prawami dostępu lub konflikt z oprogramowaniem antywirusowym blokującym dostęp.");
             French.Add("failedToGetDotNetFrameworkVersion", "Impossible d'obtenir la version .NET Framework installée. Cela pourrait indiquer un problème d'autorisations ou votre logiciel antivirus pourrait le bloquer.");
             Spanish.Add("failedToGetDotNetFrameworkVersion", "No se ha podido obtener la versión de la instalación de .Net Framework. Esto puede indicar un problema de permisos, o un antivirus puede estar bloqueando la obtención.");
@@ -774,7 +774,8 @@ namespace RelhaxModpack
             //
             English.Add("invalidDotNetFrameworkVersion", "The installed version of the .NET Framework is less then 4.8. Relhax Modpack requires version 4.8 or above to operate. Would you like to open a link" +
                 "to get the latest version of the .NET Framework?");
-            German.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
+            German.Add("invalidDotNetFrameworkVersion", "Die installierte Version von .NET Framework ist kleiner als 4.8. Für den Betrieb von Relhax Modpack ist Version 4.8 oder höher erforderlich." +
+                "Möchten Sie einen Link öffnen um die neueste Version von .NET Framework zu erhalten?");
             Polish.Add("invalidDotNetFrameworkVersion", "Zainstalowana wersja .NET Framework jest za stara. Modpack wymaga .NET Framework w wersji 4.8 lub wyższej.\n" +
                 "Czy chcesz przejść do strony pobierania najnowszej wersji .NET Framework?");
             French.Add("invalidDotNetFrameworkVersion", "La version installée de .NET Framework est inférieur à la 4.8. Relhax Modpack nécessite la version 4.8 ou supérieur afin d'opérer. " +
@@ -2698,7 +2699,7 @@ namespace RelhaxModpack
             //Component: selectionFormatOldV2
             //the message box to show up when your selection file is old (v2) and will be upgraded
             English.Add("selectionFormatOldV2", "This selection file format is legacy (V2) and will be upgraded to V3. A V2 backup will be created.");
-            German.Add("selectionFormatOldV2", TranslationNeeded);
+            German.Add("selectionFormatOldV2", "Dieses Auswahldateiformat ist ein Vermächtnis der Version 2 und wird auf Version 3 aktualisiert. Eine V2-Sicherung wird erstellt.");
             Polish.Add("selectionFormatOldV2", "Format tego pliku kolekcji jest przestarzały (V2), zostanie stworzona jego kopia zapasowa i zostanie on zaktualizowany do V3.");
             French.Add("selectionFormatOldV2", "Ce format de fichier de sélection est hérité (V2) et sera mis à niveau vers la V3. Une sauvegarde de la V2 sera créée.");
             Spanish.Add("selectionFormatOldV2", "Este formato de archivo de selección es de legado (V2) y será actualizado a V3. Una copia de seguridad de tipo V2 será creada.");
@@ -3337,15 +3338,16 @@ namespace RelhaxModpack
             // Many users download the application right from the website and run it in the downloads folder. This is not reccomended
             English.Add("moveAppOutOfDownloads", "The application detected that it is launched from the 'Downloads' folder. This is not recommended because the application creates several folders and files " +
                 "that may be difficult to find in a large 'Downloads' folder. You should move the application and all 'Relhax' files and folders into a new folder.");
-            German.Add("moveAppOutOfDownloads", TranslationNeeded);
+			German.Add("moveAppOutOfDownloads", "Die Anwendung hat festgestellt, dass sie über den Ordner \"Downloads\" gestartet wurde. Dies wird nicht empfohlen, da die Anwendung mehrere Ordner und Dateien erstellt." +
+				"Sie sollten die Anwendung und alle 'Relhax'-Dateien und -Ordner in einen eigenen neuen Ordner verschieben.");
             Polish.Add("moveAppOutOfDownloads", "Wykryto, że aplikacja została uruchomiona z folderu 'Pobrane'. " +
                 "Nie jest to zalecane z racji tworzenia przez aplikację wielu plików i folderów, które mogą być trudne do znalezienia w przypadku folderu 'Pobrane' z dużą ilością plików. " +
                 "Zaleca się przeniesienie aplikacji wraz z plikami do nowego/osobnego folderu.");
             French.Add("moveAppOutOfDownloads", "L'application a détecté qu'elle est lancée à partir du dossier 'Téléchargements'. Ceci n'est pas recommandé car l'application crée plusieurs dossiers et fichiers " +
-            		"qui peut être difficile à trouver dans un grand dossier 'Téléchargements'. Vous devriez déplacer l'application et tous les fichiers ainsi que dossiers 'Relhax' dans un nouveau dossier.");
-						Spanish.Add("moveAppOutOfDownloads", "La aplicación ha detectado que está siendo ejecutanda desde la carpeta 'Descargas'. Esto no se recomienda dado que la aplicación crea varios archivos y carpetas " +
-								"que pueden ser difíciles de encontrar en una carpeta 'Descargas' grande. Recomendamos que mueva la aplicación y todos los archivos y carpetas 'Relhax' a una nueva carpeta.");
-						Russian.Add("moveAppOutOfDownloads", "Приложение было запущено из папки \"Загрузки\". Мы не рекомендуем использовать эту папку, поскольку приложение создаёт несколько папок и файлов, поиск которых может быть затруднительным в папке с загрузками. Вы должны переместить приложение и файлы/папки Relhax в другое расположение.");
+                "qui peut être difficile à trouver dans un grand dossier 'Téléchargements'. Vous devriez déplacer l'application et tous les fichiers ainsi que dossiers 'Relhax' dans un nouveau dossier.");
+			Spanish.Add("moveAppOutOfDownloads", "La aplicación ha detectado que está siendo ejecutanda desde la carpeta 'Descargas'. Esto no se recomienda dado que la aplicación crea varios archivos y carpetas " +
+				"que pueden ser difíciles de encontrar en una carpeta 'Descargas' grande. Recomendamos que mueva la aplicación y todos los archivos y carpetas 'Relhax' a una nueva carpeta.");
+			Russian.Add("moveAppOutOfDownloads", "Приложение было запущено из папки \"Загрузки\". Мы не рекомендуем использовать эту папку, поскольку приложение создаёт несколько папок и файлов, поиск которых может быть затруднительным в папке с загрузками. Вы должны переместить приложение и файлы/папки Relhax в другое расположение.");
 
             //Component: Current database is same as last installed database (body)
             //
@@ -4260,7 +4262,7 @@ namespace RelhaxModpack
             //Component: TrimRelhaxLogfileText
             // Text block for allowing the user to trim relhax.log logfile to the last 3 launches (assuming header/footer entries exist)
             English.Add("TrimRelhaxLogfileText", "Trim the Relhax log file to the last 3 launches");
-            German.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            German.Add("TrimRelhaxLogfileText", "Kürze die Relhax-Protokolldatei auf die letzten drei Starts");
             Polish.Add("TrimRelhaxLogfileText", "Zachowaj w pliku dziennika tylko 3 ostatnie uruchomienia");
             French.Add("TrimRelhaxLogfileText", "Ajustez le fichier journal Relhax aux 3 derniers lancements");
             Spanish.Add("TrimRelhaxLogfileText", "Recortar el archivo de registro relhax.log a las últimas 3 ejecuciones (asumiendo que existan entradas de encabezamiento/pie de página.");
@@ -4269,7 +4271,7 @@ namespace RelhaxModpack
             //Component: trimRelhaxLogProgress
             //
             English.Add("trimRelhaxLogProgress", "Trimming the Relhax log file");
-            German.Add("trimRelhaxLogProgress", TranslationNeeded);
+            German.Add("trimRelhaxLogProgress", "Kürze die Relhax-Protokolldatei");
             Polish.Add("trimRelhaxLogProgress", "Ograniczanie zakresu pliku dziennika");
             French.Add("trimRelhaxLogProgress", "Découpage du fichier journal Relhax");
             Spanish.Add("trimRelhaxLogProgress", "Recortando el archivo de registro de Relhax.");
@@ -4278,7 +4280,7 @@ namespace RelhaxModpack
             //Component: trimRelhaxLogSuccess
             //
             English.Add("trimRelhaxLogSuccess", "Sucessfully trimmed the Relhax log file");
-            German.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            German.Add("trimRelhaxLogSuccess", "Die Relhax-Protokolldatei wurde erfolgreich gekürzt");
             Polish.Add("trimRelhaxLogSuccess", "Ograniczanie zakresu pliku dziennika zakończone powodzeniem");
             French.Add("trimRelhaxLogSuccess", "Ajustement du fichier journal Relhax avec succès");
             Spanish.Add("trimRelhaxLogSuccess", "Archivo de registro de Relhax recortado correctamente.");
@@ -4287,7 +4289,7 @@ namespace RelhaxModpack
             //Component: trimRelhaxLogFail
             //
             English.Add("trimRelhaxLogFail", "Failed to trim the Relhax log file");
-            German.Add("trimRelhaxLogFail", TranslationNeeded);
+            German.Add("trimRelhaxLogFail", "Fehler beim Kürzen der Relhax-Protokolldatei");
             Polish.Add("trimRelhaxLogFail", "Nie udało się ograniczyć zakresu pliku dziennika");
             French.Add("trimRelhaxLogFail", "Échec de la découpe du fichier journal Relhax");
             Spanish.Add("trimRelhaxLogFail", "No se ha podido recortar correctamente el archivo de registro de Relhax.");
