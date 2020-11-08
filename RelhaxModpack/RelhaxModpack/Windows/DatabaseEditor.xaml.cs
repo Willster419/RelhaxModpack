@@ -20,6 +20,7 @@ using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 using Trigger = RelhaxModpack.Database.Trigger;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Utilities.ClassEventArgs;
 
 namespace RelhaxModpack.Windows
 {
@@ -55,6 +56,7 @@ namespace RelhaxModpack.Windows
             "-----Dependencies-----",
         };
         private readonly string HttpRegexSearch = @"https*:\/{2}\S+";
+        private readonly string UpdatedPackageNewCRC = "f";
 
         //public
         /// <summary>
@@ -1795,8 +1797,8 @@ namespace RelhaxModpack.Windows
 
             if(packToWorkOn == null)
             {
-                Logging.Editor("packToWorkOn is null (not EditorComboboxItem or Databasepackage",LogLevel.Error);
-                MessageBox.Show("packToWorkOn is null (not EditorComboboxItem or Databasepackage), abort");
+                Logging.Editor("PackToWorkOn is null (not EditorComboboxItem or Databasepackage",LogLevel.Error);
+                MessageBox.Show("PackToWorkOn is null (not EditorComboboxItem or Databasepackage), abort");
                 return;
             }
 
@@ -1804,7 +1806,7 @@ namespace RelhaxModpack.Windows
             //first check if it's an editor combobox item (selected from checkbox) or the direct item
             if (string.IsNullOrWhiteSpace(packToWorkOn.ZipFile))
             {
-                MessageBox.Show("no zip file to download");
+                MessageBox.Show("No zip file to download");
                 return;
             }
 
@@ -1814,6 +1816,8 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Missing FTP credentials");
                 return;
             }
+
+            //create the save zip file dialog if not already null
             if (SaveZipFileDialog == null)
             {
                 SaveZipFileDialog = new SaveFileDialog()
@@ -1825,7 +1829,6 @@ namespace RelhaxModpack.Windows
                     //don't set initial directory to allow for restore feature
                     //https://stackoverflow.com/questions/16078362/how-to-save-last-folder-in-openfiledialog
                     //https://stackoverflow.com/questions/4353487/what-does-the-filedialog-restoredirectory-property-actually-do
-                    //InitialDirectory = Settings.ApplicationStartupPath,
                     Title = "Select destination for zip file",
                     FileName = packToWorkOn.ZipFile
                 };
@@ -1834,8 +1837,11 @@ namespace RelhaxModpack.Windows
             {
                 SaveZipFileDialog.FileName = packToWorkOn.ZipFile;
             }
+
+            //invoke and stop if user stops
             if (!(bool)SaveZipFileDialog.ShowDialog())
                 return;
+
             //make and run the uploader instance
             DatabaseEditorDownload name = new DatabaseEditorDownload()
             {
@@ -1843,7 +1849,7 @@ namespace RelhaxModpack.Windows
                 ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion),
                 ZipFileName = Path.GetFileName(packToWorkOn.ZipFile),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
-                Upload = false,
+                TransferMode = EditorTransferMode.DownloadZip,
                 PackageToUpdate = null,
                 Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
             };
@@ -1859,7 +1865,7 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            //make sure FTP credentials are at least entered
+            //make sure FTP credentials are entered
             if (string.IsNullOrWhiteSpace(EditorSettings.BigmodsPassword) || string.IsNullOrWhiteSpace(EditorSettings.BigmodsUsername))
             {
                 MessageBox.Show("Missing FTP credentials");
@@ -1874,8 +1880,8 @@ namespace RelhaxModpack.Windows
 
             if (packToWorkOn == null)
             {
-                Logging.Editor("packToWorkOn is null (not EditorComboboxItem or Databasepackage", LogLevel.Error);
-                MessageBox.Show("packToWorkOn is null (not EditorComboboxItem or Databasepackage), abort");
+                Logging.Editor("PackToWorkOn is null (not EditorComboboxItem or Databasepackage", LogLevel.Error);
+                MessageBox.Show("PackToWorkOn is null (not EditorComboboxItem or Databasepackage), abort");
                 return;
             }
 
@@ -1887,16 +1893,12 @@ namespace RelhaxModpack.Windows
                     CheckFileExists = true,
                     CheckPathExists = true,
                     DefaultExt = "zip",
-                    //don't set InitialDirectory to allow it to remember last folder
-                    //InitialDirectory = Settings.ApplicationStartupPath,
                     Multiselect = false,
                     Title = "Select zip file to upload"
                 };
 
             if ((bool)OpenZipFileDialog.ShowDialog() && File.Exists(OpenZipFileDialog.FileName))
-            {
                 zipFileToUpload = OpenZipFileDialog.FileName;
-            }
             else
                 return;
 
@@ -1907,7 +1909,7 @@ namespace RelhaxModpack.Windows
                 ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion),
                 ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
-                Upload = true,
+                TransferMode = EditorTransferMode.UploadZip,
                 PackageToUpdate = packToWorkOn,
                 Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
             };
@@ -1917,47 +1919,40 @@ namespace RelhaxModpack.Windows
 
         private void OnEditorUploadFinished(object sender, EditorUploadDownloadEventArgs e)
         {
-            Logging.Editor("Upload finished, applying change");
+            Logging.Editor("OnEditorUploadFinished(): Upload finished, type = {0}", LogLevel.Info, e.TransferMode.ToString());
 
-            if (e.Package == null)
+            switch(e.TransferMode)
             {
-                //uploaded media
-                Logging.Editor("Upload of {0} success, adding entry in UI", LogLevel.Info, e.UploadedFilename);
-                Media m = new Media()
-                {
-                    MediaType = MediaType.Picture,
-                    URL = string.Format("{0}{1}", e.UploadedFilepathOnline, e.UploadedFilename).Replace("ftp:", "http:")
-                };
-                PackageMediasDisplay.Items.Add(m);
-            }
-            //else uploaded package zipfile entry
-            else
-            {
-                Logging.Editor("Upload was package zipfile, checking if currently displayed");
+                case EditorTransferMode.UploadMedia:
+                    Logging.Editor("Adding media entry in UI", LogLevel.Info, e.UploadedFilename);
+                    Media m = new Media()
+                    {
+                        MediaType = MediaType.Picture,
+                        URL = string.Format("{0}{1}", e.UploadedFilepathOnline, e.UploadedFilename).Replace("ftp:", "http:")
+                    };
+                    PackageMediasDisplay.Items.Add(m);
+                    break;
+                case EditorTransferMode.UploadZip:
+                    DatabasePackage selectedItem = null;
+                    if (SelectedItem is DatabasePackage dp)
+                        selectedItem = dp;
+                    else if (SelectedItem is EditorComboBoxItem editorComboBoxItem)
+                        selectedItem = editorComboBoxItem.Package;
 
-                DatabasePackage selectedItem = null;
-                if (SelectedItem is DatabasePackage dp)
-                    selectedItem = dp;
-                else if (SelectedItem is EditorComboBoxItem editorComboBoxItem)
-                    selectedItem = editorComboBoxItem.Package;
+                    Logging.Editor("Changing zipFile entry for package {0} and updating time stamp/CRC", LogLevel.Info, e.Package.PackageName);
+                    Logging.Editor("Old = {0}, New = {1}", LogLevel.Info, PackageZipFileDisplay.Text, e.UploadedFilename);
+                    e.Package.ZipFile = e.UploadedFilename;
+                    e.Package.CRC = UpdatedPackageNewCRC;
+                    e.Package.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
 
-                string tempZipName = e.Package.ZipFile;
-
-                //update the package crc and timestamp values
-                e.Package.CRC = "f";
-                e.Package.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
-
-                if (selectedItem.Equals(e.Package))
-                {
-                    Logging.Editor("It's currently displayed, updating entry for display");
-                    ApplyDatabaseObject(e.Package);
-                    e.Package.ZipFile = tempZipName;
-                    ShowDatabasePackage(e.Package);
-                }
-                else
-                {
-                    Logging.Editor("It's currently not displayed, updating entry for not display");
-                }
+                    if (selectedItem.Equals(e.Package))
+                    {
+                        Logging.Editor("It's currently displayed, updating entry for display");
+                        PackageZipFileDisplay.Text = e.Package.ZipFile;
+                        ApplyDatabaseObject(e.Package);
+                        ShowDatabasePackage(e.Package);
+                    }
+                    break;
             }
 
             UnsavedChanges = true;
@@ -2531,7 +2526,6 @@ namespace RelhaxModpack.Windows
                     AddExtension = true,
                     CheckFileExists = true,
                     CheckPathExists = true,
-                    //InitialDirectory = Settings.ApplicationStartupPath,
                     Multiselect = true,
                     Title = "Select image file to upload"
                 };
@@ -2557,11 +2551,11 @@ namespace RelhaxModpack.Windows
                     ZipFilePathOnline = selectUploadLocation.UploadPath,
                     ZipFileName = mediaToUploadFilename,
                     Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
-                    Upload = true,
+                    TransferMode = EditorTransferMode.UploadMedia,
                     PackageToUpdate = null,
                     Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
                 };
-                //this needs to be changed to a show() with event handler made for on exit
+                //changed to a show() with event handler made for on exit
                 name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
                 name.Show();
             }

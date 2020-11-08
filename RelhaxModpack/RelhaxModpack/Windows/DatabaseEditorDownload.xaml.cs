@@ -1,46 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Net;
 using System.IO;
-using System.Timers;
 using System.Windows.Threading;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Database;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Utilities.ClassEventArgs;
 
 namespace RelhaxModpack.Windows
 {
-    /// <summary>
-    /// Event args returned to the editor for when an FTP upload or download is complete
-    /// </summary>
-    public class EditorUploadDownloadEventArgs : EventArgs
-    {
-        /// <summary>
-        /// The package that was just uploaded
-        /// </summary>
-        public DatabasePackage Package;
-
-        /// <summary>
-        /// The path to the file that was uploaded or downloaded
-        /// </summary>
-        public string UploadedFilename;
-
-        /// <summary>
-        /// The FTP path to the field that was uploaded or downloaded
-        /// </summary>
-        public string UploadedFilepathOnline;
-    }
-
     /// <summary>
     /// The delegate for invocation of when the FTP upload or download finishes
     /// </summary>
@@ -75,9 +45,9 @@ namespace RelhaxModpack.Windows
         public NetworkCredential Credential;
 
         /// <summary>
-        /// Flag to indicate upload or download. True is upload, false is download
+        /// Enumeration flag to indicate uploading or downloading
         /// </summary>
-        public bool Upload;
+        public EditorTransferMode TransferMode = EditorTransferMode.DownloadZip;
 
         /// <summary>
         /// The package being updated. A null package with Upload=true indicates the item being uploaded is a media
@@ -116,47 +86,38 @@ namespace RelhaxModpack.Windows
             //set the open folder and file button
             //if uploading, the buttons are invalid, don't show then
             //if downloading, the buttons are valid to show, but not enabled until the download is complete
-            switch(Upload)
+            switch(TransferMode)
             {
-                case true:
+                case EditorTransferMode.UploadZip:
                     OpenFodlerButton.Visibility = Visibility.Hidden;
                     OpenFileButton.Visibility = Visibility.Hidden;
+                    ProgressBody.Text = string.Format("Uploading {0} to FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
                     break;
-                case false:
+                case EditorTransferMode.UploadMedia:
+                    OpenFodlerButton.Visibility = Visibility.Hidden;
+                    OpenFileButton.Visibility = Visibility.Hidden;
+                    ProgressBody.Text = string.Format("Uploading {0} to FTP folder Medias/...", ZipFileName);
+                    break;
+                case EditorTransferMode.DownloadZip:
                     OpenFodlerButton.Visibility = Visibility.Visible;
                     OpenFileButton.Visibility = Visibility.Visible;
                     OpenFodlerButton.IsEnabled = false;
                     OpenFileButton.IsEnabled = false;
+                    ProgressBody.Text = string.Format("Downloading {0} from FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
                     break;
             }
 
-            //set header
-            if(!Upload)
-            {
-                //download
-                ProgressBody.Text = string.Format("Downloading {0} from FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
-            }
-            else if(PackageToUpdate == null)
-            {
-                //upload to medias
-                ProgressBody.Text = string.Format("Uploading {0} to FTP folder Medias/...", ZipFileName);
-            }
-            else
-            {
-                //upload to bigmods
-                ProgressBody.Text = string.Format("Uploading {0} to FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
-            }
-
-            //set body initial text
-            ProgressHeader.Text = string.Format("{0} 0 kb of 0 kb", Upload ? "Uploaded" : "Downloaded");
-
+            //set initial text(s)
+            ProgressHeader.Text = string.Format("{0} 0 kb of 0 kb", TransferMode.ToString());
             CompleteFTPPath = string.Format("{0}{1}", ZipFilePathOnline, ZipFileName);
+
             using (client = new WebClient() { Credentials=Credential })
             {
-                switch(Upload)
+                switch(TransferMode)
                 {
-                    case true:
-                        //before uploading, make sure it doesn't exist first
+                    case EditorTransferMode.UploadZip:
+                    case EditorTransferMode.UploadMedia:
+                        //before uploading, make sure it doesn't exist first (zipfile or media)
                         ProgressHeader.Text = "Checking if file exists on server...";
                         Logging.Editor("Checking if {0} already exists on the server in folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
                         string[] listOfFilesOnServer = await FtpUtils.FtpListFilesFoldersAsync(ZipFilePathOnline, Credential);
@@ -166,59 +127,54 @@ namespace RelhaxModpack.Windows
                             ProgressHeader.Text = "Canceled";
                             return;
                         }
+
+                        //attach upload event handlers
                         client.UploadProgressChanged += Client_UploadProgressChanged;
-                        //write handler for if upload or download was canceled
                         client.UploadFileCompleted += Client_DownloadUploadFileCompleted;
 
-                        Logging.Editor("STARTING FTP UPLOAD");
+                        //run the FTP upload
+                        Logging.Editor("Starting FTP upload of {0} from folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
                         try
                         {
                             await client.UploadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
+                            Logging.Editor("FTP upload complete of {0}", LogLevel.Info, ZipFileName);
+
+                            //run upload event handler
+                            OnEditorUploadDownloadClosed?.Invoke(this, new EditorUploadDownloadEventArgs()
+                            {
+                                Package = PackageToUpdate,
+                                UploadedFilename = ZipFileName,
+                                UploadedFilepathOnline = ZipFilePathOnline,
+                                TransferMode = this.TransferMode
+                            });
                         }
                         catch (Exception ex)
                         {
                             Logging.Editor("FTP UPLOAD Failed");
                             Logging.Editor(ex.ToString());
                         }
-
-                        Logging.Editor("FTP UPLOAD COMPLETE");
-                        if (PackageToUpdate == null)
-                            Logging.Editor("FTP media upload complete");
-                        else
+                        finally
                         {
-                            Logging.Editor("FTP zip package upload complete, changing zipFile entry for package {0} from", LogLevel.Info, PackageToUpdate.PackageName);
-                            Logging.Editor("\"{0}\"{1}to{2}", LogLevel.Info, PackageToUpdate.ZipFile, Environment.NewLine, Environment.NewLine);
-                            Logging.Editor("\"{0}\"", LogLevel.Info, ZipFileName);
-                            PackageToUpdate.ZipFile = ZipFileName;
+                            CancelButton.IsEnabled = false;
                         }
-                        
-                        if (OnEditorUploadDownloadClosed != null)
-                        {
-                            OnEditorUploadDownloadClosed(this, new EditorUploadDownloadEventArgs()
-                            {
-                                Package = PackageToUpdate,
-                                UploadedFilename = ZipFileName,
-                                UploadedFilepathOnline = ZipFilePathOnline
-                            });
-                        }
-                        CancelButton.IsEnabled = false;
                         break;
-                    case false:
+                    case EditorTransferMode.DownloadZip:
+                        //attach download event handlers
                         client.DownloadProgressChanged += Client_DownloadProgressChanged;
-                        //write handler for if upload or download was canceled
                         client.DownloadFileCompleted += Client_DownloadUploadFileCompleted;
-                        Logging.Editor("STARTING FTP DOWNLOAD");
+
+                        //run the FTP download
+                        Logging.Editor("Starting FTP download of {0} from folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
                         try
                         {
                             FTPDownloadFilesize = await FtpUtils.FtpGetFilesizeAsync(CompleteFTPPath, Credential);
                             await client.DownloadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
-                            Logging.Editor("FTP DOWNLOAD COMPLETE ({0})", LogLevel.Info, ZipFileName);
+                            Logging.Editor("FTP download complete of {0}", LogLevel.Info, ZipFileName);
                         }
                         catch (Exception ex)
                         {
-                            Logging.Editor("FTP download failed");
+                            Logging.Editor("FTP download failed of {0}", LogLevel.Info, ZipFileName);
                             Logging.Editor(ex.ToString());
-                            //MessageBox.Show(ex.ToString());
                         }
                         finally
                         {
@@ -252,7 +208,7 @@ namespace RelhaxModpack.Windows
             TimeoutClose.Text = (--Countdown).ToString();
             if (Countdown == 0)
             {
-                Logging.Editor("countdown complete, closing the window");
+                Logging.Editor("Countdown complete, closing the window");
                 timer.Stop();
                 Close();
             }
@@ -263,15 +219,15 @@ namespace RelhaxModpack.Windows
             if(e.Cancelled)
             {
                 Logging.Editor("FTP upload or download cancel detected from UI thread, handling");
-                switch (Upload)
+                switch (TransferMode)
                 {
-                    case true:
-                        //delete file on server
-                        Logging.Editor("deleting file on server");
+                    case EditorTransferMode.UploadZip:
+                    case EditorTransferMode.UploadMedia:
+                        Logging.Editor("Deleting file on server");
                         await FtpUtils.FtpDeleteFileAsync(CompleteFTPPath, Credential);
                         break;
-                    case false:
-                        Logging.Editor("deleting file on disk");
+                    case EditorTransferMode.DownloadZip:
+                        Logging.Editor("Deleting file on disk");
                         File.Delete(ZipFilePathDisk);
                         break;
                 }
@@ -331,7 +287,7 @@ namespace RelhaxModpack.Windows
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Editor("Cancel pressed, Upload={0}", LogLevel.Info, Upload.ToString());
+            Logging.Editor("Cancel pressed, TransferMode={0}", LogLevel.Info, TransferMode.ToString());
             ProgressHeader.Text = "Canceled";
             Logging.Editor("Canceling upload or download operation");
             client.CancelAsync();

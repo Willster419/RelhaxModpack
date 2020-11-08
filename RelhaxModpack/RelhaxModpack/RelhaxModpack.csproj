@@ -177,6 +177,7 @@
     <Compile Include="UI\ZoomBorder.cs" />
     <Compile Include="Utilities\Enums\ApplicationMode.cs" />
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
+    <Compile Include="Utilities\Enums\EditorTransferMode.cs" />
     <Compile Include="Utilities\Enums\DatabaseVersions.cs" />
     <Compile Include="Utilities\Enums\DatabaseXmlVersion.cs" />
     <Compile Include="Utilities\Enums\DownloadTypes.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="Utilities\Enums\UninstallModes.cs" />
     <Compile Include="Utilities\Enums\UpdateTypes.cs" />
     <Compile Include="Utilities\Enums\XmlLoadType.cs" />
+    <Compile Include="Utilities\ClassEventArgs\EditorUploadDownloadEventArgs.cs" />
     <Compile Include="Utilities\FileUtils.cs" />
     <Compile Include="Utilities\FtpUtils.cs" />
     <Compile Include="Common\GlobalSuppressions.cs" />
