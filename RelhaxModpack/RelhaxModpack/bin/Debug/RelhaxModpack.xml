@@ -4086,6 +4086,26 @@
             When you click the save button, it also clicks the apply button before saving.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.EditorTransferMode">
+            <summary>
+            The primary functional modes the application can run in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.EditorTransferMode.DownloadZip">
+            <summary>
+            Downloading a zip file from the FTP wot online folder to disk
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.EditorTransferMode.UploadZip">
+            <summary>
+            Uploading a zip file from disk to the FTP wot online folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.EditorTransferMode.UploadMedia">
+            <summary>
+            Uploading a media preview file from disk to the FTP Medias folder
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.DatabaseVersions">
             <summary>
             Database distribution levels
@@ -4636,6 +4656,31 @@
         <member name="F:RelhaxModpack.Utilities.Enums.XmlLoadType.FromString">
             <summary>
             loading Xml from a text string
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.ClassEventArgs.EditorUploadDownloadEventArgs">
+            <summary>
+            Event args returned to the editor for when an FTP upload or download is complete
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorUploadDownloadEventArgs.Package">
+            <summary>
+            The package that was just uploaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorUploadDownloadEventArgs.UploadedFilename">
+            <summary>
+            The path to the file that was uploaded or downloaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorUploadDownloadEventArgs.UploadedFilepathOnline">
+            <summary>
+            The FTP path to the field that was uploaded or downloaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorUploadDownloadEventArgs.TransferMode">
+            <summary>
+            The Transfer mode that was used for the upload or download
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.FileUtils">
@@ -8562,26 +8607,6 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.EditorUploadDownloadEventArgs">
-            <summary>
-            Event args returned to the editor for when an FTP upload or download is complete
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Windows.EditorUploadDownloadEventArgs.Package">
-            <summary>
-            The package that was just uploaded
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Windows.EditorUploadDownloadEventArgs.UploadedFilename">
-            <summary>
-            The path to the file that was uploaded or downloaded
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Windows.EditorUploadDownloadEventArgs.UploadedFilepathOnline">
-            <summary>
-            The FTP path to the field that was uploaded or downloaded
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Windows.EditorUploadDownloadClosed">
             <summary>
             The delegate for invocation of when the FTP upload or download finishes
@@ -8617,9 +8642,9 @@
             The FTP credentials
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.Upload">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.TransferMode">
             <summary>
-            Flag to indicate upload or download. True is upload, false is download
+            Enumeration flag to indicate uploading or downloading
             </summary>
         </member>
         <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.PackageToUpdate">
