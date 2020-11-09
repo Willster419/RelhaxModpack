@@ -240,7 +240,8 @@ namespace RelhaxModpack.Windows
             if (ProgressProgressBar.Maximum != FTPDownloadFilesize)
                 ProgressProgressBar.Maximum = FTPDownloadFilesize;
             ProgressProgressBar.Value = e.BytesReceived;
-            ProgressHeader.Text = string.Format("{0} {1} kb of {2} kb", "Downloaded", e.BytesReceived / 1024, e.TotalBytesToReceive / 1024);
+            ProgressHeader.Text = string.Format("{0} {1} of {2}", "Downloaded",
+                FileUtils.SizeSuffix((ulong)e.BytesReceived, 1, true, false), FileUtils.SizeSuffix((ulong)FTPDownloadFilesize, 1, true, false));
         }
 
         private void Client_UploadProgressChanged(object sender, UploadProgressChangedEventArgs e)
@@ -248,7 +249,8 @@ namespace RelhaxModpack.Windows
             if (ProgressProgressBar.Maximum != e.TotalBytesToSend)
                 ProgressProgressBar.Maximum = e.TotalBytesToSend;
             ProgressProgressBar.Value = e.BytesSent;
-            ProgressHeader.Text = string.Format("{0} {1} kb of {2} kb", "Uploaded", e.BytesSent / 1024, e.TotalBytesToSend / 1024);
+            ProgressHeader.Text = string.Format("{0} {1} of {2}", "Uploaded",
+                FileUtils.SizeSuffix((ulong)e.BytesSent, 1, true, false), FileUtils.SizeSuffix((ulong)e.TotalBytesToSend, 1, true, false));
         }
 
         private void OpenFodlerButton_Click(object sender, RoutedEventArgs e)
