@@ -593,7 +593,7 @@ namespace RelhaxModpack
             Spanish.Add("abort", "Abortar");
             Russian.Add("abort", "Отменить");
 
-            // REFERRERS: extractionErrorHeader; GcDownloadStep1ValueError; 
+            // REFERRERS: extractionErrorHeader; GcDownloadStep1ValueError;
             English.Add("error", "Error");
             German.Add("error", "Fehler");
             Polish.Add("error", "Błąd");
@@ -764,23 +764,25 @@ namespace RelhaxModpack
             //Component: failedToGetDotNetFrameworkVersion
             //
             English.Add("failedToGetDotNetFrameworkVersion", "Failed to get the installed .NET Framework version. This could indicate a permissions problem or your antivirus software could be blocking it.");
-            German.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+            German.Add("failedToGetDotNetFrameworkVersion", "Fehler beim Abrufen der installierten .NET Framework-Version. Dies könnte auf ein Berechtigungsproblem hinweisen oder von Antivirensoftware blockiert werden.");
             Polish.Add("failedToGetDotNetFrameworkVersion", "Brak zainstalowanego .NET Framework. Może to oznaczać problem z prawami dostępu lub konflikt z oprogramowaniem antywirusowym blokującym dostęp.");
-            French.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+            French.Add("failedToGetDotNetFrameworkVersion", "Impossible d'obtenir la version .NET Framework installée. Cela pourrait indiquer un problème d'autorisations ou votre logiciel antivirus pourrait le bloquer.");
             Spanish.Add("failedToGetDotNetFrameworkVersion", "No se ha podido obtener la versión de la instalación de .Net Framework. Esto puede indicar un problema de permisos, o un antivirus puede estar bloqueando la obtención.");
-            Russian.Add("failedToGetDotNetFrameworkVersion", TranslationNeeded);
+            Russian.Add("failedToGetDotNetFrameworkVersion", "Не удалось определить установленную версию .NET Framework. Вероятно, это вызвано недостаточными привилегиями или блокировкой работы антивирусным ПО.");
 
             //Component: invalidDotNetFrameworkVersion
             //
             English.Add("invalidDotNetFrameworkVersion", "The installed version of the .NET Framework is less then 4.8. Relhax Modpack requires version 4.8 or above to operate. Would you like to open a link" +
                 "to get the latest version of the .NET Framework?");
-            German.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
-            Polish.Add("invalidDotNetFrameworkVersion", "Zainstalowana wersja .NET Framework jest za stara. Modpack wymaga .NET Framework w wersji 4.8 lub wyższej." +
+            German.Add("invalidDotNetFrameworkVersion", "Die installierte Version von .NET Framework ist kleiner als 4.8. Für den Betrieb von Relhax Modpack ist Version 4.8 oder höher erforderlich." +
+                "Möchten Sie einen Link öffnen um die neueste Version von .NET Framework zu erhalten?");
+            Polish.Add("invalidDotNetFrameworkVersion", "Zainstalowana wersja .NET Framework jest za stara. Modpack wymaga .NET Framework w wersji 4.8 lub wyższej.\n" +
                 "Czy chcesz przejść do strony pobierania najnowszej wersji .NET Framework?");
-            French.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
-            Spanish.Add("invalidDotNetFrameworkVersion", "La versión instalada de .NET Framework es anterior a 4.8. Relhax Modpack requiere la versión 4.8 o superior para funcionar." +
+            French.Add("invalidDotNetFrameworkVersion", "La version installée de .NET Framework est inférieur à la 4.8. Relhax Modpack nécessite la version 4.8 ou supérieur afin d'opérer. " +
+                "Voulez-vous ouvrir un lien pour installer la dernière version ?");
+            Spanish.Add("invalidDotNetFrameworkVersion", "La versión instalada de .NET Framework es anterior a 4.8. Relhax Modpack requiere la versión 4.8 o superior para funcionar. " +
                 " ¿Quiere abrir un vínculo para obtener la última versión de .NET Framework?");
-            Russian.Add("invalidDotNetFrameworkVersion", TranslationNeeded);
+            Russian.Add("invalidDotNetFrameworkVersion", "На вашем компьютере установлена версия .NET Framework ниже 4.8. Для работы Relhax Modpack требуется версия 4.8 или выше. Хотите перейти на страницу загрузки актуальной версии?");
             #endregion
 
             #region Tray Icon
@@ -1445,7 +1447,7 @@ namespace RelhaxModpack
             English.Add("EnableCustomFontCheckboxText", "Enable custom font");
             German.Add("EnableCustomFontCheckboxText", "Aktiviere eigene Schriftarten");
             Polish.Add("EnableCustomFontCheckboxText", "Użyj własnej czcionki");
-            French.Add("EnableCustomFontCheckboxText", TranslationNeeded);
+            French.Add("EnableCustomFontCheckboxText", "Activer la police personnalisée");
             Spanish.Add("EnableCustomFontCheckboxText", "Habilitar fuente personalizada");
             Russian.Add("EnableCustomFontCheckboxText", "Использовать другой шрифт");
 
@@ -1454,7 +1456,7 @@ namespace RelhaxModpack
             English.Add("EnableCustomFontCheckboxTextDescription", "Enable using a custom font installed on your system inside most application windows");
             German.Add("EnableCustomFontCheckboxTextDescription", "Aktiviere eine deiner installierten Schriftarten für die Anzeige des Textes im Programm");
             Polish.Add("EnableCustomFontCheckboxTextDescription", "Pozwala wybrać czcionkę używaną w większości okien spośród listy zainstalowanych w systemie czcionek");
-            French.Add("EnableCustomFontCheckboxTextDescription", TranslationNeeded);
+            French.Add("EnableCustomFontCheckboxTextDescription", "Activez l'utilisation d'une police personnalisée installée sur votre système dans la plupart des fenêtres d'application");
             Spanish.Add("EnableCustomFontCheckboxTextDescription", "Habilita una fuente personalizada instalada en su sistema en la mayoría de las ventanas de la aplicación");
             Russian.Add("EnableCustomFontCheckboxTextDescription", "Вы можете выбрать любой установленный в системе шрифт,\nкоторый будет использован почти во всех окнах программы");
 
@@ -1751,7 +1753,7 @@ namespace RelhaxModpack
             English.Add("ViewCreditsButtonText", "View Credits");
             German.Add("ViewCreditsButtonText", "Danksagung");
             Polish.Add("ViewCreditsButtonText", "Autorzy i współtwórcy Relhax Modpack"); // Authors and co-creators* of Relhax Modpack. (*also used as contributors) @Nullmaruzero
-            French.Add("ViewCreditsButtonText", TranslationNeeded);
+            French.Add("ViewCreditsButtonText", "Voir les Credits");
             Spanish.Add("ViewCreditsButtonText", "Ver créditos");
             Russian.Add("ViewCreditsButtonText", "Авторы модпака"); // I couldn't find anything more suitable, so "Modpack Authors" will be left here. *shrug* - DrWeb7_1
 
@@ -1760,7 +1762,7 @@ namespace RelhaxModpack
             English.Add("ViewCreditsButtonDescription", "See all the awesome people and projects that support the modpack!");
             German.Add("ViewCreditsButtonDescription", "Übersicht aller großartigen Leute und Projekte, die das Modpack unterstützen");
             Polish.Add("ViewCreditsButtonDescription", "Lista wszystkich wspaniałych ludzi i projektów, dzięki którym powstał ten modpack.");
-            French.Add("ViewCreditsButtonDescription", TranslationNeeded);
+            French.Add("ViewCreditsButtonDescription", "Voir toutes les personnes et les projets géniaux qui prennent en charge le modpack !");
             Spanish.Add("ViewCreditsButtonDescription", "¡Ver todas las increíbles personas y proyectos que apoyan el modpack!");
             Russian.Add("ViewCreditsButtonDescription", "Познакомьтесь с замечательными людьми и проектами, поддерживающими модпак!");
 
@@ -2515,7 +2517,7 @@ namespace RelhaxModpack
 
             //Component: FirstTimeUserModsWarning
             //
-            English.Add("FirstTimeUserModsWarning", "This tab is for selecting zip files you place in the \"RelhaxUserMods\" folder. They must be zip files, and should use a root directory folder of the \"World_of_Tanks\" directory"); 
+            English.Add("FirstTimeUserModsWarning", "This tab is for selecting zip files you place in the \"RelhaxUserMods\" folder. They must be zip files, and should use a root directory folder of the \"World_of_Tanks\" directory");
             German.Add("FirstTimeUserModsWarning", "Auf dieser Registerkarte kannst du ZIP-Dateien auswählen, welche du zuvor im Ordner \"RelhaxUserMods\" hinterlegst. Es müssen Zip-Dateien sein und sollten als Stammverzeichnisordner einen Ordner des Verzeichnisses \"World_of_Tanks\" beinhalten (zB: mods, oder res_mods)");
             Polish.Add("FirstTimeUserModsWarning", "Ta zakładka umożliwia wybór modów, które możesz umieścić w folderze \"RelhaxUserMods\"" +
                 " Muszą to być archiwa ZIP używające struktury folderów takiej samej jak folder gry (domyślnie: World_of_Tanks)."); //? Ain't sure about how the root directory thing. ASSUMED: As in the same folder structure. @Nullmaruzero
@@ -2670,7 +2672,8 @@ namespace RelhaxModpack
                 "Falls dies deine aktuelle Installation ist und du diese behalten möchtest, ist es empfehlenswert eine (Neu-)Installation auszuführen wenn du diese Nachricht liest.");
             Polish.Add("packagesUpdatedShouldInstall", "Od czasu ostatniego użycia tego pliku kolekcji, poniższe pakiety zostały zaktualizowane. Twój plik kolekcji został automatycznie zaktualizowany (utworzono też jego jednorazową kopię zapasową)." +
                 "Jeśli jest to Twoja bieżąca instalacja i chcesz ją zachować, zaleca się instalację/aktualizację po tej wiadomości.");
-            French.Add("packagesUpdatedShouldInstall", TranslationNeeded);
+            French.Add("packagesUpdatedShouldInstall", "Les packages suivants ont été mis à jour depuis le dernier chargement de ce fichier de sélection. Votre fichier de sélection a été mis à jour avec les modifications (une sauvegarde ponctuelle a également été effectuée)." +
+                "S'il s'agit de votre installation actuelle et que vous souhaitez la conserver, il est recommandé d'installer / mettre à jour après avoir vu ce message.");
             Spanish.Add("packagesUpdatedShouldInstall", "Los siguientes paquetes han sido actualizados desde la última carga de este archivo de selección. Su archivo de selección ha sido actualizado con los cambios (y se ha creado una copia de seguridad de un sólo uso). " +
                 "Si ésta es su instalación actual, y quiere conservarla, se recomienda instalar/actualizar después de ver este mensaje.");
             Russian.Add("packagesUpdatedShouldInstall",  "Следующие пакеты были обновлены с момента последней загрузки данного файла предустановки. Файл предустановки был обновлён и изменён (его резервная копия так же была сделана). Если это ваша основная конфигурация и вы хотите её сохранить, рекомендуем вам установить/обновить моды после этого уведомления.");
@@ -2680,7 +2683,7 @@ namespace RelhaxModpack
             English.Add("selectionFileIssuesTitle", "Selection loading messages");
             German.Add("selectionFileIssuesTitle", "Auswahl Ladenachrichten");
             Polish.Add("selectionFileIssuesTitle", "Uwaga"); // Following RU pattern.
-            French.Add("selectionFileIssuesTitle", TranslationNeeded);
+            French.Add("selectionFileIssuesTitle", "Sélection de messages de chargement");
             Spanish.Add("selectionFileIssuesTitle", "Mensajes de carga de la selección");
             Russian.Add("selectionFileIssuesTitle", "Внимание"); // I don't think it's possible to translate that directly, so leaving it as "Warning" - DrWeb7_1
 
@@ -2689,17 +2692,17 @@ namespace RelhaxModpack
             English.Add("selectionFileIssuesHeader", "Please read the following messages about loading your selection file");
             German.Add("selectionFileIssuesHeader", "Bitte lies folgende Nachrichten über das Laden deiner Auswahldatei");
             Polish.Add("selectionFileIssuesHeader", "Proszę zapoznać się z poniższymi komunikatami dotyczącymi Twojego pliku kolekcji");
-            French.Add("selectionFileIssuesHeader", TranslationNeeded);
+            French.Add("selectionFileIssuesHeader", "Veuillez lire les messages suivants concernant le chargement de votre fichier de sélection");
             Spanish.Add("selectionFileIssuesHeader", "Por favor, lea los siguientes mensajes sobre la carga de su archivo de selección");
             Russian.Add("selectionFileIssuesHeader", "Пожалуйста, прочтите следующие сообщения, связанные с вашим файлом предустановки");
 
             //Component: selectionFormatOldV2
             //the message box to show up when your selection file is old (v2) and will be upgraded
             English.Add("selectionFormatOldV2", "This selection file format is legacy (V2) and will be upgraded to V3. A V2 backup will be created.");
-            German.Add("selectionFormatOldV2", TranslationNeeded);
+            German.Add("selectionFormatOldV2", "Dieses Auswahldateiformat ist ein Vermächtnis der Version 2 und wird auf Version 3 aktualisiert. Eine V2-Sicherung wird erstellt.");
             Polish.Add("selectionFormatOldV2", "Format tego pliku kolekcji jest przestarzały (V2), zostanie stworzona jego kopia zapasowa i zostanie on zaktualizowany do V3.");
-            French.Add("selectionFormatOldV2", TranslationNeeded);
-            Spanish.Add("selectionFormatOldV2", TranslationNeeded);
+            French.Add("selectionFormatOldV2", "Ce format de fichier de sélection est hérité (V2) et sera mis à niveau vers la V3. Une sauvegarde de la V2 sera créée.");
+            Spanish.Add("selectionFormatOldV2", "Este formato de archivo de selección es de legado (V2) y será actualizado a V3. Una copia de seguridad de tipo V2 será creada.");
             Russian.Add("selectionFormatOldV2", "Этот файл предустановки сохранён в устаревшем формате (v2) и будет обновлён до v3. Резервная копия старого файла также будет сделана.");
 
             //Component:
@@ -2815,7 +2818,7 @@ namespace RelhaxModpack
             English.Add("SelectionFileIssuesDisplay", "Errors applying selection file");
             German.Add("SelectionFileIssuesDisplay", "Fehler beim Anwenden der Auswahldatei");
             Polish.Add("SelectionFileIssuesDisplay", "Błędy z zastosowaniem pliku kolekcji");
-            French.Add("SelectionFileIssuesDisplay", TranslationNeeded);
+            French.Add("SelectionFileIssuesDisplay", "Erreurs lors de l'application du fichier de sélection");
             Spanish.Add("SelectionFileIssuesDisplay", "Errores al aplicar el archivo de selección");
             Russian.Add("SelectionFileIssuesDisplay", "Ошибка применения файла предустановки");
 
@@ -3335,13 +3338,16 @@ namespace RelhaxModpack
             // Many users download the application right from the website and run it in the downloads folder. This is not reccomended
             English.Add("moveAppOutOfDownloads", "The application detected that it is launched from the 'Downloads' folder. This is not recommended because the application creates several folders and files " +
                 "that may be difficult to find in a large 'Downloads' folder. You should move the application and all 'Relhax' files and folders into a new folder.");
-            German.Add("moveAppOutOfDownloads", TranslationNeeded);
-            Polish.Add("moveAppOutOfDownloads", "Wykryto, że aplikacja została uruchomiona z folderu 'Pobrane'." +
-                "Nie jest to zalecane z racji tworzenia przez aplikację wielu plików i folderów, które mogą być trudne do znalezienia w folderze 'Pobrane' z dużą ilością plików." +
-                "Zaleca się przeniesienie aplikacji i oraz jej plików do nowego/osobnego folderu.");
-            French.Add("moveAppOutOfDownloads", TranslationNeeded);
-            Spanish.Add("moveAppOutOfDownloads", TranslationNeeded);
-            Russian.Add("moveAppOutOfDownloads", "Приложение было запущено из папки \"Загрузки\". Мы не рекомендуем использовать эту папку, поскольку приложение создаёт несколько папок и файлов, поиск которых может быть затруднительным в папке с загрузками. Вы должны переместить приложение и файлы/папки Relhax в другое расположение.");
+			German.Add("moveAppOutOfDownloads", "Die Anwendung hat festgestellt, dass sie über den Ordner \"Downloads\" gestartet wurde. Dies wird nicht empfohlen, da die Anwendung mehrere Ordner und Dateien erstellt." +
+				"Sie sollten die Anwendung und alle 'Relhax'-Dateien und -Ordner in einen eigenen neuen Ordner verschieben.");
+            Polish.Add("moveAppOutOfDownloads", "Wykryto, że aplikacja została uruchomiona z folderu 'Pobrane'. " +
+                "Nie jest to zalecane z racji tworzenia przez aplikację wielu plików i folderów, które mogą być trudne do znalezienia w przypadku folderu 'Pobrane' z dużą ilością plików. " +
+                "Zaleca się przeniesienie aplikacji wraz z plikami do nowego/osobnego folderu.");
+            French.Add("moveAppOutOfDownloads", "L'application a détecté qu'elle est lancée à partir du dossier 'Téléchargements'. Ceci n'est pas recommandé car l'application crée plusieurs dossiers et fichiers " +
+                "qui peut être difficile à trouver dans un grand dossier 'Téléchargements'. Vous devriez déplacer l'application et tous les fichiers ainsi que dossiers 'Relhax' dans un nouveau dossier.");
+			Spanish.Add("moveAppOutOfDownloads", "La aplicación ha detectado que está siendo ejecutanda desde la carpeta 'Descargas'. Esto no se recomienda dado que la aplicación crea varios archivos y carpetas " +
+				"que pueden ser difíciles de encontrar en una carpeta 'Descargas' grande. Recomendamos que mueva la aplicación y todos los archivos y carpetas 'Relhax' a una nueva carpeta.");
+			Russian.Add("moveAppOutOfDownloads", "Приложение было запущено из папки \"Загрузки\". Мы не рекомендуем использовать эту папку, поскольку приложение создаёт несколько папок и файлов, поиск которых может быть затруднительным в папке с загрузками. Вы должны переместить приложение и файлы/папки Relhax в другое расположение.");
 
             //Component: Current database is same as last installed database (body)
             //
@@ -4222,7 +4228,7 @@ namespace RelhaxModpack
             English.Add("CleanGameCacheText", "Clear game cache files");
             German.Add("CleanGameCacheText", "Lösche Cache des Spiels");
             Polish.Add("CleanGameCacheText", "Wyczyść pamięc podręczną gry");
-            French.Add("CleanGameCacheText", TranslationNeeded);
+            French.Add("CleanGameCacheText", "Effacer les fichiers de cache du jeu");
             Spanish.Add("CleanGameCacheText", "Limpar caché del juego");
             Russian.Add("CleanGameCacheText", "Очистить кэш игры");
 
@@ -4231,7 +4237,7 @@ namespace RelhaxModpack
             English.Add("cleanGameCacheProgress", "Clearing game cache files");
             German.Add("cleanGameCacheProgress", "Lösche Spielcache");
             Polish.Add("cleanGameCacheProgress", "Czyszczenie pamięci podręcznej gry");
-            French.Add("cleanGameCacheProgress", TranslationNeeded);
+            French.Add("cleanGameCacheProgress", "Effacement des fichiers de cache du jeu");
             Spanish.Add("cleanGameCacheProgress", "Limpiando caché del juego");
             Russian.Add("cleanGameCacheProgress", "Удаляются файлы кэша игры");
 
@@ -4240,7 +4246,7 @@ namespace RelhaxModpack
             English.Add("cleanGameCacheSuccess", "Sucessfully cleared game cache files");
             German.Add("cleanGameCacheSuccess", "Spielcache erfolgreich gelöscht");
             Polish.Add("cleanGameCacheSuccess", "Czyszczenie pamięci podręcznej gry zakończone sukcesem");
-            French.Add("cleanGameCacheSuccess", TranslationNeeded);
+            French.Add("cleanGameCacheSuccess", "Les fichiers de cache du jeu ont été effacés avec succès");
             Spanish.Add("cleanGameCacheSuccess", "Caché del juego limpiada con éxito");
             Russian.Add("cleanGameCacheSuccess", "Кэш игры успешно очищен");
 
@@ -4249,45 +4255,45 @@ namespace RelhaxModpack
             English.Add("cleanGameCacheFail", "Failed to clear game cache files");
             German.Add("cleanGameCacheFail", "Konnte Cache-Dateien nicht löschen");
             Polish.Add("cleanGameCacheFail", "Nie udało się wyczyścić pamięci podręcznej gry");
-            French.Add("cleanGameCacheFail", TranslationNeeded);
+            French.Add("cleanGameCacheFail", "Echec de la suppression des fichiers de cache du jeu");
             Spanish.Add("cleanGameCacheFail", "No se ha podido limpar los archivos de caché del juego");
             Russian.Add("cleanGameCacheFail", "Не удалось удалить файлы кэша игры");
 
             //Component: TrimRelhaxLogfileText
             // Text block for allowing the user to trim relhax.log logfile to the last 3 launches (assuming header/footer entries exist)
             English.Add("TrimRelhaxLogfileText", "Trim the Relhax log file to the last 3 launches");
-            German.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            German.Add("TrimRelhaxLogfileText", "Kürze die Relhax-Protokolldatei auf die letzten drei Starts");
             Polish.Add("TrimRelhaxLogfileText", "Zachowaj w pliku dziennika tylko 3 ostatnie uruchomienia");
-            French.Add("TrimRelhaxLogfileText", TranslationNeeded);
-            Spanish.Add("TrimRelhaxLogfileText", TranslationNeeded);
-            Russian.Add("TrimRelhaxLogfileText", TranslationNeeded);
+            French.Add("TrimRelhaxLogfileText", "Ajustez le fichier journal Relhax aux 3 derniers lancements");
+            Spanish.Add("TrimRelhaxLogfileText", "Recortar el archivo de registro relhax.log a las últimas 3 ejecuciones (asumiendo que existan entradas de encabezamiento/pie de página.");
+            Russian.Add("TrimRelhaxLogfileText", "Обрезать лог-файл Relhax до последних трёх запусков");
 
             //Component: trimRelhaxLogProgress
             //
             English.Add("trimRelhaxLogProgress", "Trimming the Relhax log file");
-            German.Add("trimRelhaxLogProgress", TranslationNeeded);
+            German.Add("trimRelhaxLogProgress", "Kürze die Relhax-Protokolldatei");
             Polish.Add("trimRelhaxLogProgress", "Ograniczanie zakresu pliku dziennika");
-            French.Add("trimRelhaxLogProgress", TranslationNeeded);
-            Spanish.Add("trimRelhaxLogProgress", TranslationNeeded);
-            Russian.Add("trimRelhaxLogProgress", TranslationNeeded);
+            French.Add("trimRelhaxLogProgress", "Découpage du fichier journal Relhax");
+            Spanish.Add("trimRelhaxLogProgress", "Recortando el archivo de registro de Relhax.");
+            Russian.Add("trimRelhaxLogProgress", "Обрезка лог-файла...");
 
             //Component: trimRelhaxLogSuccess
             //
             English.Add("trimRelhaxLogSuccess", "Sucessfully trimmed the Relhax log file");
-            German.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            German.Add("trimRelhaxLogSuccess", "Die Relhax-Protokolldatei wurde erfolgreich gekürzt");
             Polish.Add("trimRelhaxLogSuccess", "Ograniczanie zakresu pliku dziennika zakończone powodzeniem");
-            French.Add("trimRelhaxLogSuccess", TranslationNeeded);
-            Spanish.Add("trimRelhaxLogSuccess", TranslationNeeded);
-            Russian.Add("trimRelhaxLogSuccess", TranslationNeeded);
+            French.Add("trimRelhaxLogSuccess", "Ajustement du fichier journal Relhax avec succès");
+            Spanish.Add("trimRelhaxLogSuccess", "Archivo de registro de Relhax recortado correctamente.");
+            Russian.Add("trimRelhaxLogSuccess", "Лог-файл Relhax успешно обрезан");
 
             //Component: trimRelhaxLogFail
             //
             English.Add("trimRelhaxLogFail", "Failed to trim the Relhax log file");
-            German.Add("trimRelhaxLogFail", TranslationNeeded);
+            German.Add("trimRelhaxLogFail", "Fehler beim Kürzen der Relhax-Protokolldatei");
             Polish.Add("trimRelhaxLogFail", "Nie udało się ograniczyć zakresu pliku dziennika");
-            French.Add("trimRelhaxLogFail", TranslationNeeded);
-            Spanish.Add("trimRelhaxLogFail", TranslationNeeded);
-            Russian.Add("trimRelhaxLogFail", TranslationNeeded);
+            French.Add("trimRelhaxLogFail", "Échec de la découpe du fichier journal Relhax");
+            Spanish.Add("trimRelhaxLogFail", "No se ha podido recortar correctamente el archivo de registro de Relhax.");
+            Russian.Add("trimRelhaxLogFail", "Не удалось обрезать лог-файл Relhax");
             #endregion
 
             #region Add zip files Dialog
@@ -4442,7 +4448,7 @@ namespace RelhaxModpack
             English.Add("popularInDescription", "This is a popular package");
             German.Add("popularInDescription", "Dies ist ein popüläres Paket");
             Polish.Add("popularInDescription", "Popularny pakiet");
-            French.Add("popularInDescription", TranslationNeeded);
+            French.Add("popularInDescription", "C'est un package populaire");
             Spanish.Add("popularInDescription", "Este paquete es popular");
             Russian.Add("popularInDescription", "Это популярный пакет");
 
@@ -4451,7 +4457,7 @@ namespace RelhaxModpack
             English.Add("controversialInDescription", "This is a controversial package");
             German.Add("controversialInDescription", "Dies ist ein umstrittenes Paket");
             Polish.Add("controversialInDescription", "Kontrowersyjny pakiet");
-            French.Add("controversialInDescription", TranslationNeeded);
+            French.Add("controversialInDescription", "C'est est un package controversé");
             Spanish.Add("controversialInDescription", "Este paquete es polémico");
             Russian.Add("controversialInDescription", "Это подозрительный пакет");
 
@@ -4460,7 +4466,7 @@ namespace RelhaxModpack
             English.Add("encryptedInDescription", "This is an encrypted package that can't be checked for viruses");
             German.Add("encryptedInDescription", "Dies ist ein  verschlüsseltes Paket, welches nicht auf Viren überprüft werden kann");
             Polish.Add("encryptedInDescription", "Pakiet zaszyfrowany, nie można go przeskanować pod kątem potencjalnych wirusów.");
-            French.Add("encryptedInDescription", TranslationNeeded);
+            French.Add("encryptedInDescription", "C'est un package crypté, qui ne peut pas être soumis à une vérification antivirus");
             Spanish.Add("encryptedInDescription", "Este paquete está encriptado y no se puede verificar que no contenga virus.");
             Russian.Add("encryptedInDescription", "Этот пакет зашифрован.\nПроверка на вирусы невозможна");
 
@@ -5691,7 +5697,7 @@ namespace RelhaxModpack
             English.Add("Credits", "Relhax Modpack Credits");
             German.Add("Credits", "Relhax Modpack Danksagung");
             Polish.Add("Credits", "Lista zasług Relhax Modpack");
-            French.Add("Credits", TranslationNeeded);
+            French.Add("Credits", "Relhax Modpack Crédits");
             Spanish.Add("Credits", "Créditos de Relhax Modpack");
             Russian.Add("Credits", "Авторы Relhax Modpack");
 
@@ -5700,7 +5706,7 @@ namespace RelhaxModpack
             English.Add("creditsProjectLeader", "Project Leader");
             German.Add("creditsProjectLeader", "Projektleiter");
             Polish.Add("creditsProjectLeader", "Przewodnictwo Projektu");
-            French.Add("creditsProjectLeader", TranslationNeeded);
+            French.Add("creditsProjectLeader", "Directeur de projet");
             Spanish.Add("creditsProjectLeader", "Líder de proyecto");
             Russian.Add("creditsProjectLeader", "Руководитель проекта");
 
@@ -5709,7 +5715,7 @@ namespace RelhaxModpack
             English.Add("creditsDatabaseManagers", "Database Managers");
             German.Add("creditsDatabaseManagers", "Datenbank Manager");
             Polish.Add("creditsDatabaseManagers", "Administracja Bazy Danych");
-            French.Add("creditsDatabaseManagers", TranslationNeeded);
+            French.Add("creditsDatabaseManagers", "Gérants de la base de données");
             Spanish.Add("creditsDatabaseManagers", "Administradores de la base de datos");
             Russian.Add("creditsDatabaseManagers", "Операторы базы данных");
 
@@ -5718,7 +5724,7 @@ namespace RelhaxModpack
             English.Add("creditsTranslators", "Translators");
             German.Add("creditsTranslators", "Übersetzer");
             Polish.Add("creditsTranslators", "Tłumaczenia");
-            French.Add("creditsTranslators", TranslationNeeded);
+            French.Add("creditsTranslators", "Traducteurs");
             Spanish.Add("creditsTranslators", "Traductores");
             Russian.Add("creditsTranslators", "Локализация");
 
@@ -5727,7 +5733,7 @@ namespace RelhaxModpack
             English.Add("creditsusingOpenSourceProjs", "Relhax Modpack uses the following Open Source projects");
             German.Add("creditsusingOpenSourceProjs", "Relhax Modpack nutzt folgende Open-Source Projekte");
             Polish.Add("creditsusingOpenSourceProjs", "Otwarte oprogramowanie wykorzystywane w modpacku");
-            French.Add("creditsusingOpenSourceProjs", TranslationNeeded);
+            French.Add("creditsusingOpenSourceProjs", "Relhax Modpack utilise les projets Open Source suivants");
             Spanish.Add("creditsusingOpenSourceProjs", "Relhax Modpack usa los siguientes proyectos de código abierto");
             Russian.Add("creditsusingOpenSourceProjs", "В Relhax Modpack применяются следующие проекты с открытым исходным кодом");
 
@@ -5736,7 +5742,7 @@ namespace RelhaxModpack
             English.Add("creditsSpecialThanks", "Special thanks");
             German.Add("creditsSpecialThanks", "Besonderer Dank");
             Polish.Add("creditsSpecialThanks", "Specjalne podziękowania dla");
-            French.Add("creditsSpecialThanks", TranslationNeeded);
+            French.Add("creditsSpecialThanks", "Remerciement spécial");
             Spanish.Add("creditsSpecialThanks", "Agradecimientos especiales");
             Russian.Add("creditsSpecialThanks", "Особая благодарность");
 
@@ -5745,7 +5751,7 @@ namespace RelhaxModpack
             English.Add("creditsGrumpelumpf", "Project leader of OMC, allowed us to pick up Relhax from where he left off");
             German.Add("creditsGrumpelumpf", "Projektleiter des OMC Modpack, hat Relhax erlaubt dort weiter zu machen wo er aufgehört hat");
             Polish.Add("creditsGrumpelumpf", "Lidera projektu OMC, za umożliwienie nam kontynuacji projektu po swoim odejściu");
-            French.Add("creditsGrumpelumpf", TranslationNeeded);
+            French.Add("creditsGrumpelumpf", "Chef de projet OMC, nous a permis de reprendre Relhax là où il (OMC) s'était arrêté");
             Spanish.Add("creditsGrumpelumpf", "Líder de proyecto de OMC Modpack, nos permitió retomar Relhax desde donde él lo dejó");
             Russian.Add("creditsGrumpelumpf", "руководитель проекта OMC Modpack, позволивший нам работать над Relhax, когда он отошёл от дел.");
 
@@ -5754,7 +5760,7 @@ namespace RelhaxModpack
             English.Add("creditsRkk1945", "The first beta tester who worked with me for months to get the project running");
             German.Add("creditsRkk1945", "Der erste Betatester, der mir über Monate half das Projekt zu auf die Beine zu stellen");
             Polish.Add("creditsRkk1945", "Pierwszego beta-testera, który pracował ze mną nad uruchomieniem projektu przez miesiące");
-            French.Add("creditsRkk1945", TranslationNeeded);
+            French.Add("creditsRkk1945", "Le premier bêta-testeur qui a travaillé avec moi pendant des mois pour lancer le projet");
             Spanish.Add("creditsRkk1945", "El primer beta tester que trabajó conmigo durante meses para poner en marcha el proyecto");
             Russian.Add("creditsRkk1945", "первый бета-тестер, кто работал со мной месяцами, чтобы привести проект в работоспособный вид.");
 
@@ -5763,7 +5769,7 @@ namespace RelhaxModpack
             English.Add("creditsRgc", "Sponsoring the modpack and being my first beta tester group");
             German.Add("creditsRgc", "Sponsor des Modpacks und meine erste Betatestgruppe");
             Polish.Add("creditsRgc", "Za sponsorowanie modpacka oraz zostanie moją pierwszą grupą beta-testerów");
-            French.Add("creditsRgc", TranslationNeeded);
+            French.Add("creditsRgc", "Parrainer le modpack et être mon premier groupe de testeurs bêta");
             Spanish.Add("creditsRgc", "Sponsor del modpack y miembro del primer grupo de beta testers");
             Russian.Add("creditsRgc", "за продвижение модпака, а так же за то, что стали первой группой бета-тестеров.");
 
@@ -5772,7 +5778,7 @@ namespace RelhaxModpack
             English.Add("creditsBetaTestersName", "Our beta testing team");
             German.Add("creditsBetaTestersName", "Unser Betatest Team");
             Polish.Add("creditsBetaTestersName", "Naszych Beta-Testerów");
-            French.Add("creditsBetaTestersName", TranslationNeeded);
+            French.Add("creditsBetaTestersName", "Notre équipe de Beta-Testeur");
             Spanish.Add("creditsBetaTestersName", "Nuestro equipo de beta testers");
             Russian.Add("creditsBetaTestersName", "Нашей команде бета-тестеров");
 
@@ -5781,7 +5787,7 @@ namespace RelhaxModpack
             English.Add("creditsBetaTesters", "Continuing to test and report issues in the application before it goes live");
             German.Add("creditsBetaTesters", "Kontinuierlich Probleme in der Anwendung zu testen und zu melden, bevor sie live geschaltet wird");
             Polish.Add("creditsBetaTesters", "Za nieustanne testowanie i zgłaszanie błędów zanim aplikacja trafi do wszystkich użytkowników");
-            French.Add("creditsBetaTesters", TranslationNeeded);
+            French.Add("creditsBetaTesters", "Continuer à tester et signaler les problèmes dans l'application avant sa mise en ligne");
             Spanish.Add("creditsBetaTesters", "Testeo continuado e informe de bugs en la aplicación antes de su publicación");
             Russian.Add("creditsBetaTesters", "за тщательное тестирование и отправку отчётов об ошибках перед выходом в релиз.");
 
@@ -5790,7 +5796,7 @@ namespace RelhaxModpack
             English.Add("creditsSilvers", "Helping with the community outreach and social networking");
             German.Add("creditsSilvers", "Hilfe bei der Öffentlichkeitsarbeit und sozialen Netzwerken");
             Polish.Add("creditsSilvers", "Za pomoc w komunikacji ze społecznością i pozyskiwanie nowych kontaktów");
-            French.Add("creditsSilvers", TranslationNeeded);
+            French.Add("creditsSilvers", "Aide à la pub sur les réseaux sociaux et à la communauté");
             Spanish.Add("creditsSilvers", "Ayuda con la comunicación con la comunidad y en redes sociales");
             Russian.Add("creditsSilvers", "за помощь в работе с сообществом");
 
@@ -5799,7 +5805,7 @@ namespace RelhaxModpack
             English.Add("creditsXantier", "Initial IT support and setting up our server");
             German.Add("creditsXantier", "Erster IT-Support und Einrichtung unseres Servers");
             Polish.Add("creditsXantier", "Za początkowe wsparcie informatyczne oraz konfigurację naszego serwera");
-            French.Add("creditsXantier", TranslationNeeded);
+            French.Add("creditsXantier", "Assistance Informatique initiale et mise en place de notre serveur");
             Spanish.Add("creditsXantier", "Soporte inicial de IT y preparación el servidor");
             Russian.Add("creditsXantier", "за помощь в настройке сервера в первые дни");
 
@@ -5808,7 +5814,7 @@ namespace RelhaxModpack
             English.Add("creditsSpritePacker", "Developing the sprite sheet packer algorithm and porting to .NET");
             German.Add("creditsSpritePacker", "Entwicklung des Sprite Sheet Packer-Algorithmus und Portierung nach .NET");
             Polish.Add("creditsSpritePacker", "Za stworzenie algorytmu kompresji sprite'ów i konwersję na platformę .NET");
-            French.Add("creditsSpritePacker", TranslationNeeded);
+            French.Add("creditsSpritePacker", "Développement de l'algorithme Sprite Sheet Packer et de son portage vers .NET");
             Spanish.Add("creditsSpritePacker", "Desarrollo del algoritmo de empaquetado de hojas de sprites y portado a .NET");
             Russian.Add("creditsSpritePacker", "за разработку алгоритма упаковки спрайтов и портирование на .NET");
 
@@ -5817,7 +5823,7 @@ namespace RelhaxModpack
             English.Add("creditsWargaming", "Making an easy to automate modding system");
             German.Add("creditsWargaming", "Ein einfach zu automatisierendes Modding-System");
             Polish.Add("creditsWargaming", "Za stworzenie łatwego w automatyzacji systemu modów");
-            French.Add("creditsWargaming", TranslationNeeded);
+            French.Add("creditsWargaming", "Créer un système de modding facile à automatiser");
             Spanish.Add("creditsWargaming", "Crear un método sencillo para automatizar el sistema de mods");
             Russian.Add("creditsWargaming", "за создание легко автоматизируемой системы модификаций");
 
@@ -5826,7 +5832,7 @@ namespace RelhaxModpack
             English.Add("creditsUsersLikeU", "Users like you");
             German.Add("creditsUsersLikeU", "Benutzer wie du");
             Polish.Add("creditsUsersLikeU", "Dla użytkowników takich jak Ty");
-            French.Add("creditsUsersLikeU", TranslationNeeded);
+            French.Add("creditsUsersLikeU", "Des utilisateurs comme vous");
             Spanish.Add("creditsUsersLikeU", "Usuarios como usted");
             Russian.Add("creditsUsersLikeU", "Таким пользователям, как вы");
             #endregion
