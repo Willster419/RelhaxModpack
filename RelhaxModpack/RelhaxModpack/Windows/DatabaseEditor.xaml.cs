@@ -1922,16 +1922,24 @@ namespace RelhaxModpack.Windows
             switch (e.TransferMode)
             {
                 case EditorTransferMode.UploadMedia:
-                    Logging.Editor("Adding media entry in UI", LogLevel.Info, e.UploadedFilename);
+                    Logging.Editor("Adding media entry {0} to package {1}", LogLevel.Info, e.UploadedFilename, e.Package.PackageName);
                     Media m = new Media()
                     {
                         MediaType = MediaType.Picture,
                         URL = string.Format("{0}{1}", e.UploadedFilepathOnline, e.UploadedFilename).Replace("ftp:", "http:")
                     };
-                    PackageMediasDisplay.Items.Add(m);
+                    SelectablePackage updatedPackage = e.Package as SelectablePackage;
+                    updatedPackage.Medias.Add(m);
+
+                    if (selectedItem.Equals(e.Package))
+                    {
+                        Logging.Editor("It's currently displayed, updating entry for display");
+                        PackageMediasDisplay.Items.Add(m);
+                        ApplyDatabaseObject(e.Package);
+                        ShowDatabasePackage(e.Package);
+                    }
                     break;
                 case EditorTransferMode.UploadZip:
-
                     Logging.Editor("Changing zipFile entry for package {0} and updating time stamp/CRC", LogLevel.Info, e.Package.PackageName);
                     Logging.Editor("Old = {0}, New = {1}", LogLevel.Info, PackageZipFileDisplay.Text, e.UploadedFilename);
                     e.Package.ZipFile = e.UploadedFilename;
@@ -2512,6 +2520,15 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
+            //get the currently selected item in the editor UI
+            DatabasePackage packToWorkOn = GetDatabasePackage(SelectedItem);
+            if (packToWorkOn == null)
+            {
+                Logging.Editor("PackToWorkOn is null (not EditorComboboxItem or Databasepackage", LogLevel.Error);
+                MessageBox.Show("PackToWorkOn is null (not EditorComboboxItem or Databasepackage), abort");
+                return;
+            }
+
             //get the path to upload to
             if (OpenPictureDialog == null)
                 OpenPictureDialog = new OpenFileDialog()
@@ -2545,7 +2562,7 @@ namespace RelhaxModpack.Windows
                     ZipFileName = mediaToUploadFilename,
                     Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                     TransferMode = EditorTransferMode.UploadMedia,
-                    PackageToUpdate = null,
+                    PackageToUpdate = packToWorkOn,
                     Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
                 };
                 //changed to a show() with event handler made for on exit
