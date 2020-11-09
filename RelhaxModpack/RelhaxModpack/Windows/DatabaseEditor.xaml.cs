@@ -223,7 +223,7 @@ namespace RelhaxModpack.Windows
 
         private DatabasePackage GetDatabasePackage(object obj)
         {
-            if (obj is SelectablePackage selectablePackage)
+            if (obj is DatabasePackage selectablePackage)
                 return selectablePackage;
 
             else if (obj is EditorComboBoxItem editorComboBoxItem)
@@ -1872,12 +1872,8 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            DatabasePackage packToWorkOn = null;
-            if (SelectedItem is EditorComboBoxItem ecbi)
-                packToWorkOn = ecbi.Package;
-            else if (SelectedItem is DatabasePackage pack)
-                packToWorkOn = pack;
-
+            //get the currently selected item in the editor UI
+            DatabasePackage packToWorkOn = GetDatabasePackage(SelectedItem);
             if (packToWorkOn == null)
             {
                 Logging.Editor("PackToWorkOn is null (not EditorComboboxItem or Databasepackage", LogLevel.Error);
@@ -1921,7 +1917,9 @@ namespace RelhaxModpack.Windows
         {
             Logging.Editor("OnEditorUploadFinished(): Upload finished, type = {0}", LogLevel.Info, e.TransferMode.ToString());
 
-            switch(e.TransferMode)
+            DatabasePackage selectedItem = GetDatabasePackage(SelectedItem);
+
+            switch (e.TransferMode)
             {
                 case EditorTransferMode.UploadMedia:
                     Logging.Editor("Adding media entry in UI", LogLevel.Info, e.UploadedFilename);
@@ -1933,11 +1931,6 @@ namespace RelhaxModpack.Windows
                     PackageMediasDisplay.Items.Add(m);
                     break;
                 case EditorTransferMode.UploadZip:
-                    DatabasePackage selectedItem = null;
-                    if (SelectedItem is DatabasePackage dp)
-                        selectedItem = dp;
-                    else if (SelectedItem is EditorComboBoxItem editorComboBoxItem)
-                        selectedItem = editorComboBoxItem.Package;
 
                     Logging.Editor("Changing zipFile entry for package {0} and updating time stamp/CRC", LogLevel.Info, e.Package.PackageName);
                     Logging.Editor("Old = {0}, New = {1}", LogLevel.Info, PackageZipFileDisplay.Text, e.UploadedFilename);
