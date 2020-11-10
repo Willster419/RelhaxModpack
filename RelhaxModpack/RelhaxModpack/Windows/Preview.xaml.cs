@@ -421,7 +421,8 @@ namespace RelhaxModpack.Windows
 
         private void MainContentControl_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            zoomBorder.Reset();
+            //if the preview is still loading, then the preview is still loading, therefore zoomBorder is still null. Don't set it yet.
+            zoomBorder?.Reset();
         }
         #endregion
 
