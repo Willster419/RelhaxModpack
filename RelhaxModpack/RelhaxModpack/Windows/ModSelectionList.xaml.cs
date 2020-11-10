@@ -2232,15 +2232,16 @@ namespace RelhaxModpack.Windows
             //compare each package and check if it's out of date
             foreach (DatabasePackage globalDependencyFromSelection in globalPackagesFromSelection)
             {
-                DatabasePackage globalDependency = GlobalDependencies.Find(pack => pack.UID.Equals(globalDependencyFromSelection.UID));
-                if (globalDependencyFromSelection == null)
+                DatabasePackage globalDependencyFromDatabase = GlobalDependencies.Find(pack => pack.UID.Equals(globalDependencyFromSelection.UID));
+                if (globalDependencyFromDatabase == null)
                 {
-                    Logging.Info(LogOptions.MethodName, "Global package {0} was not found in list database GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                    Logging.Info(LogOptions.MethodName, "Global package {0} from selection list was not found in the database list GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
                     globalsOutOfDate = true;
+                    continue;
                 }
-                if (IsSelectionV3PackageOutOfDate(globalDependencyFromSelection, globalDependency))
+                if (IsSelectionV3PackageOutOfDate(globalDependencyFromSelection, globalDependencyFromDatabase))
                 {
-                    Logging.Info(LogOptions.MethodName, "Global package {0} is out of date from list of GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
+                    Logging.Info(LogOptions.MethodName, "Global package {0} from selection list is out of date in comparison to the database list GlobalDependencies. Setting globasOutOfDate to true", globalDependencyFromSelection.PackageName);
                     globalsOutOfDate = true;
                     outOfDatePackages.Add(globalDependencyFromSelection);
                 }
