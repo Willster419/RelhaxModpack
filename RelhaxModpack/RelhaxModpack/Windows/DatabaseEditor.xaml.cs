@@ -21,6 +21,7 @@ using RelhaxModpack.Utilities;
 using Trigger = RelhaxModpack.Database.Trigger;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Utilities.ClassEventArgs;
+using System.Windows.Controls.Primitives;
 
 namespace RelhaxModpack.Windows
 {
@@ -572,6 +573,15 @@ namespace RelhaxModpack.Windows
                     else if(element.Name.Equals(nameof(PackageLevelDisplay)) || element.Name.Equals(nameof(PackageCalculatedLevelDisplay)))
                     {
                         (element as TextBlock).Text = string.Empty;
+                    }
+
+                    //also clear the undo stack if enabled
+                    if(element is TextBoxBase tbb && tbb.IsUndoEnabled)
+                    {
+                        //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.textboxbase.isundoenabled?view=netframework-4.8#System_Windows_Controls_Primitives_TextBoxBase_IsUndoEnabled
+                        //"Setting this property to false clears the undo stack"
+                        tbb.IsUndoEnabled = false;
+                        tbb.IsUndoEnabled = true;
                     }
                 }
             }
