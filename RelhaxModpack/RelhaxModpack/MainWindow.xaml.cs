@@ -1306,7 +1306,7 @@ namespace RelhaxModpack
                                 Translations.GetTranslatedString("detectedClientVersion"),//0
                                 Settings.WoTClientVersion,//1
                                 Translations.GetTranslatedString("supportNotGuarnteed"),//2
-                                Translations.GetTranslatedString("couldTryBeta"),//3
+                                ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Stable? Translations.GetTranslatedString("couldTryBeta") : string.Empty,//3
                                 Translations.GetTranslatedString("supportedClientVersions"),//4
                                 string.Join("\n", supportedVersionsString)),//5
                                 Translations.GetTranslatedString("critical"));//header
