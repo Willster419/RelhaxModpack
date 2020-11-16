@@ -63,6 +63,8 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public uint Countdown = 0;
 
+        public EditorSettings EditorSettings = null;
+
         private WebClient client = null;
         private string CompleteFTPPath = string.Empty;
         private long FTPDownloadFilesize = -1;
@@ -87,8 +89,10 @@ namespace RelhaxModpack.Windows
             switch(TransferMode)
             {
                 case EditorTransferMode.UploadZip:
+                    OpenFileButton.Click += OpenFileButton_DeleteFileClick;
                     OpenFodlerButton.Visibility = Visibility.Hidden;
-                    OpenFileButton.Visibility = Visibility.Hidden;
+                    OpenFileButton.Visibility = Visibility.Visible;
+                    OpenFileButton.Content = "Delete local";
                     ProgressBody.Text = string.Format("Uploading {0} to FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
                     break;
                 case EditorTransferMode.UploadMedia:
@@ -97,6 +101,7 @@ namespace RelhaxModpack.Windows
                     ProgressBody.Text = string.Format("Uploading {0} to FTP folder Medias/...", ZipFileName);
                     break;
                 case EditorTransferMode.DownloadZip:
+                    OpenFileButton.Click += OpenFileButton_OpenFileClick;
                     OpenFodlerButton.Visibility = Visibility.Visible;
                     OpenFileButton.Visibility = Visibility.Visible;
                     OpenFodlerButton.IsEnabled = false;
@@ -154,6 +159,10 @@ namespace RelhaxModpack.Windows
                         finally
                         {
                             CancelButton.IsEnabled = false;
+                            if(TransferMode == EditorTransferMode.UploadZip)
+                            {
+                                OpenFileButton.IsEnabled = true;
+                            }
                         }
                         break;
                     case EditorTransferMode.DownloadZip:
@@ -269,7 +278,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void OpenFileButton_Click(object sender, RoutedEventArgs e)
+        private void OpenFileButton_OpenFileClick(object sender, RoutedEventArgs e)
         {
             if (!File.Exists(ZipFilePathDisk))
             {
@@ -283,6 +292,55 @@ namespace RelhaxModpack.Windows
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void OpenFileButton_DeleteFileClick(object sender, RoutedEventArgs e)
+        {
+            switch(EditorSettings.UploadZipDeleteIsActuallyMove)
+            {
+                //true = move the file if the destination file exists
+                case true:
+                    Logging.Editor("{0} = {1}, moving file to {2}", LogLevel.Info, nameof(EditorSettings.UploadZipDeleteIsActuallyMove), EditorSettings.UploadZipDeleteIsActuallyMove.ToString(), EditorSettings.UploadZipMoveFolder);
+                    if(Directory.Exists(EditorSettings.UploadZipMoveFolder))
+                    {
+                        try
+                        {
+                            string destinationFile = Path.Combine(EditorSettings.UploadZipMoveFolder, Path.GetFileName(ZipFilePathDisk));
+                            if (File.Exists(destinationFile))
+                            {
+                                Logging.Editor("Destination file {0} already exists, overriding", LogLevel.Info, destinationFile);
+                                File.Delete(destinationFile);
+                            }
+                            File.Move(ZipFilePathDisk, destinationFile);
+                            OpenFileButton.IsEnabled = false;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Editor(ex.ToString(), LogLevel.Exception);
+                        }   
+                    }
+                    else if (string.IsNullOrEmpty(EditorSettings.UploadZipMoveFolder))
+                    {
+                        Logging.Editor("Path for {0} is empty, no action taken", LogLevel.Warning, nameof(EditorSettings.UploadZipMoveFolder));
+                    }
+                    else
+                    {
+                        Logging.Editor("Path '{0}' does not exist, no action taken", LogLevel.Warning, EditorSettings.UploadZipMoveFolder);
+                    }
+                    break;
+                //false = delete the file
+                case false:
+                    Logging.Editor("{0} = {1}, deleting file", LogLevel.Info, nameof(EditorSettings.UploadZipDeleteIsActuallyMove), EditorSettings.UploadZipDeleteIsActuallyMove.ToString());
+                    try
+                    {
+                        File.Delete(ZipFilePathDisk);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.Editor(ex.ToString(), LogLevel.Exception);
+                    }
+                    break;
             }
         }
 

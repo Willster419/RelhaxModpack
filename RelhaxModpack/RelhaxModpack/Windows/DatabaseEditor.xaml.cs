@@ -479,26 +479,6 @@ namespace RelhaxModpack.Windows
             autoUpdatePackageWindow.ShowDialog();
         }
 
-        private void SelectAutoUpdateWorkDirectoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
-            {
-                IsFolderPicker = true,
-                Multiselect = false,
-                Title = "Select folder"
-            };
-            if (openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                SelectAutoUpdateWorkDirectoryTextbox.Text = openFolderDialog.FileName;
-            }
-        }
-
-        private void SelectAutoUpdateWorkDirectoryTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
-            LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
-        }
-
         private void PackageDevURLDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //since it is multiple lines, split into array
@@ -765,6 +745,7 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("[MouseDoubleClick]: Never found an 'http' sequence to begin parsing", LogLevel.Info);
             }
         }
+
         #endregion
 
         #region Show database methods
@@ -1861,7 +1842,8 @@ namespace RelhaxModpack.Windows
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 TransferMode = EditorTransferMode.DownloadZip,
                 PackageToUpdate = null,
-                Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
+                Countdown = EditorSettings.FTPUploadDownloadWindowTimeout,
+                EditorSettings = EditorSettings
             };
             name.Show();
         }
@@ -1917,7 +1899,8 @@ namespace RelhaxModpack.Windows
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 TransferMode = EditorTransferMode.UploadZip,
                 PackageToUpdate = packToWorkOn,
-                Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
+                Countdown = EditorSettings.FTPUploadDownloadWindowTimeout,
+                EditorSettings = EditorSettings
             };
             name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
             name.Show();
@@ -2573,7 +2556,8 @@ namespace RelhaxModpack.Windows
                     Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                     TransferMode = EditorTransferMode.UploadMedia,
                     PackageToUpdate = packToWorkOn,
-                    Countdown = EditorSettings.FTPUploadDownloadWindowTimeout
+                    Countdown = EditorSettings.FTPUploadDownloadWindowTimeout,
+                    EditorSettings = EditorSettings
                 };
                 //changed to a show() with event handler made for on exit
                 name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
@@ -2778,19 +2762,20 @@ namespace RelhaxModpack.Windows
             EditorSettings.DefaultEditorSaveLocation = DefaultSaveLocationSetting.Text;
         }
 
+        private void SelectAutoUpdateWorkDirectoryTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
+            LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
+        }
+
+        private void SelectTransferWindowMovePathTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EditorSettings.UploadZipMoveFolder = SelectTransferWindowMovePathTextbox.Text;
+        }
+
         private void SaveSelectionBeforeLeaveSetting_Click(object sender, RoutedEventArgs e)
         {
             EditorSettings.SaveSelectionBeforeLeave = (bool)SaveSelectionBeforeLeaveSetting.IsChecked;
-        }
-
-        private void ApplyBehaviorSetting_Checked(object sender, RoutedEventArgs e)
-        {
-            if ((bool)ApplyBehaviorDefaultSetting.IsChecked)
-                EditorSettings.ApplyBehavior = ApplyBehavior.Default;
-            else if ((bool)ApplyBehaviorApplyTriggersSaveSetting.IsChecked)
-                EditorSettings.ApplyBehavior = ApplyBehavior.ApplyTriggersSave;
-            else if ((bool)ApplyBehaviorSaveTriggersApplySetting.IsChecked)
-                EditorSettings.ApplyBehavior = ApplyBehavior.SaveTriggersApply;
         }
 
         private void ShowConfirmOnPackageApplySetting_Click(object sender, RoutedEventArgs e)
@@ -2801,6 +2786,49 @@ namespace RelhaxModpack.Windows
         private void ShowConfirmOnPackageAddRemoveEditSetting_Click(object sender, RoutedEventArgs e)
         {
             EditorSettings.ShowConfirmationOnPackageAddRemoveMove = (bool)ShowConfirmOnPackageAddRemoveEditSetting.IsChecked;
+        }
+
+        private void DatabaseTransferDeleteActuallyMove_Click(object sender, RoutedEventArgs e)
+        {
+            EditorSettings.UploadZipDeleteIsActuallyMove = (bool)DatabaseTransferDeleteActuallyMove.IsChecked;
+        }
+
+        private void SelectTransferWindowMovePathButton_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                Multiselect = false,
+                Title = "Select folder"
+            };
+            if (openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                SelectTransferWindowMovePathTextbox.Text = openFolderDialog.FileName;
+            }
+        }
+
+        private void SelectAutoUpdateWorkDirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                Multiselect = false,
+                Title = "Select folder"
+            };
+            if (openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                SelectAutoUpdateWorkDirectoryTextbox.Text = openFolderDialog.FileName;
+            }
+        }
+
+        private void ApplyBehaviorSetting_Checked(object sender, RoutedEventArgs e)
+        {
+            if ((bool)ApplyBehaviorDefaultSetting.IsChecked)
+                EditorSettings.ApplyBehavior = ApplyBehavior.Default;
+            else if ((bool)ApplyBehaviorApplyTriggersSaveSetting.IsChecked)
+                EditorSettings.ApplyBehavior = ApplyBehavior.ApplyTriggersSave;
+            else if ((bool)ApplyBehaviorSaveTriggersApplySetting.IsChecked)
+                EditorSettings.ApplyBehavior = ApplyBehavior.SaveTriggersApply;
         }
 
         private void FtpUpDownAutoCloseTimoutSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

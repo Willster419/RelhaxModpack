@@ -373,6 +373,8 @@
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="35"/>
                             <RowDefinition Height="20"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="20"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
@@ -417,6 +419,15 @@
                         </Button>
                         <TextBox x:Name="SelectAutoUpdateWorkDirectoryTextbox" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Center"
                                  TextChanged="SelectAutoUpdateWorkDirectoryTextbox_TextChanged" />
+                        <CheckBox x:Name="DatabaseTransferDeleteActuallyMove" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="11" VerticalAlignment="Center" Content="Editor transfer window's delete button is actually move"
+                                  Click="DatabaseTransferDeleteActuallyMove_Click" ToolTip="When checked, the delete file button in the editor file transfer window will actually move the file into the folder specified below"/>
+                        <Button x:Name="SelectTransferWindowMovePathButton" HorizontalAlignment="Stretch" Grid.Row="12" VerticalAlignment="Center" Click="SelectTransferWindowMovePathButton_Click"
+                                ToolTip="Select the folder to use for the editor transfer window, when upload mode and the above option 'delete is actually move' is checked">
+                            <TextBlock x:Name="SelectTransferWindowMovePathTextblock" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"
+                                       Text="Select transfer window's upload move directory"/>
+                        </Button>
+                        <TextBox x:Name="SelectTransferWindowMovePathTextbox" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Center"
+                                 TextChanged="SelectTransferWindowMovePathTextbox_TextChanged" />
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionHelperTab" Header="How to use" ToolTip="Read some documentation on this tool">

@@ -59,6 +59,16 @@ namespace RelhaxModpack
         public string AutoUpdaterWorkDirectory = string.Empty;
 
         /// <summary>
+        /// Flag to determine if the delete zip button (actually open file by default) will actually delete the zip, or move it to the specified folder
+        /// </summary>
+        public bool UploadZipDeleteIsActuallyMove = false;
+
+        /// <summary>
+        /// The folder path to move the uploaded file to. If the file already exists, it will be overridden
+        /// </summary>
+        public string UploadZipMoveFolder = string.Empty;
+
+        /// <summary>
         /// Create an instance of the EditorSettings class. Settings should be set via property initialization style.
         /// </summary>
         public EditorSettings() { }
