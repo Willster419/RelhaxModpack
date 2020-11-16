@@ -11,7 +11,7 @@ namespace RelhaxModpack.Utilities.ClassEventArgs
     /// <summary>
     /// Event args returned to the editor for when an FTP upload or download is complete
     /// </summary>
-    public class EditorUploadDownloadEventArgs : EventArgs
+    public class EditorTransferEventArgs : EventArgs
     {
         /// <summary>
         /// The package that was just uploaded

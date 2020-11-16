@@ -1853,7 +1853,7 @@ namespace RelhaxModpack.Windows
                 return;
 
             //make and run the uploader instance
-            DatabaseEditorDownload name = new DatabaseEditorDownload()
+            DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
             {
                 ZipFilePathDisk = SaveZipFileDialog.FileName,
                 ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion),
@@ -1909,7 +1909,7 @@ namespace RelhaxModpack.Windows
                 return;
 
             //make and run the uploader instance
-            DatabaseEditorDownload name = new DatabaseEditorDownload()
+            DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
             {
                 ZipFilePathDisk = zipFileToUpload,
                 ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion),
@@ -1923,7 +1923,7 @@ namespace RelhaxModpack.Windows
             name.Show();
         }
 
-        private void OnEditorUploadFinished(object sender, EditorUploadDownloadEventArgs e)
+        private void OnEditorUploadFinished(object sender, EditorTransferEventArgs e)
         {
             Logging.Editor("OnEditorUploadFinished(): Upload finished, type = {0}", LogLevel.Info, e.TransferMode.ToString());
 
@@ -2565,7 +2565,7 @@ namespace RelhaxModpack.Windows
             foreach (string mediaToUploadPath in OpenPictureDialog.FileNames)
             {
                 string mediaToUploadFilename = Path.GetFileName(mediaToUploadPath);
-                DatabaseEditorDownload name = new DatabaseEditorDownload()
+                DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
                 {
                     ZipFilePathDisk = mediaToUploadPath,
                     ZipFilePathOnline = selectUploadLocation.UploadPath,

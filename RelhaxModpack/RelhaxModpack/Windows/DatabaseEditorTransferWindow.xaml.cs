@@ -16,14 +16,13 @@ namespace RelhaxModpack.Windows
     /// </summary>
     /// <param name="sender">The sending object</param>
     /// <param name="e">The Upload or download event arguments</param>
-    public delegate void EditorUploadDownloadClosed(object sender, EditorUploadDownloadEventArgs e);
+    public delegate void EditorTransferWindowClosed(object sender, EditorTransferEventArgs e);
 
     /// <summary>
-    /// Interaction logic for DatabaseEditorDownload.xaml
+    /// Interaction logic for DatabaseEditorTrnasferWindow.xaml
     /// </summary>
-    public partial class DatabaseEditorDownload : RelhaxWindow
+    public partial class DatabaseEditorTrnasferWindow : RelhaxWindow
     {
-        //public
         /// <summary>
         /// The path to the zip file on the disk
         /// </summary>
@@ -57,14 +56,13 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// The event callback used for the editor when an upload or download is finished
         /// </summary>
-        public event EditorUploadDownloadClosed OnEditorUploadDownloadClosed;
+        public event EditorTransferWindowClosed OnEditorUploadDownloadClosed;
 
         /// <summary>
         /// The timeout, in seconds, until the window will automatically close
         /// </summary>
         public uint Countdown = 0;
 
-        //private
         private WebClient client = null;
         private string CompleteFTPPath = string.Empty;
         private long FTPDownloadFilesize = -1;
@@ -73,7 +71,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseEditorDownlaod class
         /// </summary>
-        public DatabaseEditorDownload()
+        public DatabaseEditorTrnasferWindow()
         {
             InitializeComponent();
         }
@@ -140,7 +138,7 @@ namespace RelhaxModpack.Windows
                             Logging.Editor("FTP upload complete of {0}", LogLevel.Info, ZipFileName);
 
                             //run upload event handler
-                            OnEditorUploadDownloadClosed?.Invoke(this, new EditorUploadDownloadEventArgs()
+                            OnEditorUploadDownloadClosed?.Invoke(this, new EditorTransferEventArgs()
                             {
                                 Package = PackageToUpdate,
                                 UploadedFilename = ZipFileName,

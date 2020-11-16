@@ -4658,27 +4658,27 @@
             loading Xml from a text string
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Utilities.ClassEventArgs.EditorUploadDownloadEventArgs">
+        <member name="T:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs">
             <summary>
             Event args returned to the editor for when an FTP upload or download is complete
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorUploadDownloadEventArgs.Package">
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.Package">
             <summary>
             The package that was just uploaded
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorUploadDownloadEventArgs.UploadedFilename">
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.UploadedFilename">
             <summary>
             The path to the file that was uploaded or downloaded
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorUploadDownloadEventArgs.UploadedFilepathOnline">
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.UploadedFilepathOnline">
             <summary>
             The FTP path to the field that was uploaded or downloaded
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorUploadDownloadEventArgs.TransferMode">
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.TransferMode">
             <summary>
             The Transfer mode that was used for the upload or download
             </summary>
@@ -8607,67 +8607,67 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.EditorUploadDownloadClosed">
+        <member name="T:RelhaxModpack.Windows.EditorTransferWindowClosed">
             <summary>
             The delegate for invocation of when the FTP upload or download finishes
             </summary>
             <param name="sender">The sending object</param>
             <param name="e">The Upload or download event arguments</param>
         </member>
-        <member name="T:RelhaxModpack.Windows.DatabaseEditorDownload">
+        <member name="T:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow">
             <summary>
-            Interaction logic for DatabaseEditorDownload.xaml
+            Interaction logic for DatabaseEditorTrnasferWindow.xaml
             </summary>
             <summary>
-            DatabaseEditorDownload
+            DatabaseEditorTrnasferWindow
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.ZipFilePathDisk">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.ZipFilePathDisk">
             <summary>
             The path to the zip file on the disk
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.ZipFilePathOnline">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.ZipFilePathOnline">
             <summary>
             The FTP path to the zip file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.ZipFileName">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.ZipFileName">
             <summary>
             The complete name of the Zip file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.Credential">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.Credential">
             <summary>
             The FTP credentials
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.TransferMode">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.TransferMode">
             <summary>
             Enumeration flag to indicate uploading or downloading
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.PackageToUpdate">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.PackageToUpdate">
             <summary>
             The package being updated. A null package with Upload=true indicates the item being uploaded is a media
             </summary>
         </member>
-        <member name="E:RelhaxModpack.Windows.DatabaseEditorDownload.OnEditorUploadDownloadClosed">
+        <member name="E:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.OnEditorUploadDownloadClosed">
             <summary>
             The event callback used for the editor when an upload or download is finished
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorDownload.Countdown">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.Countdown">
             <summary>
             The timeout, in seconds, until the window will automatically close
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditorDownload.#ctor">
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.#ctor">
             <summary>
             Create an instance of the DatabaseEditorDownlaod class
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditorDownload.InitializeComponent">
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>

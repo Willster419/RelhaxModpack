@@ -199,7 +199,7 @@
     <Compile Include="Utilities\Enums\UninstallModes.cs" />
     <Compile Include="Utilities\Enums\UpdateTypes.cs" />
     <Compile Include="Utilities\Enums\XmlLoadType.cs" />
-    <Compile Include="Utilities\ClassEventArgs\EditorUploadDownloadEventArgs.cs" />
+    <Compile Include="Utilities\ClassEventArgs\EditorTransferEventArgs.cs" />
     <Compile Include="Utilities\FileUtils.cs" />
     <Compile Include="Utilities\FtpUtils.cs" />
     <Compile Include="Common\GlobalSuppressions.cs" />
@@ -311,8 +311,8 @@
     <Compile Include="Windows\DatabaseEditor.xaml.cs">
       <DependentUpon>DatabaseEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DatabaseEditorDownload.xaml.cs">
-      <DependentUpon>DatabaseEditorDownload.xaml</DependentUpon>
+    <Compile Include="Windows\DatabaseEditorTransferWindow.xaml.cs">
+      <DependentUpon>DatabaseEditorTransferWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ModpackToolbox.xaml.cs">
       <DependentUpon>ModpackToolbox.xaml</DependentUpon>
@@ -332,7 +332,7 @@
     <Compile Include="Windows\ProgressIndicator.xaml.cs">
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\RelhaxWindow.cs" />
+    <Compile Include="Windows\RelhaxWindow.cs" />
     <Compile Include="Windows\SelectionFileIssuesDisplay.xaml.cs">
       <DependentUpon>SelectionFileIssuesDisplay.xaml</DependentUpon>
     </Compile>
@@ -436,7 +436,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DatabaseEditorDownload.xaml">
+    <Page Include="Windows\DatabaseEditorTransferWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
