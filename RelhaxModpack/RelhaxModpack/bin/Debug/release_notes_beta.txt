@@ -1,3 +1,16 @@
+Beta Application version 1.2.1.0 (2020-11-15)
+https://www.virustotal.com/gui/file-analysis/NjgyYzEwMGZmYjJmYjFiMjhmNjc4MWQ5NmU2NDRiZTQ6MTYwNTQ5NjM2NA==/detection
+- Complete re-work of the database editor transfer window to allow for identify-able cod blocks based on transfer mode (Media upload, zip file upload, zip file download). What is code debt.
+- Fixed bug of application not installing mods to the correct WoT mods and res_mods folders when in beta database, if the beta database's target version does not match the client's version.
+- Fixed bug of application crashing when global dependencies comparison list attempts to check for a global dependency package in the database that no longer exists. What is quality control.
+- Fixed bug of preview window crashing when trying to right click on a picture preview. (Thanks heavyshot of the NA server for pointing this out)
+- Disabled spell checking of database editor textboxes. The API's implementation is awful and lags out the application.
+- Added clearing of the database editor's components undo stacks when switching to a new component to display. Helps with application lag.
+- Added feature in database editor to delete a local version of an uploaded zip file after upload, or move it to a specified folder.
+- Stability improvements for FTP integration of database editor.
+- Code organization and optimizations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.2.0.0 (2020-10-19)
 https://www.virustotal.com/gui/file-analysis/OTU5ODg1ZjAzZWEzYjIxMTQ3MDgxZTY3MjQyYTcyYTA6MTYwMzA5MzUxNA==/detection
 - Added a unit tests project to the code base solution. This will allow us to unit test individual software features and help catch bugs in the application before they get released to beta.
