@@ -49,7 +49,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <DocumentationFile>bin\Debug\RelhaxModpack.xml</DocumentationFile>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>Properties\RelhaxModpack.ruleset</CodeAnalysisRuleSet>
     <NoWarn>CS1658, CS4014, CA1009, CA1065, CA0507, 1009, IDE0060, IDE0044</NoWarn>
   </PropertyGroup>
