@@ -6831,6 +6831,16 @@
             The directory where the auto updater will download, modify, and upload files to/from
             </summary>
         </member>
+        <member name="F:RelhaxModpack.EditorSettings.UploadZipDeleteIsActuallyMove">
+            <summary>
+            Flag to determine if the delete zip button (actually open file by default) will actually delete the zip, or move it to the specified folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.EditorSettings.UploadZipMoveFolder">
+            <summary>
+            The folder path to move the uploaded file to. If the file already exists, it will be overridden
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.EditorSettings.#ctor">
             <summary>
             Create an instance of the EditorSettings class. Settings should be set via property initialization style.
