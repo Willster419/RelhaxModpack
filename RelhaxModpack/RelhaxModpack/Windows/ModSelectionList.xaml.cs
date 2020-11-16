@@ -144,6 +144,7 @@ namespace RelhaxModpack.Windows
         private DispatcherTimer FlashTimer = null;
         private XDocument Md5HashDocument = null;
         private DatabaseVersions databaseVersion;
+        private string InstallingAsDatabaseVersionDisplay = string.Empty;
 
         #region Boring stuff
         /// <summary>
@@ -449,11 +450,22 @@ namespace RelhaxModpack.Windows
                 return false;
             }
 
-            //if not stable db, update WoT current version and online folder version macros from modInfoxml itself
+            //if not stable db, update WoT online folder version macro from modInfoxml itself
             if (databaseVersion != DatabaseVersions.Stable)
             {
                 Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
-                Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@version");
+            }
+
+            //set the version of the wot client to display for the UI, stored in a string to be called later
+            switch(databaseVersion)
+            {
+                case DatabaseVersions.Test:
+                case DatabaseVersions.Beta:
+                    InstallingAsDatabaseVersionDisplay = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@version");
+                    break;
+                case DatabaseVersions.Stable:
+                    InstallingAsDatabaseVersionDisplay = Settings.WoTClientVersion;
+                    break;
             }
 
             //parse the modInfoXml to list in memory
