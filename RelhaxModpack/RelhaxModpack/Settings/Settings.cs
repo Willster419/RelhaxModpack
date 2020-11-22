@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Xml;
 using System.ComponentModel;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack
 {
