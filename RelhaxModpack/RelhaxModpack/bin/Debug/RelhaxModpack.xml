@@ -8672,6 +8672,11 @@
             The timeout, in seconds, until the window will automatically close
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.EditorSettings">
+            <summary>
+            The reference to the editor settings object. Must be supplied
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.#ctor">
             <summary>
             Create an instance of the DatabaseEditorDownlaod class
