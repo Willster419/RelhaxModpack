@@ -4066,6 +4066,26 @@
             The patch runner mode. Can be used in command line mode, used for patching files given patch file instructions
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.ApplicationVersions">
+            <summary>
+            The build distribution version of the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplicationVersions.Stable">
+            <summary>
+            The stable distribution for all users
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplicationVersions.Beta">
+            <summary>
+            The beta distribution, for advanced users, may have new features or improvements, and bugs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ApplicationVersions.Alpha">
+            <summary>
+            The alpha distribution. Should never be publicly distributed
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.ApplyBehavior">
             <summary>
             The different ways that the apply and save database buttons can interact
@@ -4561,6 +4581,21 @@
         <member name="F:RelhaxModpack.Utilities.Enums.ReplacementTypes.ZipFilePath">
             <summary>
             Replacing zip path macros with absolute extraction paths
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.ReturnCodes">
+            <summary>
+            Application return error codes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ReturnCodes.Sucess">
+            <summary>
+            No error occurred
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.ReturnCodes.LogfileError">
+            <summary>
+            Error with logfile creation
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.SelectionTypes">
@@ -9275,41 +9310,6 @@
         <member name="M:RelhaxModpack.Translations.LoadTranslations">
             <summary>
             Loads all translation dictionaries. Should only be done once (at application start)
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.ReturnCodes">
-            <summary>
-            Application return error codes
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ReturnCodes.Sucess">
-            <summary>
-            No error occurred
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ReturnCodes.LogfileError">
-            <summary>
-            Error with logfile creation
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.ApplicationVersions">
-            <summary>
-            The build distribution version of the application
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplicationVersions.Stable">
-            <summary>
-            The stable distribution for all users
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplicationVersions.Beta">
-            <summary>
-            The beta distribution, for advanced users, may have new features or improvements, and bugs
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ApplicationVersions.Alpha">
-            <summary>
-            The alpha distribution. Should never be publicly distributed
             </summary>
         </member>
         <member name="T:RelhaxModpack.App">
