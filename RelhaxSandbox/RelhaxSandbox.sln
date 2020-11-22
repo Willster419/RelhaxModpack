@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2043
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelhaxWPFConvert", "RelhaxWPFConvert\RelhaxWPFConvert.csproj", "{81F2E29A-AF3A-4E03-A864-FDC23F5DD2E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelhaxSandbox", "RelhaxSandbox\RelhaxSandbox.csproj", "{81F2E29A-AF3A-4E03-A864-FDC23F5DD2E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
