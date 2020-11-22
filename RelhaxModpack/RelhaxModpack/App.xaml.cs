@@ -15,38 +15,6 @@ using RelhaxModpack.Utilities.Enums;
 namespace RelhaxModpack
 {
     /// <summary>
-    /// Application return error codes
-    /// </summary>
-    public enum ReturnCodes
-    {
-        /// <summary>
-        /// No error occurred
-        /// </summary>
-        Sucess = 0,
-        /// <summary>
-        /// Error with logfile creation
-        /// </summary>
-        LogfileError = 1
-    }
-    /// <summary>
-    /// The build distribution version of the application
-    /// </summary>
-    public enum ApplicationVersions
-    {
-        /// <summary>
-        /// The stable distribution for all users
-        /// </summary>
-        Stable,
-        /// <summary>
-        /// The beta distribution, for advanced users, may have new features or improvements, and bugs
-        /// </summary>
-        Beta,
-        /// <summary>
-        /// The alpha distribution. Should never be publicly distributed
-        /// </summary>
-        Alpha
-    }
-    /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
