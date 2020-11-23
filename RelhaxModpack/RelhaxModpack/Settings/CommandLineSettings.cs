@@ -3,6 +3,8 @@ using RelhaxModpack.Utilities;
 using System.Collections.Generic;
 using System.IO;
 using RelhaxModpack.Utilities.Enums;
+using System;
+using System.Linq;
 
 namespace RelhaxModpack
 {
@@ -11,8 +13,20 @@ namespace RelhaxModpack
     /// </summary>
     public static class CommandLineSettings
     {
-        //application command line level settings
-        //also serves as place to put default values
+        /// <summary>
+        /// A list of command line arguments that, when specified, would create a custom window to
+        /// run the application in a specific mode.
+        /// </summary>
+        /// <remarks>For example, if "database-editor" is detected, then the application is going to open the database editor</remarks>
+        public static readonly string[] CommandLineArgsToSpawnCustomWindow =
+        {
+            "patch-designer",
+            "database-updater",
+            "modpack-toolbox",
+            "database-editor",
+            "patcher"
+        };
+
         /// <summary>
         /// Using the application is database test mode. Allows you to test a local database
         /// </summary>
@@ -109,6 +123,14 @@ namespace RelhaxModpack
                         EditorAutoLoadFileName = args[++i];
                         Logging.Info(LogOptions.ClassName, "{0}, loading database from {1}", commandArg, EditorAutoLoadFileName);
                         break;
+                    case "updater-hardcode-path":
+                        Logging.Info(LogOptions.ClassName, "{0}, forcing folder path as {1}", commandArg, ModpackToolbox.HardCodeRepoPath);
+                        ModpackToolbox.UseHardCodePath = true;
+                        break;
+                    case "toolbox-hardcode-path":
+                        Logging.Info(LogOptions.ClassName, "{0}, forcing folder path as {1}", commandArg, ModpackToolbox.HardCodeRepoPath);
+                        ModpackToolbox.UseHardCodePath = true;
+                        break;
                     //now check for different startup modes
                     case "patch-designer":
                         ApplicationMode = ApplicationMode.PatchDesigner;
@@ -122,14 +144,6 @@ namespace RelhaxModpack
                         ApplicationMode = ApplicationMode.Updater;
                         Logging.Info(LogOptions.ClassName, "{0}, loading in database update mode", commandArg);
                         break;
-                    case "updater-hardcode-path":
-                        Logging.Info(LogOptions.ClassName, "{0}, forcing folder path as {1}", commandArg, ModpackToolbox.HardCodeRepoPath);
-                        ModpackToolbox.UseHardCodePath = true;
-                        break;
-                    case "toolbox-hardcode-path":
-                        Logging.Info(LogOptions.ClassName, "{0}, forcing folder path as {1}", commandArg, ModpackToolbox.HardCodeRepoPath);
-                        ModpackToolbox.UseHardCodePath = true;
-                        break;
                     case "database-editor":
                         ApplicationMode = ApplicationMode.Editor;
                         Logging.Info(LogOptions.ClassName, "{0}, loading in database edit mode", commandArg);
@@ -139,6 +153,7 @@ namespace RelhaxModpack
                         Logging.Info(LogOptions.ClassName, "{0}, loading in patch mode", commandArg);
                         PatchFilenames.Add(args[++i].Trim());
                         break;
+                    //and also check for adding macros
                     case "macro":
                         string macroName = args[++i];
                         string macroValue = args[++i];
@@ -163,6 +178,40 @@ namespace RelhaxModpack
                         }
                         break;
                 }
+            }
+        }
+
+        private static bool ArgsLaunchCustomWindowChecked = false;
+
+        private static bool ArgsOpenCustomWindow_ = false;
+
+        /// <summary>
+        /// Determines if any specified command line args will cause the application to open a custom (non MainWindow) window
+        /// </summary>
+        public static bool ArgsOpenCustomWindow
+        { 
+            get
+            {
+                if (ArgsLaunchCustomWindowChecked)
+                    return ArgsOpenCustomWindow_;
+
+                foreach(string commandLineArg in Environment.GetCommandLineArgs().ToList().Skip(1))
+                {
+                    foreach(string argsToLaunchCustomWindow in CommandLineArgsToSpawnCustomWindow)
+                    {
+                        if (commandLineArg.Contains(argsToLaunchCustomWindow))
+                        {
+                            ArgsOpenCustomWindow_ = true;
+                            break;
+                        }
+                    }
+
+                    if (ArgsOpenCustomWindow_)
+                        break;
+                }
+
+                ArgsLaunchCustomWindowChecked = true;
+                return ArgsOpenCustomWindow_;
             }
         }
     }

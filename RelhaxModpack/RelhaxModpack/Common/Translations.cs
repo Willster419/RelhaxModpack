@@ -511,12 +511,15 @@ namespace RelhaxModpack
         /// <summary>
         /// Loads all translation dictionaries. Should only be done once (at application start)
         /// </summary>
-        public static void LoadTranslations()
+        public static void LoadTranslations(bool writeToLog = true)
         {
-            Logging.Debug(LogOptions.MethodName, "Loading all translations");
+            if (writeToLog)
+                Logging.Debug(LogOptions.MethodName, "Loading all translations");
+
             if(TranslationsLoaded)
             {
-                Logging.Warning(LogOptions.MethodName, "Translations already loaded, use ReloadTranslations()");
+                if (writeToLog)
+                    Logging.Warning(LogOptions.MethodName, "Translations already loaded, use ReloadTranslations()");
                 return;
             }
 
@@ -5838,7 +5841,8 @@ namespace RelhaxModpack
             #endregion
 
             //apply the bool that all translations were applied
-            Logging.Debug(LogOptions.MethodName, "All translations loaded");
+            if (writeToLog)
+                Logging.Debug(LogOptions.MethodName, "All translations loaded");
             TranslationsLoaded = true;
         }
         #endregion

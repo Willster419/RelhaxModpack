@@ -8,10 +8,15 @@
         /// <summary>
         /// No error occurred
         /// </summary>
-        Sucess = 0,
+        Success = 0,
+
         /// <summary>
         /// Error with logfile creation
         /// </summary>
-        LogfileError = 1
+        LogfileError = 1,
+
+        PatcherNoSpecifiedFiles = 2,
+
+        PatcherNoPatchesParsed = 3,
     }
 }

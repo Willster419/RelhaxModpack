@@ -63,6 +63,34 @@ namespace RelhaxModpack
         //when application is starting for first time
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            if (!Logging.Init(Logfiles.Application))
+            {
+                //check if it's because the file already exists, or some other actual reason
+                //if the file exists, and it's locked (init failed), then check if also the command line is creating a new window
+                if (File.Exists(Logging.GetLogfile(Logfiles.Application).Filepath) && CommandLineSettings.ArgsOpenCustomWindow)
+                {
+                    //a custom window will be open, so open the log in a custom name (with the application mode). it's ok in this case, because the likely cause
+                    //is that the modpack is open in a regular window and now we want to open a custom window
+                    Logging.DisposeLogging(Logfiles.Application);
+                    if (!Logging.Init(Logfiles.Application, Logging.ApplicationTempLogFilename))
+                    {
+                        MessageBox.Show(string.Format("Failed to initialize logfile {0}, check file permissions", Logging.ApplicationTempLogFilename));
+                        Shutdown((int)ReturnCodes.LogfileError);
+                        return;
+                    }
+                }
+                else
+                {
+                    if (!Translations.TranslationsLoaded)
+                        Translations.LoadTranslations(false);
+                    //old message from Logging.Init
+                    //MessageBox.Show(string.Format("Failed to initialize logfile {0}, check file permissions", logfilePath));
+                    MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
+                    Shutdown((int)ReturnCodes.LogfileError);
+                    return;
+                }
+            }
+
             //handle any assembly resolves
             //https://stackoverflow.com/a/19806004/3128017
             AppDomain.CurrentDomain.AssemblyResolve += (sender2, bargs) =>
@@ -79,24 +107,15 @@ namespace RelhaxModpack
                 }
             };
 
-            //init logging here
-            //"The application failed to open a logfile. Either check your file permissions or move the application to a folder with write access"
-            if (!Logging.Init(Logfiles.Application))
-            {
-                MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
-                Shutdown((int)ReturnCodes.LogfileError);
-            }
-
             Logging.WriteHeader(Logfiles.Application);
             Logging.Info(string.Format("| Relhax Modpack version {0}", CommonUtils.GetApplicationVersion()));
             Logging.Info(string.Format("| Build version {0}, from date {1}", Settings.ApplicationVersion.ToString(), CommonUtils.GetCompileTime()));
             Logging.Info(string.Format("| Running on OS {0}", Environment.OSVersion.ToString()));
 
-            //parse command line arguments here
-            //get the command line args for testing of auto install
+            //parse command line arguments given to the application
             CommandLineSettings.ParseCommandLine(Environment.GetCommandLineArgs());
 
-            if (!ModpackSettings.ValidFrameworkVersion)
+            if ((!CommandLineSettings.ArgsOpenCustomWindow) && (!ModpackSettings.ValidFrameworkVersion))
             {
                 //https://github.com/Willster419/RelhaxModpack/issues/90
                 //try getting .net framework information
@@ -149,15 +168,18 @@ namespace RelhaxModpack
                 }
             }
 
-            Logging.Debug("Starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
             //switch into application modes based on mode enum
-            switch(CommandLineSettings.ApplicationMode)
+            Logging.Debug("Starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
+            switch (CommandLineSettings.ApplicationMode)
             {
                 case ApplicationMode.Updater:
                     ModpackToolbox updater = new ModpackToolbox();
-                    CloseApplicationLog(true);
 
-                    //start updater logging system
+                    //close application log if open
+                    if(Logging.IsLogOpen(Logfiles.Application))
+                        CloseApplicationLog(true);
+
+                    //start updater logging
                     if (!Logging.Init(Logfiles.Updater))
                     {
                         MessageBox.Show("Failed to initialize logfile for updater");
@@ -165,19 +187,25 @@ namespace RelhaxModpack
                         return;
                     }
                     Logging.WriteHeader(Logfiles.Updater);
+
+                    //show window
                     updater.ShowDialog();
 
-                    //stop updater logging system
+                    //stop updater logging
                     CloseLog(Logfiles.Updater);
+                    DeleteCustomLogIfExists();
                     updater = null;
-                    Current.Shutdown(0);
-                    Environment.Exit(0);
+                    Current.Shutdown((int)ReturnCodes.Success);
+                    Environment.Exit((int)ReturnCodes.Success);
                     return;
                 case ApplicationMode.Editor:
                     DatabaseEditor editor = new DatabaseEditor();
-                    CloseApplicationLog(true);
 
-                    //start updater logging system
+                    //close application log if open
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        CloseApplicationLog(true);
+
+                    //start updater logging
                     if (!Logging.Init(Logfiles.Editor))
                     {
                         MessageBox.Show("Failed to initialize logfile for editor");
@@ -185,18 +213,25 @@ namespace RelhaxModpack
                         return;
                     }
                     Logging.WriteHeader(Logfiles.Editor);
+
+                    //show window
                     editor.ShowDialog();
-                    //stop updater logging system
+
+                    //stop updater logging
                     CloseLog(Logfiles.Editor);
+                    DeleteCustomLogIfExists();
                     editor = null;
-                    Current.Shutdown(0);
-                    Environment.Exit(0);
+                    Current.Shutdown((int)ReturnCodes.Success);
+                    Environment.Exit((int)ReturnCodes.Success);
                     return;
                 case ApplicationMode.PatchDesigner:
                     PatchDesigner patcher = new PatchDesigner();
-                    CloseApplicationLog(true);
 
-                    //start updater logging system
+                    //close application log if open
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        CloseApplicationLog(true);
+
+                    //start updater logging
                     if (!Logging.Init(Logfiles.PatchDesigner))
                     {
                         MessageBox.Show("Failed to initialize logfile for patcher");
@@ -204,55 +239,68 @@ namespace RelhaxModpack
                         return;
                     }
                     Logging.WriteHeader(Logfiles.PatchDesigner);
+
+                    //show window
                     patcher.ShowDialog();
 
-                    //stop updater logging system
+                    //stop patch designer logging
                     CloseLog(Logfiles.PatchDesigner);
+                    DeleteCustomLogIfExists();
                     patcher = null;
-                    Current.Shutdown(0);
-                    Environment.Exit(0);
+                    Current.Shutdown((int)ReturnCodes.Success);
+                    Environment.Exit((int)ReturnCodes.Success);
                     return;
                 case ApplicationMode.Patcher:
                     Logging.Info("Running patch mode");
+
+                    //check that at least one patch file was specified from command line
                     if(CommandLineSettings.PatchFilenames.Count == 0)
                     {
                         Logging.Error("0 patch files parsed from command line!");
-                        Current.Shutdown(-3);
-                        Environment.Exit(-3);
+                        Current.Shutdown((int)ReturnCodes.PatcherNoSpecifiedFiles);
+                        Environment.Exit((int)ReturnCodes.PatcherNoSpecifiedFiles);
                     }
                     else
                     {
+                        //parse patch objects from command line file list
                         List<Patch> patchList = new List<Patch>();
                         foreach(string file in CommandLineSettings.PatchFilenames)
                         {
                             if(!File.Exists(file))
                             {
-                                Logging.Warning("skipping file path {0}, not found", file);
+                                Logging.Warning("Skipping file path {0}, not found", file);
                                 continue;
                             }
-                            Logging.Info("adding patches from file {0}", file);
+                            Logging.Info("Adding patches from file {0}", file);
                             XmlUtils.AddPatchesFromFile(patchList, file);
                         }
+
+                        //check for at least one patchfile was parsed
                         if(patchList.Count == 0)
                         {
                             Logging.Error("0 patches parsed from files!");
-                            Current.Shutdown(-4);
-                            Environment.Exit(-4);
+                            Current.Shutdown((int)ReturnCodes.PatcherNoPatchesParsed);
+                            Environment.Exit((int)ReturnCodes.PatcherNoPatchesParsed);
                         }
+
+                        //set default patch return code
                         PatchExitCode exitCode = PatchExitCode.Success;
+
                         //always return on worst condition
                         int i = 1;
                         foreach(Patch p in patchList)
                         {
-                            Logging.Info("running patch {0} of {1}", i++, patchList.Count);
+                            Logging.Info("Running patch {0} of {1}", i++, patchList.Count);
                             PatchExitCode exitCodeTemp = PatchUtils.RunPatch(p);
                             if ((int)exitCodeTemp < (int)exitCode)
                                 exitCode = exitCodeTemp;
                         }
-                        Logging.Info("patching finished, exit code {0} ({1})", (int)exitCode, exitCode.ToString());
+
+                        Logging.Info("Patching finished, exit code {0} ({1})", (int)exitCode, exitCode.ToString());
                         CloseApplicationLog(true);
-                        Current.Shutdown((int)exitCode);
-                        Environment.Exit((int)exitCode);
+                        //add 100 to ensure it's a patch unique error code
+                        Current.Shutdown(((int)exitCode) + 100);
+                        Environment.Exit(((int)exitCode) + 100);
                     }
                     return;
             }
@@ -272,6 +320,12 @@ namespace RelhaxModpack
                 exceptionCaptureDisplay.ShowDialog();
                 CloseApplicationLog(true);
             }
+        }
+
+        private void DeleteCustomLogIfExists()
+        {
+            if (File.Exists(Logging.ApplicationTempLogFilename))
+                File.Delete(Logging.ApplicationTempLogFilename);
         }
     }
 }

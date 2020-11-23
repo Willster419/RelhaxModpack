@@ -55,6 +55,11 @@ namespace RelhaxModpack
         public const string UninstallLogFilenameBackup = "uninstallRelhaxFiles.bak";
 
         /// <summary>
+        /// The name of the custom application log file when opening the application in a custom window mode, if the main application is already open
+        /// </summary>
+        public const string ApplicationTempLogFilename = "Relhax.CustomWindow.log";
+
+        /// <summary>
         /// The string time format for log entries
         /// </summary>
         public const string ApplicationLogfileTimestamp = "yyyy-MM-dd HH:mm:ss.fff";
@@ -102,7 +107,8 @@ namespace RelhaxModpack
             {
                 case Logfiles.Application:
                     fileToWriteTo = ApplicationLogfile;
-                    logfilePath = ApplicationLogFilename;
+                    if(string.IsNullOrEmpty(logfilePath))
+                        logfilePath = ApplicationLogFilename;
                     break;
                 case Logfiles.Installer:
                     fileToWriteTo = InstallLogfile;
@@ -112,15 +118,18 @@ namespace RelhaxModpack
                     break;
                 case Logfiles.Editor:
                     fileToWriteTo = EditorLogfile;
-                    logfilePath = ApplicationEditorLogFilename;
+                    if (string.IsNullOrEmpty(logfilePath))
+                        logfilePath = ApplicationEditorLogFilename;
                     break;
                 case Logfiles.PatchDesigner:
                     fileToWriteTo = PatcherLogfile;
-                    logfilePath = ApplicationPatchDesignerLogFilename;
+                    if (string.IsNullOrEmpty(logfilePath))
+                        logfilePath = ApplicationPatchDesignerLogFilename;
                     break;
                 case Logfiles.Updater:
                     fileToWriteTo = UpdaterLogfile;
-                    logfilePath = ApplicationUpdaterLogFilename;
+                    if (string.IsNullOrEmpty(logfilePath))
+                        logfilePath = ApplicationUpdaterLogFilename;
                     break;
             }
 
@@ -155,7 +164,6 @@ namespace RelhaxModpack
 
             if (!fileToWriteTo.Init())
             {
-                MessageBox.Show(string.Format("Failed to initialize logfile {0}, check file permissions", logfilePath));
                 return false;
             }
             return true;
