@@ -1,3 +1,13 @@
+Beta Application version 1.2.2.0 (2020-11-22)
+https://www.virustotal.com/gui/file-analysis/YjcyMmYzM2Q1MmJmNDljOGFlZjFjMjU1OGMwNGRiZGY6MTYwNjEwODAwNg==/detection
+- Re-worked the launch process of the application so that if it is currently open, and the application is attempting to be launched in a custom mode (like editor), it won't stop because of the open main log file.
+  - In other words, you can have multiple instance (modes) of the application open.
+- Minor re-work of database editor transfer window so that it has dedicated buttons for delete local file, open local file, open local folder.
+- Fixed bug with editor transfer window's delete file button not disabling after a successful deletion (worked in move mode)
+- Updated Russian (DrWeb7_1), Polish (Nullmaruzero), German (Elektrosmoker), French (Toshiro), and Spanish (LordFelix) translations. So all of them I guess. Probably should have lead with that.
+- Code organization and optimizations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.2.1.0 (2020-11-15)
 https://www.virustotal.com/gui/file-analysis/NjgyYzEwMGZmYjJmYjFiMjhmNjc4MWQ5NmU2NDRiZTQ6MTYwNTQ5NjM2NA==/detection
 - Complete re-work of the database editor transfer window to allow for identify-able cod blocks based on transfer mode (Media upload, zip file upload, zip file download). What is code debt.
