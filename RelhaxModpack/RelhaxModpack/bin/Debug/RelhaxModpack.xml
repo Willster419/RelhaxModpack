@@ -4588,7 +4588,7 @@
             Application return error codes
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.Enums.ReturnCodes.Sucess">
+        <member name="F:RelhaxModpack.Utilities.Enums.ReturnCodes.Success">
             <summary>
             No error occurred
             </summary>
@@ -6485,6 +6485,11 @@
             The name of the backup uninstall log file. During an uninstall process, it backups the current one to provide a history of 1.
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Logging.ApplicationTempLogFilename">
+            <summary>
+            The name of the custom application log file when opening the application in a custom window mode, if the main application is already open
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Logging.ApplicationLogfileTimestamp">
             <summary>
             The string time format for log entries
@@ -7196,6 +7201,13 @@
             Handles all parsing and usage of command line arguments
             </summary>
         </member>
+        <member name="F:RelhaxModpack.CommandLineSettings.CommandLineArgsToSpawnCustomWindow">
+            <summary>
+            A list of command line arguments that, when specified, would create a custom window to
+            run the application in a specific mode.
+            </summary>
+            <remarks>For example, if "database-editor" is detected, then the application is going to open the database editor</remarks>
+        </member>
         <member name="F:RelhaxModpack.CommandLineSettings.TestMode">
             <summary>
             Using the application is database test mode. Allows you to test a local database
@@ -7253,6 +7265,11 @@
             Parse the command line arguments
             </summary>
             <param name="args">A string array of command line arguments</param>
+        </member>
+        <member name="P:RelhaxModpack.CommandLineSettings.ArgsOpenCustomWindow">
+            <summary>
+            Determines if any specified command line args will cause the application to open a custom (non MainWindow) window
+            </summary>
         </member>
         <member name="T:RelhaxModpack.Settings">
             <summary>
@@ -9307,7 +9324,7 @@
             <param name="window">The window to apply translations to</param>
             <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
         </member>
-        <member name="M:RelhaxModpack.Translations.LoadTranslations">
+        <member name="M:RelhaxModpack.Translations.LoadTranslations(System.Boolean)">
             <summary>
             Loads all translation dictionaries. Should only be done once (at application start)
             </summary>
