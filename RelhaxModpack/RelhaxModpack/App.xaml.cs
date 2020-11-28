@@ -21,17 +21,6 @@ namespace RelhaxModpack
     {
         bool exceptionShown = false;
         ExceptionCaptureDisplay exceptionCaptureDisplay = new ExceptionCaptureDisplay();
-        //when application is brought to foreground
-        private void Application_Activated(object sender, EventArgs e)
-        {
-
-        }
-
-        //when application is sent to background (not active window)?
-        private void Application_Deactivated(object sender, EventArgs e)
-        {
-
-        }
 
         //when application is closing (cannot be stopped)
         private void Application_Exit(object sender, ExitEventArgs e)

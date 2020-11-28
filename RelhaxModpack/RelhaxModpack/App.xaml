@@ -5,8 +5,6 @@
              xmlns:localUI="clr-namespace:RelhaxModpack.UI"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              StartupUri="MainWindow.xaml"
-             Activated="Application_Activated"
-             Deactivated="Application_Deactivated"
              Exit="Application_Exit"
              Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
     <Application.Resources>
