@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace RelhaxWPFConvert
+namespace RelhaxSandbox
 {
     //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
     public delegate void OnSelectionCommitted(object source, SelectionChangedEventArgs e);

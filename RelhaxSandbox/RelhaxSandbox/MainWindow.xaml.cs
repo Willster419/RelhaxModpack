@@ -36,7 +36,7 @@ using Microsoft.Win32;
 using System.Linq;
 using FontFamily = System.Windows.Media.FontFamily;
 
-namespace RelhaxWPFConvert
+namespace RelhaxSandbox
 {
     public enum MediaType
     {

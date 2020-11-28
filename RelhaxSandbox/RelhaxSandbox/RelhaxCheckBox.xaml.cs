@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace RelhaxWPFConvert
+namespace RelhaxSandbox
 {
     /// <summary>
     /// Interaction logic for RelhaxCheckBox.xaml
