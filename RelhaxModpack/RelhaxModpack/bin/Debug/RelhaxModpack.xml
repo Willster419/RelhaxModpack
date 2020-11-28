@@ -608,12 +608,6 @@
             List of dependencies of this category (Any package selected in this category needs these dependencies)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Database.Category.InstallGroup">
-            <summary>
-            The install group number of the category. Used to denote which install thread it is assigned to.
-            Two (or more) categories can have the same number to be on the same install thread
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Database.Category.TabPage">
             <summary>
             The TabItem object reference
@@ -1993,16 +1987,6 @@
         <member name="P:RelhaxModpack.Database.UserFile.Pattern">
             <summary>
             The path or pattern to a file or files to backup to a temporary directory
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.UserFile.PlaceBeforeExtraction">
-            <summary>
-            Speed up the restore backup function in case of ClanIcons, the "backup folder" will be pushed back at once (and not file by file)
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.UserFile.SystemInitiated">
-            <summary>
-            Entry will be processed in any case (if package is checked), even if "save user data" option is "false"
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.UserFile.FilesSaved">
