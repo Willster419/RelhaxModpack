@@ -100,6 +100,7 @@ namespace RelhaxModpack
         public MainWindow()
         {
             InitializeComponent();
+            //set window state as minimized in constructor to allow load window to show instead
             WindowState = WindowState.Minimized;
             disabledBlacklist = new Control[]
             {
@@ -124,9 +125,6 @@ namespace RelhaxModpack
 
         private async void TheMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //first hide the window
-            //Hide();
-
             //set loading flag
             loading = true;
 
@@ -3508,6 +3506,42 @@ namespace RelhaxModpack
                 });
                 Logging.Debug("completed async task of getting file sizes of backups");
             });
+        }
+
+        /// <summary>
+        /// Get all xml strings for the V2 database file format from the selected beta database github branch
+        /// </summary>
+        /// <returns>all xml files in string form of the V2 database</returns>
+        private string GetBetaDatabase1V1ForStringCompare(bool loadMode)
+        {
+            List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList();
+
+            string[] downloadStrings = null;
+
+            if (loadMode)
+            {
+                Task t = Task.Run(() => { downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs); });
+
+                while (!t.IsCompleted)
+                {
+                    Thread.Sleep(100);
+                }
+            }
+            else
+            {
+                downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
+            }
+
+            return string.Join(string.Empty, downloadStrings);
+        }
+
+        /// <summary>
+        /// Get all xml strings for the V2 database file format from the selected beta database github branch
+        /// </summary>
+        /// <returns>all xml files in string form of the V2 database</returns>
+        private async Task<string> GetBetaDatabase1V1ForStringCompareAsync()
+        {
+            return await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
         }
     }
 }

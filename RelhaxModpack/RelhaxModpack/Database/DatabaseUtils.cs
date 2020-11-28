@@ -99,7 +99,7 @@ namespace RelhaxModpack.Database
     /// </summary>
     public static class DatabaseUtils
     {
-        #region Database Loading
+        #region Getting beta database download links from github
         /// <summary>
         /// Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
         /// </summary>
@@ -126,6 +126,7 @@ namespace RelhaxModpack.Database
         /// <returns>The list of URLs</returns>
         public static List<string> GetBetaDatabase1V1FilesList(XmlDocument rootDocument)
         {
+            //global and logical dependencies
             List<string> databaseFiles = new List<string>()
             {
                 Settings.BetaDatabaseV2FolderURL + XmlUtils.GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"),
@@ -148,33 +149,11 @@ namespace RelhaxModpack.Database
         /// <returns>The list of URLs</returns>
         public static List<string> GetBetaDatabase1V1FilesList()
         {
-            XmlDocument rootDocument = GetBetaDatabaseRoot1V1Document();
-
-            List<string> databaseFiles = new List<string>()
-            {
-                Settings.BetaDatabaseV2FolderURL + XmlUtils.GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"),
-                Settings.BetaDatabaseV2FolderURL + XmlUtils.GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file")
-            };
-
-            //categories
-            foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
-            {
-                string categoryFileName = categoryNode.Attributes["file"].Value;
-                databaseFiles.Add(Settings.BetaDatabaseV2FolderURL + categoryFileName);
-            }
-
-            return databaseFiles.Select(name => name.Replace(".Xml", ".xml")).ToList();
+            return GetBetaDatabase1V1FilesList(GetBetaDatabaseRoot1V1Document());
         }
+        #endregion
 
-        /// <summary>
-        /// Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
-        /// </summary>
-        /// <returns>The list of URLs</returns>
-        public async static Task<List<string>> GetBetaDatabase1V1FilesListAsync()
-        {
-            return await Task<List<string>>.Run(() => GetBetaDatabase1V1FilesList());
-        }
-
+        #region Database Loading
         /// <summary>
         /// Parse the Xml database of any type into lists in memory
         /// </summary>
@@ -1433,42 +1412,6 @@ namespace RelhaxModpack.Database
         public static int GetMaxPatchGroupNumber(List<DatabasePackage> listToCheck)
         {
             return listToCheck.Max(ma => ma.PatchGroup);
-        }
-
-        /// <summary>
-        /// Get all xml strings for the V2 database file format from the selected beta database github branch
-        /// </summary>
-        /// <returns>all xml files in string form of the V2 database</returns>
-        public static string GetBetaDatabase1V1ForStringCompare(bool loadMode)
-        {
-            List<string> downloadURLs = GetBetaDatabase1V1FilesList();
-
-            string[] downloadStrings = null;
-
-            if (loadMode)
-            {
-                Task t = Task.Run(() => { downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs); });
-
-                while (!t.IsCompleted)
-                {
-                    Thread.Sleep(100);
-                }
-            }
-            else
-            {
-                downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
-            }
-
-            return string.Join(string.Empty, downloadStrings);
-        }
-
-        /// <summary>
-        /// Get all xml strings for the V2 database file format from the selected beta database github branch
-        /// </summary>
-        /// <returns>all xml files in string form of the V2 database</returns>
-        public async static Task<string> GetBetaDatabase1V1ForStringCompareAsync()
-        {
-            return await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
         }
         #endregion
     }
