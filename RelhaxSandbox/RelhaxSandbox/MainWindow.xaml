@@ -315,6 +315,7 @@
                     <ComboBoxItem Content="Item 3" />
                     <ComboBoxItem Content="Item 4" />
                 </local:ComboboxWithSelectionCommit>
+                <Button x:Name="MemoryLeakTestingButton" Content="Memory Leak Testing" HorizontalAlignment="Left" Margin="474,129,0,0" VerticalAlignment="Top" Width="120" Click="MemoryLeakTestingButton_Click"/>
             </Grid>
         </TabItem>
     </TabControl>

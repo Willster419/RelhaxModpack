@@ -787,5 +787,24 @@ namespace RelhaxSandbox
 
         }
         #endregion
+
+        TestSubWindow window;
+        private void MemoryLeakTestingButton_Click(object sender, RoutedEventArgs e)
+        {
+            //GC.Collect();
+            //GC.WaitForPendingFinalizers();
+            //GC.Collect();
+            window = new TestSubWindow();
+            window.ShowDialog();
+            //don't need to call Close() to free up memory. It won't.
+            // only setting it to null will allow it to be collected
+            //window.Close();
+            window = null;
+            //GC.Collect();
+            //GC.WaitForPendingFinalizers();
+            //GC.Collect();
+
+            //in this current configuration, the TestSubWindow does *not* show up in the memory profiler
+        }
     }
 }
