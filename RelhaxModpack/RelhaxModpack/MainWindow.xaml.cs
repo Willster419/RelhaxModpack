@@ -3479,17 +3479,17 @@ namespace RelhaxModpack
             ModpackSettings.AutoOneclickSelectionFilePath = AutoInstallOneClickInstallSelectionFilePath.Text;
         }
 
-        //asyncronously get the file sizes of backups
+        //asynchronously get the file sizes of backups
         private Task GetBackupFilesizesAsync(bool displayGettingSize)
         {
             return Task.Run(() =>
             {
-                Logging.Debug("starting async task of getting file sizes of backups");
+                Logging.Debug("Starting async task of getting file sizes of backups");
                 if (displayGettingSize)
                 {
-                    Application.Current.Dispatcher.Invoke(() =>
+                    BackupModsSizeLabelUsed.Dispatcher.Invoke(() =>
                     {
-                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("backupModsSizeCalculating"), backupFiles.Count(), FileUtils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("backupModsSizeCalculating"), backupFiles.Count(), FileUtils.SizeSuffix((ulong)backupFolderTotalSize, 1, false));
                     });
                 }
 
@@ -3500,11 +3500,11 @@ namespace RelhaxModpack
                     backupFolderTotalSize += FileUtils.GetFilesize(file);
                 }
 
-                Application.Current.Dispatcher.Invoke(() =>
+                BackupModsSizeLabelUsed.Dispatcher.Invoke(() =>
                 {
-                    BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), FileUtils.SizeSuffix((ulong)backupFolderTotalSize, 1, true));
+                    BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), FileUtils.SizeSuffix((ulong)backupFolderTotalSize, 1, false));
                 });
-                Logging.Debug("completed async task of getting file sizes of backups");
+                Logging.Debug("Completed async task of getting file sizes of backups");
             });
         }
 
