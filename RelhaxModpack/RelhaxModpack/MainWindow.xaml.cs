@@ -1356,10 +1356,6 @@ namespace RelhaxModpack
             //show the mod selection list
             modSelectionList = new ModSelectionList
             {
-                //set the owner
-                //https://stackoverflow.com/questions/21756542/why-is-window-showdialog-not-blocking-in-taskscheduler-task
-                //https://docs.microsoft.com/en-us/dotnet/api/system.windows.window.owner?view=netframework-4.8
-                Owner = GetWindow(this),
                 AutoInstallMode = (sender == null),
                 //get the last parsed from the xml file (should be the latest by default
                 LastSupportedWoTClientVersion = lastSupportedWoTVersion
