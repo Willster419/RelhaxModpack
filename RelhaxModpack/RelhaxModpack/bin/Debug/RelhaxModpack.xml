@@ -9346,12 +9346,6 @@
             Creates the instance of the MainWindow class
             </summary>
         </member>
-        <member name="M:RelhaxModpack.MainWindow.GetBetaDatabase1V1ForStringCompare">
-            <summary>
-            Get all xml strings for the V2 database file format from the selected beta database github branch
-            </summary>
-            <returns>all xml files in string form of the V2 database</returns>
-        </member>
         <member name="M:RelhaxModpack.MainWindow.InitializeComponent">
             <summary>
             InitializeComponent
