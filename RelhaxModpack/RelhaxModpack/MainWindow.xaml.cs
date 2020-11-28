@@ -645,6 +645,7 @@ namespace RelhaxModpack
 
             if (RelhaxIcon != null)
             {
+                RelhaxIcon.Visible = false;
                 RelhaxIcon.Dispose();
                 RelhaxIcon = null;
                 Logging.TryWriteToLog("Tray disposed", Logfiles.Application, LogLevel.Info);
