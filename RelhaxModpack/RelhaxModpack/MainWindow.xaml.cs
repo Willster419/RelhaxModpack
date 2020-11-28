@@ -2812,15 +2812,7 @@ namespace RelhaxModpack
                 if (databaseVersion == DatabaseVersions.Beta)
                 {
                     Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, database = beta, need to get current beta database for comparison");
-                    if (loading)
-                    {
-                        if (string.IsNullOrEmpty(oldBetaDB))
-                            oldBetaDB = GetBetaDatabase1V1ForStringCompare(true);
-                    }
-                    else
-                    {
-                        oldBetaDB = await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
-                    }
+                    oldBetaDB = await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
                     newBetaDB = oldBetaDB;
                 }
 
@@ -3058,15 +3050,7 @@ namespace RelhaxModpack
                 }
 
                 Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user confirmed, setup initial check");
-                if (loading)
-                {
-                    if (string.IsNullOrEmpty(oldBetaDB))
-                        oldBetaDB = GetBetaDatabase1V1ForStringCompare(true);
-                }
-                else
-                {
-                    oldBetaDB = await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
-                }
+                oldBetaDB = await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
                 newBetaDB = oldBetaDB;
             }
 
@@ -3163,15 +3147,11 @@ namespace RelhaxModpack
             timerActive = true;
             Logging.Debug("[AutoInstallTimer_ElapsedBeta]: timer has elapsed to check for beta database updates");
 
+            newBetaDB = await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
             if (string.IsNullOrEmpty(oldBetaDB))
             {
-                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: oldBetaDB is null/empty, set this first");
-                oldBetaDB = await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
-                newBetaDB = oldBetaDB;
-            }
-            else
-            {
-                newBetaDB = await Task<string>.Run(() => GetBetaDatabase1V1ForStringCompare(false));
+                Logging.Debug("[AutoInstallTimer_ElapsedBeta]: oldBetaDB is null/empty, set them equal");
+                oldBetaDB = newBetaDB;
             }
 
             Logging.Debug("[AutoInstallTimer_ElapsedBeta]: comparing old and new beta databases");
@@ -3512,25 +3492,11 @@ namespace RelhaxModpack
         /// Get all xml strings for the V2 database file format from the selected beta database github branch
         /// </summary>
         /// <returns>all xml files in string form of the V2 database</returns>
-        private string GetBetaDatabase1V1ForStringCompare(bool loadMode)
+        private string GetBetaDatabase1V1ForStringCompare()
         {
             List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList();
 
-            string[] downloadStrings = null;
-
-            if (loadMode)
-            {
-                Task t = Task.Run(() => { downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs); });
-
-                while (!t.IsCompleted)
-                {
-                    Thread.Sleep(100);
-                }
-            }
-            else
-            {
-                downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
-            }
+            string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 
             return string.Join(string.Empty, downloadStrings);
         }
