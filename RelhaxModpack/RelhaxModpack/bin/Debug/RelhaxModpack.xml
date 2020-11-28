@@ -750,12 +750,6 @@
             </summary>
             <returns>The list of URLs</returns>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesListAsync">
-            <summary>
-            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
-            </summary>
-            <returns>The list of URLs</returns>
-        </member>
         <member name="M:RelhaxModpack.Database.DatabaseUtils.ParseDatabase(System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.String)">
             <summary>
             Parse the Xml database of any type into lists in memory
@@ -971,18 +965,6 @@
             </summary>
             <param name="listToCheck">The list of DatabasePackages</param>
             <returns>The maximum PatchGroup number</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1ForStringCompare(System.Boolean)">
-            <summary>
-            Get all xml strings for the V2 database file format from the selected beta database github branch
-            </summary>
-            <returns>all xml files in string form of the V2 database</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1ForStringCompareAsync">
-            <summary>
-            Get all xml strings for the V2 database file format from the selected beta database github branch
-            </summary>
-            <returns>all xml files in string form of the V2 database</returns>
         </member>
         <member name="T:RelhaxModpack.Database.IDatabaseComponent">
             <summary>
@@ -9363,6 +9345,12 @@
             <summary>
             Creates the instance of the MainWindow class
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.MainWindow.GetBetaDatabase1V1ForStringCompare">
+            <summary>
+            Get all xml strings for the V2 database file format from the selected beta database github branch
+            </summary>
+            <returns>all xml files in string form of the V2 database</returns>
         </member>
         <member name="M:RelhaxModpack.MainWindow.InitializeComponent">
             <summary>
