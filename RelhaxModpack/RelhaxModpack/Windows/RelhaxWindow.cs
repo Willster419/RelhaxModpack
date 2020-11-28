@@ -89,6 +89,8 @@ namespace RelhaxModpack.Windows
                     UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
                 }
             }
+
+            Loaded -= OnWindowLoaded;
         }
     }
 }

@@ -3114,9 +3114,6 @@ namespace RelhaxModpack.Windows
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects)
-                    //public resources
-
-                    //private resources
                     if (loadingProgress != null)
                         loadingProgress = null;
 
@@ -3133,8 +3130,16 @@ namespace RelhaxModpack.Windows
 
                     if (HighlightBrush != null)
                         HighlightBrush = null;
+
                     if (FlashTimer != null)
+                    {
+                        FlashTimer.IsEnabled = false;
+                        FlashTimer.Stop();
+                        if (FlashTimer.Tag != null)
+                            FlashTimer.Tag = null;
+                        FlashTimer.Tick -= OnFlashTimerTick;
                         FlashTimer = null;
+                    }
 
                     if (Md5HashDocument != null)
                         Md5HashDocument = null;
