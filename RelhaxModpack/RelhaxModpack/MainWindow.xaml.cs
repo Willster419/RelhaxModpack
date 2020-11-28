@@ -1383,13 +1383,18 @@ namespace RelhaxModpack
                 {
                     OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),
                         new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods), e.IsAutoInstall);
-                    modSelectionList = null;
                 }
             }
             else
             {
                 ToggleUIButtons(true);
             }
+
+            //do a collection to free up memory
+            //regardless if we start an install, we should set the selection list to null to free memory
+            modSelectionList.Dispose();
+            modSelectionList = null;
+            GC.Collect();
         }
 
         private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies,

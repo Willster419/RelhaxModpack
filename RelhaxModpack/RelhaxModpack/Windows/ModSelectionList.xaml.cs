@@ -94,7 +94,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for ModSelectionList.xaml
     /// </summary>
-    public partial class ModSelectionList : RelhaxWindow
+    public partial class ModSelectionList : RelhaxWindow, IDisposable
     {
         /// <summary>
         /// The list of categories
@@ -145,6 +145,7 @@ namespace RelhaxModpack.Windows
         private XDocument Md5HashDocument = null;
         private DatabaseVersions databaseVersion;
         private string InstallingAsDatabaseVersionDisplay = string.Empty;
+        private bool disposedValue;
 
         #region Boring stuff
         /// <summary>
@@ -3100,5 +3101,91 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
+
+        ~ModSelectionList()
+        {
+
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                    //public resources
+
+                    //private resources
+                    if (loadingProgress != null)
+                        loadingProgress = null;
+
+                    if (UserCategory != null)
+                    {
+                        UserCategory.Dispose();
+                        UserCategory = null;
+                    }
+                    if (p != null)
+                        p = null;
+
+                    if (OriginalBrush != null)
+                        OriginalBrush = null;
+
+                    if (HighlightBrush != null)
+                        HighlightBrush = null;
+                    if (FlashTimer != null)
+                        FlashTimer = null;
+
+                    if (Md5HashDocument != null)
+                        Md5HashDocument = null;
+
+                    //public resources
+                    if (OnSelectionListReturn != null)
+                        OnSelectionListReturn = null;
+
+                    if (GlobalDependencies != null)
+                    {
+                        foreach (DatabasePackage package in GlobalDependencies)
+                            package.Dispose();
+                        GlobalDependencies.Clear();
+                        GlobalDependencies = null;
+                    }
+
+                    if (Dependencies != null)
+                    {
+                        foreach (Dependency dependency in Dependencies)
+                            dependency.Dispose();
+                        Dependencies.Clear();
+                        Dependencies = null;
+                    }
+
+                    if (ParsedCategoryList != null)
+                    {
+                        foreach (Category category in ParsedCategoryList)
+                            category.Dispose();
+                        ParsedCategoryList.Clear();
+                        ParsedCategoryList = null;
+                    }
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~ModSelectionList()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 }
