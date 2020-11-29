@@ -673,7 +673,6 @@ namespace RelhaxModpack
         #endregion
 
         #region Installation
-
         private void InstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
             //toggle buttons and reset UI
@@ -1010,8 +1009,7 @@ namespace RelhaxModpack
             GC.Collect();
         }
 
-        private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies,
-            List<SelectablePackage> UserMods, bool isAutoInstall)
+        private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies, List<SelectablePackage> UserMods, bool isAutoInstall)
         {
             //rookie mistake checks
             if (parsedCategoryList == null || dependencies == null || globalDependencies == null ||
@@ -3460,7 +3458,7 @@ namespace RelhaxModpack
             }
         }
 
-        private void ApplyCustomUILocalizations(bool displayBackupModsSize)
+        private void ApplyCustomUILocalizations(bool applyFileSize)
         {
             //set the application information text box
             ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + CommonUtils.GetApplicationVersion();
@@ -3472,7 +3470,8 @@ namespace RelhaxModpack
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), Settings.NumLogicalProcesors);
 
             //set backup file size labels
-            GetBackupFilesizesAsync(false);
+            if (applyFileSize)
+                GetBackupFilesizesAsync(false);
         }
         #endregion
 
