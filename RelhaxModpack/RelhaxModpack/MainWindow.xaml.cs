@@ -33,35 +33,45 @@ namespace RelhaxModpack
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     public partial class MainWindow : Window
     {
+        #region Variables
+        //install and uninstall engine variables
+        private InstallEngine installEngine = null;
+        private CancellationTokenSource cancellationTokenSource = null;
+        private bool disableTriggersForInstall = true;
+        private DatabaseVersions databaseVersion;
+
+        //UI variables
+        //flag for if the application is in loading mode to stop unintended method firing
+        private bool loading = false;
+        private string oldModpackTitle = string.Empty;
+        //temp list of components not to toggle
+        private Control[] disabledBlacklist = null;
+        private Control[] enabledBlacklist = null;
+        //timer of when to check the server for a database update
+        private DispatcherTimer autoInstallPeriodicTimer = new DispatcherTimer();
+
+        //notification tray icon
         private System.Windows.Forms.NotifyIcon RelhaxIcon = null;
-        private Stopwatch stopwatch = new Stopwatch();
+
+        //custom application windows
         private ModSelectionList modSelectionList = null;
         private RelhaxProgress downloadProgress = null;
         private AdvancedProgress AdvancedProgressWindow = null;
         private NewsViewer newsViewer = null;
-        private WebClient client = null;
-        private DispatcherTimer autoInstallTimer = new DispatcherTimer();
-        private CancellationTokenSource cancellationTokenSource = null;
-        private InstallEngine installEngine = null;
-        private OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
-        {
-            AddExtension = true,
-            CheckFileExists = true,
-            CheckPathExists = true,
-            Multiselect = false,
-            Title = "Select root database 2.0 file"
-        };
-        private DatabaseVersions databaseVersion;
-        private bool loading = false;
-        private string oldModpackTitle = string.Empty;
-        //temp list of components not to toggle
-        Control[] disabledBlacklist = null;
-        Control[] enabledBlacklist = null;
-        //backup components
-        private bool disableTriggersBackupVal = true;
+
+        //application updater variables
+        //flag for if the application is in "update mode" (downloading the new application update and closing)
+        private bool updateMode = false;
+        //task during update mode to get the manager info document as well
+        private Task<ZipFile> DownloadManagerInfoZip = null;
+
+        //modpack install backup variables
+        //backup total file size
         private long backupFolderTotalSize = 0;
+        //backup list of files
         private string[] backupFiles = null;
-        //download ETA variables
+
+        //download variables
         //measures elapsed time since download started
         private Stopwatch downloadTimer = null;
         //timer to fire every second to update the display download rate
@@ -70,7 +80,7 @@ namespace RelhaxModpack
         private long lastBytesDownloaded;
         //for both rates, the current bytes downloaded
         private long currentBytesDownloaded;
-        //for eta rate, the total byptes needed to download
+        //for eta rate, the total bytes needed to download
         private long totalBytesToDownload;
         //download rate over the last second
         private double downloadRateDisplay;
@@ -78,21 +88,25 @@ namespace RelhaxModpack
         private long remainingMilliseconds;
         //reference for downloading the package to keep track of the async download
         private DatabasePackage downloadingPackage = null;
+        //client used for downloading application and database files
+        private WebClient client = null;
+
+        //task bar variables
         private TaskbarManager taskbarInstance = null;
         private TaskbarProgressBarState taskbarState = TaskbarProgressBarState.NoProgress;
         private int taskbarValue = 0;
-        //beta database compaison for auto install
-        string oldBetaDB, newBetaDB;
-        bool timerActive = false;
-        //flag for if the application is in "update mode" (downloading the new application update and closing)
-        private bool updateMode = false;
-        //task during update mode to get the manager info document as well
-        Task<ZipFile> DownloadManagerInfoZip = null;
+
+        //auto install variables
+        //beta database comparison for auto install
+        private string oldBetaDB, newBetaDB;
+        //auto install timer dispatcher flag to ensure only one even trigger happens at a time
+        private bool timerActive = false;
 
         /// <summary>
         /// The original width and height of the application before applying scaling
         /// </summary>
         public double OriginalWidth, OriginalHeight = 0;
+        #endregion
 
         #region MainWindow loading
         /// <summary>
@@ -129,7 +143,7 @@ namespace RelhaxModpack
             //set loading flag
             loading = true;
 
-            //get taskbar instance for color change if supported
+            //get task bar instance for color change if supported
             if (TaskbarManager.IsPlatformSupported && TaskbarManager.Instance != null)
             {
                 taskbarInstance = TaskbarManager.Instance;
@@ -221,11 +235,11 @@ namespace RelhaxModpack
                 }
             }
 
-            //apply custom UI themeing (only need to explicitly call this for MainWindow)
+            //apply custom UI theming (only need to explicitly call this for MainWindow)
             UISettings.ApplyCustomStyles(this);
 
             //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
-            //note: in wpf, the enabled trigger will occur in the loading event, so this will launch the checked events
+            //note: in WPF, the enabled trigger will occur in the loading event, so this will launch the checked events
             //setting a isChecked checkbox will not launch the click event
             ApplySettingsToUI();
 
@@ -375,7 +389,7 @@ namespace RelhaxModpack
 
                     //set the UI for a download
                     ResetUI();
-                    stopwatch.Reset();
+                    downloadTimer = new Stopwatch();
 
                     //check to make sure this window is displayed for progress
                     if (WindowState != WindowState.Normal)
@@ -401,7 +415,7 @@ namespace RelhaxModpack
 
             //set the file count and size for the backups folder
             Logging.Debug("Application is up to date, get file size of backups");
-            GetBackupFilesizesAsync(false);
+            GetBackupFilesizesAsync(true);
 
             //if the application is up to date, then check if we need to display the welcome message to the user
             Logging.Info("Application is up to date, checking to display welcome message");
@@ -618,9 +632,9 @@ namespace RelhaxModpack
         {
             //dispose of the timer if it's not already disposed
             Logging.TryWriteToLog("Disposing autoInstallTimer", Logfiles.Application, LogLevel.Debug);
-            if (autoInstallTimer != null)
+            if (autoInstallPeriodicTimer != null)
             {
-                autoInstallTimer = null;
+                autoInstallPeriodicTimer = null;
             }
 
             //don't save the settings file if it's in update mode or closing from a critical application failure
@@ -826,6 +840,14 @@ namespace RelhaxModpack
                 {
                     if (string.IsNullOrWhiteSpace(ModpackSettings.CustomModInfoPath) || !File.Exists(ModpackSettings.CustomModInfoPath))
                     {
+                        OpenFileDialog FindTestDatabaseDialog = new OpenFileDialog()
+                        {
+                            AddExtension = true,
+                            CheckFileExists = true,
+                            CheckPathExists = true,
+                            Multiselect = false,
+                            Title = "Select root database 2.0 file"
+                        };
                         if (!(bool)FindTestDatabaseDialog.ShowDialog())
                         {
                             ToggleUIButtons(true);
@@ -1270,11 +1292,11 @@ namespace RelhaxModpack
             Logging.Debug("UserMods install count: {0}", userModsToInstall.Count);
 
             //if user mods are being installed, then disable triggers
-            disableTriggersBackupVal = ModpackSettings.DisableTriggers;
+            disableTriggersForInstall = ModpackSettings.DisableTriggers;
             if (userModsToInstall.Count > 0 && !ModpackSettings.DisableTriggers)
             {
                 Logging.Info("DisableTriggers is false and user has mods to install. Disabling triggers");
-                disableTriggersBackupVal = true;
+                disableTriggersForInstall = true;
             }
 
             Logging.Debug("Creating install engine, cancel options and progress reporting");
@@ -1289,7 +1311,7 @@ namespace RelhaxModpack
                 GlobalDependencies = globalDependencies,
                 UserPackagesToInstall = userModsToInstall,
                 CancellationToken = cancellationTokenSource.Token,
-                DisableTriggersForInstall = disableTriggersBackupVal
+                DisableTriggersForInstall = disableTriggersForInstall
             };
 
             //setup the cancel button
@@ -2068,10 +2090,29 @@ namespace RelhaxModpack
             }
         }
 
+        private void OnUpdateDownloadProgresChange(object sender, DownloadProgressChangedEventArgs e)
+        {
+            //if it's not running, start it
+            if (!downloadTimer.IsRunning)
+                downloadTimer.Start();
+
+            //set the update progress bar
+            ChildProgressBar.Value = e.ProgressPercentage;
+            float MBDownloaded = (float)e.BytesReceived / (float)FileUtils.BYTES_TO_MBYTES;
+            float MBTotal = (float)e.TotalBytesToReceive / (float)FileUtils.BYTES_TO_MBYTES;
+            MBDownloaded = (float)Math.Round(MBDownloaded, 2);
+            MBTotal = (float)Math.Round(MBTotal, 2);
+            string downloadMessage = string.Format("{0} {1}MB {2} {3}MB", Translations.GetTranslatedString("downloadingUpdate"),
+                MBDownloaded, Translations.GetTranslatedString("of"), MBTotal);
+            InstallProgressTextBox.Text = downloadMessage;
+        }
+
         private async void OnUpdateDownloadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             //stop the timer
-            stopwatch.Reset();
+            downloadTimer.Reset();
+            downloadTimer = null;
+
             if (e.Error != null)
             {
                 Logging.WriteToLog("Failed to download application update\n" + e.Error.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
@@ -2156,23 +2197,6 @@ namespace RelhaxModpack
             Environment.Exit(0);
             return;
         }
-
-        private void OnUpdateDownloadProgresChange(object sender, DownloadProgressChangedEventArgs e)
-        {
-            //if it's not running, start it
-            if (!stopwatch.IsRunning)
-                stopwatch.Start();
-
-            //set the update progress bar
-            ChildProgressBar.Value = e.ProgressPercentage;
-            float MBDownloaded = (float)e.BytesReceived / (float)FileUtils.BYTES_TO_MBYTES;
-            float MBTotal = (float)e.TotalBytesToReceive / (float)FileUtils.BYTES_TO_MBYTES;
-            MBDownloaded = (float)Math.Round(MBDownloaded, 2);
-            MBTotal = (float)Math.Round(MBTotal, 2);
-            string downloadMessage = string.Format("{0} {1}MB {2} {3}MB", Translations.GetTranslatedString("downloadingUpdate"),
-                MBDownloaded, Translations.GetTranslatedString("of"), MBTotal);
-            InstallProgressTextBox.Text = downloadMessage;
-        }
         #endregion
 
         #region One click and auto install code
@@ -2225,7 +2249,7 @@ namespace RelhaxModpack
             {
                 Logging.Debug("[AutoInstallCB_Click]: autoInstall being turned off, process that only");
                 ModpackSettings.AutoInstall = false;
-                autoInstallTimer.Stop();
+                autoInstallPeriodicTimer.Stop();
                 return;
             }
 
@@ -2239,7 +2263,7 @@ namespace RelhaxModpack
                 AutoInstallCB.IsChecked = false;
                 AutoInstallCB.Click += AutoInstallCB_Click;
 
-                autoInstallTimer.Stop();
+                autoInstallPeriodicTimer.Stop();
                 MessageBox.Show(Translations.GetTranslatedString("autoOneclickSelectionFileNotExist"));
                 return;
             }
@@ -2250,7 +2274,7 @@ namespace RelhaxModpack
                 {
                     Logging.Info("[AutoInstallCB_Click]: database distro is beta, verify with user");
 
-                    autoInstallTimer.Stop();
+                    autoInstallPeriodicTimer.Stop();
 
                     if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"),
                         MessageBoxButton.YesNo) == MessageBoxResult.No)
@@ -2262,11 +2286,11 @@ namespace RelhaxModpack
                         AutoInstallCB.IsChecked = false;
                         AutoInstallCB.Click += AutoInstallCB_Click;
 
-                        autoInstallTimer.Stop();
+                        autoInstallPeriodicTimer.Stop();
                         return;
                     }
 
-                    autoInstallTimer.Start();
+                    autoInstallPeriodicTimer.Start();
                 }
 
                 Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user confirmed, setup initial check");
@@ -2285,37 +2309,37 @@ namespace RelhaxModpack
 
             //parse the time into a timespan for the check timer
             Logging.Info("[AutoInstallCB_Click]: registering auto install periodic timer");
-            autoInstallTimer.Stop();
+            autoInstallPeriodicTimer.Stop();
 
             switch (AutoSyncFrequencyComboBox.SelectedIndex)
             {
                 case 0://mins
-                    autoInstallTimer.Interval = TimeSpan.FromMinutes(timeToUse);
+                    autoInstallPeriodicTimer.Interval = TimeSpan.FromMinutes(timeToUse);
                     break;
                 case 1://hours
-                    autoInstallTimer.Interval = TimeSpan.FromHours(timeToUse);
+                    autoInstallPeriodicTimer.Interval = TimeSpan.FromHours(timeToUse);
                     break;
                 case 2://days
-                    autoInstallTimer.Interval = TimeSpan.FromDays(timeToUse);
+                    autoInstallPeriodicTimer.Interval = TimeSpan.FromDays(timeToUse);
                     break;
                 default:
                     throw new BadMemeException("this should not happen");
             }
 
-            autoInstallTimer.Tick -= AutoInstallTimer_ElapsedBeta;
-            autoInstallTimer.Tick -= AutoInstallTimer_Elapsed;
+            autoInstallPeriodicTimer.Tick -= AutoInstallTimer_ElapsedBeta;
+            autoInstallPeriodicTimer.Tick -= AutoInstallTimer_Elapsed;
             switch (ModpackSettings.DatabaseDistroVersion)
             {
                 case DatabaseVersions.Beta:
-                    autoInstallTimer.Tick += AutoInstallTimer_ElapsedBeta;
+                    autoInstallPeriodicTimer.Tick += AutoInstallTimer_ElapsedBeta;
                     break;
                 case DatabaseVersions.Stable:
-                    autoInstallTimer.Tick += AutoInstallTimer_Elapsed;
+                    autoInstallPeriodicTimer.Tick += AutoInstallTimer_Elapsed;
                     break;
             }
 
             //start it
-            autoInstallTimer.Start();
+            autoInstallPeriodicTimer.Start();
 
             //and finally set value into modpack settings
             ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
@@ -2807,12 +2831,12 @@ namespace RelhaxModpack
         #region Mouse button click events
         private void OpenColorPickerButton_Click(object sender, RoutedEventArgs e)
         {
-            autoInstallTimer.Stop();
+            autoInstallPeriodicTimer.Stop();
 
             RelhaxColorPicker colorPicker = new RelhaxColorPicker();
             colorPicker.ShowDialog();
 
-            autoInstallTimer.Start();
+            autoInstallPeriodicTimer.Start();
         }
 
         private void ViewCreditsButton_Click(object sender, RoutedEventArgs e)
@@ -2841,12 +2865,12 @@ namespace RelhaxModpack
 
         private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
         {
-            autoInstallTimer.Stop();
+            autoInstallPeriodicTimer.Stop();
 
             Diagnostics diagnostics = new Diagnostics();
             diagnostics.ShowDialog();
 
-            autoInstallTimer.Start();
+            autoInstallPeriodicTimer.Start();
         }
 
         private void ViewNewsButton_Click(object sender, RoutedEventArgs e)
@@ -2992,7 +3016,7 @@ namespace RelhaxModpack
                 {
                     Logging.Info("[OnUseBetaDatabaseChanged]: autoInstall is enabled, verify with user");
 
-                    autoInstallTimer.Stop();
+                    autoInstallPeriodicTimer.Stop();
 
                     if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"),
                         MessageBoxButton.YesNo) == MessageBoxResult.No)
@@ -3004,7 +3028,7 @@ namespace RelhaxModpack
                         return;
                     }
 
-                    autoInstallTimer.Start();
+                    autoInstallPeriodicTimer.Start();
                 }
 
                 Logging.Debug("[OnUseBetaDatabaseChanged]: reset internals and get list of database branches");
@@ -3067,7 +3091,7 @@ namespace RelhaxModpack
             {
                 //stop timer for applying changes
                 Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, restart timer for this change");
-                autoInstallTimer.Stop();
+                autoInstallPeriodicTimer.Stop();
 
                 //if beta database, get the latest one
                 if (databaseVersion == DatabaseVersions.Beta)
@@ -3077,18 +3101,18 @@ namespace RelhaxModpack
                     newBetaDB = oldBetaDB;
                 }
 
-                autoInstallTimer.Tick -= AutoInstallTimer_ElapsedBeta;
-                autoInstallTimer.Tick -= AutoInstallTimer_Elapsed;
+                autoInstallPeriodicTimer.Tick -= AutoInstallTimer_ElapsedBeta;
+                autoInstallPeriodicTimer.Tick -= AutoInstallTimer_Elapsed;
                 switch (ModpackSettings.DatabaseDistroVersion)
                 {
                     case DatabaseVersions.Beta:
-                        autoInstallTimer.Tick += AutoInstallTimer_ElapsedBeta;
+                        autoInstallPeriodicTimer.Tick += AutoInstallTimer_ElapsedBeta;
                         break;
                     case DatabaseVersions.Stable:
-                        autoInstallTimer.Tick += AutoInstallTimer_Elapsed;
+                        autoInstallPeriodicTimer.Tick += AutoInstallTimer_Elapsed;
                         break;
                 }
-                autoInstallTimer.Start();
+                autoInstallPeriodicTimer.Start();
             }
 
             ProcessTitle();
@@ -3427,12 +3451,12 @@ namespace RelhaxModpack
             //else enable it again
             //sending stop() will restart the timer
             //https://stackoverflow.com/questions/15617068/does-system-timers-timer-stop-restart-the-interval-countdown
-            if (autoInstallTimer != null)
+            if (autoInstallPeriodicTimer != null)
             {
                 if (toggle)
-                    autoInstallTimer.Start();
+                    autoInstallPeriodicTimer.Start();
                 else
-                    autoInstallTimer.Stop();
+                    autoInstallPeriodicTimer.Stop();
             }
         }
 
@@ -3444,13 +3468,11 @@ namespace RelhaxModpack
             //set the database information text box
             DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + Settings.DatabaseVersion;
 
-            //get the number of processor cores
+            //set the number of cores label
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), Settings.NumLogicalProcesors);
 
-            //display the backup file sizes (if requested)
-            if (displayBackupModsSize)
-                BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"),
-                    backupFiles.Count(), FileUtils.SizeSuffix((ulong)backupFolderTotalSize, 1, true, true));
+            //set backup file size labels
+            GetBackupFilesizesAsync(false);
         }
         #endregion
 
@@ -3490,31 +3512,31 @@ namespace RelhaxModpack
         }
         
         //asynchronously get the file sizes of backups
-        private Task GetBackupFilesizesAsync(bool displayGettingSize)
+        private Task GetBackupFilesizesAsync(bool calculate)
         {
             return Task.Run(() =>
             {
-                Logging.Debug("Starting async task of getting file sizes of backups");
-                if (displayGettingSize)
+                if (calculate)
                 {
+                    Logging.Debug("Starting async task of getting file sizes of backups");
                     BackupModsSizeLabelUsed.Dispatcher.Invoke(() =>
                     {
-                        BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("backupModsSizeCalculating"), backupFiles.Count(), FileUtils.SizeSuffix((ulong)backupFolderTotalSize, 1, true, true));
+                        BackupModsSizeLabelUsed.Text = Translations.GetTranslatedString("backupModsSizeCalculating");
                     });
-                }
 
-                backupFolderTotalSize = 0;
-                backupFiles = FileUtils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
-                foreach (string file in backupFiles)
-                {
-                    backupFolderTotalSize += FileUtils.GetFilesize(file);
+                    backupFolderTotalSize = 0;
+                    backupFiles = FileUtils.DirectorySearch(Settings.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
+                    foreach (string file in backupFiles)
+                    {
+                        backupFolderTotalSize += FileUtils.GetFilesize(file);
+                    }
+                    Logging.Debug("Completed async task of getting file sizes of backups");
                 }
 
                 BackupModsSizeLabelUsed.Dispatcher.Invoke(() =>
                 {
                     BackupModsSizeLabelUsed.Text = string.Format(Translations.GetTranslatedString("BackupModsSizeLabelUsed"), backupFiles.Count(), FileUtils.SizeSuffix((ulong)backupFolderTotalSize, 1, true, true));
                 });
-                Logging.Debug("Completed async task of getting file sizes of backups");
             });
         }
 
