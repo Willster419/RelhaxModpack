@@ -5090,7 +5090,7 @@
             Multiply by this value to convert milliseconds to seconds
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.CommonUtils.TO_MINUETS">
+        <member name="F:RelhaxModpack.Utilities.CommonUtils.TO_MINUTES">
             <summary>
             Multiply by this value to convert seconds to minuets
             </summary>
