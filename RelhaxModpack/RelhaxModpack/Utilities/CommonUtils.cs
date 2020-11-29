@@ -41,7 +41,7 @@ namespace RelhaxModpack.Utilities
         /// <summary>
         /// Multiply by this value to convert seconds to minuets
         /// </summary>
-        public const int TO_MINUETS = 60;
+        public const int TO_MINUTES = 60;
 
         /// <summary>
         /// Get a complete assembly name based on a matching keyword
@@ -172,35 +172,7 @@ namespace RelhaxModpack.Utilities
             return !outOfDate;
         }
 
-        public static List<string> GetListOfGithubRepoBranches()
-        {
-            //declare objects to use
-            string jsonText = string.Empty;
-
-            //check if we're windows 7 to enable TLS options needed by github
-            CheckAndEnableTLS();
-
-            //get the list of branches
-            using (PatientWebClient client = new PatientWebClient() { Timeout = 3000 })
-            {
-
-                try
-                {
-                    Logging.Debug("[GetListOfGithubRepoBranches]: downloading branch list as json from github API");
-                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                    jsonText = client.DownloadString(Settings.BetaDatabaseBranchesURL);
-                }
-                catch (WebException wex)
-                {
-                    Logging.Exception(wex.ToString());
-                }
-            }
-
-            //parse from json to list
-            return ParseBranchesJsonToList(jsonText);
-        }
-
-        public static async Task<List<string>> GetListOfGithubRepoBranchesAsync()
+        public static async Task<List<string>> GetListOfGithubRepoBranchesAsync(string githubApiUrl)
         {
             //declare objects to use
             string jsonText = string.Empty;
@@ -216,7 +188,7 @@ namespace RelhaxModpack.Utilities
                 {
                     Logging.Debug("[GetListOfGithubRepoBranchesAsync]: downloading branch list as json from github API");
                     client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                    jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
+                    jsonText = await client.DownloadStringTaskAsync(githubApiUrl);
                 }
                 catch (WebException wex)
                 {
@@ -272,7 +244,7 @@ namespace RelhaxModpack.Utilities
             //https://docs.microsoft.com/en-us/dotnet/framework/network-programming/tls
             if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
             {
-                Logging.Debug("[CheckAndEnableTLS]: Windows 7 detected, enabling TLS 1.1 and 1.2");
+                Logging.Debug(LogOptions.MethodName, "Windows 7 detected, enabling TLS 1.1 and 1.2");
                 System.Net.ServicePointManager.SecurityProtocol =
                     SecurityProtocolType.Ssl3 |
                     SecurityProtocolType.Tls |

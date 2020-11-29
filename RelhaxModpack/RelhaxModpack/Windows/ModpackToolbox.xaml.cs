@@ -733,7 +733,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Getting list of branches");
             UiUtils.AllowUIToUpdate();
 
-            List<string> branches = await CommonUtils.GetListOfGithubRepoBranchesAsync();
+            List<string> branches = await CommonUtils.GetListOfGithubRepoBranchesAsync(Settings.BetaDatabaseBranchesURL);
 
             ReportProgress(string.Join(",", branches));
             UiUtils.AllowUIToUpdate();
@@ -987,7 +987,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Starting Update database step 2...");
             ReportProgress("Running script to update online hash database...");
             //a PatientWebClient should allow a timeout value of 5 mins (or more)
-            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateDatabasePHP, 30 * CommonUtils.TO_SECONDS * CommonUtils.TO_MINUETS);
+            await RunPhpScript(PrivateStuff.BigmodsNetworkCredentialScripts, PrivateStuff.BigmodsCreateDatabasePHP, 30 * CommonUtils.TO_SECONDS * CommonUtils.TO_MINUTES);
         }
 
         private async void UpdateDatabaseV2Step3_Click(object sender, RoutedEventArgs e)

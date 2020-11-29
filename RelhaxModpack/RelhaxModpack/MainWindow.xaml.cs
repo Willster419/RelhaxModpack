@@ -48,8 +48,7 @@ namespace RelhaxModpack
         private Control[] disabledBlacklist = null;
         private Control[] enabledBlacklist = null;
         //timer of when to check the server for a database update
-        private DispatcherTimer autoInstallPeriodicTimer = new DispatcherTimer();
-
+        private DispatcherTimer autoInstallPeriodicTimer = null;
         //notification tray icon
         private System.Windows.Forms.NotifyIcon RelhaxIcon = null;
 
@@ -2204,13 +2203,13 @@ namespace RelhaxModpack
             if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
             {
                 tmep = ModpackSettings.AutoOneclickSelectionFilePath;
-                Logging.Debug("autoClickSelectionPath is null or doesn't exist, prompting user to change");
+                Logging.Debug(LogOptions.MethodName, "AutoClickSelectionPath is null or doesn't exist, prompting user to change");
                 LoadAutoSyncSelectionFile_Click(null, null);
             }
 
             if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
             {
-                Logging.Debug("autoClickSelectionPath is null or doesn't exist still, setting to false and reverting path");
+                Logging.Debug(LogOptions.MethodName, "AutoClickSelectionPath is null or doesn't exist still, setting to false and reverting path");
                 ModpackSettings.AutoOneclickSelectionFilePath = tmep;
                 ModpackSettings.OneClickInstall = false;
                 OneClickInstallCB.IsChecked = false;
@@ -2240,75 +2239,77 @@ namespace RelhaxModpack
             AutoInstallOneClickInstallSelectionFilePath.TextChanged += OnAutoInstallOneClickInstallSelectionFilePathTextChanged;
         }
 
-        private async void AutoInstallCB_Click(object sender, RoutedEventArgs e)
+        private void AutoInstallCB_Click(object sender, RoutedEventArgs e)
         {
             //if it's turning off, then process that only
             if (!(bool)AutoInstallCB.IsChecked)
             {
-                Logging.Debug("[AutoInstallCB_Click]: autoInstall being turned off, process that only");
+                Logging.Debug(LogOptions.MethodName, "AutoInstall being turned off");
                 ModpackSettings.AutoInstall = false;
                 autoInstallPeriodicTimer.Stop();
+                autoInstallPeriodicTimer = null;
                 return;
             }
 
             //the selection file must be set for this to work
             if (string.IsNullOrWhiteSpace(ModpackSettings.AutoOneclickSelectionFilePath) || !File.Exists(ModpackSettings.AutoOneclickSelectionFilePath))
             {
-                Logging.Info("[AutoInstallCB_Click]: autoClickSelectionPath is null or doesn't exist, abort");
+                Logging.Info(LogOptions.MethodName, "AutoClickSelectionPath is null or doesn't exist, abort");
+                if (autoInstallPeriodicTimer != null && autoInstallPeriodicTimer.IsEnabled)
+                    autoInstallPeriodicTimer.Stop();
+                MessageBox.Show(Translations.GetTranslatedString("autoOneclickSelectionFileNotExist"));
                 ModpackSettings.AutoInstall = false;
-
                 AutoInstallCB.Click -= AutoInstallCB_Click;
                 AutoInstallCB.IsChecked = false;
                 AutoInstallCB.Click += AutoInstallCB_Click;
-
-                autoInstallPeriodicTimer.Stop();
-                MessageBox.Show(Translations.GetTranslatedString("autoOneclickSelectionFileNotExist"));
+                autoInstallPeriodicTimer = null;
                 return;
             }
 
+            //if the current database distro is beta AND the user now wants to turn on auto install, confirm with the user that we really want to do this
+            //due to the potentially high install frequency
             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
             {
+                //if it's loading, we assume the user does want to do this
                 if (!loading)
                 {
-                    Logging.Info("[AutoInstallCB_Click]: database distro is beta, verify with user");
+                    Logging.Info(LogOptions.MethodName, "Database distro is beta, verify with user");
+                    if (autoInstallPeriodicTimer != null && autoInstallPeriodicTimer.IsEnabled)
+                        autoInstallPeriodicTimer.Stop();
 
-                    autoInstallPeriodicTimer.Stop();
-
-                    if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"),
-                        MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
                     {
-                        Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user declined, abort");
+                        Logging.Debug(LogOptions.MethodName, "Database distro is beta, user declined, abort");
                         ModpackSettings.AutoInstall = false;
-
                         AutoInstallCB.Click -= AutoInstallCB_Click;
                         AutoInstallCB.IsChecked = false;
                         AutoInstallCB.Click += AutoInstallCB_Click;
-
-                        autoInstallPeriodicTimer.Stop();
+                        autoInstallPeriodicTimer = null;
                         return;
                     }
 
                     autoInstallPeriodicTimer.Start();
                 }
-
-                Logging.Debug("[AutoInstallCB_Click]: database distro is beta, user confirmed, setup initial check");
-                oldBetaDB = await GetBetaDatabase1V1ForStringCompareAsync();
-                newBetaDB = oldBetaDB;
             }
+
+            //at this point, we want to enable auto install and we have the file specified
+            //stop the dispatcherTimer if running, and instance it if not already
+            if (autoInstallPeriodicTimer != null && autoInstallPeriodicTimer.IsEnabled)
+                autoInstallPeriodicTimer.Stop();
+            autoInstallPeriodicTimer = null;
+            autoInstallPeriodicTimer = new DispatcherTimer(DispatcherPriority.Normal);
 
             //check the time parsed value
             int timeToUse = CommonUtils.ParseInt(AutoSyncFrequencyTexbox.Text, 0);
-            if (timeToUse == 0)
+            if (timeToUse <= 0)
             {
-                Logging.Warning("[AutoInstallCB_Click]: Invalid time specified, must be above 0. using 1");
+                Logging.Warning(LogOptions.MethodName, "Invalid time specified, must be above 0. using 1");
                 timeToUse = 1;
                 AutoSyncFrequencyTexbox.Text = timeToUse.ToString();
             }
 
             //parse the time into a timespan for the check timer
-            Logging.Info("[AutoInstallCB_Click]: registering auto install periodic timer");
-            autoInstallPeriodicTimer.Stop();
-
+            Logging.Info(LogOptions.MethodName, "Registering auto install periodic timer");
             switch (AutoSyncFrequencyComboBox.SelectedIndex)
             {
                 case 0://mins
@@ -2324,6 +2325,32 @@ namespace RelhaxModpack
                     throw new BadMemeException("this should not happen");
             }
 
+            if (databaseVersion == DatabaseVersions.Beta)
+                InitAutoInstallTimerForBetaDbAsync();
+            ConfigureAutoInstallTimerEvent();
+            autoInstallPeriodicTimer.Start();
+
+            //and finally set value into modpack settings
+            ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
+
+            Logging.Info(LogOptions.MethodName, "Timer registered, listening for update check intervals");
+        }
+
+        private Task InitAutoInstallTimerForBetaDbAsync()
+        {
+            return Task.Run(async () =>
+            {
+                //get the latest complete string set of the database and set both 'new' and 'old' versions for it
+                //we don't need to do this for stable because it already stores the database version and running the periodic function will handle it for us
+                //see CheckForAutoInstallUpdates() for more info -> uses CheckForDatabaseUpdatesAsync()
+                Logging.Debug(LogOptions.MethodName, "AutoInstall is enabled and database distro = beta, need to get current beta database for comparison");
+                oldBetaDB = await GetBetaDatabase1V1ForStringCompareAsync();
+                newBetaDB = oldBetaDB;
+            });
+        }
+
+        private void ConfigureAutoInstallTimerEvent()
+        {
             autoInstallPeriodicTimer.Tick -= AutoInstallTimer_ElapsedBeta;
             autoInstallPeriodicTimer.Tick -= AutoInstallTimer_Elapsed;
             switch (ModpackSettings.DatabaseDistroVersion)
@@ -2335,14 +2362,6 @@ namespace RelhaxModpack
                     autoInstallPeriodicTimer.Tick += AutoInstallTimer_Elapsed;
                     break;
             }
-
-            //start it
-            autoInstallPeriodicTimer.Start();
-
-            //and finally set value into modpack settings
-            ModpackSettings.AutoInstall = (bool)AutoInstallCB.IsChecked;
-
-            Logging.Info("[AutoInstallCB_Click]: timer registered, listening for update check intervals");
         }
 
         private void AutoInstallTimer_Elapsed(object sender, EventArgs e)
@@ -2826,22 +2845,29 @@ namespace RelhaxModpack
         }
         #endregion
 
-        #region Mouse button click events
+        #region Button click events
         private void OpenColorPickerButton_Click(object sender, RoutedEventArgs e)
         {
-            autoInstallPeriodicTimer.Stop();
+            if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)
+                autoInstallPeriodicTimer.Stop();
 
             RelhaxColorPicker colorPicker = new RelhaxColorPicker();
             colorPicker.ShowDialog();
 
-            autoInstallPeriodicTimer.Start();
+            if (ModpackSettings.AutoInstall)
+                autoInstallPeriodicTimer.Start();
         }
 
         private void ViewCreditsButton_Click(object sender, RoutedEventArgs e)
         {
+            if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)
+                autoInstallPeriodicTimer.Stop();
+
             Credits credits = new Credits();
             credits.ShowDialog();
-            credits = null;
+
+            if (ModpackSettings.AutoInstall)
+                autoInstallPeriodicTimer.Start();
         }
 
         private void LinkButton_Click(object sender, RoutedEventArgs e)
@@ -2863,12 +2889,14 @@ namespace RelhaxModpack
 
         private void DiagnosticUtilitiesButton_Click(object sender, RoutedEventArgs e)
         {
-            autoInstallPeriodicTimer.Stop();
+            if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)
+                autoInstallPeriodicTimer.Stop();
 
             Diagnostics diagnostics = new Diagnostics();
             diagnostics.ShowDialog();
 
-            autoInstallPeriodicTimer.Start();
+            if (ModpackSettings.AutoInstall)
+                autoInstallPeriodicTimer.Start();
         }
 
         private void ViewNewsButton_Click(object sender, RoutedEventArgs e)
@@ -2950,6 +2978,9 @@ namespace RelhaxModpack
 
         private void LauchPatchDesigner_Click(object sender, RoutedEventArgs e)
         {
+            if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)
+                autoInstallPeriodicTimer.Stop();
+
             Logging.Info("Launching patch designer from MainWindow");
             if (!Logging.IsLogDisposed(Logfiles.Application))
                 Logging.DisposeLogging(Logfiles.Application);
@@ -2974,10 +3005,16 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Application.Current.Shutdown((int)ReturnCodes.LogfileError);
             }
+
+            if (ModpackSettings.AutoInstall)
+                autoInstallPeriodicTimer.Start();
         }
 
         private void LauchEditor_Click(object sender, RoutedEventArgs e)
         {
+            if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)
+                autoInstallPeriodicTimer.Stop();
+
             Logging.Info("Launching editor from MainWindow");
             if (!Logging.IsLogDisposed(Logfiles.Application))
                 Logging.DisposeLogging(Logfiles.Application);
@@ -3000,6 +3037,9 @@ namespace RelhaxModpack
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Application.Current.Shutdown((int)ReturnCodes.LogfileError);
             }
+
+            if (ModpackSettings.AutoInstall)
+                autoInstallPeriodicTimer.Start();
         }
         #endregion
 
@@ -3009,43 +3049,33 @@ namespace RelhaxModpack
             UseBetaDatabaseBranches.IsEnabled = false;
             if ((bool)UseBetaDatabaseCB.IsChecked)
             {
-                //first check if auto install is enabled with this
+                //if auto install is already enabled, then confirm with the user that we want to enable auto database updates AND use the beta version of the database
                 if (ModpackSettings.AutoInstall && !loading)
                 {
-                    Logging.Info("[OnUseBetaDatabaseChanged]: autoInstall is enabled, verify with user");
-
+                    Logging.Info(LogOptions.MethodName, "AutoInstall is enabled already, verify with user that we want to enable beta database. Potential high installation frequency");
                     autoInstallPeriodicTimer.Stop();
 
-                    if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"),
-                        MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    if (MessageBox.Show(Translations.GetTranslatedString("autoInstallWithBetaDBConfirmBody"), Translations.GetTranslatedString("autoInstallWithBetaDBConfirmHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
                     {
-                        Logging.Debug("[OnUseBetaDatabaseChanged]: autoInstall is enabled, user declined, abort");
+                        Logging.Info(LogOptions.MethodName, "AutoInstall is enabled, user declined, abort");
+                        //disconnect the event handlers before we uncheck the beta database usage
                         UseBetaDatabaseCB.Click -= OnUseBetaDatabaseChanged;
                         UseBetaDatabaseCB.IsChecked = false;
                         UseBetaDatabaseCB.Click += OnUseBetaDatabaseChanged;
                         return;
                     }
 
+                    //then restart the timer
                     autoInstallPeriodicTimer.Start();
                 }
 
-                Logging.Debug("[OnUseBetaDatabaseChanged]: reset internals and get list of database branches");
-                //disable the UI part of it
+                Logging.Debug(LogOptions.MethodName, "Disable UI components and get list of database branches to populate combobox");
                 UseBetaDatabaseCB.IsEnabled = false;
-                UseBetaDatabaseBranches.IsEnabled = true;
+                UseBetaDatabaseBranches.IsEnabled = false;
                 UseBetaDatabaseBranches.Items.Clear();
                 UseBetaDatabaseBranches.Items.Add(Translations.GetTranslatedString("loadingBranches"));
-                UseBetaDatabaseBranches.IsEnabled = false;
 
-                List<string> branches = null;
-
-                if (loading)
-                    branches = CommonUtils.GetListOfGithubRepoBranches();
-                else
-                    branches = await CommonUtils.GetListOfGithubRepoBranchesAsync();
-
-                Logging.Debug("[OnUseBetaDatabaseChanged]: Updating UI with new branches list");
-                //clear current list
+                List<string> branches = await CommonUtils.GetListOfGithubRepoBranchesAsync(Settings.BetaDatabaseBranchesURL);
                 UseBetaDatabaseBranches.Items.Clear();
 
                 //fill the UI with branch items
@@ -3054,20 +3084,18 @@ namespace RelhaxModpack
 
                 if (!string.IsNullOrEmpty(ModpackSettings.BetaDatabaseSelectedBranch) && branches.Contains(ModpackSettings.BetaDatabaseSelectedBranch))
                 {
-                    Logging.Debug("[OnUseBetaDatabaseChanged]: Branch '{0}' set from settings exists on repo and is being set", ModpackSettings.BetaDatabaseSelectedBranch);
+                    Logging.Info(LogOptions.MethodName, "Branch '{0}' set from settings exists on repo and is being set", ModpackSettings.BetaDatabaseSelectedBranch);
                     UseBetaDatabaseBranches.SelectedIndex = branches.IndexOf(ModpackSettings.BetaDatabaseSelectedBranch);
                 }
                 else
                 {
-                    Logging.Debug("[OnUseBetaDatabaseChanged]: Setting default branch 'master', branch '{0}' does not exist on repo or is blank", ModpackSettings.BetaDatabaseSelectedBranch);
+                    Logging.Info(LogOptions.MethodName, "Branch '{0}' does not exist, setting default branch to repo default 'master'", string.IsNullOrWhiteSpace(ModpackSettings.BetaDatabaseSelectedBranch)? "(empty)" : ModpackSettings.BetaDatabaseSelectedBranch);
                     //select master (index 0) as default
                     UseBetaDatabaseBranches.SelectedIndex = 0;
                 }
 
-                //set database distribution to beta
+                Logging.Debug(LogOptions.MethodName, "Set database distribution to beta and enable UI components");
                 ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
-
-                //default to master selected
                 UseBetaDatabaseBranches.IsEnabled = true;
                 UseBetaDatabaseCB.IsEnabled = true;
             }
@@ -3082,34 +3110,18 @@ namespace RelhaxModpack
             }
             else
             {
+                //actually apply the value
                 databaseVersion = ModpackSettings.DatabaseDistroVersion;
             }
 
             if (databaseVersion != DatabaseVersions.Test && ModpackSettings.AutoInstall)
             {
                 //stop timer for applying changes
-                Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, restart timer for this change");
+                Logging.Debug(LogOptions.MethodName, "AutoInstall is enabled, restart timer for this change");
                 autoInstallPeriodicTimer.Stop();
-
-                //if beta database, get the latest one
                 if (databaseVersion == DatabaseVersions.Beta)
-                {
-                    Logging.Debug("[OnUseBetaDatabaseChanged]: AutoInstall is enabled, database = beta, need to get current beta database for comparison");
-                    oldBetaDB = await GetBetaDatabase1V1ForStringCompareAsync();
-                    newBetaDB = oldBetaDB;
-                }
-
-                autoInstallPeriodicTimer.Tick -= AutoInstallTimer_ElapsedBeta;
-                autoInstallPeriodicTimer.Tick -= AutoInstallTimer_Elapsed;
-                switch (ModpackSettings.DatabaseDistroVersion)
-                {
-                    case DatabaseVersions.Beta:
-                        autoInstallPeriodicTimer.Tick += AutoInstallTimer_ElapsedBeta;
-                        break;
-                    case DatabaseVersions.Stable:
-                        autoInstallPeriodicTimer.Tick += AutoInstallTimer_Elapsed;
-                        break;
-                }
+                    InitAutoInstallTimerForBetaDbAsync();
+                ConfigureAutoInstallTimerEvent();
                 autoInstallPeriodicTimer.Start();
             }
 
@@ -3405,15 +3417,15 @@ namespace RelhaxModpack
                     break;
             }
 
+            //apply beta application settings
+            UseBetaApplicationCB.IsChecked = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Beta);
+
             //apply beta database settings
             if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Beta)
             {
                 UseBetaDatabaseCB.IsChecked = true;
                 OnUseBetaDatabaseChanged(null, null);
             }
-
-            //apply beta application settings
-            UseBetaApplicationCB.IsChecked = ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Beta ? true : false;
 
             //apply auto install check
             if (ModpackSettings.AutoInstall)
