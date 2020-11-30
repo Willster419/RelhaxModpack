@@ -908,5 +908,33 @@ namespace RelhaxModpack
                     break;
             }
         }
+
+        /// <summary>
+        /// Writes a message to the AutomationRunner logfile
+        /// </summary>
+        /// <param name="options">Log append options to include class name, method name, or both</param>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
+        /// <param name="level">The level of severity included into the string format</param>
+        public static void AutomationRunner(LogOptions options, string message, LogLevel level = LogLevel.Info)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), Logfiles.AutomationRunner, level);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.AutomationRunner, level);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), Logfiles.AutomationRunner, level);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.AutomationRunner, level);
+                    break;
+            }
+        }
     }
 }
