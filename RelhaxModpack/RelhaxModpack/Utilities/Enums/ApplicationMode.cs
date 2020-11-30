@@ -28,6 +28,11 @@
         /// <summary>
         /// The patch runner mode. Can be used in command line mode, used for patching files given patch file instructions
         /// </summary>
-        Patcher
+        Patcher,
+
+        /// <summary>
+        /// The database automation runner mode. Used for running automation sequences
+        /// </summary>
+        AutomationRunner
     }
 }

@@ -210,6 +210,10 @@
     <Compile Include="Patches\Patch.cs" />
     <Compile Include="Shortcuts\Shortcut.cs" />
     <Compile Include="Atlases\Texture.cs" />
+    <Compile Include="Windows\DatabaseAutomationRunner.xaml.cs">
+      <DependentUpon>DatabaseAutomationRunner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ICustomFeatureWindow.cs" />
     <Compile Include="Xml\XmlUnpack.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
@@ -431,6 +435,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Credits.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\DatabaseAutomationRunner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

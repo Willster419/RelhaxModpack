@@ -239,6 +239,32 @@ namespace RelhaxModpack
                     Current.Shutdown((int)ReturnCodes.Success);
                     Environment.Exit((int)ReturnCodes.Success);
                     return;
+                case ApplicationMode.AutomationRunner:
+                    DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner();
+
+                    //close application log if open
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        CloseApplicationLog(true);
+
+                    //start DatabaseAutomationRunner logging
+                    if (!Logging.Init(Logfiles.AutomationRunner))
+                    {
+                        MessageBox.Show("Failed to initialize logfile for DatabaseAutomationRunner");
+                        Current.Shutdown((int)ReturnCodes.LogfileError);
+                        return;
+                    }
+                    Logging.WriteHeader(Logfiles.AutomationRunner);
+
+                    //show window
+                    automationRunner.ShowDialog();
+
+                    //stop patch designer logging
+                    CloseLog(Logfiles.AutomationRunner);
+                    DeleteCustomLogIfExists();
+                    automationRunner = null;
+                    Current.Shutdown((int)ReturnCodes.Success);
+                    Environment.Exit((int)ReturnCodes.Success);
+                    return;
                 case ApplicationMode.Patcher:
                     Logging.Info("Running patch mode");
 

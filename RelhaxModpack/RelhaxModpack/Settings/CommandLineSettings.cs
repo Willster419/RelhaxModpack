@@ -24,7 +24,8 @@ namespace RelhaxModpack
             "database-updater",
             "modpack-toolbox",
             "database-editor",
-            "patcher"
+            "patcher",
+            DatabaseAutomationRunner.DatabaseAutomationRunnerCommandLineArg
         };
 
         /// <summary>
@@ -147,6 +148,10 @@ namespace RelhaxModpack
                     case "database-editor":
                         ApplicationMode = ApplicationMode.Editor;
                         Logging.Info(LogOptions.ClassName, "{0}, loading in database edit mode", commandArg);
+                        break;
+                    case DatabaseAutomationRunner.DatabaseAutomationRunnerCommandLineArg:
+                        ApplicationMode = ApplicationMode.AutomationRunner;
+                        Logging.Info(LogOptions.ClassName, "{0}, loading in database automation runner mode", commandArg);
                         break;
                     case "patcher":
                         ApplicationMode = ApplicationMode.Patcher;

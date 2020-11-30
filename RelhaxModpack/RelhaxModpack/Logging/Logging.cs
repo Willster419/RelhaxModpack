@@ -30,6 +30,11 @@ namespace RelhaxModpack
         public const string ApplicationPatchDesignerLogFilename = "RelhaxPatchDesigner.log";
 
         /// <summary>
+        /// The filename of the database automation runner
+        /// </summary>
+        public const string AutomationLogFilename = "RelhaxAutomation.log";
+
+        /// <summary>
         /// The filename of the old application log file
         /// </summary>
         public const string OldApplicationLogFilename = "RelHaxLog.txt";
@@ -90,6 +95,8 @@ namespace RelhaxModpack
 
         private static Logfile UpdaterLogfile;
 
+        private static Logfile AutomationLogfile;
+
         private static bool FailedToWriteToLogWindowShown = false;
 
         /// <summary>
@@ -130,6 +137,11 @@ namespace RelhaxModpack
                     fileToWriteTo = UpdaterLogfile;
                     if (string.IsNullOrEmpty(logfilePath))
                         logfilePath = ApplicationUpdaterLogFilename;
+                    break;
+                case Logfiles.AutomationRunner:
+                    fileToWriteTo = AutomationLogfile;
+                    if (string.IsNullOrEmpty(logfilePath))
+                        logfilePath = AutomationLogFilename;
                     break;
             }
 
@@ -172,36 +184,29 @@ namespace RelhaxModpack
         /// <summary>
         /// Get the instance of the logfile type
         /// </summary>
-        /// <param name="logfile">The logfile enumeration type you would like</param>
+        /// <param name="logfile">The logfile enumeration of the logfile reference to return</param>
         /// <returns>The instance of the log file</returns>
         public static Logfile GetLogfile(Logfiles logfile)
         {
-            Logfile fileToGet = null;
-
             //assign it here first to make sure it's null
             switch (logfile)
             {
                 case Logfiles.Application:
-                    fileToGet = ApplicationLogfile;
-                    break;
+                    return ApplicationLogfile;
                 case Logfiles.Installer:
-                    fileToGet = InstallLogfile;
-                    break;
+                    return InstallLogfile;
                 case Logfiles.Uninstaller:
-                    fileToGet = UninstallLogfile;
-                    break;
+                    return UninstallLogfile;
                 case Logfiles.Editor:
-                    fileToGet = EditorLogfile;
-                    break;
+                    return EditorLogfile;
                 case Logfiles.PatchDesigner:
-                    fileToGet = PatcherLogfile;
-                    break;
+                    return PatcherLogfile;
                 case Logfiles.Updater:
-                    fileToGet = UpdaterLogfile;
-                    break;
+                    return UpdaterLogfile;
+                case Logfiles.AutomationRunner:
+                    return AutomationLogfile;
             }
-
-            return fileToGet;
+            return null;
         }
 
         /// <summary>
@@ -214,18 +219,21 @@ namespace RelhaxModpack
             switch (file)
             {
                 case Logfiles.Installer:
-                    return InstallLogfile == null ? true : false;
+                    return InstallLogfile == null;
                 case Logfiles.Uninstaller:
-                    return UninstallLogfile == null ? true : false;
+                    return UninstallLogfile == null;
                 case Logfiles.Editor:
-                    return EditorLogfile == null ? true : false;
+                    return EditorLogfile == null;
                 case Logfiles.PatchDesigner:
-                    return PatcherLogfile == null ? true : false;
+                    return PatcherLogfile == null;
                 case Logfiles.Updater:
-                    return UpdaterLogfile == null ? true : false;
+                    return UpdaterLogfile == null;
                 case Logfiles.Application:
+                    return ApplicationLogfile == null;
+                case Logfiles.AutomationRunner:
+                    return AutomationLogfile == null;
                 default:
-                    return ApplicationLogfile == null ? true : false;
+                    throw new BadMemeException("No logfile specified");
             }
         }
 
@@ -264,10 +272,17 @@ namespace RelhaxModpack
                     return UpdaterLogfile.CanWrite;
 
                 case Logfiles.Application:
-                default:
                     if (ApplicationLogfile == null)
                         return false;
                     return ApplicationLogfile.CanWrite;
+
+                case Logfiles.AutomationRunner:
+                    if (AutomationLogfile == null)
+                        return false;
+                    return AutomationLogfile.CanWrite;
+
+                default:
+                    throw new BadMemeException("No logfile specified");
             }
         }
 
@@ -303,6 +318,10 @@ namespace RelhaxModpack
                     UpdaterLogfile.Dispose();
                     UpdaterLogfile = null;
                     break;
+                case Logfiles.AutomationRunner:
+                    AutomationLogfile.Dispose();
+                    AutomationLogfile = null;
+                    break;
             }
         }
 
@@ -325,6 +344,9 @@ namespace RelhaxModpack
                     break;
                 case Logfiles.Updater:
                     UpdaterLogfile.Write(ApplicationlogStartStop);
+                    break;
+                case Logfiles.AutomationRunner:
+                    AutomationLogfile.Write(ApplicationlogStartStop);
                     break;
             }
         }
@@ -383,25 +405,13 @@ namespace RelhaxModpack
                 case Logfiles.Uninstaller:
                     fileToWriteTo = UninstallLogfile;
                     break;
+                case Logfiles.AutomationRunner:
+                    fileToWriteTo = AutomationLogfile;
+                    break;
             }
-            //check if the application logfile is null and the application is now in a new mode
-            if(fileToWriteTo == null && CommandLineSettings.ApplicationMode != ApplicationMode.Default)
-            {
-                switch (CommandLineSettings.ApplicationMode)
-                {
-                    case ApplicationMode.Editor:
-                        fileToWriteTo = EditorLogfile;
-                        break;
-                    case ApplicationMode.PatchDesigner:
-                        fileToWriteTo = PatcherLogfile;
-                        break;
-                    case ApplicationMode.Updater:
-                        fileToWriteTo = UpdaterLogfile;
-                        break;
-                }
-            }
+
             //check if logfile is null
-            else if (fileToWriteTo == null)
+            if (fileToWriteTo == null)
             {
                 //check if it's the application logfile
                 if(fileToWriteTo == ApplicationLogfile)
@@ -847,6 +857,56 @@ namespace RelhaxModpack
         public static void Patcher(string message, LogLevel level = LogLevel.Info, params object[] args)
         {
             WriteToLog(message, Logfiles.PatchDesigner, level, args);
+        }
+
+        /// <summary>
+        /// Writes a message to the AutomationRunner logfile
+        /// </summary>
+        /// <param name="message">The message</param>
+        /// <param name="level">The level of severity included into the string format</param>
+        public static void AutomationRunner(string message, LogLevel level = LogLevel.Info)
+        {
+            WriteToLog(message, Logfiles.AutomationRunner, level);
+        }
+
+        /// <summary>
+        /// Writes a message to the AutomationRunner logfile
+        /// </summary>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
+        /// <param name="level">The level of severity included into the string format</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
+        public static void AutomationRunner(string message, LogLevel level = LogLevel.Info, params object[] args)
+        {
+            WriteToLog(message, Logfiles.AutomationRunner, level, args);
+        }
+
+        /// <summary>
+        /// Writes a message to the AutomationRunner logfile
+        /// </summary>
+        /// <param name="options">Log append options to include class name, method name, or both</param>
+        /// <param name="message">The formatted string to be passed into the string.Format() method</param>
+        /// <param name="level">The level of severity included into the string format</param>
+        /// <param name="args">The arguments to be passed into the string.Format() method</param>
+        public static void AutomationRunner(LogOptions options, string message, LogLevel level = LogLevel.Info, params object[] args)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), Logfiles.AutomationRunner, level, args);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.AutomationRunner, level, args);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), Logfiles.AutomationRunner, level, args);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, Logfiles.AutomationRunner, level, args);
+                    break;
+            }
         }
     }
 }

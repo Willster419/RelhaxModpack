@@ -54,6 +54,11 @@ namespace RelhaxModpack
         public const string PatcherSettingsFilename = "PatchSettings.xml";
 
         /// <summary>
+        /// The name of the modpack automation runner tool settings file
+        /// </summary>
+        public const string AutomationRunnerSettingsFilename = "AutomationRunnerSettings.xml";
+
+        /// <summary>
         /// The name of the selection file when used in the setting "save last installed selection"
         /// </summary>
         public const string LastSavedConfigFilename = "lastInstalledConfig.xml";
@@ -457,7 +462,7 @@ namespace RelhaxModpack
         /// The current distribution version of the application.
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
-        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Beta;
+        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Alpha;
 
         /// <summary>
         /// Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed)
