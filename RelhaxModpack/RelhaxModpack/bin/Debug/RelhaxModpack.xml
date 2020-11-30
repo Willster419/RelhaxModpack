@@ -549,6 +549,11 @@
             </summary>
             <returns>The atlas file name</returns>
         </member>
+        <member name="F:RelhaxModpack.Automation.AutomationSequencer.BranchesURL">
+            <summary>
+            The API URL to return a json format document of the current branches in the automation repository
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Database.Category">
             <summary>
             a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
@@ -4384,6 +4389,26 @@
             The application is closing now
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.MacroType">
+            <summary>
+            The enumeration representations of the level of where the macro is defined. Implies protection level of the macro
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.MacroType.ApplicationDefined">
+            <summary>
+            Macro is hard-code defined inside the application. It cannot be overridden
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.MacroType.Global">
+            <summary>
+            Macro is defined in the global macros definition file. Can be overridden with a local value.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.MacroType.Local">
+            <summary>
+            Macro is defined in the local automation sequence.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.MediaType">
             <summary>
             The supported types of media formats supported for preview in the application
@@ -8060,6 +8085,14 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="level">The level of severity included into the string format</param>
             <param name="args">The arguments to be passed into the string.Format() method</param>
+        </member>
+        <member name="M:RelhaxModpack.Logging.AutomationRunner(RelhaxModpack.Utilities.Enums.LogOptions,System.String,RelhaxModpack.Utilities.Enums.LogLevel)">
+            <summary>
+            Writes a message to the AutomationRunner logfile
+            </summary>
+            <param name="options">Log append options to include class name, method name, or both</param>
+            <param name="message">The formatted string to be passed into the string.Format() method</param>
+            <param name="level">The level of severity included into the string format</param>
         </member>
         <member name="T:RelhaxModpack.PatchSettings">
             <summary>
