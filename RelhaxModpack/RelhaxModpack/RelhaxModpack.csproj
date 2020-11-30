@@ -129,6 +129,10 @@
     <Compile Include="Atlases\Packing\OutOfSpaceException.cs" />
     <Compile Include="Atlases\Packing\RectanglePacker.cs" />
     <Compile Include="Atlases\IRelhaxUnmanagedLibrary.cs" />
+    <Compile Include="Automation\AutomationMacro.cs" />
+    <Compile Include="Automation\AutomationSequence.cs" />
+    <Compile Include="Automation\AutomationSequencer.cs" />
+    <Compile Include="Automation\AutomationTask.cs" />
     <Compile Include="Database\Category.cs" />
     <Compile Include="Database\DatabaseUtils.cs" />
     <Compile Include="Database\IDatabaseComponent.cs" />
@@ -188,6 +192,7 @@
     <Compile Include="Utilities\Enums\LogFiles.cs" />
     <Compile Include="Utilities\Enums\LogLevel.cs" />
     <Compile Include="Utilities\Enums\LogOptions.cs" />
+    <Compile Include="Utilities\Enums\MacroType.cs" />
     <Compile Include="Utilities\Enums\MediaType.cs" />
     <Compile Include="Utilities\Enums\PackageTags.cs" />
     <Compile Include="Utilities\Enums\PatchExitCode.cs" />

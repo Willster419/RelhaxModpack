@@ -15,5 +15,7 @@ namespace RelhaxModpack
         /// The name of the xml file on disk
         /// </summary>
         public string Filename { get; } = Settings.AutomationRunnerSettingsFilename;
+
+        public string SelectedBranch { get; set; } = "master";
     }
 }
