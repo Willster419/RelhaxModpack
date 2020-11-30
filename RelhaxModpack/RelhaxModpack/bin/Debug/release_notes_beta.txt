@@ -1,3 +1,10 @@
+Application version 1.2.3.0 (2020-11-29)
+https://www.virustotal.com/gui/file-analysis/NjlkNGRlOWRhM2FkOWNiZTYyMjIxZGQzMzNhNDc2MmQ6MTYwNjcwMjY1OA==/detection
+- Fixed memory leaks in the mod selection list.
+- Lots of code cleanup, optimization and refactor of the Main Window and mod selection list.
+- Fixed bugs with management of auto install timer causing high CPU usage (thanks for @JC on the discord server for reporting this).
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.2.2.0 (2020-11-22)
 https://www.virustotal.com/gui/file-analysis/YjcyMmYzM2Q1MmJmNDljOGFlZjFjMjU1OGMwNGRiZGY6MTYwNjEwODAwNg==/detection
 - Re-worked the launch process of the application so that if it is currently open, and the application is attempting to be launched in a custom mode (like editor), it won't stop because of the open main log file.
