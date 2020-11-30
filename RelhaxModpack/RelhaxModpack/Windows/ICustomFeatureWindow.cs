@@ -32,5 +32,10 @@ namespace RelhaxModpack.Windows
         /// </summary>
         /// <remarks>This changes the behavior of the logging for the editor</remarks>
         bool LaunchedFromMainWindow { get; set; }
+
+        /// <summary>
+        /// The settings definitions class for this window
+        /// </summary>
+        ISettingsFile Settings { get; }
     }
 }

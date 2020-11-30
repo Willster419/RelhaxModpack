@@ -144,6 +144,8 @@
     <Compile Include="Database\SelectablePackage.cs" />
     <Compile Include="Database\Trigger.cs" />
     <Compile Include="Database\UserFile.cs" />
+    <Compile Include="Settings\AutomationRunnerSettings.cs" />
+    <Compile Include="Settings\ISettingsFile.cs" />
     <Compile Include="UI\BoundUISettings.cs" />
     <Compile Include="UI\ClassColorset.cs" />
     <Compile Include="UI\ClassThemeDefinitions\BorderClassThemeDefinition.cs" />

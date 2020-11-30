@@ -35,7 +35,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// The name of the xml settings file for the DatabaseAutomationRunner window
         /// </summary>
-        public string SettingsFilename { get; } = Settings.AutomationRunnerSettingsFilename;
+        public string SettingsFilename { get; } = RelhaxModpack.Settings.AutomationRunnerSettingsFilename;
 
         /// <summary>
         /// The name of the logfile for the DatabaseAutomationRunner window
@@ -52,6 +52,13 @@ namespace RelhaxModpack.Windows
         /// The command line argument specified at application launch to show this window
         /// </summary>
         public string CommandLineArg { get; } = DatabaseAutomationRunnerCommandLineArg;
+
+        /// <summary>
+        /// The settings definitions class for this window
+        /// </summary>
+        public ISettingsFile Settings { get { return this.AutomationSettings; } }
+
+        private AutomationRunnerSettings AutomationSettings = null;
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {

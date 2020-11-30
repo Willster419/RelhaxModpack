@@ -1996,6 +1996,26 @@
             <param name="userFileToCopy">The object to copy</param>
             <returns>A new UserFile object with the same values and new list elements with the same values</returns>
         </member>
+        <member name="T:RelhaxModpack.AutomationRunnerSettings">
+            <summary>
+            Defines settings used in the database automation runner window
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AutomationRunnerSettings.Filename">
+            <summary>
+            The name of the xml file on disk
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.ISettingsFile">
+            <summary>
+            Represents a class that is used within windows as a serialized to/from xml settings definition holder
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.ISettingsFile.Filename">
+            <summary>
+            The name of the file on disk
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UI.BoundUISettings">
             <summary>
             The staic location for all color definitions that need to be databound by WPF
@@ -6168,6 +6188,11 @@
             The command line argument specified at application launch to show this window
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.DatabaseAutomationRunner.Settings">
+            <summary>
+            The settings definitions class for this window
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.DatabaseAutomationRunner.InitializeComponent">
             <summary>
             InitializeComponent
@@ -6199,6 +6224,11 @@
             Indicates if this editor instance was launched from the MainWindow or from command line
             </summary>
             <remarks>This changes the behavior of the logging for the editor</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Windows.ICustomFeatureWindow.Settings">
+            <summary>
+            The settings definitions class for this window
+            </summary>
         </member>
         <member name="T:RelhaxModpack.Windows.AskCloseWoTResult">
             <summary>
