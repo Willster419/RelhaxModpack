@@ -391,7 +391,6 @@ namespace RelhaxModpack.Windows
             DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
             FtpUpDownAutoCloseTimoutSlider.Value = EditorSettings.FTPUploadDownloadWindowTimeout;
             FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
-            SelectAutoUpdateWorkDirectoryTextbox.Text = EditorSettings.AutoUpdaterWorkDirectory;
         }
         #endregion
 
@@ -466,17 +465,6 @@ namespace RelhaxModpack.Windows
                 AddDatabaseObjectButton.IsEnabled = false;
             }
 
-        }
-
-        private void LaunchAutoUpdateButton_Click(object sender, RoutedEventArgs e)
-        {
-            AutoUpdatePackageWindow autoUpdatePackageWindow = new AutoUpdatePackageWindow()
-            {
-                Packages = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList),
-                WorkingDirectory = EditorSettings.AutoUpdaterWorkDirectory,
-                Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
-            };
-            autoUpdatePackageWindow.ShowDialog();
         }
 
         private void PackageDevURLDisplay_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -2762,12 +2750,6 @@ namespace RelhaxModpack.Windows
             EditorSettings.DefaultEditorSaveLocation = DefaultSaveLocationSetting.Text;
         }
 
-        private void SelectAutoUpdateWorkDirectoryTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            EditorSettings.AutoUpdaterWorkDirectory = SelectAutoUpdateWorkDirectoryTextbox.Text;
-            LaunchAutoUpdateButton.IsEnabled = !string.IsNullOrWhiteSpace(EditorSettings.AutoUpdaterWorkDirectory);
-        }
-
         private void SelectTransferWindowMovePathTextbox_TextChanged(object sender, TextChangedEventArgs e)
         {
             EditorSettings.UploadZipMoveFolder = SelectTransferWindowMovePathTextbox.Text;
@@ -2804,20 +2786,6 @@ namespace RelhaxModpack.Windows
             if (openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 SelectTransferWindowMovePathTextbox.Text = openFolderDialog.FileName;
-            }
-        }
-
-        private void SelectAutoUpdateWorkDirectoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            CommonOpenFileDialog openFolderDialog = new CommonOpenFileDialog()
-            {
-                IsFolderPicker = true,
-                Multiselect = false,
-                Title = "Select folder"
-            };
-            if (openFolderDialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                SelectAutoUpdateWorkDirectoryTextbox.Text = openFolderDialog.FileName;
             }
         }
 

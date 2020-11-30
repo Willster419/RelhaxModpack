@@ -135,17 +135,14 @@
     <Compile Include="Database\DatabaseLogic.cs" />
     <Compile Include="Database\DatabasePackage.cs" />
     <Compile Include="Database\Dependency.cs" />
-    <Compile Include="Database\DownloadInstructions.cs" />
     <Compile Include="Database\IComponentWithDependencies.cs" />
     <Compile Include="Database\IXmlSerializable.cs" />
     <Compile Include="Database\Media.cs" />
     <Compile Include="Database\PackageComparer.cs" />
     <Compile Include="Database\PackageTagsList.cs" />
     <Compile Include="Database\PackageTagsListConverter.cs" />
-    <Compile Include="Database\PatchUpdate.cs" />
     <Compile Include="Database\SelectablePackage.cs" />
     <Compile Include="Database\Trigger.cs" />
-    <Compile Include="Database\UpdateInstructions.cs" />
     <Compile Include="Database\UserFile.cs" />
     <Compile Include="UI\BoundUISettings.cs" />
     <Compile Include="UI\ClassColorset.cs" />
@@ -247,9 +244,6 @@
     <Compile Include="Shortcuts\ShortcutUtils.cs" />
     <Compile Include="Windows\AskCloseWoT.xaml.cs">
       <DependentUpon>AskCloseWoT.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\AutoUpdatePackageWindow.xaml.cs">
-      <DependentUpon>AutoUpdatePackageWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\CreateFTPFolderName.xaml.cs">
       <DependentUpon>CreateFTPFolderName.xaml</DependentUpon>
@@ -355,9 +349,6 @@
     <Compile Include="Xml\PrimitiveFileReader.cs" />
     <Compile Include="Xml\XmlBinaryHandler.cs" />
     <Compile Include="Xml\XmlUtils.cs" />
-    <Compile Include="Windows\AutoUpdateFilesInspector.xaml.cs">
-      <DependentUpon>AutoUpdateFilesInspector.xaml</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -423,10 +414,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AskCloseWoT.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\AutoUpdatePackageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -543,10 +530,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AdvancedProgress.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\AutoUpdateFilesInspector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

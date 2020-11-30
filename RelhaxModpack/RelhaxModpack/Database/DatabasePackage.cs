@@ -281,10 +281,6 @@ namespace RelhaxModpack.Database
         /// </summary>
         public string ComponentInternalName { get { return PackageName; } }
 
-        public DownloadInstructions DownloadInstructions { get; set; } = null;
-
-        public UpdateInstructions UpdateInstructions { get; set; }= null;
-
         /// <summary>
         /// String representation of the object
         /// </summary>
