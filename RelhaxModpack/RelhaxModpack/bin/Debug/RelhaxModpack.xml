@@ -549,10 +549,21 @@
             </summary>
             <returns>The atlas file name</returns>
         </member>
+        <member name="T:RelhaxModpack.Automation.AutomationSequence">
+            <summary>
+            An AutomationSequence class is a container to store a list of Automation tasks that pertain to a package.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Automation.AutomationSequencer.BranchesURL">
             <summary>
             The API URL to return a json format document of the current branches in the automation repository
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationSequencer.LoadBranchesListAsync">
+            <summary>
+            Load the list of branches from github
+            </summary>
+            <returns>A task of the asynchronous operation</returns>
         </member>
         <member name="T:RelhaxModpack.Database.Category">
             <summary>
@@ -2009,6 +2020,11 @@
         <member name="P:RelhaxModpack.AutomationRunnerSettings.Filename">
             <summary>
             The name of the xml file on disk
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.AutomationRunnerSettings.SelectedBranch">
+            <summary>
+            The name of the branch on github that the user specifies to download the automation scripts from
             </summary>
         </member>
         <member name="T:RelhaxModpack.ISettingsFile">
