@@ -19,7 +19,8 @@ namespace RelhaxUnitTests
             Logfiles.Application,
             Logfiles.Editor,
             Logfiles.PatchDesigner,
-            Logfiles.Updater
+            Logfiles.Updater,
+            Logfiles.AutomationRunner,
         };
 
         public static Logfiles[] AllLogFiles = LogFilesWithPresetFilenames.Concat(new Logfiles[] { Logfiles.Installer, Logfiles.Uninstaller }).ToArray();

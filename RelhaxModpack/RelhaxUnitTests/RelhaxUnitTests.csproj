@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Set03_TranslationsUnitTests.cs" />
     <Compile Include="Set04_DatabaseUnitTests.cs" />
+    <Compile Include="Set05_AutomationUnitTests.cs" />
     <Compile Include="UnitTestLogBase.cs" />
     <Compile Include="UnitTestHelper.cs" />
   </ItemGroup>
