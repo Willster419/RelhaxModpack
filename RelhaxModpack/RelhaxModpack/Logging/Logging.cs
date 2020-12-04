@@ -517,6 +517,60 @@ namespace RelhaxModpack
             }
         }
 
+        public static void Debug(Logfiles logfile, string message)
+        {
+            WriteToLog(message, logfile, LogLevel.Debug);
+        }
+
+        public static void Debug(Logfiles logfile, string message, params object[] args)
+        {
+            WriteToLog(message, logfile, LogLevel.Debug, args);
+        }
+
+        public static void Debug(Logfiles logfile, LogOptions options, string message)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Debug);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Debug);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), logfile, LogLevel.Debug);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, logfile, LogLevel.Debug);
+                    break;
+            }
+        }
+
+        public static void Debug(Logfiles logfile, LogOptions options, string message, params object[] args)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Debug, args);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Debug, args);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), logfile, LogLevel.Debug, args);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, logfile, LogLevel.Debug, args);
+                    break;
+            }
+        }
+
         /// <summary>
         /// Writes an information (info) level message to the application log
         /// </summary>
@@ -587,6 +641,60 @@ namespace RelhaxModpack
 
                 case LogOptions.None:
                     WriteToLog(message, Logfiles.Application, LogLevel.Info, args);
+                    break;
+            }
+        }
+
+        public static void Info(Logfiles logfile, string message)
+        {
+            WriteToLog(message, logfile, LogLevel.Info);
+        }
+
+        public static void Info(Logfiles logfile, string message, params object[] args)
+        {
+            WriteToLog(message, logfile, LogLevel.Info, args);
+        }
+
+        public static void Info(Logfiles logfile, LogOptions options, string message)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Info);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Info);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), logfile, LogLevel.Info);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, logfile, LogLevel.Info);
+                    break;
+            }
+        }
+
+        public static void Info(Logfiles logfile, LogOptions options, string message, params object[] args)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Info, args);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Info, args);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), logfile, LogLevel.Info, args);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, logfile, LogLevel.Info, args);
                     break;
             }
         }
@@ -665,6 +773,60 @@ namespace RelhaxModpack
             }
         }
 
+        public static void Warning(Logfiles logfile, string message)
+        {
+            WriteToLog(message, logfile, LogLevel.Warning);
+        }
+
+        public static void Warning(Logfiles logfile, string message, params object[] args)
+        {
+            WriteToLog(message, logfile, LogLevel.Warning, args);
+        }
+
+        public static void Warning(Logfiles logfile, LogOptions options, string message)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Warning);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Warning);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), logfile, LogLevel.Warning);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, logfile, LogLevel.Warning);
+                    break;
+            }
+        }
+
+        public static void Warning(Logfiles logfile, LogOptions options, string message, params object[] args)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Warning, args);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Warning, args);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), logfile, LogLevel.Warning, args);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, logfile, LogLevel.Warning, args);
+                    break;
+            }
+        }
+
         /// <summary>
         /// Writes an error level message to the application log
         /// </summary>
@@ -735,6 +897,60 @@ namespace RelhaxModpack
 
                 case LogOptions.None:
                     WriteToLog(message, Logfiles.Application, LogLevel.Error, args);
+                    break;
+            }
+        }
+
+        public static void Error(Logfiles logfile, string message)
+        {
+            WriteToLog(message, logfile, LogLevel.Error);
+        }
+
+        public static void Error(Logfiles logfile, string message, params object[] args)
+        {
+            WriteToLog(message, logfile, LogLevel.Error, args);
+        }
+
+        public static void Error(Logfiles logfile, LogOptions options, string message)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Error);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Error);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), logfile, LogLevel.Error);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, logfile, LogLevel.Error);
+                    break;
+            }
+        }
+
+        public static void Error(Logfiles logfile, LogOptions options, string message, params object[] args)
+        {
+            switch (options)
+            {
+                case LogOptions.ClassName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Error, args);
+                    break;
+
+                case LogOptions.MethodAndClassName:
+                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), logfile, LogLevel.Error, args);
+                    break;
+
+                case LogOptions.MethodName:
+                    WriteToLog(string.Format("[{0}]: {1}", CommonUtils.GetExecutingMethodName(), message), logfile, LogLevel.Error, args);
+                    break;
+
+                case LogOptions.None:
+                    WriteToLog(message, logfile, LogLevel.Error, args);
                     break;
             }
         }

@@ -202,6 +202,7 @@
     <Compile Include="Utilities\Enums\ReturnCodes.cs" />
     <Compile Include="Utilities\Enums\SelectionTypes.cs" />
     <Compile Include="Utilities\Enums\SelectionView.cs" />
+    <Compile Include="Utilities\Enums\AutomationRunMode.cs" />
     <Compile Include="Utilities\Enums\UIThemes.cs" />
     <Compile Include="Utilities\Enums\UninstallModes.cs" />
     <Compile Include="Utilities\Enums\UpdateTypes.cs" />
