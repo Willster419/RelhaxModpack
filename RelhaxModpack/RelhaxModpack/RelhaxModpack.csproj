@@ -178,6 +178,7 @@
     <Compile Include="UI\UiUtils.cs" />
     <Compile Include="UI\WindowColorset.cs" />
     <Compile Include="UI\ZoomBorder.cs" />
+    <Compile Include="Utilities\ClassEventArgs\LogMessageEventArgs.cs" />
     <Compile Include="Utilities\Enums\ApplicationMode.cs" />
     <Compile Include="Utilities\Enums\ApplicationVersions.cs" />
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />

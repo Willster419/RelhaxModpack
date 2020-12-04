@@ -14,6 +14,7 @@ using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Patches;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Utilities.ClassEventArgs;
 
 namespace RelhaxModpack.Windows
 {
@@ -953,13 +954,13 @@ namespace RelhaxModpack.Windows
             Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
-        private void Logging_OnLoggingUIThreadReport(string message)
+        private void Logging_OnLoggingUIThreadReport(object sender, LogMessageEventArgs e)
         {
             //https://www.tutorialspoint.com/csharp/csharp_delegates.htm
             //https://docs.microsoft.com/en-us/dotnet/api/system.windows.threading.dispatcher.invoke?redirectedfrom=MSDN&view=netframework-4.6.1#examples
             //https://stackoverflow.com/questions/1951927/events-in-c-sharp-definition-and-example
             //https://stackoverflow.com/questions/4936459/dispatcher-begininvoke-cannot-convert-lambda-to-system-delegate
-            Dispatcher.BeginInvoke(new Action(() => { LogOutput.AppendText(message + Environment.NewLine); }));
+            Dispatcher.BeginInvoke(new Action(() => { LogOutput.AppendText(e.Message + Environment.NewLine); }));
         }
         #endregion
 
