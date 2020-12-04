@@ -3101,12 +3101,12 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
-
+        /*
         ~ModSelectionList()
         {
 
         }
-
+        */
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -3117,11 +3117,6 @@ namespace RelhaxModpack.Windows
                     if (loadingProgress != null)
                         loadingProgress = null;
 
-                    if (UserCategory != null)
-                    {
-                        UserCategory.Dispose();
-                        UserCategory = null;
-                    }
                     if (p != null)
                         p = null;
 
@@ -3148,28 +3143,37 @@ namespace RelhaxModpack.Windows
                     if (OnSelectionListReturn != null)
                         OnSelectionListReturn = null;
 
-                    if (GlobalDependencies != null)
+                    if (!continueInstallation)
                     {
-                        foreach (DatabasePackage package in GlobalDependencies)
-                            package.Dispose();
-                        GlobalDependencies.Clear();
-                        GlobalDependencies = null;
-                    }
+                        if (UserCategory != null)
+                        {
+                            UserCategory.Dispose();
+                            UserCategory = null;
+                        }
 
-                    if (Dependencies != null)
-                    {
-                        foreach (Dependency dependency in Dependencies)
-                            dependency.Dispose();
-                        Dependencies.Clear();
-                        Dependencies = null;
-                    }
+                        if (GlobalDependencies != null)
+                        {
+                            foreach (DatabasePackage package in GlobalDependencies)
+                                package.Dispose();
+                            GlobalDependencies.Clear();
+                            GlobalDependencies = null;
+                        }
 
-                    if (ParsedCategoryList != null)
-                    {
-                        foreach (Category category in ParsedCategoryList)
-                            category.Dispose();
-                        ParsedCategoryList.Clear();
-                        ParsedCategoryList = null;
+                        if (Dependencies != null)
+                        {
+                            foreach (Dependency dependency in Dependencies)
+                                dependency.Dispose();
+                            Dependencies.Clear();
+                            Dependencies = null;
+                        }
+
+                        if (ParsedCategoryList != null)
+                        {
+                            foreach (Category category in ParsedCategoryList)
+                                category.Dispose();
+                            ParsedCategoryList.Clear();
+                            ParsedCategoryList = null;
+                        }
                     }
                 }
 

@@ -2794,6 +2794,38 @@ namespace RelhaxModpack
                         }
                         InstallerCreatedTasks = null;
                     }
+                    
+                    if (UserPackagesToInstall != null)
+                    {
+                        foreach (DatabasePackage package in UserPackagesToInstall)
+                            package.Dispose();
+                        UserPackagesToInstall.Clear();
+                        UserPackagesToInstall = null;
+                    }
+
+                    if (GlobalDependencies != null)
+                    {
+                        foreach (DatabasePackage package in GlobalDependencies)
+                            package.Dispose();
+                        GlobalDependencies.Clear();
+                        GlobalDependencies = null;
+                    }
+
+                    if (Dependencies != null)
+                    {
+                        foreach (Dependency dependency in Dependencies)
+                            dependency.Dispose();
+                        Dependencies.Clear();
+                        Dependencies = null;
+                    }
+
+                    if (ParsedCategoryList != null)
+                    {
+                        foreach (Category category in ParsedCategoryList)
+                            category.Dispose();
+                        ParsedCategoryList.Clear();
+                        ParsedCategoryList = null;
+                    }
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

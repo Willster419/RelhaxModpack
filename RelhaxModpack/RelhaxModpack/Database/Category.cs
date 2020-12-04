@@ -201,7 +201,7 @@ namespace RelhaxModpack.Database
                     {
                         if (Packages.Count > 0)
                         {
-                            foreach (SelectablePackage package in Packages)
+                            foreach (SelectablePackage package in GetFlatPackageList())
                                 package.Dispose();
                         }
                         Packages.Clear();
