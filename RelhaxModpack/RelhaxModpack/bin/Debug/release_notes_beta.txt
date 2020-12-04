@@ -1,3 +1,9 @@
+Application version 1.2.3.1 (2020-12-04)
+https://www.virustotal.com/gui/file-analysis/NjkyNWE4NjE1YmVhZTg4ZDE2NDZjMDIzOTQ1NzJiMTg6MTYwNzEwOTQyNQ==/detection
+- Fixed installation failing on a null reference exception.
+- Minor updates to internal tools.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.2.3.0 (2020-11-29)
 https://www.virustotal.com/gui/file-analysis/NjlkNGRlOWRhM2FkOWNiZTYyMjIxZGQzMzNhNDc2MmQ6MTYwNjcwMjY1OA==/detection
 - Fixed memory leaks in the mod selection list.
