@@ -641,17 +641,17 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
-        private async void UpdateApplicationV2UploadManagerInfo(object sender, RoutedEventArgs e)
+        private async void UpdateApplicationV2UploadManagerVersion(object sender, RoutedEventArgs e)
         {
             ToggleUI((TabController.SelectedItem as TabItem), false);
-            ReportProgress("Running upload manager_info.xml to bigmods");
+            ReportProgress(string.Format("Running upload {0} to bigmods", Settings.ManagerVersion));
             if (!(bool)SelectManagerInfoXml.ShowDialog())
             {
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
 
-            ReportProgress("Upload manager_info.xml");
+            ReportProgress("Upload " + Settings.ManagerVersion);
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
                 await client.UploadFileTaskAsync(PrivateStuff.BigmodsFTPModpackManager + Path.GetFileName(SelectManagerInfoXml.FileName), SelectManagerInfoXml.FileName);

@@ -66,7 +66,7 @@
                         <TextBox x:Name="UpdateApplicationV2Step6"  Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file in database repo and commit"/>
                         <Button x:Name="UpdateApplicationV2Step7a"  Content="Step 7a: Upload RelhaxModpack.exe" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationStable"/>
                         <Button x:Name="UpdateApplicationV2Step7b"  Content="Step 7b: Upload RelhaxModpackBeta.exe" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationBeta"/>
-                        <Button x:Name="UpdateApplicationV2Step8"   Content="Step 8: Upload manager_info.xml" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadManagerInfo"/>
+                        <Button x:Name="UpdateApplicationV2Step8"   Content="Step 8: Upload manager_version.xml" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadManagerVersion"/>
                         <Button x:Name="UpdateApplicationV2Step9"   Content="Step 9: Run script CreateUpdatePackages.php" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateUpdatePackages"/>
                         <Button x:Name="UpdateApplicationV2Step10"  Content="Step 10: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoBigmods"/>
                         <TextBox x:Name="UpdateApplicationV2Step11" Height="23" TextWrapping="Wrap" Text="Step 11: Post update notes on discord and forums"/>
