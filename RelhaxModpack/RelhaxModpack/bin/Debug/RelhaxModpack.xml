@@ -4043,6 +4043,46 @@
             <param name="item">The item to test</param>
             <returns>True if the item is of StretchingTreeViewItem class, false otherwise</returns>
         </member>
+        <member name="T:RelhaxModpack.Utilities.ClassEventArgs.LogMessageEventArgs">
+            <summary>
+            Event argument class when a log message is sent to a subscribed event
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.LogMessageEventArgs.Message">
+            <summary>
+            The complete message that was written to text file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.LogMessageEventArgs.LogLevel">
+            <summary>
+            The log level from the method call
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs">
+            <summary>
+            Event args returned to the editor for when an FTP upload or download is complete
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.Package">
+            <summary>
+            The package that was just uploaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.UploadedFilename">
+            <summary>
+            The path to the file that was uploaded or downloaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.UploadedFilepathOnline">
+            <summary>
+            The FTP path to the field that was uploaded or downloaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.TransferMode">
+            <summary>
+            The Transfer mode that was used for the upload or download
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.ApplicationMode">
             <summary>
             The primary functional modes the application can run in
@@ -4690,6 +4730,21 @@
             Default WPF V2 style
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.AutomationRunMode">
+            <summary>
+            The run mode of the automation sequencer
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationRunMode.Interactive">
+            <summary>
+            Gui run mode. Will not stop on errors
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationRunMode.Batch">
+            <summary>
+            Batch run mode. Will not stop on errors inside an automation script
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.UIThemes">
             <summary>
             The list of different types of themes in the application
@@ -4738,31 +4793,6 @@
         <member name="F:RelhaxModpack.Utilities.Enums.XmlLoadType.FromString">
             <summary>
             loading Xml from a text string
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs">
-            <summary>
-            Event args returned to the editor for when an FTP upload or download is complete
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.Package">
-            <summary>
-            The package that was just uploaded
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.UploadedFilename">
-            <summary>
-            The path to the file that was uploaded or downloaded
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.UploadedFilepathOnline">
-            <summary>
-            The FTP path to the field that was uploaded or downloaded
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs.TransferMode">
-            <summary>
-            The Transfer mode that was used for the upload or download
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.FileUtils">
@@ -7647,7 +7677,8 @@
             <summary>
             Delegate for allowing method callback when the logfile writes to disk
             </summary>
-            <param name="message">The formatted message that was written to the logfile</param>
+            <param name="sender">The logfile instance object</param>
+            <param name="e">The message and log level event argument</param>
         </member>
         <member name="T:RelhaxModpack.Logfile">
             <summary>
