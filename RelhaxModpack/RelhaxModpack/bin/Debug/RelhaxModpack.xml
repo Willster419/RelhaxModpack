@@ -565,6 +565,22 @@
             </summary>
             <returns>A task of the asynchronous operation</returns>
         </member>
+        <member name="T:RelhaxModpack.Automation.IDownloadTask">
+            <summary>
+            A task that implements this interface implies that it will always have a destination location for the resultant file
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Common.IComponentWithID">
+            <summary>
+            An interface to allow a unique identifier for the given component. Used mostly for identifying a broken or incorrectly parsed component from a log statement
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Common.IComponentWithID.ComponentInternalName">
+            <summary>
+            The internal ID of the component. Can be anything used to identify it.
+            </summary>
+            <remarks>When a databasePackage, the internal packageName. When category, the category name.</remarks>
+        </member>
         <member name="T:RelhaxModpack.Database.Category">
             <summary>
             a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
@@ -985,11 +1001,6 @@
         <member name="T:RelhaxModpack.Database.IDatabaseComponent">
             <summary>
             An interface for all components in the database
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.IDatabaseComponent.ComponentInternalName">
-            <summary>
-            When a databasePackage, the internal packageName. When category, the category name
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.IDatabaseComponent.EditorTreeViewItem">
@@ -5578,7 +5589,7 @@
             <param name="newObject">The new value type object created</param>
             <returns>False if the value could not be set, true otherwise</returns>
         </member>
-        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetListEntries(RelhaxModpack.Database.IDatabaseComponent,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement})">
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetListEntries(RelhaxModpack.Common.IComponentWithID,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement},System.String,System.Collections.Generic.Dictionary{System.String,System.Type})">
             <summary>
             Creates all database entries in a list property, parsing each list entry object by xmlListItems
             </summary>
@@ -7562,6 +7573,14 @@
             for the folder version: //modInfoAlpha.xml/@version
             </remarks>
         </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlStringFromXPath(System.Xml.Linq.XDocument,System.String)">
+            <summary>
+            Get a string value of the xml element or attribute inner text
+            </summary>
+            <param name="doc">The XDocument to get the value from</param>
+            <param name="xpath">The xpath search term</param>
+            <returns>The xpath return result, null if no value or failed expression</returns>
+        </member>
         <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodeFromXPath(System.String,System.String)">
             <summary>
             Get an Xml node value given an Xml path
@@ -7586,6 +7605,14 @@
             <param name="doc">The XmlDocument object to search</param>
             <param name="xpath">The xpath string</param>
             <returns>The Xml node object of the search result, or null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXNodeFromXpath(System.Xml.Linq.XDocument,System.String)">
+            <summary>
+            Get an Xml node value given an Xml path
+            </summary>
+            <param name="doc">The XmlDocument object to search</param>
+            <param name="xpath">The xpath string</param>
+            <returns>The XPathNavigator node of the search result, or null</returns>
         </member>
         <member name="M:RelhaxModpack.Xml.XmlUtils.GetXmlNodesFromXPath(System.String,System.String)">
             <summary>
@@ -7613,6 +7640,14 @@
             <returns>The node list of matching results, or null</returns>
             <remarks>XmlElement and XmlAttribute inherit from XmlNode</remarks> 
         </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.GetXNodesFromXpath(System.Xml.Linq.XDocument,System.String)">
+            <summary>
+            Get a List of XPathNavigators that match given an Xml path
+            </summary>
+            <param name="doc">The XmlDocument to search</param>
+            <param name="xpath">The xml path string</param>
+            <returns>The node list of matching results, or null</returns>
+        </member>
         <member name="M:RelhaxModpack.Xml.XmlUtils.DocumentToXDocument(System.Xml.XmlDocument)">
             <summary>
             Convert an XmlDocument to an XDocument
@@ -7620,6 +7655,13 @@
             <param name="doc">The XmlDocument to convert</param>
             <returns>The converted XDocument</returns>
             <remarks>See https://blogs.msdn.microsoft.com/xmlteam/2009/03/31/converting-from-xmldocument-to-xdocument/ </remarks>
+        </member>
+        <member name="M:RelhaxModpack.Xml.XmlUtils.ElementToXElement(System.Xml.XmlElement)">
+            <summary>
+            Convert an XmlElement to an XElement
+            </summary>
+            <param name="element">The element to convert to XElement</param>
+            <returns>The converted XElement</returns>
         </member>
         <member name="M:RelhaxModpack.Xml.XmlUtils.LoadXDocument(System.String,RelhaxModpack.Utilities.Enums.XmlLoadType)">
             <summary>
