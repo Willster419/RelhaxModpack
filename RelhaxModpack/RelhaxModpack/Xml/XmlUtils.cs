@@ -124,7 +124,6 @@ namespace RelhaxModpack.Xml
         /// </remarks>
         public static string GetXmlStringFromXPath(XmlDocument doc, string xpath)
         {
-            //set to something dumb for temporary purposes
             XmlNode result;
             try
             {
@@ -137,6 +136,27 @@ namespace RelhaxModpack.Xml
             if (result == null)
                 return null;
             return result.InnerText;
+        }
+
+        /// <summary>
+        /// Get a string value of the xml element or attribute inner text
+        /// </summary>
+        /// <param name="doc">The XDocument to get the value from</param>
+        /// <param name="xpath">The xpath search term</param>
+        /// <returns>The xpath return result, null if no value or failed expression</returns>
+        public static string GetXmlStringFromXPath(XDocument doc, string xpath)
+        {
+            string result;
+            try
+            {
+                XPathNavigator navigator = doc.CreateNavigator();
+                result = navigator.SelectSingleNode(xpath).Value;
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -194,6 +214,27 @@ namespace RelhaxModpack.Xml
           if (result == null)
               return null;
           return result;
+        }
+
+        /// <summary>
+        /// Get an Xml node value given an Xml path
+        /// </summary>
+        /// <param name="doc">The XmlDocument object to search</param>
+        /// <param name="xpath">The xpath string</param>
+        /// <returns>The XPathNavigator node of the search result, or null</returns>
+        public static XPathNavigator GetXNodeFromXpath(XDocument doc, string xpath)
+        {
+            XPathNavigator node;
+            try
+            {
+                XPathNavigator navigator = doc.CreateNavigator();
+                node = navigator.SelectSingleNode(xpath);
+                return node.NodeType == XPathNodeType.Attribute || node.NodeType == XPathNodeType.Element ? node : null;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -256,6 +297,32 @@ namespace RelhaxModpack.Xml
           }
           return results;
         }
+
+        /// <summary>
+        /// Get a List of XPathNavigators that match given an Xml path
+        /// </summary>
+        /// <param name="doc">The XmlDocument to search</param>
+        /// <param name="xpath">The xml path string</param>
+        /// <returns>The node list of matching results, or null</returns>
+        public static List<XPathNavigator> GetXNodesFromXpath(XDocument doc, string xpath)
+        {
+            List<XPathNavigator> nodeList = new List<XPathNavigator>();
+            try
+            {
+                XPathNavigator navigator = doc.CreateNavigator();
+                XPathNodeIterator iterator = navigator.Select(xpath);
+                foreach (XPathNavigator node in iterator)
+                {
+                    if (node.NodeType == XPathNodeType.Attribute || node.NodeType == XPathNodeType.Element)
+                        nodeList.Add(node);
+                }
+                return nodeList;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         #endregion
 
         #region Other Xml stuffs
@@ -270,6 +337,18 @@ namespace RelhaxModpack.Xml
             if (doc == null)
                 return null;
             return XDocument.Parse(doc.OuterXml,LoadOptions.SetLineInfo);
+        }
+
+        /// <summary>
+        /// Convert an XmlElement to an XElement
+        /// </summary>
+        /// <param name="element">The element to convert to XElement</param>
+        /// <returns>The converted XElement</returns>
+        public static XElement ElementToXElement(XmlElement element)
+        {
+            if (element == null)
+                throw new NullReferenceException();
+            return XElement.Parse(element.OuterXml, LoadOptions.PreserveWhitespace);
         }
 
         /// <summary>

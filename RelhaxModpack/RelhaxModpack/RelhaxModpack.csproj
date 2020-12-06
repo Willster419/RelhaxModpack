@@ -133,6 +133,12 @@
     <Compile Include="Automation\AutomationSequence.cs" />
     <Compile Include="Automation\AutomationSequencer.cs" />
     <Compile Include="Automation\AutomationTask.cs" />
+    <Compile Include="Automation\DownloadBrowserTask.cs" />
+    <Compile Include="Automation\DownloadHtmlTask.cs" />
+    <Compile Include="Automation\DownloadStaticTask.cs" />
+    <Compile Include="Automation\IDownloadTask.cs" />
+    <Compile Include="Automation\ShellExecuteTask.cs" />
+    <Compile Include="Common\IComponentWithID.cs" />
     <Compile Include="Database\Category.cs" />
     <Compile Include="Database\DatabaseUtils.cs" />
     <Compile Include="Database\IDatabaseComponent.cs" />

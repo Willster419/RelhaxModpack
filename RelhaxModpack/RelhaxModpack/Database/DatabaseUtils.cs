@@ -457,7 +457,7 @@ namespace RelhaxModpack.Database
                         continue;
                     }
 
-                    //if it's a package entry, we need to recursivly procsses it
+                    //if it's a package entry, we need to recursively processes it
                     if (databasePackageObject is SelectablePackage throwAwayPackage && elementName.Equals(nameof(throwAwayPackage.Packages)))
                     {
                         //need hard code special case for Packages

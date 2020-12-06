@@ -26,6 +26,8 @@ namespace RelhaxModpack.Automation
 
         public List<AutomationMacro> GlobalMacros = null;
 
+        public List<AutomationMacro> ApplicationMacros = null;
+
         public List<AutomationSequence> AutomationSequences = null;
 
         public AutomationRunnerSettings AutomationRunnerSettings = null;
@@ -130,11 +132,18 @@ namespace RelhaxModpack.Automation
                 Logging.Debug(Logfiles.AutomationRunner, "Added automation sequence URL: {0}", AutomationSequences.Last().SequenceDownloadUrl);
             }
 
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence from its download URL");
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence xml document from its download URL");
             foreach (AutomationSequence automationSequence in AutomationSequences)
             {
-                Logging.Info(Logfiles.AutomationRunner, "Parsing automation sequence for package {0}", automationSequence.Package.PackageName);
-                //TODO
+                Logging.Info(Logfiles.AutomationRunner, "Load automation sequence xml for package {0}", automationSequence.Package.PackageName);
+                await automationSequence.LoadAutomationXmlAsync();
+            }
+
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence from xml to class objects");
+            foreach (AutomationSequence automationSequence in AutomationSequences)
+            {
+                Logging.Info(Logfiles.AutomationRunner, "Load automation sequence data for package {0}", automationSequence.Package.PackageName);
+                automationSequence.ParseAutomationTasks();
             }
 
             return true;

@@ -25,6 +25,7 @@ using Newtonsoft.Json;
 using RelhaxModpack.Utilities.Enums;
 using System.Xml.Linq;
 using System.Collections;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Utilities
 {
@@ -1045,14 +1046,19 @@ namespace RelhaxModpack.Utilities
         /// <param name="databasePackageObject">The database package object with the list property, for example SelectablePackage</param>
         /// <param name="listPropertyInfo">The property metadata/info about the list property, for example Medias</param>
         /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
-        public static void SetListEntries(IDatabaseComponent databasePackageObject, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
+        public static void SetListEntries(IComponentWithID databasePackageObject, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems, string customTypeAttributeName = null, Dictionary<string, Type> typeMapper = null)
         {
+            bool customTyping = !(string.IsNullOrEmpty(customTypeAttributeName));
+            if (customTyping && typeMapper == null)
+                throw new NullReferenceException();
+
             //get the list interfaced component
             IList listProperty = listPropertyInfo.GetValue(databasePackageObject) as IList;
 
-            //we now have the empty list, now get type of list it is
+            //we now have the empty list, now get type of list it is, unless we have a dictionary to map it
+            Type listObjectType = null;
             //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
-            Type listObjectType = listProperty.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
+            if (!customTyping) listObjectType = listProperty.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
                 .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
 
             //create the tracking lists for unknown and missing elements out here as null for first time init later
@@ -1075,8 +1081,20 @@ namespace RelhaxModpack.Utilities
                     }
                 }
 
+                //if we're doing custom typing, then get the type based on the attribute name
+                if (customTyping)
+                {
+                    string typeResult = listElement.Attribute(customTypeAttributeName).Value;
+                    if (string.IsNullOrEmpty(typeResult))
+                        throw new BadMemeException("typeResult is null or empty - invalid attribute name");
+                    if (!typeMapper.ContainsKey(typeResult))
+                        throw new BadMemeException(string.Format("typeResult {0} does not exist in dictionary", typeResult));
+                    listObjectType = typeMapper[typeResult];
+                }
+                object listEntryObject = Activator.CreateInstance(listObjectType);
+
                 //make sure object type is properly implemented into serialization system
-                if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
+                if (!(listEntryObject is IXmlSerializable listEntry))
                     throw new BadMemeException("Type of this list is not of IXmlSerializable");
 
                 //assign missing attributes if not done already
@@ -1144,7 +1162,7 @@ namespace RelhaxModpack.Utilities
                 }
                 foreach (string unknownAttribute in unknownAttributes)
                 {
-                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Unknown xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
                 }
                 foreach (string unknownElement in unknownElements)
                 {
