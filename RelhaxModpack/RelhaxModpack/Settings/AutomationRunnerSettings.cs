@@ -20,5 +20,10 @@ namespace RelhaxModpack
         /// The name of the branch on github that the user specifies to download the automation scripts from
         /// </summary>
         public string SelectedBranch { get; set; } = "master";
+
+        /// <summary>
+        /// Toggle to dump the parsed macros to the log file before every sequence run
+        /// </summary>
+        public bool DumpParsedMacrosPerSequenceRun { get; set; } = false;
     }
 }

@@ -12,5 +12,7 @@ namespace RelhaxModpack.Automation
     public interface IDownloadTask
     {
         string DestinationPath { get; set; }
+
+        string Url { get; set; }
     }
 }

@@ -23,19 +23,21 @@ namespace RelhaxModpack.Automation
     {
         public AutomationSequencer AutomationSequencer { get; set; } = null;
 
-        public List<AutomationTask> AutomationTasks { get; set; } = null;
+        public List<AutomationTask> AutomationTasks { get; } = new List<AutomationTask>();
 
         public DatabasePackage Package { get; set; } = null;
 
         public string SequenceDownloadUrl { get; set; } = string.Empty;
 
-        public List<AutomationMacro> LocalMacroList { get; set;} = null;
+        public List<AutomationMacro> ApplicationMacros { get { return AutomationSequencer.ApplicationMacros; } }
+
+        public List<AutomationMacro> GlobalMacros { get { return AutomationSequencer.GlobalMacros; } }
+
+        public List<AutomationMacro> MacrosListForTask { get; } = new List<AutomationMacro>();
 
         private WebClient WebClient = null;
 
         private XDocument TasksDocument = null;
-
-        private List<AutomationMacro> GlobalMacros { get { return AutomationSequencer.GlobalMacros; } }
 
         private AutomationRunnerSettings AutomationRunnerSettings { get { return AutomationSequencer.AutomationRunnerSettings; } }
 
@@ -48,8 +50,6 @@ namespace RelhaxModpack.Automation
 
         public async Task LoadAutomationXmlAsync()
         {
-            if (Package == null)
-                throw new NullReferenceException();
             if (string.IsNullOrEmpty(SequenceDownloadUrl))
                 throw new BadMemeException("SequenceDownloadUrl is not set");
 
@@ -60,17 +60,54 @@ namespace RelhaxModpack.Automation
 
         public bool ParseAutomationTasks()
         {
-            if (Package == null)
-                throw new NullReferenceException();
-            if (string.IsNullOrEmpty(SequenceDownloadUrl))
-                throw new BadMemeException("SequenceDownloadUrl is not set");
-
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Getting list and parsing of automation tasks");
-            XPathNavigator result = XmlUtils.GetXNodeFromXpath(TasksDocument, "");
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Getting list and parsing of automation tasks");
+            XPathNavigator result = XmlUtils.GetXNodeFromXpath(TasksDocument, "/AutomationSequence/TaskDefinitions");
             XElement automationTaskHolder =  XElement.Parse(result.OuterXml);
             PropertyInfo listPropertyInfo = AutomationTasks.GetType().GetProperty(nameof(AutomationTasks));
-            CommonUtils.SetListEntries(this, listPropertyInfo, automationTaskHolder.Elements(), AutomationTask.AttributeNameForMapping, AutomationTask.TaskTypeMapper);
+            try
+            {
+                CommonUtils.SetListEntries(this, listPropertyInfo, automationTaskHolder.Elements(), AutomationTask.AttributeNameForMapping, AutomationTask.TaskTypeMapper);
+            }
+            catch (Exception ex)
+            {
+                Logging.AutomationRunner(ex.ToString(), LogLevel.Exception);
+                return false;
+            }
 
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Configuration of any additional properties for each task");
+            foreach (AutomationTask task in AutomationTasks)
+            {
+                task.AutomationSequence = this;
+                task.PreProcessingHook();
+            }
+
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Finish parsing of tasks");
+            return true;
+        }
+
+        public async Task<bool> RunTasksAsync()
+        {
+            if (Package == null || AutomationSequencer == null || AutomationRunnerSettings == null)
+                throw new NullReferenceException();
+
+            Logging.Debug(Logfiles.AutomationRunner, "Setting up macro list before task run");
+            MacrosListForTask.Clear();
+            MacrosListForTask.AddRange(ApplicationMacros);
+            foreach (AutomationMacro macro in GlobalMacros)
+            {
+                MacrosListForTask.Add(AutomationMacro.Copy(macro));
+            }
+
+            foreach (AutomationTask task in this.AutomationTasks)
+            {
+                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task: {0}", task.ID);
+                await task.ExecuteAsync();
+                if (task.ExitCode != 0)
+                {
+                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.");
+                    return false;
+                }
+            }
             return true;
         }
 
