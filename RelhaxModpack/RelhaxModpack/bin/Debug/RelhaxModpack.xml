@@ -2038,6 +2038,11 @@
             The name of the branch on github that the user specifies to download the automation scripts from
             </summary>
         </member>
+        <member name="P:RelhaxModpack.AutomationRunnerSettings.DumpParsedMacrosPerSequenceRun">
+            <summary>
+            Toggle to dump the parsed macros to the log file before every sequence run
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.ISettingsFile">
             <summary>
             Represents a class that is used within windows as a serialized to/from xml settings definition holder
@@ -4459,6 +4464,11 @@
         <member name="T:RelhaxModpack.Utilities.Enums.MacroType">
             <summary>
             The enumeration representations of the level of where the macro is defined. Implies protection level of the macro
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.MacroType.None">
+            <summary>
+            Not yet defined
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utilities.Enums.MacroType.ApplicationDefined">
