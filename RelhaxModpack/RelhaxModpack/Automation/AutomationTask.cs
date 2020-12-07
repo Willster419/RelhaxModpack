@@ -1,6 +1,7 @@
 ﻿using RelhaxModpack.Common;
 using RelhaxModpack.Database;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Windows;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace RelhaxModpack.Automation
         #region Xml serialization
         public virtual string[] PropertiesForSerializationAttributes()
         {
-            return new string[] { nameof(ID), nameof(Command) };
+            return new string[] { nameof(ID) };
         }
 
         public virtual string[] PropertiesForSerializationElements()
@@ -25,31 +26,33 @@ namespace RelhaxModpack.Automation
 
         public static Dictionary<string, Type> TaskTypeMapper { get; } = new Dictionary<string, Type>()
         {
-            {"task_command_name", typeof(AutomationTask) }
+            { DownloadStaticTask.TaskCommandName, typeof(DownloadStaticTask) }
         };
 
-        public const string AttributeNameForMapping = "name";
+        public const string AttributeNameForMapping = "Command";
         #endregion //Xml serialization
 
-        private Stopwatch ExecutionTimeStopwatch = new Stopwatch();
+        protected Stopwatch ExecutionTimeStopwatch = new Stopwatch();
 
         public AutomationSequence AutomationSequence { get; set; }
 
+        public DatabaseAutomationRunner DatabaseAutomationRunner { get { return AutomationSequence.DatabaseAutomationRunner; } }
+
         public List<AutomationMacro> Macros { get { return AutomationSequence.MacrosListForTask; } }
 
-        public string ErrorMessage { get; private set; } = string.Empty;
+        public string ErrorMessage { get; protected set; } = string.Empty;
 
-        public int ExitCode { get; private set; } = -1;
+        public int ExitCode { get; protected set; } = 0;
 
         public abstract string Command { get; }
 
         public string ID { get; set; } = string.Empty;
 
-        public long ExecutionTimeValidateCommandsMs { get; private set; } = 0;
+        public long ExecutionTimeValidateCommandsMs { get; protected set; } = 0;
 
-        public long ExecutionTimeRunTaskMs { get; private set; } = 0;
+        public long ExecutionTimeRunTaskMs { get; protected set; } = 0;
 
-        public long ExecutionTimeProcessTaskResultsMs { get; private set; } = 0;
+        public long ExecutionTimeProcessTaskResultsMs { get; protected set; } = 0;
 
         public long ExecutionTimeMs
         {
@@ -68,7 +71,7 @@ namespace RelhaxModpack.Automation
 
         public abstract void ValidateCommands();
 
-        public abstract void RunTask();
+        public abstract Task RunTask();
 
         public abstract void ProcessTaskResults();
 
@@ -92,12 +95,7 @@ namespace RelhaxModpack.Automation
             }
         }
 
-        public async Task ExecuteAsync()
-        {
-           await Task.Run(() => Execute());
-        }
-
-        public virtual void Execute()
+        public virtual async Task Execute()
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: Task start");
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ValidateCommands() start", Command);
@@ -120,7 +118,7 @@ namespace RelhaxModpack.Automation
             ExecutionTimeStopwatch.Restart();
             try
             {
-                RunTask();
+                await RunTask();
             }
             catch (Exception ex)
             {

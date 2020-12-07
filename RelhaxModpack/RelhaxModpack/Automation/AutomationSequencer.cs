@@ -13,6 +13,7 @@ using RelhaxModpack.Database;
 using System.Xml.Linq;
 using System.Reflection;
 using RelhaxModpack.Common;
+using RelhaxModpack.Windows;
 
 namespace RelhaxModpack.Automation
 {
@@ -42,6 +43,8 @@ namespace RelhaxModpack.Automation
         public bool AutomationBranchesLoaded = false;
 
         public AutomationRunMode AutomationRunMode = AutomationRunMode.Interactive;
+
+        public DatabaseAutomationRunner DatabaseAutomationRunner { get; set; } = null;
 
         private XmlDocument RootDocument = null;
 
@@ -96,49 +99,7 @@ namespace RelhaxModpack.Automation
             GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosXml, XmlLoadType.FromString);
         }
 
-        public void ResetApplicationMacros(AutomationSequence sequence)
-        {
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.ClassName, "Resetting application macros");
-            DatabasePackage package = sequence.Package;
-            SelectablePackage selectablePackage = package as SelectablePackage;
-            ApplicationMacros.Clear();
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{date}", Value = DateTime.UtcNow.ToString("yyyy-MM-dd"), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{category.name}", Value = (selectablePackage != null)? selectablePackage.ParentCategory.Name : "null", MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{name}", Value = (selectablePackage != null)? selectablePackage.NameFormatted : "null", MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{packageName}", Value = package.PackageName, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{zipfile}", Value = package.ZipFile, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{level}", Value = (selectablePackage != null)? selectablePackage.Level.ToString() : "null", MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{patchGroup}", Value = package.PatchGroup.ToString(), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{installGroup}", Value = package.InstallGroupWithOffset.ToString(), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{clientVersion}", Value = Settings.WoTClientVersion, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{onlineFolderVersion}", Value = Settings.WoTModpackOnlineFolderVersion, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{author}", Value = package.Author, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{version}", Value = package.Version, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{applicationPath}", Value = Settings.ApplicationStartupPath, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{relhaxTemp}", Value = Settings.RelhaxTempFolderPath, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{workDirectory}", Value = string.Format("{0}\\{1}", Settings.RelhaxTempFolderPath, package.PackageName), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{automationRepoRoot}", Value = AutomationXmlRepoFilebaseEscaped, MacroType = MacroType.ApplicationDefined });
-        }
-
-        public void DumpApplicationMacros()
-        {
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Dumping application parsed macros. Count = {0}", ApplicationMacros.Count);
-            foreach (AutomationMacro macro in ApplicationMacros)
-            {
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Macro: Name = {0}, Value = {1}", macro.Name, macro.Value);
-            }
-        }
-
-        public void DumpGlobalMacros()
-        {
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Dumping global parsed macros. Count = {0}", GlobalMacros.Count);
-            foreach (AutomationMacro macro in GlobalMacros)
-            {
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Macro: Name = {0}, Value = {1}", macro.Name, macro.Value);
-            }
-        }
-
-        public async Task<bool> LoadAutomationSequences(List<DatabasePackage> packagesToRun)
+        public async Task<bool> LoadAutomationSequencesAsync(List<DatabasePackage> packagesToRun)
         {
             if (RootDocument == null)
                 throw new NullReferenceException();
@@ -189,19 +150,28 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
-        public bool ParseAutomationSequences()
+        public void ResetApplicationMacros(AutomationSequence sequence)
         {
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence from xml to class objects");
-            foreach (AutomationSequence automationSequence in AutomationSequences)
-            {
-                Logging.Info(Logfiles.AutomationRunner, "Load automation sequence data for package {0}", automationSequence.Package.PackageName);
-                if  (!automationSequence.ParseAutomationTasks())
-                {
-                    Logging.Error("Failed to parse sequence {0}, check the syntax and try again", automationSequence.ComponentInternalName);
-                    return false;
-                }
-            }
-            return true;
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.ClassName, "Resetting application macros");
+            DatabasePackage package = sequence.Package;
+            SelectablePackage selectablePackage = package as SelectablePackage;
+            ApplicationMacros.Clear();
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{date}", Value = DateTime.UtcNow.ToString("yyyy-MM-dd"), MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{category.name}", Value = (selectablePackage != null)? selectablePackage.ParentCategory.Name : "null", MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{name}", Value = (selectablePackage != null)? selectablePackage.NameFormatted : "null", MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{packageName}", Value = package.PackageName, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{zipfile}", Value = package.ZipFile, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{level}", Value = (selectablePackage != null)? selectablePackage.Level.ToString() : "null", MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{patchGroup}", Value = package.PatchGroup.ToString(), MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{installGroup}", Value = package.InstallGroupWithOffset.ToString(), MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{clientVersion}", Value = Settings.WoTClientVersion, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{onlineFolderVersion}", Value = Settings.WoTModpackOnlineFolderVersion, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{author}", Value = package.Author, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{version}", Value = package.Version, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{applicationPath}", Value = Settings.ApplicationStartupPath, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{relhaxTemp}", Value = Settings.RelhaxTempFolderPath, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{workDirectory}", Value = string.Format("{0}\\{1}", Settings.RelhaxTempFolderPath, package.PackageName), MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "{automationRepoRoot}", Value = AutomationXmlRepoFilebaseEscaped, MacroType = MacroType.ApplicationDefined });
         }
 
         public bool ParseGlobalMacros()
@@ -219,6 +189,21 @@ namespace RelhaxModpack.Automation
             {
                 Logging.AutomationRunner(ex.ToString(), LogLevel.Exception);
                 return false;
+            }
+            return true;
+        }
+
+        public bool ParseAutomationSequences()
+        {
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence from xml to class objects");
+            foreach (AutomationSequence automationSequence in AutomationSequences)
+            {
+                Logging.Info(Logfiles.AutomationRunner, "Load automation sequence data for package {0}", automationSequence.Package.PackageName);
+                if  (!automationSequence.ParseAutomationTasks())
+                {
+                    Logging.Error("Failed to parse sequence {0}, check the syntax and try again", automationSequence.ComponentInternalName);
+                    return false;
+                }
             }
             return true;
         }
@@ -257,6 +242,24 @@ namespace RelhaxModpack.Automation
 
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Sequence run finished with {0} errors.", NumErrors);
             return true;
+        }
+
+        public void DumpApplicationMacros()
+        {
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Dumping application parsed macros. Count = {0}", ApplicationMacros.Count);
+            foreach (AutomationMacro macro in ApplicationMacros)
+            {
+                Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Macro: Name = {0}, Value = {1}", macro.Name, macro.Value);
+            }
+        }
+
+        public void DumpGlobalMacros()
+        {
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Dumping global parsed macros. Count = {0}", GlobalMacros.Count);
+            foreach (AutomationMacro macro in GlobalMacros)
+            {
+                Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Macro: Name = {0}, Value = {1}", macro.Name, macro.Value);
+            }
         }
 
         public void Dispose()

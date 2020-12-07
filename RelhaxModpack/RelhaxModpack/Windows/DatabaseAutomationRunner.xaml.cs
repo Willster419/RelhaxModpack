@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,12 +25,15 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public const string DatabaseAutomationRunnerCommandLineArg = "automation-runner";
 
+        public DownloadProgressChangedEventHandler DownloadProgressChanged = null;
+
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
         public DatabaseAutomationRunner()
         {
             InitializeComponent();
+            DownloadProgressChanged = WebClient_DownloadProgressChanged;
         }
 
         /// <summary>
@@ -68,6 +72,11 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
 
+        }
+
+        private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            
         }
     }
 }

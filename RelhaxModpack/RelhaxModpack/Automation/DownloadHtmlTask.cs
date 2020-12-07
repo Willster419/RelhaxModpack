@@ -26,7 +26,7 @@ namespace RelhaxModpack.Automation
             throw new NotImplementedException();
         }
 
-        public override void RunTask()
+        public override Task RunTask()
         {
             throw new NotImplementedException();
         }

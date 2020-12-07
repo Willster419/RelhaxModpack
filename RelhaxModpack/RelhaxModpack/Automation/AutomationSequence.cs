@@ -2,9 +2,11 @@
 using RelhaxModpack.Database;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Windows;
 using RelhaxModpack.Xml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -28,6 +30,8 @@ namespace RelhaxModpack.Automation
         public DatabasePackage Package { get; set; } = null;
 
         public string SequenceDownloadUrl { get; set; } = string.Empty;
+
+        public DatabaseAutomationRunner DatabaseAutomationRunner { get { return AutomationSequencer.DatabaseAutomationRunner; } }
 
         public List<AutomationMacro> ApplicationMacros { get { return AutomationSequencer.ApplicationMacros; } }
 
@@ -63,7 +67,7 @@ namespace RelhaxModpack.Automation
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Getting list and parsing of automation tasks");
             XPathNavigator result = XmlUtils.GetXNodeFromXpath(TasksDocument, "/AutomationSequence/TaskDefinitions");
             XElement automationTaskHolder =  XElement.Parse(result.OuterXml);
-            PropertyInfo listPropertyInfo = AutomationTasks.GetType().GetProperty(nameof(AutomationTasks));
+            PropertyInfo listPropertyInfo = this.GetType().GetProperty(nameof(AutomationTasks));
             try
             {
                 CommonUtils.SetListEntries(this, listPropertyInfo, automationTaskHolder.Elements(), AutomationTask.AttributeNameForMapping, AutomationTask.TaskTypeMapper);
@@ -98,10 +102,22 @@ namespace RelhaxModpack.Automation
                 MacrosListForTask.Add(AutomationMacro.Copy(macro));
             }
 
+            Logging.Debug(Logfiles.AutomationRunner, "Setting up working directory");
+            string workingDirectory = Path.Combine(Settings.RelhaxTempFolderPath, Package.PackageName);
+            if (Directory.Exists(workingDirectory))
+            {
+                Directory.Delete(workingDirectory, true);
+                Directory.CreateDirectory(workingDirectory);
+            }
+            else
+            {
+                Directory.CreateDirectory(workingDirectory);
+            }
+
             foreach (AutomationTask task in this.AutomationTasks)
             {
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task: {0}", task.ID);
-                await task.ExecuteAsync();
+                await task.Execute();
                 if (task.ExitCode != 0)
                 {
                     Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.");
