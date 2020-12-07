@@ -172,6 +172,9 @@ namespace RelhaxModpack
                 case Logfiles.Updater:
                     UpdaterLogfile = fileToWriteTo;
                     break;
+                case Logfiles.AutomationRunner:
+                    AutomationLogfile = fileToWriteTo;
+                    break;
             }
 
             if (!fileToWriteTo.Init())
