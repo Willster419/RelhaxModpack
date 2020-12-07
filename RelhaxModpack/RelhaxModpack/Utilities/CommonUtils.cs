@@ -1051,6 +1051,8 @@ namespace RelhaxModpack.Utilities
             bool customTyping = !(string.IsNullOrEmpty(customTypeAttributeName));
             if (customTyping && typeMapper == null)
                 throw new NullReferenceException();
+            if (databasePackageObject == null || listPropertyInfo == null || xmlListItems == null)
+                throw new NullReferenceException();
 
             //get the list interfaced component
             IList listProperty = listPropertyInfo.GetValue(databasePackageObject) as IList;
@@ -1071,16 +1073,6 @@ namespace RelhaxModpack.Utilities
             //if it originates from the 
             foreach (XElement listElement in xmlListItems)
             {
-                //if it's just like a string or something then just load that
-                if (listObjectType.IsValueType)
-                {
-                    if (SetObjectValue(listObjectType, listElement.Value, out object newObject))
-                    {
-                        listProperty.Add(newObject);
-                        continue;
-                    }
-                }
-
                 //if we're doing custom typing, then get the type based on the attribute name
                 if (customTyping)
                 {
@@ -1091,6 +1083,17 @@ namespace RelhaxModpack.Utilities
                         throw new BadMemeException(string.Format("typeResult {0} does not exist in dictionary", typeResult));
                     listObjectType = typeMapper[typeResult];
                 }
+
+                //if it's just like a string or something then just load that
+                if (listObjectType.IsValueType)
+                {
+                    if (SetObjectValue(listObjectType, listElement.Value, out object newObject))
+                    {
+                        listProperty.Add(newObject);
+                        continue;
+                    }
+                }
+                
                 object listEntryObject = Activator.CreateInstance(listObjectType);
 
                 //make sure object type is properly implemented into serialization system
