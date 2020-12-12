@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation
@@ -70,6 +71,8 @@ namespace RelhaxModpack.Automation
         }
 
         public abstract void ValidateCommands();
+
+        public abstract void ProcessMacros();
 
         public abstract Task RunTask();
 
@@ -147,6 +150,19 @@ namespace RelhaxModpack.Automation
             if (!EvaluateResults("RunTask"))
                 return;
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Finished task {0}: Task end, ExecutionTimeMs: {1}", Command, ExecutionTimeMs.ToString());
+        }
+
+        protected void ProcessMacro(string argName, ref string arg)
+        {
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg {0}", argName);
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Before processing: {0}", arg);
+
+            foreach (AutomationMacro macro in Macros)
+            {
+                
+            }
+
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "After processing: {0}", arg);
         }
     }
 }

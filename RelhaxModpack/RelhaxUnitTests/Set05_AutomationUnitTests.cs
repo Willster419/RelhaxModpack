@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RelhaxModpack.Utilities.Enums;
 using System.Collections.Generic;
 using RelhaxModpack.Database;
+using System.Text.RegularExpressions;
 
 namespace RelhaxUnitTests
 {
@@ -32,7 +33,7 @@ namespace RelhaxUnitTests
             await sequencer.LoadGlobalMacrosAsync();
             List<DatabasePackage> DatabasePackages = new List<DatabasePackage>();
             DatabasePackages.Add(new SelectablePackage()
-            { 
+            {
                 UID = "123456789ABCD",
                 PackageName = "Some_rofl_op_russian_medium",
                 ParentCategory = new Category() { Name = "Cat_name" },
@@ -43,6 +44,12 @@ namespace RelhaxUnitTests
             bool runSequencesResult = await sequencer.RunSequencesAsync();
             //Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
             //Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
+        }
+
+        [TestMethod]
+        public void Test02_RegexMacroReplacementTest()
+        {
+            
         }
 
         [TestInitialize]
