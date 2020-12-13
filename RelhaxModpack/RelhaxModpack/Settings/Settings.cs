@@ -602,7 +602,7 @@ namespace RelhaxModpack
                 }
                 else if (matches.Count() == 0)
                 {
-                    Logging.Warning("no match for xml setting {0}", settings[i].Name);
+                    Logging.Warning("No match for xml setting {0}", settings[i].Name);
                 }
                 else
                 {
@@ -630,7 +630,7 @@ namespace RelhaxModpack
                         }
                         catch (Exception e)
                         {
-                            Logging.Debug("failed to load property to memory {0}{1}{2}", settingField.Name, Environment.NewLine, e.ToString());
+                            Logging.Debug("Failed to load property to memory {0}{1}{2}", settingField.Name, Environment.NewLine, e.ToString());
                         }
                     }
                     else
