@@ -1011,18 +1011,6 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            //initialize the application main logile if possible for logging potential util level exception issues
-            ReportProgress("Attempting to init the main log file for exception logging");
-            if(Logging.Init(Logfiles.Application, UpdaterErrorExceptionCatcherLogfile))
-            {
-                Logging.Info(Settings.LogSpacingLineup);
-                Logging.Info("Log file initialized for database V2 step 3 error and exception catching");
-            }
-            else
-            {
-                ReportProgress("Failed to initialize the custom application logfile. Error and exception catching will be disabled");
-            }
-
             //init stringBuilders
             StringBuilder filesNotFoundSB = new StringBuilder();
             StringBuilder databaseUpdateText = new StringBuilder();
