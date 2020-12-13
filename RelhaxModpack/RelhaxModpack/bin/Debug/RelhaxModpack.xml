@@ -7752,6 +7752,11 @@
             The date and time format for writing each line in the log file
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Logfile.IsRedirecting">
+            <summary>
+            Flag for if the log file is receiving redirections from other log file
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Logfile.CanWrite">
             <summary>
             Returns true if the fileStream is not null and can be written to, false otherwise
@@ -7903,6 +7908,22 @@
             </summary>
             <param name="logfile">The logfile enumeration of the logfile reference to return</param>
             <returns>The instance of the log file</returns>
+        </member>
+        <member name="M:RelhaxModpack.Logging.RedirectLogOutput(RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.Logfiles)">
+            <summary>
+            Re-directs log messages that are meant for one logfile, and instead get sent into another
+            </summary>
+            <param name="redirectFrom">The logfile whose messages are being redirected</param>
+            <param name="redirectTo">The logfile that will receive the redirected messages</param>
+            <returns>True if the redirection succeeds, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Logging.DisableRedirection(RelhaxModpack.Utilities.Enums.Logfiles,RelhaxModpack.Utilities.Enums.Logfiles)">
+            <summary>
+            Cancels a previous re-direction setup.
+            </summary>
+            <param name="redirectFrom">The logfile whose messages were being redirected</param>
+            <param name="redirectTo">The logfile that will no longer receive the redirected messages</param>
+            <returns>True if the redirection cancellation succeeds, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.Logging.IsLogDisposed(RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>

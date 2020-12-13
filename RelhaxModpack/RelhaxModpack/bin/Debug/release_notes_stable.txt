@@ -1,3 +1,21 @@
+Application version 1.2.4.0 (2020-12-12)
+https://www.virustotal.com/gui/file-analysis/NmE4MDJiZWVhMWJhMWI4NDMyNzhmOWI5ZjNhYTg4M2Q6MTYwNzgyMTcxOA==/detection
+- Re-worked the launch process of the application so that if it is currently open, and the application is attempting to be launched in a custom mode (like editor), it won't stop because of the open main log file.
+  - In other words, you can have multiple instance (modes) of the application open.
+- Fixed memory leaks in the Mod Selection List window.
+- Fixed bugs with management of auto install timer causing high CPU usage (thanks for @JC on the discord server for reporting this).
+- Complete re-work of the database editor transfer window to allow for identify-able cod blocks based on transfer mode (Media upload, zip file upload, zip file download). What is code debt.
+- Fixed bug of application not installing mods to the correct WoT mods and res_mods folders when in beta database, if the beta database's target version does not match the client's version.
+- Fixed bug of application crashing when global dependencies comparison list attempts to check for a global dependency package in the database that no longer exists. What is quality control.
+- Fixed bug of preview window crashing when trying to right click on a picture preview. (Thanks @heavyshot of the NA server for pointing this out)
+- Disabled spell checking of database editor textboxes. The API's implementation is awful and lags out the application.
+- Added clearing of the database editor's components undo stacks when switching to a new component to display. Helps with application lag.
+- Added feature in database editor to delete a local version of an uploaded zip file after upload, or move it to a specified folder.
+- Stability improvements for FTP integration of database editor.
+- Updated Russian (DrWeb7_1), Polish (Nullmaruzero), German (Elektrosmoker), French (Toshiro), and Spanish (LordFelix) translations. So all of them I guess. Probably should have lead with that.
+- Code organization and optimizations. Like always.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Application version 1.2.0.0 (2020-10-19)
 https://www.virustotal.com/gui/file-analysis/OTU5ODg1ZjAzZWEzYjIxMTQ3MDgxZTY3MjQyYTcyYTA6MTYwMzA5MzUxNA==/detection
 - Added a unit tests project to the code base solution. This will allow us to unit test individual software features and help catch bugs in the application before they get released to beta.

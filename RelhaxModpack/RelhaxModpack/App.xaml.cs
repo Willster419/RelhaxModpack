@@ -177,6 +177,10 @@ namespace RelhaxModpack
                     }
                     Logging.WriteHeader(Logfiles.Updater);
 
+                    //redirect application log file to the modpack toolbox
+                    if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.Updater))
+                        Logging.Error(Logfiles.Updater, LogOptions.MethodName, "Failed to redirect messages from application to modpack toolbox");
+
                     //show window
                     updater.ShowDialog();
 
@@ -202,6 +206,10 @@ namespace RelhaxModpack
                         return;
                     }
                     Logging.WriteHeader(Logfiles.Editor);
+
+                    //redirect application log file to the editor
+                    if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.Editor))
+                        Logging.Error(Logfiles.Editor, LogOptions.MethodName, "Failed to redirect messages from application to editor");
 
                     //show window
                     editor.ShowDialog();
@@ -229,6 +237,10 @@ namespace RelhaxModpack
                     }
                     Logging.WriteHeader(Logfiles.PatchDesigner);
 
+                    //redirect application log file to the patch designer
+                    if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.PatchDesigner))
+                        Logging.Error(Logfiles.PatchDesigner, LogOptions.MethodName, "Failed to redirect messages from application to patch designer");
+
                     //show window
                     patcher.ShowDialog();
 
@@ -254,6 +266,10 @@ namespace RelhaxModpack
                         return;
                     }
                     Logging.WriteHeader(Logfiles.AutomationRunner);
+
+                    //redirect application log file to the automation runner
+                    if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.AutomationRunner))
+                        Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Failed to redirect messages from application to automation runner");
 
                     //show window
                     automationRunner.ShowDialog();
