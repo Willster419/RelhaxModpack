@@ -72,7 +72,7 @@ namespace RelhaxModpack.Automation
 
         public abstract void ValidateCommands();
 
-        public abstract void ProcessMacros();
+        //public abstract void ProcessMacros();
 
         public abstract Task RunTask();
 
