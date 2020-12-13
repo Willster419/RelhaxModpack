@@ -35,6 +35,11 @@ namespace RelhaxModpack
         public string Timestamp { get; private set; }
 
         /// <summary>
+        /// Flag for if the log file is receiving redirections from other log file
+        /// </summary>
+        public bool IsRedirecting { get; set; } = false;
+
+        /// <summary>
         /// Returns true if the fileStream is not null and can be written to, false otherwise
         /// </summary>
         public bool CanWrite { get { return fileStream == null ? false : true; } }

@@ -3002,9 +3002,19 @@ namespace RelhaxModpack
                 return;
             }
             Logging.WriteHeader(Logfiles.PatchDesigner);
+
+            //redirect application log file to the patcher
+            if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.PatchDesigner))
+                Logging.Error(Logfiles.PatchDesigner, LogOptions.MethodName, "Failed to redirect messages from application to patch designer");
+
+            //run target window as dialog
             designer.ShowDialog();
 
-            //and set back to application
+            //after closed, disable redirection
+            if (!Logging.DisableRedirection(Logfiles.Application, Logfiles.PatchDesigner))
+                Logging.TryWriteToLog("Failed to cancel redirect messages from application to patch designer", Logfiles.PatchDesigner, LogLevel.Error);
+
+            //after closed, re-init application logging and set as application run mode
             CommandLineSettings.ApplicationMode = ApplicationMode.Default;
             if (!Logging.Init(Logfiles.Application))
             {
@@ -3036,8 +3046,19 @@ namespace RelhaxModpack
                 return;
             }
             Logging.WriteHeader(Logfiles.Editor);
+
+            //redirect application log file to the editor
+            if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.Editor))
+                Logging.Error(Logfiles.Editor, LogOptions.MethodName, "Failed to redirect messages from application to editor");
+
+            //run target window as dialog
             editor.ShowDialog();
 
+            //after closed, disable redirection
+            if (!Logging.DisableRedirection(Logfiles.Application, Logfiles.Editor))
+                Logging.TryWriteToLog("Failed to cancel redirect messages from application to patch editor", Logfiles.Editor, LogLevel.Error);
+
+            //after closed, re-init application logging and set as application run mode
             CommandLineSettings.ApplicationMode = ApplicationMode.Default;
             if (!Logging.Init(Logfiles.Application))
             {

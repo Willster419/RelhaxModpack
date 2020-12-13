@@ -210,6 +210,104 @@ namespace RelhaxModpack
         }
 
         /// <summary>
+        /// Re-directs log messages that are meant for one logfile, and instead get sent into another
+        /// </summary>
+        /// <param name="redirectFrom">The logfile whose messages are being redirected</param>
+        /// <param name="redirectTo">The logfile that will receive the redirected messages</param>
+        /// <returns>True if the redirection succeeds, false otherwise</returns>
+        public static bool RedirectLogOutput(Logfiles redirectFrom, Logfiles redirectTo)
+        {
+            //if redirectFrom is not null, then stop because you would loose that reference
+            //TODO: add a force option?
+            Logfile sourceLogfile = GetLogfile(redirectFrom);
+            if (sourceLogfile != null)
+            {
+                TryWriteToLog("Failed to redirect log entries from {0} to {1}: destination is not null!", redirectTo, LogLevel.Error, redirectFrom.ToString(), redirectTo.ToString());
+                return false;
+            }
+
+            //make sure redirectTo is an initialized and not null log file
+            Logfile destinationLogfile = GetLogfile(redirectTo);
+            if (destinationLogfile.IsRedirecting)
+            {
+                TryWriteToLog("Failed to redirect log entries from {0} to {1}: logfile is already redirecting!", redirectTo, LogLevel.Error, redirectFrom.ToString(), redirectTo.ToString());
+                return false;
+            }
+            if (destinationLogfile == null || !destinationLogfile.CanWrite)
+            {
+                TryWriteToLog("Failed to redirect log from instance {0}: null = {1}, CanWrite = {2}", Logfiles.Application, LogLevel.Error, redirectFrom.ToString(), (destinationLogfile == null).ToString(), destinationLogfile.CanWrite.ToString());
+                return false;
+            }
+
+            Logging.Info(redirectTo, LogOptions.MethodName, "Redirecting log entries from {0}, to {1}", redirectFrom.ToString(), redirectTo.ToString());
+            destinationLogfile.IsRedirecting = true;
+            switch (redirectFrom)
+            {
+                case Logfiles.Application:
+                    ApplicationLogfile = destinationLogfile;
+                    break;
+                case Logfiles.Installer:
+                    InstallLogfile = destinationLogfile;
+                    break;
+                case Logfiles.Uninstaller:
+                    UninstallLogfile = destinationLogfile;
+                    break;
+                case Logfiles.Editor:
+                    EditorLogfile = destinationLogfile;
+                    break;
+                case Logfiles.PatchDesigner:
+                    PatcherLogfile = destinationLogfile;
+                    break;
+                case Logfiles.Updater:
+                    UpdaterLogfile = destinationLogfile;
+                    break;
+                case Logfiles.AutomationRunner:
+                    AutomationLogfile = destinationLogfile;
+                    break;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Cancels a previous re-direction setup.
+        /// </summary>
+        /// <param name="redirectFrom">The logfile whose messages were being redirected</param>
+        /// <param name="redirectTo">The logfile that will no longer receive the redirected messages</param>
+        /// <returns>True if the redirection cancellation succeeds, false otherwise</returns>
+        public static bool DisableRedirection(Logfiles redirectFrom, Logfiles redirectTo)
+        {
+            Logfile destinationLogfile = GetLogfile(redirectTo);
+            if (destinationLogfile != null)
+                destinationLogfile.IsRedirecting = false;
+
+            switch (redirectFrom)
+            {
+                case Logfiles.Application:
+                    ApplicationLogfile = null;
+                    break;
+                case Logfiles.Installer:
+                    InstallLogfile = null;
+                    break;
+                case Logfiles.Uninstaller:
+                    UninstallLogfile = null;
+                    break;
+                case Logfiles.Editor:
+                    EditorLogfile = null;
+                    break;
+                case Logfiles.PatchDesigner:
+                    PatcherLogfile = null;
+                    break;
+                case Logfiles.Updater:
+                    UpdaterLogfile = null;
+                    break;
+                case Logfiles.AutomationRunner:
+                    AutomationLogfile = null;
+                    break;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Checks if the logfile is disposed
         /// </summary>
         /// <param name="file">The logfile to check</param>
