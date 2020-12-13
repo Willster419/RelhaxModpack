@@ -2984,7 +2984,7 @@ namespace RelhaxModpack
 
         private void LauchPatchDesigner_Click(object sender, RoutedEventArgs e)
         {
-            if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)
+            if (autoInstallPeriodicTimer != null && autoInstallPeriodicTimer.IsEnabled)
                 autoInstallPeriodicTimer.Stop();
 
             Logging.Info("Launching patch designer from MainWindow");
@@ -3018,7 +3018,7 @@ namespace RelhaxModpack
 
         private void LauchEditor_Click(object sender, RoutedEventArgs e)
         {
-            if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)
+            if (autoInstallPeriodicTimer != null && autoInstallPeriodicTimer.IsEnabled)
                 autoInstallPeriodicTimer.Stop();
 
             Logging.Info("Launching editor from MainWindow");
@@ -3027,6 +3027,7 @@ namespace RelhaxModpack
 
             CommandLineSettings.ApplicationMode = ApplicationMode.Editor;
             DatabaseEditor editor = new DatabaseEditor() { LaunchedFromMainWindow = true };
+
             //start updater logging system
             if (!Logging.Init(Logfiles.Editor))
             {
