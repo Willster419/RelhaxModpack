@@ -22,6 +22,17 @@ namespace RelhaxModpack.Automation
         }
         #endregion //Xml serialization
 
+        /// <summary>
+        /// The regex string used for macro analysis and replacement
+        /// </summary>
+        public const string MacroReplaceRegex = @"^[^{}]*(?'inner1'(?'inner2'(?'open'{)(?'inner3'[^{}]*))+(?>(?'-open'})[^{}]*)+)+(?(open)(?!))$";
+
+        public const string RegexGroupInner1 = "inner1";
+
+        public const string RegexGroupInner2 = "inner2";
+
+        public const string RegexGroupInner3 = "inner3";
+
         public string Name { get; set; } = string.Empty;
 
         public string Value { get; set; } = string.Empty;
@@ -31,6 +42,11 @@ namespace RelhaxModpack.Automation
         public static AutomationMacro Copy(AutomationMacro macroToCopy)
         {
             return new AutomationMacro() { Name = macroToCopy.Name, Value = macroToCopy.Value, MacroType = macroToCopy.MacroType };
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Name: {0}, Value: {1}, Type: {2}", Name, Value, MacroType.ToString());
         }
     }
 }
