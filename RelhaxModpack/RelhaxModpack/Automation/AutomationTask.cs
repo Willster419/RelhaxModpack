@@ -230,6 +230,52 @@ namespace RelhaxModpack.Automation
                 //this means that the regex must recurse x levels (the difference) into the string to solve the inner values first
                 Logging.Debug(Logfiles.AutomationRunner, LogOptions.None, "Inner2Count ({0}) > Inner1Count ({1}), required to recuse {2} levels to solve inner macros", inner2Count, inner1Count, countDifference);
 
+                //use the matches of inner1 to send each section into the regex engine again
+                int captureCount = 0;
+                foreach (Capture capture in result.Groups[AutomationMacro.RegexGroupInner1].Captures)
+                {
+                    string capturedValue = capture.Value;
+                    Logging.Debug(Logfiles.AutomationRunner, LogOptions.None, "Running regex on Inner1Count: {0}", capturedValue);
+                    //get a count of how many "{" characters exist in this string. If it's 1, then just run this string through and call it good
+                    //if it's more then 1, then need to parse out the extra level via a new greedy regex
+                    int numStarts = capturedValue.Count(ch_ => ch_.Equals('{'));
+                    if (numStarts > 1)
+                    {
+                        Logging.Debug(Logfiles.AutomationRunner, LogOptions.None, "This match is {0} level of brackets, split out the brackets before recursively processing", numStarts);
+                        //we need to use the new value as the 'starting value', as if it didn't have a macro around it. for example, consider:
+                        //name_{use_{date}_val}_thing
+                        //after we resolve {date}, it will become part of the name for {use_{date}_val}.
+                        //the way to do this is to treat {use_{date}_val} as a word by itself, i.e. 'use_{date}_val'
+                        Regex subRegex = new Regex(@"{.+}");
+                        Match sectionMatch = subRegex.Match(capturedValue);
+
+                        //following the example above, we have the section {use_{date}_val}
+                        //strip off the brackets and send it through
+                        string splitValue = sectionMatch.Value;
+                        splitValue = splitValue.Remove(0, 1);
+                        splitValue = splitValue.Remove(splitValue.Length - 1, 1);
+                        //use_{date}_val
+                        string innerResult = ProcessMacro(string.Format("{0}_capture{1}_level{2}", argName, captureCount, countDifference), splitValue);
+                        //use_the_date_val, if {date} = the_date
+                        innerResult = "{" + innerResult + "}";
+                        //{use_the_date_val}
+                        Regex replaceRegex2 = new Regex(sectionMatch.Value);
+                        capturedValue = replaceRegex2.Replace(capturedValue, innerResult, 1);
+                    }
+                    else if (numStarts == 0)
+                    {
+                        throw new BadMemeException("whoa. didn't see that coming.");
+                    }
+                    else
+                    {
+                        Logging.Debug(Logfiles.AutomationRunner, LogOptions.None, "This match is 1 level of brackets, perform direct recursive replacement");
+                    }
+
+                    string processedValue = ProcessMacro(string.Format("{0}_capture{1}_level{2}", argName, captureCount, countDifference), capturedValue);
+                    Regex replaceRegex = new Regex(capture.Value);
+                    arg = replaceRegex.Replace(arg, processedValue, 1);
+                    captureCount++;
+                }
             }
             else
             {

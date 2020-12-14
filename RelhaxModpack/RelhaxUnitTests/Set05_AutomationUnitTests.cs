@@ -89,7 +89,8 @@ namespace RelhaxUnitTests
                 @"name_{use_{date}}_thing.{ext}",
                 @"path\to\folder_{macro_name}\file_{macro_name}.txt",
                 @"name_{use_{date_val}}_thing_{date_val}.{ext}",
-                @"name_{use_{{date}_val}}_thing.{ext}"
+                @"name_{use_{{date}_val}}_thing.{ext}",
+                @"{use_{date}}_{{ext}_val}_{prefix}.txt"
             };
 
             List<AutomationMacro> automationMacros = new List<AutomationMacro>()
@@ -105,6 +106,7 @@ namespace RelhaxUnitTests
                 new AutomationMacro() { MacroType = MacroType.Local, Name = "date_val", Value = "a_date_value" },
                 new AutomationMacro() { MacroType = MacroType.Local, Name = "use_a_date_value", Value = "the_different_val" }, //{use_{date_val}}
                 new AutomationMacro() { MacroType = MacroType.Local, Name = "use_the_other_val", Value = "the_final_val" },//{use_{{date}_val}}
+                new AutomationMacro() { MacroType = MacroType.Local, Name = "png_val", Value = "a_png_value" } //{{ext}_val}
             };
 
             string[] regexTestsAnswers =
@@ -121,7 +123,8 @@ namespace RelhaxUnitTests
               @"name_the_other_other_val_thing.png",
               @"path\to\folder_the_macro_name\file_the_macro_name.txt",
               @"name_the_different_val_thing_a_date_value.png",
-              @"name_the_final_val_thing.png"
+              @"name_the_final_val_thing.png",
+              @"the_other_other_val_a_png_value_a_prefix_value.txt"
             };
 
             AutomationSequence sequence = new AutomationSequence();
