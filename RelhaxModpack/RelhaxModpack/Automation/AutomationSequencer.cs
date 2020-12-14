@@ -156,22 +156,22 @@ namespace RelhaxModpack.Automation
             DatabasePackage package = sequence.Package;
             SelectablePackage selectablePackage = package as SelectablePackage;
             ApplicationMacros.Clear();
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{date}", Value = DateTime.UtcNow.ToString("yyyy-MM-dd"), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{category.name}", Value = (selectablePackage != null)? selectablePackage.ParentCategory.Name : "null", MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{name}", Value = (selectablePackage != null)? selectablePackage.NameFormatted : "null", MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{packageName}", Value = package.PackageName, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{zipfile}", Value = package.ZipFile, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{level}", Value = (selectablePackage != null)? selectablePackage.Level.ToString() : "null", MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{patchGroup}", Value = package.PatchGroup.ToString(), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{installGroup}", Value = package.InstallGroupWithOffset.ToString(), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{clientVersion}", Value = Settings.WoTClientVersion, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{onlineFolderVersion}", Value = Settings.WoTModpackOnlineFolderVersion, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{author}", Value = package.Author, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{version}", Value = package.Version, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{applicationPath}", Value = Settings.ApplicationStartupPath, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{relhaxTemp}", Value = Settings.RelhaxTempFolderPath, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{workDirectory}", Value = string.Format("{0}\\{1}", Settings.RelhaxTempFolderPath, package.PackageName), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "{automationRepoRoot}", Value = AutomationXmlRepoFilebaseEscaped, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "date", Value = DateTime.UtcNow.ToString("yyyy-MM-dd"), MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "category.name", Value = (selectablePackage != null)? selectablePackage.ParentCategory.Name : "null", MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "name", Value = (selectablePackage != null)? selectablePackage.NameFormatted : "null", MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "packageName", Value = package.PackageName, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "zipfile", Value = package.ZipFile, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "level", Value = (selectablePackage != null)? selectablePackage.Level.ToString() : "null", MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "patchGroup", Value = package.PatchGroup.ToString(), MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "installGroup", Value = package.InstallGroupWithOffset.ToString(), MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "clientVersion", Value = Settings.WoTClientVersion, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "onlineFolderVersion", Value = Settings.WoTModpackOnlineFolderVersion, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "author", Value = package.Author, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "version", Value = package.Version, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "applicationPath", Value = Settings.ApplicationStartupPath, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "relhaxTemp", Value = Settings.RelhaxTempFolderPath, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "workDirectory", Value = string.Format("{0}\\{1}", Settings.RelhaxTempFolderPath, package.PackageName), MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "automationRepoRoot", Value = AutomationXmlRepoFilebaseEscaped, MacroType = MacroType.ApplicationDefined });
         }
 
         public bool ParseGlobalMacros()
