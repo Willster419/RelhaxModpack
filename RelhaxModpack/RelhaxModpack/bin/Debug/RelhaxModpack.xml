@@ -549,6 +549,11 @@
             </summary>
             <returns>The atlas file name</returns>
         </member>
+        <member name="F:RelhaxModpack.Automation.AutomationMacro.MacroReplaceRegex">
+            <summary>
+            The regex string used for macro analysis and replacement
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Automation.AutomationSequence">
             <summary>
             An AutomationSequence class is a container to store a list of Automation tasks that pertain to a package.
