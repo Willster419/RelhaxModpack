@@ -23,6 +23,12 @@ namespace RelhaxModpack.Automation
         #endregion
 
         #region Task execution
+        public override void ProcessMacros()
+        {
+            Cmd = ProcessMacro(nameof(Cmd), Cmd);
+            Wd = ProcessMacro(nameof(Wd), Wd);
+        }
+
         public override void ValidateCommands()
         {
             throw new NotImplementedException();

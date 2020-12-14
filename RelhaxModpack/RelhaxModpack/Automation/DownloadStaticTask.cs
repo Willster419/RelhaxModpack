@@ -30,6 +30,12 @@ namespace RelhaxModpack.Automation
         #endregion
 
         #region Task execution
+        public override void ProcessMacros()
+        {
+            DestinationPath = ProcessMacro(nameof(DestinationPath), DestinationPath);
+            Url = ProcessMacro(nameof(Url), Url);
+        }
+
         public override void ValidateCommands()
         {
             if (string.IsNullOrEmpty(DestinationPath) || string.IsNullOrEmpty(Url))
