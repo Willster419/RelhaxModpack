@@ -1,3 +1,8 @@
+Beta Application version 1.2.4.1 (2020-12-23)
+https://www.virustotal.com/gui/file/4aa328cb69141f67922589552311d9aabc3f8e6c92939ee77c92ae1901fdd50b/detection
+- Fixed bug with logfile handling in the modpack toolbox window.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.2.4.0 (2020-12-12)
 https://www.virustotal.com/gui/file-analysis/N2U1OTgwMmVhODRiMzY3MjkyNTQ2NDBkYTE2YTQyYTE6MTYwNzgyMTg0Mg==/detection
 - Re-worked the launch process of the application so that if it is currently open, and the application is attempting to be launched in a custom mode (like editor), it won't stop because of the open main log file.
