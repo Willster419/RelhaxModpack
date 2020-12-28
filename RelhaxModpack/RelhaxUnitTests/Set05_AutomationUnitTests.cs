@@ -127,8 +127,10 @@ namespace RelhaxUnitTests
               @"the_other_other_val_a_png_value_a_prefix_value.txt"
             };
 
+            //still need a automation sequence object to run this
             AutomationSequence sequence = new AutomationSequence();
 
+            //create a random task so we can process macros for this test
             ShellExecuteTask task = new ShellExecuteTask()
             {
                 Wd = Settings.ApplicationStartupPath,
