@@ -12,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using RelhaxModpack;
+using RelhaxModpack.Utilities.ClassEventArgs;
 
 namespace RelhaxModpack.Windows
 {
@@ -27,6 +29,8 @@ namespace RelhaxModpack.Windows
 
         public DownloadProgressChangedEventHandler DownloadProgressChanged = null;
 
+        public LoggingMessageWrite LogMessageWrite = null;
+
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
@@ -34,6 +38,7 @@ namespace RelhaxModpack.Windows
         {
             InitializeComponent();
             DownloadProgressChanged = WebClient_DownloadProgressChanged;
+            LogMessageWrite = OnLogMessageWrite;
         }
 
         /// <summary>
@@ -77,6 +82,17 @@ namespace RelhaxModpack.Windows
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             
+        }
+
+        private void OnLogMessageWrite(object sender, LogMessageEventArgs e)
+        {
+            
+        }
+
+        ~DatabaseAutomationRunner()
+        {
+            DownloadProgressChanged = null;
+            LogMessageWrite = null;
         }
     }
 }
