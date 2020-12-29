@@ -58,6 +58,8 @@ namespace RelhaxModpack.Automation
 
             using (WebClient = new WebClient())
             {
+                Logging.Info(Logfiles.AutomationRunner, "Downloading file");
+                Logging.Debug(Logfiles.AutomationRunner, "Download url = {0}, file = {1}", Url, DestinationPath);
                 //https://stackoverflow.com/questions/2953403/c-sharp-passing-method-as-the-argument-in-a-method
                 if (DatabaseAutomationRunner != null)
                     WebClient.DownloadProgressChanged += DatabaseAutomationRunner.DownloadProgressChanged;
