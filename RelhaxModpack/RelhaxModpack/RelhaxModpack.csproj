@@ -193,6 +193,7 @@
     <Compile Include="Utilities\Enums\DatabaseXmlVersion.cs" />
     <Compile Include="Utilities\Enums\DownloadTypes.cs" />
     <Compile Include="Utilities\Enums\FailCode.cs" />
+    <Compile Include="Utilities\Enums\IERegistryVersion.cs" />
     <Compile Include="Utilities\Enums\KnownFolder.cs" />
     <Compile Include="Utilities\Enums\KnownFolderFlags.cs" />
     <Compile Include="Utilities\Enums\Languages.cs" />
