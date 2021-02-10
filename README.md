@@ -29,7 +29,7 @@ _The goal of this project is to redefine what a modpack installer is, from the t
 #### Why would you use this modpack over any other inno setup template modpack?
 
 <details>
-<summary><b>Improved UI</b> — {TODO: One-liner summary}...</summary>
+<summary><b>Improved UI</b> — No more bland looking setup template screens</summary>
 	<ul>
 		<li>Instead of a giant unscrollable list of hard-to-find mods to select from, the mods are presented in tabs, each tab page being a mod catagory. Xvm has a tab page, garage stats have a page, damagelogs have a page, etc. Mods per tab are sorted alphabetically</li>
 		<li>For the first time in modpack history, there is a search feature where you can search for "that one mod" you want.</li>
@@ -48,7 +48,7 @@ _The goal of this project is to redefine what a modpack installer is, from the t
 		</ul>
 </details>
 <details>
-<summary><b>Persistence</b> — Mod selections can be saved...</summary>
+<summary><b>Persistence</b> — Mod selections can be saved</summary>
   <ul>
 		<li>Like <abbr title="Odem Mortis Community">OMC</abbr> and Aslains, your mods selection can be saved.</li>
 		<li>Unlike Aslains, you can save as many mod selections as you want, and save them where ever you like</li>
@@ -56,7 +56,7 @@ _The goal of this project is to redefine what a modpack installer is, from the t
 	</ul>
 </details>
 <details>
-<summary><b>Performance</b> — {TODO: One-liner summary}...</summary>
+<summary><b>Performance</b> — The modpack has to go fast</summary>
   <ul>
 		<li>For the first time in modpack history, the installation process is multi-threaded, meaning that it can install multiple mods at once. The install process is optimized for 8-core systems.</li>
 		<li>The loading and installation times of this modpack vs. Inno setup modpacks have been reduced by up to  <b><ins>89%</b></ins> and <b><ins>60%</b></ins> on a standard hard drive using the standard extraction mode. The times are even further reduced for those with WoT installed on an SSD using the multicore extraction mode.</li>
