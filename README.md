@@ -63,7 +63,7 @@ _The goal of this project is to redefine what a modpack installer is, from the t
 	</ul>
 </details>
 <details>
-<summary><b>Automation</b> — {TODO: One-liner summary}...</summary>
+<summary><b>Automation</b> — Install your mods with 1 click, or automatically</summary>
 	<ul>
 		<li>The modpack and be set at command line with a "/auto-install config_file_name.xml" switch to automatically install the modpack, with your preference of mods selected. In this situation, you could install without any interaction, and update all your mods in seconds.</li>
 	</ul>
