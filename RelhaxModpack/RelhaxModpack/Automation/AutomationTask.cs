@@ -102,7 +102,7 @@ namespace RelhaxModpack.Automation
 
         public async Task Execute()
         {
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: Task start");
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: Task start", Command);
 
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ProcessMacros() start", Command);
             ExecutionTimeStopwatch.Restart();
