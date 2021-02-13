@@ -171,7 +171,7 @@
                             <RadioButton x:Name="ThemeDark" Tag="ThemeDark" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ThemeDarkText" Text="Dark" TextWrapping="Wrap"/>
                             </RadioButton>
-                            <RadioButton x:Name="ThemeCustom" Tag="ThemeCustom" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True">
+                            <RadioButton x:Name="ThemeCustom" Tag="ThemeCustom" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True" IsEnabled="False">
                                 <TextBlock x:Name="ThemeCustomText" Text="Custom" TextWrapping="Wrap"/>
                             </RadioButton>
                         </StackPanel>

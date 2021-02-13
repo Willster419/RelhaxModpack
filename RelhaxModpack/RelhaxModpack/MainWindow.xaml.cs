@@ -2773,8 +2773,8 @@ namespace RelhaxModpack
                 ModpackSettings.ApplicationTheme = UIThemes.Default;
             else if ((bool)ThemeDark.IsChecked)
                 ModpackSettings.ApplicationTheme = UIThemes.Dark;
-            else if ((bool)ThemeCustom.IsChecked)
-                ModpackSettings.ApplicationTheme = UIThemes.Custom;
+            else if ((bool)ThemeCustom.IsChecked) //disabling custom theme until re-work
+                ModpackSettings.ApplicationTheme = UIThemes.Dark;
 
             //try to apply it
             UISettings.ApplyUIColorSettings(this);
@@ -2784,8 +2784,8 @@ namespace RelhaxModpack
                 ThemeDefault.IsChecked = true;
             else if (UISettings.CurrentTheme.Equals(Themes.Dark))
                 ThemeDark.IsChecked = true;
-            else if (UISettings.CurrentTheme.Equals(Themes.Custom))
-                ThemeCustom.IsChecked = true;
+            else if (UISettings.CurrentTheme.Equals(Themes.Custom)) //disabling custom theme until re-work
+                ThemeDark.IsChecked = true;
         }
 
         private void OnSaveDisabledModsInSelectionChanged(object sender, RoutedEventArgs e)
@@ -3409,8 +3409,8 @@ namespace RelhaxModpack
                 case UIThemes.Dark:
                     ThemeDark.IsChecked = true;
                     break;
-                case UIThemes.Custom:
-                    ThemeCustom.IsChecked = true;
+                case UIThemes.Custom: //disabling custom theme until re-work
+                    ThemeDark.IsChecked = true;
                     break;
             }
 
