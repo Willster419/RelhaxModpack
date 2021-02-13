@@ -206,7 +206,7 @@ namespace RelhaxModpack.Utilities
                 else
                     currentRegistryValue = -1;
 
-                Logging.Debug("RegistryCurrent: {0}, RegistryToSet: {1}", LogOptions.MethodName, currentRegistryValue, registryToSet);
+                Logging.Debug(LogOptions.MethodName, "RegistryCurrent: {0}, RegistryToSet: {1}", currentRegistryValue, registryToSet);
                 if (currentRegistryValue != registryToSet)
                 {
                     Logging.Debug("Values are not same, update registry");
