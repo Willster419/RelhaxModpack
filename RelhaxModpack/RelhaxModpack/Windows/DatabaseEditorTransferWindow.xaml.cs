@@ -201,13 +201,13 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("Countdown is > 0, starting");
                 TimeoutClose.Visibility = Visibility.Visible;
                 timer.Start();
-                TimeoutClose.Text = Countdown.ToString();
+                TimeoutClose.Text = string.Format("Closing window in {0}", Countdown.ToString());
             }
         }
 
         private void Timer_Elapsed(object sender, EventArgs e)
         {
-            TimeoutClose.Text = (--Countdown).ToString();
+            TimeoutClose.Text = string.Format("Closing window in {0}", (--Countdown).ToString());
             if (Countdown == 0)
             {
                 Logging.Editor("Countdown complete, closing the window");
