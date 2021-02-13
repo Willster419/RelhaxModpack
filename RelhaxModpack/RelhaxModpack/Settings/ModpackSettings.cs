@@ -300,7 +300,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The selection view to use
         /// </summary>
-        public static SelectionView ModSelectionView = SelectionView.DefaultV2;
+        public static SelectionView ModSelectionView = SelectionView.Legacy;
 
         /// <summary>
         /// The selected language
