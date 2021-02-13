@@ -27,8 +27,6 @@
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ExpandAllRealButton_Click" Tag="ExpandAllButton">
             <TextBlock x:Name="ExpandAllButton" Text="Expand current tab" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <TextBlock x:Name="SearchTB" HorizontalAlignment="Right" Margin="0,52,270,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" 
-                   TextAlignment="Right" Padding="3" Tag="SearchTB" Text="Search for a mod..."/>
         <ComboBox x:Name="SearchCB" Tag="SearchCB" HorizontalAlignment="Right" Margin="0,52,10,0" VerticalAlignment="Top" Width="255" DropDownOpened="SearchCB_DropDownOpened"
                   KeyUp="SearchCB_KeyUp" IsEditable="True" IsTextSearchEnabled="False" PreviewMouseDown="SearchCB_PreviewMouseDown" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}"/>
         <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" Tag="ContinueButton" >
@@ -46,6 +44,6 @@
         <Button HorizontalAlignment="Right" Margin="0,0,510,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnClearSelectionsClick" Tag="ClearSelectionsButton">
             <TextBlock x:Name="ClearSelectionsButtonLabel" Text="Clear Selections" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <CheckBox Content="This tab only" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,79,10,0" x:Name="SearchThisTabOnlyCB" Tag="SearchThisTabOnlyCB"/>
+        <CheckBox x:Name="SearchThisTabOnlyCB" Tag="SearchThisTabOnlyCB" Content="Search in this tab only" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,74,129,0"/>
     </Grid>
 </local:RelhaxWindow>

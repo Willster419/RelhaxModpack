@@ -654,10 +654,11 @@ namespace RelhaxModpack.Windows
             //UI THREAD REQUIRED (checks UI components)
             SelectionListEventArgs args = GetSelectionStatus();
 
-            //update the text on the list (~2ms)
+            //update text boxes and other text properties (~2ms)
             //UI THREAD REQUIRED
             InstallingTo.Text = string.Format(Translations.GetTranslatedString("InstallingTo"), Settings.WoTDirectory);
             InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
+            SearchCB.Text = Translations.GetTranslatedString("searchComboBoxInitMessage");
 
             //determined if the collapse and expand buttons should be visible (?ms)
             //UI THREAD REQUIRED
