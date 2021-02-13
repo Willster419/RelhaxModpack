@@ -153,6 +153,27 @@ namespace RelhaxUnitTests
 
         }
 
+        [TestMethod]
+        public async Task Test03_DownloadBrowserTaskTest()
+        {
+
+            //still need a automation sequence object to run this
+            AutomationSequence sequence = new AutomationSequence();
+
+            //create a random task so we can process macros for this test
+            DownloadBrowserTask task = new DownloadBrowserTask()
+            {
+                DestinationPath = @"downloaded_file.zip",
+                Url = "https://wgmods.net/2030/",
+                ID = "download_mod_updated_test",
+                HtmlPath = @"//div[contains(@class, 'ModDetails_hidden')]/@href",
+                AutomationSequence = sequence,
+                BrowserDispatcher = theDispatcher
+            };
+
+            await task.Execute();
+        }
+
         [TestInitialize]
         public void SetDefaultValues()
         {
