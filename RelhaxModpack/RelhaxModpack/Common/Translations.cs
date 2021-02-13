@@ -2509,6 +2509,15 @@ namespace RelhaxModpack
             Spanish.Add("InstallingAsWoTVersion", "Instalando como versión de WoT: {0}");
             Russian.Add("InstallingAsWoTVersion", "Установка в клиент WoT версии {0}");
 
+            //Component: UsingDatabaseVersion
+            // A label to indicate the distribution version of the database currently in use
+            English.Add("UsingDatabaseVersion", "Using database: {0} ({1})");
+            German.Add("UsingDatabaseVersion", TranslationNeeded);
+            Polish.Add("UsingDatabaseVersion", TranslationNeeded);
+            French.Add("UsingDatabaseVersion", TranslationNeeded);
+            Spanish.Add("UsingDatabaseVersion", TranslationNeeded);
+            Russian.Add("UsingDatabaseVersion", TranslationNeeded);
+
             //Component: userMods
             //
             English.Add("userMods", "User Mods");
