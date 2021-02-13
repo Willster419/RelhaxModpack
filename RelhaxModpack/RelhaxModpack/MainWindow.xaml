@@ -336,7 +336,7 @@
         </Grid>
         <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top">
             <Border HorizontalAlignment="Left" Height="45" Margin="364,0,0,0" VerticalAlignment="Top" Width="150" Tag="LanguageSelectionBorder">
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical" Margin="0,0,-8,0">
                     <TextBlock x:Name="LanguageSelectionTextblock" Tag="LanguageSelectionTextBlock" Text="Language Selection" TextWrapping="Wrap" Margin="0,0,0,5"/>
                     <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0" Tag="LanguageSelectionCombobox"/>
                 </StackPanel>
