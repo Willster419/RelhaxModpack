@@ -2471,21 +2471,21 @@ namespace RelhaxModpack
 
             //Component: SearchThisTabOnlyCB
             // A checkbox under the search field SearchTB in mods selection window. Toggles the search engine to search only in user's currently active tab.
-            English.Add("SearchThisTabOnlyCB", "This tab only");
-            German.Add("SearchThisTabOnlyCB", "Nur diese Registerkarte");
-            Polish.Add("SearchThisTabOnlyCB", "Szukaj tylko na tej zakładkce");
-            French.Add("SearchThisTabOnlyCB", "Cet onglet seulement");
-            Spanish.Add("SearchThisTabOnlyCB", "Sólo esta pestaña");
-            Russian.Add("SearchThisTabOnlyCB", "Только в этой вкладке");
+            English.Add("SearchThisTabOnlyCB", "Search in this tab only");
+            German.Add("SearchThisTabOnlyCB", TranslationNeeded);
+            Polish.Add("SearchThisTabOnlyCB", TranslationNeeded);
+            French.Add("SearchThisTabOnlyCB", TranslationNeeded);
+            Spanish.Add("SearchThisTabOnlyCB", TranslationNeeded);
+            Russian.Add("SearchThisTabOnlyCB", TranslationNeeded);
 
-            //Component: SearchTB
+            //Component: searchComboBoxInitMessage
             // A label for the search field to the right. Used to find mods, configs etc. in the mod selection window.
-            English.Add("SearchTB", "Search for a mod: ");
-            German.Add("SearchTB", "Suche einen Mod: ");
-            Polish.Add("SearchTB", "Szukaj modów:  ");
-            French.Add("SearchTB", "Rechercher un mod: ");
-            Spanish.Add("SearchTB", "Buscar un mod: ");
-            Russian.Add("SearchTB", "Найти мод: ");
+            English.Add("searchComboBoxInitMessage", "Search for a package...");
+            German.Add("searchComboBoxInitMessage", TranslationNeeded);
+            Polish.Add("searchComboBoxInitMessage", TranslationNeeded);
+            French.Add("searchComboBoxInitMessage", TranslationNeeded);
+            Spanish.Add("searchComboBoxInitMessage", TranslationNeeded);
+            Russian.Add("searchComboBoxInitMessage", TranslationNeeded);
 
             //Component: SearchTBDescription
             // A tooltip for SearchTB. Describes the use of a wild character in the search query.
