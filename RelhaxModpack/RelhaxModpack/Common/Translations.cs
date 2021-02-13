@@ -2899,6 +2899,15 @@ namespace RelhaxModpack
             Spanish.Add("loadingApplicationUpdateNotes", "Cargando notas de la actualización de la aplicación...");
             Russian.Add("loadingApplicationUpdateNotes", "Загружается список изменений в обновлении...");
 
+            //Component: failedToLoadUpdateNotes
+            //
+            English.Add("failedToLoadUpdateNotes", "Failed to load application update notes");
+            German.Add("failedToLoadUpdateNotes", TranslationNeeded);
+            Polish.Add("failedToLoadUpdateNotes", TranslationNeeded);
+            French.Add("failedToLoadUpdateNotes", TranslationNeeded);
+            Spanish.Add("failedToLoadUpdateNotes", TranslationNeeded);
+            Russian.Add("failedToLoadUpdateNotes", TranslationNeeded);
+
             //Component: ViewUpdateNotesOnGoogleTranslate
             //
             English.Add("ViewUpdateNotesOnGoogleTranslate", "View this on Google Translate");

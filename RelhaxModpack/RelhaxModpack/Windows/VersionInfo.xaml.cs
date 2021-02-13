@@ -57,15 +57,7 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
-            {
-                Logging.Debug("[VersionInfo]: Windows 7 detected, enabling TLS 1.1 and 1.2");
-                System.Net.ServicePointManager.SecurityProtocol =
-                    SecurityProtocolType.Ssl3 |
-                    SecurityProtocolType.Tls |
-                    SecurityProtocolType.Tls11 |
-                    SecurityProtocolType.Tls12;
-            }
+            CommonUtils.CheckAndEnableTLS();
 
             //update the text box with the latest version
             ApplicationUpdateNotes.Text = Translations.GetTranslatedString("loadingApplicationUpdateNotes");
@@ -80,7 +72,7 @@ namespace RelhaxModpack.Windows
                     {
                         Logging.Exception("Failed to get update notes");
                         Logging.Exception(args.Error.ToString());
-                        ApplicationUpdateNotes.Text = Translations.GetTranslatedString("failedToGetUpdateNotes");
+                        ApplicationUpdateNotes.Text = Translations.GetTranslatedString("failedToLoadUpdateNotes");
                     }
                     else
                         ApplicationUpdateNotes.Text = args.Result;
