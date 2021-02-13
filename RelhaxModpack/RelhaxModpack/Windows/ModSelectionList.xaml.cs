@@ -656,9 +656,23 @@ namespace RelhaxModpack.Windows
 
             //update text boxes and other text properties (~2ms)
             //UI THREAD REQUIRED
-            InstallingTo.Text = string.Format(Translations.GetTranslatedString("InstallingTo"), Settings.WoTDirectory);
-            InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString("InstallingAsWoTVersion"), Settings.WoTClientVersion);
+            InstallingTo.Text = string.Format(Translations.GetTranslatedString(InstallingTo.Name), Settings.WoTDirectory);
+            InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString(InstallingAsWoTVersion.Name), Settings.WoTClientVersion);
             SearchCB.Text = Translations.GetTranslatedString("searchComboBoxInitMessage");
+            string databaseSubversionInfo = string.Empty;
+            switch (ModpackSettings.DatabaseDistroVersion)
+            {
+                case DatabaseVersions.Test:
+                    databaseSubversionInfo = "TEST";
+                    break;
+                case DatabaseVersions.Beta:
+                    databaseSubversionInfo = ModpackSettings.BetaDatabaseSelectedBranch;
+                    break;
+                case DatabaseVersions.Stable:
+                    databaseSubversionInfo = Settings.DatabaseVersion;
+                    break;
+            }
+            UsingDatabaseVersion.Text = string.Format(Translations.GetTranslatedString(UsingDatabaseVersion.Name), ModpackSettings.DatabaseDistroVersion.ToString(), databaseSubversionInfo);
 
             //determined if the collapse and expand buttons should be visible (?ms)
             //UI THREAD REQUIRED
