@@ -17,6 +17,11 @@ namespace RelhaxModpack
         public string Filename { get; } = "AutomationRunnerSettings.xml";
 
         /// <summary>
+        /// A list of properties and fields to exclude from saving/loading to and from xml
+        /// </summary>
+        public string[] MembersToExclude { get { return new string[] { nameof(MembersToExclude), nameof(Filename) }; } }
+
+        /// <summary>
         /// The name of the branch on github that the user specifies to download the automation scripts from
         /// </summary>
         public string SelectedBranch { get; set; } = "master";

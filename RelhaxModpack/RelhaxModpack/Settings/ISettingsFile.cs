@@ -15,5 +15,10 @@ namespace RelhaxModpack
         /// The name of the file on disk
         /// </summary>
         string Filename { get; }
+
+        /// <summary>
+        /// A list of properties and fields to exclude from saving/loading to and from xml
+        /// </summary>
+        string[] MembersToExclude { get; }
     }
 }
