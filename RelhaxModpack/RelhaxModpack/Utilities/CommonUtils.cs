@@ -1017,6 +1017,28 @@ namespace RelhaxModpack.Utilities
         }
 
         /// <summary>
+        /// Attempts to set a field value of a class or structure object instance with the string valueToSet
+        /// </summary>
+        /// <param name="objectToSetValueOn">The class or structure object instance to have property set</param>
+        /// <param name="fieldInfoOfObject">The field information/metadata of the field to set on the object</param>
+        /// <param name="valueToSet">The string version of the value to set</param>
+        /// <returns>False if the value could not be set, true otherwise</returns>
+        public static bool SetObjectField(object objectToSetValueOn, FieldInfo fieldInfoOfObject, string valueToSet)
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(fieldInfoOfObject.FieldType);
+                fieldInfoOfObject.SetValue(objectToSetValueOn, converter.ConvertFrom(valueToSet));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Attempts to create an instance of a value type object and set it's value based on valueToSet for objectType
         /// </summary>
         /// <param name="objectType">The type of value object to create</param>
