@@ -8739,11 +8739,6 @@
             The name of the modpack patch designer tool settings file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Settings.AutomationRunnerSettingsFilename">
-            <summary>
-            The name of the modpack automation runner tool settings file
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.Settings.LastSavedConfigFilename">
             <summary>
             The name of the selection file when used in the setting "save last installed selection"
