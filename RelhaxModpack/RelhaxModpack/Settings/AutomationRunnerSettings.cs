@@ -14,7 +14,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The name of the xml file on disk
         /// </summary>
-        public string Filename { get; } = Settings.AutomationRunnerSettingsFilename;
+        public string Filename { get; } = "AutomationRunnerSettings.xml";
 
         /// <summary>
         /// The name of the branch on github that the user specifies to download the automation scripts from

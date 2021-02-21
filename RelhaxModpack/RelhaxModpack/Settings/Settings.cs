@@ -54,11 +54,6 @@ namespace RelhaxModpack
         public const string PatcherSettingsFilename = "PatchSettings.xml";
 
         /// <summary>
-        /// The name of the modpack automation runner tool settings file
-        /// </summary>
-        public const string AutomationRunnerSettingsFilename = "AutomationRunnerSettings.xml";
-
-        /// <summary>
         /// The name of the selection file when used in the setting "save last installed selection"
         /// </summary>
         public const string LastSavedConfigFilename = "lastInstalledConfig.xml";

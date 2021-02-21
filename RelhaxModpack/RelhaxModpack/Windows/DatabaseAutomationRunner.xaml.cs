@@ -39,7 +39,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// The name of the xml settings file for the DatabaseAutomationRunner window
         /// </summary>
-        public string SettingsFilename { get; } = RelhaxModpack.Settings.AutomationRunnerSettingsFilename;
+        public string SettingsFilename { get { return this.Settings.Filename; } }
 
         /// <summary>
         /// The name of the logfile for the DatabaseAutomationRunner window
