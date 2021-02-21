@@ -1050,9 +1050,10 @@ namespace RelhaxModpack.Utilities
         {
             bool customTyping = !(string.IsNullOrEmpty(customTypeAttributeName));
             if (customTyping && typeMapper == null)
-                throw new NullReferenceException();
+                throw new NullReferenceException(nameof(typeMapper) + " is null");
             if (databasePackageObject == null || listPropertyInfo == null || xmlListItems == null)
-                throw new NullReferenceException();
+                throw new NullReferenceException(string.Format("{0}: null = {1}, {2}: null = {3}, {4}: null = {5}",
+                    nameof(databasePackageObject), databasePackageObject == null, nameof(listPropertyInfo), listPropertyInfo == null, nameof(xmlListItems), xmlListItems == null));
 
             //get the list interfaced component
             IList listProperty = listPropertyInfo.GetValue(databasePackageObject) as IList;
