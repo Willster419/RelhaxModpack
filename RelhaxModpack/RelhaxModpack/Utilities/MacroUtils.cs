@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Utilities
@@ -76,13 +77,13 @@ namespace RelhaxModpack.Utilities
                 throw new BadMemeException("REEEEEEEEEE");
             FilePathDict.Clear();
             //add macro versions first then regular versions
-            FilePathDict.Add(@"{versiondir}", Settings.WoTClientVersion);
-            FilePathDict.Add(@"{tanksversion}", Settings.WoTClientVersion);
-            FilePathDict.Add(@"{tanksonlinefolderversion}", Settings.WoTModpackOnlineFolderVersion);
-            FilePathDict.Add(@"{appdata}", Settings.AppDataFolder);
-            FilePathDict.Add(@"{appData}", Settings.AppDataFolder);
-            FilePathDict.Add(@"{app}", Settings.WoTDirectory);
-            FilePathDict.Add(@"versiondir", Settings.WoTClientVersion);
+            FilePathDict.Add(@"{versiondir}", ApplicationSettings.WoTClientVersion);
+            FilePathDict.Add(@"{tanksversion}", ApplicationSettings.WoTClientVersion);
+            FilePathDict.Add(@"{tanksonlinefolderversion}", ApplicationSettings.WoTModpackOnlineFolderVersion);
+            FilePathDict.Add(@"{appdata}", ApplicationSettings.AppDataFolder);
+            FilePathDict.Add(@"{appData}", ApplicationSettings.AppDataFolder);
+            FilePathDict.Add(@"{app}", ApplicationSettings.WoTDirectory);
+            FilePathDict.Add(@"versiondir", ApplicationSettings.WoTClientVersion);
         }
 
         /// <summary>

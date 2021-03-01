@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Utilities.ClassEventArgs;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack
 {
@@ -45,6 +46,11 @@ namespace RelhaxModpack
         public bool CanWrite { get { return fileStream == null ? false : true; } }
 
         /// <summary>
+        /// Gets or sets if this log file will write lots of diagnostic messages to the log file.
+        /// </summary>
+        public bool VerboseLogging { get; set; } = false;
+
+        /// <summary>
         /// The fileStream object to write/create the log file. Requires disposal support
         /// </summary>
         private FileStream fileStream;
@@ -61,11 +67,14 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="filePath">The path to the file to create/open</param>
         /// <param name="timestamp">the date and time format to write for each log line</param>
-        public Logfile(string filePath, string timestamp)
+        /// <param name="verbose">Flag if the logfile will be outputting diagnostic info</param>
+        /// <remarks>The verbose value will be ignored if the Application is not a beta or alpha build.</remarks>
+        public Logfile(string filePath, string timestamp, bool verbose)
         {
             Filepath = filePath ?? throw new ArgumentNullException(nameof(filePath));
             Filename = Path.GetFileName(Filepath);
             Timestamp = timestamp;
+            VerboseLogging = verbose;
         }
 
         /// <summary>
@@ -83,7 +92,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                if(ModpackSettings.VerboseLogging || ModpackSettings.ApplicationDistroVersion != ApplicationVersions.Stable)
+                if (VerboseLogging || ApplicationConstants.ApplicationVersion != ApplicationVersions.Stable)
                 {
                     MessageBox.Show(ex.ToString());
                 }
@@ -99,8 +108,8 @@ namespace RelhaxModpack
         /// <param name="logLevel">The level of severity of the log message</param>
         public void Write(string message, LogLevel logLevel)
         {
-            //only alpha and beta application distributions should log debug messages
-            if (Settings.ApplicationVersion == ApplicationVersions.Stable && logLevel == LogLevel.Debug && !ModpackSettings.VerboseLogging)
+            //only stable application distributions should be able to *not* log debug messages
+            if (ApplicationConstants.ApplicationVersion == ApplicationVersions.Stable && logLevel == LogLevel.Debug && !VerboseLogging)
                 return;
 
             string logMessageLevel = string.Empty;

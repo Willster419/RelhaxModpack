@@ -18,8 +18,9 @@ using RelhaxModpack.UI;
 using RelhaxModpack.UI.ClassThemeDefinitions;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Common;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Settings
 {
     /// <summary>
     /// Handles all custom UI settings
@@ -111,7 +112,7 @@ namespace RelhaxModpack
         /// Applies custom color settings to a window
         /// </summary>
         /// <param name="window">The Window object to apply color settings to</param>
-        public static void ApplyUIColorSettings(Window window)
+        public static void ApplyUIColorSettings(RelhaxWindow window)
         {
             if (!isDefaultThemeBackedUp)
             {
@@ -148,7 +149,7 @@ namespace RelhaxModpack
                 windowColorset.ColorsetBackedUp = true;
             }
 
-            switch (ModpackSettings.ApplicationTheme)
+            switch (window.ModpackSettings.ApplicationTheme)
             {
                 case UIThemes.Default:
                     Logging.Debug("Applying default UI theme for window {0}", window.GetType().Name);
@@ -583,14 +584,14 @@ namespace RelhaxModpack
         public static bool LoadSettingsFile()
         {
             //first check if the file exists
-            if (!File.Exists(Settings.UISettingsFileName))
+            if (!File.Exists(ApplicationConstants.UISettingsColorFile))
             {
                 Logging.Info("UIDocument file does not exist, using defaults");
                 return false;
             }
 
             //try to create a new one first in a temp. If it fails then abort.
-            XmlDocument loadedDoc = XmlUtils.LoadXmlDocument(Settings.UISettingsFileName, XmlLoadType.FromFile);
+            XmlDocument loadedDoc = XmlUtils.LoadXmlDocument(ApplicationConstants.UISettingsColorFile, XmlLoadType.FromFile);
             if (loadedDoc == null)
             {
                 Logging.Error("failed to parse UIDocument, check messages above for parsing errors");
@@ -598,7 +599,7 @@ namespace RelhaxModpack
             }
 
             //get the UI xml format version of the file
-            string versionXpath = "//" + Settings.UISettingsColorFile + "/@version";
+            string versionXpath = "//" + ApplicationConstants.UISettingsColorFile + "/@version";
             parsedFormatVersion = XmlUtils.GetXmlStringFromXPath(loadedDoc, versionXpath);
             Logging.Debug("using xpath search '{0}' found format version '{1}'", versionXpath, parsedFormatVersion.Trim());
             parsedFormatVersion = parsedFormatVersion.Trim();
@@ -623,13 +624,13 @@ namespace RelhaxModpack
 
         private static bool LoadCustomThemeV1(XmlDocument doc)
         {
-            Theme customThemeToLoad = new Theme() { ThemeName = "Custom", FileName = Settings.UISettingsColorFile };
+            Theme customThemeToLoad = new Theme() { ThemeName = "Custom", FileName = ApplicationConstants.UISettingsColorFile };
 
             //load global brushes
             List<PropertyInfo> customBrushes = customThemeToLoad.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(CustomBrush))).ToList();
             foreach (PropertyInfo property in customBrushes)
             {
-                string xPath = string.Format("//{0}/GlobalCustomBrushes/{1}", Settings.UISettingsColorFile, property.Name);
+                string xPath = string.Format("//{0}/GlobalCustomBrushes/{1}", ApplicationConstants.UISettingsColorFile, property.Name);
                 Logging.Debug("Searching for global brush {0} using xpath {1}", property.Name, xPath);
                 XmlNode globalBrush = XmlUtils.GetXmlNodeFromXPath(doc, xPath);
 
@@ -662,7 +663,7 @@ namespace RelhaxModpack
             List<PropertyInfo> classColorsets = customThemeToLoad.GetType().GetProperties().Where(prop => prop.PropertyType.Equals(typeof(ClassColorset))).ToList();
             foreach (PropertyInfo property in classColorsets)
             {
-                string xPath = string.Format("//{0}/ClassColorsets/{1}", Settings.UISettingsColorFile, property.Name);
+                string xPath = string.Format("//{0}/ClassColorsets/{1}", ApplicationConstants.UISettingsColorFile, property.Name);
                 Logging.Debug("Searching for class definition {0} using xpath {1}", property.Name, xPath);
                 XmlNode classColorsetXmlElement = XmlUtils.GetXmlNodeFromXPath(doc, xPath);
                 if (classColorsetXmlElement == null)
@@ -725,7 +726,7 @@ namespace RelhaxModpack
                 else if (!(window is MainWindow))
                     Logging.Warning("Window type {0} is not RelhaxWindow type!", type.Name);
 
-                string xmlPath = string.Format("//{0}/{1}", Settings.UISettingsColorFile, type.Name);
+                string xmlPath = string.Format("//{0}/{1}", ApplicationConstants.UISettingsColorFile, type.Name);
                 Logging.Debug("Using XmlPath {0} for finding window instance definitions", xmlPath);
                 XmlNode classColorsetWindowXmlElement = XmlUtils.GetXmlNodeFromXPath(doc, xmlPath);
                 if(classColorsetWindowXmlElement == null)
@@ -1107,7 +1108,7 @@ namespace RelhaxModpack
             doc.AppendChild(dec);
 
             //make root element and version attribute
-            XmlElement root = doc.CreateElement(Settings.UISettingsColorFile);
+            XmlElement root = doc.CreateElement(ApplicationConstants.UISettingsColorFile);
             //NOTE: version attribute should be incremented when large change in color loading structure is done
             //allows us to make whole new method to load UI settings
             XmlAttribute version = doc.CreateAttribute("version");

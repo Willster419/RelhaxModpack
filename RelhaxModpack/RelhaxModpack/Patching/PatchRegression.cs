@@ -7,54 +7,34 @@ using System.IO;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 
-namespace RelhaxModpack.Patches
+namespace RelhaxModpack.Patching
 {
-    /// <summary>
-    /// Represents a patch operation with a description and desired assertion condition
-    /// </summary>
-    public class UnitTest
-    {
-        /// <summary>
-        /// The patch operation object
-        /// </summary>
-        public Patch Patch;
-
-        /// <summary>
-        /// A description of what the patch should do
-        /// </summary>
-        public string Description;
-
-        /// <summary>
-        /// Determines if the patch should pass or fail the test
-        /// </summary>
-        public bool ShouldPass;
-    }
-
     /// <summary>
     /// A regression object is an entire regression test suite. Manages the unit tests and runs the test assertions
     /// </summary>
     /// <remarks>A regression test is designed to only test one type of patch i.e. a series of XML patches.
     /// The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
     /// the results. Results are logged to a new logfile each time a regression run is started</remarks>
-    public class Regression : IDisposable
+    public class PatchRegression : IDisposable
     {
-
         private Logfile RegressionLogfile;
-        private List<UnitTest> UnitTests;
+        private List<PatchUnitTest> UnitTests;
         private int NumPassed = 0;
         private string Startfile = "startfile";
         private string CheckFilenamePrefix = "check_";
         private string RegressionFolderPath;
         private string RegressionTypeString = "";
         private string RegressionExtension = "";
+        private Patcher Patcher = new Patcher() { DebugMode = true };
 
         /// <summary>
         /// Make a regression object
         /// </summary>
         /// <param name="regressionType">The type of regressions to run</param>
         /// <param name="unitTestsToRun">The list of unit tests to run</param>
-        public Regression(PatchRegressionTypes regressionType, List<UnitTest> unitTestsToRun)
+        public PatchRegression(PatchRegressionTypes regressionType, List<PatchUnitTest> unitTestsToRun)
         {
+            string logFilename;
             UnitTests = unitTestsToRun;
             switch (regressionType)
             {
@@ -63,32 +43,32 @@ namespace RelhaxModpack.Patches
                     RegressionExtension = string.Format(".{0}",RegressionTypeString);
                     Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
                     RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
-                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
-                        DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") , ".log")),Logging.ApplicationLogfileTimestamp);
+                    logFilename = Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
+                    RegressionLogfile = new Logfile(logFilename, Logging.ApplicationLogfileTimestamp, true);
                     break;
                 case PatchRegressionTypes.regex:
                     RegressionTypeString = "regex";
                     RegressionExtension = string.Format(".{0}", "txt");
                     Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
                     RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
-                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
-                        DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
+                    logFilename = Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
+                    RegressionLogfile = new Logfile(logFilename, Logging.ApplicationLogfileTimestamp, true);
                     break;
                 case PatchRegressionTypes.xml:
                     RegressionTypeString = "xml";
                     RegressionExtension = string.Format(".{0}", RegressionTypeString);
                     Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
                     RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
-                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString,
-                        DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
+                    logFilename = Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
+                    RegressionLogfile = new Logfile(logFilename, Logging.ApplicationLogfileTimestamp, true);
                     break;
                 case PatchRegressionTypes.followPath:
                     RegressionTypeString = "json";
                     RegressionExtension = string.Format(".{0}", "xc");
                     Startfile = string.Format("{0}{1}", @"@xvm", RegressionExtension);
                     RegressionFolderPath = Path.Combine("patch_regressions", "followPath");
-                    RegressionLogfile = new Logfile(Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", "followPath",
-                        DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log")), Logging.ApplicationLogfileTimestamp);
+                    logFilename = Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", "followPath", DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
+                    RegressionLogfile = new Logfile(logFilename, Logging.ApplicationLogfileTimestamp, true);
                     break;
             }
         }
@@ -100,14 +80,6 @@ namespace RelhaxModpack.Patches
         /// <remarks>The return value of the method does NOT related to the success of the Unit Tests</remarks>
         public bool RunRegressions()
         {
-            //if from the editor, enable verbose logging (allows it to get debug log statements)
-            bool tempVerboseLoggingSetting = ModpackSettings.VerboseLogging;
-            if (!ModpackSettings.VerboseLogging)
-            {
-                Logging.Info("p.FromEditor=true and ModpackSettings.VerboseLogging=false, setting to true for duration of patch method");
-                ModpackSettings.VerboseLogging = true;
-            }
-
             //init the logfile for regressions
             if(File.Exists(RegressionLogfile.Filepath))
             {
@@ -151,13 +123,12 @@ namespace RelhaxModpack.Patches
             WriteToLogfiles("----- Unit tests start -----");
 
             bool breakOutEarly = false;
-            foreach (UnitTest unitTest in UnitTests)
+            foreach (PatchUnitTest unitTest in UnitTests)
             {
                 unitTest.Patch.CompletePath = filenameToTestPath;
                 unitTest.Patch.File = filenameToTestPath;
                 unitTest.Patch.Type = RegressionTypeString;
                 WriteToLogfiles("Running test {0} of {1}: {2}", ++NumPassed, UnitTests.Count, unitTest.Description);
-                unitTest.Patch.FromEditor = true;
                 if(unitTest.Patch.FollowPath)
                 {
                     //delete testfile
@@ -192,7 +163,7 @@ namespace RelhaxModpack.Patches
                         File.Copy(Path.Combine(RegressionFolderPath, Startfile), filenameToTestPath);
                     }
                 }
-                PatchUtils.RunPatch(unitTest.Patch);
+                Patcher.RunPatchFromEditor(unitTest.Patch);
                 string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, NumPassed.ToString("D2"), Path.GetExtension(Startfile)));
                 WriteToLogfiles("Checking results against check file {0}...",Path.GetFileName(checkfile));
                 string patchRun = File.ReadAllText(filenameToTestPath);
@@ -236,10 +207,6 @@ namespace RelhaxModpack.Patches
             }
             //dispose log file
             RegressionLogfile.Dispose();
-
-            //set the verbose setting back
-            Logging.Debug("temp logging setting={0}, ModpackSettings.VerboseLogging={1}, setting logging back to temp");
-            ModpackSettings.VerboseLogging = tempVerboseLoggingSetting;
             return true;
         }
 

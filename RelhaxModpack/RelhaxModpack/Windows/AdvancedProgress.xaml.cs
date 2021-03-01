@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.IO;
 using RelhaxModpack.UI;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {   ///I exist as a branch
@@ -72,6 +73,11 @@ namespace RelhaxModpack.Windows
         /// The UI Reporting object for the step of font install, trimming download cache, and cleanup
         /// </summary>
         public RelhaxInstallTaskReporter FontInstallTrimDownloadCacheCleanupReporter = null;
+
+        /// <summary>
+        /// A reference to the modpack settings object
+        /// </summary>
+        public ModpackSettings ModpackSettings = null;
 
         private InstallerExitCodes lastExitCode = InstallerExitCodes.Success;
 

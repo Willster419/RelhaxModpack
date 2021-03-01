@@ -16,7 +16,7 @@ using System.Net;
 using System.Threading.Tasks;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Atlases;
-using RelhaxModpack.Patches;
+using RelhaxModpack.Patching;
 using RelhaxModpack.Shortcuts;
 using RelhaxModpack.Utilities.Enums;
 

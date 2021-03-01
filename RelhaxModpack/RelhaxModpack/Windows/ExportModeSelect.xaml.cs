@@ -1,4 +1,6 @@
-﻿using RelhaxModpack.Database;
+﻿using RelhaxModpack.Common;
+using RelhaxModpack.Database;
+using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Xml;
 using System.Collections.Generic;
@@ -35,8 +37,8 @@ namespace RelhaxModpack.Windows
 
             //parse each online folder to list type string
             VersionInfosList.Clear();
-            string xmlString = FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.SupportedClients);
-            XmlNodeList supportedClients = XmlUtils.GetXmlNodesFromXPath(xmlString, "//versions/version", Settings.SupportedClients);
+            string xmlString = FileUtils.GetStringFromZip(ApplicationSettings.ManagerInfoZipfile, ApplicationConstants.SupportedClients);
+            XmlNodeList supportedClients = XmlUtils.GetXmlNodesFromXPath(xmlString, "//versions/version", ApplicationConstants.SupportedClients);
             VersionInfosList = new List<VersionInfos>();
             foreach (XmlNode node in supportedClients)
             {

@@ -8,6 +8,7 @@ using RelhaxModpack.Utilities;
 using RelhaxModpack.Database;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Utilities.ClassEventArgs;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -97,13 +98,13 @@ namespace RelhaxModpack.Windows
             switch (TransferMode)
             {
                 case EditorTransferMode.UploadZip:
-                    ProgressBody.Text = string.Format("Uploading {0} to FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
+                    ProgressBody.Text = string.Format("Uploading {0} to FTP folder {1}", Path.GetFileName(ZipFilePathDisk), ApplicationSettings.WoTModpackOnlineFolderVersion);
                     break;
                 case EditorTransferMode.UploadMedia:
                     ProgressBody.Text = string.Format("Uploading {0} to FTP folder Medias/...", ZipFileName);
                     break;
                 case EditorTransferMode.DownloadZip:
-                    ProgressBody.Text = string.Format("Downloading {0} from FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
+                    ProgressBody.Text = string.Format("Downloading {0} from FTP folder {1}", Path.GetFileName(ZipFilePathDisk), ApplicationSettings.WoTModpackOnlineFolderVersion);
                     break;
             }
 
@@ -119,7 +120,7 @@ namespace RelhaxModpack.Windows
                     case EditorTransferMode.UploadMedia:
                         //before uploading, make sure it doesn't exist first (zipfile or media)
                         ProgressHeader.Text = "Checking if file exists on server...";
-                        Logging.Editor("Checking if {0} already exists on the server in folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
+                        Logging.Editor("Checking if {0} already exists on the server in folder {1}", LogLevel.Info, ZipFileName, ApplicationSettings.WoTModpackOnlineFolderVersion);
                         string[] listOfFilesOnServer = await FtpUtils.FtpListFilesFoldersAsync(ZipFilePathOnline, Credential);
                         if (listOfFilesOnServer.Contains(ZipFileName) && MessageBox.Show("File already exists, overwrite?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                         {
@@ -133,7 +134,7 @@ namespace RelhaxModpack.Windows
                         client.UploadFileCompleted += Client_DownloadUploadFileCompleted;
 
                         //run the FTP upload
-                        Logging.Editor("Starting FTP upload of {0} from folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
+                        Logging.Editor("Starting FTP upload of {0} from folder {1}", LogLevel.Info, ZipFileName, ApplicationSettings.WoTModpackOnlineFolderVersion);
                         try
                         {
                             await client.UploadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
@@ -165,7 +166,7 @@ namespace RelhaxModpack.Windows
                         client.DownloadFileCompleted += Client_DownloadUploadFileCompleted;
 
                         //run the FTP download
-                        Logging.Editor("Starting FTP download of {0} from folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
+                        Logging.Editor("Starting FTP download of {0} from folder {1}", LogLevel.Info, ZipFileName, ApplicationSettings.WoTModpackOnlineFolderVersion);
                         try
                         {
                             FTPDownloadFilesize = await FtpUtils.FtpGetFilesizeAsync(CompleteFTPPath, Credential);

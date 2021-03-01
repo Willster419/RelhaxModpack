@@ -1,4 +1,4 @@
-﻿<local:RelhaxWindow
+﻿<local:RelhaxCustomFeatureWindow
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -714,4 +714,4 @@
         </Grid>
         <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="50"/>
     </Grid>
-</local:RelhaxWindow>
+</local:RelhaxCustomFeatureWindow>

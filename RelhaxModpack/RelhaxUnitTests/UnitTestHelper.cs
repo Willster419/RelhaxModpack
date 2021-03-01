@@ -79,7 +79,7 @@ namespace RelhaxUnitTests
                 Directory.CreateDirectory(Path.GetDirectoryName(logfilePath));
 
             //instance and init the logfile
-            file = new Logfile(logfilePath, RelhaxModpack.Logging.ApplicationLogfileTimestamp);
+            file = new Logfile(logfilePath, Logging.ApplicationLogfileTimestamp, true);
             if (!file.Init())
             throw new BadMemeException("Unable to create log file. Something happened.");
 

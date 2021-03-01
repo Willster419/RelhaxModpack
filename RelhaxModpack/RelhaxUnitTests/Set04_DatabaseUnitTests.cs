@@ -6,6 +6,7 @@ using System.Net;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RelhaxModpack;
+using RelhaxModpack.Common;
 using RelhaxModpack.Database;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
@@ -24,8 +25,8 @@ namespace RelhaxUnitTests
         [TestMethod]
         public void Test01_GetLatestSupportWoTVersionTest()
         {
-            XmlDocument rootDocument = DatabaseUtils.GetBetaDatabaseRoot1V1Document();
-            LatestSupportedWoTVersion = XmlUtils.GetXmlStringFromXPath(rootDocument, Settings.DatabaseOnlineVersionXpath);
+            XmlDocument rootDocument = DatabaseUtils.GetBetaDatabaseRoot1V1Document(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"));
+            LatestSupportedWoTVersion = XmlUtils.GetXmlStringFromXPath(rootDocument, ApplicationConstants.DatabaseOnlineVersionXpath);
             Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
         }
 
@@ -41,7 +42,7 @@ namespace RelhaxUnitTests
             XmlDocument modInfoDocument = null;
             List<string> categoriesXml = new List<string>();
 
-            string modInfoxmlURL = Settings.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", LatestSupportedWoTVersion) + "modInfo.dat";
+            string modInfoxmlURL = ApplicationConstants.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", LatestSupportedWoTVersion) + "modInfo.dat";
 
             using (WebClient client = new WebClient())
             {
@@ -86,7 +87,7 @@ namespace RelhaxUnitTests
             string modInfoXml = string.Empty;
 
             //load string constant url from manager info xml
-            string rootXml = Settings.BetaDatabaseV2FolderURL + Settings.BetaDatabaseV2RootFilename;
+            string rootXml = ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master") + ApplicationConstants.BetaDatabaseV2RootFilename;
 
             //download the xml string into "modInfoXml"
             using (WebClient client = new WebClient())
@@ -95,7 +96,7 @@ namespace RelhaxUnitTests
                 modInfoXml = client.DownloadString(rootXml);
             }
 
-            List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList();
+            List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"));
 
             string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 
@@ -148,15 +149,15 @@ namespace RelhaxUnitTests
 
             Directory.CreateDirectory(databaseSavePath);
 
-            XmlDocument rootDoc = DatabaseUtils.GetBetaDatabaseRoot1V1Document();
+            XmlDocument rootDoc = DatabaseUtils.GetBetaDatabaseRoot1V1Document(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"));
             Assert.IsNotNull(rootDoc);
 
-            List<string> allCategoriesXml = DatabaseUtils.GetBetaDatabase1V1FilesList(rootDoc);
+            List<string> allCategoriesXml = DatabaseUtils.GetBetaDatabase1V1FilesList(rootDoc, ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"));
 
             DatabaseUtils.SaveDatabase1V1(databaseSavePath, rootDoc, GlobalDependenciesForSave, DependenciesForSave, ParsedCategoryListForSave);
 
-            Assert.IsTrue(File.Exists(Path.Combine(databaseSavePath, Settings.BetaDatabaseV2RootFilename)));
-            XmlDocument loadDoc = XmlUtils.LoadXmlDocument(Path.Combine(databaseSavePath, Settings.BetaDatabaseV2RootFilename), XmlLoadType.FromFile);
+            Assert.IsTrue(File.Exists(Path.Combine(databaseSavePath, ApplicationConstants.BetaDatabaseV2RootFilename)));
+            XmlDocument loadDoc = XmlUtils.LoadXmlDocument(Path.Combine(databaseSavePath, ApplicationConstants.BetaDatabaseV2RootFilename), XmlLoadType.FromFile);
             Assert.IsNotNull(loadDoc);
 
             foreach (string path in allCategoriesXml)

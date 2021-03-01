@@ -19,6 +19,8 @@ using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Database;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Windows
 {
@@ -173,7 +175,7 @@ namespace RelhaxModpack.Windows
             if(ModpackSettings.SaveLastSelection)
             {
                 Logging.Debug("Saving selection from continue button, when saveLastSelection is true (save format V3)");
-                SaveSelectionV3(Settings.LastInstalledConfigFilepath, true);
+                SaveSelectionV3(ApplicationConstants.LastInstalledConfigFilepath, true);
             }
             continueInstallation = true;
             this.Close();
@@ -389,7 +391,7 @@ namespace RelhaxModpack.Windows
                     if (string.IsNullOrEmpty(LastSupportedWoTClientVersion))
                         throw new BadMemeException("LastSupportedWoTClientVersion is null/empty when needed for Stable installation");
                     //make string
-                    string modInfoxmlURL = Settings.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", LastSupportedWoTClientVersion) + "modInfo.dat";
+                    string modInfoxmlURL = ApplicationConstants.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", LastSupportedWoTClientVersion) + "modInfo.dat";
 
                     //download latest modInfo xml
                     try
@@ -414,7 +416,7 @@ namespace RelhaxModpack.Windows
                     using (WebClient client = new WebClient())
                     {
                         //load string constant url from manager info xml
-                        string rootXml = Settings.BetaDatabaseV2FolderURL + Settings.BetaDatabaseV2RootFilename;
+                        string rootXml = ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch) + ApplicationConstants.BetaDatabaseV2RootFilename;
                         Logging.Debug("Download beta database from {0}", rootXml);
 
                         //download the xml string into "modInfoXml"
@@ -427,7 +429,7 @@ namespace RelhaxModpack.Windows
                     //make string
                     if (string.IsNullOrWhiteSpace(ModpackSettings.CustomModInfoPath))
                     {
-                        ModpackSettings.CustomModInfoPath = Path.Combine(Settings.ApplicationStartupPath, Settings.BetaDatabaseV2RootFilename);
+                        ModpackSettings.CustomModInfoPath = Path.Combine(ApplicationConstants.ApplicationStartupPath, ApplicationConstants.BetaDatabaseV2RootFilename);
                     }
                     //load modinfo xml
                     modInfoXml = File.ReadAllText(ModpackSettings.CustomModInfoPath);
@@ -454,7 +456,7 @@ namespace RelhaxModpack.Windows
             //if not stable db, update WoT online folder version macro from modInfoxml itself
             if (databaseVersion != DatabaseVersions.Stable)
             {
-                Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
+                ApplicationSettings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
             }
 
             //set the version of the wot client to display for the UI, stored in a string to be called later
@@ -465,7 +467,7 @@ namespace RelhaxModpack.Windows
                     InstallingAsDatabaseVersionDisplay = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@version");
                     break;
                 case DatabaseVersions.Stable:
-                    InstallingAsDatabaseVersionDisplay = Settings.WoTClientVersion;
+                    InstallingAsDatabaseVersionDisplay = ApplicationSettings.WoTClientVersion;
                     break;
             }
 
@@ -505,7 +507,7 @@ namespace RelhaxModpack.Windows
                 case DatabaseVersions.Beta:
                     Logging.Debug("Init beta db download resources");
                     //create download url list
-                    List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList();
+                    List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch));
 
                     string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 
@@ -550,17 +552,17 @@ namespace RelhaxModpack.Windows
             progress.Report(loadProgress);
 
             //check if the md5 hash database file exists, if not then make it
-            if (!File.Exists(Settings.MD5HashDatabaseXmlFile))
+            if (!File.Exists(ApplicationConstants.MD5HashDatabaseXmlFile))
             {
                 Md5HashDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
             }
             else
             {
-                Md5HashDocument = XmlUtils.LoadXDocument(Settings.MD5HashDatabaseXmlFile, XmlLoadType.FromFile);
+                Md5HashDocument = XmlUtils.LoadXDocument(ApplicationConstants.MD5HashDatabaseXmlFile, XmlLoadType.FromFile);
                 if (Md5HashDocument == null)
                 {
                     Logging.Warning("Failed to load md5 hash document, creating new");
-                    File.Delete(Settings.MD5HashDatabaseXmlFile);
+                    File.Delete(ApplicationConstants.MD5HashDatabaseXmlFile);
                     Md5HashDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
                 }
             }
@@ -570,7 +572,7 @@ namespace RelhaxModpack.Windows
             foreach (DatabasePackage package in flatListZips)
             {
                 //make path for the zipfile
-                string zipFile = Path.Combine(Settings.RelhaxDownloadsFolderPath, package.ZipFile);
+                string zipFile = Path.Combine(ApplicationConstants.RelhaxDownloadsFolderPath, package.ZipFile);
 
                 //only look for a crc if the cache file exists
                 if (!File.Exists(zipFile))
@@ -592,7 +594,7 @@ namespace RelhaxModpack.Windows
             }
 
             //and save the file
-            Md5HashDocument.Save(Settings.MD5HashDatabaseXmlFile);
+            Md5HashDocument.Save(ApplicationConstants.MD5HashDatabaseXmlFile);
         }
 
         private void InitUsermods()
@@ -604,7 +606,7 @@ namespace RelhaxModpack.Windows
             };
 
             //get a list of all zip files in the folder
-            string[] zipFilesUserMods = FileUtils.DirectorySearch(Settings.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
+            string[] zipFilesUserMods = FileUtils.DirectorySearch(ApplicationConstants.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
 
             foreach (string s in zipFilesUserMods)
             {
@@ -656,8 +658,8 @@ namespace RelhaxModpack.Windows
 
             //update text boxes and other text properties (~2ms)
             //UI THREAD REQUIRED
-            InstallingTo.Text = string.Format(Translations.GetTranslatedString(InstallingTo.Name), Settings.WoTDirectory);
-            InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString(InstallingAsWoTVersion.Name), Settings.WoTClientVersion);
+            InstallingTo.Text = string.Format(Translations.GetTranslatedString(InstallingTo.Name), ApplicationSettings.WoTDirectory);
+            InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString(InstallingAsWoTVersion.Name), ApplicationSettings.WoTClientVersion);
             SearchCB.Text = Translations.GetTranslatedString("searchComboBoxInitMessage");
             string databaseSubversionInfo = string.Empty;
             switch (ModpackSettings.DatabaseDistroVersion)
@@ -669,7 +671,7 @@ namespace RelhaxModpack.Windows
                     databaseSubversionInfo = ModpackSettings.BetaDatabaseSelectedBranch;
                     break;
                 case DatabaseVersions.Stable:
-                    databaseSubversionInfo = Settings.DatabaseVersion;
+                    databaseSubversionInfo = ApplicationSettings.DatabaseVersion;
                     break;
             }
             UsingDatabaseVersion.Text = string.Format(Translations.GetTranslatedString(UsingDatabaseVersion.Name), ModpackSettings.DatabaseDistroVersion.ToString(), databaseSubversionInfo);
@@ -974,7 +976,7 @@ namespace RelhaxModpack.Windows
             //else check and load the use selection from auto launch command line
             else if (!string.IsNullOrEmpty(CommandLineSettings.AutoInstallFileName))
             {
-                string thePath = Path.Combine(Settings.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName);
+                string thePath = Path.Combine(ApplicationConstants.RelhaxUserSelectionsFolderPath, CommandLineSettings.AutoInstallFileName);
                 Logging.Info("Loading selection file from {0}", thePath);
                 SelectionsDocument = XmlUtils.LoadXmlDocument(thePath, XmlLoadType.FromFile);
                 shouldLoadSomethingFilepath = thePath;
@@ -982,25 +984,25 @@ namespace RelhaxModpack.Windows
             }
             else if (ModpackSettings.SaveLastSelection)
             {
-                if (!File.Exists(Settings.LastInstalledConfigFilepath))
+                if (!File.Exists(ApplicationConstants.LastInstalledConfigFilepath))
                 {
                     Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
-                    SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                    SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(ApplicationSettings.ManagerInfoZipfile, ApplicationConstants.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                     shouldLoadSomethingFilepath = null;
                     shouldLoadSomething = true;
                 }
                 else
                 {
-                    Logging.Info("Loading selection file from {0}", Settings.LastInstalledConfigFilepath);
-                    SelectionsDocument = XmlUtils.LoadXmlDocument(Settings.LastInstalledConfigFilepath, XmlLoadType.FromFile);
-                    shouldLoadSomethingFilepath = Settings.LastInstalledConfigFilepath;
+                    Logging.Info("Loading selection file from {0}", ApplicationConstants.LastInstalledConfigFilepath);
+                    SelectionsDocument = XmlUtils.LoadXmlDocument(ApplicationConstants.LastInstalledConfigFilepath, XmlLoadType.FromFile);
+                    shouldLoadSomethingFilepath = ApplicationConstants.LastInstalledConfigFilepath;
                     shouldLoadSomething = true;
                 }
             }
             else
             {
                 //load default checked mods
-                SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, Settings.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(ApplicationSettings.ManagerInfoZipfile, ApplicationConstants.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                 shouldLoadSomethingFilepath = null;
                 shouldLoadSomething = true;
             }
@@ -1042,12 +1044,21 @@ namespace RelhaxModpack.Windows
                 package.ParentBorder = package.Parent.ChildBorder;
                 package.ParentStackPanel = package.Parent.ChildStackPanel;
 
+                //set UI properties, if we're going to run color change based on settings from the user
+                package.ChangeColorOnValueChecked =
+                    (ModpackSettings.ModSelectionView == SelectionView.DefaultV2 && ModpackSettings.EnableColorChangeDefaultV2View) ||
+                    (ModpackSettings.ModSelectionView == SelectionView.Legacy && ModpackSettings.EnableColorChangeLegacyView);
+                package.ModSelectionView = ModpackSettings.ModSelectionView;
+                package.ForceEnabled = ModpackSettings.ForceEnabled;
+                package.ForceVisible = ModpackSettings.ForceVisible;
+
                 //check if we actually want to add it. if the program isn't forcing them to be enabled
                 //and the mod reports being disabled, then don't add it to the UI
                 //the counter needs to still be kept up to date with the list (the whole list includes invisible mods!)
                 if (!ModpackSettings.ForceVisible && !package.Visible)
                     continue;
-                //ok now actuallt load the UI stuff
+
+                //ok now actually load the UI stuff
                 //parse command line stuff. if we're forcinfg it to be enabled or visable
                 if (ModpackSettings.ForceVisible && !package.IsStructureVisible)
                     package.Visible = true;
@@ -1718,7 +1729,7 @@ namespace RelhaxModpack.Windows
         {
             SaveFileDialog selectSavePath = new SaveFileDialog()
             {
-                InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
+                InitialDirectory = ApplicationConstants.RelhaxUserSelectionsFolderPath,
                 AddExtension = true,
                 Filter = "XML files|*.xml",
                 ValidateNames = true,
@@ -1751,7 +1762,7 @@ namespace RelhaxModpack.Windows
             {
                 OpenFileDialog selectLoadPath = new OpenFileDialog()
                 {
-                    InitialDirectory = Settings.RelhaxUserSelectionsFolderPath,
+                    InitialDirectory = ApplicationConstants.RelhaxUserSelectionsFolderPath,
                     CheckFileExists = true,
                     CheckPathExists = true,
                     AddExtension = true,
@@ -1785,7 +1796,7 @@ namespace RelhaxModpack.Windows
                 {
                     try
                     {
-                        xmlString = await client.DownloadStringTaskAsync(Settings.SelectionsRoot + e.FileToLoad);
+                        xmlString = await client.DownloadStringTaskAsync(ApplicationConstants.SelectionsRoot + e.FileToLoad);
                     }
                     catch (Exception ex)
                     {
@@ -1933,7 +1944,7 @@ namespace RelhaxModpack.Windows
             //do the same as above but for user mods
             foreach (SelectablePackage package in UserCategory.Packages)
             {
-                if (stringUserSelections.Contains(Path.GetFileNameWithoutExtension(package.ZipFile)) && File.Exists(Path.Combine(Settings.RelhaxUserModsFolderPath, package.ZipFile)))
+                if (stringUserSelections.Contains(Path.GetFileNameWithoutExtension(package.ZipFile)) && File.Exists(Path.Combine(ApplicationConstants.RelhaxUserModsFolderPath, package.ZipFile)))
                 {
                     Logging.Info(LogOptions.MethodName, string.Format("Checking User Mod {0}", package.ZipFile));
                     package.Enabled = true;
@@ -2132,7 +2143,7 @@ namespace RelhaxModpack.Windows
                 DatabasePackage userPack = new DatabasePackage()
                 {
                     PackageName = userPackage.Attributes["name"].InnerText,
-                    ZipFile = Path.Combine(Settings.RelhaxUserModsFolderPath, string.Format("{0}.zip", userPackage.Attributes["name"].InnerText)),
+                    ZipFile = Path.Combine(ApplicationConstants.RelhaxUserModsFolderPath, string.Format("{0}.zip", userPackage.Attributes["name"].InnerText)),
                     CRC = userPackage.Attributes["crc"].InnerText
                 };
                 userPackagesFromSelection.Add(userPack);
@@ -2278,7 +2289,7 @@ namespace RelhaxModpack.Windows
             //check if dependencies are out of date
             Logging.Debug(LogOptions.MethodName, "Processing dependencies from selection");
             Logging.Debug(LogOptions.MethodName, "First calculate dependencies from currently selected packages");
-            List<Dependency> dependenciesCalculatedFromLoadedSelection = DatabaseUtils.CalculateDependencies(Dependencies, ParsedCategoryList, true);
+            List<Dependency> dependenciesCalculatedFromLoadedSelection = DatabaseUtils.CalculateDependencies(Dependencies, ParsedCategoryList, true, false);
 
             Logging.Debug(LogOptions.MethodName, "Check if number if calculated dependencies == number of loaded dependencies from file");
             if (dependenciesCalculatedFromLoadedSelection.Count != dependenciesFromSelection.Count)
@@ -2570,10 +2581,10 @@ namespace RelhaxModpack.Windows
             //create saved config xml layout
             XDocument doc = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement("mods", new XAttribute("ver", Settings.ConfigFileVersion2V0),
+                new XElement("mods", new XAttribute("ver", ApplicationConstants.ConfigFileVersion2V0),
                 new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", Settings.DatabaseVersion),
+                new XAttribute("dbVersion", ApplicationSettings.DatabaseVersion),
                 new XAttribute("dbDistro", databaseVersion.ToString())));
 
             //relhax mods root
@@ -2629,10 +2640,10 @@ namespace RelhaxModpack.Windows
 
             //document root
             XElement packagesRoot = new XElement("packages",
-                new XAttribute("ver", Settings.ConfigFileVersion3V0),
+                new XAttribute("ver", ApplicationConstants.ConfigFileVersion3V0),
                 new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", Settings.DatabaseVersion),
+                new XAttribute("dbVersion", ApplicationSettings.DatabaseVersion),
                 new XAttribute("dbDistro", databaseVersion.ToString()));
 
             doc.Add(packagesRoot);
@@ -2667,7 +2678,7 @@ namespace RelhaxModpack.Windows
 
             //calculate dependencies for adding
             Logging.Debug("Running dependency calculation on database");
-            List<Dependency> dependenciesToInstall = DatabaseUtils.CalculateDependencies(Dependencies, ParsedCategoryList,true);
+            List<Dependency> dependenciesToInstall = DatabaseUtils.CalculateDependencies(Dependencies, ParsedCategoryList, true, false);
 
             Logging.Debug("Saving calculated dependencies to document");
             foreach (Dependency dependency in dependenciesToInstall)
@@ -3116,12 +3127,7 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
-        /*
-        ~ModSelectionList()
-        {
 
-        }
-        */
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

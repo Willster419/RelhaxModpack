@@ -12,33 +12,38 @@ using System.Windows.Media;
 using System.Text;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities;
-using RelhaxModpack.Patches;
+using RelhaxModpack.Patching;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Utilities.ClassEventArgs;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
     /// <summary>
     /// Interaction logic for PatchDesigner.xaml
     /// </summary>
-    public partial class PatchDesigner : RelhaxWindow
+    public partial class PatchDesigner : RelhaxCustomFeatureWindow
     {
         /// <summary>
-        /// Indicates if this editor instance was launched from the MainWindow or from command line
+        /// The command line argument specified at application launch to show this window
         /// </summary>
-        /// <remarks>This changes the behavior of the logging for the editor</remarks>
-        public bool LaunchedFromMainWindow = false;
+        public const string CommandLineArg = "patch-designer";
 
-        private PatchSettings PatchSettings;
+        /// <summary>
+        /// The name of the logfile
+        /// </summary>
+        public const string LoggingFilename = "RelhaxPatchDesigner.log";
+
+        private PatchSettings PatchSettings = new PatchSettings();
         private OpenFileDialog OpenPatchfileDialog;
         private OpenFileDialog OpenFileToPatchDialog;
         private SaveFileDialog SavePatchfileDialog;
         private bool UnsavedChanges = false;
         private bool init = true;
+        private Patcher Patcher = new Patcher() { DebugMode = false };
 
         //for drag drop
         private bool IsPatchListScrolling = false;
-        private bool RegressionsRunning = false;
         private Point BeforeDragDropPoint;
 
         //for the pop out replace in case it's a lot to replace
@@ -75,6 +80,7 @@ namespace RelhaxModpack.Windows
         public PatchDesigner()
         {
             InitializeComponent();
+            Settings = PatchSettings;
         }
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
@@ -84,34 +90,15 @@ namespace RelhaxModpack.Windows
                 if (MessageBox.Show("You have unsaved changes, return to patcher?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     return;
             }
-
-            if (!Logging.IsLogDisposed(Logfiles.PatchDesigner))
-                Logging.Patcher("Saving patcher settings",LogLevel.Info);
-            
-            if (Settings.SaveSettings(Settings.PatcherSettingsFilename, typeof(PatchSettings), null, PatchSettings))
-                if (!Logging.IsLogDisposed(Logfiles.PatchDesigner))
-                    Logging.Patcher("Patcher settings saved", LogLevel.Info);
-
-            if (!Logging.IsLogDisposed(Logfiles.PatchDesigner))
-                Logging.DisposeLogging(Logfiles.PatchDesigner);
+            Logging.DisposeLogging(Logfiles.PatchDesigner);
         }
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //load settings
-            PatchSettings = new PatchSettings();
-            Logging.Patcher("Loading patcher settings", LogLevel.Info);
-            if (!Settings.LoadSettings(Settings.PatcherSettingsFilename, typeof(PatchSettings), null, PatchSettings))
-                Logging.Patcher("Failed to load patcher settings, using defaults", LogLevel.Error);
-            else
-                Logging.Patcher("Successfully loaded patcher settings", LogLevel.Info);
             LoadSettingsToUI();
 
             //load empty patch definition
             PatchesList.Items.Clear();
-
-            //attach the log output to the logfile
-            Logging.GetLogfile(Logfiles.PatchDesigner).OnLogfileWrite += Logging_OnLoggingUIThreadReport;
 
             //save current brushes
             PatchFilePathBrush = PatchFilePathTextbox.Background;
@@ -124,7 +111,7 @@ namespace RelhaxModpack.Windows
             {
                 Task.Run(async () =>
                 {
-                    if (!await CommonUtils.IsManagerUptoDate(CommonUtils.GetApplicationVersion()))
+                    if (!await CommonUtils.IsManagerUptoDate(CommonUtils.GetApplicationVersion(), ModpackSettings.ApplicationDistroVersion))
                     {
                         MessageBox.Show("Your application is out of date. Please launch the application normally to update");
                     }
@@ -132,7 +119,7 @@ namespace RelhaxModpack.Windows
             }
 
             //add one patch as default
-            PatchesList.Items.Add(new Patch() { FromEditor = true });
+            PatchesList.Items.Add(new Patch());
             PatchesList.SelectedIndex = 0;
             SelectedPatch = PatchesList.Items[0] as Patch;
 
@@ -143,6 +130,11 @@ namespace RelhaxModpack.Windows
         {
             PopOutReplaceBlockCB.IsChecked = false;
             PopOutReplaceBlockCB_Click(null, null);
+        }
+
+        private string SelectedPatchToString()
+        {
+            return SelectedPatch == null ? "(null)" : SelectedPatch.ToString();
         }
 
         #region Settings
@@ -198,7 +190,6 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Other UI stuff
-
         private void PatchTypeCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PatchTypeCombobox.IsDropDownOpen)
@@ -385,13 +376,6 @@ namespace RelhaxModpack.Windows
             }
 
             PatchesList.Items.Refresh();
-        }
-
-        //scrolling constant to keep most recent log addition present on the screen
-        private void LogOutput_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            if(RegressionsRunning)
-                LogOutput.ScrollToEnd();
         }
 
         private void PopOutReplaceBlockCB_Click(object sender, RoutedEventArgs e)
@@ -631,11 +615,8 @@ namespace RelhaxModpack.Windows
             patchToTest.Replace = PatchReplaceTextbox.Text;
 
             //put patch into patch test methods
-            //set patch from editor to true to enable verbose logging
-            if(!patchToTest.FromEditor)
-                patchToTest.FromEditor = true;
             Logging.Patcher("Running patch...", LogLevel.Info);
-            switch (PatchUtils.RunPatch(patchToTest))
+            switch (Patcher.RunPatchFromEditor(patchToTest))
             {
                 case PatchExitCode.Error:
                     Logging.Patcher("Patch failed with errors. Check the log for details.", LogLevel.Error);
@@ -812,7 +793,7 @@ namespace RelhaxModpack.Windows
 
         private void AddPatchButton_Click(object sender, RoutedEventArgs e)
         {
-            PatchesList.Items.Add(new Patch() { FromEditor = true });
+            PatchesList.Items.Add(new Patch());
         }
         #endregion
 
@@ -880,734 +861,5 @@ namespace RelhaxModpack.Windows
         }
 
         #endregion
-
-        #region Regression Testing
-        private async void RegexRegressionTesting_Click(object sender, RoutedEventArgs e)
-        {
-            RegressionsRunning = true;
-            if (PatchSettings.SwitchToLogWhenTestingPatch)
-            {
-                RightSideTabControl.SelectedItem = LogOutputTab;
-            }
-            Logging.Patcher("Regex regressions start");
-            await Task.Run(() =>
-            {
-                Regression regression = new Regression(PatchRegressionTypes.regex, BuildRegexUnittests());
-                regression.RunRegressions();
-                regression.Dispose();
-            });
-            Logging.Patcher("Regex regressions end");
-            Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
-        }
-
-        private async void XmlRegressionTesting_Click(object sender, RoutedEventArgs e)
-        {
-            RegressionsRunning = true;
-            if (PatchSettings.SwitchToLogWhenTestingPatch)
-            {
-                RightSideTabControl.SelectedItem = LogOutputTab;
-            }
-            Logging.Patcher("Xml regressions start");
-            await Task.Run(() =>
-            {
-                Regression regression = new Regression(PatchRegressionTypes.xml, BuildXmlUnittests());
-                regression.RunRegressions();
-                regression.Dispose();
-            });
-            Logging.Patcher("Xml regressions end");
-            Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
-        }
-
-        private async void JsonRegressionTesting_Click(object sender, RoutedEventArgs e)
-        {
-            RegressionsRunning = true;
-            if (PatchSettings.SwitchToLogWhenTestingPatch)
-            {
-                RightSideTabControl.SelectedItem = LogOutputTab;
-            }
-            Logging.Patcher("Json regressions start");
-            await Task.Run(() =>
-            {
-                Regression regression = new Regression(PatchRegressionTypes.json, BuildJsonUnittests());
-                regression.RunRegressions();
-                regression.Dispose();
-            });
-            Logging.Patcher("Json regressions end");
-            Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
-        }
-
-        private async void FollowPathRegressionTesting_Click(object sender, RoutedEventArgs e)
-        {
-            RegressionsRunning = true;
-            if (PatchSettings.SwitchToLogWhenTestingPatch)
-            {
-                RightSideTabControl.SelectedItem = LogOutputTab;
-            }
-            Logging.Patcher("FollowPath regressions start");
-            await Task.Run(() =>
-            {
-                Regression regression = new Regression(PatchRegressionTypes.followPath, BuildFollowPathUnittests());
-                regression.RunRegressions();
-                regression.Dispose();
-            });
-            Logging.Patcher("FollowPath regressions end");
-            Dispatcher.Invoke(new Action(() => { RegressionsRunning = false; }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
-        }
-
-        private void Logging_OnLoggingUIThreadReport(object sender, LogMessageEventArgs e)
-        {
-            //https://www.tutorialspoint.com/csharp/csharp_delegates.htm
-            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.threading.dispatcher.invoke?redirectedfrom=MSDN&view=netframework-4.6.1#examples
-            //https://stackoverflow.com/questions/1951927/events-in-c-sharp-definition-and-example
-            //https://stackoverflow.com/questions/4936459/dispatcher-begininvoke-cannot-convert-lambda-to-system-delegate
-            Dispatcher.BeginInvoke(new Action(() => { LogOutput.AppendText(e.Message + Environment.NewLine); }));
-        }
-        #endregion
-
-        #region Json regressions
-        private List<UnitTest> BuildJsonUnittests()
-        {
-            return new List<UnitTest>()
-            {
-                new UnitTest()
-                {
-                    Description = "add test 1: basic add",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$",
-                        Search = "",
-                        Replace = "awesome/false",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "add test 2: repeat of basic add. should do nothing",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$",
-                        Search = "",
-                        Replace = "awesome/false",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "add test 3: same path as basic add, but different value to insert. should update the value",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$",
-                        Search = "",
-                        Replace = "awesome/true",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "add test 4: add of a new object as well as the path. should create object paths to value",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$",
-                        Search = "",
-                        Replace = "memes/awesome/true",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "add test 5: add of a new property to part object path that already exists. should add the value without overwriting the path",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$",
-                        Search = "",
-                        Replace = "memes/dank/true",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "add test 6: add of a new blank array",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$",
-                        Search = "",
-                        Replace = "memelist[array]",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "add test 7: add of a new blank object",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$",
-                        Search = "",
-                        Replace = "objectname[object]",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "add test 8: add of new property with slash escape",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$",
-                        Search = "",
-                        Replace = "memeville/spaces[sl]hangar_premium_v2",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "edit test 1: edit attempt of path that does not exist. should note it log and abort",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.fakePath",
-                        Search = "",
-                        Replace = "null",
-                        Mode = "edit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "edit test 2: object edit attempt of array. should note in log and abort",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.nations",
-                        Search = "",
-                        Replace = "null",
-                        Mode = "edit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "edit test 3: edit attempt of simple path. should change the one value",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.mode",
-                        Search = "normal",
-                        Replace = "epic",
-                        Mode = "edit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "edit test 4: edit attempt of simple path. should change the one value (false, should report value entry same and exit)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.mode",
-                        Search = "epic",
-                        Replace = "epic",
-                        Mode = "edit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "array edit test 1: edit of array of values. should change the last value in the array",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.ignorelist[*]",
-                        Search = "ttest",
-                        Replace = "test",
-                        Mode = "arrayEdit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "array edit test 2: edit of array of objects. should parse every value of 421 or above to be 420 (regex style)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = @"$.screensavers.starttime[*]",
-                        Search = @"^[4-9][2-9][0-9]\d*$",
-                        Replace = "420",
-                        Mode = "arrayEdit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "array edit test 3: edit of array of objects. should parse every value of 419 or below to be 420 (regex style)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = @"$.screensavers.starttime[*]",
-                        Search = @"^([0123]?[0-9]?[0-9]|4[01][0-9]|41[0-9])$",
-                        Replace = "420",
-                        Mode = "arrayEdit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "array edit test 4: edit array of objects. should parse every value less than 420 to be 420 (jsonpath style)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = @"$.screensavers2.starttime[?(@<420)]",
-                        Search = ".*",
-                        Replace = "420",
-                        Mode = "arrayEdit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "array edit test 5: edit array of objects. should parse every value more than 420 to be 420 (jsonpath style)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = @"$.screensavers2.starttime[?(@>420)]",
-                        Search = ".*",
-                        Replace = "420",
-                        Mode = "arrayEdit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "remove test 1: basic remove test with property",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.game_greeting2",
-                        Search = ".*",
-                        Replace = "",
-                        Mode = "remove"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "remove test 2: advanced remove test with property matching (should not remove as text not matched)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.game_greeting",
-                        Search = "not match this text",
-                        Replace = "",
-                        Mode = "remove"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "remove test 3: advanced remove test with property matching (should remove, text matched)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.game_greeting",
-                        Search = "match this text",
-                        Replace = "",
-                        Mode = "remove"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayAdd test 1: basic add of jValue at index 0",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.ignorelist",
-                        Search = ".*",
-                        Replace = "spaces[sl]urmom[index=0]",
-                        Mode = "arrayAdd"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayAdd test 2: basic add of jValue at index -1 (last)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.ignorelist",
-                        Search = ".*",
-                        Replace = "spaces[sl]urmom2[index=-1]",
-                        Mode = "arrayAdd"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayAdd test 3: attempt add of object to array of JValue, should fail",
-                    ShouldPass = false,
-                    Patch = new Patch()
-                    {
-                        Path = "$.ignorelist",
-                        Search = ".*",
-                        Replace = "enable/true[index=0]",
-                        Mode = "arrayAdd"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayAdd test 4: attempt add of jValue to array of object, should fail",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.sample_object_array",
-                        Search = ".*",
-                        Replace = "spaces[sl]urmom[index=0]",
-                        Mode = "arrayAdd"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayAdd test 5: basic add of object",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.sample_object_array",
-                        Search = ".*",
-                        Replace = "enable/true[index=0]",
-                        Mode = "arrayAdd"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayRemove test 1: basic remove of jValue \"test\"",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.ignorelist",
-                        Search = "test",
-                        Replace = "",
-                        Mode = "arrayRemove"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayRemove test 2: basic remove of jValue \"test3\" (does not exist, should fail)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.ignorelist",
-                        Search = "test3",
-                        Replace = "",
-                        Mode = "arrayRemove"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayRemove test 3: basic remove of jObject \"enable:true\"",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.sample_object_array",
-                        Search = ".*",
-                        Replace = "",
-                        Mode = "arrayRemove"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayClear test 1: basic clear of jValue \"username\"",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.ignorelist",
-                        Search = "username",
-                        Replace = "",
-                        Mode = "arrayClear"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayClear test 2: basic clear of jValue \"username\" (does not exist)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.ignorelist",
-                        Search = "username",
-                        Replace = "",
-                        Mode = "arrayClear"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "arrayClear test 3: basic clear of object \".*\" (all)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "$.screensavers.starttime",
-                        Search = ".*",
-                        Replace = "",
-                        Mode = "arrayClear"
-                    }
-                }
-            };
-        }
-        #endregion
-
-        #region Xml regressions
-        private List<UnitTest> BuildXmlUnittests()
-        {
-            return new List<UnitTest>()
-            {
-                new UnitTest()
-                {
-                    Description = "add test 1: adding element with value",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        //type set in regression test
-                        Path = "//audio_mods.xml/loadBanks",
-                        Search = "",
-                        Replace = "bank/sound_bank_name",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "add test 2: adding element with levels (with value)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "//audio_mods.xml/events",
-                        Search = "",
-                        Replace = "event/name/vo_ally_killed_by_player",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "add test 3: adding in element where child inner text equals",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "/audio_mods.xml/events/event[name = \"vo_ally_killed_by_player\"]",
-                        Search = "",
-                        Replace = "mod/simple_sounds_teamkill",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "add test 4: adding element with escape for slash",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "//audio_mods.xml/RTPCs",
-                        Search = "",
-                        Replace = "RTPC/RTPC[sl]volume_slider_name",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "edit test 1: edit of a value matching parameter to new value",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "//audio_mods.xml/random_property",
-                        Search = "value",
-                        Replace = "better_value",
-                        Mode = "edit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "edit test 2: edit of a value matching parameter to a new value (but match does not exist)",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "//audio_mods.xml/random_property",
-                        Search = "fake_value",
-                        Replace = "more_fake_value",
-                        Mode = "edit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "edit test 3: edit of matching any value to a new value",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "//audio_mods.xml/random_property2",
-                        Search = "",
-                        Replace = "new_value",
-                        Mode = "edit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "remove test 1: remove matching element name",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "//audio_mods.xml/prop_to_remove",
-                        Search = "",
-                        Replace = "",
-                        Mode = "remove"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "remove test 2: remove matching element name and value",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Path = "//audio_mods.xml/prop_to_remove2",
-                        Search = "remove_me",
-                        Replace = "",
-                        Mode = "remove"
-                    }
-                }
-            };
-        }
-        #endregion
-
-        #region Regex regressions
-        private List<UnitTest> BuildRegexUnittests()
-        {
-            return new List<UnitTest>()
-            {
-                new UnitTest()
-                {
-                    Description = "multiple matches, only replaces on specified lines",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Lines = new string[] { "3", "5" },
-                        Search = "should match",
-                        Replace = "replaced",
-                        Type = "regex"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "multiple matches, replaces all lines",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        Lines = new string[] { },
-                        Search = "should match",
-                        Replace = "replaced",
-                        Type = "regex"
-                    }
-                }
-            };
-        }
-        #endregion
-
-        #region FollowPath regressions
-        private List<UnitTest> BuildFollowPathUnittests()
-        {
-            return new List<UnitTest>()
-            {
-                new UnitTest()
-                {
-                    Description = "disable damageLog, follow path @xvm.xc->check_01.xc, includes \"$ref\" inside file",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        FollowPath = true,
-                        Path = @"$.damageLog.enabled",
-                        Search = ".*",
-                        Replace = "false",
-                        Type = "json",
-                        Mode = "edit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "update hitlogHeader's updateEvent property to be on dank memes. followPath @xvm.xc->battleLabels.xc->battleLabelsTemplates.xc",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        FollowPath = true,
-                        //@"$.screensavers2.starttime[?(@<420)]"
-                        //https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html#filters
-                        Path = @"$.battleLabels.formats[?(@ =~ /hitLogHeader/)].updateEvent",
-                        Search = ".*",
-                        Replace = "PY(ON_DANK_MEMES)",
-                        Type = "json",
-                        Mode = "edit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "remove array reference entry of fire",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        FollowPath = true,
-                        Path = @"$.battleLabels.formats",
-                        Search = "fire",
-                        Replace = "",
-                        Type = "json",
-                        Mode = "arrayRemove"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "part 1 of 4: add a object to playersPanel definition-> change link in root file from 'playersPanel' to 'def'",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        FollowPath = true,
-                        Path = @"$.playersPanel",
-                        Search = ".*",
-                        Replace = @"[xvm_dollar][lbracket][quote]playersPanel.xc[quote][colon][quote]def[quote][xvm_rbracket]",
-                        Type = "json",
-                        Mode = "edit"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "part 2 of 4: add a object to playersPanel definition-> change link in root file from 'playersPanel' to 'def'",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        FollowPath = true,
-                        Path = @"$.playersPanel",
-                        Search = ".*",
-                        Replace = @"newDef[object]",
-                        Type = "json",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "part 3 of 4: add a object to playersPanel definition-> change link in root file from 'playersPanel' to 'def'",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        FollowPath = true,
-                        Path = @"$.playersPanel.newDef",
-                        Search = ".*",
-                        Replace = @"isThisTheBestXvmParserEver/true",
-                        Type = "json",
-                        Mode = "add"
-                    }
-                },
-                new UnitTest()
-                {
-                    Description = "part 4 of 4: add a object to playersPanel definition-> change link in root file back to 'def' to 'playersPanel'",
-                    ShouldPass = true,
-                    Patch = new Patch()
-                    {
-                        FollowPath = true,
-                        Path = @"$.playersPanel",
-                        Search = ".*",
-                        Replace = @"[xvm_dollar][lbracket][quote]playersPanel.xc[quote][colon][quote]playersPanel[quote][xvm_rbracket]",
-                        Type = "json",
-                        Mode = "edit"
-                    }
-                }
-            };
-        }
-        #endregion
-
-        private string SelectedPatchToString()
-        {
-            return SelectedPatch == null ? "(null)" : SelectedPatch.ToString();
-        }
     }
 }

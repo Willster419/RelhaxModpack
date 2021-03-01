@@ -16,6 +16,8 @@ using System.Xml;
 using RelhaxModpack.UI;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Windows
 {
@@ -77,7 +79,7 @@ namespace RelhaxModpack.Windows
             {
                 try
                 {
-                    selectionsXMlString = await client.DownloadStringTaskAsync(Settings.SelectionsRoot + Settings.SelectionsXml);
+                    selectionsXMlString = await client.DownloadStringTaskAsync(ApplicationConstants.SelectionsRoot + ApplicationConstants.SelectionsXml);
                 }
                 catch(Exception ex)
                 {

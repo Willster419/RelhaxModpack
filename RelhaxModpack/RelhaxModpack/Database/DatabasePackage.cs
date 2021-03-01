@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Utilities;
+﻿using RelhaxModpack.Common;
+using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
@@ -151,13 +152,13 @@ namespace RelhaxModpack.Database
         /// The start address of the URL to the zip file
         /// URL format: StartAddress + ZipFile + EndAddress
         /// </summary>
-        public string StartAddress { get; set; } = Settings.DefaultStartAddress;
+        public string StartAddress { get; set; } = ApplicationConstants.DefaultStartAddress;
 
         /// <summary>
         /// The end address of the URL to the zip file
         /// URL format: StartAddress + ZipFile + EndAddress
         /// </summary>
-        public string EndAddress { get; set; } = Settings.DefaultEndAddress;
+        public string EndAddress { get; set; } = ApplicationConstants.DefaultEndAddress;
 
         /// <summary>
         /// Determine at install time if the package needs to be downloaded

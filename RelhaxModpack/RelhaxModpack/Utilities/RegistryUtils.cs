@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using RelhaxModpack.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -97,9 +98,9 @@ namespace RelhaxModpack.Utilities
             {
                 string potentialResult = path;
                 //if it has win32 or win64, filter it out
-                if (potentialResult.Contains(Settings.WoT32bitFolderWithSlash) || potentialResult.Contains(Settings.WoT64bitFolderWithSlash))
+                if (potentialResult.Contains(ApplicationConstants.WoT32bitFolderWithSlash) || potentialResult.Contains(ApplicationConstants.WoT64bitFolderWithSlash))
                 {
-                    potentialResult = potentialResult.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
+                    potentialResult = potentialResult.Replace(ApplicationConstants.WoT32bitFolderWithSlash, string.Empty).Replace(ApplicationConstants.WoT64bitFolderWithSlash, string.Empty);
                 }
                 if (File.Exists(potentialResult))
                 {

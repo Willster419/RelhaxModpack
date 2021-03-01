@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Utilities
 {
@@ -751,7 +752,7 @@ namespace RelhaxModpack.Utilities
         /// <remarks>This is for in case the user specifies the WoT exe inside the win32 and/or win64 folders</remarks>
         public static string RemoveWoT32bit64bitPathIfExists(string wotPath)
         {
-            return wotPath.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
+            return wotPath.Replace(ApplicationConstants.WoT32bitFolderWithSlash, string.Empty).Replace(ApplicationConstants.WoT64bitFolderWithSlash, string.Empty);
         }
 
         /// <summary>

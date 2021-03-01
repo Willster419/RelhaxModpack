@@ -14,6 +14,8 @@ using System.IO;
 using System.Windows.Threading;
 using System.Threading;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxInstallerUnitTester
 {
@@ -28,13 +30,14 @@ namespace RelhaxInstallerUnitTester
         private static List<Category> ParsedCategoryList = null;
         private static Logfile log = null;
         private static App app = null;
+        private static ModpackSettings ModpackSettings = new ModpackSettings();
+        private static SettingsParser SettingsParser = new SettingsParser();
 
         [TestMethod]
         public void Test01_LoadModpackSettingsTest()
         {
-            bool settingsLoaded = Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), null, null);
-            if (File.Exists(Settings.ModpackSettingsFileName))
-                Assert.IsTrue(settingsLoaded);
+            Assert.IsTrue(File.Exists(ModpackSettings.SettingsFilename));
+            SettingsParser.LoadSettings(ModpackSettings);
 
             GlobalDependencies = new List<DatabasePackage>();
         }
@@ -53,14 +56,14 @@ namespace RelhaxInstallerUnitTester
 
             //ensure folder structure exists
             log.Write("Ensuring folder structure exists");
-            foreach(string folderPath in Settings.FoldersToCheck)
+            foreach(string folderPath in ApplicationConstants.FoldersToCheck)
             {
                 if (!Directory.Exists(folderPath))
                     Directory.CreateDirectory(folderPath);
             }
 
             //get the managerInfo document
-            Settings.ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(true);
+            ApplicationSettings.ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(true);
         }
 
         [TestMethod]
@@ -152,7 +155,7 @@ namespace RelhaxInstallerUnitTester
         {
             string[] fullyQualifiedTestNameSplit = ctx.FullyQualifiedTestClassName.Split('.');
             //throw exception if it fails to create the log file
-            log = new Logfile(fullyQualifiedTestNameSplit[fullyQualifiedTestNameSplit.Length-1], Logging.ApplicationLogfileTimestamp);
+            log = new Logfile(fullyQualifiedTestNameSplit[fullyQualifiedTestNameSplit.Length-1], Logging.ApplicationLogfileTimestamp, true);
 
             log.Init();
 

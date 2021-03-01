@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Settings
 {
     /// <summary>
     /// Defines settings used in the database automation runner window

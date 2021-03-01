@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Text;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Database
 {
@@ -279,14 +280,7 @@ namespace RelhaxModpack.Database
                     }
                 }
 
-                //determine if we should perform color change on the UI component(s)
-                bool UIComponentColorChange = false;
-                if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2 && ModpackSettings.EnableColorChangeDefaultV2View)
-                    UIComponentColorChange = true;
-                else if (ModpackSettings.ModSelectionView == SelectionView.Legacy && ModpackSettings.EnableColorChangeLegacyView)
-                    UIComponentColorChange = true;
-
-                if(UIComponentColorChange && Visible && IsStructureVisible)
+                if(ChangeColorOnValueChecked && Visible && IsStructureVisible)
                 {
                     //if the UI component is not null, it's a checkbox or radiobutton
                     if (UIComponent != null)
@@ -334,7 +328,7 @@ namespace RelhaxModpack.Database
                     {
                         //workarounds
                         //top item is not going to correct color
-                        if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
+                        if (ModSelectionView == SelectionView.Legacy)
                         {
                             if (_Checked)
                             {
@@ -345,7 +339,7 @@ namespace RelhaxModpack.Database
                                 TreeView.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
                             }
                         }
-                        else if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
+                        else if (ModSelectionView == SelectionView.DefaultV2)
                         {
                             if (!_Checked)
                             {
@@ -459,6 +453,17 @@ namespace RelhaxModpack.Database
         /// The StackPanel that this item is inside. WPF component
         /// </summary>
         public StackPanel ParentStackPanel;
+
+        /// <summary>
+        /// Gets or sets if the UI background components of this package should change color when the checked value changes
+        /// </summary>
+        public bool ChangeColorOnValueChecked { get; set; } = false;
+
+        public SelectionView ModSelectionView { get; set; }
+
+        public bool ForceVisible { get; set; }
+
+        public bool ForceEnabled { get; set; }
         #endregion
 
         #region UI Properties Default View
@@ -655,9 +660,9 @@ namespace RelhaxModpack.Database
                 //get if the package is need to be download "(updated)" text (and size)
                 //(only happens if level > -1)
                 string nameDisplay = NameFormatted;
-                if (ModpackSettings.ForceVisible && !IsStructureVisible)
+                if (ForceVisible && !IsStructureVisible)
                     nameDisplay = string.Format("{0} [{1}]", nameDisplay, Translations.GetTranslatedString("invisible"));
-                if (ModpackSettings.ForceEnabled && !IsStructureEnabled)
+                if (ForceEnabled && !IsStructureEnabled)
                     nameDisplay = string.Format("{0} [{1}]", nameDisplay, Translations.GetTranslatedString("disabled"));
                 if(Level > -1 && DownloadFlag)
                 {

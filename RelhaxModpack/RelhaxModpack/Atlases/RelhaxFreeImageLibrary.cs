@@ -10,6 +10,7 @@ using Ionic.Zip;
 using RelhaxModpack.Atlases;
 using TeximpNet;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack
 {
@@ -42,7 +43,7 @@ namespace RelhaxModpack
         /// </summary>
         public string Filepath
         {
-            get { return Path.Combine(Settings.RelhaxLibrariesFolderPath, ExtractedFilename); }
+            get { return Path.Combine(ApplicationConstants.RelhaxLibrariesFolderPath, ExtractedFilename); }
         }
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace RelhaxModpack
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
             using (ZipFile zout = ZipFile.Read(stream))
             {
-                zout.ExtractAll(Settings.RelhaxLibrariesFolderPath);
+                zout.ExtractAll(ApplicationConstants.RelhaxLibrariesFolderPath);
             }
         }
     }

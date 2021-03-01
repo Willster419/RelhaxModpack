@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.UI;
+﻿using RelhaxModpack.Settings;
+using RelhaxModpack.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace RelhaxModpack.Windows
         /// Controls if the window should have translation applied
         /// </summary>
         public bool LocalizeWindow { get; set; } = false;
+
         /// <summary>
         /// Controls if the window should have tool tips applied
         /// </summary>
@@ -34,6 +36,12 @@ namespace RelhaxModpack.Windows
         public bool ApplyScaling { get; set; } = false;
 
         /// <summary>
+        /// Controls if the window should apply custom font to this window.
+        /// </summary>
+        /// <remarks>This setting works in tandem with the ModpackSettings setting to use custom font.</remarks>
+        public bool ApplyCustomFont { get; set; } = false;
+
+        /// <summary>
         /// The original Width and Height of the window before scaling
         /// </summary>
         public double OriginalWidth { get; set; }
@@ -44,6 +52,16 @@ namespace RelhaxModpack.Windows
         public double OriginalHeight { get; set; }
 
         /// <summary>
+        /// A reference to the modpack settings window configuration class
+        /// </summary>
+        public ModpackSettings ModpackSettings { get; set; }
+
+        /// <summary>
+        /// A reference to the command line settings configuration class
+        /// </summary>
+        public CommandLineSettings CommandLineSettings { get; set; }
+
+        /// <summary>
         /// Creates an instance of the RelhaxWindow class
         /// </summary>
         public RelhaxWindow() : base()
@@ -52,8 +70,14 @@ namespace RelhaxModpack.Windows
             Loaded += OnWindowLoaded;
         }
 
-        //hook into the window loaded event to apply things that should be done to all child windows of the mainWindow
-        private void OnWindowLoaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Performs custom window loading functions that should be done to all windows of this class
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <remarks>This function saves the original size that the window was designed for (scaling), applies localizations, applies color settings,
+        /// applies custom font, and applies scaling. Each application action is controlled by a boolean.</remarks>
+        protected virtual void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
             //get the original width and height
             OriginalHeight = Height;
@@ -73,7 +97,7 @@ namespace RelhaxModpack.Windows
             }
 
             //apply font changes
-            if(ModpackSettings.EnableCustomFont)
+            if(ApplyCustomFont && ModpackSettings.EnableCustomFont)
             {
                 UiUtils.ApplyFontToWindow(this, UiUtils.CustomFontFamily);
             }

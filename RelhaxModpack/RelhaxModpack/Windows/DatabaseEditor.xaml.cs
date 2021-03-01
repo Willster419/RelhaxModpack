@@ -22,16 +22,27 @@ using Trigger = RelhaxModpack.Database.Trigger;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Utilities.ClassEventArgs;
 using System.Windows.Controls.Primitives;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Windows
 {
     /// <summary>
     /// Interaction logic for DatabaseEditor.xaml
     /// </summary>
-    public partial class DatabaseEditor : RelhaxWindow
+    public partial class DatabaseEditor : RelhaxCustomFeatureWindow
     {
-        //private
-        private EditorSettings EditorSettings;
+        /// <summary>
+        /// The command line argument specified at application launch to show this window
+        /// </summary>
+        public const string CommandLineArg = "database-editor";
+
+        /// <summary>
+        /// The name of the logfile
+        /// </summary>
+        public const string LoggingFilename = "RelhaxEditor.log";
+
+        private EditorSettings EditorSettings = new EditorSettings();
         private List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
         private List<Dependency> Dependencies = new List<Dependency>();
         private List<Category> ParsedCategoryList = new List<Category>();
@@ -43,7 +54,6 @@ namespace RelhaxModpack.Windows
         private TreeViewItem ItemToExpand;
         private Point BeforeDragDropPoint;
         private bool IsScrolling = false;
-        //private bool AlreadyLoggedMouseMove = false;
         private bool AlreadyLoggedScroll = false;
         private bool Init = true;
         private object SelectedItem = null;
@@ -56,15 +66,7 @@ namespace RelhaxModpack.Windows
             "-----Global Dependencies-----",
             "-----Dependencies-----",
         };
-        private readonly string HttpRegexSearch = @"https*:\/{2}\S+";
         private readonly string UpdatedPackageNewCRC = "f";
-
-        //public
-        /// <summary>
-        /// Indicates if this editor instance was launched from the MainWindow or from command line
-        /// </summary>
-        /// <remarks>This changes the behavior of the logging for the editor</remarks>
-        public bool LaunchedFromMainWindow = false;
 
         #region Stuff
         /// <summary>
@@ -73,22 +75,11 @@ namespace RelhaxModpack.Windows
         public DatabaseEditor()
         {
             InitializeComponent();
+            Settings = EditorSettings;
         }
 
         private void OnApplicationLoad(object sender, RoutedEventArgs e)
         {
-            Logging.Editor("Editor start");
-            EditorSettings = new EditorSettings();
-            Logging.Editor("Loading editor settings");
-            if (!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
-            {
-                Logging.Editor("Failed to load editor settings, using defaults", LogLevel.Warning);
-            }
-            else
-            {
-                Logging.Editor("Editor settings loaded success");
-            }
-
             //check if we are loading the document auto from the command line
             LoadSettingsToUI();
             if (!string.IsNullOrWhiteSpace(CommandLineSettings.EditorAutoLoadFileName))
@@ -119,8 +110,8 @@ namespace RelhaxModpack.Windows
             }
 
             //init timers
-            ReselectOldItem = new DispatcherTimer(TimeSpan.FromMilliseconds(50), DispatcherPriority.Normal, AwesomeHack_Tick, this.Dispatcher) { IsEnabled = false };
-            DragDropTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, OnDragDropTimerTick, this.Dispatcher) { IsEnabled = false };
+            ReselectOldItem = new DispatcherTimer(TimeSpan.FromMilliseconds(50), DispatcherPriority.Normal, AwesomeHack_Tick, base.Dispatcher) { IsEnabled = false };
+            DragDropTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, OnDragDropTimerTick, base.Dispatcher) { IsEnabled = false };
 
             //clear searchbox
             SearchBox.Items.Clear();
@@ -130,24 +121,6 @@ namespace RelhaxModpack.Windows
             foreach (string s in InstallEngine.CompleteTriggerList)
                 LoadedTriggersComboBox.Items.Add(s);
             Init = false;
-
-            if (!CommandLineSettings.SkipUpdate)
-            {
-                if (!LaunchedFromMainWindow)
-                {
-                    Task.Run(async () =>
-                    {
-                        if (!await CommonUtils.IsManagerUptoDate(CommonUtils.GetApplicationVersion()))
-                        {
-                            MessageBox.Show("Your application is out of date. Please launch the application normally to update");
-                        }
-                    });
-                }
-            }
-            else
-            {
-                Logging.Editor("Skipping update check from command line setting", LogLevel.Warning);
-            }
         }
 
         private void AwesomeHack_Tick(object sender, EventArgs e)
@@ -189,15 +162,12 @@ namespace RelhaxModpack.Windows
                     return;
                 }
             }
-            if (!Logging.IsLogDisposed(Logfiles.Editor))
-            {
-                if (Logging.IsLogOpen(Logfiles.Editor))
-                    Logging.Editor("Saving editor settings");
-                if (Settings.SaveSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
-                    if (Logging.IsLogOpen(Logfiles.Editor))
-                        Logging.Editor("Editor settings saved");
-                Logging.DisposeLogging(Logfiles.Editor);
-            }
+
+            Logging.TryWriteToLog("Saving editor settings", Logfiles.Editor, LogLevel.Info);
+            SettingsParser parser = new SettingsParser();
+            parser.SaveSettings(Settings);
+            Logging.TryWriteToLog("Editor settings saved", Logfiles.Editor, LogLevel.Info);
+            Logging.DisposeLogging(Logfiles.Editor);
         }
 
         private int GetMaxPatchGroups()
@@ -1825,7 +1795,7 @@ namespace RelhaxModpack.Windows
             DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
             {
                 ZipFilePathDisk = SaveZipFileDialog.FileName,
-                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion),
+                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, ApplicationSettings.WoTModpackOnlineFolderVersion),
                 ZipFileName = Path.GetFileName(packToWorkOn.ZipFile),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 TransferMode = EditorTransferMode.DownloadZip,
@@ -1882,7 +1852,7 @@ namespace RelhaxModpack.Windows
             DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
             {
                 ZipFilePathDisk = zipFileToUpload,
-                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion),
+                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, ApplicationSettings.WoTModpackOnlineFolderVersion),
                 ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 TransferMode = EditorTransferMode.UploadZip,
@@ -1964,8 +1934,8 @@ namespace RelhaxModpack.Windows
             }
 
             //actually save
-            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), Settings.BetaDatabaseV2RootFilename),
-                        Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), ApplicationConstants.BetaDatabaseV2RootFilename),
+                        ApplicationSettings.WoTClientVersion, ApplicationSettings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             UnsavedChanges = false;
         }
@@ -1985,8 +1955,8 @@ namespace RelhaxModpack.Windows
                     AddExtension = true,
                     CheckPathExists = true,
                     DefaultExt = "xml",
-                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
-                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
+                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? ApplicationConstants.ApplicationStartupPath :
+                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : ApplicationConstants.ApplicationStartupPath,
                     Title = string.Format("Save Database")
                 };
 
@@ -2000,8 +1970,8 @@ namespace RelhaxModpack.Windows
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
 
             //actually save
-            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
-                        Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), ApplicationConstants.BetaDatabaseV2RootFilename),
+                        ApplicationSettings.WoTClientVersion, ApplicationSettings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             UnsavedChanges = false;
         }
@@ -2059,8 +2029,8 @@ namespace RelhaxModpack.Windows
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             //for the folder version: //modInfoAlpha.xml/@version
-            Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
-            Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
+            ApplicationSettings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
+            ApplicationSettings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
         }
@@ -2101,8 +2071,8 @@ namespace RelhaxModpack.Windows
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             //for the folder version: //modInfoAlpha.xml/@version
-            Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
-            Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
+            ApplicationSettings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
+            ApplicationSettings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
         }
@@ -2118,8 +2088,8 @@ namespace RelhaxModpack.Windows
                     OverwritePrompt = false,
                     CheckFileExists = false,
                     DefaultExt = "xml",
-                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
-                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
+                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? ApplicationConstants.ApplicationStartupPath :
+                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : ApplicationConstants.ApplicationStartupPath,
                     Title = "Select path to save database to. NOTE: It is only selecting path, does not save"
                 };
             if (!(bool)SaveDatabaseDialog.ShowDialog())

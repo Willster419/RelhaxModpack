@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Utilities;
+﻿using RelhaxModpack.Common;
+using RelhaxModpack.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -41,8 +42,8 @@ namespace RelhaxModpack.Windows
             {
                 try
                 {
-                    DatabaseUpdateText.Text = await client.DownloadStringTaskAsync(Settings.DatabaseNotesUrl);
-                    ApplicationUpdateText.Text = await client.DownloadStringTaskAsync(Settings.ApplicationNotesBetaUrl);
+                    DatabaseUpdateText.Text = await client.DownloadStringTaskAsync(ApplicationConstants.DatabaseNotesUrl);
+                    ApplicationUpdateText.Text = await client.DownloadStringTaskAsync(ApplicationConstants.ApplicationNotesBetaUrl);
                 }
                 catch (Exception ex)
                 {

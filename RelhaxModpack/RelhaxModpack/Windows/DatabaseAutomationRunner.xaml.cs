@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Settings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -18,14 +19,21 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for DatabaseAutomationRunner.xaml
     /// </summary>
-    public partial class DatabaseAutomationRunner : RelhaxWindow, ICustomFeatureWindow
+    public partial class DatabaseAutomationRunner : RelhaxCustomFeatureWindow
     {
         /// <summary>
         /// The command line argument specified at application launch to show this window
         /// </summary>
-        public const string DatabaseAutomationRunnerCommandLineArg = "automation-runner";
+        public const string CommandLineArg = "automation-runner";
+
+        /// <summary>
+        /// The name of the logfile
+        /// </summary>
+        public const string LoggingFilename = "RelhaxAutomation.log";
 
         public DownloadProgressChangedEventHandler DownloadProgressChanged = null;
+
+        private AutomationRunnerSettings AutomationSettings = new AutomationRunnerSettings();
 
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
@@ -34,44 +42,18 @@ namespace RelhaxModpack.Windows
         {
             InitializeComponent();
             DownloadProgressChanged = WebClient_DownloadProgressChanged;
+            Settings = AutomationSettings;
         }
 
-        /// <summary>
-        /// The name of the xml settings file for the DatabaseAutomationRunner window
-        /// </summary>
-        public string SettingsFilename { get { return this.Settings.Filename; } }
-
-        /// <summary>
-        /// The name of the logfile for the DatabaseAutomationRunner window
-        /// </summary>
-        public string LogFilename { get; } = Logging.AutomationLogFilename;
-
-        /// <summary>
-        /// Indicates if this editor instance was launched from the MainWindow or from command line
-        /// </summary>
-        /// <remarks>This changes the behavior of the logging for the editor</remarks>
-        public bool LaunchedFromMainWindow { get; set; } = false;
-
-        /// <summary>
-        /// The command line argument specified at application launch to show this window
-        /// </summary>
-        public string CommandLineArg { get; } = DatabaseAutomationRunnerCommandLineArg;
-
-        /// <summary>
-        /// The settings definitions class for this window
-        /// </summary>
-        public ISettingsFile Settings { get { return this.AutomationSettings; } }
-
-        private AutomationRunnerSettings AutomationSettings = null;
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
-
+            
         }
 
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

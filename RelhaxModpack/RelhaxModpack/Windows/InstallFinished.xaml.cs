@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities;
 using System;
 using System.Collections.Generic;
@@ -25,8 +26,8 @@ namespace RelhaxModpack.Windows
         {
             if(!CommonUtils.StartProcess(new ProcessStartInfo()
             {
-                WorkingDirectory = Settings.WoTDirectory,
-                FileName = Path.Combine(Settings.WoTDirectory, "WorldOfTanks.exe")
+                WorkingDirectory = ApplicationSettings.WoTDirectory,
+                FileName = Path.Combine(ApplicationSettings.WoTDirectory, "WorldOfTanks.exe")
             }))
             {
                 MessageBox.Show(Translations.GetTranslatedString("CouldNotStartProcess"));

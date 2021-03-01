@@ -575,6 +575,418 @@
             A task that implements this interface implies that it will always have a destination location for the resultant file
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Common.ApplicationConstants">
+            <summary>
+            Contains all constant and static read-only fields to exist throughout the entire application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.UISettingsColorFile">
+            <summary>
+            The name of the settings color file
+            </summary>
+            <remarks>Stores all settings</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.LastSavedConfigFilename">
+            <summary>
+            The name of the selection file when used in the setting "save last installed selection"
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.EditorLaunchFromMainWindowFilename">
+            <summary>
+            The file in the application root directory used to unlock the "launch editor" button
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DefaultEndAddress">
+            <summary>
+            The default end address of the location of mod packages (start + zip + end)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.BetaDatabaseV2RootFilename">
+            <summary>
+            The filename of the V2 root database document. All category names and filenames, and version info is in this document
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationUpdateFileName">
+            <summary>
+            The filename to download the latest stable or beta application zip file as
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelicBatchUpdateScript">
+            <summary>
+            The filename to save the self updater script as
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelicBatchUpdateScriptServer">
+            <summary>
+            The filename of the self updater script inside the manager zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationFilenameStable">
+            <summary>
+            The name of the application executable when compiled with stable distribution
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationFilenameBeta">
+            <summary>
+            The name of the application executable when compiled with beta distribution
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelicBatchUpdateScriptOld">
+            <summary>
+            The old V1 filename to save the self updater script as
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.SelectionsXml">
+            <summary>
+            The root filename of the list of selection files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.WoT64bitFolder">
+            <summary>
+            The name of the 64bit folder in the 'World_of_Tanks' directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.WoT32bitFolder">
+            <summary>
+            The name of the 32bit folder in the 'World_of_Tanks' directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ModsDir">
+            <summary>
+            The name of the 'mods' directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ResModsDir">
+            <summary>
+            The name of the 'res_mods' directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.WoTVersionXml">
+            <summary>
+            The name of the version xml used for getting the current client version information
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.PatchFolderName">
+            <summary>
+            The name of the installer folder to hold all patch xml files in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ShortcutFolderName">
+            <summary>
+            The name of the installer folder to hold all shortcut xml files in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.XmlUnpackFolderName">
+            <summary>
+            The name of the installer folder to hold all xml unpack entries in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.AtlasCreationFoldername">
+            <summary>
+            The name of the installer folder to hold all xml atlas creation instructions in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.FontsToInstallFoldername">
+            <summary>
+            The name of the installer folder to hold all fonts to install (or check if needs to install)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ReadmeFromZipfileFolderName">
+            <summary>
+            The name of the temporary install folder to hold database manager readme files. The end user does not need this folder
+            and will be deleted at the end of the installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.AutoUpdateZipFolderName">
+            <summary>
+            The name of the temporary install folder that holds the auto update information of the database editor.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DefaultCheckedSelectionfile">
+            <summary>
+            The filename of the selection file used to select mods on default loading of the mod selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.SupportedClients">
+            <summary>
+            The filename of the xml document inside the manager info zip file containing the list of supported WoT clients
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ManagerVersion">
+            <summary>
+            The filename of the xml document inside the manager info zip file containing manager version information
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.PmodLog">
+            <summary>
+            The name of the pmod log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.XvmLog">
+            <summary>
+            The name of the xvm log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.PythonLog">
+            <summary>
+            The name of the WoT python debug log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.LogsFolder">
+            <summary>
+            The name of the logs folder used for WG CEF browser and Relhax Modpack
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DotNetFrameworkLatestDownloadURL">
+            <summary>
+            URL to get the latest version of the .NET Framework
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationStartupPath">
+            <summary>
+            The Startup root path of the application. Does not include the application name
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxDownloadsFolderPath">
+            <summary>
+            The absolute path of the application zip file and zip database file folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxDownloadsFolderPathOld">
+            <summary>
+            The old absolute path of the application zip file and zip database file folder
+            </summary>
+            [Obsolete]
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxModBackupFolderPath">
+            <summary>
+            The absolute path of the application mod backup folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxModBackupFolderPathOld">
+            <summary>
+            The old absolute path of the application mod backup folder
+            </summary>
+            [Obsolete]
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxUserSelectionsFolderPath">
+            <summary>
+            The absolute path of the application user selections folder. Default location 
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxUserSelectionsFolderPathOld">
+            <summary>
+            The old absolute path of the application user selections folder. Old Default location
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxUserModsFolderPath">
+            <summary>
+            The absolute path of the application folder where users can place custom mod zip files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxUserModsFolderPathOld">
+            <summary>
+            The old absolute path of the application folder where users can place custom mod zip files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxTempFolderPath">
+            <summary>
+            The absolute path of the application temporary folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxTempFolderPathOld">
+            <summary>
+            The old absolute path of the application temporary folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxLibrariesFolderPath">
+            <summary>
+            The absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxLibrariesFolderPathOld">
+            <summary>
+            The old absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ManagerInfoDatFile">
+            <summary>
+            The location of the manager info zip file. Contains several xml files with database and client definitions
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.LastInstalledConfigFilepath">
+            <summary>
+            The absolute path of the selection file used for saving last selection
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.WoT64bitFolderWithSlash">
+            <summary>
+            The WoT 64bit folder name with the folder separator before it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.WoT32bitFolderWithSlash">
+            <summary>
+            The WoT 32bit folder name with the folder separator before it
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxSettingsFilepath">
+            <summary>
+            The absolute path of the V2 settings file used for saving ModpackSettings
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxLogFilepath">
+            <summary>
+            The absolute path of the Relhax log file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.FoldersToCleanup">
+            <summary>
+            The list of installer folders in the root {WoT} directory to cleanup after an installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.MD5HashDatabaseXmlFile">
+            <summary>
+            The absolute path to the md5 hash zip file download database file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.FoldersToCheck">
+            <summary>
+            Array of all Modpack created folders in the application directory
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.BigmodsDatabaseRootEscaped">
+            <summary>
+            The escaped constant URL of the stable database on the server, escaped with the 'dbVersion' macro
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DefaultStartAddress">
+            <summary>
+            The default starting address of the location of mod packages (start + zip + end), escaped with the 'onlineFolder' macro
+            </summary>
+            <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.BetaDatabaseV2FolderURLEscaped">
+            <summary>
+            The URL of the V2 beta database root folder, escaped with the 'branch' macro
+            </summary>
+            <remarks>'branch' is a name of a github branch on the RelhaxModpackDatabase repo</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.BetaDatabaseBranchesURL">
+            <summary>
+            The API URL to return a json format document of the current branches in the repository
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ManagerInfoURLBigmods">
+            <summary>
+            The URL of the V2 manager info zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationUpdateURL">
+            <summary>
+            The URL to the location of the latest stable version of the application as a zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationBetaUpdateURL">
+            <summary>
+            The URL to the location of the latest beta version of the application as a zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.SelectionsRoot">
+            <summary>
+            The root URL of the V2 selection files location
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationNotesStableUrl">
+            <summary>
+            The URL path of the latest application stable release notes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationNotesBetaUrl">
+            <summary>
+            The URL path of the latest application beta release notes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseNotesUrl">
+            <summary>
+            The URL path of the latest V2 database release notes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseOnlineFolderXpath">
+            <summary>
+            The xpath string to get the onlineFolder attribute from the document root
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseOnlineVersionXpath">
+            <summary>
+            The xpath string to get the database version info attribute from the document root
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ConfigFileVersion2V0">
+            <summary>
+            The old V2 config file version for saving the user's selection preferences
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ConfigFileVersion3V0">
+            <summary>
+            The latest config file version for saving the user's selection preferences
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.WoTProcessName">
+            <summary>
+            The name of the WoT process used for detecting if it is running
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.WoTVersionXmlXpath">
+            <summary>
+            The xpath to the version information used by the modpack to determine the WoT client version
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationVersion">
+            <summary>
+            The current distribution version of the application.
+            Alpha should NEVER be built for public distribution unless direct testing!
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.LogSpacingLineup">
+            <summary>
+            The amount so space characters to line up a continued log entry without the date/time
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.MaximumDisplayScale">
+            <summary>
+            The maximum amount that the application will be allowed to scale. 300%
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.MinimumDisplayScale">
+            <summary>
+            The default amount that the application will be scaled to. 100%
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.NumberUIDCharacters">
+            <summary>
+            The number of characters that make up a package UID
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.UIDCharacters">
+            <summary>
+            The array of character options that are used for generating the UID
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.NumLogicalProcesors">
+            <summary>
+            The number of logical processors (threads) detected on the system. Used to make n installation threads for faster extraction
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.MinimumDotNetFrameworkVersionRequired">
+            <summary>
+            The minimum release value of the user's installed .NET framework to use the modpack
+            </summary>
+            <remarks>It varies for OS. For example:
+            On Windows 10 May 2019 Update and Windows 10 November 2019 Update: 528040
+            On Windows 10 May 2020 Update: 528372
+            On all other Windows operating systems(including other Windows 10 operating systems): 528049
+            See: https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed </remarks>
+        </member>
         <member name="T:RelhaxModpack.Common.IComponentWithID">
             <summary>
             An interface to allow a unique identifier for the given component. Used mostly for identifying a broken or incorrectly parsed component from a log statement
@@ -768,20 +1180,20 @@
             A utility class for working with database components
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabaseRoot1V1Document">
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabaseRoot1V1Document(System.String)">
             <summary>
             Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
             </summary>
             <returns>the XmlDocument object of the root database file</returns>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesList(System.Xml.XmlDocument)">
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesList(System.Xml.XmlDocument,System.String)">
             <summary>
             Get a list of all URLs to each xml document file of the database
             </summary>
             <param name="rootDocument">The root 'database.xml' document object</param>
             <returns>The list of URLs</returns>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesList">
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesList(System.String)">
             <summary>
             Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
             </summary>
@@ -966,7 +1378,7 @@
             <param name="componentsWithDependencies">List of all DatabasePackage objects that have dependencies</param>
             <param name="dependencies">List of all Dependencies that exist in the database</param>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.Boolean)">
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.Boolean,System.Boolean)">
             <summary>
             Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
             </summary>
@@ -1802,6 +2214,11 @@
             The StackPanel that this item is inside. WPF component
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Database.SelectablePackage.ChangeColorOnValueChecked">
+            <summary>
+            Gets or sets if the UI background components of this package should change color when the checked value changes
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.ContentControl">
             <summary>
             ContentControl item to allow for right-clicking of disabled components. defaultv2 WPF component
@@ -2028,35 +2445,993 @@
             <param name="userFileToCopy">The object to copy</param>
             <returns>A new UserFile object with the same values and new list elements with the same values</returns>
         </member>
-        <member name="T:RelhaxModpack.AutomationRunnerSettings">
+        <member name="T:RelhaxModpack.Patching.PatchUnitTest">
+            <summary>
+            Represents a patch operation with a description and desired assertion condition
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.PatchUnitTest.Patch">
+            <summary>
+            The patch operation object
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.PatchUnitTest.Description">
+            <summary>
+            A description of what the patch should do
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.PatchUnitTest.ShouldPass">
+            <summary>
+            Determines if the patch should pass or fail the test
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Patching.Patch">
+            <summary>
+            A patch is an instruction object of how to modify a text file. Can be a json, xml, or plain text file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.TypeRegex1">
+            <summary>
+            One of two string values used for regex type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.TypeRegex2">
+            <summary>
+            One of two string values used for regex type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.TypeXml">
+            <summary>
+            The string value used for xml type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.TypeJson">
+            <summary>
+            The string value used for json type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.TypeXvm">
+            <summary>
+            The string value used for xvm type legacy patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.NativeProcessingFile">
+            <summary>
+            A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.ActualPatchName">
+            <summary>
+            the actual name of the original patch before processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.Type">
+            <summary>
+            The type of patch, xml or regex (direct text replacement)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.Mode">
+            <summary>
+            If not regex, the mode that the xml patcher should use.<para/>Examples: add xml node, remove xml node, edit xml node
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.PatchPath">
+            <summary>
+            The starting path to the file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.File">
+            <summary>
+            The path to the file, relative to patchPath
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.CompletePath">
+            <summary>
+            The complete path to the file, saved at parse time
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.Version">
+            <summary>
+            The version of the patch for parsing. Allows for multiple variations. Default to 1
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.Path">
+            <summary>
+            If xml or json, the xml xpath or json jsonpath to the node
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.Lines">
+            <summary>
+            If regex, the optional specific lines in the text file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.Search">
+            <summary>
+            The node inner text (xml) or regex criteria to search for
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.Replace">
+            <summary>
+            The text to replace the found search text with
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.FollowPath">
+            <summary>
+            For json patches, if it should use the new method of separating the path for getting the xvm references
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.DumpPatchInfoForLog">
+            <summary>
+            Collects all patch information for logging
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.ListboxDisplay">
+            <summary>
+            Gets a listbox style UI element display-ready text
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.IsValidForSave">
+            <summary>
+            Gets a value that determines if all required properties are filed out to be saved to a patch file
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patch.GetInvalidPatchesForSave(RelhaxModpack.Patching.Patch[])">
+            <summary>
+            Returns a list of patch objects that are not ready to be written to a patch file
+            </summary>
+            <param name="patchList">The list of patches to check</param>
+            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+            <seealso cref="P:RelhaxModpack.Patching.Patch.IsValidForSave"/>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patch.GetInvalidPatchesForSave(System.Collections.Generic.List{RelhaxModpack.Patching.Patch})">
+            <summary>
+            Returns a list of patch objects that are not ready to be written to a patch file
+            </summary>
+            <param name="patchList">The list of patches to check</param>
+            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+            <seealso cref="P:RelhaxModpack.Patching.Patch.IsValidForSave"/>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patch.GetInvalidPatchesForSave(System.Windows.Controls.ItemCollection)">
+            <summary>
+            Returns a list of patch objects that are not ready to be written to a patch file
+            </summary>
+            <param name="patchList">The list of patches to check</param>
+            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+            <seealso cref="P:RelhaxModpack.Patching.Patch.IsValidForSave"/>
+        </member>
+        <member name="T:RelhaxModpack.Patching.PatchRegression">
+            <summary>
+            A regression object is an entire regression test suite. Manages the unit tests and runs the test assertions
+            </summary>
+            <remarks>A regression test is designed to only test one type of patch i.e. a series of XML patches.
+            The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
+            the results. Results are logged to a new logfile each time a regression run is started</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Patching.PatchRegression.#ctor(RelhaxModpack.Utilities.Enums.PatchRegressionTypes,System.Collections.Generic.List{RelhaxModpack.Patching.PatchUnitTest})">
+            <summary>
+            Make a regression object
+            </summary>
+            <param name="regressionType">The type of regressions to run</param>
+            <param name="unitTestsToRun">The list of unit tests to run</param>
+        </member>
+        <member name="M:RelhaxModpack.Patching.PatchRegression.RunRegressions">
+            <summary>
+            Run a complete regression test based on the list of unit tests
+            </summary>
+            <returns>Returns false if a setup error occurred, true otherwise</returns>
+            <remarks>The return value of the method does NOT related to the success of the Unit Tests</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Patching.PatchRegression.Dispose(System.Boolean)">
+            <summary>
+            Dispose of managed resources
+            </summary>
+            <param name="disposing">For redundant calls</param>
+        </member>
+        <member name="M:RelhaxModpack.Patching.PatchRegression.Dispose">
+            <summary>
+            Dispose of managed resources
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Patching.Patcher">
+            <summary>
+            A class for handling patch operations
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patcher.DebugMode">
+            <summary>
+            Gets or sets if the patcher should run in debug mode
+            </summary>
+            <remarks>Debug mode will create additional files as individual steps of the patch process are outputted for debug</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patcher.PatchJsonNullEscape">
+            <summary>
+            Provides the ability to insert a 'null' value into json configurations
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.RunPatchFromCommandline(RelhaxModpack.Patching.Patch)">
+            <summary>
+            Runs a patch operation, but first parsing the 'app' and 'versiondir' keywords
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.RunPatch(RelhaxModpack.Patching.Patch)">
+            <summary>
+            Run a patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.XMLPatch(RelhaxModpack.Patching.Patch)">
+            <summary>
+            Run an XML patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.RegxPatch(RelhaxModpack.Patching.Patch,System.Int32[])">
+            <summary>
+            Run a regex patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <param name="lines">The lines to patch on the file.</param>
+            <returns>The operation exit code</returns>
+            <remarks>Can be used to "batch patch" an xml or json file. See Database examples.
+            Use -1 to indicate the whole file is being patched. Use 0 to check every line.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.JsonPatch(RelhaxModpack.Patching.Patch)">
+            <summary>
+            Run a Json patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.GetXvmFolderName">
+            <summary>
+            Gets the absolute path to the Xvm configuration folder
+            </summary>
+            <returns>The absolute path of the Xvm configuration folder if it exists, otherwise returns "default"</returns>
+        </member>
+        <member name="T:RelhaxModpack.Settings.AutomationRunnerSettings">
             <summary>
             Defines settings used in the database automation runner window
             </summary>
         </member>
-        <member name="P:RelhaxModpack.AutomationRunnerSettings.Filename">
+        <member name="P:RelhaxModpack.Settings.AutomationRunnerSettings.Filename">
             <summary>
             The name of the xml file on disk
             </summary>
         </member>
-        <member name="P:RelhaxModpack.AutomationRunnerSettings.SelectedBranch">
+        <member name="P:RelhaxModpack.Settings.AutomationRunnerSettings.MembersToExclude">
+            <summary>
+            A list of properties and fields to exclude from saving/loading to and from xml
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.AutomationRunnerSettings.SelectedBranch">
             <summary>
             The name of the branch on github that the user specifies to download the automation scripts from
             </summary>
         </member>
-        <member name="P:RelhaxModpack.AutomationRunnerSettings.DumpParsedMacrosPerSequenceRun">
+        <member name="P:RelhaxModpack.Settings.AutomationRunnerSettings.DumpParsedMacrosPerSequenceRun">
             <summary>
             Toggle to dump the parsed macros to the log file before every sequence run
             </summary>
         </member>
-        <member name="T:RelhaxModpack.ISettingsFile">
+        <member name="T:RelhaxModpack.Settings.ISettingsFile">
             <summary>
             Represents a class that is used within windows as a serialized to/from xml settings definition holder
             </summary>
         </member>
-        <member name="P:RelhaxModpack.ISettingsFile.Filename">
+        <member name="P:RelhaxModpack.Settings.ISettingsFile.Filename">
             <summary>
             The name of the file on disk
             </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.ISettingsFile.MembersToExclude">
+            <summary>
+            A list of properties and fields to exclude from saving/loading to and from xml
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Settings.ModpackToolboxSettings">
+            <summary>
+            The settings file for the ModpackToolbox window class
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackToolboxSettings.SettingsFilename">
+            <summary>
+            The name of the settings file on disk
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.ModpackToolboxSettings.Filename">
+            <summary>
+            The name of the xml file on disk
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.ModpackToolboxSettings.MembersToExclude">
+            <summary>
+            A list of properties and fields to exclude from saving/loading to and from xml
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.ModpackToolboxSettings.UseCustomDbPath">
+            <summary>
+            Toggle if using the custom path
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.ModpackToolboxSettings.CustomDbPath">
+            <summary>
+            If using a custom path to perform work, toggle the folder path of the RelhaxModpackDatabaseRepo
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Settings.SettingsParser">
+            <summary>
+            A helper class to parse a settings object to and from xml
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Settings.SettingsParser.LoadSettings(RelhaxModpack.Settings.ISettingsFile,System.String)">
+            <summary>
+            Load the settings object with values from the given xml file path
+            </summary>
+            <param name="settingsFile">The instance of the settings class object to load settings into</param>
+            <param name="customSettingsPath">The custom location of the settings xml file</param>
+        </member>
+        <member name="M:RelhaxModpack.Settings.SettingsParser.LoadSettings(RelhaxModpack.Settings.ISettingsFile)">
+            <summary>
+            Load the settings object with values from the given xml file path
+            </summary>
+            <param name="settingsFile">The instance of the settings class object to load settings into</param>
+        </member>
+        <member name="T:RelhaxModpack.Settings.PatchSettings">
+            <summary>
+            Defines the settings used for the patch class
+            </summary>
+            <remarks>There is no constructor for this class. It is not needed as the act of not having one assigns a default
+            of an empty constructor with to parameters. See https://stackoverflow.com/a/23458819/3128017 </remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.PatchSettings.SettingsFilename">
+            <summary>
+            The name of the settings file on disk
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.PatchSettings.Filename">
+            <summary>
+            The name of the xml file on disk
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.PatchSettings.MembersToExclude">
+            <summary>
+            A list of properties and fields to exclude from saving/loading to and from xml
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.PatchSettings.SaveSelectionBeforeLeave">
+            <summary>
+            If the selected patch should be saved (hitting apply) before the selection changes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.PatchSettings.SwitchToLogWhenTestingPatch">
+            <summary>
+            If true, when testing a patch, the log tab will become the active tab
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.PatchSettings.AppMacro">
+            <summary>
+            The path to use for replacing the {app} macro in patch files
+            </summary>
+            <remarks>This is for the relative patch mode</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.PatchSettings.VersiondirMacro">
+            <summary>
+            The version of the game to use for replacing the {versiondir} macro in patch files
+            </summary>
+            <remarks>This is for the relative patch mode</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.PatchSettings.ApplyBehavior">
+            <summary>
+            Controls how the save patch and apply button interact with each other. See ApplyBehavior enumeration for interaction definitions.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Settings.EditorSettings">
+            <summary>
+            The settings used in the editor window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.SettingsFilename">
+            <summary>
+            The name of the settings file on disk
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.EditorSettings.Filename">
+            <summary>
+            The name of the xml file on disk
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.EditorSettings.MembersToExclude">
+            <summary>
+            A list of properties and fields to exclude from saving/loading to and from xml
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.BigmodsUsername">
+            <summary>
+            The user's FTP account username to the bigmods FTP server
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.BigmodsPassword">
+            <summary>
+            The user's FTP account password to the bigmods FTP server
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.SaveSelectionBeforeLeave">
+            <summary>
+            Before you click on a new selection to display, it will apply any changes made. Can be used with ApplyBehavior.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.ApplyBehavior">
+            <summary>
+            The behavior the editor should use for the save and apply buttons
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.ShowConfirmationOnPackageApply">
+            <summary>
+            Show a confirmation window when clicking apply
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.ShowConfirmationOnPackageAddRemoveMove">
+            <summary>
+            Show a confirmation window when clicking to add or move a package
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.DefaultEditorSaveLocation">
+            <summary>
+            The location to save the database file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.FTPUploadDownloadWindowTimeout">
+            <summary>
+            The timeout, in seconds, until the FTP upload or download window will close. Set to 0 to disable timeout.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.UploadZipDeleteIsActuallyMove">
+            <summary>
+            Flag to determine if the delete zip button (actually open file by default) will actually delete the zip, or move it to the specified folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.UploadZipMoveFolder">
+            <summary>
+            The folder path to move the uploaded file to. If the file already exists, it will be overridden
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Settings.ModpackSettings">
+            <summary>
+            Provides access to all settings used in the modpack.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.SettingsFilename">
+            <summary>
+            The name of the settings file on disk
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.OldSettingsFilename">
+            <summary>
+            The name of the Relhax V1 settings file on disk
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.ModpackSettings.Filename">
+            <summary>
+            The name of the xml file on disk
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.ModpackSettings.MembersToExclude">
+            <summary>
+            A list of properties and fields to exclude from saving/loading to and from xml
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.CustomModInfoPath">
+            <summary>
+            The custom path to the ModInfo.xml file if loading in test mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.BetaDatabaseSelectedBranch">
+            <summary>
+            The name of the git branch to use when downloading the database. Uses the RelhaxModpackDatabase repository
+            </summary>
+            <remarks>URL for the repository: https://github.com/Willster419/RelhaxModpackDatabase </remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.AtlasLibrariesCanBeLoaded">
+            <summary>
+            Flag to track when/if the user has MSVCP2013 installed to load the atlas image processing libraries
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.InformIfApplicationInDownloadsFolder">
+            <summary>
+            Show a warning (once) if the user launched the application right from the downloads folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.NotifyIfSameDatabase">
+            <summary>
+            Toggle if the program should notify the user if the database version is the same as the last installed version
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.BackupModFolder">
+            <summary>
+            Toggle if the program will backup the current mod installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.CleanInstallation">
+            <summary>
+            Toggle if the program will clean the mods and res_mods folders before installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ForceManuel">
+            <summary>
+            Toggle if the program should force the user to manually point to the WoT location
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.SaveLastSelection">
+            <summary>
+            Toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.SaveUserData">
+            <summary>
+            Toggle if the application should save user cache save data like session stats, or auto equip configs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.SaveDisabledMods">
+            <summary>
+            Toggle if the application should save disabled mods in the user's selection file. If selected, when a mod is enabled again, it will be automatically selected
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.DisplayUserModsWarning">
+            <summary>
+            A one time run bool to display a message about how to use user mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.DisplaySelectionPreviewMessage">
+            <summary>
+            A one time run bool to display a message about how the user can right click a selection to get a preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.VerboseLogging">
+            <summary>
+            Toggle if the application should use debug level logging or just info
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.AllowStatisticDataGather">
+            <summary>
+            Toggle if the application can gather statistic data about it's usage
+            </summary>
+            <remarks>The data that the modpack gathers is only the list of packages you selected for installation. This helps us determine which mods are popular, and for how best to
+            prioritize which mods to work on first in the event the support team is overloaded</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.EnableBordersLegacyView">
+            <summary>
+            Toggle for each view if the borders around the child selection options should show
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.EnableBordersDefaultV2View">
+            <summary>
+            Toggle for each view if the borders around the child selection options should show
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.EnableColorChangeLegacyView">
+            <summary>
+            Toggle for each view if the color change should occur when a child selection happens
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.EnableColorChangeDefaultV2View">
+            <summary>
+            Toggle for each view if the color change should occur when a child selection happens
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ShowInstallCompleteWindow">
+            <summary>
+            Toggle if the installation complete window will be shown
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ClearCache">
+            <summary>
+            Toggle if the program will delete the WoT appdata cache
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.DeleteLogs">
+            <summary>
+            Toggle if the program will delete xvm, pmod, WoT logs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.CreateShortcuts">
+            <summary>
+            Toggle if the program will create desktop shortcuts
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.InstallWhileDownloading">
+            <summary>
+            Toggle the ability for the modpack to extract a package as soon as it is downloaded
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.MulticoreExtraction">
+            <summary>
+            Toggle the ability to have multiple extractions happening at the same time
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ExportMode">
+            <summary>
+            Toggle export mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ForceEnabled">
+            <summary>
+            Force all packages to be enabled in the selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ForceVisible">
+            <summary>
+            Force all packages to be visible in the selection list
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.DisableTriggers">
+            <summary>
+            When selected, the installation engine will disable event triggers.
+            </summary>
+            <remarks>The triggers, when enabled, enable the application to start some install tasks when all required packages are downloaded</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.OneClickInstall">
+            <summary>
+            Toggle one click install mode
+            </summary>
+            <remarks>Allows the user to install a selection when clicking the install button</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.AutoInstall">
+            <summary>
+            Toggle auto install mode
+            </summary>
+            <remarks>Allows the user to have the application automatically check for and install a selection file when the database updates</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.AdvancedInstalProgress">
+            <summary>
+            Toggle the advanced installation progress window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.DeleteCacheFiles">
+            <summary>
+            True - After an installation the application will ask to delete old download cache files
+            False - After an installation the application will always delete old download cache files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.PreviewFullscreen">
+            <summary>
+            Toggle for if the Preview window should be shown in fullscreen mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ModSelectionFullscreen">
+            <summary>
+            Toggle for if the ModSelectionView window should be shown in fullscreen mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.MinimizeToSystemTray">
+            <summary>
+            Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ShowOptionsCollapsedLegacy">
+            <summary>
+            Toggle for if the selection list options in Legacy view should be collapsed by default on start
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.AutoOneclickShowWarningOnSelectionsFail">
+            <summary>
+            Toggle if during auto or one click load if the application should inform if any selection errors during selection file load
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.EnableCustomFont">
+            <summary>
+            Toggle if the application should apply a custom font to the MainWindow and all windows of RelhaxWindow with 
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ValidFrameworkVersion">
+            <summary>
+            Flag to enable a check if the user is running the minimum required .NET Framework version for this application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.AutoInstallFrequencyInterval">
+            <summary>
+            The time, in a specified unit, to check for anew data base version
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.AutoInstallFrequencyTimeUnit">
+            <summary>
+            The time unit to use for the interval (mins, hours, etc)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ModSelectionHeight">
+            <summary>
+            The height, in pixels, of the ModSelectionView window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ModSelectionWidth">
+            <summary>
+            The width, in pixels, of the ModSelectionView window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.PreviewX">
+            <summary>
+            The x-coordinate location, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.PreviewY">
+            <summary>
+            The y-coordinate location, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.PreviewHeight">
+            <summary>
+            The height, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.PreviewWidth">
+            <summary>
+            The width, in pixels, of the Preview window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.DisplayScale">
+            <summary>
+            The factor to scale the window size and components by. From 1 to 3 in increments of 0.25
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.AutoOneclickSelectionFilePath">
+            <summary>
+            The path to the auto or one click selection file
+            </summary>
+            <remarks>Used for both auto and one click installation modes</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.CustomFontName">
+            <summary>
+            The name of the font to use for the MainWindow and all windows that are of RelhaxWindow type
+            </summary>
+            <remarks>If the font name is not found in the system folder, this is reset to empty</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.UninstallMode">
+            <summary>
+            The Uninstall mode to use when uninstalling or installing with the clean install option
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ModSelectionView">
+            <summary>
+            The selection view to use
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.Language">
+            <summary>
+            The selected language
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.DatabaseDistroVersion">
+            <summary>
+            The distribution version of the database to use when selecting mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ApplicationDistroVersion">
+            <summary>
+            The application distribution version to use. When selected, it won't take affect until application restart
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.ApplicationTheme">
+            <summary>
+            The theme to apply to the application
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Settings.ModpackSettings.ApplyLegacySettings(System.Collections.Generic.List{System.Xml.Linq.XElement})">
+            <summary>
+            Check for old poorly named settings that don't directly match setting property names
+            </summary>
+            <param name="settings">The node that holds all the settings nodes</param>
+        </member>
+        <member name="T:RelhaxModpack.Settings.CommandLineSettings">
+            <summary>
+            Handles all parsing and usage of command line arguments. TODO: make into instance class
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.CommandLineSettings.CommandLineArgsToSpawnCustomWindow">
+            <summary>
+            A list of command line arguments that, when specified, would create a custom window to
+            run the application in a specific mode.
+            </summary>
+            <remarks>For example, if "database-editor" is detected, then the application is going to open the database editor</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.CommandLineSettings.TestMode">
+            <summary>
+            Using the application is database test mode. Allows you to test a local database
+            </summary>
+            <remarks>Activated with "/test"</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.CommandLineSettings.SkipUpdate">
+            <summary>
+            Skip the application update check
+            </summary>
+            <remarks>Activated with "/skip-update"</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.CommandLineSettings.SilentStart">
+            <summary>
+            Allows the application (in installer mode) to be launched in a minimized state
+            </summary>
+            <remarks>Activated with "/silent-start"</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.CommandLineSettings.AutoInstallFileName">
+            <summary>
+            The name of the auto install selection file
+            </summary>
+            <remarks>The application uses the filename as check for if in auto install mode i.e. if the string is not empty.
+            The file must be in the "RelhaxUserSelections" folder</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.CommandLineSettings.UpdateKeyFileName">
+            <summary>
+            The name of the file that contains the key for unlocking the updater
+            </summary>
+            <remarks>use key filename as check for update key mode</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.CommandLineSettings.EditorAutoLoadFileName">
+            <summary>
+            The path to load the database from when the application starts
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.CommandLineSettings.PatchFilenames">
+            <summary>
+            The parsed list of patch instruction files for patch mode
+            </summary>
+            <remarks>The application will run the patches in order loaded from the command line i.e. left to right</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.CommandLineSettings.ApplicationMode">
+            <summary>
+            The mode that the application is currently running in
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Settings.CommandLineSettings.#ctor(System.String[])">
+            <summary>
+            Creates an instance of the CommandLineSettings class
+            </summary>
+            <param name="args">The list of command line arguments provided from the Environment class</param>
+            <remarks>The first arg to the exe is skipped</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Settings.CommandLineSettings.ParseCommandLineSwitches">
+            <summary>
+            Parse the command line arguments
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Settings.CommandLineSettings.ArgsOpenCustomWindow">
+            <summary>
+            Determines if any specified command line args will cause the application to open a custom (non MainWindow) window
+            </summary>
+            <returns>True if the provided arguments will return a custom array, false otherwise</returns>
+        </member>
+        <member name="T:RelhaxModpack.Settings.ApplicationSettings">
+            <summary>
+            Handles all generic constants and statics used throughout the application
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationSettings.AppDataFolder">
+            <summary>
+            The location of the WoT app data folder parsed at installation time
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationSettings.WoTDirectory">
+            <summary>
+            The location of the WoT installation directory parsed at installation time
+            </summary>
+            <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationSettings.WoTClientVersion">
+            <summary>
+            The version information of WoT parsed at installation time
+            </summary>
+            <remarks>This info is gathered from the "version.xml" file from the game's root directory</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationSettings.WoTModpackOnlineFolderVersion">
+            <summary>
+            The version of the online folder name containing the zip files for this game parsed at installation time
+            </summary>
+            <remarks>The online folders are done by major versions only i.e. 1.4.1, 1.5.0, etc. All zip files on 1.5.0.x are stored in this folder</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationSettings.DatabaseVersion">
+            <summary>
+            The version of the database parsed upon application load
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationSettings.FirstLoad">
+            <summary>
+            Determines if this is the first time the application is loading, parsed upon application load
+            </summary>
+            <remarks>Done by checking if the settings file exists. If it is set to true in the application, it will be set to false again when it closes.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationSettings.FirstLoadToV2">
+            <summary>
+            Determines if while being the first time loading, if this is an upgrade operation to Relhax V2, parsed upon application load
+            </summary>
+            <remarks>Done by if FirstLoad is true and the Relhax V1 settings file exists</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationSettings.ManagerInfoZipfile">
+            <summary>
+            The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk. Parsed upon application load.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ApplicationSettings.TrueAlpha">
+            <summary>
+            Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed), parsed upon application load.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Settings.UISettings">
+            <summary>
+            Handles all custom UI settings
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.UISettings.CustomColorSettingsPathV1">
+            <summary>
+            The name of the Xml element to hold all custom color settings
+            </summary>
+            <remarks>See CustomSettings array for list of custom colors</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.UISettings.NotSelectedTabColor">
+            <summary>
+            The color to use in the selection list for a tab which is not selected
+            </summary>
+            <remarks>It starts as null because the color is unknown (and can be different types based on the user's theme).
+            It is set on user selection on a component in the selection list.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Settings.UISettings.NullAllowedGlobalBrushes">
+            <summary>
+            A list of brush names that are allowed to have 'null' as the value for global brushes (global = at root of Theme object)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Settings.UISettings.CurrentTheme">
+            <summary>
+            The currently applied theme in the UI engine
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Settings.UISettings.ApplyCustomStyles(System.Windows.Window)">
+            <summary>
+            Applies the custom style templates for a UI component class type when an ID is defined.
+            This allows for custom color definitions to be loaded.
+            </summary>
+            <param name="window">The Window to apply the styles to</param>
+        </member>
+        <member name="M:RelhaxModpack.Settings.UISettings.ApplyUIColorSettings(RelhaxModpack.Windows.RelhaxWindow)">
+            <summary>
+            Applies custom color settings to a window
+            </summary>
+            <param name="window">The Window object to apply color settings to</param>
+        </member>
+        <member name="M:RelhaxModpack.Settings.UISettings.ApplyThemeToRootComponent(System.Windows.FrameworkElement,System.Boolean,RelhaxModpack.UI.WindowColorset,System.Boolean)">
+            <summary>
+            Applies theme properties to UI components based on colorDefinition rule sets for that UI component class type
+            </summary>
+            <param name="rootElement">The element to start at for applying theme properties</param>
+            <param name="customWindowDefinition">To determine if to apply custom theme properties based on a list of custom theme properties for that window</param>
+            <param name="wcolorset">The property object of colorDefinition rules</param>
+            <param name="includeSelf">Determine if applying the rootElement</param>
+        </member>
+        <member name="M:RelhaxModpack.Settings.UISettings.LoadSettingsFile">
+            <summary>
+            Load the custom color definitions from XML
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Settings.UISettings.ParseColorFromString(System.String,System.Windows.Media.Color@)">
+            <summary>
+            Tries to parse a hex code color to a color object
+            </summary>
+            <param name="color">The string hex code for the color to use</param>
+            <param name="outColor">The corresponding color object</param>
+            <returns>True if color parsing was successful, a default color otherwise</returns>
+            <remarks>Uses the 32bit color codes for generation (Alpha, Red, Green, Blue) Alpha is transparency</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Settings.UISettings.VerifyPoints(System.Windows.Point)">
+            <summary>
+            Verifies that the points for applying color gradient directions are within 0-1
+            </summary>
+            <param name="p">The color gradient direction to verify</param>
+        </member>
+        <member name="M:RelhaxModpack.Settings.UISettings.DumpAllWindowColorSettingsToFile(System.String,RelhaxModpack.MainWindow)">
+            <summary>
+            Saves all currently enabled color settings to an xml file
+            </summary>
+            <param name="savePath">The path to save the xml file to</param>
+            <param name="mainWindow">If method is called from MainWindow, use itself for getting its color properties</param>
         </member>
         <member name="T:RelhaxModpack.UI.BoundUISettings">
             <summary>
@@ -3363,7 +4738,7 @@
             <remarks>See https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread 
             <para>and https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this </para></remarks>
         </member>
-        <member name="M:RelhaxModpack.UI.UiUtils.ApplyApplicationScale(System.Windows.Window,System.Double)">
+        <member name="M:RelhaxModpack.UI.UiUtils.ApplyApplicationScale(RelhaxModpack.Windows.RelhaxWindow,System.Double)">
             <summary>
             Applies vector based application scaling to the specified window
             </summary>
@@ -5255,11 +6630,12 @@
             <param name="overwrite">Set to true to force a download of the latest version</param>
             <returns>The mangerInfo zip file in the Ionic.Zipfile object</returns>
         </member>
-        <member name="M:RelhaxModpack.Utilities.CommonUtils.IsManagerUptoDate(System.String)">
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.IsManagerUptoDate(System.String,RelhaxModpack.Utilities.Enums.ApplicationVersions)">
             <summary>
             Compares if the current application version is the same as the version checked from online
             </summary>
             <param name="currentVersion">The string representation of the latest modpack application version</param>
+            <param name="applicationVersion">Control if the update check will use the beta or stable distribution channel</param>
             <returns>True if the manager string versions are the same, false otherwise</returns>
             <remarks>IsManagerUptoDate will return false if it fails to get the latest managerInfo zip file</remarks>
         </member>
@@ -5595,6 +6971,15 @@
             <param name="valueToSet">The string version of the value to set</param>
             <returns>False if the value could not be set, true otherwise</returns>
         </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetObjectField(System.Object,System.Reflection.FieldInfo,System.String)">
+            <summary>
+            Attempts to set a field value of a class or structure object instance with the string valueToSet
+            </summary>
+            <param name="objectToSetValueOn">The class or structure object instance to have property set</param>
+            <param name="fieldInfoOfObject">The field information/metadata of the field to set on the object</param>
+            <param name="valueToSet">The string version of the value to set</param>
+            <returns>False if the value could not be set, true otherwise</returns>
+        </member>
         <member name="M:RelhaxModpack.Utilities.CommonUtils.SetObjectValue(System.Type,System.String,System.Object@)">
             <summary>
             Attempts to create an instance of a value type object and set it's value based on valueToSet for objectType
@@ -5809,39 +7194,49 @@
             The install engine is the root component to the entire installation process. It manages install tasks, threading, and resource usage from start to finish.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallEngine.OrderedPackagesToInstall">
+        <member name="P:RelhaxModpack.InstallEngine.OrderedPackagesToInstall">
             <summary>
             List of packages that have zip files to install and are enabled (and checked if selectable) and ordered into installGroups
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallEngine.PackagesToInstall">
+        <member name="P:RelhaxModpack.InstallEngine.PackagesToInstall">
             <summary>
             List of packages that have zip files to install and are enabled (and checked if selectable)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallEngine.FlatListSelectablePackages">
+        <member name="P:RelhaxModpack.InstallEngine.FlatListSelectablePackages">
             <summary>
             Flat list of all selectable packages
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallEngine.UserPackagesToInstall">
+        <member name="P:RelhaxModpack.InstallEngine.UserPackagesToInstall">
             <summary>
             List of user packages placed in the RelhaxUserMods folder and selected for installation
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallEngine.ParsedCategoryList">
+        <member name="P:RelhaxModpack.InstallEngine.ParsedCategoryList">
             <summary>
             A reference for the list of parsed categories
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallEngine.Dependencies">
+        <member name="P:RelhaxModpack.InstallEngine.Dependencies">
             <summary>
             A reference for the list of parsed dependencies
             </summary>
         </member>
-        <member name="F:RelhaxModpack.InstallEngine.GlobalDependencies">
+        <member name="P:RelhaxModpack.InstallEngine.GlobalDependencies">
             <summary>
             A reference for the list of parsed globally installed dependencies
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.InstallEngine.ModpackSettings">
+            <summary>
+            The Modpack settings configuration class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.InstallEngine.CommandLineSettings">
+            <summary>
+            The Command line settings configuration class
             </summary>
         </member>
         <member name="F:RelhaxModpack.InstallEngine.TriggerContouricons">
@@ -5916,256 +7311,6 @@
             <summary>
             This code added to correctly implement the disposable pattern.
             </summary>
-        </member>
-        <member name="T:RelhaxModpack.Patches.Patch">
-            <summary>
-            A patch is an instruction object of how to modify a text file. Can be a json, xml, or plain text file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.TypeRegex1">
-            <summary>
-            One of two string values used for regex type patches
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.TypeRegex2">
-            <summary>
-            One of two string values used for regex type patches
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.TypeXml">
-            <summary>
-            The string value used for xml type patches
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.TypeJson">
-            <summary>
-            The string value used for json type patches
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.TypeXvm">
-            <summary>
-            The string value used for xvm type legacy patches
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.NativeProcessingFile">
-            <summary>
-            A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.ActualPatchName">
-            <summary>
-            the actual name of the original patch before processed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.Type">
-            <summary>
-            The type of patch, xml or regex (direct text replacement)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.Mode">
-            <summary>
-            If not regex, the mode that the xml patcher should use.<para/>Examples: add xml node, remove xml node, edit xml node
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.PatchPath">
-            <summary>
-            The starting path to the file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.File">
-            <summary>
-            The path to the file, relative to patchPath
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.CompletePath">
-            <summary>
-            The complete path to the file, saved at parse time
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.FollowPathEditorCompletePath">
-            <summary>
-            Saves the complete path for if in editor mode, otherwise not used
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.Version">
-            <summary>
-            The version of the patch for parsing. Allows for multiple variations. Default to 1
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.Path">
-            <summary>
-            If xml or json, the xml xpath or json jsonpath to the node
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.Lines">
-            <summary>
-            If regex, the optional specific lines in the text file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.Search">
-            <summary>
-            The node inner text (xml) or regex criteria to search for
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.Replace">
-            <summary>
-            The text to replace the found search text with
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.FollowPath">
-            <summary>
-            For json patches, if it should use the new method of separating the path for getting the xvm references
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.Patch.FromEditor">
-            <summary>
-            If from editor/patch designer, enable verbose logging for the duration of that patch
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patches.Patch.DumpPatchInfoForLog">
-            <summary>
-            Collects all patch information for logging
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Patches.Patch.ToString">
-            <summary>
-            The string representation of the object
-            </summary>
-            <returns>The type, mode and lines/path if in editor mode. Else, the base ToString()</returns>
-        </member>
-        <member name="P:RelhaxModpack.Patches.Patch.ListboxDisplay">
-            <summary>
-            Gets a listbox style UI element display-ready text
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patches.Patch.IsValidForSave">
-            <summary>
-            Gets a value that determines if all required properties are filed out to be saved to a patch file
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Patches.Patch.GetInvalidPatchesForSave(RelhaxModpack.Patches.Patch[])">
-            <summary>
-            Returns a list of patch objects that are not ready to be written to a patch file
-            </summary>
-            <param name="patchList">The list of patches to check</param>
-            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
-            <seealso cref="P:RelhaxModpack.Patches.Patch.IsValidForSave"/>
-        </member>
-        <member name="M:RelhaxModpack.Patches.Patch.GetInvalidPatchesForSave(System.Collections.Generic.List{RelhaxModpack.Patches.Patch})">
-            <summary>
-            Returns a list of patch objects that are not ready to be written to a patch file
-            </summary>
-            <param name="patchList">The list of patches to check</param>
-            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
-            <seealso cref="P:RelhaxModpack.Patches.Patch.IsValidForSave"/>
-        </member>
-        <member name="M:RelhaxModpack.Patches.Patch.GetInvalidPatchesForSave(System.Windows.Controls.ItemCollection)">
-            <summary>
-            Returns a list of patch objects that are not ready to be written to a patch file
-            </summary>
-            <param name="patchList">The list of patches to check</param>
-            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
-            <seealso cref="P:RelhaxModpack.Patches.Patch.IsValidForSave"/>
-        </member>
-        <member name="T:RelhaxModpack.Patches.UnitTest">
-            <summary>
-            Represents a patch operation with a description and desired assertion condition
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.UnitTest.Patch">
-            <summary>
-            The patch operation object
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.UnitTest.Description">
-            <summary>
-            A description of what the patch should do
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.UnitTest.ShouldPass">
-            <summary>
-            Determines if the patch should pass or fail the test
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Patches.Regression">
-            <summary>
-            A regression object is an entire regression test suite. Manages the unit tests and runs the test assertions
-            </summary>
-            <remarks>A regression test is designed to only test one type of patch i.e. a series of XML patches.
-            The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
-            the results. Results are logged to a new logfile each time a regression run is started</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Patches.Regression.#ctor(RelhaxModpack.Utilities.Enums.PatchRegressionTypes,System.Collections.Generic.List{RelhaxModpack.Patches.UnitTest})">
-            <summary>
-            Make a regression object
-            </summary>
-            <param name="regressionType">The type of regressions to run</param>
-            <param name="unitTestsToRun">The list of unit tests to run</param>
-        </member>
-        <member name="M:RelhaxModpack.Patches.Regression.RunRegressions">
-            <summary>
-            Run a complete regression test based on the list of unit tests
-            </summary>
-            <returns>Returns false if a setup error occurred, true otherwise</returns>
-            <remarks>The return value of the method does NOT related to the success of the Unit Tests</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Patches.Regression.Dispose(System.Boolean)">
-            <summary>
-            Dispose of managed resources
-            </summary>
-            <param name="disposing">For redundant calls</param>
-        </member>
-        <member name="M:RelhaxModpack.Patches.Regression.Dispose">
-            <summary>
-            Dispose of managed resources
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Patches.PatchUtils">
-            <summary>
-            A class for handling patch operations
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patches.PatchUtils.PatchJsonNullEscape">
-            <summary>
-            Provides the ability to insert a 'null' value into json configurations
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Patches.PatchUtils.RunPatch(RelhaxModpack.Patches.Patch)">
-            <summary>
-            Run a patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.Patches.PatchUtils.XMLPatch(RelhaxModpack.Patches.Patch)">
-            <summary>
-            Run an XML patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.Patches.PatchUtils.RegxPatch(RelhaxModpack.Patches.Patch,System.Int32[])">
-            <summary>
-            Run a regex patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <param name="lines">The lines to patch on the file.</param>
-            <returns>The operation exit code</returns>
-            <remarks>Can be used to "batch patch" an xml or json file. See Database examples.
-            Use -1 to indicate the whole file is being patched. Use 0 to check every line.</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Patches.PatchUtils.JsonPatch(RelhaxModpack.Patches.Patch)">
-            <summary>
-            Run a Json patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.Patches.PatchUtils.GetXvmFolderName">
-            <summary>
-            Gets the absolute path to the Xvm configuration folder
-            </summary>
-            <returns>The absolute path of the Xvm configuration folder if it exists, otherwise returns "default"</returns>
         </member>
         <member name="T:RelhaxModpack.Shortcuts.Shortcut">
             <summary>
@@ -6254,9 +7399,14 @@
             DatabaseAutomationRunner
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseAutomationRunner.DatabaseAutomationRunnerCommandLineArg">
+        <member name="F:RelhaxModpack.Windows.DatabaseAutomationRunner.CommandLineArg">
             <summary>
             The command line argument specified at application launch to show this window
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseAutomationRunner.LoggingFilename">
+            <summary>
+            The name of the logfile
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.DatabaseAutomationRunner.#ctor">
@@ -6264,67 +7414,36 @@
             Create an instance of the DatabaseAutomationRunner window
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Windows.DatabaseAutomationRunner.SettingsFilename">
-            <summary>
-            The name of the xml settings file for the DatabaseAutomationRunner window
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Windows.DatabaseAutomationRunner.LogFilename">
-            <summary>
-            The name of the logfile for the DatabaseAutomationRunner window
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Windows.DatabaseAutomationRunner.LaunchedFromMainWindow">
-            <summary>
-            Indicates if this editor instance was launched from the MainWindow or from command line
-            </summary>
-            <remarks>This changes the behavior of the logging for the editor</remarks>
-        </member>
-        <member name="P:RelhaxModpack.Windows.DatabaseAutomationRunner.CommandLineArg">
-            <summary>
-            The command line argument specified at application launch to show this window
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Windows.DatabaseAutomationRunner.Settings">
-            <summary>
-            The settings definitions class for this window
-            </summary>
-        </member>
         <member name="M:RelhaxModpack.Windows.DatabaseAutomationRunner.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.ICustomFeatureWindow">
+        <member name="T:RelhaxModpack.Windows.RelhaxCustomFeatureWindow">
             <summary>
-            An interface definition to specify a window that is a separate sub-function of the application:
-            It has its own log and settings file.
+            A class definition to specify a window that is a separate sub-function of the application:
+            It has its own log and settings file, and requires custom loading code
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Windows.ICustomFeatureWindow.SettingsFilename">
-            <summary>
-            The name of the xml settings file for this window
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Windows.ICustomFeatureWindow.LogFilename">
-            <summary>
-            The name of the logfile for this window
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Windows.ICustomFeatureWindow.CommandLineArg">
-            <summary>
-            The command line argument to launch this window
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Windows.ICustomFeatureWindow.LaunchedFromMainWindow">
+        <member name="P:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.LaunchedFromMainWindow">
             <summary>
             Indicates if this editor instance was launched from the MainWindow or from command line
             </summary>
             <remarks>This changes the behavior of the logging for the editor</remarks>
         </member>
-        <member name="P:RelhaxModpack.Windows.ICustomFeatureWindow.Settings">
+        <member name="P:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.Settings">
             <summary>
             The settings definitions class for this window
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.RunStandaloneUpdateCheck">
+            <summary>
+            Controls is the application will, on startup, run a check to see if it's the latest version
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.#ctor">
+            <summary>
+            Creates an instance of the RelhaxCustomFeatureWindow class
             </summary>
         </member>
         <member name="T:RelhaxModpack.Windows.AskCloseWoTResult">
@@ -6913,6 +8032,11 @@
             The UI Reporting object for the step of font install, trimming download cache, and cleanup
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Windows.AdvancedProgress.ModpackSettings">
+            <summary>
+            A reference to the modpack settings object
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.AdvancedProgress.OnReportAdvancedProgress(RelhaxModpack.UI.RelhaxInstallerProgress)">
             <summary>
             Update the advanced progress UI objects
@@ -6979,11 +8103,15 @@
             DatabaseEditor
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditor.LaunchedFromMainWindow">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditor.CommandLineArg">
             <summary>
-            Indicates if this editor instance was launched from the MainWindow or from command line
+            The command line argument specified at application launch to show this window
             </summary>
-            <remarks>This changes the behavior of the logging for the editor</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Windows.DatabaseEditor.LoggingFilename">
+            <summary>
+            The name of the logfile
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.DatabaseEditor.#ctor">
             <summary>
@@ -7073,18 +8201,14 @@
             ModpackToolbox
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.ModpackToolbox.HardCodeRepoPath">
+        <member name="F:RelhaxModpack.Windows.ModpackToolbox.CommandLineArg">
             <summary>
-            The current path for Willster419's database repository
+            The command line argument specified at application launch to show this window
             </summary>
-            <remarks>
-            This was done because the database repository is different then the application repository.
-            During debug, this can be set to have the updater (in the repository path) assume that it's in the database repository.
-            </remarks>
         </member>
-        <member name="F:RelhaxModpack.Windows.ModpackToolbox.UseHardCodePath">
+        <member name="F:RelhaxModpack.Windows.ModpackToolbox.LoggingFilename">
             <summary>
-            Flag to use the 
+            The name of the logfile
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.ModpackToolbox.#ctor">
@@ -7248,11 +8372,15 @@
             PatchDesigner
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.PatchDesigner.LaunchedFromMainWindow">
+        <member name="F:RelhaxModpack.Windows.PatchDesigner.CommandLineArg">
             <summary>
-            Indicates if this editor instance was launched from the MainWindow or from command line
+            The command line argument specified at application launch to show this window
             </summary>
-            <remarks>This changes the behavior of the logging for the editor</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Windows.PatchDesigner.LoggingFilename">
+            <summary>
+            The name of the logfile
+            </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.PatchDesigner.#ctor">
             <summary>
@@ -7378,6 +8506,12 @@
             Controls if the window should apply scaling values set from the main window
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyCustomFont">
+            <summary>
+            Controls if the window should apply custom font to this window.
+            </summary>
+            <remarks>This setting works in tandem with the ModpackSettings setting to use custom font.</remarks>
+        </member>
         <member name="P:RelhaxModpack.Windows.RelhaxWindow.OriginalWidth">
             <summary>
             The original Width and Height of the window before scaling
@@ -7388,10 +8522,29 @@
             The original Width and Height of the window before scaling
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ModpackSettings">
+            <summary>
+            A reference to the modpack settings window configuration class
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.CommandLineSettings">
+            <summary>
+            A reference to the command line settings configuration class
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.RelhaxWindow.#ctor">
             <summary>
             Creates an instance of the RelhaxWindow class
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxWindow.OnWindowLoaded(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Performs custom window loading functions that should be done to all windows of this class
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+            <remarks>This function saves the original size that the window was designed for (scaling), applies localizations, applies color settings,
+            applies custom font, and applies scaling. Each application action is controlled by a boolean.</remarks>
         </member>
         <member name="T:RelhaxModpack.Windows.SelectionFileIssuesDisplay">
             <summary>
@@ -7701,7 +8854,7 @@
             <param name="xmlUnpack">The Xml unpack instructions object</param>
             <param name="unpackBuilder">The stringBuilder to log the generated files location for the install log</param>
         </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.AddPatchesFromFile(System.Collections.Generic.List{RelhaxModpack.Patches.Patch},System.String,System.String)">
+        <member name="M:RelhaxModpack.Xml.XmlUtils.AddPatchesFromFile(System.Collections.Generic.List{RelhaxModpack.Patching.Patch},System.String,System.String)">
             <summary>
             Parse a list of patch instructions from an Xml file into patch objects
             </summary>
@@ -7767,6 +8920,11 @@
             Returns true if the fileStream is not null and can be written to, false otherwise
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Logfile.VerboseLogging">
+            <summary>
+            Gets or sets if this log file will write lots of diagnostic messages to the log file.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Logfile.fileStream">
             <summary>
             The fileStream object to write/create the log file. Requires disposal support
@@ -7777,12 +8935,14 @@
             The event for when the logfile is written to
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Logfile.#ctor(System.String,System.String)">
+        <member name="M:RelhaxModpack.Logfile.#ctor(System.String,System.String,System.Boolean)">
             <summary>
             Create an instance of the log file
             </summary>
             <param name="filePath">The path to the file to create/open</param>
             <param name="timestamp">the date and time format to write for each log line</param>
+            <param name="verbose">Flag if the logfile will be outputting diagnostic info</param>
+            <remarks>The verbose value will be ignored if the Application is not a beta or alpha build.</remarks>
         </member>
         <member name="M:RelhaxModpack.Logfile.Init">
             <summary>
@@ -7822,26 +8982,6 @@
         <member name="F:RelhaxModpack.Logging.ApplicationLogFilename">
             <summary>
             The filename of the application log file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Logging.ApplicationUpdaterLogFilename">
-            <summary>
-            The filename of the updater log file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Logging.ApplicationEditorLogFilename">
-            <summary>
-            The filename of the editor log file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Logging.ApplicationPatchDesignerLogFilename">
-            <summary>
-            The filename of the patch designer
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Logging.AutomationLogFilename">
-            <summary>
-            The filename of the database automation runner
             </summary>
         </member>
         <member name="F:RelhaxModpack.Logging.OldApplicationLogFilename">
@@ -7899,13 +9039,15 @@
             Provides a reference to an instance of an uninstall log file
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Utilities.Enums.Logfiles,System.String)">
+        <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Utilities.Enums.Logfiles,System.Boolean,System.String)">
             <summary>
             Initialize the logging system for the application
             </summary>
             <param name="logfile">The log file to initialize</param>
+            <param name="verbose">Flag if the logfile will be outputting diagnostic info</param>
             <param name="logfilePath">The custom path of where to initialize the file</param>
             <returns>True if successful initialization, false otherwise</returns>
+            <remarks>The verbose value will be ignored if the Application is not a beta or alpha build.</remarks>
         </member>
         <member name="M:RelhaxModpack.Logging.GetLogfile(RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
@@ -8219,1076 +9361,6 @@
             <param name="message">The formatted string to be passed into the string.Format() method</param>
             <param name="level">The level of severity included into the string format</param>
         </member>
-        <member name="T:RelhaxModpack.PatchSettings">
-            <summary>
-            Defines the settings used for the patch class
-            </summary>
-            <remarks>There is no constructor for this class. It is not needed as the act of not having one assigns a default
-            of an empty constructor with to parameters. See https://stackoverflow.com/a/23458819/3128017 </remarks>
-        </member>
-        <member name="F:RelhaxModpack.PatchSettings.SaveSelectionBeforeLeave">
-            <summary>
-            If the selected patch should be saved (hitting apply) before the selection changes
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.PatchSettings.SwitchToLogWhenTestingPatch">
-            <summary>
-            If true, when testing a patch, the log tab will become the active tab
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.PatchSettings.AppMacro">
-            <summary>
-            The path to use for replacing the {app} macro in patch files
-            </summary>
-            <remarks>This is for the relative patch mode</remarks>
-        </member>
-        <member name="F:RelhaxModpack.PatchSettings.VersiondirMacro">
-            <summary>
-            The version of the game to use for replacing the {versiondir} macro in patch files
-            </summary>
-            <remarks>This is for the relative patch mode</remarks>
-        </member>
-        <member name="F:RelhaxModpack.PatchSettings.ApplyBehavior">
-            <summary>
-            Controls how the save patch and apply button interact with each other. See ApplyBehavior enumeration for interaction definitions.
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.EditorSettings">
-            <summary>
-            The settings used in the editor window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.EditorSettings.BigmodsUsername">
-            <summary>
-            The user's FTP account username to the bigmods FTP server
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.EditorSettings.BigmodsPassword">
-            <summary>
-            The user's FTP account password to the bigmods FTP server
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.EditorSettings.SaveSelectionBeforeLeave">
-            <summary>
-            Before you click on a new selection to display, it will apply any changes made. Can be used with ApplyBehavior.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.EditorSettings.ApplyBehavior">
-            <summary>
-            The behavior the editor should use for the save and apply buttons
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.EditorSettings.ShowConfirmationOnPackageApply">
-            <summary>
-            Show a confirmation window when clicking apply
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.EditorSettings.ShowConfirmationOnPackageAddRemoveMove">
-            <summary>
-            Show a confirmation window when clicking to add or move a package
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.EditorSettings.DefaultEditorSaveLocation">
-            <summary>
-            The location to save the database file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.EditorSettings.FTPUploadDownloadWindowTimeout">
-            <summary>
-            The timeout, in seconds, until the FTP upload or download window will close. Set to 0 to disable timeout.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.EditorSettings.UploadZipDeleteIsActuallyMove">
-            <summary>
-            Flag to determine if the delete zip button (actually open file by default) will actually delete the zip, or move it to the specified folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.EditorSettings.UploadZipMoveFolder">
-            <summary>
-            The folder path to move the uploaded file to. If the file already exists, it will be overridden
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.EditorSettings.#ctor">
-            <summary>
-            Create an instance of the EditorSettings class. Settings should be set via property initialization style.
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.ModpackSettings">
-            <summary>
-            Provides access to all settings used in the modpack.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.PropertiesToExclude">
-            <summary>
-            Contains a list of properties that may be defined in the ModpackSettings class, but to exclude from the properties serialization (loading/saving)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.CustomModInfoPath">
-            <summary>
-            The custom path to the ModInfo.xml file if loading in test mode
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.BetaDatabaseSelectedBranch">
-            <summary>
-            The name of the git branch to use when downloading the database. Uses the RelhaxModpackDatabase repository
-            </summary>
-            <remarks>URL for the repository: https://github.com/Willster419/RelhaxModpackDatabase </remarks>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.AtlasLibrariesCanBeLoaded">
-            <summary>
-            Flag to track when/if the user has MSVCP2013 installed to load the atlas image processing libraries
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.InformIfApplicationInDownloadsFolder">
-            <summary>
-            Show a warning (once) if the user launched the application right from the downloads folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.NotifyIfSameDatabase">
-            <summary>
-            Toggle if the program should notify the user if the database version is the same as the last installed version
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.BackupModFolder">
-            <summary>
-            Toggle if the program will backup the current mod installation
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.CleanInstallation">
-            <summary>
-            Toggle if the program will clean the mods and res_mods folders before installation
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ForceManuel">
-            <summary>
-            Toggle if the program should force the user to manually point to the WoT location
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.SaveLastSelection">
-            <summary>
-            Toggle if the application should automatically save the last selected config to also be automatically loaded upon selection load
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.SaveUserData">
-            <summary>
-            Toggle if the application should save user cache save data like session stats, or auto equip configs
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.SaveDisabledMods">
-            <summary>
-            Toggle if the application should save disabled mods in the user's selection file. If selected, when a mod is enabled again, it will be automatically selected
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DisplayUserModsWarning">
-            <summary>
-            A one time run bool to display a message about how to use user mods
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DisplaySelectionPreviewMessage">
-            <summary>
-            A one time run bool to display a message about how the user can right click a selection to get a preview window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.VerboseLogging">
-            <summary>
-            Toggle if the application should use debug level logging or just info
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.AllowStatisticDataGather">
-            <summary>
-            Toggle if the application can gather statistic data about it's usage
-            </summary>
-            <remarks>The data that the modpack gathers is only the list of packages you selected for installation. This helps us determine which mods are popular, and for how best to
-            prioritize which mods to work on first in the event the support team is overloaded</remarks>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.EnableBordersLegacyView">
-            <summary>
-            Toggle for each view if the borders around the child selection options should show
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.EnableBordersDefaultV2View">
-            <summary>
-            Toggle for each view if the borders around the child selection options should show
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.EnableColorChangeLegacyView">
-            <summary>
-            Toggle for each view if the color change should occur when a child selection happens
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.EnableColorChangeDefaultV2View">
-            <summary>
-            Toggle for each view if the color change should occur when a child selection happens
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ShowInstallCompleteWindow">
-            <summary>
-            Toggle if the installation complete window will be shown
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ClearCache">
-            <summary>
-            Toggle if the program will delete the WoT appdata cache
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DeleteLogs">
-            <summary>
-            Toggle if the program will delete xvm, pmod, WoT logs
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.CreateShortcuts">
-            <summary>
-            Toggle if the program will create desktop shortcuts
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.InstallWhileDownloading">
-            <summary>
-            Toggle the ability for the modpack to extract a package as soon as it is downloaded
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.MulticoreExtraction">
-            <summary>
-            Toggle the ability to have multiple extractions happening at the same time
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ExportMode">
-            <summary>
-            Toggle export mode
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ForceEnabled">
-            <summary>
-            Force all packages to be enabled in the selection list
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ForceVisible">
-            <summary>
-            Force all packages to be visible in the selection list
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DisableTriggers">
-            <summary>
-            When selected, the installation engine will disable event triggers.
-            </summary>
-            <remarks>The triggers, when enabled, enable the application to start some install tasks when all required packages are downloaded</remarks>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.OneClickInstall">
-            <summary>
-            Toggle one click install mode
-            </summary>
-            <remarks>Allows the user to install a selection when clicking the install button</remarks>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.AutoInstall">
-            <summary>
-            Toggle auto install mode
-            </summary>
-            <remarks>Allows the user to have the application automatically check for and install a selection file when the database updates</remarks>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.AdvancedInstalProgress">
-            <summary>
-            Toggle the advanced installation progress window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DeleteCacheFiles">
-            <summary>
-            True - After an installation the application will ask to delete old download cache files
-            False - After an installation the application will always delete old download cache files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.PreviewFullscreen">
-            <summary>
-            Toggle for if the Preview window should be shown in fullscreen mode
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionFullscreen">
-            <summary>
-            Toggle for if the ModSelectionView window should be shown in fullscreen mode
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.MinimizeToSystemTray">
-            <summary>
-            Toggle for minimizing the application to the system tray (After the application is done installing mods I presume?)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ShowOptionsCollapsedLegacy">
-            <summary>
-            Toggle for if the selection list options in Legacy view should be collapsed by default on start
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.AutoOneclickShowWarningOnSelectionsFail">
-            <summary>
-            Toggle if during auto or one click load if the application should inform if any selection errors during selection file load
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.EnableCustomFont">
-            <summary>
-            Toggle if the application should apply a custom font to the MainWindow and all windows of RelhaxWindow with 
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ValidFrameworkVersion">
-            <summary>
-            Flag to enable a check if the user is running the minimum required .NET Framework version for this application
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.AutoInstallFrequencyInterval">
-            <summary>
-            The time, in a specified unit, to check for anew data base version
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.AutoInstallFrequencyTimeUnit">
-            <summary>
-            The time unit to use for the interval (mins, hours, etc)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionHeight">
-            <summary>
-            The height, in pixels, of the ModSelectionView window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionWidth">
-            <summary>
-            The width, in pixels, of the ModSelectionView window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.PreviewX">
-            <summary>
-            The x-coordinate location, in pixels, of the Preview window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.PreviewY">
-            <summary>
-            The y-coordinate location, in pixels, of the Preview window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.PreviewHeight">
-            <summary>
-            The height, in pixels, of the Preview window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.PreviewWidth">
-            <summary>
-            The width, in pixels, of the Preview window
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DisplayScale">
-            <summary>
-            The factor to scale the window size and components by. From 1 to 3 in increments of 0.25
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.AutoOneclickSelectionFilePath">
-            <summary>
-            The path to the auto or one click selection file
-            </summary>
-            <remarks>Used for both auto and one click installation modes</remarks>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.CustomFontName">
-            <summary>
-            The name of the font to use for the MainWindow and all windows that are of RelhaxWindow type
-            </summary>
-            <remarks>If the font name is not found in the system folder, this is reset to empty</remarks>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.UninstallMode">
-            <summary>
-            The Uninstall mode to use when uninstalling or installing with the clean install option
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ModSelectionView">
-            <summary>
-            The selection view to use
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.Language">
-            <summary>
-            The selected language
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.DatabaseDistroVersion">
-            <summary>
-            The distribution version of the database to use when selecting mods
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ApplicationDistroVersion">
-            <summary>
-            The application distribution version to use. When selected, it won't take affect until application restart
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.ModpackSettings.ApplicationTheme">
-            <summary>
-            The theme to apply to the application
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.ModpackSettings.ApplyOldSettings(System.Xml.XmlNodeList)">
-            <summary>
-            Check for old poorly named settings that don't directly match setting property names
-            </summary>
-            <param name="settings">The node that holds all the settings nodes</param>
-        </member>
-        <member name="T:RelhaxModpack.CommandLineSettings">
-            <summary>
-            Handles all parsing and usage of command line arguments
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.CommandLineSettings.CommandLineArgsToSpawnCustomWindow">
-            <summary>
-            A list of command line arguments that, when specified, would create a custom window to
-            run the application in a specific mode.
-            </summary>
-            <remarks>For example, if "database-editor" is detected, then the application is going to open the database editor</remarks>
-        </member>
-        <member name="F:RelhaxModpack.CommandLineSettings.TestMode">
-            <summary>
-            Using the application is database test mode. Allows you to test a local database
-            </summary>
-            <remarks>Activated with "/test"</remarks>
-        </member>
-        <member name="F:RelhaxModpack.CommandLineSettings.SkipUpdate">
-            <summary>
-            Skip the application update check
-            </summary>
-            <remarks>Activated with "/skip-update"</remarks>
-        </member>
-        <member name="F:RelhaxModpack.CommandLineSettings.SilentStart">
-            <summary>
-            Allows the application (in installer mode) to be launched in a minimized state
-            </summary>
-            <remarks>Activated with "/silent-start"</remarks>
-        </member>
-        <member name="F:RelhaxModpack.CommandLineSettings.AutoInstallFileName">
-            <summary>
-            The name of the auto install selection file
-            </summary>
-            <remarks>The application uses the filename as check for if in auto install mode i.e. if the string is not empty.
-            The file must be in the "RelhaxUserSelections" folder</remarks>
-        </member>
-        <member name="F:RelhaxModpack.CommandLineSettings.UpdateKeyFileName">
-            <summary>
-            The name of the file that contains the key for unlocking the updater
-            </summary>
-            <remarks>use key filename as check for update key mode</remarks>
-        </member>
-        <member name="F:RelhaxModpack.CommandLineSettings.EditorAutoLoadFileName">
-            <summary>
-            The path to load the database from when the application starts
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.CommandLineSettings.PatchFilenames">
-            <summary>
-            The parsed list of patch instruction files for patch mode
-            </summary>
-            <remarks>The application will run the patches in order loaded from the command line i.e. left to right</remarks>
-        </member>
-        <member name="F:RelhaxModpack.CommandLineSettings.ApplicationMode">
-            <summary>
-            The mode that the application is currently running in
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.CommandLineSettings.ParseCommandLineConflicts">
-            <summary>
-            Parse any conflicting command line arguments
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.CommandLineSettings.ParseCommandLine(System.String[])">
-            <summary>
-            Parse the command line arguments
-            </summary>
-            <param name="args">A string array of command line arguments</param>
-        </member>
-        <member name="P:RelhaxModpack.CommandLineSettings.ArgsOpenCustomWindow">
-            <summary>
-            Determines if any specified command line args will cause the application to open a custom (non MainWindow) window
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Settings">
-            <summary>
-            Handles all generic constants and statics used throughout the application
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationStartupPath">
-            <summary>
-            The Startup root path of the application. Does not include the application name
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ModpackSettingsFileName">
-            <summary>
-            The name of the application settings file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.UISettingsColorFile">
-            <summary>
-            The name of the settings color file
-            </summary>
-            <remarks>Stores all settings</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.OldModpackSettingsFilename">
-            <summary>
-            The name of the legacy application settings file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.UISettingsFileName">
-            <summary>
-            The name of the application color settings file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.EditorSettingsFilename">
-            <summary>
-            The name of the modpack editor tool settings file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.PatcherSettingsFilename">
-            <summary>
-            The name of the modpack patch designer tool settings file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.LastSavedConfigFilename">
-            <summary>
-            The name of the selection file when used in the setting "save last installed selection"
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.EditorLaunchFromMainWindowFilename">
-            <summary>
-            The file in the application root directory used to unlock the "launch editor" button
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DefaultEndAddress">
-            <summary>
-            The default end address of the location of mod packages (start + zip + end)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.BetaDatabaseV2RootFilename">
-            <summary>
-            The filename of the V2 root database document. All category names and filenames, and version info is in this document
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationUpdateFileName">
-            <summary>
-            The filename to download the latest stable or beta application zip file as
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelicBatchUpdateScript">
-            <summary>
-            The filename to save the self updater script as
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelicBatchUpdateScriptServer">
-            <summary>
-            The filename of the self updater script inside the manager zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationFilenameStable">
-            <summary>
-            The name of the application executable when compiled with stable distribution
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationFilenameBeta">
-            <summary>
-            The name of the application executable when compiled with beta distribution
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelicBatchUpdateScriptOld">
-            <summary>
-            The old V1 filename to save the self updater script as
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.SelectionsXml">
-            <summary>
-            The root filename of the list of selection files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolderPath">
-            <summary>
-            The absolute path of the application zip file and zip database file folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxDownloadsFolderPathOld">
-            <summary>
-            The old absolute path of the application zip file and zip database file folder
-            </summary>
-            [Obsolete]
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolderPath">
-            <summary>
-            The absolute path of the application mod backup folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxModBackupFolderPathOld">
-            <summary>
-            The old absolute path of the application mod backup folder
-            </summary>
-            [Obsolete]
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolderPath">
-            <summary>
-            The absolute path of the application user selections folder. Default location 
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserSelectionsFolderPathOld">
-            <summary>
-            The old absolute path of the application user selections folder. Old Default location
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolderPath">
-            <summary>
-            The absolute path of the application folder where users can place custom mod zip files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxUserModsFolderPathOld">
-            <summary>
-            The old absolute path of the application folder where users can place custom mod zip files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxTempFolderPath">
-            <summary>
-            The absolute path of the application temporary folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxTempFolderPathOld">
-            <summary>
-            The old absolute path of the application temporary folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolderPath">
-            <summary>
-            The absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxLibrariesFolderPathOld">
-            <summary>
-            The old absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WoT64bitFolder">
-            <summary>
-            The name of the 64bit folder in the 'World_of_Tanks' directory
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WoT32bitFolder">
-            <summary>
-            The name of the 32bit folder in the 'World_of_Tanks' directory
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ModsDir">
-            <summary>
-            The name of the 'mods' directory
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ResModsDir">
-            <summary>
-            The name of the 'res_mods' directory
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WoT64bitFolderWithSlash">
-            <summary>
-            The WoT 64bit folder name with the folder separator before it
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WoT32bitFolderWithSlash">
-            <summary>
-            The WoT 32bit folder name with the folder separator before it
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WoTVersionXml">
-            <summary>
-            The name of the version xml used for getting the current client version information
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.PatchFolderName">
-            <summary>
-            The name of the installer folder to hold all patch xml files in
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ShortcutFolderName">
-            <summary>
-            The name of the installer folder to hold all shortcut xml files in
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.XmlUnpackFolderName">
-            <summary>
-            The name of the installer folder to hold all xml unpack entries in
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.AtlasCreationFoldername">
-            <summary>
-            The name of the installer folder to hold all xml atlas creation instructions in
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.FontsToInstallFoldername">
-            <summary>
-            The name of the installer folder to hold all fonts to install (or check if needs to install)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ReadmeFromZipfileFolderName">
-            <summary>
-            The name of the temporary install folder to hold database manager readme files. The end user does not need this folder
-            and will be deleted at the end of the installation
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.AutoUpdateZipFolderName">
-            <summary>
-            The name of the temporary install folder that holds the auto update information of the database editor.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.FoldersToCleanup">
-            <summary>
-            The list of installer folders in the root {WoT} directory to cleanup after an installation
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.MD5HashDatabaseXmlFile">
-            <summary>
-            The absolute path to the md5 hash zip file download database file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DefaultCheckedSelectionfile">
-            <summary>
-            The filename of the selection file used to select mods on default loading of the mod selection list
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.SupportedClients">
-            <summary>
-            The filename of the xml document inside the manager info zip file containing the list of supported WoT clients
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ManagerVersion">
-            <summary>
-            The filename of the xml document inside the manager info zip file containing manager version information
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ManagerInfoDatFile">
-            <summary>
-            The location of the manager info zip file. Contains several xml files with database and client definitions
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.LastInstalledConfigFilepath">
-            <summary>
-            The absolute path of the selection file used for saving last selection
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxSettingsFilepath">
-            <summary>
-            The absolute path of the V2 settings file used for saving ModpackSettings
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.RelhaxLogFilepath">
-            <summary>
-            The absolute path of the Relhax log file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.FoldersToCheck">
-            <summary>
-            Array of all Modpack created folders in the application directory
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.PmodLog">
-            <summary>
-            The name of the pmod log file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.XvmLog">
-            <summary>
-            The name of the xvm log file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.PythonLog">
-            <summary>
-            The name of the WoT python debug log file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.LogsFolder">
-            <summary>
-            The name of the logs folder used for WG CEF browser and Relhax Modpack
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.MinimumDotNetFrameworkVersionRequired">
-            <summary>
-            The minimum release value of the user's installed .NET framework to use the modpack
-            </summary>
-            <remarks>It varies for OS. For example:
-            On Windows 10 May 2019 Update and Windows 10 November 2019 Update: 528040
-            On Windows 10 May 2020 Update: 528372
-            On all other Windows operating systems(including other Windows 10 operating systems): 528049
-            See: https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed </remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DotNetFrameworkLatestDownloadURL">
-            <summary>
-            URL to get the latest version of the .NET Framework
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.BigmodsDatabaseRootEscaped">
-            <summary>
-            The escaped constant URL of the stable database on the server, escaped with the 'dbVersion' macro
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DefaultStartAddress">
-            <summary>
-            The default starting address of the location of mod packages (start + zip + end), escaped with the 'onlineFolder' macro
-            </summary>
-            <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.BetaDatabaseV2FolderURLEscaped">
-            <summary>
-            The URL of the V2 beta database root folder, escaped with the 'branch' macro
-            </summary>
-            <remarks>'branch' is a name of a github branch on the RelhaxModpackDatabase repo</remarks>
-        </member>
-        <member name="P:RelhaxModpack.Settings.BetaDatabaseV2FolderURL">
-            <summary>
-            The URL of the V2 beta database root folder, using BetaDatabaseSelectedBranch as the replacement for the 'branch' macro
-            </summary>
-            <remarks>By default, this value is 'master'</remarks>
-            <seealso cref="F:RelhaxModpack.ModpackSettings.BetaDatabaseSelectedBranch"/>
-        </member>
-        <member name="F:RelhaxModpack.Settings.BetaDatabaseBranchesURL">
-            <summary>
-            The API URL to return a json format document of the current branches in the repository
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ManagerInfoURLBigmods">
-            <summary>
-            The URL of the V2 manager info zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationUpdateURL">
-            <summary>
-            The URL to the location of the latest stable version of the application as a zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationBetaUpdateURL">
-            <summary>
-            The URL to the location of the latest beta version of the application as a zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.SelectionsRoot">
-            <summary>
-            The root URL of the V2 selection files location
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationNotesStableUrl">
-            <summary>
-            The URL path of the latest application stable release notes
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationNotesBetaUrl">
-            <summary>
-            The URL path of the latest application beta release notes
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DatabaseNotesUrl">
-            <summary>
-            The URL path of the latest V2 database release notes
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DatabaseOnlineFolderXpath">
-            <summary>
-            The xpath string to get the onlineFolder attribute from the document root
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DatabaseOnlineVersionXpath">
-            <summary>
-            The xpath string to get the database version info attribute from the document root
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ConfigFileVersion2V0">
-            <summary>
-            The old V2 config file version for saving the user's selection preferences
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ConfigFileVersion3V0">
-            <summary>
-            The latest config file version for saving the user's selection preferences
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WoTProcessName">
-            <summary>
-            The name of the WoT process used for detecting if it is running
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WoTVersionXmlXpath">
-            <summary>
-            The xpath to the version information used by the modpack to determine the WoT client version
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationVersion">
-            <summary>
-            The current distribution version of the application.
-            Alpha should NEVER be built for public distribution unless direct testing!
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.TrueAlpha">
-            <summary>
-            Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.NumLogicalProcesors">
-            <summary>
-            The number of logical processors (threads) detected on the system. Used to make n installation threads for faster extraction
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.LogSpacingLineup">
-            <summary>
-            The amount so space characters to line up a continued log entry without the date/time
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.AppDataFolder">
-            <summary>
-            The location of the WoT app data folder parsed at installation time
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WoTDirectory">
-            <summary>
-            The location of the WoT installation directory parsed at installation time
-            </summary>
-            <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WoTClientVersion">
-            <summary>
-            The version information of WoT parsed at install time
-            </summary>
-            <remarks>This info is gathered from the "version.xml" file from the game's root directory</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.WoTModpackOnlineFolderVersion">
-            <summary>
-            The version of the online folder name containing the zip files for this game
-            </summary>
-            <remarks>The online folders are done by major versions only i.e. 1.4.1, 1.5.0, etc. All zip files on 1.5.0.x are stored in this folder</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.DatabaseVersion">
-            <summary>
-            The version of the database parsed upon application load
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.FirstLoad">
-            <summary>
-            Determines if this is the first time the application is loading
-            </summary>
-            <remarks>Done by checking if the settings file exists. If it is set to true in the application, it will be set to false again when it closes.</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.FirstLoadToV2">
-            <summary>
-            Determines if while being the first time loading, if this is an upgrade operation to Relhax V2
-            </summary>
-            <remarks>Done by if FirstLoad is true and the Relhax V1 settings file exists</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.MaximumDisplayScale">
-            <summary>
-            The maximum amount that the application will be allowed to scale. 300%
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.MinimumDisplayScale">
-            <summary>
-            The default amount that the application will be scaled to. 100%
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.NumberUIDCharacters">
-            <summary>
-            The number of characters that make up a package UID
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.UIDCharacters">
-            <summary>
-            The array of character options that are used for generating the UID
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ManagerInfoZipfile">
-            <summary>
-            The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk.
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Settings.LoadSettings(System.String,System.Type,System.String[],System.Object)">
-            <summary>
-            Loads/serializes an xml file into a settings class based on class type
-            </summary>
-            <param name="xmlfile">The path to the file</param>
-            <param name="SettingsClass">The type of the settings class to load into</param>
-            <param name="propertiesToExclude">A string list of properties (in the class) to not look for. If none, you can pass in null</param>
-            <param name="classInstance">The object to append the xml settings to. If the settings class is static, pass in null</param>
-            <returns>Success if loading, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Settings.SaveSettings(System.String,System.Type,System.String[],System.Object)">
-            <summary>
-            Saves/serializes a settings class file to xml
-            </summary>
-            <param name="xmlFile">The file to write to. If exists, it will be overwritten</param>
-            <param name="SettingsClass">The type of the class to save values from</param>
-            <param name="propertiesToExclude">A string list of properties (in the class) to not look for</param>
-            <param name="classInstance">The actual instance of the class to save from</param>
-            <returns></returns>
-        </member>
-        <member name="T:RelhaxModpack.UISettings">
-            <summary>
-            Handles all custom UI settings
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.CustomColorSettingsPathV1">
-            <summary>
-            The name of the Xml element to hold all custom color settings
-            </summary>
-            <remarks>See CustomSettings array for list of custom colors</remarks>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.NotSelectedTabColor">
-            <summary>
-            The color to use in the selection list for a tab which is not selected
-            </summary>
-            <remarks>It starts as null because the color is unknown (and can be different types based on the user's theme).
-            It is set on user selection on a component in the selection list.</remarks>
-        </member>
-        <member name="F:RelhaxModpack.UISettings.NullAllowedGlobalBrushes">
-            <summary>
-            A list of brush names that are allowed to have 'null' as the value for global brushes (global = at root of Theme object)
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.UISettings.CurrentTheme">
-            <summary>
-            The currently applied theme in the UI engine
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UISettings.ApplyCustomStyles(System.Windows.Window)">
-            <summary>
-            Applies the custom style templates for a UI component class type when an ID is defined.
-            This allows for custom color definitions to be loaded.
-            </summary>
-            <param name="window">The Window to apply the styles to</param>
-        </member>
-        <member name="M:RelhaxModpack.UISettings.ApplyUIColorSettings(System.Windows.Window)">
-            <summary>
-            Applies custom color settings to a window
-            </summary>
-            <param name="window">The Window object to apply color settings to</param>
-        </member>
-        <member name="M:RelhaxModpack.UISettings.ApplyThemeToRootComponent(System.Windows.FrameworkElement,System.Boolean,RelhaxModpack.UI.WindowColorset,System.Boolean)">
-            <summary>
-            Applies theme properties to UI components based on colorDefinition rule sets for that UI component class type
-            </summary>
-            <param name="rootElement">The element to start at for applying theme properties</param>
-            <param name="customWindowDefinition">To determine if to apply custom theme properties based on a list of custom theme properties for that window</param>
-            <param name="wcolorset">The property object of colorDefinition rules</param>
-            <param name="includeSelf">Determine if applying the rootElement</param>
-        </member>
-        <member name="M:RelhaxModpack.UISettings.LoadSettingsFile">
-            <summary>
-            Load the custom color definitions from XML
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.UISettings.ParseColorFromString(System.String,System.Windows.Media.Color@)">
-            <summary>
-            Tries to parse a hex code color to a color object
-            </summary>
-            <param name="color">The string hex code for the color to use</param>
-            <param name="outColor">The corresponding color object</param>
-            <returns>True if color parsing was successful, a default color otherwise</returns>
-            <remarks>Uses the 32bit color codes for generation (Alpha, Red, Green, Blue) Alpha is transparency</remarks>
-        </member>
-        <member name="M:RelhaxModpack.UISettings.VerifyPoints(System.Windows.Point)">
-            <summary>
-            Verifies that the points for applying color gradient directions are within 0-1
-            </summary>
-            <param name="p">The color gradient direction to verify</param>
-        </member>
-        <member name="M:RelhaxModpack.UISettings.DumpAllWindowColorSettingsToFile(System.String,RelhaxModpack.MainWindow)">
-            <summary>
-            Saves all currently enabled color settings to an xml file
-            </summary>
-            <param name="savePath">The path to save the xml file to</param>
-            <param name="mainWindow">If method is called from MainWindow, use itself for getting its color properties</param>
-        </member>
         <member name="T:RelhaxModpack.RelhaxFreeImageLibrary">
             <summary>
             A wrapper class around the TexImpNet FreeImage library class
@@ -9463,9 +9535,14 @@
             Russian language string identifier in national language
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Translations.CurrentLanguageEnum">
+            <summary>
+            The Currently set language of the Translations class to use for localizing windows and phrases
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Translations.SetLanguage(RelhaxModpack.Utilities.Enums.Languages)">
             <summary>
-            Sets the language dictionary to use when returning a localized string
+            Sets the language dictionary to use when returning a localized string, and set it in the modpack settings class
             </summary>
             <param name="language">The language to switch to</param>
         </member>
@@ -9475,6 +9552,12 @@
             </summary>
             <param name="language">The english-named enumeration of the language</param>
             <returns>The key-value language dictionary</returns>
+        </member>
+        <member name="M:RelhaxModpack.Translations.GetLanguageNativeName">
+            <summary>
+            Get the native language name of the english enumerated name of the currently set language in the Translations class
+            </summary>
+            <returns>The name of the requested language in it's native language</returns>
         </member>
         <member name="M:RelhaxModpack.Translations.GetLanguageNativeName(RelhaxModpack.Utilities.Enums.Languages)">
             <summary>
@@ -9561,16 +9644,6 @@
             </summary>
             <summary>
             MainWindow
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.MainWindow.OriginalWidth">
-            <summary>
-            The original width and height of the application before applying scaling
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.MainWindow.OriginalHeight">
-            <summary>
-            The original width and height of the application before applying scaling
             </summary>
         </member>
         <member name="M:RelhaxModpack.MainWindow.#ctor">

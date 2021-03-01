@@ -1,4 +1,5 @@
-﻿<Window
+﻿<windows:RelhaxWindow
+    xmlns:windows="clr-namespace:RelhaxModpack.Windows"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -348,4 +349,4 @@
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar" Tag="ChildProgressBar"/>
         </Grid>
     </Grid>
-</Window>
+</windows:RelhaxWindow>

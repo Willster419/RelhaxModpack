@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Settings
 {
     /// <summary>
     /// Represents a class that is used within windows as a serialized to/from xml settings definition holder

@@ -15,6 +15,7 @@ using RelhaxModpack.Utilities.Enums;
 using System.Net;
 using System.IO;
 using System.Xml.XPath;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Database
 {
@@ -104,13 +105,13 @@ namespace RelhaxModpack.Database
         /// Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
         /// </summary>
         /// <returns>the XmlDocument object of the root database file</returns>
-        public static XmlDocument GetBetaDatabaseRoot1V1Document()
+        public static XmlDocument GetBetaDatabaseRoot1V1Document(string betaDatabaseV2FolderUrlParsed)
         {
             XmlDocument rootDocument = null;
             using (WebClient client = new WebClient())
             {
                 //load string constant url from manager info xml
-                string rootXml = Settings.BetaDatabaseV2FolderURL + Settings.BetaDatabaseV2RootFilename;
+                string rootXml = ApplicationConstants.BetaDatabaseV2FolderURLEscaped + ApplicationConstants.BetaDatabaseV2RootFilename;
 
                 //download the xml string into "modInfoXml"
                 client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
@@ -124,20 +125,20 @@ namespace RelhaxModpack.Database
         /// </summary>
         /// <param name="rootDocument">The root 'database.xml' document object</param>
         /// <returns>The list of URLs</returns>
-        public static List<string> GetBetaDatabase1V1FilesList(XmlDocument rootDocument)
+        public static List<string> GetBetaDatabase1V1FilesList(XmlDocument rootDocument, string betaDatabaseV2FolderUrlParsed)
         {
             //global and logical dependencies
             List<string> databaseFiles = new List<string>()
             {
-                Settings.BetaDatabaseV2FolderURL + XmlUtils.GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"),
-                Settings.BetaDatabaseV2FolderURL + XmlUtils.GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file")
+                betaDatabaseV2FolderUrlParsed + XmlUtils.GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/globalDependencies/@file"),
+                betaDatabaseV2FolderUrlParsed + XmlUtils.GetXmlStringFromXPath(rootDocument, "/modInfoAlpha.xml/dependencies/@file")
             };
 
             //categories
             foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(rootDocument, "//modInfoAlpha.xml/categories/category"))
             {
                 string categoryFileName = categoryNode.Attributes["file"].Value;
-                databaseFiles.Add(Settings.BetaDatabaseV2FolderURL + categoryFileName);
+                databaseFiles.Add(betaDatabaseV2FolderUrlParsed + categoryFileName);
             }
 
             return databaseFiles.Select(name => name.Replace(".Xml", ".xml")).ToList();
@@ -147,9 +148,9 @@ namespace RelhaxModpack.Database
         /// Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
         /// </summary>
         /// <returns>The list of URLs</returns>
-        public static List<string> GetBetaDatabase1V1FilesList()
+        public static List<string> GetBetaDatabase1V1FilesList(string betaDatabaseV2FolderUrlParsed)
         {
-            return GetBetaDatabase1V1FilesList(GetBetaDatabaseRoot1V1Document());
+            return GetBetaDatabase1V1FilesList(GetBetaDatabaseRoot1V1Document(betaDatabaseV2FolderUrlParsed), betaDatabaseV2FolderUrlParsed);
         }
         #endregion
 
@@ -1055,7 +1056,7 @@ namespace RelhaxModpack.Database
         /// <param name="parsedCategoryList">The list of Categories</param>
         /// <param name="suppressSomeLogging">Flag for it some of the more verbose logging should be suppressed</param>
         /// <returns>A list of calculated dependencies to install</returns>
-        public static List<Dependency> CalculateDependencies(List<Dependency> dependencies, List<Category> parsedCategoryList, bool suppressSomeLogging)
+        public static List<Dependency> CalculateDependencies(List<Dependency> dependencies, List<Category> parsedCategoryList, bool suppressSomeLogging, bool showDependencyCalculationErrorMessages)
         {
             //flat list is packages
             List<SelectablePackage> flatListSelect = GetFlatSelectablePackageList(parsedCategoryList);
@@ -1208,7 +1209,8 @@ namespace RelhaxModpack.Database
                             "This will lead to logic errors in database calculation! Tip: this dependency ({0}) should be BELOW ({1}) in the" +
                             "list of dependencies in the editor. Order matters!", dependency.PackageName, login.PackageName);
                         Logging.Error(errorMessage);
-                        if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
+                        //if (ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test)
+                        if (showDependencyCalculationErrorMessages)
                             MessageBox.Show(errorMessage);
                     }
                 }

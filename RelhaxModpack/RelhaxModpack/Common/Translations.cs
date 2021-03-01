@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack
 {
@@ -112,6 +113,11 @@ namespace RelhaxModpack
         /// </summary>
         public const string LanguageRussian = "Pусский";
 
+        /// <summary>
+        /// The Currently set language of the Translations class to use for localizing windows and phrases
+        /// </summary>
+        public static Languages CurrentLanguageEnum { get; private set; } = Languages.English;
+
         private static Dictionary<string, string> English = new Dictionary<string, string>();
         private static Dictionary<string, string> German = new Dictionary<string, string>();
         private static Dictionary<string, string> Polish = new Dictionary<string, string>();
@@ -124,7 +130,7 @@ namespace RelhaxModpack
 
         #region Language methods
         /// <summary>
-        /// Sets the language dictionary to use when returning a localized string
+        /// Sets the language dictionary to use when returning a localized string, and set it in the modpack settings class
         /// </summary>
         /// <param name="language">The language to switch to</param>
         public static void SetLanguage(Languages language)
@@ -150,7 +156,6 @@ namespace RelhaxModpack
                     CurrentLanguage = Russian;
                     break;
             }
-            ModpackSettings.Language = language;
         }
 
         /// <summary>
@@ -177,6 +182,15 @@ namespace RelhaxModpack
                 default:
                     return null;
             }
+        }
+
+        /// <summary>
+        /// Get the native language name of the english enumerated name of the currently set language in the Translations class
+        /// </summary>
+        /// <returns>The name of the requested language in it's native language</returns>
+        public static string GetLanguageNativeName()
+        {
+            return GetLanguageNativeName(CurrentLanguageEnum);
         }
 
         /// <summary>
@@ -254,7 +268,7 @@ namespace RelhaxModpack
                 {
                     //Log warning it is todo in selected language
                     Logging.WriteToLog(string.Format("Missing translation key={0}, value=TODO, language={1}",
-                        componentName, ModpackSettings.Language.ToString()),Logfiles.Application,LogLevel.Error);
+                        componentName, CurrentLanguageEnum.ToString()), Logfiles.Application, LogLevel.Error);
                     s = English[componentName];
                     if(s.Equals(TranslationNeeded))
                     {
@@ -271,7 +285,7 @@ namespace RelhaxModpack
                 if(English.ContainsKey(componentName))
                 {
                     Logging.WriteToLog(string.Format("Missing translation: key={0}, value=TODO, language={1}",
-                        componentName, ModpackSettings.Language.ToString()), Logfiles.Application, LogLevel.Error);
+                        componentName, CurrentLanguageEnum.ToString()), Logfiles.Application, LogLevel.Error);
                     s = English[componentName];
                     if (s.Equals(TranslationNeeded))
                     {
@@ -311,7 +325,7 @@ namespace RelhaxModpack
             if(!CurrentLanguage.ContainsKey(componentName))
             {
                 if(logError)
-                    Logging.Error("Missing translation: key={0}, value=MISSING_TRANSLATION, language={1}", componentName, ModpackSettings.Language.ToString());
+                    Logging.Error("Missing translation: key={0}, value=MISSING_TRANSLATION, language={1}", componentName, CurrentLanguageEnum.ToString());
                 return false;
             }
             return true;

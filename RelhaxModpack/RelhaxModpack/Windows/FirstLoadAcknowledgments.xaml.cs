@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Documents;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -31,7 +32,7 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Settings.FirstLoadToV2)
+            if (ApplicationSettings.FirstLoadToV2)
                 V2UpgradeNoticeText.Visibility = Visibility.Visible;
         }
 

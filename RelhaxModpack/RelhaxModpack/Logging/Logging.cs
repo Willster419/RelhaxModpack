@@ -15,26 +15,6 @@ namespace RelhaxModpack
         public const string ApplicationLogFilename = "Relhax.log";
 
         /// <summary>
-        /// The filename of the updater log file
-        /// </summary>
-        public const string ApplicationUpdaterLogFilename = "RelhaxUpdater.log";
-
-        /// <summary>
-        /// The filename of the editor log file
-        /// </summary>
-        public const string ApplicationEditorLogFilename = "RelhaxEditor.log";
-
-        /// <summary>
-        /// The filename of the patch designer
-        /// </summary>
-        public const string ApplicationPatchDesignerLogFilename = "RelhaxPatchDesigner.log";
-
-        /// <summary>
-        /// The filename of the database automation runner
-        /// </summary>
-        public const string AutomationLogFilename = "RelhaxAutomation.log";
-
-        /// <summary>
         /// The filename of the old application log file
         /// </summary>
         public const string OldApplicationLogFilename = "RelHaxLog.txt";
@@ -103,9 +83,11 @@ namespace RelhaxModpack
         /// Initialize the logging system for the application
         /// </summary>
         /// <param name="logfile">The log file to initialize</param>
+        /// <param name="verbose">Flag if the logfile will be outputting diagnostic info</param>
         /// <param name="logfilePath">The custom path of where to initialize the file</param>
         /// <returns>True if successful initialization, false otherwise</returns>
-        public static bool Init(Logfiles logfile, string logfilePath = null)
+        /// <remarks>The verbose value will be ignored if the Application is not a beta or alpha build.</remarks>
+        public static bool Init(Logfiles logfile, bool verbose, string logfilePath = null)
         {
             Logfile fileToWriteTo = null;
 
@@ -126,29 +108,29 @@ namespace RelhaxModpack
                 case Logfiles.Editor:
                     fileToWriteTo = EditorLogfile;
                     if (string.IsNullOrEmpty(logfilePath))
-                        logfilePath = ApplicationEditorLogFilename;
+                        logfilePath = Windows.DatabaseEditor.LoggingFilename;
                     break;
                 case Logfiles.PatchDesigner:
                     fileToWriteTo = PatcherLogfile;
                     if (string.IsNullOrEmpty(logfilePath))
-                        logfilePath = ApplicationPatchDesignerLogFilename;
+                        logfilePath = Windows.PatchDesigner.LoggingFilename;
                     break;
                 case Logfiles.Updater:
                     fileToWriteTo = UpdaterLogfile;
                     if (string.IsNullOrEmpty(logfilePath))
-                        logfilePath = ApplicationUpdaterLogFilename;
+                        logfilePath = Windows.ModpackToolbox.LoggingFilename;
                     break;
                 case Logfiles.AutomationRunner:
                     fileToWriteTo = AutomationLogfile;
                     if (string.IsNullOrEmpty(logfilePath))
-                        logfilePath = AutomationLogFilename;
+                        logfilePath = Windows.DatabaseAutomationRunner.LoggingFilename;
                     break;
             }
 
             if (fileToWriteTo != null)
                 throw new BadMemeException("only do this once jackass");
 #pragma warning disable IDE0068 // Use recommended dispose pattern
-            fileToWriteTo = new Logfile(logfilePath, ApplicationLogfileTimestamp);
+            fileToWriteTo = new Logfile(logfilePath, ApplicationLogfileTimestamp, verbose);
 #pragma warning restore IDE0068 // Use recommended dispose pattern
 
             //now that it's newed, the reference needs to be reverse assigned

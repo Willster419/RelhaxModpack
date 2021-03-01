@@ -5,12 +5,14 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using Microsoft.Win32;
-using RelhaxModpack.Patches;
+using RelhaxModpack.Patching;
 using RelhaxModpack.Properties;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Windows;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack
 {
@@ -52,16 +54,20 @@ namespace RelhaxModpack
         //when application is starting for first time
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (!Logging.Init(Logfiles.Application))
+            CommandLineSettings commandLineSettings = new CommandLineSettings(Environment.GetCommandLineArgs().Skip(1).ToArray());
+            SettingsParser settingsParser = new SettingsParser();
+            ModpackSettings modpackSettings = new ModpackSettings();
+            if (!Logging.Init(Logfiles.Application, false))
             {
                 //check if it's because the file already exists, or some other actual reason
                 //if the file exists, and it's locked (init failed), then check if also the command line is creating a new window
-                if (File.Exists(Logging.GetLogfile(Logfiles.Application).Filepath) && CommandLineSettings.ArgsOpenCustomWindow)
+                if (File.Exists(Logging.GetLogfile(Logfiles.Application).Filepath) && commandLineSettings.ArgsOpenCustomWindow())
                 {
-                    //a custom window will be open, so open the log in a custom name (with the application mode). it's ok in this case, because the likely cause
-                    //is that the modpack is open in a regular window and now we want to open a custom window
+                    //getting here means the main window is open, but in this instance, a custom window will be open. We can temporarily
+                    //open the log in a custom name (with the application mode), and when opening the 'real' logfile for the custom window,
+                    //we'll transfer the text over then
                     Logging.DisposeLogging(Logfiles.Application);
-                    if (!Logging.Init(Logfiles.Application, Logging.ApplicationTempLogFilename))
+                    if (!Logging.Init(Logfiles.Application, false, Logging.ApplicationTempLogFilename))
                     {
                         MessageBox.Show(string.Format("Failed to initialize logfile {0}, check file permissions", Logging.ApplicationTempLogFilename));
                         Shutdown((int)ReturnCodes.LogfileError);
@@ -98,13 +104,22 @@ namespace RelhaxModpack
 
             Logging.WriteHeader(Logfiles.Application);
             Logging.Info(string.Format("| Relhax Modpack version {0}", CommonUtils.GetApplicationVersion()));
-            Logging.Info(string.Format("| Build version {0}, from date {1}", Settings.ApplicationVersion.ToString(), CommonUtils.GetCompileTime()));
+            Logging.Info(string.Format("| Build version {0}, from date {1}", ApplicationConstants.ApplicationVersion.ToString(), CommonUtils.GetCompileTime()));
             Logging.Info(string.Format("| Running on OS {0}", Environment.OSVersion.ToString()));
 
             //parse command line arguments given to the application
-            CommandLineSettings.ParseCommandLine(Environment.GetCommandLineArgs());
+            Logging.Info("Parsing command line switches");
+            commandLineSettings.ParseCommandLineSwitches();
 
-            if ((!CommandLineSettings.ArgsOpenCustomWindow) && (!ModpackSettings.ValidFrameworkVersion))
+            //load the ModpackSettings from xml file
+            settingsParser.LoadSettings(modpackSettings);
+
+            //set verbose logging option
+            Logging.GetLogfile(Logfiles.Application).VerboseLogging = modpackSettings.VerboseLogging;
+
+            //run a check for a valid .net framework version, only if we're opening MainWindow, and the version
+            //of the .net framework installed has not yet been detected to be 4.8
+            if ((!commandLineSettings.ArgsOpenCustomWindow()) && (!modpackSettings.ValidFrameworkVersion))
             {
                 //https://github.com/Willster419/RelhaxModpack/issues/90
                 //try getting .net framework information
@@ -135,41 +150,41 @@ namespace RelhaxModpack
                     Logging.Exception(ex.ToString());
                 }
 
-                Logging.Info("Minimum required .NET Framework version: {0}, Installed: {1}", Settings.MinimumDotNetFrameworkVersionRequired, frameworkVersion);
+                Logging.Info("Minimum required .NET Framework version: {0}, Installed: {1}", ApplicationConstants.MinimumDotNetFrameworkVersionRequired, frameworkVersion);
 
                 if (frameworkVersion == -1)
                 {
                     Logging.Error("Failed to get .NET Framework version from the registry");
                     MessageBox.Show("failedToGetDotNetFrameworkVersion");
                 }
-                else if (frameworkVersion < Settings.MinimumDotNetFrameworkVersionRequired)
+                else if (frameworkVersion < ApplicationConstants.MinimumDotNetFrameworkVersionRequired)
                 {
                     Logging.Error("Invalid .NET Framework version (less then 4.8)");
                     if (MessageBox.Show("invalidDotNetFrameworkVersion","",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        CommonUtils.StartProcess(Settings.DotNetFrameworkLatestDownloadURL);
+                        CommonUtils.StartProcess(ApplicationConstants.DotNetFrameworkLatestDownloadURL);
                     }
                 }
                 else
                 {
                     Logging.Info("Valid .NET Framework version");
-                    ModpackSettings.ValidFrameworkVersion = true;
+                    modpackSettings.ValidFrameworkVersion = true;
                 }
             }
 
             //switch into application modes based on mode enum
-            Logging.Debug("Starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
-            switch (CommandLineSettings.ApplicationMode)
+            Logging.Debug("Starting application in {0} mode", commandLineSettings.ApplicationMode.ToString());
+            switch (commandLineSettings.ApplicationMode)
             {
                 case ApplicationMode.Updater:
-                    ModpackToolbox updater = new ModpackToolbox();
+                    ModpackToolbox updater = new ModpackToolbox() { CommandLineSettings = commandLineSettings, ModpackSettings = modpackSettings };
 
                     //close application log if open
                     if(Logging.IsLogOpen(Logfiles.Application))
                         CloseApplicationLog(true);
 
                     //start updater logging
-                    if (!Logging.Init(Logfiles.Updater))
+                    if (!Logging.Init(Logfiles.Updater, modpackSettings.VerboseLogging))
                     {
                         MessageBox.Show("Failed to initialize logfile for updater");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
@@ -192,14 +207,14 @@ namespace RelhaxModpack
                     Environment.Exit((int)ReturnCodes.Success);
                     return;
                 case ApplicationMode.Editor:
-                    DatabaseEditor editor = new DatabaseEditor();
+                    DatabaseEditor editor = new DatabaseEditor() { CommandLineSettings = commandLineSettings, ModpackSettings = modpackSettings };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
                         CloseApplicationLog(true);
 
                     //start updater logging
-                    if (!Logging.Init(Logfiles.Editor))
+                    if (!Logging.Init(Logfiles.Editor, modpackSettings.VerboseLogging))
                     {
                         MessageBox.Show("Failed to initialize logfile for editor");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
@@ -222,14 +237,14 @@ namespace RelhaxModpack
                     Environment.Exit((int)ReturnCodes.Success);
                     return;
                 case ApplicationMode.PatchDesigner:
-                    PatchDesigner patcher = new PatchDesigner();
+                    PatchDesigner patcher = new PatchDesigner() { CommandLineSettings = commandLineSettings, ModpackSettings = modpackSettings };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
                         CloseApplicationLog(true);
 
                     //start updater logging
-                    if (!Logging.Init(Logfiles.PatchDesigner))
+                    if (!Logging.Init(Logfiles.PatchDesigner, modpackSettings.VerboseLogging))
                     {
                         MessageBox.Show("Failed to initialize logfile for patcher");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
@@ -252,14 +267,14 @@ namespace RelhaxModpack
                     Environment.Exit((int)ReturnCodes.Success);
                     return;
                 case ApplicationMode.AutomationRunner:
-                    DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner();
+                    DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner() { CommandLineSettings = commandLineSettings, ModpackSettings = modpackSettings };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
                         CloseApplicationLog(true);
 
                     //start DatabaseAutomationRunner logging
-                    if (!Logging.Init(Logfiles.AutomationRunner))
+                    if (!Logging.Init(Logfiles.AutomationRunner, modpackSettings.VerboseLogging))
                     {
                         MessageBox.Show("Failed to initialize logfile for DatabaseAutomationRunner");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
@@ -285,7 +300,7 @@ namespace RelhaxModpack
                     Logging.Info("Running patch mode");
 
                     //check that at least one patch file was specified from command line
-                    if(CommandLineSettings.PatchFilenames.Count == 0)
+                    if(commandLineSettings.PatchFilenames.Count == 0)
                     {
                         Logging.Error("0 patch files parsed from command line!");
                         Current.Shutdown((int)ReturnCodes.PatcherNoSpecifiedFiles);
@@ -295,7 +310,7 @@ namespace RelhaxModpack
                     {
                         //parse patch objects from command line file list
                         List<Patch> patchList = new List<Patch>();
-                        foreach(string file in CommandLineSettings.PatchFilenames)
+                        foreach(string file in commandLineSettings.PatchFilenames)
                         {
                             if(!File.Exists(file))
                             {
@@ -319,10 +334,11 @@ namespace RelhaxModpack
 
                         //always return on worst condition
                         int i = 1;
+                        Patcher thePatcher = new Patcher();
                         foreach(Patch p in patchList)
                         {
                             Logging.Info("Running patch {0} of {1}", i++, patchList.Count);
-                            PatchExitCode exitCodeTemp = PatchUtils.RunPatch(p);
+                            PatchExitCode exitCodeTemp = thePatcher.RunPatchFromCommandline(p);
                             if ((int)exitCodeTemp < (int)exitCode)
                                 exitCode = exitCodeTemp;
                         }
@@ -333,6 +349,11 @@ namespace RelhaxModpack
                         Current.Shutdown(((int)exitCode) + 100);
                         Environment.Exit(((int)exitCode) + 100);
                     }
+                    return;
+                case ApplicationMode.Default:
+                    //assign the settings to the main window
+                    ((RelhaxWindow)this.MainWindow).ModpackSettings = modpackSettings;
+                    ((RelhaxWindow)this.MainWindow).CommandLineSettings = commandLineSettings;
                     return;
             }
         }

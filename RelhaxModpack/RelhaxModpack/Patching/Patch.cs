@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Linq;
+using RelhaxModpack.Common;
 
-namespace RelhaxModpack.Patches
+namespace RelhaxModpack.Patching
 {
     /// <summary>
     /// A patch is an instruction object of how to modify a text file. Can be a json, xml, or plain text file
@@ -71,11 +72,6 @@ namespace RelhaxModpack.Patches
         public string CompletePath = string.Empty;
 
         /// <summary>
-        /// Saves the complete path for if in editor mode, otherwise not used
-        /// </summary>
-        public string FollowPathEditorCompletePath = string.Empty;
-
-        /// <summary>
         /// The version of the patch for parsing. Allows for multiple variations. Default to 1
         /// </summary>
         public int Version = 1;
@@ -106,11 +102,6 @@ namespace RelhaxModpack.Patches
         public bool FollowPath = false;
 
         /// <summary>
-        /// If from editor/patch designer, enable verbose logging for the duration of that patch
-        /// </summary>
-        public bool FromEditor = false;
-
-        /// <summary>
         /// Collects all patch information for logging
         /// </summary>
         public string DumpPatchInfoForLog
@@ -125,25 +116,16 @@ namespace RelhaxModpack.Patches
                     NativeProcessingFile,
                     ActualPatchName,
                     Environment.NewLine,
-                    Settings.LogSpacingLineup,
+                    ApplicationConstants.LogSpacingLineup,
                     PatchPath,
                     File,
                     Environment.NewLine,
-                    Settings.LogSpacingLineup,
+                    ApplicationConstants.LogSpacingLineup,
                     Lines == null ? "null" : string.Join(",", Lines),
                     string.IsNullOrEmpty(Path) ? "null" :Path,
                     Search,
                     Replace);
             }
-        }
-
-        /// <summary>
-        /// The string representation of the object
-        /// </summary>
-        /// <returns>The type, mode and lines/path if in editor mode. Else, the base ToString()</returns>
-        public override string ToString()
-        {
-            return FromEditor? string.Format("type={0} ,mode={1}, lines/path={2}", Type, Mode, Lines == null ? Path : string.Join(",", Lines)) : base.ToString();
         }
 
         /// <summary>

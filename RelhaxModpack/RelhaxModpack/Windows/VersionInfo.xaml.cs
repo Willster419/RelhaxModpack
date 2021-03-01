@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Net;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Windows
 {
@@ -65,7 +66,7 @@ namespace RelhaxModpack.Windows
             using (WebClient client = new WebClient())
             {
                 Uri temp = new Uri((ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
-                    Settings.ApplicationNotesStableUrl : Settings.ApplicationNotesBetaUrl);
+                    ApplicationConstants.ApplicationNotesStableUrl : ApplicationConstants.ApplicationNotesBetaUrl);
                 client.DownloadStringCompleted += (senderr, args) =>
                 {
                     if(args.Error != null)

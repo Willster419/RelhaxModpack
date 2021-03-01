@@ -26,6 +26,11 @@ namespace RelhaxModpack.Settings
         /// <param name="customSettingsPath">The custom location of the settings xml file</param>
         public void LoadSettings(ISettingsFile settingsFile, string customSettingsPath)
         {
+            if (!File.Exists(customSettingsPath))
+            {
+                Logging.Info(LogOptions.MethodName, "Settings document {0} does not exist, loading defaults", settingsFile.Filename);
+                return;
+            }
             Logging.Debug(LogOptions.MethodAndClassName, "Loading settings document {0} from location {1}", settingsFile.GetType().Name, customSettingsPath);
             LoadSettings(settingsFile, XmlUtils.LoadXDocument(customSettingsPath, XmlLoadType.FromFile));
             Logging.Debug(LogOptions.MethodAndClassName, "Loaded settings document {0} from location {1}", settingsFile.GetType().Name, customSettingsPath);
@@ -37,6 +42,11 @@ namespace RelhaxModpack.Settings
         /// <param name="settingsFile">The instance of the settings class object to load settings into</param>
         public void LoadSettings(ISettingsFile settingsFile)
         {
+            if (!File.Exists(settingsFile.Filename))
+            {
+                Logging.Info(LogOptions.MethodName, "Settings document {0} does not exist, loading defaults", settingsFile.Filename);
+                return;
+            }
             Logging.Debug(LogOptions.MethodAndClassName, "Loading settings document {0} from location {1}", settingsFile.GetType().Name, settingsFile.Filename);
             LoadSettings(settingsFile, XmlUtils.LoadXDocument(settingsFile.Filename, XmlLoadType.FromFile));
             Logging.Debug(LogOptions.MethodAndClassName, "Loaded settings document {0} from location {1}", settingsFile.GetType().Name, settingsFile.Filename);
@@ -44,6 +54,9 @@ namespace RelhaxModpack.Settings
 
         private void LoadSettings(ISettingsFile settingsFile, XDocument document)
         {
+            if (settingsFile == null)
+                throw new NullReferenceException();
+
             //add setting values from fields and properties
             Type settingsClass = settingsFile.GetType();
             List<MemberInfo> memberInfos = new List<MemberInfo>();
@@ -52,11 +65,17 @@ namespace RelhaxModpack.Settings
 
             //filter out components from exclude list
             Logging.Debug("Components to save before exclude list: {0}", memberInfos.Count);
-            memberInfos = memberInfos.FindAll(meme => !settingsFile.PropertiesFieldsToExclude.Contains(meme.Name));
+            memberInfos = memberInfos.FindAll(meme => !settingsFile.MembersToExclude.Contains(meme.Name));
             Logging.Debug("Components to save after exclude list: {0}", memberInfos.Count);
 
             //get the list of 
             List<XElement> settingsXml = document.XPathSelectElements(string.Format("/{0}", settingsClass.Name)).ToList();
+
+            //legacy compatibility
+            if (settingsClass.Equals(typeof(ModpackSettings)))
+            {
+                ((ModpackSettings)settingsFile).ApplyLegacySettings(settingsXml);
+            }
 
             foreach (XElement settingsElement in settingsXml)
             {
@@ -116,7 +135,7 @@ namespace RelhaxModpack.Settings
 
             //filter out components from exclude list
             Logging.Debug("Components to save before exclude list: {0}", memberInfos.Count);
-            memberInfos = memberInfos.FindAll(meme => !settingsFile.PropertiesFieldsToExclude.Contains(meme.Name));
+            memberInfos = memberInfos.FindAll(meme => !settingsFile.MembersToExclude.Contains(meme.Name));
             Logging.Debug("Components to save after exclude list: {0}", memberInfos.Count);
 
             //loop through each member
