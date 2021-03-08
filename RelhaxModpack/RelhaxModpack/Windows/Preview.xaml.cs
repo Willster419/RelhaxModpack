@@ -170,6 +170,31 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        public void Refresh()
+        {
+            if (Medias.Count > 0)
+            {
+                DisplayMedia(Medias[0]);
+            }
+            else if (Medias.Count == 0)
+            {
+                CurrentDispalyMedia = null;
+            }
+            else
+            {
+                if (EditorMode)
+                    Title = "EDITOR_TEST_MODE";
+                else if (ComboBoxItemsInsideMode)
+                    Title = string.Format("{0}: ({1})", Translations.GetTranslatedString("dropDownItemsInside"), Translations.GetTranslatedString("none"));
+                else
+                    Title = InvokedPackage.NameFormatted;
+
+                PreviewDescriptionBox.Text = InvokedPackage.DescriptionFormatted;
+                PreviewUpdatesBox.Text = InvokedPackage.UpdateCommentFormatted;
+                CurrentDisplaySP = InvokedPackage;
+            }
+        }
+
         private async void DisplayMedia(Media media)
         {
             //the devURL, description and update notes only need to be

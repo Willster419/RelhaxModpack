@@ -135,7 +135,7 @@ namespace RelhaxModpack.Windows
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress = null;
         private Category UserCategory = null;
-        private Preview p = null;
+        private Preview previewWindow = null;
         private const int FLASH_TICK_INTERVAL = 250;
         private const int NUM_FLASH_TICKS = 5;
         private int numTicks = 0;
@@ -188,10 +188,10 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
             //close and dispose preview
-            if (p != null)
+            if (previewWindow != null)
             {
-                p.Close();
-                p = null;
+                previewWindow.Close();
+                previewWindow = null;
             }
 
             //save width and height settings
@@ -1651,19 +1651,38 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            if (p != null)
+            //if preview window for the first time, create and show
+            //if its not a virgin preview window, use the currently existing one but refresh the contents
+            if (previewWindow != null)
             {
-                p.Close();
-                p = null;
+                previewWindow.ComboBoxItemsInsideMode = comboboxItemsInside;
+                previewWindow.Medias = spc.Medias;
+                previewWindow.InvokedPackage = spc;
+                previewWindow.Refresh();
+
+            }
+            else if (previewWindow == null)
+            {
+                previewWindow = new Preview()
+                {
+                    ComboBoxItemsInsideMode = comboboxItemsInside,
+                    Medias = spc.Medias,
+                    InvokedPackage = spc
+                };
+                previewWindow.Show();
             }
 
-            p = new Preview()
+            //handle if the preview window was closed after one was viewed, and start up a new one
+            if (Application.Current.Windows.OfType<Preview>().SingleOrDefault() == null)
             {
-                ComboBoxItemsInsideMode = comboboxItemsInside,
-                Medias = spc.Medias,
-                InvokedPackage = spc
-            };
-            p.Show();
+                previewWindow = new Preview()
+                {
+                    ComboBoxItemsInsideMode = comboboxItemsInside,
+                    Medias = spc.Medias,
+                    InvokedPackage = spc
+                };
+                previewWindow.Show();
+            }
         }
 
         //Handler for allowing right click of disabled mods (WPF)
@@ -3117,8 +3136,8 @@ namespace RelhaxModpack.Windows
                     if (loadingProgress != null)
                         loadingProgress = null;
 
-                    if (p != null)
-                        p = null;
+                    if (previewWindow != null)
+                        previewWindow = null;
 
                     if (OriginalBrush != null)
                         OriginalBrush = null;
