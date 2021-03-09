@@ -14,6 +14,8 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class InstallFinished : RelhaxWindow
     {
+        public string WoTDirectory { get; set; }
+
         /// <summary>
         /// Create an instance of the InstallFinished window
         /// </summary>
@@ -24,10 +26,13 @@ namespace RelhaxModpack.Windows
 
         private void InstallationCompleteStartWoTButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(WoTDirectory))
+                throw new BadMemeException("B r u h");
+
             if(!CommonUtils.StartProcess(new ProcessStartInfo()
             {
-                WorkingDirectory = ApplicationSettings.WoTDirectory,
-                FileName = Path.Combine(ApplicationSettings.WoTDirectory, "WorldOfTanks.exe")
+                WorkingDirectory = WoTDirectory,
+                FileName = Path.Combine(WoTDirectory, "WorldOfTanks.exe")
             }))
             {
                 MessageBox.Show(Translations.GetTranslatedString("CouldNotStartProcess"));

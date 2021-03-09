@@ -63,7 +63,7 @@ namespace RelhaxInstallerUnitTester
             }
 
             //get the managerInfo document
-            ApplicationSettings.ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(true);
+            ((App)RelhaxModpack.App.Current).ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(true);
         }
 
         [TestMethod]
@@ -91,8 +91,13 @@ namespace RelhaxInstallerUnitTester
                     //the lists are newed in the application
                     GlobalDependencies = Set01_ModSelectionListTests.GlobalDependencies,
                     Dependencies = Set01_ModSelectionListTests.Dependencies,
-                    ParsedCategoryList = Set01_ModSelectionListTests.ParsedCategoryList
+                    ParsedCategoryList = Set01_ModSelectionListTests.ParsedCategoryList,
+                    WoTClientVersion = "TODO",
+                    WoTModpackOnlineFolderVersion = "TODO",
+                    DatabaseVersion = "TODO",
+                    WoTDirectory = "TODO"
                 };
+                throw new BadMemeException("Finish plox");
 
                 SelectionList.Closed += (sender, e) => SelectionList.Dispatcher.InvokeShutdown();
                 SelectionList.WindowState = WindowState.Normal;

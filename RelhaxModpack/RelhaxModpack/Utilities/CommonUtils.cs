@@ -81,15 +81,15 @@ namespace RelhaxModpack.Utilities
         public static async Task<XmlDocument> GetManagerInfoDocumentAsync(bool overwrite)
         {
 
-            ApplicationSettings.ManagerInfoZipfile = await GetManagerInfoZipfileAsync(overwrite);
-            if(ApplicationSettings.ManagerInfoZipfile == null)
+            ((App)Application.Current).ManagerInfoZipfile = await GetManagerInfoZipfileAsync(overwrite);
+            if(((App)Application.Current).ManagerInfoZipfile == null)
             {
                 Logging.Exception("Settings.ModInfoZipfile is null");
                 return null;
             }
 
             //get the version info string
-            string xmlString = FileUtils.GetStringFromZip(ApplicationSettings.ManagerInfoZipfile, "manager_version.xml");
+            string xmlString = FileUtils.GetStringFromZip(((App)Application.Current).ManagerInfoZipfile, "manager_version.xml");
             if (string.IsNullOrEmpty(xmlString))
             {
                 Logging.Exception("Failed to get xml string from Settings.ModInfoZipfile");
@@ -114,15 +114,15 @@ namespace RelhaxModpack.Utilities
 #pragma warning restore CS0618 // Type or member is obsolete
 
             //if the zipfile is not null and no overwrite, then stop
-            if (ApplicationSettings.ManagerInfoZipfile != null && !overwrite)
+            if (((App)Application.Current).ManagerInfoZipfile != null && !overwrite)
             {
-                return ApplicationSettings.ManagerInfoZipfile;
+                return ((App)Application.Current).ManagerInfoZipfile;
             }
             //if zipfile is not null and we are overwriting, then dispose of the zip first
-            else if (ApplicationSettings.ManagerInfoZipfile != null && overwrite)
+            else if (((App)Application.Current).ManagerInfoZipfile != null && overwrite)
             {
-                ApplicationSettings.ManagerInfoZipfile.Dispose();
-                ApplicationSettings.ManagerInfoZipfile = null;
+                ((App)Application.Current).ManagerInfoZipfile.Dispose();
+                ((App)Application.Current).ManagerInfoZipfile = null;
             }
 
             using (WebClient client = new WebClient())
@@ -896,10 +896,10 @@ namespace RelhaxModpack.Utilities
         {
             //make sure that the app data folder exists
             //if it does not, then it does not need to run this
-            if (!Directory.Exists(ApplicationSettings.AppDataFolder))
+            if (!Directory.Exists(ApplicationConstants.AppDataFolder))
             {
                 Logging.Info("Appdata folder does not exist, creating");
-                Directory.CreateDirectory(ApplicationSettings.AppDataFolder);
+                Directory.CreateDirectory(ApplicationConstants.AppDataFolder);
                 return true;
             }
             Logging.Info("Appdata folder exists, backing up user settings and clearing cache");
@@ -926,9 +926,9 @@ namespace RelhaxModpack.Utilities
             foreach (string file in fileNames)
             {
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
-                if (File.Exists(Path.Combine(ApplicationSettings.AppDataFolder, file)))
+                if (File.Exists(Path.Combine(ApplicationConstants.AppDataFolder, file)))
                 {
-                    if (!FileUtils.FileMove(Path.Combine(ApplicationSettings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
+                    if (!FileUtils.FileMove(Path.Combine(ApplicationConstants.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
                     {
                         Logging.Error("Failed to move file for clear cache");
                         return false;
@@ -942,9 +942,9 @@ namespace RelhaxModpack.Utilities
 
             foreach (string folder in folderNames)
             {
-                if (Directory.Exists(Path.Combine(ApplicationSettings.AppDataFolder, folder)))
+                if (Directory.Exists(Path.Combine(ApplicationConstants.AppDataFolder, folder)))
                 {
-                    FileUtils.DirectoryMove(Path.Combine(ApplicationSettings.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
+                    FileUtils.DirectoryMove(Path.Combine(ApplicationConstants.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
                 }
                 else
                 {
@@ -954,17 +954,17 @@ namespace RelhaxModpack.Utilities
 
             //now delete the temp folder
             Logging.WriteToLog("Starting clearing cache step 2 of 3: actually clearing cache", Logfiles.Application, LogLevel.Debug);
-            FileUtils.DirectoryDelete(ApplicationSettings.AppDataFolder, true);
+            FileUtils.DirectoryDelete(ApplicationConstants.AppDataFolder, true);
 
             //then put the above files back
             Logging.WriteToLog("Starting clearing cache step 3 of 3: restoring old files", Logfiles.Application, LogLevel.Debug);
-            Directory.CreateDirectory(ApplicationSettings.AppDataFolder);
+            Directory.CreateDirectory(ApplicationConstants.AppDataFolder);
             foreach (string file in fileNames)
             {
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if (File.Exists(Path.Combine(AppPathTempFolder, file)))
                 {
-                    if (!FileUtils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(ApplicationSettings.AppDataFolder, file)))
+                    if (!FileUtils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(ApplicationConstants.AppDataFolder, file)))
                     {
                         Logging.Error("Failed to move file for clear cache");
                         return false;
@@ -986,7 +986,7 @@ namespace RelhaxModpack.Utilities
             {
                 if (Directory.Exists(Path.Combine(AppPathTempFolder, folder)))
                 {
-                    FileUtils.DirectoryMove(Path.Combine(AppPathTempFolder, folder), Path.Combine(ApplicationSettings.AppDataFolder, folder), true);
+                    FileUtils.DirectoryMove(Path.Combine(AppPathTempFolder, folder), Path.Combine(ApplicationConstants.AppDataFolder, folder), true);
                 }
                 else
                 {

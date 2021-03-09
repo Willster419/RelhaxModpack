@@ -102,6 +102,46 @@ namespace RelhaxModpack
         private string oldBetaDB, newBetaDB;
         //auto install timer dispatcher flag to ensure only one even trigger happens at a time
         private bool timerActive = false;
+
+        /// <summary>
+        /// The location of the WoT installation directory parsed at installation time
+        /// </summary>
+        /// <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
+        private string WoTDirectory = string.Empty;
+
+        /// <summary>
+        /// The version information of WoT parsed at installation time
+        /// </summary>
+        /// <remarks>This info is gathered from the "version.xml" file from the game's root directory</remarks>
+        private string WoTClientVersion = string.Empty;
+
+        /// <summary>
+        /// The version of the online folder name containing the zip files for this game parsed at installation time
+        /// </summary>
+        /// <remarks>The online folders are done by major versions only i.e. 1.4.1, 1.5.0, etc. All zip files on 1.5.0.x are stored in this folder</remarks>
+        private string WoTModpackOnlineFolderVersion = string.Empty;
+
+        /// <summary>
+        /// The version of the database parsed upon application load
+        /// </summary>
+        private string DatabaseVersion = string.Empty;
+
+        /// <summary>
+        /// Determines if this is the first time the application is loading, parsed upon application load
+        /// </summary>
+        /// <remarks>Done by checking if the settings file exists. If it is set to true in the application, it will be set to false again when it closes.</remarks>
+        private bool FirstLoad = false;
+
+        /// <summary>
+        /// Determines if while being the first time loading, if this is an upgrade operation to Relhax V2, parsed upon application load
+        /// </summary>
+        /// <remarks>Done by if FirstLoad is true and the Relhax V1 settings file exists</remarks>
+        private bool FirstLoadToV2 = false;
+
+        /// <summary>
+        /// Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed), parsed upon application load.
+        /// </summary>
+        private bool TrueAlpha = false;
         #endregion
 
         #region MainWindow loading
@@ -320,12 +360,11 @@ namespace RelhaxModpack
             Logging.Info("Structure verified");
 
             //set the application appData directory
-            ApplicationSettings.AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
-            if (!Directory.Exists(ApplicationSettings.AppDataFolder))
+            if (!Directory.Exists(ApplicationConstants.AppDataFolder))
             {
-                Logging.WriteToLog(string.Format("AppDataFolder does not exist at {0}, creating it", ApplicationSettings.AppDataFolder),
+                Logging.WriteToLog(string.Format("AppDataFolder does not exist at {0}, creating it", ApplicationConstants.AppDataFolder),
                     Logfiles.Application, LogLevel.Warning);
-                Directory.CreateDirectory(ApplicationSettings.AppDataFolder);
+                Directory.CreateDirectory(ApplicationConstants.AppDataFolder);
             }
 
             //check for updates to application
@@ -417,14 +456,14 @@ namespace RelhaxModpack
             Logging.Info("Application is up to date, checking to display welcome message");
 
             //run checks to see if it's the first time loading the application
-            ApplicationSettings.FirstLoad = !File.Exists(ModpackSettings.SettingsFilename) && !File.Exists(ModpackSettings.OldSettingsFilename);
-            ApplicationSettings.FirstLoadToV2 = !File.Exists(ModpackSettings.SettingsFilename) && File.Exists(ModpackSettings.OldSettingsFilename);
-            Logging.Info("FirstLoading = {0}, FirstLoadingV2 = {1}", ApplicationSettings.FirstLoad.ToString(), ApplicationSettings.FirstLoadToV2.ToString());
+            FirstLoad = !File.Exists(ModpackSettings.SettingsFilename) && !File.Exists(ModpackSettings.OldSettingsFilename);
+            FirstLoadToV2 = !File.Exists(ModpackSettings.SettingsFilename) && File.Exists(ModpackSettings.OldSettingsFilename);
+            Logging.Info("FirstLoading = {0}, FirstLoadingV2 = {1}", FirstLoad.ToString(), FirstLoadToV2.ToString());
 
-            if (ApplicationSettings.FirstLoad || ApplicationSettings.FirstLoadToV2)
+            if (FirstLoad || FirstLoadToV2)
             {
                 //display the selection of language if it's the first time loading (not an upgrade)
-                if (ApplicationSettings.FirstLoad && !ApplicationSettings.FirstLoadToV2)
+                if (FirstLoad && !FirstLoadToV2)
                 {
                     FirstLoadSelectLanguage firstLoadSelectLanguage = new FirstLoadSelectLanguage();
                     firstLoadSelectLanguage.ShowDialog();
@@ -447,7 +486,7 @@ namespace RelhaxModpack
                 }
 
                 //display the welcome window and make sure the user agrees to it
-                FirstLoadAcknowledgments firstLoadAknowledgements = new FirstLoadAcknowledgments();
+                FirstLoadAcknowledgments firstLoadAknowledgements = new FirstLoadAcknowledgments() { FirstLoadToV2 = this.FirstLoadToV2 };
                 firstLoadAknowledgements.ShowDialog();
                 if (!firstLoadAknowledgements.UserAgreed)
                 {
@@ -457,7 +496,7 @@ namespace RelhaxModpack
                     return;
                 }
                 //if user agreed and its the first time loading in v2, the do the structure upgrade
-                else if (ApplicationSettings.FirstLoadToV2)
+                else if (FirstLoadToV2)
                 {
                     progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("upgradingStructure"));
                     UiUtils.AllowUIToUpdate();
@@ -733,9 +772,9 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("ExportModeSelect returned true, setting majorVersion to {0}, minorVersion to {1}",
                         exportModeSelect.SelectedVersionInfo.WoTOnlineFolderVersion, exportModeSelect.SelectedVersionInfo.WoTClientVersion);
-                    ApplicationSettings.WoTModpackOnlineFolderVersion = exportModeSelect.SelectedVersionInfo.WoTOnlineFolderVersion;
-                    ApplicationSettings.WoTClientVersion = exportModeSelect.SelectedVersionInfo.WoTClientVersion;
-                    ApplicationSettings.WoTDirectory = foldertoExportTo;
+                    WoTModpackOnlineFolderVersion = exportModeSelect.SelectedVersionInfo.WoTOnlineFolderVersion;
+                    WoTClientVersion = exportModeSelect.SelectedVersionInfo.WoTClientVersion;
+                    WoTDirectory = foldertoExportTo;
                 }
                 else
                 {
@@ -771,7 +810,7 @@ namespace RelhaxModpack
                     Logging.Debug("Auto detect failed or user requests manual");
                     OpenFileDialog manualWoTFind = new OpenFileDialog()
                     {
-                        InitialDirectory = string.IsNullOrWhiteSpace(ApplicationSettings.WoTDirectory) ? ApplicationConstants.ApplicationStartupPath : ApplicationSettings.WoTDirectory,
+                        InitialDirectory = string.IsNullOrWhiteSpace(WoTDirectory) ? ApplicationConstants.ApplicationStartupPath : WoTDirectory,
                         AddExtension = true,
                         CheckFileExists = true,
                         CheckPathExists = true,
@@ -807,10 +846,10 @@ namespace RelhaxModpack
                     return;
                 }
 
-                ApplicationSettings.WoTDirectory = Path.GetDirectoryName(searchResult);
-                Logging.Info("Wot root directory parsed as " + ApplicationSettings.WoTDirectory);
+                WoTDirectory = Path.GetDirectoryName(searchResult);
+                Logging.Info("Wot root directory parsed as " + WoTDirectory);
 
-                string versionXml = Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.WoTVersionXml);
+                string versionXml = Path.Combine(WoTDirectory, ApplicationConstants.WoTVersionXml);
                 if (!File.Exists(versionXml))
                 {
                     Logging.Error("Failed to find WoT version.xml file or the file does not exist! '{0}", versionXml);
@@ -820,7 +859,7 @@ namespace RelhaxModpack
                 }
 
                 //check to make sure the application is not in the same directory as the WoT install
-                if (ApplicationSettings.WoTDirectory.Equals(ApplicationConstants.ApplicationStartupPath))
+                if (WoTDirectory.Equals(ApplicationConstants.ApplicationStartupPath))
                 {
                     //display error and abort
                     MessageBox.Show(Translations.GetTranslatedString("moveOutOfTanksLocation"));
@@ -853,8 +892,8 @@ namespace RelhaxModpack
                 //get the version of tanks in the format
                 //of the res_mods version folder i.e. 0.9.17.0.3
                 string versionTemp = XmlUtils.GetXmlStringFromXPath(versionXml, ApplicationConstants.WoTVersionXmlXpath);
-                ApplicationSettings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2).Trim();
-                Logging.Info("Detected client version: {0}", ApplicationSettings.WoTClientVersion);
+                WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2).Trim();
+                Logging.Info("Detected client version: {0}", WoTClientVersion);
 
                 //determine if current detected version of the game is supported
                 //only if application distribution is not alpha and database distribution is not test
@@ -862,7 +901,7 @@ namespace RelhaxModpack
                 if (databaseVersion != DatabaseVersions.Test)
                 {
                     //make an array of all the supported versions
-                    string supportedClientsXML = FileUtils.GetStringFromZip(ApplicationSettings.ManagerInfoZipfile, "supported_clients.xml");
+                    string supportedClientsXML = FileUtils.GetStringFromZip(((App)Application.Current).ManagerInfoZipfile, "supported_clients.xml");
                     if (string.IsNullOrWhiteSpace(supportedClientsXML))
                     {
                         Logging.Info("Failed to parse supported_clients.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
@@ -888,10 +927,10 @@ namespace RelhaxModpack
                         supportedVersionsString[i] = supportedVersionsXML[i].InnerText.Trim();
 
                         //see if this supported client version is the same as what was parsed to be the current client version
-                        if (supportedVersionsString[i].Equals(ApplicationSettings.WoTClientVersion))
+                        if (supportedVersionsString[i].Equals(WoTClientVersion))
                         {
                             //set the online folder
-                            ApplicationSettings.WoTModpackOnlineFolderVersion = supportedVersionsXML[i].Attributes["folder"].Value;
+                            WoTModpackOnlineFolderVersion = supportedVersionsXML[i].Attributes["folder"].Value;
                         }
                     }
 
@@ -901,19 +940,19 @@ namespace RelhaxModpack
 
                     //check to see if array of supported clients has the detected WoT client version
                     //if the version does not match, then we need to set the online folder download version
-                    if (!supportedVersionsString.Contains(ApplicationSettings.WoTClientVersion))
+                    if (!supportedVersionsString.Contains(WoTClientVersion))
                     {
-                        ApplicationSettings.WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
+                        WoTModpackOnlineFolderVersion = supportedVersionsXML[supportedVersionsXML.Count - 1].Attributes["folder"].Value;
 
                         //if it's not alpha, show the warning messages
-                        if ((ApplicationConstants.ApplicationVersion != ApplicationVersions.Alpha) || (!ApplicationSettings.TrueAlpha))
+                        if ((ApplicationConstants.ApplicationVersion != ApplicationVersions.Alpha) || (!TrueAlpha))
                         {
 #pragma warning disable CS0162
                             //log and inform the user
-                            Logging.Warning("Current client version {0} does not exist in list: {1}", ApplicationSettings.WoTClientVersion, string.Join(", ", supportedVersionsString));
+                            Logging.Warning("Current client version {0} does not exist in list: {1}", WoTClientVersion, string.Join(", ", supportedVersionsString));
                             MessageBox.Show(string.Format("{0}: {1}\n{2} {3}\n\n{4}:\n{5}",
                                 Translations.GetTranslatedString("detectedClientVersion"),//0
-                                ApplicationSettings.WoTClientVersion,//1
+                                WoTClientVersion,//1
                                 Translations.GetTranslatedString("supportNotGuarnteed"),//2
                                 ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Stable? Translations.GetTranslatedString("couldTryBeta") : string.Empty,//3
                                 Translations.GetTranslatedString("supportedClientVersions"),//4
@@ -928,7 +967,7 @@ namespace RelhaxModpack
                     {
                         Logging.Info("NotifyIfSameDatabase is true and databaseDistroVersion is stable, checking if last installed database is the same as current");
                         //get the install log for last installed database version
-                        string installedfilesLogPath = Path.Combine(ApplicationSettings.WoTDirectory, "logs", Logging.InstallLogFilename);
+                        string installedfilesLogPath = Path.Combine(WoTDirectory, "logs", Logging.InstallLogFilename);
                         if (File.Exists(installedfilesLogPath))
                         {
                             //use index 0 of array, index 18 of string array
@@ -937,7 +976,7 @@ namespace RelhaxModpack
                             if(!string.IsNullOrWhiteSpace(lastInstalledDatabaseVersion) && lastInstalledDatabaseVersion.Length >=18)
                                 lastInstalledDatabaseVersion = lastInstalledDatabaseVersion.Substring(18).Trim();
                             Logging.Debug("LastInstalledDatabaseVersion (post trim): {0}", lastInstalledDatabaseVersion);
-                            if (ApplicationSettings.DatabaseVersion.Equals(lastInstalledDatabaseVersion))
+                            if (DatabaseVersion.Equals(lastInstalledDatabaseVersion))
                             {
                                 if (MessageBox.Show(Translations.GetTranslatedString("DatabaseVersionsSameBody"), Translations.GetTranslatedString("DatabaseVersionsSameHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
                                 {
@@ -967,7 +1006,11 @@ namespace RelhaxModpack
             {
                 AutoInstallMode = (sender == null),
                 //get the last parsed from the xml file (should be the latest by default
-                LastSupportedWoTClientVersion = lastSupportedWoTVersion
+                LastSupportedWoTClientVersion = lastSupportedWoTVersion,
+                WoTClientVersion = this.WoTClientVersion,
+                WoTModpackOnlineFolderVersion = this.WoTModpackOnlineFolderVersion,
+                DatabaseVersion = this.DatabaseVersion,
+                WoTDirectory = this.WoTDirectory
             };
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
             modSelectionList.OnSelectionListReturn += ModSelectionList_OnSelectionListReturn;
@@ -1016,10 +1059,10 @@ namespace RelhaxModpack
             stopwatch.Restart();
 
             //check if wot is running
-            while (CommonUtils.IsProcessRunning(ApplicationConstants.WoTProcessName, ApplicationSettings.WoTDirectory))
+            while (CommonUtils.IsProcessRunning(ApplicationConstants.WoTProcessName, WoTDirectory))
             {
                 //create window to determine if cancel, wait, kill TODO
-                AskCloseWoT askCloseWoT = new AskCloseWoT();
+                AskCloseWoT askCloseWoT = new AskCloseWoT() { WoTDirectory = this.WoTDirectory };
                 //a positive result means that we are going to retry the loop
                 //it could mean the user hit retry (close true), or hit force close (succeeded, and try again anyways)
                 askCloseWoT.ShowDialog();
@@ -1036,7 +1079,7 @@ namespace RelhaxModpack
             }
 
             //build macro hash for install
-            MacroUtils.BuildFilepathMacroList();
+            MacroUtils.BuildFilepathMacroList(WoTClientVersion, WoTModpackOnlineFolderVersion, WoTDirectory);
 
             //perform dependency calculations
             //get a flat list of packages to install
@@ -1305,7 +1348,10 @@ namespace RelhaxModpack
                 UserPackagesToInstall = userModsToInstall,
                 CancellationToken = cancellationTokenSource.Token,
                 DisableTriggersForInstall = disableTriggersForInstall,
-                ModpackSettings = this.ModpackSettings
+                ModpackSettings = this.ModpackSettings,
+                DatabaseVersion = this.DatabaseVersion,
+                WoTDirectory = this.WoTDirectory,
+                WoTClientVersion = this.WoTClientVersion
             };
 
             //setup the cancel button
@@ -1363,7 +1409,7 @@ namespace RelhaxModpack
                 {
                     if (ModpackSettings.ShowInstallCompleteWindow)
                     {
-                        InstallFinished installFinished = new InstallFinished();
+                        InstallFinished installFinished = new InstallFinished() { WoTDirectory = this.WoTDirectory };
                         installFinished.ShowDialog();
                     }
                     else
@@ -1631,7 +1677,7 @@ namespace RelhaxModpack
                     retryCount = 3;
                     while (retryCount > 0)
                     {
-                        package.StartAddress = package.StartAddress.Replace("{onlineFolder}", ApplicationSettings.WoTModpackOnlineFolderVersion);
+                        package.StartAddress = package.StartAddress.Replace("{onlineFolder}", WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
                         Logging.Debug("[{0}]: Download of {1} from URL {2}", nameof(ProcessDownloadsAsync), package.PackageName, fileToDownload);
                         fileToSaveTo = Path.Combine(ApplicationConstants.RelhaxDownloadsFolderPath, package.ZipFile);
@@ -1723,7 +1769,7 @@ namespace RelhaxModpack
                     while (retry)
                     {
                         //replace the start address macro
-                        package.StartAddress = package.StartAddress.Replace("{onlineFolder}", ApplicationSettings.WoTModpackOnlineFolderVersion);
+                        package.StartAddress = package.StartAddress.Replace("{onlineFolder}", WoTModpackOnlineFolderVersion);
                         fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
                         Logging.Debug("[{0}]: Download of {1} from URL {2}", nameof(ProcessDownloads), package.PackageName, fileToDownload);
                         fileToSaveTo = Path.Combine(ApplicationConstants.RelhaxDownloadsFolderPath, package.ZipFile);
@@ -1807,7 +1853,7 @@ namespace RelhaxModpack
                 Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
                 OpenFileDialog manualWoTFind = new OpenFileDialog()
                 {
-                    InitialDirectory = string.IsNullOrWhiteSpace(ApplicationSettings.WoTDirectory) ? ApplicationConstants.ApplicationStartupPath : ApplicationSettings.WoTDirectory,
+                    InitialDirectory = string.IsNullOrWhiteSpace(WoTDirectory) ? ApplicationConstants.ApplicationStartupPath : WoTDirectory,
                     AddExtension = true,
                     CheckFileExists = true,
                     CheckPathExists = true,
@@ -1828,17 +1874,17 @@ namespace RelhaxModpack
                     return;
                 }
             }
-            ApplicationSettings.WoTDirectory = Path.GetDirectoryName(autoSearchResult);
-            Logging.Info("Wot root directory parsed as " + ApplicationSettings.WoTDirectory);
+            WoTDirectory = Path.GetDirectoryName(autoSearchResult);
+            Logging.Info("Wot root directory parsed as " + WoTDirectory);
 
             //get the version of tanks in the format of the res_mods version folder i.e. 0.9.17.0.3
-            string versionTemp = XmlUtils.GetXmlStringFromXPath(Path.Combine(ApplicationSettings.WoTDirectory, "version.xml"), "//version.xml/version");
-            ApplicationSettings.WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
+            string versionTemp = XmlUtils.GetXmlStringFromXPath(Path.Combine(WoTDirectory, "version.xml"), "//version.xml/version");
+            WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2);
 
             //verify the uninstall
             string uninstallModeTranslated = ModpackSettings.UninstallMode == UninstallModes.Quick ?
                 Translations.GetTranslatedString("UninstallQuickText") : Translations.GetTranslatedString("UninstallDefaultText");
-            string uninstallConfirmMessage = string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), ApplicationSettings.WoTDirectory, uninstallModeTranslated);
+            string uninstallConfirmMessage = string.Format(Translations.GetTranslatedString("verifyUninstallVersionAndLocation"), WoTDirectory, uninstallModeTranslated);
             if (MessageBox.Show(uninstallConfirmMessage, Translations.GetTranslatedString("confirmUninstallHeader"), MessageBoxButton.YesNo) == MessageBoxResult.No)
             {
                 ToggleUIButtons(true);
@@ -1846,10 +1892,10 @@ namespace RelhaxModpack
             }
 
             //check if wot is running
-            while (CommonUtils.IsProcessRunning(ApplicationConstants.WoTProcessName, ApplicationSettings.WoTDirectory))
+            while (CommonUtils.IsProcessRunning(ApplicationConstants.WoTProcessName, WoTDirectory))
             {
                 //create window to determine if cancel, wait, kill TODO
-                AskCloseWoT askCloseWoT = new AskCloseWoT();
+                AskCloseWoT askCloseWoT = new AskCloseWoT() { WoTDirectory = this.WoTDirectory };
                 //a positive result means that we are going to retry the loop
                 //it could mean the user hit retry (close true), or hit force close (succeeded, and try again anyways)
                 askCloseWoT.ShowDialog();
@@ -1880,10 +1926,13 @@ namespace RelhaxModpack
             cancellationTokenSource = new CancellationTokenSource();
 
             //create and run uninstall engine
-            installEngine = new InstallEngine
+            installEngine = new InstallEngine()
             {
                 CancellationToken = cancellationTokenSource.Token,
-                ModpackSettings = this.ModpackSettings
+                ModpackSettings = this.ModpackSettings,
+                DatabaseVersion = null, //not needed for uninstall
+                WoTDirectory = this.WoTDirectory,
+                WoTClientVersion = this.WoTClientVersion
             };
             RelhaxInstallFinishedEventArgs results = await installEngine.RunUninstallationAsync(progress);
             installEngine.Dispose();
@@ -1942,14 +1991,14 @@ namespace RelhaxModpack
             }
             else
             {
-                if (ApplicationSettings.ManagerInfoZipfile == null)
+                if (((App)Application.Current).ManagerInfoZipfile == null)
                 {
                     Logging.Debug("CheckForDatabaseUpdates(false), but Settings.ModInfoZipfile is null. getting latest modInfo");
-                    ApplicationSettings.ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(false);
+                    ((App)Application.Current).ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(false);
                 }
                 //only get if from the downloaded version
                 //get the version info string
-                string xmlString = FileUtils.GetStringFromZip(ApplicationSettings.ManagerInfoZipfile, ApplicationConstants.ManagerVersion);
+                string xmlString = FileUtils.GetStringFromZip(((App)Application.Current).ManagerInfoZipfile, ApplicationConstants.ManagerVersion);
                 if (string.IsNullOrEmpty(xmlString))
                 {
                     Logging.WriteToLog("Failed to get xml string from managerInfo.dat", Logfiles.Application, LogLevel.ApplicationHalt);
@@ -1962,21 +2011,21 @@ namespace RelhaxModpack
 
             //get new DB update version and compare
             string databaseNewVersion = XmlUtils.GetXmlStringFromXPath(doc, "//version/database");
-            Logging.Info(string.Format("Comparing database versions, old={0}, new={1}", ApplicationSettings.DatabaseVersion, databaseNewVersion));
+            Logging.Info(string.Format("Comparing database versions, old={0}, new={1}", DatabaseVersion, databaseNewVersion));
 
-            if (string.IsNullOrWhiteSpace(ApplicationSettings.DatabaseVersion))
+            if (string.IsNullOrWhiteSpace(DatabaseVersion))
             {
                 //auto apply and don't announce. this usually happens when the application is loading for first time
                 Logging.Info("Settings.DatabaseVersion is empty, setting init value");
-                ApplicationSettings.DatabaseVersion = databaseNewVersion;
-                DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + ApplicationSettings.DatabaseVersion;
+                DatabaseVersion = databaseNewVersion;
+                DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + DatabaseVersion;
             }
-            else if (!ApplicationSettings.DatabaseVersion.Equals(databaseNewVersion))
+            else if (!DatabaseVersion.Equals(databaseNewVersion))
             {
                 //this happens when user clicks to manually check for updates or from the auto install feature
                 Logging.Info("new version of database applied");
-                ApplicationSettings.DatabaseVersion = databaseNewVersion;
-                DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + ApplicationSettings.DatabaseVersion;
+                DatabaseVersion = databaseNewVersion;
+                DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + DatabaseVersion;
             }
             else
             {
@@ -2047,7 +2096,7 @@ namespace RelhaxModpack
             else if (version == ApplicationVersions.Alpha && File.Exists("RelhaxModpack.xml"))
             {
                 Logging.Debug("TRUE alpha detected");
-                ApplicationSettings.TrueAlpha = true;
+                TrueAlpha = true;
             }
 
             //declare these out here so the logger can access them
@@ -2149,15 +2198,15 @@ namespace RelhaxModpack
             }
             else
             {
-                ApplicationSettings.ManagerInfoZipfile = DownloadManagerInfoZip.Result;
+                ((App)Application.Current).ManagerInfoZipfile = DownloadManagerInfoZip.Result;
             }
 
             //and one final check
-            if (ApplicationSettings.ManagerInfoZipfile == null)
+            if (((App)Application.Current).ManagerInfoZipfile == null)
             {
-                Logging.Warning("Settings.ManagerInfoZipfile is null, getting now");
-                ApplicationSettings.ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(false);
-                if (ApplicationSettings.ManagerInfoZipfile == null)
+                Logging.Warning("Settings.((App)Application.Current).ManagerInfoZipfile is null, getting now");
+                ((App)Application.Current).ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(false);
+                if (((App)Application.Current).ManagerInfoZipfile == null)
                 {
                     MessageBox.Show(Translations.GetTranslatedString("failedToExtractUpdateArchive"));
                     Environment.Exit(-1);
@@ -2166,7 +2215,7 @@ namespace RelhaxModpack
             }
 
             //extract the batch script to update the application
-            string batchScript = FileUtils.GetStringFromZip(ApplicationSettings.ManagerInfoZipfile, ApplicationConstants.RelicBatchUpdateScriptServer);
+            string batchScript = FileUtils.GetStringFromZip(((App)Application.Current).ManagerInfoZipfile, ApplicationConstants.RelicBatchUpdateScriptServer);
             Logging.Debug("Writing batch script to disk");
             File.WriteAllText(ApplicationConstants.RelicBatchUpdateScript, batchScript);
 
@@ -2368,13 +2417,13 @@ namespace RelhaxModpack
                     break;
                 case DatabaseVersions.Stable:
                     //reset check flag and get old db version
-                    string oldDBVersion = ApplicationSettings.DatabaseVersion;
+                    string oldDBVersion = DatabaseVersion;
 
                     //actually check for updates
                     await CheckForDatabaseUpdatesAsync(true);
 
                     //check if database was updated
-                    if (!oldDBVersion.Equals(ApplicationSettings.DatabaseVersion))
+                    if (!oldDBVersion.Equals(DatabaseVersion))
                     {
                         updateAvailable = true;
                     }
@@ -2499,7 +2548,7 @@ namespace RelhaxModpack
         private async void OnMenuClickChekUpdates(object sender, EventArgs e)
         {
             Logging.Debug("check for database updates from menu click");
-            string oldDBVersion = ApplicationSettings.DatabaseVersion;
+            string oldDBVersion = DatabaseVersion;
 
             //make and show progress indicator
             ProgressIndicator progressIndicator = new ProgressIndicator()
@@ -2517,7 +2566,7 @@ namespace RelhaxModpack
             progressIndicator.Close();
 
             Logging.Debug("database check complete");
-            if (!oldDBVersion.Equals(ApplicationSettings.DatabaseVersion))
+            if (!oldDBVersion.Equals(DatabaseVersion))
             {
                 Logging.Debug("old and current db versions do not match, displaying notification window");
                 MessageBox.Show(Translations.GetTranslatedString("newDBApplied"));
@@ -2892,7 +2941,7 @@ namespace RelhaxModpack
             if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)
                 autoInstallPeriodicTimer.Stop();
 
-            Diagnostics diagnostics = new Diagnostics() { ModpackSettings = this.ModpackSettings };
+            Diagnostics diagnostics = new Diagnostics() { ModpackSettings = this.ModpackSettings, WoTDirectory = this.WoTDirectory };
             diagnostics.ShowDialog();
 
             if (ModpackSettings.AutoInstall)
@@ -3290,7 +3339,7 @@ namespace RelhaxModpack
             if (ModpackSettings.ApplicationDistroVersion != ApplicationVersions.Stable)
             {
                 //if it's real alpha, then put alpha
-                if (ApplicationSettings.TrueAlpha)
+                if (TrueAlpha)
                     Title = string.Format("{0} ({1} APP)", Title, ApplicationConstants.ApplicationVersion.ToString());
                 else
                     Title = string.Format("{0} ({1} APP)", Title, ModpackSettings.ApplicationDistroVersion.ToString());
@@ -3498,7 +3547,7 @@ namespace RelhaxModpack
             ApplicationVersionLabel.Text = Translations.GetTranslatedString("applicationVersion") + " " + CommonUtils.GetApplicationVersion();
 
             //set the database information text box
-            DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + ApplicationSettings.DatabaseVersion;
+            DatabaseVersionLabel.Text = Translations.GetTranslatedString("databaseVersion") + " " + DatabaseVersion;
 
             //set the number of cores label
             MulticoreExtractionCoresCountLabel.Text = string.Format(Translations.GetTranslatedString("MulticoreExtractionCoresCountLabel"), ApplicationConstants.NumLogicalProcesors);

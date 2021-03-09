@@ -27,8 +27,16 @@ namespace RelhaxUnitTests
             AutomationSequencer sequencer = new AutomationSequencer()
             {
                 AutomationRunnerSettings = this.AutomationRunnerSettings,
-                AutomationRunMode = AutomationRunMode.Interactive
+                AutomationRunMode = AutomationRunMode.Interactive,
+                WoTClientVersion = "TODO",
+                WoTModpackOnlineFolderVersion = "TODO"
             };
+            throw new BadMemeException("you should, like, finish this");
+            /*
+            //TODO: dynamically get this from the beta db?
+            ApplicationSettings.WoTModpackOnlineFolderVersion = "1.10.0";
+            ApplicationSettings.WoTClientVersion = "1.10.0.4";
+            */
 
             await sequencer.LoadBranchesListAsync();
             await sequencer.LoadRootDocumentAsync();
@@ -154,14 +162,6 @@ namespace RelhaxUnitTests
                 Assert.AreEqual(task.Cmd, answer);
             }
 
-        }
-
-        [TestInitialize]
-        public void SetDefaultValues()
-        {
-            //TODO: dynamically get this from the beta db?
-            ApplicationSettings.WoTModpackOnlineFolderVersion = "1.10.0";
-            ApplicationSettings.WoTClientVersion = "1.10.0.4";
         }
     }
 }

@@ -266,6 +266,12 @@ namespace RelhaxModpack
         /// </summary>
         public CommandLineSettings CommandLineSettings { get; set; }
 
+        public string DatabaseVersion { get; set; }
+
+        public string WoTClientVersion { get; set; }
+
+        public string WoTDirectory { get; set; }
+
         //names of triggers
         /// <summary>
         /// The event name for starting the contour icon atlas building
@@ -349,14 +355,6 @@ namespace RelhaxModpack
         /// </summary>
         public bool DisableTriggersForInstall = true;
         #endregion
-
-        /// <summary>
-        /// Creates an instance of the installation engine. Properties should be assigned at this step
-        /// </summary>
-        public InstallEngine()
-        {
-            //init the install engine
-        }
 
         #region Installer entry points
         /// <summary>
@@ -667,7 +665,7 @@ namespace RelhaxModpack
 
             //backup the last installed log file
             //note this does not need to be done above this step
-            string logsFilepath = Path.Combine(ApplicationSettings.WoTDirectory, "logs");
+            string logsFilepath = Path.Combine(WoTDirectory, "logs");
             string backupInstallLogfile = Path.Combine(logsFilepath, Logging.InstallLogFilenameBackup);
             string installLogfile = Path.Combine(logsFilepath, Logging.InstallLogFilename);
             //make the "logs" folder if it does not alredy exist
@@ -688,7 +686,7 @@ namespace RelhaxModpack
             }
 
             //write time and database version
-            string databaseHeader = string.Format("Database Version: {0}{1}", ApplicationSettings.DatabaseVersion, Environment.NewLine);
+            string databaseHeader = string.Format("Database Version: {0}{1}", DatabaseVersion, Environment.NewLine);
             string dateTimeHeader = string.Format("/*  Date: {0:yyyy-MM-dd HH:mm:ss}  */{1}", DateTime.Now, Environment.NewLine);
             Logging.Installer(databaseHeader);
             Logging.Installer(dateTimeHeader);
@@ -972,8 +970,8 @@ namespace RelhaxModpack
             //check for access to the res_mods and mods folder
             //check if the folders can be modified first
             Logging.Info("Starting UninstallMods(), UninstallMode={0}, logToUninstaller={1}", UninstallMode.ToString(), logToUninstaller.ToString());
-            string resModsFolder = Path.Combine(ApplicationSettings.WoTDirectory, "res_mods");
-            string modsFolder = Path.Combine(ApplicationSettings.WoTDirectory, "mods");
+            string resModsFolder = Path.Combine(WoTDirectory, "res_mods");
+            string modsFolder = Path.Combine(WoTDirectory, "mods");
             Logging.Debug("resModsFolder parsed as {0}", resModsFolder);
             Logging.Debug("modsFolder parsed as {0}", modsFolder);
 
@@ -984,8 +982,8 @@ namespace RelhaxModpack
             if (UninstallMode == UninstallModes.Default)
             {
                 Logging.Debug("creating list of files to delete from reading uninstall logfile");
-                string regularlogfilePath = Path.Combine(ApplicationSettings.WoTDirectory, "logs", Logging.InstallLogFilename);
-                string backuplogfilePath = Path.Combine(ApplicationSettings.WoTDirectory, "logs", Logging.InstallLogFilenameBackup);
+                string regularlogfilePath = Path.Combine(WoTDirectory, "logs", Logging.InstallLogFilename);
+                string backuplogfilePath = Path.Combine(WoTDirectory, "logs", Logging.InstallLogFilenameBackup);
 
                 //if the original log exists, then use it
                 if (File.Exists(regularlogfilePath))
@@ -1043,7 +1041,7 @@ namespace RelhaxModpack
             foreach (string folder in ApplicationConstants.FoldersToCleanup)
             {
                 CancellationToken.ThrowIfCancellationRequested();
-                string folderPath = Path.Combine(ApplicationSettings.WoTDirectory, folder);
+                string folderPath = Path.Combine(WoTDirectory, folder);
                 if (Directory.Exists(folderPath))
                 {
                     Logging.Debug("adding installer created folder {0}", folder);
@@ -1072,8 +1070,8 @@ namespace RelhaxModpack
             {
                 //backup old uninstall logfile
                 Logging.Debug("backing up old uninstall logfile and creating new");
-                string backupUninstallLogfile = Path.Combine(ApplicationSettings.WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
-                string uninstallLogfile = Path.Combine(ApplicationSettings.WoTDirectory, "logs", Logging.UninstallLogFilename);
+                string backupUninstallLogfile = Path.Combine(WoTDirectory, "logs", Logging.UninstallLogFilenameBackup);
+                string uninstallLogfile = Path.Combine(WoTDirectory, "logs", Logging.UninstallLogFilename);
                 if (File.Exists(backupUninstallLogfile))
                     FileUtils.FileDelete(backupUninstallLogfile);
                 if (File.Exists(uninstallLogfile))
@@ -1174,8 +1172,8 @@ namespace RelhaxModpack
 
             //re-create the folders at the end
             Logging.Debug("re-creating res_mods and mods folders including wot version folder number");
-            Directory.CreateDirectory(Path.Combine(resModsFolder, ApplicationSettings.WoTClientVersion));
-            Directory.CreateDirectory(Path.Combine(modsFolder, ApplicationSettings.WoTClientVersion));
+            Directory.CreateDirectory(Path.Combine(resModsFolder, WoTClientVersion));
+            Directory.CreateDirectory(Path.Combine(modsFolder, WoTClientVersion));
 
             //if we are logging, we need to dispose of the uninstall log
             Logging.Debug("disposing of logging and cleanup");
@@ -1209,7 +1207,7 @@ namespace RelhaxModpack
                 Directory.CreateDirectory(ApplicationConstants.RelhaxModBackupFolderPath);
 
             //create the directory for this version to backup to
-            string zipFileName = string.Format("{0:yyyy-MM-dd-HH-mm-ss}_{1}.zip", DateTime.Now,ApplicationSettings.WoTClientVersion);
+            string zipFileName = string.Format("{0:yyyy-MM-dd-HH-mm-ss}_{1}.zip", DateTime.Now,WoTClientVersion);
             string zipFileFullPath = Path.Combine(ApplicationConstants.RelhaxModBackupFolderPath, zipFileName);
             backupZipfileNameForCancelDeletion = zipFileFullPath;
             Logging.Debug("started backupMods(), making zipfile {0}", zipFileFullPath);
@@ -1229,21 +1227,21 @@ namespace RelhaxModpack
                 Progress.Report(Prog);
 
                 //get the list of mods to add to the zip
-                List<string> filesToAdd = FileUtils.DirectorySearch(Path.Combine(ApplicationSettings.WoTDirectory, "mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList();
-                filesToAdd.AddRange(FileUtils.DirectorySearch(Path.Combine(ApplicationSettings.WoTDirectory, "res_mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
+                List<string> filesToAdd = FileUtils.DirectorySearch(Path.Combine(WoTDirectory, "mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList();
+                filesToAdd.AddRange(FileUtils.DirectorySearch(Path.Combine(WoTDirectory, "res_mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
 
                 //add them to the zip. also get the string to be the path in the zip file, meaning that the root path in the zip file starts at "World_of_Tanks"
                 foreach(string file in filesToAdd)
                 {
-                    backupZip.AddFile(file, Path.GetDirectoryName(file.Substring(ApplicationSettings.WoTDirectory.Length + 1)));
+                    backupZip.AddFile(file, Path.GetDirectoryName(file.Substring(WoTDirectory.Length + 1)));
                 }
 
                 //clear the list and repeat the process for the appDataFolder
                 filesToAdd.Clear();
-                filesToAdd.AddRange(FileUtils.DirectorySearch(ApplicationSettings.AppDataFolder, SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
+                filesToAdd.AddRange(FileUtils.DirectorySearch(ApplicationConstants.AppDataFolder, SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
                 foreach (string file in filesToAdd)
                 {
-                    backupZip.AddFile(file, Path.GetDirectoryName(Path.Combine("appData", file.Substring(ApplicationSettings.AppDataFolder.Length + 1))));
+                    backupZip.AddFile(file, Path.GetDirectoryName(Path.Combine("appData", file.Substring(ApplicationConstants.AppDataFolder.Length + 1))));
                 }
 
                 //save the file. all the time to wait is in this method, so add the event handler here
@@ -1443,19 +1441,19 @@ namespace RelhaxModpack
             string[] logsToDelete = new string[]
             {
                 //32 folders
-                Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.WoT32bitFolder, ApplicationConstants.PythonLog),
-                Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.WoT32bitFolder, ApplicationConstants.XvmLog),
-                Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.WoT32bitFolder, ApplicationConstants.PmodLog),
+                Path.Combine(WoTDirectory, ApplicationConstants.WoT32bitFolder, ApplicationConstants.PythonLog),
+                Path.Combine(WoTDirectory, ApplicationConstants.WoT32bitFolder, ApplicationConstants.XvmLog),
+                Path.Combine(WoTDirectory, ApplicationConstants.WoT32bitFolder, ApplicationConstants.PmodLog),
                 //64 folders
-                Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.WoT64bitFolder, ApplicationConstants.PythonLog),
-                Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.WoT64bitFolder, ApplicationConstants.XvmLog),
-                Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.WoT64bitFolder, ApplicationConstants.PmodLog),
+                Path.Combine(WoTDirectory, ApplicationConstants.WoT64bitFolder, ApplicationConstants.PythonLog),
+                Path.Combine(WoTDirectory, ApplicationConstants.WoT64bitFolder, ApplicationConstants.XvmLog),
+                Path.Combine(WoTDirectory, ApplicationConstants.WoT64bitFolder, ApplicationConstants.PmodLog),
                 //root folders
-                Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.PythonLog),
-                Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.XvmLog),
-                Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.PmodLog),
-                Path.Combine(ApplicationSettings.WoTDirectory, "WoTLauncher.log"),
-                Path.Combine(ApplicationSettings.WoTDirectory, "cef.log")
+                Path.Combine(WoTDirectory, ApplicationConstants.PythonLog),
+                Path.Combine(WoTDirectory, ApplicationConstants.XvmLog),
+                Path.Combine(WoTDirectory, ApplicationConstants.PmodLog),
+                Path.Combine(WoTDirectory, "WoTLauncher.log"),
+                Path.Combine(WoTDirectory, "cef.log")
             };
 
             Prog.ParrentTotal = logsToDelete.Count();
@@ -1905,7 +1903,7 @@ namespace RelhaxModpack
                     (int)InstallStopWatch.Elapsed.TotalMilliseconds));
 
             //check for any font files to install at all
-            string[] fontsToInstall = FileUtils.DirectorySearch(Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
+            string[] fontsToInstall = FileUtils.DirectorySearch(Path.Combine(WoTDirectory, ApplicationConstants.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
 
             //filter out fontReg
             fontsToInstall = fontsToInstall.Where(filename => !filename.Contains(".exe")).ToArray();
@@ -1947,12 +1945,12 @@ namespace RelhaxModpack
                         LockProgress();
 
                         //check if fontReg exists
-                        string fontRegPath = Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.FontsToInstallFoldername, "FontReg.exe");
+                        string fontRegPath = Path.Combine(WoTDirectory, ApplicationConstants.FontsToInstallFoldername, "FontReg.exe");
                         if (!File.Exists(fontRegPath))
                         {
                             Logging.Error("FontReg was not located in the \"_fonts\" folder!");
                             MessageBox.Show(string.Format("{0}{1}{2}{3}{4}", Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
-                                ApplicationSettings.WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
+                                WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
                         }
 
                         CancellationToken.ThrowIfCancellationRequested();
@@ -1963,7 +1961,7 @@ namespace RelhaxModpack
                             UseShellExecute = true,
                             Verb = "runas", // Provides Run as Administrator
                             Arguments = "/copy",
-                            WorkingDirectory = Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.FontsToInstallFoldername)
+                            WorkingDirectory = Path.Combine(WoTDirectory, ApplicationConstants.FontsToInstallFoldername)
                         };
 
                         try
@@ -1994,7 +1992,7 @@ namespace RelhaxModpack
                                 installFontss.Kill();
                                 Logging.Error("FontReg failed to finish cleanly, process was killed early");
                                 MessageBox.Show(string.Format("{0}{1}{2}{3}{4}", Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
-                                    ApplicationSettings.WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
+                                    WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
                             }
                             Logging.Info("FontReg.exe ExitCode: " + installFontss.ExitCode);
                             Logging.Info("Installing of fonts complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
@@ -2003,7 +2001,7 @@ namespace RelhaxModpack
                         {
                             Logging.Exception("could not start font installer:{0}{1}", Environment.NewLine, ex.ToString());
                             MessageBox.Show(string.Format("{0}{1}{2}{3}{4}", Translations.GetTranslatedString("fontsPromptError_1"), Environment.NewLine,
-                                ApplicationSettings.WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
+                                WoTDirectory, Environment.NewLine, Translations.GetTranslatedString("fontsPromptError_2")));
                         }
                         finally
                         {
@@ -2093,7 +2091,7 @@ namespace RelhaxModpack
                 Prog.Filename = folder;
                 Progress.Report(Prog);
 
-                string folderPath = Path.Combine(ApplicationSettings.WoTDirectory, folder);
+                string folderPath = Path.Combine(WoTDirectory, folder);
                 bool directoryExists = Directory.Exists(folderPath);
                 bool deleteSuccess = false;
                 if (directoryExists)
@@ -2251,7 +2249,7 @@ namespace RelhaxModpack
                             //check for versiondir
                             string zipEntryName = zip[j].FileName;
                             if (zipEntryName.Contains("versiondir"))
-                                zipEntryName = zipEntryName.Replace("versiondir", ApplicationSettings.WoTClientVersion);
+                                zipEntryName = zipEntryName.Replace("versiondir", WoTClientVersion);
                             //check for xvmConfigFolderName
                             if (zipEntryName.Contains("configs/xvm/xvmConfigFolderName"))
                             {
@@ -2345,8 +2343,8 @@ namespace RelhaxModpack
                                 if(!string.IsNullOrWhiteSpace(zipFilename))
                                 {
                                     zip[j].FileName = zipFilename;
-                                    zip[j].Extract(ApplicationSettings.AppDataFolder, ExtractExistingFileAction.OverwriteSilently);
-                                    extractPath = ApplicationSettings.AppDataFolder;
+                                    zip[j].Extract(ApplicationConstants.AppDataFolder, ExtractExistingFileAction.OverwriteSilently);
+                                    extractPath = ApplicationConstants.AppDataFolder;
                                 }
                             }
                             //_RelhaxRoot = app startup directory
@@ -2363,8 +2361,8 @@ namespace RelhaxModpack
                             //default is World_of_Tanks directory
                             else
                             {
-                                zip[j].Extract(ApplicationSettings.WoTDirectory, ExtractExistingFileAction.OverwriteSilently);
-                                extractPath = ApplicationSettings.WoTDirectory;
+                                zip[j].Extract(WoTDirectory, ExtractExistingFileAction.OverwriteSilently);
+                                extractPath = WoTDirectory;
                             }
                             loggingCompletePath = Path.Combine(extractPath, zipFilename.Replace(@"/", @"\"));
                             zipLogger.AppendLine(package.LogAtInstall ? loggingCompletePath : "#" + loggingCompletePath);
@@ -2510,7 +2508,7 @@ namespace RelhaxModpack
             List<Patch> patches = new List<Patch>();
 
             //if the patches folder does not exist, then there are no patches to load or run
-            if (!Directory.Exists(Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.PatchFolderName)))
+            if (!Directory.Exists(Path.Combine(WoTDirectory, ApplicationConstants.PatchFolderName)))
             {
                 Logging.Info("\"{0}\" folder does not exist, skipping", ApplicationConstants.PatchFolderName);
                 Logging.Info("Number of patches: {0}", patches.Count());
@@ -2518,7 +2516,7 @@ namespace RelhaxModpack
             }
 
             //get the list of all patches in the directory
-            string[] patch_files = FileUtils.DirectorySearch(Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.PatchFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
+            string[] patch_files = FileUtils.DirectorySearch(Path.Combine(WoTDirectory, ApplicationConstants.PatchFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (patch_files == null)
                 Logging.WriteToLog("Failed to parse patches from patch directory (see above lines for more info", Logfiles.Application, LogLevel.Error);
             else
@@ -2530,7 +2528,7 @@ namespace RelhaxModpack
                     string completePath;
                     foreach (string filename in patch_files)
                     {
-                        completePath = Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.PatchFolderName, filename);
+                        completePath = Path.Combine(WoTDirectory, ApplicationConstants.PatchFolderName, filename);
                         //just double check...
                         if(!File.Exists(completePath))
                         {
@@ -2551,7 +2549,7 @@ namespace RelhaxModpack
             List<Shortcut> shortcuts = new List<Shortcut>();
 
             //if the patches folder does not exist, then there are no patches to load or run
-            if (!Directory.Exists(Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.ShortcutFolderName)))
+            if (!Directory.Exists(Path.Combine(WoTDirectory, ApplicationConstants.ShortcutFolderName)))
             {
                 Logging.Info("\"{0}\" folder does not exist, skipping", ApplicationConstants.ShortcutFolderName);
                 Logging.WriteToLog(string.Format("Number of shortcuts: {0}", shortcuts.Count()), Logfiles.Application, LogLevel.Info);
@@ -2560,7 +2558,7 @@ namespace RelhaxModpack
 
             //get a list of all files in the dedicated shortcuts directory
             //foreach one add it to the patch list
-            string[] shortcut_files = FileUtils.DirectorySearch(Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.ShortcutFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
+            string[] shortcut_files = FileUtils.DirectorySearch(Path.Combine(WoTDirectory, ApplicationConstants.ShortcutFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (shortcut_files == null)
                 Logging.WriteToLog("Failed to parse shortcuts from directory", Logfiles.Application, LogLevel.Error);
             else if (shortcut_files.Count() == 0)
@@ -2574,7 +2572,7 @@ namespace RelhaxModpack
                 string completePath;
                 foreach (string filename in shortcut_files)
                 {
-                    completePath = Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.ShortcutFolderName, filename);
+                    completePath = Path.Combine(WoTDirectory, ApplicationConstants.ShortcutFolderName, filename);
                     //apply "normal" file properties just in case the user's wot install directory is special
                     FileUtils.ApplyNormalFileProperties(completePath);
                     //ok NOW actually add the file to the patch list
@@ -2591,7 +2589,7 @@ namespace RelhaxModpack
             List<XmlUnpack> XmlUnpacks = new List<XmlUnpack>();
 
             //if the patches folder does not exist, then there are no patches to load or run
-            if (!Directory.Exists(Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.XmlUnpackFolderName)))
+            if (!Directory.Exists(Path.Combine(WoTDirectory, ApplicationConstants.XmlUnpackFolderName)))
             {
                 Logging.Info("\"{0}\" folder does not exist, skipping", ApplicationConstants.XmlUnpackFolderName);
                 Logging.WriteToLog(string.Format("Number of XmlUnpack files: {0}", XmlUnpacks.Count()), Logfiles.Application, LogLevel.Info);
@@ -2600,7 +2598,7 @@ namespace RelhaxModpack
 
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
-            string[] unpack_files = FileUtils.DirectorySearch(Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.XmlUnpackFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
+            string[] unpack_files = FileUtils.DirectorySearch(Path.Combine(WoTDirectory, ApplicationConstants.XmlUnpackFolderName), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (unpack_files == null)
                 Logging.WriteToLog("Failed to parse xml unpacks from unpack directory", Logfiles.Application, LogLevel.Error);
             else
@@ -2612,7 +2610,7 @@ namespace RelhaxModpack
                     string completePath;
                     foreach (string filename in unpack_files)
                     {
-                        completePath = Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.ShortcutFolderName, filename);
+                        completePath = Path.Combine(WoTDirectory, ApplicationConstants.ShortcutFolderName, filename);
 
                         //ok NOW actually add the file to the patch list
                         Logging.Info("Adding xml unpack entries from file {1}", Logfiles.Application, filename);
@@ -2640,7 +2638,7 @@ namespace RelhaxModpack
             List<Atlas> atlases = new List<Atlas>();
 
             //if the patches folder does not exist, then there are no patches to load or run
-            if (!Directory.Exists(Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.AtlasCreationFoldername)))
+            if (!Directory.Exists(Path.Combine(WoTDirectory, ApplicationConstants.AtlasCreationFoldername)))
             {
                 Logging.Debug("\"{0}\" folder does not exist, skipping", ApplicationConstants.AtlasCreationFoldername);
                 Logging.WriteToLog(string.Format("Number of atlases: {0}", atlases.Count()), Logfiles.Application, LogLevel.Debug);
@@ -2649,7 +2647,7 @@ namespace RelhaxModpack
 
             //get a list of all files in the dedicated patch directory
             //foreach one add it to the patch list
-            string[] atlas_files = FileUtils.DirectorySearch(Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.AtlasCreationFoldername), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
+            string[] atlas_files = FileUtils.DirectorySearch(Path.Combine(WoTDirectory, ApplicationConstants.AtlasCreationFoldername), SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (atlas_files == null)
                 Logging.WriteToLog("Failed to parse atlases from atlas directory", Logfiles.Application, LogLevel.Error);
             else
@@ -2661,7 +2659,7 @@ namespace RelhaxModpack
                     string completePath;
                     foreach (string filename in atlas_files)
                     {
-                        completePath = Path.Combine(ApplicationSettings.WoTDirectory, ApplicationConstants.ShortcutFolderName, filename);
+                        completePath = Path.Combine(WoTDirectory, ApplicationConstants.ShortcutFolderName, filename);
                         //apply "normal" file properties just in case the user's wot install directory is special
                         FileUtils.ApplyNormalFileProperties(completePath);
                         //ok NOW actually add the file to the patch list
@@ -2771,8 +2769,8 @@ namespace RelhaxModpack
                     Logging.Debug("creating mods and res_mods if they don't already exist, just in case");
                     foreach (string s in new string[]
                     {
-                        Path.Combine(ApplicationSettings.WoTDirectory, "res_mods", ApplicationSettings.WoTClientVersion),
-                        Path.Combine(ApplicationSettings.WoTDirectory, "mods", ApplicationSettings.WoTClientVersion)
+                        Path.Combine(WoTDirectory, "res_mods", WoTClientVersion),
+                        Path.Combine(WoTDirectory, "mods", WoTClientVersion)
                     })
                     {
                         if (!Directory.Exists(s))

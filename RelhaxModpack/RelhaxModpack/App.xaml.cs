@@ -21,8 +21,13 @@ namespace RelhaxModpack
     /// </summary>
     public partial class App : Application
     {
-        bool exceptionShown = false;
-        ExceptionCaptureDisplay exceptionCaptureDisplay = new ExceptionCaptureDisplay();
+        private bool exceptionShown = false;
+        private ExceptionCaptureDisplay exceptionCaptureDisplay = new ExceptionCaptureDisplay();
+
+        /// <summary>
+        /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk. Parsed upon application load.
+        /// </summary>
+        public Ionic.Zip.ZipFile ManagerInfoZipfile = null;
 
         //when application is closing (cannot be stopped)
         private void Application_Exit(object sender, ExitEventArgs e)
@@ -334,7 +339,7 @@ namespace RelhaxModpack
 
                         //always return on worst condition
                         int i = 1;
-                        Patcher thePatcher = new Patcher();
+                        Patcher thePatcher = new Patcher() { WoTDirectory = null };
                         foreach(Patch p in patchList)
                         {
                             Logging.Info("Running patch {0} of {1}", i++, patchList.Count);

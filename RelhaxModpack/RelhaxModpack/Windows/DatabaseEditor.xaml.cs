@@ -42,6 +42,10 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public const string LoggingFilename = "RelhaxEditor.log";
 
+        public string WoTModpackOnlineFolderVersion { get; set; }
+
+        public string WoTClientVersion { get; set; }
+
         private EditorSettings EditorSettings = new EditorSettings();
         private List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
         private List<Dependency> Dependencies = new List<Dependency>();
@@ -1792,16 +1796,17 @@ namespace RelhaxModpack.Windows
                 return;
 
             //make and run the uploader instance
-            DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
+            DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow()
             {
                 ZipFilePathDisk = SaveZipFileDialog.FileName,
-                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, ApplicationSettings.WoTModpackOnlineFolderVersion),
+                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, WoTModpackOnlineFolderVersion),
                 ZipFileName = Path.GetFileName(packToWorkOn.ZipFile),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 TransferMode = EditorTransferMode.DownloadZip,
                 PackageToUpdate = null,
                 Countdown = EditorSettings.FTPUploadDownloadWindowTimeout,
-                EditorSettings = EditorSettings
+                EditorSettings = EditorSettings,
+                WoTModpackOnlineFolderVersion = this.WoTModpackOnlineFolderVersion
             };
             name.Show();
         }
@@ -1849,16 +1854,17 @@ namespace RelhaxModpack.Windows
                 return;
 
             //make and run the uploader instance
-            DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
+            DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow()
             {
                 ZipFilePathDisk = zipFileToUpload,
-                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, ApplicationSettings.WoTModpackOnlineFolderVersion),
+                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, WoTModpackOnlineFolderVersion),
                 ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 TransferMode = EditorTransferMode.UploadZip,
                 PackageToUpdate = packToWorkOn,
                 Countdown = EditorSettings.FTPUploadDownloadWindowTimeout,
-                EditorSettings = EditorSettings
+                EditorSettings = EditorSettings,
+                WoTModpackOnlineFolderVersion = this.WoTModpackOnlineFolderVersion
             };
             name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
             name.Show();
@@ -1935,7 +1941,7 @@ namespace RelhaxModpack.Windows
 
             //actually save
             DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), ApplicationConstants.BetaDatabaseV2RootFilename),
-                        ApplicationSettings.WoTClientVersion, ApplicationSettings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+                        WoTClientVersion, WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             UnsavedChanges = false;
         }
@@ -1971,7 +1977,7 @@ namespace RelhaxModpack.Windows
 
             //actually save
             DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), ApplicationConstants.BetaDatabaseV2RootFilename),
-                        ApplicationSettings.WoTClientVersion, ApplicationSettings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+                        WoTClientVersion, WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             UnsavedChanges = false;
         }
@@ -2029,8 +2035,8 @@ namespace RelhaxModpack.Windows
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             //for the folder version: //modInfoAlpha.xml/@version
-            ApplicationSettings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
-            ApplicationSettings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
+            WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
+            WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
         }
@@ -2071,8 +2077,8 @@ namespace RelhaxModpack.Windows
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             //for the folder version: //modInfoAlpha.xml/@version
-            ApplicationSettings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
-            ApplicationSettings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
+            WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
+            WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
         }
@@ -2506,7 +2512,7 @@ namespace RelhaxModpack.Windows
             foreach (string mediaToUploadPath in OpenPictureDialog.FileNames)
             {
                 string mediaToUploadFilename = Path.GetFileName(mediaToUploadPath);
-                DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
+                DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow()
                 {
                     ZipFilePathDisk = mediaToUploadPath,
                     ZipFilePathOnline = selectUploadLocation.UploadPath,
@@ -2515,7 +2521,8 @@ namespace RelhaxModpack.Windows
                     TransferMode = EditorTransferMode.UploadMedia,
                     PackageToUpdate = packToWorkOn,
                     Countdown = EditorSettings.FTPUploadDownloadWindowTimeout,
-                    EditorSettings = EditorSettings
+                    EditorSettings = EditorSettings,
+                    WoTModpackOnlineFolderVersion = this.WoTModpackOnlineFolderVersion
                 };
                 //changed to a show() with event handler made for on exit
                 name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;

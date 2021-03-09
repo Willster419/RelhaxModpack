@@ -238,7 +238,6 @@
     <Compile Include="Settings\EditorSettings.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
     <Compile Include="Settings\CommandLineSettings.cs" />
-    <Compile Include="Settings\ApplicationSettings.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="UI\EditorComboBoxItem.cs" />
     <Compile Include="UI\EditorSearchBoxItem.cs" />

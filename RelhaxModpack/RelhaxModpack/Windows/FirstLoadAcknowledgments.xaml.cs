@@ -15,6 +15,8 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool UserAgreed { get; private set; } = false;
 
+        public bool FirstLoadToV2 { get; set; }
+
         /// <summary>
         /// Create an instance of the FirstLoadAcknowledgments window
         /// </summary>
@@ -32,7 +34,7 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (ApplicationSettings.FirstLoadToV2)
+            if (FirstLoadToV2)
                 V2UpgradeNoticeText.Visibility = Visibility.Visible;
         }
 

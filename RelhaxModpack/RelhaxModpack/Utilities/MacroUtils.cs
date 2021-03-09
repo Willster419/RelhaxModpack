@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RelhaxModpack.Common;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities.Enums;
 
@@ -71,19 +72,19 @@ namespace RelhaxModpack.Utilities
         /// <summary>
         /// Builds the Filepath macro dictionary with settings that should be parsed from the Settings class
         /// </summary>
-        public static void BuildFilepathMacroList()
+        public static void BuildFilepathMacroList(string WoTClientVersion, string WoTModpackOnlineFolderVersion, string WoTDirectory)
         {
             if (FilePathDict == null)
                 throw new BadMemeException("REEEEEEEEEE");
             FilePathDict.Clear();
             //add macro versions first then regular versions
-            FilePathDict.Add(@"{versiondir}", ApplicationSettings.WoTClientVersion);
-            FilePathDict.Add(@"{tanksversion}", ApplicationSettings.WoTClientVersion);
-            FilePathDict.Add(@"{tanksonlinefolderversion}", ApplicationSettings.WoTModpackOnlineFolderVersion);
-            FilePathDict.Add(@"{appdata}", ApplicationSettings.AppDataFolder);
-            FilePathDict.Add(@"{appData}", ApplicationSettings.AppDataFolder);
-            FilePathDict.Add(@"{app}", ApplicationSettings.WoTDirectory);
-            FilePathDict.Add(@"versiondir", ApplicationSettings.WoTClientVersion);
+            FilePathDict.Add(@"{versiondir}", WoTClientVersion);
+            FilePathDict.Add(@"{tanksversion}", WoTClientVersion);
+            FilePathDict.Add(@"{tanksonlinefolderversion}", WoTModpackOnlineFolderVersion);
+            FilePathDict.Add(@"{appdata}", ApplicationConstants.AppDataFolder);
+            FilePathDict.Add(@"{appData}", ApplicationConstants.AppDataFolder);
+            FilePathDict.Add(@"{app}", WoTDirectory);
+            FilePathDict.Add(@"versiondir", WoTClientVersion);
         }
 
         /// <summary>

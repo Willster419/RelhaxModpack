@@ -271,6 +271,11 @@ namespace RelhaxModpack.Common
         public static readonly string WoT32bitFolderWithSlash = Path.DirectorySeparatorChar + WoT32bitFolder;
 
         /// <summary>
+        /// The location of the WoT app data folder parsed at installation time
+        /// </summary>
+        public static readonly string AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wargaming.net", "WorldOfTanks");
+
+        /// <summary>
         /// The absolute path of the V2 settings file used for saving ModpackSettings
         /// </summary>
         public static readonly string RelhaxSettingsFilepath = Path.Combine(ApplicationStartupPath, ModpackSettings.SettingsFilename);

@@ -53,6 +53,10 @@ namespace RelhaxModpack.Automation
 
         private WebClient WebClient = null;
 
+        public string WoTClientVersion { get; set; }
+
+        public string WoTModpackOnlineFolderVersion { get; set; }
+
         private string AutomationXmlRootEscaped { get { return AutomationRunnerSettings == null? string.Empty : AutomationXmlRoot.Replace("{branch}", AutomationRunnerSettings.SelectedBranch); } }
 
         private string AutomationXmlRepoFilebaseEscaped { get { return AutomationRunnerSettings == null ? string.Empty : AutomationXmlRepoFilebase.Replace("{branch}", AutomationRunnerSettings.SelectedBranch); } }
@@ -165,8 +169,8 @@ namespace RelhaxModpack.Automation
             ApplicationMacros.Add(new AutomationMacro() { Name = "level", Value = (selectablePackage != null)? selectablePackage.Level.ToString() : "null", MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "patchGroup", Value = package.PatchGroup.ToString(), MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "installGroup", Value = package.InstallGroupWithOffset.ToString(), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "clientVersion", Value = ApplicationSettings.WoTClientVersion, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "onlineFolderVersion", Value = ApplicationSettings.WoTModpackOnlineFolderVersion, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "clientVersion", Value = WoTClientVersion, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "onlineFolderVersion", Value = WoTModpackOnlineFolderVersion, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "author", Value = package.Author, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "version", Value = package.Version, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "applicationPath", Value = ApplicationConstants.ApplicationStartupPath, MacroType = MacroType.ApplicationDefined });

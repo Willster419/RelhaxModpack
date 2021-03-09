@@ -48,6 +48,8 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public AskCloseWoTResult AskCloseWoTResult { get; set; } = AskCloseWoTResult.CancelInstallation;
 
+        public string WoTDirectory { get; set; }
+
         /// <summary>
         /// Create an instance of the AskCloseWoT window
         /// </summary>
@@ -67,7 +69,7 @@ namespace RelhaxModpack.Windows
         {
             AskCloseWoTResult = AskCloseWoTResult.Retry;
             Logging.Info("Getting WoT process(es)");
-            Process WoTProcess = CommonUtils.GetProcess(ApplicationConstants.WoTProcessName, ApplicationSettings.WoTDirectory);
+            Process WoTProcess = CommonUtils.GetProcess(ApplicationConstants.WoTProcessName, WoTDirectory);
             if(WoTProcess == null)
             {
                 Logging.Error("Failed to get process (null result)");

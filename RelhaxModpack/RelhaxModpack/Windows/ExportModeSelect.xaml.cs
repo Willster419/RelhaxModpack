@@ -37,7 +37,7 @@ namespace RelhaxModpack.Windows
 
             //parse each online folder to list type string
             VersionInfosList.Clear();
-            string xmlString = FileUtils.GetStringFromZip(ApplicationSettings.ManagerInfoZipfile, ApplicationConstants.SupportedClients);
+            string xmlString = FileUtils.GetStringFromZip(((App)Application.Current).ManagerInfoZipfile, ApplicationConstants.SupportedClients);
             XmlNodeList supportedClients = XmlUtils.GetXmlNodesFromXPath(xmlString, "//versions/version", ApplicationConstants.SupportedClients);
             VersionInfosList = new List<VersionInfos>();
             foreach (XmlNode node in supportedClients)

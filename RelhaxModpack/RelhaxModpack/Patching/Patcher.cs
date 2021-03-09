@@ -28,6 +28,8 @@ namespace RelhaxModpack.Patching
         /// <remarks>Debug mode will create additional files as individual steps of the patch process are outputted for debug</remarks>
         public bool DebugMode { get; set; } = false;
 
+        public string WoTDirectory { get; set; }
+
         /// <summary>
         /// Provides the ability to insert a 'null' value into json configurations
         /// </summary>
@@ -88,7 +90,7 @@ namespace RelhaxModpack.Patching
             if (string.IsNullOrWhiteSpace(p.PatchPath))
             {
                 Logging.Warning(LogOptions.ClassName, "PatchPath is empty, using '{{app}}'", p.PatchPath);
-                p.PatchPath = ApplicationSettings.WoTDirectory;
+                p.PatchPath = WoTDirectory;
             }
             else
             {
@@ -1401,7 +1403,7 @@ namespace RelhaxModpack.Patching
         public string GetXvmFolderName()
         {
             //form where it should be
-            string xvmBootFile = Path.Combine(ApplicationSettings.WoTDirectory, "res_mods\\configs\\xvm\\xvm.xc");
+            string xvmBootFile = Path.Combine(WoTDirectory, "res_mods\\configs\\xvm\\xvm.xc");
 
             //check if it exists there
             if (!File.Exists(xvmBootFile))

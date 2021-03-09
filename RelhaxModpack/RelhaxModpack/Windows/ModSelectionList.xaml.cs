@@ -134,6 +134,14 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool LoadingUI { get; private set; } = false;
 
+        public string WoTModpackOnlineFolderVersion { get; set; }
+
+        public string WoTClientVersion { get; set; }
+
+        public string DatabaseVersion { get; set; }
+
+        public string WoTDirectory { get; set; }
+
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress = null;
         private Category UserCategory = null;
@@ -456,7 +464,8 @@ namespace RelhaxModpack.Windows
             //if not stable db, update WoT online folder version macro from modInfoxml itself
             if (databaseVersion != DatabaseVersions.Stable)
             {
-                ApplicationSettings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
+                throw new BadMemeException("This will fail");
+                WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
             }
 
             //set the version of the wot client to display for the UI, stored in a string to be called later
@@ -467,7 +476,7 @@ namespace RelhaxModpack.Windows
                     InstallingAsDatabaseVersionDisplay = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@version");
                     break;
                 case DatabaseVersions.Stable:
-                    InstallingAsDatabaseVersionDisplay = ApplicationSettings.WoTClientVersion;
+                    InstallingAsDatabaseVersionDisplay = WoTClientVersion;
                     break;
             }
 
@@ -658,8 +667,8 @@ namespace RelhaxModpack.Windows
 
             //update text boxes and other text properties (~2ms)
             //UI THREAD REQUIRED
-            InstallingTo.Text = string.Format(Translations.GetTranslatedString(InstallingTo.Name), ApplicationSettings.WoTDirectory);
-            InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString(InstallingAsWoTVersion.Name), ApplicationSettings.WoTClientVersion);
+            InstallingTo.Text = string.Format(Translations.GetTranslatedString(InstallingTo.Name), WoTDirectory);
+            InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString(InstallingAsWoTVersion.Name), WoTClientVersion);
             SearchCB.Text = Translations.GetTranslatedString("searchComboBoxInitMessage");
             string databaseSubversionInfo = string.Empty;
             switch (ModpackSettings.DatabaseDistroVersion)
@@ -671,7 +680,7 @@ namespace RelhaxModpack.Windows
                     databaseSubversionInfo = ModpackSettings.BetaDatabaseSelectedBranch;
                     break;
                 case DatabaseVersions.Stable:
-                    databaseSubversionInfo = ApplicationSettings.DatabaseVersion;
+                    databaseSubversionInfo = DatabaseVersion;
                     break;
             }
             UsingDatabaseVersion.Text = string.Format(Translations.GetTranslatedString(UsingDatabaseVersion.Name), ModpackSettings.DatabaseDistroVersion.ToString(), databaseSubversionInfo);
@@ -987,7 +996,7 @@ namespace RelhaxModpack.Windows
                 if (!File.Exists(ApplicationConstants.LastInstalledConfigFilepath))
                 {
                     Logging.Warning("LastInstalledConfigFile does not exist, loading as first time with check default mods");
-                    SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(ApplicationSettings.ManagerInfoZipfile, ApplicationConstants.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                    SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(((App)Application.Current).ManagerInfoZipfile, ApplicationConstants.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                     shouldLoadSomethingFilepath = null;
                     shouldLoadSomething = true;
                 }
@@ -1002,7 +1011,7 @@ namespace RelhaxModpack.Windows
             else
             {
                 //load default checked mods
-                SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(ApplicationSettings.ManagerInfoZipfile, ApplicationConstants.DefaultCheckedSelectionfile), XmlLoadType.FromString);
+                SelectionsDocument = XmlUtils.LoadXmlDocument(FileUtils.GetStringFromZip(((App)Application.Current).ManagerInfoZipfile, ApplicationConstants.DefaultCheckedSelectionfile), XmlLoadType.FromString);
                 shouldLoadSomethingFilepath = null;
                 shouldLoadSomething = true;
             }
@@ -2584,7 +2593,7 @@ namespace RelhaxModpack.Windows
                 new XElement("mods", new XAttribute("ver", ApplicationConstants.ConfigFileVersion2V0),
                 new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", ApplicationSettings.DatabaseVersion),
+                new XAttribute("dbVersion", DatabaseVersion),
                 new XAttribute("dbDistro", databaseVersion.ToString())));
 
             //relhax mods root
@@ -2643,7 +2652,7 @@ namespace RelhaxModpack.Windows
                 new XAttribute("ver", ApplicationConstants.ConfigFileVersion3V0),
                 new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", ApplicationSettings.DatabaseVersion),
+                new XAttribute("dbVersion", DatabaseVersion),
                 new XAttribute("dbDistro", databaseVersion.ToString()));
 
             doc.Add(packagesRoot);

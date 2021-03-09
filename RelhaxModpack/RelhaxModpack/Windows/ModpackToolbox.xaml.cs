@@ -70,6 +70,8 @@ namespace RelhaxModpack.Windows
         private string KeyFilename = "key.txt"; //can be overridden by command line argument
         private WebClient client;
         private bool authorized = false;
+        private string WoTModpackOnlineFolderVersion;
+        private string WoTClientVersion;
         //open
         private OpenFileDialog SelectModInfo = new OpenFileDialog() { Filter = "*.xml|*.xml" };
         private OpenFileDialog SelectV2Application = new OpenFileDialog() { Title = "Find V2 application to upload", Filter = "*.exe|*.exe" };
@@ -298,10 +300,9 @@ namespace RelhaxModpack.Windows
                 LogOutput.Text = "Loading database...";
                 //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
                 //for the folder version: //modInfoAlpha.xml/@version
-                ApplicationSettings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, ApplicationConstants.DatabaseOnlineFolderXpath);
-                ApplicationSettings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, ApplicationConstants.DatabaseOnlineVersionXpath);
-                string versionInfo = string.Format("{0} = {1},  {2} = {3}", nameof(ApplicationSettings.WoTModpackOnlineFolderVersion)
-                    , ApplicationSettings.WoTModpackOnlineFolderVersion, nameof(ApplicationSettings.WoTClientVersion), ApplicationSettings.WoTClientVersion);
+                WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, ApplicationConstants.DatabaseOnlineFolderXpath);
+                WoTClientVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, ApplicationConstants.DatabaseOnlineVersionXpath);
+                string versionInfo = string.Format("{0} = {1},  {2} = {3}", nameof(WoTModpackOnlineFolderVersion), WoTModpackOnlineFolderVersion, nameof(WoTClientVersion), WoTClientVersion);
                 ReportProgress(versionInfo);
                 ReportProgress("Database loaded");
             }
@@ -544,7 +545,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Generation of internal csv...");
 
             //check
-            if (string.IsNullOrEmpty(ApplicationSettings.WoTClientVersion) || string.IsNullOrEmpty(ApplicationSettings.WoTModpackOnlineFolderVersion))
+            if (string.IsNullOrEmpty(WoTClientVersion) || string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("Database not loaded");
                 return;
@@ -558,7 +559,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Generation of user csv...");
 
             //check
-            if (string.IsNullOrEmpty(ApplicationSettings.WoTClientVersion) || string.IsNullOrEmpty(ApplicationSettings.WoTModpackOnlineFolderVersion))
+            if (string.IsNullOrEmpty(WoTClientVersion) || string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("Database not loaded");
                 return;
@@ -992,7 +993,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Preparing database update");
 
             //checks
-            if (string.IsNullOrEmpty(ApplicationSettings.WoTModpackOnlineFolderVersion))
+            if (string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -1093,22 +1094,22 @@ namespace RelhaxModpack.Windows
             string lastDate = database_version_text.InnerText.Split('_')[1];
 
             ReportProgress(string.Format("lastWoTClientVersion    = {0}", lastWoTClientVersion));
-            ReportProgress(string.Format("currentWoTClientVersion = {0}", ApplicationSettings.WoTClientVersion));
+            ReportProgress(string.Format("currentWoTClientVersion = {0}", WoTClientVersion));
             ReportProgress(string.Format("lastDate                = {0}", lastDate));
             ReportProgress(string.Format("currentDate             = {0}", dateTimeFormat));
 
             string databaseVersionTag = string.Empty;
 
-            if (lastWoTClientVersion.Equals(ApplicationSettings.WoTClientVersion) && lastDate.Equals(dateTimeFormat))
+            if (lastWoTClientVersion.Equals(WoTClientVersion) && lastDate.Equals(dateTimeFormat))
             {
                 ReportProgress("WoTVersion and date match, so incrementing the itteration");
                 int lastItteration = int.Parse(database_version_text.InnerText.Split('_')[2]);
-                databaseVersionTag = string.Format("{0}_{1}_{2}", ApplicationSettings.WoTClientVersion, dateTimeFormat, ++lastItteration);
+                databaseVersionTag = string.Format("{0}_{1}_{2}", WoTClientVersion, dateTimeFormat, ++lastItteration);
             }
             else
             {
                 ReportProgress("lastWoTVersion and/or date NOT match, not incrementing the version (starts at 1)");
-                databaseVersionTag = string.Format("{0}_{1}_1", ApplicationSettings.WoTClientVersion, dateTimeFormat);
+                databaseVersionTag = string.Format("{0}_{1}_1", WoTClientVersion, dateTimeFormat);
             }
 
             ReportProgress(string.Format("databaseVersionTag = {0}", databaseVersionTag));
@@ -1195,7 +1196,7 @@ namespace RelhaxModpack.Windows
             using (client = new WebClient())
             {
                 string databaseXmlString = await client.DownloadStringTaskAsync(string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
-                    ApplicationSettings.WoTModpackOnlineFolderVersion, DatabaseXml));
+                    WoTModpackOnlineFolderVersion, DatabaseXml));
                 databaseXml = XmlUtils.LoadXmlDocument(databaseXmlString, XmlLoadType.FromString);
             }
 
@@ -1436,7 +1437,7 @@ namespace RelhaxModpack.Windows
             //save new modInfo.xml
             ReportProgress("Updating database");
             File.Delete(SelectModInfo.FileName);
-            DatabaseUtils.SaveDatabase(SelectModInfo.FileName, ApplicationSettings.WoTClientVersion, ApplicationSettings.WoTModpackOnlineFolderVersion,
+            DatabaseUtils.SaveDatabase(SelectModInfo.FileName, WoTClientVersion, WoTModpackOnlineFolderVersion,
                 globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Done");
@@ -1451,7 +1452,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Uploading changed files");
 
             //checks
-            if (string.IsNullOrEmpty(ApplicationSettings.WoTModpackOnlineFolderVersion))
+            if (string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -1476,13 +1477,13 @@ namespace RelhaxModpack.Windows
             ReportProgress("Uploading new database files to bigmods");
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
-                string databaseFtpPath = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPModpackDatabase, ApplicationSettings.WoTClientVersion);
+                string databaseFtpPath = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPModpackDatabase, WoTClientVersion);
                 ReportProgress(string.Format("FTP upload path parsed as {0}", databaseFtpPath));
 
                 //check if ftp folder exists
-                ReportProgress(string.Format("Checking if FTP folder '{0}' exists", ApplicationSettings.WoTClientVersion));
+                ReportProgress(string.Format("Checking if FTP folder '{0}' exists", WoTClientVersion));
                 string[] folders = await FtpUtils.FtpListFilesFoldersAsync(PrivateStuff.BigmodsFTPModpackDatabase, PrivateStuff.BigmodsNetworkCredential);
-                if (!folders.Contains(ApplicationSettings.WoTClientVersion))
+                if (!folders.Contains(WoTClientVersion))
                 {
                     ReportProgress("Does not exist, making");
                     await FtpUtils.FtpMakeFolderAsync(databaseFtpPath, PrivateStuff.BigmodsNetworkCredential);
@@ -1539,8 +1540,8 @@ namespace RelhaxModpack.Windows
             ReportProgress("Checking if supported_clients.xml needs to be updated for new WoT version");
 
             ReportProgress("Checking if latest WoT version is the same as this database supports");
-            ReportProgress("Old version = " + LastSupportedTanksVersion + ", new version = " + ApplicationSettings.WoTClientVersion);
-            if (!LastSupportedTanksVersion.Equals(ApplicationSettings.WoTClientVersion))
+            ReportProgress("Old version = " + LastSupportedTanksVersion + ", new version = " + WoTClientVersion);
+            if (!LastSupportedTanksVersion.Equals(WoTClientVersion))
             {
                 ReportProgress("Last supported version does not match");
                 MessageBox.Show("Old database client version != new client version.\nPlease update the " + ApplicationConstants.SupportedClients + " document after publishing the database");
@@ -1776,7 +1777,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Checking for duplicate packageNames");
 
             //checks
-            if (string.IsNullOrEmpty(ApplicationSettings.WoTModpackOnlineFolderVersion))
+            if (string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -1812,7 +1813,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Checking for duplicate UIDs");
 
             //checks
-            if (string.IsNullOrEmpty(ApplicationSettings.WoTModpackOnlineFolderVersion))
+            if (string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -1848,7 +1849,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Checking for missing UIDs and adding");
 
             //checks
-            if (string.IsNullOrEmpty(ApplicationSettings.WoTModpackOnlineFolderVersion))
+            if (string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -1901,7 +1902,7 @@ namespace RelhaxModpack.Windows
             }
 
             string fullDatabasePath = Path.Combine(Path.GetDirectoryName(SelectModInfoSave.FileName), ApplicationConstants.BetaDatabaseV2RootFilename);
-            DatabaseUtils.SaveDatabase(fullDatabasePath, ApplicationSettings.WoTClientVersion, ApplicationSettings.WoTModpackOnlineFolderVersion, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, DatabaseXmlVersion.OnePointOne);
+            DatabaseUtils.SaveDatabase(fullDatabasePath, WoTClientVersion, WoTModpackOnlineFolderVersion, globalDependenciesDuplicateCheck, dependenciesDuplicateCheck, parsedCategoryListDuplicateCheck, DatabaseXmlVersion.OnePointOne);
 
             ReportProgress("Database saved");
             ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -1942,7 +1943,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Remove clients from xml and server");
 
             //checks
-            if (string.IsNullOrEmpty(ApplicationSettings.WoTModpackOnlineFolderVersion))
+            if (string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -2022,7 +2023,7 @@ namespace RelhaxModpack.Windows
             ReportProgress("Add clients to and upload supported_clients.xml");
             
             //checks
-            if (string.IsNullOrEmpty(ApplicationSettings.WoTModpackOnlineFolderVersion))
+            if (string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
             {
                 ReportProgress("WoTModpackOnlineFolderVersion is empty");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -2048,7 +2049,7 @@ namespace RelhaxModpack.Windows
 
             //if loaded database's wot version is new, then add it to the document
             // "/versions/version[text()='1.8.0.1']"
-            string xpathString = string.Format(@"/versions/version[text()='{0}']",ApplicationSettings.WoTClientVersion);
+            string xpathString = string.Format(@"/versions/version[text()='{0}']",WoTClientVersion);
             XmlNode selectedVersion = XmlUtils.GetXmlNodeFromXPath(supportedClients, xpathString);
             if(selectedVersion == null)
             {
@@ -2058,8 +2059,8 @@ namespace RelhaxModpack.Windows
 
                 //create the version element and set attributes and text
                 XmlElement supported_client = supportedClients.CreateElement("version");
-                supported_client.InnerText = ApplicationSettings.WoTClientVersion;
-                supported_client.SetAttribute("folder", ApplicationSettings.WoTModpackOnlineFolderVersion);
+                supported_client.InnerText = WoTClientVersion;
+                supported_client.SetAttribute("folder", WoTModpackOnlineFolderVersion);
 
                 //add element to document at the end
                 versionRoot.AppendChild(supported_client);
