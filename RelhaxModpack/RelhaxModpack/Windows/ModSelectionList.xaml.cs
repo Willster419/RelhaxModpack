@@ -135,7 +135,7 @@ namespace RelhaxModpack.Windows
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress = null;
         private Category UserCategory = null;
-        private Preview p = null;
+        private Preview previewWindow = null;
         private const int FLASH_TICK_INTERVAL = 250;
         private const int NUM_FLASH_TICKS = 5;
         private int numTicks = 0;
@@ -188,10 +188,10 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
             //close and dispose preview
-            if (p != null)
+            if (previewWindow != null)
             {
-                p.Close();
-                p = null;
+                previewWindow.Close();
+                previewWindow = null;
             }
 
             //save width and height settings
@@ -1574,9 +1574,17 @@ namespace RelhaxModpack.Windows
             if (LoadingUI)
                 return;
 
+            //if it's not mouseEventArgs, then abort because we can't determine if it's a right click
             if (e is MouseEventArgs m)
+            {
                 if (m.RightButton != MouseButtonState.Pressed)
                     return;
+            }
+            else
+            {
+                Logging.Error(LogOptions.ClassName, "Unknown event type for mouse down event: {0}", e.GetType().ToString());
+                return;
+            }
 
             SelectablePackage spc = null;
             bool comboboxItemsInside = false;
@@ -1651,19 +1659,27 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            if (p != null)
+            //check if the window reference exists and if it's loaded (not a closed window, can't re-open a closed window)
+            //https://stackoverflow.com/a/49477128/3128017
+            //https://stackoverflow.com/a/26124156/3128017
+            if (previewWindow != null && previewWindow.IsLoaded)
             {
-                p.Close();
-                p = null;
+                //if its not a virgin preview window, use the currently existing one but refresh the contents
+                previewWindow.ComboBoxItemsInsideMode = comboboxItemsInside;
+                previewWindow.Medias = spc.Medias;
+                previewWindow.InvokedPackage = spc;
+                previewWindow.Refresh(false);
             }
-
-            p = new Preview()
+            else
             {
-                ComboBoxItemsInsideMode = comboboxItemsInside,
-                Medias = spc.Medias,
-                InvokedPackage = spc
-            };
-            p.Show();
+                previewWindow = new Preview()
+                {
+                    ComboBoxItemsInsideMode = comboboxItemsInside,
+                    Medias = spc.Medias,
+                    InvokedPackage = spc
+                };
+                previewWindow.Show();
+            }
         }
 
         //Handler for allowing right click of disabled mods (WPF)
@@ -3117,8 +3133,8 @@ namespace RelhaxModpack.Windows
                     if (loadingProgress != null)
                         loadingProgress = null;
 
-                    if (p != null)
-                        p = null;
+                    if (previewWindow != null)
+                        previewWindow = null;
 
                     if (OriginalBrush != null)
                         OriginalBrush = null;
