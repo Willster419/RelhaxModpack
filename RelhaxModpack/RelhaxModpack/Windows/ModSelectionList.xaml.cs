@@ -1574,9 +1574,17 @@ namespace RelhaxModpack.Windows
             if (LoadingUI)
                 return;
 
+            //if it's not mouseEventArgs, then abort because we can't determine if it's a right click
             if (e is MouseEventArgs m)
+            {
                 if (m.RightButton != MouseButtonState.Pressed)
                     return;
+            }
+            else
+            {
+                Logging.Error(LogOptions.ClassName, "Unknown event type for mouse down event: {0}", e.GetType().ToString());
+                return;
+            }
 
             SelectablePackage spc = null;
             bool comboboxItemsInside = false;
