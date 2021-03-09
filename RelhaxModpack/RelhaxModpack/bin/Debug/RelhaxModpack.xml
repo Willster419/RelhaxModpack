@@ -829,6 +829,11 @@
             The WoT 32bit folder name with the folder separator before it
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.AppDataFolder">
+            <summary>
+            The location of the WoT app data folder parsed at installation time
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxSettingsFilepath">
             <summary>
             The absolute path of the V2 settings file used for saving ModpackSettings
@@ -3300,61 +3305,6 @@
             Determines if any specified command line args will cause the application to open a custom (non MainWindow) window
             </summary>
             <returns>True if the provided arguments will return a custom array, false otherwise</returns>
-        </member>
-        <member name="T:RelhaxModpack.Settings.ApplicationSettings">
-            <summary>
-            Handles all generic constants and statics used throughout the application
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationSettings.AppDataFolder">
-            <summary>
-            The location of the WoT app data folder parsed at installation time
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationSettings.WoTDirectory">
-            <summary>
-            The location of the WoT installation directory parsed at installation time
-            </summary>
-            <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationSettings.WoTClientVersion">
-            <summary>
-            The version information of WoT parsed at installation time
-            </summary>
-            <remarks>This info is gathered from the "version.xml" file from the game's root directory</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationSettings.WoTModpackOnlineFolderVersion">
-            <summary>
-            The version of the online folder name containing the zip files for this game parsed at installation time
-            </summary>
-            <remarks>The online folders are done by major versions only i.e. 1.4.1, 1.5.0, etc. All zip files on 1.5.0.x are stored in this folder</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationSettings.DatabaseVersion">
-            <summary>
-            The version of the database parsed upon application load
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationSettings.FirstLoad">
-            <summary>
-            Determines if this is the first time the application is loading, parsed upon application load
-            </summary>
-            <remarks>Done by checking if the settings file exists. If it is set to true in the application, it will be set to false again when it closes.</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationSettings.FirstLoadToV2">
-            <summary>
-            Determines if while being the first time loading, if this is an upgrade operation to Relhax V2, parsed upon application load
-            </summary>
-            <remarks>Done by if FirstLoad is true and the Relhax V1 settings file exists</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationSettings.ManagerInfoZipfile">
-            <summary>
-            The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk. Parsed upon application load.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Settings.ApplicationSettings.TrueAlpha">
-            <summary>
-            Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed), parsed upon application load.
-            </summary>
         </member>
         <member name="T:RelhaxModpack.Settings.UISettings">
             <summary>
@@ -6530,7 +6480,7 @@
             The dictionary to store literal versions of characters with their escaped versions
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Utilities.MacroUtils.BuildFilepathMacroList">
+        <member name="M:RelhaxModpack.Utilities.MacroUtils.BuildFilepathMacroList(System.String,System.String,System.String)">
             <summary>
             Builds the Filepath macro dictionary with settings that should be parsed from the Settings class
             </summary>
@@ -7272,11 +7222,6 @@
         <member name="F:RelhaxModpack.InstallEngine.DisableTriggersForInstall">
             <summary>
             Flag for if the install engine should honor the user setting or if installing user packages, disable triggers anyways
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.InstallEngine.#ctor">
-            <summary>
-            Creates an instance of the installation engine. Properties should be assigned at this step
             </summary>
         </member>
         <member name="M:RelhaxModpack.InstallEngine.RunInstallationAsync(System.IProgress{RelhaxModpack.UI.RelhaxInstallerProgress})">
@@ -8130,65 +8075,65 @@
             <param name="sender">The sending object</param>
             <param name="e">The Upload or download event arguments</param>
         </member>
-        <member name="T:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow">
+        <member name="T:RelhaxModpack.Windows.DatabaseEditorTransferWindow">
             <summary>
             Interaction logic for DatabaseEditorTrnasferWindow.xaml
             </summary>
             <summary>
-            DatabaseEditorTrnasferWindow
+            DatabaseEditorTransferWindow
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.ZipFilePathDisk">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTransferWindow.ZipFilePathDisk">
             <summary>
             The path to the zip file on the disk
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.ZipFilePathOnline">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTransferWindow.ZipFilePathOnline">
             <summary>
             The FTP path to the zip file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.ZipFileName">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTransferWindow.ZipFileName">
             <summary>
             The complete name of the Zip file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.Credential">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTransferWindow.Credential">
             <summary>
             The FTP credentials
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.TransferMode">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTransferWindow.TransferMode">
             <summary>
             Enumeration flag to indicate uploading or downloading
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.PackageToUpdate">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTransferWindow.PackageToUpdate">
             <summary>
             The package being updated. A null package with Upload=true indicates the item being uploaded is a media
             </summary>
         </member>
-        <member name="E:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.OnEditorUploadDownloadClosed">
+        <member name="E:RelhaxModpack.Windows.DatabaseEditorTransferWindow.OnEditorUploadDownloadClosed">
             <summary>
             The event callback used for the editor when an upload or download is finished
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.Countdown">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTransferWindow.Countdown">
             <summary>
             The timeout, in seconds, until the window will automatically close
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.EditorSettings">
+        <member name="F:RelhaxModpack.Windows.DatabaseEditorTransferWindow.EditorSettings">
             <summary>
             The reference to the editor settings object. Must be supplied
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.#ctor">
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorTransferWindow.#ctor">
             <summary>
             Create an instance of the DatabaseEditorDownlaod class
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditorTrnasferWindow.InitializeComponent">
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorTransferWindow.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -9628,6 +9573,11 @@
             App
             </summary>
         </member>
+        <member name="F:RelhaxModpack.App.ManagerInfoZipfile">
+            <summary>
+            The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk. Parsed upon application load.
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.App.InitializeComponent">
             <summary>
             InitializeComponent
@@ -9644,6 +9594,46 @@
             </summary>
             <summary>
             MainWindow
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.MainWindow.WoTDirectory">
+            <summary>
+            The location of the WoT installation directory parsed at installation time
+            </summary>
+            <remarks>The path is absolute, ending at "World_of_Tanks"</remarks>
+        </member>
+        <member name="F:RelhaxModpack.MainWindow.WoTClientVersion">
+            <summary>
+            The version information of WoT parsed at installation time
+            </summary>
+            <remarks>This info is gathered from the "version.xml" file from the game's root directory</remarks>
+        </member>
+        <member name="F:RelhaxModpack.MainWindow.WoTModpackOnlineFolderVersion">
+            <summary>
+            The version of the online folder name containing the zip files for this game parsed at installation time
+            </summary>
+            <remarks>The online folders are done by major versions only i.e. 1.4.1, 1.5.0, etc. All zip files on 1.5.0.x are stored in this folder</remarks>
+        </member>
+        <member name="F:RelhaxModpack.MainWindow.DatabaseVersion">
+            <summary>
+            The version of the database parsed upon application load
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.MainWindow.FirstLoad">
+            <summary>
+            Determines if this is the first time the application is loading, parsed upon application load
+            </summary>
+            <remarks>Done by checking if the settings file exists. If it is set to true in the application, it will be set to false again when it closes.</remarks>
+        </member>
+        <member name="F:RelhaxModpack.MainWindow.FirstLoadToV2">
+            <summary>
+            Determines if while being the first time loading, if this is an upgrade operation to Relhax V2, parsed upon application load
+            </summary>
+            <remarks>Done by if FirstLoad is true and the Relhax V1 settings file exists</remarks>
+        </member>
+        <member name="F:RelhaxModpack.MainWindow.TrueAlpha">
+            <summary>
+            Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed), parsed upon application load.
             </summary>
         </member>
         <member name="M:RelhaxModpack.MainWindow.#ctor">
