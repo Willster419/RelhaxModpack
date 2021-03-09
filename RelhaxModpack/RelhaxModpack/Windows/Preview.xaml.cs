@@ -170,6 +170,9 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        /// <summary>
+        /// Refresh the window to display new preview elements
+        /// </summary>
         public void Refresh()
         {
             if (Medias.Count > 0)
