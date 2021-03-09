@@ -193,6 +193,9 @@ namespace RelhaxModpack.Windows
                 PreviewUpdatesBox.Text = InvokedPackage.UpdateCommentFormatted;
                 CurrentDisplaySP = InvokedPackage;
             }
+
+            //start the focus timer to bring focus to this window
+            OMCViewLegacyFocusTimer.Start();
         }
 
         private async void DisplayMedia(Media media)
