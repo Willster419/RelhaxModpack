@@ -1659,29 +1659,18 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            //if preview window for the first time, create and show
-            //if its not a virgin preview window, use the currently existing one but refresh the contents
-            if (previewWindow != null)
+            //check if the window reference exists and if it's loaded (not a closed window, can't re-open a closed window)
+            //https://stackoverflow.com/a/49477128/3128017
+            //https://stackoverflow.com/a/26124156/3128017
+            if (previewWindow != null && previewWindow.IsLoaded)
             {
+                //if its not a virgin preview window, use the currently existing one but refresh the contents
                 previewWindow.ComboBoxItemsInsideMode = comboboxItemsInside;
                 previewWindow.Medias = spc.Medias;
                 previewWindow.InvokedPackage = spc;
-                previewWindow.Refresh();
-
+                previewWindow.Refresh(false);
             }
-            else if (previewWindow == null)
-            {
-                previewWindow = new Preview()
-                {
-                    ComboBoxItemsInsideMode = comboboxItemsInside,
-                    Medias = spc.Medias,
-                    InvokedPackage = spc
-                };
-                previewWindow.Show();
-            }
-
-            //handle if the preview window was closed after one was viewed, and start up a new one
-            if (Application.Current.Windows.OfType<Preview>().SingleOrDefault() == null)
+            else
             {
                 previewWindow = new Preview()
                 {

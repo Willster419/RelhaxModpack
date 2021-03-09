@@ -72,44 +72,10 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            //check that all components have the package parent reference set
-            foreach (Media media in Medias)
-            {
-                bool anyMediaErrors = false;
-                if (media.SelectablePackageParent == null)
-                {
-                    Logging.Error("A media component does not have its SelectablePackageParent set");
-                    Logging.Error(media.ToString());
-                    anyMediaErrors = true;
-                }
-                if (anyMediaErrors)
-                {
-                    MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
-                    Close();
-                    return;
-                }
-            }
-
             //translate 3 components
             DevUrlHeader.Text = Translations.GetTranslatedString(DevUrlHeader.Name);
             PreviewNextPicButton.Content = Translations.GetTranslatedString(PreviewNextPicButton.Name);
             PreviewPreviousPicButton.Content = Translations.GetTranslatedString(PreviewPreviousPicButton.Name);
-
-            //make the linked labels in the link box
-            for (int i = 0; i < Medias.Count; i++)
-            {
-                TextBlock block = new TextBlock();
-                block.Inlines.Clear();
-                Hyperlink h = new Hyperlink(new Run(i.ToString()))
-                {
-                    Tag = Medias[i],
-                    //dummy URI just to make the request navigate work
-                    NavigateUri = new Uri("http://google.com")
-                };
-                h.RequestNavigate += OnMediaHyperlinkClick;
-                block.Inlines.Add(h);
-                MediaIndexer.Children.Add(block);
-            }
 
             if (EditorMode)
             {
@@ -145,287 +111,317 @@ namespace RelhaxModpack.Windows
             }
 
             //invoke displaying the first element
-            if (Medias.Count > 0)
-            {
-                DisplayMedia(Medias[0]);
-            }
-            else
-            {
-                if (EditorMode)
-                    Title = "EDITOR_TEST_MODE";
-                else if (ComboBoxItemsInsideMode)
-                    Title = string.Format("{0}: ({1})", Translations.GetTranslatedString("dropDownItemsInside"), Translations.GetTranslatedString("none"));
-                else
-                    Title = InvokedPackage.NameFormatted;
-
-                PreviewDescriptionBox.Text = InvokedPackage.DescriptionFormatted;
-                PreviewUpdatesBox.Text = InvokedPackage.UpdateCommentFormatted;
-                CurrentDisplaySP = InvokedPackage;
-            }
-
-            //set the timer if the view is OMC
-            if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
-            {
-                OMCViewLegacyFocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
-            }
+            Refresh(true);
         }
 
         /// <summary>
         /// Refresh the window to display new preview elements
         /// </summary>
-        public void Refresh()
+        public void Refresh(bool init)
         {
+            //check that all components have the package parent reference set
+            foreach (Media media in Medias)
+            {
+                bool anyMediaErrors = false;
+                if (media.SelectablePackageParent == null)
+                {
+                    Logging.Error("A media component does not have its SelectablePackageParent set");
+                    Logging.Error(media.ToString());
+                    anyMediaErrors = true;
+                }
+                if (anyMediaErrors)
+                {
+                    MessageBox.Show(Translations.GetTranslatedString("previewEncounteredError"));
+                    Close();
+                    return;
+                }
+            }
+            CurrentDisplaySP = InvokedPackage;
+
             if (Medias.Count > 0)
             {
-                DisplayMedia(Medias[0]);
-            }
-            else if (Medias.Count == 0)
-            {
-                CurrentDispalyMedia = null;
+                DisplayMedia(Medias[0], true);
             }
             else
             {
-                if (EditorMode)
-                    Title = "EDITOR_TEST_MODE";
-                else if (ComboBoxItemsInsideMode)
-                    Title = string.Format("{0}: ({1})", Translations.GetTranslatedString("dropDownItemsInside"), Translations.GetTranslatedString("none"));
-                else
-                    Title = InvokedPackage.NameFormatted;
-
-                PreviewDescriptionBox.Text = InvokedPackage.DescriptionFormatted;
-                PreviewUpdatesBox.Text = InvokedPackage.UpdateCommentFormatted;
-                CurrentDisplaySP = InvokedPackage;
+                DisplayMedia(null, true);
             }
 
             //start the focus timer to bring focus to this window
-            if (OMCViewLegacyFocusTimer == null)
+            if (init && ModpackSettings.ModSelectionView == SelectionView.Legacy)
+            {
                 OMCViewLegacyFocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
+            }
+            else if (OMCViewLegacyFocusTimer == null)
+            {
+                OMCViewLegacyFocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
+            }
             else
+            {
                 OMCViewLegacyFocusTimer.Start();
+            }
         }
 
-        private async void DisplayMedia(Media media)
+        private async void DisplayMedia(Media media, bool fullRedraw)
         {
-            //the devURL, description and update notes only need to be
-            //re-parsed if the package has changed
-            if (CurrentDispalyMedia == null || (!CurrentDispalyMedia.Equals(media)))
+            //don't need to update if it's the same as what is currently displayed
+            if (media != null && CurrentDispalyMedia != null && CurrentDispalyMedia.Equals(media))
             {
-                //check if devurl, desciption, update notes need to be changed if selectablePackage changed as well
-                if (CurrentDisplaySP == null || (!CurrentDisplaySP.Equals(media.SelectablePackageParent)))
-                {
-                    //check if devURL element should be enabled or not
-                    if (string.IsNullOrWhiteSpace(media.SelectablePackageParent.DevURL))
-                    {
-                        DevUrlHeader.IsEnabled = false;
-                        DevUrlHeader.Visibility = Visibility.Hidden;
-                        DevUrlHolder.IsEnabled = false;
-                        DevUrlHolder.Visibility = Visibility.Hidden;
-                    }
-                    else
-                    {
-                        //devURL is now array of elements separated by newline
-                        //load the stack with textblocks with tooltips for the URLs
-                        string[] devURLS = media.SelectablePackageParent.DevURLList;
-
-                        //clear last list of URL links
-                        DevUrlHolder.Children.Clear();
-
-                        for (int i = 0; i < devURLS.Count(); i++)
-                        {
-                            //make a URI to hold the goto devurl link
-                            Uri goTo = null;
-                            try
-                            {
-                                goTo = new Uri(devURLS[i].Trim());
-                            }
-                            catch (UriFormatException)
-                            {
-                                Logging.Error("Invalid URI string, skipping: {0}", devURLS[i].Trim());
-                            }
-                            if (goTo == null)
-                                continue;
-
-                            //make a textbox to hold the hyperlink object
-                            TextBlock block = new TextBlock()
-                            {
-                                ToolTip = devURLS[i].Trim()
-                            };
-                            //https://stackoverflow.com/questions/21214450/how-to-add-a-hyperlink-in-a-textblock-in-code?noredirect=1&lq=1
-                            block.Inlines.Clear();
-
-                            //make a run to display the number of the link
-                            Run inline = new Run(i.ToString());
-
-                            //and the hyperlink will display the run
-                            Hyperlink h = new Hyperlink(inline)
-                            {
-                                NavigateUri = goTo
-                            };
-                            h.RequestNavigate += OnHyperLinkClick;
-
-                            //add hyperlink to textbox
-                            block.Inlines.Add(h);
-
-                            //add to developer url textbox
-                            DevUrlHolder.Children.Add(block);
-                        }
-                    }
-
-                    //set the name of the window to be the package name
-                    if (EditorMode)
-                    {
-                        Title = "EDITOR_TEST_MODE";
-                    }
-                    else if (ComboBoxItemsInsideMode)
-                    {
-                        Title = string.Format("{0}: {1}", Translations.GetTranslatedString("dropDownItemsInside"), media.SelectablePackageParent.NameFormatted);
-                    }
-                    else
-                    {
-                        Title = media.SelectablePackageParent.NameFormatted;
-                    }
-
-                    //set description
-                    PreviewDescriptionBox.Text = media.SelectablePackageParent.DescriptionFormatted;
-
-                    //set update notes
-                    PreviewUpdatesBox.Text = media.SelectablePackageParent.UpdateCommentFormatted;
-
-                    //update the last currentDisplayedSP
-                    CurrentDisplaySP = media.SelectablePackageParent;
-                }
+                Logging.Debug(LogOptions.ClassName, "No need to display media, is the same");
+                return;
             }
             CurrentDispalyMedia = media;
 
+            //devurl, description, update notes need to be changed if the parent package being displayed changed
+            //this would happen only if we are in combobox mode (displaying medias of multiple packages)
+            if (ComboBoxItemsInsideMode && media != null && (!CurrentDisplaySP.Equals(media.SelectablePackageParent)))
+            {
+                fullRedraw = true;
+                CurrentDisplaySP = media.SelectablePackageParent;
+            }
+
+            if (fullRedraw)
+            {
+                ToggleDevUrlList(media, media == null? false : string.IsNullOrWhiteSpace(media.SelectablePackageParent.DevURL));
+
+                //set the name of the window to be the package name
+                if (EditorMode)
+                {
+                    Title = "EDITOR_TEST_MODE";
+                }
+                else if (ComboBoxItemsInsideMode)
+                {
+                    Title = string.Format("{0}: {1}", Translations.GetTranslatedString("dropDownItemsInside"), CurrentDisplaySP.NameFormatted);
+                }
+                else
+                {
+                    Title = CurrentDisplaySP.NameFormatted;
+                }
+
+                //set description
+                PreviewDescriptionBox.Text = CurrentDisplaySP.DescriptionFormatted;
+
+                //set update notes
+                PreviewUpdatesBox.Text = CurrentDisplaySP.UpdateCommentFormatted;
+            }
+
+            //clear media url list and re-build it
+            if (MediaIndexer.Children.Count > 0)
+                MediaIndexer.Children.Clear();
+
+            //make the linked labels in the link box
+            for (int i = 0; i < Medias.Count; i++)
+            {
+                TextBlock block = new TextBlock();
+                block.Inlines.Clear();
+                Hyperlink h = new Hyperlink(new Run(i.ToString()))
+                {
+                    Tag = Medias[i],
+                    //dummy URI just to make the request navigate work
+                    NavigateUri = new Uri("http://google.com")
+                };
+                h.RequestNavigate += OnMediaHyperlinkClick;
+                block.Inlines.Add(h);
+                MediaIndexer.Children.Add(block);
+            }
+
+            HandlePlayerDisposal();
+
+            //null the child element and make it again
+            MainPreviewBorder.Child = null;
+            if (media != null)
+            {
+                Logging.Debug(LogOptions.ClassName, "Loading preview of MediaType {0}, URL={1}", media.MediaType.ToString(), media.URL);
+                Image pictureViewer;
+                switch (media.MediaType)
+                {
+                    case MediaType.Unknown:
+                    default:
+                        Logging.Error("Invalid MediaType: {0}", media.MediaType.ToString());
+                        return;
+                    case MediaType.HTML:
+                        if (browser != null)
+                        {
+                            browser.Dispose();
+                            browser = null;
+                        }
+                        browser = new WebBrowser();
+                        //https://stackoverflow.com/questions/2585782/displaying-html-from-string-in-wpf-webbrowser-control
+                        browser.NavigateToString(media.URL);
+                        MainPreviewBorder.Child = browser;
+                        break;
+                    case MediaType.MediaFile:
+                        //show progress first
+                        MainPreviewBorder.Child = new ProgressBar()
+                        {
+                            Minimum = 0,
+                            Maximum = 1,
+                            Value = 0,
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            VerticalAlignment = VerticalAlignment.Top,
+                            Margin = new Thickness(0, 20, 0, 0),
+                            Height = 20
+                        };
+                        using (WebClient client = new WebClient() { })
+                        {
+                            client.DownloadProgressChanged += Client_DownloadProgressChanged;
+
+                            //now load the media
+                            try
+                            {
+                                byte[] data = await client.DownloadDataTaskAsync(media.URL);
+                                MainPreviewBorder.Child = new RelhaxMediaPlayer(media.URL, data);
+                            }
+                            catch (Exception ex)
+                            {
+                                Logging.Exception("failed to load audio data");
+                                Logging.Exception(ex.ToString());
+                                pictureViewer = new Image
+                                {
+                                    ClipToBounds = true
+                                };
+                                pictureViewer.Source = CommonUtils.BitmapToImageSource(Properties.Resources.error_loading_picture);
+                                MainPreviewBorder.Child = pictureViewer;
+                            }
+                        }
+                        break;
+                    case MediaType.Picture:
+                        //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
+                        pictureViewer = new Image
+                        {
+                            ClipToBounds = true
+                        };
+                        MainContentControl.MouseRightButtonDown += MainContentControl_MouseRightButtonDown;
+                        MainContentControl.PreviewMouseDoubleClick += MainContentControl_PreviewMouseDoubleClick;
+                        MainPreviewBorder.Child = new ProgressBar()
+                        {
+                            Minimum = 0,
+                            Maximum = 1,
+                            Value = 0,
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            VerticalAlignment = VerticalAlignment.Top,
+                            Margin = new Thickness(0, 20, 0, 0),
+                            Height = 20
+                        };
+                        //https://stackoverflow.com/questions/9173904/byte-array-to-image-conversion
+                        //https://stackoverflow.com/questions/18134234/how-to-convert-system-io-stream-into-an-image
+                        using (WebClient client = new WebClient() { })
+                        {
+                            client.DownloadProgressChanged += Client_DownloadProgressChanged;
+                            try
+                            {
+                                byte[] image = await client.DownloadDataTaskAsync(media.URL);
+                                ImageStream = new MemoryStream(image);
+                                BitmapImage bitmapImage = new BitmapImage();
+                                bitmapImage.BeginInit();
+                                bitmapImage.StreamSource = ImageStream;
+                                bitmapImage.EndInit();
+                                pictureViewer.Source = bitmapImage;
+                            }
+                            catch (Exception ex)
+                            {
+                                Logging.Exception("failed to load picture");
+                                Logging.Exception(ex.ToString());
+                                pictureViewer.Source = CommonUtils.BitmapToImageSource(Properties.Resources.error_loading_picture);
+                            }
+                        }
+                        //put the zoom border inside the main preview one. already set, might as well use it
+                        zoomBorder = new ZoomBorder()
+                        {
+                            Child = pictureViewer,
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            VerticalAlignment = VerticalAlignment.Stretch,
+                            BorderThickness = new Thickness(1.0),
+                            BorderBrush = Brushes.Black,
+                            ClipToBounds = true
+                        };
+                        zoomBorder.SizeChanged += ZoomBorder_SizeChanged;
+                        MainPreviewBorder.ClipToBounds = true;
+                        MainPreviewBorder.BorderThickness = new Thickness(0.0);
+                        MainPreviewBorder.Child = zoomBorder;
+                        break;
+                    case MediaType.Webpage:
+                        if (browser != null)
+                        {
+                            browser.Dispose();
+                            browser = null;
+                        }
+                        browser = new WebBrowser();
+                        //https://stackoverflow.com/questions/2585782/displaying-html-from-string-in-wpf-webbrowser-control
+                        browser.Navigate(media.URL);
+                        MainPreviewBorder.Child = browser;
+                        break;
+                }
+            }
+        }
+
+        private void ToggleDevUrlList(Media media, bool enable)
+        {
+            DevUrlHeader.IsEnabled = enable;
+            DevUrlHeader.Visibility = enable ? Visibility.Visible : Visibility.Hidden;
+            DevUrlHolder.IsEnabled = enable;
+            DevUrlHolder.Visibility = enable ? Visibility.Visible : Visibility.Hidden;
+
+            //clear last list of URL links
+            if (DevUrlHolder.Children.Count > 0)
+                DevUrlHolder.Children.Clear();
+
+            if (enable)
+            {
+                //devURL is now array of elements separated by newline
+                //load the stack with textblocks with tooltips for the URLs
+                string[] devURLS = media.SelectablePackageParent.DevURLList;
+
+                for (int i = 0; i < devURLS.Count(); i++)
+                {
+                    //make a URI to hold the goto devurl link
+                    Uri goTo = null;
+                    try
+                    {
+                        goTo = new Uri(devURLS[i].Trim());
+                    }
+                    catch (UriFormatException)
+                    {
+                        Logging.Error("Invalid URI string, skipping: {0}", devURLS[i].Trim());
+                    }
+                    if (goTo == null)
+                        continue;
+
+                    //make a textbox to hold the hyperlink object
+                    TextBlock block = new TextBlock()
+                    {
+                        ToolTip = devURLS[i].Trim()
+                    };
+                    //https://stackoverflow.com/questions/21214450/how-to-add-a-hyperlink-in-a-textblock-in-code?noredirect=1&lq=1
+                    block.Inlines.Clear();
+
+                    //make a run to display the number of the link
+                    Run inline = new Run(i.ToString());
+
+                    //and the hyperlink will display the run
+                    Hyperlink h = new Hyperlink(inline)
+                    {
+                        NavigateUri = goTo
+                    };
+                    h.RequestNavigate += OnHyperLinkClick;
+
+                    //add hyperlink to textbox
+                    block.Inlines.Add(h);
+
+                    //add to developer url textbox
+                    DevUrlHolder.Children.Add(block);
+                }
+            }
+        }
+
+        private void HandlePlayerDisposal()
+        {
             //if the child is our media player, then stop and dispose
             if (MainPreviewBorder.Child != null && MainPreviewBorder.Child is RelhaxMediaPlayer player)
             {
                 player.StopPlaybackIfPlaying();
                 player.Dispose();
-            }
-
-            //null the child element and make it again
-            MainPreviewBorder.Child = null;
-            Logging.Debug("loading preview of MediaType {0}, URL={1}", media.MediaType.ToString(), media.URL);
-            Image pictureViewer;
-            switch (media.MediaType)
-            {
-                case MediaType.Unknown:
-                default:
-                    Logging.Error("Invalid MediaType: {0}", media.MediaType.ToString());
-                    return;
-                case MediaType.HTML:
-                    if (browser != null)
-                    {
-                        browser.Dispose();
-                        browser = null;
-                    }
-                    browser = new WebBrowser();
-                    //https://stackoverflow.com/questions/2585782/displaying-html-from-string-in-wpf-webbrowser-control
-                    browser.NavigateToString(media.URL);
-                    MainPreviewBorder.Child = browser;
-                    break;
-                case MediaType.MediaFile:
-                    //show progress first
-                    MainPreviewBorder.Child = new ProgressBar()
-                    {
-                        Minimum = 0,
-                        Maximum = 1,
-                        Value = 0,
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Margin = new Thickness(0, 20, 0, 0),
-                        Height = 20
-                    };
-                    using (WebClient client = new WebClient() { })
-                    {
-                        client.DownloadProgressChanged += Client_DownloadProgressChanged;
-
-                        //now load the media
-                        try
-                        {
-                            byte[] data = await client.DownloadDataTaskAsync(media.URL);
-                            MainPreviewBorder.Child = new RelhaxMediaPlayer(media.URL, data);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logging.Exception("failed to load audio data");
-                            Logging.Exception(ex.ToString());
-                            pictureViewer = new Image
-                            {
-                                ClipToBounds = true
-                            };
-                            pictureViewer.Source = CommonUtils.BitmapToImageSource(Properties.Resources.error_loading_picture);
-                            MainPreviewBorder.Child = pictureViewer;
-                        }
-                    }
-                    break;
-                case MediaType.Picture:
-                    //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.image?view=netframework-4.7.2
-                    pictureViewer = new Image
-                    {
-                        ClipToBounds = true
-                    };
-                    MainContentControl.MouseRightButtonDown += MainContentControl_MouseRightButtonDown;
-                    MainContentControl.PreviewMouseDoubleClick += MainContentControl_PreviewMouseDoubleClick;
-                    MainPreviewBorder.Child = new ProgressBar()
-                    {
-                        Minimum = 0,
-                        Maximum = 1,
-                        Value = 0,
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Margin = new Thickness(0, 20, 0, 0),
-                        Height = 20
-                    };
-                    //https://stackoverflow.com/questions/9173904/byte-array-to-image-conversion
-                    //https://stackoverflow.com/questions/18134234/how-to-convert-system-io-stream-into-an-image
-                    using (WebClient client = new WebClient() { })
-                    {
-                        client.DownloadProgressChanged += Client_DownloadProgressChanged;
-                        try
-                        {
-                            byte[] image = await client.DownloadDataTaskAsync(media.URL);
-                            ImageStream = new MemoryStream(image);
-                            BitmapImage bitmapImage = new BitmapImage();
-                            bitmapImage.BeginInit();
-                            bitmapImage.StreamSource = ImageStream;
-                            bitmapImage.EndInit();
-                            pictureViewer.Source = bitmapImage;
-                        }
-                        catch (Exception ex)
-                        {
-                            Logging.Exception("failed to load picture");
-                            Logging.Exception(ex.ToString());
-                            pictureViewer.Source = CommonUtils.BitmapToImageSource(Properties.Resources.error_loading_picture);
-                        }
-                    }
-                    //put the zoom border inside the main preview one. already set, might as well use it
-                    zoomBorder = new ZoomBorder()
-                    {
-                        Child = pictureViewer,
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        VerticalAlignment = VerticalAlignment.Stretch,
-                        BorderThickness = new Thickness(1.0),
-                        BorderBrush = Brushes.Black,
-                        ClipToBounds = true
-                    };
-                    zoomBorder.SizeChanged += ZoomBorder_SizeChanged;
-                    MainPreviewBorder.ClipToBounds = true;
-                    MainPreviewBorder.BorderThickness = new Thickness(0.0);
-                    MainPreviewBorder.Child = zoomBorder;
-                    break;
-                case MediaType.Webpage:
-                    if (browser != null)
-                    {
-                        browser.Dispose();
-                        browser = null;
-                    }
-                    browser = new WebBrowser();
-                    //https://stackoverflow.com/questions/2585782/displaying-html-from-string-in-wpf-webbrowser-control
-                    browser.Navigate(media.URL);
-                    MainPreviewBorder.Child = browser;
-                    break;
+                player = null;
             }
         }
 
@@ -473,8 +469,8 @@ namespace RelhaxModpack.Windows
             {
                 if (link.Tag is Media media)
                 {
-                    if (!media.Equals(CurrentDispalyMedia))
-                        DisplayMedia(media);
+                    if (CurrentDispalyMedia == null || !media.Equals(CurrentDispalyMedia))
+                        DisplayMedia(media, false);
                 }
             }
         }
@@ -493,19 +489,23 @@ namespace RelhaxModpack.Windows
 
         private void PreviewNextPicButton_Click(object sender, RoutedEventArgs e)
         {
+            if (CurrentDispalyMedia == null)
+                return;
             int index = Medias.IndexOf(CurrentDispalyMedia);
             if (index < Medias.Count - 1)
             {
-                DisplayMedia(Medias[index + 1]);
+                DisplayMedia(Medias[index + 1], false);
             }
         }
 
         private void PreviewPreviousPicButton_Click(object sender, RoutedEventArgs e)
         {
+            if (CurrentDispalyMedia == null)
+                return;
             int index = Medias.IndexOf(CurrentDispalyMedia);
             if (index > 0)
             {
-                DisplayMedia(Medias[index - 1]);
+                DisplayMedia(Medias[index - 1], false);
             }
         }
 
@@ -535,14 +535,17 @@ namespace RelhaxModpack.Windows
                 }
             }
 
-            Logging.Debug("Preview:  Disposing image memory stream");
+            Logging.Debug(LogOptions.ClassName, "Disposing media player");
+            HandlePlayerDisposal();
+
+            Logging.Debug(LogOptions.ClassName, "Disposing image memory stream");
             if (ImageStream != null)
             {
                 ImageStream.Dispose();
                 ImageStream = null;
             }
 
-            Logging.Debug("Preview:  Disposing browser");
+            Logging.Debug(LogOptions.ClassName, "Disposing browser");
             if (browser != null)
             {
                 browser.Dispose();
