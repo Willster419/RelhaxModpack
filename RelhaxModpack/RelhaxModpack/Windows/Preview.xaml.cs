@@ -198,7 +198,10 @@ namespace RelhaxModpack.Windows
             }
 
             //start the focus timer to bring focus to this window
-            OMCViewLegacyFocusTimer.Start();
+            if (OMCViewLegacyFocusTimer == null)
+                OMCViewLegacyFocusTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, Timer_Tick, this.Dispatcher) { IsEnabled = true };
+            else
+                OMCViewLegacyFocusTimer.Start();
         }
 
         private async void DisplayMedia(Media media)
