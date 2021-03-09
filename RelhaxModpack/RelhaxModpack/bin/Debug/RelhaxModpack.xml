@@ -7297,6 +7297,11 @@
             Create an instance of the Preview window
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Windows.Preview.Refresh(System.Boolean)">
+            <summary>
+            Refresh the window to display new preview elements
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Windows.Preview.InitializeComponent">
             <summary>
             InitializeComponent
