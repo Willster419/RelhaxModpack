@@ -68,8 +68,8 @@ namespace RelhaxModpack.Settings
             memberInfos = memberInfos.FindAll(meme => !settingsFile.MembersToExclude.Contains(meme.Name));
             Logging.Debug("Components to save after exclude list: {0}", memberInfos.Count);
 
-            //get the list of 
-            List<XElement> settingsXml = document.XPathSelectElements(string.Format("/{0}", settingsClass.Name)).ToList();
+            //get the top level xml node of the document. it should be the name of the class, like "ModpackSettings"
+            List<XElement> settingsXml = document.XPathSelectElements(string.Format("/{0}/*", settingsClass.Name)).ToList();
 
             //legacy compatibility
             if (settingsClass.Equals(typeof(ModpackSettings)))
