@@ -61,7 +61,10 @@ namespace RelhaxModpack.Settings
             Type settingsClass = settingsFile.GetType();
             List<MemberInfo> memberInfos = new List<MemberInfo>();
             memberInfos.AddRange(settingsClass.GetFields().ToList());
+            Logging.Debug(LogOptions.MethodName, "Added {0} Fields to memberInfos", memberInfos.Count);
+            int fieldsCount = memberInfos.Count;
             memberInfos.AddRange(settingsClass.GetProperties().ToList());
+            Logging.Debug(LogOptions.MethodName, "Added {0} Properties to memberInfos", memberInfos.Count - fieldsCount);
 
             //filter out components from exclude list
             Logging.Debug("Components to save before exclude list: {0}", memberInfos.Count);
