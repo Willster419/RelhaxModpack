@@ -22,7 +22,9 @@ namespace RelhaxModpack
     public partial class App : Application
     {
         private bool exceptionShown = false;
-        private ExceptionCaptureDisplay exceptionCaptureDisplay = new ExceptionCaptureDisplay();
+        private ExceptionCaptureDisplay exceptionCaptureDisplay;
+        private CommandLineSettings CommandLineSettings;
+        private PatchExitCode PatcherExitCode;
 
         /// <summary>
         /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk. Parsed upon application load.
@@ -32,8 +34,29 @@ namespace RelhaxModpack
         //when application is closing (cannot be stopped)
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            if (Logging.IsLogOpen(Logfiles.Application))
-                Logging.Info("Disposing log");
+            switch (CommandLineSettings.ApplicationMode)
+            {
+                case ApplicationMode.Updater:
+                    CloseLog(Logfiles.Updater);
+                    DeleteCustomLogIfExists();
+                    break;
+                case ApplicationMode.Editor:
+                    CloseLog(Logfiles.Editor);
+                    DeleteCustomLogIfExists();
+                    break;
+                case ApplicationMode.PatchDesigner:
+                    CloseLog(Logfiles.PatchDesigner);
+                    DeleteCustomLogIfExists();
+                    break;
+                case ApplicationMode.AutomationRunner:
+                    CloseLog(Logfiles.AutomationRunner);
+                    DeleteCustomLogIfExists();
+                    break;
+                case ApplicationMode.Patcher:
+                    Logging.Info("Patching finished, exit code {0} ({1})", (int)PatcherExitCode, PatcherExitCode.ToString());
+                    e.ApplicationExitCode = ((int)PatcherExitCode) + 100;
+                    break;
+            }
             CloseApplicationLog(true);
         }
 
@@ -59,14 +82,14 @@ namespace RelhaxModpack
         //when application is starting for first time
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            CommandLineSettings commandLineSettings = new CommandLineSettings(Environment.GetCommandLineArgs().Skip(1).ToArray());
+            CommandLineSettings = new CommandLineSettings(Environment.GetCommandLineArgs().Skip(1).ToArray());
             SettingsParser settingsParser = new SettingsParser();
             ModpackSettings modpackSettings = new ModpackSettings();
             if (!Logging.Init(Logfiles.Application, false))
             {
                 //check if it's because the file already exists, or some other actual reason
                 //if the file exists, and it's locked (init failed), then check if also the command line is creating a new window
-                if (File.Exists(Logging.GetLogfile(Logfiles.Application).Filepath) && commandLineSettings.ArgsOpenCustomWindow())
+                if (File.Exists(Logging.GetLogfile(Logfiles.Application).Filepath) && CommandLineSettings.ArgsOpenCustomWindow())
                 {
                     //getting here means the main window is open, but in this instance, a custom window will be open. We can temporarily
                     //open the log in a custom name (with the application mode), and when opening the 'real' logfile for the custom window,
@@ -114,17 +137,20 @@ namespace RelhaxModpack
 
             //parse command line arguments given to the application
             Logging.Info("Parsing command line switches");
-            commandLineSettings.ParseCommandLineSwitches();
+            CommandLineSettings.ParseCommandLineSwitches();
 
             //load the ModpackSettings from xml file
             settingsParser.LoadSettings(modpackSettings);
 
             //set verbose logging option
-            Logging.GetLogfile(Logfiles.Application).VerboseLogging = modpackSettings.VerboseLogging;
+            bool verboseSettingForLogfile = modpackSettings.VerboseLogging;
+            if (ApplicationConstants.ApplicationVersion != ApplicationVersions.Stable)
+                verboseSettingForLogfile = true;
+            Logging.GetLogfile(Logfiles.Application).VerboseLogging = verboseSettingForLogfile;
 
             //run a check for a valid .net framework version, only if we're opening MainWindow, and the version
             //of the .net framework installed has not yet been detected to be 4.8
-            if ((!commandLineSettings.ArgsOpenCustomWindow()) && (!modpackSettings.ValidFrameworkVersion))
+            if ((!CommandLineSettings.ArgsOpenCustomWindow()) && (!modpackSettings.ValidFrameworkVersion))
             {
                 //https://github.com/Willster419/RelhaxModpack/issues/90
                 //try getting .net framework information
@@ -178,11 +204,11 @@ namespace RelhaxModpack
             }
 
             //switch into application modes based on mode enum
-            Logging.Debug("Starting application in {0} mode", commandLineSettings.ApplicationMode.ToString());
-            switch (commandLineSettings.ApplicationMode)
+            Logging.Debug("Starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
+            switch (CommandLineSettings.ApplicationMode)
             {
                 case ApplicationMode.Updater:
-                    ModpackToolbox updater = new ModpackToolbox() { CommandLineSettings = commandLineSettings, ModpackSettings = modpackSettings };
+                    ModpackToolbox updater = new ModpackToolbox() { CommandLineSettings = CommandLineSettings, ModpackSettings = modpackSettings };
 
                     //close application log if open
                     if(Logging.IsLogOpen(Logfiles.Application))
@@ -202,17 +228,10 @@ namespace RelhaxModpack
                         Logging.Error(Logfiles.Updater, LogOptions.MethodName, "Failed to redirect messages from application to modpack toolbox");
 
                     //show window
-                    updater.ShowDialog();
-
-                    //stop updater logging
-                    CloseLog(Logfiles.Updater);
-                    DeleteCustomLogIfExists();
-                    updater = null;
-                    Current.Shutdown((int)ReturnCodes.Success);
-                    Environment.Exit((int)ReturnCodes.Success);
-                    return;
+                    updater.Show();
+                    break;
                 case ApplicationMode.Editor:
-                    DatabaseEditor editor = new DatabaseEditor() { CommandLineSettings = commandLineSettings, ModpackSettings = modpackSettings };
+                    DatabaseEditor editor = new DatabaseEditor() { CommandLineSettings = CommandLineSettings, ModpackSettings = modpackSettings };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
@@ -232,17 +251,10 @@ namespace RelhaxModpack
                         Logging.Error(Logfiles.Editor, LogOptions.MethodName, "Failed to redirect messages from application to editor");
 
                     //show window
-                    editor.ShowDialog();
-
-                    //stop updater logging
-                    CloseLog(Logfiles.Editor);
-                    DeleteCustomLogIfExists();
-                    editor = null;
-                    Current.Shutdown((int)ReturnCodes.Success);
-                    Environment.Exit((int)ReturnCodes.Success);
-                    return;
+                    editor.Show();
+                    break;
                 case ApplicationMode.PatchDesigner:
-                    PatchDesigner patcher = new PatchDesigner() { CommandLineSettings = commandLineSettings, ModpackSettings = modpackSettings };
+                    PatchDesigner patcher = new PatchDesigner() { CommandLineSettings = CommandLineSettings, ModpackSettings = modpackSettings };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
@@ -262,17 +274,10 @@ namespace RelhaxModpack
                         Logging.Error(Logfiles.PatchDesigner, LogOptions.MethodName, "Failed to redirect messages from application to patch designer");
 
                     //show window
-                    patcher.ShowDialog();
-
-                    //stop patch designer logging
-                    CloseLog(Logfiles.PatchDesigner);
-                    DeleteCustomLogIfExists();
-                    patcher = null;
-                    Current.Shutdown((int)ReturnCodes.Success);
-                    Environment.Exit((int)ReturnCodes.Success);
-                    return;
+                    patcher.Show();
+                    break;
                 case ApplicationMode.AutomationRunner:
-                    DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner() { CommandLineSettings = commandLineSettings, ModpackSettings = modpackSettings };
+                    DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner() { CommandLineSettings = CommandLineSettings, ModpackSettings = modpackSettings };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
@@ -292,20 +297,11 @@ namespace RelhaxModpack
                         Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Failed to redirect messages from application to automation runner");
 
                     //show window
-                    automationRunner.ShowDialog();
-
-                    //stop patch designer logging
-                    CloseLog(Logfiles.AutomationRunner);
-                    DeleteCustomLogIfExists();
-                    automationRunner = null;
-                    Current.Shutdown((int)ReturnCodes.Success);
-                    Environment.Exit((int)ReturnCodes.Success);
-                    return;
+                    automationRunner.Show();
+                    break;
                 case ApplicationMode.Patcher:
-                    Logging.Info("Running patch mode");
-
                     //check that at least one patch file was specified from command line
-                    if(commandLineSettings.PatchFilenames.Count == 0)
+                    if(CommandLineSettings.PatchFilenames.Count == 0)
                     {
                         Logging.Error("0 patch files parsed from command line!");
                         Current.Shutdown((int)ReturnCodes.PatcherNoSpecifiedFiles);
@@ -315,7 +311,7 @@ namespace RelhaxModpack
                     {
                         //parse patch objects from command line file list
                         List<Patch> patchList = new List<Patch>();
-                        foreach(string file in commandLineSettings.PatchFilenames)
+                        foreach(string file in CommandLineSettings.PatchFilenames)
                         {
                             if(!File.Exists(file))
                             {
@@ -335,7 +331,7 @@ namespace RelhaxModpack
                         }
 
                         //set default patch return code
-                        PatchExitCode exitCode = PatchExitCode.Success;
+                        PatcherExitCode = PatchExitCode.Success;
 
                         //always return on worst condition
                         int i = 1;
@@ -344,22 +340,15 @@ namespace RelhaxModpack
                         {
                             Logging.Info("Running patch {0} of {1}", i++, patchList.Count);
                             PatchExitCode exitCodeTemp = thePatcher.RunPatchFromCommandline(p);
-                            if ((int)exitCodeTemp < (int)exitCode)
-                                exitCode = exitCodeTemp;
+                            if ((int)exitCodeTemp < (int)PatcherExitCode)
+                                PatcherExitCode = exitCodeTemp;
                         }
-
-                        Logging.Info("Patching finished, exit code {0} ({1})", (int)exitCode, exitCode.ToString());
-                        CloseApplicationLog(true);
-                        //add 100 to ensure it's a patch unique error code
-                        Current.Shutdown(((int)exitCode) + 100);
-                        Environment.Exit(((int)exitCode) + 100);
                     }
-                    return;
+                    break;
                 case ApplicationMode.Default:
-                    //assign the settings to the main window
-                    ((RelhaxWindow)this.MainWindow).ModpackSettings = modpackSettings;
-                    ((RelhaxWindow)this.MainWindow).CommandLineSettings = commandLineSettings;
-                    return;
+                    MainWindow window = new MainWindow() { CommandLineSettings = CommandLineSettings, ModpackSettings = modpackSettings };
+                    window.Show();
+                    break;
             }
         }
 
@@ -369,6 +358,7 @@ namespace RelhaxModpack
             if (!exceptionShown)
             {
                 exceptionShown = true;
+                exceptionCaptureDisplay = new ExceptionCaptureDisplay();
                 if (!Logging.IsLogDisposed(Logfiles.Application) && Logging.IsLogOpen(Logfiles.Application))
                 {
                     Logging.WriteToLog(e.Exception.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
