@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using RelhaxModpack.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,7 +26,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create and initialize the AddPicturesZip window
         /// </summary>
-        public AddPicturesZip()
+        public AddPicturesZip(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

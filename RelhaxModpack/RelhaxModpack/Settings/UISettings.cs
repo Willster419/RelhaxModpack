@@ -116,7 +116,7 @@ namespace RelhaxModpack.Settings
         {
             if (!isDefaultThemeBackedUp)
             {
-                BackupDefaultThemeColorSettings();
+                BackupDefaultThemeColorSettings(window.ModpackSettings);
                 isDefaultThemeBackedUp = true;
             }
 
@@ -195,11 +195,10 @@ namespace RelhaxModpack.Settings
 
         private static void ApplyThemeToWindow(Window window)
         {
-            string windowType = window.GetType().Name;
             //using RelhaxWindow type allows us to directly control/check if the window should be color changed
             if (window is RelhaxWindow relhaxWindow && !relhaxWindow.ApplyColorSettings)
             {
-                Logging.Warning("Window of type '{0}' is set to not have color setting applied, skipping", windowType);
+                Logging.Warning("Window of type '{0}' is set to not have color setting applied, skipping", window.GetType().Name);
                 return;
             }
 
@@ -402,13 +401,13 @@ namespace RelhaxModpack.Settings
         #endregion
 
         #region Backup of default theme runtime
-        private static void BackupDefaultThemeColorSettings()
+        private static void BackupDefaultThemeColorSettings(ModpackSettings modpackSettings)
         {
             //make an instance of a template window for getting UI class component color default definitions
             //note control is not backed up, because it is so generic that it should not have a default
             //note Combobox is not backed up, because it is all done via WPF databinding
             //at the theme applying level, this would be from a tag (not class) level. but this can change between themes
-            TemplateWindow templateWindow = new TemplateWindow();
+            TemplateWindow templateWindow = new TemplateWindow(modpackSettings);
 
             List<FrameworkElement> templateWindowComponents = UiUtils.GetAllWindowComponentsLogical(templateWindow, false).Distinct().ToList();
 

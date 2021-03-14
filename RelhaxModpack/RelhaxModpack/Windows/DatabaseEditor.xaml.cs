@@ -76,7 +76,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseEditor
         /// </summary>
-        public DatabaseEditor()
+        public DatabaseEditor(ModpackSettings modpackSettings) : base (modpackSettings)
         {
             InitializeComponent();
             Settings = EditorSettings;
@@ -1796,7 +1796,7 @@ namespace RelhaxModpack.Windows
                 return;
 
             //make and run the uploader instance
-            DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow()
+            DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow(this.ModpackSettings)
             {
                 ZipFilePathDisk = SaveZipFileDialog.FileName,
                 ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, WoTModpackOnlineFolderVersion),
@@ -1854,7 +1854,7 @@ namespace RelhaxModpack.Windows
                 return;
 
             //make and run the uploader instance
-            DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow()
+            DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow(this.ModpackSettings)
             {
                 ZipFilePathDisk = zipFileToUpload,
                 ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, WoTModpackOnlineFolderVersion),
@@ -2156,7 +2156,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Please select a package to perform action on");
                 return;
             }
-            EditorAddRemove addRemove = new EditorAddRemove()
+            EditorAddRemove addRemove = new EditorAddRemove(this.ModpackSettings)
             {
                 GlobalDependencies = GlobalDependencies,
                 Dependencies = Dependencies,
@@ -2195,7 +2195,7 @@ namespace RelhaxModpack.Windows
                 throw new BadMemeException("cbi2.Package is null");
 
             //make the window and show it
-            EditorAddRemove addRemove = new EditorAddRemove()
+            EditorAddRemove addRemove = new EditorAddRemove(this.ModpackSettings)
             {
                 GlobalDependencies = GlobalDependencies,
                 Dependencies = Dependencies,
@@ -2318,7 +2318,7 @@ namespace RelhaxModpack.Windows
                 {
                     Preview = null;
                 }
-                Preview = new Preview()
+                Preview = new Preview(this.ModpackSettings)
                 {
                     Medias = new List<Media>() { media },
                     EditorMode = true,
@@ -2363,7 +2363,7 @@ namespace RelhaxModpack.Windows
             {
                 Preview = null;
             }
-            Preview = new Preview()
+            Preview = new Preview(this.ModpackSettings)
             {
                 Medias = new List<Media>() { testMedia },
                 EditorMode = true,
@@ -2501,7 +2501,7 @@ namespace RelhaxModpack.Windows
                 return;
 
             //select path to upload to on server
-            EditorSelectMediaUploadLocation selectUploadLocation = new EditorSelectMediaUploadLocation()
+            EditorSelectMediaUploadLocation selectUploadLocation = new EditorSelectMediaUploadLocation(this.ModpackSettings)
             {
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
             };
@@ -2512,7 +2512,7 @@ namespace RelhaxModpack.Windows
             foreach (string mediaToUploadPath in OpenPictureDialog.FileNames)
             {
                 string mediaToUploadFilename = Path.GetFileName(mediaToUploadPath);
-                DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow()
+                DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow(this.ModpackSettings)
                 {
                     ZipFilePathDisk = mediaToUploadPath,
                     ZipFilePathOnline = selectUploadLocation.UploadPath,

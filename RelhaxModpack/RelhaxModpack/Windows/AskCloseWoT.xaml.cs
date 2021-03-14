@@ -53,7 +53,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the AskCloseWoT window
         /// </summary>
-        public AskCloseWoT()
+        public AskCloseWoT(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

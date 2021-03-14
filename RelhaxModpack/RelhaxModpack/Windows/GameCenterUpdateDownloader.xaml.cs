@@ -146,7 +146,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the GameCenterUpdateDownloaded window
         /// </summary>
-        public GameCenterUpdateDownloader()
+        public GameCenterUpdateDownloader(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

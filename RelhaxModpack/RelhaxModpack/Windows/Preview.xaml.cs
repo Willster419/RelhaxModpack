@@ -15,6 +15,7 @@ using System.Windows.Threading;
 using RelhaxModpack.Database;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -53,7 +54,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the Preview window
         /// </summary>
-        public Preview()
+        public Preview(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

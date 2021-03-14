@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Globalization;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -26,7 +27,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the RelhaxColorPicker window
         /// </summary>
-        public RelhaxColorPicker()
+        public RelhaxColorPicker(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

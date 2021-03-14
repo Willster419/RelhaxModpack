@@ -78,7 +78,7 @@ namespace RelhaxInstallerUnitTester
             //https://www.c-sharpcorner.com/uploadfile/suchit_84/creating-wpf-windows-on-dedicated-threads/
             Thread thread = new Thread(() =>
             {
-                SelectionList = new ModSelectionList()
+                SelectionList = new ModSelectionList(ModpackSettings, null)
                 {
                     ApplyColorSettings = false, //not cross-thread safe
                     ApplyScaling = false,
@@ -93,7 +93,6 @@ namespace RelhaxInstallerUnitTester
                     Dependencies = Set01_ModSelectionListTests.Dependencies,
                     ParsedCategoryList = Set01_ModSelectionListTests.ParsedCategoryList,
                     WoTClientVersion = "TODO",
-                    WoTModpackOnlineFolderVersion = "TODO",
                     DatabaseVersion = "TODO",
                     WoTDirectory = "TODO"
                 };

@@ -16,6 +16,7 @@ using System.Net;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Common;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -32,7 +33,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the VersionInfo class
         /// </summary>
-        public VersionInfo()
+        public VersionInfo(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

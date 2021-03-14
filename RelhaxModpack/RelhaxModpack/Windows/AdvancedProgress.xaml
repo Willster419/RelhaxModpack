@@ -1,4 +1,4 @@
-﻿<local:RelhaxWindow x:Name="Advanced_Installer_Progress"
+﻿<local:RelhaxWindow
         x:Class="RelhaxModpack.Windows.AdvancedProgress"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

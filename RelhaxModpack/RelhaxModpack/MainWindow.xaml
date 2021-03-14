@@ -7,13 +7,13 @@
     xmlns:local="clr-namespace:RelhaxModpack"
     xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="clr-namespace:RelhaxModpack.UI"
-    x:Name="TheMainWindow"
     x:Class="RelhaxModpack.MainWindow"
     mc:Ignorable="d"
     Title="Relhax" Height="660" Width="550" ResizeMode="CanMinimize"
     Loaded="TheMainWindow_Loaded"
     Closing="TheMainWindow_Closing"
-    Icon="Resources/modpack_icon.ico">
+    Icon="Resources/modpack_icon.ico"
+    LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Window.Resources>
         
     </Window.Resources>

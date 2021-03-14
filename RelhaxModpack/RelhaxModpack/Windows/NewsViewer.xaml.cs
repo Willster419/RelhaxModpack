@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.Common;
+using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the NewsViewer window
         /// </summary>
-        public NewsViewer()
+        public NewsViewer(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

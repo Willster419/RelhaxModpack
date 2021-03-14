@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -59,7 +60,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Creates an instance of the ProgressIndicator class
         /// </summary>
-        public ProgressIndicator()
+        public ProgressIndicator(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

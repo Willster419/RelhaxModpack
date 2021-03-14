@@ -26,7 +26,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the ExportModeSelect class
         /// </summary>
-        public ExportModeSelect()
+        public ExportModeSelect(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

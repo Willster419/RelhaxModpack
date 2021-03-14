@@ -25,6 +25,7 @@ namespace RelhaxModpack
         private ExceptionCaptureDisplay exceptionCaptureDisplay;
         private CommandLineSettings CommandLineSettings;
         private PatchExitCode PatcherExitCode;
+        private ModpackSettings modpackSettings;
 
         /// <summary>
         /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk. Parsed upon application load.
@@ -84,7 +85,7 @@ namespace RelhaxModpack
         {
             CommandLineSettings = new CommandLineSettings(Environment.GetCommandLineArgs().Skip(1).ToArray());
             SettingsParser settingsParser = new SettingsParser();
-            ModpackSettings modpackSettings = new ModpackSettings();
+            modpackSettings = new ModpackSettings();
             if (!Logging.Init(Logfiles.Application, false))
             {
                 //check if it's because the file already exists, or some other actual reason
@@ -208,7 +209,7 @@ namespace RelhaxModpack
             switch (CommandLineSettings.ApplicationMode)
             {
                 case ApplicationMode.Updater:
-                    ModpackToolbox updater = new ModpackToolbox() { CommandLineSettings = CommandLineSettings, ModpackSettings = modpackSettings };
+                    ModpackToolbox updater = new ModpackToolbox(modpackSettings) { CommandLineSettings = CommandLineSettings };
 
                     //close application log if open
                     if(Logging.IsLogOpen(Logfiles.Application))
@@ -231,7 +232,7 @@ namespace RelhaxModpack
                     updater.Show();
                     break;
                 case ApplicationMode.Editor:
-                    DatabaseEditor editor = new DatabaseEditor() { CommandLineSettings = CommandLineSettings, ModpackSettings = modpackSettings };
+                    DatabaseEditor editor = new DatabaseEditor(modpackSettings) { CommandLineSettings = CommandLineSettings };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
@@ -254,7 +255,7 @@ namespace RelhaxModpack
                     editor.Show();
                     break;
                 case ApplicationMode.PatchDesigner:
-                    PatchDesigner patcher = new PatchDesigner() { CommandLineSettings = CommandLineSettings, ModpackSettings = modpackSettings };
+                    PatchDesigner patcher = new PatchDesigner(modpackSettings) { CommandLineSettings = CommandLineSettings };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
@@ -277,7 +278,7 @@ namespace RelhaxModpack
                     patcher.Show();
                     break;
                 case ApplicationMode.AutomationRunner:
-                    DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner() { CommandLineSettings = CommandLineSettings, ModpackSettings = modpackSettings };
+                    DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner(modpackSettings) { CommandLineSettings = CommandLineSettings };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
@@ -335,6 +336,7 @@ namespace RelhaxModpack
 
                         //always return on worst condition
                         int i = 1;
+                        //TODO: does WoTDirectory get set later? maybe tm?
                         Patcher thePatcher = new Patcher() { WoTDirectory = null };
                         foreach(Patch p in patchList)
                         {
@@ -346,7 +348,7 @@ namespace RelhaxModpack
                     }
                     break;
                 case ApplicationMode.Default:
-                    MainWindow window = new MainWindow() { CommandLineSettings = CommandLineSettings, ModpackSettings = modpackSettings };
+                    MainWindow window = new MainWindow(modpackSettings) { CommandLineSettings = CommandLineSettings };
                     window.Show();
                     break;
             }
@@ -358,7 +360,7 @@ namespace RelhaxModpack
             if (!exceptionShown)
             {
                 exceptionShown = true;
-                exceptionCaptureDisplay = new ExceptionCaptureDisplay();
+                exceptionCaptureDisplay = new ExceptionCaptureDisplay(modpackSettings);
                 if (!Logging.IsLogDisposed(Logfiles.Application) && Logging.IsLogOpen(Logfiles.Application))
                 {
                     Logging.WriteToLog(e.Exception.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);

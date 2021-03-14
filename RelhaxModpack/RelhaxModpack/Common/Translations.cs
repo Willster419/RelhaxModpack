@@ -53,7 +53,9 @@ namespace RelhaxModpack
             "SampleXmlOutputTextbox",
             //{0} kb of {1} kb
             "GcDownloadStep4DownloadingSizes",
-            "TaskName"
+            "TaskName",
+            //the name of the main relhax window
+            "MainWindow"
         };
 
         /// <summary>
@@ -139,21 +141,27 @@ namespace RelhaxModpack
             {
                 case Languages.English:
                     CurrentLanguage = English;
+                    CurrentLanguageEnum = Languages.English;
                     break;
                 case Languages.French:
                     CurrentLanguage = French;
+                    CurrentLanguageEnum = Languages.French;
                     break;
                 case Languages.German:
                     CurrentLanguage = German;
+                    CurrentLanguageEnum = Languages.German;
                     break;
                 case Languages.Polish:
                     CurrentLanguage = Polish;
+                    CurrentLanguageEnum = Languages.Polish;
                     break;
                 case Languages.Spanish:
                     CurrentLanguage = Spanish;
+                    CurrentLanguageEnum = Languages.Spanish;
                     break;
                 case Languages.Russian:
                     CurrentLanguage = Russian;
+                    CurrentLanguageEnum = Languages.Russian;
                     break;
             }
         }
@@ -306,9 +314,8 @@ namespace RelhaxModpack
         /// Determines if a key exists in the currently selected language, or in english if no language is selected
         /// </summary>
         /// <param name="componentName">The key of the component to look up</param>
-        /// <param name="logError">Flag to log an error in the logfile if it does not exist</param>
         /// <returns>True if it exists in the currently selected language, or false otherwise</returns>
-        public static bool ExistsInCurrentLanguage(string componentName, bool logError)
+        public static bool ExistsInCurrentLanguage(string componentName)
         {
             if (!TranslationsLoaded)
             {
@@ -322,13 +329,7 @@ namespace RelhaxModpack
                 return Exists(componentName, Languages.English);
             }
 
-            if(!CurrentLanguage.ContainsKey(componentName))
-            {
-                if(logError)
-                    Logging.Error("Missing translation: key={0}, value=MISSING_TRANSLATION, language={1}", componentName, CurrentLanguageEnum.ToString());
-                return false;
-            }
-            return true;
+            return Exists(componentName, CurrentLanguageEnum);
         }
 
         /// <summary>
@@ -401,24 +402,12 @@ namespace RelhaxModpack
         /// </summary>
         /// <param name="window">The window to apply translations to</param>
         /// <param name="applyToolTips">Set to true to seach and apply tooltips to the components</param>
-        public static void LocalizeWindow(Window window, bool applyToolTips)
+        public static void LocalizeWindow(RelhaxWindow window, bool applyToolTips)
         {
             //apply window title
             string typeName = window.GetType().Name;
-            if (window is RelhaxWindow)
-            {
-                if (ExistsInCurrentLanguage(typeName, true))
-                    window.Title = GetTranslatedString(typeName);
-            }
-            else if (window is MainWindow)
-            {
-                Logging.Debug("MainWindow Title localization skipped");
-            }
-            else
-            {
-                Logging.Warning("Window type {0} is not of RelhaxWindow but translation requested, skipping!", typeName);
-                return;
-            }
+            if (ExistsInCurrentLanguage(typeName))
+                window.Title = GetTranslatedString(typeName);
 
             //Get a list of all visual class controls curently presend and loaded in the window
             List<FrameworkElement> allWindowControls = UiUtils.GetAllWindowComponentsVisual(window, false);
@@ -459,7 +448,7 @@ namespace RelhaxModpack
                         headeredContentControl.Content = GetTranslatedString(headeredContentControl.Name);
                     if (applyToolTips)
                     {
-                        if (ExistsInCurrentLanguage(headeredContentControl.Name + "Description",false))
+                        if (ExistsInCurrentLanguage(headeredContentControl.Name + "Description"))
                             headeredContentControl.ToolTip = GetTranslatedString(headeredContentControl.Name + "Description");
                     }
                 }
@@ -469,7 +458,7 @@ namespace RelhaxModpack
                     link.Text = GetTranslatedString(componentName);
                     if (applyToolTips)
                     {
-                        if (ExistsInCurrentLanguage(componentName + "Description",false))
+                        if (ExistsInCurrentLanguage(componentName + "Description"))
                             link.ToolTip = GetTranslatedString(componentName + "Description");
                     }
                 }
@@ -482,7 +471,7 @@ namespace RelhaxModpack
                         contentControl.Content = GetTranslatedString(contentControl.Name);
                     if (applyToolTips)
                     {
-                        if (ExistsInCurrentLanguage(contentControl.Name + "Description", false))
+                        if (ExistsInCurrentLanguage(contentControl.Name + "Description"))
                             contentControl.ToolTip = GetTranslatedString(contentControl.Name + "Description");
                     }
                 }
@@ -492,7 +481,7 @@ namespace RelhaxModpack
                     textBox.Text = GetTranslatedString(textBox.Name);
                     if (applyToolTips)
                     {
-                        if (ExistsInCurrentLanguage(textBox.Name + "Description", false))
+                        if (ExistsInCurrentLanguage(textBox.Name + "Description"))
                             textBox.ToolTip = GetTranslatedString(textBox.Name + "Description");
                     }
                 }
@@ -504,7 +493,7 @@ namespace RelhaxModpack
                 //apply tool tips?
                 if (applyToolTips)
                 {
-                    if (ExistsInCurrentLanguage(textBlock.Name + "Description", false))
+                    if (ExistsInCurrentLanguage(textBlock.Name + "Description"))
                         textBlock.ToolTip = GetTranslatedString(textBlock.Name + "Description");
                 }
             }

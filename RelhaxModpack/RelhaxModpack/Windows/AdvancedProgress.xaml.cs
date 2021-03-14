@@ -13,7 +13,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create and initialize the AdvancedProgress window
         /// </summary>
-        public AdvancedProgress()
+        public AdvancedProgress(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

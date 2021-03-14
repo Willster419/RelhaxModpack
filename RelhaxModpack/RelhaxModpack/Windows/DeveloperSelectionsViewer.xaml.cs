@@ -64,7 +64,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DeveloperSelectionsViewer window
         /// </summary>
-        public DeveloperSelectionsViewer()
+        public DeveloperSelectionsViewer(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

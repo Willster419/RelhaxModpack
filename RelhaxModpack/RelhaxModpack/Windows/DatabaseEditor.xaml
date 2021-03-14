@@ -8,7 +8,6 @@
     xmlns:RelhaxModpack="clr-namespace:RelhaxModpack"
     xmlns:database="clr-namespace:RelhaxModpack.Database"
     xmlns:enums="clr-namespace:RelhaxModpack.Utilities.Enums"
-    x:Name="relhaxWindow"
     x:Class="RelhaxModpack.Windows.DatabaseEditor"
     mc:Ignorable="d"
     Title="DatabaseEditor" Height="720" Width="1280" MinHeight="600" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"

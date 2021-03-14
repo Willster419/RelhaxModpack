@@ -26,7 +26,7 @@ namespace RelhaxModpack.Settings
         /// <summary>
         /// A list of properties and fields to exclude from saving/loading to and from xml
         /// </summary>
-        public string[] MembersToExclude { get { return new string[] { nameof(MembersToExclude), nameof(Filename) }; } }
+        public string[] MembersToExclude { get { return new string[] { nameof(MembersToExclude), nameof(Filename), nameof(SettingsFilename) }; } }
 
         /// <summary>
         /// The user's FTP account username to the bigmods FTP server

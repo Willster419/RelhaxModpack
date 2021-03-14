@@ -62,10 +62,12 @@ namespace RelhaxModpack.Windows
         public bool IsAutoInstall = false;
 
         /// <summary>
-        /// Flag to determind if the current installation loaded with selection file
+        /// Flag to determine if the current installation loaded with selection file
         /// format V3+ is out of date with what the database has
         /// </summary>
         public bool IsSelectionOutOfDate = false;
+
+        public string WoTModpackOnlineFolderFromDB = string.Empty;
     }
 
     /// <summary>
@@ -134,8 +136,6 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool LoadingUI { get; private set; } = false;
 
-        public string WoTModpackOnlineFolderVersion { get; set; }
-
         public string WoTClientVersion { get; set; }
 
         public string DatabaseVersion { get; set; }
@@ -154,16 +154,18 @@ namespace RelhaxModpack.Windows
         private DispatcherTimer FlashTimer = null;
         private XDocument Md5HashDocument = null;
         private DatabaseVersions databaseVersion;
-        private string InstallingAsDatabaseVersionDisplay = string.Empty;
         private bool disposedValue;
+        private string WoTModpackOnlineFolderFromDB;
 
         #region Boring stuff
         /// <summary>
         /// Create an instance of the ModSelectionList window
         /// </summary>
-        public ModSelectionList()
+        public ModSelectionList(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings) : base(modpackSettings)
         {
             InitializeComponent();
+            if (this.CommandLineSettings == null)
+                this.CommandLineSettings = commandLineSettings;
             WindowState = WindowState.Minimized;
         }
 
@@ -219,7 +221,8 @@ namespace RelhaxModpack.Windows
                 Dependencies = Dependencies,
                 GlobalDependencies = GlobalDependencies,
                 UserMods = UserCategory?.Packages,
-                IsAutoInstall = AutoInstallMode
+                IsAutoInstall = AutoInstallMode,
+                WoTModpackOnlineFolderFromDB = this.WoTModpackOnlineFolderFromDB
             });
         }
 
@@ -306,7 +309,7 @@ namespace RelhaxModpack.Windows
 
             //create the loading window (~40ms)
             //UI THREAD REQUIRED
-            loadingProgress = new ProgressIndicator()
+            loadingProgress = new ProgressIndicator(this.ModpackSettings)
             {
                 ProgressMaximum = 8,
                 ProgressMinimum = 0,
@@ -461,24 +464,8 @@ namespace RelhaxModpack.Windows
                 return false;
             }
 
-            //if not stable db, update WoT online folder version macro from modInfoxml itself
-            if (databaseVersion != DatabaseVersions.Stable)
-            {
-                throw new BadMemeException("This will fail");
-                WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
-            }
-
-            //set the version of the wot client to display for the UI, stored in a string to be called later
-            switch(databaseVersion)
-            {
-                case DatabaseVersions.Test:
-                case DatabaseVersions.Beta:
-                    InstallingAsDatabaseVersionDisplay = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@version");
-                    break;
-                case DatabaseVersions.Stable:
-                    InstallingAsDatabaseVersionDisplay = WoTClientVersion;
-                    break;
-            }
+            //get WoT online folder version macro from modInfoxml itself
+            WoTModpackOnlineFolderFromDB = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
 
             //parse the modInfoXml to list in memory
             switch (databaseVersion)
@@ -1040,7 +1027,8 @@ namespace RelhaxModpack.Windows
                 GlobalDependencies = GlobalDependencies,
                 UserMods = UserCategory.Packages,
                 IsAutoInstall = isAutoInstall,
-                IsSelectionOutOfDate = selectionFileOutOfDate
+                IsSelectionOutOfDate = selectionFileOutOfDate,
+                WoTModpackOnlineFolderFromDB = this.WoTModpackOnlineFolderFromDB
             };
             return args;
         }
@@ -1692,7 +1680,7 @@ namespace RelhaxModpack.Windows
                 p = null;
             }
 
-            p = new Preview()
+            p = new Preview(this.ModpackSettings)
             {
                 ComboBoxItemsInsideMode = comboboxItemsInside,
                 Medias = spc.Medias,
@@ -1750,7 +1738,7 @@ namespace RelhaxModpack.Windows
 
         private void OnLoadSelectionClick(object sender, RoutedEventArgs e)
         {
-            DeveloperSelectionsViewer selections = new DeveloperSelectionsViewer() { };
+            DeveloperSelectionsViewer selections = new DeveloperSelectionsViewer(this.ModpackSettings) { };
             selections.OnDeveloperSelectionsClosed += OnDeveloperSelectionsExit;
             selections.ShowDialog();
         }
@@ -1986,7 +1974,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Info(LogOptions.MethodName, "Informing user of {0} disabled selections, {1} broken selections, {2} removed selections, {3} removed user selections",
                     disabledMods.Count, brokenMods.Count, stringSelections.Count, stringUserSelections.Count);
-                SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay();
+                SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay(this.ModpackSettings);
                 int totalCount = disabledMods.Count + stringSelections.Count + stringUserSelections.Count + brokenMods.Count;
                 if (disabledMods.Count > 0)
                 {
@@ -2448,7 +2436,7 @@ namespace RelhaxModpack.Windows
             }
             else if (!silent && totalBrokenCount > 0)//only report issues if silent is false and if anything needs to be reported
             {
-                SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay
+                SelectionFileIssuesDisplay window = new SelectionFileIssuesDisplay(this.ModpackSettings)
                 {
                     Title = Translations.GetTranslatedString("selectionFileIssuesTitle"),
                     HeaderText = Translations.GetTranslatedString("selectionFileIssuesHeader"),

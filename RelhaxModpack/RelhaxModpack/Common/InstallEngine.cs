@@ -323,7 +323,7 @@ namespace RelhaxModpack
         private string XvmFolderName = string.Empty;
         private Dictionary<string, string> OriginalPatchNames = new Dictionary<string, string>();
         private string backupZipfileNameForCancelDeletion = string.Empty;
-        private Patcher Patcher = new Patcher();
+        private Patcher Patcher;
 
         //async progress reporters
         private RelhaxInstallerProgress ProgPatch = null;
@@ -355,6 +355,19 @@ namespace RelhaxModpack
         /// </summary>
         public bool DisableTriggersForInstall = true;
         #endregion
+
+        /// <summary>
+        /// Creates an instance of the InstallEngine class.
+        /// </summary>
+        /// <param name="modpackSettings">The modpack settings configuration class</param>
+        /// <param name="commandLineSettings">The command line settings configuration class</param>
+        public InstallEngine(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings)
+        {
+            if (ModpackSettings == null)
+                this.ModpackSettings = modpackSettings;
+            if (CommandLineSettings == null)
+                this.CommandLineSettings = commandLineSettings;
+        }
 
         #region Installer entry points
         /// <summary>
@@ -454,7 +467,6 @@ namespace RelhaxModpack
         public Task<RelhaxInstallFinishedEventArgs> RunUninstallationAsync(IProgress<RelhaxInstallerProgress> progress)
         {
             if (ModpackSettings == null) throw new NullReferenceException();
-            if (CommandLineSettings == null) throw new NullReferenceException();
 
             Prog = new RelhaxInstallerProgress();
             Progress = progress;
@@ -835,6 +847,9 @@ namespace RelhaxModpack
                     ProgPatch.ParrentTotal = pathces.Count;
                     ProgPatch.InstallStatus = InstallerExitCodes.PatchError;
                     LockProgress();
+
+                    //instance it
+                    Patcher = new Patcher() { DebugMode = false, WoTDirectory = this.WoTDirectory };
 
                     foreach (Patch patch in pathces)
                     {

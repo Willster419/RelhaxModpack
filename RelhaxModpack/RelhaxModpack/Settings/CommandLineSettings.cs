@@ -9,7 +9,7 @@ using System.Linq;
 namespace RelhaxModpack.Settings
 {
     /// <summary>
-    /// Handles all parsing and usage of command line arguments. TODO: make into instance class
+    /// Handles all parsing and usage of command line arguments.
     /// </summary>
     public class CommandLineSettings
     {

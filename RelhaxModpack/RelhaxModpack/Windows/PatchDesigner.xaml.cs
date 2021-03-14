@@ -77,7 +77,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the PatchDesigner window
         /// </summary>
-        public PatchDesigner()
+        public PatchDesigner(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
             Settings = PatchSettings;
@@ -382,7 +382,7 @@ namespace RelhaxModpack.Windows
         {
             if((bool)PopOutReplaceBlockCB.IsChecked)
             {
-                popOutReplacePatchDesigner = new PopOutReplacePatchDesigner();
+                popOutReplacePatchDesigner = new PopOutReplacePatchDesigner(this.ModpackSettings);
                 popOutReplacePatchDesigner.Closed += PopOutReplacePatchDesigner_Closed;
                 popOutReplacePatchDesigner.Show();
                 PatchReplaceTextbox.IsEnabled = false;

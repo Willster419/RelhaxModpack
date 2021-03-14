@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using System.Net;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -39,7 +40,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the EditorSelectMediaUploadLocation window
         /// </summary>
-        public EditorSelectMediaUploadLocation()
+        public EditorSelectMediaUploadLocation(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
@@ -69,7 +70,7 @@ namespace RelhaxModpack.Windows
             if(FTPTreeView.SelectedItem is TreeViewItem selectedTreeViewItem)
             {
                 StatusTextBlock.Text = "making folder...";
-                CreateFTPFolderName createFTPFolder = new CreateFTPFolderName()
+                CreateFTPFolderName createFTPFolder = new CreateFTPFolderName(this.ModpackSettings)
                 {
                     FTPPath = selectedTreeViewItem.Tag as string,
                     Credential = Credential

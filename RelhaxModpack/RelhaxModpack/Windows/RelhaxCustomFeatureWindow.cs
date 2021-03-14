@@ -34,7 +34,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Creates an instance of the RelhaxCustomFeatureWindow class
         /// </summary>
-        public RelhaxCustomFeatureWindow() : base()
+        public RelhaxCustomFeatureWindow(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             //subscribe to the loaded event to load custom settings code
             Closed += OnWindowClosed;

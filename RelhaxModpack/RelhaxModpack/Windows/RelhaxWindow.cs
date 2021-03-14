@@ -33,7 +33,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Controls if the window should apply scaling values set from the main window
         /// </summary>
-        public bool ApplyScaling { get; set; } = false;
+        public bool ApplyScaling { get; set; } = true;
 
         /// <summary>
         /// Controls if the window should apply custom font to this window.
@@ -64,8 +64,10 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Creates an instance of the RelhaxWindow class
         /// </summary>
-        public RelhaxWindow() : base()
+        public RelhaxWindow(ModpackSettings modpackSettings) : base()
         {
+            if (this.ModpackSettings == null)
+                this.ModpackSettings = modpackSettings;
             //subscribe to the loaded event to load custom code
             Loaded += OnWindowLoaded;
         }

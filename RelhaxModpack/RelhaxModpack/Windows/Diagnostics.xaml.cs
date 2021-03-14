@@ -33,7 +33,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the Diagnostics window
         /// </summary>
-        public Diagnostics()
+        public Diagnostics(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
@@ -129,7 +129,7 @@ namespace RelhaxModpack.Windows
             };
 
             //use a nice diagnostic window to check if the user wants to include any other files
-            AddPicturesZip apz = new AddPicturesZip() { FilesToAddalways = filesToCollect };
+            AddPicturesZip apz = new AddPicturesZip(this.ModpackSettings) { FilesToAddalways = filesToCollect };
 
             //add the already above collected files to the list
             foreach (string file in filesToCollect)
@@ -266,7 +266,7 @@ namespace RelhaxModpack.Windows
 
         private void DownloadWGPatchFiles_Click(object sender, RoutedEventArgs e)
         {
-            GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader()
+            GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader(this.ModpackSettings)
             {
                 SelectedClient = string.IsNullOrWhiteSpace(WoTDirectory) ? string.Empty : WoTDirectory
             };

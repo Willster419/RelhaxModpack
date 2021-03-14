@@ -24,7 +24,7 @@ namespace RelhaxModpack.Settings
         /// <summary>
         /// A list of properties and fields to exclude from saving/loading to and from xml
         /// </summary>
-        public string[] MembersToExclude { get { return new string[] { nameof(MembersToExclude), nameof(Filename) }; } }
+        public string[] MembersToExclude { get { return new string[] { nameof(MembersToExclude), nameof(Filename), nameof(SettingsFilename) }; } }
 
         /// <summary>
         /// Toggle if using the custom path

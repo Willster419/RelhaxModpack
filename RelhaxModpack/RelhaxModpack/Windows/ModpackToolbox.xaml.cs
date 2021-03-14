@@ -163,7 +163,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseUpdater window
         /// </summary>
-        public ModpackToolbox()
+        public ModpackToolbox(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
             Settings = ToolboxSettings;

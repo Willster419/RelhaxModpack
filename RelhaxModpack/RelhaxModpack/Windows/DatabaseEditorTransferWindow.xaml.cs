@@ -79,7 +79,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseEditorDownlaod class
         /// </summary>
-        public DatabaseEditorTransferWindow()
+        public DatabaseEditorTransferWindow(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

@@ -19,7 +19,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the InstallFinished window
         /// </summary>
-        public InstallFinished()
+        public InstallFinished(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

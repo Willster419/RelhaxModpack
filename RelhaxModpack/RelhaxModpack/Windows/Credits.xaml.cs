@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Settings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the Credits window
         /// </summary>
-        public Credits()
+        public Credits(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

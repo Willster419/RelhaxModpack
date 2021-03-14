@@ -38,7 +38,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
-        public DatabaseAutomationRunner()
+        public DatabaseAutomationRunner(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
             DownloadProgressChanged = WebClient_DownloadProgressChanged;

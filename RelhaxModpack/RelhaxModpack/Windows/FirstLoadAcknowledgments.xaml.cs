@@ -20,7 +20,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the FirstLoadAcknowledgments window
         /// </summary>
-        public FirstLoadAcknowledgments()
+        public FirstLoadAcknowledgments(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
