@@ -1695,7 +1695,7 @@ namespace RelhaxModpack.Windows
             }
             else
             {
-                previewWindow = new Preview()
+                previewWindow = new Preview(this.ModpackSettings)
                 {
                     ComboBoxItemsInsideMode = comboboxItemsInside,
                     Medias = spc.Medias,
