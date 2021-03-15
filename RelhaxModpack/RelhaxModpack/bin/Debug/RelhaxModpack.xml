@@ -3231,7 +3231,7 @@
         </member>
         <member name="T:RelhaxModpack.Settings.CommandLineSettings">
             <summary>
-            Handles all parsing and usage of command line arguments. TODO: make into instance class
+            Handles all parsing and usage of command line arguments.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Settings.CommandLineSettings.CommandLineArgsToSpawnCustomWindow">
@@ -7224,6 +7224,13 @@
             Flag for if the install engine should honor the user setting or if installing user packages, disable triggers anyways
             </summary>
         </member>
+        <member name="M:RelhaxModpack.InstallEngine.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Settings.CommandLineSettings)">
+            <summary>
+            Creates an instance of the InstallEngine class.
+            </summary>
+            <param name="modpackSettings">The modpack settings configuration class</param>
+            <param name="commandLineSettings">The command line settings configuration class</param>
+        </member>
         <member name="M:RelhaxModpack.InstallEngine.RunInstallationAsync(System.IProgress{RelhaxModpack.UI.RelhaxInstallerProgress})">
             <summary>
             Run an asynchronous installation
@@ -7354,7 +7361,7 @@
             The name of the logfile
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseAutomationRunner.#ctor">
+        <member name="M:RelhaxModpack.Windows.DatabaseAutomationRunner.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the DatabaseAutomationRunner window
             </summary>
@@ -7386,7 +7393,7 @@
             Controls is the application will, on startup, run a check to see if it's the latest version
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.#ctor">
+        <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Creates an instance of the RelhaxCustomFeatureWindow class
             </summary>
@@ -7424,7 +7431,7 @@
             The return structure for determining the result from closing this window
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.AskCloseWoT.#ctor">
+        <member name="M:RelhaxModpack.Windows.AskCloseWoT.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the AskCloseWoT window
             </summary>
@@ -7462,7 +7469,7 @@
             The newly created folder name
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.CreateFTPFolderName.#ctor">
+        <member name="M:RelhaxModpack.Windows.CreateFTPFolderName.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the CreateFTPFolderName window
             </summary>
@@ -7480,7 +7487,7 @@
             Credits
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.Credits.#ctor">
+        <member name="M:RelhaxModpack.Windows.Credits.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the Credits window
             </summary>
@@ -7525,7 +7532,7 @@
             Fires when the developer selection window is closed
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DeveloperSelectionsViewer.#ctor">
+        <member name="M:RelhaxModpack.Windows.DeveloperSelectionsViewer.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the DeveloperSelectionsViewer window
             </summary>
@@ -7548,7 +7555,7 @@
             The number of log file entries that should be kept after the trim operation
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.Diagnostics.#ctor">
+        <member name="M:RelhaxModpack.Windows.Diagnostics.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the Diagnostics window
             </summary>
@@ -7601,7 +7608,7 @@
             The currently selected package in the editor's database tree view
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.EditorAddRemove.#ctor">
+        <member name="M:RelhaxModpack.Windows.EditorAddRemove.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the EditorAddRemove window
             </summary>
@@ -7629,7 +7636,7 @@
             The FTP upload path to upload the media to
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.EditorSelectMediaUploadLocation.#ctor">
+        <member name="M:RelhaxModpack.Windows.EditorSelectMediaUploadLocation.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the EditorSelectMediaUploadLocation window
             </summary>
@@ -7647,7 +7654,7 @@
             ExceptionCaptureDisplay
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.ExceptionCaptureDisplay.#ctor">
+        <member name="M:RelhaxModpack.Windows.ExceptionCaptureDisplay.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the ExceptionCaptureDisplay window
             </summary>
@@ -7675,7 +7682,7 @@
             The selection version info struct that was selected from the user selection
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.ExportModeSelect.#ctor">
+        <member name="M:RelhaxModpack.Windows.ExportModeSelect.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the ExportModeSelect class
             </summary>
@@ -7698,7 +7705,7 @@
             Flag to determine if the user selected a language
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.FirstLoadSelectLanguage.#ctor">
+        <member name="M:RelhaxModpack.Windows.FirstLoadSelectLanguage.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create and instance of the FirstLoadSelectLanguage Window
             </summary>
@@ -7721,7 +7728,7 @@
             Gets and sets is the user has agreed to the Acknowledgments before allowing him/her to use the application
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.FirstLoadAcknowledgments.#ctor">
+        <member name="M:RelhaxModpack.Windows.FirstLoadAcknowledgments.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the FirstLoadAcknowledgments window
             </summary>
@@ -7844,7 +7851,7 @@
             The name of the Game center process shown in windows
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.#ctor">
+        <member name="M:RelhaxModpack.Windows.GameCenterUpdateDownloader.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the GameCenterUpdateDownloaded window
             </summary>
@@ -7862,7 +7869,7 @@
             NewsViewer
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.NewsViewer.#ctor">
+        <member name="M:RelhaxModpack.Windows.NewsViewer.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the NewsViewer window
             </summary>
@@ -7880,7 +7887,7 @@
             PopOutReplacePatchDesigner
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.PopOutReplacePatchDesigner.#ctor">
+        <member name="M:RelhaxModpack.Windows.PopOutReplacePatchDesigner.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the PopOutReplacePatchDesigner Window
             </summary>
@@ -7898,7 +7905,7 @@
             RelhaxColorPicker
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.#ctor">
+        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the RelhaxColorPicker window
             </summary>
@@ -7917,7 +7924,7 @@
             AdvancedProgress
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.AdvancedProgress.#ctor">
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create and initialize the AdvancedProgress window
             </summary>
@@ -8020,7 +8027,7 @@
             AddPicturesZip
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.AddPicturesZip.#ctor">
+        <member name="M:RelhaxModpack.Windows.AddPicturesZip.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create and initialize the AddPicturesZip window
             </summary>
@@ -8058,7 +8065,7 @@
             The name of the logfile
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditor.#ctor">
+        <member name="M:RelhaxModpack.Windows.DatabaseEditor.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the DatabaseEditor
             </summary>
@@ -8128,7 +8135,7 @@
             The reference to the editor settings object. Must be supplied
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditorTransferWindow.#ctor">
+        <member name="M:RelhaxModpack.Windows.DatabaseEditorTransferWindow.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the DatabaseEditorDownlaod class
             </summary>
@@ -8156,7 +8163,7 @@
             The name of the logfile
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.ModpackToolbox.#ctor">
+        <member name="M:RelhaxModpack.Windows.ModpackToolbox.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the DatabaseUpdater window
             </summary>
@@ -8174,7 +8181,7 @@
             InstallFinished
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.InstallFinished.#ctor">
+        <member name="M:RelhaxModpack.Windows.InstallFinished.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the InstallFinished window
             </summary>
@@ -8222,7 +8229,7 @@
         </member>
         <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.IsSelectionOutOfDate">
             <summary>
-            Flag to determind if the current installation loaded with selection file
+            Flag to determine if the current installation loaded with selection file
             format V3+ is out of date with what the database has
             </summary>
         </member>
@@ -8293,7 +8300,7 @@
             Flag to indicate if the window is loading application specific UI
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.ModSelectionList.#ctor">
+        <member name="M:RelhaxModpack.Windows.ModSelectionList.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Settings.CommandLineSettings)">
             <summary>
             Create an instance of the ModSelectionList window
             </summary>
@@ -8327,7 +8334,7 @@
             The name of the logfile
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.PatchDesigner.#ctor">
+        <member name="M:RelhaxModpack.Windows.PatchDesigner.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the PatchDesigner window
             </summary>
@@ -8365,7 +8372,7 @@
             Get or set the package that invoked the preview window
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.Preview.#ctor">
+        <member name="M:RelhaxModpack.Windows.Preview.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the Preview window
             </summary>
@@ -8403,7 +8410,7 @@
             Gets or sets the progress value to display
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.ProgressIndicator.#ctor">
+        <member name="M:RelhaxModpack.Windows.ProgressIndicator.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Creates an instance of the ProgressIndicator class
             </summary>
@@ -8477,7 +8484,7 @@
             A reference to the command line settings configuration class
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.RelhaxWindow.#ctor">
+        <member name="M:RelhaxModpack.Windows.RelhaxWindow.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Creates an instance of the RelhaxWindow class
             </summary>
@@ -8514,7 +8521,7 @@
             Get or set the text of the window button
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.SelectionFileIssuesDisplay.#ctor">
+        <member name="M:RelhaxModpack.Windows.SelectionFileIssuesDisplay.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the RelhaxMessageWindow class
             </summary>
@@ -8532,7 +8539,7 @@
             ScalingConfirmation
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.ScalingConfirmation.#ctor">
+        <member name="M:RelhaxModpack.Windows.ScalingConfirmation.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the ScalingConfirmation window
             </summary>
@@ -8550,7 +8557,7 @@
             TemplateWindow
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.TemplateWindow.#ctor">
+        <member name="M:RelhaxModpack.Windows.TemplateWindow.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of TemplateWindow
             </summary>
@@ -8573,7 +8580,7 @@
             Gets if the user selected to accept the update
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.VersionInfo.#ctor">
+        <member name="M:RelhaxModpack.Windows.VersionInfo.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Create an instance of the VersionInfo class
             </summary>
@@ -9528,12 +9535,11 @@
             <param name="componentName">The key value of the string phrase</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Translations.ExistsInCurrentLanguage(System.String,System.Boolean)">
+        <member name="M:RelhaxModpack.Translations.ExistsInCurrentLanguage(System.String)">
             <summary>
             Determines if a key exists in the currently selected language, or in english if no language is selected
             </summary>
             <param name="componentName">The key of the component to look up</param>
-            <param name="logError">Flag to log an error in the logfile if it does not exist</param>
             <returns>True if it exists in the currently selected language, or false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.Translations.Exists(System.String,RelhaxModpack.Utilities.Enums.Languages)">
@@ -9552,7 +9558,7 @@
             <param name="langaugeToCheck">The language of which dictionary to check</param>
             <returns>True if the component (key) exists and the entry is not TODO</returns>
         </member>
-        <member name="M:RelhaxModpack.Translations.LocalizeWindow(System.Windows.Window,System.Boolean)">
+        <member name="M:RelhaxModpack.Translations.LocalizeWindow(RelhaxModpack.Windows.RelhaxWindow,System.Boolean)">
             <summary>
             Applies localized text translations for the passed in window
             See the comments in the method for more information
@@ -9631,12 +9637,7 @@
             </summary>
             <remarks>Done by if FirstLoad is true and the Relhax V1 settings file exists</remarks>
         </member>
-        <member name="F:RelhaxModpack.MainWindow.TrueAlpha">
-            <summary>
-            Flag to determine if the user running is intentionally using the alpha version (or if an Alpha version was accidentally distributed), parsed upon application load.
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.MainWindow.#ctor">
+        <member name="M:RelhaxModpack.MainWindow.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Creates the instance of the MainWindow class
             </summary>
