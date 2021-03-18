@@ -806,5 +806,14 @@ namespace RelhaxSandbox
 
             //in this current configuration, the TestSubWindow does *not* show up in the memory profiler
         }
+
+        private void DownloadManagerTestingButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (DownloadManager manager = new DownloadManager())
+            {
+                manager.DownloadPackages("https://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe", "RelhaxModpack.exe");
+                DownloadManagerTestingHashResult.Text = "MD5 hash is " + manager.Hash;
+            }
+        }
     }
 }

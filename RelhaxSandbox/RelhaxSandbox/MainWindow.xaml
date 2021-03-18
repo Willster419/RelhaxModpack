@@ -316,6 +316,9 @@
                     <ComboBoxItem Content="Item 4" />
                 </local:ComboboxWithSelectionCommit>
                 <Button x:Name="MemoryLeakTestingButton" Content="Memory Leak Testing" HorizontalAlignment="Left" Margin="474,129,0,0" VerticalAlignment="Top" Width="120" Click="MemoryLeakTestingButton_Click"/>
+                <Button x:Name="DownloadManagerTestingButton" Content="Download Manager Testing" HorizontalAlignment="Left" Margin="474,154,0,0" VerticalAlignment="Top" Width="154" Click="DownloadManagerTestingButton_Click"/>
+                <ProgressBar x:Name="DownloadManagerTestingProgressBar" HorizontalAlignment="Left" Height="11" Margin="474,179,0,0" VerticalAlignment="Top" Width="154"/>
+                <TextBlock x:Name="DownloadManagerTestingHashResult" HorizontalAlignment="Left" Margin="474,195,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="302"/>
             </Grid>
         </TabItem>
     </TabControl>
