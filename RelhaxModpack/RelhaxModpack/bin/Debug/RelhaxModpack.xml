@@ -596,11 +596,6 @@
             The file in the application root directory used to unlock the "launch editor" button
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Common.ApplicationConstants.DefaultEndAddress">
-            <summary>
-            The default end address of the location of mod packages (start + zip + end)
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.BetaDatabaseV2RootFilename">
             <summary>
             The filename of the V2 root database document. All category names and filenames, and version info is in this document
@@ -864,11 +859,23 @@
             The escaped constant URL of the stable database on the server, escaped with the 'dbVersion' macro
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Common.ApplicationConstants.DefaultStartAddress">
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.StartAddressMirrorUsaDefault">
             <summary>
-            The default starting address of the location of mod packages (start + zip + end), escaped with the 'onlineFolder' macro
+            The default download mirror, escaped with the 'onlineFolder' macro
             </summary>
             <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.StartAddressMirrorDe">
+            <summary>
+            The download mirror located in Germany
+            </summary>
+            <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DownloadMirrors">
+            <summary>
+            A read-only list of all download mirrors in this application
+            </summary>
+            <remarks>The order of this list matters as the index is used to store the user choice</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.BetaDatabaseV2FolderURLEscaped">
             <summary>
@@ -1610,18 +1617,6 @@
         <member name="P:RelhaxModpack.Database.DatabasePackage.CRC">
             <summary>
             The crc checksum of the zipfile
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.DatabasePackage.StartAddress">
-            <summary>
-            The start address of the URL to the zip file
-            URL format: StartAddress + ZipFile + EndAddress
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.DatabasePackage.EndAddress">
-            <summary>
-            The end address of the URL to the zip file
-            URL format: StartAddress + ZipFile + EndAddress
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.DownloadFlag">
@@ -3180,6 +3175,13 @@
             <summary>
             The factor to scale the window size and components by. From 1 to 3 in increments of 0.25
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.DownloadMirror">
+            <summary>
+            The download mirror to use when running the download manager
+            </summary>
+            <remarks>0 based index for easy usage into the ApplicationConstants.DownloadMirrors field</remarks>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.DownloadMirrors"/>
         </member>
         <member name="F:RelhaxModpack.Settings.ModpackSettings.AutoOneclickSelectionFilePath">
             <summary>
