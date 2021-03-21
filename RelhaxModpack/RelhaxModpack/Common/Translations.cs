@@ -2967,7 +2967,7 @@ namespace RelhaxModpack
 
             //Component: downloadMirrorDe
             //
-            English.Add("downloadMirrorDe", "clanverwaltung.de, City, Germany");
+            English.Add("downloadMirrorDe", "clanverwaltung.de, Frankfurt, Germany");
             German.Add("downloadMirrorDe", TranslationNeeded);
             Polish.Add("downloadMirrorDe", TranslationNeeded);
             French.Add("downloadMirrorDe", TranslationNeeded);
