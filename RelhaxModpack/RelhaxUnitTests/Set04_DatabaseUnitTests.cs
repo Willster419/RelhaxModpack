@@ -184,7 +184,6 @@ namespace RelhaxUnitTests
                 Assert.IsFalse(string.IsNullOrWhiteSpace(package.CompleteUIDPath));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(package.ComponentInternalName));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(package.PackageName));
-                Assert.IsFalse(string.IsNullOrWhiteSpace(package.StartAddress));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(package.UID));
             }
 

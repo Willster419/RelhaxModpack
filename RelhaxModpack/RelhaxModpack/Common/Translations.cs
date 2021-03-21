@@ -2937,6 +2937,42 @@ namespace RelhaxModpack
             French.Add("VersionInfoAskText", "Voulez vous faire la mise à jour maintenant?");
             Spanish.Add("VersionInfoAskText", "¿Quiere actualizar ahora?");
             Russian.Add("VersionInfoAskText", "Хотите обновить прямо сейчас?");
+
+            //Component: SelectDownloadMirrorTextBlock
+            //
+            English.Add("SelectDownloadMirrorTextBlock", "Select a download mirror");
+            German.Add("SelectDownloadMirrorTextBlock", TranslationNeeded);
+            Polish.Add("SelectDownloadMirrorTextBlock", TranslationNeeded);
+            French.Add("SelectDownloadMirrorTextBlock", TranslationNeeded);
+            Spanish.Add("SelectDownloadMirrorTextBlock", TranslationNeeded);
+            Russian.Add("SelectDownloadMirrorTextBlock", TranslationNeeded);
+
+            //Component: SelectDownloadMirrorTextBlockDescription
+            //
+            English.Add("SelectDownloadMirrorTextBlockDescription", "This mirror will be used only for package downloads");
+            German.Add("SelectDownloadMirrorTextBlockDescription", TranslationNeeded);
+            Polish.Add("SelectDownloadMirrorTextBlockDescription", TranslationNeeded);
+            French.Add("SelectDownloadMirrorTextBlockDescription", TranslationNeeded);
+            Spanish.Add("SelectDownloadMirrorTextBlockDescription", TranslationNeeded);
+            Russian.Add("SelectDownloadMirrorTextBlockDescription", TranslationNeeded);
+
+            //Component: downloadMirrorUsaDefault
+            //
+            English.Add("downloadMirrorUsaDefault", "relhaxmodpack.com, Dallas, USA");
+            German.Add("downloadMirrorUsaDefault", TranslationNeeded);
+            Polish.Add("downloadMirrorUsaDefault", TranslationNeeded);
+            French.Add("downloadMirrorUsaDefault", TranslationNeeded);
+            Spanish.Add("downloadMirrorUsaDefault", TranslationNeeded);
+            Russian.Add("downloadMirrorUsaDefault", TranslationNeeded);
+
+            //Component: downloadMirrorDe
+            //
+            English.Add("downloadMirrorDe", "clanverwaltung.de, City, Germany");
+            German.Add("downloadMirrorDe", TranslationNeeded);
+            Polish.Add("downloadMirrorDe", TranslationNeeded);
+            French.Add("downloadMirrorDe", TranslationNeeded);
+            Spanish.Add("downloadMirrorDe", TranslationNeeded);
+            Russian.Add("downloadMirrorDe", TranslationNeeded);
             #endregion
 
             #region Installer Messages

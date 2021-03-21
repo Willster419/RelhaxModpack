@@ -32,11 +32,6 @@ namespace RelhaxModpack.Common
         public const string EditorLaunchFromMainWindowFilename = "EditorUnlock.txt";
 
         /// <summary>
-        /// The default end address of the location of mod packages (start + zip + end)
-        /// </summary>
-        public const string DefaultEndAddress = "";
-
-        /// <summary>
         /// The filename of the V2 root database document. All category names and filenames, and version info is in this document
         /// </summary>
         public const string BetaDatabaseV2RootFilename = "database.xml";
@@ -325,10 +320,26 @@ namespace RelhaxModpack.Common
         public const string BigmodsDatabaseRootEscaped = "http://bigmods.relhaxmodpack.com/RelhaxModpack/resources/database/{dbVersion}/";
 
         /// <summary>
-        /// The default starting address of the location of mod packages (start + zip + end), escaped with the 'onlineFolder' macro
+        /// The default download mirror, escaped with the 'onlineFolder' macro
         /// </summary>
         /// <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
-        public const string DefaultStartAddress = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+        public const string StartAddressMirrorUsaDefault = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+
+        /// <summary>
+        /// The download mirror located in Germany
+        /// </summary>
+        /// <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
+        public const string StartAddressMirrorDe = @"http://relhax.clanverwaltung.de/filedepot/files/{onlineFolder}/";
+
+        /// <summary>
+        /// A read-only list of all download mirrors in this application
+        /// </summary>
+        /// <remarks>The order of this list matters as the index is used to store the user choice</remarks>
+        public static readonly string[] DownloadMirrors = new string[]
+        {
+            StartAddressMirrorUsaDefault,
+            StartAddressMirrorDe
+        };
 
         /// <summary>
         /// The URL of the V2 beta database root folder, escaped with the 'branch' macro

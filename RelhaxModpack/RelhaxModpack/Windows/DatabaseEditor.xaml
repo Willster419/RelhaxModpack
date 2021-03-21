@@ -520,9 +520,7 @@
                         <!-- Names -->
                         <TextBlock x:Name="PackageDisplayNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="Package Name" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageStartAddressTextBlock" HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="Start Address" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageZipFileTextBlock" HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="Zip File" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageEndAddressTextBlock" HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" Text="End Address" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageVersionTextBlock" HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageAuthorTextBlock" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Author" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageMaintainersTextBlock" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Maintainers" VerticalAlignment="Center" ToolTip="Comma separated values of Database managers of this component"/>
@@ -537,9 +535,7 @@
                         <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="15" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
                         <TextBox x:Name="PackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackagePackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox x:Name="PackageStartAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageZipFileDisplay" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Stretch" />
-                        <TextBox x:Name="PackageEndAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageVersionDisplay" HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageAuthorDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageMaintainersDisplay" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" ToolTip="Comma separated values of Database managers of this component"/>

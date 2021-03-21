@@ -11,6 +11,7 @@ using System.Globalization;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using System.Xml.Linq;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Settings
 {
@@ -291,6 +292,13 @@ namespace RelhaxModpack.Settings
         /// The factor to scale the window size and components by. From 1 to 3 in increments of 0.25
         /// </summary>
         public double DisplayScale = 1.0f;
+
+        /// <summary>
+        /// The download mirror to use when running the download manager
+        /// </summary>
+        /// <remarks>0 based index for easy usage into the ApplicationConstants.DownloadMirrors field</remarks>
+        /// <seealso cref="ApplicationConstants.DownloadMirrors"/>
+        public int DownloadMirror = 0;
 
         /// <summary>
         /// The path to the auto or one click selection file

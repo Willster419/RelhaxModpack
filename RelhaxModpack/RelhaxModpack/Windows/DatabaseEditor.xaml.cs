@@ -556,10 +556,8 @@ namespace RelhaxModpack.Windows
                 {
                     //basic tab is always difficult
                     PackagePackageNameDisplay.IsEnabled = true;
-                    PackageStartAddressDisplay.IsEnabled = true;
                     PackageMaintainersDisplay.IsEnabled = true;
                     PackageZipFileDisplay.IsEnabled = true;
-                    PackageEndAddressDisplay.IsEnabled = true;
                     PackageDevURLDisplay.IsEnabled = true;
                     PackageVersionDisplay.IsEnabled = true;
                     PackageAuthorDisplay.IsEnabled = true;
@@ -798,9 +796,7 @@ namespace RelhaxModpack.Windows
             //set text field texts
             PackagePackageNameDisplay.Text = package.PackageName;
             PackageMaintainersDisplay.Text = package.Maintainers;
-            PackageStartAddressDisplay.Text = package.StartAddress;
             PackageZipFileDisplay.Text = package.ZipFile;
-            PackageEndAddressDisplay.Text = package.EndAddress;
             PackageVersionDisplay.Text = package.Version;
             PackageAuthorDisplay.Text = package.Author;
             PackageUidDisplay.Text = package.UID;
@@ -1069,8 +1065,6 @@ namespace RelhaxModpack.Windows
             //save package elements first
             package.PackageName = PackagePackageNameDisplay.Text;
             package.Maintainers = PackageMaintainersDisplay.Text;
-            package.StartAddress = PackageStartAddressDisplay.Text;
-            package.EndAddress = PackageEndAddressDisplay.Text;
 
             //devURL is separated by newlines for array list, so it's not necessary to escape
             package.DevURL = MacroUtils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
@@ -1274,10 +1268,6 @@ namespace RelhaxModpack.Windows
             if (!package.PackageName.Equals(PackagePackageNameDisplay.Text))
                 return true;
             if (!package.Maintainers.Equals(PackageMaintainersDisplay.Text))
-                return true;
-            if (!package.StartAddress.Equals(PackageStartAddressDisplay.Text))
-                return true;
-            if (!package.EndAddress.Equals(PackageEndAddressDisplay.Text))
                 return true;
 
             //devURL is separated by newlines for array list, so it's not necessary to escape

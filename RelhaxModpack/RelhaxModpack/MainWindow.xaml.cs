@@ -239,6 +239,12 @@ namespace RelhaxModpack
             progressIndicator.UpdateProgress(0);
             UiUtils.AllowUIToUpdate();
 
+            //load the download mirrors into the combobox
+            SelectDownloadMirrorCombobox.Items.Clear();
+            SelectDownloadMirrorCombobox.Items.Add(Translations.GetTranslatedString("downloadMirrorUsaDefault"));
+            SelectDownloadMirrorCombobox.Items.Add(Translations.GetTranslatedString("downloadMirrorDe"));
+
+
             //create tray icons and menus
             CreateTray();
 
@@ -1664,8 +1670,7 @@ namespace RelhaxModpack
                     retryCount = 3;
                     while (retryCount > 0)
                     {
-                        package.StartAddress = package.StartAddress.Replace("{onlineFolder}", WoTModpackOnlineFolderVersion);
-                        fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
+                        fileToDownload = ApplicationConstants.DownloadMirrors[ModpackSettings.DownloadMirror].Replace("{onlineFolder}", WoTModpackOnlineFolderVersion) + package.ZipFile;
                         Logging.Debug("[{0}]: Download of {1} from URL {2}", nameof(ProcessDownloadsAsync), package.PackageName, fileToDownload);
                         fileToSaveTo = Path.Combine(ApplicationConstants.RelhaxDownloadsFolderPath, package.ZipFile);
                         try
@@ -1756,8 +1761,7 @@ namespace RelhaxModpack
                     while (retry)
                     {
                         //replace the start address macro
-                        package.StartAddress = package.StartAddress.Replace("{onlineFolder}", WoTModpackOnlineFolderVersion);
-                        fileToDownload = package.StartAddress + package.ZipFile + package.EndAddress;
+                        fileToDownload = ApplicationConstants.DownloadMirrors[ModpackSettings.DownloadMirror].Replace("{onlineFolder}", WoTModpackOnlineFolderVersion) + package.ZipFile;
                         Logging.Debug("[{0}]: Download of {1} from URL {2}", nameof(ProcessDownloads), package.PackageName, fileToDownload);
                         fileToSaveTo = Path.Combine(ApplicationConstants.RelhaxDownloadsFolderPath, package.ZipFile);
                         try
@@ -3292,6 +3296,13 @@ namespace RelhaxModpack
                 }
             }
         }
+
+        private void SelectDownloadMirrorCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (loading)
+                return;
+            ModpackSettings.DownloadMirror = SelectDownloadMirrorCombobox.SelectedIndex;
+        }
         #endregion
 
         #region Other UI methods
@@ -3470,6 +3481,24 @@ namespace RelhaxModpack
                 ConfigureAutoInstallTimerEvent();
                 autoInstallPeriodicTimer.Start();
             }
+
+            //apply download mirror
+            SelectDownloadMirrorCombobox.SelectionChanged -= SelectDownloadMirrorCombobox_SelectionChanged;
+            if ((SelectDownloadMirrorCombobox.Items.Count - 1) > ModpackSettings.DownloadMirror)
+            {
+                SelectDownloadMirrorCombobox.SelectedIndex = ModpackSettings.DownloadMirror;
+            }
+            else if (SelectDownloadMirrorCombobox.Items.Count == 0)
+            {
+                Logging.Error("{0} items count is 0 when trying to set download mirror!", nameof(SelectDownloadMirrorCombobox));
+            }
+            else
+            {
+                Logging.Warning("{0} has {1} items when trying to select index of {2}. Using default index 0", nameof(SelectDownloadMirrorCombobox), SelectDownloadMirrorCombobox.Items.Count, ModpackSettings.DownloadMirror);
+                ModpackSettings.DownloadMirror = 0;
+                SelectDownloadMirrorCombobox.SelectedIndex = ModpackSettings.DownloadMirror;
+            }
+            SelectDownloadMirrorCombobox.SelectionChanged += SelectDownloadMirrorCombobox_SelectionChanged;
         }
 
         private void ToggleUIButtons(bool toggle)

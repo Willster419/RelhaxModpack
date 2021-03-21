@@ -52,8 +52,6 @@ namespace RelhaxModpack.Database
             nameof(CRC),
             nameof(Timestamp),
             nameof(LogAtInstall),
-            nameof(StartAddress),
-            nameof(EndAddress),
             nameof(Triggers),
             nameof(DevURL),
             nameof(InternalNotes),
@@ -147,18 +145,6 @@ namespace RelhaxModpack.Database
         /// The crc checksum of the zipfile
         /// </summary>
         public string CRC { get; set; } = string.Empty;
-
-        /// <summary>
-        /// The start address of the URL to the zip file
-        /// URL format: StartAddress + ZipFile + EndAddress
-        /// </summary>
-        public string StartAddress { get; set; } = ApplicationConstants.DefaultStartAddress;
-
-        /// <summary>
-        /// The end address of the URL to the zip file
-        /// URL format: StartAddress + ZipFile + EndAddress
-        /// </summary>
-        public string EndAddress { get; set; } = ApplicationConstants.DefaultEndAddress;
 
         /// <summary>
         /// Determine at install time if the package needs to be downloaded
@@ -329,8 +315,6 @@ namespace RelhaxModpack.Database
             this.Timestamp = packageToCopy.Timestamp;
             this.ZipFile = packageToCopy.ZipFile;
             this.CRC = packageToCopy.CRC;
-            this.StartAddress = packageToCopy.StartAddress;
-            this.EndAddress = packageToCopy.EndAddress;
             this.LogAtInstall = packageToCopy.LogAtInstall;
             this.Triggers = packageToCopy.Triggers;
             this.DevURL = packageToCopy.DevURL;

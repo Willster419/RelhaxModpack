@@ -162,6 +162,8 @@
                         <CheckBox Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="UseBetaApplicationText" Text="Use beta application" TextWrapping="Wrap"/>
                         </CheckBox>
+                        <TextBlock Tag="SelectDownloadMirrorTextBlock" x:Name="SelectDownloadMirrorTextBlock" Text="Select a download mirror" TextWrapping="Wrap"/>
+                        <ComboBox Tag="SelectDownloadMirrorComboBox" x:Name="SelectDownloadMirrorCombobox" SelectionChanged="SelectDownloadMirrorCombobox_SelectionChanged" Margin="20,0,0,0"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <TextBlock x:Name="ThemeSelectText" Text="Select theme:" ToolTipService.ShowOnDisabled="True"/>
