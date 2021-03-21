@@ -26,6 +26,7 @@ using System.Windows.Media;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
+using RelhaxModpack.Utilities.ClassEventArgs;
 
 namespace RelhaxModpack
 {

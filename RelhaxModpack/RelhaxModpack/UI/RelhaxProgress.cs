@@ -1,4 +1,6 @@
-﻿namespace RelhaxModpack.UI
+﻿using RelhaxModpack.Utilities.Enums;
+
+namespace RelhaxModpack.UI
 {
     /// <summary>
     /// The base class for reporting async progress to any UI receiver task.

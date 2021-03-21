@@ -5406,6 +5406,85 @@
             The log level from the method call
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.ClassEventArgs.RelhaxInstallFinishedEventArgs">
+            <summary>
+            Event arguments for when the installer finishes or is ended prematurely
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.RelhaxInstallFinishedEventArgs.ExitCode">
+            <summary>
+            The exit code from the installer thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.RelhaxInstallFinishedEventArgs.ErrorMessage">
+            <summary>
+            The error message description
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.RelhaxInstallFinishedEventArgs.ParsedCategoryList">
+            <summary>
+            Reference to list of parsed categories
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.RelhaxInstallFinishedEventArgs.Dependencies">
+            <summary>
+            Reference to list of parsed dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.RelhaxInstallFinishedEventArgs.GlobalDependencies">
+            <summary>
+            Reference to list of dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.RelhaxInstallFinishedEventArgs.InstallFailedSteps">
+            <summary>
+            A list of all the steps that the installer failed at when returning back to the MainWindow
+            </summary>
+            <remarks>The installer creates many threads to complete different parts of the installation.
+            One of more of these may fail and should be logged when the installer cleanly exists and returns to the MainWindow</remarks>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs">
+            <summary>
+            Event arguments for when the selection list is closed
+            </summary>
+            <remarks>See https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c </remarks>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.ContinueInstallation">
+            <summary>
+            If the installation should be continued or if the user canceled
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.ParsedCategoryList">
+            <summary>
+            The list of categories
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.Dependencies">
+            <summary>
+            The list of dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.GlobalDependencies">
+            <summary>
+            The list of global dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.UserMods">
+            <summary>
+            The list of use mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.IsAutoInstall">
+            <summary>
+            Flag to determine if the current installation is started from auto install mode
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.IsSelectionOutOfDate">
+            <summary>
+            Flag to determine if the current installation loaded with selection file
+            format V3+ is out of date with what the database has
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.ClassEventArgs.EditorTransferEventArgs">
             <summary>
             Event args returned to the editor for when an FTP upload or download is complete
@@ -5504,6 +5583,117 @@
         <member name="F:RelhaxModpack.Utilities.Enums.ApplyBehavior.SaveTriggersApply">
             <summary>
             When you click the save button, it also clicks the apply button before saving.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.InstallerExitCodes">
+            <summary>
+            Possible points at which the installer can fail
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.Success">
+            <summary>
+            No fail
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.DownloadModsError">
+            <summary>
+            Error with downloading mods
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.BackupModsError">
+            <summary>
+            Error with backup of mods to the RelhaxBackup folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.BackupDataError">
+            <summary>
+            Error with backing up of user cache data to temporary folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.ClearCacheError">
+            <summary>
+            Error with clearing WoT app data cache
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.ClearLogsError">
+            <summary>
+            Error with clearing game and mod logs
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.CleanModsError">
+            <summary>
+            Error with cleaning mods and res_mods folders
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.ExtractionError">
+            <summary>
+            Error with mods extraction/installation
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.UserExtractionError">
+            <summary>
+            Error with user mods extraction
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.RestoreUserdataError">
+            <summary>
+            Error with restoring user cache data from temporary folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.XmlUnpackError">
+            <summary>
+            Error with copying/extracting and unpacking binary xml files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.PatchError">
+            <summary>
+            Error with patching configuration files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.ShortcutsError">
+            <summary>
+            Error with creating shortcuts
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.ContourIconAtlasError">
+            <summary>
+            Error with creating the contour icon atlas files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.FontInstallError">
+            <summary>
+            Error with installing fonts (starting the fontReg process)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.TrimDownloadCacheError">
+            <summary>
+            Error with deleting old download files from the RelhaxDownloads folder
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.CleanupError">
+            <summary>
+            Error with cleanup of temporary and leftover files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstallerExitCodes.UnknownError">
+            <summary>
+            An unknown error has occurred
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.SelectionPropagationDirection">
+            <summary>
+            The UI checked propagation directions
+            </summary>
+            <remarks>When a UI package element is checked, it needs to propagate the checked behavior up or down to prevent an invalid selection</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SelectionPropagationDirection.PropagateUp">
+            <summary>
+            Up the higher parent levels
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.SelectionPropagationDirection.PropagateDown">
+            <summary>
+            Down to lower child levels
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.EditorTransferMode">
@@ -6116,6 +6306,36 @@
         <member name="F:RelhaxModpack.Utilities.Enums.UIThemes.Custom">
             <summary>
             A custom application theme from the UISettings.xml
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.UninstallerExitCodes">
+            <summary>
+            Possible points at which the uninstaller can fail
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.UninstallerExitCodes.GettingFilelistError">
+            <summary>
+            Error with getting the file lists (from folder scan and/or from log file)
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.UninstallerExitCodes.UninstallError">
+            <summary>
+            Error with deleting of files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.UninstallerExitCodes.ProcessingEmptyFolders">
+            <summary>
+            Error with deleting of empty folders
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.UninstallerExitCodes.PerformFinalClearup">
+            <summary>
+            Error with cleanup of temporary and leftover files
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.UninstallerExitCodes.Success">
+            <summary>
+            No error occurred
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.UninstallModes">
@@ -6956,168 +7176,6 @@
             <typeparam name="T">The type of the enumeration to get a list of</typeparam>
             <returns>A list of all enumeration values of that type</returns>
             <remarks>See https://stackoverflow.com/a/801058/3128017 </remarks>
-        </member>
-        <member name="T:RelhaxModpack.InstallerExitCodes">
-            <summary>
-            Possible points at which the installer can fail
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.Success">
-            <summary>
-            No fail
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.DownloadModsError">
-            <summary>
-            Error with downloading mods
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.BackupModsError">
-            <summary>
-            Error with backup of mods to the RelhaxBackup folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.BackupDataError">
-            <summary>
-            Error with backing up of user cache data to temporary folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.ClearCacheError">
-            <summary>
-            Error with clearing WoT app data cache
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.ClearLogsError">
-            <summary>
-            Error with clearing game and mod logs
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.CleanModsError">
-            <summary>
-            Error with cleaning mods and res_mods folders
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.ExtractionError">
-            <summary>
-            Error with mods extraction/installation
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.UserExtractionError">
-            <summary>
-            Error with user mods extraction
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.RestoreUserdataError">
-            <summary>
-            Error with restoring user cache data from temporary folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.XmlUnpackError">
-            <summary>
-            Error with copying/extracting and unpacking binary xml files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.PatchError">
-            <summary>
-            Error with patching configuration files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.ShortcutsError">
-            <summary>
-            Error with creating shortcuts
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.ContourIconAtlasError">
-            <summary>
-            Error with creating the contour icon atlas files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.FontInstallError">
-            <summary>
-            Error with installing fonts (starting the fontReg process)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.TrimDownloadCacheError">
-            <summary>
-            Error with deleting old download files from the RelhaxDownloads folder
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.CleanupError">
-            <summary>
-            Error with cleanup of temporary and leftover files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.InstallerExitCodes.UnknownError">
-            <summary>
-            An unknown error has occurred
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UninstallerExitCodes">
-            <summary>
-            Possible points at which the uninstaller can fail
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UninstallerExitCodes.GettingFilelistError">
-            <summary>
-            Error with getting the file lists (from folder scan and/or from log file)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UninstallerExitCodes.UninstallError">
-            <summary>
-            Error with deleting of files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UninstallerExitCodes.ProcessingEmptyFolders">
-            <summary>
-            Error with deleting of empty folders
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UninstallerExitCodes.PerformFinalClearup">
-            <summary>
-            Error with cleanup of temporary and leftover files
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UninstallerExitCodes.Success">
-            <summary>
-            No error occurred
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.RelhaxInstallFinishedEventArgs">
-            <summary>
-            Event arguments for when the installer finishes or is ended prematurely
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.ExitCode">
-            <summary>
-            The exit code from the installer thread
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.ErrorMessage">
-            <summary>
-            The error message description
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.ParsedCategoryList">
-            <summary>
-            Reference to list of parsed categories
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.Dependencies">
-            <summary>
-            Reference to list of parsed dependencies
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.GlobalDependencies">
-            <summary>
-            Reference to list of dependencies
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.RelhaxInstallFinishedEventArgs.InstallFailedSteps">
-            <summary>
-            A list of all the steps that the installer failed at when returning back to the MainWindow
-            </summary>
-            <remarks>The installer creates many threads to complete different parts of the installation.
-            One of more of these may fail and should be logged when the installer cleanly exists and returns to the MainWindow</remarks>
         </member>
         <member name="T:RelhaxModpack.RelhaxZipFile">
             <summary>
@@ -8009,7 +8067,7 @@
             </summary>
             <param name="reporter">The task to toggle</param>
         </member>
-        <member name="M:RelhaxModpack.Windows.AdvancedProgress.ToggleComplete(RelhaxModpack.InstallerExitCodes)">
+        <member name="M:RelhaxModpack.Windows.AdvancedProgress.ToggleComplete(RelhaxModpack.Utilities.Enums.InstallerExitCodes)">
             <summary>
             Toggle a reporting task to the complete state
             </summary>
@@ -8193,70 +8251,12 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.SelectionListEventArgs">
-            <summary>
-            Event arguments for when the selection list is closed
-            </summary>
-            <remarks>See https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c </remarks>
-        </member>
-        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.ContinueInstallation">
-            <summary>
-            If the installation should be continued or if the user canceled
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.ParsedCategoryList">
-            <summary>
-            The list of categories
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.Dependencies">
-            <summary>
-            The list of dependencies
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.GlobalDependencies">
-            <summary>
-            The list of global dependencies
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.UserMods">
-            <summary>
-            The list of use mods
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.IsAutoInstall">
-            <summary>
-            Flag to determine if the current installation is started from auto install mode
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Windows.SelectionListEventArgs.IsSelectionOutOfDate">
-            <summary>
-            Flag to determine if the current installation loaded with selection file
-            format V3+ is out of date with what the database has
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Windows.SelectionListClosedDelegate">
             <summary>
             The delegate to invoke when calling back to the sender for the SelectionClosed event
             </summary>
             <param name="sender">The sender (this)</param>
             <param name="e">The event arguments to send to the installer (MainWindow)</param>
-        </member>
-        <member name="T:RelhaxModpack.Windows.SelectionPropagationDirection">
-            <summary>
-            The UI checked propagation directions
-            </summary>
-            <remarks>When a UI package element is checked, it needs to propagate the checked behavior up or down to prevent an invalid selection</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Windows.SelectionPropagationDirection.PropagateUp">
-            <summary>
-            Up the higher parent levels
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Windows.SelectionPropagationDirection.PropagateDown">
-            <summary>
-            Down to lower child levels
-            </summary>
         </member>
         <member name="T:RelhaxModpack.Windows.ModSelectionList">
             <summary>

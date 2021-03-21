@@ -21,78 +21,17 @@ using RelhaxModpack.Database;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
+using RelhaxModpack.Utilities.ClassEventArgs;
 
 namespace RelhaxModpack.Windows
 {
-    #region Structs and stuff
-    /// <summary>
-    /// Event arguments for when the selection list is closed
-    /// </summary>
-    /// <remarks>See https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c </remarks>
-    public class SelectionListEventArgs : EventArgs
-    {
-        /// <summary>
-        /// If the installation should be continued or if the user canceled
-        /// </summary>
-        public bool ContinueInstallation = false;
-
-        /// <summary>
-        /// The list of categories
-        /// </summary>
-        public List<Category> ParsedCategoryList;
-
-        /// <summary>
-        /// The list of dependencies
-        /// </summary>
-        public List<Dependency> Dependencies;
-
-        /// <summary>
-        /// The list of global dependencies
-        /// </summary>
-        public List<DatabasePackage> GlobalDependencies;
-
-        /// <summary>
-        /// The list of use mods
-        /// </summary>
-        public List<SelectablePackage> UserMods;
-
-        /// <summary>
-        /// Flag to determine if the current installation is started from auto install mode
-        /// </summary>
-        public bool IsAutoInstall = false;
-
-        /// <summary>
-        /// Flag to determine if the current installation loaded with selection file
-        /// format V3+ is out of date with what the database has
-        /// </summary>
-        public bool IsSelectionOutOfDate = false;
-
-        public string WoTModpackOnlineFolderFromDB = string.Empty;
-    }
-
+    #region Stuff
     /// <summary>
     /// The delegate to invoke when calling back to the sender for the SelectionClosed event
     /// </summary>
     /// <param name="sender">The sender (this)</param>
     /// <param name="e">The event arguments to send to the installer (MainWindow)</param>
     public delegate void SelectionListClosedDelegate(object sender, SelectionListEventArgs e);
-
-    /// <summary>
-    /// The UI checked propagation directions
-    /// </summary>
-    /// <remarks>When a UI package element is checked, it needs to propagate the checked behavior up or down to prevent an invalid selection</remarks>
-    public enum SelectionPropagationDirection
-    {
-        /// <summary>
-        /// Up the higher parent levels
-        /// </summary>
-        PropagateUp,
-
-        /// <summary>
-        /// Down to lower child levels
-        /// </summary>
-        PropagateDown
-    }
     #endregion
 
     /// <summary>

@@ -16,6 +16,7 @@ using System.Threading;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
+using RelhaxModpack.Utilities.ClassEventArgs;
 
 namespace RelhaxInstallerUnitTester
 {

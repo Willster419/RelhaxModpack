@@ -2,6 +2,7 @@
 using System.IO;
 using RelhaxModpack.UI;
 using RelhaxModpack.Settings;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Windows
 {   ///I exist as a branch

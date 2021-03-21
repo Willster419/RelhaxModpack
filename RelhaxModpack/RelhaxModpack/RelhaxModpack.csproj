@@ -189,9 +189,13 @@
     <Compile Include="UI\WindowColorset.cs" />
     <Compile Include="UI\ZoomBorder.cs" />
     <Compile Include="Utilities\ClassEventArgs\LogMessageEventArgs.cs" />
+    <Compile Include="Utilities\ClassEventArgs\RelhaxInstallFinishedEventArgs.cs" />
+    <Compile Include="Utilities\ClassEventArgs\SelectionListEventArgs.cs" />
     <Compile Include="Utilities\Enums\ApplicationMode.cs" />
     <Compile Include="Utilities\Enums\ApplicationVersions.cs" />
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
+    <Compile Include="Utilities\Enums\InstallerExitCodes.cs" />
+    <Compile Include="Utilities\Enums\SelectionPropagationDirection.cs" />
     <Compile Include="Utilities\Enums\EditorTransferMode.cs" />
     <Compile Include="Utilities\Enums\DatabaseVersions.cs" />
     <Compile Include="Utilities\Enums\DatabaseXmlVersion.cs" />
@@ -214,6 +218,7 @@
     <Compile Include="Utilities\Enums\SelectionView.cs" />
     <Compile Include="Utilities\Enums\AutomationRunMode.cs" />
     <Compile Include="Utilities\Enums\UIThemes.cs" />
+    <Compile Include="Utilities\Enums\UninstallerExitCodes.cs" />
     <Compile Include="Utilities\Enums\UninstallModes.cs" />
     <Compile Include="Utilities\Enums\UpdateTypes.cs" />
     <Compile Include="Utilities\Enums\XmlLoadType.cs" />
