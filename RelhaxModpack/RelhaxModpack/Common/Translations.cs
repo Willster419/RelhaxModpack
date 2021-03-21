@@ -413,7 +413,7 @@ namespace RelhaxModpack
             List<FrameworkElement> allWindowControls = UiUtils.GetAllWindowComponentsVisual(window, false);
             foreach (FrameworkElement v in allWindowControls)
             {
-                TranslateComponent(v, true);
+                TranslateComponent(v, applyToolTips);
             }
         }
 
@@ -2028,7 +2028,7 @@ namespace RelhaxModpack
             Russian.Add("SelectionViewGB", "Вид списка");
 
             //Component: SelectionDefaultText
-            //Mod selection view default (relhax) [NOW WPF VERSION IS DEFAULT]
+            //Mod selection view default (relhax)
             English.Add("SelectionDefaultText", "Default");
             German.Add("SelectionDefaultText", "Standard");
             Polish.Add("SelectionDefaultText", "Domyślny");
@@ -2037,7 +2037,7 @@ namespace RelhaxModpack
             Russian.Add("SelectionDefaultText", "Стандартный");
 
             //Component: SelectionLegacyText
-            //Mod selection view legacy (OMC)
+            //Mod selection view legacy (OMC) [Now default]
             AddTranslationToAll("SelectionLegacyText", "OMC Legacy");
 
             //Component: Mod selection Description
