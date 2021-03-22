@@ -4490,6 +4490,128 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.UI.RelhaxInstallerProgress">
+            <summary>
+            The RelhaxInstallerProgress class adds additional properties for zip file extraction
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.BytesProcessed">
+            <summary>
+            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
+            During copy operations, the number of processed copied bytes, and the total bytes to copy.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.BytesTotal">
+            <summary>
+            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
+            During copy operations, the number of processed copied bytes, and the total bytes to copy.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.WaitingOnDownload">
+            <summary>
+            Flag to mark if the install engine is waiting on a package to download
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.WaitingOnDownloadOfAThread">
+            <summary>
+            Flag to mark if the install engine is waiting on a package to download in a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.BytesProcessedOfAThread">
+            <summary>
+            The number of bytes currently processed in an entry in a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.BytesTotalOfAThread">
+            <summary>
+            The number of bytes to total process in an entry in a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.Filename">
+            <summary>
+            The name of the file currently being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.FilenameOfAThread">
+            <summary>
+            The name of the file currently being processed in a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntryFilename">
+            <summary>
+            During zip file extraction, the entry inside the zip file being processed
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntriesProcessed">
+            <summary>
+            The number of entries currently processed in this zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntriesTotal">
+            <summary>
+            The total number of entries in this zip file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntriesProcessedOfAThread">
+            <summary>
+            The number of processed entries of a zip file of a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntriesTotalOfAThread">
+            <summary>
+            The number of total entries of a zip file of a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntryFilenameOfAThread">
+            <summary>
+            The entry name of a zip file of a thread
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.ThreadID">
+            <summary>
+            The ID number of the thread that this zip file belongs to
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.TotalThreads">
+            <summary>
+            The total number of extraction threads
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.CompletedThreads">
+            <summary>
+            The number of completed extraction threads
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.InstallGroup">
+            <summary>
+            The extraction installation group
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.TotalInstallGroups">
+            <summary>
+            The total number of install groups
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.CompletedPackagesOfAThread">
+            <summary>
+            The number of completed extracted packages that thread [index] has
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.TotalPackagesofAThread">
+            <summary>
+            The number of packages that thread [index] has
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.InstallStatus">
+            <summary>
+            The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.UninstallStatus">
+            <summary>
+            The current status of the uninstaller. Also used as exit code.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.UI.Theme">
             <summary>
             The root object for all definitions needed for the UI engine
@@ -5225,128 +5347,6 @@
         <member name="F:RelhaxModpack.UI.RelhaxProgress.ReportMessage">
             <summary>
             A custom formatted string to use if the async task supports/implements it
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.UI.RelhaxInstallerProgress">
-            <summary>
-            The RelhaxInstallerProgress class adds additional properties for zip file extraction
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.BytesProcessed">
-            <summary>
-            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
-            During copy operations, the number of processed copied bytes, and the total bytes to copy.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.BytesTotal">
-            <summary>
-            During zip file extraction, the number of processed bytes extracted, and the total bytes to extract.
-            During copy operations, the number of processed copied bytes, and the total bytes to copy.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.WaitingOnDownload">
-            <summary>
-            Flag to mark if the install engine is waiting on a package to download
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.WaitingOnDownloadOfAThread">
-            <summary>
-            Flag to mark if the install engine is waiting on a package to download in a thread
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.BytesProcessedOfAThread">
-            <summary>
-            The number of bytes currently processed in an entry in a thread
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.BytesTotalOfAThread">
-            <summary>
-            The number of bytes to total process in an entry in a thread
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.Filename">
-            <summary>
-            The name of the file currently being processed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.FilenameOfAThread">
-            <summary>
-            The name of the file currently being processed in a thread
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntryFilename">
-            <summary>
-            During zip file extraction, the entry inside the zip file being processed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntriesProcessed">
-            <summary>
-            The number of entries currently processed in this zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntriesTotal">
-            <summary>
-            The total number of entries in this zip file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntriesProcessedOfAThread">
-            <summary>
-            The number of processed entries of a zip file of a thread
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntriesTotalOfAThread">
-            <summary>
-            The number of total entries of a zip file of a thread
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.EntryFilenameOfAThread">
-            <summary>
-            The entry name of a zip file of a thread
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.ThreadID">
-            <summary>
-            The ID number of the thread that this zip file belongs to
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.TotalThreads">
-            <summary>
-            The total number of extraction threads
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.CompletedThreads">
-            <summary>
-            The number of completed extraction threads
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.InstallGroup">
-            <summary>
-            The extraction installation group
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.TotalInstallGroups">
-            <summary>
-            The total number of install groups
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.CompletedPackagesOfAThread">
-            <summary>
-            The number of completed extracted packages that thread [index] has
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.TotalPackagesofAThread">
-            <summary>
-            The number of packages that thread [index] has
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.InstallStatus">
-            <summary>
-            The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.UninstallStatus">
-            <summary>
-            The current status of the uninstaller. Also used as exit code.
             </summary>
         </member>
         <member name="T:RelhaxModpack.UI.StretchingTreeView">
