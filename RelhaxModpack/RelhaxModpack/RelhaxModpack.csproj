@@ -180,9 +180,11 @@
     <Compile Include="UI\RelhaxComboBoxItem.xaml.cs">
       <DependentUpon>RelhaxComboBoxItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\RelhaxDownloadProgress.cs" />
     <Compile Include="UI\RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\RelhaxInstallerProgress.cs" />
     <Compile Include="UI\Theme.cs" />
     <Compile Include="UI\Themes.cs" />
     <Compile Include="UI\UiUtils.cs" />
