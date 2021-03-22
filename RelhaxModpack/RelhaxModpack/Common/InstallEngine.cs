@@ -127,7 +127,6 @@ namespace RelhaxModpack
         /// <summary>
         /// A list of all current trigger event names
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]
         public static readonly string[] CompleteTriggerList = new string[]
         {
             TriggerContouricons,
