@@ -139,6 +139,7 @@
     <Compile Include="Automation\IDownloadTask.cs" />
     <Compile Include="Automation\ShellExecuteTask.cs" />
     <Compile Include="Common\ApplicationConstants.cs" />
+    <Compile Include="Common\DownloadManager.cs" />
     <Compile Include="Common\IComponentWithID.cs" />
     <Compile Include="Database\Category.cs" />
     <Compile Include="Database\DatabaseUtils.cs" />
