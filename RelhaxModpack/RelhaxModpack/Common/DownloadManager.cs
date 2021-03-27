@@ -1,6 +1,7 @@
 ﻿using RelhaxModpack.Database;
 using RelhaxModpack.UI;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,6 +36,7 @@ namespace RelhaxModpack.Common
         private MD5 md5Hash;
         private FileStream filestream;
         private RelhaxDownloadProgress downloadProgress;
+        private Md5DatabaseManager databaseManager;
 
         //RelhaxDownloadProgress params and exit codes TODO
 
@@ -43,6 +45,7 @@ namespace RelhaxModpack.Common
             webClient = new WebClient();
             md5Hash = MD5.Create();
             downloadProgress = new RelhaxDownloadProgress();
+            databaseManager = new Md5DatabaseManager();
         }
 
         public async Task DownloadPackagesAsync(List<DatabasePackage> packagesToDownload)
@@ -67,17 +70,28 @@ namespace RelhaxModpack.Common
                 Logging.Warning("CancellationToken is null, no cancellations will be acknowledged for this download operation");
             }
 
-            foreach (DatabasePackage package in packagesToDownload)
+            //load md5 database manager before downloading packages
+            if (!databaseManager.DatabaseLoaded)
+                databaseManager.LoadMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
+
+            for (int i = 0; i < packagesToDownload.Count; i++)
             {
-                Logging.Debug(Utilities.Enums.LogOptions.ClassName, "Download of package {0} from formed URL {1}", package.PackageName, UrlBase + package.ZipFile);
+                DatabasePackage package = packagesToDownload[i];
+                Logging.Info(LogOptions.ClassName, "Download {0} of {1}, package {2} start", i + 1, packagesToDownload.Count, package.PackageName);
+                Logging.Debug(LogOptions.ClassName, "Download of package {0} from formed URL {1}", package.PackageName, UrlBase + package.ZipFile);
                 await DownloadPackageAsync(package);
+                Logging.Info(LogOptions.ClassName, "Download {0} of {1}, package {2} finish", i + 1, packagesToDownload.Count, package.PackageName);
             }
         }
 
         public async Task DownloadPackageAsync(DatabasePackage package)
         {
+            if (!databaseManager.DatabaseLoaded)
+                databaseManager.LoadMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
+
             string downloadUrl = UrlBase + package.ZipFile;
             string downloadLocation = Path.Combine(DownloadLocationBase, package.ZipFile);
+
             Logging.Debug("Delete {0} if exists", downloadLocation);
             if (File.Exists(downloadLocation))
                 FileUtils.FileDelete(downloadLocation);
@@ -93,6 +107,7 @@ namespace RelhaxModpack.Common
                 {
                     try
                     {
+                        Logging.Debug(LogOptions.ClassName, "Opening download stream and file write stream for {0}", package.ZipFile);
                         using (stream = webClient.OpenRead(downloadUrl))
                         using (filestream = new FileStream(downloadLocation, FileMode.Create, FileAccess.Write))
                         {
@@ -114,8 +129,9 @@ namespace RelhaxModpack.Common
                                         sBuilder.Append(md5Hash.Hash[i].ToString("x2"));
                                     }
                                     Hash = sBuilder.ToString();
+                                    Logging.Info(LogOptions.ClassName, "Hash for package {0} calculated to be {1}", package.PackageName, Hash);
 
-                                    if ((!Hash.Equals("f") && (!Hash.Equals(package.CRC))))
+                                    if ((!package.CRC.Equals("f") && (!Hash.Equals(package.CRC))))
                                     {
                                         //download failed, the hash doesn't match. try again
                                         if (failCount == 3)
@@ -126,15 +142,6 @@ namespace RelhaxModpack.Common
                                     }
                                     else
                                     {
-                                        if (Hash.Equals("f"))
-                                        {
-                                            Logging.Info("The hash was calculated to be {0}, but package reports {1} to mean it's a beta package that can change. Skipping saving to database.", Hash, package.CRC);
-                                        }
-                                        else
-                                        {
-                                            //save to local database cache file
-                                            //TODO
-                                        }
                                         ThrowIfCancellationRequested();
                                         Progress.Report(downloadProgress);
 
@@ -142,6 +149,10 @@ namespace RelhaxModpack.Common
                                         md5Hash.Clear();
                                         stream.Close();
                                         package.DownloadFlag = false;
+
+                                        //save to local database cache file, even if the crc is "f". The loading in the selection list will skip getting the hash if the crc is f
+                                        databaseManager.UpdateFileEntry(package.ZipFile, File.GetLastWriteTime(downloadLocation), Hash);
+                                        databaseManager.SaveMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
 
                                         //set the failCount for loop to jump out and the userRetry to stop asking
                                         failCount = 4;
