@@ -22,6 +22,8 @@ namespace RelhaxModpack.Common
 
         public const string DatabaseFiletimeMd5Name = "md5";
 
+        public bool DatabaseLoaded { get; private set; } = false;
+
         private XDocument Md5HashDocument;
 
         public void LoadMd5Database(string fileLocation)
@@ -47,6 +49,7 @@ namespace RelhaxModpack.Common
                 Logging.Debug(LogOptions.ClassName, "Creating new database file");
                 Md5HashDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement(DatabaseRootNodeName));
             }
+            DatabaseLoaded = true;
         }
 
         public void SaveMd5Database(string fileLocation)
