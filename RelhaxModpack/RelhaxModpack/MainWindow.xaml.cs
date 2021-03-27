@@ -3485,7 +3485,7 @@ namespace RelhaxModpack
 
             //apply download mirror
             SelectDownloadMirrorCombobox.SelectionChanged -= SelectDownloadMirrorCombobox_SelectionChanged;
-            if ((SelectDownloadMirrorCombobox.Items.Count - 1) > ModpackSettings.DownloadMirror)
+            if ((SelectDownloadMirrorCombobox.Items.Count) > ModpackSettings.DownloadMirror)
             {
                 SelectDownloadMirrorCombobox.SelectedIndex = ModpackSettings.DownloadMirror;
             }
