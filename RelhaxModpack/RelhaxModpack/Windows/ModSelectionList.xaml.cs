@@ -91,7 +91,6 @@ namespace RelhaxModpack.Windows
         private Brush OriginalBrush = null;
         private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
         private DispatcherTimer FlashTimer = null;
-        private XDocument Md5HashDocument = null;
         private DatabaseVersions databaseVersion;
         private bool disposedValue;
         private string WoTModpackOnlineFolderFromDB;
@@ -487,23 +486,11 @@ namespace RelhaxModpack.Windows
             progress.Report(loadProgress);
 
             //check if the md5 hash database file exists, if not then make it
-            if (!File.Exists(ApplicationConstants.MD5HashDatabaseXmlFile))
-            {
-                Md5HashDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
-            }
-            else
-            {
-                Md5HashDocument = XmlUtils.LoadXDocument(ApplicationConstants.MD5HashDatabaseXmlFile, XmlLoadType.FromFile);
-                if (Md5HashDocument == null)
-                {
-                    Logging.Warning("Failed to load md5 hash document, creating new");
-                    File.Delete(ApplicationConstants.MD5HashDatabaseXmlFile);
-                    Md5HashDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("database"));
-                }
-            }
+            Md5DatabaseManager md5DatabaseManager = new Md5DatabaseManager();
+            md5DatabaseManager.LoadMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
 
             //make a sublist of only packages where a zipfile exists (in the database)
-            List<DatabasePackage> flatListZips = flatList.Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
+            List<DatabasePackage> flatListZips = flatList.FindAll(package => !string.IsNullOrWhiteSpace(package.ZipFile));
             foreach (DatabasePackage package in flatListZips)
             {
                 //make path for the zipfile
@@ -514,6 +501,10 @@ namespace RelhaxModpack.Windows
                 {
                     //set the download flag since it doesn't exist
                     package.DownloadFlag = true;
+
+                    //delete the entry if it exists
+                    if (md5DatabaseManager.FileEntryWithoutTimeExists(package.ZipFile))
+                        md5DatabaseManager.DeleteFileEntry(package.ZipFile);
                     continue;
                 }
 
@@ -522,14 +513,26 @@ namespace RelhaxModpack.Windows
                     Translations.GetTranslatedString("verifyingDownloadCache"), package.PackageName);
                 progress.Report(loadProgress);
 
-                //compares the crcs of the files
-                string oldCRCFromDownloadsFolder = GetMD5Hash(zipFile);
-                if (!package.CRC.Equals(oldCRCFromDownloadsFolder))
-                    package.DownloadFlag = true;
+                //check if the entry in the database is up to date (filetime) with the filetime of the currently downloaded file
+                //if it's not, then get the hash and update the hash and filetime
+                if (!md5DatabaseManager.FileEntryUpToDate(package.ZipFile, File.GetLastWriteTime(zipFile)))
+                {
+                    string hash = FileUtils.CreateMD5Hash(zipFile);
+                    if (hash.Equals("-1"))
+                        throw new BadMemeException("A '-1' means the file doesn't exist. But it does. Or at least it should at this point.");
+                    md5DatabaseManager.UpdateFileEntry(package.ZipFile, File.GetLastWriteTime(zipFile), hash);
+                }
+                else
+                {
+                    //the file entry is up to date in the database, but it may be out of date with the modpack database
+                    if (!package.CRC.Equals(md5DatabaseManager.GetMd5HashFileEntry(package.ZipFile, File.GetLastWriteTime(zipFile))))
+                        package.DownloadFlag = true;
+                }
+                
             }
 
             //and save the file
-            Md5HashDocument.Save(ApplicationConstants.MD5HashDatabaseXmlFile);
+            md5DatabaseManager.SaveMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
         }
 
         private void InitUsermods()
@@ -2961,88 +2964,6 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region MD5 hash code
-        private string GetMD5Hash(string inputFile)
-        {
-            string hash;
-            //get filetime from file, convert it to string with base 10
-            string filetime = Convert.ToString(File.GetLastWriteTime(inputFile).ToFileTime(), 10);
-            //extract filename with path
-            string filename = Path.GetFileName(inputFile);
-            //check database for filename with filetime
-            hash = GetMd5HashDatabase(filename, filetime);
-            if (hash == "-1")   //file not found in database
-            {
-                //create Md5Hash from file
-                hash = FileUtils.CreateMD5Hash(inputFile);
-
-                if (hash == "-1")
-                {
-                    //no file found, then delete from database
-                    DeleteMd5HashDatabase(filename);
-                }
-                else
-                {
-                    //file found. update the database with new values
-                    UpdateMd5HashDatabase(filename, hash, filetime);
-                }
-                //report back the created Hash
-                return hash;
-            }
-            //Hash found in database
-            else
-            {
-                //report back the stored Hash
-                return hash;
-            }
-        }
-        // need filename and filetime to check the database
-        private string GetMd5HashDatabase(string inputFile, string inputFiletime)
-        {
-            bool exists = Md5HashDocument.Descendants("file")
-                       .Where(arg => arg.Attribute("filename").Value.Equals(inputFile) && arg.Attribute("filetime").Value.Equals(inputFiletime))
-                       .Any();
-            if (exists)
-            {
-                XElement element = Md5HashDocument.Descendants("file")
-                   .Where(arg => arg.Attribute("filename").Value.Equals(inputFile) && arg.Attribute("filetime").Value.Equals(inputFiletime))
-                   .Single();
-                return element.Attribute("md5").Value;
-            }
-            return "-1";
-        }
-
-        private void UpdateMd5HashDatabase(string inputFile, string inputMd5Hash, string inputFiletime)
-        {
-            bool exists = Md5HashDocument.Descendants("file")
-                       .Where(arg => arg.Attribute("filename").Value.Equals(inputFile))
-                       .Any();
-            if (exists)
-            {
-                XElement element = Md5HashDocument.Descendants("file")
-                   .Where(arg => arg.Attribute("filename").Value.Equals(inputFile))
-                   .Single();
-                element.Attribute("filetime").Value = inputFiletime;
-                element.Attribute("md5").Value = inputMd5Hash;
-            }
-            else
-            {
-                Md5HashDocument.Element("database").Add(new XElement("file", new XAttribute("filename", inputFile), new XAttribute("filetime", inputFiletime), new XAttribute("md5", inputMd5Hash)));
-            }
-        }
-
-        private void DeleteMd5HashDatabase(string inputFile)
-        {
-            // extract filename from path (if call with full path)
-            string fileName = Path.GetFileName(inputFile);
-            bool exists = Md5HashDocument.Descendants("file")
-                       .Where(arg => arg.Attribute("filename").Value.Equals(inputFile))
-                       .Any();
-            if (exists)
-                Md5HashDocument.Descendants("file").Where(arg => arg.Attribute("filename").Value.Equals(inputFile)).Remove();
-        }
-        #endregion
-
         #region Collapse and expand buttons
         private void CollapseAllRealButton_Click(object sender, RoutedEventArgs e)
         {
@@ -3108,9 +3029,6 @@ namespace RelhaxModpack.Windows
                         FlashTimer.Tick -= OnFlashTimerTick;
                         FlashTimer = null;
                     }
-
-                    if (Md5HashDocument != null)
-                        Md5HashDocument = null;
 
                     //public resources
                     if (OnSelectionListReturn != null)
