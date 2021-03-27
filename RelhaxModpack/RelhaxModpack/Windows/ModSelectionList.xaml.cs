@@ -507,6 +507,12 @@ namespace RelhaxModpack.Windows
                         md5DatabaseManager.DeleteFileEntry(package.ZipFile);
                     continue;
                 }
+                else if (package.CRC.Equals("f"))
+                {
+                    //this package is under current testing, don't update the hash for it, but mark it as needing download
+                    package.DownloadFlag = true;
+                    continue;
+                }
 
                 //since file exists, report progress here
                 loadProgress.ReportMessage = string.Format("{0} {1}",
