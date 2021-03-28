@@ -531,8 +531,12 @@ namespace RelhaxModpack.Windows
                 else
                 {
                     //the file entry is up to date in the database, but it may be out of date with the modpack database
-                    if (!package.CRC.Equals(md5DatabaseManager.GetMd5HashFileEntry(package.ZipFile, File.GetLastWriteTime(zipFile))))
+                    string hashInDb = md5DatabaseManager.GetMd5HashFileEntry(package.ZipFile, File.GetLastWriteTime(zipFile));
+                    if (!package.CRC.Equals(hashInDb))
+                    {
+                        Logging.Info("Zip file {0} reports up to date by filetime, but local hash {1} does not match online hash {2}. Flag for re-download", package.ZipFile, hashInDb, package.CRC);
                         package.DownloadFlag = true;
+                    }
                 }
                 
             }
