@@ -290,15 +290,15 @@ namespace RelhaxModpack.Utilities
         /// <summary>
         /// Calculates and returns the size magnitude of the file (kilo, mega, giga...)
         /// </summary>
-        /// <param name="value">The file size in bytes</param>
+        /// <param name="bytes">The file size in bytes</param>
         /// <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
         /// <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
         /// <param name="ignoreSizeWarningIf0">If set to true, the application log will not show values about the passed in value for size calculation being 0. 
         /// File of 0 size, for example.</param>
         /// <returns>The string representation to decimalPlaces of the file size optionally with the bytes parameter</returns>
-        public static string SizeSuffix(ulong value, uint decimalPlaces = 1, bool sizeSuffix = false, bool ignoreSizeWarningIf0 = false)
+        public static string SizeSuffix(ulong bytes, uint decimalPlaces = 1, bool sizeSuffix = false, bool ignoreSizeWarningIf0 = false)
         {
-            if (value == 0)
+            if (bytes == 0)
             {
                 if (!ignoreSizeWarningIf0)
                     Logging.Warning("SizeSuffix value is 0 (is this the intent?)");
@@ -308,7 +308,7 @@ namespace RelhaxModpack.Utilities
                     return "0.0";
             }
 
-            if (value < 1000)
+            if (bytes < 1000)
             {
                 if (sizeSuffix)
                     return string.Format("{0:n" + decimalPlaces + "} {1}", 0.1, SizeSuffixes[1]);
@@ -317,11 +317,11 @@ namespace RelhaxModpack.Utilities
             }
 
             // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
-            int mag = (int)Math.Log(value, 1024);
+            int mag = (int)Math.Log(bytes, 1024);
 
             // 1L << (mag * 10) == 2 ^ (10 * mag) 
             // [i.e. the number of bytes in the unit corresponding to mag]
-            decimal adjustedSize = (decimal)value / (1L << (mag * 10));
+            decimal adjustedSize = (decimal)bytes / (1L << (mag * 10));
 
             // make adjustment when the value is large enough that
             // it would round up to 1000 or more
