@@ -1685,26 +1685,6 @@
             The name of the author of the mod/configuration/etc.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Database.DatabasePackage.BytesToDownload">
-            <summary>
-            The number of bytes to download, used if "install while download" is true
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.DatabasePackage.BytesDownloaded">
-            <summary>
-            The number of bytes currently downloaded, used if "install while download" is true
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.DatabasePackage.IsCurrentlyDownloading">
-            <summary>
-            Flag to determine if this package is the one currently downloading, used if "install while download" is true
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.DatabasePackage.DownloadFailed">
-            <summary>
-            Flag to determine if this package failed to download from either download methods
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Tags">
             <summary>
             The list of tags that this package contains (like patches, scripts, etc)
@@ -1713,11 +1693,6 @@
         <member name="P:RelhaxModpack.Database.DatabasePackage.EditorTreeViewItem">
             <summary>
             Reference for the UI element of this package in the database editor
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.DatabasePackage.ExtractionStarted">
-            <summary>
-            Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.ComponentInternalName">
@@ -4507,16 +4482,6 @@
             During copy operations, the number of processed copied bytes, and the total bytes to copy.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.WaitingOnDownload">
-            <summary>
-            Flag to mark if the install engine is waiting on a package to download
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.WaitingOnDownloadOfAThread">
-            <summary>
-            Flag to mark if the install engine is waiting on a package to download in a thread
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.BytesProcessedOfAThread">
             <summary>
             The number of bytes currently processed in an entry in a thread
@@ -4600,6 +4565,11 @@
         <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.TotalPackagesofAThread">
             <summary>
             The number of packages that thread [index] has
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.WaitingOnDownloadsOfAThread">
+            <summary>
+            Flag to mark if the install engine is waiting on a package to download in a thread
             </summary>
         </member>
         <member name="F:RelhaxModpack.UI.RelhaxInstallerProgress.InstallStatus">
@@ -6446,7 +6416,7 @@
             <summary>
             Calculates and returns the size magnitude of the file (kilo, mega, giga...)
             </summary>
-            <param name="value">The file size in bytes</param>
+            <param name="bytes">The file size in bytes</param>
             <param name="decimalPlaces">The number of decimal places to maintain in the result</param>
             <param name="sizeSuffix">If it should return the byte symbol with the size amount (KB, MB, etc.)</param>
             <param name="ignoreSizeWarningIf0">If set to true, the application log will not show values about the passed in value for size calculation being 0. 
