@@ -1197,15 +1197,14 @@ namespace RelhaxModpack
                         if (ex is OperationCanceledException)
                         {
                             Logging.Info("Download task was canceled, canceling installation");
-                            ToggleUIButtons(true);
-                            return;
                         }
                         else
                         {
                             Logging.Exception(ex.ToString());
-                            ToggleUIButtons(true);
-                            return;
                         }
+                        ResetUI();
+                        ToggleUIButtons(true);
+                        return;
                     }
                     finally
                     {
