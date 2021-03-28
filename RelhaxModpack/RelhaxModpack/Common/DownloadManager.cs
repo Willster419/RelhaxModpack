@@ -43,7 +43,6 @@ namespace RelhaxModpack.Common
         public DownloadManager()
         {
             webClient = new WebClient();
-            md5Hash = MD5.Create();
             databaseManager = new Md5DatabaseManager();
         }
 
@@ -116,6 +115,7 @@ namespace RelhaxModpack.Common
                         Logging.Debug(LogOptions.ClassName, "Opening download stream and file write stream for {0}", package.ZipFile);
                         using (stream = webClient.OpenRead(downloadUrl))
                         using (filestream = new FileStream(downloadLocation, FileMode.Create, FileAccess.Write))
+                        using (md5Hash = MD5.Create())
                         {
                             byte[] buffer = new byte[BYTE_CHUNKS];
                             ThrowIfCancellationRequested();
@@ -162,7 +162,7 @@ namespace RelhaxModpack.Common
                                         }
                                         else
                                         {
-                                            Logging.Warning("The file download hash failed to match. Downloaded = {0}, Database = {1}, try {2} of {3}", Hash, package.CRC, failCount, RetryCount);
+                                            Logging.Warning("The file download hash for zip file {0} failed to match. Downloaded = {1}, Database = {2}, try {3} of {4}", package.ZipFile, Hash, package.CRC, failCount, RetryCount);
                                         }
                                     }
                                     else
@@ -247,7 +247,7 @@ namespace RelhaxModpack.Common
         public void Dispose()
         {
             ((IDisposable)webClient).Dispose();
-            ((IDisposable)md5Hash).Dispose();
+            ((IDisposable)md5Hash)?.Dispose();
             ((IDisposable)stream)?.Dispose();
             ((IDisposable)filestream)?.Dispose();
         }
