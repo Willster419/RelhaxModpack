@@ -1546,31 +1546,35 @@ namespace RelhaxModpack
         private void DownloadProgress_ProgressChanged(object sender, RelhaxDownloadProgress e)
         {
             //if current is 0 then use it as an initial block
-            if (currentBytesDownloaded == 0)
+            switch (e.DownloadProgressState)
             {
-                //init elapsed timer
-                if (downloadTimer == null)
-                {
-                    downloadTimer = new Stopwatch();
-                }
-                downloadTimer.Restart();
-
-                //init update timer
-                if (downloadDisplayTimer == null)
-                {
-                    downloadDisplayTimer = new DispatcherTimer()
+                case DownloadProgressState.OpenStreams:
+                    //init elapsed timer
+                    if (downloadTimer == null)
                     {
-                        Interval = TimeSpan.FromMilliseconds(1000),
-                        IsEnabled = false
-                    };
-                    downloadDisplayTimer.Tick += DownloadDisplayTimer_Elapsed;
-                }
-                downloadDisplayTimer.Stop();
-                downloadDisplayTimer.Start();
+                        downloadTimer = new Stopwatch();
+                    }
+                    downloadTimer.Restart();
 
-                //init rates and history
-                lastBytesDownloaded = 0;
-                downloadRateDisplay = 0;
+                    //init update timer
+                    if (downloadDisplayTimer == null)
+                    {
+                        downloadDisplayTimer = new DispatcherTimer()
+                        {
+                            Interval = TimeSpan.FromMilliseconds(1000),
+                            IsEnabled = false
+                        };
+                        downloadDisplayTimer.Tick += DownloadDisplayTimer_Elapsed;
+                    }
+                    downloadDisplayTimer.Stop();
+                    downloadDisplayTimer.Start();
+
+                    //init rates and history
+                    lastBytesDownloaded = 0;
+                    downloadRateDisplay = 0;
+                    break;
+                case DownloadProgressState.None:
+                    return;
             }
 
             totalBytesToDownload = e.ChildTotal;

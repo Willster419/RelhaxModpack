@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.Database;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace RelhaxModpack.UI
 {
     public class RelhaxDownloadProgress : RelhaxProgress
     {
-        public DatabasePackage DatabasePackage;
+        public DatabasePackage DatabasePackage = null;
+
+        public DownloadProgressState DownloadProgressState = DownloadProgressState.None;
     }
 }

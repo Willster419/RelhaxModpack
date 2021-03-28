@@ -198,6 +198,7 @@
     <Compile Include="Utilities\Enums\ApplicationMode.cs" />
     <Compile Include="Utilities\Enums\ApplicationVersions.cs" />
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
+    <Compile Include="Utilities\Enums\DownloadProgressState.cs" />
     <Compile Include="Utilities\Enums\InstallerExitCodes.cs" />
     <Compile Include="Utilities\Enums\SelectionPropagationDirection.cs" />
     <Compile Include="Utilities\Enums\EditorTransferMode.cs" />

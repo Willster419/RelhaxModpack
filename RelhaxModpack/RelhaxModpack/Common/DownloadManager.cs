@@ -40,8 +40,6 @@ namespace RelhaxModpack.Common
         private RelhaxDownloadProgress downloadProgress;
         private Md5DatabaseManager databaseManager;
 
-        //RelhaxDownloadProgress params and exit codes TODO
-
         public DownloadManager()
         {
             webClient = new WebClient();
@@ -49,7 +47,7 @@ namespace RelhaxModpack.Common
             databaseManager = new Md5DatabaseManager();
         }
 
-        public async Task DownloadPackagesAsync(List<DatabasePackage> packagesToDownload)
+        public Task DownloadPackagesAsync(List<DatabasePackage> packagesToDownload)
         {
             if (string.IsNullOrEmpty(UrlBase))
             {
@@ -73,21 +71,23 @@ namespace RelhaxModpack.Common
 
             downloadProgress = new RelhaxDownloadProgress() { ParrentTotal = packagesToDownload.Count };
 
-            //load md5 database manager before downloading packages
-            if (!databaseManager.DatabaseLoaded)
-                databaseManager.LoadMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
+            return Task.Run(() => {
+                //load md5 database manager before downloading packages
+                if (!databaseManager.DatabaseLoaded)
+                    databaseManager.LoadMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
 
-            for (int i = 0; i < packagesToDownload.Count; i++)
-            {
-                DatabasePackage package = packagesToDownload[i];
-                Logging.Info(LogOptions.ClassName, "Download {0} of {1}, package {2} start", i + 1, packagesToDownload.Count, package.PackageName);
-                Logging.Debug(LogOptions.ClassName, "Download of package {0} from formed URL {1}", package.PackageName, UrlBase + package.ZipFile);
-                await DownloadPackageAsync(package);
-                Logging.Info(LogOptions.ClassName, "Download {0} of {1}, package {2} finish", i + 1, packagesToDownload.Count, package.PackageName);
-            }
+                for (int i = 0; i < packagesToDownload.Count; i++)
+                {
+                    DatabasePackage package = packagesToDownload[i];
+                    Logging.Info(LogOptions.ClassName, "Download {0} of {1}, package {2} start", i + 1, packagesToDownload.Count, package.PackageName);
+                    Logging.Debug(LogOptions.ClassName, "Download of package {0} from formed URL {1}", package.PackageName, UrlBase + package.ZipFile);
+                    DownloadPackage(package);
+                    Logging.Info(LogOptions.ClassName, "Download {0} of {1}, package {2} finish", i + 1, packagesToDownload.Count, package.PackageName);
+                }
+            });
         }
 
-        private async Task DownloadPackageAsync(DatabasePackage package)
+        private void DownloadPackage(DatabasePackage package)
         {
             if (!databaseManager.DatabaseLoaded)
                 databaseManager.LoadMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
@@ -102,6 +102,7 @@ namespace RelhaxModpack.Common
             ThrowIfCancellationRequested();
             downloadProgress.DatabasePackage = package;
             downloadProgress.ChildCurrent = downloadProgress.ChildTotal = 0;
+            downloadProgress.DownloadProgressState = DownloadProgressState.None;
             Progress.Report(downloadProgress);
 
             //open the stream to the file to download. A fail here means that the file might not exist
@@ -118,23 +119,38 @@ namespace RelhaxModpack.Common
                         {
                             byte[] buffer = new byte[BYTE_CHUNKS];
                             ThrowIfCancellationRequested();
+                            downloadProgress.DownloadProgressState = DownloadProgressState.OpenStreams;
                             Progress.Report(downloadProgress);
 
                             while (true)
                             {
                                 int readBytes = stream.Read(buffer, 0, BYTE_CHUNKS);
+                                downloadProgress.ChildCurrent += readBytes;
                                 if (readBytes < BYTE_CHUNKS)
                                 {
-                                    StringBuilder sBuilder = new StringBuilder();
+                                    //write and hash final segment
                                     md5Hash.TransformFinalBlock(buffer, 0, readBytes);
                                     filestream.Write(buffer, 0, readBytes);
 
+                                    //report progress
+                                    downloadProgress.DownloadProgressState = DownloadProgressState.Download;
+                                    Progress.Report(downloadProgress);
+
+                                    //output final hash entry and save to Hash property
+                                    StringBuilder sBuilder = new StringBuilder();
                                     for (int i = 0; i < md5Hash.Hash.Length; i++)
                                     {
                                         sBuilder.Append(md5Hash.Hash[i].ToString("x2"));
                                     }
                                     Hash = sBuilder.ToString();
                                     Logging.Info(LogOptions.ClassName, "Hash for package {0} calculated to be {1}", package.PackageName, Hash);
+
+                                    //close streams and clear hash entry
+                                    //This method calls Dispose, specifying true to release all resources. 
+                                    //https://docs.microsoft.com/en-us/dotnet/api/system.io.stream.close?view=netframework-4.8
+                                    filestream.Close();
+                                    stream.Close();
+                                    md5Hash.Clear();
 
                                     if ((!package.CRC.Equals("f") && (!Hash.Equals(package.CRC))))
                                     {
@@ -144,25 +160,29 @@ namespace RelhaxModpack.Common
                                             //this is the third time the file download has failed. something is wrong here.
                                             throw new BadMemeException(string.Format("The file download hash failed to match. Downloaded = {0}, Database = {1}", Hash, package.CRC));
                                         }
+                                        else
+                                        {
+                                            Logging.Warning("The file download hash failed to match. Downloaded = {0}, Database = {1}, try {2} of {3}", Hash, package.CRC, failCount, RetryCount);
+                                        }
                                     }
                                     else
                                     {
-                                        filestream.Close();
-                                        md5Hash.Clear();
-                                        stream.Close();
-                                        package.DownloadFlag = false;
-
                                         //save to local database cache file, even if the crc is "f". The loading in the selection list will skip getting the hash if the crc is f
                                         databaseManager.UpdateFileEntry(package.ZipFile, File.GetLastWriteTime(downloadLocation), Hash);
                                         databaseManager.SaveMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
+
+                                        //set download flag as false since it was successfully downloaded and recorded
+                                        package.DownloadFlag = false;
 
                                         //set the failCount for loop to jump out and the userRetry to stop asking
                                         failCount = 4;
                                         retry = false;
 
+                                        //report final progress and check for cancel
                                         downloadProgress.ParrentCurrent++;
-                                        ThrowIfCancellationRequested();
+                                        downloadProgress.DownloadProgressState = DownloadProgressState.DownloadCompleted;
                                         Progress.Report(downloadProgress);
+                                        ThrowIfCancellationRequested();
 
                                         if (ManualResetEvent != null)
                                         {
@@ -178,6 +198,7 @@ namespace RelhaxModpack.Common
                                     md5Hash.TransformBlock(buffer, 0, BYTE_CHUNKS, buffer, 0);
                                     filestream.Write(buffer, 0, BYTE_CHUNKS);
                                     ThrowIfCancellationRequested();
+                                    downloadProgress.DownloadProgressState = DownloadProgressState.Download;
                                     Progress.Report(downloadProgress);
                                 }
                             }
