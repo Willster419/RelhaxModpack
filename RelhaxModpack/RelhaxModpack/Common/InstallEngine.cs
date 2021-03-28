@@ -1468,19 +1468,21 @@ namespace RelhaxModpack
                             Logging.Info("Thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count);
                             //https://docs.microsoft.com/en-us/dotnet/api/system.threading.spinlock?view=net-5.0#examples
                             //SpinLockSample3
-                            SpinLock spinLock = new SpinLock(false);
+                            //SpinLock spinLock = new SpinLock(false);
                             bool valueLocked = false;
                             tasks[k] = Task.Run(() =>
                             {
                                 int temp = k;
-                                spinLock.Exit();
+                                valueLocked = true;
+                                //spinLock.Exit();
                                 ExtractFiles(packageThreads[temp], temp);
                                 Prog.CompletedThreads++;
                             });
                             Logging.Debug("Thread {0} started, waiting for thread ID value to be locked", k);
-                            //while (!valueLocked) Thread.Sleep(5);
+                            while (!valueLocked) Thread.Sleep(5);
                             //valueLocked = false;
-                            spinLock.Enter(ref valueLocked);
+                            //if (!valueLocked)
+                                //spinLock.Enter(ref valueLocked);
                             Logging.Debug("Thread {0} ID value locked, starting next task", k);
                             //also save the task to a list to use for cancel later
                             InstallerCreatedTasks.Add(tasks[k]);
