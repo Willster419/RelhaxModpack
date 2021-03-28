@@ -1220,9 +1220,11 @@ namespace RelhaxModpack
 
                     CancelDownloadInstallButton.IsEnabled = false;
                     CancelDownloadInstallButton.Visibility = Visibility.Hidden;
+
                     //connect the install and disconnect the download
                     CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
                     CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
+
                     Logging.Info("Download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds);
                     lastTime = stopwatch.Elapsed;
                 }
