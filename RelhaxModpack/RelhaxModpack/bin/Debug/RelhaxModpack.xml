@@ -5555,6 +5555,31 @@
             When you click the save button, it also clicks the apply button before saving.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.DownloadProgressState">
+            <summary>
+            The primary functional modes the application can run in
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DownloadProgressState.None">
+            <summary>
+            Default download state. No activity.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DownloadProgressState.OpenStreams">
+            <summary>
+            The file stream and download stream have been opened. This will only fire once per download operation.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DownloadProgressState.Download">
+            <summary>
+            The file is being downloaded.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DownloadProgressState.DownloadCompleted">
+            <summary>
+            The file download is completed. This will only fire once per download operation.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.InstallerExitCodes">
             <summary>
             Possible points at which the installer can fail
