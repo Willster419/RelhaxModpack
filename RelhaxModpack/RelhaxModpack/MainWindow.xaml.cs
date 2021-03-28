@@ -39,7 +39,8 @@ namespace RelhaxModpack
         #region Variables
         //install and uninstall engine variables
         private InstallEngine installEngine = null;
-        private CancellationTokenSource cancellationTokenSource = null;
+        private CancellationTokenSource installerCancellationTokenSource = null;
+        private CancellationTokenSource downloaderCancellationTokenSource = null;
         private bool disableTriggersForInstall = true;
         private DatabaseVersions databaseVersion;
 
@@ -57,7 +58,6 @@ namespace RelhaxModpack
 
         //custom application windows
         private ModSelectionList modSelectionList = null;
-        private RelhaxProgress downloadProgress = null;
         private AdvancedProgress AdvancedProgressWindow = null;
         private NewsViewer newsViewer = null;
 
@@ -76,6 +76,7 @@ namespace RelhaxModpack
         private string[] backupFiles = null;
 
         //download variables
+        private DownloadManager downloadManager;
         //measures elapsed time since download started
         private Stopwatch downloadTimer = null;
         //timer to fire every second to update the display download rate
@@ -90,10 +91,7 @@ namespace RelhaxModpack
         private double downloadRateDisplay;
         //remaining time
         private long remainingMilliseconds;
-        //reference for downloading the package to keep track of the async download
-        private DatabasePackage downloadingPackage = null;
-        //client used for downloading application and database files
-        private WebClient client = null;
+        private bool deferToDownloadReport = false;
 
         //task bar variables
         private TaskbarManager taskbarInstance = null;
@@ -1159,52 +1157,114 @@ namespace RelhaxModpack
             TimeSpan lastTime = stopwatch.Elapsed;
             Logging.Info(string.Format("Took {0} msec to process lists", stopwatch.ElapsedMilliseconds));
 
-            //first, if we have downloads to do and doing them the standard way, then start processing them
-            if (packagesToDownload.Count > 0 && !ModpackSettings.InstallWhileDownloading)
+            //first, if we have downloads to do, then start processing them
+            if (packagesToDownload.Count > 0)
             {
-                Logging.Info("Download while install = false and packages to download, starting ProcessDownloads()");
-                //toggle the button before and after as well
-                CancelDownloadInstallButton.Visibility = Visibility.Visible;
-                CancelDownloadInstallButton.IsEnabled = true;
-                //disconnect the install method and connect the download
+                deferToDownloadReport = false;
+                downloaderCancellationTokenSource = new CancellationTokenSource();
+                downloadManager = new DownloadManager()
+                {
+                    CancellationToken = downloaderCancellationTokenSource.Token,
+                    RetryCount = 3,
+                    DownloadLocationBase = ApplicationConstants.RelhaxDownloadsFolderPath,
+                    UrlBase = ApplicationConstants.DownloadMirrors[ModpackSettings.DownloadMirror].Replace("{onlineFolder}", WoTModpackOnlineFolderVersion)
+                };
+
                 //https://stackoverflow.com/questions/367523/how-to-ensure-an-event-is-only-subscribed-to-once
+                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
-                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
-                bool downlaodTaskComplete = await ProcessDownloads(packagesToDownload);
 
-                //stop and end the timer
-                if(downloadDisplayTimer != null)
+                if (!ModpackSettings.InstallWhileDownloading)
                 {
-                    downloadDisplayTimer.Stop();
-                    downloadDisplayTimer = null;
-                }
+                    Logging.Info("Download while install = false and packages to download, processing downloads with await");
 
-                if (!downlaodTaskComplete)
-                {
-                    Logging.Info("Download task was canceled, canceling installation");
-                    ToggleUIButtons(true);
-                    return;
+                    //toggle the cancel button to be available for the download process
+                    CancelDownloadInstallButton.Visibility = Visibility.Visible;
+                    CancelDownloadInstallButton.IsEnabled = true;
+
+                    //create progress object and connect to downloadManager
+                    Progress<RelhaxDownloadProgress> downloadProgress = new Progress<RelhaxDownloadProgress>();
+                    downloadProgress.ProgressChanged += DownloadProgress_ProgressChanged;
+                    downloadManager.Progress = downloadProgress;
+
+                    try
+                    {
+                        await downloadManager.DownloadPackagesAsync(packagesToDownload);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is OperationCanceledException)
+                        {
+                            Logging.Info("Download task was canceled, canceling installation");
+                            ToggleUIButtons(true);
+                            return;
+                        }
+                        else
+                        {
+                            Logging.Exception(ex.ToString());
+                            ToggleUIButtons(true);
+                            return;
+                        }
+                    }
+                    finally
+                    {
+                        downloadManager.Dispose();
+                    }
+
+                    //stop and end the timer
+                    if (downloadDisplayTimer != null)
+                    {
+                        downloadDisplayTimer.Stop();
+                        downloadDisplayTimer = null;
+                    }
+
+                    CancelDownloadInstallButton.IsEnabled = false;
+                    CancelDownloadInstallButton.Visibility = Visibility.Hidden;
+                    //connect the install and disconnect the download
+                    CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
+                    CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
+                    Logging.Info("Download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds);
+                    lastTime = stopwatch.Elapsed;
                 }
-                CancelDownloadInstallButton.IsEnabled = false;
-                CancelDownloadInstallButton.Visibility = Visibility.Hidden;
-                //connect the install and disconnect the download
-                CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
-                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
-                Logging.Info(string.Format("Download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds));
-                lastTime = stopwatch.Elapsed;
+                else
+                {
+                    Logging.Info("Download while install = true and packages to download, processing downloads without await");
+
+                    //async does download and install at the same time, so subscribe to install too (download already subscribed)
+                    CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
+
+                    //create progress object and connect to downloadManager
+                    Progress<RelhaxDownloadProgress> downloadProgress = new Progress<RelhaxDownloadProgress>();
+                    downloadProgress.ProgressChanged += DownloadProgress_ProgressChanged_InstallWhileDownloading;
+                    downloadManager.Progress = downloadProgress;
+
+                    try
+                    {
+                        downloadManager.DownloadPackagesAsync(packagesToDownload);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is OperationCanceledException)
+                        {
+                            Logging.Info("Download task was canceled, canceling installation");
+                            ToggleUIButtons(true);
+                            return;
+                        }
+                        else
+                        {
+                            Logging.Exception(ex.ToString());
+                            ToggleUIButtons(true);
+                            return;
+                        }
+                    }
+                    finally
+                    {
+                        downloadManager.Dispose();
+                    }
+                }
             }
-            else if (packagesToDownload.Count > 0 && ModpackSettings.InstallWhileDownloading)
-            {
-                Logging.Info("Download while install = true and packages to download, starting ProcessDownloadsAsync()");
-                ProcessDownloadsAsync(packagesToDownload);
-                //async does download and install at the same time, so subscribe to both, install first
-                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
-                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
-                CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
-                CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
-            }
-            else if (packagesToDownload.Count == 0)
+            else
                 Logging.Info("No packages to download, continue");
 
             //now let's start the install procedures
@@ -1318,7 +1378,7 @@ namespace RelhaxModpack
             }
 
             //create the cancellation token source
-            cancellationTokenSource = new CancellationTokenSource();
+            installerCancellationTokenSource = new CancellationTokenSource();
 
             Logging.Debug("UserMods install count: {0}", userModsToInstall.Count);
 
@@ -1341,12 +1401,15 @@ namespace RelhaxModpack
                 Dependencies = dependencies,
                 GlobalDependencies = globalDependencies,
                 UserPackagesToInstall = userModsToInstall,
-                CancellationToken = cancellationTokenSource.Token,
+                CancellationToken = installerCancellationTokenSource.Token,
                 DisableTriggersForInstall = disableTriggersForInstall,
                 DatabaseVersion = this.DatabaseVersion,
                 WoTDirectory = this.WoTDirectory,
                 WoTClientVersion = this.WoTClientVersion
             };
+
+            if (ModpackSettings.InstallWhileDownloading)
+                installEngine.DownloadManager = downloadManager;
 
             //setup the cancel button
             CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
@@ -1415,7 +1478,7 @@ namespace RelhaxModpack
                 InstallProgressTextBox.Text = string.Empty;
                 ToggleUIButtons(true);
             }
-            else if (cancellationTokenSource.IsCancellationRequested)
+            else if (installerCancellationTokenSource.IsCancellationRequested)
             {
                 Logging.Info("Cancel success");
                 ToggleUIButtons(true);
@@ -1454,6 +1517,121 @@ namespace RelhaxModpack
 
                 MessageBox.Show(errorBuilder.ToString());
             }
+        }
+
+        private void DownloadProgress_ProgressChanged_InstallWhileDownloading(object sender, RelhaxDownloadProgress e)
+        {
+            if (!deferToDownloadReport) return;
+
+            //child is bytes downloaded
+            ChildProgressBar.Maximum = e.ChildTotal;
+            ChildProgressBar.Minimum = 0;
+            ChildProgressBar.Value = e.ChildCurrent;
+
+            //break it up into lines cause it's hard to read
+            //"downloading package_name"
+            string line1 = string.Format("{0} {1}", Translations.GetTranslatedString("Downloading"), e.DatabasePackage.PackageName);
+
+            //"zip_file_name"
+            string line2 = e.DatabasePackage.ZipFile;
+
+            //https://stackoverflow.com/questions/9869346/double-string-format
+            //"2MB of 8MB"
+            string line3 = string.Format("{0} {1} {2}", FileUtils.SizeSuffix((ulong)e.ChildCurrent, 1, true), Translations.GetTranslatedString("of"), FileUtils.SizeSuffix((ulong)e.ChildTotal, 1, true));
+
+            //also report to the download message process
+            InstallProgressTextBox.Text = string.Format("{0}\n{1}\n{2}", line1, line2, line3);
+        }
+
+        private void DownloadProgress_ProgressChanged(object sender, RelhaxDownloadProgress e)
+        {
+            //if current is 0 then use it as an initial block
+            if (currentBytesDownloaded == 0)
+            {
+                //init elapsed timer
+                if (downloadTimer == null)
+                {
+                    downloadTimer = new Stopwatch();
+                }
+                downloadTimer.Restart();
+
+                //init update timer
+                if (downloadDisplayTimer == null)
+                {
+                    downloadDisplayTimer = new DispatcherTimer()
+                    {
+                        Interval = TimeSpan.FromMilliseconds(1000),
+                        IsEnabled = false
+                    };
+                    downloadDisplayTimer.Tick += DownloadDisplayTimer_Elapsed;
+                }
+                downloadDisplayTimer.Stop();
+                downloadDisplayTimer.Start();
+
+                //init rates and history
+                lastBytesDownloaded = 0;
+                downloadRateDisplay = 0;
+            }
+
+            totalBytesToDownload = e.ChildTotal;
+            currentBytesDownloaded = e.ChildCurrent;
+
+            //child is bytes downloaded
+            ChildProgressBar.Maximum = e.ChildTotal;
+            ChildProgressBar.Minimum = 0;
+            ChildProgressBar.Value = e.ChildCurrent;
+
+            //parent is packages downloaded
+            ParentProgressBar.Maximum = e.ParrentTotal;
+            ParentProgressBar.Minimum = 0;
+            ParentProgressBar.Value = e.ParrentCurrent;
+
+            //break it up into lines cause it's hard to read
+            //"downloading 2 of 4"
+            string line1 = string.Format("{0} {1} {2} {3}",
+                Translations.GetTranslatedString("Downloading"), ParentProgressBar.Value, Translations.GetTranslatedString("of"), ParentProgressBar.Maximum);
+
+            //"zip_file_name"
+            string line2 = e.DatabasePackage.ZipFile;
+
+            //https://stackoverflow.com/questions/9869346/double-string-format
+            //"2MB of 8MB at 1 MB/S"
+            string line3 = string.Format("{0} {1} {2} {3} {4}/s",
+                FileUtils.SizeSuffix((ulong)e.ChildCurrent, 1, true), Translations.GetTranslatedString("of"), FileUtils.SizeSuffix((ulong)e.ChildTotal, 1, true),
+                Translations.GetTranslatedString("at"), FileUtils.SizeSuffix((ulong)downloadRateDisplay, 1, true, true));
+
+            //"4 seconds"
+            //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings
+            TimeSpan remain = TimeSpan.FromMilliseconds(remainingMilliseconds);
+            string line4 = string.Format("{0} {1} {2} {3}", remain.ToString(@"mm"), Translations.GetTranslatedString("minutes"), remain.ToString(@"ss"),
+                Translations.GetTranslatedString("seconds"));
+
+            //also report to the download message process
+            InstallProgressTextBox.Text = string.Format("{0}\n{1}\n{2}\n{3}", line1, line2, line3, line4);
+        }
+
+        private void DownloadDisplayTimer_Elapsed(object sender, EventArgs e)
+        {
+            //update download rate display values
+            downloadRateDisplay = currentBytesDownloaded - lastBytesDownloaded;
+
+            //update download rate ETA values
+            //bytes remaining
+            long bytesRemainToDownload = totalBytesToDownload - currentBytesDownloaded;
+
+            //overall download rate bytes/msec
+            double downloadRateOverall = 0;
+            if (downloadTimer.Elapsed.TotalMilliseconds > 0)
+                downloadRateOverall = currentBytesDownloaded / downloadTimer.Elapsed.TotalMilliseconds;
+
+            //remaining time msec
+            if ((long)downloadRateOverall > 0)
+                remainingMilliseconds = bytesRemainToDownload / (long)downloadRateOverall;
+            else
+                remainingMilliseconds = 0;
+
+            //set current to previous
+            lastBytesDownloaded = currentBytesDownloaded;
         }
 
         private void OnInstallProgressChanged(object sender, RelhaxInstallerProgress e)
@@ -1552,18 +1730,13 @@ namespace RelhaxModpack
                             line2 = string.Format("{0}: {1} {2} {3} {4} {5}", Translations.GetTranslatedString("installExtractingCompletedThreads"), e.CompletedThreads.ToString(),
                                 Translations.GetTranslatedString("of"), e.TotalThreads.ToString(), Translations.GetTranslatedString("installExtractingOfGroup"), e.InstallGroup.ToString());
                             line3 = Path.GetFileName(e.Filename);
-                            if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
+                            if (ModpackSettings.InstallWhileDownloading && e.AllThreadsWaitingOnDownloads)
                             {
-                                line4 = string.Format(" ({0}...)", Translations.GetTranslatedString("Downloading"));
-                                if (ChildProgressBar.Maximum != e.BytesTotal)
-                                    ChildProgressBar.Maximum = e.BytesTotal;
-                                if (ChildProgressBar.Minimum != 0)
-                                    ChildProgressBar.Minimum = 0;
-                                if (ChildProgressBar.Value != e.BytesProcessed)
-                                    ChildProgressBar.Value = e.BytesProcessed;
+                                deferToDownloadReport = true;
                             }
                             else
                             {
+                                deferToDownloadReport = false;
                                 line4 = e.EntryFilename;
                             }
                         }
@@ -1574,19 +1747,13 @@ namespace RelhaxModpack
                             line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                             line2 = Path.GetFileName(e.Filename);
-                            if (ModpackSettings.InstallWhileDownloading && e.WaitingOnDownload)
+                            if (ModpackSettings.InstallWhileDownloading && e.AllThreadsWaitingOnDownloads)
                             {
-                                line3 = string.Format(" ({0}...)", Translations.GetTranslatedString("Downloading"));
-                                line4 = string.Empty;
-                                if (ChildProgressBar.Maximum != e.BytesTotal)
-                                    ChildProgressBar.Maximum = e.BytesTotal;
-                                if (ChildProgressBar.Minimum != 0)
-                                    ChildProgressBar.Minimum = 0;
-                                if (ChildProgressBar.Value != e.BytesProcessed)
-                                    ChildProgressBar.Value = e.BytesProcessed;
+                                deferToDownloadReport = true;
                             }
                             else
                             {
+                                deferToDownloadReport = false;
                                 line3 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installZipFileEntry"), ((e.EntriesProcessed) > 0 ? e.EntriesProcessed : 1).ToString(),
                                 Translations.GetTranslatedString("of"), e.EntriesTotal.ToString());
                                 line4 = e.EntryFilename;
@@ -1646,187 +1813,6 @@ namespace RelhaxModpack
                     string.IsNullOrEmpty(line4) ? string.Empty : line4 + "\n");
 
             }
-        }
-
-        //handles processing of downloads
-        private async Task ProcessDownloadsAsync(List<DatabasePackage> packagesToDownload)
-        {
-            using (WebClient client = new WebClient())
-            {
-                this.client = client;
-                this.client.DownloadProgressChanged += (sender, args) =>
-                {
-                    if(downloadingPackage != null)
-                    {
-                        downloadingPackage.BytesDownloaded = args.BytesReceived;
-                        downloadingPackage.BytesToDownload = args.TotalBytesToReceive;
-                    }
-                };
-                int retryCount = 3;
-                string fileToDownload = string.Empty;
-                string fileToSaveTo = string.Empty;
-                foreach (DatabasePackage package in packagesToDownload)
-                {
-                    downloadingPackage = package;
-                    retryCount = 3;
-                    while (retryCount > 0)
-                    {
-                        fileToDownload = ApplicationConstants.DownloadMirrors[ModpackSettings.DownloadMirror].Replace("{onlineFolder}", WoTModpackOnlineFolderVersion) + package.ZipFile;
-                        Logging.Debug("[{0}]: Download of {1} from URL {2}", nameof(ProcessDownloadsAsync), package.PackageName, fileToDownload);
-                        fileToSaveTo = Path.Combine(ApplicationConstants.RelhaxDownloadsFolderPath, package.ZipFile);
-                        try
-                        {
-                            Logging.Info("Async download of {0} start", package.ZipFile);
-                            package.IsCurrentlyDownloading = true;
-                            await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
-                            package.IsCurrentlyDownloading = false;
-                            Logging.Info("Async download of {0} finish", package.ZipFile);
-                            retryCount = 0;
-                            package.DownloadFlag = false;
-                        }
-                        catch (WebException ex)
-                        {
-                            if (cancellationTokenSource.IsCancellationRequested)
-                            {
-                                Logging.Info("Download canceled from UI request, stopping installation");
-                                if (File.Exists(fileToSaveTo))
-                                    File.Delete(fileToSaveTo);
-                                return;
-                            }
-                            Logging.Error("Failed to download the file {0}, try {1} of {2}\n{3}", package.ZipFile, retryCount, 1, ex.ToString());
-                            retryCount--;
-
-                            //if it failed or not, the file should be deleted
-                            if (File.Exists(fileToSaveTo))
-                                File.Delete(fileToSaveTo);
-
-                            //if we've hit the retry limit, then mark it as downloaded
-                            if(retryCount <= 0)
-                            {
-                                Logging.Error("Failed to download the file {0} using URL {1}", package.ZipFile, fileToDownload);
-                                System.Windows.Forms.DialogResult result = System.Windows.Forms.MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
-                                    Translations.GetTranslatedString("failedToDownload1"), Environment.NewLine,
-                                    package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
-                                    Translations.GetTranslatedString("failedToDownloadHeader"), System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore);
-                                switch (result)
-                                {
-                                    case System.Windows.Forms.DialogResult.Retry:
-                                        //keep retry as true
-                                        Logging.Info("User selected retry, set retryCount");
-                                        retryCount++;
-                                        break;
-                                    case System.Windows.Forms.DialogResult.Ignore:
-                                        //skip this file
-                                        Logging.Debug("Ignore file that failed to download, it will be logged during installation");
-                                        package.IsCurrentlyDownloading = false;
-                                        package.DownloadFlag = false;
-                                        package.DownloadFailed = true;
-                                        break;
-                                    case System.Windows.Forms.DialogResult.Abort:
-                                        //stop the installation all together
-                                        //trigger the cancel button?
-                                        CancelDownloadInstallButton_Install_Click(null, null);
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private async Task<bool> ProcessDownloads(List<DatabasePackage> packagesToDownload)
-        {
-            //remember this is on the UI thread
-            //reset the UI info
-            ParentProgressBar.Minimum = 0;
-            ParentProgressBar.Maximum = packagesToDownload.Count;
-            ParentProgressBar.Value = 0;
-            using (WebClient client = new WebClient())
-            {
-                this.client = client;
-                client.DownloadProgressChanged += Client_DownloadProgressChanged;
-                string fileToDownload = string.Empty;
-                string fileToSaveTo = string.Empty;
-                downloadProgress = new RelhaxProgress()
-                {
-                    ParrentCurrent = 0,
-                    ParrentTotal = packagesToDownload.Count
-                };
-                foreach (DatabasePackage package in packagesToDownload)
-                {
-                    //increment it out here, not in the repeat loop
-                    ParentProgressBar.Value++;
-                    downloadProgress.ChildCurrentProgress = package.ZipFile;
-                    bool retry = true;
-                    while (retry)
-                    {
-                        //replace the start address macro
-                        fileToDownload = ApplicationConstants.DownloadMirrors[ModpackSettings.DownloadMirror].Replace("{onlineFolder}", WoTModpackOnlineFolderVersion) + package.ZipFile;
-                        Logging.Debug("[{0}]: Download of {1} from URL {2}", nameof(ProcessDownloads), package.PackageName, fileToDownload);
-                        fileToSaveTo = Path.Combine(ApplicationConstants.RelhaxDownloadsFolderPath, package.ZipFile);
-                        try
-                        {
-                            //reset current bytes downloaded
-                            currentBytesDownloaded = 0;
-                            Logging.Info("Download of {0} start", package.ZipFile);
-                            await client.DownloadFileTaskAsync(fileToDownload, fileToSaveTo);
-                            Logging.Info("Download of {0} finish", package.ZipFile);
-                            retry = false;
-                            package.DownloadFlag = false;
-                        }
-                        catch (WebException ex)
-                        {
-                            if (ex.Status == WebExceptionStatus.RequestCanceled)
-                            {
-                                Logging.Info("Download canceled from UI request, stopping installation");
-                                downloadTimer.Stop();
-                                ToggleUIButtons(true);
-                                ResetUI();
-                                retry = false;
-                                if (File.Exists(fileToSaveTo))
-                                    File.Delete(fileToSaveTo);
-                                return false;
-                            }
-                            else
-                            {
-                                Logging.Error("failed to download the file {0} {1} {2}", package.ZipFile, Environment.NewLine, ex.ToString());
-                                System.Windows.Forms.DialogResult result = System.Windows.Forms.MessageBox.Show(string.Format("{0} {1} \"{2}\" {3}",
-                                    Translations.GetTranslatedString("failedToDownload1"), Environment.NewLine,
-                                    package.ZipFile, Translations.GetTranslatedString("failedToDownload2")),
-                                    Translations.GetTranslatedString("failedToDownloadHeader"), System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore);
-                                switch (result)
-                                {
-                                    case System.Windows.Forms.DialogResult.Retry:
-                                        //keep retry as true
-                                        break;
-                                    case System.Windows.Forms.DialogResult.Ignore:
-                                        //skip this file and log it failed
-                                        retry = false;
-                                        package.DownloadFailed = true;
-
-                                        //set the flag for download even though it failed
-                                        package.DownloadFlag = false;
-                                        break;
-                                    case System.Windows.Forms.DialogResult.Abort:
-                                        //stop the installation all together
-                                        ToggleUIButtons(true);
-                                        ResetUI();
-                                        retry = false;
-                                        return false;
-                                }
-                            }
-                            //if it failed or canceled, the file should be deleted
-                            if (File.Exists(fileToSaveTo))
-                                File.Delete(fileToSaveTo);
-                        }
-                        //stop the timer
-                        if(downloadDisplayTimer != null)
-                            downloadDisplayTimer.Stop();
-                    }
-                }
-            }
-            return true;
         }
         #endregion
 
@@ -1915,12 +1901,12 @@ namespace RelhaxModpack
             progress.ProgressChanged += UninstallProgressChanged;
 
             //create token source
-            cancellationTokenSource = new CancellationTokenSource();
+            installerCancellationTokenSource = new CancellationTokenSource();
 
             //create and run uninstall engine
             installEngine = new InstallEngine(this.ModpackSettings, null)
             {
-                CancellationToken = cancellationTokenSource.Token,
+                CancellationToken = installerCancellationTokenSource.Token,
                 ModpackSettings = this.ModpackSettings,
                 DatabaseVersion = null, //not needed for uninstall
                 WoTDirectory = this.WoTDirectory,
@@ -2966,39 +2952,26 @@ namespace RelhaxModpack
 
         private void CancelDownloadInstallButton_Download_Click(object sender, RoutedEventArgs e)
         {
-            if (client == null)
-            {
-                Logging.Info("Cancel pressed in download mode (and download while install is false), but client reference is false, cannot cancel!");
-                return;
-            }
-            Logging.Info("Cancel pressed from UI in download mode, sending cancel request");
-            client.CancelAsync();
+            CancelAsyncProcess(downloaderCancellationTokenSource);
         }
 
         private void CancelDownloadInstallButton_Install_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info("Cancel press from UI in install mode, processing request");
+            CancelAsyncProcess(installerCancellationTokenSource);
+        }
 
-            //cancel installer
-            if (installEngine == null)
+        private void CancelAsyncProcess(CancellationTokenSource cancellationTokenSource)
+        {
+            Logging.Info(LogOptions.MethodName, "Cancel press from UI, processing request");
+
+            if (!cancellationTokenSource.IsCancellationRequested)
             {
-                Logging.Error("Cancel request failed because installEngine is null!");
-            }
-            else if (!cancellationTokenSource.IsCancellationRequested)
-            {
-                Logging.Info("requesting cancel of installation from UI - cancel process started");
+                Logging.Info("Requesting cancel of installation from UI - cancel process started");
                 cancellationTokenSource.Cancel();
             }
             else
             {
-                Logging.Info("cancel already started for installer - skipping request");
-            }
-
-            //then cancel downloader
-            if (ModpackSettings.InstallWhileDownloading)
-            {
-                Logging.Info("InstallWhileDownloading is true, attempt to cancel download thread");
-                CancelDownloadInstallButton_Download_Click(null, null);
+                Logging.Info("Cancel already started - skipping request");
             }
         }
 
@@ -3189,88 +3162,6 @@ namespace RelhaxModpack
 
             Translations.LocalizeWindow(this, true);
             ApplyCustomUILocalizations();
-        }
-
-        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            //if current is 0 then use it as an initial block
-            if (currentBytesDownloaded == 0)
-            {
-                //init elapsed timer
-                if (downloadTimer == null)
-                {
-                    downloadTimer = new Stopwatch();
-                }
-                downloadTimer.Restart();
-                //init update timer
-                if (downloadDisplayTimer == null)
-                {
-                    downloadDisplayTimer = new DispatcherTimer()
-                    {
-                        Interval = TimeSpan.FromMilliseconds(1000),
-                        IsEnabled = false
-                    };
-                    downloadDisplayTimer.Tick += DownloadDisplayTimer_Elapsed;
-                }
-                downloadDisplayTimer.Stop();
-                downloadDisplayTimer.Start();
-                //init rates and history
-                lastBytesDownloaded = 0;
-                downloadRateDisplay = 0;
-            }
-            currentBytesDownloaded = e.BytesReceived;
-            totalBytesToDownload = e.TotalBytesToReceive;
-
-            ChildProgressBar.Maximum = e.TotalBytesToReceive;
-            ChildProgressBar.Minimum = 0;
-            ChildProgressBar.Value = e.BytesReceived;
-
-            //break it up into lines cause it's hard to read
-            //"downloading 2 of 4"
-            string line1 = string.Format("{0} {1} {2} {3}",
-                Translations.GetTranslatedString("Downloading"), ParentProgressBar.Value, Translations.GetTranslatedString("of"), ParentProgressBar.Maximum);
-
-            //"zip file name"
-            string line2 = downloadProgress.ChildCurrentProgress;
-
-            //https://stackoverflow.com/questions/9869346/double-string-format
-            //"2MB of 8MB at 1 MB/S"
-            string line3 = string.Format("{0} {1} {2} {3} {4}/s",
-                FileUtils.SizeSuffix((ulong)e.BytesReceived, 1, true), Translations.GetTranslatedString("of"), FileUtils.SizeSuffix((ulong)e.TotalBytesToReceive, 1, true),
-                Translations.GetTranslatedString("at"), FileUtils.SizeSuffix((ulong)downloadRateDisplay, 1, true, true));
-
-            //"4 seconds"
-            //https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings
-            TimeSpan remain = TimeSpan.FromMilliseconds(remainingMilliseconds);
-            string line4 = string.Format("{0} {1} {2} {3}", remain.ToString(@"mm"), Translations.GetTranslatedString("minutes"), remain.ToString(@"ss"),
-                Translations.GetTranslatedString("seconds"));
-
-            //also report to the download message process
-            InstallProgressTextBox.Text = string.Format("{0}\n{1}\n{2}\n{3}", line1, line2, line3, line4);
-        }
-
-        private void DownloadDisplayTimer_Elapsed(object sender, EventArgs e)
-        {
-            //update download rate display values
-            downloadRateDisplay = currentBytesDownloaded - lastBytesDownloaded;
-
-            //update download rate ETA values
-            //bytes remaining
-            long bytesRemainToDownload = totalBytesToDownload - currentBytesDownloaded;
-
-            //overall download rate bytes/msec
-            double downloadRateOverall = 0;
-            if (downloadTimer.Elapsed.TotalMilliseconds > 0)
-                downloadRateOverall = currentBytesDownloaded / downloadTimer.Elapsed.TotalMilliseconds;
-
-            //remaining time msec
-            if ((long)downloadRateOverall > 0)
-                remainingMilliseconds = bytesRemainToDownload / (long)downloadRateOverall;
-            else
-                remainingMilliseconds = 0;
-
-            //set current to previous
-            lastBytesDownloaded = currentBytesDownloaded;
         }
 
         private void ApplyCustomScalingSlider_MouseUp(object sender, MouseButtonEventArgs e)

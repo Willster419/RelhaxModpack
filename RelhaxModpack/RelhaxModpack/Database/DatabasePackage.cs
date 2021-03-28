@@ -81,7 +81,6 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Database Properties
-
         /// <summary>
         /// A unique identifier for each component in the database. No two components will have the same PackageName
         /// </summary>
@@ -225,26 +224,6 @@ namespace RelhaxModpack.Database
         public string Author { get; set; } = string.Empty;
 
         /// <summary>
-        /// The number of bytes to download, used if "install while download" is true
-        /// </summary>
-        public long BytesToDownload { get; set; } = 0;
-
-        /// <summary>
-        /// The number of bytes currently downloaded, used if "install while download" is true
-        /// </summary>
-        public long BytesDownloaded { get; set; } = 0;
-
-        /// <summary>
-        /// Flag to determine if this package is the one currently downloading, used if "install while download" is true
-        /// </summary>
-        public bool IsCurrentlyDownloading { get; set; } = false;
-
-        /// <summary>
-        /// Flag to determine if this package failed to download from either download methods
-        /// </summary>
-        public bool DownloadFailed { get; set; } = false;
-
-        /// <summary>
         /// The list of tags that this package contains (like patches, scripts, etc)
         /// </summary>
         public PackageTagsList Tags { get; set; }  = new PackageTagsList();
@@ -258,11 +237,6 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Other Properties and Methods
-        /// <summary>
-        /// Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
-        /// </summary>
-        public bool ExtractionStarted { get; set; } = false;
-
         /// <summary>
         /// When a databasePackage, the internal packageName. When category, the category name
         /// </summary>

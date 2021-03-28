@@ -108,6 +108,8 @@ namespace RelhaxModpack
 
         public string WoTDirectory { get; set; }
 
+        public DownloadManager DownloadManager { get; set; }
+
         //names of triggers
         /// <summary>
         /// The event name for starting the contour icon atlas building
@@ -184,6 +186,8 @@ namespace RelhaxModpack
 
         //locking object for if a patch name already exists (multithread extraction)
         private object duplicatePatchNameObjectLocker = new object();
+
+        private ManualResetEvent ManualResetEvent;
 
         /// <summary>
         /// Flag for if the install engine should honor the user setting or if installing user packages, disable triggers anyways
@@ -393,6 +397,13 @@ namespace RelhaxModpack
                         }
                     }
                 }
+            }
+
+            //if download while install is set, setup the event thread synchronization mechanism to handle waiting on the download thread
+            if (ModpackSettings.InstallWhileDownloading)
+            {
+                this.ManualResetEvent = new ManualResetEvent(false);
+                DownloadManager.ManualResetEvent = this.ManualResetEvent;
             }
 
             //process packages with data (cache) for cache backup and restore
@@ -1408,8 +1419,8 @@ namespace RelhaxModpack
                     packages = packages.OrderByDescending(pack => pack.Size).ToList();
                     //for not just go with the packages as they are, they should already be in alphabetical order
 
-                    //make a list of packages again, but size is based on number of logical processors and/or multi-core install mods
-                    //if a user has 8 cores, then make 8 lists of packages to install
+                    //make a list of packages again, but size is based on number of logical processors and/or multi-core install mode.
+                    //if a user has 8 cores, then make 8 lists of packages to install.
                     List<DatabasePackage>[] packageThreads = new List<DatabasePackage>[numThreads];
 
                     //new up the lists before we can assign to them
@@ -1433,8 +1444,6 @@ namespace RelhaxModpack
                     if (tasks.Count() != packageThreads.Count())
                         throw new BadMemeException("ohhhhhhhhh, NOW you f*cked UP!");
 
-                    bool valueLocked = false;
-
                     //start the threads
                     Logging.Debug("Starting {0} threads", tasks.Count());
 
@@ -1446,8 +1455,8 @@ namespace RelhaxModpack
                     Prog.EntryFilenameOfAThread = new string[tasks.Count()];
                     Prog.BytesProcessedOfAThread = new long[tasks.Count()];
                     Prog.BytesTotalOfAThread = new long[tasks.Count()];
-                    Prog.WaitingOnDownloadOfAThread = new bool[tasks.Count()];
                     Prog.FilenameOfAThread = new string[tasks.Count()];
+                    Prog.WaitingOnDownloadsOfAThread = new bool[tasks.Count()];
 
                     CancellationToken.ThrowIfCancellationRequested();
 
@@ -1457,16 +1466,21 @@ namespace RelhaxModpack
                         if (packageThreads[k].Count > 0)
                         {
                             Logging.Info("Thread {0} starting task, packages to extract={1}", k, packageThreads[k].Count);
+                            //https://docs.microsoft.com/en-us/dotnet/api/system.threading.spinlock?view=net-5.0#examples
+                            //SpinLockSample3
+                            SpinLock spinLock = new SpinLock(false);
+                            bool valueLocked = false;
                             tasks[k] = Task.Run(() =>
                             {
                                 int temp = k;
-                                valueLocked = true;
+                                spinLock.Exit();
                                 ExtractFiles(packageThreads[temp], temp);
                                 Prog.CompletedThreads++;
                             });
                             Logging.Debug("Thread {0} started, waiting for thread ID value to be locked", k);
-                            while (!valueLocked) ;
-                            valueLocked = false;
+                            //while (!valueLocked) Thread.Sleep(5);
+                            //valueLocked = false;
+                            spinLock.Enter(ref valueLocked);
                             Logging.Debug("Thread {0} ID value locked, starting next task", k);
                             //also save the task to a list to use for cancel later
                             InstallerCreatedTasks.Add(tasks[k]);
@@ -1966,116 +1980,69 @@ namespace RelhaxModpack
             //setup progressing
             Prog.TotalPackagesofAThread[threadNum] = (uint)packagesToExtract.Count();
             Prog.CompletedPackagesOfAThread[threadNum] = 0;
+            if (Prog.WaitingOnDownloadsOfAThread[threadNum])
+                Prog.WaitingOnDownloadsOfAThread[threadNum] = false;
+            List<DatabasePackage> packagesInstalled = new List<DatabasePackage>();
 
-            bool notAllPackagesExtracted = true;
-            //setup progress reporting of this thread
-
-            //in case the user selected to "download while installing", there may be cases where
-            //some items in this list (earlier, for sake of argument) are not downloaded yet, but others below are.
-            //if this is the case, then we need to skip over those items and install others while we wait
-            int numExtracted = 0;
-            while (notAllPackagesExtracted)
+            while (true)
             {
-                foreach (DatabasePackage package in packagesToExtract)
+                //get lists of packages waiting on downloading and packages already downloaded
+                List<DatabasePackage> packagesReadyRightNowForInstall = packagesToExtract.FindAll(package => !package.DownloadFlag).Except(packagesInstalled).ToList();
+                List<DatabasePackage> packagesStillDownloading = packagesToExtract.FindAll(package => package.DownloadFlag).Except(packagesInstalled).ToList();
+
+                foreach (DatabasePackage package in packagesReadyRightNowForInstall)
                 {
                     //check for cancel
                     CancellationToken.ThrowIfCancellationRequested();
 
-                    //check if we are installing while downloading and this package is still downloading
-                    if (ModpackSettings.InstallWhileDownloading && package.DownloadFlag)
+                    Logging.Info("Thread ID={0}, extraction started of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
+
+                    Progress.Report(Prog);
+
+                    if (string.IsNullOrWhiteSpace(package.ZipFile))
                     {
-                        if (ModpackSettings.AdvancedInstalProgress)
-                        {
-                            if (package.IsCurrentlyDownloading)
-                            {
-                                Prog.WaitingOnDownloadOfAThread[threadNum] = true;
-                                Prog.FilenameOfAThread[threadNum] = package.ZipFile;
-                                Prog.BytesProcessedOfAThread[threadNum] = package.BytesDownloaded;
-                                Prog.BytesTotalOfAThread[threadNum] = package.BytesToDownload;
-                                Prog.ThreadID = (uint)threadNum;
-                                Progress.Report(Prog);
-                            }
-                        }
-                        else
-                        {
-                            if (package.IsCurrentlyDownloading)
-                            {
-                                Prog.WaitingOnDownload = true;
-                                Prog.Filename = package.ZipFile;
-                                Prog.BytesProcessed = package.BytesDownloaded;
-                                Prog.BytesTotal = package.BytesToDownload;
-                                Progress.Report(Prog);
-                            }
-                        }
-                        continue;
+                        Logging.Warning("Zipfile for package {0} is blank, this should have been filtered out", package.PackageName);
                     }
-                    //else check if we are installing while downloading and this package's extraction has started
-                    else if (ModpackSettings.InstallWhileDownloading && package.ExtractionStarted)
-                    {
-                        continue;
-                    }
-                    //else start extraction
+                    //stop if the zipfile name is blank (no actual zipfile to extract)
                     else
                     {
-                        Logging.Info("Thread ID={0}, extraction started of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
+                        StringBuilder zipLogger = new StringBuilder();
+                        zipLogger.AppendLine(string.Format("/*   {0}   */", package.ZipFile));
+                        Unzip(package, threadNum, zipLogger, false);
+                        Logging.Installer(zipLogger.ToString());
+                        packagesInstalled.Add(package);
+                    }
 
-                        //flag that this package's extraction has started
-                        package.ExtractionStarted = true;
+                    Logging.Info("Thread ID={0}, extraction finished of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
 
-                        if (ModpackSettings.AdvancedInstalProgress)
-                        {
-                            Prog.WaitingOnDownloadOfAThread[threadNum] = false;
-                        }
-                        else
-                        {
-                            Prog.WaitingOnDownload = false;
-                        }
+                    //update progress of total packages extracted
+                    Prog.ParrentCurrent++;
 
-                        Progress.Report(Prog);
+                    //update progress of packages extracted on this thread
+                    Prog.CompletedPackagesOfAThread[threadNum]++;
 
-                        //don't extract if the package failed to download
-                        if(package.DownloadFailed)
-                        {
-                            Logging.Error("Skipping package {0} due to failed download", package.PackageName);
-                            InstallFinishedArgs.InstallFailedSteps.Add(InstallerExitCodes.DownloadModsError);
-                        }
-                        else if (string.IsNullOrWhiteSpace(package.ZipFile))
-                        {
-                            Logging.Warning("Zipfile for package {0} is blank!", package.PackageName);
-                        }
-                        //stop if the zipfile name is blank (no actual zipfile to extract)
-                        else
-                        {
-                            StringBuilder zipLogger = new StringBuilder();
-                            zipLogger.AppendLine(string.Format("/*   {0}   */", package.ZipFile));
-                            Unzip(package, threadNum, zipLogger, false);
-                            Logging.Installer(zipLogger.ToString());
-                        }
-
-                        Logging.Info("Thread ID={0}, extraction finished of zipfile {1} of packageName {2}", threadNum, package.ZipFile, package.PackageName);
-
-                        //increment counter
-                        numExtracted++;
-                        Logging.Debug("Thread ID={0}, extracted {1} of {2}", threadNum, numExtracted, packagesToExtract.Count);
-
-                        //update progress of total packages extracted
-                        Prog.ParrentCurrent++;
-
-                        //update progress of packages extracted on this thread
-                        Prog.CompletedPackagesOfAThread[threadNum]++;
-
-                        //after zip file extraction, process triggers (if enabled)
-                        if (!DisableTriggersForInstall)
-                        {
-                            if (package.TriggersList.Count > 0)
-                                ProcessTriggers(package.TriggersList);
-                        }
+                    //after zip file extraction, process triggers (if enabled)
+                    if (!DisableTriggersForInstall)
+                    {
+                        if (package.TriggersList.Count > 0)
+                            ProcessTriggers(package.TriggersList);
                     }
                 }
-                if (numExtracted == packagesToExtract.Count)
-                    notAllPackagesExtracted = false;
+
+                //if the number of packages still downloading is 0 then everything has been extracted and we can return
+                if (packagesStillDownloading.Count == 0)
+                {
+                    Logging.Debug("Thread ID={0}, 0 packages still waiting for download", threadNum);
+                    return;
+                }
                 else
-                    Thread.Sleep(200);
+                {
+                    Logging.Debug("Thread ID={0}, waiting for {1} packages that report as still downloading, wait at event", threadNum, packagesStillDownloading.Count);
+                    Prog.WaitingOnDownloadsOfAThread[threadNum] = true;
+                    ManualResetEvent.WaitOne();
+                    Prog.WaitingOnDownloadsOfAThread[threadNum] = false;
+                    Logging.Debug("Thread ID={0}, event signal, re-calculate lists of packages waiting to download", threadNum);
+                }
             }
         }
 

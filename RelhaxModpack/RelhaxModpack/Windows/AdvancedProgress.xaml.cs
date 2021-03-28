@@ -252,7 +252,7 @@ namespace RelhaxModpack.Windows
                             progress.InstallGroup);
                     }
 
-                    if(progress.WaitingOnDownloadOfAThread != null && progress.WaitingOnDownloadOfAThread[progress.ThreadID])
+                    if(progress.WaitingOnDownloadsOfAThread != null && progress.WaitingOnDownloadsOfAThread[progress.ThreadID])
                     {
                         if(ExtractionModsReporters[progress.ThreadID].ReportState == TaskReportState.Inactive)
                         {

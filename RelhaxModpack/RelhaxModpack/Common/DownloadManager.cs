@@ -31,6 +31,8 @@ namespace RelhaxModpack.Common
 
         public CancellationToken CancellationToken { get; set; }
 
+        public ManualResetEvent ManualResetEvent;
+
         private WebClient webClient;
         private Stream stream;
         private MD5 md5Hash;
@@ -44,7 +46,6 @@ namespace RelhaxModpack.Common
         {
             webClient = new WebClient();
             md5Hash = MD5.Create();
-            downloadProgress = new RelhaxDownloadProgress();
             databaseManager = new Md5DatabaseManager();
         }
 
@@ -70,6 +71,8 @@ namespace RelhaxModpack.Common
                 Logging.Warning("CancellationToken is null, no cancellations will be acknowledged for this download operation");
             }
 
+            downloadProgress = new RelhaxDownloadProgress() { ParrentTotal = packagesToDownload.Count };
+
             //load md5 database manager before downloading packages
             if (!databaseManager.DatabaseLoaded)
                 databaseManager.LoadMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
@@ -84,7 +87,7 @@ namespace RelhaxModpack.Common
             }
         }
 
-        public async Task DownloadPackageAsync(DatabasePackage package)
+        private async Task DownloadPackageAsync(DatabasePackage package)
         {
             if (!databaseManager.DatabaseLoaded)
                 databaseManager.LoadMd5Database(ApplicationConstants.MD5HashDatabaseXmlFile);
@@ -97,6 +100,8 @@ namespace RelhaxModpack.Common
                 FileUtils.FileDelete(downloadLocation);
 
             ThrowIfCancellationRequested();
+            downloadProgress.DatabasePackage = package;
+            downloadProgress.ChildCurrent = downloadProgress.ChildTotal = 0;
             Progress.Report(downloadProgress);
 
             //open the stream to the file to download. A fail here means that the file might not exist
@@ -142,9 +147,6 @@ namespace RelhaxModpack.Common
                                     }
                                     else
                                     {
-                                        ThrowIfCancellationRequested();
-                                        Progress.Report(downloadProgress);
-
                                         filestream.Close();
                                         md5Hash.Clear();
                                         stream.Close();
@@ -157,6 +159,17 @@ namespace RelhaxModpack.Common
                                         //set the failCount for loop to jump out and the userRetry to stop asking
                                         failCount = 4;
                                         retry = false;
+
+                                        downloadProgress.ParrentCurrent++;
+                                        ThrowIfCancellationRequested();
+                                        Progress.Report(downloadProgress);
+
+                                        if (ManualResetEvent != null)
+                                        {
+                                            ManualResetEvent.Set();
+                                            Thread.Sleep(2);
+                                            ManualResetEvent.Reset();
+                                        }
                                     }
                                     break;
                                 }
@@ -200,9 +213,7 @@ namespace RelhaxModpack.Common
                                         //keep retry as true
                                         break;
                                     case DialogResult.Abort:
-                                        ThrowIfCancellationRequested();
-                                        Progress.Report(downloadProgress);
-                                        break;
+                                        throw new OperationCanceledException(CancellationToken);
                                 }
                             }
                         }

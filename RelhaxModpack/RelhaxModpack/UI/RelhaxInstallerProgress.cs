@@ -19,16 +19,6 @@ namespace RelhaxModpack.UI
         public long BytesProcessed, BytesTotal = 0;
 
         /// <summary>
-        /// Flag to mark if the install engine is waiting on a package to download
-        /// </summary>
-        public bool WaitingOnDownload = false;
-
-        /// <summary>
-        /// Flag to mark if the install engine is waiting on a package to download in a thread
-        /// </summary>
-        public bool[] WaitingOnDownloadOfAThread;
-
-        /// <summary>
         /// The number of bytes currently processed in an entry in a thread
         /// </summary>
         public long[] BytesProcessedOfAThread;
@@ -112,6 +102,24 @@ namespace RelhaxModpack.UI
         /// The number of packages that thread [index] has
         /// </summary>
         public uint[] TotalPackagesofAThread;
+
+        /// <summary>
+        /// Flag to mark if the install engine is waiting on a package to download in a thread
+        /// </summary>
+        public bool[] WaitingOnDownloadsOfAThread;
+
+        public bool AllThreadsWaitingOnDownloads
+        {
+            get
+            {
+                foreach(bool waitingOnDownload in WaitingOnDownloadsOfAThread)
+                {
+                    if (!waitingOnDownload)
+                        return false;
+                }
+                return true;
+            }
+        }
 
         /// <summary>
         /// The current status of the installer. Represents the current state of the installer. When it exists, it is also used as an exit code.
