@@ -233,7 +233,7 @@ namespace RelhaxModpack.Common
                                     case DialogResult.Retry:
                                         //keep retry as true
                                         break;
-                                    case DialogResult.Abort:
+                                    case DialogResult.Cancel:
                                         throw new OperationCanceledException(CancellationToken);
                                 }
                             }
