@@ -120,6 +120,7 @@ namespace RelhaxModpack.Common
                             byte[] buffer = new byte[BYTE_CHUNKS];
                             ThrowIfCancellationRequested();
                             downloadProgress.DownloadProgressState = DownloadProgressState.OpenStreams;
+                            downloadProgress.ChildTotal = CommonUtils.ParseInt(webClient.ResponseHeaders[HttpResponseHeader.ContentLength], 1);
                             Progress.Report(downloadProgress);
 
                             while (true)
