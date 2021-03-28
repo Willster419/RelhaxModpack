@@ -120,14 +120,17 @@ namespace RelhaxModpack.Common
                             byte[] buffer = new byte[BYTE_CHUNKS];
                             ThrowIfCancellationRequested();
                             downloadProgress.DownloadProgressState = DownloadProgressState.OpenStreams;
-                            downloadProgress.ChildTotal = CommonUtils.ParseInt(webClient.ResponseHeaders[HttpResponseHeader.ContentLength], 1);
+                            int totalBytesToDownload = CommonUtils.ParseInt(webClient.ResponseHeaders[HttpResponseHeader.ContentLength], 1);
+                            int totalBytesDownloaded = 0;
+                            downloadProgress.ChildTotal = totalBytesToDownload;
                             Progress.Report(downloadProgress);
 
                             while (true)
                             {
                                 int readBytes = stream.Read(buffer, 0, BYTE_CHUNKS);
-                                downloadProgress.ChildCurrent += readBytes;
-                                if (readBytes < BYTE_CHUNKS)
+                                totalBytesDownloaded += readBytes;
+                                downloadProgress.ChildCurrent = totalBytesDownloaded;
+                                if (totalBytesDownloaded >= totalBytesToDownload)
                                 {
                                     //write and hash final segment
                                     md5Hash.TransformFinalBlock(buffer, 0, readBytes);
@@ -196,8 +199,8 @@ namespace RelhaxModpack.Common
                                 }
                                 else
                                 {
-                                    md5Hash.TransformBlock(buffer, 0, BYTE_CHUNKS, buffer, 0);
-                                    filestream.Write(buffer, 0, BYTE_CHUNKS);
+                                    md5Hash.TransformBlock(buffer, 0, readBytes, buffer, 0);
+                                    filestream.Write(buffer, 0, readBytes);
                                     ThrowIfCancellationRequested();
                                     downloadProgress.DownloadProgressState = DownloadProgressState.Download;
                                     Progress.Report(downloadProgress);
