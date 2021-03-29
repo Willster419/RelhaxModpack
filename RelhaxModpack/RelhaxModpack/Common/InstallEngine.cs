@@ -110,6 +110,8 @@ namespace RelhaxModpack
 
         public DownloadManager DownloadManager { get; set; }
 
+        public bool DownloadingPackages { get; set; }
+
         //names of triggers
         /// <summary>
         /// The event name for starting the contour icon atlas building
@@ -400,7 +402,7 @@ namespace RelhaxModpack
             }
 
             //if download while install is set, setup the event thread synchronization mechanism to handle waiting on the download thread
-            if (ModpackSettings.InstallWhileDownloading)
+            if (ModpackSettings.InstallWhileDownloading && DownloadingPackages)
             {
                 this.ManualResetEvent = new ManualResetEvent(false);
                 DownloadManager.ManualResetEvent = this.ManualResetEvent;
