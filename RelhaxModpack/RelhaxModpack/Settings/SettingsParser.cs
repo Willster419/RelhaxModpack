@@ -82,6 +82,12 @@ namespace RelhaxModpack.Settings
 
             foreach (XElement settingsElement in settingsXml)
             {
+                if (settingsFile.MembersToExclude.Contains(settingsElement.Name.LocalName))
+                {
+                    Logging.Info("Skipping loading property/field {0}, is on exclude list", settingsElement.Name.LocalName);
+                    continue;
+                }
+
                 FieldInfo fi = settingsClass.GetField(settingsElement.Name.LocalName);
                 PropertyInfo pi = settingsClass.GetProperty(settingsElement.Name.LocalName);
 
