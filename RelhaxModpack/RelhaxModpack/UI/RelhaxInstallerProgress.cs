@@ -112,6 +112,9 @@ namespace RelhaxModpack.UI
         {
             get
             {
+                if (WaitingOnDownloadsOfAThread == null)
+                    return false;
+
                 foreach(bool waitingOnDownload in WaitingOnDownloadsOfAThread)
                 {
                     if (!waitingOnDownload)
