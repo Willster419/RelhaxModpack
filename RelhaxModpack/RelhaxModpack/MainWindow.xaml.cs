@@ -3009,7 +3009,7 @@ namespace RelhaxModpack
                 Logging.DisposeLogging(Logfiles.Application);
 
             CommandLineSettings.ApplicationMode = ApplicationMode.PatchDesigner;
-            PatchDesigner designer = new PatchDesigner(this.ModpackSettings) { LaunchedFromMainWindow = true };
+            PatchDesigner designer = new PatchDesigner(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings };
 
             //start updater logging system
             if (!Logging.Init(Logfiles.PatchDesigner, ModpackSettings.VerboseLogging))
@@ -3053,7 +3053,7 @@ namespace RelhaxModpack
                 Logging.DisposeLogging(Logfiles.Application);
 
             CommandLineSettings.ApplicationMode = ApplicationMode.Editor;
-            DatabaseEditor editor = new DatabaseEditor(this.ModpackSettings) { LaunchedFromMainWindow = true };
+            DatabaseEditor editor = new DatabaseEditor(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings };
 
             //start updater logging system
             if (!Logging.Init(Logfiles.Editor, ModpackSettings.VerboseLogging))
