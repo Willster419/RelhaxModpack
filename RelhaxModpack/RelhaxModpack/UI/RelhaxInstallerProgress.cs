@@ -78,6 +78,8 @@ namespace RelhaxModpack.UI
         /// </summary>
         public uint TotalThreads = 0;
 
+        public uint TotalThreadsOfThisGroup = 0;
+
         /// <summary>
         /// The number of completed extraction threads
         /// </summary>
@@ -121,6 +123,27 @@ namespace RelhaxModpack.UI
                         return false;
                 }
                 return true;
+            }
+        }
+
+        public bool AllRemainingThreadsWaitingOnDownloads
+        {
+            get
+            {
+                if (WaitingOnDownloadsOfAThread == null)
+                    return false;
+
+                uint numThreadsStillRunning = TotalThreadsOfThisGroup - CompletedThreads;
+
+                uint numThreadsWaitingOnDownloads = 0;
+
+                foreach (bool waitingOnDownload in WaitingOnDownloadsOfAThread)
+                {
+                    if (waitingOnDownload)
+                        numThreadsWaitingOnDownloads++;
+                }
+
+                return (numThreadsStillRunning == numThreadsWaitingOnDownloads);
             }
         }
 

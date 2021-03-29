@@ -1739,9 +1739,9 @@ namespace RelhaxModpack
                             line1 = string.Format("{0} {1} {2} {3}", Translations.GetTranslatedString("installExtractingMods"), ((e.ParrentCurrent) > 0 ? e.ParrentCurrent : 1).ToString(),
                                 Translations.GetTranslatedString("of"), e.ParrentTotal.ToString());
                             line2 = string.Format("{0}: {1} {2} {3} {4} {5}", Translations.GetTranslatedString("installExtractingCompletedThreads"), e.CompletedThreads.ToString(),
-                                Translations.GetTranslatedString("of"), e.TotalThreads.ToString(), Translations.GetTranslatedString("installExtractingOfGroup"), e.InstallGroup.ToString());
+                                Translations.GetTranslatedString("of"), e.TotalThreadsOfThisGroup.ToString(), Translations.GetTranslatedString("installExtractingOfGroup"), e.InstallGroup.ToString());
                             line3 = Path.GetFileName(e.Filename);
-                            if (ModpackSettings.InstallWhileDownloading && e.AllThreadsWaitingOnDownloads)
+                            if (ModpackSettings.InstallWhileDownloading && e.AllRemainingThreadsWaitingOnDownloads)
                             {
                                 deferToDownloadReport = true;
                             }

@@ -1497,6 +1497,7 @@ namespace RelhaxModpack
                     }
 
                     //and log it all
+                    Prog.TotalThreadsOfThisGroup = (uint)tasks.Where(task => task != null).Count();
                     Logging.Debug("All threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)", i);
                     Task.WaitAll(tasks.Where(task => task != null).ToArray());
                     CancellationToken.ThrowIfCancellationRequested();
@@ -2043,6 +2044,7 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("Thread ID={0}, waiting for {1} packages that report as still downloading, wait at event", threadNum, packagesStillDownloading.Count);
                     Prog.WaitingOnDownloadsOfAThread[threadNum] = true;
+                    Progress.Report(Prog);
                     ManualResetEvent.WaitOne();
                     Prog.WaitingOnDownloadsOfAThread[threadNum] = false;
                     Logging.Debug("Thread ID={0}, event signal, re-calculate lists of packages waiting to download", threadNum);
