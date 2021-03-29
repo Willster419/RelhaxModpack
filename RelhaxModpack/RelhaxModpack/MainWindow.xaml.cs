@@ -1172,7 +1172,6 @@ namespace RelhaxModpack
 
                 //https://stackoverflow.com/questions/367523/how-to-ensure-an-event-is-only-subscribed-to-once
                 CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
-                CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
                 CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Download_Click;
 
                 if (!ModpackSettings.InstallWhileDownloading)
@@ -1203,6 +1202,7 @@ namespace RelhaxModpack
                             Logging.Exception(ex.ToString());
                         }
                         ResetUI();
+                        InstallProgressTextBox.Text = Translations.GetTranslatedString("canceled");
                         ToggleUIButtons(true);
                         return;
                     }
@@ -1223,7 +1223,6 @@ namespace RelhaxModpack
 
                     //connect the install and disconnect the download
                     CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
-                    CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
 
                     Logging.Info("Download time took {0} msec", stopwatch.Elapsed.TotalMilliseconds - lastTime.TotalMilliseconds);
                     lastTime = stopwatch.Elapsed;
@@ -1240,29 +1239,32 @@ namespace RelhaxModpack
                     downloadProgress.ProgressChanged += DownloadProgress_ProgressChanged_InstallWhileDownloading;
                     downloadManager.Progress = downloadProgress;
 
-                    try
+                    downloadManager.DownloadPackagesAsync(packagesToDownload).ContinueWith(taskk =>
                     {
-                        downloadManager.DownloadPackagesAsync(packagesToDownload);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex is OperationCanceledException)
+                        if (taskk.IsFaulted)
                         {
-                            Logging.Info("Download task was canceled, canceling installation");
-                            ToggleUIButtons(true);
+                            Dispatcher.Invoke(() =>
+                            {
+                                ResetUI();
+                                if (taskk.Exception.InnerException is OperationCanceledException)
+                                {
+                                    Logging.Info("Download task was canceled, canceling installation");
+                                    InstallProgressTextBox.Text = Translations.GetTranslatedString("canceled");
+                                }
+                                else
+                                {
+                                    Logging.Exception(taskk.Exception.InnerException.ToString());
+                                    InstallProgressTextBox.Text = Translations.GetTranslatedString("error");
+                                }
+                                ToggleUIButtons(true);
+
+                                //set taskbar progress state back to normal
+                                taskbarState = TaskbarProgressBarState.NoProgress;
+                                taskbarInstance.SetProgressState(taskbarState);
+                            });
                             return;
                         }
-                        else
-                        {
-                            Logging.Exception(ex.ToString());
-                            ToggleUIButtons(true);
-                            return;
-                        }
-                    }
-                    finally
-                    {
-                        downloadManager.Dispose();
-                    }
+                    });
                 }
             }
             else
@@ -1403,6 +1405,7 @@ namespace RelhaxModpack
                 GlobalDependencies = globalDependencies,
                 UserPackagesToInstall = userModsToInstall,
                 CancellationToken = installerCancellationTokenSource.Token,
+                DownloadingPackages = (packagesToDownload.Count > 0),
                 DisableTriggersForInstall = disableTriggersForInstall,
                 DatabaseVersion = this.DatabaseVersion,
                 WoTDirectory = this.WoTDirectory,
@@ -1412,9 +1415,8 @@ namespace RelhaxModpack
             if (ModpackSettings.InstallWhileDownloading)
                 installEngine.DownloadManager = downloadManager;
 
-            //setup the cancel button
+            //setup the cancel button for installs
             CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Install_Click;
-            CancelDownloadInstallButton.Click -= CancelDownloadInstallButton_Download_Click;
             CancelDownloadInstallButton.Click += CancelDownloadInstallButton_Install_Click;
             CancelDownloadInstallButton.Visibility = Visibility.Visible;
             CancelDownloadInstallButton.IsEnabled = true;
@@ -1429,6 +1431,10 @@ namespace RelhaxModpack
             Logging.Debug("Installation has finished, returned to MainWindow");
             installEngine.Dispose();
             installEngine = null;
+
+            //if install while downloading, it's now safe to dispose of the download manager
+            if (ModpackSettings.InstallWhileDownloading && packagesToDownload.Count > 0)
+                downloadManager.Dispose();
 
             //close and hide the install progress button
             CancelDownloadInstallButton.IsEnabled = false;
@@ -1481,7 +1487,7 @@ namespace RelhaxModpack
             }
             else if (installerCancellationTokenSource.IsCancellationRequested)
             {
-                Logging.Info("Cancel success");
+                Logging.Info("Install cancel success");
                 ToggleUIButtons(true);
                 InstallProgressTextBox.Text = Translations.GetTranslatedString("canceled");
             }
