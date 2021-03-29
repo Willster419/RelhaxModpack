@@ -80,11 +80,9 @@ namespace RelhaxModpack
             }
         }
 
-        //when application is starting for first time
-        private void Application_Startup(object sender, StartupEventArgs e)
+        private void InitSettingsAndLogging()
         {
             CommandLineSettings = new CommandLineSettings(Environment.GetCommandLineArgs().Skip(1).ToArray());
-            SettingsParser settingsParser = new SettingsParser();
             modpackSettings = new ModpackSettings();
             if (!Logging.Init(Logfiles.Application, false))
             {
@@ -114,7 +112,10 @@ namespace RelhaxModpack
                     return;
                 }
             }
+        }
 
+        private void AttachAssemblyResolver()
+        {
             //handle any assembly resolves
             //https://stackoverflow.com/a/19806004/3128017
             AppDomain.CurrentDomain.AssemblyResolve += (sender2, bargs) =>
@@ -130,7 +131,10 @@ namespace RelhaxModpack
                     return Assembly.Load(assemblyData);
                 }
             };
+        }
 
+        private void FinishApplicationInit()
+        {
             Logging.WriteHeader(Logfiles.Application);
             Logging.Info(string.Format("| Relhax Modpack version {0}", CommonUtils.GetApplicationVersion()));
             Logging.Info(string.Format("| Build version {0}, from date {1}", ApplicationConstants.ApplicationVersion.ToString(), CommonUtils.GetCompileTime()));
@@ -141,6 +145,7 @@ namespace RelhaxModpack
             CommandLineSettings.ParseCommandLineSwitches();
 
             //load the ModpackSettings from xml file
+            SettingsParser settingsParser = new SettingsParser();
             settingsParser.LoadSettings(modpackSettings);
 
             //set verbose logging option
@@ -192,7 +197,7 @@ namespace RelhaxModpack
                 else if (frameworkVersion < ApplicationConstants.MinimumDotNetFrameworkVersionRequired)
                 {
                     Logging.Error("Invalid .NET Framework version (less then 4.8)");
-                    if (MessageBox.Show("invalidDotNetFrameworkVersion","",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if (MessageBox.Show("invalidDotNetFrameworkVersion", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         CommonUtils.StartProcess(ApplicationConstants.DotNetFrameworkLatestDownloadURL);
                     }
@@ -203,7 +208,10 @@ namespace RelhaxModpack
                     modpackSettings.ValidFrameworkVersion = true;
                 }
             }
+        }
 
+        private void SelectWindowStartup()
+        {
             //switch into application modes based on mode enum
             Logging.Debug("Starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
             switch (CommandLineSettings.ApplicationMode)
@@ -212,7 +220,7 @@ namespace RelhaxModpack
                     ModpackToolbox updater = new ModpackToolbox(modpackSettings) { CommandLineSettings = CommandLineSettings };
 
                     //close application log if open
-                    if(Logging.IsLogOpen(Logfiles.Application))
+                    if (Logging.IsLogOpen(Logfiles.Application))
                         CloseApplicationLog(true);
 
                     //start updater logging
@@ -302,7 +310,7 @@ namespace RelhaxModpack
                     break;
                 case ApplicationMode.Patcher:
                     //check that at least one patch file was specified from command line
-                    if(CommandLineSettings.PatchFilenames.Count == 0)
+                    if (CommandLineSettings.PatchFilenames.Count == 0)
                     {
                         Logging.Error("0 patch files parsed from command line!");
                         Current.Shutdown((int)ReturnCodes.PatcherNoSpecifiedFiles);
@@ -312,9 +320,9 @@ namespace RelhaxModpack
                     {
                         //parse patch objects from command line file list
                         List<Patch> patchList = new List<Patch>();
-                        foreach(string file in CommandLineSettings.PatchFilenames)
+                        foreach (string file in CommandLineSettings.PatchFilenames)
                         {
-                            if(!File.Exists(file))
+                            if (!File.Exists(file))
                             {
                                 Logging.Warning("Skipping file path {0}, not found", file);
                                 continue;
@@ -324,7 +332,7 @@ namespace RelhaxModpack
                         }
 
                         //check for at least one patchfile was parsed
-                        if(patchList.Count == 0)
+                        if (patchList.Count == 0)
                         {
                             Logging.Error("0 patches parsed from files!");
                             Current.Shutdown((int)ReturnCodes.PatcherNoPatchesParsed);
@@ -338,7 +346,7 @@ namespace RelhaxModpack
                         int i = 1;
                         //TODO: does WoTDirectory get set later? maybe tm?
                         Patcher thePatcher = new Patcher() { WoTDirectory = null };
-                        foreach(Patch p in patchList)
+                        foreach (Patch p in patchList)
                         {
                             Logging.Info("Running patch {0} of {1}", i++, patchList.Count);
                             PatchExitCode exitCodeTemp = thePatcher.RunPatchFromCommandline(p);
@@ -352,6 +360,15 @@ namespace RelhaxModpack
                     window.Show();
                     break;
             }
+        }
+
+        //when application is starting for first time
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            InitSettingsAndLogging();
+            AttachAssemblyResolver();
+            FinishApplicationInit();
+            SelectWindowStartup();
         }
 
         //https://stackoverflow.com/questions/793100/globally-catch-exceptions-in-a-wpf-application
