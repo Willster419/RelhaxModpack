@@ -1,5 +1,5 @@
 # Beta Application version 1.3.0.0 (2021-03-28)
-https://www.virustotal.com/gui/file-analysis/Zjc0Y2U1YTgwYzcyMjBmMzk0MDI1MjhhOWJlNmM4YmY6MTYxNjk5NDc4Mw==/detection
+https://www.virustotal.com/gui/file-analysis/ODlkMzVkN2YyM2IzOTUwOGNlNTcwNDgxM2Y5NjVhZmE6MTYxNzAwMTcyNQ==/detection
 
 ## The application update you didn't know was needed, and will hardly notice
 
