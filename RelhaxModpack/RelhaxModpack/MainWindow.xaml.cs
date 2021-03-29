@@ -1745,7 +1745,7 @@ namespace RelhaxModpack
                         line2 = e.Filename;
                         break;
                     case InstallerExitCodes.ExtractionError:
-                        if(ModpackSettings.MulticoreExtraction && !ModpackSettings.AdvancedInstalProgress)
+                        if(ModpackSettings.MulticoreExtraction)
                         {
                             ChildProgressBar.Maximum = e.TotalInstallGroups;
                             ChildProgressBar.Value = e.InstallGroup;
