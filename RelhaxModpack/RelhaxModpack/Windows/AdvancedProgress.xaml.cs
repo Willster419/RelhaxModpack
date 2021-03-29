@@ -78,11 +78,6 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public RelhaxInstallTaskReporter FontInstallTrimDownloadCacheCleanupReporter = null;
 
-        /// <summary>
-        /// A reference to the modpack settings object
-        /// </summary>
-        public ModpackSettings ModpackSettings = null;
-
         private InstallerExitCodes lastExitCode = InstallerExitCodes.Success;
 
         private int lastInstallGroup = -1;
