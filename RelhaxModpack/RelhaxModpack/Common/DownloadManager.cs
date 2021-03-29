@@ -191,7 +191,6 @@ namespace RelhaxModpack.Common
                                         if (ManualResetEvent != null)
                                         {
                                             ManualResetEvent.Set();
-                                            Thread.Sleep(2);
                                             ManualResetEvent.Reset();
                                         }
                                     }
@@ -212,12 +211,12 @@ namespace RelhaxModpack.Common
                     {
                         if (e is WebException webEx && webEx.Status == WebExceptionStatus.RequestCanceled)
                         {
-                            Logging.Info("Download request canceled");
+                            Logging.Info(LogOptions.ClassName, "Download process canceled");
                             throw new OperationCanceledException(CancellationToken);
                         }
                         else if (e is OperationCanceledException opex)
                         {
-                            Logging.Info("I meant to throw this");
+                            Logging.Info(LogOptions.ClassName, "Download process canceled");
                             throw opex;
                         }
                         else
