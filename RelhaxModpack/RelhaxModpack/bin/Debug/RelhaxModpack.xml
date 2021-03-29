@@ -8039,11 +8039,6 @@
             The UI Reporting object for the step of font install, trimming download cache, and cleanup
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.AdvancedProgress.ModpackSettings">
-            <summary>
-            A reference to the modpack settings object
-            </summary>
-        </member>
         <member name="M:RelhaxModpack.Windows.AdvancedProgress.OnReportAdvancedProgress(RelhaxModpack.UI.RelhaxInstallerProgress)">
             <summary>
             Update the advanced progress UI objects
