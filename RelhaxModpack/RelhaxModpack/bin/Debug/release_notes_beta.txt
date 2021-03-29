@@ -1,3 +1,56 @@
+# Beta Application version 1.3.0.0 (2021-03-28)
+https://www.virustotal.com/gui/file-analysis/Zjc0Y2U1YTgwYzcyMjBmMzk0MDI1MjhhOWJlNmM4YmY6MTYxNjk5NDc4Mw==/detection
+
+## The application update you didn't know was needed, and will hardly notice
+
+### A complete re-structure of the application from the bottom-up
+- There was a lot of spaghetti code, or at least potential for some (more). It was cleaned up by implementing class structure into several areas:
+  - A lot of static properties and settings were moved into class objects. This helps with trying to find where things are randomly set within different points of the code and allows for potential modification of settings to be used in a sub-function.
+  - Windows that provide a separate function (like Patch Designer or Database Editor) now all derive from RelhaxCustomFeatureWindow, which ensures they all have a ModpackSettings and CommandLineSettings configuration class objects.
+  - Application logging and startup was changed so that modpack settings are loaded for all 'feature windows'. This means that the order for application launch is now:
+    1. Logging setup
+    2. Settings loading
+    3. .Net framework version verification
+    4. Command line parsing
+    5. Feature window selection
+  - Several static methods and functions were moved into class structure objects. This allows for two things: Reuse-ability, and more reliable and extensive unit testing. Specifically:
+    - Settings object loading/saving to/from custom feature Windows.
+    - Local database cache management.
+    - Downloading of packages from our servers.
+
+### New feature: Ability to select download mirrors!
+- Starting with 1.3.0.0, you have the ability to select a download mirror for downloading the zip packages! This is a huge benefit for our EU, RU, (basically not NA) users! As of now, you have two options:
+  - relhaxmodpack.com, Dallas, USA
+  - clanverwaltung.de, Frankfurt, Germany
+- Additionally, we've integrated our mirror solution to use rsync for hourly synchronization, with the option to manually sync from the database editor. As soon as a package is updated to the main server, it will be on the mirror(s) in seconds!
+
+### Less 'incomplete download' messages
+- The new download manager has integrated md5 hash calculation right into downloading, so as soon as the file is downloaded, the hash is already calculated. This allows two things:
+  - The hash is saved immediately to the download cache database so you don't need to wait for it when you are loading the selection list.
+  - The hash is compared to the server hash, and if not equal, it will automatically try a could times to re-download. NOTE: with the beta database, packages 'in-testing' will still be re-downloaded every time until published into the stable database.
+
+### Other big changes you'll notice
+- The preview window was not only optimized internally, but now will display the next preview elements you right click on *without* re-opening the window.
+- The thread synchronization was re-worked with the introduction of the download manager component
+  - Now in the 'download while installing' step, if an extraction thread is waiting for a package to download, it will use synchronization mechanisms instead of low frequency polling. It's all about parallel computing and optimization.
+  - This also fixed issues with progress reporting, especially in the Advanced Progress reporting window: When 'download while installing' enabled, the progress will report downloading, rather then reporting nothing and giving the idea it is stuck.
+
+
+### Miscellaneous improvements
+- Re-work top of ModSelectionList layout to allow for dynamic expansion of text (it will wrap and fill down, those below it will move down).
+- Add label to ModSelectionList to show the version of the database you'll be installing.
+- Change default selection view to legacy.
+- Removed useless package properties: StartAddress and EndAddress. They were only used once, and never afterwards.
+- Fixed alignment of language selection text box.
+- Moved all downloads from http to https.
+- Remove separate text box informing the user he can search, and put it into the search combobox.
+- Improve exception logging for CommonUtils.SetListEntries().
+- Beta and Alpha application distributions now will have debug logging enabled always.
+- More refactoring of enums and EventArgs into the Enums and CustomEventArgs namespace/folder.
+- Added missing translation entries.
+- Updated translations. I think. I probably did.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 Beta Application version 1.2.4.1 (2020-12-23)
 https://www.virustotal.com/gui/file/4aa328cb69141f67922589552311d9aabc3f8e6c92939ee77c92ae1901fdd50b/detection
 - Fixed bug with logfile handling in the modpack toolbox window.
