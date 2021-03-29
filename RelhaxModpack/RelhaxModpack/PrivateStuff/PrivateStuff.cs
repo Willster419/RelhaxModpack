@@ -36,6 +36,7 @@ namespace RelhaxModpack
         public const string BigmodsCreateManagerInfoPHP = null;
         public const string BigmodsCreateUpdatePackagesPHP = null;
         public const string BigmodsCreateModInfoPHP = null;
+        public const string BigmodsTriggerManualMirrorSyncPHP = null;
         public const string BigmodsModpackUpdaterKey = null;
         #endregion
 
