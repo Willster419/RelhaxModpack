@@ -1530,6 +1530,11 @@ namespace RelhaxModpack
         {
             if (!deferToDownloadReport) return;
 
+            if (ModpackSettings.AdvancedInstalProgress && AdvancedProgressWindow != null)
+            {
+                AdvancedProgressWindow.OnReportDownload(e);
+            }
+
             //child is bytes downloaded
             ChildProgressBar.Maximum = e.ChildTotal;
             ChildProgressBar.Minimum = 0;
@@ -1669,6 +1674,14 @@ namespace RelhaxModpack
                     throw new BadMemeException("Not so advanced now is it");
                 }
                 AdvancedProgressWindow.OnReportAdvancedProgress(e);
+                if (ModpackSettings.InstallWhileDownloading && e.AllRemainingThreadsWaitingOnDownloads)
+                {
+                    deferToDownloadReport = true;
+                }
+                else
+                {
+                    deferToDownloadReport = false;
+                }
             }
             else
             {
