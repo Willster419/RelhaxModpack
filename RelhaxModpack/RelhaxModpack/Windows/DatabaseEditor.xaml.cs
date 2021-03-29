@@ -1873,7 +1873,7 @@ namespace RelhaxModpack.Windows
                     Media m = new Media()
                     {
                         MediaType = MediaType.Picture,
-                        URL = string.Format("{0}{1}", e.UploadedFilepathOnline, e.UploadedFilename).Replace("ftp:", "http:")
+                        URL = string.Format("{0}{1}", e.UploadedFilepathOnline, e.UploadedFilename).Replace("ftp:", "https:")
                     };
                     SelectablePackage updatedPackage = e.Package as SelectablePackage;
                     updatedPackage.Medias.Add(m);

@@ -879,7 +879,7 @@ namespace RelhaxModpack.Windows
             using (client = new WebClient())
             {
                 XmlDocument filesInOnlineFolder = new XmlDocument();
-                string downlaodUrlString = string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}", selectedVersionInfos.WoTOnlineFolderVersion, DatabaseXml);
+                string downlaodUrlString = string.Format("https://bigmods.relhaxmodpack.com/WoT/{0}/{1}", selectedVersionInfos.WoTOnlineFolderVersion, DatabaseXml);
                 ReportProgress("Downloading from " + downlaodUrlString);
                 filesInOnlineFolder.LoadXml(await client.DownloadStringTaskAsync(downlaodUrlString));
                 foreach(XmlNode node in filesInOnlineFolder.SelectNodes("//database/file"))
@@ -1195,7 +1195,7 @@ namespace RelhaxModpack.Windows
             XmlDocument databaseXml = null;
             using (client = new WebClient())
             {
-                string databaseXmlString = await client.DownloadStringTaskAsync(string.Format("http://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
+                string databaseXmlString = await client.DownloadStringTaskAsync(string.Format("https://bigmods.relhaxmodpack.com/WoT/{0}/{1}",
                     WoTModpackOnlineFolderVersion, DatabaseXml));
                 databaseXml = XmlUtils.LoadXmlDocument(databaseXmlString, XmlLoadType.FromString);
             }

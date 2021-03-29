@@ -317,19 +317,19 @@ namespace RelhaxModpack.Common
         /// <summary>
         /// The escaped constant URL of the stable database on the server, escaped with the 'dbVersion' macro
         /// </summary>
-        public const string BigmodsDatabaseRootEscaped = "http://bigmods.relhaxmodpack.com/RelhaxModpack/resources/database/{dbVersion}/";
+        public const string BigmodsDatabaseRootEscaped = "https://bigmods.relhaxmodpack.com/RelhaxModpack/resources/database/{dbVersion}/";
 
         /// <summary>
         /// The default download mirror, escaped with the 'onlineFolder' macro
         /// </summary>
         /// <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
-        public const string StartAddressMirrorUsaDefault = @"http://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
+        public const string StartAddressMirrorUsaDefault = @"https://bigmods.relhaxmodpack.com/WoT/{onlineFolder}/";
 
         /// <summary>
         /// The download mirror located in Germany
         /// </summary>
         /// <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
-        public const string StartAddressMirrorDe = @"http://relhax.clanverwaltung.de/filedepot/files/{onlineFolder}/";
+        public const string StartAddressMirrorDe = @"https://relhax.clanverwaltung.de/filedepot/files/{onlineFolder}/";
 
         /// <summary>
         /// A read-only list of all download mirrors in this application
@@ -355,17 +355,17 @@ namespace RelhaxModpack.Common
         /// <summary>
         /// The URL of the V2 manager info zip file
         /// </summary>
-        public const string ManagerInfoURLBigmods = "http://bigmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat";
+        public const string ManagerInfoURLBigmods = "https://bigmods.relhaxmodpack.com/RelhaxModpack/managerInfo.dat";
 
         /// <summary>
         /// The URL to the location of the latest stable version of the application as a zip file
         /// </summary>
-        public const string ApplicationUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
+        public const string ApplicationUpdateURL = "https://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.zip";
 
         /// <summary>
         /// The URL to the location of the latest beta version of the application as a zip file
         /// </summary>
-        public const string ApplicationBetaUpdateURL = "http://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip";
+        public const string ApplicationBetaUpdateURL = "https://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpackBeta.zip";
 
         /// <summary>
         /// The root URL of the V2 selection files location

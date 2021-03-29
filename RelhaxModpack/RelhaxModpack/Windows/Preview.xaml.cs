@@ -219,7 +219,7 @@ namespace RelhaxModpack.Windows
                 {
                     Tag = Medias[i],
                     //dummy URI just to make the request navigate work
-                    NavigateUri = new Uri("http://google.com")
+                    NavigateUri = new Uri("https://google.com")
                 };
                 h.RequestNavigate += OnMediaHyperlinkClick;
                 block.Inlines.Add(h);
