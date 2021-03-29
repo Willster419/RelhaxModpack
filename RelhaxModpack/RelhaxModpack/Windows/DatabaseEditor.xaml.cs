@@ -1900,6 +1900,7 @@ namespace RelhaxModpack.Windows
                         ApplyDatabaseObject(e.Package);
                         ShowDatabasePackage(e.Package);
                     }
+                    TriggerMirrorSyncButton_Click(null, null);
                     break;
             }
 
@@ -2094,7 +2095,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Database Add/Move/Remove buttons
+        #region Database Add/Move/Remove/Sync buttons
 
         private void RemoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
@@ -2207,6 +2208,38 @@ namespace RelhaxModpack.Windows
                     addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSameLevel);
                 DatabaseTreeView.Items.Refresh();
             }
+        }
+
+        private async void TriggerMirrorSyncButton_Click(object sender, RoutedEventArgs e)
+        {
+            TriggerMirrorSyncButton.IsEnabled = false;
+            TriggerMirrorSyncButton.Content = "Running...";
+            Logging.Editor("Running trigger manual sync script...");
+
+            string resultText = null;
+            using (PatientWebClient client = new PatientWebClient()
+            { Credentials = PrivateStuff.BigmodsNetworkCredentialScripts, Timeout = 100000 })
+            {
+                try
+                {
+                    string result = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsTriggerManualMirrorSyncPHP);
+                    Logging.Editor(result.Replace("<br />", "\n"));
+                    if (result.ToLower().Contains("trigger=1"))
+                        resultText = "SUCCESS!";
+                }
+                catch (WebException wex)
+                {
+                    Logging.Editor("Failed to run trigger manual sync script", LogLevel.Error);
+                    Logging.Editor(wex.ToString(), LogLevel.Exception);
+                    resultText = "ERROR!";
+                }
+            }
+
+            TriggerMirrorSyncButton.Content = resultText;
+            await Task.Delay(5000);
+
+            TriggerMirrorSyncButton.IsEnabled = true;
+            TriggerMirrorSyncButton.Content = "Trigger Sync";
         }
         #endregion
 

@@ -303,12 +303,14 @@
             <RowDefinition Height="632*"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
+        <Button x:Name="AddDatabaseObjectButton"    Content="Add/Copy"     HorizontalAlignment="Left"  Margin="10,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="AddDatabaseObjectButton"    Click="AddDatabaseObjectButton_Click"    IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Add a package to the database by making a copy of the selected package"/>
         <Button x:Name="RemoveDatabaseObjectButton" Content="Remove"       HorizontalAlignment="Left"  Margin="90,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
                 Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click" IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Remove the selected package from the database"/>
         <Button x:Name="MoveDatabaseObjectButton"   Content="Move"         HorizontalAlignment="Left"  Margin="170,0,0,5"   Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
                 Tag="MoveDatabaseObjectButton"   Click="MoveDatabaseObjectButton_Click"   IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Move the selected package to below another package.\nSupports moving between package types"/>
-        <Button x:Name="AddDatabaseObjectButton"    Content="Add/Copy"     HorizontalAlignment="Left"  Margin="10,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
-                Tag="AddDatabaseObjectButton"    Click="AddDatabaseObjectButton_Click"    IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Add a package to the database by making a copy of the selected package"/>
+        <Button x:Name="TriggerMirrorSyncButton"    Content="Trigger Sync" HorizontalAlignment="Left"  Margin="250,0,0,5"   Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="AddDatabaseObjectButton"    Click="TriggerMirrorSyncButton_Click"    IsEnabled="True"  ToolTipService.ShowOnDisabled="True" ToolTip="Trigger a manual sync to our download mirror(s)"/>
         <Button x:Name="ApplyButton"                Content="Apply"        HorizontalAlignment="Right" Margin="0,0,170,5"  Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="45"
                 Tag="ApplyButton"                Click="ApplyButton_Click"                IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Apply any changes from the right tab to the selected package"/>
         <Button x:Name="LoadAsDatabaseButton"       Content="Load as..."   HorizontalAlignment="Right" Margin="0,0,90,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
@@ -707,6 +709,6 @@
                       Style="{DynamicResource ComboBoxStyle1}" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}">
             </ComboBox>
         </Grid>
-        <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="50"/>
+        <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="30"/>
     </Grid>
 </local:RelhaxCustomFeatureWindow>
