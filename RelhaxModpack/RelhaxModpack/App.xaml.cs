@@ -30,7 +30,7 @@ namespace RelhaxModpack
         /// <summary>
         /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk. Parsed upon application load.
         /// </summary>
-        public Ionic.Zip.ZipFile ManagerInfoZipfile = null;
+        public Ionic.Zip.ZipFile ManagerInfoZipfile;
 
         //when application is closing (cannot be stopped)
         private void Application_Exit(object sender, ExitEventArgs e)
