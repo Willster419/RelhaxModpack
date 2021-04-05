@@ -105,13 +105,13 @@ namespace RelhaxModpack.Database
         /// Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
         /// </summary>
         /// <returns>the XmlDocument object of the root database file</returns>
-        public static XmlDocument GetBetaDatabaseRoot1V1Document(string betaDatabaseV2FolderUrlParsed)
+        public static XmlDocument GetBetaDatabaseRoot1V1Document(string betaDatabaseV2FolderUrlParsed, string betaDatabaseSelectedBranch)
         {
             XmlDocument rootDocument = null;
             using (WebClient client = new WebClient())
             {
                 //load string constant url from manager info xml
-                string rootXml = ApplicationConstants.BetaDatabaseV2FolderURLEscaped + ApplicationConstants.BetaDatabaseV2RootFilename;
+                string rootXml = ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", betaDatabaseSelectedBranch) + ApplicationConstants.BetaDatabaseV2RootFilename;
 
                 //download the xml string into "modInfoXml"
                 client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
@@ -148,9 +148,9 @@ namespace RelhaxModpack.Database
         /// Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
         /// </summary>
         /// <returns>The list of URLs</returns>
-        public static List<string> GetBetaDatabase1V1FilesList(string betaDatabaseV2FolderUrlParsed)
+        public static List<string> GetBetaDatabase1V1FilesList(string betaDatabaseV2FolderUrlParsed, string betaDatabaseSelectedBranch)
         {
-            return GetBetaDatabase1V1FilesList(GetBetaDatabaseRoot1V1Document(betaDatabaseV2FolderUrlParsed), betaDatabaseV2FolderUrlParsed);
+            return GetBetaDatabase1V1FilesList(GetBetaDatabaseRoot1V1Document(betaDatabaseV2FolderUrlParsed, betaDatabaseSelectedBranch), betaDatabaseV2FolderUrlParsed);
         }
         #endregion
 

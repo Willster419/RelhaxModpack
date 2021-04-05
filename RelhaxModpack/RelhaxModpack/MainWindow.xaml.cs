@@ -3574,7 +3574,7 @@ namespace RelhaxModpack
         private Task<string> GetBetaDatabase1V1ForStringCompareAsync()
         {
             return Task<string>.Run(() => {
-                List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch));
+                List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch), ModpackSettings.BetaDatabaseSelectedBranch);
 
                 string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 

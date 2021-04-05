@@ -441,7 +441,7 @@ namespace RelhaxModpack.Windows
                 case DatabaseVersions.Beta:
                     Logging.Debug("Init beta db download resources");
                     //create download url list
-                    List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch));
+                    List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch), ModpackSettings.BetaDatabaseSelectedBranch);
 
                     string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 
