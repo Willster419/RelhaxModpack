@@ -1192,7 +1192,7 @@
             A utility class for working with database components
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabaseRoot1V1Document(System.String)">
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabaseRoot1V1Document(System.String,System.String)">
             <summary>
             Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
             </summary>
@@ -1205,7 +1205,7 @@
             <param name="rootDocument">The root 'database.xml' document object</param>
             <returns>The list of URLs</returns>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesList(System.String)">
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesList(System.String,System.String)">
             <summary>
             Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
             </summary>
