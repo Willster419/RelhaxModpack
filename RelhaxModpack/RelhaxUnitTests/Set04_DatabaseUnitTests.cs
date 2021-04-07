@@ -25,7 +25,7 @@ namespace RelhaxUnitTests
         [TestMethod]
         public void Test01_GetLatestSupportWoTVersionTest()
         {
-            XmlDocument rootDocument = DatabaseUtils.GetBetaDatabaseRoot1V1Document(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"));
+            XmlDocument rootDocument = DatabaseUtils.GetBetaDatabaseRoot1V1Document(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"), "master");
             LatestSupportedWoTVersion = XmlUtils.GetXmlStringFromXPath(rootDocument, ApplicationConstants.DatabaseOnlineVersionXpath);
             Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
         }
@@ -96,7 +96,7 @@ namespace RelhaxUnitTests
                 modInfoXml = client.DownloadString(rootXml);
             }
 
-            List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"));
+            List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"), "master");
 
             string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 
@@ -149,7 +149,7 @@ namespace RelhaxUnitTests
 
             Directory.CreateDirectory(databaseSavePath);
 
-            XmlDocument rootDoc = DatabaseUtils.GetBetaDatabaseRoot1V1Document(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"));
+            XmlDocument rootDoc = DatabaseUtils.GetBetaDatabaseRoot1V1Document(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"), "master");
             Assert.IsNotNull(rootDoc);
 
             List<string> allCategoriesXml = DatabaseUtils.GetBetaDatabase1V1FilesList(rootDoc, ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"));
