@@ -57,7 +57,7 @@ namespace RelhaxModpack
         private System.Windows.Forms.NotifyIcon RelhaxIcon = null;
 
         //custom application windows
-        private ModSelectionList modSelectionList = null;
+        private PackageSelectionList modSelectionList = null;
         private AdvancedProgress AdvancedProgressWindow = null;
         private NewsViewer newsViewer = null;
 
@@ -990,7 +990,7 @@ namespace RelhaxModpack
             }
 
             //show the mod selection list
-            modSelectionList = new ModSelectionList(this.ModpackSettings, this.CommandLineSettings)
+            modSelectionList = new PackageSelectionList(this.ModpackSettings, this.CommandLineSettings)
             {
                 AutoInstallMode = (sender == null),
                 //get the last parsed from the xml file (should be the latest by default

@@ -35,9 +35,9 @@ namespace RelhaxModpack.Windows
     #endregion
 
     /// <summary>
-    /// Interaction logic for ModSelectionList.xaml
+    /// Interaction logic for PackageSelectionList.xaml
     /// </summary>
-    public partial class ModSelectionList : RelhaxWindow, IDisposable
+    public partial class PackageSelectionList : RelhaxWindow, IDisposable
     {
         /// <summary>
         /// The list of categories
@@ -99,7 +99,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the ModSelectionList window
         /// </summary>
-        public ModSelectionList(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings) : base(modpackSettings)
+        public PackageSelectionList(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings) : base(modpackSettings)
         {
             InitializeComponent();
             if (this.CommandLineSettings == null)

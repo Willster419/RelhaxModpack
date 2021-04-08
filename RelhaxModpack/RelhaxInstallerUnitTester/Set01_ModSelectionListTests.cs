@@ -25,7 +25,7 @@ namespace RelhaxInstallerUnitTester
     {
         //declaring these objects as static will allow them to exist throughout the test
         //exists in all methods
-        private static ModSelectionList SelectionList = null;
+        private static PackageSelectionList SelectionList = null;
         private static List<DatabasePackage> GlobalDependencies = null;
         private static List<Dependency> Dependencies = null;
         private static List<Category> ParsedCategoryList = null;
@@ -79,7 +79,7 @@ namespace RelhaxInstallerUnitTester
             //https://www.c-sharpcorner.com/uploadfile/suchit_84/creating-wpf-windows-on-dedicated-threads/
             Thread thread = new Thread(() =>
             {
-                SelectionList = new ModSelectionList(ModpackSettings, null)
+                SelectionList = new PackageSelectionList(ModpackSettings, null)
                 {
                     ApplyColorSettings = false, //not cross-thread safe
                     ApplyScaling = false,
