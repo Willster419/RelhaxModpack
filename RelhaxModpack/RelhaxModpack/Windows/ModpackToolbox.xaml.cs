@@ -458,7 +458,7 @@ namespace RelhaxModpack.Windows
                 Path.Combine(ApplicationConstants.ApplicationStartupPath, "database_user.csv");
 
             //global dependencies
-            string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tTags\tDevURL\tEnabled\tVisible\tVersion" : "Category\tMod\tDevURL";
+            string header = @internal ? "PackageName\tCategory\tPackage\tLevel\tZip\tTags\tDeprecated\tDevURL\tEnabled\tVisible\tVersion" : "Category\tMod\tDevURL";
             sb.AppendLine(header);
 
             if(@internal)
@@ -472,7 +472,9 @@ namespace RelhaxModpack.Windows
                         "0",
                         string.IsNullOrWhiteSpace(dp.ZipFile) ? notApplicable : dp.ZipFile,
                         dp.Tags.ToString(),
-                        string.IsNullOrWhiteSpace(dp.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + dp.DevURLList[0].Trim() + "\",\"link\")",
+                        dp.Deprecated.ToString(),
+                        //example google url: =HYPERLINK("http://wwiihwa.blogspot.de/","link")
+                        string.IsNullOrWhiteSpace(dp.DevURLList[0].Trim()) ? string.Empty : "=HYPERLINK(\"" + dp.DevURLList[0].Trim() + "\",\"link\")",
                         dp.Enabled,
                         string.Empty,
                         dp.Version
@@ -487,7 +489,8 @@ namespace RelhaxModpack.Windows
                         "0",
                         string.IsNullOrWhiteSpace(dep.ZipFile) ? notApplicable : dep.ZipFile,
                         dep.Tags.ToString(),
-                        string.IsNullOrWhiteSpace(dep.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + dep.DevURLList[0].Trim() + "\",\"link\")",
+                        dep.Deprecated.ToString(),
+                        string.IsNullOrWhiteSpace(dep.DevURLList[0].Trim()) ? string.Empty : "=HYPERLINK(\"" + dep.DevURLList[0].Trim() + "\",\"link\")",
                         dep.Enabled,
                         string.Empty,
                         dep.Version));
@@ -508,7 +511,7 @@ namespace RelhaxModpack.Windows
                             nameIndneted = "--" + nameIndneted;
                         }
                         sb.AppendLine(string.Format("{0}\t{1}\t{2}", sp.ParentCategory.Name, nameIndneted,
-                            string.IsNullOrWhiteSpace(sp.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + sp.DevURLList[0].Trim() + "\",\"link\")"));
+                            string.IsNullOrWhiteSpace(sp.DevURLList[0].Trim()) ? string.Empty : "=HYPERLINK(\"" + sp.DevURLList[0].Trim() + "\",\"link\")"));
                     }
                     else
                     {
@@ -519,7 +522,8 @@ namespace RelhaxModpack.Windows
                             sp.Level,
                             string.IsNullOrWhiteSpace(sp.ZipFile) ? notApplicable : sp.ZipFile,
                             sp.Tags.ToString(),
-                            string.IsNullOrWhiteSpace(sp.DevURLList[0].Trim()) ? "" : "=HYPERLINK(\"" + sp.DevURLList[0].Trim() + "\",\"link\")",
+                            sp.Deprecated.ToString(),
+                            string.IsNullOrWhiteSpace(sp.DevURLList[0].Trim()) ? string.Empty : "=HYPERLINK(\"" + sp.DevURLList[0].Trim() + "\",\"link\")",
                             sp.Enabled,
                             sp.Visible,
                             sp.Version));
