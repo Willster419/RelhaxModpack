@@ -56,7 +56,8 @@ namespace RelhaxModpack.Database
             nameof(DevURL),
             nameof(InternalNotes),
             nameof(Author),
-            nameof(Maintainers)
+            nameof(Maintainers),
+            nameof(Deprecated)
         };
         #endregion
 
@@ -227,6 +228,11 @@ namespace RelhaxModpack.Database
         /// The list of tags that this package contains (like patches, scripts, etc)
         /// </summary>
         public PackageTagsList Tags { get; set; }  = new PackageTagsList();
+
+        /// <summary>
+        /// A flag to set for a package that is considered to be outdated or no longer supported or stale.
+        /// </summary>
+        public bool Deprecated { get; set; } = false;
         #endregion
 
         #region UI Properties
