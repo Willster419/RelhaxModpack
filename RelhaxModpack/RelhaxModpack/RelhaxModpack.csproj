@@ -348,8 +348,8 @@
     <Compile Include="Windows\InstallFinished.xaml.cs">
       <DependentUpon>InstallFinished.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ModSelectionList.xaml.cs">
-      <DependentUpon>ModSelectionList.xaml</DependentUpon>
+    <Compile Include="Windows\PackageSelectionList.xaml.cs">
+      <DependentUpon>PackageSelectionList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\PatchDesigner.xaml.cs">
       <DependentUpon>PatchDesigner.xaml</DependentUpon>
@@ -509,7 +509,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ModSelectionList.xaml">
+    <Page Include="Windows\PackageSelectionList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
