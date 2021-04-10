@@ -8898,7 +8898,7 @@
             <param name="verbose">Flag if the logfile will be outputting diagnostic info</param>
             <remarks>The verbose value will be ignored if the Application is not a beta or alpha build.</remarks>
         </member>
-        <member name="M:RelhaxModpack.Logfile.Init">
+        <member name="M:RelhaxModpack.Logfile.Init(System.Boolean)">
             <summary>
             Initializes the log file
             </summary>
@@ -8993,7 +8993,7 @@
             Provides a reference to an instance of an uninstall log file
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Utilities.Enums.Logfiles,System.Boolean,System.String)">
+        <member name="M:RelhaxModpack.Logging.Init(RelhaxModpack.Utilities.Enums.Logfiles,System.Boolean,System.Boolean,System.String)">
             <summary>
             Initialize the logging system for the application
             </summary>
