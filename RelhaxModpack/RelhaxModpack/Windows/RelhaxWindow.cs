@@ -1,5 +1,6 @@
 ﻿using RelhaxModpack.Settings;
 using RelhaxModpack.UI;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace RelhaxModpack.Windows
 {
@@ -42,6 +44,11 @@ namespace RelhaxModpack.Windows
         public bool ApplyCustomFont { get; set; } = false;
 
         /// <summary>
+        /// Controls if pressing the escape key while the window is open will close it.
+        /// </summary>
+        public bool EscapeKeyClosesWindow { get; set; } = false;
+
+        /// <summary>
         /// The original Width and Height of the window before scaling
         /// </summary>
         public double OriginalWidth { get; set; }
@@ -70,6 +77,18 @@ namespace RelhaxModpack.Windows
                 this.ModpackSettings = modpackSettings;
             //subscribe to the loaded event to load custom code
             Loaded += OnWindowLoaded;
+
+            if (EscapeKeyClosesWindow)
+                KeyUp += OnKeyUp;
+        }
+
+        private void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Logging.Debug(LogOptions.ClassName, "Escape Key pressed, closing window");
+                this.Close();
+            }
         }
 
         /// <summary>
