@@ -77,9 +77,6 @@ namespace RelhaxModpack.Windows
                 this.ModpackSettings = modpackSettings;
             //subscribe to the loaded event to load custom code
             Loaded += OnWindowLoaded;
-
-            if (EscapeKeyClosesWindow)
-                KeyUp += OnKeyUp;
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e)
@@ -103,6 +100,10 @@ namespace RelhaxModpack.Windows
             //get the original width and height
             OriginalHeight = Height;
             OriginalWidth = Width;
+
+            //subscribe to the event of the escape key pressed closing the window
+            if (EscapeKeyClosesWindow)
+                KeyUp += OnKeyUp;
 
             //deal with the translations
             if (LocalizeWindow)
