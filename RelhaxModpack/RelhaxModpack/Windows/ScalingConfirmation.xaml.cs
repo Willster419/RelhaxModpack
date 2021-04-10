@@ -65,5 +65,19 @@ namespace RelhaxModpack.Windows
             DialogResult = true;
             Close();
         }
+
+        private void RelhaxWindow_Closed(object sender, EventArgs e)
+        {
+            if (DialogResult == null)
+                DialogResult = false;
+
+            if (Timer != null)
+            {
+                if (Timer.IsEnabled)
+                    Timer.Stop();
+                Timer = null;
+            }
+
+        }
     }
 }
