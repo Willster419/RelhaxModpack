@@ -7557,17 +7557,17 @@
             InitializeComponent
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Windows.DevleoperSelectionsClosedEWventArgs">
+        <member name="T:RelhaxModpack.Windows.DevleoperSelectionsClosedEventArgs">
             <summary>
             Event argument passed back to the caller for when the developer selection window is closed
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DevleoperSelectionsClosedEWventArgs.LoadSelection">
+        <member name="F:RelhaxModpack.Windows.DevleoperSelectionsClosedEventArgs.LoadSelection">
             <summary>
             Determines if a selection should be loaded (for example, if the user closed the window instead of selecting one)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Windows.DevleoperSelectionsClosedEWventArgs.FileToLoad">
+        <member name="F:RelhaxModpack.Windows.DevleoperSelectionsClosedEventArgs.FileToLoad">
             <summary>
             the name of the file to load from the online list of selection files
             </summary>
@@ -8465,6 +8465,11 @@
             Controls if the window should apply custom font to this window.
             </summary>
             <remarks>This setting works in tandem with the ModpackSettings setting to use custom font.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Windows.RelhaxWindow.EscapeKeyClosesWindow">
+            <summary>
+            Controls if pressing the escape key while the window is open will close it.
+            </summary>
         </member>
         <member name="P:RelhaxModpack.Windows.RelhaxWindow.OriginalWidth">
             <summary>
