@@ -162,7 +162,7 @@ namespace RelhaxInstallerUnitTester
             //throw exception if it fails to create the log file
             log = new Logfile(fullyQualifiedTestNameSplit[fullyQualifiedTestNameSplit.Length-1], Logging.ApplicationLogfileTimestamp, true);
 
-            log.Init();
+            log.Init(false);
 
             if (!log.CanWrite)
                 throw new BadMemeException("Can't write to the logfile");

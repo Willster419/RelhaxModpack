@@ -87,7 +87,7 @@ namespace RelhaxModpack.Patching
                 File.Delete(RegressionLogfile.Filepath);
             }
 
-            if(!RegressionLogfile.Init())
+            if(!RegressionLogfile.Init(true))
             {
                 Logging.Error("failed to initialize logfile");
                 return false;

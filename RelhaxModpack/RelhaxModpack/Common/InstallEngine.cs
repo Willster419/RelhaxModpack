@@ -539,7 +539,7 @@ namespace RelhaxModpack
                 File.Move(installLogfile, backupInstallLogfile);
 
             //start the logfile for the installer
-            if(!Logging.Init(Logfiles.Installer, ModpackSettings.VerboseLogging, installLogfile))
+            if(!Logging.Init(Logfiles.Installer, ModpackSettings.VerboseLogging, false, installLogfile))
             {
                 Logging.Error("Failed to init application installer log file at {0}", installLogfile);
                 return InstallFinishedArgs;
@@ -941,7 +941,7 @@ namespace RelhaxModpack
                     File.Move(uninstallLogfile, backupUninstallLogfile);
 
                 //create the uninstall logfile and write header info
-                if (!Logging.Init(Logfiles.Uninstaller, ModpackSettings.VerboseLogging, uninstallLogfile))
+                if (!Logging.Init(Logfiles.Uninstaller, ModpackSettings.VerboseLogging, false, uninstallLogfile))
                 {
                     Logging.Error("Failed to init the uninstall logfile. the uninstall will not be logged.");
                 }

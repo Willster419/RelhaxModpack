@@ -19,7 +19,7 @@ namespace RelhaxUnitTests
                 if(!Logging.IsLogOpen(logfile))
                     //init with the default name (pass in null to get default), or if no default, the name of the enumeration and ".log"
                     //throw exception if it fails to create the log file
-                    if (!Logging.Init(logfile, true, UnitTestHelper.LogFilesWithPresetFilenames.Contains(logfile) ? null : string.Format("{0}.log", logfile.ToString())))
+                    if (!Logging.Init(logfile, true, false, UnitTestHelper.LogFilesWithPresetFilenames.Contains(logfile) ? null : string.Format("{0}.log", logfile.ToString())))
                         throw new BadMemeException("Failed to create a log file");
             }
         }

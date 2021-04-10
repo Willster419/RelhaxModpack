@@ -410,7 +410,7 @@ namespace RelhaxModpack.Windows
             //DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("trimRelhaxLogFail");
 
             //restore the logfile
-            Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging);
+            Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, true);
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("trimRelhaxLogSuccess");
             Logging.Info(LogOptions.ClassName, "Successfully trimmed the log file ({0})", trimmed? string.Format("Trimmed to {0} entries", this.RelhaxLogfileTrimLength) : "No trim required");
         }

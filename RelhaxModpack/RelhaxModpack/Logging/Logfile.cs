@@ -81,7 +81,7 @@ namespace RelhaxModpack
         /// Initializes the log file
         /// </summary>
         /// <returns>True if successful initialization, false otherwise</returns>
-        public bool Init()
+        public bool Init(bool displayErrorIfFail)
         {
             if (fileStream != null)
                 fileStream.Dispose();
@@ -92,7 +92,7 @@ namespace RelhaxModpack
             }
             catch (Exception ex)
             {
-                if (VerboseLogging || ApplicationConstants.ApplicationVersion != ApplicationVersions.Stable)
+                if ((VerboseLogging || ApplicationConstants.ApplicationVersion != ApplicationVersions.Stable) && displayErrorIfFail)
                 {
                     MessageBox.Show(ex.ToString());
                 }

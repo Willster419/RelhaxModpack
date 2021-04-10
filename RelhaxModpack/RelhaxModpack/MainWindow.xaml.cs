@@ -511,7 +511,7 @@ namespace RelhaxModpack
                         File.Delete(Logging.ApplicationLogFilename);
                         File.Move(Logging.OldApplicationLogFilename, Logging.ApplicationLogFilename);
                         File.AppendAllText(Logging.ApplicationLogFilename, tempNewLogText);
-                        Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, Logging.ApplicationLogFilename);
+                        Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, true, Logging.ApplicationLogFilename);
                     }
                     else
                         Logging.Info("Skipped (old log does not exist)");
@@ -3012,7 +3012,7 @@ namespace RelhaxModpack
             PatchDesigner designer = new PatchDesigner(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings };
 
             //start updater logging system
-            if (!Logging.Init(Logfiles.PatchDesigner, ModpackSettings.VerboseLogging))
+            if (!Logging.Init(Logfiles.PatchDesigner, ModpackSettings.VerboseLogging, true))
             {
                 MessageBox.Show("Failed to initialize logfile for patch designer");
                 designer = null;
@@ -3033,7 +3033,7 @@ namespace RelhaxModpack
 
             //after closed, re-init application logging and set as application run mode
             CommandLineSettings.ApplicationMode = ApplicationMode.Default;
-            if (!Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging))
+            if (!Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, true))
             {
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Application.Current.Shutdown((int)ReturnCodes.LogfileError);
@@ -3056,7 +3056,7 @@ namespace RelhaxModpack
             DatabaseEditor editor = new DatabaseEditor(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings };
 
             //start updater logging system
-            if (!Logging.Init(Logfiles.Editor, ModpackSettings.VerboseLogging))
+            if (!Logging.Init(Logfiles.Editor, ModpackSettings.VerboseLogging, true))
             {
                 MessageBox.Show("Failed to initialize logfile for editor");
                 editor.Close();
@@ -3077,7 +3077,7 @@ namespace RelhaxModpack
 
             //after closed, re-init application logging and set as application run mode
             CommandLineSettings.ApplicationMode = ApplicationMode.Default;
-            if (!Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging))
+            if (!Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, true))
             {
                 MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
                 Application.Current.Shutdown((int)ReturnCodes.LogfileError);

@@ -87,7 +87,7 @@ namespace RelhaxModpack
         /// <param name="logfilePath">The custom path of where to initialize the file</param>
         /// <returns>True if successful initialization, false otherwise</returns>
         /// <remarks>The verbose value will be ignored if the Application is not a beta or alpha build.</remarks>
-        public static bool Init(Logfiles logfile, bool verbose, string logfilePath = null)
+        public static bool Init(Logfiles logfile, bool verbose, bool logInitFail, string logfilePath = null)
         {
             Logfile fileToWriteTo = null;
 
@@ -159,7 +159,7 @@ namespace RelhaxModpack
                     break;
             }
 
-            if (!fileToWriteTo.Init())
+            if (!fileToWriteTo.Init(logInitFail))
             {
                 return false;
             }

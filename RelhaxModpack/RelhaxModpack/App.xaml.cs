@@ -84,7 +84,7 @@ namespace RelhaxModpack
         {
             CommandLineSettings = new CommandLineSettings(Environment.GetCommandLineArgs().Skip(1).ToArray());
             modpackSettings = new ModpackSettings();
-            if (!Logging.Init(Logfiles.Application, false))
+            if (!Logging.Init(Logfiles.Application, false, !CommandLineSettings.ArgsOpenCustomWindow()))
             {
                 //check if it's because the file already exists, or some other actual reason
                 //if the file exists, and it's locked (init failed), then check if also the command line is creating a new window
@@ -94,7 +94,7 @@ namespace RelhaxModpack
                     //open the log in a custom name (with the application mode), and when opening the 'real' logfile for the custom window,
                     //we'll transfer the text over then
                     Logging.DisposeLogging(Logfiles.Application);
-                    if (!Logging.Init(Logfiles.Application, false, Logging.ApplicationTempLogFilename))
+                    if (!Logging.Init(Logfiles.Application, false, false, Logging.ApplicationTempLogFilename))
                     {
                         MessageBox.Show(string.Format("Failed to initialize logfile {0}, check file permissions", Logging.ApplicationTempLogFilename));
                         Shutdown((int)ReturnCodes.LogfileError);
@@ -224,7 +224,7 @@ namespace RelhaxModpack
                         CloseApplicationLog(true);
 
                     //start updater logging
-                    if (!Logging.Init(Logfiles.Updater, modpackSettings.VerboseLogging))
+                    if (!Logging.Init(Logfiles.Updater, modpackSettings.VerboseLogging, true))
                     {
                         MessageBox.Show("Failed to initialize logfile for updater");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
@@ -247,7 +247,7 @@ namespace RelhaxModpack
                         CloseApplicationLog(true);
 
                     //start updater logging
-                    if (!Logging.Init(Logfiles.Editor, modpackSettings.VerboseLogging))
+                    if (!Logging.Init(Logfiles.Editor, modpackSettings.VerboseLogging, true))
                     {
                         MessageBox.Show("Failed to initialize logfile for editor");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
@@ -270,7 +270,7 @@ namespace RelhaxModpack
                         CloseApplicationLog(true);
 
                     //start updater logging
-                    if (!Logging.Init(Logfiles.PatchDesigner, modpackSettings.VerboseLogging))
+                    if (!Logging.Init(Logfiles.PatchDesigner, modpackSettings.VerboseLogging, true))
                     {
                         MessageBox.Show("Failed to initialize logfile for patcher");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
@@ -293,7 +293,7 @@ namespace RelhaxModpack
                         CloseApplicationLog(true);
 
                     //start DatabaseAutomationRunner logging
-                    if (!Logging.Init(Logfiles.AutomationRunner, modpackSettings.VerboseLogging))
+                    if (!Logging.Init(Logfiles.AutomationRunner, modpackSettings.VerboseLogging, true))
                     {
                         MessageBox.Show("Failed to initialize logfile for DatabaseAutomationRunner");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
