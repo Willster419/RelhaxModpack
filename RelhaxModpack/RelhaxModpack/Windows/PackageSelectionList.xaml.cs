@@ -1708,7 +1708,7 @@ namespace RelhaxModpack.Windows
             selections.ShowDialog();
         }
 
-        private async void OnDeveloperSelectionsExit(object sender, DevleoperSelectionsClosedEWventArgs e)
+        private async void OnDeveloperSelectionsExit(object sender, DevleoperSelectionsClosedEventArgs e)
         {
             if(!e.LoadSelection)
                 return;
