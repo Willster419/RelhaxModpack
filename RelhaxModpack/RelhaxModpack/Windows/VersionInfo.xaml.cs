@@ -57,6 +57,17 @@ namespace RelhaxModpack.Windows
             Close();
         }
 
+        /// <summary>
+        /// Method that occurs when the key up event is fired. Sets the update confirm to false and runs the base method.
+        /// </summary>
+        /// <param name="sender">The object that sent the request.</param>
+        /// <param name="e">The key event args to go with the event.</param>
+        protected override void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            ConfirmUpdate = false;
+            base.OnKeyUp(sender, e);
+        }
+
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             CommonUtils.CheckAndEnableTLS();

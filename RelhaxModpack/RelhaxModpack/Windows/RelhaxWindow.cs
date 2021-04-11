@@ -79,7 +79,12 @@ namespace RelhaxModpack.Windows
             Loaded += OnWindowLoaded;
         }
 
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        /// <summary>
+        /// Method that occurs when they key up event is fired.
+        /// </summary>
+        /// <param name="sender">The object that sent the request.</param>
+        /// <param name="e">The key event args to go with the event.</param>
+        protected virtual void OnKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
