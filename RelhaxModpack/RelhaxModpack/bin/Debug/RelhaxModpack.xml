@@ -8496,6 +8496,13 @@
             Creates an instance of the RelhaxWindow class
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxWindow.OnKeyUp(System.Object,System.Windows.Input.KeyEventArgs)">
+            <summary>
+            Method that occurs when they key up event is fired.
+            </summary>
+            <param name="sender">The object that sent the request.</param>
+            <param name="e">The key event args to go with the event.</param>
+        </member>
         <member name="M:RelhaxModpack.Windows.RelhaxWindow.OnWindowLoaded(System.Object,System.Windows.RoutedEventArgs)">
             <summary>
             Performs custom window loading functions that should be done to all windows of this class
@@ -8591,6 +8598,13 @@
             <summary>
             Create an instance of the VersionInfo class
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.VersionInfo.OnKeyUp(System.Object,System.Windows.Input.KeyEventArgs)">
+            <summary>
+            Method that occurs when the key up event is fired. Sets the update confirm to false and runs the base method.
+            </summary>
+            <param name="sender">The object that sent the request.</param>
+            <param name="e">The key event args to go with the event.</param>
         </member>
         <member name="M:RelhaxModpack.Windows.VersionInfo.InitializeComponent">
             <summary>
