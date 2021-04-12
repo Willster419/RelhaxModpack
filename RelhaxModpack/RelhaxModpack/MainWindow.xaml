@@ -124,6 +124,9 @@
                         <CheckBox x:Name="DeleteOldPackagesCB" Tag="DeleteOldPackagesCB" Click="OnDeleteCacheFilesChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="DeleteOldPackagesText" Text="Delete old packages" TextWrapping="Wrap"/>
                         </CheckBox>
+                        <CheckBox x:Name="MinimalistModeCB" Tag="MinimalistModeCB" Click="OnMinimalistModeChanged" ToolTipService.ShowOnDisabled="True">
+                            <TextBlock x:Name="MinimalistModeText" Text="Minimalist Mode" TextWrapping="Wrap"/>
+                        </CheckBox>
                     </StackPanel>
                 </Grid>
             </TabItem>

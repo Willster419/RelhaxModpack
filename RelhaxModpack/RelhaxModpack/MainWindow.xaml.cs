@@ -1137,6 +1137,16 @@ namespace RelhaxModpack
             packagesToInstall.AddRange(selectablePackagesToInstall);
             List<SelectablePackage> userModsToInstall = UserMods.Where(mod => mod.Checked).ToList();
 
+            //if minimalist mode, exclude packages that we don't *need* to install
+            if (ModpackSettings.MinimalistMode)
+            {
+                Logging.Debug("Minimalist mode enabled, exclude packages from installation");
+                int numPackagesBefore = packagesToInstall.Count;
+                packagesToInstall.RemoveAll(selectablePack => selectablePack.MinimalistModeExclude);
+                int numPackagesAfter = packagesToInstall.Count;
+                Logging.Info("Minimalist mode check removed {0} packages not explicitly required for install", numPackagesBefore - numPackagesAfter);
+            }
+
             //while we're at it let's make a list of packages that need to be downloaded
             List<DatabasePackage> packagesToDownload = packagesToInstall.Where(pack => pack.DownloadFlag).ToList();
 
@@ -2889,6 +2899,11 @@ namespace RelhaxModpack
         private void OnAutoSyncFrequencyComboBoxTimeUnitSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ModpackSettings.AutoInstallFrequencyTimeUnit = AutoSyncFrequencyComboBox.SelectedIndex;
+        }
+
+        private void OnMinimalistModeChanged(object sender, RoutedEventArgs e)
+        {
+            ModpackSettings.MinimalistMode = (bool)MinimalistModeCB.IsChecked;
         }
         #endregion
 

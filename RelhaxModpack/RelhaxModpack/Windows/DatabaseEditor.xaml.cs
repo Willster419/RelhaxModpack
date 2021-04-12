@@ -567,6 +567,7 @@ namespace RelhaxModpack.Windows
                     PackageLogAtInstallDisplay.IsEnabled = true;
                     PackageEnabledDisplay.IsEnabled = true;//kinda meta
                     PackageDeprecatedDisplay.IsEnabled = true;
+                    PackageMinimalistModeExcludeDisplay.IsEnabled = true;
                     ApplyButton.IsEnabled = true;
                     ZipDownload.IsEnabled = true;
                     ZipUload.IsEnabled = true;
@@ -846,6 +847,7 @@ namespace RelhaxModpack.Windows
             PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
             PackageEnabledDisplay.IsChecked = package.Enabled;
             PackageDeprecatedDisplay.IsChecked = package.Deprecated;
+            PackageMinimalistModeExcludeDisplay.IsChecked = package.MinimalistModeExclude;
 
             //devURL
             PackageDevURLDisplay.Text = MacroUtils.MacroReplace(package.DevURL,ReplacementTypes.TextUnescape);
@@ -1077,6 +1079,7 @@ namespace RelhaxModpack.Windows
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
             package.Deprecated = (bool)PackageDeprecatedDisplay.IsChecked;
+            package.MinimalistModeExclude = (bool)PackageMinimalistModeExcludeDisplay.IsChecked;
             package.InternalNotes = MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
             package.Triggers = string.Join(",", PackageTriggersDisplay.Items.Cast<string>());
             package.Tags.Clear();
@@ -1289,6 +1292,8 @@ namespace RelhaxModpack.Windows
             if (!package.Enabled.Equals((bool)PackageEnabledDisplay.IsChecked))
                 return true;
             if (!package.Deprecated.Equals((bool)PackageDeprecatedDisplay.IsChecked))
+                return true;
+            if (!package.MinimalistModeExclude.Equals((bool)PackageMinimalistModeExcludeDisplay.IsChecked))
                 return true;
             if (!package.InternalNotes.Equals(MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape)))
                 return true;

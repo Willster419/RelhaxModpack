@@ -249,6 +249,12 @@ namespace RelhaxModpack.Settings
         public bool ValidFrameworkVersion = false;
 
         /// <summary>
+        /// Toggle to enable minimalist mode during install. It won't install additional recommended files, only minimum files to allow the packages to work.
+        /// </summary>
+        /// <seealso cref="Database.DatabasePackage.MinimalistModeExclude"/>
+        public bool MinimalistMode = false;
+
+        /// <summary>
         /// The time, in a specified unit, to check for anew data base version
         /// </summary>
         public int AutoInstallFrequencyInterval = 10;

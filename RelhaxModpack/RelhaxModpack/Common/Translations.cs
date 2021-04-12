@@ -1294,6 +1294,24 @@ namespace RelhaxModpack
             Spanish.Add("DeleteOldPackagesCBDescription", "Elimina los archivos zip que ya no vayan a ser utilizados por el instalador en la carpeta \"RelHaxDownloads\" para liberar espacio en disco");
             Russian.Add("DeleteOldPackagesCBDescription", "Удалять ненужные установщику ZIP-архивы из папки \"RelhaxDownloads\" с целью освобождения места на диске");
 
+            //Component: MinimalistModeText
+            //
+            English.Add("MinimalistModeText", "Minimalist Mode");
+            German.Add("MinimalistModeText", TranslationNeeded);
+            Polish.Add("MinimalistModeText", TranslationNeeded);
+            French.Add("MinimalistModeText", TranslationNeeded);
+            Spanish.Add("MinimalistModeText", TranslationNeeded);
+            Russian.Add("MinimalistModeText", TranslationNeeded);
+
+            //Component: MinimalistModeDescription
+            //
+            English.Add("MinimalistModeDescription", "When checked, the modpack will exclude certain packages from installation that are not required, like the modpack button or Relhax theme files.");
+            German.Add("MinimalistModeDescription", TranslationNeeded);
+            Polish.Add("MinimalistModeDescription", TranslationNeeded);
+            French.Add("MinimalistModeDescription", TranslationNeeded);
+            Spanish.Add("MinimalistModeDescription", TranslationNeeded);
+            Russian.Add("MinimalistModeDescription", TranslationNeeded);
+
             //Component: AutoInstallText
             //
             English.Add("AutoInstallText", "Enable auto install (NEW)");

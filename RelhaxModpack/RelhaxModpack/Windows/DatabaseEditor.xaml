@@ -571,6 +571,7 @@
                         </StackPanel>
                         <StackPanel Grid.Column="0" Grid.Row="20" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Deprecated" x:Name="PackageDeprecatedDisplay" Tag="DeprecatedCB" Margin="0"/>
+                            <CheckBox Content="Minimalist mode exclude" x:Name="PackageMinimalistModeExcludeDisplay" Tag="MinimalistModeCB" Margin="16,0,0,0" ToolTip="When this is true, the package will be excluded from installation"/>
                         </StackPanel>
                         <Button Grid.Column="0" Grid.Row="22" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" />
                         <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" />

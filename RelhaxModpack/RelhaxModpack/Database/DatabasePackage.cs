@@ -57,7 +57,8 @@ namespace RelhaxModpack.Database
             nameof(InternalNotes),
             nameof(Author),
             nameof(Maintainers),
-            nameof(Deprecated)
+            nameof(Deprecated),
+            nameof(MinimalistModeExclude)
         };
         #endregion
 
@@ -233,6 +234,12 @@ namespace RelhaxModpack.Database
         /// A flag to set for a package that is considered to be outdated or no longer supported or stale.
         /// </summary>
         public bool Deprecated { get; set; } = false;
+
+        /// <summary>
+        /// A flag for determining if this package should be excluded from install when minimalist mode is enabled in ModpackSettings.
+        /// </summary>
+        /// <seealso cref="Settings.ModpackSettings.MinimalistMode"/>
+        public bool MinimalistModeExclude { get; set; } = false;
         #endregion
 
         #region UI Properties
