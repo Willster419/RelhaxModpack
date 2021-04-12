@@ -1695,6 +1695,12 @@
             A flag to set for a package that is considered to be outdated or no longer supported or stale.
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Database.DatabasePackage.MinimalistModeExclude">
+            <summary>
+            A flag for determining if this package should be excluded from install when minimalist mode is enabled in ModpackSettings.
+            </summary>
+            <seealso cref="F:RelhaxModpack.Settings.ModpackSettings.MinimalistMode"/>
+        </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.EditorTreeViewItem">
             <summary>
             Reference for the UI element of this package in the database editor
@@ -3110,6 +3116,12 @@
             <summary>
             Flag to enable a check if the user is running the minimum required .NET Framework version for this application
             </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.ModpackSettings.MinimalistMode">
+            <summary>
+            Toggle to enable minimalist mode during install. It won't install additional recommended files, only minimum files to allow the packages to work.
+            </summary>
+            <seealso cref="P:RelhaxModpack.Database.DatabasePackage.MinimalistModeExclude"/>
         </member>
         <member name="F:RelhaxModpack.Settings.ModpackSettings.AutoInstallFrequencyInterval">
             <summary>
