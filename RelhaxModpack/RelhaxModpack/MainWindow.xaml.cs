@@ -791,21 +791,15 @@ namespace RelhaxModpack
 
                 if (string.IsNullOrEmpty(searchResult) || ModpackSettings.ForceManuel)
                 {
-                    Logging.Debug("Auto detect failed or user requests manual");
-                    OpenFileDialog manualWoTFind = new OpenFileDialog()
+                    Logging.WriteToLog("Auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
+
+                    WoTClientSelection clientSelection = new WoTClientSelection(ModpackSettings);
+
+                    if ((bool)clientSelection.ShowDialog())
                     {
-                        InitialDirectory = string.IsNullOrWhiteSpace(WoTDirectory) ? ApplicationConstants.ApplicationStartupPath : WoTDirectory,
-                        AddExtension = true,
-                        CheckFileExists = true,
-                        CheckPathExists = true,
-                        Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
-                        Title = Translations.GetTranslatedString("selectWOTExecutable"),
-                        Multiselect = false,
-                        ValidateNames = true
-                    };
-                    if ((bool)manualWoTFind.ShowDialog())
-                    {
-                        searchResult = manualWoTFind.FileName;
+                        searchResult = clientSelection.SelectedPath;
+                        searchResult = searchResult.Replace(ApplicationConstants.WoT32bitFolderWithSlash, string.Empty).Replace(ApplicationConstants.WoT64bitFolderWithSlash, string.Empty);
+                        Logging.Info(LogOptions.ClassName, "Selected WoT install: {0}", searchResult);
                     }
                     else
                     {
@@ -814,9 +808,12 @@ namespace RelhaxModpack
                         return;
                     }
                 }
+                WoTDirectory = Path.GetDirectoryName(searchResult);
+                Logging.Info("Wot root directory parsed as " + WoTDirectory);
+                
 
                 //check to make sure it is the root application, not the win32/64 versions
-                if(searchResult.Contains(ApplicationConstants.WoT32bitFolderWithSlash) || searchResult.Contains(ApplicationConstants.WoT64bitFolderWithSlash))
+                if (searchResult.Contains(ApplicationConstants.WoT32bitFolderWithSlash) || searchResult.Contains(ApplicationConstants.WoT64bitFolderWithSlash))
                 {
                     searchResult = searchResult.Replace(ApplicationConstants.WoT32bitFolderWithSlash, string.Empty).Replace(ApplicationConstants.WoT64bitFolderWithSlash, string.Empty);
                 }
@@ -1859,26 +1856,26 @@ namespace RelhaxModpack
             ResetUI();
 
             //parse WoT root directory
-            Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
-            string autoSearchResult = RegistryUtils.AutoFindWoTDirectoryFirst();
+            Logging.WriteToLog("Started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
+            string autoSearchResult = string.Empty;
+
+            //only run the code if the user wants to auto find the WoT directory (which is default)
+            if (!ModpackSettings.ForceManuel)
+            {
+                autoSearchResult = RegistryUtils.AutoFindWoTDirectoryFirst();
+            }
+
             if (string.IsNullOrEmpty(autoSearchResult) || ModpackSettings.ForceManuel)
             {
-                Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
-                OpenFileDialog manualWoTFind = new OpenFileDialog()
+                Logging.WriteToLog("Auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
+
+                WoTClientSelection clientSelection = new WoTClientSelection(ModpackSettings);
+
+                if ((bool)clientSelection.ShowDialog())
                 {
-                    InitialDirectory = string.IsNullOrWhiteSpace(WoTDirectory) ? ApplicationConstants.ApplicationStartupPath : WoTDirectory,
-                    AddExtension = true,
-                    CheckFileExists = true,
-                    CheckPathExists = true,
-                    Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
-                    Title = Translations.GetTranslatedString("selectWOTExecutable"),
-                    Multiselect = false,
-                    RestoreDirectory = true,
-                    ValidateNames = true
-                };
-                if ((bool)manualWoTFind.ShowDialog())
-                {
-                    autoSearchResult = manualWoTFind.FileName;
+                    autoSearchResult = clientSelection.SelectedPath;
+                    autoSearchResult = autoSearchResult.Replace(ApplicationConstants.WoT32bitFolderWithSlash, string.Empty).Replace(ApplicationConstants.WoT64bitFolderWithSlash, string.Empty);
+                    Logging.Info(LogOptions.ClassName, "Selected WoT install: {0}", autoSearchResult);
                 }
                 else
                 {
