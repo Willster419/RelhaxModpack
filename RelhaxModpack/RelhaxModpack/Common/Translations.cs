@@ -4374,6 +4374,53 @@ namespace RelhaxModpack
             Russian.Add("trimRelhaxLogFail", "Не удалось обрезать лог-файл Relhax");
             #endregion
 
+            #region Meme
+            //Component: WoTClientSelection
+            //
+            English.Add("WoTClientSelection", "Selections Viewer");
+            German.Add("WoTClientSelection", TranslationNeeded);
+            Polish.Add("WoTClientSelection", TranslationNeeded);
+            French.Add("WoTClientSelection", TranslationNeeded);
+            Spanish.Add("WoTClientSelection", TranslationNeeded);
+            Russian.Add("WoTClientSelection", TranslationNeeded);
+
+            //Component: ClientSelectionsTextHeader
+            //
+            English.Add("ClientSelectionsTextHeader", "The following clients were automatically detected");
+            German.Add("ClientSelectionsTextHeader", TranslationNeeded);
+            Polish.Add("ClientSelectionsTextHeader", TranslationNeeded);
+            French.Add("ClientSelectionsTextHeader", TranslationNeeded);
+            Spanish.Add("ClientSelectionsTextHeader", TranslationNeeded);
+            Russian.Add("ClientSelectionsTextHeader", TranslationNeeded);
+
+            //Component: ClientSelectionsCancelButton
+            //
+            English.Add("ClientSelectionsCancelButton", English["cancel"]);
+            German.Add("ClientSelectionsCancelButton", German["cancel"]);
+            Polish.Add("ClientSelectionsCancelButton", Polish["cancel"]);
+            French.Add("ClientSelectionsCancelButton", French["cancel"]);
+            Spanish.Add("ClientSelectionsCancelButton", Spanish["cancel"]);
+            Russian.Add("ClientSelectionsCancelButton", Russian["cancel"]);
+
+            //Component: ClientSelectionsManualFind
+            //The text in the first radioButton in the selection viewer, for the user to select their own personal config file to load
+            English.Add("ClientSelectionsManualFind", "Manual Selection");
+            German.Add("ClientSelectionsManualFind", TranslationNeeded);
+            Polish.Add("ClientSelectionsManualFind", TranslationNeeded);
+            French.Add("ClientSelectionsManualFind", TranslationNeeded);
+            Spanish.Add("ClientSelectionsManualFind", TranslationNeeded);
+            Russian.Add("ClientSelectionsManualFind", TranslationNeeded);
+
+            //Component: ClientSelectionsContinueButton
+            //
+            English.Add("ClientSelectionsContinueButton", English["select"]);
+            German.Add("ClientSelectionsContinueButton", German["select"]);
+            Polish.Add("ClientSelectionsContinueButton", Polish["select"]);
+            French.Add("ClientSelectionsContinueButton", French["select"]);
+            Spanish.Add("ClientSelectionsContinueButton", Spanish["select"]);
+            Russian.Add("ClientSelectionsContinueButton", Russian["select"]);
+            #endregion
+
             #region Add zip files Dialog
             //Component: AddPicturesZip
             //
