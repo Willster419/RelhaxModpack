@@ -6747,11 +6747,17 @@
             A utility class to handle registry requests
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Utilities.RegistryUtils.AutoFindWoTDirectory">
+        <member name="M:RelhaxModpack.Utilities.RegistryUtils.AutoFindWoTDirectoryFirst">
             <summary>
-            Checks the registry to get the latest location of where WoT is installed
+            Checks the registry to get the latest location of where WoT is installed, includes exe in the name
             </summary>
             <returns>True if operation success</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.RegistryUtils.AutoFindWoTDirectoryList">
+            <summary>
+            Checks the registry to get the latest location of where WoT is installed, includes exe in the name
+            </summary>
+            <returns>A list of all unique valid game paths</returns>
         </member>
         <member name="M:RelhaxModpack.Utilities.RegistryUtils.GetRegistryKeys(RelhaxModpack.Utilities.RegistrySearch)">
             <summary>
@@ -7468,6 +7474,29 @@
         <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Creates an instance of the RelhaxCustomFeatureWindow class
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.WoTClientSelection">
+            <summary>
+            Interaction logic for WoTClientSelection.xaml
+            </summary>
+            <summary>
+            WoTClientSelection
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.WoTClientSelection.SelectedPath">
+            <summary>
+            The selected wot client path to use. A null value means none was selected. It will include the exe.
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.WoTClientSelection.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+            <summary>
+            Create an instance of the WoTClientSelection Window
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.WoTClientSelection.InitializeComponent">
+            <summary>
+            InitializeComponent
             </summary>
         </member>
         <member name="T:RelhaxModpack.Windows.AskCloseWoTResult">
