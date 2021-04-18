@@ -3,6 +3,7 @@ using RelhaxModpack.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace RelhaxModpack.Utilities
 {
@@ -28,16 +29,36 @@ namespace RelhaxModpack.Utilities
     public static class RegistryUtils
     {
         /// <summary>
-        /// Checks the registry to get the latest location of where WoT is installed
+        /// Checks the registry to get the latest location of where WoT is installed, includes exe in the name
         /// </summary>
         /// <returns>True if operation success</returns>
-        public static string AutoFindWoTDirectory()
+        public static string AutoFindWoTDirectoryFirst()
         {
+            List<string> searchPathWoT = AutoFindWoTDirectoryList();
+
+            if (searchPathWoT == null || searchPathWoT.Count == 0)
+            {
+                Logging.Warning("No valid paths found");
+                return null;
+            }
+
+            //return first result found
+            Logging.Info("Returning first result in search: {0}", searchPathWoT[0]);
+            return searchPathWoT[0];
+        }
+
+        /// <summary>
+        /// Checks the registry to get the latest location of where WoT is installed, includes exe in the name
+        /// </summary>
+        /// <returns>A list of all unique valid game paths</returns>
+        public static List<string> AutoFindWoTDirectoryList()
+        {
+            RegistryKey result;
             List<string> searchPathWoT = new List<string>();
-            RegistryKey result = null;
 
             //check replay link locations (the last game instance the user opened)
             //key is null, value is path
+            //example value: "C:\TANKS\World_of_Tanks_NA\win64\WorldOfTanks.exe" "%1"
             RegistrySearch[] registryEntriesGroup1 = new RegistrySearch[]
             {
                 new RegistrySearch(){Root = Registry.LocalMachine, Searchpath = @"SOFTWARE\Classes\.wotreplay\shell\open\command"},
@@ -55,10 +76,9 @@ namespace RelhaxModpack.Utilities
                         string possiblePath = result.GetValue(valueInKey) as string;
                         if (!string.IsNullOrWhiteSpace(possiblePath) && possiblePath.ToLower().Contains("worldoftanks.exe"))
                         {
-                            //trim front
-                            possiblePath = possiblePath.Substring(1);
-                            //trim end
-                            possiblePath = possiblePath.Substring(0, possiblePath.Length - 6);
+                            string[] splitResult = possiblePath.Split('"');
+                            //get index 1 option
+                            possiblePath = splitResult[1].Trim();
                             Logging.Debug("Possible path found: {0}", possiblePath);
                             searchPathWoT.Add(possiblePath);
                         }
@@ -94,22 +114,30 @@ namespace RelhaxModpack.Utilities
                 }
             }
 
-            foreach (string path in searchPathWoT)
+            Logging.Debug("Filter out win32/64 options");
+            for (int i = 0; i < searchPathWoT.Count; i++)
             {
-                string potentialResult = path;
+                string potentialResult = searchPathWoT[i];
                 //if it has win32 or win64, filter it out
                 if (potentialResult.Contains(ApplicationConstants.WoT32bitFolderWithSlash) || potentialResult.Contains(ApplicationConstants.WoT64bitFolderWithSlash))
                 {
                     potentialResult = potentialResult.Replace(ApplicationConstants.WoT32bitFolderWithSlash, string.Empty).Replace(ApplicationConstants.WoT64bitFolderWithSlash, string.Empty);
                 }
-                if (File.Exists(potentialResult))
-                {
-                    Logging.Info("Valid game path found: {0}", potentialResult);
-                    return potentialResult;
-                }
+                searchPathWoT[i] = potentialResult;
             }
-            //return false if nothing found
-            return null;
+
+            Logging.Debug("Filter out options to non existent locations");
+            searchPathWoT.RemoveAll(match => !File.Exists(match));
+
+            Logging.Debug("Filter out duplicates");
+            searchPathWoT = searchPathWoT.Distinct().ToList();
+
+            foreach (string path in searchPathWoT)
+            {
+                Logging.Info("Valid path found: {0}", path);
+            }
+
+            return searchPathWoT;
         }
 
         /// <summary>

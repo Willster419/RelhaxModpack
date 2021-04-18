@@ -240,6 +240,9 @@
       <DependentUpon>DatabaseAutomationRunner.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RelhaxCustomFeatureWindow.cs" />
+    <Compile Include="Windows\WoTClientSelection.xaml.cs">
+      <DependentUpon>WoTClientSelection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Xml\XmlUnpack.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
@@ -558,6 +561,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AdvancedProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WoTClientSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

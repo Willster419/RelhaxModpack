@@ -48,40 +48,38 @@ namespace RelhaxModpack.Windows
         {
             if (string.IsNullOrWhiteSpace(WoTDirectory))
             {
-                CollectLogInfoButton.IsEnabled = false;
-                //DownloadWGPatchFilesText.IsEnabled = false;
-                CleanupModFilesButton.IsEnabled = false;
-                SelectedInstallation.Text = string.Format("{0}\n{1}",
-                    Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
+                Logging.Info("WoTDirectory is empty, add default from registry search");
+                WoTDirectory = RegistryUtils.AutoFindWoTDirectoryFirst();
+                if (!string.IsNullOrWhiteSpace(WoTDirectory))
+                {
+                    WoTDirectory = Path.GetDirectoryName(WoTDirectory);
+                }
+                
+                //if it's still empty, then mark is as not happening
+                if (string.IsNullOrWhiteSpace(WoTDirectory))
+                {
+                    CollectLogInfoButton.IsEnabled = false;
+                    CleanupModFilesButton.IsEnabled = false;
+                    SelectedInstallation.Text = string.Format("{0}\n{1}",
+                        Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
+                }
             }
-            else
-            {
-                CollectLogInfoButton.IsEnabled = true;
-                //DownloadWGPatchFilesText.IsEnabled = true;
-                CleanupModFilesButton.IsEnabled = true;
-                SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), WoTDirectory);
-            }
+            CollectLogInfoButton.IsEnabled = true;
+            CleanupModFilesButton.IsEnabled = true;
+            SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), WoTDirectory);
         }
 
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info(LogOptions.ClassName, "Selecting WoT install");
-            //show a standard WoT selection window from manual find WoT.exe
-            OpenFileDialog manualWoTFind = new OpenFileDialog()
+            Logging.Info(LogOptions.ClassName, "Selecting WoT install, showing WoTClientSelectionWindow");
+
+            WoTClientSelection clientSelection = new WoTClientSelection(ModpackSettings);
+            
+            if ((bool)clientSelection.ShowDialog())
             {
-                AddExtension = true,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
-                Title = Translations.GetTranslatedString("selectWOTExecutable"),
-                Multiselect = false,
-                ValidateNames = true
-            };
-            if ((bool)manualWoTFind.ShowDialog())
-            {
-                WoTDirectory = Path.GetDirectoryName(manualWoTFind.FileName);
+                WoTDirectory = Path.GetDirectoryName(clientSelection.SelectedPath);
                 WoTDirectory = WoTDirectory.Replace(ApplicationConstants.WoT32bitFolderWithSlash, string.Empty).Replace(ApplicationConstants.WoT64bitFolderWithSlash, string.Empty);
-                Logging.Info(LogOptions.ClassName, "Selected WoT install -> {0}",WoTDirectory);
+                Logging.Info(LogOptions.ClassName, "Selected WoT install: {0}", WoTDirectory);
             }
             else
             {
@@ -95,7 +93,10 @@ namespace RelhaxModpack.Windows
         private void CollectLogInfo_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(WoTDirectory))
+            {
+                Logging.Error("WoTDirectory is empty, cannon collect logs");
                 return;
+            }
 
             //setup UI
             Logging.Info(LogOptions.ClassName, "Started collection of log files");

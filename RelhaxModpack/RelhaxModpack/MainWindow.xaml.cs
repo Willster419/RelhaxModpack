@@ -782,10 +782,11 @@ namespace RelhaxModpack
                 //parse WoT root directory
                 Logging.Debug("Started looking for WoT root directory");
                 string searchResult = string.Empty;
+
                 //only run the code if the user wants to auto find the WoT directory (which is default)
                 if(!ModpackSettings.ForceManuel)
                 {
-                    searchResult = RegistryUtils.AutoFindWoTDirectory();
+                    searchResult = RegistryUtils.AutoFindWoTDirectoryFirst();
                 }
 
                 if (string.IsNullOrEmpty(searchResult) || ModpackSettings.ForceManuel)
@@ -1859,7 +1860,7 @@ namespace RelhaxModpack
 
             //parse WoT root directory
             Logging.WriteToLog("started looking for WoT root directory", Logfiles.Application, LogLevel.Debug);
-            string autoSearchResult = RegistryUtils.AutoFindWoTDirectory();
+            string autoSearchResult = RegistryUtils.AutoFindWoTDirectoryFirst();
             if (string.IsNullOrEmpty(autoSearchResult) || ModpackSettings.ForceManuel)
             {
                 Logging.WriteToLog("auto detect failed or user requests manual", Logfiles.Application, LogLevel.Debug);
