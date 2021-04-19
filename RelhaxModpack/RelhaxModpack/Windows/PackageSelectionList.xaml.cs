@@ -2186,27 +2186,40 @@ namespace RelhaxModpack.Windows
             }
 
             //now that database packages are checked, check for the correct structure of mods
-            //brokenMods = IsValidStructure(ParsedCategoryList);
-            foreach (SelectablePackage checkedPackage in packagesFromDatabase.FindAll(pac => pac.Enabled && pac.Checked && pac.Visible))
+            //brokenMods = IsValidStructure(ParsedCategoryList); <- V2 method of checking
+            //note that this needs to run in a loop until no packages are unchecked due to invalid structure. here's why.
+            //the structure is that it goes from top down, which means top level down that branch. If in level 3, it needs to disable
+            //that package due to invalid structure, it won't unset 2 because that one had already been processed. If 3 was a single1
+            //then that means that level 2 is invalid structure, which means we need to run the loop again
+            bool needToRunLoopAgain = true;
+            while (needToRunLoopAgain)
             {
-                if (!checkedPackage.IsStructureValid)
+                needToRunLoopAgain = false;
+                foreach (SelectablePackage checkedPackage in packagesFromDatabase.FindAll(pac => pac.Enabled && pac.Checked && pac.Visible))
                 {
-                    Logging.Info(LogOptions.MethodName, "Package {0} reports that it is invalid structure, needs to be unchecked", checkedPackage.PackageName);
-                    brokenStructurePackages.Add(checkedPackage);
-                    checkedPackage.Checked = false;
-                    //but we still want to save it in the selection list (rather then remove and the user would need to manually find it again)
-                    checkedPackage.FlagForSelectionSave = true;
+                    if (!checkedPackage.IsStructureValid)
+                    {
+                        Logging.Info(LogOptions.MethodName, "Package {0} reports that it is invalid structure, needs to be unchecked", checkedPackage.PackageName);
+                        brokenStructurePackages.Add(checkedPackage);
+                        checkedPackage.Checked = false;
 
-                    //only trigger out of date if it's the firs time loading this file with the structure invalid
-                    SelectablePackage packageFromSelection = packagesFromSelection.Find(pc => pc.UID.Equals(checkedPackage.UID));
-                    if (packageFromSelection.FlagForSelectionSave)
-                    {
-                        Logging.Debug(LogOptions.MethodName, "PackageFromSelection FlagForSelectionSave high, not first time loading file with disabled components. Don't trigger out of date");
-                    }
-                    else
-                    {
-                        Logging.Debug(LogOptions.MethodName, "PackageFromSelection FlagForSelectionSave low, first time loading file with disabled components. Can trigger out of date flag");
-                        packagesOutOfDate = true;
+                        //also flag that we want to check if we need to run the loop again
+                        needToRunLoopAgain = true;
+
+                        //but we still want to save it in the selection list (rather then remove and the user would need to manually find it again)
+                        checkedPackage.FlagForSelectionSave = true;
+
+                        //only trigger out of date if it's the firs time loading this file with the structure invalid
+                        SelectablePackage packageFromSelection = packagesFromSelection.Find(pc => pc.UID.Equals(checkedPackage.UID));
+                        if (packageFromSelection.FlagForSelectionSave)
+                        {
+                            Logging.Debug(LogOptions.MethodName, "PackageFromSelection FlagForSelectionSave high, not first time loading file with disabled components. Don't trigger out of date");
+                        }
+                        else
+                        {
+                            Logging.Debug(LogOptions.MethodName, "PackageFromSelection FlagForSelectionSave low, first time loading file with disabled components. Can trigger out of date flag");
+                            packagesOutOfDate = true;
+                        }
                     }
                 }
             }
@@ -2734,7 +2747,7 @@ namespace RelhaxModpack.Windows
         //ex: a new mandatory option was added to a mod, but the user does not have it selected
         private List<SelectablePackage> IsValidStructure(List<Category> ParsedCategoryList)
         {
-            List<SelectablePackage>  brokenPackages = new List<SelectablePackage>();
+            List<SelectablePackage> brokenPackages = new List<SelectablePackage>();
             foreach (Category cat in ParsedCategoryList)
             {
                 if (cat.Packages.Count > 0)

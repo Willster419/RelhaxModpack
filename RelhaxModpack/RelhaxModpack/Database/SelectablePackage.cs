@@ -759,11 +759,11 @@ namespace RelhaxModpack.Database
                     return false;
 
                 bool hasSingles = false;
-                bool singleSelected = false;
+                int numSingleSelected = 0;
                 bool hasDD1 = false;
-                bool DD1Selected = false;
+                int numDD1Selected = 0;
                 bool hasDD2 = false;
-                bool DD2Selected = false;
+                int numDD2Selected = 0;
 
                 //first check if this package has any of these children type
                 foreach (SelectablePackage childPackage in this.Packages)
@@ -774,32 +774,34 @@ namespace RelhaxModpack.Database
                         //check if the child package is selected. it's fine to overwrite the bool cause we're
                         //just wanting to know if *any* child packages of this type are checked
                         if (childPackage.Checked)
-                            singleSelected = true;
+                            numSingleSelected++;
                     }
                     else if ((childPackage.Type == SelectionTypes.single_dropdown1) && childPackage.Enabled)
                     {
                         hasDD1 = true;
                         if (childPackage.Checked)
-                            DD1Selected = true;
+                            numDD1Selected++;
                     }
                     else if (childPackage.Type == SelectionTypes.single_dropdown2 && childPackage.Enabled)
                     {
                         hasDD2 = true;
                         if (childPackage.Checked)
-                            DD2Selected = true;
+                            numDD2Selected++;
                     }
                 }
 
                 //now make sure that for each of the above types, at least one is checked
-                if (hasSingles && !singleSelected)
+                if (hasSingles && numSingleSelected != 1)
                 {
                     return false;
                 }
-                if (hasDD1 && !DD1Selected)
+
+                if (hasDD1 && numDD1Selected != 1)
                 {
                     return false;
                 }
-                if (hasDD2 && !DD2Selected)
+
+                if (hasDD2 && numDD2Selected != 1)
                 {
                     return false;
                 }
