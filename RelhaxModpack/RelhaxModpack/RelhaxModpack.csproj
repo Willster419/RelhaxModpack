@@ -157,6 +157,8 @@
     <Compile Include="Database\SelectablePackage.cs" />
     <Compile Include="Database\Trigger.cs" />
     <Compile Include="Database\UserFile.cs" />
+    <Compile Include="Installer\Instruction.cs" />
+    <Compile Include="Installer\InstructionLoader.cs" />
     <Compile Include="Patching\PatchUnitTest.cs" />
     <Compile Include="Settings\AutomationRunnerSettings.cs" />
     <Compile Include="Settings\ISettingsFile.cs" />
@@ -200,6 +202,8 @@
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
     <Compile Include="Utilities\Enums\DownloadProgressState.cs" />
     <Compile Include="Utilities\Enums\InstallerExitCodes.cs" />
+    <Compile Include="Utilities\Enums\InstructionsLoaderExitCode.cs" />
+    <Compile Include="Utilities\Enums\InstructionsType.cs" />
     <Compile Include="Utilities\Enums\SelectionPropagationDirection.cs" />
     <Compile Include="Utilities\Enums\EditorTransferMode.cs" />
     <Compile Include="Utilities\Enums\DatabaseVersions.cs" />

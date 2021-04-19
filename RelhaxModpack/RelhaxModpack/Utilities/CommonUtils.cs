@@ -1118,6 +1118,10 @@ namespace RelhaxModpack.Utilities
                         continue;
                     }
                 }
+                else if (listObjectType.Equals(typeof(string)))
+                {
+                    listProperty.Add(listElement.Value);
+                }
                 
                 object listEntryObject = Activator.CreateInstance(listObjectType);
 

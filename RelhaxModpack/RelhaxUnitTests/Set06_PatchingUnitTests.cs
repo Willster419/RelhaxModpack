@@ -564,7 +564,7 @@ namespace RelhaxUnitTests
                     ShouldPass = true,
                     Patch = new Patch()
                     {
-                        Lines = new string[] { "3", "5" },
+                        Line = "3,5",
                         Search = "should match",
                         Replace = "replaced",
                         Type = "regex"
@@ -576,7 +576,7 @@ namespace RelhaxUnitTests
                     ShouldPass = true,
                     Patch = new Patch()
                     {
-                        Lines = new string[] { },
+                        Line = "",
                         Search = "should match",
                         Replace = "replaced",
                         Type = "regex"

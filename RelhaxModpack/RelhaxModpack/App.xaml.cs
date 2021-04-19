@@ -13,6 +13,7 @@ using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
+using RelhaxModpack.Installer;
 
 namespace RelhaxModpack
 {
@@ -319,7 +320,8 @@ namespace RelhaxModpack
                     else
                     {
                         //parse patch objects from command line file list
-                        List<Patch> patchList = new List<Patch>();
+                        List<Instruction> patchList = new List<Instruction>();
+                        InstructionLoader loader = new InstructionLoader();
                         foreach (string file in CommandLineSettings.PatchFilenames)
                         {
                             if (!File.Exists(file))
@@ -328,7 +330,7 @@ namespace RelhaxModpack
                                 continue;
                             }
                             Logging.Info("Adding patches from file {0}", file);
-                            XmlUtils.AddPatchesFromFile(patchList, file);
+                            loader.AddInstructionObjectsToList(file, patchList, InstructionsType.Patch, Patch.PatchXmlSearchPath);
                         }
 
                         //check for at least one patchfile was parsed

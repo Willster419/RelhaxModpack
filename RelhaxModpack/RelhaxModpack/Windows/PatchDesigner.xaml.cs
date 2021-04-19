@@ -16,6 +16,8 @@ using RelhaxModpack.Patching;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Utilities.ClassEventArgs;
 using RelhaxModpack.Settings;
+using RelhaxModpack.Installer;
+using System.Reflection;
 
 namespace RelhaxModpack.Windows
 {
@@ -360,7 +362,7 @@ namespace RelhaxModpack.Windows
 
             if (patch.Type.ToLower().Equals("regex"))
             {
-                patch.Lines = PatchLinesPathTextbox.Text.Split(',');
+                patch.Line = PatchLinesPathTextbox.Text;
             }
             else
             {
@@ -551,7 +553,7 @@ namespace RelhaxModpack.Windows
                     }
                     else
                     {
-                        patchToTest.Lines = PatchLinesPathTextbox.Text.Split(',');
+                        patchToTest.Line = PatchLinesPathTextbox.Text;
                     }
                     break;
                 case "xml":
@@ -684,8 +686,9 @@ namespace RelhaxModpack.Windows
             if((bool)OpenPatchfileDialog.ShowDialog())
             {
                 PatchesList.Items.Clear();
-                List<Patch> patches = new List<Patch>();
-                XmlUtils.AddPatchesFromFile(patches, OpenPatchfileDialog.FileName, Path.GetFileName(OpenPatchfileDialog.FileName));
+                List<Instruction> patches = new List<Instruction>();
+                InstructionLoader loader = new InstructionLoader();
+                loader.AddInstructionObjectsToList(OpenPatchfileDialog.FileName, patches, InstructionsType.Patch, Patch.PatchXmlSearchPath);
                 if (patches == null || patches.Count == 0)
                 {
                     MessageBox.Show("Failed to load xml document, check the logs for more info");
@@ -741,7 +744,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 //save patches to XmlDocuemnt
-                XmlDocument doc = XmlUtils.SavePatchToXmlDocument(PatchesList.Items.OfType<Patch>().ToList());
+                XmlDocument doc = SavePatchToXmlDocument(PatchesList.Items.OfType<Patch>().ToList());
                 
                 //delete the file if it currently exists
                 if (File.Exists(SavePatchfileDialog.FileName))
@@ -751,6 +754,43 @@ namespace RelhaxModpack.Windows
                 UnsavedChanges = false;
                 Logging.Patcher("[SavePatchXmlButton_Click]: Patch saved", LogLevel.Info);
             }
+        }
+
+        private XmlDocument SavePatchToXmlDocument(List<Patch> PatchesList)
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlElement patchHolder = doc.CreateElement("patchs");
+            doc.AppendChild(patchHolder);
+            int counter = 0;
+            foreach (Patch patch in PatchesList)
+            {
+                Logging.Patcher("[SavePatchToXmlDocument]: Saving patch {0} of {1}: {2}", LogLevel.Info, ++counter, PatchesList.Count, patch.ToString());
+                Logging.Patcher("{0}", LogLevel.Info, patch.DumpPatchInfoForLog);
+                XmlElement xmlPatch = doc.CreateElement("patch");
+                patchHolder.AppendChild(xmlPatch);
+
+                foreach (string property in patch.PropertiesToSerialize())
+                {
+                    string propertyNameToSave = property;
+                    //make the first char lowercase
+                    propertyNameToSave = propertyNameToSave[0].ToString().ToLower() + propertyNameToSave.Substring(1);
+
+                    XmlElement element = doc.CreateElement(propertyNameToSave);
+                    PropertyInfo propertyInfo = typeof(Patch).GetProperty(property);
+                    element.InnerText = propertyInfo.GetValue(patch).ToString();
+                    xmlPatch.AppendChild(element);
+                }
+
+                if (patch.Type.Equals("regex"))
+                {
+                    doc.RemoveChild(doc.SelectSingleNode("path"));
+                }
+                else
+                {
+                    doc.RemoveChild(doc.SelectSingleNode("line"));
+                }
+            }
+            return doc;
         }
 
         private void ClearLogButton_Click(object sender, RoutedEventArgs e)
