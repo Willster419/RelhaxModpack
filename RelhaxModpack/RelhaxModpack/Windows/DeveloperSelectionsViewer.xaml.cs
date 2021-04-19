@@ -16,13 +16,15 @@ using System.Xml;
 using RelhaxModpack.UI;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Windows
 {
     /// <summary>
     /// Event argument passed back to the caller for when the developer selection window is closed
     /// </summary>
-    public class DevleoperSelectionsClosedEWventArgs : EventArgs
+    public class DevleoperSelectionsClosedEventArgs : EventArgs
     {
         /// <summary>
         /// Determines if a selection should be loaded (for example, if the user closed the window instead of selecting one)
@@ -40,7 +42,7 @@ namespace RelhaxModpack.Windows
     /// </summary>
     /// <param name="sender">The sender (this)</param>
     /// <param name="e">The arguments</param>
-    public delegate void DeveloperSelectionsClosedDelagate(object sender, DevleoperSelectionsClosedEWventArgs e);
+    public delegate void DeveloperSelectionsClosedDelagate(object sender, DevleoperSelectionsClosedEventArgs e);
 
     /// <summary>
     /// Interaction logic for DeveloperSelectionsViewer.xaml
@@ -56,13 +58,13 @@ namespace RelhaxModpack.Windows
         //private
         //init it to false so that it only will get changed to true at that one point when it works
         private bool LoadSelection = false;
-        private string FileToLoad = "";
+        private string FileToLoad = string.Empty;
         private WebClient client;
 
         /// <summary>
         /// Create an instance of the DeveloperSelectionsViewer window
         /// </summary>
-        public DeveloperSelectionsViewer()
+        public DeveloperSelectionsViewer(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
@@ -77,7 +79,7 @@ namespace RelhaxModpack.Windows
             {
                 try
                 {
-                    selectionsXMlString = await client.DownloadStringTaskAsync(Settings.SelectionsRoot + Settings.SelectionsXml);
+                    selectionsXMlString = await client.DownloadStringTaskAsync(ApplicationConstants.SelectionsRoot + ApplicationConstants.SelectionsXml);
                 }
                 catch(Exception ex)
                 {
@@ -151,7 +153,7 @@ namespace RelhaxModpack.Windows
                         }
                     }
                 }
-                OnDeveloperSelectionsClosed(this, new DevleoperSelectionsClosedEWventArgs()
+                OnDeveloperSelectionsClosed(this, new DevleoperSelectionsClosedEventArgs()
                 {
                     LoadSelection = LoadSelection,
                     FileToLoad = FileToLoad

@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Reflection;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Common;
 
 namespace RelhaxUnitTests
 {
@@ -64,8 +65,8 @@ namespace RelhaxUnitTests
             }
 
             //delete the library folders if they exist
-            if (Directory.Exists(Settings.RelhaxLibrariesFolderPath))
-                Directory.Delete(Settings.RelhaxLibrariesFolderPath, true);
+            if (Directory.Exists(ApplicationConstants.RelhaxLibrariesFolderPath))
+                Directory.Delete(ApplicationConstants.RelhaxLibrariesFolderPath, true);
 
             //they are started as being statically constructed, but the constructors themselves don't really do anything
             foreach(IRelhaxUnmanagedLibrary library in libraries)
@@ -306,8 +307,8 @@ namespace RelhaxUnitTests
             Assert.IsTrue(log.CanWrite);
 
             //make sure atlas packer's relhax temp folder exists
-            if (!Directory.Exists(Settings.RelhaxTempFolderPath))
-                Directory.CreateDirectory(Settings.RelhaxTempFolderPath);
+            if (!Directory.Exists(ApplicationConstants.RelhaxTempFolderPath))
+                Directory.CreateDirectory(ApplicationConstants.RelhaxTempFolderPath);
             AtlasCreator atlasCreator = null;
 
             foreach (string atlasPrefix in AtlasFiles)

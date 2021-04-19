@@ -60,18 +60,6 @@ namespace RelhaxModpack.Database
         public string Pattern { get; set; } = string.Empty;
 
         /// <summary>
-        /// Speed up the restore backup function in case of ClanIcons, the "backup folder" will be pushed back at once (and not file by file)
-        /// </summary>
-        [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
-        public bool PlaceBeforeExtraction { get; set; } = false;
-
-        /// <summary>
-        /// Entry will be processed in any case (if package is checked), even if "save user data" option is "false"
-        /// </summary>
-        [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
-        public bool SystemInitiated { get; set; } = false;
-
-        /// <summary>
         /// The list of actual files saved to the temporary backup directory. Contains the full path and file name
         /// </summary>
         public List<UserDataFile> FilesSaved { get; } = new List<UserDataFile>();
@@ -95,9 +83,6 @@ namespace RelhaxModpack.Database
             UserFile file =  new UserFile()
             {
                 Pattern = userFileToCopy.Pattern,
-#pragma warning disable CS0618 // Type or member is obsolete
-                PlaceBeforeExtraction = userFileToCopy.PlaceBeforeExtraction,
-                SystemInitiated = userFileToCopy.SystemInitiated
             };
 
             return file;
@@ -113,9 +98,6 @@ namespace RelhaxModpack.Database
             UserFile file = new UserFile()
             {
                 Pattern = userFileToCopy.Pattern,
-                PlaceBeforeExtraction = userFileToCopy.PlaceBeforeExtraction,
-                SystemInitiated = userFileToCopy.SystemInitiated,
-#pragma warning restore CS0618 // Type or member is obsolete
             };
 
             file.FilesSaved.AddRange(userFileToCopy.FilesSaved);

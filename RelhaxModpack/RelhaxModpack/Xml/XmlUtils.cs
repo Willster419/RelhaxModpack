@@ -16,7 +16,7 @@ using System.Net;
 using System.Threading.Tasks;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Atlases;
-using RelhaxModpack.Patches;
+using RelhaxModpack.Patching;
 using RelhaxModpack.Shortcuts;
 using RelhaxModpack.Utilities.Enums;
 
@@ -124,7 +124,6 @@ namespace RelhaxModpack.Xml
         /// </remarks>
         public static string GetXmlStringFromXPath(XmlDocument doc, string xpath)
         {
-            //set to something dumb for temporary purposes
             XmlNode result;
             try
             {
@@ -137,6 +136,27 @@ namespace RelhaxModpack.Xml
             if (result == null)
                 return null;
             return result.InnerText;
+        }
+
+        /// <summary>
+        /// Get a string value of the xml element or attribute inner text
+        /// </summary>
+        /// <param name="doc">The XDocument to get the value from</param>
+        /// <param name="xpath">The xpath search term</param>
+        /// <returns>The xpath return result, null if no value or failed expression</returns>
+        public static string GetXmlStringFromXPath(XDocument doc, string xpath)
+        {
+            string result;
+            try
+            {
+                XPathNavigator navigator = doc.CreateNavigator();
+                result = navigator.SelectSingleNode(xpath).Value;
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -194,6 +214,27 @@ namespace RelhaxModpack.Xml
           if (result == null)
               return null;
           return result;
+        }
+
+        /// <summary>
+        /// Get an Xml node value given an Xml path
+        /// </summary>
+        /// <param name="doc">The XmlDocument object to search</param>
+        /// <param name="xpath">The xpath string</param>
+        /// <returns>The XPathNavigator node of the search result, or null</returns>
+        public static XPathNavigator GetXNodeFromXpath(XDocument doc, string xpath)
+        {
+            XPathNavigator node;
+            try
+            {
+                XPathNavigator navigator = doc.CreateNavigator();
+                node = navigator.SelectSingleNode(xpath);
+                return node.NodeType == XPathNodeType.Attribute || node.NodeType == XPathNodeType.Element ? node : null;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -256,6 +297,32 @@ namespace RelhaxModpack.Xml
           }
           return results;
         }
+
+        /// <summary>
+        /// Get a List of XPathNavigators that match given an Xml path
+        /// </summary>
+        /// <param name="doc">The XmlDocument to search</param>
+        /// <param name="xpath">The xml path string</param>
+        /// <returns>The node list of matching results, or null</returns>
+        public static List<XPathNavigator> GetXNodesFromXpath(XDocument doc, string xpath)
+        {
+            List<XPathNavigator> nodeList = new List<XPathNavigator>();
+            try
+            {
+                XPathNavigator navigator = doc.CreateNavigator();
+                XPathNodeIterator iterator = navigator.Select(xpath);
+                foreach (XPathNavigator node in iterator)
+                {
+                    if (node.NodeType == XPathNodeType.Attribute || node.NodeType == XPathNodeType.Element)
+                        nodeList.Add(node);
+                }
+                return nodeList;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         #endregion
 
         #region Other Xml stuffs
@@ -270,6 +337,18 @@ namespace RelhaxModpack.Xml
             if (doc == null)
                 return null;
             return XDocument.Parse(doc.OuterXml,LoadOptions.SetLineInfo);
+        }
+
+        /// <summary>
+        /// Convert an XmlElement to an XElement
+        /// </summary>
+        /// <param name="element">The element to convert to XElement</param>
+        /// <returns>The converted XElement</returns>
+        public static XElement ElementToXElement(XmlElement element)
+        {
+            if (element == null)
+                throw new NullReferenceException();
+            return XElement.Parse(element.OuterXml, LoadOptions.PreserveWhitespace);
         }
 
         /// <summary>
@@ -372,320 +451,6 @@ namespace RelhaxModpack.Xml
                 Logging.Exception(xmlUnpackExceptino.ToString());
                 return false;
             }
-        }
-        #endregion
-
-        #region Component Parsing methods
-        /// <summary>
-        /// Parse a list of patch instructions from an Xml file into patch objects
-        /// </summary>
-        /// <param name="patches">The list of patches to parse into</param>
-        /// <param name="filename">The name of the file to parse from</param>
-        /// <param name="originalNameFromZip">The original name when extracted from the zip file during install time</param>
-        public static void AddPatchesFromFile(List<Patch> patches, string filename, string originalNameFromZip = null)
-        {
-            //make an Xml document to get all patches
-            XmlDocument doc = LoadXmlDocument(filename, XmlLoadType.FromFile);
-            if (doc == null)
-                return;
-            //make new patch object for each entry
-            //remember to add lots of logging
-            XmlNodeList XMLpatches = GetXmlNodesFromXPath(doc, "//patchs/patch");
-            if (XMLpatches == null || XMLpatches.Count == 0)
-            {
-                Logging.Error("File {0} contains no patch entries", filename);
-                return;
-            }
-            Logging.Info("Adding {0} patches from patchFile: {1}", XMLpatches.Count, filename);
-            foreach (XmlNode patchNode in XMLpatches)
-            {
-                Patch p = new Patch
-                {
-                    NativeProcessingFile = Path.GetFileName(filename),
-                    ActualPatchName = originalNameFromZip
-                };
-                Logging.Debug("Adding patch from file: {0} -> original name: {1}", Path.GetFileName(filename), originalNameFromZip);
-                
-                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
-                foreach (XmlNode property in patchNode.ChildNodes)
-                {
-                    //each element in the Xml gets put into the
-                    //the corresponding attribute for the Patch instance
-                    switch (property.Name)
-                    {
-                        case "type":
-                            p.Type = property.InnerText.Trim();
-                            break;
-                        case "mode":
-                            p.Mode = property.InnerText.Trim();
-                            break;
-                        case "patchPath":
-                            p.PatchPath = property.InnerText.Trim();
-                            break;
-                        case "followPath":
-                            p.FollowPath = CommonUtils.ParseBool(property.InnerText.Trim(), false);
-                            break;
-                        case "file":
-                            p.File = property.InnerText.Trim();
-                            break;
-                        case "path":
-                            p.Path = property.InnerText.Trim();
-                            break;
-                        case "version":
-                            p.Version = CommonUtils.ParseInt(property.InnerText.Trim(), 1);
-                            break;
-                        case "line":
-                            if (!string.IsNullOrWhiteSpace(property.InnerText.Trim()))
-                                p.Lines = property.InnerText.Trim().Split(',');
-                            break;
-                        case "search":
-                            p.Search = property.InnerText.Trim();
-                            break;
-                        case "replace":
-                            p.Replace = property.InnerText.Trim();
-                            break;
-                    }
-                }
-                patches.Add(p);
-            }
-        }
-
-        /// <summary>
-        /// Parse a list of shortcut instructions from an Xml file into shortcut objects
-        /// </summary>
-        /// <param name="shortcuts">The list of shortcuts to parse into</param>
-        /// <param name="filename">The name of the file to parse from</param>
-        public static void AddShortcutsFromFile(List<Shortcut> shortcuts, string filename)
-        {
-            //make an Xml document to get all shortcuts
-            XmlDocument doc = LoadXmlDocument(filename, XmlLoadType.FromFile);
-            if (doc == null)
-            {
-                Logging.Error("Failed to parse Xml shortcut file, skipping");
-                return;
-            }
-            //make new patch object for each entry
-            //remember to add lots of logging
-            XmlNodeList XMLshortcuts = GetXmlNodesFromXPath(doc, "//shortcuts/shortcut");
-            if (XMLshortcuts == null || XMLshortcuts.Count == 0)
-            {
-                Logging.Warning("File {0} contains no shortcut entries", filename);
-                return;
-            }
-            Logging.Info("Adding {0} shortcuts from shortcutFile: {1}", XMLshortcuts.Count, filename);
-            foreach (XmlNode patchNode in XMLshortcuts)
-            {
-                Shortcut sc = new Shortcut();
-                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
-                foreach (XmlNode property in patchNode.ChildNodes)
-                {
-                    //each element in the Xml gets put into the
-                    //the corresponding attribute for the Patch instance
-                    switch (property.Name)
-                    {
-                        case "path":
-                            sc.Path = property.InnerText.Trim();
-                            break;
-                        case "name":
-                            sc.Name = property.InnerText.Trim();
-                            break;
-                        case "enabled":
-                            sc.Enabled = CommonUtils.ParseBool(property.InnerText.Trim(), false);
-                            break;
-                    }
-                }
-                shortcuts.Add(sc);
-            }
-        }
-
-        /// <summary>
-        /// Parse a list of Xml unpack instructions from an Xml file into XmlUnpack objects
-        /// </summary>
-        /// <param name="xmlUnpacks">The list of XmlUnpacks to parse into</param>
-        /// <param name="filename">The name of the file to parse from</param>
-        public static void AddXmlUnpackFromFile(List<XmlUnpack> xmlUnpacks, string filename)
-        {
-            //make an Xml document to get all Xml Unpacks
-            XmlDocument doc = LoadXmlDocument(filename, XmlLoadType.FromFile);
-            if (doc == null)
-            {
-                Logging.Error("failed to parse Xml file");
-                return;
-            }
-            //make new patch object for each entry
-            //remember to add lots of logging
-            XmlNodeList XMLUnpacks = GetXmlNodesFromXPath(doc, "//files/file");
-            if (XMLUnpacks == null || XMLUnpacks.Count == 0)
-            {
-                Logging.Error("File {0} contains no XmlUnapck entries", filename);
-                return;
-            }
-            Logging.Info("Adding {0} Xml unpack entries from file: {1}", XMLUnpacks.Count, filename);
-            foreach (XmlNode patchNode in XMLUnpacks)
-            {
-                XmlUnpack xmlup = new XmlUnpack();
-                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
-                foreach (XmlNode property in patchNode.ChildNodes)
-                {
-                    //each element in the Xml gets put into the
-                    //the corresponding attribute for the Patch instance
-                    switch (property.Name)
-                    {
-                        case "pkg":
-                            xmlup.Pkg = property.InnerText.Trim();
-                            break;
-                        case "directoryInArchive":
-                            xmlup.DirectoryInArchive = property.InnerText.Trim();
-                            break;
-                        case "fileName":
-                            xmlup.FileName = property.InnerText.Trim();
-                            break;
-                        case "extractDirectory":
-                            xmlup.ExtractDirectory = property.InnerText.Trim();
-                            break;
-                        case "newFileName":
-                            xmlup.NewFileName = property.InnerText.Trim();
-                            break;
-                    }
-                }
-                xmlUnpacks.Add(xmlup);
-            }
-        }
-
-        /// <summary>
-        /// Parse a list of Xml atlas creation instructions from an Xml file into Atlas objects
-        /// </summary>
-        /// <param name="atlases">The list of Atlases to parse into</param>
-        /// <param name="filename">The name of the file to parse from</param>
-        public static void AddAtlasFromFile(List<Atlas> atlases, string filename)
-        {
-            //make an Xml document to get all Xml Unpacks
-            XmlDocument doc = LoadXmlDocument(filename, XmlLoadType.FromFile);
-            if (doc == null)
-                return;
-            //make new patch object for each entry
-            //remember to add lots of logging
-            XmlNodeList XMLAtlases = GetXmlNodesFromXPath(doc, "//atlases/atlas");
-            if (XMLAtlases == null || XMLAtlases.Count == 0)
-            {
-                Logging.Error("File {0} contains no atlas entries", filename);
-                return;
-            }
-            Logging.Info("Adding {0} atlas entries from file: {1}", XMLAtlases.Count, filename);
-            foreach (XmlNode atlasNode in XMLAtlases)
-            {
-                Atlas sc = new Atlas();
-                //we have the patchNode "patch" object, now we need to get it's children to actually get the properties of said patch
-                foreach (XmlNode property in atlasNode.ChildNodes)
-                {
-                    //each element in the Xml gets put into the
-                    //the corresponding attribute for the Patch instance
-                    switch (property.Name)
-                    {
-                        case "pkg":
-                            sc.Pkg = property.InnerText.Trim();
-                            break;
-                        case "directoryInArchive":
-                            sc.DirectoryInArchive = property.InnerText.Trim();
-                            break;
-                        case "atlasFile":
-                            sc.AtlasFile = property.InnerText.Trim();
-                            break;
-                        case "mapFile":
-                            sc.MapFile = property.InnerText.Trim();
-                            break;
-                        case "powOf2":
-                            sc.PowOf2 = CommonUtils.ParseBool(property.InnerText.Trim(), false);
-                            break;
-                        case "square":
-                            sc.Square = CommonUtils.ParseBool(property.InnerText.Trim(), false);
-                            break;
-                        case "fastImagePacker":
-                            sc.FastImagePacker = CommonUtils.ParseBool(property.InnerText.Trim(), false);
-                            break;
-                        case "padding":
-                            sc.Padding = CommonUtils.ParseInt(property.InnerText.Trim(), 1);
-                            break;
-                        case "atlasWidth":
-                            sc.AtlasWidth = CommonUtils.ParseInt(property.InnerText.Trim(), 2400);
-                            break;
-                        case "atlasHeight":
-                            sc.AtlasHeight = CommonUtils.ParseInt(property.InnerText.Trim(), 8192);
-                            break;
-                        case "atlasSaveDirectory":
-                            sc.AtlasSaveDirectory = property.InnerText.Trim();
-                            break;
-                        case "imageFolders":
-                            foreach (XmlNode imageFolder in property.ChildNodes)
-                            {
-                                sc.ImageFolderList.Add(imageFolder.InnerText.Trim());
-                            }
-                            break;
-                    }
-                }
-                atlases.Add(sc);
-            }
-        }
-
-        public static XmlDocument SavePatchToXmlDocument(List<Patch> PatchesList)
-        {
-            XmlDocument doc = new XmlDocument();
-            XmlElement patchHolder = doc.CreateElement("patchs");
-            doc.AppendChild(patchHolder);
-            int counter = 0;
-            foreach (Patch patch in PatchesList)
-            {
-                Logging.Patcher("[SavePatchToXmlDocument]: Saving patch {0} of {1}: {2}", LogLevel.Info, ++counter, PatchesList.Count, patch.ToString());
-                Logging.Patcher("{0}", LogLevel.Info, patch.DumpPatchInfoForLog);
-                XmlElement xmlPatch = doc.CreateElement("patch");
-                patchHolder.AppendChild(xmlPatch);
-
-                XmlElement version = doc.CreateElement("version");
-                version.InnerText = patch.Version.ToString();
-                xmlPatch.AppendChild(version);
-
-                XmlElement type = doc.CreateElement("type");
-                type.InnerText = patch.Type;
-                xmlPatch.AppendChild(type);
-
-                XmlElement mode = doc.CreateElement("mode");
-                mode.InnerText = patch.Mode;
-                xmlPatch.AppendChild(mode);
-
-                XmlElement patchPath = doc.CreateElement("patchPath");
-                patchPath.InnerText = patch.PatchPath;
-                xmlPatch.AppendChild(patchPath);
-
-                XmlElement followPath = doc.CreateElement("followPath");
-                followPath.InnerText = patch.Version == 1 ? false.ToString() : patch.FollowPath.ToString();
-                xmlPatch.AppendChild(followPath);
-
-                XmlElement file = doc.CreateElement("file");
-                file.InnerText = patch.File;
-                xmlPatch.AppendChild(file);
-
-                if (patch.Type.Equals("regex"))
-                {
-                    XmlElement line = doc.CreateElement("line");
-                    line.InnerText = string.Join(",", patch.Lines);
-                    xmlPatch.AppendChild(line);
-                }
-                else
-                {
-                    XmlElement line = doc.CreateElement("path");
-                    line.InnerText = patch.Path;
-                    xmlPatch.AppendChild(line);
-                }
-
-                XmlElement search = doc.CreateElement("search");
-                search.InnerText = patch.Search;
-                xmlPatch.AppendChild(search);
-
-                XmlElement replace = doc.CreateElement("replace");
-                replace.InnerText = MacroUtils.MacroReplace(patch.Replace, ReplacementTypes.TextEscape);
-                xmlPatch.AppendChild(replace);
-            }
-            return doc;
         }
         #endregion
     }

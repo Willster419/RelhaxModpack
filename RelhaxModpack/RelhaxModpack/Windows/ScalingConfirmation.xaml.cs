@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Settings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +29,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the ScalingConfirmation window
         /// </summary>
-        public ScalingConfirmation()
+        public ScalingConfirmation(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
@@ -63,6 +64,20 @@ namespace RelhaxModpack.Windows
             Timer.Stop();
             DialogResult = true;
             Close();
+        }
+
+        private void RelhaxWindow_Closed(object sender, EventArgs e)
+        {
+            if (DialogResult == null)
+                DialogResult = false;
+
+            if (Timer != null)
+            {
+                if (Timer.IsEnabled)
+                    Timer.Stop();
+                Timer = null;
+            }
+
         }
     }
 }

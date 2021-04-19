@@ -13,6 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Windows
 {
@@ -46,10 +48,12 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public AskCloseWoTResult AskCloseWoTResult { get; set; } = AskCloseWoTResult.CancelInstallation;
 
+        public string WoTDirectory { get; set; }
+
         /// <summary>
         /// Create an instance of the AskCloseWoT window
         /// </summary>
-        public AskCloseWoT()
+        public AskCloseWoT(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
@@ -65,7 +69,7 @@ namespace RelhaxModpack.Windows
         {
             AskCloseWoTResult = AskCloseWoTResult.Retry;
             Logging.Info("Getting WoT process(es)");
-            Process WoTProcess = CommonUtils.GetProcess(Settings.WoTProcessName, Settings.WoTDirectory);
+            Process WoTProcess = CommonUtils.GetProcess(ApplicationConstants.WoTProcessName, WoTDirectory);
             if(WoTProcess == null)
             {
                 Logging.Error("Failed to get process (null result)");

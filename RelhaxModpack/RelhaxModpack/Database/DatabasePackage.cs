@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Utilities;
+﻿using RelhaxModpack.Common;
+using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace RelhaxModpack.Database
     /// <summary>
     /// A database component is the base class for all other packages
     /// </summary>
-    public class DatabasePackage : IDatabaseComponent, IXmlSerializable
+    public class DatabasePackage : IDatabaseComponent, IXmlSerializable, IDisposable
     {
         #region Xml serialization
         /// <summary>
@@ -51,13 +52,13 @@ namespace RelhaxModpack.Database
             nameof(CRC),
             nameof(Timestamp),
             nameof(LogAtInstall),
-            nameof(StartAddress),
-            nameof(EndAddress),
             nameof(Triggers),
             nameof(DevURL),
             nameof(InternalNotes),
             nameof(Author),
-            nameof(Maintainers)
+            nameof(Maintainers),
+            nameof(Deprecated),
+            nameof(MinimalistModeExclude)
         };
         #endregion
 
@@ -82,7 +83,6 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Database Properties
-
         /// <summary>
         /// A unique identifier for each component in the database. No two components will have the same PackageName
         /// </summary>
@@ -146,18 +146,6 @@ namespace RelhaxModpack.Database
         /// The crc checksum of the zipfile
         /// </summary>
         public string CRC { get; set; } = string.Empty;
-
-        /// <summary>
-        /// The start address of the URL to the zip file
-        /// URL format: StartAddress + ZipFile + EndAddress
-        /// </summary>
-        public string StartAddress { get; set; } = Settings.DefaultStartAddress;
-
-        /// <summary>
-        /// The end address of the URL to the zip file
-        /// URL format: StartAddress + ZipFile + EndAddress
-        /// </summary>
-        public string EndAddress { get; set; } = Settings.DefaultEndAddress;
 
         /// <summary>
         /// Determine at install time if the package needs to be downloaded
@@ -238,29 +226,20 @@ namespace RelhaxModpack.Database
         public string Author { get; set; } = string.Empty;
 
         /// <summary>
-        /// The number of bytes to download, used if "install while download" is true
-        /// </summary>
-        public long BytesToDownload { get; set; } = 0;
-
-        /// <summary>
-        /// The number of bytes currently downloaded, used if "install while download" is true
-        /// </summary>
-        public long BytesDownloaded { get; set; } = 0;
-
-        /// <summary>
-        /// Flag to determine if this package is the one currently downloading, used if "install while download" is true
-        /// </summary>
-        public bool IsCurrentlyDownloading { get; set; } = false;
-
-        /// <summary>
-        /// Flag to determine if this package failed to download from either download methods
-        /// </summary>
-        public bool DownloadFailed { get; set; } = false;
-
-        /// <summary>
         /// The list of tags that this package contains (like patches, scripts, etc)
         /// </summary>
         public PackageTagsList Tags { get; set; }  = new PackageTagsList();
+
+        /// <summary>
+        /// A flag to set for a package that is considered to be outdated or no longer supported or stale.
+        /// </summary>
+        public bool Deprecated { get; set; } = false;
+
+        /// <summary>
+        /// A flag for determining if this package should be excluded from install when minimalist mode is enabled in ModpackSettings.
+        /// </summary>
+        /// <seealso cref="Settings.ModpackSettings.MinimalistMode"/>
+        public bool MinimalistModeExclude { get; set; } = false;
         #endregion
 
         #region UI Properties
@@ -272,18 +251,9 @@ namespace RelhaxModpack.Database
 
         #region Other Properties and Methods
         /// <summary>
-        /// Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
-        /// </summary>
-        public bool ExtractionStarted { get; set; } = false;
-
-        /// <summary>
         /// When a databasePackage, the internal packageName. When category, the category name
         /// </summary>
         public string ComponentInternalName { get { return PackageName; } }
-
-        public DownloadInstructions DownloadInstructions { get; set; } = null;
-
-        public UpdateInstructions UpdateInstructions { get; set; }= null;
 
         /// <summary>
         /// String representation of the object
@@ -332,8 +302,6 @@ namespace RelhaxModpack.Database
             this.Timestamp = packageToCopy.Timestamp;
             this.ZipFile = packageToCopy.ZipFile;
             this.CRC = packageToCopy.CRC;
-            this.StartAddress = packageToCopy.StartAddress;
-            this.EndAddress = packageToCopy.EndAddress;
             this.LogAtInstall = packageToCopy.LogAtInstall;
             this.Triggers = packageToCopy.Triggers;
             this.DevURL = packageToCopy.DevURL;
@@ -343,6 +311,43 @@ namespace RelhaxModpack.Database
             this.UID = packageToCopy.UID;
             //don't call the property for enabled, just the internal field
             this._Enabled = packageToCopy._Enabled;
+        }
+        #endregion
+
+        #region Disposable support
+        private bool disposedValue = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                    Tags.Clear();
+                    Tags = null;
+                    if (EditorTreeViewItem != null)
+                        EditorTreeViewItem = null;
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~DatabasePackage()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }

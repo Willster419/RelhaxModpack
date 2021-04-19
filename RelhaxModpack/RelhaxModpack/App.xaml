@@ -4,11 +4,9 @@
              xmlns:local="clr-namespace:RelhaxModpack"
              xmlns:localUI="clr-namespace:RelhaxModpack.UI"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-             StartupUri="MainWindow.xaml"
-             Activated="Application_Activated"
-             Deactivated="Application_Deactivated"
              Exit="Application_Exit"
              Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
+    <!-- https://stackoverflow.com/a/47901337/3128017 -->
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

@@ -6,13 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Settings
 {
     /// <summary>
     /// The settings used in the editor window
     /// </summary>
-    public class EditorSettings
+    public class EditorSettings : ISettingsFile
     {
+        /// <summary>
+        /// The name of the settings file on disk
+        /// </summary>
+        public const string SettingsFilename = "EditorSettings.xml";
+
+        /// <summary>
+        /// The name of the xml file on disk
+        /// </summary>
+        public string Filename { get { return SettingsFilename; } }
+
+        /// <summary>
+        /// A list of properties and fields to exclude from saving/loading to and from xml
+        /// </summary>
+        public string[] MembersToExclude { get { return new string[] { nameof(MembersToExclude), nameof(Filename), nameof(SettingsFilename) }; } }
+
         /// <summary>
         /// The user's FTP account username to the bigmods FTP server
         /// </summary>
@@ -54,13 +69,13 @@ namespace RelhaxModpack
         public uint FTPUploadDownloadWindowTimeout = 0;
 
         /// <summary>
-        /// The directory where the auto updater will download, modify, and upload files to/from
+        /// Flag to determine if the delete zip button (actually open file by default) will actually delete the zip, or move it to the specified folder
         /// </summary>
-        public string AutoUpdaterWorkDirectory = string.Empty;
+        public bool UploadZipDeleteIsActuallyMove = false;
 
         /// <summary>
-        /// Create an instance of the EditorSettings class. Settings should be set via property initialization style.
+        /// The folder path to move the uploaded file to. If the file already exists, it will be overridden
         /// </summary>
-        public EditorSettings() { }
+        public string UploadZipMoveFolder = string.Empty;
     }
 }

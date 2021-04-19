@@ -33,6 +33,11 @@
         /// <summary>
         /// The log file for the database update tool
         /// </summary>
-        Updater
+        Updater,
+
+        /// <summary>
+        /// The log file for the database automation runner window
+        /// </summary>
+        AutomationRunner
     }
 }

@@ -14,6 +14,9 @@ using System.IO;
 using System.Windows.Threading;
 using System.Threading;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
+using RelhaxModpack.Utilities.ClassEventArgs;
 
 namespace RelhaxInstallerUnitTester
 {
@@ -22,19 +25,20 @@ namespace RelhaxInstallerUnitTester
     {
         //declaring these objects as static will allow them to exist throughout the test
         //exists in all methods
-        private static ModSelectionList SelectionList = null;
+        private static PackageSelectionList SelectionList = null;
         private static List<DatabasePackage> GlobalDependencies = null;
         private static List<Dependency> Dependencies = null;
         private static List<Category> ParsedCategoryList = null;
         private static Logfile log = null;
         private static App app = null;
+        private static ModpackSettings ModpackSettings = new ModpackSettings();
+        private static SettingsParser SettingsParser = new SettingsParser();
 
         [TestMethod]
         public void Test01_LoadModpackSettingsTest()
         {
-            bool settingsLoaded = Settings.LoadSettings(Settings.ModpackSettingsFileName, typeof(ModpackSettings), null, null);
-            if (File.Exists(Settings.ModpackSettingsFileName))
-                Assert.IsTrue(settingsLoaded);
+            Assert.IsTrue(File.Exists(ModpackSettings.SettingsFilename));
+            SettingsParser.LoadSettings(ModpackSettings);
 
             GlobalDependencies = new List<DatabasePackage>();
         }
@@ -53,14 +57,14 @@ namespace RelhaxInstallerUnitTester
 
             //ensure folder structure exists
             log.Write("Ensuring folder structure exists");
-            foreach(string folderPath in Settings.FoldersToCheck)
+            foreach(string folderPath in ApplicationConstants.FoldersToCheck)
             {
                 if (!Directory.Exists(folderPath))
                     Directory.CreateDirectory(folderPath);
             }
 
             //get the managerInfo document
-            Settings.ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(true);
+            ((App)RelhaxModpack.App.Current).ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(true);
         }
 
         [TestMethod]
@@ -75,7 +79,7 @@ namespace RelhaxInstallerUnitTester
             //https://www.c-sharpcorner.com/uploadfile/suchit_84/creating-wpf-windows-on-dedicated-threads/
             Thread thread = new Thread(() =>
             {
-                SelectionList = new ModSelectionList()
+                SelectionList = new PackageSelectionList(ModpackSettings, null)
                 {
                     ApplyColorSettings = false, //not cross-thread safe
                     ApplyScaling = false,
@@ -88,8 +92,12 @@ namespace RelhaxInstallerUnitTester
                     //the lists are newed in the application
                     GlobalDependencies = Set01_ModSelectionListTests.GlobalDependencies,
                     Dependencies = Set01_ModSelectionListTests.Dependencies,
-                    ParsedCategoryList = Set01_ModSelectionListTests.ParsedCategoryList
+                    ParsedCategoryList = Set01_ModSelectionListTests.ParsedCategoryList,
+                    WoTClientVersion = "TODO",
+                    DatabaseVersion = "TODO",
+                    WoTDirectory = "TODO"
                 };
+                throw new BadMemeException("Finish plox");
 
                 SelectionList.Closed += (sender, e) => SelectionList.Dispatcher.InvokeShutdown();
                 SelectionList.WindowState = WindowState.Normal;
@@ -152,9 +160,9 @@ namespace RelhaxInstallerUnitTester
         {
             string[] fullyQualifiedTestNameSplit = ctx.FullyQualifiedTestClassName.Split('.');
             //throw exception if it fails to create the log file
-            log = new Logfile(fullyQualifiedTestNameSplit[fullyQualifiedTestNameSplit.Length-1], Logging.ApplicationLogfileTimestamp);
+            log = new Logfile(fullyQualifiedTestNameSplit[fullyQualifiedTestNameSplit.Length-1], Logging.ApplicationLogfileTimestamp, true);
 
-            log.Init();
+            log.Init(false);
 
             if (!log.CanWrite)
                 throw new BadMemeException("Can't write to the logfile");

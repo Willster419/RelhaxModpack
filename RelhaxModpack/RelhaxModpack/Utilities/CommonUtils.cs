@@ -25,6 +25,8 @@ using Newtonsoft.Json;
 using RelhaxModpack.Utilities.Enums;
 using System.Xml.Linq;
 using System.Collections;
+using RelhaxModpack.Common;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Utilities
 {
@@ -41,7 +43,7 @@ namespace RelhaxModpack.Utilities
         /// <summary>
         /// Multiply by this value to convert seconds to minuets
         /// </summary>
-        public const int TO_MINUETS = 60;
+        public const int TO_MINUTES = 60;
 
         /// <summary>
         /// Get a complete assembly name based on a matching keyword
@@ -79,15 +81,15 @@ namespace RelhaxModpack.Utilities
         public static async Task<XmlDocument> GetManagerInfoDocumentAsync(bool overwrite)
         {
 
-            Settings.ManagerInfoZipfile = await GetManagerInfoZipfileAsync(overwrite);
-            if(Settings.ManagerInfoZipfile == null)
+            ((App)Application.Current).ManagerInfoZipfile = await GetManagerInfoZipfileAsync(overwrite);
+            if(((App)Application.Current).ManagerInfoZipfile == null)
             {
                 Logging.Exception("Settings.ModInfoZipfile is null");
                 return null;
             }
 
             //get the version info string
-            string xmlString = FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, "manager_version.xml");
+            string xmlString = FileUtils.GetStringFromZip(((App)Application.Current).ManagerInfoZipfile, "manager_version.xml");
             if (string.IsNullOrEmpty(xmlString))
             {
                 Logging.Exception("Failed to get xml string from Settings.ModInfoZipfile");
@@ -107,27 +109,27 @@ namespace RelhaxModpack.Utilities
         {
             //first delete the old file if it exists, just to check
 #pragma warning disable CS0618 // Type or member is obsolete
-            if (File.Exists(Settings.ManagerInfoDatFile))
-                File.Delete(Settings.ManagerInfoDatFile);
+            if (File.Exists(ApplicationConstants.ManagerInfoDatFile))
+                File.Delete(ApplicationConstants.ManagerInfoDatFile);
 #pragma warning restore CS0618 // Type or member is obsolete
 
             //if the zipfile is not null and no overwrite, then stop
-            if (Settings.ManagerInfoZipfile != null && !overwrite)
+            if (((App)Application.Current).ManagerInfoZipfile != null && !overwrite)
             {
-                return Settings.ManagerInfoZipfile;
+                return ((App)Application.Current).ManagerInfoZipfile;
             }
             //if zipfile is not null and we are overwriting, then dispose of the zip first
-            else if (Settings.ManagerInfoZipfile != null && overwrite)
+            else if (((App)Application.Current).ManagerInfoZipfile != null && overwrite)
             {
-                Settings.ManagerInfoZipfile.Dispose();
-                Settings.ManagerInfoZipfile = null;
+                ((App)Application.Current).ManagerInfoZipfile.Dispose();
+                ((App)Application.Current).ManagerInfoZipfile = null;
             }
 
             using (WebClient client = new WebClient())
             {
                 try
                 {
-                    byte[] zipfile = await client.DownloadDataTaskAsync(Settings.ManagerInfoURLBigmods);
+                    byte[] zipfile = await client.DownloadDataTaskAsync(ApplicationConstants.ManagerInfoURLBigmods);
                     return ZipFile.Read(new MemoryStream(zipfile));
                 }
                 catch(Exception ex)
@@ -143,9 +145,10 @@ namespace RelhaxModpack.Utilities
         /// Compares if the current application version is the same as the version checked from online
         /// </summary>
         /// <param name="currentVersion">The string representation of the latest modpack application version</param>
+        /// <param name="applicationVersion">Control if the update check will use the beta or stable distribution channel</param>
         /// <returns>True if the manager string versions are the same, false otherwise</returns>
         /// <remarks>IsManagerUptoDate will return false if it fails to get the latest managerInfo zip file</remarks>
-        public static async Task<bool> IsManagerUptoDate(string currentVersion)
+        public static async Task<bool> IsManagerUptoDate(string currentVersion, ApplicationVersions applicationVersion)
         {
             //actually compare the build of the application of the requested distribution channel
             XmlDocument doc = await GetManagerInfoDocumentAsync(false);
@@ -155,7 +158,7 @@ namespace RelhaxModpack.Utilities
                 return false;
             }
 
-            string applicationOnlineVersion = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
+            string applicationOnlineVersion = (applicationVersion == ApplicationVersions.Stable) ?
                 XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
                 XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
 
@@ -172,35 +175,7 @@ namespace RelhaxModpack.Utilities
             return !outOfDate;
         }
 
-        public static List<string> GetListOfGithubRepoBranches()
-        {
-            //declare objects to use
-            string jsonText = string.Empty;
-
-            //check if we're windows 7 to enable TLS options needed by github
-            CheckAndEnableTLS();
-
-            //get the list of branches
-            using (PatientWebClient client = new PatientWebClient() { Timeout = 3000 })
-            {
-
-                try
-                {
-                    Logging.Debug("[GetListOfGithubRepoBranches]: downloading branch list as json from github API");
-                    client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                    jsonText = client.DownloadString(Settings.BetaDatabaseBranchesURL);
-                }
-                catch (WebException wex)
-                {
-                    Logging.Exception(wex.ToString());
-                }
-            }
-
-            //parse from json to list
-            return ParseBranchesJsonToList(jsonText);
-        }
-
-        public static async Task<List<string>> GetListOfGithubRepoBranchesAsync()
+        public static async Task<List<string>> GetListOfGithubRepoBranchesAsync(string githubApiUrl)
         {
             //declare objects to use
             string jsonText = string.Empty;
@@ -216,7 +191,7 @@ namespace RelhaxModpack.Utilities
                 {
                     Logging.Debug("[GetListOfGithubRepoBranchesAsync]: downloading branch list as json from github API");
                     client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                    jsonText = await client.DownloadStringTaskAsync(Settings.BetaDatabaseBranchesURL);
+                    jsonText = await client.DownloadStringTaskAsync(githubApiUrl);
                 }
                 catch (WebException wex)
                 {
@@ -272,7 +247,7 @@ namespace RelhaxModpack.Utilities
             //https://docs.microsoft.com/en-us/dotnet/framework/network-programming/tls
             if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
             {
-                Logging.Debug("[CheckAndEnableTLS]: Windows 7 detected, enabling TLS 1.1 and 1.2");
+                Logging.Debug(LogOptions.MethodName, "Windows 7 detected, enabling TLS 1.1 and 1.2");
                 System.Net.ServicePointManager.SecurityProtocol =
                     SecurityProtocolType.Ssl3 |
                     SecurityProtocolType.Tls |
@@ -507,7 +482,7 @@ namespace RelhaxModpack.Utilities
         /// <returns>a Unique IDentifier for a package</returns>
         public static string GenerateUID()
         {
-            return RandomString(Settings.NumberUIDCharacters, Settings.UIDCharacters);
+            return RandomString(ApplicationConstants.NumberUIDCharacters, ApplicationConstants.UIDCharacters);
         }
 
         /// <summary>
@@ -921,16 +896,16 @@ namespace RelhaxModpack.Utilities
         {
             //make sure that the app data folder exists
             //if it does not, then it does not need to run this
-            if (!Directory.Exists(Settings.AppDataFolder))
+            if (!Directory.Exists(ApplicationConstants.AppDataFolder))
             {
                 Logging.Info("Appdata folder does not exist, creating");
-                Directory.CreateDirectory(Settings.AppDataFolder);
+                Directory.CreateDirectory(ApplicationConstants.AppDataFolder);
                 return true;
             }
             Logging.Info("Appdata folder exists, backing up user settings and clearing cache");
 
             //make the temp folder if it does not already exist
-            string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolderPath, "AppDataBackup");
+            string AppPathTempFolder = Path.Combine(ApplicationConstants.RelhaxTempFolderPath, "AppDataBackup");
             //delete if possibly from previous install
             if (Directory.Exists(AppPathTempFolder))
                 FileUtils.DirectoryDelete(AppPathTempFolder, true);
@@ -951,9 +926,9 @@ namespace RelhaxModpack.Utilities
             foreach (string file in fileNames)
             {
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
-                if (File.Exists(Path.Combine(Settings.AppDataFolder, file)))
+                if (File.Exists(Path.Combine(ApplicationConstants.AppDataFolder, file)))
                 {
-                    if (!FileUtils.FileMove(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
+                    if (!FileUtils.FileMove(Path.Combine(ApplicationConstants.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
                     {
                         Logging.Error("Failed to move file for clear cache");
                         return false;
@@ -967,9 +942,9 @@ namespace RelhaxModpack.Utilities
 
             foreach (string folder in folderNames)
             {
-                if (Directory.Exists(Path.Combine(Settings.AppDataFolder, folder)))
+                if (Directory.Exists(Path.Combine(ApplicationConstants.AppDataFolder, folder)))
                 {
-                    FileUtils.DirectoryMove(Path.Combine(Settings.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
+                    FileUtils.DirectoryMove(Path.Combine(ApplicationConstants.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
                 }
                 else
                 {
@@ -979,17 +954,17 @@ namespace RelhaxModpack.Utilities
 
             //now delete the temp folder
             Logging.WriteToLog("Starting clearing cache step 2 of 3: actually clearing cache", Logfiles.Application, LogLevel.Debug);
-            FileUtils.DirectoryDelete(Settings.AppDataFolder, true);
+            FileUtils.DirectoryDelete(ApplicationConstants.AppDataFolder, true);
 
             //then put the above files back
             Logging.WriteToLog("Starting clearing cache step 3 of 3: restoring old files", Logfiles.Application, LogLevel.Debug);
-            Directory.CreateDirectory(Settings.AppDataFolder);
+            Directory.CreateDirectory(ApplicationConstants.AppDataFolder);
             foreach (string file in fileNames)
             {
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if (File.Exists(Path.Combine(AppPathTempFolder, file)))
                 {
-                    if (!FileUtils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)))
+                    if (!FileUtils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(ApplicationConstants.AppDataFolder, file)))
                     {
                         Logging.Error("Failed to move file for clear cache");
                         return false;
@@ -1011,7 +986,7 @@ namespace RelhaxModpack.Utilities
             {
                 if (Directory.Exists(Path.Combine(AppPathTempFolder, folder)))
                 {
-                    FileUtils.DirectoryMove(Path.Combine(AppPathTempFolder, folder), Path.Combine(Settings.AppDataFolder, folder), true);
+                    FileUtils.DirectoryMove(Path.Combine(AppPathTempFolder, folder), Path.Combine(ApplicationConstants.AppDataFolder, folder), true);
                 }
                 else
                 {
@@ -1034,6 +1009,28 @@ namespace RelhaxModpack.Utilities
             {
                 var converter = TypeDescriptor.GetConverter(propertyInfoOfObject.PropertyType);
                 propertyInfoOfObject.SetValue(objectToSetValueOn, converter.ConvertFrom(valueToSet));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to set a field value of a class or structure object instance with the string valueToSet
+        /// </summary>
+        /// <param name="objectToSetValueOn">The class or structure object instance to have property set</param>
+        /// <param name="fieldInfoOfObject">The field information/metadata of the field to set on the object</param>
+        /// <param name="valueToSet">The string version of the value to set</param>
+        /// <returns>False if the value could not be set, true otherwise</returns>
+        public static bool SetObjectField(object objectToSetValueOn, FieldInfo fieldInfoOfObject, string valueToSet)
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(fieldInfoOfObject.FieldType);
+                fieldInfoOfObject.SetValue(objectToSetValueOn, converter.ConvertFrom(valueToSet));
                 return true;
             }
             catch (Exception ex)
@@ -1073,14 +1070,22 @@ namespace RelhaxModpack.Utilities
         /// <param name="databasePackageObject">The database package object with the list property, for example SelectablePackage</param>
         /// <param name="listPropertyInfo">The property metadata/info about the list property, for example Medias</param>
         /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
-        public static void SetListEntries(IDatabaseComponent databasePackageObject, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems)
+        public static void SetListEntries(IComponentWithID databasePackageObject, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems, string customTypeAttributeName = null, Dictionary<string, Type> typeMapper = null)
         {
+            bool customTyping = !(string.IsNullOrEmpty(customTypeAttributeName));
+            if (customTyping && typeMapper == null)
+                throw new NullReferenceException(nameof(typeMapper) + " is null");
+            if (databasePackageObject == null || listPropertyInfo == null || xmlListItems == null)
+                throw new NullReferenceException(string.Format("{0}: null = {1}, {2}: null = {3}, {4}: null = {5}",
+                    nameof(databasePackageObject), databasePackageObject == null, nameof(listPropertyInfo), listPropertyInfo == null, nameof(xmlListItems), xmlListItems == null));
+
             //get the list interfaced component
             IList listProperty = listPropertyInfo.GetValue(databasePackageObject) as IList;
 
-            //we now have the empty list, now get type of list it is
+            //we now have the empty list, now get type of list it is, unless we have a dictionary to map it
+            Type listObjectType = null;
             //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
-            Type listObjectType = listProperty.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
+            if (!customTyping) listObjectType = listProperty.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1)
                 .FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
 
             //create the tracking lists for unknown and missing elements out here as null for first time init later
@@ -1093,6 +1098,17 @@ namespace RelhaxModpack.Utilities
             //if it originates from the 
             foreach (XElement listElement in xmlListItems)
             {
+                //if we're doing custom typing, then get the type based on the attribute name
+                if (customTyping)
+                {
+                    string typeResult = listElement.Attribute(customTypeAttributeName).Value;
+                    if (string.IsNullOrEmpty(typeResult))
+                        throw new BadMemeException("typeResult is null or empty - invalid attribute name");
+                    if (!typeMapper.ContainsKey(typeResult))
+                        throw new BadMemeException(string.Format("typeResult {0} does not exist in dictionary", typeResult));
+                    listObjectType = typeMapper[typeResult];
+                }
+
                 //if it's just like a string or something then just load that
                 if (listObjectType.IsValueType)
                 {
@@ -1102,9 +1118,15 @@ namespace RelhaxModpack.Utilities
                         continue;
                     }
                 }
+                else if (listObjectType.Equals(typeof(string)))
+                {
+                    listProperty.Add(listElement.Value);
+                }
+                
+                object listEntryObject = Activator.CreateInstance(listObjectType);
 
                 //make sure object type is properly implemented into serialization system
-                if (!(Activator.CreateInstance(listObjectType) is IXmlSerializable listEntry))
+                if (!(listEntryObject is IXmlSerializable listEntry))
                     throw new BadMemeException("Type of this list is not of IXmlSerializable");
 
                 //assign missing attributes if not done already
@@ -1172,7 +1194,7 @@ namespace RelhaxModpack.Utilities
                 }
                 foreach (string unknownAttribute in unknownAttributes)
                 {
-                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Unknown xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
                 }
                 foreach (string unknownElement in unknownElements)
                 {

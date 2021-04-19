@@ -10,7 +10,7 @@ namespace RelhaxModpack.Database
     /// <summary>
     /// a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
     /// </summary>
-    public class Category : IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
+    public class Category : IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
     {
         #region Xml serialization
         /// <summary>
@@ -77,14 +77,6 @@ namespace RelhaxModpack.Database
         /// List of dependencies of this category (Any package selected in this category needs these dependencies)
         /// </summary>
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
-
-        //https://stackoverflow.com/questions/1759352/how-to-mark-a-method-as-obsolete-or-deprecated
-        /// <summary>
-        /// The install group number of the category. Used to denote which install thread it is assigned to.
-        /// Two (or more) categories can have the same number to be on the same install thread
-        /// </summary>
-        [Obsolete("This is for legacy database compatibility and will be ignored in Relhax V2")]
-        public int InstallGroup = 0;
         #endregion
 
         #region UI Properties
@@ -192,6 +184,63 @@ namespace RelhaxModpack.Database
                     anyPackages = true;
             }
             return anyPackages;
+        }
+        #endregion
+
+        #region Disposable Support
+
+        private bool disposedValue;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                    if (Packages != null)
+                    {
+                        if (Packages.Count > 0)
+                        {
+                            foreach (SelectablePackage package in GetFlatPackageList())
+                                package.Dispose();
+                        }
+                        Packages.Clear();
+                        Packages = null;
+                    }
+                    if (Dependencies != null)
+                    {
+                        Dependency.ClearLogics(Dependencies);
+                        Dependencies = null;
+                    }
+                    if (TabPage != null)
+                        TabPage = null;
+                    if (CategoryHeader != null)
+                    {
+                        CategoryHeader.Dispose();
+                        CategoryHeader = null;
+                    }
+                    if (EditorTreeViewItem != null)
+                        EditorTreeViewItem = null;
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~Category()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }

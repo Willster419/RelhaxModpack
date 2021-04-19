@@ -6,13 +6,14 @@ using System.Windows.Controls;
 using System.Text;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Database
 {
     /// <summary>
     /// A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
     /// </summary>
-    public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
+    public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
     {
         #region Xml serialization
         /// <summary>
@@ -279,14 +280,7 @@ namespace RelhaxModpack.Database
                     }
                 }
 
-                //determine if we should perform color change on the UI component(s)
-                bool UIComponentColorChange = false;
-                if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2 && ModpackSettings.EnableColorChangeDefaultV2View)
-                    UIComponentColorChange = true;
-                else if (ModpackSettings.ModSelectionView == SelectionView.Legacy && ModpackSettings.EnableColorChangeLegacyView)
-                    UIComponentColorChange = true;
-
-                if(UIComponentColorChange && Visible && IsStructureVisible)
+                if(ChangeColorOnValueChecked && Visible && IsStructureVisible)
                 {
                     //if the UI component is not null, it's a checkbox or radiobutton
                     if (UIComponent != null)
@@ -334,7 +328,7 @@ namespace RelhaxModpack.Database
                     {
                         //workarounds
                         //top item is not going to correct color
-                        if (ModpackSettings.ModSelectionView == SelectionView.Legacy)
+                        if (ModSelectionView == SelectionView.Legacy)
                         {
                             if (_Checked)
                             {
@@ -345,7 +339,7 @@ namespace RelhaxModpack.Database
                                 TreeView.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
                             }
                         }
-                        else if (ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
+                        else if (ModSelectionView == SelectionView.DefaultV2)
                         {
                             if (!_Checked)
                             {
@@ -459,6 +453,17 @@ namespace RelhaxModpack.Database
         /// The StackPanel that this item is inside. WPF component
         /// </summary>
         public StackPanel ParentStackPanel;
+
+        /// <summary>
+        /// Gets or sets if the UI background components of this package should change color when the checked value changes
+        /// </summary>
+        public bool ChangeColorOnValueChecked { get; set; } = false;
+
+        public SelectionView ModSelectionView { get; set; }
+
+        public bool ForceVisible { get; set; }
+
+        public bool ForceEnabled { get; set; }
         #endregion
 
         #region UI Properties Default View
@@ -655,9 +660,9 @@ namespace RelhaxModpack.Database
                 //get if the package is need to be download "(updated)" text (and size)
                 //(only happens if level > -1)
                 string nameDisplay = NameFormatted;
-                if (ModpackSettings.ForceVisible && !IsStructureVisible)
+                if (ForceVisible && !IsStructureVisible)
                     nameDisplay = string.Format("{0} [{1}]", nameDisplay, Translations.GetTranslatedString("invisible"));
-                if (ModpackSettings.ForceEnabled && !IsStructureEnabled)
+                if (ForceEnabled && !IsStructureEnabled)
                     nameDisplay = string.Format("{0} [{1}]", nameDisplay, Translations.GetTranslatedString("disabled"));
                 if(Level > -1 && DownloadFlag)
                 {
@@ -754,11 +759,11 @@ namespace RelhaxModpack.Database
                     return false;
 
                 bool hasSingles = false;
-                bool singleSelected = false;
+                int numSingleSelected = 0;
                 bool hasDD1 = false;
-                bool DD1Selected = false;
+                int numDD1Selected = 0;
                 bool hasDD2 = false;
-                bool DD2Selected = false;
+                int numDD2Selected = 0;
 
                 //first check if this package has any of these children type
                 foreach (SelectablePackage childPackage in this.Packages)
@@ -769,32 +774,34 @@ namespace RelhaxModpack.Database
                         //check if the child package is selected. it's fine to overwrite the bool cause we're
                         //just wanting to know if *any* child packages of this type are checked
                         if (childPackage.Checked)
-                            singleSelected = true;
+                            numSingleSelected++;
                     }
                     else if ((childPackage.Type == SelectionTypes.single_dropdown1) && childPackage.Enabled)
                     {
                         hasDD1 = true;
                         if (childPackage.Checked)
-                            DD1Selected = true;
+                            numDD1Selected++;
                     }
                     else if (childPackage.Type == SelectionTypes.single_dropdown2 && childPackage.Enabled)
                     {
                         hasDD2 = true;
                         if (childPackage.Checked)
-                            DD2Selected = true;
+                            numDD2Selected++;
                     }
                 }
 
                 //now make sure that for each of the above types, at least one is checked
-                if (hasSingles && !singleSelected)
+                if (hasSingles && numSingleSelected != 1)
                 {
                     return false;
                 }
-                if (hasDD1 && !DD1Selected)
+
+                if (hasDD1 && numDD1Selected != 1)
                 {
                     return false;
                 }
-                if (hasDD2 && !DD2Selected)
+
+                if (hasDD2 && numDD2Selected != 1)
                 {
                     return false;
                 }
@@ -858,6 +865,104 @@ namespace RelhaxModpack.Database
                         this.Dependencies.Add(DatabaseLogic.Copy(file));
                 }
             }
+        }
+        #endregion
+
+        #region Disposable support
+        private bool disposedValue = false;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    if(Packages != null)
+                    {
+                        if (Packages.Count > 0)
+                        {
+                            foreach (SelectablePackage package in Packages)
+                                package.Dispose();
+                        }
+                        Packages.Clear();
+                        Packages = null;
+                    }
+                    if (Dependencies != null)
+                    {
+                        Dependency.ClearLogics(Dependencies);
+                        Dependencies = null;
+                    }
+                    // TODO: dispose managed state (managed objects)
+                    if (ParentCategory != null)
+                        ParentCategory = null;
+                    if (Parent != null)
+                        Parent = null;
+                    if (TopParent != null)
+                        TopParent = null;
+                    if (UserFiles != null)
+                    {
+                        foreach (UserFile file in UserFiles)
+                        {
+                            file.FilesSaved.Clear();
+                        }
+                        UserFiles.Clear();
+                        UserFiles = null;
+                    }
+                    if (Medias != null)
+                    {
+                        foreach (Media media in Medias)
+                            media.SelectablePackageParent = null;
+                        Medias.Clear();
+                        Medias = null;
+                    }
+                    if (UIComponent != null)
+                    {
+                        UIComponent.Package = null;
+                        UIComponent = null;
+                    }
+                    if (ParentUIComponent != null)
+                    {
+                        ParentUIComponent.Package = null;
+                        ParentUIComponent = null;
+                    }
+                    if (TopParentUIComponent != null)
+                    {
+                        TopParentUIComponent.Package = null;
+                        TopParentUIComponent = null;
+                    }
+                    if (RelhaxWPFComboBoxList != null)
+                    {
+                        for (int i = 0; i < RelhaxWPFComboBoxList.Count(); i++)
+                            if (RelhaxWPFComboBoxList[i] != null)
+                                RelhaxWPFComboBoxList[i] = null;
+                        RelhaxWPFComboBoxList = null;
+                    }
+                    if (ChildBorder != null)
+                        ChildBorder = null;
+                    if (ChildStackPanel != null)
+                        ChildStackPanel = null;
+                    if (ParentBorder != null)
+                        ParentBorder = null;
+                    if (ParentStackPanel != null)
+                        ParentStackPanel = null;
+                    if (ContentControl != null)
+                        ContentControl = null;
+                    if (ScrollViewer != null)
+                        ScrollViewer = null;
+                    if (TreeViewItem != null)
+                        TreeViewItem = null;
+                    if (TreeView != null)
+                        TreeView = null;
+                    if (TabIndex != null)
+                        TabIndex = null;
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+
+            base.Dispose(disposing);
         }
         #endregion
     }
