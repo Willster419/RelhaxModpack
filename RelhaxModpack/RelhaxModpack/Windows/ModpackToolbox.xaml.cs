@@ -2158,5 +2158,152 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion
+
+        #region Medias Cleaning and Testing
+        private struct MediasCleaningStruct
+        {
+            public SelectablePackage SelectablePackage;
+            public Media MediaWithProblem;
+        }
+
+        private async void CleanMediasStep2_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Attempting to download all media to test if it's still valid");
+
+            //checks
+            if (string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            List<MediasCleaningStruct> brokenMedias = new List<MediasCleaningStruct>();
+            List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
+            List<Dependency> dependencies = new List<Dependency>();
+            List<Category> parsedCategoryList = new List<Category>();
+
+            //load root document
+            XmlDocument rootDocument = XmlUtils.LoadXmlDocument(SelectModInfo.FileName, XmlLoadType.FromFile);
+            if (rootDocument == null)
+            {
+                ReportProgress("Failed to parse root database file. Invalid XML document");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            ReportProgress("Parsing database 1.1 document");
+            //parse main database
+            if (!DatabaseUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
+                globalDependencies, dependencies, parsedCategoryList))
+            {
+                ReportProgress("Failed to parse database");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            SetProgress(20);
+
+            //bulid link refrences (parent/child, levels, etc)
+            DatabaseUtils.BuildLinksRefrence(parsedCategoryList, true);
+            DatabaseUtils.BuildLevelPerPackage(parsedCategoryList);
+            client = new WebClient();
+
+            //get an estimate count beforehand
+            int numToTest = 0;
+            int totalTested = 0;
+            foreach (SelectablePackage selectablePackage in DatabaseUtils.GetFlatSelectablePackageList(parsedCategoryList))
+            {
+                if (selectablePackage.Medias == null || selectablePackage.Medias.Count == 0)
+                    continue;
+
+                for (int i = 0; i < selectablePackage.Medias.Count; i++)
+                {
+                    Media media = selectablePackage.Medias[i];
+                    if (media.MediaType == MediaType.MediaFile || media.MediaType == MediaType.Picture)
+                    {
+                        numToTest++;
+                    }
+                }
+            }
+            JobProgressBar.Maximum = numToTest;
+            CleanMediasCancel.Visibility = Visibility.Visible;
+            CleanMediasCancel.IsEnabled = true;
+
+            foreach (SelectablePackage selectablePackage in DatabaseUtils.GetFlatSelectablePackageList(parsedCategoryList))
+            {
+                if (selectablePackage.Medias == null || selectablePackage.Medias.Count == 0)
+                    continue;
+
+                for (int i = 0; i < selectablePackage.Medias.Count; i++)
+                {
+                    Media media = selectablePackage.Medias[i];
+                    if (media.MediaType == MediaType.MediaFile || media.MediaType == MediaType.Picture)
+                    {
+                        ReportProgress(string.Format("Attempt to download media {0} of {1}, package {2}, type {3}, url {4}", totalTested, numToTest, selectablePackage.PackageName, selectablePackage.Medias[i].MediaType, selectablePackage.Medias[i].URL));
+                        try
+                        {
+                            byte[] tempByte = await client.DownloadDataTaskAsync(selectablePackage.Medias[i].URL);
+                            ReportProgress("Download PASS");
+                        }
+                        catch (WebException wex)
+                        {
+                            if (wex.Status == WebExceptionStatus.RequestCanceled)
+                            {
+                                ReportProgress("Process canceled");
+                                CleanMediasCancel.Visibility = Visibility.Hidden;
+                                CleanMediasCancel.IsEnabled = false;
+                                ToggleUI((TabController.SelectedItem as TabItem), true);
+                            }
+
+                            ReportProgress("Download FAIL");
+                            brokenMedias.Add(new MediasCleaningStruct() { SelectablePackage = selectablePackage, MediaWithProblem = media });
+                            Logging.Error(wex.ToString());
+                        }
+                        finally
+                        {
+                            totalTested++;
+                            SetProgress(totalTested);
+                        }
+                    }
+                }
+            }
+
+            client.Dispose();
+
+            ReportProgress(string.Format("Finished, {0} of {1} medias have problems", brokenMedias.Count, numToTest));
+            foreach (MediasCleaningStruct mediasCleaningStruct in brokenMedias)
+            {
+                SelectablePackage packageWithIssue = mediasCleaningStruct.SelectablePackage;
+                Media mediaWithProblem = mediasCleaningStruct.MediaWithProblem;
+                ReportProgress(string.Format("Package {0}, type {1}, url {2}", packageWithIssue.PackageName, mediaWithProblem.MediaType, mediaWithProblem.URL));
+            }
+
+            MessageBoxResult result = MessageBox.Show("Remove all packages with invalid media?", "Do the thing?", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                foreach (MediasCleaningStruct mediasCleaningStruct in brokenMedias)
+                {
+                    mediasCleaningStruct.SelectablePackage.Medias.Remove(mediasCleaningStruct.MediaWithProblem);
+                }
+                DatabaseUtils.SaveDatabase(SelectModInfo.FileName, WoTClientVersion, WoTModpackOnlineFolderVersion, globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
+                ReportProgress(string.Format("Broken Medias deleted"));
+            }
+
+            ReportProgress("Done");
+            CleanMediasCancel.Visibility = Visibility.Hidden;
+            CleanMediasCancel.IsEnabled = false;
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+        #endregion
+
+        private void CleanFoldersCancel_Click(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Stop requested, canceling operation");
+            client.CancelAsync();
+        }
     }
 }
