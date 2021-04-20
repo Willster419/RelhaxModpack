@@ -1,3 +1,9 @@
+# Beta Application version 1.3.0.6 (2021-04-19)
+https://www.virustotal.com/gui/file-analysis/MjVmNWI2NjYyYWVlNTYwMDFiYjZjN2ZjZTRmMjVlZjI6MTYxODg5MzIwNQ==/detection
+
+- Fixed bug of installation failing if no instruction files exist (or folder does not exist) for parsing.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.0.5 (2021-04-19)
 https://www.virustotal.com/gui/file/e846535186a395e32ea94a0b82c3331c6d4d8c6bd0d4f87938a31db566007345/detection
 
