@@ -1,3 +1,24 @@
+# Beta Application version 1.3.0.5 (2021-04-19)
+
+
+## New features added
+- The escape key can be used to close several dialog-like windows now (diagnostics, install done, and release notes windows to name a few).
+- Added a `Deprecated` field to the database for internal tracking. This can be used by us to track, investigate and determine action on packages that look old and obsolete.
+- Added a `Minimalist Mode` as requested by some users, so that only the minimum amount of packages are installed for mod operation. For example, it won't change the background or loading theme to be the Relhax logo.
+- Improved the behavior of the Diagnostic Tools window so that it will try to auto-fill the selected WoT directory info by the following methods:
+  - If an installation was just done, it will use that path.
+  - Else, it will auto search (like the main installation process) and select the most recent installation path.
+- In the main installation process, and when selecting a client in the Diagnostic Tools, instead of a window prompting you to find a folder, it will first provide you with a list of auto-detected WoT install paths. You can still manually select one from that window.
+
+## Bug fixes
+- Fixed a bug that would needlessly show a bogus exception message when determining how to start the log file.
+- Fixed a crash when canceling the scaling option after preview that occurred after the time expired.
+- Fixed the code to validate a selection structure after loading it from a file. It will now check to make sure only 1 option is selected in options that should only have one, rather then only checking if it had 1 or more.
+  - Also fixed the scenario where a parent package would still be selected and technically be an invalid selection when the child was determined to be an invalid selection.
+
+## Other improvements
+- Updated the instruction parsing code (Atlas files, Patch files, etc) to be using a reflective and dynamic method, rather that a static method that required manual entry and maintenance.
+
 # Beta Application version 1.3.0.1 (2021-04-07)
 https://www.virustotal.com/gui/file-analysis/MTI0MjA2YzZhMThhYTcyNmEyNmE0OGRhZjVkMjg3ZDM6MTYxNzgwNTc5OA==/detection
 
