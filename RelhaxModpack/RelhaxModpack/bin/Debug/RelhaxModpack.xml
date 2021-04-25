@@ -2885,6 +2885,11 @@
             The folder path to move the uploaded file to. If the file already exists, it will be overridden
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.DeleteUploadLocallyUponCompletion">
+            <summary>
+            Flag to determine if after an upload is completed, the file will automatically be deleted or moved to a local folder
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Settings.ModpackSettings">
             <summary>
             Provides access to all settings used in the modpack.
