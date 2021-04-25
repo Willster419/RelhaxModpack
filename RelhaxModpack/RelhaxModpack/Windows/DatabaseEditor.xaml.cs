@@ -356,15 +356,25 @@ namespace RelhaxModpack.Windows
         {
             BigmodsUsernameSetting.Text = EditorSettings.BigmodsUsername;
             BigmodsPasswordSetting.Text = EditorSettings.BigmodsPassword;
+
+            DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
+
+            SelectTransferWindowMovePathTextbox.Text = EditorSettings.UploadZipMoveFolder;
+
             SaveSelectionBeforeLeaveSetting.IsChecked = EditorSettings.SaveSelectionBeforeLeave;
+
+            ShowConfirmOnPackageApplySetting.IsChecked = EditorSettings.ShowConfirmationOnPackageApply;
+            ShowConfirmOnPackageAddRemoveEditSetting.IsChecked = EditorSettings.ShowConfirmationOnPackageAddRemoveMove;
+
             ApplyBehaviorDefaultSetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.Default ? true : false;
             ApplyBehaviorApplyTriggersSaveSetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave ? true : false;
             ApplyBehaviorSaveTriggersApplySetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply ? true : false;
-            ShowConfirmOnPackageApplySetting.IsChecked = EditorSettings.ShowConfirmationOnPackageApply;
-            ShowConfirmOnPackageAddRemoveEditSetting.IsChecked = EditorSettings.ShowConfirmationOnPackageAddRemoveMove;
-            DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
+
             FtpUpDownAutoCloseTimoutSlider.Value = EditorSettings.FTPUploadDownloadWindowTimeout;
             FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
+
+            DatabaseTransferDeleteActuallyMove.IsChecked = EditorSettings.UploadZipDeleteIsActuallyMove;
+            DatabaseTransferAutoDelete.IsChecked = EditorSettings.DeleteUploadLocallyUponCompletion;
         }
         #endregion
 
@@ -2783,6 +2793,11 @@ namespace RelhaxModpack.Windows
         private void DatabaseTransferDeleteActuallyMove_Click(object sender, RoutedEventArgs e)
         {
             EditorSettings.UploadZipDeleteIsActuallyMove = (bool)DatabaseTransferDeleteActuallyMove.IsChecked;
+        }
+
+        private void DatabaseTransferAutoDelete_Click(object sender, RoutedEventArgs e)
+        {
+            EditorSettings.DeleteUploadLocallyUponCompletion = (bool)DatabaseTransferAutoDelete.IsChecked;
         }
 
         private void SelectTransferWindowMovePathButton_Click(object sender, RoutedEventArgs e)

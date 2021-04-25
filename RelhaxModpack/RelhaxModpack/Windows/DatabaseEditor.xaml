@@ -413,6 +413,8 @@
                             <Slider x:Name="FtpUpDownAutoCloseTimoutSlider" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsEnabled="True" ValueChanged="FtpUpDownAutoCloseTimoutSlider_ValueChanged" IsSnapToTickEnabled="True"/>
                             <TextBlock x:Name="FtpUpDownAutoCloseTimoutDisplayLabel" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="Test" Grid.Column="1"/>
                         </Grid>
+                        <CheckBox x:Name="DatabaseTransferAutoDelete" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="10" VerticalAlignment="Center" Content="Automatically delete package locally upon successful upload"
+                                  Click="DatabaseTransferAutoDelete_Click" ToolTip="When checked, a package that is successfully uploaded will be automatically deleted from disk"/>
                         <CheckBox x:Name="DatabaseTransferDeleteActuallyMove" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="11" VerticalAlignment="Center" Content="Editor transfer window's delete button is actually move"
                                   Click="DatabaseTransferDeleteActuallyMove_Click" ToolTip="When checked, the delete file button in the editor file transfer window will actually move the file into the folder specified below"/>
                         <Button x:Name="SelectTransferWindowMovePathButton" HorizontalAlignment="Stretch" Grid.Row="12" VerticalAlignment="Center" Click="SelectTransferWindowMovePathButton_Click"

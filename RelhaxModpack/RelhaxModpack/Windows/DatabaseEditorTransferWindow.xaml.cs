@@ -151,6 +151,11 @@ namespace RelhaxModpack.Windows
                                 TransferMode = this.TransferMode
                             });
                             DeleteFileButton.IsEnabled = true;
+
+                            if (TransferMode == EditorTransferMode.UploadZip && EditorSettings.DeleteUploadLocallyUponCompletion)
+                            {
+                                DeleteFileButton_Click(null, null);
+                            }
                         }
                         catch (Exception ex)
                         {
