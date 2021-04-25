@@ -1,3 +1,9 @@
+# Beta Application version 1.3.0.7 (2021-04-25)
+https://www.virustotal.com/gui/file-analysis/NmVjYjM2ZjVlOWZlZWM1ZTI3YmQ3MTUyMzVmNmI0MmQ6MTYxOTMzNTc3Mg==/detection
+
+- Added editor option that if set, will auto delete a zip from the disk after a successful upload. Honors the "delete is actually move" setting.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.0.6 (2021-04-19)
 https://www.virustotal.com/gui/file-analysis/MjVmNWI2NjYyYWVlNTYwMDFiYjZjN2ZjZTRmMjVlZjI6MTYxODg5MzIwNQ==/detection
 
