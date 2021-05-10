@@ -4754,11 +4754,6 @@
             A pre-built dark theme
             </summary>
         </member>
-        <member name="F:RelhaxModpack.UI.Themes.Custom">
-            <summary>
-            The custom theme to be loaded from xml by the user
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.UI.UiUtils">
             <summary>
             A utility class to handle UI interaction
@@ -8053,24 +8048,6 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.PopOutReplacePatchDesigner.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.RelhaxColorPicker">
-            <summary>
-            Interaction logic for RelhaxColorPicker.xaml
-            </summary>
-            <summary>
-            RelhaxColorPicker
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.#ctor(RelhaxModpack.Settings.ModpackSettings)">
-            <summary>
-            Create an instance of the RelhaxColorPicker window
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
