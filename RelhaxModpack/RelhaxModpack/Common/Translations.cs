@@ -3800,21 +3800,12 @@ namespace RelhaxModpack
 
             //Component:
             //
-            English.Add("zipReadingErrorMessage2", "could not be read, most likely due to an incomplete download. Please try again.");
-            German.Add("zipReadingErrorMessage2", "Konnte nicht gelesen werden, da es höchstwahrscheinlich ein unvollständiger Download ist. Bitte versuche es später nochmal.");
-            Polish.Add("zipReadingErrorMessage2", "nie mógł zostać przetworzony. Prawdopodobnie jest niekompletny. Spróbuj pobrać ponownie.");
-            French.Add("zipReadingErrorMessage2", "n'as pas pus être lus, probablement un téléchargement incomplet. Veuillez réessayer.");
-            Spanish.Add("zipReadingErrorMessage2", "no ha podido ser leído, probablemente por una descarga incompleta. Por favor vuelva a intentarlo.");
-            Russian.Add("zipReadingErrorMessage2", "не может быть прочитан, возможно, причиной послужила незаконченная загрузка. Попробуйте ещё раз.");
-
-            //Component:
-            //
-            English.Add("zipReadingErrorMessage3", "Could not be read.");
-            German.Add("zipReadingErrorMessage3", "Konnte nicht gelesen werden.");
-            Polish.Add("zipReadingErrorMessage3", "Nie można odczytać.");
+            English.Add("zipReadingErrorMessage3", "could not be read.");
+            German.Add("zipReadingErrorMessage3", "konnte nicht gelesen werden.");
+            Polish.Add("zipReadingErrorMessage3", "nie można odczytać.");
             French.Add("zipReadingErrorMessage3", "n'as pas pus être lus");
-            Spanish.Add("zipReadingErrorMessage3", "No ha podido ser leído.");
-            Russian.Add("zipReadingErrorMessage3", "Сбой чтения");
+            Spanish.Add("zipReadingErrorMessage3", "no ha podido ser leído.");
+            Russian.Add("zipReadingErrorMessage3", "cбой чтения");
 
             //Component:
             //
