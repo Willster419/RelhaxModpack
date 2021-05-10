@@ -643,6 +643,17 @@ namespace RelhaxModpack.UI
                     }
                 },
                 {
+                    typeof(WoTClientSelection), new WindowColorset()
+                    {
+                        WindowType = typeof (WoTClientSelection),
+                        BackgroundBrush = new CustomBrush()
+                        {
+                            IsValid = true,
+                            Brush = DarkThemeBackground
+                        }
+                    }
+                },
+                {
                     typeof(VersionInfo), new WindowColorset()
                     {
                         WindowType = typeof(VersionInfo),
