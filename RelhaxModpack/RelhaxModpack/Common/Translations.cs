@@ -2491,7 +2491,7 @@ namespace RelhaxModpack
             Russian.Add("ClearSelectionsButtonLabel", "Снять все галочки");
 
             //Component: SearchThisTabOnlyCB
-            // A checkbox under the search field SearchTB in mods selection window. Toggles the search engine to search only in user's currently active tab.
+            // A checkbox under the search field SearchCB in mods selection window. Toggles the search engine to search only in user's currently active tab.
             English.Add("SearchThisTabOnlyCB", "Search in this tab only");
             German.Add("SearchThisTabOnlyCB", TranslationNeeded);
             Polish.Add("SearchThisTabOnlyCB", TranslationNeeded);
@@ -2500,7 +2500,7 @@ namespace RelhaxModpack
             Russian.Add("SearchThisTabOnlyCB", TranslationNeeded);
 
             //Component: searchComboBoxInitMessage
-            // A label for the search field to the right. Used to find mods, configs etc. in the mod selection window.
+            // The first text value inside the SearchCB combo box when the window is launched
             English.Add("searchComboBoxInitMessage", "Search for a package...");
             German.Add("searchComboBoxInitMessage", TranslationNeeded);
             Polish.Add("searchComboBoxInitMessage", TranslationNeeded);
@@ -2531,7 +2531,7 @@ namespace RelhaxModpack
             Russian.Add("InstallingAsWoTVersion", "Установка в клиент WoT версии {0}");
 
             //Component: UsingDatabaseVersion
-            // A label to indicate the distribution version of the database currently in use
+            // A label in the package selection list (previously called mod selection list) to indicate the distribution version of the database currently in use
             English.Add("UsingDatabaseVersion", "Using database: {0} ({1})");
             German.Add("UsingDatabaseVersion", TranslationNeeded);
             Polish.Add("UsingDatabaseVersion", TranslationNeeded);
@@ -4367,7 +4367,7 @@ namespace RelhaxModpack
 
             #region Wot Client install selection
             //Component: WoTClientSelection
-            //
+            // Title for the wot client selection window. Allows the user to select from a list of detected installations.
             English.Add("WoTClientSelection", "WoT Client Selection");
             German.Add("WoTClientSelection", TranslationNeeded);
             Polish.Add("WoTClientSelection", TranslationNeeded);
@@ -4394,7 +4394,7 @@ namespace RelhaxModpack
             Russian.Add("ClientSelectionsCancelButton", Russian["cancel"]);
 
             //Component: ClientSelectionsManualFind
-            //The text for the button that allows a user to manually locate a WoT installation
+            // The text for the button that allows a user to manually locate a WoT installation. This was the previous feature before replaced with this window
             English.Add("ClientSelectionsManualFind", "Manual Selection");
             German.Add("ClientSelectionsManualFind", TranslationNeeded);
             Polish.Add("ClientSelectionsManualFind", TranslationNeeded);
