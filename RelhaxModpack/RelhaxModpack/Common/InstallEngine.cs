@@ -2228,7 +2228,7 @@ namespace RelhaxModpack
                         //log as error, 3 tries and all failures
                         Logging.Exception("Failed to extract zipfile {0}, exception message:{1}{2}", package.ZipFile, Environment.NewLine, e.ToString());
                         MessageBox.Show(string.Format("{0}, {1} {2} {3}",
-                            Translations.GetTranslatedString("zipReadingErrorMessage1"), package.ZipFile, Translations.GetTranslatedString("zipReadingErrorMessage2"),
+                            Translations.GetTranslatedString("zipReadingErrorMessage1"), package.ZipFile, Translations.GetTranslatedString("zipReadingErrorMessage3"),
                             Translations.GetTranslatedString("zipReadingErrorHeader")));
                         //delete the file (if it exists)
                         if(File.Exists(zipFilePath) && !userMod)
