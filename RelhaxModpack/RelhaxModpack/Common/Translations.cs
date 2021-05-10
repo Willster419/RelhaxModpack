@@ -1314,12 +1314,12 @@ namespace RelhaxModpack
 
             //Component: AutoInstallText
             //
-            English.Add("AutoInstallText", "Enable auto install (NEW)");
-            German.Add("AutoInstallText", "Automatische Installation (NEU)");
-            Polish.Add("AutoInstallText", "Automatyczna instalacja (NOWOŚĆ)");
-            French.Add("AutoInstallText", "Activer l'installation automatique (NOUVEAU)");
-            Spanish.Add("AutoInstallText", "Habilitar instalación automática (NUEVO)");
-            Russian.Add("AutoInstallText", "Включить автоустановку (НОВИНКА)");
+            English.Add("AutoInstallText", "Enable auto install");
+            German.Add("AutoInstallText", "Automatische Installation");
+            Polish.Add("AutoInstallText", "Automatyczna instalacja");
+            French.Add("AutoInstallText", "Activer l'installation automatique");
+            Spanish.Add("AutoInstallText", "Habilitar instalación automática");
+            Russian.Add("AutoInstallText", "Включить автоустановку");
 
             //Component: AutoInstallCBDescription
             //
@@ -4365,10 +4365,10 @@ namespace RelhaxModpack
             Russian.Add("trimRelhaxLogFail", "Не удалось обрезать лог-файл Relhax");
             #endregion
 
-            #region Meme
+            #region Wot Client install selection
             //Component: WoTClientSelection
             //
-            English.Add("WoTClientSelection", "Selections Viewer");
+            English.Add("WoTClientSelection", "WoT Client Selection");
             German.Add("WoTClientSelection", TranslationNeeded);
             Polish.Add("WoTClientSelection", TranslationNeeded);
             French.Add("WoTClientSelection", TranslationNeeded);
@@ -4377,7 +4377,7 @@ namespace RelhaxModpack
 
             //Component: ClientSelectionsTextHeader
             //
-            English.Add("ClientSelectionsTextHeader", "The following clients were automatically detected");
+            English.Add("ClientSelectionsTextHeader", "The following client installations were automatically detected");
             German.Add("ClientSelectionsTextHeader", TranslationNeeded);
             Polish.Add("ClientSelectionsTextHeader", TranslationNeeded);
             French.Add("ClientSelectionsTextHeader", TranslationNeeded);
@@ -4394,7 +4394,7 @@ namespace RelhaxModpack
             Russian.Add("ClientSelectionsCancelButton", Russian["cancel"]);
 
             //Component: ClientSelectionsManualFind
-            //The text in the first radioButton in the selection viewer, for the user to select their own personal config file to load
+            //The text for the button that allows a user to manually locate a WoT installation
             English.Add("ClientSelectionsManualFind", "Manual Selection");
             German.Add("ClientSelectionsManualFind", TranslationNeeded);
             Polish.Add("ClientSelectionsManualFind", TranslationNeeded);
