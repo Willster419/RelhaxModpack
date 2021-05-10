@@ -588,17 +588,6 @@ namespace RelhaxModpack.UI
                     }
                 },
                 {
-                    typeof(RelhaxColorPicker), new WindowColorset()
-                    {
-                        WindowType = typeof(RelhaxColorPicker),
-                        BackgroundBrush = new CustomBrush()
-                        {
-                            IsValid = true,
-                            Brush = DarkThemeBackground
-                        }
-                    }
-                },
-                {
                     typeof(DeveloperSelectionsViewer), new WindowColorset()
                     {
                         WindowType = typeof(DeveloperSelectionsViewer),
@@ -693,10 +682,5 @@ namespace RelhaxModpack.UI
                 }
             }
         };
-
-        /// <summary>
-        /// The custom theme to be loaded from xml by the user
-        /// </summary>
-        public static Theme Custom = null;
     }
 }

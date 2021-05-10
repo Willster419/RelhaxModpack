@@ -255,7 +255,7 @@ namespace RelhaxModpack
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
             if(ModpackSettings.ApplicationTheme == UIThemes.Custom)
             {
-                Logging.Warning("UIThemes was set to custom, but this feature is no longer supported and will be removed. Setting to default");
+                Logging.Warning("UIThemes was set to custom, but this feature is no longer supported. Setting to default");
                 ModpackSettings.ApplicationTheme = UIThemes.Default;
             }
 
@@ -2817,13 +2817,11 @@ namespace RelhaxModpack
 
         private void OnThemeChanged(object sender, RoutedEventArgs e)
         {
-            //ModpackSettings is desited theme
+            //set ModpackSettings theme value
             if ((bool)ThemeDefault.IsChecked)
                 ModpackSettings.ApplicationTheme = UIThemes.Default;
             else if ((bool)ThemeDark.IsChecked)
                 ModpackSettings.ApplicationTheme = UIThemes.Dark;
-            else if ((bool)ThemeCustom.IsChecked) //disabling custom theme
-                ModpackSettings.ApplicationTheme = UIThemes.Default;
 
             //try to apply it
             UISettings.ApplyUIColorSettings(this);
@@ -2833,7 +2831,7 @@ namespace RelhaxModpack
                 ThemeDefault.IsChecked = true;
             else if (UISettings.CurrentTheme.Equals(Themes.Dark))
                 ThemeDark.IsChecked = true;
-            else if (UISettings.CurrentTheme.Equals(Themes.Custom)) //disabling custom theme
+            else //disabling custom theme
                 ThemeDefault.IsChecked = true;
         }
 
@@ -2906,18 +2904,6 @@ namespace RelhaxModpack
         #endregion
 
         #region Button click events
-        private void OpenColorPickerButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)
-                autoInstallPeriodicTimer.Stop();
-
-            RelhaxColorPicker colorPicker = new RelhaxColorPicker(this.ModpackSettings);
-            colorPicker.ShowDialog();
-
-            if (ModpackSettings.AutoInstall)
-                autoInstallPeriodicTimer.Start();
-        }
-
         private void ViewCreditsButton_Click(object sender, RoutedEventArgs e)
         {
             if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)
@@ -2964,27 +2950,6 @@ namespace RelhaxModpack
 
             newsViewer = new NewsViewer(this.ModpackSettings);
             newsViewer.Show();
-        }
-
-        private void DumpColorSettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog()
-            {
-                AddExtension = true,
-                CheckPathExists = true,
-                OverwritePrompt = true,
-                DefaultExt = "xml",
-                Title = Translations.GetTranslatedString("ColorDumpSaveFileDialog"),
-                Filter = "XML Documents|*.xml"
-            };
-            bool result = (bool)saveFileDialog.ShowDialog();
-            if (result)
-            {
-                Logging.Info("Saving color settings dump to " + saveFileDialog.FileName);
-                UISettings.DumpAllWindowColorSettingsToFile(saveFileDialog.FileName, this);
-                Logging.Info("Color settings saved");
-                MessageBox.Show(Translations.GetTranslatedString("DumpColorSettingsSaveSuccess"));
-            }
         }
 
         private void CancelDownloadInstallButton_Download_Click(object sender, RoutedEventArgs e)
@@ -3360,6 +3325,7 @@ namespace RelhaxModpack
                     ThemeDark.IsChecked = true;
                     break;
                 case UIThemes.Custom: //disabling custom theme
+                    Logging.Warning("UIThemes was set to custom, but this feature is no longer supported. Setting to default");
                     ThemeDefault.IsChecked = true;
                     break;
             }
