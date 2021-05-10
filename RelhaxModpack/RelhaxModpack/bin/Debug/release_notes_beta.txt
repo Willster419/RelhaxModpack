@@ -1,3 +1,12 @@
+# Beta Application version 1.3.0.8 (2021-05-09)
+https://www.virustotal.com/gui/file/350654ee342374a0133d87a3caa9980add3efa841af4d22cd7bda83d4ca652e9/detection
+
+- Fixed bug of client selection window crashing in default theme.
+- Updated translations for error message during installation if a zip file fails to open.
+- Removed UI options for custom theme. Any custom theme options found will re-direct to default.
+- Updated descriptions for translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.0.7 (2021-04-25)
 https://www.virustotal.com/gui/file-analysis/NmVjYjM2ZjVlOWZlZWM1ZTI3YmQ3MTUyMzVmNmI0MmQ6MTYxOTMzNTc3Mg==/detection
 
