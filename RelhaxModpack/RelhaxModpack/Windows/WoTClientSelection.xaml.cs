@@ -44,7 +44,7 @@ namespace RelhaxModpack.Windows
             List<string> clientPaths = RegistryUtils.AutoFindWoTDirectoryList();
 
             //get windowComponent
-            WindowColorset developerSelectionColorset = UISettings.CurrentTheme.WindowColorsets[typeof(DeveloperSelectionsViewer)];
+            WindowColorset developerSelectionColorset = UISettings.CurrentTheme.WindowColorsets[typeof(WoTClientSelection)];
 
             //load selections into stackpanel
             bool firstOne = true;
