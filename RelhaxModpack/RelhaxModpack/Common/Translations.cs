@@ -1297,7 +1297,7 @@ namespace RelhaxModpack
             //Component: MinimalistModeText
             //
             English.Add("MinimalistModeText", "Minimalist Mode");
-            German.Add("MinimalistModeText", TranslationNeeded);
+            German.Add("MinimalistModeText", "Minimal Modus");
             Polish.Add("MinimalistModeText", TranslationNeeded);
             French.Add("MinimalistModeText", "Mode minimaliste");
             Spanish.Add("MinimalistModeText", TranslationNeeded);
@@ -1306,7 +1306,7 @@ namespace RelhaxModpack
             //Component: MinimalistModeDescription
             //
             English.Add("MinimalistModeDescription", "When checked, the modpack will exclude certain packages from installation that are not required, like the modpack button or Relhax theme files.");
-            German.Add("MinimalistModeDescription", TranslationNeeded);
+            German.Add("MinimalistModeDescription", "Wenn ausgewählt wird das Modpack einige nicht benötigte Pakete bei der Installation ausschließen, wie zum Beispiel den Modpack Button oder Relhax Themendateien");
             Polish.Add("MinimalistModeDescription", TranslationNeeded);
             French.Add("MinimalistModeDescription", "Si cette option est cochée, le modpack exclura l'installation de certains packs qui ne sont pas requis, comme le bouton du modpack ou les fichiers du thème Relhax.");
             Spanish.Add("MinimalistModeDescription", TranslationNeeded);
@@ -2493,7 +2493,7 @@ namespace RelhaxModpack
             //Component: SearchThisTabOnlyCB
             // A checkbox under the search field SearchCB in mods selection window. Toggles the search engine to search only in user's currently active tab.
             English.Add("SearchThisTabOnlyCB", "Search in this tab only");
-            German.Add("SearchThisTabOnlyCB", TranslationNeeded);
+            German.Add("SearchThisTabOnlyCB", "Suche nur in diesem Tab");
             Polish.Add("SearchThisTabOnlyCB", TranslationNeeded);
             French.Add("SearchThisTabOnlyCB", "Rechercher dans cet onglet uniquement");
             Spanish.Add("SearchThisTabOnlyCB", TranslationNeeded);
@@ -2502,7 +2502,7 @@ namespace RelhaxModpack
             //Component: searchComboBoxInitMessage
             // The first text value inside the SearchCB combo box when the window is launched
             English.Add("searchComboBoxInitMessage", "Search for a package...");
-            German.Add("searchComboBoxInitMessage", TranslationNeeded);
+            German.Add("searchComboBoxInitMessage", "Suche nach einem Paket...");
             Polish.Add("searchComboBoxInitMessage", TranslationNeeded);
             French.Add("searchComboBoxInitMessage", "Rechercher un package...");
             Spanish.Add("searchComboBoxInitMessage", TranslationNeeded);
@@ -2533,7 +2533,7 @@ namespace RelhaxModpack
             //Component: UsingDatabaseVersion
             // A label in the package selection list (previously called mod selection list) to indicate the distribution version of the database currently in use
             English.Add("UsingDatabaseVersion", "Using database: {0} ({1})");
-            German.Add("UsingDatabaseVersion", TranslationNeeded);
+            German.Add("UsingDatabaseVersion", "Nutze Datenbank: {0} ({1})");
             Polish.Add("UsingDatabaseVersion", TranslationNeeded);
             French.Add("UsingDatabaseVersion", "Utilisation de la base de données : {0} ({1})");
             Spanish.Add("UsingDatabaseVersion", TranslationNeeded);
@@ -2932,7 +2932,7 @@ namespace RelhaxModpack
             //Component: failedToLoadUpdateNotes
             //
             English.Add("failedToLoadUpdateNotes", "Failed to load application update notes");
-            German.Add("failedToLoadUpdateNotes", TranslationNeeded);
+            German.Add("failedToLoadUpdateNotes", "Fehler beim Laden der Anwendungsaktualisierungsnotizen");
             Polish.Add("failedToLoadUpdateNotes", TranslationNeeded);
             French.Add("failedToLoadUpdateNotes", "Échec du chargement des notes de mise à jour de l'application");
             Spanish.Add("failedToLoadUpdateNotes", TranslationNeeded);
@@ -2959,7 +2959,7 @@ namespace RelhaxModpack
             //Component: SelectDownloadMirrorTextBlock
             //
             English.Add("SelectDownloadMirrorTextBlock", "Select a download mirror");
-            German.Add("SelectDownloadMirrorTextBlock", TranslationNeeded);
+            German.Add("SelectDownloadMirrorTextBlock", "Wähle einen Download-Mirror");
             Polish.Add("SelectDownloadMirrorTextBlock", TranslationNeeded);
             French.Add("SelectDownloadMirrorTextBlock", "Sélectionnez un miroir de téléchargement");
             Spanish.Add("SelectDownloadMirrorTextBlock", TranslationNeeded);
@@ -2968,7 +2968,7 @@ namespace RelhaxModpack
             //Component: SelectDownloadMirrorTextBlockDescription
             //
             English.Add("SelectDownloadMirrorTextBlockDescription", "This mirror will be used only for package downloads");
-            German.Add("SelectDownloadMirrorTextBlockDescription", TranslationNeeded);
+            German.Add("SelectDownloadMirrorTextBlockDescription", "Dieser Mirror wird nur für Paketdownloads verwendet");
             Polish.Add("SelectDownloadMirrorTextBlockDescription", TranslationNeeded);
             French.Add("SelectDownloadMirrorTextBlockDescription", "Ce miroir va être utilisé uniquement pour le téléchargement de packs");
             Spanish.Add("SelectDownloadMirrorTextBlockDescription", TranslationNeeded);
@@ -2977,7 +2977,7 @@ namespace RelhaxModpack
             //Component: downloadMirrorUsaDefault
             //
             English.Add("downloadMirrorUsaDefault", "relhaxmodpack.com, Dallas, USA");
-            German.Add("downloadMirrorUsaDefault", TranslationNeeded);
+            German.Add("downloadMirrorUsaDefault", "relhaxmodpack.com, Dallas, USA");
             Polish.Add("downloadMirrorUsaDefault", TranslationNeeded);
             French.Add("downloadMirrorUsaDefault", "relhaxmodpack.com, Dallas, USA");
             Spanish.Add("downloadMirrorUsaDefault", TranslationNeeded);
@@ -2986,7 +2986,7 @@ namespace RelhaxModpack
             //Component: downloadMirrorDe
             //
             English.Add("downloadMirrorDe", "clanverwaltung.de, Frankfurt, Germany");
-            German.Add("downloadMirrorDe", TranslationNeeded);
+            German.Add("downloadMirrorDe", "clanverwaltung.de, Frankfurt, Germany");
             Polish.Add("downloadMirrorDe", TranslationNeeded);
             French.Add("downloadMirrorDe", "clanverwaltung.de, Francfort, Allemagne");
             Spanish.Add("downloadMirrorDe", TranslationNeeded);
@@ -4369,7 +4369,7 @@ namespace RelhaxModpack
             //Component: WoTClientSelection
             // Title for the wot client selection window. Allows the user to select from a list of detected installations.
             English.Add("WoTClientSelection", "WoT Client Selection");
-            German.Add("WoTClientSelection", TranslationNeeded);
+            German.Add("WoTClientSelection", "Auswahl des WoT-Clients");
             Polish.Add("WoTClientSelection", TranslationNeeded);
             French.Add("WoTClientSelection", "Sélection du client WoT");
             Spanish.Add("WoTClientSelection", TranslationNeeded);
@@ -4378,7 +4378,7 @@ namespace RelhaxModpack
             //Component: ClientSelectionsTextHeader
             //
             English.Add("ClientSelectionsTextHeader", "The following client installations were automatically detected");
-            German.Add("ClientSelectionsTextHeader", TranslationNeeded);
+            German.Add("ClientSelectionsTextHeader", "Die folgenden Client-Installationen wurden automatisch erkannt");
             Polish.Add("ClientSelectionsTextHeader", TranslationNeeded);
             French.Add("ClientSelectionsTextHeader", "Les installations client suivantes ont été automatiquement détectées");
             Spanish.Add("ClientSelectionsTextHeader", TranslationNeeded);
@@ -4396,7 +4396,7 @@ namespace RelhaxModpack
             //Component: ClientSelectionsManualFind
             // The text for the button that allows a user to manually locate a WoT installation. This was the previous feature before replaced with this window
             English.Add("ClientSelectionsManualFind", "Manual Selection");
-            German.Add("ClientSelectionsManualFind", TranslationNeeded);
+            German.Add("ClientSelectionsManualFind", "Manuelle Auswahl");
             Polish.Add("ClientSelectionsManualFind", TranslationNeeded);
             French.Add("ClientSelectionsManualFind", "Sélection manuelle");
             Spanish.Add("ClientSelectionsManualFind", TranslationNeeded);
