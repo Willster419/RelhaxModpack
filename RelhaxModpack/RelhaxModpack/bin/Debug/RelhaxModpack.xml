@@ -507,7 +507,7 @@
             </summary>
             <remarks>This is loaded from the xml file</remarks>
         </member>
-        <member name="P:RelhaxModpack.Atlases.Atlas.ImageFolderList">
+        <member name="P:RelhaxModpack.Atlases.Atlas.ImageFolders">
             <summary>
             List of folders that could contain images to replace original images
             </summary>
@@ -2431,6 +2431,16 @@
             <param name="userFileToCopy">The object to copy</param>
             <returns>A new UserFile object with the same values and new list elements with the same values</returns>
         </member>
+        <member name="P:RelhaxModpack.Installer.Instruction.NativeProcessingFile">
+            <summary>
+            A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Installer.Instruction.ActualPatchName">
+            <summary>
+            the actual name of the original patch before processed
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Patching.PatchUnitTest">
             <summary>
             Represents a patch operation with a description and desired assertion condition
@@ -2481,67 +2491,57 @@
             The string value used for xvm type legacy patches
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.NativeProcessingFile">
-            <summary>
-            A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patching.Patch.ActualPatchName">
-            <summary>
-            the actual name of the original patch before processed
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patching.Patch.Type">
+        <member name="P:RelhaxModpack.Patching.Patch.Type">
             <summary>
             The type of patch, xml or regex (direct text replacement)
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.Mode">
+        <member name="P:RelhaxModpack.Patching.Patch.Mode">
             <summary>
             If not regex, the mode that the xml patcher should use.<para/>Examples: add xml node, remove xml node, edit xml node
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.PatchPath">
+        <member name="P:RelhaxModpack.Patching.Patch.PatchPath">
             <summary>
             The starting path to the file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.File">
+        <member name="P:RelhaxModpack.Patching.Patch.File">
             <summary>
             The path to the file, relative to patchPath
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.CompletePath">
+        <member name="P:RelhaxModpack.Patching.Patch.CompletePath">
             <summary>
             The complete path to the file, saved at parse time
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.Version">
+        <member name="P:RelhaxModpack.Patching.Patch.Version">
             <summary>
             The version of the patch for parsing. Allows for multiple variations. Default to 1
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.Path">
+        <member name="P:RelhaxModpack.Patching.Patch.Path">
             <summary>
             If xml or json, the xml xpath or json jsonpath to the node
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.Lines">
+        <member name="P:RelhaxModpack.Patching.Patch.Lines">
             <summary>
             If regex, the optional specific lines in the text file
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.Search">
+        <member name="P:RelhaxModpack.Patching.Patch.Search">
             <summary>
             The node inner text (xml) or regex criteria to search for
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.Replace">
+        <member name="P:RelhaxModpack.Patching.Patch.Replace">
             <summary>
             The text to replace the found search text with
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Patching.Patch.FollowPath">
+        <member name="P:RelhaxModpack.Patching.Patch.FollowPath">
             <summary>
             For json patches, if it should use the new method of separating the path for getting the xvm references
             </summary>
@@ -2883,6 +2883,11 @@
         <member name="F:RelhaxModpack.Settings.EditorSettings.UploadZipMoveFolder">
             <summary>
             The folder path to move the uploaded file to. If the file already exists, it will be overridden
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Settings.EditorSettings.DeleteUploadLocallyUponCompletion">
+            <summary>
+            Flag to determine if after an upload is completed, the file will automatically be deleted or moved to a local folder
             </summary>
         </member>
         <member name="T:RelhaxModpack.Settings.ModpackSettings">
@@ -4749,11 +4754,6 @@
             A pre-built dark theme
             </summary>
         </member>
-        <member name="F:RelhaxModpack.UI.Themes.Custom">
-            <summary>
-            The custom theme to be loaded from xml by the user
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.UI.UiUtils">
             <summary>
             A utility class to handle UI interaction
@@ -5691,6 +5691,60 @@
             <summary>
             An unknown error has occurred
             </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.InstructionsLoaderExitCode">
+            <summary>
+            The exit codes that can occur when running the instructions loader
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstructionsLoaderExitCode.None">
+            <summary>
+            No error occurred
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstructionsLoaderExitCode.FileSearchError">
+            <summary>
+            An error occurred when searching for files to load
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstructionsLoaderExitCode.FileLoadError">
+            <summary>
+            An error occurred when loading the instructions to parse
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstructionsLoaderExitCode.FileParseError">
+            <summary>
+            An error occurred when parsing the instructions to a class object
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.InstructionsType">
+            <summary>
+            The supported instruction types that can be loaded for execution
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstructionsType.Atlas">
+            <summary>
+            The Atlas type instructions
+            </summary>
+            <seealso cref="T:RelhaxModpack.Atlases.Atlas"/>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstructionsType.UnpackCopy">
+            <summary>
+            The Unpack and Copy type instructions, previously called XmlUnpack
+            </summary>
+            <seealso cref="T:RelhaxModpack.Xml.XmlUnpack"/>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstructionsType.Patch">
+            <summary>
+            The Patch type instructions
+            </summary>
+            <seealso cref="T:RelhaxModpack.Patching.Patch"/>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.InstructionsType.Shortcut">
+            <summary>
+            The shortcut type instructions
+            </summary>
+            <seealso cref="T:RelhaxModpack.Shortcuts.Shortcut"/>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.SelectionPropagationDirection">
             <summary>
@@ -7347,17 +7401,17 @@
             Represents instructions on how to create a shortcut
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Shortcuts.Shortcut.Path">
+        <member name="P:RelhaxModpack.Shortcuts.Shortcut.Path">
             <summary>
             The target of the shortcut
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Shortcuts.Shortcut.Name">
+        <member name="P:RelhaxModpack.Shortcuts.Shortcut.Name">
             <summary>
             The name for the shortcut
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Shortcuts.Shortcut.Enabled">
+        <member name="P:RelhaxModpack.Shortcuts.Shortcut.Enabled">
             <summary>
             Flag for in the installer to actually create the shortcut
             </summary>
@@ -7994,24 +8048,6 @@
             </summary>
         </member>
         <member name="M:RelhaxModpack.Windows.PopOutReplacePatchDesigner.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Windows.RelhaxColorPicker">
-            <summary>
-            Interaction logic for RelhaxColorPicker.xaml
-            </summary>
-            <summary>
-            RelhaxColorPicker
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.#ctor(RelhaxModpack.Settings.ModpackSettings)">
-            <summary>
-            Create an instance of the RelhaxColorPicker window
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Windows.RelhaxColorPicker.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -8657,16 +8693,6 @@
             Represents a set of xml instructions for extracting and copying xml files into another location. Includes xml binary decompression
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Xml.XmlUnpack.NativeProcessingFile">
-            <summary>
-            A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Xml.XmlUnpack.ActualPatchName">
-            <summary>
-            The actual name of the original file before processed
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Xml.XmlUnpack.Pkg">
             <summary>
             Path and name to the package file
@@ -8867,35 +8893,6 @@
             </summary>
             <param name="xmlUnpack">The Xml unpack instructions object</param>
             <param name="unpackBuilder">The stringBuilder to log the generated files location for the install log</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.AddPatchesFromFile(System.Collections.Generic.List{RelhaxModpack.Patching.Patch},System.String,System.String)">
-            <summary>
-            Parse a list of patch instructions from an Xml file into patch objects
-            </summary>
-            <param name="patches">The list of patches to parse into</param>
-            <param name="filename">The name of the file to parse from</param>
-            <param name="originalNameFromZip">The original name when extracted from the zip file during install time</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.AddShortcutsFromFile(System.Collections.Generic.List{RelhaxModpack.Shortcuts.Shortcut},System.String)">
-            <summary>
-            Parse a list of shortcut instructions from an Xml file into shortcut objects
-            </summary>
-            <param name="shortcuts">The list of shortcuts to parse into</param>
-            <param name="filename">The name of the file to parse from</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.AddXmlUnpackFromFile(System.Collections.Generic.List{RelhaxModpack.Xml.XmlUnpack},System.String)">
-            <summary>
-            Parse a list of Xml unpack instructions from an Xml file into XmlUnpack objects
-            </summary>
-            <param name="xmlUnpacks">The list of XmlUnpacks to parse into</param>
-            <param name="filename">The name of the file to parse from</param>
-        </member>
-        <member name="M:RelhaxModpack.Xml.XmlUtils.AddAtlasFromFile(System.Collections.Generic.List{RelhaxModpack.Atlases.Atlas},System.String)">
-            <summary>
-            Parse a list of Xml atlas creation instructions from an Xml file into Atlas objects
-            </summary>
-            <param name="atlases">The list of Atlases to parse into</param>
-            <param name="filename">The name of the file to parse from</param>
         </member>
         <member name="T:RelhaxModpack.LoggingMessageWrite">
             <summary>

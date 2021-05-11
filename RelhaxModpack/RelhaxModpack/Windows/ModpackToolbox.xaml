@@ -86,6 +86,15 @@
                     <TextBox x:Name="CleanZipFoldersTextbox" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible" Margin="1,118,1,5" TextWrapping="NoWrap" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Visible"/>
                 </Grid>
             </TabItem>
+            <TabItem x:Name="CleanMediasTab" Header="Clean Media Entries">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <Button x:Name="CleanMediasStep1" Content="Step 1: Load database" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
+                        <Button x:Name="CleanMediasStep2" Content="Step 2: Try to download all media to test for errors" HorizontalContentAlignment="Left" Click="CleanMediasStep2_Click"/>
+                        <Button x:Name="CleanMediasCancel" Content="Cancel Process" HorizontalContentAlignment="Left" Visibility="Hidden" Click="CleanFoldersCancel_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
             <TabItem x:Name="DatabaseOutputTab" Header="Database Output">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel >

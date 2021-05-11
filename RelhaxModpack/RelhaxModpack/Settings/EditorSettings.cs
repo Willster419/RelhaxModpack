@@ -77,5 +77,10 @@ namespace RelhaxModpack.Settings
         /// The folder path to move the uploaded file to. If the file already exists, it will be overridden
         /// </summary>
         public string UploadZipMoveFolder = string.Empty;
+
+        /// <summary>
+        /// Flag to determine if after an upload is completed, the file will automatically be deleted or moved to a local folder
+        /// </summary>
+        public bool DeleteUploadLocallyUponCompletion = false;
     }
 }

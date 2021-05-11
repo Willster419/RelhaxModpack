@@ -165,30 +165,12 @@ namespace RelhaxModpack.Settings
                     ApplyThemeToWindow(window);
                     return;
                 case UIThemes.Custom:
-                    Logging.Debug("Applying custom UI theme for window {0}", window.GetType().Name);
-                    bool themewasNullDisplayMessage = false;
-                    if(Themes.Custom == null)
-                    {
-                        Logging.Info("Custom theme definition is null, load from xml file");
-                        if (!LoadSettingsFile())
-                        {
-                            Logging.Info("Custom theme load failed. Enable verbose logging for more information");
-                            MessageBox.Show(Translations.GetTranslatedString("failedToParseUISettingsFile"));
-                            return;
-                        }
-                        else
-                        {
-                            themewasNullDisplayMessage = true;
-                        }
-                    }
-                    if (!CurrentTheme.Equals(Themes.Custom))
-                        CurrentTheme = Themes.Custom;
+                    Logging.Warning("UIThemes was set to custom, but this feature is no longer supported. Setting to default");
+                    Logging.Debug("Applying default UI theme for window {0}", window.GetType().Name);
+                    //only apply it if need be so that we're not constantly setting the bindings
+                    if (!CurrentTheme.Equals(Themes.Default))
+                        CurrentTheme = Themes.Default;
                     ApplyThemeToWindow(window);
-                    if(themewasNullDisplayMessage)
-                    {
-                        Logging.Info("Custom theme loaded successfully");
-                        MessageBox.Show(Translations.GetTranslatedString("UISettingsFileApplied"));
-                    }
                     return;
             }
         }
@@ -781,7 +763,7 @@ namespace RelhaxModpack.Settings
                 customThemeToLoad.WindowColorsets.Add(type, windowColorset);
             }
 
-            Themes.Custom = customThemeToLoad;
+            //Themes.Custom = customThemeToLoad;
             return true;
         }
 

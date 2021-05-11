@@ -379,13 +379,11 @@ namespace RelhaxModpack.Windows
                     butt.IsEnabled = toggle;
             }
             SetProgress(JobProgressBar.Minimum);
-            UiUtils.AllowUIToUpdate();
         }
 
         private void SetProgress(double prog)
         {
             JobProgressBar.Value = prog;
-            UiUtils.AllowUIToUpdate();
         }
 
         private async Task<bool> LoadDatabase1V1FromBigmods(string lastWoTClientVersion, List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
@@ -730,12 +728,10 @@ namespace RelhaxModpack.Windows
 
             //could be multiple branches on github database
             ReportProgress("Getting list of branches");
-            UiUtils.AllowUIToUpdate();
 
             List<string> branches = await CommonUtils.GetListOfGithubRepoBranchesAsync(ApplicationConstants.BetaDatabaseBranchesURL);
 
             ReportProgress(string.Join(",", branches));
-            UiUtils.AllowUIToUpdate();
 
             foreach (string branch in branches)
             {
@@ -745,7 +741,6 @@ namespace RelhaxModpack.Windows
             foreach(VersionInfos infos in specificVersions)
             {
                 ReportProgress("Adding zip files from WoTClientVersion " + infos.WoTClientVersion);
-                UiUtils.AllowUIToUpdate();
 
                 XmlDocument doc = new XmlDocument();
                 List<DatabasePackage> flatList = new List<DatabasePackage>();
@@ -779,18 +774,15 @@ namespace RelhaxModpack.Windows
                     string betaDatabaseOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, ApplicationConstants.DatabaseOnlineFolderXpath);
 
                     ReportProgress(string.Format("GITHUB branch = {0}, online folder={1}, selected online folder to clean version={2}", branchName, betaDatabaseOnlineFolderVersion, selectedVersionInfos.WoTOnlineFolderVersion));
-                    UiUtils.AllowUIToUpdate();
 
                     if (!betaDatabaseOnlineFolderVersion.Equals(selectedVersionInfos.WoTOnlineFolderVersion))
                     {
                         ReportProgress("Skipping (online folders are not equal)");
-                        UiUtils.AllowUIToUpdate();
                         continue;
                     }
                     else
                     {
                         ReportProgress("Including (online folders are equal)");
-                        UiUtils.AllowUIToUpdate();
 
                         //parse beta database to lists
                         List<string> downloadURLs = new List<string>()
@@ -824,7 +816,6 @@ namespace RelhaxModpack.Windows
                 {
                     string modInfoxmlURL = ApplicationConstants.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", infos.WoTClientVersion) + "modInfo.dat";
                     ReportProgress("Downloading database " + modInfoxmlURL);
-                    UiUtils.AllowUIToUpdate();
 
                     //download latest modInfo xml
                     byte[] zip;
@@ -1208,7 +1199,6 @@ namespace RelhaxModpack.Windows
 
             //update the crc values, also makes list of updated mods
             ReportProgress("Downloaded, comparing crc values for list of updated mods");
-            UiUtils.AllowUIToUpdate();
             foreach (DatabasePackage package in flatListCurrent)
             {
                 if (string.IsNullOrEmpty(package.ZipFile))
@@ -1250,7 +1240,6 @@ namespace RelhaxModpack.Windows
             //do list magic to get all added, removed, disabled, etc package lists
             //used for disabled, removed, added mods
             ReportProgress("Getting list of added and removed packages");
-            UiUtils.AllowUIToUpdate();
             PackageComparerByUID pc = new PackageComparerByUID();
 
             //if in before but not after = removed
@@ -1260,7 +1249,6 @@ namespace RelhaxModpack.Windows
             addedPackages = flatListCurrent.Except(flatListOld, pc).ToList();
 
             ReportProgress("Getting list of packages old and new minus removed and added");
-            UiUtils.AllowUIToUpdate();
 
             //first start by getting the list of all current packages, then filter out removed and added packages
             //make a copy of the current flat list
@@ -1281,7 +1269,6 @@ namespace RelhaxModpack.Windows
             //get the list of renamed packages
             //a renamed package will have the same internal name, but a different display name
             ReportProgress("Getting list of renamed packages");
-            UiUtils.AllowUIToUpdate();
             foreach (SelectablePackage selectablePackage in selectablePackagesNotRemovedOrAdded)
             {
                 SelectablePackage oldPackageWithMatchingUID = selectablePackagesOld.Find(pack => pack.UID.Equals(selectablePackage.UID));
@@ -1298,7 +1285,6 @@ namespace RelhaxModpack.Windows
             //list of moved packages
             //a moved package will have a different UIDPath (the UID's don't change, so any change detected would imply a structure level change)
             ReportProgress("Getting list of moved packages");
-            UiUtils.AllowUIToUpdate();
             foreach (SelectablePackage selectablePackage in selectablePackagesNotRemovedOrAdded)
             {
                 SelectablePackage oldPackageWithMatchingUID = selectablePackagesOld.Find(pack => pack.UID.Equals(selectablePackage.UID));
@@ -1316,7 +1302,6 @@ namespace RelhaxModpack.Windows
 
             //if a package was internally renamed, the packageName won't match
             ReportProgress("Getting list of internal renamed packages");
-            UiUtils.AllowUIToUpdate();
             foreach (SelectablePackage selectablePackage in selectablePackagesNotRemovedOrAdded)
             {
                 SelectablePackage oldPackageWithMatchingUID = selectablePackagesOld.Find(pack => pack.UID.Equals(selectablePackage.UID));
@@ -1665,7 +1650,6 @@ namespace RelhaxModpack.Windows
                 if(node == null)
                 {
                     ReportProgress(string.Format("Package '{0}' does not exist, adding to install stats",package.PackageName));
-                    UiUtils.AllowUIToUpdate();
                     XmlElement element = installStats.CreateElement("package");
                     XmlAttribute nameAttribute = installStats.CreateAttribute("name");
                     nameAttribute.Value = package.PackageName;
@@ -2158,5 +2142,156 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion
+
+        #region Medias Cleaning and Testing
+        private struct MediasCleaningStruct
+        {
+            public SelectablePackage SelectablePackage;
+            public Media MediaWithProblem;
+        }
+
+        private async void CleanMediasStep2_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Attempting to download all media to test if it's still valid");
+
+            //checks
+            if (string.IsNullOrEmpty(WoTModpackOnlineFolderVersion))
+            {
+                ReportProgress("WoTModpackOnlineFolderVersion is empty");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            List<MediasCleaningStruct> brokenMedias = new List<MediasCleaningStruct>();
+            List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
+            List<Dependency> dependencies = new List<Dependency>();
+            List<Category> parsedCategoryList = new List<Category>();
+
+            //load root document
+            XmlDocument rootDocument = XmlUtils.LoadXmlDocument(SelectModInfo.FileName, XmlLoadType.FromFile);
+            if (rootDocument == null)
+            {
+                ReportProgress("Failed to parse root database file. Invalid XML document");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            ReportProgress("Parsing database 1.1 document");
+            //parse main database
+            if (!DatabaseUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(SelectModInfo.FileName), rootDocument,
+                globalDependencies, dependencies, parsedCategoryList))
+            {
+                ReportProgress("Failed to parse database");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            SetProgress(20);
+
+            //bulid link refrences (parent/child, levels, etc)
+            DatabaseUtils.BuildLinksRefrence(parsedCategoryList, true);
+            DatabaseUtils.BuildLevelPerPackage(parsedCategoryList);
+            client = new WebClient();
+
+            //get an estimate count beforehand
+            int numToTest = 0;
+            int totalTested = 0;
+            foreach (SelectablePackage selectablePackage in DatabaseUtils.GetFlatSelectablePackageList(parsedCategoryList))
+            {
+                if (selectablePackage.Medias == null || selectablePackage.Medias.Count == 0)
+                    continue;
+
+                for (int i = 0; i < selectablePackage.Medias.Count; i++)
+                {
+                    Media media = selectablePackage.Medias[i];
+                    if (media.MediaType == MediaType.MediaFile || media.MediaType == MediaType.Picture)
+                    {
+                        numToTest++;
+                    }
+                }
+            }
+            JobProgressBar.Maximum = numToTest;
+            CleanMediasCancel.Visibility = Visibility.Visible;
+            CleanMediasCancel.IsEnabled = true;
+
+            foreach (SelectablePackage selectablePackage in DatabaseUtils.GetFlatSelectablePackageList(parsedCategoryList))
+            {
+                if (selectablePackage.Medias == null || selectablePackage.Medias.Count == 0)
+                    continue;
+
+                for (int i = 0; i < selectablePackage.Medias.Count; i++)
+                {
+                    Media media = selectablePackage.Medias[i];
+                    if (media.MediaType == MediaType.MediaFile || media.MediaType == MediaType.Picture)
+                    {
+                        ReportProgress(string.Format("Attempt to download media {0} of {1}, package {2}, type {3}, url {4}", totalTested, numToTest, selectablePackage.PackageName, selectablePackage.Medias[i].MediaType, selectablePackage.Medias[i].URL));
+                        try
+                        {
+                            byte[] tempByte = await client.DownloadDataTaskAsync(selectablePackage.Medias[i].URL);
+                            ReportProgress("Download PASS");
+                        }
+                        catch (WebException wex)
+                        {
+                            if (wex.Status == WebExceptionStatus.RequestCanceled)
+                            {
+                                ReportProgress("Process canceled");
+                                CleanMediasCancel.Visibility = Visibility.Hidden;
+                                CleanMediasCancel.IsEnabled = false;
+                                ToggleUI((TabController.SelectedItem as TabItem), true);
+                                JobProgressBar.Minimum = 0;
+                                JobProgressBar.Value = JobProgressBar.Minimum;
+                                JobProgressBar.Maximum = 100;
+                                return;
+                            }
+
+                            ReportProgress("Download FAIL");
+                            brokenMedias.Add(new MediasCleaningStruct() { SelectablePackage = selectablePackage, MediaWithProblem = media });
+                            Logging.Error(wex.ToString());
+                        }
+                        finally
+                        {
+                            totalTested++;
+                            SetProgress(totalTested);
+                        }
+                    }
+                }
+            }
+
+            client.Dispose();
+
+            ReportProgress(string.Format("Finished, {0} of {1} medias have problems", brokenMedias.Count, numToTest));
+            foreach (MediasCleaningStruct mediasCleaningStruct in brokenMedias)
+            {
+                SelectablePackage packageWithIssue = mediasCleaningStruct.SelectablePackage;
+                Media mediaWithProblem = mediasCleaningStruct.MediaWithProblem;
+                ReportProgress(string.Format("Package {0}, type {1}, url {2}", packageWithIssue.PackageName, mediaWithProblem.MediaType, mediaWithProblem.URL));
+            }
+
+            MessageBoxResult result = MessageBox.Show("Remove all packages with invalid media?", "Do the thing?", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                foreach (MediasCleaningStruct mediasCleaningStruct in brokenMedias)
+                {
+                    mediasCleaningStruct.SelectablePackage.Medias.Remove(mediasCleaningStruct.MediaWithProblem);
+                }
+                DatabaseUtils.SaveDatabase(SelectModInfo.FileName, WoTClientVersion, WoTModpackOnlineFolderVersion, globalDependencies, dependencies, parsedCategoryList, DatabaseXmlVersion.OnePointOne);
+                ReportProgress(string.Format("Broken Medias deleted"));
+            }
+
+            ReportProgress("Done");
+            CleanMediasCancel.Visibility = Visibility.Hidden;
+            CleanMediasCancel.IsEnabled = false;
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+        #endregion
+
+        private void CleanFoldersCancel_Click(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Stop requested, canceling operation");
+            client.CancelAsync();
+        }
     }
 }

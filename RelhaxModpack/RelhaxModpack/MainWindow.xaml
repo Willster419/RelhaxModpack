@@ -177,16 +177,7 @@
                             <RadioButton x:Name="ThemeDark" Tag="ThemeDark" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ThemeDarkText" Text="Dark" TextWrapping="Wrap"/>
                             </RadioButton>
-                            <RadioButton x:Name="ThemeCustom" Tag="ThemeCustom" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True" IsEnabled="False">
-                                <TextBlock x:Name="ThemeCustomText" Text="Custom" TextWrapping="Wrap"/>
-                            </RadioButton>
                         </StackPanel>
-                        <Button Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click" Margin="0,0,0,2" ToolTipService.ShowOnDisabled="True">
-                            <TextBlock x:Name="DumpColorSettingsButtonText" Text="Save current color settings" TextWrapping="Wrap"/>
-                        </Button>
-                        <Button Tag="OpenColorPickerButton" Name="OpenColorPickerButton" Click="OpenColorPickerButton_Click" ToolTipService.ShowOnDisabled="True">
-                            <TextBlock x:Name="OpenColorPickerButtonText" Text="Open color picker" TextWrapping="Wrap"/>
-                        </Button>
                         <TextBlock x:Name="ApplyCustomScalingText" Tag="ApplyCustomScalingCB" Text="Application scaling" ToolTipService.ShowOnDisabled="True"/>
                         <!-- https://stackoverflow.com/questions/832216/wpf-how-to-make-controls-stretch-in-a-stackpanel -->
                         <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">

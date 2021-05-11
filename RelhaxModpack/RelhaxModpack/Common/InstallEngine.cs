@@ -647,20 +647,20 @@ namespace RelhaxModpack
 
             Logging.Info(string.Format("Unpack of xml files, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             InstructionLoader copyUnpackPatchInstructionLoader = new InstructionLoader();
-            List<XmlUnpack> xmlUnpacks = copyUnpackPatchInstructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.XmlUnpackFolderName), InstructionsType.UnpackCopy, XmlUnpack.XmlUnpackXmlSearchPath, null).Cast<XmlUnpack>().ToList();
+            List<XmlUnpack> xmlUnpacks = copyUnpackPatchInstructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.XmlUnpackFolderName), InstructionsType.UnpackCopy, XmlUnpack.XmlUnpackXmlSearchPath, null)?.Cast<XmlUnpack>()?.ToList();
 
-            //perform macro replacement on all xml unpack entries
-            foreach (XmlUnpack xmlUnpack in xmlUnpacks)
+            if (xmlUnpacks != null && xmlUnpacks.Count > 0)
             {
-                xmlUnpack.DirectoryInArchive = MacroUtils.MacroReplace(xmlUnpack.DirectoryInArchive, ReplacementTypes.FilePath);
-                xmlUnpack.FileName = MacroUtils.MacroReplace(xmlUnpack.FileName, ReplacementTypes.FilePath);
-                xmlUnpack.ExtractDirectory = MacroUtils.MacroReplace(xmlUnpack.ExtractDirectory, ReplacementTypes.FilePath);
-                xmlUnpack.NewFileName = MacroUtils.MacroReplace(xmlUnpack.NewFileName, ReplacementTypes.FilePath);
-                xmlUnpack.Pkg = MacroUtils.MacroReplace(xmlUnpack.Pkg, ReplacementTypes.FilePath);
-            }
+                //perform macro replacement on all xml unpack entries
+                foreach (XmlUnpack xmlUnpack in xmlUnpacks)
+                {
+                    xmlUnpack.DirectoryInArchive = MacroUtils.MacroReplace(xmlUnpack.DirectoryInArchive, ReplacementTypes.FilePath);
+                    xmlUnpack.FileName = MacroUtils.MacroReplace(xmlUnpack.FileName, ReplacementTypes.FilePath);
+                    xmlUnpack.ExtractDirectory = MacroUtils.MacroReplace(xmlUnpack.ExtractDirectory, ReplacementTypes.FilePath);
+                    xmlUnpack.NewFileName = MacroUtils.MacroReplace(xmlUnpack.NewFileName, ReplacementTypes.FilePath);
+                    xmlUnpack.Pkg = MacroUtils.MacroReplace(xmlUnpack.Pkg, ReplacementTypes.FilePath);
+                }
 
-            if (xmlUnpacks.Count > 0)
-            {
                 //progress
                 Prog.ParrentTotal = xmlUnpacks.Count;
 
@@ -698,8 +698,8 @@ namespace RelhaxModpack
             Prog.ParrentCurrentProgress = string.Empty;
             Prog.ChildCurrentProgress = string.Empty;
 
-            List<Patch> pathces = copyUnpackPatchInstructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.PatchFolderName), InstructionsType.Patch, Patch.PatchXmlSearchPath,OriginalPatchNames).Cast<Patch>().ToList();
-            if (pathces.Count > 0)
+            List<Patch> pathces = copyUnpackPatchInstructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.PatchFolderName), InstructionsType.Patch, Patch.PatchXmlSearchPath,OriginalPatchNames)?.Cast<Patch>()?.ToList();
+            if (pathces != null && pathces.Count > 0)
             {
                 //no need to installer log patches, since it's operating on files that already exist
                 PatchTask = Task.Run(() =>
@@ -1595,8 +1595,8 @@ namespace RelhaxModpack
             {
                 InstructionLoader instructionLoader = new InstructionLoader();
                 CancellationToken.ThrowIfCancellationRequested();
-                List<Shortcut> shortcuts = instructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.ShortcutFolderName), InstructionsType.Shortcut, Shortcut.ShortcutXmlSearchPath, null).Cast<Shortcut>().ToList();
-                if (shortcuts.Count > 0)
+                List<Shortcut> shortcuts = instructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.ShortcutFolderName), InstructionsType.Shortcut, Shortcut.ShortcutXmlSearchPath, null)?.Cast<Shortcut>()?.ToList();
+                if (shortcuts != null && shortcuts.Count > 0)
                 {
                     CancellationToken.ThrowIfCancellationRequested();
                     StringBuilder shortcutBuilder = new StringBuilder();
@@ -1650,8 +1650,8 @@ namespace RelhaxModpack
 
             //create and parse atlas lists from xml files
             InstructionLoader instructionLoader = new InstructionLoader();
-            List<Atlas> atlases = instructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.AtlasCreationFoldername), InstructionsType.Atlas, Atlas.AtlasXmlSearchPath, null).Cast<Atlas>().ToList();
-            if (atlases.Count > 0)
+            List<Atlas> atlases = instructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.AtlasCreationFoldername), InstructionsType.Atlas, Atlas.AtlasXmlSearchPath, null)?.Cast<Atlas>()?.ToList();
+            if (atlases!= null && atlases.Count > 0)
             {
                 //initial progress report
                 ProgAtlas = CopyProgress(Prog);
@@ -2228,7 +2228,7 @@ namespace RelhaxModpack
                         //log as error, 3 tries and all failures
                         Logging.Exception("Failed to extract zipfile {0}, exception message:{1}{2}", package.ZipFile, Environment.NewLine, e.ToString());
                         MessageBox.Show(string.Format("{0}, {1} {2} {3}",
-                            Translations.GetTranslatedString("zipReadingErrorMessage1"), package.ZipFile, Translations.GetTranslatedString("zipReadingErrorMessage2"),
+                            Translations.GetTranslatedString("zipReadingErrorMessage1"), package.ZipFile, Translations.GetTranslatedString("zipReadingErrorMessage3"),
                             Translations.GetTranslatedString("zipReadingErrorHeader")));
                         //delete the file (if it exists)
                         if(File.Exists(zipFilePath) && !userMod)
