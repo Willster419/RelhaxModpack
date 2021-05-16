@@ -1,4 +1,4 @@
-﻿<local:RelhaxWindow
+﻿<local:RelhaxCustomFeatureWindow
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,6 @@
     xmlns:RelhaxModpack="clr-namespace:RelhaxModpack"
     xmlns:database="clr-namespace:RelhaxModpack.Database"
     xmlns:enums="clr-namespace:RelhaxModpack.Utilities.Enums"
-    x:Name="relhaxWindow"
     x:Class="RelhaxModpack.Windows.DatabaseEditor"
     mc:Ignorable="d"
     Title="DatabaseEditor" Height="720" Width="1280" MinHeight="600" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
@@ -304,12 +303,14 @@
             <RowDefinition Height="632*"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
+        <Button x:Name="AddDatabaseObjectButton"    Content="Add/Copy"     HorizontalAlignment="Left"  Margin="10,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="AddDatabaseObjectButton"    Click="AddDatabaseObjectButton_Click"    IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Add a package to the database by making a copy of the selected package"/>
         <Button x:Name="RemoveDatabaseObjectButton" Content="Remove"       HorizontalAlignment="Left"  Margin="90,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
                 Tag="RemoveDatabaseObjectButton" Click="RemoveDatabaseObjectButton_Click" IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Remove the selected package from the database"/>
         <Button x:Name="MoveDatabaseObjectButton"   Content="Move"         HorizontalAlignment="Left"  Margin="170,0,0,5"   Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
                 Tag="MoveDatabaseObjectButton"   Click="MoveDatabaseObjectButton_Click"   IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Move the selected package to below another package.\nSupports moving between package types"/>
-        <Button x:Name="AddDatabaseObjectButton"    Content="Add/Copy"     HorizontalAlignment="Left"  Margin="10,0,0,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
-                Tag="AddDatabaseObjectButton"    Click="AddDatabaseObjectButton_Click"    IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Add a package to the database by making a copy of the selected package"/>
+        <Button x:Name="TriggerMirrorSyncButton"    Content="Trigger Sync" HorizontalAlignment="Left"  Margin="250,0,0,5"   Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
+                Tag="AddDatabaseObjectButton"    Click="TriggerMirrorSyncButton_Click"    IsEnabled="True"  ToolTipService.ShowOnDisabled="True" ToolTip="Trigger a manual sync to our download mirror(s)"/>
         <Button x:Name="ApplyButton"                Content="Apply"        HorizontalAlignment="Right" Margin="0,0,170,5"  Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="45"
                 Tag="ApplyButton"                Click="ApplyButton_Click"                IsEnabled="False" ToolTipService.ShowOnDisabled="True" ToolTip="Apply any changes from the right tab to the selected package"/>
         <Button x:Name="LoadAsDatabaseButton"       Content="Load as..."   HorizontalAlignment="Right" Margin="0,0,90,5"    Grid.Row="1" VerticalAlignment="Bottom" Width="75" Height="20"
@@ -412,6 +413,8 @@
                             <Slider x:Name="FtpUpDownAutoCloseTimoutSlider" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsEnabled="True" ValueChanged="FtpUpDownAutoCloseTimoutSlider_ValueChanged" IsSnapToTickEnabled="True"/>
                             <TextBlock x:Name="FtpUpDownAutoCloseTimoutDisplayLabel" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="Test" Grid.Column="1"/>
                         </Grid>
+                        <CheckBox x:Name="DatabaseTransferAutoDelete" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="10" VerticalAlignment="Center" Content="Automatically delete package locally upon successful upload"
+                                  Click="DatabaseTransferAutoDelete_Click" ToolTip="When checked, a package that is successfully uploaded will be automatically deleted from disk"/>
                         <CheckBox x:Name="DatabaseTransferDeleteActuallyMove" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="11" VerticalAlignment="Center" Content="Editor transfer window's delete button is actually move"
                                   Click="DatabaseTransferDeleteActuallyMove_Click" ToolTip="When checked, the delete file button in the editor file transfer window will actually move the file into the folder specified below"/>
                         <Button x:Name="SelectTransferWindowMovePathButton" HorizontalAlignment="Stretch" Grid.Row="12" VerticalAlignment="Center" Click="SelectTransferWindowMovePathButton_Click"
@@ -521,9 +524,7 @@
                         <!-- Names -->
                         <TextBlock x:Name="PackageDisplayNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="Package Name" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageStartAddressTextBlock" HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="Start Address" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageZipFileTextBlock" HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="Zip File" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageEndAddressTextBlock" HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" Text="End Address" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageVersionTextBlock" HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageAuthorTextBlock" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Author" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageMaintainersTextBlock" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Maintainers" VerticalAlignment="Center" ToolTip="Comma separated values of Database managers of this component"/>
@@ -538,9 +539,7 @@
                         <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="15" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
                         <TextBox x:Name="PackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackagePackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox x:Name="PackageStartAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageZipFileDisplay" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Stretch" />
-                        <TextBox x:Name="PackageEndAddressDisplay" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageVersionDisplay" HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageAuthorDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackageMaintainersDisplay" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" ToolTip="Comma separated values of Database managers of this component"/>
@@ -571,6 +570,10 @@
                             <CheckBox Content="Obfuscated" x:Name="PackageObfuscatedModDisplay" Tag="ObfuscatedCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Offset InstallGroup" x:Name="CategoryOffsetInstallGroupDisplay" Tag="OffsetInstallGroupCB" Margin="16,0,0,0"/>
                             <CheckBox Content="From WGmods" x:Name="PackageFromWGmodsDisplay" Tag="PackageFromWGmodsCB" Margin="4,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="20" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+                            <CheckBox Content="Deprecated" x:Name="PackageDeprecatedDisplay" Tag="DeprecatedCB" Margin="0"/>
+                            <CheckBox Content="Minimalist mode exclude" x:Name="PackageMinimalistModeExcludeDisplay" Tag="MinimalistModeCB" Margin="16,0,0,0" ToolTip="When this is true, the package will be excluded from installation"/>
                         </StackPanel>
                         <Button Grid.Column="0" Grid.Row="22" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" />
                         <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" />
@@ -712,6 +715,6 @@
                       Style="{DynamicResource ComboBoxStyle1}" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}">
             </ComboBox>
         </Grid>
-        <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="50"/>
+        <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="30"/>
     </Grid>
-</local:RelhaxWindow>
+</local:RelhaxCustomFeatureWindow>

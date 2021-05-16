@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Utilities;
+﻿using RelhaxModpack.Common;
+using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
@@ -51,13 +52,13 @@ namespace RelhaxModpack.Database
             nameof(CRC),
             nameof(Timestamp),
             nameof(LogAtInstall),
-            nameof(StartAddress),
-            nameof(EndAddress),
             nameof(Triggers),
             nameof(DevURL),
             nameof(InternalNotes),
             nameof(Author),
-            nameof(Maintainers)
+            nameof(Maintainers),
+            nameof(Deprecated),
+            nameof(MinimalistModeExclude)
         };
         #endregion
 
@@ -82,7 +83,6 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Database Properties
-
         /// <summary>
         /// A unique identifier for each component in the database. No two components will have the same PackageName
         /// </summary>
@@ -146,18 +146,6 @@ namespace RelhaxModpack.Database
         /// The crc checksum of the zipfile
         /// </summary>
         public string CRC { get; set; } = string.Empty;
-
-        /// <summary>
-        /// The start address of the URL to the zip file
-        /// URL format: StartAddress + ZipFile + EndAddress
-        /// </summary>
-        public string StartAddress { get; set; } = Settings.DefaultStartAddress;
-
-        /// <summary>
-        /// The end address of the URL to the zip file
-        /// URL format: StartAddress + ZipFile + EndAddress
-        /// </summary>
-        public string EndAddress { get; set; } = Settings.DefaultEndAddress;
 
         /// <summary>
         /// Determine at install time if the package needs to be downloaded
@@ -238,29 +226,20 @@ namespace RelhaxModpack.Database
         public string Author { get; set; } = string.Empty;
 
         /// <summary>
-        /// The number of bytes to download, used if "install while download" is true
-        /// </summary>
-        public long BytesToDownload { get; set; } = 0;
-
-        /// <summary>
-        /// The number of bytes currently downloaded, used if "install while download" is true
-        /// </summary>
-        public long BytesDownloaded { get; set; } = 0;
-
-        /// <summary>
-        /// Flag to determine if this package is the one currently downloading, used if "install while download" is true
-        /// </summary>
-        public bool IsCurrentlyDownloading { get; set; } = false;
-
-        /// <summary>
-        /// Flag to determine if this package failed to download from either download methods
-        /// </summary>
-        public bool DownloadFailed { get; set; } = false;
-
-        /// <summary>
         /// The list of tags that this package contains (like patches, scripts, etc)
         /// </summary>
         public PackageTagsList Tags { get; set; }  = new PackageTagsList();
+
+        /// <summary>
+        /// A flag to set for a package that is considered to be outdated or no longer supported or stale.
+        /// </summary>
+        public bool Deprecated { get; set; } = false;
+
+        /// <summary>
+        /// A flag for determining if this package should be excluded from install when minimalist mode is enabled in ModpackSettings.
+        /// </summary>
+        /// <seealso cref="Settings.ModpackSettings.MinimalistMode"/>
+        public bool MinimalistModeExclude { get; set; } = false;
         #endregion
 
         #region UI Properties
@@ -271,11 +250,6 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Other Properties and Methods
-        /// <summary>
-        /// Flag used for the "download while install" setting. Default is false until it is set true. Once set, the installer will not try to extract this package again
-        /// </summary>
-        public bool ExtractionStarted { get; set; } = false;
-
         /// <summary>
         /// When a databasePackage, the internal packageName. When category, the category name
         /// </summary>
@@ -328,8 +302,6 @@ namespace RelhaxModpack.Database
             this.Timestamp = packageToCopy.Timestamp;
             this.ZipFile = packageToCopy.ZipFile;
             this.CRC = packageToCopy.CRC;
-            this.StartAddress = packageToCopy.StartAddress;
-            this.EndAddress = packageToCopy.EndAddress;
             this.LogAtInstall = packageToCopy.LogAtInstall;
             this.Triggers = packageToCopy.Triggers;
             this.DevURL = packageToCopy.DevURL;

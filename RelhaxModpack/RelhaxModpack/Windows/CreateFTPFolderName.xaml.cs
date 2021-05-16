@@ -15,6 +15,7 @@ using System.IO;
 using Path = System.IO.Path;
 using System.Net;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -46,7 +47,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the CreateFTPFolderName window
         /// </summary>
-        public CreateFTPFolderName()
+        public CreateFTPFolderName(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

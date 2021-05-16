@@ -1,4 +1,4 @@
-﻿<local:RelhaxWindow x:Name="Advanced_Installer_Progress"
+﻿<local:RelhaxWindow
         x:Class="RelhaxModpack.Windows.AdvancedProgress"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:user="clr-namespace:RelhaxModpack.UI"
         mc:Ignorable="d"
-        Title="Advanced Installer Progress" Height="600" Width="600"
+        Title="Advanced Installer Progress" Height="768" Width="1024"
         LocalizeWindow="true" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
     <TabControl x:Name="MainTabControl" Tag="AdvancedInstallMainTabControl">
         <TabItem Header="Pre-install tasks" x:Name="PreInstallTab" Tag="PreInstallTab">

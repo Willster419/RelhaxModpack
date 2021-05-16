@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Installer;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,8 +11,32 @@ namespace RelhaxModpack.Atlases
     /// <summary>
     /// A class that serves as a description of an atlas file with processing instructions
     /// </summary>
-    public class Atlas
+    public class Atlas : Instruction
     {
+
+        public const string AtlasXmlSearchPath = "//atlases/atlas";
+
+        public override string RootObjectPath { get { return AtlasXmlSearchPath; } }
+
+        public override string[] PropertiesToSerialize()
+        {
+            return new string[]
+            {
+                nameof(Pkg),
+                nameof(DirectoryInArchive),
+                nameof(AtlasFile),
+                nameof(MapFile),
+                nameof(PowOf2),
+                nameof(Square),
+                nameof(AtlasWidth),
+                nameof(AtlasHeight),
+                nameof(FastImagePacker),
+                nameof(Padding),
+                nameof(AtlasSaveDirectory),
+                nameof(ImageFolders)
+            };
+        }
+
         /// <summary>
         /// Complete path to the package file
         /// </summary>
@@ -82,7 +107,7 @@ namespace RelhaxModpack.Atlases
         /// List of folders that could contain images to replace original images
         /// </summary>
         /// <remarks>This is loaded from the xml file</remarks>
-        public List<string> ImageFolderList { get; set; } = new List<string>();
+        public List<string> ImageFolders { get; set; } = new List<string>();
 
         /// <summary>
         /// The list of textures in each atlas

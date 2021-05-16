@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.UI
 {
@@ -163,36 +165,26 @@ namespace RelhaxModpack.UI
         /// </summary>
         /// <param name="window">The window to apply scaling to</param>
         /// <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
-        public static void ApplyApplicationScale(Window window, double scaleValue)
+        public static void ApplyApplicationScale(RelhaxWindow window, double scaleValue)
         {
             //input filtering
-            if (scaleValue < Settings.MinimumDisplayScale)
+            if (scaleValue < ApplicationConstants.MinimumDisplayScale)
             {
-                Logging.Warning("scale size of {0} is to small, setting to 1", scaleValue.ToString("N"));
-                scaleValue = Settings.MinimumDisplayScale;
+                Logging.Warning("Scale size of {0} is to small, setting to 1", scaleValue.ToString("N"));
+                scaleValue = ApplicationConstants.MinimumDisplayScale;
             }
-            if (scaleValue > Settings.MaximumDisplayScale)
+            if (scaleValue > ApplicationConstants.MaximumDisplayScale)
             {
-                Logging.Warning("scale size of {0} is to large, setting to 3", scaleValue.ToString("N"));
-                scaleValue = Settings.MaximumDisplayScale;
+                Logging.Warning("Scale size of {0} is to large, setting to 3", scaleValue.ToString("N"));
+                scaleValue = ApplicationConstants.MaximumDisplayScale;
             }
 
             //scale internals
             (window.Content as FrameworkElement).LayoutTransform = new ScaleTransform(scaleValue, scaleValue, 0, 0);
 
-            //scale window itself
-            if (window is MainWindow mw)
-            {
-                mw.Width = mw.OriginalWidth * scaleValue;
-                mw.Height = mw.OriginalHeight * scaleValue;
-            }
-            else if (window is RelhaxWindow rw)
-            {
-                rw.Width = rw.OriginalWidth * scaleValue;
-                rw.Height = rw.OriginalHeight * scaleValue;
-            }
-            else
-                throw new BadMemeException("you should probably make me a RelhaxWindow if you want to use this feature");
+            //scale window size itself
+            window.Width = window.OriginalWidth * scaleValue;
+            window.Height = window.OriginalHeight * scaleValue;
         }
 
         public static FontFamily DefaultFontFamily = null;

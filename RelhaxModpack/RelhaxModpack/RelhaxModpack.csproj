@@ -138,7 +138,10 @@
     <Compile Include="Automation\DownloadStaticTask.cs" />
     <Compile Include="Automation\IDownloadTask.cs" />
     <Compile Include="Automation\ShellExecuteTask.cs" />
+    <Compile Include="Common\ApplicationConstants.cs" />
+    <Compile Include="Common\DownloadManager.cs" />
     <Compile Include="Common\IComponentWithID.cs" />
+    <Compile Include="Common\Md5DatabaseManager.cs" />
     <Compile Include="Database\Category.cs" />
     <Compile Include="Database\DatabaseUtils.cs" />
     <Compile Include="Database\IDatabaseComponent.cs" />
@@ -154,8 +157,13 @@
     <Compile Include="Database\SelectablePackage.cs" />
     <Compile Include="Database\Trigger.cs" />
     <Compile Include="Database\UserFile.cs" />
+    <Compile Include="Installer\Instruction.cs" />
+    <Compile Include="Installer\InstructionLoader.cs" />
+    <Compile Include="Patching\PatchUnitTest.cs" />
     <Compile Include="Settings\AutomationRunnerSettings.cs" />
     <Compile Include="Settings\ISettingsFile.cs" />
+    <Compile Include="Settings\ModpackToolboxSettings.cs" />
+    <Compile Include="Settings\SettingsParser.cs" />
     <Compile Include="UI\BoundUISettings.cs" />
     <Compile Include="UI\ClassColorset.cs" />
     <Compile Include="UI\ClassThemeDefinitions\BorderClassThemeDefinition.cs" />
@@ -176,18 +184,27 @@
     <Compile Include="UI\RelhaxComboBoxItem.xaml.cs">
       <DependentUpon>RelhaxComboBoxItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\RelhaxDownloadProgress.cs" />
     <Compile Include="UI\RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\RelhaxInstallerProgress.cs" />
     <Compile Include="UI\Theme.cs" />
     <Compile Include="UI\Themes.cs" />
     <Compile Include="UI\UiUtils.cs" />
     <Compile Include="UI\WindowColorset.cs" />
     <Compile Include="UI\ZoomBorder.cs" />
     <Compile Include="Utilities\ClassEventArgs\LogMessageEventArgs.cs" />
+    <Compile Include="Utilities\ClassEventArgs\RelhaxInstallFinishedEventArgs.cs" />
+    <Compile Include="Utilities\ClassEventArgs\SelectionListEventArgs.cs" />
     <Compile Include="Utilities\Enums\ApplicationMode.cs" />
     <Compile Include="Utilities\Enums\ApplicationVersions.cs" />
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
+    <Compile Include="Utilities\Enums\DownloadProgressState.cs" />
+    <Compile Include="Utilities\Enums\InstallerExitCodes.cs" />
+    <Compile Include="Utilities\Enums\InstructionsLoaderExitCode.cs" />
+    <Compile Include="Utilities\Enums\InstructionsType.cs" />
+    <Compile Include="Utilities\Enums\SelectionPropagationDirection.cs" />
     <Compile Include="Utilities\Enums\EditorTransferMode.cs" />
     <Compile Include="Utilities\Enums\DatabaseVersions.cs" />
     <Compile Include="Utilities\Enums\DatabaseXmlVersion.cs" />
@@ -211,6 +228,7 @@
     <Compile Include="Utilities\Enums\SelectionView.cs" />
     <Compile Include="Utilities\Enums\AutomationRunMode.cs" />
     <Compile Include="Utilities\Enums\UIThemes.cs" />
+    <Compile Include="Utilities\Enums\UninstallerExitCodes.cs" />
     <Compile Include="Utilities\Enums\UninstallModes.cs" />
     <Compile Include="Utilities\Enums\UpdateTypes.cs" />
     <Compile Include="Utilities\Enums\XmlLoadType.cs" />
@@ -220,13 +238,16 @@
     <Compile Include="Common\GlobalSuppressions.cs" />
     <Compile Include="Atlases\Atlas.cs" />
     <Compile Include="Common\InstallEngine.cs" />
-    <Compile Include="Patches\Patch.cs" />
+    <Compile Include="Patching\Patch.cs" />
     <Compile Include="Shortcuts\Shortcut.cs" />
     <Compile Include="Atlases\Texture.cs" />
     <Compile Include="Windows\DatabaseAutomationRunner.xaml.cs">
       <DependentUpon>DatabaseAutomationRunner.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ICustomFeatureWindow.cs" />
+    <Compile Include="Windows\RelhaxCustomFeatureWindow.cs" />
+    <Compile Include="Windows\WoTClientSelection.xaml.cs">
+      <DependentUpon>WoTClientSelection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Xml\XmlUnpack.cs" />
     <Compile Include="Logging\Logfile.cs" />
     <Compile Include="Logging\Logging.cs" />
@@ -235,7 +256,6 @@
     <Compile Include="Settings\EditorSettings.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
     <Compile Include="Settings\CommandLineSettings.cs" />
-    <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="UI\EditorComboBoxItem.cs" />
     <Compile Include="UI\EditorSearchBoxItem.cs" />
@@ -254,7 +274,7 @@
     </Compile>
     <Compile Include="Utilities\MacroUtils.cs" />
     <Compile Include="Utilities\RegistryUtils.cs" />
-    <Compile Include="Patches\Regression.cs" />
+    <Compile Include="Patching\PatchRegression.cs" />
     <Compile Include="Atlases\RelhaxFreeImageLibrary.cs" />
     <Compile Include="Atlases\RelhaxNvTexLibrary.cs" />
     <Compile Include="Shortcuts\ShortcutUtils.cs" />
@@ -301,9 +321,6 @@
     <Compile Include="Windows\PopOutReplacePatchDesigner.xaml.cs">
       <DependentUpon>PopOutReplacePatchDesigner.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\RelhaxColorPicker.xaml.cs">
-      <DependentUpon>RelhaxColorPicker.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\RelhaxMediaPlayer.xaml.cs">
       <DependentUpon>RelhaxMediaPlayer.xaml</DependentUpon>
     </Compile>
@@ -315,7 +332,7 @@
     </Compile>
     <Compile Include="Common\BadMemeException.cs" />
     <Compile Include="Common\CiInfo.cs" />
-    <Compile Include="Patches\PatchUtils.cs" />
+    <Compile Include="Patching\Patcher.cs" />
     <Compile Include="Common\PatientWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -336,8 +353,8 @@
     <Compile Include="Windows\InstallFinished.xaml.cs">
       <DependentUpon>InstallFinished.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ModSelectionList.xaml.cs">
-      <DependentUpon>ModSelectionList.xaml</DependentUpon>
+    <Compile Include="Windows\PackageSelectionList.xaml.cs">
+      <DependentUpon>PackageSelectionList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\PatchDesigner.xaml.cs">
       <DependentUpon>PatchDesigner.xaml</DependentUpon>
@@ -497,7 +514,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ModSelectionList.xaml">
+    <Page Include="Windows\PackageSelectionList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -518,10 +535,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ProgressIndicator.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\RelhaxColorPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -546,6 +559,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AdvancedProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WoTClientSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

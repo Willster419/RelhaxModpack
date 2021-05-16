@@ -1,19 +1,29 @@
-﻿namespace RelhaxModpack.Xml
+﻿using RelhaxModpack.Installer;
+using System;
+
+namespace RelhaxModpack.Xml
 {
     /// <summary>
     /// Represents a set of xml instructions for extracting and copying xml files into another location. Includes xml binary decompression
     /// </summary>
-    public class XmlUnpack
+    public class XmlUnpack : Instruction
     {
-        /// <summary>
-        /// A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)
-        /// </summary>
-        public string NativeProcessingFile { get; set; } = string.Empty;
 
-        /// <summary>
-        /// The actual name of the original file before processed
-        /// </summary>
-        public string ActualPatchName { get; set; } = string.Empty;
+        public const string XmlUnpackXmlSearchPath = "//files/file";
+
+        public override string RootObjectPath { get { return XmlUnpackXmlSearchPath; } }
+
+        public override string[] PropertiesToSerialize()
+        {
+            return new string[]
+            {
+                nameof(Pkg),
+                nameof(FileName),
+                nameof(DirectoryInArchive),
+                nameof(ExtractDirectory),
+                nameof(NewFileName)
+            };
+        }
 
         /// <summary>
         /// Path and name to the package file

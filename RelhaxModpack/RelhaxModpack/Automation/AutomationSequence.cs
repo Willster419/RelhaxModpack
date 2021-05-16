@@ -1,5 +1,6 @@
 ﻿using RelhaxModpack.Common;
 using RelhaxModpack.Database;
+using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Windows;
@@ -103,7 +104,7 @@ namespace RelhaxModpack.Automation
             }
 
             Logging.Debug(Logfiles.AutomationRunner, "Setting up working directory");
-            string workingDirectory = Path.Combine(Settings.RelhaxTempFolderPath, Package.PackageName);
+            string workingDirectory = Path.Combine(ApplicationConstants.RelhaxTempFolderPath, Package.PackageName);
             if (Directory.Exists(workingDirectory))
             {
                 Directory.Delete(workingDirectory, true);

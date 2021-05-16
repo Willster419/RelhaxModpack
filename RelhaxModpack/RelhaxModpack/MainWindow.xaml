@@ -1,4 +1,5 @@
-﻿<Window
+﻿<windows:RelhaxWindow
+    xmlns:windows="clr-namespace:RelhaxModpack.Windows"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,13 +7,13 @@
     xmlns:local="clr-namespace:RelhaxModpack"
     xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="clr-namespace:RelhaxModpack.UI"
-    x:Name="TheMainWindow"
     x:Class="RelhaxModpack.MainWindow"
     mc:Ignorable="d"
     Title="Relhax" Height="660" Width="550" ResizeMode="CanMinimize"
     Loaded="TheMainWindow_Loaded"
     Closing="TheMainWindow_Closing"
-    Icon="Resources/modpack_icon.ico">
+    Icon="Resources/modpack_icon.ico"
+    LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Window.Resources>
         
     </Window.Resources>
@@ -123,6 +124,9 @@
                         <CheckBox x:Name="DeleteOldPackagesCB" Tag="DeleteOldPackagesCB" Click="OnDeleteCacheFilesChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="DeleteOldPackagesText" Text="Delete old packages" TextWrapping="Wrap"/>
                         </CheckBox>
+                        <CheckBox x:Name="MinimalistModeCB" Tag="MinimalistModeCB" Click="OnMinimalistModeChanged" ToolTipService.ShowOnDisabled="True">
+                            <TextBlock x:Name="MinimalistModeText" Text="Minimalist Mode" TextWrapping="Wrap"/>
+                        </CheckBox>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -161,6 +165,8 @@
                         <CheckBox Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="UseBetaApplicationText" Text="Use beta application" TextWrapping="Wrap"/>
                         </CheckBox>
+                        <TextBlock Tag="SelectDownloadMirrorTextBlock" x:Name="SelectDownloadMirrorTextBlock" Text="Select a download mirror" TextWrapping="Wrap"/>
+                        <ComboBox Tag="SelectDownloadMirrorComboBox" x:Name="SelectDownloadMirrorCombobox" SelectionChanged="SelectDownloadMirrorCombobox_SelectionChanged" Margin="20,0,0,0"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <TextBlock x:Name="ThemeSelectText" Text="Select theme:" ToolTipService.ShowOnDisabled="True"/>
@@ -171,16 +177,7 @@
                             <RadioButton x:Name="ThemeDark" Tag="ThemeDark" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ThemeDarkText" Text="Dark" TextWrapping="Wrap"/>
                             </RadioButton>
-                            <RadioButton x:Name="ThemeCustom" Tag="ThemeCustom" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True">
-                                <TextBlock x:Name="ThemeCustomText" Text="Custom" TextWrapping="Wrap"/>
-                            </RadioButton>
                         </StackPanel>
-                        <Button Tag="DumpColorSettingsButton" Name="DumpColorSettingsButton" Click="DumpColorSettingsButton_Click" Margin="0,0,0,2" ToolTipService.ShowOnDisabled="True">
-                            <TextBlock x:Name="DumpColorSettingsButtonText" Text="Save current color settings" TextWrapping="Wrap"/>
-                        </Button>
-                        <Button Tag="OpenColorPickerButton" Name="OpenColorPickerButton" Click="OpenColorPickerButton_Click" ToolTipService.ShowOnDisabled="True">
-                            <TextBlock x:Name="OpenColorPickerButtonText" Text="Open color picker" TextWrapping="Wrap"/>
-                        </Button>
                         <TextBlock x:Name="ApplyCustomScalingText" Tag="ApplyCustomScalingCB" Text="Application scaling" ToolTipService.ShowOnDisabled="True"/>
                         <!-- https://stackoverflow.com/questions/832216/wpf-how-to-make-controls-stretch-in-a-stackpanel -->
                         <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
@@ -336,7 +333,7 @@
         </Grid>
         <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top">
             <Border HorizontalAlignment="Left" Height="45" Margin="364,0,0,0" VerticalAlignment="Top" Width="150" Tag="LanguageSelectionBorder">
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical" Margin="0,0,-8,0">
                     <TextBlock x:Name="LanguageSelectionTextblock" Tag="LanguageSelectionTextBlock" Text="Language Selection" TextWrapping="Wrap" Margin="0,0,0,5"/>
                     <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0" Tag="LanguageSelectionCombobox"/>
                 </StackPanel>
@@ -348,4 +345,4 @@
             <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar" Tag="ChildProgressBar"/>
         </Grid>
     </Grid>
-</Window>
+</windows:RelhaxWindow>

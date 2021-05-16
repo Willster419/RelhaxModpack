@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Windows;
+﻿using RelhaxModpack.Settings;
+using RelhaxModpack.Windows;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

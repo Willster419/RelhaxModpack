@@ -26,6 +26,7 @@ using RelhaxModpack.Utilities.Enums;
 using System.Xml.Linq;
 using System.Collections;
 using RelhaxModpack.Common;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Utilities
 {
@@ -80,15 +81,15 @@ namespace RelhaxModpack.Utilities
         public static async Task<XmlDocument> GetManagerInfoDocumentAsync(bool overwrite)
         {
 
-            Settings.ManagerInfoZipfile = await GetManagerInfoZipfileAsync(overwrite);
-            if(Settings.ManagerInfoZipfile == null)
+            ((App)Application.Current).ManagerInfoZipfile = await GetManagerInfoZipfileAsync(overwrite);
+            if(((App)Application.Current).ManagerInfoZipfile == null)
             {
                 Logging.Exception("Settings.ModInfoZipfile is null");
                 return null;
             }
 
             //get the version info string
-            string xmlString = FileUtils.GetStringFromZip(Settings.ManagerInfoZipfile, "manager_version.xml");
+            string xmlString = FileUtils.GetStringFromZip(((App)Application.Current).ManagerInfoZipfile, "manager_version.xml");
             if (string.IsNullOrEmpty(xmlString))
             {
                 Logging.Exception("Failed to get xml string from Settings.ModInfoZipfile");
@@ -108,27 +109,27 @@ namespace RelhaxModpack.Utilities
         {
             //first delete the old file if it exists, just to check
 #pragma warning disable CS0618 // Type or member is obsolete
-            if (File.Exists(Settings.ManagerInfoDatFile))
-                File.Delete(Settings.ManagerInfoDatFile);
+            if (File.Exists(ApplicationConstants.ManagerInfoDatFile))
+                File.Delete(ApplicationConstants.ManagerInfoDatFile);
 #pragma warning restore CS0618 // Type or member is obsolete
 
             //if the zipfile is not null and no overwrite, then stop
-            if (Settings.ManagerInfoZipfile != null && !overwrite)
+            if (((App)Application.Current).ManagerInfoZipfile != null && !overwrite)
             {
-                return Settings.ManagerInfoZipfile;
+                return ((App)Application.Current).ManagerInfoZipfile;
             }
             //if zipfile is not null and we are overwriting, then dispose of the zip first
-            else if (Settings.ManagerInfoZipfile != null && overwrite)
+            else if (((App)Application.Current).ManagerInfoZipfile != null && overwrite)
             {
-                Settings.ManagerInfoZipfile.Dispose();
-                Settings.ManagerInfoZipfile = null;
+                ((App)Application.Current).ManagerInfoZipfile.Dispose();
+                ((App)Application.Current).ManagerInfoZipfile = null;
             }
 
             using (WebClient client = new WebClient())
             {
                 try
                 {
-                    byte[] zipfile = await client.DownloadDataTaskAsync(Settings.ManagerInfoURLBigmods);
+                    byte[] zipfile = await client.DownloadDataTaskAsync(ApplicationConstants.ManagerInfoURLBigmods);
                     return ZipFile.Read(new MemoryStream(zipfile));
                 }
                 catch(Exception ex)
@@ -144,9 +145,10 @@ namespace RelhaxModpack.Utilities
         /// Compares if the current application version is the same as the version checked from online
         /// </summary>
         /// <param name="currentVersion">The string representation of the latest modpack application version</param>
+        /// <param name="applicationVersion">Control if the update check will use the beta or stable distribution channel</param>
         /// <returns>True if the manager string versions are the same, false otherwise</returns>
         /// <remarks>IsManagerUptoDate will return false if it fails to get the latest managerInfo zip file</remarks>
-        public static async Task<bool> IsManagerUptoDate(string currentVersion)
+        public static async Task<bool> IsManagerUptoDate(string currentVersion, ApplicationVersions applicationVersion)
         {
             //actually compare the build of the application of the requested distribution channel
             XmlDocument doc = await GetManagerInfoDocumentAsync(false);
@@ -156,7 +158,7 @@ namespace RelhaxModpack.Utilities
                 return false;
             }
 
-            string applicationOnlineVersion = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
+            string applicationOnlineVersion = (applicationVersion == ApplicationVersions.Stable) ?
                 XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_stable").Trim() ://stable
                 XmlUtils.GetXmlStringFromXPath(doc, "//version/relhax_v2_beta").Trim();//beta
 
@@ -480,7 +482,7 @@ namespace RelhaxModpack.Utilities
         /// <returns>a Unique IDentifier for a package</returns>
         public static string GenerateUID()
         {
-            return RandomString(Settings.NumberUIDCharacters, Settings.UIDCharacters);
+            return RandomString(ApplicationConstants.NumberUIDCharacters, ApplicationConstants.UIDCharacters);
         }
 
         /// <summary>
@@ -894,16 +896,16 @@ namespace RelhaxModpack.Utilities
         {
             //make sure that the app data folder exists
             //if it does not, then it does not need to run this
-            if (!Directory.Exists(Settings.AppDataFolder))
+            if (!Directory.Exists(ApplicationConstants.AppDataFolder))
             {
                 Logging.Info("Appdata folder does not exist, creating");
-                Directory.CreateDirectory(Settings.AppDataFolder);
+                Directory.CreateDirectory(ApplicationConstants.AppDataFolder);
                 return true;
             }
             Logging.Info("Appdata folder exists, backing up user settings and clearing cache");
 
             //make the temp folder if it does not already exist
-            string AppPathTempFolder = Path.Combine(Settings.RelhaxTempFolderPath, "AppDataBackup");
+            string AppPathTempFolder = Path.Combine(ApplicationConstants.RelhaxTempFolderPath, "AppDataBackup");
             //delete if possibly from previous install
             if (Directory.Exists(AppPathTempFolder))
                 FileUtils.DirectoryDelete(AppPathTempFolder, true);
@@ -924,9 +926,9 @@ namespace RelhaxModpack.Utilities
             foreach (string file in fileNames)
             {
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
-                if (File.Exists(Path.Combine(Settings.AppDataFolder, file)))
+                if (File.Exists(Path.Combine(ApplicationConstants.AppDataFolder, file)))
                 {
-                    if (!FileUtils.FileMove(Path.Combine(Settings.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
+                    if (!FileUtils.FileMove(Path.Combine(ApplicationConstants.AppDataFolder, file), Path.Combine(AppPathTempFolder, file)))
                     {
                         Logging.Error("Failed to move file for clear cache");
                         return false;
@@ -940,9 +942,9 @@ namespace RelhaxModpack.Utilities
 
             foreach (string folder in folderNames)
             {
-                if (Directory.Exists(Path.Combine(Settings.AppDataFolder, folder)))
+                if (Directory.Exists(Path.Combine(ApplicationConstants.AppDataFolder, folder)))
                 {
-                    FileUtils.DirectoryMove(Path.Combine(Settings.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
+                    FileUtils.DirectoryMove(Path.Combine(ApplicationConstants.AppDataFolder, folder), Path.Combine(AppPathTempFolder, folder), true);
                 }
                 else
                 {
@@ -952,17 +954,17 @@ namespace RelhaxModpack.Utilities
 
             //now delete the temp folder
             Logging.WriteToLog("Starting clearing cache step 2 of 3: actually clearing cache", Logfiles.Application, LogLevel.Debug);
-            FileUtils.DirectoryDelete(Settings.AppDataFolder, true);
+            FileUtils.DirectoryDelete(ApplicationConstants.AppDataFolder, true);
 
             //then put the above files back
             Logging.WriteToLog("Starting clearing cache step 3 of 3: restoring old files", Logfiles.Application, LogLevel.Debug);
-            Directory.CreateDirectory(Settings.AppDataFolder);
+            Directory.CreateDirectory(ApplicationConstants.AppDataFolder);
             foreach (string file in fileNames)
             {
                 Logging.WriteToLog("Processing cache file/folder to move: " + file, Logfiles.Application, LogLevel.Debug);
                 if (File.Exists(Path.Combine(AppPathTempFolder, file)))
                 {
-                    if (!FileUtils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(Settings.AppDataFolder, file)))
+                    if (!FileUtils.FileMove(Path.Combine(AppPathTempFolder, file), Path.Combine(ApplicationConstants.AppDataFolder, file)))
                     {
                         Logging.Error("Failed to move file for clear cache");
                         return false;
@@ -984,7 +986,7 @@ namespace RelhaxModpack.Utilities
             {
                 if (Directory.Exists(Path.Combine(AppPathTempFolder, folder)))
                 {
-                    FileUtils.DirectoryMove(Path.Combine(AppPathTempFolder, folder), Path.Combine(Settings.AppDataFolder, folder), true);
+                    FileUtils.DirectoryMove(Path.Combine(AppPathTempFolder, folder), Path.Combine(ApplicationConstants.AppDataFolder, folder), true);
                 }
                 else
                 {
@@ -1007,6 +1009,28 @@ namespace RelhaxModpack.Utilities
             {
                 var converter = TypeDescriptor.GetConverter(propertyInfoOfObject.PropertyType);
                 propertyInfoOfObject.SetValue(objectToSetValueOn, converter.ConvertFrom(valueToSet));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to set a field value of a class or structure object instance with the string valueToSet
+        /// </summary>
+        /// <param name="objectToSetValueOn">The class or structure object instance to have property set</param>
+        /// <param name="fieldInfoOfObject">The field information/metadata of the field to set on the object</param>
+        /// <param name="valueToSet">The string version of the value to set</param>
+        /// <returns>False if the value could not be set, true otherwise</returns>
+        public static bool SetObjectField(object objectToSetValueOn, FieldInfo fieldInfoOfObject, string valueToSet)
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(fieldInfoOfObject.FieldType);
+                fieldInfoOfObject.SetValue(objectToSetValueOn, converter.ConvertFrom(valueToSet));
                 return true;
             }
             catch (Exception ex)
@@ -1050,9 +1074,10 @@ namespace RelhaxModpack.Utilities
         {
             bool customTyping = !(string.IsNullOrEmpty(customTypeAttributeName));
             if (customTyping && typeMapper == null)
-                throw new NullReferenceException();
+                throw new NullReferenceException(nameof(typeMapper) + " is null");
             if (databasePackageObject == null || listPropertyInfo == null || xmlListItems == null)
-                throw new NullReferenceException();
+                throw new NullReferenceException(string.Format("{0}: null = {1}, {2}: null = {3}, {4}: null = {5}",
+                    nameof(databasePackageObject), databasePackageObject == null, nameof(listPropertyInfo), listPropertyInfo == null, nameof(xmlListItems), xmlListItems == null));
 
             //get the list interfaced component
             IList listProperty = listPropertyInfo.GetValue(databasePackageObject) as IList;
@@ -1092,6 +1117,10 @@ namespace RelhaxModpack.Utilities
                         listProperty.Add(newObject);
                         continue;
                     }
+                }
+                else if (listObjectType.Equals(typeof(string)))
+                {
+                    listProperty.Add(listElement.Value);
                 }
                 
                 object listEntryObject = Activator.CreateInstance(listObjectType);

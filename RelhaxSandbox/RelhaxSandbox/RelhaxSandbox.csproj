@@ -107,6 +107,7 @@
     </ApplicationDefinition>
     <Compile Include="ComboboxWithSelectionCommit.cs" />
     <Compile Include="CustomBrushConverter.cs" />
+    <Compile Include="DownloadManager.cs" />
     <Compile Include="RelhaxHyperlink.xaml.cs">
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>

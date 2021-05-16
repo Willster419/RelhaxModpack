@@ -8,6 +8,7 @@ using RelhaxModpack.Utilities;
 using RelhaxModpack.Database;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Utilities.ClassEventArgs;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -21,7 +22,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for DatabaseEditorTrnasferWindow.xaml
     /// </summary>
-    public partial class DatabaseEditorTrnasferWindow : RelhaxWindow
+    public partial class DatabaseEditorTransferWindow : RelhaxWindow
     {
         /// <summary>
         /// The path to the zip file on the disk
@@ -68,6 +69,8 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public EditorSettings EditorSettings = null;
 
+        public string WoTModpackOnlineFolderVersion { get; set; }
+
         private WebClient client = null;
         private string CompleteFTPPath = string.Empty;
         private long FTPDownloadFilesize = -1;
@@ -76,7 +79,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseEditorDownlaod class
         /// </summary>
-        public DatabaseEditorTrnasferWindow()
+        public DatabaseEditorTransferWindow(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
@@ -97,13 +100,13 @@ namespace RelhaxModpack.Windows
             switch (TransferMode)
             {
                 case EditorTransferMode.UploadZip:
-                    ProgressBody.Text = string.Format("Uploading {0} to FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
+                    ProgressBody.Text = string.Format("Uploading {0} to FTP folder {1}", Path.GetFileName(ZipFilePathDisk), WoTModpackOnlineFolderVersion);
                     break;
                 case EditorTransferMode.UploadMedia:
                     ProgressBody.Text = string.Format("Uploading {0} to FTP folder Medias/...", ZipFileName);
                     break;
                 case EditorTransferMode.DownloadZip:
-                    ProgressBody.Text = string.Format("Downloading {0} from FTP folder {1}", Path.GetFileName(ZipFilePathDisk), Settings.WoTModpackOnlineFolderVersion);
+                    ProgressBody.Text = string.Format("Downloading {0} from FTP folder {1}", Path.GetFileName(ZipFilePathDisk), WoTModpackOnlineFolderVersion);
                     break;
             }
 
@@ -119,7 +122,7 @@ namespace RelhaxModpack.Windows
                     case EditorTransferMode.UploadMedia:
                         //before uploading, make sure it doesn't exist first (zipfile or media)
                         ProgressHeader.Text = "Checking if file exists on server...";
-                        Logging.Editor("Checking if {0} already exists on the server in folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
+                        Logging.Editor("Checking if {0} already exists on the server in folder {1}", LogLevel.Info, ZipFileName, WoTModpackOnlineFolderVersion);
                         string[] listOfFilesOnServer = await FtpUtils.FtpListFilesFoldersAsync(ZipFilePathOnline, Credential);
                         if (listOfFilesOnServer.Contains(ZipFileName) && MessageBox.Show("File already exists, overwrite?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                         {
@@ -133,7 +136,7 @@ namespace RelhaxModpack.Windows
                         client.UploadFileCompleted += Client_DownloadUploadFileCompleted;
 
                         //run the FTP upload
-                        Logging.Editor("Starting FTP upload of {0} from folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
+                        Logging.Editor("Starting FTP upload of {0} from folder {1}", LogLevel.Info, ZipFileName, WoTModpackOnlineFolderVersion);
                         try
                         {
                             await client.UploadFileTaskAsync(CompleteFTPPath, ZipFilePathDisk);
@@ -148,6 +151,11 @@ namespace RelhaxModpack.Windows
                                 TransferMode = this.TransferMode
                             });
                             DeleteFileButton.IsEnabled = true;
+
+                            if (TransferMode == EditorTransferMode.UploadZip && EditorSettings.DeleteUploadLocallyUponCompletion)
+                            {
+                                DeleteFileButton_Click(null, null);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -165,7 +173,7 @@ namespace RelhaxModpack.Windows
                         client.DownloadFileCompleted += Client_DownloadUploadFileCompleted;
 
                         //run the FTP download
-                        Logging.Editor("Starting FTP download of {0} from folder {1}", LogLevel.Info, ZipFileName, Settings.WoTModpackOnlineFolderVersion);
+                        Logging.Editor("Starting FTP download of {0} from folder {1}", LogLevel.Info, ZipFileName, WoTModpackOnlineFolderVersion);
                         try
                         {
                             FTPDownloadFilesize = await FtpUtils.FtpGetFilesizeAsync(CompleteFTPPath, Credential);
@@ -201,13 +209,13 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("Countdown is > 0, starting");
                 TimeoutClose.Visibility = Visibility.Visible;
                 timer.Start();
-                TimeoutClose.Text = Countdown.ToString();
+                TimeoutClose.Text = string.Format("Closing window in {0}", Countdown.ToString());
             }
         }
 
         private void Timer_Elapsed(object sender, EventArgs e)
         {
-            TimeoutClose.Text = (--Countdown).ToString();
+            TimeoutClose.Text = string.Format("Closing window in {0}", (--Countdown).ToString());
             if (Countdown == 0)
             {
                 Logging.Editor("Countdown complete, closing the window");

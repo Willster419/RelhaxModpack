@@ -1,4 +1,6 @@
-﻿namespace RelhaxModpack.Windows
+﻿using RelhaxModpack.Settings;
+
+namespace RelhaxModpack.Windows
 {
     /// <summary>
     /// Interaction logic for ExceptionCaptureDisplay.xaml
@@ -8,7 +10,7 @@
         /// <summary>
         /// Create an instance of the ExceptionCaptureDisplay window
         /// </summary>
-        public ExceptionCaptureDisplay()
+        public ExceptionCaptureDisplay(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

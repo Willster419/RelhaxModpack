@@ -7,6 +7,8 @@ using RelhaxModpack.Utilities.Enums;
 using System.Collections.Generic;
 using RelhaxModpack.Database;
 using System.Text.RegularExpressions;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxUnitTests
 {
@@ -25,8 +27,16 @@ namespace RelhaxUnitTests
             AutomationSequencer sequencer = new AutomationSequencer()
             {
                 AutomationRunnerSettings = this.AutomationRunnerSettings,
-                AutomationRunMode = AutomationRunMode.Interactive
+                AutomationRunMode = AutomationRunMode.Interactive,
+                WoTClientVersion = "TODO",
+                WoTModpackOnlineFolderVersion = "TODO"
             };
+            throw new BadMemeException("you should, like, finish this");
+            /*
+            //TODO: dynamically get this from the beta db?
+            ApplicationSettings.WoTModpackOnlineFolderVersion = "1.10.0";
+            ApplicationSettings.WoTClientVersion = "1.10.0.4";
+            */
 
             await sequencer.LoadBranchesListAsync();
             await sequencer.LoadRootDocumentAsync();
@@ -62,6 +72,7 @@ namespace RelhaxUnitTests
              * 
                 MATCHES ALL
                 ^[^{}]*(?>(?>(?'open'{)[^{}]*)+(?>(?'-open'})[^{}]*)+)+(?(open)(?!))$
+
                 ONLY MATCHES ONE
                 ^[^{}]*(?'open'{)+(?'inner'[^{}]*)(?'-open'})+[^{}]*(?(open)(?!))$
 
@@ -133,7 +144,7 @@ namespace RelhaxUnitTests
             //create a random task so we can process macros for this test
             ShellExecuteTask task = new ShellExecuteTask()
             {
-                Wd = Settings.ApplicationStartupPath,
+                Wd = ApplicationConstants.ApplicationStartupPath,
                 AutomationSequence = sequence
             };
             task.Macros.AddRange(automationMacros);
@@ -147,7 +158,7 @@ namespace RelhaxUnitTests
 
                 task.ProcessMacros();
 
-                Assert.AreEqual(task.Wd, Settings.ApplicationStartupPath);
+                Assert.AreEqual(task.Wd, ApplicationConstants.ApplicationStartupPath);
                 Assert.AreEqual(task.Cmd, answer);
             }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Settings
 {
     /// <summary>
     /// Defines settings used in the database automation runner window
@@ -14,7 +14,12 @@ namespace RelhaxModpack
         /// <summary>
         /// The name of the xml file on disk
         /// </summary>
-        public string Filename { get; } = Settings.AutomationRunnerSettingsFilename;
+        public string Filename { get; } = "AutomationRunnerSettings.xml";
+
+        /// <summary>
+        /// A list of properties and fields to exclude from saving/loading to and from xml
+        /// </summary>
+        public string[] MembersToExclude { get { return new string[] { nameof(MembersToExclude), nameof(Filename) }; } }
 
         /// <summary>
         /// The name of the branch on github that the user specifies to download the automation scripts from

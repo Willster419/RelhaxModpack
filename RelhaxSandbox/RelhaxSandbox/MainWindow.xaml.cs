@@ -806,5 +806,41 @@ namespace RelhaxSandbox
 
             //in this current configuration, the TestSubWindow does *not* show up in the memory profiler
         }
+
+        private void DownloadManagerTestingButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (DownloadManager manager = new DownloadManager())
+            {
+                manager.DownloadPackages("https://bigmods.relhaxmodpack.com/RelhaxModpack/RelhaxModpack.exe", "RelhaxModpack.exe");
+                DownloadManagerTestingHashResult.Text = "MD5 hash is " + manager.Hash;
+            }
+        }
+
+        private void ThreadingTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            Thread myThread = new Thread(() => {
+                bool access = ThreadingTestButton.Dispatcher.CheckAccess();
+                //the next line will fail with the exception: 
+                //System.InvalidOperationException: 'The calling thread cannot access this object because a different thread owns it.'
+                //only the thread that created the object can 
+                //ThreadingTestButton.Content = "test";
+
+
+                //an interesting note is that one could create a window, show it, and invoke the dispatcher to run
+                //such that it tells the dispatcher of *this* thread to 'idle' (wait for UI input)
+                //while it's technically multithreading, it doesn't allow parallelism within a window itself I.E:
+
+                //SplashWindow tempWindow = new SplashWindow();
+                //tempWindow.Show();
+                //System.Windows.Threading.Dispatcher.Run();
+
+                //https://stackoverflow.com/a/1111485/3128017
+                //https://stackoverflow.com/a/8669719/3128017
+            });
+
+            myThread.SetApartmentState(ApartmentState.STA);
+            myThread.IsBackground = true;
+            myThread.Start();
+        }
     }
 }

@@ -22,16 +22,31 @@ using Trigger = RelhaxModpack.Database.Trigger;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Utilities.ClassEventArgs;
 using System.Windows.Controls.Primitives;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Windows
 {
     /// <summary>
     /// Interaction logic for DatabaseEditor.xaml
     /// </summary>
-    public partial class DatabaseEditor : RelhaxWindow
+    public partial class DatabaseEditor : RelhaxCustomFeatureWindow
     {
-        //private
-        private EditorSettings EditorSettings;
+        /// <summary>
+        /// The command line argument specified at application launch to show this window
+        /// </summary>
+        public const string CommandLineArg = "database-editor";
+
+        /// <summary>
+        /// The name of the logfile
+        /// </summary>
+        public const string LoggingFilename = "RelhaxEditor.log";
+
+        public string WoTModpackOnlineFolderVersion { get; set; }
+
+        public string WoTClientVersion { get; set; }
+
+        private EditorSettings EditorSettings = new EditorSettings();
         private List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
         private List<Dependency> Dependencies = new List<Dependency>();
         private List<Category> ParsedCategoryList = new List<Category>();
@@ -43,7 +58,6 @@ namespace RelhaxModpack.Windows
         private TreeViewItem ItemToExpand;
         private Point BeforeDragDropPoint;
         private bool IsScrolling = false;
-        //private bool AlreadyLoggedMouseMove = false;
         private bool AlreadyLoggedScroll = false;
         private bool Init = true;
         private object SelectedItem = null;
@@ -56,39 +70,20 @@ namespace RelhaxModpack.Windows
             "-----Global Dependencies-----",
             "-----Dependencies-----",
         };
-        private readonly string HttpRegexSearch = @"https*:\/{2}\S+";
         private readonly string UpdatedPackageNewCRC = "f";
-
-        //public
-        /// <summary>
-        /// Indicates if this editor instance was launched from the MainWindow or from command line
-        /// </summary>
-        /// <remarks>This changes the behavior of the logging for the editor</remarks>
-        public bool LaunchedFromMainWindow = false;
 
         #region Stuff
         /// <summary>
         /// Create an instance of the DatabaseEditor
         /// </summary>
-        public DatabaseEditor()
+        public DatabaseEditor(ModpackSettings modpackSettings) : base (modpackSettings)
         {
             InitializeComponent();
+            Settings = EditorSettings;
         }
 
         private void OnApplicationLoad(object sender, RoutedEventArgs e)
         {
-            Logging.Editor("Editor start");
-            EditorSettings = new EditorSettings();
-            Logging.Editor("Loading editor settings");
-            if (!Settings.LoadSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
-            {
-                Logging.Editor("Failed to load editor settings, using defaults", LogLevel.Warning);
-            }
-            else
-            {
-                Logging.Editor("Editor settings loaded success");
-            }
-
             //check if we are loading the document auto from the command line
             LoadSettingsToUI();
             if (!string.IsNullOrWhiteSpace(CommandLineSettings.EditorAutoLoadFileName))
@@ -119,8 +114,8 @@ namespace RelhaxModpack.Windows
             }
 
             //init timers
-            ReselectOldItem = new DispatcherTimer(TimeSpan.FromMilliseconds(50), DispatcherPriority.Normal, AwesomeHack_Tick, this.Dispatcher) { IsEnabled = false };
-            DragDropTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, OnDragDropTimerTick, this.Dispatcher) { IsEnabled = false };
+            ReselectOldItem = new DispatcherTimer(TimeSpan.FromMilliseconds(50), DispatcherPriority.Normal, AwesomeHack_Tick, base.Dispatcher) { IsEnabled = false };
+            DragDropTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, OnDragDropTimerTick, base.Dispatcher) { IsEnabled = false };
 
             //clear searchbox
             SearchBox.Items.Clear();
@@ -130,24 +125,6 @@ namespace RelhaxModpack.Windows
             foreach (string s in InstallEngine.CompleteTriggerList)
                 LoadedTriggersComboBox.Items.Add(s);
             Init = false;
-
-            if (!CommandLineSettings.SkipUpdate)
-            {
-                if (!LaunchedFromMainWindow)
-                {
-                    Task.Run(async () =>
-                    {
-                        if (!await CommonUtils.IsManagerUptoDate(CommonUtils.GetApplicationVersion()))
-                        {
-                            MessageBox.Show("Your application is out of date. Please launch the application normally to update");
-                        }
-                    });
-                }
-            }
-            else
-            {
-                Logging.Editor("Skipping update check from command line setting", LogLevel.Warning);
-            }
         }
 
         private void AwesomeHack_Tick(object sender, EventArgs e)
@@ -189,15 +166,12 @@ namespace RelhaxModpack.Windows
                     return;
                 }
             }
-            if (!Logging.IsLogDisposed(Logfiles.Editor))
-            {
-                if (Logging.IsLogOpen(Logfiles.Editor))
-                    Logging.Editor("Saving editor settings");
-                if (Settings.SaveSettings(Settings.EditorSettingsFilename, typeof(EditorSettings), null, EditorSettings))
-                    if (Logging.IsLogOpen(Logfiles.Editor))
-                        Logging.Editor("Editor settings saved");
-                Logging.DisposeLogging(Logfiles.Editor);
-            }
+
+            Logging.TryWriteToLog("Saving editor settings", Logfiles.Editor, LogLevel.Info);
+            SettingsParser parser = new SettingsParser();
+            parser.SaveSettings(Settings);
+            Logging.TryWriteToLog("Editor settings saved", Logfiles.Editor, LogLevel.Info);
+            Logging.DisposeLogging(Logfiles.Editor);
         }
 
         private int GetMaxPatchGroups()
@@ -382,15 +356,25 @@ namespace RelhaxModpack.Windows
         {
             BigmodsUsernameSetting.Text = EditorSettings.BigmodsUsername;
             BigmodsPasswordSetting.Text = EditorSettings.BigmodsPassword;
+
+            DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
+
+            SelectTransferWindowMovePathTextbox.Text = EditorSettings.UploadZipMoveFolder;
+
             SaveSelectionBeforeLeaveSetting.IsChecked = EditorSettings.SaveSelectionBeforeLeave;
+
+            ShowConfirmOnPackageApplySetting.IsChecked = EditorSettings.ShowConfirmationOnPackageApply;
+            ShowConfirmOnPackageAddRemoveEditSetting.IsChecked = EditorSettings.ShowConfirmationOnPackageAddRemoveMove;
+
             ApplyBehaviorDefaultSetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.Default ? true : false;
             ApplyBehaviorApplyTriggersSaveSetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.ApplyTriggersSave ? true : false;
             ApplyBehaviorSaveTriggersApplySetting.IsChecked = EditorSettings.ApplyBehavior == ApplyBehavior.SaveTriggersApply ? true : false;
-            ShowConfirmOnPackageApplySetting.IsChecked = EditorSettings.ShowConfirmationOnPackageApply;
-            ShowConfirmOnPackageAddRemoveEditSetting.IsChecked = EditorSettings.ShowConfirmationOnPackageAddRemoveMove;
-            DefaultSaveLocationSetting.Text = EditorSettings.DefaultEditorSaveLocation;
+
             FtpUpDownAutoCloseTimoutSlider.Value = EditorSettings.FTPUploadDownloadWindowTimeout;
             FtpUpDownAutoCloseTimoutDisplayLabel.Text = EditorSettings.FTPUploadDownloadWindowTimeout.ToString();
+
+            DatabaseTransferDeleteActuallyMove.IsChecked = EditorSettings.UploadZipDeleteIsActuallyMove;
+            DatabaseTransferAutoDelete.IsChecked = EditorSettings.DeleteUploadLocallyUponCompletion;
         }
         #endregion
 
@@ -582,10 +566,8 @@ namespace RelhaxModpack.Windows
                 {
                     //basic tab is always difficult
                     PackagePackageNameDisplay.IsEnabled = true;
-                    PackageStartAddressDisplay.IsEnabled = true;
                     PackageMaintainersDisplay.IsEnabled = true;
                     PackageZipFileDisplay.IsEnabled = true;
-                    PackageEndAddressDisplay.IsEnabled = true;
                     PackageDevURLDisplay.IsEnabled = true;
                     PackageVersionDisplay.IsEnabled = true;
                     PackageAuthorDisplay.IsEnabled = true;
@@ -594,6 +576,8 @@ namespace RelhaxModpack.Windows
                     PackageLastUpdatedDisplay.IsEnabled = true;
                     PackageLogAtInstallDisplay.IsEnabled = true;
                     PackageEnabledDisplay.IsEnabled = true;//kinda meta
+                    PackageDeprecatedDisplay.IsEnabled = true;
+                    PackageMinimalistModeExcludeDisplay.IsEnabled = true;
                     ApplyButton.IsEnabled = true;
                     ZipDownload.IsEnabled = true;
                     ZipUload.IsEnabled = true;
@@ -824,9 +808,7 @@ namespace RelhaxModpack.Windows
             //set text field texts
             PackagePackageNameDisplay.Text = package.PackageName;
             PackageMaintainersDisplay.Text = package.Maintainers;
-            PackageStartAddressDisplay.Text = package.StartAddress;
             PackageZipFileDisplay.Text = package.ZipFile;
-            PackageEndAddressDisplay.Text = package.EndAddress;
             PackageVersionDisplay.Text = package.Version;
             PackageAuthorDisplay.Text = package.Author;
             PackageUidDisplay.Text = package.UID;
@@ -874,6 +856,8 @@ namespace RelhaxModpack.Windows
             //some checkboxes
             PackageLogAtInstallDisplay.IsChecked = package.LogAtInstall;
             PackageEnabledDisplay.IsChecked = package.Enabled;
+            PackageDeprecatedDisplay.IsChecked = package.Deprecated;
+            PackageMinimalistModeExcludeDisplay.IsChecked = package.MinimalistModeExclude;
 
             //devURL
             PackageDevURLDisplay.Text = MacroUtils.MacroReplace(package.DevURL,ReplacementTypes.TextUnescape);
@@ -1095,8 +1079,6 @@ namespace RelhaxModpack.Windows
             //save package elements first
             package.PackageName = PackagePackageNameDisplay.Text;
             package.Maintainers = PackageMaintainersDisplay.Text;
-            package.StartAddress = PackageStartAddressDisplay.Text;
-            package.EndAddress = PackageEndAddressDisplay.Text;
 
             //devURL is separated by newlines for array list, so it's not necessary to escape
             package.DevURL = MacroUtils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape);
@@ -1106,6 +1088,8 @@ namespace RelhaxModpack.Windows
             package.PatchGroup = (int)PackagePatchGroupDisplay.SelectedItem;
             package.LogAtInstall = (bool)PackageLogAtInstallDisplay.IsChecked;
             package.Enabled = (bool)PackageEnabledDisplay.IsChecked;
+            package.Deprecated = (bool)PackageDeprecatedDisplay.IsChecked;
+            package.MinimalistModeExclude = (bool)PackageMinimalistModeExcludeDisplay.IsChecked;
             package.InternalNotes = MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape);
             package.Triggers = string.Join(",", PackageTriggersDisplay.Items.Cast<string>());
             package.Tags.Clear();
@@ -1301,10 +1285,6 @@ namespace RelhaxModpack.Windows
                 return true;
             if (!package.Maintainers.Equals(PackageMaintainersDisplay.Text))
                 return true;
-            if (!package.StartAddress.Equals(PackageStartAddressDisplay.Text))
-                return true;
-            if (!package.EndAddress.Equals(PackageEndAddressDisplay.Text))
-                return true;
 
             //devURL is separated by newlines for array list, so it's not necessary to escape
             if (!package.DevURL.Equals(MacroUtils.MacroReplace(PackageDevURLDisplay.Text, ReplacementTypes.TextEscape)))
@@ -1320,6 +1300,10 @@ namespace RelhaxModpack.Windows
             if (!package.LogAtInstall.Equals((bool)PackageLogAtInstallDisplay.IsChecked))
                 return true;
             if (!package.Enabled.Equals((bool)PackageEnabledDisplay.IsChecked))
+                return true;
+            if (!package.Deprecated.Equals((bool)PackageDeprecatedDisplay.IsChecked))
+                return true;
+            if (!package.MinimalistModeExclude.Equals((bool)PackageMinimalistModeExcludeDisplay.IsChecked))
                 return true;
             if (!package.InternalNotes.Equals(MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape)))
                 return true;
@@ -1822,16 +1806,17 @@ namespace RelhaxModpack.Windows
                 return;
 
             //make and run the uploader instance
-            DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
+            DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow(this.ModpackSettings)
             {
                 ZipFilePathDisk = SaveZipFileDialog.FileName,
-                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion),
+                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, WoTModpackOnlineFolderVersion),
                 ZipFileName = Path.GetFileName(packToWorkOn.ZipFile),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 TransferMode = EditorTransferMode.DownloadZip,
                 PackageToUpdate = null,
                 Countdown = EditorSettings.FTPUploadDownloadWindowTimeout,
-                EditorSettings = EditorSettings
+                EditorSettings = EditorSettings,
+                WoTModpackOnlineFolderVersion = this.WoTModpackOnlineFolderVersion
             };
             name.Show();
         }
@@ -1879,16 +1864,17 @@ namespace RelhaxModpack.Windows
                 return;
 
             //make and run the uploader instance
-            DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
+            DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow(this.ModpackSettings)
             {
                 ZipFilePathDisk = zipFileToUpload,
-                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, Settings.WoTModpackOnlineFolderVersion),
+                ZipFilePathOnline = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPUsersRoot, WoTModpackOnlineFolderVersion),
                 ZipFileName = Path.GetFileName(zipFileToUpload),
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword),
                 TransferMode = EditorTransferMode.UploadZip,
                 PackageToUpdate = packToWorkOn,
                 Countdown = EditorSettings.FTPUploadDownloadWindowTimeout,
-                EditorSettings = EditorSettings
+                EditorSettings = EditorSettings,
+                WoTModpackOnlineFolderVersion = this.WoTModpackOnlineFolderVersion
             };
             name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
             name.Show();
@@ -1907,7 +1893,7 @@ namespace RelhaxModpack.Windows
                     Media m = new Media()
                     {
                         MediaType = MediaType.Picture,
-                        URL = string.Format("{0}{1}", e.UploadedFilepathOnline, e.UploadedFilename).Replace("ftp:", "http:")
+                        URL = string.Format("{0}{1}", e.UploadedFilepathOnline, e.UploadedFilename).Replace("ftp:", "https:")
                     };
                     SelectablePackage updatedPackage = e.Package as SelectablePackage;
                     updatedPackage.Medias.Add(m);
@@ -1934,6 +1920,7 @@ namespace RelhaxModpack.Windows
                         ApplyDatabaseObject(e.Package);
                         ShowDatabasePackage(e.Package);
                     }
+                    TriggerMirrorSyncButton_Click(null, null);
                     break;
             }
 
@@ -1964,8 +1951,8 @@ namespace RelhaxModpack.Windows
             }
 
             //actually save
-            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), Settings.BetaDatabaseV2RootFilename),
-                        Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), ApplicationConstants.BetaDatabaseV2RootFilename),
+                        WoTClientVersion, WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             UnsavedChanges = false;
         }
@@ -1985,8 +1972,8 @@ namespace RelhaxModpack.Windows
                     AddExtension = true,
                     CheckPathExists = true,
                     DefaultExt = "xml",
-                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
-                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
+                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? ApplicationConstants.ApplicationStartupPath :
+                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : ApplicationConstants.ApplicationStartupPath,
                     Title = string.Format("Save Database")
                 };
 
@@ -2000,8 +1987,8 @@ namespace RelhaxModpack.Windows
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
 
             //actually save
-            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), Settings.BetaDatabaseV2RootFilename),
-                        Settings.WoTClientVersion, Settings.WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), ApplicationConstants.BetaDatabaseV2RootFilename),
+                        WoTClientVersion, WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
 
             UnsavedChanges = false;
         }
@@ -2059,8 +2046,8 @@ namespace RelhaxModpack.Windows
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             //for the folder version: //modInfoAlpha.xml/@version
-            Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
-            Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
+            WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
+            WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
         }
@@ -2101,8 +2088,8 @@ namespace RelhaxModpack.Windows
             //set the onlineFolder and version
             //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
             //for the folder version: //modInfoAlpha.xml/@version
-            Settings.WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
-            Settings.WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
+            WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
+            WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
         }
@@ -2118,8 +2105,8 @@ namespace RelhaxModpack.Windows
                     OverwritePrompt = false,
                     CheckFileExists = false,
                     DefaultExt = "xml",
-                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? Settings.ApplicationStartupPath :
-                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : Settings.ApplicationStartupPath,
+                    InitialDirectory = string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text) ? ApplicationConstants.ApplicationStartupPath :
+                    Directory.Exists(Path.GetDirectoryName(DefaultSaveLocationSetting.Text)) ? DefaultSaveLocationSetting.Text : ApplicationConstants.ApplicationStartupPath,
                     Title = "Select path to save database to. NOTE: It is only selecting path, does not save"
                 };
             if (!(bool)SaveDatabaseDialog.ShowDialog())
@@ -2128,7 +2115,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Database Add/Move/Remove buttons
+        #region Database Add/Move/Remove/Sync buttons
 
         private void RemoveDatabaseObjectButton_Click(object sender, RoutedEventArgs e)
         {
@@ -2180,7 +2167,7 @@ namespace RelhaxModpack.Windows
                 MessageBox.Show("Please select a package to perform action on");
                 return;
             }
-            EditorAddRemove addRemove = new EditorAddRemove()
+            EditorAddRemove addRemove = new EditorAddRemove(this.ModpackSettings)
             {
                 GlobalDependencies = GlobalDependencies,
                 Dependencies = Dependencies,
@@ -2219,7 +2206,7 @@ namespace RelhaxModpack.Windows
                 throw new BadMemeException("cbi2.Package is null");
 
             //make the window and show it
-            EditorAddRemove addRemove = new EditorAddRemove()
+            EditorAddRemove addRemove = new EditorAddRemove(this.ModpackSettings)
             {
                 GlobalDependencies = GlobalDependencies,
                 Dependencies = Dependencies,
@@ -2241,6 +2228,38 @@ namespace RelhaxModpack.Windows
                     addRemove.SelectedPackage, DragDropEffects.Copy, !addRemove.AddSameLevel);
                 DatabaseTreeView.Items.Refresh();
             }
+        }
+
+        private async void TriggerMirrorSyncButton_Click(object sender, RoutedEventArgs e)
+        {
+            TriggerMirrorSyncButton.IsEnabled = false;
+            TriggerMirrorSyncButton.Content = "Running...";
+            Logging.Editor("Running trigger manual sync script...");
+
+            string resultText = null;
+            using (PatientWebClient client = new PatientWebClient()
+            { Credentials = PrivateStuff.BigmodsNetworkCredentialScripts, Timeout = 100000 })
+            {
+                try
+                {
+                    string result = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsTriggerManualMirrorSyncPHP);
+                    Logging.Editor(result.Replace("<br />", "\n"));
+                    if (result.ToLower().Contains("trigger=1"))
+                        resultText = "SUCCESS!";
+                }
+                catch (WebException wex)
+                {
+                    Logging.Editor("Failed to run trigger manual sync script", LogLevel.Error);
+                    Logging.Editor(wex.ToString(), LogLevel.Exception);
+                    resultText = "ERROR!";
+                }
+            }
+
+            TriggerMirrorSyncButton.Content = resultText;
+            await Task.Delay(5000);
+
+            TriggerMirrorSyncButton.IsEnabled = true;
+            TriggerMirrorSyncButton.Content = "Trigger Sync";
         }
         #endregion
 
@@ -2342,7 +2361,7 @@ namespace RelhaxModpack.Windows
                 {
                     Preview = null;
                 }
-                Preview = new Preview()
+                Preview = new Preview(this.ModpackSettings)
                 {
                     Medias = new List<Media>() { media },
                     EditorMode = true,
@@ -2387,7 +2406,7 @@ namespace RelhaxModpack.Windows
             {
                 Preview = null;
             }
-            Preview = new Preview()
+            Preview = new Preview(this.ModpackSettings)
             {
                 Medias = new List<Media>() { testMedia },
                 EditorMode = true,
@@ -2525,7 +2544,7 @@ namespace RelhaxModpack.Windows
                 return;
 
             //select path to upload to on server
-            EditorSelectMediaUploadLocation selectUploadLocation = new EditorSelectMediaUploadLocation()
+            EditorSelectMediaUploadLocation selectUploadLocation = new EditorSelectMediaUploadLocation(this.ModpackSettings)
             {
                 Credential = new NetworkCredential(EditorSettings.BigmodsUsername, EditorSettings.BigmodsPassword)
             };
@@ -2536,7 +2555,7 @@ namespace RelhaxModpack.Windows
             foreach (string mediaToUploadPath in OpenPictureDialog.FileNames)
             {
                 string mediaToUploadFilename = Path.GetFileName(mediaToUploadPath);
-                DatabaseEditorTrnasferWindow name = new DatabaseEditorTrnasferWindow()
+                DatabaseEditorTransferWindow name = new DatabaseEditorTransferWindow(this.ModpackSettings)
                 {
                     ZipFilePathDisk = mediaToUploadPath,
                     ZipFilePathOnline = selectUploadLocation.UploadPath,
@@ -2545,7 +2564,8 @@ namespace RelhaxModpack.Windows
                     TransferMode = EditorTransferMode.UploadMedia,
                     PackageToUpdate = packToWorkOn,
                     Countdown = EditorSettings.FTPUploadDownloadWindowTimeout,
-                    EditorSettings = EditorSettings
+                    EditorSettings = EditorSettings,
+                    WoTModpackOnlineFolderVersion = this.WoTModpackOnlineFolderVersion
                 };
                 //changed to a show() with event handler made for on exit
                 name.OnEditorUploadDownloadClosed += OnEditorUploadFinished;
@@ -2773,6 +2793,11 @@ namespace RelhaxModpack.Windows
         private void DatabaseTransferDeleteActuallyMove_Click(object sender, RoutedEventArgs e)
         {
             EditorSettings.UploadZipDeleteIsActuallyMove = (bool)DatabaseTransferDeleteActuallyMove.IsChecked;
+        }
+
+        private void DatabaseTransferAutoDelete_Click(object sender, RoutedEventArgs e)
+        {
+            EditorSettings.DeleteUploadLocallyUponCompletion = (bool)DatabaseTransferAutoDelete.IsChecked;
         }
 
         private void SelectTransferWindowMovePathButton_Click(object sender, RoutedEventArgs e)

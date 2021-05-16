@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.Net;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Common;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -31,7 +33,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the VersionInfo class
         /// </summary>
-        public VersionInfo()
+        public VersionInfo(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
@@ -55,17 +57,20 @@ namespace RelhaxModpack.Windows
             Close();
         }
 
+        /// <summary>
+        /// Method that occurs when the key up event is fired. Sets the update confirm to false and runs the base method.
+        /// </summary>
+        /// <param name="sender">The object that sent the request.</param>
+        /// <param name="e">The key event args to go with the event.</param>
+        protected override void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            ConfirmUpdate = false;
+            base.OnKeyUp(sender, e);
+        }
+
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
-            {
-                Logging.Debug("[VersionInfo]: Windows 7 detected, enabling TLS 1.1 and 1.2");
-                System.Net.ServicePointManager.SecurityProtocol =
-                    SecurityProtocolType.Ssl3 |
-                    SecurityProtocolType.Tls |
-                    SecurityProtocolType.Tls11 |
-                    SecurityProtocolType.Tls12;
-            }
+            CommonUtils.CheckAndEnableTLS();
 
             //update the text box with the latest version
             ApplicationUpdateNotes.Text = Translations.GetTranslatedString("loadingApplicationUpdateNotes");
@@ -73,14 +78,14 @@ namespace RelhaxModpack.Windows
             using (WebClient client = new WebClient())
             {
                 Uri temp = new Uri((ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Stable) ?
-                    Settings.ApplicationNotesStableUrl : Settings.ApplicationNotesBetaUrl);
+                    ApplicationConstants.ApplicationNotesStableUrl : ApplicationConstants.ApplicationNotesBetaUrl);
                 client.DownloadStringCompleted += (senderr, args) =>
                 {
                     if(args.Error != null)
                     {
                         Logging.Exception("Failed to get update notes");
                         Logging.Exception(args.Error.ToString());
-                        ApplicationUpdateNotes.Text = Translations.GetTranslatedString("failedToGetUpdateNotes");
+                        ApplicationUpdateNotes.Text = Translations.GetTranslatedString("failedToLoadUpdateNotes");
                     }
                     else
                         ApplicationUpdateNotes.Text = args.Result;

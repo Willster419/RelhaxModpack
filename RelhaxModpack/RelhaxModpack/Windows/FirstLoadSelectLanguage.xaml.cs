@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Reflection;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -29,7 +30,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create and instance of the FirstLoadSelectLanguage Window
         /// </summary>
-        public FirstLoadSelectLanguage()
+        public FirstLoadSelectLanguage(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
