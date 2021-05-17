@@ -15,7 +15,7 @@
     Icon="Resources/modpack_icon.ico"
     LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Window.Resources>
-        
+
     </Window.Resources>
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
         <Grid.Background>
@@ -325,8 +325,8 @@
         </Grid>
         <Grid HorizontalAlignment="Stretch" Height="25" Margin="10,596,10,0" VerticalAlignment="Top" Tag="VersionsGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Stretch" x:Name="ApplicationVersionLabel" Tag="ApplicationVersionLabel"/>
             <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Stretch" x:Name="DatabaseVersionLabel" Tag="DatabaseVersionLabel"/>
