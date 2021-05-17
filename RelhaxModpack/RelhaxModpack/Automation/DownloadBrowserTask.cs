@@ -62,7 +62,7 @@ namespace RelhaxModpack.Automation
 
         public async override Task RunTask()
         {
-            base.RunTask();
+            await base.RunTask();
         }
 
         protected async override Task SetupUrl()
