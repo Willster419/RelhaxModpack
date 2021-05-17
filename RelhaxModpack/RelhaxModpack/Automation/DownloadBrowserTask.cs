@@ -9,22 +9,21 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Threading;
+using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace RelhaxModpack.Automation
 {
     public class DownloadBrowserTask : DownloadHtmlTask, IDownloadTask, IXmlSerializable
     {
-        public int WaitTimeMs { get; } = 3000;
+        public int WaitTimeMs { get; } = 1000;
 
-        public int Retries { get; } = 3;
+        public int WaitCounts { get; } = 3;
 
         public override string Command { get; } = "download_browser";
 
         protected WebBrowser Browser = null;
-
-        public Dispatcher BrowserDispatcher = null;
 
         protected string HtmlString = null;
 
@@ -32,10 +31,12 @@ namespace RelhaxModpack.Automation
 
         protected bool BrowserLoaded = false;
 
+        protected bool BrowserNavigated = false;
+
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
-            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(WaitTimeMs), nameof(Retries) }).ToArray();
+            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(WaitTimeMs), nameof(WaitCounts) }).ToArray();
         }
         #endregion
 
@@ -50,16 +51,21 @@ namespace RelhaxModpack.Automation
                 Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
                 return;
             }
-            if (Retries <= 0)
+            if (WaitCounts <= 0)
             {
                 ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: Retries must be greater then 0. Current value: {1}", ExitCode, Retries.ToString());
+                ErrorMessage = string.Format("ExitCode {0}: Retries must be greater then 0. Current value: {1}", ExitCode, WaitCounts.ToString());
                 Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
                 return;
             }
         }
 
         public async override Task RunTask()
+        {
+            base.RunTask();
+        }
+
+        protected async override Task SetupUrl()
         {
             //add registry entry to use latest IE for script parsing
             Logging.AutomationRunner("Setting application to use latest version of IE for embedded browser", LogLevel.Debug);
@@ -79,56 +85,46 @@ namespace RelhaxModpack.Automation
             HtmlNode resultNode = node.SelectSingleNode(HtmlPath);
             Logging.Debug(Logfiles.AutomationRunner, "Htmlpath results in node value '{0}' of type '{1}'", resultNode.InnerText, resultNode.NodeType.ToString());
             Url = resultNode.InnerText;
-
-            Logging.AutomationRunner("Using DownloadStaticTask explicit cast to invoke RunTask()", LogLevel.Debug);
-            (this as DownloadStaticTask).RunTask();
         }
 
         protected async Task RunBrowserAsync()
         {
-            Dispatcher dispatcher = this.BrowserDispatcher == null ? App.Current.Dispatcher : this.BrowserDispatcher;
-            await dispatcher.Invoke(RunBrowserRealAsync);
-        }
-
-        protected async Task RunBrowserRealAsync()
-        {
             using (Browser = new WebBrowser())
             {
+                Browser.ScriptErrorsSuppressed = true;
                 //set event handler for browser to be done loading
-                Logging.Debug(Logfiles.AutomationRunner, "Setting browser loadCompleted event handler");
-                Browser.LoadCompleted += (sendahh, endArgs) =>
+                Browser.Navigated += (senda, args) =>
                 {
-                    Logging.Debug(Logfiles.AutomationRunner, "The browser reports load completed");
-                    BrowserLoaded = true;
+                    Logging.Debug(Logfiles.AutomationRunner, "The browser reports navigation completed, wait for document completed and timeout");
+                    BrowserNavigated = true;
                 };
 
-                Browser.Navigating += (sendahh, endArgs) =>
+                Browser.DocumentCompleted += (sendahh, endArgs) =>
                 {
-                    //suppress script errors message window
-                    Logging.Debug(Logfiles.AutomationRunner, "Setting browser script suppression");
-                    //https://stackoverflow.com/questions/1298255/how-do-i-suppress-script-errors-when-using-the-wpf-webbrowser-control
-                    dynamic activeX = this.Browser.GetType().InvokeMember("ActiveXInstance", BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
-                        null, this.Browser, new object[] { });
-                    activeX.Silent = true;
+                    Logging.Debug(Logfiles.AutomationRunner, "The browser reports document completed, wait for timeout");
+                    BrowserLoaded = true;
                 };
 
                 //run browser enough to get scripts parsed to get download link
                 Logging.Debug(Logfiles.AutomationRunner, "Running async task to load browser and wait for it to finish");
-                bool temp = Browser.IsInitialized;
-                Browser.BeginInit();
-                Browser.EndInit();
                 Browser.Navigate(Url);
 
-                //this wait allows the browser to finish loading external scripts
-                while (!((BrowserFinishedLoadingScriptsCounter >= 3) && BrowserLoaded))
+                //wait for browser events to finish
+                while (!BrowserLoaded && !BrowserNavigated)
                 {
                     await Task.Delay(WaitTimeMs);
-                    Logging.Debug(Logfiles.AutomationRunner, "The browser task delay has elapsed, BrowserLoadingCounter is set to {0}", ++BrowserFinishedLoadingScriptsCounter);
+                    Logging.Debug(Logfiles.AutomationRunner, "The browser task events completed, wait additional {0} counts", WaitCounts);
                 }
 
-                Logging.Info(Logfiles.AutomationRunner, "The browser reports that the task loading is done, save html to string");
-                var doc = Browser.Document as mshtml.HTMLDocument;
-                HtmlString = doc.body.outerHTML;
+                //this wait allows the browser to finish loading external scripts
+                while (BrowserFinishedLoadingScriptsCounter <= WaitCounts)
+                {
+                    await Task.Delay(WaitTimeMs);
+                    Logging.Debug(Logfiles.AutomationRunner, "Waiting {0} of {1} counts", ++BrowserFinishedLoadingScriptsCounter, WaitCounts);
+                }
+
+                Logging.Info(Logfiles.AutomationRunner, "The browser reports all loading done, save html to string");
+                HtmlString = Browser.DocumentText;
             }
         }
 

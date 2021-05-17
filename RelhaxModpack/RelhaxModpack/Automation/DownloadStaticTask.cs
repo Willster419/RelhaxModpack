@@ -49,13 +49,23 @@ namespace RelhaxModpack.Automation
 
         public override async Task RunTask()
         {
+            DownloadSetup();
+
+            await DownloadFile();
+        }
+
+        protected void DownloadSetup()
+        {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Verifying that destination path ({0}) exists and deleting file if exists", DestinationPath);
             string directoryPath = Path.GetDirectoryName(DestinationPath);
             if ((!string.IsNullOrWhiteSpace(directoryPath)) && (!Directory.Exists(directoryPath)))
                 Directory.CreateDirectory(directoryPath);
             if (File.Exists(DestinationPath))
                 File.Delete(DestinationPath);
+        }
 
+        protected async Task DownloadFile()
+        {
             using (WebClient = new WebClient())
             {
                 Logging.Info(Logfiles.AutomationRunner, "Downloading file");
