@@ -6859,7 +6859,7 @@
             The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Utilities.RegistryUtils.AutoFindWoTDirectory">
+        <member name="M:RelhaxModpack.Utilities.RegistryUtils.AutoFindWoTDirectoryFirst">
             <summary>
             Checks the registry to get the latest location of where WoT is installed, includes exe in the name
             </summary>
