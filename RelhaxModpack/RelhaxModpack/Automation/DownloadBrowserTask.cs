@@ -87,7 +87,7 @@ namespace RelhaxModpack.Automation
             Url = resultNode.InnerText;
         }
 
-        protected async Task RunBrowserAsync()
+        protected async virtual Task RunBrowserAsync()
         {
             using (Browser = new WebBrowser())
             {
