@@ -9630,6 +9630,36 @@
             Loads all translation dictionaries. Should only be done once (at application start)
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsEnglish">
+            <summary>
+            Loads all English translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsFrench">
+            <summary>
+            Loads all French translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsGerman">
+            <summary>
+            Loads all German translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsPolish">
+            <summary>
+            Loads all Polish translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsRussian">
+            <summary>
+            Loads all Russian translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsSpanish">
+            <summary>
+            Loads all Spanish translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.App">
             <summary>
             Interaction logic for App.xaml
