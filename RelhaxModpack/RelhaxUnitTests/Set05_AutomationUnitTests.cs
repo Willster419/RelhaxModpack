@@ -168,27 +168,31 @@ namespace RelhaxUnitTests
         [TestMethod]
         public async Task Test03_DownloadBrowserTaskTest()
         {
-
             //still need a automation sequence object to run this
             AutomationSequence sequence = new AutomationSequence();
 
             //create a random task so we can process macros for this test
+            //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
+            //https://stackoverflow.com/a/39064452/3128017
             DownloadBrowserTask task = new DownloadBrowserTask()
             {
                 DestinationPath = @"downloaded_file.zip",
                 Url = "https://wgmods.net/2030/",
                 ID = "download_mod_updated_test",
-                HtmlPath = @"//div[contains(@class, 'ModDetails_hidden')]/@href",
+                HtmlPath = @"//a[contains(@class, 'ModDetails_hidden')]//@href",
                 AutomationSequence = sequence
             };
 
             await task.Execute();
         }
 
+        /*
+         * Kept in case later it's needed for test initialization
         [TestInitialize]
         public void SetDefaultValues()
         {
             
         }
+        */
     }
 }

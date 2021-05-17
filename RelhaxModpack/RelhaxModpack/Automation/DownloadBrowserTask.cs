@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
@@ -32,6 +33,8 @@ namespace RelhaxModpack.Automation
         protected bool BrowserLoaded = false;
 
         protected bool BrowserNavigated = false;
+
+        Dispatcher browserDispatcher = null;
 
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
@@ -79,19 +82,64 @@ namespace RelhaxModpack.Automation
             Logging.Debug(Logfiles.AutomationRunner, "The htmlpath used was {0}", HtmlPath);
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(HtmlString);
-            HtmlNode node = document.DocumentNode;
-            //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
-            //sample html xpath: //div[contains(@class, 'ModDetails_label')]
-            HtmlNode resultNode = node.SelectSingleNode(HtmlPath);
-            Logging.Debug(Logfiles.AutomationRunner, "Htmlpath results in node value '{0}' of type '{1}'", resultNode.InnerText, resultNode.NodeType.ToString());
-            Url = resultNode.InnerText;
+            HtmlNodeNavigator navigator = (HtmlAgilityPack.HtmlNodeNavigator)document.CreateNavigator();
+            var result = navigator.SelectSingleNode(HtmlPath);
+            if (result == null)
+            {
+                ExitCode = 3;
+                ErrorMessage = string.Format("ExitCode {0}: The HtmlPath returned no results", ExitCode);
+                return;
+            }
+            else
+            {
+                Logging.Debug(Logfiles.AutomationRunner, "Htmlpath results in node value '{0}' of type '{1}'", result.ToString(), result.NodeType.ToString());
+                Url = result.ToString();
+            }
         }
 
         protected async virtual Task RunBrowserAsync()
         {
-            using (Browser = new WebBrowser())
+            RunBrowserOnUIThread();
+
+            //wait for browser events to finish
+            while (!(BrowserLoaded && BrowserNavigated))
             {
+                await Task.Delay(WaitTimeMs);
+                Logging.Debug(Logfiles.AutomationRunner, "The browser task events completed, wait additional {0} counts", WaitCounts);
+            }
+
+            //this wait allows the browser to finish loading external scripts
+            while (BrowserFinishedLoadingScriptsCounter <= WaitCounts)
+            {
+                await Task.Delay(WaitTimeMs);
+                Logging.Debug(Logfiles.AutomationRunner, "Waiting {0} of {1} counts", ++BrowserFinishedLoadingScriptsCounter, WaitCounts);
+            }
+
+            Logging.Info(Logfiles.AutomationRunner, "The browser reports all loading done, save html to string");
+
+            //cleanup from the browser
+            browserDispatcher.Invoke(() =>
+            {
+                Browser.Dispose();
+            });
+            browserDispatcher.InvokeShutdown();
+            browserDispatcher.ShutdownFinished += (sender, args) =>
+            {
+                browserDispatcher = null;
+            };
+        }
+
+        protected virtual void RunBrowserOnUIThread()
+        {
+            Thread thread = new Thread(() =>
+            {
+                //get dispatcher to be able to invoke disposal later
+                browserDispatcher = Dispatcher.CurrentDispatcher;
+
+                //create and setup browser
+                Browser = new WebBrowser();
                 Browser.ScriptErrorsSuppressed = true;
+
                 //set event handler for browser to be done loading
                 Browser.Navigated += (senda, args) =>
                 {
@@ -103,29 +151,20 @@ namespace RelhaxModpack.Automation
                 {
                     Logging.Debug(Logfiles.AutomationRunner, "The browser reports document completed, wait for timeout");
                     BrowserLoaded = true;
+                    HtmlString = Browser.Document.Body.OuterHtml;
                 };
 
                 //run browser enough to get scripts parsed to get download link
                 Logging.Debug(Logfiles.AutomationRunner, "Running async task to load browser and wait for it to finish");
                 Browser.Navigate(Url);
 
-                //wait for browser events to finish
-                while (!BrowserLoaded && !BrowserNavigated)
-                {
-                    await Task.Delay(WaitTimeMs);
-                    Logging.Debug(Logfiles.AutomationRunner, "The browser task events completed, wait additional {0} counts", WaitCounts);
-                }
+                //start the windows message pump to the browser runs
+                Dispatcher.Run();
 
-                //this wait allows the browser to finish loading external scripts
-                while (BrowserFinishedLoadingScriptsCounter <= WaitCounts)
-                {
-                    await Task.Delay(WaitTimeMs);
-                    Logging.Debug(Logfiles.AutomationRunner, "Waiting {0} of {1} counts", ++BrowserFinishedLoadingScriptsCounter, WaitCounts);
-                }
-
-                Logging.Info(Logfiles.AutomationRunner, "The browser reports all loading done, save html to string");
-                HtmlString = Browser.DocumentText;
-            }
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         public override void ProcessTaskResults()
