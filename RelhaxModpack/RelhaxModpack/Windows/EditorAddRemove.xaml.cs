@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RelhaxModpack.Database;
+using RelhaxModpack.Settings;
 using RelhaxModpack.UI;
 using RelhaxModpack.Utilities.Enums;
 
@@ -65,7 +66,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the EditorAddRemove window
         /// </summary>
-        public EditorAddRemove()
+        public EditorAddRemove(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }

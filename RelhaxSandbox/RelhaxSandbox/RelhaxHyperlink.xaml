@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="RelhaxSandbox.RelhaxHyperlink"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RelhaxSandbox"
+             mc:Ignorable="d" >
+    <TextBlock x:Name="ParentTextBlock">
+        <Hyperlink x:Name="TheHyperlink" Click="TheHyperlink_Click">
+            <TextBlock x:Name="ChildTextblock"/>
+        </Hyperlink>
+    </TextBlock>
+</UserControl>

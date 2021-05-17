@@ -1,0 +1,25 @@
+﻿<Application
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:RelhaxSandbox"
+             xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="RelhaxSandbox.App"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <!-- https://www.codeproject.com/articles/35346/using-a-resource-dictionary-in-wpf -->
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="RelhaxThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!-- https://www.wpf-tutorial.com/wpf-application/resources/ -->
+            <sys:Boolean x:Key="ApplyColorSettings">False</sys:Boolean>
+            <!-- x:Key="RelhaxButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}" -->
+            <Style x:Key="WindowStyleBase" TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
+                <Setter Property="{StaticResource ApplyColorSettings}" Value="True"/>
+            </Style>
+            <Style TargetType="{x:Type Window}" BasedOn="{StaticResource WindowStyleBase}">
+                <Setter Property="{StaticResource ApplyColorSettings}" Value="True"/>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

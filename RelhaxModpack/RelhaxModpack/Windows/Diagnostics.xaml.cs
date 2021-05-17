@@ -13,6 +13,8 @@ using RelhaxModpack.Utilities;
 using RelhaxModpack.UI;
 using System.Text;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Windows
 {
@@ -21,6 +23,8 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class Diagnostics : RelhaxWindow
     {
+        public string WoTDirectory { get; set; }
+
         /// <summary>
         /// The number of log file entries that should be kept after the trim operation
         /// </summary>
@@ -29,7 +33,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the Diagnostics window
         /// </summary>
-        public Diagnostics()
+        public Diagnostics(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
@@ -42,42 +46,40 @@ namespace RelhaxModpack.Windows
 
         private void ToggleInstallLocationNeededButtons()
         {
-            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
+            if (string.IsNullOrWhiteSpace(WoTDirectory))
             {
-                CollectLogInfoButton.IsEnabled = false;
-                //DownloadWGPatchFilesText.IsEnabled = false;
-                CleanupModFilesButton.IsEnabled = false;
-                SelectedInstallation.Text = string.Format("{0}\n{1}",
-                    Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
+                Logging.Info("WoTDirectory is empty, add default from registry search");
+                WoTDirectory = RegistryUtils.AutoFindWoTDirectoryFirst();
+                if (!string.IsNullOrWhiteSpace(WoTDirectory))
+                {
+                    WoTDirectory = Path.GetDirectoryName(WoTDirectory);
+                }
+                
+                //if it's still empty, then mark is as not happening
+                if (string.IsNullOrWhiteSpace(WoTDirectory))
+                {
+                    CollectLogInfoButton.IsEnabled = false;
+                    CleanupModFilesButton.IsEnabled = false;
+                    SelectedInstallation.Text = string.Format("{0}\n{1}",
+                        Translations.GetTranslatedString("SelectedInstallation"), Translations.GetTranslatedString("SelectedInstallationNone"));
+                }
             }
-            else
-            {
-                CollectLogInfoButton.IsEnabled = true;
-                //DownloadWGPatchFilesText.IsEnabled = true;
-                CleanupModFilesButton.IsEnabled = true;
-                SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), Settings.WoTDirectory);
-            }
+            CollectLogInfoButton.IsEnabled = true;
+            CleanupModFilesButton.IsEnabled = true;
+            SelectedInstallation.Text = string.Format("{0}\n{1}", Translations.GetTranslatedString("SelectedInstallation"), WoTDirectory);
         }
 
         private void ChangeInstall_Click(object sender, RoutedEventArgs e)
         {
-            Logging.Info(LogOptions.ClassName, "Selecting WoT install");
-            //show a standard WoT selection window from manual find WoT.exe
-            OpenFileDialog manualWoTFind = new OpenFileDialog()
+            Logging.Info(LogOptions.ClassName, "Selecting WoT install, showing WoTClientSelectionWindow");
+
+            WoTClientSelection clientSelection = new WoTClientSelection(ModpackSettings);
+            
+            if ((bool)clientSelection.ShowDialog())
             {
-                AddExtension = true,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
-                Title = Translations.GetTranslatedString("selectWOTExecutable"),
-                Multiselect = false,
-                ValidateNames = true
-            };
-            if ((bool)manualWoTFind.ShowDialog())
-            {
-                Settings.WoTDirectory = Path.GetDirectoryName(manualWoTFind.FileName);
-                Settings.WoTDirectory = Settings.WoTDirectory.Replace(Settings.WoT32bitFolderWithSlash, string.Empty).Replace(Settings.WoT64bitFolderWithSlash, string.Empty);
-                Logging.Info(LogOptions.ClassName, "Selected WoT install -> {0}",Settings.WoTDirectory);
+                WoTDirectory = Path.GetDirectoryName(clientSelection.SelectedPath);
+                WoTDirectory = WoTDirectory.Replace(ApplicationConstants.WoT32bitFolderWithSlash, string.Empty).Replace(ApplicationConstants.WoT64bitFolderWithSlash, string.Empty);
+                Logging.Info(LogOptions.ClassName, "Selected WoT install: {0}", WoTDirectory);
             }
             else
             {
@@ -90,8 +92,11 @@ namespace RelhaxModpack.Windows
 
         private void CollectLogInfo_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(Settings.WoTDirectory))
+            if (string.IsNullOrWhiteSpace(WoTDirectory))
+            {
+                Logging.Error("WoTDirectory is empty, cannon collect logs");
                 return;
+            }
 
             //setup UI
             Logging.Info(LogOptions.ClassName, "Started collection of log files");
@@ -101,12 +106,12 @@ namespace RelhaxModpack.Windows
             List<string> filesToCollect = new List<string>()
             {
                 //relhax files in relhax dir (relhax.log, relhaxsettings.xml, lastinstalledconfig.xml)
-                Settings.RelhaxLogFilepath,
-                Settings.RelhaxSettingsFilepath,
-                Settings.LastInstalledConfigFilepath,
+                ApplicationConstants.RelhaxLogFilepath,
+                ApplicationConstants.RelhaxSettingsFilepath,
+                ApplicationConstants.LastInstalledConfigFilepath,
                 //relhax files in wot/logs dir (need to be combined here cause it can change from installation)
-                Path.Combine(Settings.WoTDirectory, Settings.LogsFolder, Logging.InstallLogFilename),
-                Path.Combine(Settings.WoTDirectory, Settings.LogsFolder, Logging.UninstallLogFilename),
+                Path.Combine(WoTDirectory, ApplicationConstants.LogsFolder, Logging.InstallLogFilename),
+                Path.Combine(WoTDirectory, ApplicationConstants.LogsFolder, Logging.UninstallLogFilename),
                 //disabled for now, but in case WG decides to change it again...
                 /*
                 //wot files in wot/32bit folder
@@ -119,13 +124,13 @@ namespace RelhaxModpack.Windows
                 Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.PmodLog),
                 */
                 //wot files in wot folder
-                Path.Combine(Settings.WoTDirectory, Settings.PythonLog),
-                Path.Combine(Settings.WoTDirectory, Settings.XvmLog),
-                Path.Combine(Settings.WoTDirectory, Settings.PmodLog)
+                Path.Combine(WoTDirectory, ApplicationConstants.PythonLog),
+                Path.Combine(WoTDirectory, ApplicationConstants.XvmLog),
+                Path.Combine(WoTDirectory, ApplicationConstants.PmodLog)
             };
 
             //use a nice diagnostic window to check if the user wants to include any other files
-            AddPicturesZip apz = new AddPicturesZip() { FilesToAddalways = filesToCollect };
+            AddPicturesZip apz = new AddPicturesZip(this.ModpackSettings) { FilesToAddalways = filesToCollect };
 
             //add the already above collected files to the list
             foreach (string file in filesToCollect)
@@ -206,12 +211,12 @@ namespace RelhaxModpack.Windows
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCache");
             try
             {
-                await FileUtils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.zip");
-                await FileUtils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
+                await FileUtils.DirectoryDeleteAsync(ApplicationConstants.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.zip");
+                await FileUtils.DirectoryDeleteAsync(ApplicationConstants.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
-                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, Settings.RelhaxDownloadsFolderPath);
+                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCache"), Environment.NewLine, ApplicationConstants.RelhaxDownloadsFolderPath);
                 Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheComplete");
@@ -224,11 +229,11 @@ namespace RelhaxModpack.Windows
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("clearingDownloadCacheDatabase");
             try
             {
-                await FileUtils.DirectoryDeleteAsync(Settings.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
+                await FileUtils.DirectoryDeleteAsync(ApplicationConstants.RelhaxDownloadsFolderPath, false, false, 3, 100, "*.xml");
             }
             catch (IOException ioex)
             {
-                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCacheDatabase"), Environment.NewLine, Settings.RelhaxDownloadsFolderPath);
+                DiagnosticsStatusTextBox.Text = string.Format("{0}{1}{2}", Translations.GetTranslatedString("failedToClearDownloadCacheDatabase"), Environment.NewLine, ApplicationConstants.RelhaxDownloadsFolderPath);
                 Logging.Exception(ioex.ToString());
             }
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("cleaningDownloadCacheDatabaseComplete");
@@ -262,9 +267,9 @@ namespace RelhaxModpack.Windows
 
         private void DownloadWGPatchFiles_Click(object sender, RoutedEventArgs e)
         {
-            GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader()
+            GameCenterUpdateDownloader gameCenterUpdateDownloader = new GameCenterUpdateDownloader(this.ModpackSettings)
             {
-                SelectedClient = string.IsNullOrWhiteSpace(Settings.WoTDirectory) ? string.Empty : Settings.WoTDirectory
+                SelectedClient = string.IsNullOrWhiteSpace(WoTDirectory) ? string.Empty : WoTDirectory
             };
             gameCenterUpdateDownloader.ShowDialog();
         }
@@ -273,10 +278,10 @@ namespace RelhaxModpack.Windows
         {
             string[] locationsToCheck = new string[]
             {
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.ModsDir),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT64bitFolder, Settings.ResModsDir),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.ModsDir),
-                Path.Combine(Settings.WoTDirectory, Settings.WoT32bitFolder, Settings.ResModsDir)
+                Path.Combine(WoTDirectory, ApplicationConstants.WoT64bitFolder, ApplicationConstants.ModsDir),
+                Path.Combine(WoTDirectory, ApplicationConstants.WoT64bitFolder, ApplicationConstants.ResModsDir),
+                Path.Combine(WoTDirectory, ApplicationConstants.WoT32bitFolder, ApplicationConstants.ModsDir),
+                Path.Combine(WoTDirectory, ApplicationConstants.WoT32bitFolder, ApplicationConstants.ResModsDir)
             };
 
             List<string> filesToDelete = new List<string>();
@@ -406,7 +411,7 @@ namespace RelhaxModpack.Windows
             //DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("trimRelhaxLogFail");
 
             //restore the logfile
-            Logging.Init(Logfiles.Application);
+            Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, true);
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("trimRelhaxLogSuccess");
             Logging.Info(LogOptions.ClassName, "Successfully trimmed the log file ({0})", trimmed? string.Format("Trimmed to {0} entries", this.RelhaxLogfileTrimLength) : "No trim required");
         }

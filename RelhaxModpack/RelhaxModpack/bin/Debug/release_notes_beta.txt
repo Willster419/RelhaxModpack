@@ -1,4 +1,195 @@
-Application version 1.2.0.0 (2020-10-19)
+# Beta Application version 1.3.1.0 (2021-05-15)
+https://www.virustotal.com/gui/file-analysis/ZDE0ZTAyNTc0ODUyNTA5ZTRmOTUyZjBiMzcwMTU4ZmQ6MTYyMTEzMDQ5NA==/detection
+
+## The application update you didn't know was needed, and if I did it right, will hardly notice
+
+### A complete re-structure of the application from the bottom-up
+- There was a lot of spaghetti code, or at least potential for some (more). It was cleaned up by implementing class structure into several areas:
+  - A lot of static properties and settings were moved into class objects. This helps with trying to find where things are randomly set within different points of the code and allows for potential modification of settings to be used in a sub-function.
+  - Windows that provide a separate function (like Patch Designer or Database Editor) now all derive from RelhaxCustomFeatureWindow, which ensures they all have a ModpackSettings and CommandLineSettings configuration class objects.
+  - Application logging and startup was changed so that modpack settings are loaded for all 'feature windows'. This means that the order for application launch is now:
+    1. Logging setup
+    2. Settings loading
+    3. .Net framework version verification
+    4. Command line parsing
+    5. Feature window selection
+  - Several static methods and functions were moved into class structure objects. This allows for two things: Reuse-ability, and more reliable and extensive unit testing. Specifically:
+    - Settings object loading/saving to/from custom feature Windows.
+    - Local database cache management.
+    - Downloading of packages from our servers.
+
+### New feature: Ability to select download mirrors!
+- Starting with 1.3.1.0, you have the ability to select a download mirror for downloading the zip packages! This is a huge benefit for our EU, RU, (basically not NA) users! As of now, you have two options:
+  - relhaxmodpack.com, Dallas, USA
+  - clanverwaltung.de, Frankfurt, Germany
+- Additionally, we've integrated our mirror solution to use rsync for hourly synchronization, with the option to manually sync from the database editor. As soon as a package is updated to the main server, it will be on the mirror(s) in seconds!
+
+### Less 'incomplete download' messages
+- The new download manager has integrated md5 hash calculation right into downloading, so as soon as the file is downloaded, the hash is already calculated. This allows two things:
+  - The hash is saved immediately to the download cache database so you don't need to wait for it when you are loading the selection list.
+  - The hash is compared to the server hash, and if not equal, it will automatically try a could times to re-download. NOTE: with the beta database, packages 'in-testing' will still be re-downloaded every time until published into the stable database.
+
+### Other big changes you'll notice
+- The preview window was not only optimized internally, but now will display the next preview elements you right click on *without* re-opening the window.
+- The thread synchronization was re-worked with the introduction of the download manager component
+  - Now in the 'download while installing' step, if an extraction thread is waiting for a package to download, it will use synchronization mechanisms instead of low frequency polling. It's all about parallel computing and optimization.
+  - This also fixed issues with progress reporting, especially in the Advanced Progress reporting window: When 'download while installing' enabled, the progress will report downloading, rather then reporting nothing and giving the idea it is stuck.
+- The escape key can be used to close several dialog-like windows now (diagnostics, install done, and release notes windows to name a few).
+- Added a `Deprecated` field to the database for internal tracking. This can be used by us to track, investigate and determine action on packages that look old and obsolete.
+- Added a `Minimalist Mode` as requested by some users, so that only the minimum amount of packages are installed for mod operation. For example, it won't change the background or loading theme to be the Relhax logo.
+- Improved the behavior of the Diagnostic Tools window so that it will try to auto-fill the selected WoT directory info by the following methods:
+  - If an installation was just done, it will use that path.
+  - Else, it will auto search (like the main installation process) and select the most recent installation path.
+- In the main installation process, and when selecting a client in the Diagnostic Tools, instead of a window prompting you to find a folder, it will first provide you with a list of auto-detected WoT install paths. You can still manually select one from that window.
+
+
+### Miscellaneous improvements
+- Re-work top of ModSelectionList layout to allow for dynamic expansion of text (it will wrap and fill down, those below it will move down).
+- Add label to ModSelectionList to show the version of the database you'll be installing.
+- Updated the instruction parsing code (Atlas files, Patch files, etc) to be using a reflective and dynamic method, rather that a static method that required manual entry and maintenance.
+- Change default selection view to legacy.
+- Fixed a crash when canceling the scaling option after preview that occurred after the time expired.
+- Fixed the code to validate a selection structure after loading it from a file. It will now check to make sure only 1 option is selected in options that should only have one, rather then only checking if it had 1 or more.
+  - Also fixed the scenario where a parent package would still be selected and technically be an invalid selection when the child was determined to be an invalid selection.
+- Added editor option that if set, will auto delete a zip from the disk after a successful upload. Honors the "delete is actually move" setting.
+- Removed useless package properties: StartAddress and EndAddress. They were only used once, and never afterwards.
+- Fixed alignment of language selection text box.
+- Moved all downloads from http to https.
+- Remove separate text box informing the user he can search, and put it into the search combobox.
+- Improve exception logging for CommonUtils.SetListEntries().
+- Beta and Alpha application distributions now will have debug logging enabled always.
+- More refactoring of enums and EventArgs into the Enums and CustomEventArgs namespace/folder.
+- Removed UI options for custom theme. Any custom theme options found will re-direct to default.
+- Updated and added new translations for English, Spanish(LordFelix), French (Tolrod22), German (Elektrosmoker), Polish (Nullmaruzero)
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+# Beta Application version 1.3.0.8 (2021-05-09)
+https://www.virustotal.com/gui/file/350654ee342374a0133d87a3caa9980add3efa841af4d22cd7bda83d4ca652e9/detection
+
+- Fixed bug of client selection window crashing in default theme.
+- Updated translations for error message during installation if a zip file fails to open.
+- Removed UI options for custom theme. Any custom theme options found will re-direct to default.
+- Updated descriptions for translations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+# Beta Application version 1.3.0.7 (2021-04-25)
+https://www.virustotal.com/gui/file-analysis/NmVjYjM2ZjVlOWZlZWM1ZTI3YmQ3MTUyMzVmNmI0MmQ6MTYxOTMzNTc3Mg==/detection
+
+- Added editor option that if set, will auto delete a zip from the disk after a successful upload. Honors the "delete is actually move" setting.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+# Beta Application version 1.3.0.6 (2021-04-19)
+https://www.virustotal.com/gui/file-analysis/MjVmNWI2NjYyYWVlNTYwMDFiYjZjN2ZjZTRmMjVlZjI6MTYxODg5MzIwNQ==/detection
+
+- Fixed bug of installation failing if no instruction files exist (or folder does not exist) for parsing.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+# Beta Application version 1.3.0.5 (2021-04-19)
+https://www.virustotal.com/gui/file/e846535186a395e32ea94a0b82c3331c6d4d8c6bd0d4f87938a31db566007345/detection
+
+## New features added
+- The escape key can be used to close several dialog-like windows now (diagnostics, install done, and release notes windows to name a few).
+- Added a `Deprecated` field to the database for internal tracking. This can be used by us to track, investigate and determine action on packages that look old and obsolete.
+- Added a `Minimalist Mode` as requested by some users, so that only the minimum amount of packages are installed for mod operation. For example, it won't change the background or loading theme to be the Relhax logo.
+- Improved the behavior of the Diagnostic Tools window so that it will try to auto-fill the selected WoT directory info by the following methods:
+  - If an installation was just done, it will use that path.
+  - Else, it will auto search (like the main installation process) and select the most recent installation path.
+- In the main installation process, and when selecting a client in the Diagnostic Tools, instead of a window prompting you to find a folder, it will first provide you with a list of auto-detected WoT install paths. You can still manually select one from that window.
+
+## Bug fixes
+- Fixed a bug that would needlessly show a bogus exception message when determining how to start the log file.
+- Fixed a crash when canceling the scaling option after preview that occurred after the time expired.
+- Fixed the code to validate a selection structure after loading it from a file. It will now check to make sure only 1 option is selected in options that should only have one, rather then only checking if it had 1 or more.
+  - Also fixed the scenario where a parent package would still be selected and technically be an invalid selection when the child was determined to be an invalid selection.
+
+## Other improvements
+- Updated the instruction parsing code (Atlas files, Patch files, etc) to be using a reflective and dynamic method, rather that a static method that required manual entry and maintenance.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+# Beta Application version 1.3.0.1 (2021-04-07)
+https://www.virustotal.com/gui/file-analysis/MTI0MjA2YzZhMThhYTcyNmEyNmE0OGRhZjVkMjg3ZDM6MTYxNzgwNTc5OA==/detection
+
+- Fixed the bug with beta database not loading.
+- Fixed the bug of the application not starting on some systems.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+# Beta Application version 1.3.0.0 (2021-03-28)
+https://www.virustotal.com/gui/file-analysis/ODlkMzVkN2YyM2IzOTUwOGNlNTcwNDgxM2Y5NjVhZmE6MTYxNzAwMTcyNQ==/detection
+
+## The application update you didn't know was needed, and will hardly notice
+
+### A complete re-structure of the application from the bottom-up
+- There was a lot of spaghetti code, or at least potential for some (more). It was cleaned up by implementing class structure into several areas:
+  - A lot of static properties and settings were moved into class objects. This helps with trying to find where things are randomly set within different points of the code and allows for potential modification of settings to be used in a sub-function.
+  - Windows that provide a separate function (like Patch Designer or Database Editor) now all derive from RelhaxCustomFeatureWindow, which ensures they all have a ModpackSettings and CommandLineSettings configuration class objects.
+  - Application logging and startup was changed so that modpack settings are loaded for all 'feature windows'. This means that the order for application launch is now:
+    1. Logging setup
+    2. Settings loading
+    3. .Net framework version verification
+    4. Command line parsing
+    5. Feature window selection
+  - Several static methods and functions were moved into class structure objects. This allows for two things: Reuse-ability, and more reliable and extensive unit testing. Specifically:
+    - Settings object loading/saving to/from custom feature Windows.
+    - Local database cache management.
+    - Downloading of packages from our servers.
+
+### New feature: Ability to select download mirrors!
+- Starting with 1.3.0.0, you have the ability to select a download mirror for downloading the zip packages! This is a huge benefit for our EU, RU, (basically not NA) users! As of now, you have two options:
+  - relhaxmodpack.com, Dallas, USA
+  - clanverwaltung.de, Frankfurt, Germany
+- Additionally, we've integrated our mirror solution to use rsync for hourly synchronization, with the option to manually sync from the database editor. As soon as a package is updated to the main server, it will be on the mirror(s) in seconds!
+
+### Less 'incomplete download' messages
+- The new download manager has integrated md5 hash calculation right into downloading, so as soon as the file is downloaded, the hash is already calculated. This allows two things:
+  - The hash is saved immediately to the download cache database so you don't need to wait for it when you are loading the selection list.
+  - The hash is compared to the server hash, and if not equal, it will automatically try a could times to re-download. NOTE: with the beta database, packages 'in-testing' will still be re-downloaded every time until published into the stable database.
+
+### Other big changes you'll notice
+- The preview window was not only optimized internally, but now will display the next preview elements you right click on *without* re-opening the window.
+- The thread synchronization was re-worked with the introduction of the download manager component
+  - Now in the 'download while installing' step, if an extraction thread is waiting for a package to download, it will use synchronization mechanisms instead of low frequency polling. It's all about parallel computing and optimization.
+  - This also fixed issues with progress reporting, especially in the Advanced Progress reporting window: When 'download while installing' enabled, the progress will report downloading, rather then reporting nothing and giving the idea it is stuck.
+
+
+### Miscellaneous improvements
+- Re-work top of ModSelectionList layout to allow for dynamic expansion of text (it will wrap and fill down, those below it will move down).
+- Add label to ModSelectionList to show the version of the database you'll be installing.
+- Change default selection view to legacy.
+- Removed useless package properties: StartAddress and EndAddress. They were only used once, and never afterwards.
+- Fixed alignment of language selection text box.
+- Moved all downloads from http to https.
+- Remove separate text box informing the user he can search, and put it into the search combobox.
+- Improve exception logging for CommonUtils.SetListEntries().
+- Beta and Alpha application distributions now will have debug logging enabled always.
+- More refactoring of enums and EventArgs into the Enums and CustomEventArgs namespace/folder.
+- Added missing translation entries.
+- Updated translations. I think. I probably did.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Beta Application version 1.2.4.1 (2020-12-23)
+https://www.virustotal.com/gui/file/4aa328cb69141f67922589552311d9aabc3f8e6c92939ee77c92ae1901fdd50b/detection
+- Fixed bug with logfile handling in the modpack toolbox window.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Beta Application version 1.2.4.0 (2020-12-12)
+https://www.virustotal.com/gui/file-analysis/N2U1OTgwMmVhODRiMzY3MjkyNTQ2NDBkYTE2YTQyYTE6MTYwNzgyMTg0Mg==/detection
+- Re-worked the launch process of the application so that if it is currently open, and the application is attempting to be launched in a custom mode (like editor), it won't stop because of the open main log file.
+  - In other words, you can have multiple instance (modes) of the application open.
+- Fixed memory leaks in the Mod Selection List window.
+- Fixed bugs with management of auto install timer causing high CPU usage (thanks for @JC on the discord server for reporting this).
+- Complete re-work of the database editor transfer window to allow for identify-able cod blocks based on transfer mode (Media upload, zip file upload, zip file download). What is code debt.
+- Fixed bug of application not installing mods to the correct WoT mods and res_mods folders when in beta database, if the beta database's target version does not match the client's version.
+- Fixed bug of application crashing when global dependencies comparison list attempts to check for a global dependency package in the database that no longer exists. What is quality control.
+- Fixed bug of preview window crashing when trying to right click on a picture preview. (Thanks @heavyshot of the NA server for pointing this out)
+- Disabled spell checking of database editor textboxes. The API's implementation is awful and lags out the application.
+- Added clearing of the database editor's components undo stacks when switching to a new component to display. Helps with application lag.
+- Added feature in database editor to delete a local version of an uploaded zip file after upload, or move it to a specified folder.
+- Stability improvements for FTP integration of database editor.
+- Updated Russian (DrWeb7_1), Polish (Nullmaruzero), German (Elektrosmoker), French (Toshiro), and Spanish (LordFelix) translations. So all of them I guess. Probably should have lead with that.
+- Code organization and optimizations. Like always.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Beta Application version 1.2.0.0 (2020-10-19)
 https://www.virustotal.com/gui/file-analysis/OTU5ODg1ZjAzZWEzYjIxMTQ3MDgxZTY3MjQyYTcyYTA6MTYwMzA5MzUxNA==/detection
 - Added a unit tests project to the code base solution. This will allow us to unit test individual software features and help catch bugs in the application before they get released to beta.
 - Added database property and editor code-behind for adding tags to packages to classify what type of package it is (does it have patches, scripts, images, etc.)
@@ -37,7 +228,7 @@ https://www.virustotal.com/gui/file/726aa850bbc6f04d1276b8741447d8fa73c552a8f41e
 - Several comment and logfile writing improvements
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-Application version 1.1.1.0 (2020-07-03)
+Beta Application version 1.1.1.0 (2020-07-03)
 https://www.virustotal.com/gui/file-analysis/YTQ5YTlmN2MxNjE0NDZiNjhjMmQ4ZjM0ODRkMTk1ZTc6MTU5MzgwODc4NA==/detection
 - Fixed the bug with drop down combobox selections not selecting the item that you click on. (Thanks Silvers of the NA server for reporting)
 - Fixed bugs with selecting font from the MainWindow.

@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.Atlases.Packing;
+using RelhaxModpack.Common;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Xml;
@@ -94,9 +95,9 @@ namespace RelhaxModpack.Atlases
             Atlas.AtlasMapFilePath = Path.Combine(Atlas.AtlasSaveDirectory, Atlas.MapFile);
             //set location to extract original WG atlas files. If not custom set, then set them to the RelhaxTempfolder location
             if (string.IsNullOrEmpty(Atlas.TempAtlasImageFilePath))
-                Atlas.TempAtlasImageFilePath = Path.Combine(Settings.RelhaxTempFolderPath, Atlas.AtlasFile);
+                Atlas.TempAtlasImageFilePath = Path.Combine(ApplicationConstants.RelhaxTempFolderPath, Atlas.AtlasFile);
             if(string.IsNullOrEmpty(Atlas.TempAtlasMapFilePath))
-                Atlas.TempAtlasMapFilePath = Path.Combine(Settings.RelhaxTempFolderPath, Atlas.MapFile);
+                Atlas.TempAtlasMapFilePath = Path.Combine(ApplicationConstants.RelhaxTempFolderPath, Atlas.MapFile);
 
             //prepare the temp and output directories (lock to prevent multiple threads creating folders. Could get messy.
             lock (AtlasUtils.AtlasLoaderLockObject)

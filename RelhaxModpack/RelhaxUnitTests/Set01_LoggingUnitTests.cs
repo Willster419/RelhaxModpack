@@ -32,7 +32,7 @@ namespace RelhaxUnitTests
                 //create it (if not already open)
                 if (!Logging.IsLogOpen(logfile))
                 {
-                    Assert.IsTrue(Logging.Init(logfile, UnitTestHelper.LogFilesWithPresetFilenames.Contains(logfile) ? null : logfile.ToString()));
+                    Assert.IsTrue(Logging.Init(logfile, true, false, UnitTestHelper.LogFilesWithPresetFilenames.Contains(logfile) ? null : logfile.ToString()));
                     Assert.IsFalse(Logging.IsLogDisposed(logfile));
                     Assert.IsTrue(Logging.IsLogOpen(logfile));
                 }

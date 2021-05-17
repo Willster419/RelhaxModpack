@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Documents;
+using RelhaxModpack.Settings;
 
 namespace RelhaxModpack.Windows
 {
@@ -14,10 +15,12 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool UserAgreed { get; private set; } = false;
 
+        public bool FirstLoadToV2 { get; set; }
+
         /// <summary>
         /// Create an instance of the FirstLoadAcknowledgments window
         /// </summary>
-        public FirstLoadAcknowledgments()
+        public FirstLoadAcknowledgments(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
@@ -31,7 +34,7 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Settings.FirstLoadToV2)
+            if (FirstLoadToV2)
                 V2UpgradeNoticeText.Visibility = Visibility.Visible;
         }
 

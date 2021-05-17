@@ -1,4 +1,4 @@
-﻿<local:RelhaxWindow
+﻿<local:RelhaxCustomFeatureWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -66,7 +66,7 @@
                         <TextBox x:Name="UpdateApplicationV2Step6"  Height="23" TextWrapping="Wrap" Text="Step 6: Update manager_info.xml file in database repo and commit"/>
                         <Button x:Name="UpdateApplicationV2Step7a"  Content="Step 7a: Upload RelhaxModpack.exe" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationStable"/>
                         <Button x:Name="UpdateApplicationV2Step7b"  Content="Step 7b: Upload RelhaxModpackBeta.exe" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadApplicationBeta"/>
-                        <Button x:Name="UpdateApplicationV2Step8"   Content="Step 8: Upload manager_info.xml" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadManagerInfo"/>
+                        <Button x:Name="UpdateApplicationV2Step8"   Content="Step 8: Upload manager_version.xml" HorizontalContentAlignment="Left" Click="UpdateApplicationV2UploadManagerVersion"/>
                         <Button x:Name="UpdateApplicationV2Step9"   Content="Step 9: Run script CreateUpdatePackages.php" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateUpdatePackages"/>
                         <Button x:Name="UpdateApplicationV2Step10"  Content="Step 10: Run script CreateManagerInfo.php" HorizontalContentAlignment="Left" Click="UpdateApplicationV2CreateManagerInfoBigmods"/>
                         <TextBox x:Name="UpdateApplicationV2Step11" Height="23" TextWrapping="Wrap" Text="Step 11: Post update notes on discord and forums"/>
@@ -84,6 +84,15 @@
                         <TextBlock x:Name="CleanZipFoldersListHeader" Text="List of files to be deleted" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <TextBox x:Name="CleanZipFoldersTextbox" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible" Margin="1,118,1,5" TextWrapping="NoWrap" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Visible"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="CleanMediasTab" Header="Clean Media Entries">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <Button x:Name="CleanMediasStep1" Content="Step 1: Load database" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
+                        <Button x:Name="CleanMediasStep2" Content="Step 2: Try to download all media to test for errors" HorizontalContentAlignment="Left" Click="CleanMediasStep2_Click"/>
+                        <Button x:Name="CleanMediasCancel" Content="Cancel Process" HorizontalContentAlignment="Left" Visibility="Hidden" Click="CleanFoldersCancel_Click"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem x:Name="DatabaseOutputTab" Header="Database Output">
@@ -181,4 +190,4 @@
         <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Grid.Column="2" Click="ClearLogButton_Click" Margin="0,0,5,5"/>
         <ProgressBar x:Name="JobProgressBar" Grid.Column="2" HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Bottom" Maximum="100" Minimum="0" Value="0" Margin="0,0,85,5" />
     </Grid>
-</local:RelhaxWindow>
+</local:RelhaxCustomFeatureWindow>

@@ -12,7 +12,7 @@ namespace RelhaxModpack
         /// <summary>
         /// Get or set the length of time, in milliseconds, until the operation will timeout
         /// </summary>
-        public int Timeout { get; set; } = 5 * CommonUtils.TO_SECONDS * CommonUtils.TO_MINUETS;
+        public int Timeout { get; set; } = 5 * CommonUtils.TO_SECONDS * CommonUtils.TO_MINUTES;
 
         /// <summary>
         /// Set the URL to get the request data from

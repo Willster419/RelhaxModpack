@@ -5,71 +5,60 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using Microsoft.Win32;
-using RelhaxModpack.Patches;
+using RelhaxModpack.Patching;
 using RelhaxModpack.Properties;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Windows;
 using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Common;
+using RelhaxModpack.Installer;
 
 namespace RelhaxModpack
 {
-    /// <summary>
-    /// Application return error codes
-    /// </summary>
-    public enum ReturnCodes
-    {
-        /// <summary>
-        /// No error occurred
-        /// </summary>
-        Sucess = 0,
-        /// <summary>
-        /// Error with logfile creation
-        /// </summary>
-        LogfileError = 1
-    }
-    /// <summary>
-    /// The build distribution version of the application
-    /// </summary>
-    public enum ApplicationVersions
-    {
-        /// <summary>
-        /// The stable distribution for all users
-        /// </summary>
-        Stable,
-        /// <summary>
-        /// The beta distribution, for advanced users, may have new features or improvements, and bugs
-        /// </summary>
-        Beta,
-        /// <summary>
-        /// The alpha distribution. Should never be publicly distributed
-        /// </summary>
-        Alpha
-    }
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
-        bool exceptionShown = false;
-        ExceptionCaptureDisplay exceptionCaptureDisplay = new ExceptionCaptureDisplay();
-        //when application is brought to foreground
-        private void Application_Activated(object sender, EventArgs e)
-        {
+        private bool exceptionShown = false;
+        private ExceptionCaptureDisplay exceptionCaptureDisplay;
+        private CommandLineSettings CommandLineSettings;
+        private PatchExitCode PatcherExitCode;
+        private ModpackSettings modpackSettings;
 
-        }
-
-        //when application is sent to background (not active window)?
-        private void Application_Deactivated(object sender, EventArgs e)
-        {
-
-        }
+        /// <summary>
+        /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk. Parsed upon application load.
+        /// </summary>
+        public Ionic.Zip.ZipFile ManagerInfoZipfile;
 
         //when application is closing (cannot be stopped)
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            if (Logging.IsLogOpen(Logfiles.Application))
-                Logging.Info("Disposing log");
+            switch (CommandLineSettings.ApplicationMode)
+            {
+                case ApplicationMode.Updater:
+                    CloseLog(Logfiles.Updater);
+                    DeleteCustomLogIfExists();
+                    break;
+                case ApplicationMode.Editor:
+                    CloseLog(Logfiles.Editor);
+                    DeleteCustomLogIfExists();
+                    break;
+                case ApplicationMode.PatchDesigner:
+                    CloseLog(Logfiles.PatchDesigner);
+                    DeleteCustomLogIfExists();
+                    break;
+                case ApplicationMode.AutomationRunner:
+                    CloseLog(Logfiles.AutomationRunner);
+                    DeleteCustomLogIfExists();
+                    break;
+                case ApplicationMode.Patcher:
+                    Logging.Info("Patching finished, exit code {0} ({1})", (int)PatcherExitCode, PatcherExitCode.ToString());
+                    e.ApplicationExitCode = ((int)PatcherExitCode) + 100;
+                    break;
+            }
             CloseApplicationLog(true);
         }
 
@@ -92,8 +81,41 @@ namespace RelhaxModpack
             }
         }
 
-        //when application is starting for first time
-        private void Application_Startup(object sender, StartupEventArgs e)
+        private void InitSettingsAndLogging()
+        {
+            CommandLineSettings = new CommandLineSettings(Environment.GetCommandLineArgs().Skip(1).ToArray());
+            modpackSettings = new ModpackSettings();
+            if (!Logging.Init(Logfiles.Application, false, !CommandLineSettings.ArgsOpenCustomWindow()))
+            {
+                //check if it's because the file already exists, or some other actual reason
+                //if the file exists, and it's locked (init failed), then check if also the command line is creating a new window
+                if (File.Exists(Logging.GetLogfile(Logfiles.Application).Filepath) && CommandLineSettings.ArgsOpenCustomWindow())
+                {
+                    //getting here means the main window is open, but in this instance, a custom window will be open. We can temporarily
+                    //open the log in a custom name (with the application mode), and when opening the 'real' logfile for the custom window,
+                    //we'll transfer the text over then
+                    Logging.DisposeLogging(Logfiles.Application);
+                    if (!Logging.Init(Logfiles.Application, false, false, Logging.ApplicationTempLogFilename))
+                    {
+                        MessageBox.Show(string.Format("Failed to initialize logfile {0}, check file permissions", Logging.ApplicationTempLogFilename));
+                        Shutdown((int)ReturnCodes.LogfileError);
+                        return;
+                    }
+                }
+                else
+                {
+                    if (!Translations.TranslationsLoaded)
+                        Translations.LoadTranslations(false);
+                    //old message from Logging.Init
+                    //MessageBox.Show(string.Format("Failed to initialize logfile {0}, check file permissions", logfilePath));
+                    MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
+                    Shutdown((int)ReturnCodes.LogfileError);
+                    return;
+                }
+            }
+        }
+
+        private void AttachAssemblyResolver()
         {
             //handle any assembly resolves
             //https://stackoverflow.com/a/19806004/3128017
@@ -110,25 +132,32 @@ namespace RelhaxModpack
                     return Assembly.Load(assemblyData);
                 }
             };
+        }
 
-            //init logging here
-            //"The application failed to open a logfile. Either check your file permissions or move the application to a folder with write access"
-            if (!Logging.Init(Logfiles.Application))
-            {
-                MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
-                Shutdown((int)ReturnCodes.LogfileError);
-            }
-
+        private void FinishApplicationInit()
+        {
             Logging.WriteHeader(Logfiles.Application);
             Logging.Info(string.Format("| Relhax Modpack version {0}", CommonUtils.GetApplicationVersion()));
-            Logging.Info(string.Format("| Build version {0}, from date {1}", Settings.ApplicationVersion.ToString(), CommonUtils.GetCompileTime()));
+            Logging.Info(string.Format("| Build version {0}, from date {1}", ApplicationConstants.ApplicationVersion.ToString(), CommonUtils.GetCompileTime()));
             Logging.Info(string.Format("| Running on OS {0}", Environment.OSVersion.ToString()));
 
-            //parse command line arguments here
-            //get the command line args for testing of auto install
-            CommandLineSettings.ParseCommandLine(Environment.GetCommandLineArgs());
+            //parse command line arguments given to the application
+            Logging.Info("Parsing command line switches");
+            CommandLineSettings.ParseCommandLineSwitches();
 
-            if (!ModpackSettings.ValidFrameworkVersion)
+            //load the ModpackSettings from xml file
+            SettingsParser settingsParser = new SettingsParser();
+            settingsParser.LoadSettings(modpackSettings);
+
+            //set verbose logging option
+            bool verboseSettingForLogfile = modpackSettings.VerboseLogging;
+            if (ApplicationConstants.ApplicationVersion != ApplicationVersions.Stable)
+                verboseSettingForLogfile = true;
+            Logging.GetLogfile(Logfiles.Application).VerboseLogging = verboseSettingForLogfile;
+
+            //run a check for a valid .net framework version, only if we're opening MainWindow, and the version
+            //of the .net framework installed has not yet been detected to be 4.8
+            if ((!CommandLineSettings.ArgsOpenCustomWindow()) && (!modpackSettings.ValidFrameworkVersion))
             {
                 //https://github.com/Willster419/RelhaxModpack/issues/90
                 //try getting .net framework information
@@ -159,135 +188,189 @@ namespace RelhaxModpack
                     Logging.Exception(ex.ToString());
                 }
 
-                Logging.Info("Minimum required .NET Framework version: {0}, Installed: {1}", Settings.MinimumDotNetFrameworkVersionRequired, frameworkVersion);
+                Logging.Info("Minimum required .NET Framework version: {0}, Installed: {1}", ApplicationConstants.MinimumDotNetFrameworkVersionRequired, frameworkVersion);
 
                 if (frameworkVersion == -1)
                 {
                     Logging.Error("Failed to get .NET Framework version from the registry");
                     MessageBox.Show("failedToGetDotNetFrameworkVersion");
                 }
-                else if (frameworkVersion < Settings.MinimumDotNetFrameworkVersionRequired)
+                else if (frameworkVersion < ApplicationConstants.MinimumDotNetFrameworkVersionRequired)
                 {
                     Logging.Error("Invalid .NET Framework version (less then 4.8)");
-                    if (MessageBox.Show("invalidDotNetFrameworkVersion","",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if (MessageBox.Show("invalidDotNetFrameworkVersion", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        CommonUtils.StartProcess(Settings.DotNetFrameworkLatestDownloadURL);
+                        CommonUtils.StartProcess(ApplicationConstants.DotNetFrameworkLatestDownloadURL);
                     }
                 }
                 else
                 {
                     Logging.Info("Valid .NET Framework version");
-                    ModpackSettings.ValidFrameworkVersion = true;
+                    modpackSettings.ValidFrameworkVersion = true;
                 }
             }
+        }
 
-            Logging.Debug("Starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
+        private void SelectWindowStartup()
+        {
             //switch into application modes based on mode enum
-            switch(CommandLineSettings.ApplicationMode)
+            Logging.Debug("Starting application in {0} mode", CommandLineSettings.ApplicationMode.ToString());
+            switch (CommandLineSettings.ApplicationMode)
             {
                 case ApplicationMode.Updater:
-                    ModpackToolbox updater = new ModpackToolbox();
-                    CloseApplicationLog(true);
+                    ModpackToolbox updater = new ModpackToolbox(modpackSettings) { CommandLineSettings = CommandLineSettings };
 
-                    //start updater logging system
-                    if (!Logging.Init(Logfiles.Updater))
+                    //close application log if open
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        CloseApplicationLog(true);
+
+                    //start updater logging
+                    if (!Logging.Init(Logfiles.Updater, modpackSettings.VerboseLogging, true))
                     {
                         MessageBox.Show("Failed to initialize logfile for updater");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
                         return;
                     }
                     Logging.WriteHeader(Logfiles.Updater);
-                    updater.ShowDialog();
 
-                    //stop updater logging system
-                    CloseLog(Logfiles.Updater);
-                    updater = null;
-                    Current.Shutdown(0);
-                    Environment.Exit(0);
-                    return;
+                    //redirect application log file to the modpack toolbox
+                    if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.Updater))
+                        Logging.Error(Logfiles.Updater, LogOptions.MethodName, "Failed to redirect messages from application to modpack toolbox");
+
+                    //show window
+                    updater.Show();
+                    break;
                 case ApplicationMode.Editor:
-                    DatabaseEditor editor = new DatabaseEditor();
-                    CloseApplicationLog(true);
+                    DatabaseEditor editor = new DatabaseEditor(modpackSettings) { CommandLineSettings = CommandLineSettings };
 
-                    //start updater logging system
-                    if (!Logging.Init(Logfiles.Editor))
+                    //close application log if open
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        CloseApplicationLog(true);
+
+                    //start updater logging
+                    if (!Logging.Init(Logfiles.Editor, modpackSettings.VerboseLogging, true))
                     {
                         MessageBox.Show("Failed to initialize logfile for editor");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
                         return;
                     }
                     Logging.WriteHeader(Logfiles.Editor);
-                    editor.ShowDialog();
-                    //stop updater logging system
-                    CloseLog(Logfiles.Editor);
-                    editor = null;
-                    Current.Shutdown(0);
-                    Environment.Exit(0);
-                    return;
-                case ApplicationMode.PatchDesigner:
-                    PatchDesigner patcher = new PatchDesigner();
-                    CloseApplicationLog(true);
 
-                    //start updater logging system
-                    if (!Logging.Init(Logfiles.PatchDesigner))
+                    //redirect application log file to the editor
+                    if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.Editor))
+                        Logging.Error(Logfiles.Editor, LogOptions.MethodName, "Failed to redirect messages from application to editor");
+
+                    //show window
+                    editor.Show();
+                    break;
+                case ApplicationMode.PatchDesigner:
+                    PatchDesigner patcher = new PatchDesigner(modpackSettings) { CommandLineSettings = CommandLineSettings };
+
+                    //close application log if open
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        CloseApplicationLog(true);
+
+                    //start updater logging
+                    if (!Logging.Init(Logfiles.PatchDesigner, modpackSettings.VerboseLogging, true))
                     {
                         MessageBox.Show("Failed to initialize logfile for patcher");
                         Current.Shutdown((int)ReturnCodes.LogfileError);
                         return;
                     }
                     Logging.WriteHeader(Logfiles.PatchDesigner);
-                    patcher.ShowDialog();
 
-                    //stop updater logging system
-                    CloseLog(Logfiles.PatchDesigner);
-                    patcher = null;
-                    Current.Shutdown(0);
-                    Environment.Exit(0);
-                    return;
+                    //redirect application log file to the patch designer
+                    if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.PatchDesigner))
+                        Logging.Error(Logfiles.PatchDesigner, LogOptions.MethodName, "Failed to redirect messages from application to patch designer");
+
+                    //show window
+                    patcher.Show();
+                    break;
+                case ApplicationMode.AutomationRunner:
+                    DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner(modpackSettings) { CommandLineSettings = CommandLineSettings };
+
+                    //close application log if open
+                    if (Logging.IsLogOpen(Logfiles.Application))
+                        CloseApplicationLog(true);
+
+                    //start DatabaseAutomationRunner logging
+                    if (!Logging.Init(Logfiles.AutomationRunner, modpackSettings.VerboseLogging, true))
+                    {
+                        MessageBox.Show("Failed to initialize logfile for DatabaseAutomationRunner");
+                        Current.Shutdown((int)ReturnCodes.LogfileError);
+                        return;
+                    }
+                    Logging.WriteHeader(Logfiles.AutomationRunner);
+
+                    //redirect application log file to the automation runner
+                    if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.AutomationRunner))
+                        Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Failed to redirect messages from application to automation runner");
+
+                    //show window
+                    automationRunner.Show();
+                    break;
                 case ApplicationMode.Patcher:
-                    Logging.Info("Running patch mode");
-                    if(CommandLineSettings.PatchFilenames.Count == 0)
+                    //check that at least one patch file was specified from command line
+                    if (CommandLineSettings.PatchFilenames.Count == 0)
                     {
                         Logging.Error("0 patch files parsed from command line!");
-                        Current.Shutdown(-3);
-                        Environment.Exit(-3);
+                        Current.Shutdown((int)ReturnCodes.PatcherNoSpecifiedFiles);
+                        Environment.Exit((int)ReturnCodes.PatcherNoSpecifiedFiles);
                     }
                     else
                     {
-                        List<Patch> patchList = new List<Patch>();
-                        foreach(string file in CommandLineSettings.PatchFilenames)
+                        //parse patch objects from command line file list
+                        List<Instruction> patchList = new List<Instruction>();
+                        InstructionLoader loader = new InstructionLoader();
+                        foreach (string file in CommandLineSettings.PatchFilenames)
                         {
-                            if(!File.Exists(file))
+                            if (!File.Exists(file))
                             {
-                                Logging.Warning("skipping file path {0}, not found", file);
+                                Logging.Warning("Skipping file path {0}, not found", file);
                                 continue;
                             }
-                            Logging.Info("adding patches from file {0}", file);
-                            XmlUtils.AddPatchesFromFile(patchList, file);
+                            Logging.Info("Adding patches from file {0}", file);
+                            loader.AddInstructionObjectsToList(file, patchList, InstructionsType.Patch, Patch.PatchXmlSearchPath);
                         }
-                        if(patchList.Count == 0)
+
+                        //check for at least one patchfile was parsed
+                        if (patchList.Count == 0)
                         {
                             Logging.Error("0 patches parsed from files!");
-                            Current.Shutdown(-4);
-                            Environment.Exit(-4);
+                            Current.Shutdown((int)ReturnCodes.PatcherNoPatchesParsed);
+                            Environment.Exit((int)ReturnCodes.PatcherNoPatchesParsed);
                         }
-                        PatchExitCode exitCode = PatchExitCode.Success;
+
+                        //set default patch return code
+                        PatcherExitCode = PatchExitCode.Success;
+
                         //always return on worst condition
                         int i = 1;
-                        foreach(Patch p in patchList)
+                        //TODO: does WoTDirectory get set later? maybe tm?
+                        Patcher thePatcher = new Patcher() { WoTDirectory = null };
+                        foreach (Patch p in patchList)
                         {
-                            Logging.Info("running patch {0} of {1}", i++, patchList.Count);
-                            PatchExitCode exitCodeTemp = PatchUtils.RunPatch(p);
-                            if ((int)exitCodeTemp < (int)exitCode)
-                                exitCode = exitCodeTemp;
+                            Logging.Info("Running patch {0} of {1}", i++, patchList.Count);
+                            PatchExitCode exitCodeTemp = thePatcher.RunPatchFromCommandline(p);
+                            if ((int)exitCodeTemp < (int)PatcherExitCode)
+                                PatcherExitCode = exitCodeTemp;
                         }
-                        Logging.Info("patching finished, exit code {0} ({1})", (int)exitCode, exitCode.ToString());
-                        CloseApplicationLog(true);
-                        Current.Shutdown((int)exitCode);
-                        Environment.Exit((int)exitCode);
                     }
-                    return;
+                    break;
+                case ApplicationMode.Default:
+                    MainWindow window = new MainWindow(modpackSettings) { CommandLineSettings = CommandLineSettings };
+                    window.Show();
+                    break;
             }
+        }
+
+        //when application is starting for first time
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            InitSettingsAndLogging();
+            AttachAssemblyResolver();
+            FinishApplicationInit();
+            SelectWindowStartup();
         }
 
         //https://stackoverflow.com/questions/793100/globally-catch-exceptions-in-a-wpf-application
@@ -296,6 +379,7 @@ namespace RelhaxModpack
             if (!exceptionShown)
             {
                 exceptionShown = true;
+                exceptionCaptureDisplay = new ExceptionCaptureDisplay(modpackSettings);
                 if (!Logging.IsLogDisposed(Logfiles.Application) && Logging.IsLogOpen(Logfiles.Application))
                 {
                     Logging.WriteToLog(e.Exception.ToString(), Logfiles.Application, LogLevel.ApplicationHalt);
@@ -304,6 +388,12 @@ namespace RelhaxModpack
                 exceptionCaptureDisplay.ShowDialog();
                 CloseApplicationLog(true);
             }
+        }
+
+        private void DeleteCustomLogIfExists()
+        {
+            if (File.Exists(Logging.ApplicationTempLogFilename))
+                File.Delete(Logging.ApplicationTempLogFilename);
         }
     }
 }

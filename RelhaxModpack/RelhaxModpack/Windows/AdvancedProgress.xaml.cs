@@ -1,6 +1,11 @@
 ﻿using System.Text;
 using System.IO;
 using RelhaxModpack.UI;
+using RelhaxModpack.Settings;
+using RelhaxModpack.Utilities.Enums;
+using System.Collections.Generic;
+using System.Linq;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {   ///I exist as a branch
@@ -12,7 +17,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create and initialize the AdvancedProgress window
         /// </summary>
-        public AdvancedProgress()
+        public AdvancedProgress(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
         }
@@ -76,6 +81,42 @@ namespace RelhaxModpack.Windows
         private InstallerExitCodes lastExitCode = InstallerExitCodes.Success;
 
         private int lastInstallGroup = -1;
+
+        private RelhaxInstallerProgress lastRelhaxInstallerProgressExtraction = null;
+
+        public void OnReportDownload(RelhaxDownloadProgress progress)
+        {
+            if (lastRelhaxInstallerProgressExtraction.WaitingOnDownloadsOfAThread == null)
+                return;
+
+            int indexWaitingOnDownload = 0;
+            foreach (bool b in lastRelhaxInstallerProgressExtraction.WaitingOnDownloadsOfAThread)
+            {
+                if (b)
+                    break;
+                indexWaitingOnDownload++;
+            }
+            if (indexWaitingOnDownload >= lastRelhaxInstallerProgressExtraction.WaitingOnDownloadsOfAThread.Length)
+                return;
+
+            ExtractionModsReporters[indexWaitingOnDownload].TaskMinimum = 0;
+            ExtractionModsReporters[indexWaitingOnDownload].TaskMaximum = progress.ChildTotal;
+            ExtractionModsReporters[indexWaitingOnDownload].TaskValue = progress.ChildCurrent;
+
+            //break it up into lines cause it's hard to read
+            //"downloading package_name"
+            string line1 = string.Format("{0} {1}", Translations.GetTranslatedString("Downloading"), progress.DatabasePackage.PackageName);
+
+            //"zip_file_name"
+            string line2 = progress.DatabasePackage.ZipFile;
+
+            //https://stackoverflow.com/questions/9869346/double-string-format
+            //"2MB of 8MB"
+            string line3 = string.Format("{0} {1} {2}", FileUtils.SizeSuffix((ulong)progress.ChildCurrent, 1, true), Translations.GetTranslatedString("of"), FileUtils.SizeSuffix((ulong)progress.ChildTotal, 1, true));
+
+            //also report to the download message process
+            ExtractionModsReporters[indexWaitingOnDownload].TaskText = string.Format("{0}\n{1}\n{2}", line1, line2, line3);
+        }
 
         /// <summary>
         /// Update the advanced progress UI objects
@@ -211,6 +252,7 @@ namespace RelhaxModpack.Windows
                         CleanModsReporter.TaskValue = progress.ChildCurrent;
                     break;
                 case InstallerExitCodes.ExtractionError:
+                    lastRelhaxInstallerProgressExtraction = progress;
                     if(ExtractionModsReporters[progress.ThreadID] == null)
                     {
                         Logging.Error("Extraction reporter for thread {0} is null! ID={0}", progress.ThreadID);
@@ -245,15 +287,12 @@ namespace RelhaxModpack.Windows
                             progress.InstallGroup);
                     }
 
-                    if(progress.WaitingOnDownloadOfAThread != null && progress.WaitingOnDownloadOfAThread[progress.ThreadID])
+                    if(progress.WaitingOnDownloadsOfAThread != null && progress.WaitingOnDownloadsOfAThread[progress.ThreadID])
                     {
                         if(ExtractionModsReporters[progress.ThreadID].ReportState == TaskReportState.Inactive)
                         {
                             ExtractionModsReporters[progress.ThreadID].ReportState = TaskReportState.Active;
                         }
-
-                        if(progress.FilenameOfAThread != null)
-                            builder.AppendFormat("{0}\n({1})...", Path.GetFileName(progress.FilenameOfAThread[progress.ThreadID]), Translations.GetTranslatedString("Downloading"));
                     }
                     else
                     {

@@ -3,81 +3,100 @@ using RelhaxModpack.Utilities;
 using System.Collections.Generic;
 using System.IO;
 using RelhaxModpack.Utilities.Enums;
+using System;
+using System.Linq;
 
-namespace RelhaxModpack
+namespace RelhaxModpack.Settings
 {
     /// <summary>
-    /// Handles all parsing and usage of command line arguments
+    /// Handles all parsing and usage of command line arguments.
     /// </summary>
-    public static class CommandLineSettings
+    public class CommandLineSettings
     {
-        //application command line level settings
-        //also serves as place to put default values
+        /// <summary>
+        /// A list of command line arguments that, when specified, would create a custom window to
+        /// run the application in a specific mode.
+        /// </summary>
+        /// <remarks>For example, if "database-editor" is detected, then the application is going to open the database editor</remarks>
+        public static readonly string[] CommandLineArgsToSpawnCustomWindow =
+        {
+            PatchDesigner.CommandLineArg,
+            "database-updater", //old version of modpack-toolbox
+            ModpackToolbox.CommandLineArg,
+            DatabaseEditor.CommandLineArg,
+            "patcher",
+            DatabaseAutomationRunner.CommandLineArg
+        };
+
         /// <summary>
         /// Using the application is database test mode. Allows you to test a local database
         /// </summary>
         /// <remarks>Activated with "/test"</remarks>
-        public static bool TestMode = false;
+        public bool TestMode = false;
 
         /// <summary>
         /// Skip the application update check
         /// </summary>
         /// <remarks>Activated with "/skip-update"</remarks>
-        public static bool SkipUpdate = false;
+        public bool SkipUpdate = false;
 
         /// <summary>
         /// Allows the application (in installer mode) to be launched in a minimized state
         /// </summary>
         /// <remarks>Activated with "/silent-start"</remarks>
-        public static bool SilentStart = false;
+        public bool SilentStart = false;
 
         /// <summary>
         /// The name of the auto install selection file
         /// </summary>
         /// <remarks>The application uses the filename as check for if in auto install mode i.e. if the string is not empty.
         /// The file must be in the "RelhaxUserSelections" folder</remarks>
-        public static string AutoInstallFileName = string.Empty;
+        public string AutoInstallFileName = string.Empty;
 
         /// <summary>
         /// The name of the file that contains the key for unlocking the updater
         /// </summary>
         /// <remarks>use key filename as check for update key mode</remarks>
-        public static string UpdateKeyFileName = string.Empty;
+        public string UpdateKeyFileName = string.Empty;
 
         /// <summary>
         /// The path to load the database from when the application starts
         /// </summary>
-        public static string EditorAutoLoadFileName = string.Empty;
+        public string EditorAutoLoadFileName = string.Empty;
 
         /// <summary>
         /// The parsed list of patch instruction files for patch mode
         /// </summary>
         /// <remarks>The application will run the patches in order loaded from the command line i.e. left to right</remarks>
-        public static List<string> PatchFilenames = new List<string>();
+        public List<string> PatchFilenames = new List<string>();
 
         /// <summary>
         /// The mode that the application is currently running in
         /// </summary>
-        public static ApplicationMode ApplicationMode = ApplicationMode.Default;
+        public ApplicationMode ApplicationMode = ApplicationMode.Default;
 
         /// <summary>
-        /// Parse any conflicting command line arguments
+        /// Creates an instance of the CommandLineSettings class
         /// </summary>
-        public static void ParseCommandLineConflicts()
+        /// <param name="args">The list of command line arguments provided from the Environment class</param>
+        /// <remarks>The first arg to the exe is skipped</remarks>
+        public CommandLineSettings(string[] args)
         {
-            //check for conflicting command line arguments
+            this.CommandLineArgs = args;
         }
 
         /// <summary>
         /// Parse the command line arguments
         /// </summary>
-        /// <param name="args">A string array of command line arguments</param>
-        public static void ParseCommandLine(string[] args)
+        public void ParseCommandLineSwitches()
         {
-            Logging.Info(LogOptions.ClassName, "Command line: " + string.Join(" ", args));
-            for (int i = 0; i < args.Length; i++)
+            if (CommandLineArgs == null)
+                throw new BadMemeException("CommandLineArgs is null");
+
+            Logging.Info(LogOptions.ClassName, "Command line: " + string.Join(" ", CommandLineArgs));
+            for (int i = 0; i < CommandLineArgs.Length; i++)
             {
-                string commandArg = args[i];
+                string commandArg = CommandLineArgs[i];
                 char compare = commandArg[0];
                 if (compare.Equals('/') || compare.Equals('-'))
                     commandArg = commandArg.Remove(0, 1);
@@ -97,47 +116,51 @@ namespace RelhaxModpack
                         SilentStart = true;
                         break;
                     case "auto-install":
-                        AutoInstallFileName = args[++i];
+                        AutoInstallFileName = CommandLineArgs[++i];
                         Logging.Info(LogOptions.ClassName, "{0}, attempting to launch installation using user configuration file {1}", commandArg, AutoInstallFileName);
                         break;
                     case "updateKeyFile":
                         //get key file
-                        UpdateKeyFileName = args[++i];
+                        UpdateKeyFileName = CommandLineArgs[++i];
                         Logging.Info(LogOptions.ClassName, "{0}, loading keyfile {1}", commandArg, UpdateKeyFileName);
                         break;
                     case "editorAutoLoad":
-                        EditorAutoLoadFileName = args[++i];
+                        EditorAutoLoadFileName = CommandLineArgs[++i];
                         Logging.Info(LogOptions.ClassName, "{0}, loading database from {1}", commandArg, EditorAutoLoadFileName);
                         break;
+                    case "updater-hardcode-path":
+                        Logging.Warning(LogOptions.ClassName, "{0} is obsolete and will be skipped. See the {1} file for this setting.", commandArg, ModpackToolboxSettings.SettingsFilename);
+                        break;
+                    case "toolbox-hardcode-path":
+                        Logging.Warning(LogOptions.ClassName, "{0} is obsolete and will be skipped. See the {1} file for this setting.", commandArg, ModpackToolboxSettings.SettingsFilename);
+                        break;
                     //now check for different startup modes
-                    case "patch-designer":
+                    case PatchDesigner.CommandLineArg:
                         ApplicationMode = ApplicationMode.PatchDesigner;
                         Logging.Info(LogOptions.ClassName, "{0}, loading in patch design mode", commandArg);
                         break;
                     case "database-updater":
+                    case ModpackToolbox.CommandLineArg:
                         ApplicationMode = ApplicationMode.Updater;
                         Logging.Info(LogOptions.ClassName, "{0}, loading in database update mode", commandArg);
                         break;
-                    case "modpack-toolbox":
-                        ApplicationMode = ApplicationMode.Updater;
-                        Logging.Info(LogOptions.ClassName, "{0}, loading in database update mode", commandArg);
-                        break;
-                    case "updater-hardcode-path":
-                        Logging.Info(LogOptions.ClassName, "{0}, forcing folder path as {1}", commandArg, ModpackToolbox.HardCodeRepoPath);
-                        ModpackToolbox.UseHardCodePath = true;
-                        break;
-                    case "database-editor":
+                    case DatabaseEditor.CommandLineArg:
                         ApplicationMode = ApplicationMode.Editor;
                         Logging.Info(LogOptions.ClassName, "{0}, loading in database edit mode", commandArg);
+                        break;
+                    case DatabaseAutomationRunner.CommandLineArg:
+                        ApplicationMode = ApplicationMode.AutomationRunner;
+                        Logging.Info(LogOptions.ClassName, "{0}, loading in database automation runner mode", commandArg);
                         break;
                     case "patcher":
                         ApplicationMode = ApplicationMode.Patcher;
                         Logging.Info(LogOptions.ClassName, "{0}, loading in patch mode", commandArg);
-                        PatchFilenames.Add(args[++i].Trim());
+                        PatchFilenames.Add(CommandLineArgs[++i].Trim());
                         break;
+                    //and also check for adding macros
                     case "macro":
-                        string macroName = args[++i];
-                        string macroValue = args[++i];
+                        string macroName = CommandLineArgs[++i];
+                        string macroValue = CommandLineArgs[++i];
                         Logging.Info(LogOptions.ClassName, "{0}, parsing macro '{1}' with value '{2}'", commandArg, macroName, macroValue);
                         /*
                         FilePathDict.Add(@"{versiondir}", Settings.WoTClientVersion);
@@ -160,6 +183,43 @@ namespace RelhaxModpack
                         break;
                 }
             }
+        }
+
+        private string[] CommandLineArgs = null;
+
+        private bool ArgsLaunchCustomWindowChecked = false;
+
+        private bool ArgsOpenCustomWindow_ = false;
+
+        /// <summary>
+        /// Determines if any specified command line args will cause the application to open a custom (non MainWindow) window
+        /// </summary>
+        /// <returns>True if the provided arguments will return a custom array, false otherwise</returns>
+        public bool ArgsOpenCustomWindow()
+        {
+            if (CommandLineArgs == null)
+                throw new BadMemeException("CommandLineArgs is null");
+
+            if (ArgsLaunchCustomWindowChecked)
+                return ArgsOpenCustomWindow_;
+
+            foreach (string commandLineArg in CommandLineArgs)
+            {
+                foreach (string argsToLaunchCustomWindow in CommandLineArgsToSpawnCustomWindow)
+                {
+                    if (commandLineArg.Contains(argsToLaunchCustomWindow))
+                    {
+                        ArgsOpenCustomWindow_ = true;
+                        break;
+                    }
+                }
+
+                if (ArgsOpenCustomWindow_)
+                    break;
+            }
+
+            ArgsLaunchCustomWindowChecked = true;
+            return ArgsOpenCustomWindow_;
         }
     }
 }
