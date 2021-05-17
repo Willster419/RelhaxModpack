@@ -66,7 +66,7 @@ namespace RelhaxModpack
             French.Add("ViewNewsButtonDescription", "Afficher les actualités sur l'application, la base de données et autres actualités");
             French.Add("ForceManuelGameDetectionText", "Forcer la détection manuelle");
             French.Add("ForceManuelGameDetectionCBDescription", "Cette option force une détection manuelle de l'emplacement du jeu. " +
-            		"Cochez-la si vous rencontrez des problèmes pour localiser automatiquement le jeu.");
+                    "Cochez-la si vous rencontrez des problèmes pour localiser automatiquement le jeu.");
             French.Add("LanguageSelectionTextblock", "Sélection de la langue");
             French.Add("LanguageSelectionTextblockDescription", "Sélectionner votre langue.\nSi vous rencontrez des traductions manquantes ou des erreurs, n'hésitez pas à nous en informer.");
             French.Add("Forms_ENG_NAButtonDescription", "Accéder à la page anglophone du forum 'World of Tanks' pour le serveur NA");
@@ -121,7 +121,7 @@ namespace RelhaxModpack
             French.Add("OneClickInstallText", "Activer l'installation en un clic");
             French.Add("ForceEnabledCB", "Forcer l'activation de tous les packs [!]");
             French.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", "Lors de l'utilisation de l'installation automatique ou en un clic, affiche un avertissement "+
-            	"pour annuler l'installation si une erreur apparait lors de l'application du fichier de sélection");
+                "pour annuler l'installation si une erreur apparait lors de l'application du fichier de sélection");
 
             French.Add("ForceEnabledCBDescription", "Provoque l'activation de tous les packs. Peut causer de lourds problèmes de stabilité de votre installation");
 
@@ -168,8 +168,8 @@ namespace RelhaxModpack
 
             French.Add("ExportWindowDesctiption", "Sélection de la version de WoT que vous souhaitez exporter");
             French.Add("HelperText", "Bienvenue dans le Modpack Relhax !"+
-            	"\nJ'ai essayé de faire le modpack le plus simple possible, mais des questions peuvent toujours survenir. Survolez un paramètre pour voir une explication." +
-            	"\nMerci d'utiliser Relhax, j'espère que vous l'apprécierez ! - Willster419");
+                "\nJ'ai essayé de faire le modpack le plus simple possible, mais des questions peuvent toujours survenir. Survolez un paramètre pour voir une explication." +
+                "\nMerci d'utiliser Relhax, j'espère que vous l'apprécierez ! - Willster419");
             French.Add("helperTextShort", "Bienvenue dans le Modpack Relhax !");
 
             French.Add("NotifyIfSameDatabaseCBDescription", "Vous informe si votre dernière version de base de données installée est identique. Si c'est le cas, cela signifie qu'il n'y a pas de mise à jour des mods. Cela ne marche qu'avec la base de données stable.");
@@ -254,7 +254,7 @@ namespace RelhaxModpack
             French.Add("SearchThisTabOnlyCB", "Rechercher dans cet onglet uniquement");
             French.Add("searchComboBoxInitMessage", "Rechercher un package...");
             French.Add("SearchTBDescription", "Vous pouvez également rechercher plusieurs parties de nom, séparées par un * (astérisque).\nPar exemple: config*willster419" +
-            	" affichera comme résultat de la recherche: Config de Willster419");
+                " affichera comme résultat de la recherche: Config de Willster419");
             French.Add("InstallingAsWoTVersion", "Installation en tant que version de WoT: {0}");
             French.Add("UsingDatabaseVersion", "Utilisation de la base de données : {0} ({1})");
 
@@ -356,13 +356,8 @@ namespace RelhaxModpack
             French.Add("moveOutOfTanksLocation", "Le modpack ne peut pas être éxecuté a partir du dossier de World of Tanks. Veuillez déplacer l`application" +
                 " dans un autre dossier et réessayer");
 
-			German.Add("moveAppOutOfDownloads", "Die Anwendung hat festgestellt, dass sie über den Ordner \"Downloads\" gestartet wurde. Dies wird nicht empfohlen, da die Anwendung mehrere Ordner und Dateien erstellt." +
-				"Sie sollten die Anwendung und alle 'Relhax'-Dateien und -Ordner in einen eigenen neuen Ordner verschieben.");
             French.Add("moveAppOutOfDownloads", "L'application a détecté qu'elle est lancée à partir du dossier 'Téléchargements'. Ceci n'est pas recommandé car l'application crée plusieurs dossiers et fichiers " +
                 "qui peuvent être difficiles à trouver dans un grand dossier 'Téléchargements'. Vous devriez déplacer l'application et tous les fichiers ainsi que dossiers 'Relhax' dans un nouveau dossier.");
-			Spanish.Add("moveAppOutOfDownloads", "La aplicación ha detectado que está siendo ejecutanda desde la carpeta 'Descargas'. Esto no se recomienda dado que la aplicación crea varios archivos y carpetas " +
-				"que pueden ser difíciles de encontrar en una carpeta 'Descargas' grande. Recomendamos que mueva la aplicación y todos los archivos y carpetas 'Relhax' a una nueva carpeta.");
-			Russian.Add("moveAppOutOfDownloads", "Приложение было запущено из папки «Загрузки». Мы не рекомендуем использовать эту папку, поскольку приложение создаёт несколько папок и файлов, поиск которых может быть затруднительным в папке с загрузками. Вы должны переместить приложение и файлы/папки Relhax в другое расположение.");
             French.Add("DatabaseVersionsSameBody", "La base de données n'a pas changé depuis votre dernière installation. Par conséquent, il n'y a pas de mise à jour pour votre sélection" +
                 " de mods. Continuer quand même ?");
             French.Add("DatabaseVersionsSameHeader", "La version de la base de données est identique");

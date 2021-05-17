@@ -353,14 +353,9 @@ namespace RelhaxModpack
             Polish.Add("noUninstallLogHeader", "Usuń wszystkie mody");
             Polish.Add("moveOutOfTanksLocation", "Modpack nie może być uruchamiany z katalogu World_of_Tanks. Przenieś aplikację i spróbuj ponownie.");
 
-			German.Add("moveAppOutOfDownloads", "Die Anwendung hat festgestellt, dass sie über den Ordner \"Downloads\" gestartet wurde. Dies wird nicht empfohlen, da die Anwendung mehrere Ordner und Dateien erstellt." +
-				"Sie sollten die Anwendung und alle 'Relhax'-Dateien und -Ordner in einen eigenen neuen Ordner verschieben.");
             Polish.Add("moveAppOutOfDownloads", "Wykryto, że aplikacja została uruchomiona z folderu 'Pobrane'. " +
                 "Nie jest to zalecane z racji tworzenia przez aplikację wielu plików i folderów, które mogą być trudne do znalezienia w przypadku folderu 'Pobrane' z dużą ilością plików. " +
                 "Zaleca się przeniesienie aplikacji wraz z plikami do nowego/osobnego folderu.");
-			Spanish.Add("moveAppOutOfDownloads", "La aplicación ha detectado que está siendo ejecutanda desde la carpeta 'Descargas'. Esto no se recomienda dado que la aplicación crea varios archivos y carpetas " +
-				"que pueden ser difíciles de encontrar en una carpeta 'Descargas' grande. Recomendamos que mueva la aplicación y todos los archivos y carpetas 'Relhax' a una nueva carpeta.");
-			Russian.Add("moveAppOutOfDownloads", "Приложение было запущено из папки «Загрузки». Мы не рекомендуем использовать эту папку, поскольку приложение создаёт несколько папок и файлов, поиск которых может быть затруднительным в папке с загрузками. Вы должны переместить приложение и файлы/папки Relhax в другое расположение.");
             Polish.Add("DatabaseVersionsSameBody", "Baza danych nie została zaktualizowana od ostatniej instalacji — nie ma żadych aktualizacji dla ostatnio zainstalowanych modów.\n" +
                 "Czy nadal chcesz kontynuować?");
             Polish.Add("DatabaseVersionsSameHeader", "Brak aktualizacji zainstalowanych modów.");
