@@ -32,8 +32,10 @@ namespace RelhaxModpack.Utilities
         /// <summary>
         /// The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage
         /// </summary>
-        public const string IE_BROWSER_EMULATION_REGPATH = @"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
-        
+        public const string IE_BROWSER_EMULATION_REGPATH_32 = @"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
+
+        public const string IE_BROWSER_EMULATION_REGPATH_64 = @"SOFTWARE\Wow6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
+
         /// <summary>
         /// Checks the registry to get the latest location of where WoT is installed, includes exe in the name
         /// </summary>
@@ -225,10 +227,12 @@ namespace RelhaxModpack.Utilities
             //https://weblog.west-wind.com/posts/2011/May/21/Web-Browser-Control-Specifying-the-IE-Version#Using-the-X--UA--Compatible-HTML-Meta-Tag
             //https://stackoverflow.com/questions/17922308/use-latest-version-of-internet-explorer-in-the-webbrowser-control
 
+            string browserEmulationKey = Environment.Is64BitProcess ? IE_BROWSER_EMULATION_REGPATH_64 : IE_BROWSER_EMULATION_REGPATH_32;
+
             int registryToSet = (int)IEVersion;
             int currentRegistryValue;
 
-            using (RegistryKey Key = Registry.CurrentUser.CreateSubKey(IE_BROWSER_EMULATION_REGPATH, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            using (RegistryKey Key = Registry.CurrentUser.CreateSubKey(browserEmulationKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
             {
                 if (Key.GetValue(exeName) != null && Key.GetValue(exeName) is int IeValue)
                     currentRegistryValue = IeValue;
