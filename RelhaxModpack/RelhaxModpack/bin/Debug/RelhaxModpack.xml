@@ -6854,7 +6854,7 @@
             A utility class to handle registry requests
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.RegistryUtils.IE_BROWSER_EMULATION_REGPATH">
+        <member name="F:RelhaxModpack.Utilities.RegistryUtils.IE_BROWSER_EMULATION_REGPATH_32">
             <summary>
             The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage
             </summary>
