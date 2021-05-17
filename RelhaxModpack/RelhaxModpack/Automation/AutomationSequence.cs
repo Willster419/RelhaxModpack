@@ -32,7 +32,7 @@ namespace RelhaxModpack.Automation
 
         public string SequenceDownloadUrl { get; set; } = string.Empty;
 
-        public DatabaseAutomationRunner DatabaseAutomationRunner { get { return AutomationSequencer.DatabaseAutomationRunner; } }
+        public DatabaseAutomationRunner DatabaseAutomationRunner { get { return AutomationSequencer?.DatabaseAutomationRunner; } }
 
         public List<AutomationMacro> ApplicationMacros { get { return AutomationSequencer.ApplicationMacros; } }
 
