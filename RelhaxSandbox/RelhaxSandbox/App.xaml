@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:RelhaxSandbox"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="RelhaxSandbox.App"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             StartupUri="MainWindow.xaml">
+             StartupUri="MainWindow.xaml"
+             DispatcherUnhandledException="Application_DispatcherUnhandledException">
     <Application.Resources>
         <!-- https://www.codeproject.com/articles/35346/using-a-resource-dictionary-in-wpf -->
         <ResourceDictionary>

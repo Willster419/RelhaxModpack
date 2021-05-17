@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxSandbox"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxSandbox.MainWindow"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="MainWindow" Height="500" Width="800" Loaded="Window_Loaded">
     <Window.Resources>
     </Window.Resources>
     <TabControl x:Name="MainTab">
@@ -276,14 +277,34 @@
                 <ContentPresenter Grid.Column="1" x:Name="WpfDocumentViewer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,41,0,0"/>
             </Grid>
         </TabItem>
+        <TabItem Header="WPF BROWSER">
+            <Grid>
+                <TextBlock x:Name="AutoUpdateWGURLHeaderIEWPF" HorizontalAlignment="Left" Margin="10,4,0,0" TextWrapping="Wrap" Text="URL" VerticalAlignment="Top"/>
+                <TextBox x:Name="AutoUpdateWGURLTextboxIEWPF" HorizontalAlignment="Stretch" Height="23" Margin="41,3,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="https://wgmods.net/392/"/>
+                <TextBlock x:Name="AutoUpdateWGInfoIEWPF" HorizontalAlignment="Left" Margin="128,33,0,0" TextWrapping="Wrap" Text="Data here" VerticalAlignment="Top"/>
+                <Button x:Name="AutoUpdateWGClickIE" Content="Get Info (WPF)" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="113" Click="AutoUpdateWGClickIEWPF_Click"/>
+                <WebBrowser x:Name="IEBrowse" HorizontalAlignment="Stretch" Margin="10,56,10,108" VerticalAlignment="Stretch" Visibility="Visible"/>
+                <TextBox x:Name="HeadersBlockWPF" HorizontalAlignment="Stretch" Margin="10,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="93" ScrollViewer.CanContentScroll="True" 
+                         ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="WINFORMS BROWSER">
+            <Grid>
+                <TextBlock x:Name="AutoUpdateWGURLHeaderIEWIN" HorizontalAlignment="Left" Margin="10,4,0,0" TextWrapping="Wrap" Text="URL" VerticalAlignment="Top"/>
+                <TextBox x:Name="AutoUpdateWGURLTextboxIEWIN" HorizontalAlignment="Stretch" Height="23" Margin="36,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="https://wgmods.net/392/"/>
+                <TextBlock x:Name="AutoUpdateWGInfoIEWIN" HorizontalAlignment="Left" Margin="128,33,0,0" TextWrapping="Wrap" Text="Data here" VerticalAlignment="Top"/>
+                <Button x:Name="AutoUpdateWGClickIEWinForms" Content="Get Info (WinForms)" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="113" Click="AutoUpdateWGClickIEWinForms_Click"/>
+                <WindowsFormsHost HorizontalAlignment="Stretch" Margin="10,56,10,108" VerticalAlignment="Stretch" Visibility="Visible">
+                    <WindowsFormsHost.Child>
+                        <wf:WebBrowser x:Name="TestBrowse"/>
+                    </WindowsFormsHost.Child>
+                </WindowsFormsHost>
+                <TextBox x:Name="HeadersBlockWIN" HorizontalAlignment="Stretch" Margin="10,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="93" ScrollViewer.CanContentScroll="True" 
+                         ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+            </Grid>
+        </TabItem>
         <TabItem Header="Other tests 2">
             <Grid>
-                <TextBlock x:Name="AutoUpdateWGURLHeaderIE" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="WG mod URL" VerticalAlignment="Top"/>
-                <TextBox x:Name="AutoUpdateWGURLTextboxIE" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="152"
-                         Text="https://wgmods.net/392/"/>
-                <TextBlock x:Name="AutoUpdateWGInfoIE" HorizontalAlignment="Left" Margin="10,59,0,0" TextWrapping="Wrap" Text="Data here" VerticalAlignment="Top"/>
-                <Button x:Name="AutoUpdateWGClickIE" Content="Get Info" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="75" Click="AutoUpdateWGClickIE_Click"/>
-                <WebBrowser x:Name="IEBrowse" HorizontalAlignment="Left" Height="291" Margin="90,80,0,0" VerticalAlignment="Top" Width="696" Visibility="Hidden"/>
                 <RichTextBox HorizontalAlignment="Left" Height="167" Margin="167,31,0,0" VerticalAlignment="Top" Width="302">
                     <FlowDocument>
                         <Section FontSize="12">
@@ -318,7 +339,7 @@
                 <Button x:Name="MemoryLeakTestingButton" Content="Memory Leak Testing" HorizontalAlignment="Left" Margin="474,129,0,0" VerticalAlignment="Top" Width="120" Click="MemoryLeakTestingButton_Click"/>
                 <Button x:Name="DownloadManagerTestingButton" Content="Download Manager Testing" HorizontalAlignment="Left" Margin="474,154,0,0" VerticalAlignment="Top" Width="154" Click="DownloadManagerTestingButton_Click"/>
                 <TextBlock x:Name="DownloadManagerTestingHashResult" HorizontalAlignment="Left" Margin="474,179,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="154"/>
-                <Button x:Name="ThreadingTestButton" Content="Threading test" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Width="87" Click="ThreadingTestButton_Click"/>
+                <Button x:Name="ThreadingTestButton" Content="Threading test" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Width="113" Click="ThreadingTestButton_Click"/>
             </Grid>
         </TabItem>
     </TabControl>
