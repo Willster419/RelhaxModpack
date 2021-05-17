@@ -13,7 +13,7 @@ using System.Windows.Media;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Settings;
 
-namespace RelhaxModpack.Translations
+namespace RelhaxModpack
 {
     /// <summary>
     /// Handles all localization for the application User Interface

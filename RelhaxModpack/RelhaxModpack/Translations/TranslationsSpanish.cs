@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RelhaxModpack.Translations
+namespace RelhaxModpack
 {
     public static partial class Translations
     {
