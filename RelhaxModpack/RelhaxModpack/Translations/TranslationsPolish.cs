@@ -193,7 +193,6 @@ namespace RelhaxModpack
             Polish.Add("FindBugAddModButtonDescription", "Znalazłeś błąd? Chcesz dodać moda? Zgłoś się tutaj!");
             Polish.Add("SelectionViewGB", "Widok kolekcji"); //? This fella does not seem to be used in V2. @Nullmaruzero
             Polish.Add("SelectionDefaultText", "Domyślny");
-            AddTranslationToAll("SelectionLegacyText", "OMC Legacy");
             Polish.Add("SelectionLayoutDescription", "Wybierz tryb widoku listy modyfikacji.\nDomyślnie: Lista wyboru RelHax\nOMC: Drzewko wyboru OMC");
             Polish.Add("SelectionDefaultDescription", "Wybierz tryb widoku listy modyfikacji.\nDomyślnie: Lista wyboru RelHax\nOMC: Drzewko wyboru OMC");
             Polish.Add("SelectionLegacyDescription", "Wybierz tryb widoku listy modyfikacji.\nDomyślnie: Lista wyboru RelHax\nOMC: Drzewko wyboru OMC");

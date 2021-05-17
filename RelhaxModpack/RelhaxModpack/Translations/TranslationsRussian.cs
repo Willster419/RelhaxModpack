@@ -190,7 +190,6 @@ namespace RelhaxModpack
             Russian.Add("FindBugAddModButtonDescription", "Нашли баг? Хотите добавить мод? Пишите сюда!");
             Russian.Add("SelectionViewGB", "Вид списка");
             Russian.Add("SelectionDefaultText", "Стандартный");
-            AddTranslationToAll("SelectionLegacyText", "OMC Legacy");
             Russian.Add("SelectionLayoutDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
             Russian.Add("SelectionDefaultDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
             Russian.Add("SelectionLegacyDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");

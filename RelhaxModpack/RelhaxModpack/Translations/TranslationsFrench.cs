@@ -197,7 +197,6 @@ namespace RelhaxModpack
             French.Add("FindBugAddModButtonDescription", "Tu as trouvé un bug ? Tu veux qu'un mod soit ajouté ? Signale le ici !");
 
             French.Add("SelectionDefaultText", "Standard");
-            AddTranslationToAll("SelectionLegacyText", "OMC Legacy");
             French.Add("SelectionLayoutDescription", "Sélectionnez un style de liste pour la sélection\nNormal: liste de sélection Relhax\nLegacy: liste de vue arbre OMC");
             French.Add("SelectionDefaultDescription", "Sélectionnez un style de liste pour la sélection\nNormal: liste de sélection Relhax\nLegacy: liste de vue arbre OMC");
             French.Add("SelectionLegacyDescription", "Sélectionnez un style de liste pour la sélection\nNormal: liste de sélection Relhax\nLegacy: liste de vue arbre OMC");
