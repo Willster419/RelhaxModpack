@@ -336,7 +336,13 @@
     <Compile Include="Common\PatientWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Common\Translations.cs" />
+    <Compile Include="Translations\Translations.cs" />
+    <Compile Include="Translations\TranslationsEnglish.cs" />
+    <Compile Include="Translations\TranslationsFrench.cs" />
+    <Compile Include="Translations\TranslationsGerman.cs" />
+    <Compile Include="Translations\TranslationsPolish.cs" />
+    <Compile Include="Translations\TranslationsRussian.cs" />
+    <Compile Include="Translations\TranslationsSpanish.cs" />
     <Compile Include="Utilities\CommonUtils.cs" />
     <Compile Include="Windows\AddPicturesZip.xaml.cs">
       <DependentUpon>AddPicturesZip.xaml</DependentUpon>
