@@ -58,7 +58,8 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
-            
+            DownloadProgressChanged = null;
+            LogMessageWrite = null;
         }
 
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -71,10 +72,9 @@ namespace RelhaxModpack.Windows
             
         }
 
-        ~DatabaseAutomationRunner()
+        private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DownloadProgressChanged = null;
-            LogMessageWrite = null;
+
         }
     }
 }

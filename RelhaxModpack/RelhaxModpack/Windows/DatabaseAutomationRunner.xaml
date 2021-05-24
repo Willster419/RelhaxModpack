@@ -5,10 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="DatabaseAutomationRunner" Height="450" Width="800"
+        Title="Database Automation Runner" Height="480" Width="800"
         Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Grid>
-        
+        <TabControl x:Name="MainTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" SelectionChanged="MainTabView_SelectionChanged">
+            <TabItem x:Name="TabItemRunSequences" Header="Run Sequences">
+                
+            </TabItem>
+            <TabItem x:Name="TabItemSettings" Header="Settings">
+                
+            </TabItem>
+        </TabControl>
     </Grid>
 </local:RelhaxCustomFeatureWindow>
