@@ -110,7 +110,7 @@ namespace RelhaxModpack
             Russian.Add("DeleteOldPackagesText", "Удалить старые пакеты модификаций");
             Russian.Add("DeleteOldPackagesCBDescription", "Удалять ненужные установщику ZIP-архивы из папки \"RelhaxDownloads\" с целью освобождения места на диске.");
             Russian.Add("MinimalistModeText", "Минималистичный режим");
-            Russian.Add("MinimalistModeDescription", "В этом режиме установщик модпака исключает некоторые необязательные пакеты, такие как кнопка модпака или файлы темы Relhax.");
+            Russian.Add("MinimalistModeCBDescription", "В этом режиме установщик модпака исключает некоторые необязательные пакеты, такие как кнопка модпака или файлы темы Relhax.");
             Russian.Add("AutoInstallText", "Включить автоустановку");
             Russian.Add("AutoInstallCBDescription", "Установщик автоматически проверит наличие обновлений модификаций в указанное время и применит их, основываясь на выбранной конфигурации.");
             Russian.Add("OneClickInstallText", "Установка «в один клик»"); // How will the application treat typographic quotes? - DrWeb7_1

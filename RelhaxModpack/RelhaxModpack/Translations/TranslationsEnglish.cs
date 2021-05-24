@@ -312,9 +312,9 @@ namespace RelhaxModpack
             //
             English.Add("MinimalistModeText", "Minimalist Mode");
 
-            //Component: MinimalistModeDescription
+            //Component: MinimalistModeCBDescription
             //
-            English.Add("MinimalistModeDescription", "When checked, the modpack will exclude certain packages from installation that are not required, like the modpack button or Relhax theme files.");
+            English.Add("MinimalistModeCBDescription", "When checked, the modpack will exclude certain packages from installation that are not required, like the modpack button or Relhax theme files.");
 
             //Component: AutoInstallText
             //
