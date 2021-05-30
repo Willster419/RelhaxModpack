@@ -113,7 +113,7 @@ namespace RelhaxModpack
             Polish.Add("DeleteOldPackagesText", "Usuń stare pakiety");
             Polish.Add("DeleteOldPackagesCBDescription", "Zwalnia miejsce na dysku usuwając stare i nieużywane archiwa ZIP z folderu „RelhaxDownloads”.");
             Polish.Add("MinimalistModeText", "Tryb minimalistyczny");
-            Polish.Add("MinimalistModeDescription", "Pomija instalację niektórych dodatkowych pakietów, takich jak motywy graficzne Relhax czy link do nas w garażu.");
+            Polish.Add("MinimalistModeCBDescription", "Pomija instalację niektórych dodatkowych pakietów, takich jak motywy graficzne Relhax czy link do nas w garażu.");
             Polish.Add("AutoInstallText", "Automatyczna instalacja");
             Polish.Add("AutoInstallCBDescription", "Regularnie sprawdza dostępność aktualizacji modów i automatycznie je instaluje według pliku kolekcji i częstotliwości wybranych poniżej.");
             Polish.Add("OneClickInstallText", "Włącz instalację na kliknięcie");

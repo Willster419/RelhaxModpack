@@ -115,7 +115,7 @@ namespace RelhaxModpack
             German.Add("DeleteOldPackagesText", "Lösche alte Archiv-Dateien");
             German.Add("DeleteOldPackagesCBDescription", "Lösche alle ZIP-Dateien im Ordner \"RelhaxDownloads\", welche vom Installationsprogramm nicht mehr verwendet werden, um Speicherplatz freizugeben.");
             German.Add("MinimalistModeText", "Minimal Modus");
-            German.Add("MinimalistModeDescription", "Wenn ausgewählt wird das Modpack einige nicht benötigte Pakete bei der Installation ausschließen, wie zum Beispiel den Modpack Button oder Relhax Themendateien");
+            German.Add("MinimalistModeCBDescription", "Wenn ausgewählt wird das Modpack einige nicht benötigte Pakete bei der Installation ausschließen, wie zum Beispiel den Modpack Button oder Relhax Themendateien");
             German.Add("AutoInstallText", "Automatische Installation");
             German.Add("AutoInstallCBDescription", "Wenn unten eine Auswahldatei und eine Zeit eingestellt sind, sucht das Installationsprogramm automatisch nach Updates für deine Mods und wendet diese an.");
             German.Add("OneClickInstallText", "Ein-Klick-Installation");
