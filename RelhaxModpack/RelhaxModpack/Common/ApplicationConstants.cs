@@ -380,7 +380,7 @@ namespace RelhaxModpack.Common
         /// <summary>
         /// The URL path of the latest application beta release notes
         /// </summary>
-        public const string ApplicationNotesBetaUrl = "https://github.com/Willster419/RelhaxModpack/raw/master/RelhaxModpack/RelhaxModpack/bin/Debug/release_notes_beta.txt";
+        public const string ApplicationNotesBetaUrl = "https://github.com/Willster419/RelhaxModpack/raw/staging/RelhaxModpack/RelhaxModpack/bin/Debug/release_notes_beta.txt";
 
         /// <summary>
         /// The URL path of the latest V2 database release notes
