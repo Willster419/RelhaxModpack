@@ -1,6 +1,7 @@
 ﻿using RelhaxModpack.Common;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -44,7 +45,8 @@ namespace RelhaxModpack.Windows
                 try
                 {
                     DatabaseUpdateText.Text = await client.DownloadStringTaskAsync(ApplicationConstants.DatabaseNotesUrl);
-                    ApplicationUpdateText.Text = await client.DownloadStringTaskAsync(ApplicationConstants.ApplicationNotesBetaUrl);
+                    ApplicationUpdateText.Text = await client.DownloadStringTaskAsync(ApplicationConstants.ApplicationVersion == ApplicationVersions.Stable?
+                        ApplicationConstants.ApplicationNotesStableUrl : ApplicationConstants.ApplicationNotesBetaUrl);
                 }
                 catch (Exception ex)
                 {
