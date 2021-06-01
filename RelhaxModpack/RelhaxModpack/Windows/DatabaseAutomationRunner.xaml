@@ -7,14 +7,33 @@
         mc:Ignorable="d"
         Title="Database Automation Runner" Height="480" Width="800"
         Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
+        LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" EscapeKeyClosesWindow="False"
+        ApplyScaling="True" ApplyCustomFont="True">
     <Grid>
         <TabControl x:Name="MainTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" SelectionChanged="MainTabView_SelectionChanged">
             <TabItem x:Name="TabItemRunSequences" Header="Run Sequences">
-                
+                <Grid>
+                    <ListBox x:Name="SequencesToRunListBox" Margin="10,10,494,35"/>
+                    <ListBox HorizontalAlignment="Left" Height="376" Margin="332,10,0,0" VerticalAlignment="Top" Width="250"/>
+                    <Button Content="&gt;&gt;" HorizontalAlignment="Left" Margin="297,152,0,0" VerticalAlignment="Top" Width="30"/>
+                    <Button Content="&lt;&lt;" HorizontalAlignment="Left" Margin="297,177,0,0" VerticalAlignment="Top" Width="30"/>
+                    <Button HorizontalAlignment="Left" Margin="587,133,0,0" VerticalAlignment="Top" Width="69" Height="40">
+                        <TextBlock Text="Move up selected" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+                    <Button HorizontalAlignment="Left" Margin="587,177,0,0" VerticalAlignment="Top" Width="69" Height="40">
+                        <TextBlock Text="Move down selected" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+                    <Button Content="Run" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75"/>
+                    <Button HorizontalAlignment="Left" Margin="557,391,0,0" VerticalAlignment="Top" Width="139">
+                        <TextBlock Text="Open HtmlPath Selector"/>
+                    </Button>
+                    <Button HorizontalAlignment="Left" Margin="442,391,0,0" VerticalAlignment="Top" Width="110">
+                        <TextBlock Text="Open logfile viewer"/>
+                    </Button>
+                </Grid>
             </TabItem>
             <TabItem x:Name="TabItemSettings" Header="Settings">
-                
+
             </TabItem>
         </TabControl>
     </Grid>
