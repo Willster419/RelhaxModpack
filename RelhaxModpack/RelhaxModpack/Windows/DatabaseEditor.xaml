@@ -559,17 +559,17 @@
                         <StackPanel Grid.Column="0" Grid.Row="17" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Log At Install" Tag="LogAtInstallCB" x:Name="PackageLogAtInstallDisplay"/>
                             <CheckBox Content="Show In Search" x:Name="PackageShowInSearchListDisplay" Tag="PopularModCB" Margin="8,0,0,0"/>
-                            <CheckBox Content="Popular" x:Name="PackagePopularModDisplay" Tag="PopularModCB" Margin="23,0,0,0"/>
+                            <CheckBox Content="Popular" x:Name="PackagePopularModDisplay" Tag="PopularModCB" Margin="70,0,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="0" Grid.Row="18" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Grey Area" x:Name="PackageGreyAreaModDisplay" Tag="PackageGreyAreaModDisplay" Margin="0,0,0,0"/>
                             <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="25,0,0,0"/>
-                            <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="69,0,0,0"/>
+                            <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="116,0,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="0" Grid.Row="19" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Obfuscated" x:Name="PackageObfuscatedModDisplay" Tag="ObfuscatedCB" Margin="0,0,0,0"/>
                             <CheckBox Content="Offset InstallGroup" x:Name="CategoryOffsetInstallGroupDisplay" Tag="OffsetInstallGroupCB" Margin="16,0,0,0"/>
-                            <CheckBox Content="From WGmods" x:Name="PackageFromWGmodsDisplay" Tag="PackageFromWGmodsCB" Margin="4,0,0,0"/>
+                            <CheckBox Content="From WGmods" x:Name="PackageFromWGmodsDisplay" Tag="PackageFromWGmodsCB" Margin="51,0,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="0" Grid.Row="20" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
                             <CheckBox Content="Deprecated" x:Name="PackageDeprecatedDisplay" Tag="DeprecatedCB" Margin="0"/>
