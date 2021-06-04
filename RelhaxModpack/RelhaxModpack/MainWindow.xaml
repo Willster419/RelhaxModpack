@@ -15,7 +15,7 @@
     Icon="Resources/modpack_icon.ico"
     LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Window.Resources>
-        
+
     </Window.Resources>
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
         <Grid.Background>
