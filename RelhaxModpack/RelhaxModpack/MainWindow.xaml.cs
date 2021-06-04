@@ -2064,7 +2064,7 @@ namespace RelhaxModpack
             if (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Alpha)
             {
                 Logging.Warning("Alpha is invalid option for ModpackSettings.ApplicationDistroVersion, setting to stable");
-                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
             }
 
             //4 possibilities:
@@ -2088,6 +2088,21 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("Application was not beta: '{0}'", betaDistro);
                     ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+                }
+            }
+
+            //check if the new/regular settings file exists, and if it doesn't ,then set the application distro version to what the application was compiled as
+            if (!File.Exists(ModpackSettings.SettingsFilename))
+            {
+                Logging.Info("{0} settings file does not exist. This is a first time load, set settings application distro version to application compile ({1})", ModpackSettings.SettingsFilename, ApplicationConstants.ApplicationVersion.ToString());
+                switch (ApplicationConstants.ApplicationVersion)
+                {
+                    case ApplicationVersions.Alpha:
+                    case ApplicationVersions.Beta:
+                        ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
+                        break;
+                    case ApplicationVersions.Stable:
+                        ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
                 }
             }
 
