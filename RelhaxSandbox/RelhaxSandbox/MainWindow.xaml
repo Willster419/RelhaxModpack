@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxSandbox"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxSandbox.MainWindow"
+        xmlns:ToggleSwitch="clr-namespace:ToggleSwitch;assembly=ToggleSwitch"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
     <Window.Resources>
@@ -231,6 +232,11 @@
             <Grid x:Name="HighlightTestingTabItemGrid">
                 <Button x:Name="ToggleDisableButton" Content="Toggle Disable" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="106" Click="ToggleDisableButton_Click"/>
                 <Button x:Name="ToggleDarkUIButton" Content="Toggle Dark UI" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="106" Click="ToggleDarkUIButton_Click"/>
+                <ToggleSwitch:HorizontalToggleSwitch 
+                            Margin="10,250,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="25"
+                            UncheckedContent="Light Mode" UncheckedBackground="White" UncheckedForeground="Black" Unchecked="ThemeToggleSwitch_Unchecked"
+                            CheckedContent="Dark Mode" CheckedBackground="Black" CheckedForeground="White" Checked="ThemeToggleSwitch_Checked"
+                            />
                 <TabControl HorizontalAlignment="Left" Height="94" Margin="121,10,0,0" VerticalAlignment="Top" Width="268" x:Name="HighlightTabControl">
                     <TabItem Header="TabItem" Style="{DynamicResource RelhaxTabItemStyle}" x:Name="HighlightTabItem1">
                         <Grid Background="#FFE5E5E5"/>

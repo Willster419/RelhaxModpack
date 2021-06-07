@@ -842,5 +842,23 @@ namespace RelhaxSandbox
             myThread.IsBackground = true;
             myThread.Start();
         }
+
+        private void ThemeToggleSwitch_Unchecked(object sender, RoutedEventArgs e)
+        {
+            HighlightTestingTabItemGrid.Background = new SolidColorBrush(Colors.Transparent);
+            HighlightCheckbox.Background = new SolidColorBrush(Colors.Transparent);
+            HighlightRadioButton.Background = new SolidColorBrush(Colors.Transparent);
+            HighlightRadioButton2.Background = new SolidColorBrush(Colors.Transparent);
+            UISettings.ToggleUIBrushes();
+        }
+
+        private void ThemeToggleSwitch_Checked(object sender, RoutedEventArgs e)
+        {
+            HighlightTestingTabItemGrid.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 50, 50, 50));
+            HighlightCheckbox.Background = new SolidColorBrush(Colors.Black);
+            HighlightRadioButton.Background = new SolidColorBrush(Colors.Black);
+            HighlightRadioButton2.Background = new SolidColorBrush(Colors.Black);
+            UISettings.ToggleUIBrushes();
+        }
     }
 }
