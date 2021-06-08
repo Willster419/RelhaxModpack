@@ -415,5 +415,11 @@ namespace RelhaxModpack.Windows
             DiagnosticsStatusTextBox.Text = Translations.GetTranslatedString("trimRelhaxLogSuccess");
             Logging.Info(LogOptions.ClassName, "Successfully trimmed the log file ({0})", trimmed? string.Format("Trimmed to {0} entries", this.RelhaxLogfileTrimLength) : "No trim required");
         }
+
+        private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Close();
+        }
     }
 }
