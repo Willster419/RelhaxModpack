@@ -1,56 +1,121 @@
 ﻿<local:RelhaxWindow x:Class="RelhaxModpack.Windows.PackageSelectionList"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RelhaxModpack.Windows"
-        mc:Ignorable="d"
-        Title="Selection List" Height="480" Width="800" MinHeight="480" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnWindowLoad" Closed="RelhaxWindow_Closed"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
-    <local:RelhaxWindow.Resources>
-        <ItemsPanelTemplate x:Key="VSP">
-            <VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"/>
-        </ItemsPanelTemplate>
-    </local:RelhaxWindow.Resources>
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="ModSelectionGrid">
-        <Grid HorizontalAlignment="Stretch" Height="84" Margin="10,10,10,0" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="255"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <TextBlock x:Name="HelpLabel" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="HelpLabel" Text="Right-click a selection component to see a preview window"/>
-                <TextBlock x:Name="InstallingTo" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" Tag="InstallingTo"/>
-                <TextBlock x:Name="InstallingAsWoTVersion" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="InstallingAsWoTVersion" Text="Installing as WoT version: "/>
-                <TextBlock x:Name="UsingDatabaseVersion" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="UsingDatabaseVersion" Text="Using database: "/>
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:RelhaxModpack.Windows"
+		xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+		TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+		TextElement.FontWeight="Regular"
+		TextElement.FontSize="13"
+		TextOptions.TextFormattingMode="Ideal" 
+		TextOptions.TextRenderingMode="Auto"        
+		Background="{DynamicResource MaterialDesignPaper}"
+		FontFamily="{DynamicResource MaterialDesignFont}"
+		mc:Ignorable="d"
+		Title="Selection List" Height="600" Width="800" MinHeight="600" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnWindowLoad" Closed="RelhaxWindow_Closed"
+		LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="True">
+	<local:RelhaxWindow.Resources>
+		<ItemsPanelTemplate x:Key="VSP">
+			<VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"/>
+		</ItemsPanelTemplate>
+	</local:RelhaxWindow.Resources>
+	<Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="ModSelectionGrid">
+		<Grid HorizontalAlignment="Stretch" Height="84" Margin="10,10,10,0" VerticalAlignment="Top">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="255"/>
+			</Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <CheckBox
+      					x:Name="SearchThisTabOnlyCB"
+						Tag="SearchThisTabOnlyCB"
+      					Margin="0,0,0,8"
+      					Content="Search This Tab" />
+                    <Button
+						Content="Clear"
+						Style="{StaticResource MaterialDesignFlatButton}"
+						HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,0,0,8"
+						Grid.Column="1"
+						Click="ClearOutlinedComboBox_Click" />
+                </Grid>
+                <ComboBox
+    				x:Name="SearchCB" DropDownOpened="SearchCB_DropDownOpened" KeyUp="SearchCB_KeyUp" PreviewMouseDown="SearchCB_PreviewMouseDown"
+					Tag="SearchCB" IsEditable="True" IsTextSearchEnabled="False"
+    				Style="{StaticResource MaterialDesignOutlinedComboBox}"
+					ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}"
+    				Width="256" />
             </StackPanel>
-            <Button x:Name="CollapseAllRealButton" HorizontalAlignment="Left" Margin="0,0,130,0" VerticalAlignment="Top" Width="125" Height="35"
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="CollapseAllRealButton_Click" Tag="CollapseAllButton" Grid.Column="2">
-                <TextBlock x:Name="CollapseAllButton" Text="Collapse current tab" TextWrapping="Wrap" TextAlignment="Center"/>
-            </Button>
-            <Button x:Name="ExpandAllRealButton" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Top" Width="125" Height="35"
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ExpandAllRealButton_Click" Tag="ExpandAllButton" Grid.Column="1">
-                <TextBlock x:Name="ExpandAllButton" Text="Expand current tab" TextWrapping="Wrap" TextAlignment="Center"/>
-            </Button>
-            <ComboBox x:Name="SearchCB" Tag="SearchCB" HorizontalAlignment="Left" Margin="0,40,0,0" VerticalAlignment="Top" Width="255" DropDownOpened="SearchCB_DropDownOpened" Grid.Column="2"
-                  KeyUp="SearchCB_KeyUp" IsEditable="True" IsTextSearchEnabled="False" PreviewMouseDown="SearchCB_PreviewMouseDown" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}"/>
-            <CheckBox x:Name="SearchThisTabOnlyCB" Tag="SearchThisTabOnlyCB" Content="Search in this tab only" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,64,0,0" Grid.Column="1" Width="255"/>
+            <materialDesign:Card
+                Background="Transparent"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"
+                Width="500">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock 
+                        x:Name="HelpLabel" Tag="HelpLabel" Style="{DynamicResource MaterialDesignBody2TextBlock}"
+                        HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Grid.Row="0"
+                        TextWrapping="Wrap" Text="Right-click a selection component to see a preview window"/>
+                    <Separator
+                        Grid.Row="1" Style="{DynamicResource MaterialDesignSeparator}"/>
+                    <TextBlock 
+                        x:Name="InstallingTo" Tag="InstallingTo" Style="{DynamicResource MaterialDesignBody2TextBlock}"
+                        HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Grid.Row="2"
+                        TextWrapping="Wrap" Text="Installing to: "/>
+                    <TextBlock 
+                        x:Name="InstallingAsWoTVersion" Tag="InstallingAsWoTVersion" Style="{DynamicResource MaterialDesignBody2TextBlock}"
+                        HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Grid.Row="3"
+                        TextWrapping="Wrap" Text="Installing as WoT version: "/>
+                    <TextBlock 
+                        x:Name="UsingDatabaseVersion" Tag="UsingDatabaseVersion" Style="{DynamicResource MaterialDesignBody2TextBlock}"
+                        HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Grid.Row="4"
+                        TextWrapping="Wrap" Text="Using database: "/>
+                </Grid>
+            </materialDesign:Card>
         </Grid>
-        <TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,94,10,60" VerticalAlignment="Stretch" Tag="SelectionListTabs" SelectionChanged="ModTabGroups_SelectionChanged"/>
-        <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" Tag="ContinueButton" >
-            <TextBlock x:Name="ContinueButtonLabel" Text="Install" TextWrapping="Wrap" TextAlignment="Center"/>
-        </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,135,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnCancelInstallation" Tag="CancelButton" >
+		<TabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,105,10,60" VerticalAlignment="Stretch" Tag="SelectionListTabs" SelectionChanged="ModTabGroups_SelectionChanged" Background="Transparent"/>
+		<Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Click="OnContinueInstallation" Tag="ContinueButton" Style="{DynamicResource MaterialDesignRaisedButton}">
+			<TextBlock x:Name="ContinueButtonLabel" Text="Install" TextWrapping="Wrap" TextAlignment="Center"/>
+		</Button>
+        <Button HorizontalAlignment="Right" Margin="0,0,85,10" VerticalAlignment="Bottom" Click="OnCancelInstallation" Tag="CancelButton" Style="{DynamicResource MaterialDesignRaisedButton}">
             <TextBlock x:Name="CancelButtonLabel" Text="Cancel" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,260,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnSaveSelectionClick" Tag="SaveSelectionButton" >
-            <TextBlock x:Name="SaveSelectionButtonLabel" Text="Save selection" TextWrapping="Wrap" TextAlignment="Center"/>
+        <Button x:Name="CollapseAllRealButton" HorizontalAlignment="Right" Margin="0,0,250,10" VerticalAlignment="Bottom" Style="{DynamicResource MaterialDesignRaisedButton}"
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="CollapseAllRealButton_Click" Tag="CollapseAllButton">
+            <TextBlock x:Name="CollapseAllButton" Text="Collapse" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,385,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnLoadSelectionClick" Tag="LoadSelectionButton" >
-            <TextBlock x:Name="LoadSelectionButtonLabel" Text="Load Selection" TextWrapping="Wrap" TextAlignment="Center"/>
+        <Button 
+            x:Name="ExpandAllRealButton" HorizontalAlignment="Right" Margin="0,0,165,10" VerticalAlignment="Bottom" Style="{DynamicResource MaterialDesignRaisedButton}"
+            HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ExpandAllRealButton_Click" Tag="ExpandAllButton">
+            <TextBlock x:Name="ExpandAllButton" Text="Expand" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,510,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnClearSelectionsClick" Tag="ClearSelectionsButton">
-            <TextBlock x:Name="ClearSelectionsButtonLabel" Text="Clear Selections" TextWrapping="Wrap" TextAlignment="Center"/>
+        <Button 
+                    HorizontalAlignment="Left" Margin="85,0,0,10" VerticalAlignment="Bottom" ToolTip="Save Selection" Height="40" Width="40" Padding="0"
+                    Click="OnSaveSelectionClick" Tag="SaveSelectionButton" Style="{DynamicResource MaterialDesignIconButton}">
+            <materialDesign:PackIcon Kind="ContentSave" Height="35" Width="35"/>
+        </Button>
+        <Button 
+                    HorizontalAlignment="Left" Margin="45,0,0,10" VerticalAlignment="Bottom" Height="40" Width="40" Padding="0"
+                    Click="OnLoadSelectionClick" Tag="LoadSelectionButton" Style="{DynamicResource MaterialDesignFlatButton}">
+            <materialDesign:PackIcon Kind="FolderOpen" Height="35" Width="35" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Button>
+        <Button 
+                    HorizontalAlignment="Left" Margin="5,0,0,10" VerticalAlignment="Bottom" Width="40" Height="40" Padding="0"
+                    Click="OnClearSelectionsClick" Tag="ClearSelectionsButton" Style="{DynamicResource MaterialDesignIconButton}">
+            <materialDesign:PackIcon Kind="CloseBox" Height="35" Width="35"/>
         </Button>
     </Grid>
 </local:RelhaxWindow>

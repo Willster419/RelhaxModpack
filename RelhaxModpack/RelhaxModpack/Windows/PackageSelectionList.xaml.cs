@@ -3107,5 +3107,10 @@ namespace RelhaxModpack.Windows
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+        private void ClearOutlinedComboBox_Click(object sender, RoutedEventArgs e)
+        {
+            SearchCB.SelectedItem = null;
+        }
     }
 }
