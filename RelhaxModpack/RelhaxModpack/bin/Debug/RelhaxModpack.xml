@@ -7574,6 +7574,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.HtmlPathSelector">
+            <summary>
+            Interaction logic for HtmlPathSelector.xaml
+            </summary>
+            <summary>
+            HtmlPathSelector
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.HtmlPathSelector.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.RelhaxCustomFeatureWindow">
             <summary>
             A class definition to specify a window that is a separate sub-function of the application:
