@@ -28,6 +28,48 @@ namespace RelhaxModpack.Automation
 
         public List<AutomationTask> AutomationTasks { get; } = new List<AutomationTask>();
 
+        public bool PackageLoaded { get { return Package != null; } }
+
+        private string packageUID;
+
+        public string PackageUID
+        {
+            get
+            {
+                if (PackageLoaded)
+                    return Package.UID;
+                else
+                    return packageUID;
+            }
+            set
+            {
+                if (PackageLoaded)
+                    Package.UID = value;
+                else
+                    packageUID = value;
+            }
+        }
+
+        private string packageName;
+
+        public string PackageName
+        {
+            get
+            {
+                if (PackageLoaded)
+                    return Package.PackageName;
+                else
+                    return packageName;
+            }
+            set
+            {
+                if (PackageLoaded)
+                    Package.PackageName = value;
+                else
+                    packageName = value;
+            }
+        }
+
         public DatabasePackage Package { get; set; } = null;
 
         public string SequenceDownloadUrl { get; set; } = string.Empty;
@@ -131,6 +173,11 @@ namespace RelhaxModpack.Automation
         public void Dispose()
         {
             ((IDisposable)WebClient).Dispose();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}, {1}", this.PackageName, this.PackageUID);
         }
     }
 }

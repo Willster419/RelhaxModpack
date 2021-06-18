@@ -87,6 +87,9 @@ namespace RelhaxModpack.Automation
 
         public async Task LoadRootDocumentAsync()
         {
+            if (string.IsNullOrWhiteSpace(AutomationXmlRootEscaped))
+                throw new ArgumentException("AutomationXmlRootEscaped cannot be null or whitespace");
+
             string xmlString = await WebClient.DownloadStringTaskAsync(AutomationXmlRootEscaped);
             RootDocument = XmlUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
         }
@@ -99,12 +102,32 @@ namespace RelhaxModpack.Automation
             //get the url to download from
             string globalMacrosUrlFile = XmlUtils.GetXmlStringFromXPath(RootDocument, "/root.xml/GlobalMacros/@path");
             string globalMacrosUrl = string.Format("{0}{1}", AutomationXmlRepoFilebaseEscaped, globalMacrosUrlFile);
-            string globalMacrosXml = string.Empty;
-            globalMacrosXml = await WebClient.DownloadStringTaskAsync(globalMacrosUrl);
+            string globalMacrosXml = await WebClient.DownloadStringTaskAsync(globalMacrosUrl);
             GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosXml, XmlLoadType.FromString);
         }
 
-        public async Task<bool> LoadAutomationSequencesAsync(List<DatabasePackage> packagesToRun)
+        public async Task<bool> ParseRootDocumentAsync()
+        {
+            if (RootDocument == null)
+                throw new NullReferenceException();
+
+            Logging.AutomationRunner(LogOptions.MethodName, "Checking root document for to build automation sequences", LogLevel.Info);
+
+            XmlNodeList sequencesXml = XmlUtils.GetXmlNodesFromXPath(RootDocument, "//root.xml/AutomationSequence");
+
+            foreach (XmlElement result in sequencesXml)
+            {
+                string sequencePackageName = result.Attributes["packageName"].Value;
+                string sequenceUID = result.Attributes["UID"].Value;
+                string sequenceUrlPath = result.Attributes["path"].Value;
+                Logging.AutomationRunner(LogOptions.MethodName, "Parsing sequence for package {0} (UID {1})", LogLevel.Info, sequencePackageName, sequenceUID);
+                AutomationSequences.Add(new AutomationSequence() { AutomationSequencer = this, Package = null, PackageName = sequencePackageName, PackageUID = sequenceUID, SequenceDownloadUrl = AutomationXmlRepoFilebaseEscaped + sequenceUrlPath });
+            }
+
+            return true;
+        }
+
+        public async Task<bool> ParseAutomationSequencesToRunAsync(List<DatabasePackage> packagesToRun)
         {
             if (RootDocument == null)
                 throw new NullReferenceException();
@@ -113,46 +136,57 @@ namespace RelhaxModpack.Automation
             if (packagesToRun.Count == 0)
                 throw new BadMemeException("packagesToRun must have at least one package to run automation on");
 
-            Logging.AutomationRunner(LogOptions.MethodName, "Checking root document for to build urls to download automation sequences", LogLevel.Info);
-            foreach (DatabasePackage package in packagesToRun)
+            Logging.AutomationRunner("Parsing sequences for packages");
+
+            foreach(DatabasePackage package in packagesToRun)
             {
-                Logging.AutomationRunner(LogOptions.MethodName, "Parsing path for automation of package {0}", LogLevel.Info, package.PackageName);
-                //sample xpath: /root.xml/AutomationSequence[@UID='123456789ABCD']
-                XmlElement result = XmlUtils.GetXmlNodeFromXPath(RootDocument, string.Format("/root.xml/AutomationSequence[@UID='{0}']", package.UID)) as XmlElement;
-                if (result == null)
+                Logging.AutomationRunner("Parsing sequences for packages for package {0} (UID {1})", LogLevel.Info, package.PackageName, package.UID);
+
+                //TODO: modify code to parse from list of parsed sequences
+
+                /*
+                Logging.AutomationRunner(LogOptions.MethodName, "Checking root document for to build urls to download automation sequences", LogLevel.Info);
+                foreach (DatabasePackage package in packagesToRun)
                 {
-                    Logging.Error(Logfiles.AutomationRunner, "Package not found in automation database");
-                    return false;
+                    Logging.AutomationRunner(LogOptions.MethodName, "Parsing path for automation of package {0}", LogLevel.Info, package.PackageName);
+                    //sample xpath: /root.xml/AutomationSequence[@UID='123456789ABCD']
+                    XmlElement result = XmlUtils.GetXmlNodeFromXPath(RootDocument, string.Format("/root.xml/AutomationSequence[@UID='{0}']", package.UID)) as XmlElement;
+                    if (result == null)
+                    {
+                        Logging.Error(Logfiles.AutomationRunner, "Package not found in automation database");
+                        return false;
+                    }
+
+                    if (result.Attributes["packageName"].Value != package.PackageName)
+                    {
+                        Logging.Warning(Logfiles.AutomationRunner, "The packageName property is out of date. From database: {0}. From Package: {1}", result.Attributes["packageName"].Value, package.PackageName);
+                    }
+
+                    string pathToFileFromRepoRoot = result.Attributes["path"].Value;
+                    if (string.IsNullOrEmpty(pathToFileFromRepoRoot))
+                    {
+                        Logging.Error(Logfiles.AutomationRunner, "Package path attribute not found from xml node");
+                        return false;
+                    }
+                    if (pathToFileFromRepoRoot[0] == '/')
+                    {
+                        Logging.Warning(Logfiles.AutomationRunner, "Package path attribute starts with slash, please update entry to remove it!");
+                        pathToFileFromRepoRoot = pathToFileFromRepoRoot.Substring(1);
+                    }
+                    AutomationSequences.Add(new AutomationSequence() { AutomationSequencer = this, Package = package, SequenceDownloadUrl = AutomationXmlRepoFilebaseEscaped + pathToFileFromRepoRoot });
+                    Logging.Debug(Logfiles.AutomationRunner, "Added automation sequence URL: {0}", AutomationSequences.Last().SequenceDownloadUrl);
                 }
 
-                if (result.Attributes["packageName"].Value != package.PackageName)
+                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence xml document from its download URL");
+                foreach (AutomationSequence automationSequence in AutomationSequences)
                 {
-                    Logging.Warning(Logfiles.AutomationRunner, "The packageName property is out of date. From database: {0}. From Package: {1}", result.Attributes["packageName"].Value, package.PackageName);
+                    Logging.Info(Logfiles.AutomationRunner, "Load automation sequence xml for package {0}", automationSequence.Package.PackageName);
+                    await automationSequence.LoadAutomationXmlAsync();
                 }
-
-                string pathToFileFromRepoRoot = result.Attributes["path"].Value;
-                if (string.IsNullOrEmpty(pathToFileFromRepoRoot))
-                {
-                    Logging.Error(Logfiles.AutomationRunner, "Package path attribute not found from xml node");
-                    return false;
-                }
-                if (pathToFileFromRepoRoot[0] == '/')
-                {
-                    Logging.Warning(Logfiles.AutomationRunner, "Package path attribute starts with slash, please update entry to remove it!");
-                    pathToFileFromRepoRoot = pathToFileFromRepoRoot.Substring(1);
-                }
-                AutomationSequences.Add(new AutomationSequence() { AutomationSequencer = this, Package = package, SequenceDownloadUrl = AutomationXmlRepoFilebaseEscaped + pathToFileFromRepoRoot });
-                Logging.Debug(Logfiles.AutomationRunner, "Added automation sequence URL: {0}", AutomationSequences.Last().SequenceDownloadUrl);
+                */
             }
 
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence xml document from its download URL");
-            foreach (AutomationSequence automationSequence in AutomationSequences)
-            {
-                Logging.Info(Logfiles.AutomationRunner, "Load automation sequence xml for package {0}", automationSequence.Package.PackageName);
-                await automationSequence.LoadAutomationXmlAsync();
-            }
-
-            return true;
+            return false;
         }
 
         public void ResetApplicationMacros(AutomationSequence sequence)

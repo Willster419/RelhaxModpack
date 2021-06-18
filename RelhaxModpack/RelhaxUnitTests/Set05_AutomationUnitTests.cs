@@ -50,7 +50,7 @@ namespace RelhaxUnitTests
                 ParentCategory = new Category() { Name = "Cat_name" },
                 Level = 0
             });
-            bool loadAutomationSequencesResult = await sequencer.LoadAutomationSequencesAsync(DatabasePackages);
+            //bool loadAutomationSequencesResult = await sequencer.LoadAutomationSequencesAsync(DatabasePackages);
             bool parseAutomationSequencesResult = sequencer.ParseAutomationSequences();
             bool runSequencesResult = await sequencer.RunSequencesAsync();
             //Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));

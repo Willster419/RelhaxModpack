@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RelhaxModpack;
 using RelhaxModpack.Utilities.ClassEventArgs;
+using RelhaxModpack.Automation;
 
 namespace RelhaxModpack.Windows
 {
@@ -39,6 +40,8 @@ namespace RelhaxModpack.Windows
 
         public LoggingMessageWrite LogMessageWrite = null;
 
+        private AutomationSequencer AutomationSequencer = null;
+
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
@@ -48,18 +51,58 @@ namespace RelhaxModpack.Windows
             DownloadProgressChanged = WebClient_DownloadProgressChanged;
             Settings = AutomationSettings;
             LogMessageWrite = OnLogMessageWrite;
+            AutomationSequencer = new AutomationSequencer() { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this};
         }
 
 
-        private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            //load branches from the server
+            Logging.Info("Loading branches");
+            await AutomationSequencer.LoadBranchesListAsync();
+
+            //ensure that the branch specified in settings exists, and if so apply it. else apply the default setting
+            if (!AutomationSequencer.AutomationBranches.Contains(AutomationSettings.SelectedBranch))
+            {
+                Logging.Error("The selected branch does not exist on the server: {0}", AutomationSettings.SelectedBranch);
+                //TODO: command line mode should be an exit return
+            }
+            else
+            {
+                Logging.Info("Applying branch to load from: {0}", AutomationSettings.SelectedBranch);
+            }
+
+            //load the available package sequences from the root document
+            SequencesAvailableListBox.Items.Clear();
+            SequencesAvailableListBox.Items.Add("Loading available sequences from server...");
+            Logging.Info("Loading sequences from root document");
+            await AutomationSequencer.LoadRootDocumentAsync();
+
+            //load the available global macros
+            Logging.Info("Loading global macros");
+            await AutomationSequencer.LoadGlobalMacrosAsync();
+
+            //parse the document now that it's loaded
+            Logging.Info("Parsing sequences from root document");
+            await AutomationSequencer.ParseRootDocumentAsync();
+
+            //load the sequences into the listbox view
+            SequencesAvailableListBox.Items.Clear();
+            foreach (AutomationSequence sequence in AutomationSequencer.AutomationSequences)
+            {
+                SequencesAvailableListBox.Items.Add(sequence);
+            }
+
+            //TODO: load beta database
+            //TODO: have options for loading database (stable, beta, test)
+            //TODO: parse wot client version and online modpack version
         }
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
             DownloadProgressChanged = null;
             LogMessageWrite = null;
+            AutomationSequencer.Dispose();
         }
 
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

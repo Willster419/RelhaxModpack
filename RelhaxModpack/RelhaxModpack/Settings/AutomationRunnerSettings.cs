@@ -19,12 +19,14 @@ namespace RelhaxModpack.Settings
         /// <summary>
         /// A list of properties and fields to exclude from saving/loading to and from xml
         /// </summary>
-        public string[] MembersToExclude { get { return new string[] { nameof(MembersToExclude), nameof(Filename) }; } }
+        public string[] MembersToExclude { get { return new string[] { nameof(MembersToExclude), nameof(Filename), nameof(RepoDefaultBranch) }; } }
 
         /// <summary>
         /// The name of the branch on github that the user specifies to download the automation scripts from
         /// </summary>
         public string SelectedBranch { get; set; } = "master";
+
+        public const string RepoDefaultBranch = "master";
 
         /// <summary>
         /// Toggle to dump the parsed macros to the log file before every sequence run
