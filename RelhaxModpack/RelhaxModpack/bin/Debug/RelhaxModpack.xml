@@ -7614,6 +7614,19 @@
             Creates an instance of the RelhaxCustomFeatureWindow class
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.RelhaxLogViewer">
+            <summary>
+            Interaction logic for RelhaxLogViewer.xaml
+            </summary>
+            <summary>
+            RelhaxLogViewer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxLogViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.WoTClientSelection">
             <summary>
             Interaction logic for WoTClientSelection.xaml
