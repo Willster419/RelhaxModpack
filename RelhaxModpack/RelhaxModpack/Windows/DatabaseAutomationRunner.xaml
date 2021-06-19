@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Database Automation Runner" Height="480" Width="800"
+        Title="Database Automation Runner" Height="480" Width="800" MinHeight="480" MinWidth="800"
         Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" EscapeKeyClosesWindow="False"
         ApplyScaling="True" ApplyCustomFont="True">
@@ -13,29 +13,43 @@
         <TabControl x:Name="MainTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" SelectionChanged="MainTabView_SelectionChanged">
             <TabItem x:Name="TabItemRunSequences" Header="Run Sequences">
                 <Grid>
-                    <ListBox x:Name="SequencesAvailableListBox" Margin="10,10,436,35"/>
-                    <ListBox x:Name="SequencesToRunListBox" HorizontalAlignment="Left" Height="376" Margin="390,10,0,0" VerticalAlignment="Top" Width="312"/>
-                    <Button Content="&gt;&gt;" HorizontalAlignment="Left" Margin="355,152,0,0" VerticalAlignment="Top" Width="30"/>
-                    <Button HorizontalAlignment="Left" Margin="707,132,0,0" VerticalAlignment="Top" Width="69" Height="40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="21"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="SequencesAvailableListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0"/>
+                    <ListBox x:Name="SequencesToRunListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" />
+                    <Button x:Name="MoveSequencesToRunListButton" Content="&gt;&gt;" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="30" Height="20" Grid.Column="1" Click="MoveSequencesToRunListButton_Click"/>
+                    <Button x:Name="MoveUpSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,0,0,100" VerticalAlignment="Center" Height="40" Grid.Column="3" Click="MoveUpSelectedSequenceButton_Click">
                         <TextBlock Text="Move up selected" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
-                    <Button HorizontalAlignment="Left" Margin="707,177,0,0" VerticalAlignment="Top" Width="69" Height="40">
+                    <Button x:Name="MoveDownSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Center" Height="45" Grid.Column="3" Click="MoveDownSelectedSequenceButton_Click">
                         <TextBlock Text="Move down selected" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
-                    <Button HorizontalAlignment="Left" Margin="707,222,0,0" VerticalAlignment="Top" Width="69" Height="40">
+                    <Button x:Name="DeleteSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Center" Height="40" Grid.Column="3" Click="DeleteSelectedSequenceButton_Click">
                         <TextBlock Text="Delete selected" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
-                    <Button Content="Run" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75"/>
-                    <Button HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="139">
+                    <Button x:Name="OpenLogfileViewerButton" HorizontalAlignment="Right" Margin="0,1,234,0" VerticalAlignment="Stretch" Width="110" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Click="OpenLogfileViewerButton_Click">
+                        <TextBlock Text="Open logfile viewer"/>
+                    </Button>
+                    <Button x:Name="OpenHtmlPathSelectorButton" HorizontalAlignment="Right" Margin="0,1,90,0" VerticalAlignment="Stretch" Width="139" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Click="OpenHtmlPathSelectorButton_Click">
                         <TextBlock Text="Open HtmlPath Selector"/>
                     </Button>
-                    <Button HorizontalAlignment="Right" Margin="0,0,234,10" VerticalAlignment="Bottom" Width="110">
-                        <TextBlock Text="Open logfile viewer"/>
+                    <Button x:Name="RunSequencesButton" HorizontalAlignment="Right" Margin="0,1,10,0" VerticalAlignment="Stretch" Width="75" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Click="RunSequencesButton_Click">
+                        <TextBlock Text="Run" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItemSettings" Header="Settings">
+                <Grid>
 
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

@@ -28,6 +28,8 @@ namespace RelhaxModpack.Settings
 
         public const string RepoDefaultBranch = "master";
 
+        public bool OpenLogWindowOnStartup { get; set; } = true;
+
         /// <summary>
         /// Toggle to dump the parsed macros to the log file before every sequence run
         /// </summary>

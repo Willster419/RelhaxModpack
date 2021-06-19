@@ -38,9 +38,9 @@ namespace RelhaxModpack.Windows
 
         private AutomationRunnerSettings AutomationSettings = new AutomationRunnerSettings();
 
-        public LoggingMessageWrite LogMessageWrite = null;
-
         private AutomationSequencer AutomationSequencer = null;
+
+        private RelhaxLogViewer logViewer;
 
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
@@ -50,13 +50,22 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
             DownloadProgressChanged = WebClient_DownloadProgressChanged;
             Settings = AutomationSettings;
-            LogMessageWrite = OnLogMessageWrite;
             AutomationSequencer = new AutomationSequencer() { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this};
         }
 
-
         private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //init the log viewer window
+            logViewer = new RelhaxLogViewer(ModpackSettings)
+            {
+                WindowStartupLocation = WindowStartupLocation.Manual,
+                Top = this.Top,
+                Left = this.Left + this.Width + 10
+            };
+
+            if (AutomationSettings.OpenLogWindowOnStartup)
+                logViewer.Show();
+
             //load branches from the server
             Logging.Info("Loading branches");
             await AutomationSequencer.LoadBranchesListAsync();
@@ -101,7 +110,8 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
             DownloadProgressChanged = null;
-            LogMessageWrite = null;
+            if (!logViewer.ViewerClosed)
+                logViewer.Close();
             AutomationSequencer.Dispose();
         }
 
@@ -110,12 +120,57 @@ namespace RelhaxModpack.Windows
             
         }
 
-        private void OnLogMessageWrite(object sender, LogMessageEventArgs e)
+        private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
         }
 
-        private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MoveSequencesToRunListButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveUpSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveDownSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OpenLogfileViewerButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (logViewer.ViewerClosed)
+            {
+                logViewer = null;
+                logViewer = new RelhaxLogViewer(ModpackSettings)
+                {
+                    WindowStartupLocation = WindowStartupLocation.Manual,
+                    Top = this.Top,
+                    Left = this.Left + this.Width + 10
+                };
+                logViewer.Show();
+            }
+            else
+            {
+                logViewer.Focus();
+            }
+        }
+
+        private void OpenHtmlPathSelectorButton_Click(object sender, RoutedEventArgs e)
+        {
+            HtmlPathSelector htmlPathSelector = new HtmlPathSelector(ModpackSettings);
+            htmlPathSelector.Show();
+        }
+
+        private void RunSequencesButton_Click(object sender, RoutedEventArgs e)
         {
 
         }

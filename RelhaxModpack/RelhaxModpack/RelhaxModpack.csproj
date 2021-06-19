@@ -248,6 +248,9 @@
       <DependentUpon>HtmlPathSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RelhaxCustomFeatureWindow.cs" />
+    <Compile Include="Windows\RelhaxLogViewer.xaml.cs">
+      <DependentUpon>RelhaxLogViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\WoTClientSelection.xaml.cs">
       <DependentUpon>WoTClientSelection.xaml</DependentUpon>
     </Compile>
@@ -548,6 +551,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ProgressIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\RelhaxLogViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
