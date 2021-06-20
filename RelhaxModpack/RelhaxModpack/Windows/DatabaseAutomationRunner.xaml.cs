@@ -42,6 +42,8 @@ namespace RelhaxModpack.Windows
 
         private RelhaxLogViewer logViewer;
 
+        HtmlPathSelector htmlPathSelector;
+
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
@@ -112,6 +114,8 @@ namespace RelhaxModpack.Windows
             DownloadProgressChanged = null;
             if (!logViewer.ViewerClosed)
                 logViewer.Close();
+            if (htmlPathSelector != null && htmlPathSelector.IsLoaded)
+                htmlPathSelector.Close();
             AutomationSequencer.Dispose();
         }
 
@@ -166,8 +170,17 @@ namespace RelhaxModpack.Windows
 
         private void OpenHtmlPathSelectorButton_Click(object sender, RoutedEventArgs e)
         {
-            HtmlPathSelector htmlPathSelector = new HtmlPathSelector(ModpackSettings);
-            htmlPathSelector.Show();
+            if (htmlPathSelector == null || !htmlPathSelector.IsLoaded)
+            {
+                if (htmlPathSelector != null)
+                    htmlPathSelector = null;
+                htmlPathSelector = new HtmlPathSelector(ModpackSettings);
+                htmlPathSelector.Show();
+            }
+            else
+            {
+                htmlPathSelector.Focus();
+            }
         }
 
         private void RunSequencesButton_Click(object sender, RoutedEventArgs e)
