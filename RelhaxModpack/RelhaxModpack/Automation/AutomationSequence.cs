@@ -80,7 +80,9 @@ namespace RelhaxModpack.Automation
 
         public List<AutomationMacro> GlobalMacros { get { return AutomationSequencer.GlobalMacros; } }
 
-        public List<AutomationMacro> MacrosListForTask { get; } = new List<AutomationMacro>();
+        public List<AutomationMacro> SequenceMacros { get; } = new List<AutomationMacro>();
+
+        public List<AutomationMacro> AllMacros { get; private set; } = new List<AutomationMacro>();
 
         private WebClient WebClient = null;
 
@@ -138,17 +140,47 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
+        public bool ParseSequenceMacros()
+        {
+            Logging.Info("Parsing defined macros inside the sequence");
+            XPathNavigator result = XmlUtils.GetXNodeFromXpath(TasksDocument, "/AutomationSequence/Macros");
+            XElement macroHolder = XElement.Parse(result.OuterXml);
+            SequenceMacros.Clear();
+            PropertyInfo listPropertyInfo = this.GetType().GetProperty(nameof(SequenceMacros));
+            try
+            {
+                bool setListEntriesResult = CommonUtils.SetListEntries(this, listPropertyInfo, macroHolder.Elements());
+                if (!setListEntriesResult)
+                    return false;
+                
+            }
+            catch (Exception ex)
+            {
+                Logging.AutomationRunner(ex.ToString(), LogLevel.Exception);
+                return false;
+            }
+            foreach (AutomationMacro macro in SequenceMacros)
+            {
+                macro.MacroType = MacroType.ApplicationDefined;
+            }
+            return true;
+        }
+
         public async Task<bool> RunTasksAsync()
         {
             if (Package == null || AutomationSequencer == null || AutomationRunnerSettings == null)
                 throw new NullReferenceException();
 
             Logging.Debug(Logfiles.AutomationRunner, "Setting up macro list before task run");
-            MacrosListForTask.Clear();
-            MacrosListForTask.AddRange(ApplicationMacros);
+            AllMacros.Clear();
+            AllMacros.AddRange(ApplicationMacros);
             foreach (AutomationMacro macro in GlobalMacros)
             {
-                MacrosListForTask.Add(AutomationMacro.Copy(macro));
+                AllMacros.Add(AutomationMacro.Copy(macro));
+            }
+            foreach (AutomationMacro macro in SequenceMacros)
+            {
+                AllMacros.Add(AutomationMacro.Copy(macro));
             }
 
             Logging.Debug(Logfiles.AutomationRunner, "Setting up working directory");
@@ -163,6 +195,7 @@ namespace RelhaxModpack.Automation
                 Directory.CreateDirectory(workingDirectory);
             }
 
+            bool taskReturn = true;
             foreach (AutomationTask task in this.AutomationTasks)
             {
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task: {0}", task.ID);
@@ -170,10 +203,14 @@ namespace RelhaxModpack.Automation
                 if (task.ExitCode != 0)
                 {
                     Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.", task.ID);
-                    return false;
+                    taskReturn = false;
+                    break;
                 }
             }
-            return true;
+
+            //dispose/cleanup the tasks
+            AutomationTasks.Clear();
+            return taskReturn;
         }
 
         public void Dispose()

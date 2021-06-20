@@ -226,6 +226,7 @@ namespace RelhaxModpack.Automation
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Preparing macro lists for sequence run: {0}", sequence.ComponentInternalName);
                 ResetApplicationMacros(sequence);
                 ParseGlobalMacros();
+                sequence.ParseSequenceMacros();
                 if (AutomationRunnerSettings.DumpParsedMacrosPerSequenceRun)
                 {
                     DumpApplicationMacros();
@@ -286,6 +287,10 @@ namespace RelhaxModpack.Automation
             {
                 Logging.AutomationRunner(ex.ToString(), LogLevel.Exception);
                 return false;
+            }
+            foreach(AutomationMacro macro in GlobalMacros)
+            {
+                macro.MacroType = MacroType.Global;
             }
             return true;
         }

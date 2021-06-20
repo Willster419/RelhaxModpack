@@ -42,7 +42,7 @@ namespace RelhaxModpack.Automation
 
         public DatabaseAutomationRunner DatabaseAutomationRunner { get { return AutomationSequence.DatabaseAutomationRunner; } }
 
-        public List<AutomationMacro> Macros { get { return AutomationSequence.MacrosListForTask; } }
+        public List<AutomationMacro> Macros { get { return AutomationSequence.AllMacros; } }
 
         public string ErrorMessage { get; protected set; } = string.Empty;
 
