@@ -1120,6 +1120,41 @@
             Returns true if at least one package is enabled and checked and visible from the first level of packages in the category
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.ParsedCategoryList">
+            <summary>
+            The list of categories
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.GlobalDependencies">
+            <summary>
+            The list of global dependencies
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.Dependencies">
+            <summary>
+            The list of dependencies
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.ModpackSettings">
+            <summary>
+            A reference to the modpack settings window configuration class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+            <summary>
+            Creates an instance of the RelhaxWindow class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Settings.CommandLineSettings)">
+            <summary>
+            Creates an instance of the RelhaxWindow class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.#ctor">
+            <summary>
+            Creates an instance of the RelhaxWindow class
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Database.DatabaseBeforeAfter">
             <summary>
             Allows the old and new versions of a SelectablePackage to be saved temporarily for comparing differences between two database structures
@@ -5570,6 +5605,16 @@
         <member name="F:RelhaxModpack.Utilities.Enums.ApplyBehavior.SaveTriggersApply">
             <summary>
             When you click the save button, it also clicks the apply button before saving.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode">
+            <summary>
+            List of possible return code error conditions that can occur when loading the database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode.None">
+            <summary>
+            No error occurred
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.DownloadProgressState">
