@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using RelhaxModpack.Common;
 using RelhaxModpack.Database;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
@@ -142,6 +143,8 @@ namespace RelhaxModpack.Automation
             browserDispatcher.Invoke(() =>
             {
                 Browser.Dispose();
+                WindowsInterop.SecurityAlertDialogWillBeShown -= this.WindowsInterop_SecurityAlertDialogWillBeShown;
+                WindowsInterop.Unhook();
             });
             browserDispatcher.InvokeShutdown();
             browserDispatcher.ShutdownFinished += (sender, args) =>
@@ -174,6 +177,9 @@ namespace RelhaxModpack.Automation
                     BrowserLoaded = true;
                     HtmlString = Browser.Document.Body.OuterHtml;
                 };
+
+                WindowsInterop.SecurityAlertDialogWillBeShown += new GenericDelegate<Boolean, Boolean>(this.WindowsInterop_SecurityAlertDialogWillBeShown);
+                WindowsInterop.Hook();
 
                 //run browser enough to get scripts parsed to get download link
                 Logging.Debug(Logfiles.AutomationRunner, "Running async task to load browser and wait for it to finish");
@@ -215,6 +221,13 @@ namespace RelhaxModpack.Automation
                 Logging.Exception(ex.ToString());
                 return false;
             }
+        }
+
+        private Boolean WindowsInterop_SecurityAlertDialogWillBeShown(Boolean blnIsSSLDialog)
+        {
+            // Return true to ignore and not show the 
+            // "Security Alert" dialog to the user
+            return true;
         }
         #endregion
     }
