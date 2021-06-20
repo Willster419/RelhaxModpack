@@ -22,21 +22,25 @@ namespace RelhaxModpack.Automation
 
         public override string Command { get { return TaskCommandName; } }
 
-        public int WaitTimeMs { get; set; } = 1000;
+        public string WaitTimeMs { get; set; } = "1000";
 
-        public int WaitCounts { get; set; } = 3;
+        public string WaitCounts { get; set; } = "3";
 
         protected WebBrowser Browser = null;
 
         protected string HtmlString = null;
 
-        protected int BrowserFinishedLoadingScriptsCounter = 0;
+        protected int waitTimeMs { get; set; }
 
-        protected bool BrowserLoaded = false;
+        protected int waitCounts { get; set; }
 
-        protected bool BrowserNavigated = false;
+        private int BrowserFinishedLoadingScriptsCounter = 0;
 
-        Dispatcher browserDispatcher = null;
+        private bool BrowserLoaded = false;
+
+        private bool BrowserNavigated = false;
+
+        private Dispatcher browserDispatcher = null;
 
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
@@ -46,20 +50,26 @@ namespace RelhaxModpack.Automation
         #endregion
 
         #region Task execution
+        public override void ProcessMacros()
+        {
+            base.ProcessMacros();
+            waitTimeMs = int.Parse(ProcessMacro(nameof(WaitTimeMs), WaitTimeMs));
+            waitCounts = int.Parse(ProcessMacro(nameof(WaitCounts), WaitCounts));
+        }
         public override void ValidateCommands()
         {
             base.ValidateCommands();
-            if (WaitTimeMs <= 0)
+            if (waitTimeMs <= 0)
             {
                 ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: WaitTimeMs must be greater then 0. Current value: {1}", ExitCode, WaitTimeMs.ToString());
+                ErrorMessage = string.Format("ExitCode {0}: waitTimeMs must be greater then 0. Current value: {1}", ExitCode, waitTimeMs.ToString());
                 Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
                 return;
             }
-            if (WaitCounts <= 0)
+            if (waitCounts <= 0)
             {
                 ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: Retries must be greater then 0. Current value: {1}", ExitCode, WaitCounts.ToString());
+                ErrorMessage = string.Format("ExitCode {0}: Retries must be greater then 0. Current value: {1}", ExitCode, waitCounts.ToString());
                 Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
                 return;
             }
@@ -110,20 +120,20 @@ namespace RelhaxModpack.Automation
         {
             RunBrowserOnUIThread();
 
-            Logging.Info("Browser will check at a rate of {0}ms, and then wait {1} times after", WaitTimeMs.ToString(), WaitCounts.ToString());
+            Logging.Info("Browser will check at a rate of {0}ms, and then wait {1} times after", waitTimeMs.ToString(), waitCounts.ToString());
             //wait for browser events to finish
             while (!(BrowserLoaded && BrowserNavigated))
             {
-                await Task.Delay(WaitTimeMs);
+                await Task.Delay(waitTimeMs);
                 Logging.Debug(Logfiles.AutomationRunner, "BrowserLoaded: {0}, BrowserNavigated: {1}", BrowserLoaded.ToString(), BrowserNavigated.ToString());
             }
 
             //this wait allows the browser to finish loading external scripts
-            Logging.Debug(Logfiles.AutomationRunner, "The browser task events completed, wait additional {0} counts", WaitCounts);
-            while (BrowserFinishedLoadingScriptsCounter <= WaitCounts)
+            Logging.Debug(Logfiles.AutomationRunner, "The browser task events completed, wait additional {0} counts", waitCounts);
+            while (BrowserFinishedLoadingScriptsCounter <= waitCounts)
             {
-                await Task.Delay(WaitTimeMs);
-                Logging.Debug(Logfiles.AutomationRunner, "Waiting {0} of {1} counts", ++BrowserFinishedLoadingScriptsCounter, WaitCounts);
+                await Task.Delay(waitTimeMs);
+                Logging.Debug(Logfiles.AutomationRunner, "Waiting {0} of {1} counts", ++BrowserFinishedLoadingScriptsCounter, waitCounts);
             }
 
             Logging.Info(Logfiles.AutomationRunner, "The browser reports all loading done, save html to string");

@@ -27,6 +27,12 @@ namespace RelhaxModpack.Automation
         #endregion
 
         #region Task execution
+        public override void ProcessMacros()
+        {
+            base.ProcessMacros();
+            HtmlPath = ProcessMacro(nameof(HtmlPath), HtmlPath);
+        }
+
         public override void ValidateCommands()
         {
             base.ValidateCommands();
