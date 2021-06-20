@@ -200,6 +200,7 @@ namespace RelhaxModpack.Windows
 
         private async void RunSequencesButton_Click(object sender, RoutedEventArgs e)
         {
+            RunSequencesButton.IsEnabled = false;
             Logging.Info(LogOptions.MethodName, "Invoking the sequencer");
             List<AutomationSequence> sequencesToRun = SequencesToRunListBox.Items.Cast<AutomationSequence>().ToList();
             if (await AutomationSequencer.RunSequencerAsync(sequencesToRun))
@@ -210,6 +211,7 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Info("Sequencer run FAILURE");
             }
+            RunSequencesButton.IsEnabled = true;
         }
     }
 }
