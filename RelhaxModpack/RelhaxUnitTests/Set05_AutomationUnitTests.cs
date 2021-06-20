@@ -51,8 +51,8 @@ namespace RelhaxUnitTests
                 Level = 0
             });
             //bool loadAutomationSequencesResult = await sequencer.LoadAutomationSequencesAsync(DatabasePackages);
-            bool parseAutomationSequencesResult = sequencer.ParseAutomationSequences();
-            bool runSequencesResult = await sequencer.RunSequencesAsync();
+            //bool parseAutomationSequencesResult = sequencer.ParseAutomationSequences();
+            //bool runSequencesResult = await sequencer.RunSequencesAsync();
             //Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
             //Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
         }

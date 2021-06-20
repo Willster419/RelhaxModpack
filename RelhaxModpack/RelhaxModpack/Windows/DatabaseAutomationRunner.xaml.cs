@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using RelhaxModpack;
 using RelhaxModpack.Utilities.ClassEventArgs;
 using RelhaxModpack.Automation;
+using RelhaxModpack.Database;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Windows
 {
@@ -42,7 +44,9 @@ namespace RelhaxModpack.Windows
 
         private RelhaxLogViewer logViewer;
 
-        HtmlPathSelector htmlPathSelector;
+        private HtmlPathSelector htmlPathSelector;
+
+        private DatabaseManager databaseManager;
 
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
@@ -52,7 +56,8 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
             DownloadProgressChanged = WebClient_DownloadProgressChanged;
             Settings = AutomationSettings;
-            AutomationSequencer = new AutomationSequencer() { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this};
+            databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings);
+            AutomationSequencer = new AutomationSequencer() { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this, DatabaseManager = databaseManager};
         }
 
         private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
@@ -97,16 +102,17 @@ namespace RelhaxModpack.Windows
             Logging.Info("Parsing sequences from root document");
             await AutomationSequencer.ParseRootDocumentAsync();
 
+            //load database
+            await databaseManager.LoadDatabaseAsync();
+            AutomationSequencer.WoTClientVersion = databaseManager.WoTClientVersion;
+            AutomationSequencer.WoTModpackOnlineFolderVersion = databaseManager.WoTOnlineFolderVersion;
+
             //load the sequences into the listbox view
             SequencesAvailableListBox.Items.Clear();
             foreach (AutomationSequence sequence in AutomationSequencer.AutomationSequences)
             {
                 SequencesAvailableListBox.Items.Add(sequence);
             }
-
-            //TODO: load beta database
-            //TODO: have options for loading database (stable, beta, test)
-            //TODO: parse wot client version and online modpack version
         }
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
@@ -131,7 +137,13 @@ namespace RelhaxModpack.Windows
 
         private void MoveSequencesToRunListButton_Click(object sender, RoutedEventArgs e)
         {
+            if (SequencesAvailableListBox.SelectedItem == null)
+                return;
 
+            if (SequencesToRunListBox.Items.Contains(SequencesAvailableListBox.SelectedItem))
+                return;
+
+            SequencesToRunListBox.Items.Add(SequencesAvailableListBox.SelectedItem);
         }
 
         private void MoveUpSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
@@ -146,7 +158,10 @@ namespace RelhaxModpack.Windows
 
         private void DeleteSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
         {
+            if (SequencesToRunListBox.SelectedItem == null)
+                return;
 
+            SequencesToRunListBox.Items.Remove(SequencesToRunListBox.SelectedItem);
         }
 
         private void OpenLogfileViewerButton_Click(object sender, RoutedEventArgs e)
@@ -183,9 +198,18 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void RunSequencesButton_Click(object sender, RoutedEventArgs e)
+        private async void RunSequencesButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Logging.Info(LogOptions.MethodName, "Invoking the sequencer");
+            List<AutomationSequence> sequencesToRun = SequencesToRunListBox.Items.Cast<AutomationSequence>().ToList();
+            if (await AutomationSequencer.RunSequencerAsync(sequencesToRun))
+            {
+                Logging.Info("Sequencer run SUCCESS");
+            }
+            else
+            {
+                Logging.Info("Sequencer run FAILURE");
+            }
         }
     }
 }

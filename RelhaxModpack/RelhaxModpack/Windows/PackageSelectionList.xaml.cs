@@ -260,9 +260,9 @@ namespace RelhaxModpack.Windows
             Hide();
 
             //create progress reporter object. it doesn't report direct progress, but receives
-            //reports from inside wherever the reporter is used. I'm 99.99% certain when the event
+            //reports from inside wherever the reporter is used. When the event
             //is fired, it's on the UI thread (not the thread that reported) (~3ms)
-            //UI THREAD REQUIRED?
+            //UI THREAD REQUIRED
             //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
             Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
             progressIndicator.ProgressChanged += OnWindowLoadReportProgress;

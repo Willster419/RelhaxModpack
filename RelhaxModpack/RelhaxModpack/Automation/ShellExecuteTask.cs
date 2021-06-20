@@ -12,13 +12,16 @@ namespace RelhaxModpack.Automation
 {
     public class ShellExecuteTask : AutomationTask, IXmlSerializable, IDisposable
     {
+        public const string TaskCommandName = "shell_exec";
+
+        public override string Command { get { return TaskCommandName; } }
+
         public string Cmd { get; set; } = string.Empty;
 
         public string Wd { get; set; } = string.Empty;
 
-        public override string Command { get; } = "shell_exec";
-
         protected Process process = null;
+
         protected ProcessStartInfo startInfo = null;
 
         #region Xml serialization

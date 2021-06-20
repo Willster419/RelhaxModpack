@@ -145,6 +145,7 @@
     <Compile Include="Common\StringConstants.cs" />
     <Compile Include="Common\WindowsInterop.cs" />
     <Compile Include="Database\Category.cs" />
+    <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Database\DatabaseUtils.cs" />
     <Compile Include="Database\IDatabaseComponent.cs" />
     <Compile Include="Database\DatabaseLogic.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Utilities\Enums\ApplicationMode.cs" />
     <Compile Include="Utilities\Enums\ApplicationVersions.cs" />
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
+    <Compile Include="Utilities\Enums\DatabaseLoadFailCode.cs" />
     <Compile Include="Utilities\Enums\DownloadProgressState.cs" />
     <Compile Include="Utilities\Enums\InstallerExitCodes.cs" />
     <Compile Include="Utilities\Enums\InstructionsLoaderExitCode.cs" />

@@ -48,7 +48,10 @@ namespace RelhaxModpack.Windows
 
         private void OnLogMessageWrite(object sender, LogMessageEventArgs e)
         {
-            LogTextbox.AppendText(e.Message + Environment.NewLine);
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                LogTextbox.AppendText(e.Message + Environment.NewLine);
+            }));
         }
 
         private void ToggleWordWrapCheckbox_Click(object sender, RoutedEventArgs e)

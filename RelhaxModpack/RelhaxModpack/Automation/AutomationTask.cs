@@ -27,7 +27,10 @@ namespace RelhaxModpack.Automation
 
         public static Dictionary<string, Type> TaskTypeMapper { get; } = new Dictionary<string, Type>()
         {
-            { DownloadStaticTask.TaskCommandName, typeof(DownloadStaticTask) }
+            { DownloadStaticTask.TaskCommandName, typeof(DownloadStaticTask) },
+            { DownloadHtmlTask.TaskCommandName, typeof(DownloadHtmlTask) },
+            { DownloadBrowserTask.TaskCommandName, typeof(DownloadBrowserTask) },
+            { ShellExecuteTask.TaskCommandName, typeof(ShellExecuteTask) }
         };
 
         public const string AttributeNameForMapping = "Command";
@@ -166,7 +169,7 @@ namespace RelhaxModpack.Automation
             ExecutionTimeProcessTaskResultsMs = ExecutionTimeStopwatch.ElapsedMilliseconds;
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ProcessTaskResults() finish, ExecutionTime: {1}", Command, ExecutionTimeProcessTaskResultsMs.ToString());
             ExecutionTimeStopwatch.Stop();
-            if (!EvaluateResults("RunTask"))
+            if (!EvaluateResults("ProcessTaskResults"))
                 return;
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Finished task {0}: Task end, ExecutionTimeMs: {1}", Command, ExecutionTimeMs.ToString());
         }

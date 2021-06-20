@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,6 +40,15 @@ namespace RelhaxModpack.Windows
 
         private async void UrlGoButton_Click(object sender, RoutedEventArgs e)
         {
+            //check if the url is valid
+            //https://stackoverflow.com/a/3808841/3128017
+            if (!UrlIsValid(UrlTextBox.Text))
+            {
+                Logging.Info("The URL is invalid");
+                HtmlPathResultsTextBox.Text = "Invalid URL";
+                return;
+            }
+
             HtmlPathResultsTextBox.Text = "Loading...";
             
             if (Browser.Url != null && Browser.Url.Equals(UrlTextBox.Text))
@@ -76,10 +86,11 @@ namespace RelhaxModpack.Windows
             while (!(browserDocumentCompleted && browserNavigated))
             {
                 await Task.Delay((int)SetDelaySlider.Value);
-                Logging.Debug(Logfiles.AutomationRunner, "The browser task events completed, wait additional {0} counts", waitCounts);
+                Logging.Debug(Logfiles.AutomationRunner, "browserDocumentCompleted: {0}, browserNavigated: {1}", browserDocumentCompleted.ToString(), browserNavigated.ToString());
             }
 
             //this wait allows the browser to finish loading external scripts
+            Logging.Debug(Logfiles.AutomationRunner, "The browser task events completed, wait additional {0} counts", waitCounts);
             while (browserFinishedLoadingScriptsCounter <= waitCounts)
             {
                 await Task.Delay((int)SetDelaySlider.Value);
@@ -162,6 +173,30 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
             WindowsInterop.Unhook();
+        }
+
+        private bool UrlIsValid(string url)
+        {
+            try
+            {
+                //Creating the HttpWebRequest
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                //Setting the Request method HEAD, you can also use GET too.
+                request.Method = "HEAD";
+                //Getting the Web Response.
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    //Returns TRUE if the Status code == 200
+                    response.Close();
+                    return (response.StatusCode == HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //Any exception will returns false.
+                Logging.Exception(ex.ToString());
+                return false;
+            }
         }
     }
 }

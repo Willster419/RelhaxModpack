@@ -72,6 +72,8 @@ namespace RelhaxModpack.Common
         /// </summary>
         public const string SelectionsXml = "selections.xml";
 
+        public const string ModInfoZip = "modInfo.dat";
+
         /// <summary>
         /// The name of the 64bit folder in the 'World_of_Tanks' directory
         /// </summary>

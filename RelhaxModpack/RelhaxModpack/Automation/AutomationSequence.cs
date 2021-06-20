@@ -100,6 +100,7 @@ namespace RelhaxModpack.Automation
             if (string.IsNullOrEmpty(SequenceDownloadUrl))
                 throw new BadMemeException("SequenceDownloadUrl is not set");
 
+            Logging.Debug(LogOptions.ClassName, "Downloading sequence xml from {0}", SequenceDownloadUrl);
             string xmlString = await WebClient.DownloadStringTaskAsync(SequenceDownloadUrl);
             TasksDocument = XmlUtils.LoadXDocument(xmlString, XmlLoadType.FromString);
         }
@@ -108,12 +109,17 @@ namespace RelhaxModpack.Automation
         public bool ParseAutomationTasks()
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Getting list and parsing of automation tasks");
+            Logging.Debug("Getting xml node results of TaskDefinitions");
             XPathNavigator result = XmlUtils.GetXNodeFromXpath(TasksDocument, "/AutomationSequence/TaskDefinitions");
             XElement automationTaskHolder =  XElement.Parse(result.OuterXml);
+
+            Logging.Debug("Getting property of automationTasks and setting list entries");
             PropertyInfo listPropertyInfo = this.GetType().GetProperty(nameof(AutomationTasks));
             try
             {
-                CommonUtils.SetListEntries(this, listPropertyInfo, automationTaskHolder.Elements(), AutomationTask.AttributeNameForMapping, AutomationTask.TaskTypeMapper);
+                bool setListEntriesResult = CommonUtils.SetListEntries(this, listPropertyInfo, automationTaskHolder.Elements(), AutomationTask.AttributeNameForMapping, AutomationTask.TaskTypeMapper);
+                if (!setListEntriesResult)
+                    return false;
             }
             catch (Exception ex)
             {
@@ -163,7 +169,7 @@ namespace RelhaxModpack.Automation
                 await task.Execute();
                 if (task.ExitCode != 0)
                 {
-                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.");
+                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.", task.ID);
                     return false;
                 }
             }

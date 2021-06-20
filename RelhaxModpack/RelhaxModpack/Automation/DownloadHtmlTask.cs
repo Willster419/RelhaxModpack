@@ -13,9 +13,11 @@ namespace RelhaxModpack.Automation
 {
     public class DownloadHtmlTask : DownloadStaticTask, IDownloadTask, IXmlSerializable
     {
+        public const string TaskCommandName = "download_html";
+
         public string HtmlPath { get; set; } = string.Empty;
 
-        public override string Command { get; } = "download_html";
+        public override string Command { get { return TaskCommandName; } }
 
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()

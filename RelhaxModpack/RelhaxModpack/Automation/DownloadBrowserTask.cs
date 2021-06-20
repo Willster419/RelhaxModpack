@@ -18,11 +18,13 @@ namespace RelhaxModpack.Automation
 {
     public class DownloadBrowserTask : DownloadHtmlTask, IDownloadTask, IXmlSerializable
     {
-        public int WaitTimeMs { get; } = 1000;
+        public const string TaskCommandName = "download_browser";
 
-        public int WaitCounts { get; } = 3;
+        public override string Command { get { return TaskCommandName; } }
 
-        public override string Command { get; } = "download_browser";
+        public int WaitTimeMs { get; set; } = 1000;
+
+        public int WaitCounts { get; set; } = 3;
 
         protected WebBrowser Browser = null;
 
@@ -61,6 +63,13 @@ namespace RelhaxModpack.Automation
                 Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
                 return;
             }
+            if (!UrlIsValid(Url))
+            {
+                ExitCode = 1;
+                ErrorMessage = string.Format("ExitCode {0}: The given URL is not valid: {1}", ExitCode, Url);
+                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+                return;
+            }
         }
 
         public async override Task RunTask()
@@ -82,7 +91,7 @@ namespace RelhaxModpack.Automation
             Logging.Debug(Logfiles.AutomationRunner, "The htmlpath used was {0}", HtmlPath);
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(HtmlString);
-            HtmlNodeNavigator navigator = (HtmlAgilityPack.HtmlNodeNavigator)document.CreateNavigator();
+            HtmlNodeNavigator navigator = (HtmlNodeNavigator)document.CreateNavigator();
             var result = navigator.SelectSingleNode(HtmlPath);
             if (result == null)
             {
@@ -101,14 +110,16 @@ namespace RelhaxModpack.Automation
         {
             RunBrowserOnUIThread();
 
+            Logging.Info("Browser will check at a rate of {0}ms, and then wait {1} times after", WaitTimeMs.ToString(), WaitCounts.ToString());
             //wait for browser events to finish
             while (!(BrowserLoaded && BrowserNavigated))
             {
                 await Task.Delay(WaitTimeMs);
-                Logging.Debug(Logfiles.AutomationRunner, "The browser task events completed, wait additional {0} counts", WaitCounts);
+                Logging.Debug(Logfiles.AutomationRunner, "BrowserLoaded: {0}, BrowserNavigated: {1}", BrowserLoaded.ToString(), BrowserNavigated.ToString());
             }
 
             //this wait allows the browser to finish loading external scripts
+            Logging.Debug(Logfiles.AutomationRunner, "The browser task events completed, wait additional {0} counts", WaitCounts);
             while (BrowserFinishedLoadingScriptsCounter <= WaitCounts)
             {
                 await Task.Delay(WaitTimeMs);
@@ -143,13 +154,13 @@ namespace RelhaxModpack.Automation
                 //set event handler for browser to be done loading
                 Browser.Navigated += (senda, args) =>
                 {
-                    Logging.Debug(Logfiles.AutomationRunner, "The browser reports navigation completed, wait for document completed and timeout");
+                    Logging.Debug(Logfiles.AutomationRunner, "The browser reports navigation completed");
                     BrowserNavigated = true;
                 };
 
                 Browser.DocumentCompleted += (sendahh, endArgs) =>
                 {
-                    Logging.Debug(Logfiles.AutomationRunner, "The browser reports document completed, wait for timeout");
+                    Logging.Debug(Logfiles.AutomationRunner, "The browser reports document completed");
                     BrowserLoaded = true;
                     HtmlString = Browser.Document.Body.OuterHtml;
                 };
@@ -170,6 +181,30 @@ namespace RelhaxModpack.Automation
         public override void ProcessTaskResults()
         {
             base.ProcessTaskResults();
+        }
+
+        private bool UrlIsValid(string url)
+        {
+            try
+            {
+                //Creating the HttpWebRequest
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                //Setting the Request method HEAD, you can also use GET too.
+                request.Method = "HEAD";
+                //Getting the Web Response.
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    //Returns TRUE if the Status code == 200
+                    response.Close();
+                    return (response.StatusCode == HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                //Any exception will returns false.
+                Logging.Exception(ex.ToString());
+                return false;
+            }
         }
         #endregion
     }
