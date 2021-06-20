@@ -142,6 +142,8 @@
     <Compile Include="Common\DownloadManager.cs" />
     <Compile Include="Common\IComponentWithID.cs" />
     <Compile Include="Common\Md5DatabaseManager.cs" />
+    <Compile Include="Common\StringConstants.cs" />
+    <Compile Include="Common\WindowsInterop.cs" />
     <Compile Include="Database\Category.cs" />
     <Compile Include="Database\DatabaseUtils.cs" />
     <Compile Include="Database\IDatabaseComponent.cs" />
