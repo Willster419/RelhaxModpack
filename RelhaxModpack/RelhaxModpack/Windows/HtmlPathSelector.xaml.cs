@@ -172,6 +172,7 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
+            WindowsInterop.SecurityAlertDialogWillBeShown -= this.WindowsInterop_SecurityAlertDialogWillBeShown;
             WindowsInterop.Unhook();
         }
 
