@@ -3,21 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using RelhaxModpack;
-using RelhaxModpack.Utilities.ClassEventArgs;
 using RelhaxModpack.Automation;
 using RelhaxModpack.Database;
 using RelhaxModpack.Utilities.Enums;
+using Microsoft.Win32;
+using System.IO;
+using RelhaxModpack.Common;
 
 namespace RelhaxModpack.Windows
 {
@@ -50,6 +43,8 @@ namespace RelhaxModpack.Windows
 
         private DatabaseManager databaseManager;
 
+        private SaveFileDialog SaveDatabaseDialog;
+
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
@@ -65,6 +60,8 @@ namespace RelhaxModpack.Windows
 
         private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            LoadSettingsToUI();
+
             //init the log viewer window
             logViewer = new RelhaxLogViewer(ModpackSettings)
             {
@@ -123,6 +120,16 @@ namespace RelhaxModpack.Windows
             AutomationSequencer.Dispose();
         }
 
+        private void LoadSettingsToUI()
+        {
+            BigmodsUsernameSetting.Text = AutomationSettings.BigmodsUsername;
+            BigmodsPasswordSetting.Text = AutomationSettings.BigmodsPassword;
+            OpenLogWindowOnStartupSetting.IsChecked = AutomationSettings.OpenLogWindowOnStartup;
+            DumpParsedMacrosPerSequenceRunSetting.IsChecked = AutomationSettings.DumpParsedMacrosPerSequenceRun;
+            AutomamtionDatabaseSelectedBranchSetting.Text = AutomationSettings.SelectedBranch;
+            SelectDBSaveLocationSetting.Text = AutomationSettings.DatabaseSavePath;
+        }
+
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             if (AutomationTaskProgressBar.Visibility != Visibility.Visible)
@@ -143,11 +150,6 @@ namespace RelhaxModpack.Windows
             AutomationTaskProgressBar.Visibility = Visibility.Hidden;
             AutomationTaskProgressTextBlock.Text = string.Empty;
             AutomationTaskProgressTextBlock.Visibility = Visibility.Hidden;
-        }
-
-        private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private void MoveSequencesToRunListButton_Click(object sender, RoutedEventArgs e)
@@ -234,5 +236,58 @@ namespace RelhaxModpack.Windows
             }
             RunSequencesButton.IsEnabled = true;
         }
+
+        #region Settings tab events
+        private void OpenLogWindowOnStartupSetting_Click(object sender, RoutedEventArgs e)
+        {
+            AutomationSettings.OpenLogWindowOnStartup = (bool)OpenLogWindowOnStartupSetting.IsChecked;
+        }
+
+        private void BigmodsUsernameSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.BigmodsUsername = BigmodsUsernameSetting.Text;
+        }
+
+        private void BigmodsPasswordSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.BigmodsPassword = BigmodsPasswordSetting.Text;
+        }
+
+        private void DumpParsedMacrosPerSequenceRunSetting_Click(object sender, RoutedEventArgs e)
+        {
+            AutomationSettings.DumpParsedMacrosPerSequenceRun = (bool)DumpParsedMacrosPerSequenceRunSetting.IsChecked;
+        }
+
+        private void AutomamtionDatabaseSelectedBranchSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.SelectedBranch = AutomamtionDatabaseSelectedBranchSetting.Text;
+        }
+
+        private void SelectDBSaveLocationButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SaveDatabaseDialog == null)
+                SaveDatabaseDialog = new SaveFileDialog()
+                {
+                    AddExtension = true,
+                    CheckPathExists = true,
+                    //https://stackoverflow.com/questions/5512752/how-to-stop-overwriteprompt-when-creating-savefiledialog-using-getsavefilename
+                    OverwritePrompt = false,
+                    CheckFileExists = false,
+                    DefaultExt = "xml",
+                    InitialDirectory = string.IsNullOrWhiteSpace(SelectDBSaveLocationSetting.Text) ? ApplicationConstants.ApplicationStartupPath :
+                    Directory.Exists(Path.GetDirectoryName(SelectDBSaveLocationSetting.Text)) ? SelectDBSaveLocationSetting.Text : ApplicationConstants.ApplicationStartupPath,
+                    Title = "Select path to save database to. NOTE: It is only selecting path, does not save"
+                };
+
+            if (!(bool)SaveDatabaseDialog.ShowDialog())
+                return;
+            SelectDBSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
+        }
+
+        private void SelectDBSaveLocationSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.DatabaseSavePath = SelectDBSaveLocationSetting.Text;
+        }
+        #endregion
     }
 }

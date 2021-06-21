@@ -10,7 +10,7 @@
         LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" EscapeKeyClosesWindow="False"
         ApplyScaling="True" ApplyCustomFont="True">
     <Grid>
-        <TabControl x:Name="MainTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" SelectionChanged="MainTabView_SelectionChanged">
+        <TabControl x:Name="MainTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
             <TabItem x:Name="TabItemRunSequences" Header="Run Sequences">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -52,8 +52,36 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItemSettings" Header="Settings">
-                <Grid>
-
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="BigmodsUsernameTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Username" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"
+                                   ToolTip="Enter your FTP account user name to be able to run package upload/download tasks"/>
+                    <TextBox x:Name="BigmodsUsernameSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" TextChanged="BigmodsUsernameSetting_TextChanged"/>
+                    <TextBlock x:Name="BigmodsPasswordTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Bigmods Password" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"
+                                   ToolTip="Enter your FTP account password to be able to run package upload/download tasks"/>
+                    <TextBox x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TextChanged="BigmodsPasswordSetting_TextChanged"/>
+                    <CheckBox x:Name="OpenLogWindowOnStartupSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Content="Open log window on startup"
+                                  Click="OpenLogWindowOnStartupSetting_Click" ToolTip="When checked, the log window will start when you launch the application in this mode"/>
+                    <CheckBox x:Name="DumpParsedMacrosPerSequenceRunSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="3" VerticalAlignment="Center" Content="Dump parsed macros for each sequence during run"
+                                  Click="DumpParsedMacrosPerSequenceRunSetting_Click" ToolTip="Show a message box to confirm when pressing one of the add/move/remove buttons"/>
+                    <TextBlock x:Name="AutomamtionDatabaseSelectedBranchTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Beta DB selected branch" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"
+                                   ToolTip="Enter the target branch to use for the automation repo. The default is 'master'."/>
+                    <TextBox x:Name="AutomamtionDatabaseSelectedBranchSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="AutomamtionDatabaseSelectedBranchSetting_TextChanged"/>
+                    <Button x:Name="SelectDBSaveLocationButton" Content="Select DB save location" HorizontalAlignment="Stretch" Grid.Row="5" VerticalAlignment="Center" Click="SelectDBSaveLocationButton_Click"
+                                ToolTip="Select the location to use for loading and saving the database for automation runs"/>
+                    <TextBox x:Name="SelectDBSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="SelectDBSaveLocationSetting_TextChanged" />
                 </Grid>
             </TabItem>
         </TabControl>
