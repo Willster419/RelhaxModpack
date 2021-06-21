@@ -30,8 +30,6 @@ namespace RelhaxModpack.Automation
 
         public bool PackageLoaded { get { return Package != null; } }
 
-        private string packageUID;
-
         public string PackageUID
         {
             get
@@ -49,8 +47,6 @@ namespace RelhaxModpack.Automation
                     packageUID = value;
             }
         }
-
-        private string packageName;
 
         public string PackageName
         {
@@ -88,9 +84,15 @@ namespace RelhaxModpack.Automation
 
         private XDocument TasksDocument = null;
 
-        private AutomationRunnerSettings AutomationRunnerSettings { get { return AutomationSequencer.AutomationRunnerSettings; } }
+        public AutomationRunnerSettings AutomationRunnerSettings { get { return AutomationSequencer.AutomationRunnerSettings; } }
+
+        public DatabaseManager DatabaseManager { get { return AutomationSequencer.DatabaseManager; } }
 
         public string ComponentInternalName { get { return ((IComponentWithID)Package).ComponentInternalName; } }
+
+        private string packageName;
+
+        private string packageUID;
 
         public AutomationSequence()
         {

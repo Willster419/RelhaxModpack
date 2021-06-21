@@ -1,5 +1,6 @@
 ﻿using RelhaxModpack.Common;
 using RelhaxModpack.Database;
+using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Windows;
 using System;
@@ -41,6 +42,8 @@ namespace RelhaxModpack.Automation
         public AutomationSequence AutomationSequence { get; set; }
 
         public DatabaseAutomationRunner DatabaseAutomationRunner { get { return AutomationSequence.DatabaseAutomationRunner; } }
+
+        public AutomationRunnerSettings AutomationSettings { get { return AutomationSequence.AutomationRunnerSettings; } }
 
         public List<AutomationMacro> Macros { get { return AutomationSequence.AllMacros; } }
 
