@@ -169,12 +169,6 @@ namespace RelhaxModpack.Windows
                     return;
                 }
             }
-
-            Logging.TryWriteToLog("Saving editor settings", Logfiles.Editor, LogLevel.Info);
-            SettingsParser parser = new SettingsParser();
-            parser.SaveSettings(Settings);
-            Logging.TryWriteToLog("Editor settings saved", Logfiles.Editor, LogLevel.Info);
-            Logging.DisposeLogging(Logfiles.Editor);
         }
 
         private int GetMaxPatchGroups()
