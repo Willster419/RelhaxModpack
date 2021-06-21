@@ -47,6 +47,8 @@
                     <Button x:Name="RunSequencesButton" HorizontalAlignment="Right" Margin="0,1,10,0" VerticalAlignment="Stretch" Width="75" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Click="RunSequencesButton_Click">
                         <TextBlock Text="Run" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
+                    <ProgressBar x:Name="AutomationTaskProgressBar" HorizontalAlignment="Stretch" Margin="0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Visibility="Hidden" />
+                    <TextBlock x:Name="AutomationTaskProgressTextBlock" HorizontalAlignment="Stretch" Margin="0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Visibility="Hidden" Text="Test" TextAlignment="Center"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItemSettings" Header="Settings">

@@ -38,6 +38,8 @@ namespace RelhaxModpack.Windows
 
         public DownloadProgressChangedEventHandler DownloadProgressChanged = null;
 
+        public DownloadDataCompletedEventHandler DownloadDataCompleted = null;
+
         private AutomationRunnerSettings AutomationSettings = new AutomationRunnerSettings();
 
         private AutomationSequencer AutomationSequencer = null;
@@ -55,6 +57,7 @@ namespace RelhaxModpack.Windows
         {
             InitializeComponent();
             DownloadProgressChanged = WebClient_DownloadProgressChanged;
+            DownloadDataCompleted = WebClient_DownloadDataComplted;
             Settings = AutomationSettings;
             databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings);
             AutomationSequencer = new AutomationSequencer() { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this, DatabaseManager = databaseManager};
@@ -122,7 +125,24 @@ namespace RelhaxModpack.Windows
 
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            
+            if (AutomationTaskProgressBar.Visibility != Visibility.Visible)
+            {
+                //this only will happen once during the task's execution
+                AutomationTaskProgressTextBlock.Visibility = Visibility.Visible;
+                AutomationTaskProgressBar.Visibility = Visibility.Visible;
+                AutomationTaskProgressBar.Minimum = 0;
+                AutomationTaskProgressBar.Maximum = e.TotalBytesToReceive;
+            }
+            AutomationTaskProgressBar.Value = e.BytesReceived;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesReceived, e.TotalBytesToReceive);
+        }
+
+        private void WebClient_DownloadDataComplted(object sender, DownloadDataCompletedEventArgs e)
+        {
+            AutomationTaskProgressBar.Value = AutomationTaskProgressBar.Minimum;
+            AutomationTaskProgressBar.Visibility = Visibility.Hidden;
+            AutomationTaskProgressTextBlock.Text = string.Empty;
+            AutomationTaskProgressTextBlock.Visibility = Visibility.Hidden;
         }
 
         private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
