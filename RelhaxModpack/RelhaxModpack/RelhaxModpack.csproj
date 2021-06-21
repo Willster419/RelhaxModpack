@@ -139,7 +139,6 @@
     <Compile Include="Automation\DownloadStaticTask.cs" />
     <Compile Include="Automation\IDatabaseTask.cs" />
     <Compile Include="Automation\IDownloadTask.cs" />
-    <Compile Include="Automation\IUploadTask.cs" />
     <Compile Include="Automation\LoadDatabaseTask.cs" />
     <Compile Include="Automation\SaveDatabaseTask.cs" />
     <Compile Include="Automation\ShellExecuteTask.cs" />
