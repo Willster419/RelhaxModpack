@@ -14,11 +14,11 @@ namespace RelhaxModpack.Automation
     {
         public const string TaskCommandName = "download_static";
 
+        public override string Command { get { return TaskCommandName; } }
+
         public string DestinationPath { get; set; } = string.Empty;
 
         public string Url { get; set; } = string.Empty;
-
-        public override string Command { get { return TaskCommandName; } }
 
         protected WebClient WebClient = null;
 
@@ -72,10 +72,16 @@ namespace RelhaxModpack.Automation
                 Logging.Debug(Logfiles.AutomationRunner, "Download url = {0}, file = {1}", Url, DestinationPath);
                 //https://stackoverflow.com/questions/2953403/c-sharp-passing-method-as-the-argument-in-a-method
                 if (DatabaseAutomationRunner != null)
+                {
                     WebClient.DownloadProgressChanged += DatabaseAutomationRunner.DownloadProgressChanged;
+                    WebClient.DownloadDataCompleted += DatabaseAutomationRunner.DownloadDataCompleted;
+                }
                 await WebClient.DownloadFileTaskAsync(Url, DestinationPath);
                 if (DatabaseAutomationRunner != null)
+                {
                     WebClient.DownloadProgressChanged -= DatabaseAutomationRunner.DownloadProgressChanged;
+                    WebClient.DownloadDataCompleted -= DatabaseAutomationRunner.DownloadDataCompleted;
+                }
             }
         }
 
