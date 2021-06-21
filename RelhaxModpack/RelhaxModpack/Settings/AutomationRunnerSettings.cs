@@ -30,6 +30,10 @@ namespace RelhaxModpack.Settings
 
         public bool OpenLogWindowOnStartup { get; set; } = true;
 
+        public string BigmodsUsername { get; set; } = string.Empty;
+
+        public string BigmodsPassword { get; set; } = string.Empty;
+
         /// <summary>
         /// Toggle to dump the parsed macros to the log file before every sequence run
         /// </summary>
