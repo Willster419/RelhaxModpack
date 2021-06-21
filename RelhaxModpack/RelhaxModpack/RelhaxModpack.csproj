@@ -133,10 +133,15 @@
     <Compile Include="Automation\AutomationSequence.cs" />
     <Compile Include="Automation\AutomationSequencer.cs" />
     <Compile Include="Automation\AutomationTask.cs" />
+    <Compile Include="Automation\DatabaseTask.cs" />
     <Compile Include="Automation\DownloadBrowserTask.cs" />
     <Compile Include="Automation\DownloadHtmlTask.cs" />
     <Compile Include="Automation\DownloadStaticTask.cs" />
+    <Compile Include="Automation\IDatabaseTask.cs" />
     <Compile Include="Automation\IDownloadTask.cs" />
+    <Compile Include="Automation\IUploadTask.cs" />
+    <Compile Include="Automation\LoadDatabaseTask.cs" />
+    <Compile Include="Automation\SaveDatabaseTask.cs" />
     <Compile Include="Automation\ShellExecuteTask.cs" />
     <Compile Include="Common\ApplicationConstants.cs" />
     <Compile Include="Common\DownloadManager.cs" />
