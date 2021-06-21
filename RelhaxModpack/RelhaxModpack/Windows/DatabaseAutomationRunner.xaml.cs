@@ -102,11 +102,6 @@ namespace RelhaxModpack.Windows
             Logging.Info("Parsing sequences from root document");
             await AutomationSequencer.ParseRootDocumentAsync();
 
-            //load database
-            await databaseManager.LoadDatabaseAsync();
-            AutomationSequencer.WoTClientVersion = databaseManager.WoTClientVersion;
-            AutomationSequencer.WoTModpackOnlineFolderVersion = databaseManager.WoTOnlineFolderVersion;
-
             //load the sequences into the listbox view
             SequencesAvailableListBox.Items.Clear();
             foreach (AutomationSequence sequence in AutomationSequencer.AutomationSequences)
@@ -201,6 +196,12 @@ namespace RelhaxModpack.Windows
         private async void RunSequencesButton_Click(object sender, RoutedEventArgs e)
         {
             RunSequencesButton.IsEnabled = false;
+            //load database
+            Logging.Info("Loading database");
+            await databaseManager.LoadDatabaseAsync();
+            AutomationSequencer.WoTClientVersion = databaseManager.WoTClientVersion;
+            AutomationSequencer.WoTModpackOnlineFolderVersion = databaseManager.WoTOnlineFolderVersion;
+
             Logging.Info(LogOptions.MethodName, "Invoking the sequencer");
             List<AutomationSequence> sequencesToRun = SequencesToRunListBox.Items.Cast<AutomationSequence>().ToList();
             if (await AutomationSequencer.RunSequencerAsync(sequencesToRun))
