@@ -11,6 +11,8 @@ namespace RelhaxModpack.Settings
     /// </summary>
     public class AutomationRunnerSettings : ISettingsFile
     {
+        public const string RepoDefaultBranch = "master";
+
         /// <summary>
         /// The name of the xml file on disk
         /// </summary>
@@ -26,13 +28,13 @@ namespace RelhaxModpack.Settings
         /// </summary>
         public string SelectedBranch { get; set; } = "master";
 
-        public const string RepoDefaultBranch = "master";
-
         public bool OpenLogWindowOnStartup { get; set; } = true;
 
         public string BigmodsUsername { get; set; } = string.Empty;
 
         public string BigmodsPassword { get; set; } = string.Empty;
+
+        public string DatabaseSavePath { get; set; } = string.Empty;
 
         /// <summary>
         /// Toggle to dump the parsed macros to the log file before every sequence run
