@@ -49,7 +49,7 @@ namespace RelhaxModpack.Automation
                 if (DatabaseAutomationRunner != null)
                 {
                     WebClient.DownloadProgressChanged += DatabaseAutomationRunner.DownloadProgressChanged;
-                    WebClient.DownloadDataCompleted += DatabaseAutomationRunner.DownloadDataCompleted;
+                    WebClient.DownloadFileCompleted += DatabaseAutomationRunner.DownloadFileCompleted;
                 }
                 try
                 {
@@ -65,7 +65,7 @@ namespace RelhaxModpack.Automation
                     if (DatabaseAutomationRunner != null)
                     {
                         WebClient.DownloadProgressChanged -= DatabaseAutomationRunner.DownloadProgressChanged;
-                        WebClient.DownloadDataCompleted -= DatabaseAutomationRunner.DownloadDataCompleted;
+                        WebClient.DownloadFileCompleted -= DatabaseAutomationRunner.DownloadFileCompleted;
                     }
                 }
             }

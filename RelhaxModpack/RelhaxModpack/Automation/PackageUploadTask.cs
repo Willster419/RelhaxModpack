@@ -62,8 +62,8 @@ namespace RelhaxModpack.Automation
                 //https://stackoverflow.com/questions/2953403/c-sharp-passing-method-as-the-argument-in-a-method
                 if (DatabaseAutomationRunner != null)
                 {
-                    WebClient.DownloadProgressChanged += DatabaseAutomationRunner.DownloadProgressChanged;
-                    WebClient.DownloadDataCompleted += DatabaseAutomationRunner.DownloadDataCompleted;
+                    WebClient.UploadProgressChanged += DatabaseAutomationRunner.UploadProgressChanged;
+                    WebClient.UploadFileCompleted += DatabaseAutomationRunner.UploadFileCompleted;
                 }
                 try
                 {
@@ -78,8 +78,8 @@ namespace RelhaxModpack.Automation
                 {
                     if (DatabaseAutomationRunner != null)
                     {
-                        WebClient.DownloadProgressChanged -= DatabaseAutomationRunner.DownloadProgressChanged;
-                        WebClient.DownloadDataCompleted -= DatabaseAutomationRunner.DownloadDataCompleted;
+                        WebClient.UploadProgressChanged -= DatabaseAutomationRunner.UploadProgressChanged;
+                        WebClient.UploadFileCompleted -= DatabaseAutomationRunner.UploadFileCompleted;
                     }
                 }
             }

@@ -74,13 +74,13 @@ namespace RelhaxModpack.Automation
                 if (DatabaseAutomationRunner != null)
                 {
                     WebClient.DownloadProgressChanged += DatabaseAutomationRunner.DownloadProgressChanged;
-                    WebClient.DownloadDataCompleted += DatabaseAutomationRunner.DownloadDataCompleted;
+                    WebClient.DownloadFileCompleted += DatabaseAutomationRunner.DownloadFileCompleted;
                 }
                 await WebClient.DownloadFileTaskAsync(Url, DestinationPath);
                 if (DatabaseAutomationRunner != null)
                 {
                     WebClient.DownloadProgressChanged -= DatabaseAutomationRunner.DownloadProgressChanged;
-                    WebClient.DownloadDataCompleted -= DatabaseAutomationRunner.DownloadDataCompleted;
+                    WebClient.DownloadFileCompleted -= DatabaseAutomationRunner.DownloadFileCompleted;
                 }
             }
         }

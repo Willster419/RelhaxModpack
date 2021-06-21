@@ -11,6 +11,8 @@ using RelhaxModpack.Utilities.Enums;
 using Microsoft.Win32;
 using System.IO;
 using RelhaxModpack.Common;
+using System.ComponentModel;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -33,6 +35,12 @@ namespace RelhaxModpack.Windows
 
         public DownloadDataCompletedEventHandler DownloadDataCompleted = null;
 
+        public AsyncCompletedEventHandler DownloadFileCompleted = null;
+
+        public UploadProgressChangedEventHandler UploadProgressChanged = null;
+
+        public UploadFileCompletedEventHandler UploadFileCompleted = null;
+
         private AutomationRunnerSettings AutomationSettings = new AutomationRunnerSettings();
 
         private AutomationSequencer AutomationSequencer = null;
@@ -53,13 +61,17 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
             DownloadProgressChanged = WebClient_DownloadProgressChanged;
             DownloadDataCompleted = WebClient_DownloadDataComplted;
+            DownloadFileCompleted = WebClient_TransferFileCompleted;
+            UploadFileCompleted = WebClient_UploadFileCompleted;
+            UploadProgressChanged = WebClient_UploadProgressChanged;
             Settings = AutomationSettings;
-            databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings);
-            AutomationSequencer = new AutomationSequencer() { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this, DatabaseManager = databaseManager};
         }
 
         private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings);
+            AutomationSequencer = new AutomationSequencer() { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this, DatabaseManager = databaseManager };
+
             LoadSettingsToUI();
 
             //init the log viewer window
@@ -146,6 +158,35 @@ namespace RelhaxModpack.Windows
 
         private void WebClient_DownloadDataComplted(object sender, DownloadDataCompletedEventArgs e)
         {
+            HideAutomationProgress();
+        }
+
+        private void WebClient_TransferFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            HideAutomationProgress();
+        }
+
+        private void WebClient_UploadFileCompleted(object sender, UploadFileCompletedEventArgs e)
+        {
+            HideAutomationProgress();
+        }
+
+        private void WebClient_UploadProgressChanged(object sender, UploadProgressChangedEventArgs e)
+        {
+            if (AutomationTaskProgressBar.Visibility != Visibility.Visible)
+            {
+                //this only will happen once during the task's execution
+                AutomationTaskProgressTextBlock.Visibility = Visibility.Visible;
+                AutomationTaskProgressBar.Visibility = Visibility.Visible;
+                AutomationTaskProgressBar.Minimum = 0;
+                AutomationTaskProgressBar.Maximum = e.TotalBytesToReceive;
+            }
+            AutomationTaskProgressBar.Value = e.BytesReceived;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesReceived, e.TotalBytesToReceive);
+        }
+
+        private void HideAutomationProgress()
+        {
             AutomationTaskProgressBar.Value = AutomationTaskProgressBar.Minimum;
             AutomationTaskProgressBar.Visibility = Visibility.Hidden;
             AutomationTaskProgressTextBlock.Text = string.Empty;
@@ -220,7 +261,7 @@ namespace RelhaxModpack.Windows
             RunSequencesButton.IsEnabled = false;
             //load database
             Logging.Info("Loading database");
-            await databaseManager.LoadDatabaseAsync();
+            await databaseManager.LoadDatabaseTestAsync(AutomationSettings.DatabaseSavePath);
             AutomationSequencer.WoTClientVersion = databaseManager.WoTClientVersion;
             AutomationSequencer.WoTModpackOnlineFolderVersion = databaseManager.WoTOnlineFolderVersion;
 
