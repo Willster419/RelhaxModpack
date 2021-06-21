@@ -31,7 +31,12 @@ namespace RelhaxModpack.Automation
         public override void ValidateCommands()
         {
             if (DatabaseManager == null)
-                throw new NullReferenceException();
+            {
+                ExitCode = 1;
+                ErrorMessage = string.Format("ExitCode {0}: DatabaseManager is null (This is an internal application error)", ExitCode);
+                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+                return;
+            }
         }
 
         public override void ProcessTaskResults()
