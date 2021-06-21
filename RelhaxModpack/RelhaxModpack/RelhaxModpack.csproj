@@ -140,6 +140,9 @@
     <Compile Include="Automation\IDatabaseTask.cs" />
     <Compile Include="Automation\IDownloadTask.cs" />
     <Compile Include="Automation\LoadDatabaseTask.cs" />
+    <Compile Include="Automation\PackageDownloadTask.cs" />
+    <Compile Include="Automation\PackageTransferTask.cs" />
+    <Compile Include="Automation\PackageUploadTask.cs" />
     <Compile Include="Automation\SaveDatabaseTask.cs" />
     <Compile Include="Automation\ShellExecuteTask.cs" />
     <Compile Include="Common\ApplicationConstants.cs" />

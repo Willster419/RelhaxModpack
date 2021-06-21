@@ -34,6 +34,8 @@ namespace RelhaxModpack.Automation
             { ShellExecuteTask.TaskCommandName, typeof(ShellExecuteTask) },
             { LoadDatabaseTask.TaskCommandName, typeof(LoadDatabaseTask) },
             { SaveDatabaseTask.TaskCommandName, typeof(SaveDatabaseTask) },
+            { PackageDownloadTask.TaskCommandName, typeof(PackageDownloadTask) },
+            { PackageUploadTask.TaskCommandName, typeof(PackageUploadTask) }
         };
 
         public const string AttributeNameForMapping = "Command";
