@@ -93,6 +93,9 @@ namespace RelhaxModpack
         private long remainingMilliseconds;
         private bool deferToDownloadReport = false;
 
+        //database manager
+        private DatabaseManager databaseManager;
+
         //task bar variables
         private TaskbarManager taskbarInstance = null;
         private TaskbarProgressBarState taskbarState = TaskbarProgressBarState.NoProgress;
@@ -305,6 +308,9 @@ namespace RelhaxModpack
                         throw new BadMemeException("The font was never set in the selector combobox");
                 }
             }
+
+            //setup the database manager helper class
+            databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings);
 
             //save database version to temp and process if command line test mode
             databaseVersion = ModpackSettings.DatabaseDistroVersion;
@@ -992,10 +998,10 @@ namespace RelhaxModpack
             {
                 AutoInstallMode = (sender == null),
                 //get the last parsed from the xml file (should be the latest by default
-                LastSupportedWoTClientVersion = lastSupportedWoTVersion,
-                WoTClientVersion = this.WoTClientVersion,
-                DatabaseVersion = this.DatabaseVersion,
-                WoTDirectory = this.WoTDirectory
+                LastSupportedWoTClientVersionFromMainWindow = lastSupportedWoTVersion,
+                WotClientVersionFromMainWindow = this.WoTClientVersion,
+                DatabaseVersionFromMainWindow = this.DatabaseVersion,
+                WoTDirectoryFromMainWindow = this.WoTDirectory
             };
 
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
@@ -3567,8 +3573,8 @@ namespace RelhaxModpack
         //Get all xml strings for the V2 database file format from the selected beta database github branch
         private Task<string> GetBetaDatabase1V1ForStringCompareAsync()
         {
-            return Task<string>.Run(() => {
-                List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch), ModpackSettings.BetaDatabaseSelectedBranch);
+            return Task<string>.Run(async () => {
+                List<string> downloadURLs = await databaseManager.GetBetaDatabase1V1FilesListAsync();
 
                 string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 
