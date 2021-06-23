@@ -137,6 +137,7 @@
     <Compile Include="Automation\DownloadBrowserTask.cs" />
     <Compile Include="Automation\DownloadHtmlTask.cs" />
     <Compile Include="Automation\DownloadStaticTask.cs" />
+    <Compile Include="Automation\HtmlBrowserParser.cs" />
     <Compile Include="Automation\IDatabaseTask.cs" />
     <Compile Include="Automation\IDownloadTask.cs" />
     <Compile Include="Automation\LoadDatabaseTask.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
     <Compile Include="Utilities\Enums\DatabaseLoadFailCode.cs" />
     <Compile Include="Utilities\Enums\DownloadProgressState.cs" />
+    <Compile Include="Utilities\Enums\HtmlBrowserParserExitCode.cs" />
     <Compile Include="Utilities\Enums\InstallerExitCodes.cs" />
     <Compile Include="Utilities\Enums\InstructionsLoaderExitCode.cs" />
     <Compile Include="Utilities\Enums\InstructionsType.cs" />
