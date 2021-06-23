@@ -43,8 +43,6 @@ namespace RelhaxModpack.Automation
 
         protected Dispatcher browserDispatcher = null;
 
-        protected HtmlBrowserParser htmlBrowserParser;
-
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
@@ -92,10 +90,10 @@ namespace RelhaxModpack.Automation
             RegistryUtils.SetRegisterKeyForIEVersion(IERegistryVersion.IE11Forced);
 
             Logging.AutomationRunner("Running Browser execution code");
-            htmlBrowserParser = new HtmlBrowserParser(HtmlPath, Url, waitTimeMs, waitCounts, false, null, null);
-            HtmlBrowserParserExitCode exitCode = await htmlBrowserParser.RunParserAsync();
+            htmlXpathParser = new HtmlBrowserParser(HtmlPath, Url, waitTimeMs, waitCounts, false, null, null);
+            HtmlXpathParserExitCode exitCode = await htmlXpathParser.RunParserAsync();
 
-            if (exitCode != HtmlBrowserParserExitCode.None)
+            if (exitCode != HtmlXpathParserExitCode.None)
             {
                 ExitCode = 3;
                 ErrorMessage = string.Format("ExitCode {0}: The html browser parser exited with code {1}. Check the above log messages for more information.", exitCode);
@@ -103,7 +101,7 @@ namespace RelhaxModpack.Automation
                 return;
             }
 
-            Url = htmlBrowserParser.ResultString;
+            Url = htmlXpathParser.ResultString;
         }
 
         public override void ProcessTaskResults()

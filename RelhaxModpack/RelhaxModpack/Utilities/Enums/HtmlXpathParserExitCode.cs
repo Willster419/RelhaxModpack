@@ -3,7 +3,7 @@
     /// <summary>
     /// List of possible return code error conditions that can occur when running the htmlPath browser parser
     /// </summary>
-    public enum HtmlBrowserParserExitCode
+    public enum HtmlXpathParserExitCode
     {
         /// <summary>
         /// No error occurred

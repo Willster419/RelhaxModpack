@@ -26,7 +26,7 @@ namespace RelhaxModpack.Windows
 
         private int waitCounts = 3;
 
-        HtmlBrowserParser htmlBrowserParser;
+        HtmlWebscrapeParser htmlXpathParser;
 
         public HtmlPathSelector(ModpackSettings modpackSettings) : base (modpackSettings)
         {
@@ -35,21 +35,9 @@ namespace RelhaxModpack.Windows
 
         private async void UrlGoButton_Click(object sender, RoutedEventArgs e)
         {
-            Logging.AutomationRunner("Running Browser execution code");
-            htmlBrowserParser = new HtmlBrowserParser(HtmlPathTextBox.Text, UrlTextBox.Text, (int)SetDelaySlider.Value, waitCounts, true, HtmlDocumentTextFilename, Browser);
-            HtmlBrowserParserExitCode exitCode = await htmlBrowserParser.RunParserAsync();
-
-            if (exitCode != HtmlBrowserParserExitCode.None)
-            {
-                string errorMessage = string.Format("ExitCode {0}: The html browser parser exited with code {1}.", exitCode);
-                HtmlPathResultsTextBox.Text = errorMessage;
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, errorMessage);
-                return;
-            }
-
-            Logging.Debug(Logfiles.AutomationRunner, "HtmlPath results in node value '{0}' of type '{1}'", htmlBrowserParser.ResultNode.InnerXml, htmlBrowserParser.ResultNode.NodeType.ToString());
-            HtmlPathResultsTextBox.Text = string.Format("Result value as text: {0}\nResult node type: {1}\nResult inner html: {2}\nResult outer html: {3}",
-                htmlBrowserParser.ResultNode.Value, htmlBrowserParser.ResultNode.NodeType.ToString(), htmlBrowserParser.ResultNode.InnerXml, htmlBrowserParser.ResultNode.OuterXml);
+            Logging.AutomationRunner("Running browser execution code");
+            htmlXpathParser = new HtmlBrowserParser(HtmlPathTextBox.Text, UrlTextBox.Text, (int)SetDelaySlider.Value, waitCounts, true, HtmlDocumentTextFilename, Browser);
+            HandleResult(await htmlXpathParser.RunParserAsync());
         }
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
@@ -63,6 +51,28 @@ namespace RelhaxModpack.Windows
         {
             if (SetDelayValueTextBlock != null)
                 SetDelayValueTextBlock.Text = string.Format("{0} ms", (int)SetDelaySlider.Value);
+        }
+
+        private async void HtmlScrapeGoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Logging.AutomationRunner("Running web scrape code");
+            htmlXpathParser = new HtmlWebscrapeParser(HtmlPathTextBox.Text, UrlTextBox.Text, true, HtmlDocumentTextFilename);
+            HandleResult(await htmlXpathParser.RunParserAsync());
+        }
+
+        private void HandleResult(HtmlXpathParserExitCode exitCode)
+        {
+            if (exitCode != HtmlXpathParserExitCode.None)
+            {
+                string errorMessage = string.Format("The html browser parser exited with code {0} ({1}).", (int)exitCode, exitCode.ToString());
+                HtmlPathResultsTextBox.Text = errorMessage;
+                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, errorMessage);
+                return;
+            }
+
+            Logging.Debug(Logfiles.AutomationRunner, "HtmlPath results in node value '{0}' of type '{1}'", htmlXpathParser.ResultNode.InnerXml, htmlXpathParser.ResultNode.NodeType.ToString());
+            HtmlPathResultsTextBox.Text = string.Format("Result value as text: {0}\nResult node type: {1}\nResult inner html: {2}\nResult outer html: {3}",
+                htmlXpathParser.ResultNode.Value, htmlXpathParser.ResultNode.NodeType.ToString(), htmlXpathParser.ResultNode.InnerXml, htmlXpathParser.ResultNode.OuterXml);
         }
     }
 }

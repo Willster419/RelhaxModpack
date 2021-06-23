@@ -19,6 +19,8 @@ namespace RelhaxModpack.Automation
 
         public override string Command { get { return TaskCommandName; } }
 
+        protected HtmlWebscrapeParser htmlXpathParser;
+
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
@@ -54,22 +56,19 @@ namespace RelhaxModpack.Automation
 
         protected async virtual Task SetupUrl()
         {
-            using (WebClient = new WebClient())
+            Logging.AutomationRunner("Running web scrape execution code");
+            htmlXpathParser = new HtmlWebscrapeParser(HtmlPath, Url, false, null);
+            HtmlXpathParserExitCode exitCode = await htmlXpathParser.RunParserAsync();
+
+            if (exitCode != HtmlXpathParserExitCode.None)
             {
-                //https://stackoverflow.com/questions/2953403/c-sharp-passing-method-as-the-argument-in-a-method
-                Logging.Info(Logfiles.AutomationRunner, "Download html webpage to string");
-                string webpageHtmlString = await WebClient.DownloadStringTaskAsync(Url);
-                Logging.Info(Logfiles.AutomationRunner, "Running htmlpath to get download file url");
-                Logging.Debug(Logfiles.AutomationRunner, "The htmlpath used was {0}", HtmlPath);
-                HtmlDocument document = new HtmlDocument();
-                document.LoadHtml(webpageHtmlString);
-                HtmlNode node = document.DocumentNode;
-                //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
-                //sample html xpath: //div[contains(@class, 'ModDetails_label')]
-                HtmlNode resultNode = node.SelectSingleNode(HtmlPath);
-                Logging.Debug(Logfiles.AutomationRunner, "Htmlpath results in node value '{0}' of type '{1}'", resultNode.InnerText, resultNode.NodeType.ToString());
-                Url = resultNode.InnerText;
+                ExitCode = 3;
+                ErrorMessage = string.Format("ExitCode {0}: The html browser parser exited with code {1}. Check the above log messages for more information.", exitCode);
+                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+                return;
             }
+
+            Url = htmlXpathParser.ResultString;
         }
 
         public override void ProcessTaskResults()
