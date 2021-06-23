@@ -5596,12 +5596,12 @@
             The file download is completed. This will only fire once per download operation.
             </summary>
         </member>
-        <member name="T:RelhaxModpack.Utilities.Enums.HtmlBrowserParserExitCode">
+        <member name="T:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode">
             <summary>
             List of possible return code error conditions that can occur when running the htmlPath browser parser
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.Enums.HtmlBrowserParserExitCode.None">
+        <member name="F:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode.None">
             <summary>
             No error occurred
             </summary>
