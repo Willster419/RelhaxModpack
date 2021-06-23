@@ -5596,6 +5596,16 @@
             The file download is completed. This will only fire once per download operation.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.HtmlBrowserParserExitCode">
+            <summary>
+            List of possible return code error conditions that can occur when running the htmlPath browser parser
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.HtmlBrowserParserExitCode.None">
+            <summary>
+            No error occurred
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.InstallerExitCodes">
             <summary>
             Possible points at which the installer can fail
