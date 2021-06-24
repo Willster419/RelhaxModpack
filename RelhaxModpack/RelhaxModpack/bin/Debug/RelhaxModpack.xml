@@ -4788,21 +4788,6 @@
             <remarks>See https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread 
             <para>and https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this </para></remarks>
         </member>
-        <member name="M:RelhaxModpack.UI.UiUtils.ApplyApplicationScale(RelhaxModpack.Windows.RelhaxWindow,System.Double)">
-            <summary>
-            Applies vector based application scaling to the specified window
-            </summary>
-            <param name="window">The window to apply scaling to</param>
-            <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
-        </member>
-        <member name="M:RelhaxModpack.UI.UiUtils.ApplyFontToWindow(System.Windows.Window,System.Windows.Media.FontFamily)">
-            <summary>
-            Applies the given FontFamily font type to the window
-            </summary>
-            <param name="window">The window to apply the font to</param>
-            <param name="font">The font to apply to the window</param>
-            <exception cref="T:System.ArgumentNullException">When any argument is null</exception>
-        </member>
         <member name="T:RelhaxModpack.UI.WindowColorset">
             <summary>
             Contains all color definitions to apply for that window, including the list of individual component color definitions
@@ -8699,6 +8684,17 @@
             <param name="e"></param>
             <remarks>This function saves the original size that the window was designed for (scaling), applies localizations, applies color settings,
             applies custom font, and applies scaling. Each application action is controlled by a boolean.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxWindow.ApplyApplicationScale(System.Double)">
+            <summary>
+            Applies vector based application scaling to the specified window
+            </summary>
+            <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxWindow.ApplyFontToWindow">
+            <summary>
+            Applies the given FontFamily font type to the window
+            </summary>
         </member>
         <member name="T:RelhaxModpack.Windows.SelectionFileIssuesDisplay">
             <summary>
