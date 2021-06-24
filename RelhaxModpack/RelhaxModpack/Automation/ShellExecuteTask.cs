@@ -50,7 +50,7 @@ namespace RelhaxModpack.Automation
         public override async Task RunTask()
         {
             //dump vars before run
-            Logging.AutomationRunner("Dumping environment variables", LogLevel.Debug);
+            Logging.AutomationRunner("Dumping current shell environment variables", LogLevel.Debug);
 
             //https://stackoverflow.com/a/141098/3128017
             foreach (KeyValuePair<string, string> keyValuePair in process.StartInfo.Environment)
