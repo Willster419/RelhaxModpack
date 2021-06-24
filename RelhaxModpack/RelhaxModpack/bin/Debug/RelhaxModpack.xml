@@ -5561,6 +5561,11 @@
             When you click the save button, it also clicks the apply button before saving.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.AutomationExitCode">
+            <summary>
+            List of possible return code error conditions that can occur when running an automation task
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode">
             <summary>
             List of possible return code error conditions that can occur when loading the database
