@@ -262,14 +262,14 @@ namespace RelhaxModpack.Database
             }
 
             //extract supported_clients xml from the manager info file
-            string supportedClientsXML = FileUtils.GetStringFromZip(ManagerInfoZipfile, ApplicationConstants.SupportedClients);
-            if (string.IsNullOrWhiteSpace(supportedClientsXML))
+            string supportedClientsXmlString = FileUtils.GetStringFromZip(ManagerInfoZipfile, ApplicationConstants.SupportedClients);
+            if (string.IsNullOrWhiteSpace(supportedClientsXmlString))
             {
                 Logging.Info("Failed to extract supported_clients.xml from string from zipfile", Logfiles.Application, LogLevel.Exception);
                 return DatabaseLoadFailCode.FailedToExtractXmlFromZipFile;
             }
 
-            XmlDocument doc = XmlUtils.LoadXmlDocument(supportedClientsXML, XmlLoadType.FromString);
+            XmlDocument doc = XmlUtils.LoadXmlDocument(supportedClientsXmlString, XmlLoadType.FromString);
             if (doc == null)
             {
                 Logging.Error("Failed to parse supported_clients.xml into xml document");
@@ -277,8 +277,9 @@ namespace RelhaxModpack.Database
             }
 
             //parse the list of supported client xml nodes
-            XmlNodeList supportedVersionsXML = XmlUtils.GetXmlNodesFromXPath(doc, "//versions/version");
-            lastSupportedWoTClient = supportedVersionsXML[supportedClientsXML.Count() - 1].InnerText.Trim();
+            XmlNodeList supportedVersionsXml = XmlUtils.GetXmlNodesFromXPath(doc, "//versions/version");
+            XmlNode lastSupportedVersionXml = supportedVersionsXml[supportedVersionsXml.Count - 1];
+            lastSupportedWoTClient = lastSupportedVersionXml.InnerText.Trim();
             Logging.Info(LogOptions.ClassName, "Parsed last supported WoT client as {0}", lastSupportedWoTClient);
             return DatabaseLoadFailCode.None;
         }
