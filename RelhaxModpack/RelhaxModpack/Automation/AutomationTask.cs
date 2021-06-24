@@ -95,15 +95,19 @@ namespace RelhaxModpack.Automation
 
         public virtual bool EvaluateResults(string state)
         {
-            if (ExitCode != AutomationExitCode.None)
+            switch (ExitCode)
             {
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Error in task {0} execution! Exit code {1}, ErrorMessage: {2}", Command, ExitCode, string.IsNullOrEmpty(ErrorMessage) ? "(empty)" : ErrorMessage);
-                return false;
-            }
-            else
-            {
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Task: {0} State: {1}, ExitCode: {2}", Command, state, ExitCode);
-                return true;
+                case AutomationExitCode.None:
+                    Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Task: {0} ID: {1} State: {2}, ExitCode: {3}", Command, ID, state, ExitCode);
+                    return true;
+
+                case AutomationExitCode.ComparisonEqualFail:
+                    Logging.Info("The task {0} (ID {1} reported exit code {2}. The Sequence will stop, but a success will be reported", Command, ID, ExitCode.ToString());
+                    return true;
+
+                default:
+                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Error in task {0} execution! Exit code {1}, ErrorMessage: {2}", Command, ExitCode, string.IsNullOrEmpty(ErrorMessage) ? "(empty)" : ErrorMessage);
+                    return false;
             }
         }
 

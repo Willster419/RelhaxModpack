@@ -137,6 +137,8 @@
     <Compile Include="Automation\DownloadBrowserTask.cs" />
     <Compile Include="Automation\DownloadHtmlTask.cs" />
     <Compile Include="Automation\DownloadStaticTask.cs" />
+    <Compile Include="Automation\FileCompareTask.cs" />
+    <Compile Include="Automation\FileHashComparer.cs" />
     <Compile Include="Automation\HtmlBrowserParser.cs" />
     <Compile Include="Automation\HtmlWebscrapeParser.cs" />
     <Compile Include="Automation\IDatabaseTask.cs" />

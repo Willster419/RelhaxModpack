@@ -197,22 +197,39 @@ namespace RelhaxModpack.Automation
                 Directory.CreateDirectory(workingDirectory);
             }
 
-            bool taskReturn = true;
+            bool taskReturnsGood = true;
             foreach (AutomationTask task in this.AutomationTasks)
             {
+                bool breakLoop = false;
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task: {0}", task.ID);
                 await task.Execute();
-                if (task.ExitCode != 0)
+
+                switch (task.ExitCode)
                 {
-                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.", task.ID);
-                    taskReturn = false;
-                    break;
+                    case AutomationExitCode.None:
+                        breakLoop = false;
+                        taskReturnsGood = true;
+                        break;
+
+                    case AutomationExitCode.ComparisonEqualFail:
+                        breakLoop = true;
+                        taskReturnsGood = true;
+                        break;
+
+                    default:
+                        Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.", task.ID);
+                        breakLoop = true;
+                        taskReturnsGood = false;
+                        break;
                 }
+
+                if (breakLoop)
+                    break;
             }
 
             //dispose/cleanup the tasks
             AutomationTasks.Clear();
-            return taskReturn;
+            return taskReturnsGood;
         }
 
         public void Dispose()
