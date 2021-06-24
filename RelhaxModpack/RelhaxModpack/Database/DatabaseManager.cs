@@ -170,7 +170,7 @@ namespace RelhaxModpack.Database
                 throw new NullReferenceException();
             Init();
             lastSupportedWoTClient = clientVersion;
-            LoadRootDatabaseXmlStringStableAsync();
+            await LoadRootDatabaseXmlStringStableAsync();
             ParseRootDatabaseFromString();
             LoadWoTVersionInfoFromXmlDocument();
             ParseDatabaseXmlStable();
@@ -397,9 +397,10 @@ namespace RelhaxModpack.Database
         public async Task<List<string>> GetBetaDatabase1V1FilesListAsync()
         {
             this.DatabaseDistroToLoad = DatabaseVersions.Beta;
+            this.BetaDatabaseBranch = ModpackSettings.BetaDatabaseSelectedBranch;
             await LoadRootDatabaseXmlStringAsync();
             ParseRootDatabaseFromString();
-            return GetBetaDatabase1V1FilesList(DatabaseRootXmlDocument, ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch));
+            return GetBetaDatabase1V1FilesList(DatabaseRootXmlDocument, ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", this.BetaDatabaseBranch));
         }
 
         private async Task<DatabaseLoadFailCode> ParseDatabaseXmlAsync()
