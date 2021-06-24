@@ -27,6 +27,7 @@ using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
 using RelhaxModpack.Utilities.ClassEventArgs;
+using RelhaxModpack.UI.Extensions;
 
 namespace RelhaxModpack
 {
@@ -576,7 +577,7 @@ namespace RelhaxModpack
             //if current scale is not target, then update
             if (ModpackSettings.DisplayScale != currentScale)
             {
-                UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                ApplyApplicationScale(ModpackSettings.DisplayScale);
             }
 
             //apply to slider
@@ -2641,16 +2642,11 @@ namespace RelhaxModpack
         #region Custom Font code
         private void CustomFontSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CustomFontSelector.SelectedItem == null)
+            if (CustomFontSelector.SelectedItem != null)
             {
-                UiUtils.ApplyFontToWindow(this, UiUtils.DefaultFontFamily);
-            }
-            else
-            {
-                FontFamily selectedFont = (CustomFontSelector.SelectedItem as TextBlock).FontFamily;
-                UiUtils.CustomFontFamily = selectedFont;
-                ModpackSettings.CustomFontName = selectedFont.Source.Split('#')[1];
-                UiUtils.ApplyFontToWindow(this, selectedFont);
+                SelectedFontFamily = FontList[CustomFontSelector.SelectedIndex];
+                ModpackSettings.CustomFontName = SelectedFontFamily.FontName();
+                ApplyFontToWindow();
             }
         }
 
@@ -2660,16 +2656,17 @@ namespace RelhaxModpack
             {
                 ModpackSettings.EnableCustomFont = true;
 
+                FontList.Clear();
                 string fontsfolder = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
-                List<FontFamily> fonts = Fonts.GetFontFamilies(fontsfolder).ToList();
+                FontList.AddRange(Fonts.GetFontFamilies(fontsfolder).ToList());
                 CustomFontSelector.Items.Clear();
 
-                foreach (FontFamily font in fonts)
+                foreach (FontFamily font in FontList)
                 {
                     CustomFontSelector.Items.Add(new TextBlock()
                     {
                         FontFamily = font,
-                        Text = font.Source.Split('#')[1]
+                        Text = font.FontName()
                     });
                 }
                 CustomFontSelector.IsEnabled = true;
@@ -2680,11 +2677,28 @@ namespace RelhaxModpack
                 CustomFontSelector.SelectedIndex = -1;
                 CustomFontSelector.IsEnabled = false;
 
-                if (UiUtils.DefaultFontFamily == null)
-                    UiUtils.DefaultFontFamily = this.FontFamily;
+                if (DefaultFontFamily == null)
+                    DefaultFontFamily = this.FontFamily;
 
-                UiUtils.ApplyFontToWindow(this, UiUtils.DefaultFontFamily);
+                SelectedFontFamily = DefaultFontFamily;
+                ModpackSettings.CustomFontName = SelectedFontFamily.FontName();
+                ApplyFontToWindow();
             }
+        }
+
+        protected override void ApplyFontToWindow()
+        {
+            if (DefaultFontFamily == null)
+            {
+                DefaultFontFamily = this.FontFamily;
+                SelectedFontFamily = DefaultFontFamily;
+                FontList.Clear();
+            }
+
+            if (FontList.Count == 0)
+                FontList.AddRange(Fonts.GetFontFamilies(Environment.GetFolderPath(Environment.SpecialFolder.Fonts)).ToList());
+
+            base.ApplyFontToWindow();
         }
         #endregion
 
@@ -3200,12 +3214,12 @@ namespace RelhaxModpack
                 ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
                 double oldTempValue = ModpackSettings.DisplayScale;
                 ModpackSettings.DisplayScale = ApplyCustomScalingSlider.Value;
-                UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                ApplyApplicationScale(ModpackSettings.DisplayScale);
                 ScalingConfirmation confirmation = new ScalingConfirmation(this.ModpackSettings);
                 if (!(bool)confirmation.ShowDialog())
                 {
                     ModpackSettings.DisplayScale = oldTempValue;
-                    UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                    ApplyApplicationScale(ModpackSettings.DisplayScale);
                     ApplyCustomScalingSlider.Value = ModpackSettings.DisplayScale;
                     ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
                 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace RelhaxModpack.Windows
 {
@@ -72,6 +73,19 @@ namespace RelhaxModpack.Windows
                     }
                 });
             }
+        }
+
+        protected override void ApplyFontToWindow()
+        {
+            if (DefaultFontFamily == null)
+            {
+                DefaultFontFamily = this.FontFamily;
+                SelectedFontFamily = DefaultFontFamily;
+                FontList.Clear();
+                FontList.AddRange(Fonts.GetFontFamilies(Environment.GetFolderPath(Environment.SpecialFolder.Fonts)).ToList());
+            }
+
+            base.ApplyFontToWindow();
         }
     }
 }

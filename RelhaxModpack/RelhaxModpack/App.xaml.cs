@@ -14,6 +14,7 @@ using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
 using RelhaxModpack.Installer;
+using System.Windows.Media;
 
 namespace RelhaxModpack
 {
@@ -32,6 +33,10 @@ namespace RelhaxModpack
         /// The manager info zip in a program reference. Allows for multiple instances of the application to be active at the same time. Also saves milliseconds by not having to write to disk. Parsed upon application load.
         /// </summary>
         public Ionic.Zip.ZipFile ManagerInfoZipfile;
+
+        public FontFamily DefaultFontFamily = null;
+
+        public List<FontFamily> Fonts = new List<FontFamily>();
 
         //when application is closing (cannot be stopped)
         private void Application_Exit(object sender, ExitEventArgs e)

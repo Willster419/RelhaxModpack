@@ -1,5 +1,7 @@
-﻿using RelhaxModpack.Settings;
+﻿using RelhaxModpack.Common;
+using RelhaxModpack.Settings;
 using RelhaxModpack.UI;
+using RelhaxModpack.UI.Extensions;
 using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace RelhaxModpack.Windows
 {
@@ -68,6 +71,19 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public CommandLineSettings CommandLineSettings { get; set; }
 
+        protected FontFamily DefaultFontFamily
+        {
+            get { return (Application.Current as App).DefaultFontFamily; }
+            set { (Application.Current as App).DefaultFontFamily = value; }
+        }
+
+        protected FontFamily SelectedFontFamily { get; set; }
+
+        protected List<FontFamily> FontList
+        { 
+            get { return (Application.Current as App).Fonts; }
+        }
+
         /// <summary>
         /// Creates an instance of the RelhaxWindow class
         /// </summary>
@@ -126,10 +142,10 @@ namespace RelhaxModpack.Windows
             //apply font changes
             if(ApplyCustomFont && ModpackSettings.EnableCustomFont)
             {
-                UiUtils.ApplyFontToWindow(this, UiUtils.CustomFontFamily);
+                ApplyFontToWindow();
             }
 
-            //deal with scaling
+            //apply scaling
             if (ApplyScaling)
             {
                 //get current scaling of window (like from display settings)
@@ -137,11 +153,62 @@ namespace RelhaxModpack.Windows
                 //if current scale is not target(modpackSetting), then update
                 if (ModpackSettings.DisplayScale != currentScale)
                 {
-                    UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                    ApplyApplicationScale(ModpackSettings.DisplayScale);
                 }
             }
 
             Loaded -= OnWindowLoaded;
+        }
+
+        /// <summary>
+        /// Applies vector based application scaling to the specified window
+        /// </summary>
+        /// <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
+        protected virtual void ApplyApplicationScale(double scaleValue)
+        {
+            //input filtering
+            if (scaleValue < ApplicationConstants.MinimumDisplayScale)
+            {
+                Logging.Warning("Scale size of {0} is to small, setting to 1", scaleValue.ToString("N"));
+                scaleValue = ApplicationConstants.MinimumDisplayScale;
+            }
+            if (scaleValue > ApplicationConstants.MaximumDisplayScale)
+            {
+                Logging.Warning("Scale size of {0} is to large, setting to 3", scaleValue.ToString("N"));
+                scaleValue = ApplicationConstants.MaximumDisplayScale;
+            }
+
+            //scale internals
+            (this.Content as FrameworkElement).LayoutTransform = new ScaleTransform(scaleValue, scaleValue, 0, 0);
+
+            //scale window size itself
+            this.Width = this.OriginalWidth * scaleValue;
+            this.Height = this.OriginalHeight * scaleValue;
+        }
+
+
+        /// <summary>
+        /// Applies the given FontFamily font type to the window
+        /// </summary>
+        protected virtual void ApplyFontToWindow()
+        {
+            FontFamily result = FontList.Find(font => font.FontName().Equals(ModpackSettings.CustomFontName));
+
+            if (result == null)
+            {
+                Logging.Warning(LogOptions.MethodName, "Unable to find font {0} in system font list. Using default font {1}", ModpackSettings.CustomFontName, DefaultFontFamily.FontName());
+                SelectedFontFamily = DefaultFontFamily;
+            }
+
+            Logging.Debug(LogOptions.MethodName, "Applying font '{0}' to window", result.FontName());
+
+            SelectedFontFamily = result;
+            this.FontFamily = SelectedFontFamily;
+            foreach (FrameworkElement element in UiUtils.GetAllWindowComponentsLogical(this, true))
+            {
+                if (element is Control control)
+                    control.FontFamily = this.SelectedFontFamily;
+            }
         }
     }
 }
