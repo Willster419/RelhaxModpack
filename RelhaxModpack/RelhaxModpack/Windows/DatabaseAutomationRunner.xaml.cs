@@ -276,7 +276,8 @@ namespace RelhaxModpack.Windows
             List<AutomationSequence> sequencesToRun = SequencesToRunListBox.Items.Cast<AutomationSequence>().ToList();
             if (await AutomationSequencer.RunSequencerAsync(sequencesToRun))
             {
-                Logging.Info("Sequencer run SUCCESS");
+                Logging.Info("Sequencer run SUCCESS, saving database");
+                databaseManager.SaveDatabase(AutomationSettings.DatabaseSavePath);
             }
             else
             {
