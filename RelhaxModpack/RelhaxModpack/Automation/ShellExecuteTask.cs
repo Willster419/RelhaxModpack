@@ -40,21 +40,11 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (string.IsNullOrEmpty(Wd) || string.IsNullOrEmpty(Cmd))
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: The Wd or Cmd is null/empty. DestinationPath: '{1}', Url: '{2}'.", ExitCode, Wd, Cmd);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(string.IsNullOrEmpty(Wd) || string.IsNullOrEmpty(Cmd), string.Format("ExitCode {0}: The Wd or Cmd is null/empty. DestinationPath: '{1}', Url: '{2}'.", ExitCode, Wd, Cmd)))
                 return;
-            }
 
-            if (!Directory.Exists(Wd))
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: The folder path for Wd does not exist: '{1}'", ExitCode, Wd);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(!Directory.Exists(Wd), string.Format("ExitCode {0}: The folder path for Wd does not exist: '{1}'", ExitCode, Wd)))
                 return;
-            }
         }
 
         public override async Task RunTask()
@@ -88,21 +78,19 @@ namespace RelhaxModpack.Automation
             //run in separate task to avoid blocking on UI thread - no async wait
             await Task.Run(() =>
             {
+                bool processStarted = true;
                 try
                 {
-                    if (!process.Start())
-                    {
-                        ExitCode = 2;
-                        ErrorMessage = string.Format("{0} {1}: The task failed to start (Start() returned false)", nameof(ExitCode), ExitCode);
-                        Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
-                    }
+                    processStarted = process.Start();
                 }
                 catch(Exception ex)
                 {
-                    ExitCode = 3;
-                    ErrorMessage = string.Format("{0} {1}: The task failed to start (exception){2}{3}", nameof(ExitCode), ExitCode, Environment.NewLine, ex.ToString());
-                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+                    Logging.Exception(ex.ToString());
+                    processStarted = false;
                 }
+
+                if (ValidateForExitPreFormatted(!processStarted, AutomationExitCode.ShellFail, "The process failed to start"))
+                    return;
             });
         }
 
@@ -119,12 +107,8 @@ namespace RelhaxModpack.Automation
         public override void ProcessTaskResults()
         {
             //check error code
-            if (process.ExitCode != 0)
-            {
-                ExitCode = 4;
-                ErrorMessage = string.Format("{0} {1}: The process returned exit code {2}", nameof(ExitCode), ExitCode, process.ExitCode);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
-            }
+            if (ProcessTaskResult(process.ExitCode != 0, string.Format("The process returned exit code {0}", process.ExitCode)))
+                return;
         }
 
         public void Dispose()

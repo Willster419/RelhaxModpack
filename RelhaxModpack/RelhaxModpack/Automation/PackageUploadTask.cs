@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Utilities.Enums;
+﻿using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,31 +35,37 @@ namespace RelhaxModpack.Automation
         {
             base.ValidateCommands();
 
-            if (string.IsNullOrEmpty(ZipFileName))
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: ZipFileName is null or empty", ExitCode);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(string.IsNullOrEmpty(ZipFileName), string.Format("ExitCode {0}: ZipFileName is null or empty", ExitCode)))
                 return;
-            }
 
-            if (!File.Exists(FilePath))
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: The filepath {1} does not exist", ExitCode, FilePath);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(!File.Exists(FilePath), string.Format("ExitCode {0}: The filepath {1} does not exist", ExitCode, FilePath)))
                 return;
-            }
         }
 
         public override async Task RunTask()
         {
-            using (WebClient = new WebClient { Credentials = new NetworkCredential(AutomationSettings.BigmodsUsername, AutomationSettings.BigmodsPassword) })
+            NetworkCredential networkCredential = new NetworkCredential(AutomationSettings.BigmodsUsername, AutomationSettings.BigmodsPassword);
+            string serverPath = string.Format("{0}{1}", PrivateStuff.BigmodsFTPUsersRoot, WoTOnlineFolderVersion);
+            string uploadUrl = string.Format("{0}/{1}", serverPath, ZipFileName);
+            Logging.Info("Checking if {0} already exists on the server in folder {1}", ZipFileName, WoTOnlineFolderVersion);
+            string[] listOfFilesOnServer = await FtpUtils.FtpListFilesFoldersAsync(serverPath, networkCredential);
+            int duplicateIncriment = 1;
+            string nameWithNoExtension = Path.GetFileNameWithoutExtension(ZipFileName);
+            string extension = Path.GetExtension(ZipFileName);
+            string newFilename = ZipFileName;
+            while (listOfFilesOnServer.Contains(newFilename))
             {
-                string serverPath = string.Format("{0}{1}/{2}", PrivateStuff.BigmodsFTPUsersRoot, WoTOnlineFolderVersion, ZipFileName);
+                Logging.Info("Filename already exists on server, giving it a unique name");
+                newFilename = string.Format("{0}_{1}.{2}", nameWithNoExtension, duplicateIncriment++.ToString(), extension);
+                Logging.Info("Propose {0}", newFilename);
+            }
+            ZipFileName = newFilename;
+
+            using (WebClient = new WebClient { Credentials = networkCredential })
+            {
 
                 Logging.Info(Logfiles.AutomationRunner, "Uploading package");
-                Logging.Debug(Logfiles.AutomationRunner, "Upload zip url = {0}, file = {1}", serverPath, FilePath);
+                Logging.Debug(Logfiles.AutomationRunner, "Upload zip url = {0}, file = {1}", uploadUrl, FilePath);
                 //https://stackoverflow.com/questions/2953403/c-sharp-passing-method-as-the-argument-in-a-method
                 if (DatabaseAutomationRunner != null)
                 {
@@ -68,6 +75,7 @@ namespace RelhaxModpack.Automation
                 try
                 {
                     await WebClient.UploadFileTaskAsync(serverPath, FilePath);
+                    DatabasePackage.ZipFile = ZipFileName;
                     TransferSuccess = true;
                 }
                 catch (Exception ex)

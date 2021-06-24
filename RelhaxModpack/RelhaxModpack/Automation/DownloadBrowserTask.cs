@@ -61,21 +61,11 @@ namespace RelhaxModpack.Automation
         public override void ValidateCommands()
         {
             base.ValidateCommands();
-            if (waitTimeMs <= 0)
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: waitTimeMs must be greater then 0. Current value: {1}", ExitCode, waitTimeMs.ToString());
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(waitTimeMs <= 0, string.Format("ExitCode {0}: waitTimeMs must be greater then 0. Current value: {1}", ExitCode, waitTimeMs.ToString())))
                 return;
-            }
 
-            if (waitCounts <= 0)
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: Retries must be greater then 0. Current value: {1}", ExitCode, waitCounts.ToString());
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(waitCounts <= 0, string.Format("ExitCode {0}: Retries must be greater then 0. Current value: {1}", ExitCode, waitCounts.ToString())))
                 return;
-            }
         }
 
         public async override Task RunTask()
@@ -91,15 +81,10 @@ namespace RelhaxModpack.Automation
 
             Logging.AutomationRunner("Running Browser execution code");
             htmlXpathParser = new HtmlBrowserParser(HtmlPath, Url, waitTimeMs, waitCounts, false, null, null);
-            HtmlXpathParserExitCode exitCode = await htmlXpathParser.RunParserAsync();
+            HtmlXpathParserExitCode parserExitCode = await htmlXpathParser.RunParserAsync();
 
-            if (exitCode != HtmlXpathParserExitCode.None)
-            {
-                ExitCode = 3;
-                ErrorMessage = string.Format("ExitCode {0}: The html browser parser exited with code {1}. Check the above log messages for more information.", exitCode);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateForExitPreFormatted(parserExitCode != HtmlXpathParserExitCode.None, AutomationExitCode.FileDownloadFail, string.Format("The html browser parser exited with code {0}. Check the above log messages for more information.", parserExitCode)))
                 return;
-            }
 
             Url = htmlXpathParser.ResultString;
         }

@@ -212,6 +212,7 @@
     <Compile Include="Utilities\Enums\ApplicationMode.cs" />
     <Compile Include="Utilities\Enums\ApplicationVersions.cs" />
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
+    <Compile Include="Utilities\Enums\AutomationExitCode.cs" />
     <Compile Include="Utilities\Enums\DatabaseLoadFailCode.cs" />
     <Compile Include="Utilities\Enums\DownloadProgressState.cs" />
     <Compile Include="Utilities\Enums\HtmlXpathParserExitCode.cs" />

@@ -150,10 +150,17 @@ namespace RelhaxModpack.Windows
                 AutomationTaskProgressTextBlock.Visibility = Visibility.Visible;
                 AutomationTaskProgressBar.Visibility = Visibility.Visible;
                 AutomationTaskProgressBar.Minimum = 0;
-                AutomationTaskProgressBar.Maximum = e.TotalBytesToReceive;
+                if (e.UserState != null)
+                {
+                    AutomationTaskProgressBar.Maximum = (long)e.UserState;
+                }
+                else
+                {
+                    AutomationTaskProgressBar.Maximum = e.TotalBytesToReceive;
+                }
             }
             AutomationTaskProgressBar.Value = e.BytesReceived;
-            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesReceived, e.TotalBytesToReceive);
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesReceived, (int)AutomationTaskProgressBar.Maximum);
         }
 
         private void WebClient_DownloadDataComplted(object sender, DownloadDataCompletedEventArgs e)

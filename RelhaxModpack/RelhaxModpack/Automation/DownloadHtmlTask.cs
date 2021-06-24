@@ -38,35 +38,26 @@ namespace RelhaxModpack.Automation
         public override void ValidateCommands()
         {
             base.ValidateCommands();
-            if (string.IsNullOrEmpty(HtmlPath))
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: HtmlPath is empty", ExitCode);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(string.IsNullOrEmpty(HtmlPath), string.Format("ExitCode {0}: HtmlPath is empty", ExitCode)))
                 return;
-            }
         }
 
         public async override Task RunTask()
         {
             DownloadSetup();
             await SetupUrl();
-            await DownloadFile();
+            if (ExitCode == AutomationExitCode.None)
+                await DownloadFile();
         }
 
         protected async virtual Task SetupUrl()
         {
             Logging.AutomationRunner("Running web scrape execution code");
             htmlXpathParser = new HtmlWebscrapeParser(HtmlPath, Url, false, null);
-            HtmlXpathParserExitCode exitCode = await htmlXpathParser.RunParserAsync();
+            HtmlXpathParserExitCode parserExitCode = await htmlXpathParser.RunParserAsync();
 
-            if (exitCode != HtmlXpathParserExitCode.None)
-            {
-                ExitCode = 3;
-                ErrorMessage = string.Format("ExitCode {0}: The html browser parser exited with code {1}. Check the above log messages for more information.", exitCode);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateForExitPreFormatted(parserExitCode != HtmlXpathParserExitCode.None, AutomationExitCode.FileDownloadFail, string.Format("The html browser parser exited with code {0}. Check the above log messages for more information.", parserExitCode)))
                 return;
-            }
 
             Url = htmlXpathParser.ResultString;
         }

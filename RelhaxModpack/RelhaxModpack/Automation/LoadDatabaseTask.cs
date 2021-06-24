@@ -37,13 +37,8 @@ namespace RelhaxModpack.Automation
             {
                 string directoryPath = Path.GetDirectoryName(CustomDatabasePath);
                 //the directory path could be null if the user wants to load/save the database right here and is using a relative path
-                if (!string.IsNullOrWhiteSpace(directoryPath) && !Directory.Exists(directoryPath))
-                {
-                    ExitCode = 1;
-                    ErrorMessage = string.Format("ExitCode {0}: The path to load the database does not exist: {1}", ExitCode, directoryPath);
-                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+                if (ValidateCommand(!string.IsNullOrWhiteSpace(directoryPath) && !Directory.Exists(directoryPath), string.Format("ExitCode {0}: The path to load the database does not exist: {1}", ExitCode, directoryPath)))
                     return;
-                }
             }
         }
 

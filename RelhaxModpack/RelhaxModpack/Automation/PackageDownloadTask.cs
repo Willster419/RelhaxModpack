@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Utilities.Enums;
+﻿using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,13 +20,8 @@ namespace RelhaxModpack.Automation
         {
             base.ValidateCommands();
 
-            if (string.IsNullOrEmpty(DatabasePackage.ZipFile))
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: Package {1} does not have a zip file to download", ExitCode, DatabasePackage.PackageName);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(string.IsNullOrEmpty(DatabasePackage.ZipFile), string.Format("ExitCode {0}: Package {1} does not have a zip file to download", ExitCode, DatabasePackage.PackageName)))
                 return;
-            }
 
             string directoryPath = Path.GetDirectoryName(FilePath);
             //the directory path could be null if the user wants to load/save the database right here and is using a relative path
@@ -53,6 +49,14 @@ namespace RelhaxModpack.Automation
                 }
                 try
                 {
+                    if(DatabaseAutomationRunner != null)
+                    {
+                        if (DatabaseAutomationRunner.DownloadProgressChanged != null)
+                        {
+                            long filesize = await FtpUtils.FtpGetFilesizeAsync(serverPath, WebClient.Credentials);
+                            DatabaseAutomationRunner.DownloadFileCompleted.Invoke(null, new System.ComponentModel.AsyncCompletedEventArgs(null, false, filesize));
+                        }
+                    }
                     await WebClient.DownloadFileTaskAsync(serverPath, FilePath);
                     TransferSuccess = true;
                 }
@@ -75,12 +79,8 @@ namespace RelhaxModpack.Automation
         {
             base.ProcessTaskResults();
 
-            if (!File.Exists(FilePath))
-            {
-                ExitCode = 4;
-                ErrorMessage = string.Format("{0} {1}: The download FilePath {2} does not exist", nameof(ExitCode), ExitCode, FilePath);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
-            }
+            if (ProcessTaskResult(!File.Exists(FilePath), string.Format("The download FilePath {0} does not exist", FilePath)))
+                return;
         }
         #endregion
     }

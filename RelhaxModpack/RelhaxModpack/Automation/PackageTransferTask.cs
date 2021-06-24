@@ -19,8 +19,6 @@ namespace RelhaxModpack.Automation
 
         protected WebClient WebClient;
 
-        protected NetworkCredential Credential;
-
         protected bool TransferSuccess = false;
 
         #region Xml serialization
@@ -38,47 +36,23 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (string.IsNullOrEmpty(FilePath))
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: FilePath is null/empty", ExitCode);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(string.IsNullOrEmpty(FilePath), string.Format("ExitCode {0}: FilePath is null/empty", ExitCode)))
                 return;
-            }
 
-            if (DatabasePackage == null)
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: DatabasePackage is null (This is an internal application error)", ExitCode);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(DatabasePackage == null, string.Format("ExitCode {0}: DatabasePackage is null (This is an internal application error)", ExitCode)))
                 return;
-            }
 
-            if (string.IsNullOrEmpty(AutomationSettings.BigmodsUsername))
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: AutomationSettings.BigmodsUsername is null/empty", ExitCode);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(string.IsNullOrEmpty(AutomationSettings.BigmodsUsername), string.Format("ExitCode {0}: AutomationSettings.BigmodsUsername is null/empty", ExitCode)))
                 return;
-            }
 
-            if (string.IsNullOrEmpty(AutomationSettings.BigmodsPassword))
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: AutomationSettings.BigmodsPassword is null/empty", ExitCode);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(string.IsNullOrEmpty(AutomationSettings.BigmodsPassword), string.Format("ExitCode {0}: AutomationSettings.BigmodsPassword is null/empty", ExitCode)))
                 return;
-            }
         }
 
         public override void ProcessTaskResults()
         {
-            if (!TransferSuccess)
-            {
-                ExitCode = 4;
-                ErrorMessage = string.Format("{0} {1}: The transfer reported a failure. Check the log for more information", nameof(ExitCode), ExitCode);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
-            }
+            if (!ProcessTaskResult(TransferSuccess, "The transfer reported a failure. Check the log for more information"))
+                return;
         }
         #endregion
     }

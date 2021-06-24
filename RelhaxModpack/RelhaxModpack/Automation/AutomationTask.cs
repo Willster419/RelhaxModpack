@@ -53,7 +53,7 @@ namespace RelhaxModpack.Automation
 
         public string ErrorMessage { get; protected set; } = string.Empty;
 
-        public int ExitCode { get; protected set; } = 0;
+        public AutomationExitCode ExitCode { get; protected set; } = 0;
 
         public abstract string Command { get; }
 
@@ -82,6 +82,9 @@ namespace RelhaxModpack.Automation
             //stub
         }
 
+        //these are public so they can be unit tested. Maybe protect them and have unit testing run on Execute() only?
+
+
         public abstract void ValidateCommands();
 
         public abstract void ProcessMacros();
@@ -92,15 +95,9 @@ namespace RelhaxModpack.Automation
 
         public virtual bool EvaluateResults(string state)
         {
-            if (ExitCode != 0)
+            if (ExitCode != AutomationExitCode.None)
             {
                 Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Error in task {0} execution! Exit code {1}, ErrorMessage: {2}", Command, ExitCode, string.IsNullOrEmpty(ErrorMessage) ? "(empty)" : ErrorMessage);
-                return false;
-            }
-            else if (ExitCode == -1)
-            {
-                Logging.AutomationRunner("BadMemeException: ExitCode result is -1. This could indicate an error with the task API. Please report this error to the developer.", LogLevel.Exception);
-                Logging.GetLogfile(Logfiles.AutomationRunner).Write(ErrorMessage);
                 return false;
             }
             else
@@ -108,6 +105,41 @@ namespace RelhaxModpack.Automation
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Task: {0} State: {1}, ExitCode: {2}", Command, state, ExitCode);
                 return true;
             }
+        }
+
+        protected virtual bool ValidateCommand(bool test, string formattedString)
+        {
+            return ValidateForExit(test, AutomationExitCode.ValidateCommandsFail, formattedString);
+        }
+
+        protected virtual bool ValidateCommandNew(bool test, string formattedString)
+        {
+            return ValidateForExit(test, AutomationExitCode.ValidateCommandsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
+        }
+
+        protected virtual bool ProcessTaskResult(bool test, string formattedString)
+        {
+            return ValidateForExit(test, AutomationExitCode.ProcessResultsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
+        }
+
+        protected virtual bool ValidateForExit(bool test, AutomationExitCode exitCode, string formattedString)
+        {
+            if (test)
+            {
+                ExitCode = exitCode;
+                ErrorMessage = formattedString;
+            }
+            return test;
+        }
+
+        protected virtual bool ValidateForExitPreFormatted(bool test, AutomationExitCode exitCode, string formattedString)
+        {
+            if (test)
+            {
+                ExitCode = exitCode;
+                ErrorMessage = string.Format("Exit Code {0}: {1}", (int)exitCode, formattedString);
+            }
+            return test;
         }
 
         public async Task Execute()
@@ -122,12 +154,12 @@ namespace RelhaxModpack.Automation
             }
             catch (Exception ex)
             {
-                ExitCode = -1;
+                ExitCode = AutomationExitCode.ExecuteException;
                 ErrorMessage = ex.ToString() + Environment.NewLine + ex.StackTrace;
             }
             ExecutionTimeProcessMacrosMs = ExecutionTimeStopwatch.ElapsedMilliseconds;
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ValidateCommands() finish, ExecutionTime: {1}", Command, ExecutionTimeProcessMacrosMs.ToString());
-            if (!EvaluateResults("ProcessMacros"))
+            if (!EvaluateResults(nameof(ProcessMacros)))
                 return;
 
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ValidateCommands() start", Command);
@@ -138,12 +170,12 @@ namespace RelhaxModpack.Automation
             }
             catch (Exception ex)
             {
-                ExitCode = -1;
+                ExitCode = AutomationExitCode.ExecuteException;
                 ErrorMessage = ex.ToString() + Environment.NewLine + ex.StackTrace;
             }
             ExecutionTimeValidateCommandsMs = ExecutionTimeStopwatch.ElapsedMilliseconds;
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ValidateCommands() finish, ExecutionTime: {1}", Command, ExecutionTimeValidateCommandsMs.ToString());
-            if (!EvaluateResults("ValidateCommands"))
+            if (!EvaluateResults(nameof(ValidateCommands)))
                 return;
 
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: RunTask() start", Command);
@@ -154,12 +186,12 @@ namespace RelhaxModpack.Automation
             }
             catch (Exception ex)
             {
-                ExitCode = -1;
+                ExitCode = AutomationExitCode.ExecuteException;
                 ErrorMessage = ex.ToString() + Environment.NewLine + ex.StackTrace;
             }
             ExecutionTimeRunTaskMs = ExecutionTimeStopwatch.ElapsedMilliseconds;
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: RunTask() finish, ExecutionTime: {1}", Command, ExecutionTimeRunTaskMs.ToString());
-            if (!EvaluateResults("RunTask"))
+            if (!EvaluateResults(nameof(RunTask)))
                 return;
 
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ProcessTaskResults() start", Command);
@@ -170,13 +202,13 @@ namespace RelhaxModpack.Automation
             }
             catch (Exception ex)
             {
-                ExitCode = -1;
+                ExitCode = AutomationExitCode.ExecuteException;
                 ErrorMessage = ex.ToString() + Environment.NewLine + ex.StackTrace;
             }
             ExecutionTimeProcessTaskResultsMs = ExecutionTimeStopwatch.ElapsedMilliseconds;
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ProcessTaskResults() finish, ExecutionTime: {1}", Command, ExecutionTimeProcessTaskResultsMs.ToString());
             ExecutionTimeStopwatch.Stop();
-            if (!EvaluateResults("ProcessTaskResults"))
+            if (!EvaluateResults(nameof(ProcessTaskResults)))
                 return;
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Finished task {0}: Task end, ExecutionTimeMs: {1}", Command, ExecutionTimeMs.ToString());
         }

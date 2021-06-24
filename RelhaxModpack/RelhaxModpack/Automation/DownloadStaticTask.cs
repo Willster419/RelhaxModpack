@@ -38,13 +38,8 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (string.IsNullOrEmpty(DestinationPath) || string.IsNullOrEmpty(Url))
-            {
-                ExitCode = 1;
-                ErrorMessage = string.Format("ExitCode {0}: The DestinationPath or Url is null/empty. DestinationPath: '{1}', Url: '{2}'.", ExitCode, DestinationPath, Url);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
+            if (ValidateCommand(string.IsNullOrEmpty(DestinationPath) || string.IsNullOrEmpty(Url), string.Format("ExitCode {0}: The DestinationPath or Url is null/empty. DestinationPath: '{1}', Url: '{2}'.", ExitCode, DestinationPath, Url)))
                 return;
-            }
         }
 
         public override async Task RunTask()
@@ -76,23 +71,30 @@ namespace RelhaxModpack.Automation
                     WebClient.DownloadProgressChanged += DatabaseAutomationRunner.DownloadProgressChanged;
                     WebClient.DownloadFileCompleted += DatabaseAutomationRunner.DownloadFileCompleted;
                 }
-                await WebClient.DownloadFileTaskAsync(Url, DestinationPath);
-                if (DatabaseAutomationRunner != null)
+                try
                 {
-                    WebClient.DownloadProgressChanged -= DatabaseAutomationRunner.DownloadProgressChanged;
-                    WebClient.DownloadFileCompleted -= DatabaseAutomationRunner.DownloadFileCompleted;
+                    await WebClient.DownloadFileTaskAsync(Url, DestinationPath);
                 }
+                catch (WebException wex)
+                {
+                    Logging.Exception(wex.ToString());
+                }
+                finally
+                {
+                    if (DatabaseAutomationRunner != null)
+                    {
+                        WebClient.DownloadProgressChanged -= DatabaseAutomationRunner.DownloadProgressChanged;
+                        WebClient.DownloadFileCompleted -= DatabaseAutomationRunner.DownloadFileCompleted;
+                    }
+                }
+                
             }
         }
 
         public override void ProcessTaskResults()
         {
-            if (!File.Exists(DestinationPath))
-            {
-                ExitCode = 2;
-                ErrorMessage = string.Format("ExitCode {0}: The file '{0}' was not detected to exist", ExitCode, DestinationPath);
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, ErrorMessage);
-            }
+            if (!ProcessTaskResult(File.Exists(DestinationPath), string.Format("The file {0} was not detected to exist", DestinationPath)))
+                return;
         }
         #endregion
     }
