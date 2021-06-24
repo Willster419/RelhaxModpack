@@ -1,3 +1,10 @@
+# Beta Application version 1.3.2.2 (2021-06-24)
+https://www.virustotal.com/gui/file-analysis/Njc3OWIxM2JjYTI5ZWFhNWI1YTkzMTliZDk0Nzg1YTI6MTYyNDU2NzUxNQ==/detection
+
+- Fixed a bug where custom database feature windows (like the editor, patch designer, etc.) would crash on launch if a custom font was requested.
+- Fixed a bug that would not correctly detect the version of windows above windows 8.0
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.2.1 (2021-06-24)
 https://www.virustotal.com/gui/file-analysis/MGJmMjNkMGFjNzVhM2Y5YzQxMTgwODYyM2MyZWM4YTE6MTYyNDUyMTY4Mg==/detection
 
