@@ -20,6 +20,8 @@ namespace RelhaxModpack.Automation
 
         public string Wd { get; set; } = string.Empty;
 
+        public string Filename { get; set; } = string.Empty;
+
         protected Process process = null;
 
         protected ProcessStartInfo startInfo = null;
@@ -27,7 +29,7 @@ namespace RelhaxModpack.Automation
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
-            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(Wd), nameof(Cmd) }).ToArray();
+            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(Wd), nameof(Cmd), nameof(Filename) }).ToArray();
         }
         #endregion
 
@@ -36,11 +38,18 @@ namespace RelhaxModpack.Automation
         {
             Cmd = ProcessMacro(nameof(Cmd), Cmd);
             Wd = ProcessMacro(nameof(Wd), Wd);
+            Filename = ProcessMacro(nameof(Filename), Filename);
         }
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrue(string.IsNullOrEmpty(Wd) || string.IsNullOrEmpty(Cmd), string.Format("ExitCode {0}: The Wd or Cmd is null/empty. DestinationPath: '{1}', Url: '{2}'.", ExitCode, Wd, Cmd)))
+            if (ValidateCommandTrueNew(string.IsNullOrEmpty(Wd), "Wd is empty string"))
+                return;
+
+            if (ValidateCommandTrueNew(string.IsNullOrEmpty(Cmd), "Cmd is empty string"))
+                return;
+
+            if (ValidateCommandTrueNew(string.IsNullOrEmpty(Filename), "Filename is empty string"))
                 return;
 
             if (ValidateCommandTrue(!Directory.Exists(Wd), string.Format("ExitCode {0}: The folder path for Wd does not exist: '{1}'", ExitCode, Wd)))
@@ -49,15 +58,6 @@ namespace RelhaxModpack.Automation
 
         public override async Task RunTask()
         {
-            //dump vars before run
-            Logging.AutomationRunner("Dumping current shell environment variables", LogLevel.Debug);
-
-            //https://stackoverflow.com/a/141098/3128017
-            foreach (KeyValuePair<string, string> keyValuePair in process.StartInfo.Environment)
-            {
-                Logging.AutomationRunner("Key = {0}, Value = {1}", LogLevel.Debug, keyValuePair.Key, keyValuePair.Value);
-            }
-
             //build the task process
             process = new Process()
             {
@@ -67,9 +67,19 @@ namespace RelhaxModpack.Automation
                     UseShellExecute = false,
                     RedirectStandardError = true,
                     RedirectStandardOutput = true,
-                    WorkingDirectory = Wd
+                    WorkingDirectory = Wd,
+                    FileName = this.Filename
                 },
             };
+
+            //dump vars before run
+            Logging.AutomationRunner("Dumping current shell environment variables", LogLevel.Debug);
+
+            //https://stackoverflow.com/a/141098/3128017
+            foreach (KeyValuePair<string, string> keyValuePair in process.StartInfo.Environment)
+            {
+                Logging.AutomationRunner("Key = {0}, Value = {1}", LogLevel.Debug, keyValuePair.Key, keyValuePair.Value);
+            }
 
             //set std error and output redirect to the main window if the event handler isn't null
             process.OutputDataReceived += Process_OutputDataReceived;
@@ -82,6 +92,7 @@ namespace RelhaxModpack.Automation
                 try
                 {
                     processStarted = process.Start();
+                    process.WaitForExit();
                 }
                 catch(Exception ex)
                 {
@@ -92,6 +103,7 @@ namespace RelhaxModpack.Automation
                 if (ValidateForExitPreFormatted(!processStarted, AutomationExitCode.ShellFail, "The process failed to start"))
                     return;
             });
+
         }
 
         private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
@@ -113,6 +125,8 @@ namespace RelhaxModpack.Automation
 
         public void Dispose()
         {
+            process.OutputDataReceived -= Process_OutputDataReceived;
+            process.ErrorDataReceived -= Process_ErrorDataReceived;
             ((IDisposable)process).Dispose();
         }
         #endregion
