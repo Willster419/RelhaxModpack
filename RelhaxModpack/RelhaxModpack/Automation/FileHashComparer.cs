@@ -63,6 +63,7 @@ namespace RelhaxModpack.Automation
                 return;
             }
             await ComputeHashA(streamA);
+            streamA.Dispose();
         }
 
         public async Task ComputeHashA(Stream streamA)
@@ -92,6 +93,7 @@ namespace RelhaxModpack.Automation
                 return;
             }
             await ComputeHashB(streamB);
+            streamB.Dispose();
         }
 
         public async Task ComputeHashB(Stream streamB)
