@@ -63,7 +63,6 @@ namespace RelhaxModpack.Automation
 
             using (WebClient = new WebClient { Credentials = networkCredential })
             {
-
                 Logging.Info(Logfiles.AutomationRunner, "Uploading package");
                 Logging.Debug(Logfiles.AutomationRunner, "Upload zip url = {0}, file = {1}", uploadUrl, FilePath);
                 //https://stackoverflow.com/questions/2953403/c-sharp-passing-method-as-the-argument-in-a-method
