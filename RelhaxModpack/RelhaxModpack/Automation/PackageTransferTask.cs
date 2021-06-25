@@ -51,7 +51,7 @@ namespace RelhaxModpack.Automation
 
         public override void ProcessTaskResults()
         {
-            if (!ProcessTaskResultTrue(TransferSuccess, "The transfer reported a failure. Check the log for more information"))
+            if (!ProcessTaskResultFalse(TransferSuccess, "The transfer reported a failure. Check the log for more information"))
                 return;
         }
         #endregion
