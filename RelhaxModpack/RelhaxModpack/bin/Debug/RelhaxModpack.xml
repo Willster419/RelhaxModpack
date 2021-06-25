@@ -588,7 +588,7 @@
         </member>
         <member name="M:RelhaxModpack.Automation.AutomationTask.ProcessTaskResultTrue(System.Boolean,System.String)">
             <summary>
-            
+            "true" version means that the test being true is "bad"
             </summary>
             <param name="test"></param>
             <param name="formattedString"></param>
