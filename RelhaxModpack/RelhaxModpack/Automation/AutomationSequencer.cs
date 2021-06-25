@@ -258,6 +258,7 @@ namespace RelhaxModpack.Automation
             ApplicationMacros.Add(new AutomationMacro() { Name = "category.name", Value = (selectablePackage != null) ? selectablePackage.ParentCategory.Name : "null", MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "name", Value = (selectablePackage != null) ? selectablePackage.NameFormatted : "null", MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "packageName", Value = package.PackageName, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "packageUID", Value = package.UID, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "zipfile", Value = package.ZipFile, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "level", Value = (selectablePackage != null) ? selectablePackage.Level.ToString() : "null", MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "patchGroup", Value = package.PatchGroup.ToString(), MacroType = MacroType.ApplicationDefined });
