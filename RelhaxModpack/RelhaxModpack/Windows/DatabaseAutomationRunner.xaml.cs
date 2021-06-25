@@ -13,6 +13,7 @@ using System.IO;
 using RelhaxModpack.Common;
 using System.ComponentModel;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.UI;
 
 namespace RelhaxModpack.Windows
 {
@@ -41,6 +42,8 @@ namespace RelhaxModpack.Windows
 
         public UploadFileCompletedEventHandler UploadFileCompleted = null;
 
+        public EventHandler<RelhaxProgress> RelhaxProgressChanged = null;
+
         private AutomationRunnerSettings AutomationSettings = new AutomationRunnerSettings();
 
         private AutomationSequencer AutomationSequencer = null;
@@ -66,6 +69,7 @@ namespace RelhaxModpack.Windows
             DownloadFileCompleted = WebClient_TransferFileCompleted;
             UploadFileCompleted = WebClient_UploadFileCompleted;
             UploadProgressChanged = WebClient_UploadProgressChanged;
+            RelhaxProgressChanged = RelhaxProgressReport_ProgressChanged;
             Settings = AutomationSettings;
         }
 
@@ -144,15 +148,12 @@ namespace RelhaxModpack.Windows
             SelectDBSaveLocationSetting.Text = AutomationSettings.DatabaseSavePath;
         }
 
+        #region Progress reporting code
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             if (AutomationTaskProgressBar.Visibility != Visibility.Visible)
             {
-                //this only will happen once during the task's execution
-                AutomationTaskProgressTextBlock.Visibility = Visibility.Visible;
-                AutomationTaskProgressBar.Visibility = Visibility.Visible;
-                AutomationTaskProgressBar.Minimum = 0;
-                AutomationTaskProgressBar.Maximum = e.TotalBytesToReceive;
+                ShowAutomationProgress(e.TotalBytesToReceive);
             }
 
             if (e.UserState != null && e.UserState is long totalSize && !ftpDownloadSizeLocked)
@@ -163,6 +164,30 @@ namespace RelhaxModpack.Windows
 
             AutomationTaskProgressBar.Value = e.BytesReceived;
             AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesReceived, (int)AutomationTaskProgressBar.Maximum);
+        }
+
+        private void WebClient_UploadProgressChanged(object sender, UploadProgressChangedEventArgs e)
+        {
+            if (AutomationTaskProgressBar.Visibility != Visibility.Visible)
+            {
+                //this only will happen once during the task's execution
+                ShowAutomationProgress(e.TotalBytesToReceive);
+            }
+            AutomationTaskProgressBar.Value = e.BytesReceived;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesReceived, e.TotalBytesToReceive);
+        }
+
+        private void RelhaxProgressReport_ProgressChanged(object sender, RelhaxProgress e)
+        {
+            if (AutomationTaskProgressBar.Visibility != Visibility.Visible)
+            {
+                ShowAutomationProgress(e.ChildTotal);
+            }
+
+            if (e.ChildCurrent == e.ChildTotal)
+            {
+                HideAutomationProgress();
+            }
         }
 
         private void WebClient_DownloadDataComplted(object sender, DownloadDataCompletedEventArgs e)
@@ -181,18 +206,12 @@ namespace RelhaxModpack.Windows
             HideAutomationProgress();
         }
 
-        private void WebClient_UploadProgressChanged(object sender, UploadProgressChangedEventArgs e)
+        private void ShowAutomationProgress(long maxProgress)
         {
-            if (AutomationTaskProgressBar.Visibility != Visibility.Visible)
-            {
-                //this only will happen once during the task's execution
-                AutomationTaskProgressTextBlock.Visibility = Visibility.Visible;
-                AutomationTaskProgressBar.Visibility = Visibility.Visible;
-                AutomationTaskProgressBar.Minimum = 0;
-                AutomationTaskProgressBar.Maximum = e.TotalBytesToReceive;
-            }
-            AutomationTaskProgressBar.Value = e.BytesReceived;
-            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesReceived, e.TotalBytesToReceive);
+            AutomationTaskProgressTextBlock.Visibility = Visibility.Visible;
+            AutomationTaskProgressBar.Visibility = Visibility.Visible;
+            AutomationTaskProgressBar.Minimum = 0;
+            AutomationTaskProgressBar.Maximum = maxProgress;
         }
 
         private void HideAutomationProgress()
@@ -202,7 +221,9 @@ namespace RelhaxModpack.Windows
             AutomationTaskProgressTextBlock.Text = string.Empty;
             AutomationTaskProgressTextBlock.Visibility = Visibility.Hidden;
         }
+        #endregion
 
+        #region Sequence move around buttons
         private void MoveSequencesToRunListButton_Click(object sender, RoutedEventArgs e)
         {
             if (SequencesAvailableListBox.SelectedItem == null)
@@ -231,7 +252,9 @@ namespace RelhaxModpack.Windows
 
             SequencesToRunListBox.Items.Remove(SequencesToRunListBox.SelectedItem);
         }
+        #endregion
 
+        #region Open window buttons
         private void OpenLogfileViewerButton_Click(object sender, RoutedEventArgs e)
         {
             if (logViewer.ViewerClosed)
@@ -265,6 +288,7 @@ namespace RelhaxModpack.Windows
                 htmlPathSelector.Focus();
             }
         }
+        #endregion
 
         private async void RunSequencesButton_Click(object sender, RoutedEventArgs e)
         {
