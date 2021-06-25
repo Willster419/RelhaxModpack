@@ -35,10 +35,10 @@ namespace RelhaxModpack.Automation
         {
             base.ValidateCommands();
 
-            if (ValidateCommand(string.IsNullOrEmpty(ZipFileName), string.Format("ExitCode {0}: ZipFileName is null or empty", ExitCode)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(ZipFileName), string.Format("ExitCode {0}: ZipFileName is null or empty", ExitCode)))
                 return;
 
-            if (ValidateCommand(!File.Exists(FilePath), string.Format("ExitCode {0}: The filepath {1} does not exist", ExitCode, FilePath)))
+            if (ValidateCommandTrue(!File.Exists(FilePath), string.Format("ExitCode {0}: The filepath {1} does not exist", ExitCode, FilePath)))
                 return;
         }
 

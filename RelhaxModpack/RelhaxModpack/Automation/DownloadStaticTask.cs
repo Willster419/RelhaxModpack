@@ -38,7 +38,8 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommand(string.IsNullOrEmpty(DestinationPath) || string.IsNullOrEmpty(Url), string.Format("ExitCode {0}: The DestinationPath or Url is null/empty. DestinationPath: '{1}', Url: '{2}'.", ExitCode, DestinationPath, Url)))
+            //"true" version means that the test being true is "bad"
+            if (ValidateCommandTrue(string.IsNullOrEmpty(DestinationPath) || string.IsNullOrEmpty(Url), string.Format("ExitCode {0}: The DestinationPath or Url is null/empty. DestinationPath: '{1}', Url: '{2}'.", ExitCode, DestinationPath, Url)))
                 return;
         }
 
@@ -93,7 +94,8 @@ namespace RelhaxModpack.Automation
 
         public override void ProcessTaskResults()
         {
-            if (!ProcessTaskResult(File.Exists(DestinationPath), string.Format("The file {0} was not detected to exist", DestinationPath)))
+            //"false" version means that the test being false is "bad"
+            if (ProcessTaskResultFalse(File.Exists(DestinationPath), string.Format("The file {0} was not detected to exist", DestinationPath)))
                 return;
         }
         #endregion

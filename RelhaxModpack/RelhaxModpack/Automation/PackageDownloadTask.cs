@@ -20,7 +20,7 @@ namespace RelhaxModpack.Automation
         {
             base.ValidateCommands();
 
-            if (ValidateCommand(string.IsNullOrEmpty(DatabasePackage.ZipFile), string.Format("ExitCode {0}: Package {1} does not have a zip file to download", ExitCode, DatabasePackage.PackageName)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(DatabasePackage.ZipFile), string.Format("ExitCode {0}: Package {1} does not have a zip file to download", ExitCode, DatabasePackage.PackageName)))
                 return;
 
             string directoryPath = Path.GetDirectoryName(FilePath);
@@ -79,7 +79,7 @@ namespace RelhaxModpack.Automation
         {
             base.ProcessTaskResults();
 
-            if (ProcessTaskResult(!File.Exists(FilePath), string.Format("The download FilePath {0} does not exist", FilePath)))
+            if (ProcessTaskResultTrue(!File.Exists(FilePath), string.Format("The download FilePath {0} does not exist", FilePath)))
                 return;
         }
         #endregion

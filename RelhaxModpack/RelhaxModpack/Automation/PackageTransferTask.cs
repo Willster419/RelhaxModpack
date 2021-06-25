@@ -36,22 +36,22 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommand(string.IsNullOrEmpty(FilePath), string.Format("ExitCode {0}: FilePath is null/empty", ExitCode)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(FilePath), string.Format("ExitCode {0}: FilePath is null/empty", ExitCode)))
                 return;
 
-            if (ValidateCommand(DatabasePackage == null, string.Format("ExitCode {0}: DatabasePackage is null (This is an internal application error)", ExitCode)))
+            if (ValidateCommandTrue(DatabasePackage == null, string.Format("ExitCode {0}: DatabasePackage is null (This is an internal application error)", ExitCode)))
                 return;
 
-            if (ValidateCommand(string.IsNullOrEmpty(AutomationSettings.BigmodsUsername), string.Format("ExitCode {0}: AutomationSettings.BigmodsUsername is null/empty", ExitCode)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(AutomationSettings.BigmodsUsername), string.Format("ExitCode {0}: AutomationSettings.BigmodsUsername is null/empty", ExitCode)))
                 return;
 
-            if (ValidateCommand(string.IsNullOrEmpty(AutomationSettings.BigmodsPassword), string.Format("ExitCode {0}: AutomationSettings.BigmodsPassword is null/empty", ExitCode)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(AutomationSettings.BigmodsPassword), string.Format("ExitCode {0}: AutomationSettings.BigmodsPassword is null/empty", ExitCode)))
                 return;
         }
 
         public override void ProcessTaskResults()
         {
-            if (!ProcessTaskResult(TransferSuccess, "The transfer reported a failure. Check the log for more information"))
+            if (!ProcessTaskResultTrue(TransferSuccess, "The transfer reported a failure. Check the log for more information"))
                 return;
         }
         #endregion

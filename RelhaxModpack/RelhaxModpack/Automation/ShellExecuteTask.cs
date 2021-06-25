@@ -40,10 +40,10 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommand(string.IsNullOrEmpty(Wd) || string.IsNullOrEmpty(Cmd), string.Format("ExitCode {0}: The Wd or Cmd is null/empty. DestinationPath: '{1}', Url: '{2}'.", ExitCode, Wd, Cmd)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(Wd) || string.IsNullOrEmpty(Cmd), string.Format("ExitCode {0}: The Wd or Cmd is null/empty. DestinationPath: '{1}', Url: '{2}'.", ExitCode, Wd, Cmd)))
                 return;
 
-            if (ValidateCommand(!Directory.Exists(Wd), string.Format("ExitCode {0}: The folder path for Wd does not exist: '{1}'", ExitCode, Wd)))
+            if (ValidateCommandTrue(!Directory.Exists(Wd), string.Format("ExitCode {0}: The folder path for Wd does not exist: '{1}'", ExitCode, Wd)))
                 return;
         }
 
@@ -107,7 +107,7 @@ namespace RelhaxModpack.Automation
         public override void ProcessTaskResults()
         {
             //check error code
-            if (ProcessTaskResult(process.ExitCode != 0, string.Format("The process returned exit code {0}", process.ExitCode)))
+            if (ProcessTaskResultTrue(process.ExitCode != 0, string.Format("The process returned exit code {0}", process.ExitCode)))
                 return;
         }
 

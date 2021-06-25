@@ -45,14 +45,14 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandNew(string.IsNullOrEmpty(FileA), "The arg File1 is empty string"))
+            if (ValidateCommandTrueNew(string.IsNullOrEmpty(FileA), "The arg File1 is empty string"))
                 return;
-            if (ValidateCommandNew(string.IsNullOrEmpty(FileB), "The arg File2 is empty string"))
+            if (ValidateCommandTrueNew(string.IsNullOrEmpty(FileB), "The arg File2 is empty string"))
                 return;
 
-            if (ValidateCommandNew(!File.Exists(FileA), string.Format("The path for File1, {0}, does not exist", FileA)))
+            if (ValidateCommandTrueNew(!File.Exists(FileA), string.Format("The path for File1, {0}, does not exist", FileA)))
                 return;
-            if (ValidateCommandNew(!File.Exists(FileB), string.Format("The path for File1, {0}, does not exist", FileA)))
+            if (ValidateCommandTrueNew(!File.Exists(FileB), string.Format("The path for File1, {0}, does not exist", FileA)))
                 return;
         }
 
@@ -90,9 +90,9 @@ namespace RelhaxModpack.Automation
 
         public override void ProcessTaskResults()
         {
-            if (ProcessTaskResult(!fileHashComparer.HashACalculated, "Hash A failed to calculate"))
+            if (ProcessTaskResultTrue(!fileHashComparer.HashACalculated, "Hash A failed to calculate"))
                 return;
-            if (ProcessTaskResult(!fileHashComparer.HashBCalculated, "Hash B failed to calculate"))
+            if (ProcessTaskResultTrue(!fileHashComparer.HashBCalculated, "Hash B failed to calculate"))
                 return;
 
             if (ValidateForExit(fileAHash.Equals(fileBHash), AutomationExitCode.ComparisonEqualFail, string.Format("Both files have the same hash: {0}", fileAHash)))

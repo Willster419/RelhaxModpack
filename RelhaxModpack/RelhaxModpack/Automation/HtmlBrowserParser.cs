@@ -64,7 +64,7 @@ namespace RelhaxModpack.Automation
 
             HtmlXpathParserExitCode exitCode = await base.RunParserAsync();
 
-            if (lastLastUrl.Equals(this.lastUrl))
+            if (!string.IsNullOrEmpty(lastLastUrl) && lastLastUrl.Equals(this.lastUrl))
             {
                 Logging.Debug(LogOptions.ClassName, "The browser was not run, no need to cleanup");
             }

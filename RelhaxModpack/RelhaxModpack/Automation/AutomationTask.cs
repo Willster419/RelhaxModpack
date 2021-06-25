@@ -111,19 +111,49 @@ namespace RelhaxModpack.Automation
             }
         }
 
-        protected virtual bool ValidateCommand(bool test, string formattedString)
+        /// <summary>
+        /// "true" version means that the test being true is "bad"
+        /// </summary>
+        /// <param name="test"></param>
+        /// <param name="formattedString"></param>
+        /// <returns></returns>
+        protected virtual bool ValidateCommandTrue(bool test, string formattedString)
         {
             return ValidateForExit(test, AutomationExitCode.ValidateCommandsFail, formattedString);
         }
 
-        protected virtual bool ValidateCommandNew(bool test, string formattedString)
+        /// <summary>
+        /// "true" version means that the test being true is "bad"
+        /// </summary>
+        /// <param name="test"></param>
+        /// <param name="formattedString"></param>
+        /// <returns></returns>
+        protected virtual bool ValidateCommandTrueNew(bool test, string formattedString)
         {
             return ValidateForExit(test, AutomationExitCode.ValidateCommandsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
         }
 
-        protected virtual bool ProcessTaskResult(bool test, string formattedString)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="test"></param>
+        /// <param name="formattedString"></param>
+        /// <returns></returns>
+        protected virtual bool ProcessTaskResultTrue(bool test, string formattedString)
         {
             return ValidateForExit(test, AutomationExitCode.ProcessResultsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
+        }
+
+        /// <summary>
+        /// "false" version means that the test being false is "bad"
+        /// </summary>
+        /// <param name="test"></param>
+        /// <param name="formattedString"></param>
+        /// <returns></returns>
+        protected virtual bool ProcessTaskResultFalse(bool test, string formattedString)
+        {
+            bool test_ = !test;
+            return ValidateForExit(test_, AutomationExitCode.ProcessResultsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
         }
 
         protected virtual bool ValidateForExit(bool test, AutomationExitCode exitCode, string formattedString)

@@ -38,7 +38,7 @@ namespace RelhaxModpack.Automation
         public override void ValidateCommands()
         {
             base.ValidateCommands();
-            if (ValidateCommand(string.IsNullOrEmpty(HtmlPath), string.Format("ExitCode {0}: HtmlPath is empty", ExitCode)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(HtmlPath), string.Format("ExitCode {0}: HtmlPath is empty", ExitCode)))
                 return;
         }
 
