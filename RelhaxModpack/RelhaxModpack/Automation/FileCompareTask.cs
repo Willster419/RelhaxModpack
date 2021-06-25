@@ -25,9 +25,9 @@ namespace RelhaxModpack.Automation
 
         protected string fileAHash, fileBHash = string.Empty;
 
-        Progress<RelhaxProgress> calculationProgress;
+        protected Progress<RelhaxProgress> calculationProgress;
 
-        CancellationTokenSource cancellationTokenSource;
+        protected CancellationTokenSource cancellationTokenSource;
 
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
