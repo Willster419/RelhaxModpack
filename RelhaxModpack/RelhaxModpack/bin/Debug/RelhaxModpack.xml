@@ -570,6 +570,38 @@
             </summary>
             <returns>A task of the asynchronous operation</returns>
         </member>
+        <member name="M:RelhaxModpack.Automation.AutomationTask.ValidateCommandTrue(System.Boolean,System.String)">
+            <summary>
+            "true" version means that the test being true is "bad"
+            </summary>
+            <param name="test"></param>
+            <param name="formattedString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationTask.ValidateCommandTrueNew(System.Boolean,System.String)">
+            <summary>
+            "true" version means that the test being true is "bad"
+            </summary>
+            <param name="test"></param>
+            <param name="formattedString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationTask.ProcessTaskResultTrue(System.Boolean,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="test"></param>
+            <param name="formattedString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.AutomationTask.ProcessTaskResultFalse(System.Boolean,System.String)">
+            <summary>
+            "false" version means that the test being false is "bad"
+            </summary>
+            <param name="test"></param>
+            <param name="formattedString"></param>
+            <returns></returns>
+        </member>
         <member name="T:RelhaxModpack.Automation.IDownloadTask">
             <summary>
             A task that implements this interface implies that it will always have a destination location for the resultant file
