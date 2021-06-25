@@ -107,23 +107,42 @@ namespace RelhaxModpack.Automation
             {
                 byte[] buffer = new byte[BYTE_CHUNKS];
                 int numBytesRead = 0;
+                byte[] oldBuffer;
+                int oldNumBytesRead;
                 progress.ChildTotal = (int)stream.Length;
                 progress.ChildCurrent = 0;
                 Reporter.Report(progress);
 
                 try
                 {
+                    //use an "old" system for an n-1 history
+                    //we need to do that because we need to use TransformFinalBlock()
+                    //for the final calculation rather then TransformBlock
+                    //md5hash.TransformBlock(buffer, 0, numBytesRead, null, 0);
+                    numBytesRead = await stream.ReadAsync(buffer, 0, BYTE_CHUNKS);
+                    progress.ChildCurrent += numBytesRead;
+
+                    oldBuffer = buffer;
+                    oldNumBytesRead = numBytesRead;
+
                     while (stream.Position < stream.Length)
                     {
+                        oldBuffer = buffer;
+                        oldNumBytesRead = numBytesRead;
+
                         numBytesRead = await stream.ReadAsync(buffer, 0, BYTE_CHUNKS);
                         progress.ChildCurrent += numBytesRead;
-                        md5hash.TransformBlock(buffer, 0, numBytesRead, buffer, 0);
 
-                        Reporter.Report(progress);
+                        if (numBytesRead == 0)
+                            break;
+
+                        md5hash.TransformBlock(oldBuffer, 0, oldNumBytesRead, null, 0);
+
                         ThrowIfCancellationRequested(cancellationToken);
+                        Reporter?.Report(progress);
                     }
 
-                    md5hash.TransformFinalBlock(buffer, 0, numBytesRead);
+                    md5hash.TransformFinalBlock(oldBuffer, 0, oldNumBytesRead);
 
                     //output final hash entry and save to Hash property
                     builder = new StringBuilder();
@@ -131,8 +150,10 @@ namespace RelhaxModpack.Automation
                     {
                         builder.Append(md5hash.Hash[i].ToString("x2"));
                     }
+
                     Logging.Info(LogOptions.ClassName, "Hash for stream {0} calculated to be {1}", stream, StreamAHash.ToString());
-                    Reporter.Report(progress);
+                    progress.ChildCurrent = progress.ChildTotal;
+                    Reporter?.Report(progress);
                 }
                 catch (OperationCanceledException)
                 {
