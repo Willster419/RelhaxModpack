@@ -136,6 +136,7 @@ namespace RelhaxModpack.Automation
             {
                 task.AutomationSequence = this;
                 task.PreProcessingHook();
+                Logging.Info("Processed task {0}", task.ID);
             }
 
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Finish parsing of tasks");
@@ -189,13 +190,13 @@ namespace RelhaxModpack.Automation
             string workingDirectory = Path.Combine(ApplicationConstants.RelhaxTempFolderPath, Package.PackageName);
             if (Directory.Exists(workingDirectory))
             {
-                Directory.Delete(workingDirectory, true);
-                Directory.CreateDirectory(workingDirectory);
+                if (!FileUtils.DirectoryDelete(workingDirectory, true, true))
+                {
+                    Logging.Error(LogOptions.ClassName, "Failed to clear the working directory");
+                    return false;
+                }
             }
-            else
-            {
-                Directory.CreateDirectory(workingDirectory);
-            }
+            Directory.CreateDirectory(workingDirectory);
 
             bool taskReturnsGood = true;
             foreach (AutomationTask task in this.AutomationTasks)
