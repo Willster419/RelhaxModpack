@@ -134,7 +134,7 @@ namespace RelhaxModpack.Automation
         }
 
         /// <summary>
-        /// 
+        /// "true" version means that the test being true is "bad"
         /// </summary>
         /// <param name="test"></param>
         /// <param name="formattedString"></param>
