@@ -198,7 +198,7 @@ namespace RelhaxModpack.Common
                                 }
                                 else
                                 {
-                                    md5Hash.TransformBlock(buffer, 0, readBytes, buffer, 0);
+                                    md5Hash.TransformBlock(buffer, 0, readBytes, null, 0);
                                     filestream.Write(buffer, 0, readBytes);
                                     ThrowIfCancellationRequested();
                                     downloadProgress.DownloadProgressState = DownloadProgressState.Download;
