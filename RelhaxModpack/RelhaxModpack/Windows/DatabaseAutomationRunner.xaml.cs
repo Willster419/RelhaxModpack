@@ -53,6 +53,8 @@ namespace RelhaxModpack.Windows
 
         private SaveFileDialog SaveDatabaseDialog;
 
+        private bool ftpDownloadSizeLocked = false;
+
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
@@ -150,16 +152,13 @@ namespace RelhaxModpack.Windows
                 AutomationTaskProgressTextBlock.Visibility = Visibility.Visible;
                 AutomationTaskProgressBar.Visibility = Visibility.Visible;
                 AutomationTaskProgressBar.Minimum = 0;
-                
+                AutomationTaskProgressBar.Maximum = e.TotalBytesToReceive;
             }
 
-            if (e.UserState != null && e.UserState is long totalSize)
+            if (e.UserState != null && e.UserState is long totalSize && !ftpDownloadSizeLocked)
             {
                 AutomationTaskProgressBar.Maximum = (long)e.UserState;
-            }
-            else
-            {
-                AutomationTaskProgressBar.Maximum = e.TotalBytesToReceive;
+                ftpDownloadSizeLocked = true;
             }
 
             AutomationTaskProgressBar.Value = e.BytesReceived;
@@ -168,6 +167,7 @@ namespace RelhaxModpack.Windows
 
         private void WebClient_DownloadDataComplted(object sender, DownloadDataCompletedEventArgs e)
         {
+            ftpDownloadSizeLocked = false;
             HideAutomationProgress();
         }
 
@@ -268,6 +268,9 @@ namespace RelhaxModpack.Windows
 
         private async void RunSequencesButton_Click(object sender, RoutedEventArgs e)
         {
+            if (SequencesToRunListBox.Items.Count == 0)
+                return;
+
             RunSequencesButton.IsEnabled = false;
             //load database
             Logging.Info("Loading database");
