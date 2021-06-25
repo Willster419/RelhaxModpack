@@ -23,7 +23,7 @@ namespace RelhaxModpack.Automation
 
         protected FileHashComparer fileHashComparer;
 
-        protected string fileAHash, fileBHash;
+        protected string fileAHash, fileBHash = string.Empty;
 
         Progress<RelhaxProgress> calculationProgress;
 
@@ -68,6 +68,11 @@ namespace RelhaxModpack.Automation
                 ProgressB = calculationProgress
             };
 
+            if (DatabaseAutomationRunner != null)
+            {
+                calculationProgress.ProgressChanged += DatabaseAutomationRunner.RelhaxProgressChanged;
+            }
+
             try
             {
                 await fileHashComparer.ComputeHashA(FileA);
@@ -80,10 +85,14 @@ namespace RelhaxModpack.Automation
             finally
             {
                 cancellationTokenSource.Dispose();
+                if (DatabaseAutomationRunner != null)
+                {
+                    calculationProgress.ProgressChanged -= DatabaseAutomationRunner.RelhaxProgressChanged;
+                }
             }
 
-            fileAHash = fileHashComparer.StreamAHash.ToString();
-            fileBHash = fileHashComparer.StreamBHash.ToString();
+            fileAHash = fileHashComparer.StreamAHash?.ToString();
+            fileBHash = fileHashComparer.StreamBHash?.ToString();
             Logging.Debug("File A hash: {0}", fileAHash);
             Logging.Debug("File B hash: {0}", fileBHash);
         }
