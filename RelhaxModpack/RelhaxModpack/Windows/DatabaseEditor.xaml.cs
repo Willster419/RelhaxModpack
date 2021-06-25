@@ -1948,7 +1948,7 @@ namespace RelhaxModpack.Windows
             }
 
             //actually save
-            databaseManager.SaveDatabase();
+            databaseManager.SaveDatabase(EditorSettings.DefaultEditorSaveLocation);
 
             UnsavedChanges = false;
         }
@@ -1983,7 +1983,7 @@ namespace RelhaxModpack.Windows
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
 
             //actually save
-            databaseManager.SaveDatabase();
+            databaseManager.SaveDatabase(EditorSettings.DefaultEditorSaveLocation);
 
             UnsavedChanges = false;
         }

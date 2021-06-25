@@ -802,10 +802,6 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Database Saving
-        public void SaveDatabase()
-        {
-            SaveDatabase(ModpackSettings.CustomModInfoPath);
-        }
         /// <summary>
         /// Save the database to an Xml 1.1 version format
         /// </summary>
