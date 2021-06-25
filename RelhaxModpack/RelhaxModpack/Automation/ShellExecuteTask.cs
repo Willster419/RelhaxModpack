@@ -64,6 +64,7 @@ namespace RelhaxModpack.Automation
                 StartInfo = new ProcessStartInfo()
                 {
                     Arguments = Cmd,
+                    //Setting this property to false enables you to redirect input, output, and error streams
                     UseShellExecute = false,
                     RedirectStandardError = true,
                     RedirectStandardOutput = true,
@@ -92,6 +93,8 @@ namespace RelhaxModpack.Automation
                 try
                 {
                     processStarted = process.Start();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
                     process.WaitForExit();
                 }
                 catch(Exception ex)
