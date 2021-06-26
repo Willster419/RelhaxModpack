@@ -40,6 +40,8 @@ namespace RelhaxModpack.Automation
             { FileCopyTask.TaskCommandName, typeof(FileCopyTask) },
             { FileDeleteTask.TaskCommandName, typeof(FileDeleteTask) },
             { FileMoveTask.TaskCommandName, typeof(FileMoveTask) },
+            { TaskImportTask.TaskCommandName, typeof(TaskImportTask) },
+            { MacroImportTask.TaskCommandName, typeof(MacroImportTask) },
         };
 
         public const string AttributeNameForMapping = "Command";
