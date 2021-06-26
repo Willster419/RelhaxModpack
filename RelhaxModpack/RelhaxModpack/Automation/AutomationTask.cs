@@ -112,7 +112,7 @@ namespace RelhaxModpack.Automation
                     return true;
 
                 default:
-                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Error in task {0} execution! Exit code {1}, ErrorMessage: {2}", Command, ExitCode, string.IsNullOrEmpty(ErrorMessage) ? "(empty)" : ErrorMessage);
+                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Error in task {0} execution! ID: {1} Exit code: {2}, ErrorMessage: {3}", Command, ID, ExitCode, string.IsNullOrEmpty(ErrorMessage) ? "(empty)" : ErrorMessage);
                     return false;
             }
         }
@@ -124,17 +124,6 @@ namespace RelhaxModpack.Automation
         /// <param name="formattedString"></param>
         /// <returns></returns>
         protected virtual bool ValidateCommandTrue(bool test, string formattedString)
-        {
-            return ValidateForExit(test, AutomationExitCode.ValidateCommandsFail, formattedString);
-        }
-
-        /// <summary>
-        /// "true" version means that the test being true is "bad"
-        /// </summary>
-        /// <param name="test"></param>
-        /// <param name="formattedString"></param>
-        /// <returns></returns>
-        protected virtual bool ValidateCommandTrueNew(bool test, string formattedString)
         {
             return ValidateForExit(test, AutomationExitCode.ValidateCommandsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
         }
@@ -198,7 +187,7 @@ namespace RelhaxModpack.Automation
                 ErrorMessage = ex.ToString() + Environment.NewLine + ex.StackTrace;
             }
             ExecutionTimeProcessMacrosMs = ExecutionTimeStopwatch.ElapsedMilliseconds;
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ValidateCommands() finish, ExecutionTime: {1}", Command, ExecutionTimeProcessMacrosMs.ToString());
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ProcessMacros() finish, ExecutionTime: {1}", Command, ExecutionTimeProcessMacrosMs.ToString());
             if (!EvaluateResults(nameof(ProcessMacros)))
                 return;
 

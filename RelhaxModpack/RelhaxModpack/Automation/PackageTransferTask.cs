@@ -36,16 +36,16 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrue(string.IsNullOrEmpty(FilePath), string.Format("ExitCode {0}: FilePath is null/empty", ExitCode)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(FilePath), string.Format("FilePath is null/empty")))
                 return;
 
-            if (ValidateCommandTrue(DatabasePackage == null, string.Format("ExitCode {0}: DatabasePackage is null (This is an internal application error)", ExitCode)))
+            if (ValidateCommandTrue(DatabasePackage == null, string.Format("DatabasePackage is null (This is an internal application error)")))
                 return;
 
-            if (ValidateCommandTrue(string.IsNullOrEmpty(AutomationSettings.BigmodsUsername), string.Format("ExitCode {0}: AutomationSettings.BigmodsUsername is null/empty", ExitCode)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(AutomationSettings.BigmodsUsername), string.Format("AutomationSettings.BigmodsUsername is null/empty")))
                 return;
 
-            if (ValidateCommandTrue(string.IsNullOrEmpty(AutomationSettings.BigmodsPassword), string.Format("ExitCode {0}: AutomationSettings.BigmodsPassword is null/empty", ExitCode)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(AutomationSettings.BigmodsPassword), string.Format("AutomationSettings.BigmodsPassword is null/empty")))
                 return;
         }
 

@@ -15,9 +15,9 @@ namespace RelhaxModpack.Automation
     {
         public const int BYTE_CHUNKS = 4096;
 
-        public StringBuilder StreamAHash { get; protected set; }
+        public StringBuilder HashAStringBuilder { get; protected set; }
 
-        public StringBuilder StreamBHash { get; protected set; }
+        public StringBuilder HashBStringBuilder { get; protected set; }
 
         public bool HashACalculated { get; protected set; }
 
@@ -68,7 +68,8 @@ namespace RelhaxModpack.Automation
 
         public async Task ComputeHashA(Stream streamA)
         {
-            HashACalculated = await ComputeHash(streamA, md5HashA, hashProgressA, ProgressA, "A", StreamAHash, CancellationTokenA);
+            HashAStringBuilder = new StringBuilder();
+            HashACalculated = await ComputeHash(streamA, md5HashA, hashProgressA, ProgressA, "A", HashAStringBuilder, CancellationTokenA);
         }
 
         public async Task ComputeHashB(string filenameB)
@@ -98,7 +99,8 @@ namespace RelhaxModpack.Automation
 
         public async Task ComputeHashB(Stream streamB)
         {
-            HashBCalculated = await ComputeHash(streamB, md5HashB, hashProgressB, ProgressB, "B", StreamBHash, CancellationTokenB);
+            HashBStringBuilder = new StringBuilder();
+            HashBCalculated = await ComputeHash(streamB, md5HashB, hashProgressB, ProgressB, "B", HashBStringBuilder, CancellationTokenB);
         }
 
         protected async Task<bool> ComputeHash(Stream stream, MD5 md5hash, RelhaxProgress progress, IProgress<RelhaxProgress> Reporter, string streamName, StringBuilder builder, CancellationToken cancellationToken)
@@ -142,16 +144,17 @@ namespace RelhaxModpack.Automation
                         Reporter?.Report(progress);
                     }
 
+                    oldBuffer = buffer;
+                    oldNumBytesRead = numBytesRead;
                     md5hash.TransformFinalBlock(oldBuffer, 0, oldNumBytesRead);
 
                     //output final hash entry and save to Hash property
-                    builder = new StringBuilder();
                     for (int i = 0; i < md5hash.Hash.Length; i++)
                     {
                         builder.Append(md5hash.Hash[i].ToString("x2"));
                     }
 
-                    Logging.Info(LogOptions.ClassName, "Hash for stream {0} calculated to be {1}", stream, StreamAHash.ToString());
+                    Logging.Info(LogOptions.ClassName, "Hash for stream {0} calculated to be {1}", stream, builder.ToString());
                     progress.ChildCurrent = progress.ChildTotal;
                     Reporter?.Report(progress);
                 }

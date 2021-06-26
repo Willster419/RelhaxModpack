@@ -30,7 +30,7 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrue(DatabaseManager == null, string.Format("ExitCode {0}: DatabaseManager is null (This is an internal application error)", ExitCode)))
+            if (ValidateCommandTrue(DatabaseManager == null, string.Format("DatabaseManager is null (This is an internal application error)")))
                 return;
         }
 

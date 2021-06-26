@@ -28,10 +28,7 @@ namespace RelhaxModpack.Automation
             }
 
             Logging.Info("Moving file from location {0} to location {1}", SourceFilePath, DestinationFilePath);
-
-            if (fileMoveResult)
             fileMoveResult = FileUtils.FileMove(SourceFilePath, DestinationFilePath);
-
             return null;
         }
 

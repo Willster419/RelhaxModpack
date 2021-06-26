@@ -30,37 +30,38 @@ namespace RelhaxModpack.Automation
             DestinationFilePath = ProcessMacro(nameof(DestinationFilePath), DestinationFilePath);
         }
 
-        public override Task RunTask()
-        {
-            Logging.Info("Checking if destination file {0} already exists", DestinationFilePath);
-
-            if (File.Exists(DestinationFilePath))
-            {
-                Logging.Info("Destination file already exists, delete it");
-                destinationDeleteResult = FileUtils.FileDelete(DestinationFilePath);
-            }
-
-            if (destinationDeleteResult)
-            {
-                Logging.Info("Destination file deleted");
-            }
-            else
-            {
-                Logging.Info("Destination file failed to delete, abort task");
-            }
-
-            return null;
-        }
-
         public override void ValidateCommands()
         {
             base.ValidateCommands();
 
-            if (ValidateCommandTrueNew(string.IsNullOrEmpty(DestinationFilePath), string.Format("DestinationPath is empty string")))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(DestinationFilePath), string.Format("DestinationPath is empty string")))
                 return;
+        }
 
-            if (ValidateCommandTrueNew(!File.Exists(DestinationFilePath), string.Format("DestinationPath of {0} file does not exist", DestinationFilePath)))
-                return;
+        public override Task RunTask()
+        {
+            string directoryPath = Path.GetDirectoryName(DestinationFilePath);
+            Logging.Info("Checking if destination folder {0} already exists", directoryPath);
+            if ((!string.IsNullOrWhiteSpace(directoryPath)) && (!Directory.Exists(directoryPath)))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            Logging.Info("Checking if destination file {0} already exists", DestinationFilePath);
+            if (File.Exists(DestinationFilePath))
+            {
+                Logging.Info("Destination file already exists, delete it");
+                destinationDeleteResult = FileUtils.FileDelete(DestinationFilePath);
+
+                if (destinationDeleteResult)
+                {
+                    Logging.Info("Destination file deleted");
+                }
+                else
+                {
+                    Logging.Info("Destination file failed to delete, abort task");
+                }
+            }
         }
         #endregion
     }

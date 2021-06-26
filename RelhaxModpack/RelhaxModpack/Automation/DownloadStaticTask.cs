@@ -39,7 +39,9 @@ namespace RelhaxModpack.Automation
         public override void ValidateCommands()
         {
             //"true" version means that the test being true is "bad"
-            if (ValidateCommandTrue(string.IsNullOrEmpty(DestinationPath) || string.IsNullOrEmpty(Url), string.Format("ExitCode {0}: The DestinationPath or Url is null/empty. DestinationPath: '{1}', Url: '{2}'.", ExitCode, DestinationPath, Url)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(DestinationPath), string.Format("DestinationPath is null/empty")))
+                return;
+            if (ValidateCommandTrue(string.IsNullOrEmpty(Url), string.Format("Url is null/empty")))
                 return;
         }
 

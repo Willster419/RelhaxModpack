@@ -45,14 +45,14 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrueNew(string.IsNullOrEmpty(FileA), "The arg File1 is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(FileA), "The arg File1 is empty string"))
                 return;
-            if (ValidateCommandTrueNew(string.IsNullOrEmpty(FileB), "The arg File2 is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(FileB), "The arg File2 is empty string"))
                 return;
 
-            if (ValidateCommandTrueNew(!File.Exists(FileA), string.Format("The path for File1, {0}, does not exist", FileA)))
+            if (ValidateCommandTrue(!File.Exists(FileA), string.Format("The path for File1, {0}, does not exist", FileA)))
                 return;
-            if (ValidateCommandTrueNew(!File.Exists(FileB), string.Format("The path for File1, {0}, does not exist", FileA)))
+            if (ValidateCommandTrue(!File.Exists(FileB), string.Format("The path for File1, {0}, does not exist", FileA)))
                 return;
         }
 
@@ -91,8 +91,8 @@ namespace RelhaxModpack.Automation
                 }
             }
 
-            fileAHash = fileHashComparer.StreamAHash?.ToString();
-            fileBHash = fileHashComparer.StreamBHash?.ToString();
+            fileAHash = fileHashComparer.HashAStringBuilder?.ToString();
+            fileBHash = fileHashComparer.HashBStringBuilder?.ToString();
             Logging.Debug("File A hash: {0}", fileAHash);
             Logging.Debug("File B hash: {0}", fileBHash);
         }

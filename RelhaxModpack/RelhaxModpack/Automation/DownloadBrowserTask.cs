@@ -61,10 +61,10 @@ namespace RelhaxModpack.Automation
         public override void ValidateCommands()
         {
             base.ValidateCommands();
-            if (ValidateCommandTrue(waitTimeMs <= 0, string.Format("ExitCode {0}: waitTimeMs must be greater then 0. Current value: {1}", ExitCode, waitTimeMs.ToString())))
+            if (ValidateCommandTrue(waitTimeMs <= 0, string.Format("waitTimeMs must be greater then 0. Current value: {0}", waitTimeMs.ToString())))
                 return;
 
-            if (ValidateCommandTrue(waitCounts <= 0, string.Format("ExitCode {0}: Retries must be greater then 0. Current value: {1}", ExitCode, waitCounts.ToString())))
+            if (ValidateCommandTrue(waitCounts <= 0, string.Format("Retries must be greater then 0. Current value: {0}", waitCounts.ToString())))
                 return;
         }
 

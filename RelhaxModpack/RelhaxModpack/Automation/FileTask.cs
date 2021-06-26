@@ -27,10 +27,10 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrueNew(string.IsNullOrEmpty(SourceFilePath), string.Format("SourceFilePath is empty string")))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(SourceFilePath), string.Format("SourceFilePath is empty string")))
                 return;
 
-            if (ValidateCommandTrueNew(!File.Exists(SourceFilePath), string.Format("SourceFilePath of {0} file does not exist", SourceFilePath)))
+            if (ValidateCommandTrue(!File.Exists(SourceFilePath), string.Format("SourceFilePath of {0} file does not exist", SourceFilePath)))
                 return;
         }
         #endregion

@@ -47,10 +47,10 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrueNew(AutomationSequence == null, "AutomationSequence is null"))
+            if (ValidateCommandTrue(AutomationSequence == null, "AutomationSequence is null"))
                 return;
 
-            if (ValidateCommandTrueNew(string.IsNullOrEmpty(RepoUrlPath), string.Format("RepoUrlPath is empty string")))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(RepoUrlPath), string.Format("RepoUrlPath is empty string")))
                 return;
         }
 

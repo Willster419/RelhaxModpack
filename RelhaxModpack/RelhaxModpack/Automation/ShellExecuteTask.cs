@@ -43,16 +43,16 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrueNew(string.IsNullOrEmpty(Wd), "Wd is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(Wd), "Wd is empty string"))
                 return;
 
-            if (ValidateCommandTrueNew(string.IsNullOrEmpty(Cmd), "Cmd is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(Cmd), "Cmd is empty string"))
                 return;
 
-            if (ValidateCommandTrueNew(string.IsNullOrEmpty(Filename), "Filename is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(Filename), "Filename is empty string"))
                 return;
 
-            if (ValidateCommandTrue(!Directory.Exists(Wd), string.Format("ExitCode {0}: The folder path for Wd does not exist: '{1}'", ExitCode, Wd)))
+            if (ValidateCommandTrue(!Directory.Exists(Wd), string.Format("The folder path for Wd does not exist: '{0}'", Wd)))
                 return;
         }
 
@@ -69,7 +69,8 @@ namespace RelhaxModpack.Automation
                     RedirectStandardError = true,
                     RedirectStandardOutput = true,
                     WorkingDirectory = Wd,
-                    FileName = this.Filename
+                    FileName = this.Filename,
+                    CreateNoWindow = true
                 },
             };
 
