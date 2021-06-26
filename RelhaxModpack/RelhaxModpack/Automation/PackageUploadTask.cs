@@ -47,7 +47,6 @@ namespace RelhaxModpack.Automation
         {
             NetworkCredential networkCredential = new NetworkCredential(AutomationSettings.BigmodsUsername, AutomationSettings.BigmodsPassword);
             string serverPath = string.Format("{0}{1}", PrivateStuff.BigmodsFTPUsersRoot, WoTOnlineFolderVersion);
-            string uploadUrl = string.Format("{0}/{1}", serverPath, ZipFileName);
             Logging.Info("Checking if {0} already exists on the server in folder {1}", ZipFileName, WoTOnlineFolderVersion);
             string[] listOfFilesOnServer = await FtpUtils.FtpListFilesFoldersAsync(serverPath, networkCredential);
             int duplicateIncriment = 1;
@@ -57,13 +56,14 @@ namespace RelhaxModpack.Automation
             while (listOfFilesOnServer.Contains(newFilename))
             {
                 Logging.Info("Filename already exists on server, giving it a unique name");
-                newFilename = string.Format("{0}_{1}.{2}", nameWithNoExtension, duplicateIncriment++.ToString(), extension);
+                newFilename = string.Format("{0}_{1}{2}", nameWithNoExtension, duplicateIncriment++.ToString(), extension);
                 Logging.Info("Propose {0}", newFilename);
             }
             ZipFileName = newFilename;
 
             using (WebClient = new WebClient { Credentials = networkCredential })
             {
+                string uploadUrl = string.Format("{0}/{1}", serverPath, ZipFileName);
                 Logging.Info(Logfiles.AutomationRunner, "Uploading package");
                 Logging.Debug(Logfiles.AutomationRunner, "Upload zip url = {0}, file = {1}", uploadUrl, FilePath);
                 //https://stackoverflow.com/questions/2953403/c-sharp-passing-method-as-the-argument-in-a-method
