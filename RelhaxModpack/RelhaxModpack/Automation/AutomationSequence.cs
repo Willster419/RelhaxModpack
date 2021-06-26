@@ -164,7 +164,7 @@ namespace RelhaxModpack.Automation
             }
             foreach (AutomationMacro macro in SequenceMacros)
             {
-                macro.MacroType = MacroType.ApplicationDefined;
+                macro.MacroType = MacroType.Local;
             }
             return true;
         }
