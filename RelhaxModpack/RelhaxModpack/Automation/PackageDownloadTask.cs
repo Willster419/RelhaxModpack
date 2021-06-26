@@ -21,7 +21,7 @@ namespace RelhaxModpack.Automation
         {
             base.ValidateCommands();
 
-            if (ValidateCommandTrue(string.IsNullOrEmpty(DatabasePackage.ZipFile), string.Format("Package {1} does not have a zip file to download", DatabasePackage.PackageName)))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(DatabasePackage.ZipFile), string.Format("Package {0} does not have a zip file to download", DatabasePackage.PackageName)))
                 return;
 
             string directoryPath = Path.GetDirectoryName(FilePath);
