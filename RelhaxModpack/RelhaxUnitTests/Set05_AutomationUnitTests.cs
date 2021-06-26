@@ -201,7 +201,7 @@ namespace RelhaxUnitTests
 
             Assert.IsTrue(fileHashComparer.HashACalculated);
             Assert.IsNotNull(fileHashComparer.HashAStringBuilder);
-            Assert.AreEqual(fileACorrectHash, fileHashComparer.HashAStringBuilder.ToString());
+            Assert.AreEqual(fileACorrectHash.ToLower(), fileHashComparer.HashAStringBuilder.ToString().ToLower());
         }
 
         /*
