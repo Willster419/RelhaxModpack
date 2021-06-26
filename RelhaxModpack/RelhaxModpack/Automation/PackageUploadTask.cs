@@ -76,6 +76,7 @@ namespace RelhaxModpack.Automation
                 {
                     await WebClient.UploadFileTaskAsync(uploadUrl, FilePath);
                     DatabasePackage.ZipFile = ZipFileName;
+                    DatabasePackage.CRC = "f";
                     TransferSuccess = true;
                 }
                 catch (Exception ex)
