@@ -6138,11 +6138,6 @@
             The enumeration representations of the level of where the macro is defined. Implies protection level of the macro
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.Enums.MacroType.None">
-            <summary>
-            Not yet defined
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.Utilities.Enums.MacroType.ApplicationDefined">
             <summary>
             Macro is hard-code defined inside the application. It cannot be overridden
@@ -7334,6 +7329,13 @@
             <param name="valueToSet">The string version of the value to set</param>
             <param name="newObject">The new value type object created</param>
             <returns>False if the value could not be set, true otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetListEntries(System.Collections.IList,System.String,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement},System.String,System.Collections.Generic.Dictionary{System.String,System.Type})">
+            <summary>
+            Creates all database entries in a list property, parsing each list entry object by xmlListItems
+            </summary>
+            <param name="listProperty">A generic representation of a initialized, empty list</param>
+            <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
         </member>
         <member name="M:RelhaxModpack.Utilities.CommonUtils.SetListEntries(RelhaxModpack.Common.IComponentWithID,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement},System.String,System.Collections.Generic.Dictionary{System.String,System.Type})">
             <summary>
