@@ -111,12 +111,18 @@ namespace RelhaxModpack.Automation
 
         private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            Logging.Info("[PROCESS INFO]: {0}", e.Data);
+            if (string.IsNullOrEmpty(e.Data))
+                return;
+
+            Logging.Info("[PROCESS ERROR]: {0}", e.Data);
         }
 
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            Logging.Info("[PROCESS ERROR]: {0}", e.Data);
+            if (string.IsNullOrEmpty(e.Data))
+                return;
+
+            Logging.Info("[PROCESS INFO]: {0}", e.Data);
         }
 
         public override void ProcessTaskResults()
