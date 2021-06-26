@@ -82,6 +82,9 @@ namespace RelhaxModpack.Automation
                 Logging.AutomationRunner("Key = {0}, Value = {1}", LogLevel.Debug, keyValuePair.Key, keyValuePair.Value);
             }
 
+            //log the command
+            Logging.Info("Running Filename {0} in work directory {1} with args {1}", Filename, Wd, Cmd);
+
             //set std error and output redirect to the main window if the event handler isn't null
             process.OutputDataReceived += Process_OutputDataReceived;
             process.ErrorDataReceived += Process_ErrorDataReceived;
