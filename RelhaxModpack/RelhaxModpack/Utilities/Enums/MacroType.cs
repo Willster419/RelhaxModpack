@@ -6,11 +6,6 @@
     public enum MacroType
     {
         /// <summary>
-        /// Not yet defined
-        /// </summary>
-        None,
-
-        /// <summary>
         /// Macro is hard-code defined inside the application. It cannot be overridden
         /// </summary>
         ApplicationDefined,
