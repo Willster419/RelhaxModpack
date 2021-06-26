@@ -145,7 +145,7 @@ namespace RelhaxModpack.Automation
 
         public bool ParseSequenceMacros()
         {
-            Logging.Info("Parsing defined macros inside the sequence");
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing defined macros inside the sequence");
             XPathNavigator result = XmlUtils.GetXNodeFromXpath(TasksDocument, "/AutomationSequence/Macros");
             XElement macroHolder = XElement.Parse(result.OuterXml);
             SequenceMacros.Clear();
