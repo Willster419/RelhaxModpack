@@ -215,15 +215,15 @@ namespace RelhaxModpack.Automation
         {
             if (sequencesToRun.Count == 0)
             {
-                Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "No sequences specified in AutomationSequences list");
+                Logging.Error(Logfiles.AutomationRunner, LogOptions.ClassName, "No sequences specified in AutomationSequences list");
                 return false;
             }
 
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "RUNNING AUTOMATION SEQUENCES. Put in caps so you know it's important");
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "RUNNING AUTOMATION SEQUENCES. Put in caps so you know it's important");
             NumErrors = 0;
             foreach (AutomationSequence sequence in sequencesToRun)
             {
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Preparing macro lists for sequence run: {0}", sequence.ComponentInternalName);
+                Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Preparing macro lists for sequence run: {0}", sequence.ComponentInternalName);
                 ResetApplicationMacros(sequence);
                 ParseGlobalMacros();
                 sequence.ParseSequenceMacros();
@@ -233,18 +233,31 @@ namespace RelhaxModpack.Automation
                     DumpGlobalMacros();
                 }
 
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running sequence: {0}", sequence.ComponentInternalName);
-                bool SequenceResult = await sequence.RunTasksAsync();
-                if (!SequenceResult)
+                Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Running sequence: {0}", sequence.ComponentInternalName);
+                await sequence.RunTasksAsync();
+                SequencerExitCode exitCode = sequence.ExitCode;
+                Logging.Info("----------------------- SEQUENCE RESULTS -----------------------");
+                switch (exitCode)
                 {
-                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "ERROR with sequence {0}. Check the log above or enable verbose logging for details.", sequence.ComponentInternalName);
-                    NumErrors++;
-                    continue;
+                    case SequencerExitCode.NotRun:
+                        Logging.Error(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence {0} result {1}. Check the log above or enable verbose logging for details.", sequence.ComponentInternalName, exitCode.ToString());
+                        NumErrors++;
+                        continue;
+
+                    case SequencerExitCode.TaskErrors:
+                        Logging.Error(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence {0} result {1}. Check the log above or enable verbose logging for details.", sequence.ComponentInternalName, exitCode.ToString());
+                        NumErrors++;
+                        continue;
+
+                    case SequencerExitCode.NoTaskErrors:
+                        Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence {0} result {1}.", sequence.ComponentInternalName, exitCode.ToString());
+                        break;
                 }
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "SUCCESS finished sequence {0}.", sequence.ComponentInternalName);
+                Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence {0} SUCCESS.", sequence.ComponentInternalName);
+                Logging.Info("----------------------------------------------------------------");
             }
 
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Sequence run finished with {0} errors.", NumErrors);
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence run finished with {0} errors of {1} total sequences.", NumErrors, sequencesToRun.Count);
             return NumErrors == 0;
         }
 

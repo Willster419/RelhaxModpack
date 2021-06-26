@@ -261,6 +261,7 @@
     <Compile Include="Utilities\Enums\SelectionTypes.cs" />
     <Compile Include="Utilities\Enums\SelectionView.cs" />
     <Compile Include="Utilities\Enums\AutomationRunMode.cs" />
+    <Compile Include="Utilities\Enums\SequencerExitCode.cs" />
     <Compile Include="Utilities\Enums\UIThemes.cs" />
     <Compile Include="Utilities\Enums\UninstallerExitCodes.cs" />
     <Compile Include="Utilities\Enums\UninstallModes.cs" />

@@ -82,6 +82,8 @@ namespace RelhaxModpack.Automation
 
         public AutomationCompareTracker AutomationCompareTracker { get; protected set; } = new AutomationCompareTracker();
 
+        public SequencerExitCode ExitCode { get; set; } = SequencerExitCode.NotRun;
+
         private WebClient WebClient = null;
 
         private XDocument TasksDocument = null;
@@ -173,6 +175,7 @@ namespace RelhaxModpack.Automation
 
         public async Task<bool> RunTasksAsync()
         {
+            ExitCode = SequencerExitCode.NotRun;
             if (Package == null || AutomationSequencer == null || AutomationRunnerSettings == null)
                 throw new NullReferenceException();
 
@@ -229,6 +232,8 @@ namespace RelhaxModpack.Automation
                 if (breakLoop)
                     break;
             }
+
+            ExitCode = taskReturnsGood ? SequencerExitCode.NoTaskErrors : SequencerExitCode.TaskErrors;
 
             //dispose/cleanup the tasks
             AutomationTasks.Clear();
