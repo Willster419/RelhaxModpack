@@ -103,6 +103,9 @@ namespace RelhaxModpack.Automation
                 return;
             if (ProcessTaskResultTrue(!fileHashComparer.HashBCalculated, "Hash B failed to calculate"))
                 return;
+
+            //getting to here means that successful hashes were calculated
+            AutomationCompareTracker.AddCompare(this, FileA, fileAHash, FileB, fileBHash);
         }
         #endregion
     }
