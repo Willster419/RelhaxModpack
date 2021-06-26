@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Log Viewer" Height="450" Width="800" Closed="Window_Closed">
+        Title="Log Viewer" Height="600" Width="1000" Closed="Window_Closed">
     <Grid>
         <TextBox x:Name="LogTextbox" IsReadOnly="True" IsUndoEnabled="False" HorizontalAlignment="Stretch" Margin="10,10,10,35" TextWrapping="NoWrap" VerticalAlignment="Stretch"
                  TextChanged="LogTextbox_TextChanged" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Loaded="LogTextbox_Loaded"/>

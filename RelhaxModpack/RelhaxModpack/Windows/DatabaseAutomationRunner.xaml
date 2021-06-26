@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Database Automation Runner" Height="480" Width="800" MinHeight="480" MinWidth="800"
+        Title="Database Automation Runner" Height="500" Width="1000" MinHeight="480" MinWidth="800"
         Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" EscapeKeyClosesWindow="False"
         ApplyScaling="True" ApplyCustomFont="True">
@@ -26,8 +26,10 @@
                     </Grid.RowDefinitions>
                     <TextBlock x:Name="SequencesAvailableTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="NoWrap" Grid.Column="0" Grid.Row="0" Text="Sequences available from server"/>
                     <TextBlock x:Name="SequencesToRunTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="NoWrap" Grid.Column="2" Grid.Row="0" Text="Sequences selected to run"/>
-                    <ListBox x:Name="SequencesAvailableListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1"/>
-                    <ListBox x:Name="SequencesToRunListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="1"/>
+                    <ListBox x:Name="SequencesAvailableListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" ScrollViewer.CanContentScroll="True"
+                             ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+                    <ListBox x:Name="SequencesToRunListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="1" ScrollViewer.CanContentScroll="True"
+                             ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
                     <Button x:Name="MoveSequencesToRunListButton" Content="&gt;&gt;" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="30" Height="20" Grid.Column="1" Grid.Row="1" Click="MoveSequencesToRunListButton_Click"/>
                     <Button x:Name="MoveUpSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,0,0,100" VerticalAlignment="Center" Height="40" Grid.Column="3" Grid.Row="1" Click="MoveUpSelectedSequenceButton_Click">
                         <TextBlock Text="Move up selected" TextWrapping="Wrap" TextAlignment="Center"/>
