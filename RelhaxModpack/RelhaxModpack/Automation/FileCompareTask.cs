@@ -103,9 +103,6 @@ namespace RelhaxModpack.Automation
                 return;
             if (ProcessTaskResultTrue(!fileHashComparer.HashBCalculated, "Hash B failed to calculate"))
                 return;
-
-            if (ValidateForExit(fileAHash.Equals(fileBHash), AutomationExitCode.ComparisonEqualFail, string.Format("Both files have the same hash: {0}", fileAHash)))
-                return;
         }
         #endregion
     }

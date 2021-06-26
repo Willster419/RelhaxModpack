@@ -42,6 +42,8 @@ namespace RelhaxModpack.Automation
             { FileMoveTask.TaskCommandName, typeof(FileMoveTask) },
             { TaskImportTask.TaskCommandName, typeof(TaskImportTask) },
             { MacroImportTask.TaskCommandName, typeof(MacroImportTask) },
+            { StartCompareTask.TaskCommandName, typeof(StartCompareTask) },
+            { EndCompareTask.TaskCommandName, typeof(EndCompareTask) }
         };
 
         public const string AttributeNameForMapping = "Command";
@@ -56,6 +58,8 @@ namespace RelhaxModpack.Automation
         public AutomationRunnerSettings AutomationSettings { get { return AutomationSequence.AutomationRunnerSettings; } }
 
         public List<AutomationMacro> Macros { get { return AutomationSequence.AllMacros; } }
+
+        public AutomationCompareTracker AutomationCompareTracker { get { return AutomationSequence.AutomationCompareTracker; } }
 
         public string ErrorMessage { get; protected set; } = string.Empty;
 

@@ -80,6 +80,8 @@ namespace RelhaxModpack.Automation
 
         public List<AutomationMacro> AllMacros { get; private set; } = new List<AutomationMacro>();
 
+        public AutomationCompareTracker AutomationCompareTracker { get; protected set; } = new AutomationCompareTracker();
+
         private WebClient WebClient = null;
 
         private XDocument TasksDocument = null;

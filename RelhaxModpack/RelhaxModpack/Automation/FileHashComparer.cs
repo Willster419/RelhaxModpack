@@ -113,7 +113,7 @@ namespace RelhaxModpack.Automation
                 int oldNumBytesRead;
                 progress.ChildTotal = (int)stream.Length;
                 progress.ChildCurrent = 0;
-                Reporter.Report(progress);
+                Reporter?.Report(progress);
 
                 try
                 {
@@ -127,7 +127,7 @@ namespace RelhaxModpack.Automation
                     oldBuffer = buffer;
                     oldNumBytesRead = numBytesRead;
 
-                    while (stream.Position < stream.Length)
+                    while (true)
                     {
                         oldBuffer = buffer;
                         oldNumBytesRead = numBytesRead;
