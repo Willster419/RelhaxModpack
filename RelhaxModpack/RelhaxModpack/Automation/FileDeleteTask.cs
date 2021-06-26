@@ -16,13 +16,11 @@ namespace RelhaxModpack.Automation
         protected bool fileDeleteResult;
 
         #region Task execution
-        public override Task RunTask()
+        public override async Task RunTask()
         {
             Logging.Info("Deleting file at location {0}", SourceFilePath);
 
             fileDeleteResult = FileUtils.FileDelete(SourceFilePath);
-
-            return null;
         }
 
         public override void ProcessTaskResults()

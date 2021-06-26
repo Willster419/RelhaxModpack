@@ -17,19 +17,18 @@ namespace RelhaxModpack.Automation
         protected bool fileMoveResult;
 
         #region Task execution
-        public override Task RunTask()
+        public override async Task RunTask()
         {
             base.RunTask();
 
             if (!destinationDeleteResult)
             {
                 fileMoveResult = false;
-                return null;
+                return;
             }
 
             Logging.Info("Moving file from location {0} to location {1}", SourceFilePath, DestinationFilePath);
             fileMoveResult = FileUtils.FileMove(SourceFilePath, DestinationFilePath);
-            return null;
         }
 
         public override void ProcessTaskResults()

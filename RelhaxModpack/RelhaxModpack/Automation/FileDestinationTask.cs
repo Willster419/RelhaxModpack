@@ -38,7 +38,7 @@ namespace RelhaxModpack.Automation
                 return;
         }
 
-        public override Task RunTask()
+        public override async Task RunTask()
         {
             string directoryPath = Path.GetDirectoryName(DestinationFilePath);
             Logging.Info("Checking if destination folder {0} already exists", directoryPath);
