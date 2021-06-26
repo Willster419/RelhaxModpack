@@ -6425,6 +6425,11 @@
             Batch run mode. Will not stop on errors inside an automation script
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.SequencerExitCode">
+            <summary>
+            List of possible return code error conditions that can occur when running a sequence
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.UIThemes">
             <summary>
             The list of different types of themes in the application
