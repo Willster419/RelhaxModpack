@@ -76,6 +76,11 @@ namespace RelhaxModpack.Common
                     }
                 }
 
+                //https://stackoverflow.com/a/1054274/3128017
+                File.SetCreationTime(DestinationFile, File.GetCreationTime(SourceFile));
+                File.SetLastAccessTime(DestinationFile, File.GetLastAccessTime(SourceFile));
+                File.SetLastWriteTime(DestinationFile, File.GetLastWriteTime(SourceFile));
+
                 Logging.Info(LogOptions.ClassName, "The file copy operation completed");
                 progress.ChildCurrent = progress.ChildTotal;
                 Reporter?.Report(progress);
