@@ -129,7 +129,7 @@ namespace RelhaxModpack.Automation
         /// <returns></returns>
         protected virtual bool ValidateCommandTrue(bool test, string formattedString)
         {
-            return ValidateForExit(test, AutomationExitCode.ValidateCommandsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
+            return ValidateForExitTrue(test, AutomationExitCode.ValidateCommandsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace RelhaxModpack.Automation
         /// <returns></returns>
         protected virtual bool ProcessTaskResultTrue(bool test, string formattedString)
         {
-            return ValidateForExit(test, AutomationExitCode.ProcessResultsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
+            return ValidateForExitTrue(test, AutomationExitCode.ProcessResultsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
         }
 
         /// <summary>
@@ -152,10 +152,10 @@ namespace RelhaxModpack.Automation
         protected virtual bool ProcessTaskResultFalse(bool test, string formattedString)
         {
             bool test_ = !test;
-            return ValidateForExit(test_, AutomationExitCode.ProcessResultsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
+            return ValidateForExitTrue(test_, AutomationExitCode.ProcessResultsFail, string.Format("Exit Code {0}: {1}", (int)AutomationExitCode.ValidateCommandsFail, formattedString));
         }
 
-        protected virtual bool ValidateForExit(bool test, AutomationExitCode exitCode, string formattedString)
+        protected virtual bool ValidateForExitTrue(bool test, AutomationExitCode exitCode, string formattedString)
         {
             if (test)
             {
@@ -165,7 +165,7 @@ namespace RelhaxModpack.Automation
             return test;
         }
 
-        protected virtual bool ValidateForExitPreFormatted(bool test, AutomationExitCode exitCode, string formattedString)
+        protected virtual bool ValidateForExitTrueNew(bool test, AutomationExitCode exitCode, string formattedString)
         {
             if (test)
             {

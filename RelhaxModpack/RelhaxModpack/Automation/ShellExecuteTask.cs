@@ -107,7 +107,7 @@ namespace RelhaxModpack.Automation
                     processStarted = false;
                 }
 
-                if (ValidateForExitPreFormatted(!processStarted, AutomationExitCode.ShellFail, "The process failed to start"))
+                if (ValidateForExitTrueNew(!processStarted, AutomationExitCode.ShellFail, "The process failed to start"))
                     return;
             });
 

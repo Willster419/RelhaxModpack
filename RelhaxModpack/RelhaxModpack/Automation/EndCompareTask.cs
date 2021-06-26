@@ -39,11 +39,11 @@ namespace RelhaxModpack.Automation
                 Logging.Debug("File b: {0}, Hash: {1}", automationCompare.CompareBFilepath, automationCompare.CompareBHash);
                 if (automationCompare.CompareResult)
                 {
-                    Logging.Info("Compare {0} is matching files", automationCompare.AutomationTask.ID); 
+                    Logging.Info("Compare {0} is MATCH", automationCompare.AutomationTask.ID); 
                 }
                 else
                 {
-                    Logging.Info("Compare {0} is different files", automationCompare.AutomationTask.ID);
+                    Logging.Info("Compare {0} is DIFFERENT", automationCompare.AutomationTask.ID);
                 }
             }
 
@@ -53,7 +53,7 @@ namespace RelhaxModpack.Automation
             if (ProcessTaskResultTrue(AutomationCompareTracker.NumDifferences + AutomationCompareTracker.NumMatches == 0, "The number of total compares is 0"))
                 return;
 
-            if (ValidateForExit(AutomationCompareTracker.NumDifferences == 0, AutomationExitCode.ComparisonEqualFail, string.Format("There are no differences, no need to continue execution")))
+            if (ValidateForExitTrue(AutomationCompareTracker.NumDifferences == 0, AutomationExitCode.ComparisonEqualFail, string.Format("There are no differences, no need to continue execution")))
                 return;
         }
     }
