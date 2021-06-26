@@ -34,6 +34,8 @@ namespace RelhaxModpack.Windows
 
         public DownloadProgressChangedEventHandler DownloadProgressChanged = null;
 
+        public ProgressChangedEventHandler ProgressChanged = null;
+
         public DownloadDataCompletedEventHandler DownloadDataCompleted = null;
 
         public AsyncCompletedEventHandler DownloadFileCompleted = null;
@@ -56,8 +58,6 @@ namespace RelhaxModpack.Windows
 
         private SaveFileDialog SaveDatabaseDialog;
 
-        private bool ftpDownloadSizeLocked = false;
-
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
@@ -70,6 +70,7 @@ namespace RelhaxModpack.Windows
             UploadFileCompleted = WebClient_UploadFileCompleted;
             UploadProgressChanged = WebClient_UploadProgressChanged;
             RelhaxProgressChanged = RelhaxProgressReport_ProgressChanged;
+            ProgressChanged = GenericProgressChanged;
             Settings = AutomationSettings;
         }
 
@@ -149,17 +150,20 @@ namespace RelhaxModpack.Windows
         }
 
         #region Progress reporting code
+        private void GenericProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage == 69)
+            {
+                //used for getting ftp download size from server
+                ShowAutomationProgress((long)e.UserState);
+            }
+        }
+
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             if (AutomationTaskProgressBar.Visibility != Visibility.Visible)
             {
                 ShowAutomationProgress(e.TotalBytesToReceive);
-            }
-
-            if (e.UserState != null && e.UserState is long totalSize && !ftpDownloadSizeLocked)
-            {
-                AutomationTaskProgressBar.Maximum = (long)e.UserState;
-                ftpDownloadSizeLocked = true;
             }
 
             AutomationTaskProgressBar.Value = e.BytesReceived;
@@ -192,7 +196,6 @@ namespace RelhaxModpack.Windows
 
         private void WebClient_DownloadDataComplted(object sender, DownloadDataCompletedEventArgs e)
         {
-            ftpDownloadSizeLocked = false;
             HideAutomationProgress();
         }
 

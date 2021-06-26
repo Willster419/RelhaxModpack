@@ -2,6 +2,7 @@
 using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -54,7 +55,7 @@ namespace RelhaxModpack.Automation
                         if (DatabaseAutomationRunner.DownloadProgressChanged != null)
                         {
                             long filesize = await FtpUtils.FtpGetFilesizeAsync(serverPath, WebClient.Credentials);
-                            DatabaseAutomationRunner.DownloadFileCompleted.Invoke(null, new System.ComponentModel.AsyncCompletedEventArgs(null, false, filesize));
+                            DatabaseAutomationRunner.ProgressChanged.Invoke(null, new ProgressChangedEventArgs(69, filesize));
                         }
                     }
                     await WebClient.DownloadFileTaskAsync(serverPath, FilePath);
