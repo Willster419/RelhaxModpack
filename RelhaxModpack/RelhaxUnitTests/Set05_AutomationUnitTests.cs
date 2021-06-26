@@ -9,6 +9,7 @@ using RelhaxModpack.Database;
 using System.Text.RegularExpressions;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
+using System.IO;
 
 namespace RelhaxUnitTests
 {
@@ -184,6 +185,23 @@ namespace RelhaxUnitTests
             };
 
             await task.Execute();
+        }
+
+        [TestMethod]
+        public async Task Test04_FileHashCompareTest()
+        {
+            //first test the individual component, then the task
+            FileHashComparer fileHashComparer = new FileHashComparer();
+
+            string fileAPath = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.dds");
+            string fileACorrectHashPath = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.dds.md5");
+            string fileACorrectHash = File.ReadAllText(fileACorrectHashPath);
+
+            await fileHashComparer.ComputeHashA(fileAPath);
+
+            Assert.IsTrue(fileHashComparer.HashACalculated);
+            Assert.IsNotNull(fileHashComparer.HashAStringBuilder);
+            Assert.AreEqual(fileACorrectHash, fileHashComparer.HashAStringBuilder.ToString());
         }
 
         /*
