@@ -28,6 +28,7 @@ namespace RelhaxModpack.Automation
         #region Task Execution
         public override void ProcessMacros()
         {
+            base.ProcessMacros();
             ZipFileName = ProcessMacro(nameof(ZipFileName), ZipFileName);
         }
 
@@ -73,7 +74,7 @@ namespace RelhaxModpack.Automation
                 }
                 try
                 {
-                    await WebClient.UploadFileTaskAsync(serverPath, FilePath);
+                    await WebClient.UploadFileTaskAsync(uploadUrl, FilePath);
                     DatabasePackage.ZipFile = ZipFileName;
                     TransferSuccess = true;
                 }
