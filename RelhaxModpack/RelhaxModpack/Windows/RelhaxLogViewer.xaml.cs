@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.Settings;
+using RelhaxModpack.UI;
 using RelhaxModpack.Utilities.ClassEventArgs;
 using System;
 using System.Collections.Generic;
@@ -48,9 +49,10 @@ namespace RelhaxModpack.Windows
 
         private void OnLogMessageWrite(object sender, LogMessageEventArgs e)
         {
-            Dispatcher.BeginInvoke((Action)(() =>
+            Dispatcher.Invoke((Action)(() =>
             {
                 LogTextbox.AppendText(e.Message + Environment.NewLine);
+                UiUtils.AllowUIToUpdate();
             }));
         }
 
