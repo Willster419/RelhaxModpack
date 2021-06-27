@@ -197,7 +197,7 @@ namespace RelhaxModpack.Automation
             string workingDirectory = Path.Combine(ApplicationConstants.RelhaxTempFolderPath, Package.PackageName);
             if (Directory.Exists(workingDirectory))
             {
-                if (!FileUtils.DirectoryDelete(workingDirectory, true, true))
+                if (!await FileUtils.DirectoryDeleteAsync(workingDirectory, true, true))
                 {
                     Logging.Error(LogOptions.ClassName, "Failed to clear the working directory");
                     return false;
