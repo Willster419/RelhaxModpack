@@ -65,7 +65,7 @@ namespace RelhaxModpack.Automation
         public override async Task RunTask()
         {
             Logging.Info("Applying value {0} to property {1} of type {2}", PropertyValue, property.Name, property.PropertyType.ToString());
-            propertySet = CommonUtils.SetObjectProperty(DatabasePackage, property, PropertyValue);
+            propertySet = CommonUtils.SetObjectProperty(targetPackage, property, PropertyValue);
         }
 
         public override void ProcessTaskResults()
