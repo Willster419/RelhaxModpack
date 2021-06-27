@@ -35,6 +35,8 @@ namespace RelhaxModpack.Automation
 
         public List<AutomationSequence> AutomationSequences { get; } = new List<AutomationSequence>();
 
+        public List<DatabasePackage> DatabasePackages { get; private set; }
+
         public DatabaseManager DatabaseManager { get; set; }
 
         public AutomationRunnerSettings AutomationRunnerSettings { get; set; } = null;
@@ -161,12 +163,12 @@ namespace RelhaxModpack.Automation
 
         private bool LinkPackagesToAutomationSequences(List<AutomationSequence> sequencesToRun)
         {
-            List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
+            DatabasePackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
             foreach (AutomationSequence automationSequence in sequencesToRun)
             {
                 Logging.Debug("Linking sequence to package reference: {0}, {1}", automationSequence.PackageName, automationSequence.PackageUID);
 
-                DatabasePackage result = allPackages.Find(pack => pack.UID.Equals(automationSequence.PackageUID));
+                DatabasePackage result = DatabasePackages.Find(pack => pack.UID.Equals(automationSequence.PackageUID));
                 if (result == null)
                 {
                     Logging.Error("A package does not exist in the database matching UID {0}", automationSequence.PackageUID);

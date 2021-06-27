@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation
 {
-    public abstract class PackageTransferTask : AutomationTask, IXmlSerializable
+    public abstract class PackageTransferTask : DatabasePackageTask, IXmlSerializable
     {
         public string FilePath { get; set; } = string.Empty;
-
-        public DatabasePackage DatabasePackage { get { return AutomationSequence.Package; } }
 
         public string WoTOnlineFolderVersion { get { return AutomationSequence.DatabaseManager.WoTOnlineFolderVersion; } }
 
@@ -36,10 +34,9 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrue(string.IsNullOrEmpty(FilePath), string.Format("FilePath is null/empty")))
-                return;
+            base.ValidateCommands();
 
-            if (ValidateCommandTrue(DatabasePackage == null, string.Format("DatabasePackage is null (This is an internal application error)")))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(FilePath), string.Format("FilePath is null/empty")))
                 return;
 
             if (ValidateCommandTrue(string.IsNullOrEmpty(AutomationSettings.BigmodsUsername), string.Format("AutomationSettings.BigmodsUsername is null/empty")))

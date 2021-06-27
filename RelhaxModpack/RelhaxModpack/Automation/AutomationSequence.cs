@@ -82,6 +82,8 @@ namespace RelhaxModpack.Automation
 
         public AutomationCompareTracker AutomationCompareTracker { get; protected set; } = new AutomationCompareTracker();
 
+        public List<DatabasePackage> DatabasePackages { get { return AutomationSequencer.DatabasePackages; } }
+
         public SequencerExitCode ExitCode { get; set; } = SequencerExitCode.NotRun;
 
         private WebClient WebClient = null;
