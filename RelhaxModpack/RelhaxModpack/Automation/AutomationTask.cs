@@ -44,7 +44,8 @@ namespace RelhaxModpack.Automation
             { MacroImportTask.TaskCommandName, typeof(MacroImportTask) },
             { StartCompareTask.TaskCommandName, typeof(StartCompareTask) },
             { EndCompareTask.TaskCommandName, typeof(EndCompareTask) },
-            { UpdatePackagePropertyTask.TaskCommandName, typeof(UpdatePackagePropertyTask) }
+            { UpdatePackagePropertyTask.TaskCommandName, typeof(UpdatePackagePropertyTask) },
+            { RetrievePackagePropertyTask.TaskCommandName, typeof(RetrievePackagePropertyTask) }
         };
 
         public const string AttributeNameForMapping = "Command";

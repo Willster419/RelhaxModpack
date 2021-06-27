@@ -138,6 +138,7 @@
     <Compile Include="Automation\AutomationSequence.cs" />
     <Compile Include="Automation\AutomationSequencer.cs" />
     <Compile Include="Automation\AutomationTask.cs" />
+    <Compile Include="Automation\DatabasePackagePropertyTask.cs" />
     <Compile Include="Automation\DatabasePackageTask.cs" />
     <Compile Include="Automation\DatabaseTask.cs" />
     <Compile Include="Automation\DownloadBrowserTask.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="Automation\PackageDownloadTask.cs" />
     <Compile Include="Automation\PackageTransferTask.cs" />
     <Compile Include="Automation\PackageUploadTask.cs" />
+    <Compile Include="Automation\RetrievePackagePropertyTask.cs" />
     <Compile Include="Automation\SaveDatabaseTask.cs" />
     <Compile Include="Automation\ShellExecuteTask.cs" />
     <Compile Include="Automation\StartCompareTask.cs" />

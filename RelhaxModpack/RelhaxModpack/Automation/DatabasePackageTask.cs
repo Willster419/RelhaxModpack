@@ -13,13 +13,15 @@ namespace RelhaxModpack.Automation
 
         public List<DatabasePackage> DatabasePackages { get { return AutomationSequence.DatabasePackages; } }
 
+        #region Task execution
         public override void ValidateCommands()
         {
             if (ValidateCommandTrue(DatabasePackage == null, string.Format("DatabasePackage is null (This is an internal application error)")))
                 return;
 
-            if (ValidateCommandTrue(DatabasePackages == null, string.Format("DatabasePackage is null (This is an internal application error)")))
+            if (ValidateCommandTrue(DatabasePackages == null, string.Format("DatabasePackages is null (This is an internal application error)")))
                 return;
         }
+        #endregion
     }
 }
