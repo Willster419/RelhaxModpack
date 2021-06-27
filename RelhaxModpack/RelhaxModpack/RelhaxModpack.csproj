@@ -158,7 +158,10 @@
     <Compile Include="Automation\IDownloadTask.cs" />
     <Compile Include="Automation\ImportTask.cs" />
     <Compile Include="Automation\LoadDatabaseTask.cs" />
+    <Compile Include="Automation\MacroCreateTask.cs" />
+    <Compile Include="Automation\MacroDeleteTask.cs" />
     <Compile Include="Automation\MacroImportTask.cs" />
+    <Compile Include="Automation\MacroTask.cs" />
     <Compile Include="Automation\PackageDownloadTask.cs" />
     <Compile Include="Automation\PackageTransferTask.cs" />
     <Compile Include="Automation\PackageUploadTask.cs" />
