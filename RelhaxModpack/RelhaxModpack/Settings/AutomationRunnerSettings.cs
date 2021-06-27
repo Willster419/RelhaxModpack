@@ -41,6 +41,6 @@ namespace RelhaxModpack.Settings
         /// </summary>
         public bool DumpParsedMacrosPerSequenceRun { get; set; } = false;
 
-        public bool DumpShellEnvironmentVarsPerSequenceRun { get; set; } = true;
+        public bool DumpShellEnvironmentVarsPerSequenceRun { get; set; } = false;
     }
 }
