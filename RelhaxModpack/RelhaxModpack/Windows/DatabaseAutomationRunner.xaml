@@ -63,6 +63,7 @@
                         <RowDefinition Height="20"/>
                         <RowDefinition Height="20"/>
                         <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150"/>
@@ -77,13 +78,15 @@
                     <CheckBox x:Name="OpenLogWindowOnStartupSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Content="Open log window on startup"
                                   Click="OpenLogWindowOnStartupSetting_Click" ToolTip="When checked, the log window will start when you launch the application in this mode"/>
                     <CheckBox x:Name="DumpParsedMacrosPerSequenceRunSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="3" VerticalAlignment="Center" Content="Dump parsed macros for each sequence during run"
-                                  Click="DumpParsedMacrosPerSequenceRunSetting_Click" ToolTip="Show a message box to confirm when pressing one of the add/move/remove buttons"/>
-                    <TextBlock x:Name="AutomamtionDatabaseSelectedBranchTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Beta DB selected branch" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"
+                                  Click="DumpParsedMacrosPerSequenceRunSetting_Click" ToolTip="When checked, the list of macros will be dumped to the logfile at the start of each sequence"/>
+                    <CheckBox x:Name="DumpEnvironmentVariablesAtSequenceStartSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Center" Content="Dump environment variables at the start of the sequencer"
+                                  Click="DumpEnvironmentVariablesAtSequenceStartSetting_Click"  ToolTip="When checked, the list of system environment variables will be dumped to the logfile at the start of the sequencer"/>
+                    <TextBlock x:Name="AutomamtionDatabaseSelectedBranchTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Beta DB selected branch" VerticalAlignment="Center" Grid.Column="0" Grid.Row="5"
                                    ToolTip="Enter the target branch to use for the automation repo. The default is 'master'."/>
-                    <TextBox x:Name="AutomamtionDatabaseSelectedBranchSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="AutomamtionDatabaseSelectedBranchSetting_TextChanged"/>
-                    <Button x:Name="SelectDBSaveLocationButton" Content="Select DB save location" HorizontalAlignment="Stretch" Grid.Row="5" VerticalAlignment="Center" Click="SelectDBSaveLocationButton_Click"
+                    <TextBox x:Name="AutomamtionDatabaseSelectedBranchSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="AutomamtionDatabaseSelectedBranchSetting_TextChanged"/>
+                    <Button x:Name="SelectDBSaveLocationButton" Content="Select DB save location" HorizontalAlignment="Stretch" Grid.Row="6" VerticalAlignment="Center" Click="SelectDBSaveLocationButton_Click"
                                 ToolTip="Select the location to use for loading and saving the database for automation runs"/>
-                    <TextBox x:Name="SelectDBSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="SelectDBSaveLocationSetting_TextChanged" />
+                    <TextBox x:Name="SelectDBSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="SelectDBSaveLocationSetting_TextChanged" />
                 </Grid>
             </TabItem>
         </TabControl>

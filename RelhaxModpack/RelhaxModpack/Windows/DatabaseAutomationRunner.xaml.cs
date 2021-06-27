@@ -147,6 +147,7 @@ namespace RelhaxModpack.Windows
             DumpParsedMacrosPerSequenceRunSetting.IsChecked = AutomationSettings.DumpParsedMacrosPerSequenceRun;
             AutomamtionDatabaseSelectedBranchSetting.Text = AutomationSettings.SelectedBranch;
             SelectDBSaveLocationSetting.Text = AutomationSettings.DatabaseSavePath;
+            DumpEnvironmentVariablesAtSequenceStartSetting.IsChecked = AutomationSettings.DumpShellEnvironmentVarsPerSequenceRun;
         }
 
         #region Progress reporting code
@@ -338,6 +339,11 @@ namespace RelhaxModpack.Windows
         private void DumpParsedMacrosPerSequenceRunSetting_Click(object sender, RoutedEventArgs e)
         {
             AutomationSettings.DumpParsedMacrosPerSequenceRun = (bool)DumpParsedMacrosPerSequenceRunSetting.IsChecked;
+        }
+
+        private void DumpEnvironmentVariablesAtSequenceStartSetting_Click(object sender, RoutedEventArgs e)
+        {
+            AutomationSettings.DumpShellEnvironmentVarsPerSequenceRun = (bool)DumpEnvironmentVariablesAtSequenceStartSetting.IsChecked;
         }
 
         private void AutomamtionDatabaseSelectedBranchSetting_TextChanged(object sender, TextChangedEventArgs e)
