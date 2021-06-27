@@ -44,10 +44,6 @@ namespace RelhaxModpack.Automation
             if (ValidateCommandTrue(string.IsNullOrEmpty(MacroSaveName), "The arg MacroSaveName is empty string"))
                 return;
 
-            if (ValidateCommandTrue(string.IsNullOrEmpty(PropertyIndex), "The arg PropertyIndex is empty string"))
-                return;
-            propertyIndex = int.Parse(PropertyIndex);
-
             if (ValidateCommandTrue(targetPackage == null, string.Format("A package by the UID {0} was not found in the database list", TargetPackageUID)))
                 return;
 
@@ -57,6 +53,13 @@ namespace RelhaxModpack.Automation
             bool isValidType = property.PropertyType.IsValueType || property.PropertyType.IsArray || property.PropertyType.Equals(typeof(string));
             if (ValidateCommandFalse(isValidType, string.Format("Property must be a value type (string, int, etc), or array of a value type")))
                 return;
+
+            if (property.PropertyType.IsArray)
+            {
+                if (ValidateCommandTrue(string.IsNullOrEmpty(PropertyIndex), "Property detected to be an array and PropertyIndex is empty string"))
+                    return;
+                propertyIndex = int.Parse(PropertyIndex);
+            }
         }
 
         public override async Task RunTask()
@@ -92,6 +95,9 @@ namespace RelhaxModpack.Automation
 
             Logging.Info("Creating macro for package {0} (UID {1}) of property {2}", targetPackage.PackageName, targetPackage.UID, property.Name);
             Logging.Info("Macro name: {0}, Value: {1}", MacroSaveName, valueToSave);
+            AutomationMacro macro = Macros.Find(mac => mac.Name.Equals(MacroSaveName));
+            if (macro != null)
+                Macros.Remove(macro);
             Macros.Add(new AutomationMacro() { MacroType = MacroType.Local, Name = MacroSaveName, Value = valueToSave });
             propertyGot = true;
         }
