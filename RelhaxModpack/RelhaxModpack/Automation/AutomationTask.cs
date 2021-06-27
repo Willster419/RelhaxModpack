@@ -134,6 +134,18 @@ namespace RelhaxModpack.Automation
         }
 
         /// <summary>
+        /// "false" version means that the test being false is "bad"
+        /// </summary>
+        /// <param name="test"></param>
+        /// <param name="formattedString"></param>
+        /// <returns></returns>
+        protected virtual bool ValidateCommandFalse(bool test, string formattedString)
+        {
+            bool test_ = !test;
+            return ValidateCommandTrue(test_, formattedString);
+        }
+
+        /// <summary>
         /// "true" version means that the test being true is "bad"
         /// </summary>
         /// <param name="test"></param>
