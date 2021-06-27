@@ -558,10 +558,10 @@ namespace RelhaxModpack.Utilities
         /// <param name="timeout">The time in milliseconds between retries</param>
         /// <param name="pattern">The pattern of files to search for in a directory</param>
         /// <returns>True if the complete operation was a success, false otherwise</returns>
-        public static async Task DirectoryDeleteAsync(string folderPath, bool deleteSubfolders, bool deleteRoot = true, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
+        public static async Task<bool> DirectoryDeleteAsync(string folderPath, bool deleteSubfolders, bool deleteRoot = true, uint numRetrys = 3, uint timeout = 100, string pattern = "*")
         {
             //Task taskA = Task.Run( () => Console.WriteLine("Hello from taskA."));
-            await Task.Run(() => DirectoryDelete(folderPath, deleteSubfolders, deleteRoot, numRetrys, timeout, pattern));
+            return await Task.Run(() => DirectoryDelete(folderPath, deleteSubfolders, deleteRoot, numRetrys, timeout, pattern));
         }
 
         /// <summary>
