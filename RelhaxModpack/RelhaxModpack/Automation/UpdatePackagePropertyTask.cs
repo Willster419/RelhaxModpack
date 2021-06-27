@@ -44,6 +44,7 @@ namespace RelhaxModpack.Automation
 
             PropertyName = ProcessMacro(nameof(PropertyName), PropertyName);
             PropertyValue = ProcessMacro(nameof(PropertyValue), PropertyValue);
+            TargetPackageUID = ProcessMacro(nameof(TargetPackageUID), TargetPackageUID);
         }
 
         public override void ValidateCommands()
@@ -69,7 +70,7 @@ namespace RelhaxModpack.Automation
 
         public override void ProcessTaskResults()
         {
-            if (!ProcessTaskResultFalse(!propertySet, string.Format("Failed to apply value")))
+            if (ProcessTaskResultFalse(propertySet, string.Format("Failed to apply value")))
                 return;
         }
 
@@ -92,6 +93,7 @@ namespace RelhaxModpack.Automation
                 packageType = this.DatabasePackage.GetType();
                 Logging.Debug("PackageType: {0}", packageType.ToString());
                 property = packageType.GetProperties().First(prop => prop.Name.ToLower().Equals(PropertyName.ToLower()));
+
                 if (property != null)
                 {
                     string currentValue = property.GetValue(DatabasePackage).ToString();
