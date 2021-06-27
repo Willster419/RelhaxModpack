@@ -7,10 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using RelhaxModpack.UI;
+using System.Threading;
+using System.Windows.Threading;
+using ThreadState = System.Threading.ThreadState;
 
 namespace RelhaxModpack.Automation
 {
-    public class ShellExecuteTask : AutomationTask, IXmlSerializable, IDisposable
+    public class ShellExecuteTask : AutomationTask, IXmlSerializable
     {
         public const string TaskCommandName = "shell_exec";
 
@@ -25,6 +29,10 @@ namespace RelhaxModpack.Automation
         protected Process process = null;
 
         protected ProcessStartInfo startInfo = null;
+
+        protected bool processStarted;
+
+        protected int exitCode;
 
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
@@ -74,43 +82,33 @@ namespace RelhaxModpack.Automation
                 },
             };
 
-            //dump vars before run
-            Logging.AutomationRunner("Dumping current shell environment variables", LogLevel.Debug);
-
-            //https://stackoverflow.com/a/141098/3128017
-            foreach (KeyValuePair<string, string> keyValuePair in process.StartInfo.Environment)
-            {
-                Logging.AutomationRunner("Key = {0}, Value = {1}", LogLevel.Debug, keyValuePair.Key, keyValuePair.Value);
-            }
-
-            //log the command
-            Logging.Info("Running Filename {0} in work directory {1} with args {1}", Filename, Wd, Cmd);
-
-            //set std error and output redirect to the main window if the event handler isn't null
-            process.OutputDataReceived += Process_OutputDataReceived;
-            process.ErrorDataReceived += Process_ErrorDataReceived;
-
-            //run in separate task to avoid blocking on UI thread - no async wait
+            Logging.Info("Running shell execution with Filename {0} in work directory {1} with args {1}", Filename, Wd, Cmd);
             await Task.Run(() =>
             {
-                bool processStarted = true;
                 try
                 {
+                    process.OutputDataReceived += Process_OutputDataReceived;
+                    process.ErrorDataReceived += Process_ErrorDataReceived;
                     processStarted = process.Start();
+                    processStarted = true;
+
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
+
                     process.WaitForExit();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logging.Exception(ex.ToString());
                     processStarted = false;
                 }
 
-                if (ValidateForExitTrueNew(!processStarted, AutomationExitCode.ShellFail, "The process failed to start"))
-                    return;
+                process.OutputDataReceived -= Process_OutputDataReceived;
+                process.ErrorDataReceived -= Process_ErrorDataReceived;
+                exitCode = process.ExitCode;
+                process.Dispose();
             });
-
+            Logging.Info("Shell execution finishes");
         }
 
         private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
@@ -131,16 +129,12 @@ namespace RelhaxModpack.Automation
 
         public override void ProcessTaskResults()
         {
-            //check error code
-            if (ProcessTaskResultTrue(process.ExitCode != 0, string.Format("The process returned exit code {0}", process.ExitCode)))
+            if (ProcessTaskResultFalse(processStarted, "The process failed to start"))
                 return;
-        }
 
-        public void Dispose()
-        {
-            process.OutputDataReceived -= Process_OutputDataReceived;
-            process.ErrorDataReceived -= Process_ErrorDataReceived;
-            ((IDisposable)process).Dispose();
+            //check error code
+            if (ProcessTaskResultTrue(exitCode != 0, string.Format("The process returned exit code {0}", exitCode)))
+                return;
         }
         #endregion
     }

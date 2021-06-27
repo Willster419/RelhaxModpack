@@ -40,5 +40,7 @@ namespace RelhaxModpack.Settings
         /// Toggle to dump the parsed macros to the log file before every sequence run
         /// </summary>
         public bool DumpParsedMacrosPerSequenceRun { get; set; } = false;
+
+        public bool DumpShellEnvironmentVarsPerSequenceRun { get; set; } = true;
     }
 }

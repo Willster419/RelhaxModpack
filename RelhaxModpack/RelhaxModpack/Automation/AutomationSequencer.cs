@@ -15,6 +15,7 @@ using System.Reflection;
 using RelhaxModpack.Common;
 using RelhaxModpack.Windows;
 using RelhaxModpack.Settings;
+using System.Diagnostics;
 
 namespace RelhaxModpack.Automation
 {
@@ -223,6 +224,31 @@ namespace RelhaxModpack.Automation
 
             Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "RUNNING AUTOMATION SEQUENCES. Put in caps so you know it's important");
             NumErrors = 0;
+
+            if (AutomationRunnerSettings.DumpShellEnvironmentVarsPerSequenceRun)
+            {
+                //dump vars before run
+                Logging.AutomationRunner("Dumping current shell environment variables", LogLevel.Debug);
+                using (Process process = new Process()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        //Setting this property to false enables you to redirect input, output, and error streams
+                        UseShellExecute = false,
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true,
+                        CreateNoWindow = true
+                    }
+                })
+                {
+                    //https://stackoverflow.com/a/141098/3128017
+                    foreach (KeyValuePair<string, string> keyValuePair in process.StartInfo.Environment)
+                    {
+                        Logging.AutomationRunner("Key = {0}, Value = {1}", LogLevel.Debug, keyValuePair.Key, keyValuePair.Value);
+                    }
+                }
+            }
+
             foreach (AutomationSequence sequence in sequencesToRun)
             {
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Preparing macro lists for sequence run: {0}", sequence.ComponentInternalName);
