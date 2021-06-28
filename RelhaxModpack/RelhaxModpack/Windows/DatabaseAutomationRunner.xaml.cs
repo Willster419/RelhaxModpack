@@ -228,33 +228,120 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Sequence move around buttons
+        public struct LocationTracker
+        {
+            public AutomationSequence Sequence;
+            public int OldIndex;
+        }
         private void MoveSequencesToRunListButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SequencesAvailableListBox.SelectedItem == null)
+            if (SequencesAvailableListBox.SelectedItems.Count == 0)
                 return;
 
-            if (SequencesToRunListBox.Items.Contains(SequencesAvailableListBox.SelectedItem))
-                return;
-
-            SequencesToRunListBox.Items.Add(SequencesAvailableListBox.SelectedItem);
+            foreach (AutomationSequence sequence in SequencesAvailableListBox.SelectedItems)
+            {
+                if (!SequencesToRunListBox.Items.Contains(sequence))
+                    SequencesToRunListBox.Items.Add(sequence);
+            }
         }
 
         private void MoveUpSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
         {
+            if (SequencesToRunListBox.SelectedItems.Count == 0)
+                return;
 
+            //make a list outside of SequencesToRunListBox so we're not actively modifying a collection we're looping on
+            List<AutomationSequence> itemsToMove = SequencesToRunListBox.SelectedItems.Cast<AutomationSequence>().ToList();
+
+            //track the original index of each of these items
+            int lowestIndex = SequencesToRunListBox.Items.Count;
+            List<LocationTracker> trackerList = new List<LocationTracker>();
+            foreach (AutomationSequence sequence in itemsToMove)
+            {
+                int currentIndex = SequencesToRunListBox.Items.IndexOf(sequence);
+                if (currentIndex < lowestIndex)
+                {
+                    lowestIndex = currentIndex;
+                }
+                trackerList.Add(new LocationTracker
+                {
+                    Sequence = sequence,
+                    OldIndex = SequencesToRunListBox.Items.IndexOf(sequence)
+                });
+            }
+
+            if (lowestIndex == 0)
+                return;
+
+            //now we have the old index of each one. we essentially want to move them all up by 1
+            foreach (LocationTracker locationTracker in trackerList)
+            {
+                //remove from the list
+                SequencesToRunListBox.Items.Remove(locationTracker.Sequence);
+
+                //re-insert at one index up
+                SequencesToRunListBox.Items.Insert(locationTracker.OldIndex - 1, locationTracker.Sequence);
+            }
+
+            //then highlight/select them again
+            SequencesToRunListBox.SelectedItems.Clear();
+            foreach (AutomationSequence sequence in itemsToMove)
+            {
+                SequencesToRunListBox.SelectedItems.Add(sequence);
+            }
         }
 
         private void MoveDownSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
         {
+            if (SequencesToRunListBox.SelectedItems.Count == 0)
+                return;
 
+            List<AutomationSequence> itemsToMove = SequencesToRunListBox.SelectedItems.Cast<AutomationSequence>().ToList();
+            int highestIndex = 0;
+            List<LocationTracker> trackerList = new List<LocationTracker>();
+            foreach (AutomationSequence sequence in itemsToMove)
+            {
+                int currentIndex = SequencesToRunListBox.Items.IndexOf(sequence);
+                if (currentIndex > highestIndex)
+                {
+                    highestIndex = currentIndex;
+                }
+                trackerList.Add(new LocationTracker
+                {
+                    Sequence = sequence,
+                    OldIndex = SequencesToRunListBox.Items.IndexOf(sequence)
+                });
+            }
+
+            if (highestIndex == SequencesToRunListBox.Items.Count - 1)
+                return;
+
+            //now we have the old index of each one. we essentially want to move them all down by 1
+            foreach (LocationTracker locationTracker in trackerList)
+            {
+                //remove from the list
+                SequencesToRunListBox.Items.Remove(locationTracker.Sequence);
+
+                //re-insert at one index up
+                SequencesToRunListBox.Items.Insert(locationTracker.OldIndex + 1, locationTracker.Sequence);
+            }
+
+            //then highlight/select them again
+            SequencesToRunListBox.SelectedItems.Clear();
+            foreach (AutomationSequence sequence in itemsToMove)
+            {
+                SequencesToRunListBox.SelectedItems.Add(sequence);
+            }
         }
 
         private void DeleteSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SequencesToRunListBox.SelectedItem == null)
+            if (SequencesToRunListBox.SelectedItems.Count == 0)
                 return;
 
-            SequencesToRunListBox.Items.Remove(SequencesToRunListBox.SelectedItem);
+            List<AutomationSequence> itemsToRemove = SequencesToRunListBox.SelectedItems.Cast<AutomationSequence>().ToList();
+            foreach (AutomationSequence sequence in itemsToRemove)
+                SequencesToRunListBox.Items.Remove(sequence);
         }
         #endregion
 
