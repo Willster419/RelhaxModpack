@@ -94,7 +94,7 @@ namespace RelhaxModpack
             German.Add("DisableTriggersCBDescription", "Das Zulassen von Triggern kann die Installation beschleunigen, indem einige Aufgaben ausgeführt werden (z. B. das Erstellen von Kontursymbolen), während extrahiert wird," +
                 "sobald alle für diese Aufgabe erforderlichen Ressourcen verfügbar sind. Dies wird automatisch deaktiviert, wenn Benutzermodifikationen erkannt werden");
             German.Add("appDataFolderNotExistHeader", "Konnte den Cache-Ordner WoT nicht erkennen");
-
+            German.Add("CancelDownloadInstallButton", German["cancel"]);
             German.Add("appDataFolderNotExist", "Der Installer konnte den WoT-Cache-Ordner nicht erkennen. Installation fortsetzen ohne den WoT-Cache zu löschen?");
             German.Add("viewAppUpdates", "Programmaktualisierungen anzeigen");
             German.Add("viewDBUpdates", "Datenbankaktualisierungen anzeigen");
@@ -161,8 +161,8 @@ namespace RelhaxModpack
             German.Add("MulticoreExtractionText", "Mehrkern Extraktion");
             German.Add("MulticoreExtractionCBDescription", "Wird der Installer den parallelen Entpack-Modus verwenden. Er wird mehrere Zip-Dateien gleichzeitig entpacken" +
                 " und dadurch die Installationszeit reduziert. Nur für SSD Festplatten.");
-
-
+            German.Add("UninstallDefaultText", "Standard");
+            German.Add("UninstallQuickText", "Schnell");
             German.Add("ExportModeText", "Export-Modus");
             German.Add("ExportModeCBDescription", "Der Export-Modus ermöglicht es dir, einen Ordner und WoT-Version zu wählen, in die du deine Mods-Installation exportieren möchtest." +
                 " Nur für fortgeschrittene Benutzer. Bitte beachten: es werden KEINE Spiel-XML-Dateien entpackt und nicht modifiziert oder Atlas Dateien erstellt (jeweils aus dem Spiel" +
