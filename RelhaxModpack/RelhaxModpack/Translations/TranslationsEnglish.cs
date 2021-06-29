@@ -1734,6 +1734,9 @@ namespace RelhaxModpack
             // ACKS window title.
             English.Add("FirstLoadAcknowledgments", "First Load Acknowledgements");
 
+            //---- Fix my description, I was missing and @Nullmaruzero found me!
+            English.Add("AgreementLicense", "I have read and agree to the ");
+
             //Component: LicenseLink
             // A link inlining at the end with the AgreementLicense first checkbox text from above.
             English.Add("LicenseLink", "License Agreement");

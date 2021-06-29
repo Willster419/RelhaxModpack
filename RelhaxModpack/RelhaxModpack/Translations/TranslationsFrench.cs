@@ -532,6 +532,8 @@ namespace RelhaxModpack
             #endregion
 
             #region First Load Acknowledgements
+            French.Add("FirstLoadAcknowledgments", "Remerciement de première charge");
+            French.Add("AgreementLicense", "J'ai lu et accepté le ");
             French.Add("LicenseLink", "Accord de licence");
             French.Add("AgreementSupport1", "Je comprends que je peux recevoir de l’aide sur les ");
             French.Add("AgreementSupportForums", "Forums");
