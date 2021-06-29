@@ -249,30 +249,33 @@ namespace RelhaxModpack.Database
         /// Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
         /// </summary>
         /// <param name="ParsedCategoryList">The List of categories</param>
-        /// <param name="buildFakeParents">If the header parent SelectablePackage objects should be built as well</param>
-        public static void BuildLinksRefrence(List<Category> ParsedCategoryList, bool buildFakeParents)
+        public static void BuildLinksRefrence(List<Category> ParsedCategoryList)
         {
             foreach (Category cat in ParsedCategoryList)
             {
-                if (buildFakeParents)
-                {
-                    cat.CategoryHeader = new SelectablePackage()
-                    {
-                        Name = string.Format("----------[{0}]----------", cat.Name),
-                        TabIndex = cat.TabPage,
-                        ParentCategory = cat,
-                        Type = SelectionTypes.multi,
-                        Visible = true,
-                        Enabled = true,
-                        Level = -1,
-                        PackageName = string.Format("Category_{0}_Header", cat.Name.Replace(' ', '_')),
-                        Packages = cat.Packages
-                    };
-                }
                 foreach (SelectablePackage sp in cat.Packages)
                 {
                     BuildLinksRefrence(sp, cat, cat.CategoryHeader);
                 }
+            }
+        }
+
+        public static void BuildTopLevelParents(List<Category> ParsedCategoryList)
+        {
+            foreach (Category cat in ParsedCategoryList)
+            {
+                cat.CategoryHeader = new SelectablePackage()
+                {
+                    Name = string.Format("----------[{0}]----------", cat.Name),
+                    TabIndex = cat.TabPage,
+                    ParentCategory = cat,
+                    Type = SelectionTypes.multi,
+                    Visible = true,
+                    Enabled = true,
+                    Level = -1,
+                    PackageName = string.Format("Category_{0}_Header", cat.Name.Replace(' ', '_')),
+                    Packages = cat.Packages
+                };
             }
         }
 

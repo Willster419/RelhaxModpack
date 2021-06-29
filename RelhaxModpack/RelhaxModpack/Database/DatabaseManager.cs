@@ -158,7 +158,8 @@ namespace RelhaxModpack.Database
 
             await ParseDatabaseXmlAsync();
 
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
+            DatabaseUtils.BuildTopLevelParents(ParsedCategoryList);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
             DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
 
             return DatabaseLoadFailCode.None;
@@ -174,7 +175,8 @@ namespace RelhaxModpack.Database
             ParseRootDatabaseFromString();
             LoadWoTVersionInfoFromXmlDocument();
             ParseDatabaseXmlStable();
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
+            DatabaseUtils.BuildTopLevelParents(ParsedCategoryList);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
             DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
             return DatabaseLoadFailCode.None;
         }

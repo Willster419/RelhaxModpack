@@ -944,7 +944,8 @@ namespace RelhaxModpack.Windows
             SetProgress(20);
 
             //bulid link refrences (parent/child, levels, etc)
-            DatabaseUtils.BuildLinksRefrence(currentDatabaseManager.ParsedCategoryList, true);
+            DatabaseUtils.BuildTopLevelParents(currentDatabaseManager.ParsedCategoryList);
+            DatabaseUtils.BuildLinksRefrence(currentDatabaseManager.ParsedCategoryList);
             DatabaseUtils.BuildLevelPerPackage(currentDatabaseManager.ParsedCategoryList);
             List<DatabasePackage> flatListCurrent = DatabaseUtils.GetFlatList(currentDatabaseManager.GlobalDependencies, currentDatabaseManager.Dependencies, currentDatabaseManager.ParsedCategoryList);
 
@@ -1032,7 +1033,8 @@ namespace RelhaxModpack.Windows
             }
 
             //build link references of old document
-            DatabaseUtils.BuildLinksRefrence(parsedCateogryListOld, true);
+            DatabaseUtils.BuildTopLevelParents(parsedCateogryListOld);
+            DatabaseUtils.BuildLinksRefrence(parsedCateogryListOld);
             DatabaseUtils.BuildLevelPerPackage(parsedCateogryListOld);
             List<DatabasePackage> flatListOld = DatabaseUtils.GetFlatList(globalDependenciesOld, dependenciesOld, parsedCateogryListOld);
 
@@ -2073,7 +2075,8 @@ namespace RelhaxModpack.Windows
             SetProgress(20);
 
             //bulid link refrences (parent/child, levels, etc)
-            DatabaseUtils.BuildLinksRefrence(databaseManager.ParsedCategoryList, true);
+            DatabaseUtils.BuildTopLevelParents(databaseManager.ParsedCategoryList);
+            DatabaseUtils.BuildLinksRefrence(databaseManager.ParsedCategoryList);
             DatabaseUtils.BuildLevelPerPackage(databaseManager.ParsedCategoryList);
             client = new WebClient();
 

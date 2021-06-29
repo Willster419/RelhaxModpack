@@ -410,7 +410,7 @@ namespace RelhaxModpack.Windows
             //link everything again now that the category exists (~10ms)
             //MUST HAPPEN AFTER InitDatabaseUI()
             //NO UI THREAD REQUIRED
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
             DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //run the loop for each category to create package UI objects (~8 sec)
@@ -528,23 +528,6 @@ namespace RelhaxModpack.Windows
 
                 //add brush resource
                 cat.TabPage.Resources.Add("TabItemHeaderSelectedBackground", UISettings.CurrentTheme.SelectionListActiveTabHeaderBackgroundColor.Brush);
-
-                //make and attach the category header
-                cat.CategoryHeader = new SelectablePackage()
-                {
-                    Name = string.Format("----------[{0}]----------", cat.Name),
-                    TabIndex = cat.TabPage,
-                    ParentCategory = cat,
-                    Type = SelectionTypes.multi,
-                    Visible = true,
-                    Enabled = true,
-                    Level = -1,
-                    PackageName = string.Format("Category_{0}_Header", cat.Name.Replace(' ', '_'))
-                };
-
-                //creates a reference to itself
-                cat.CategoryHeader.Parent = cat.CategoryHeader;
-                cat.CategoryHeader.TopParent = cat.CategoryHeader;
 
                 switch (ModpackSettings.ModSelectionView)
                 {

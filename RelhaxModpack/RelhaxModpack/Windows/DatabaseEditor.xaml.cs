@@ -1489,7 +1489,8 @@ namespace RelhaxModpack.Windows
             SearchBox.Items.Clear();
 
             //rebuild the levels as well
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, true);
+            DatabaseUtils.BuildTopLevelParents(ParsedCategoryList);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
             DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
             DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
