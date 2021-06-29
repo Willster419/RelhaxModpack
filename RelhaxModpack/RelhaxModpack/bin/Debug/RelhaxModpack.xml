@@ -1375,12 +1375,11 @@
             <param name="packages">The list of packages to sort</param>
             <param name="recursive">If the list should recursively sort</param>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildLinksRefrence(System.Collections.Generic.List{RelhaxModpack.Database.Category},System.Boolean)">
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildLinksRefrence(System.Collections.Generic.List{RelhaxModpack.Database.Category})">
             <summary>
             Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
             </summary>
             <param name="ParsedCategoryList">The List of categories</param>
-            <param name="buildFakeParents">If the header parent SelectablePackage objects should be built as well</param>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildLinksRefrence(RelhaxModpack.Database.SelectablePackage,RelhaxModpack.Database.Category,RelhaxModpack.Database.SelectablePackage)">
             <summary>
