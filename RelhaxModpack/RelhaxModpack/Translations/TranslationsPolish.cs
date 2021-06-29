@@ -531,7 +531,7 @@ namespace RelhaxModpack
             #endregion
 
             #region First Load Acknowledgements
-            Polish.Add("FirstLoadAcknowledgments", "Pierwsze Urochomienie — Umowa Licencyjna"); // Can't think of a gracious way to do this one. @Nullmaruzero
+            Polish.Add("FirstLoadAcknowledgments", "Pierwsze Uruchomienie — Umowa Licencyjna"); // Can't think of a gracious way to do this one. @Nullmaruzero
             Polish.Add("LicenseLink", "Umowy Licencyjnej");
             Polish.Add("AgreementSupport1", "Rozumiem, że mogę uzyskać wsparcie techniczne na dedykowanym ");
             Polish.Add("AgreementSupportForums", "Forum");
