@@ -94,7 +94,7 @@ namespace RelhaxModpack
             French.Add("DisableTriggersCBDescription", "Autoriser les déclencheurs peut accélérer l’installation en exécutant certaines tâches (comme la création d’icônes de contour) au cours de l’extraction "+
                  "une fois que toutes les ressources requises pour cette tâche sont prêtes. Ceci est automatiquement désactivé si des mods utilisateur sont détectés");
             French.Add("appDataFolderNotExistHeader", "Impossible de détecter le dossier de cache de WoT");
-
+            French.Add("CancelDownloadInstallButton", French["cancel"]);
             French.Add("appDataFolderNotExist", "L'installateur n'a pas pu détecter le dossier de cache de WoT. Continuer l'installation sans nettoyer le cache de WoT ?");
             French.Add("viewAppUpdates", "Afficher les dernières mises à jour de l'application");
             French.Add("viewDBUpdates", "Afficher les dernières mises à jour de la base de données");
@@ -119,12 +119,12 @@ namespace RelhaxModpack
             French.Add("AutoInstallText", "Activer l'installation automatique");
             French.Add("AutoInstallCBDescription", "Quand un fichier de sélection et une heure sont définis ci-dessous, l'installateur va automatiquement chercher les mises à jour de vos mods et les appliquer");
             French.Add("OneClickInstallText", "Activer l'installation en un clic");
-            French.Add("ForceEnabledCB", "Forcer l'activation de tous les packs [!]");
+            French.Add("AutoOneclickShowWarningOnSelectionsFailText", "Afficher un avertissement si le fichier de sélection contient des erreurs lorsqu'il est chargé");
             French.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", "Lors de l'utilisation de l'installation automatique ou en un clic, affiche un avertissement "+
                 "pour annuler l'installation si une erreur apparait lors de l'application du fichier de sélection");
-
+            French.Add("ForceEnabledText", "Forcer l'activation de tous les packs [!]");
             French.Add("ForceEnabledCBDescription", "Provoque l'activation de tous les packs. Peut causer de lourds problèmes de stabilité de votre installation");
-
+            French.Add("ForceVisibleText", "Forcer 10la visibilité de tous les packs [!]");
             French.Add("ForceVisibleCBDescription", "Provoque l'activation de la visibilité de tous les packs. Peut causer de lourds problèmes de stabilité de votre installation");
             French.Add("LoadAutoSyncSelectionFileText", "Charger le fichier de sélection");
             French.Add("LoadAutoSyncSelectionFileDescription", "Chargement de votre fichier de sélection de mods pour utiliser l'installation en un clic ainsi que l'installation automatique");
@@ -144,7 +144,7 @@ namespace RelhaxModpack
             French.Add("MulticoreExtractionCoresCountLabel", "Coeurs détectés: {0}");
             French.Add("MulticoreExtractionCoresCountLabelDescription", "Nombre de coeurs logiques de processeur (threads) détectés sur votre système");
             French.Add("SaveDisabledModsInSelectionDescription", "Quand un mod est réactivé, il sera sélectionné depuis votre sélection de fichiers");
-            French.Add("AdvancedInstallationProgress", "Voir la fenêtre de progression de l'installation");
+            French.Add("AdvancedInstallationProgressText", "Voir la fenêtre de progression de l'installation");
             French.Add("AdvancedInstallationProgressDescription", "Montre une fenêtre de progression de l'installation pendant l'extraction, utile quand vous avez l'extraction multicoeurs activée");
             French.Add("ThemeSelectText", "Sélectionner un thème");
             French.Add("ThemeDefaultText", "Standard");
@@ -165,13 +165,13 @@ namespace RelhaxModpack
             French.Add("ExportModeText", "Mode d'exportation");
             French.Add("ExportModeCBDescription", "Le mode d'exportation vous permettra de sélectionner un dossier et la version de WoT vers lesquels vous souhaitez exporter votre installation de mods. Pour les utilisateurs avancés uniquement. "+
                 "Notez que cela ne va PAS: décompresser les fichiers xml du jeu, les fichiers de correctifs (fournis par le jeu) ou créer les fichiers d'atlas. Les instructions se trouvent dans le répertoire d'exportation.");
-
+            French.Add("ViewCreditsButtonText", "Voir les crédits");
             French.Add("ExportWindowDesctiption", "Sélection de la version de WoT que vous souhaitez exporter");
             French.Add("HelperText", "Bienvenue dans le Modpack Relhax !"+
                 "\nJ'ai essayé de faire le modpack le plus simple possible, mais des questions peuvent toujours survenir. Survolez un paramètre pour voir une explication." +
                 "\nMerci d'utiliser Relhax, j'espère que vous l'apprécierez ! - Willster419");
             French.Add("helperTextShort", "Bienvenue dans le Modpack Relhax !");
-
+            French.Add("NotifyIfSameDatabaseText", "Informer si aucune nouvelle base de données n'est disponible (base de données stable uniquement)");
             French.Add("NotifyIfSameDatabaseCBDescription", "Vous informe si votre dernière version de base de données installée est identique. Si c'est le cas, cela signifie qu'il n'y a pas de mise à jour des mods. Cela ne marche qu'avec la base de données stable.");
             French.Add("ShowInstallCompleteWindowText", "Montrer la fenêtre d'installation terminée" );
             French.Add("ShowInstallCompleteWindowCBDescription", "Afficher une fenêtre lors de l'achèvement de l'installation avec des opérations populaires à" +
