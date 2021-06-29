@@ -2031,6 +2031,10 @@ namespace RelhaxModpack
             //
             English.Add("GcDownloadStep5CloseText", English["close"]);
 
+            //--- Fix my description, @Nullmaruzero
+            //      Without this string in English, the window title does not update back to English after selecting any other language.
+            English.Add("FirstLoadSelectLanguage", "Language Selection");
+
             //Component: SelectLanguageHeader
             // A header (label) in the window with a list of radio buttons with available languages below.
             English.Add("SelectLanguageHeader", "Please select your language");

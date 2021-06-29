@@ -624,6 +624,7 @@ namespace RelhaxModpack
             Russian.Add("GcDownloadStep5TabDescription", "Процесс успешно завершён. Wargaming Game Center должен обнаружить файлы после запуска.");
             Russian.Add("FirstLoadSelectLanguage", "Язык интерфейса");
             Russian.Add("SelectLanguageHeader", "Пожалуйста, выберите язык интерфейса");
+            Russian.Add("SelectLanguagesContinueButton", Russian["ContinueButton"]);
             Russian.Add("Credits", "Авторы Relhax Modpack");
             Russian.Add("creditsProjectLeader", "Руководитель проекта");
             Russian.Add("creditsDatabaseManagers", "Операторы базы данных");

@@ -622,6 +622,7 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep5TabDescription", "¡El proceso se ha completado! WG Game Center debería detectar los archivos en su próxima ejecución");
             Spanish.Add("FirstLoadSelectLanguage", "Selección de Idioma");
             Spanish.Add("SelectLanguageHeader", "Por favor, seleccione el idioma");
+            Spanish.Add("SelectLanguagesContinueButton", Spanish["ContinueButton"]);
             Spanish.Add("Credits", "Créditos de Relhax Modpack");
             Spanish.Add("creditsProjectLeader", "Líder de proyecto");
             Spanish.Add("creditsDatabaseManagers", "Administradores de la base de datos");

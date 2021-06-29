@@ -623,6 +623,7 @@ namespace RelhaxModpack
             French.Add("GcDownloadStep5TabDescription", "Le processus est terminé. Le Game Center devrait détecter les fichiers quand il sera ouvert.");
             French.Add("FirstLoadSelectLanguage", "Sélection de la langue");
             French.Add("SelectLanguageHeader", "S'il vous plaît, sélectionnez votre langue");
+            French.Add("SelectLanguagesContinueButton", French["ContinueButton"]);
             French.Add("Credits", "Crédits Relhax Modpack");
             French.Add("creditsProjectLeader", "Directeur de projet");
             French.Add("creditsDatabaseManagers", "Gérants de la base de données");

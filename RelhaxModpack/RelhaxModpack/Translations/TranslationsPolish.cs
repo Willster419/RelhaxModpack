@@ -623,6 +623,7 @@ namespace RelhaxModpack
             Polish.Add("GcDownloadStep5TabDescription", "Proces zakończony sukcesem! WG Game Center powinno wykryć pobrane pliki aktualizacji przy uruchomieniu.");
             Polish.Add("FirstLoadSelectLanguage", "Wybór Języka");
             Polish.Add("SelectLanguageHeader", "Wybierz język aplikacji");
+            Polish.Add("SelectLanguagesContinueButton", Polish["ContinueButton"]);
             Polish.Add("Credits", "Lista zasług Relhax Modpack");
             Polish.Add("creditsProjectLeader", "Przewodnictwo Projektu");
             Polish.Add("creditsDatabaseManagers", "Administracja Bazy Danych");
