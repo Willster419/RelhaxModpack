@@ -1,22 +1,19 @@
-# Beta Application version 1.3.2.3 (2021-06-25)
-https://www.virustotal.com/gui/file-analysis/NzJlYTMzYTU5N2RjMGRlNGE1ODg5YjdkZGFkNzVjOTk6MTYyNDYxMTQzOA==/detection
+# Developer Preview application version 1.3.2.8 (2021-06-28)
+https://www.virustotal.com/gui/file-analysis/NDhjOWJiMzRhZGNiMjRkNjkwZTZmYzAyZDkzOTgyNjg6MTYyNDk0OTIzNg==/detection
 
-- Fixed the bug of the database editor not saving to the correct file location.
---------------------------------------------------------------------------------------------------------------------------------------------
+### Initial development of the new automation system
+- Xml based programming of automatically updating the database rather then relying on manual work.
+- An automation runner window runs the `AutomationSequencer`.
+- An `AutomationSequencer` runs a list of `AutomationSequence` objects, called sequences for short.
+- Each sequence has a list of tasks that it will run. The types of tasks can be downloading, file IO, zipfile processing, file comparison via md5 hash, and more.
 
-# Beta Application version 1.3.2.2 (2021-06-24)
-https://www.virustotal.com/gui/file-analysis/Njc3OWIxM2JjYTI5ZWFhNWI1YTkzMTliZDk0Nzg1YTI6MTYyNDU2NzUxNQ==/detection
-
-- Fixed a bug where custom database feature windows (like the editor, patch designer, etc.) would crash on launch if a custom font was requested.
-- Fixed a bug that would not correctly detect the version of windows above windows 8.0.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-# Beta Application version 1.3.2.1 (2021-06-24)
-https://www.virustotal.com/gui/file-analysis/MGJmMjNkMGFjNzVhM2Y5YzQxMTgwODYyM2MyZWM4YTE6MTYyNDUyMTY4Mg==/detection
-
+### Other fixes
 - Fixed a bug with the first time load of the application distribution not being set on startup. It was causing a loop (or weird update track, at least).
 - Moved several static methods and copy-paste code into a single `DatabaseManager` class to handle loading and saving of the database.
-- Initial development of the new automation system.
+- Fixed a bug where custom database feature windows (like the editor, patch designer, etc.) would crash on launch if a custom font was requested.
+- Fixed a bug that would not correctly detect the version of windows above windows 8.0.
+- Fixed the bug of the database editor not saving to the correct file location.
+- fixed the bug of the database editor crashing when removing or adding, or moving a package at the top most level of a category.
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 # Beta Application version 1.3.1.2 (2021-05-31)
