@@ -94,7 +94,7 @@ namespace RelhaxModpack
             Spanish.Add("DisableTriggersCBDescription", "Permitir los Desencadenantes puede acelerar la instalación al ejecutar algunas tareas (como crear los iconos de contorno) durante la extracción " +
                 "después de que todos los recursos para la operación estén disponibles. Se desactiva automáticamente si se detectan Mods del Usuario");
             Spanish.Add("appDataFolderNotExistHeader", "No se ha detectado la carpeta de caché de WoT");
-
+            Spanish.Add("CancelDownloadInstallButton", Spanish["cancel"]);
             Spanish.Add("appDataFolderNotExist", "El instalador no ha podido detectar la carpeta de caché de WoT. ¿Continuar la instalación sin limpiar la caché?");
             Spanish.Add("viewAppUpdates", "Ver las últimas actualicaciones de la aplicación");
             Spanish.Add("viewDBUpdates", "Ver las últimas actualizaciones de la base de datos");
@@ -118,11 +118,11 @@ namespace RelhaxModpack
             Spanish.Add("AutoInstallText", "Habilitar instalación automática");
             Spanish.Add("AutoInstallCBDescription", "Cuando se establece un archivo de selección y fecha abajo, el instalador buscará automáticamente actualizaciones a los Mods instalados y las aplicará");
             Spanish.Add("OneClickInstallText", "Habilitar instalación en un clic");
-
+            Spanish.Add("AutoOneclickShowWarningOnSelectionsFailText", "Mostrar una advertencia si el documento de selección tiene errores al cargar");
             Spanish.Add("AutoOneclickShowWarningOnSelectionsFailButtonDescription", "Cuando se utiliza instalación automática o en un clic, mostrar una advertencia para cancelar si ocurre algún error al aplicar el archivo de selección");
-
+            Spanish.Add("ForceEnabledText", "Forzar habilitación de todos los paquetes [!]");
             Spanish.Add("ForceEnabledCBDescription", "Fuerza la habilitación de todos los paquetes. Puede causar problemas de inestabilidad severa de la instalación");
-
+            Spanish.Add("ForceVisibleText", "Forzar visibilidad de todos los paquetes [!]");
             Spanish.Add("ForceVisibleCBDescription", "Fuerza a todos los paquetes a ser visibles. Puede causar problemas de inestabilidad severa de la instalación");
             Spanish.Add("LoadAutoSyncSelectionFileText", "Cargar archivo de selección");
             Spanish.Add("LoadAutoSyncSelectionFileDescription", "Carga el archivo de mods seleccionados para usar las funciones de instalación automática o en un clic.");
@@ -163,13 +163,13 @@ namespace RelhaxModpack
             Spanish.Add("ExportModeText", "Modo de exportación");
             Spanish.Add("ExportModeCBDescription", "El modo de exportación le permitirá seleccionar una carpeta y versión de WoT a la que exportar la instalación de Mods. Sólo para usuarios avanzados." +
                 " Tenga en cuenta que NO desempaquetará archivos XML o archivos de parche (proporcionados por el juego), ni creará los archivos de tipo atlas. Habrá instrucciones en el directorio exportado.");
-
+            Spanish.Add("ViewCreditsButtonText", "Ver créditos");
             Spanish.Add("ExportWindowDescription", "Seleccione la versión de WoT para la que quiere exportar");
             Spanish.Add("HelperText", "¡Bienvenido a RelHax Modpack!" +
                 "\nHe intentado hacer el Modpack tan sencillo como ha sido posible, pero aún así pueden surgir dudas. Mantenga el ratón sobre una opción para obtener una explicación." +
                 "\n¡Gracias por usar Relhax, espero que lo disfrute! - Willster419");
             Spanish.Add("helperTextShort", "¡Bienvenido a RelHax Modpack!");
-
+            Spanish.Add("NotifyIfSameDatabaseText", "Informar si no hay una nueva base de datos disponible (sólo estable)"); //"Informar si no hay nueva base de datos"
             Spanish.Add("NotifyIfSameDatabaseCBDescriptionOLD", "Mostrar una notificación si la última instalación tiene la misma versión de la base de datos." +
                 " De ser así, significa que no hay ninguna actualización para ningún Mod");
             Spanish.Add("NotifyIfSameDatabaseCBDescription", "Notificar si la última instalación tiene la misma versión de la base de datos que la actual. De ser así, significa que no ha habido ninguna actualización de ningún mod.\n" +
