@@ -920,6 +920,14 @@ namespace RelhaxModpack
             // A button in VersionInfo window confirming the installation of the new available version of the application.
             English.Add("VersionInfoYesButton", English["yes"]);
 
+            //Component: VersionInfoNoButton
+            // A button in VersionInfo window aborting the installation of the new available version of the application.
+            English.Add("VersionInfoNoButton", English["no"]);
+
+            //--- Fix my description.
+            //  Without it, the update windows displays the bare string name.
+            English.Add("NewVersionAvailable", "New version available");
+
             //Component: HavingProblemsTextBlock
             // Text on the bottom of the Updater window, followed by ManualUpdateLink with hard-coded empty space (not the key) in between.
             English.Add("HavingProblemsTextBlock", "If you are having problems updating, please");

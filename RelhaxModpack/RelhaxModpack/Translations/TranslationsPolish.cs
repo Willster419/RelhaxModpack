@@ -292,6 +292,8 @@ namespace RelhaxModpack
             Polish.Add("invisible", "ukryty");
             Polish.Add("SelectionFileIssuesDisplay", "Błędy z zastosowaniem pliku kolekcji");
             Polish.Add("VersionInfo", "Aktualizacja Aplikacji");
+            Polish.Add("VersionInfoYesButton", Polish["yes"]);
+            Polish.Add("VersionInfoNoButton", Polish["no"]);
             Polish.Add("NewVersionAvailable", "Nowa wersja dostępna");
             Polish.Add("HavingProblemsTextBlock", "Jeśli masz problem z aktualizacją,");
             Polish.Add("ManualUpdateLink", "kliknij tutaj");
