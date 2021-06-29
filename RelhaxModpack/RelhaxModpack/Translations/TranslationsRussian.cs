@@ -90,7 +90,7 @@ namespace RelhaxModpack
             Russian.Add("DisableTriggersText", "Отключить триггеры");
             Russian.Add("DisableTriggersCBDescription", "Включённые триггеры позволят ускорить установку, выполняя во время распаковки некоторые задачи (такие как создание контурных иконок)\nпосле подготовки всех необходимых ресурсов. При обнаружении пользовательских модов триггеры отключаются автоматически.");
             Russian.Add("appDataFolderNotExistHeader", "Не удалось найти папку кэша World of Tanks");
-
+            Russian.Add("CancelDownloadInstallButton", Russian["cancel"]);
             Russian.Add("appDataFolderNotExist", "Установщик не обнаружил папку кэша игры. Продолжить установку без очистки кэша?");
             Russian.Add("viewAppUpdates", "Посмотреть последние обновления приложения");
             Russian.Add("viewDBUpdates", "Посмотреть последние обновления базы данных");
@@ -166,7 +166,7 @@ namespace RelhaxModpack
             Russian.Add("ExportWindowDesctiption", "Выберите версию WoT, для которой нужно произвести экспорт");
             Russian.Add("HelperText", "Вас приветствует Relhax Modpack!\n\nЯ старался сделать его максимально простым для пользователя, но вопросы всё же могут возникнуть.\n\nНаведите курсор мыши на любую настройку, и вы увидите пояснение к ней.\n\nБлагодарим вас за выбор в пользу Relhax, надеюсь, вам понравится! - Willster419");
             Russian.Add("helperTextShort", "Вас приветствует Relhax Modpack!");
-
+            Russian.Add("NotifyIfSameDatabaseText", "Сообщать об актуальности БД (только для стабильной версии)");
             Russian.Add("NotifyIfSameDatabaseCBDescriptionOLD", "Уведомлять в случае совпадения версий баз данных. Это означает отсутствие обновлений к каким-либо модификациям.");
             Russian.Add("NotifyIfSameDatabaseCBDescription", "Если ваша версия БД является актуальной, то вы увидите уведомление. Это значит, что модификации не получали обновлений.");
             Russian.Add("ShowInstallCompleteWindowText", "Показывать расширенное окно окончания установки");
