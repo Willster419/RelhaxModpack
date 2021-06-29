@@ -93,7 +93,7 @@ namespace RelhaxModpack
             Polish.Add("DisableTriggersCBDescription", "Przyśpiesza instalację wykonując pomniejsze zadania podczas wyodrębniania plików, " +
                  "gdy wszystkie wymagane czynności dla głównego zadania zostały już zakończone.\nWyzwalacze są automatycznie wyłączane przy instalowaniu własnych modów użytkownika.");
             Polish.Add("appDataFolderNotExistHeader", "Nie udało się znaleźć folderu pamięci podręcznej WoT");
-
+            Polish.Add("CancelDownloadInstallButton", Polish["cancel"]);
             Polish.Add("appDataFolderNotExist", "Instalator nie wykrył folderu pamięci podręcznej cache. Kontynuować bez opróżnienia folderu cache?");
             Polish.Add("viewAppUpdates", "Wyświetl ostatnie aktualizacje aplikacji");
             Polish.Add("viewDBUpdates", "Wyświetl ostatnie aktualizacje bazy danych");
