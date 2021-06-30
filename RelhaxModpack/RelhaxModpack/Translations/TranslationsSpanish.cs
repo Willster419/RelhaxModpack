@@ -339,7 +339,7 @@ namespace RelhaxModpack
             Spanish.Add("extractionErrorMessage", "Error eliminando las carpetas 'res_mods' o 'mods'. World of Tanks está en ejecución o bien" +
                 " sus permisos de seguridad de archivos y carpetas son incorrectos.");
             Spanish.Add("deleteErrorHeader", "Cierre las carpetas");
-            Spanish.Add("deleteErrorMessage", TranslationNeeded);
+            Spanish.Add("deleteErrorMessage", "Por favor, cierre las carpetas 'mods' y 'res_mods' (y sus subcarpetas) en el explorador, y pulse OK para continuar.");
             Spanish.Add("noUninstallLogMessage", "El archivo de registro que contiene la lista de archivos instalados (installedRelhaxFiles.log) no existe. ¿Quiere eliminar todos los mods en su lugar?");
             Spanish.Add("noUninstallLogHeader", "Eliminar todos los mods");
             Spanish.Add("moveOutOfTanksLocation", "El modpack no puede ser ejecutado desde el directorio de World_of_Tanks. Por favor, mueva la aplicación y vuelva a intentarlo.");
