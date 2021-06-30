@@ -375,6 +375,7 @@ namespace RelhaxModpack
             German.Add("detectedClientVersion", "Erkannte Client Version");
             German.Add("supportedClientVersions", "Unterstützte Clients");
             German.Add("supportNotGuarnteed", "Diese Client Version wird (noch) nicht offiziell unterstützt. Die Mods könnten nicht funktionieren oder sogar Dein World of Tanks beschädigen.");
+            German.Add("couldTryBeta", "Falls gerade ein Spiel-Patch veröffentlicht wurde, arbeitet das Team an einer Unterstützung der aktuellen Version. Du kannst versuchen die Beta-Datenbank zu nutzen.");
             German.Add("missingMSVCPLibrariesHeader", "Fehler beim Laden erforderlicher Bibliotheksdateien");
             German.Add("missingMSVCPLibraries", "Die Bibliotheken für die Konturbildverarbeitung konnten nicht geladen werden. Das könnte auf ein fehlendes Microsoft DLL-Paket hinweisen.");
             German.Add("openLinkToMSVCP", "Die Seite für den Paketdownload im Browser anzeigen?");

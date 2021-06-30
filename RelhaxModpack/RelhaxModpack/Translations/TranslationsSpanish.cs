@@ -365,7 +365,8 @@ namespace RelhaxModpack
             Spanish.Add("databaseNotFound", "No se ha encontrado base de datos en la URL especificada");
             Spanish.Add("detectedClientVersion", "Versión del cliente detectada");
             Spanish.Add("supportedClientVersions", "Versiones del cliente soportadas");
-
+            Spanish.Add("supportNotGuaranteed", "Esta versión del cliente no está oficialmente soportada. Algunos mods pueden no funcionar.");
+            Spanish.Add("couldTryBeta", "Si el juego ha sido recientemente actualizado, el equipo está trabajando en proporcionarle soporte. Puede intentar usar la base de datos en beta.");
             Spanish.Add("missingMSVCPLibrariesHeader", "No se han podido cargar las librerías necesarias");
             Spanish.Add("missingMSVCPLibraries", "No se han podido cargar las librerías de procesamiento de imágenes de iconos de contorno. Esto puede indicar que le falta un paquete requerido .dll de Microsoft");
             Spanish.Add("openLinkToMSVCP", "¿Quiere abrir su navegador en la página de descarga del paquete?");

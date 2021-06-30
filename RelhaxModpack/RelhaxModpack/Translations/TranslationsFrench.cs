@@ -346,7 +346,6 @@ namespace RelhaxModpack
             French.Add("noUninstallLogHeader", "Supprimer tous les mods");
             French.Add("moveOutOfTanksLocation", "Le modpack ne peut pas être éxecuté a partir du dossier de World of Tanks. Veuillez déplacer l`application" +
                 " dans un autre dossier et réessayer");
-
             French.Add("moveAppOutOfDownloads", "L'application a détecté qu'elle est lancée à partir du dossier 'Téléchargements'. Ceci n'est pas recommandé car l'application crée plusieurs dossiers et fichiers " +
                 "qui peuvent être difficiles à trouver dans un grand dossier 'Téléchargements'. Vous devriez déplacer l'application et tous les fichiers ainsi que dossiers 'Relhax' dans un nouveau dossier.");
             French.Add("DatabaseVersionsSameBody", "La base de données n'a pas changé depuis votre dernière installation. Par conséquent, il n'y a pas de mise à jour pour votre sélection" +
@@ -355,7 +354,8 @@ namespace RelhaxModpack
             French.Add("databaseNotFound", "Base de données introuvable à l'URL fournie");
             French.Add("detectedClientVersion", "Version détectée du client");
             French.Add("supportedClientVersions", "Clients supportés");
-
+            French.Add("supportNotGuarnteed", "Ce client n'est pas supporté officiellement. Les mods risquent de ne pas fonctionner.");
+            French.Add("couldTryBeta", "Si un patch du jeu a récemment été déployé, l'équipe travaille afin de rendre le modpack compatible. Vous pouvez essayer d'utiliser la base de données beta.");
             French.Add("missingMSVCPLibrariesHeader", "Echec du chargement des bibliothèques requises");
             French.Add("missingMSVCPLibraries", "Échec du chargement des bibliothèques de traitement d'icône de contour. Cela peut indiquer qu'il vous manque un package Microsoft dll requis.");
             French.Add("openLinkToMSVCP", "Voulez-vous ouvrir votre navigateur à la page de téléchargement du package ?");

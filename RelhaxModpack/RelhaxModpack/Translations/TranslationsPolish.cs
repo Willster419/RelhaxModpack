@@ -352,6 +352,7 @@ namespace RelhaxModpack
             Polish.Add("detectedClientVersion", "Wykryta wersja klienta");
             Polish.Add("supportedClientVersions", "Wspierane wersje klienta");
             Polish.Add("supportNotGuarnteed", "Ta wersja klienta gry nie jest oficjalnie wspierana. Mody mogą działać nieprawidłowo.\n"); // Line-break to fit with 'couldTryBeta' below. @Nullmaruzero
+            Polish.Add("couldTryBeta", "Jeśli niedawo została wydana nowa wersja lub aktualizacja WoT, będziemy potrzebować trochę czasu na aktualizację paczki.\n\nW międzyczasie możesz spróbować użyć wersji rozwojowej (BETA) bazy danych.");
             Polish.Add("missingMSVCPLibrariesHeader", "Nie udało się wczytać wymaganych bibliotek");
             Polish.Add("missingMSVCPLibraries", "Nie udało się wczytać bibliotek odpowiedzialnych za przetwarzanie obrazów ikon. Prawdopodobnie wymagane biblioteki DLL nie są zainstalowane.");
             Polish.Add("openLinkToMSVCP", "Czy chcesz przejsć do strony pobierania wymaganego pakietu?");
