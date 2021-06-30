@@ -553,7 +553,8 @@ namespace RelhaxModpack
             French.Add("AgreementSupportDiscord", "Discord");
             French.Add("AgreementHoster", "Je comprends que Relhax est un hébergement de mods et un service d'installation. Relhax ne gère pas tous les mods de ce Modpack");
             French.Add("AgreementAnonData", "Je comprends que Relhax V2 collecte des données d'utilisation anonymes pour améliorer l'application, et peut être désactivée dans les options avancées");
-
+            French.Add("V2UpgradeNoticeText", "Il semble que vous exécutiez une mise à niveau de V1 à V2 pour la première fois.\n" +
+                "Appuyer sur Continuer entraînera une mise à niveau de la structure de fichiers qui ne peut pas être annulée. Il est recommandé de faire une sauvegarde de votre dossier V1 avant de continuer.");
             French.Add("upgradingStructure", "Mise à niveau de la structure des fichiers et des dossiers V1");
             #endregion
 
