@@ -202,7 +202,6 @@ namespace RelhaxModpack
             German.Add("HomepageButtonDescription", "Zu unserer Homepage");
             German.Add("DonateButtonDescription", "Spende für die Weiterentwicklung");
             German.Add("FindBugAddModButtonDescription", "Fehler gefunden? Willst Du einen Mod hinzufügen? Bitte hier melden!");
-            German.Add("SelectionViewGB", "Darstellungsart");
             German.Add("SelectionDefaultText", "Standard");
             German.Add("SelectionLayoutDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             German.Add("SelectionDefaultDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");

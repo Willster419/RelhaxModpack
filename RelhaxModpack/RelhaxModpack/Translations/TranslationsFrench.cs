@@ -100,15 +100,12 @@ namespace RelhaxModpack
             French.Add("viewDBUpdates", "Afficher les dernières mises à jour de la base de données");
             French.Add("EnableColorChangeDefaultV2Text", "Activer le changement de couleurs");
             French.Add("EnableColorChangeDefaultV2CBDescription", "Activer le changement de couleurs lors de la sélection d'un mod ou d'une configuration");
-
             French.Add("EnableColorChangeLegacyText", "Activer le changement de couleurs");
             French.Add("EnableColorChangeLegacyCBDescription", "Activer le changement de couleurs lors de la sélection d'un mod ou d'une configuration");
             French.Add("ShowOptionsCollapsedLegacyText", "Afficher les options réduites au démarrage");
             French.Add("ShowOptionsCollapsedLegacyCBDescription", "Lorsque cette option est cochée, toutes les options de la liste de sélection (sauf au niveau de la catégorie) seront réduites.");
-
             French.Add("ClearLogFilesText", "Effacer les fichiers logs");
             French.Add("ClearLogFilesCBDescription", "Effacer les fichiers logs de WoT (python.log), ainsi que les fichiers logs de xvm (xvm.log) et les fichiers logs de pmod (pmod.log)");
-
             French.Add("CreateShortcutsText", "Créer des raccourcis sur le bureau");
             French.Add("CreateShortcutsCBDescription", "Lorsque cette option est cochée, l'installation créera des icônes de raccourci sur votre bureau pour les mods qui ont des" +
                 " fichiers .exe (comme la configuration WWIIHA)");
@@ -196,7 +193,6 @@ namespace RelhaxModpack
             French.Add("HomepageButtonDescription", "Visiter notre site web");
             French.Add("DonateButtonDescription", "Donation pour aider au développement");
             French.Add("FindBugAddModButtonDescription", "Tu as trouvé un bug ? Tu veux qu'un mod soit ajouté ? Signale le ici !");
-
             French.Add("SelectionDefaultText", "Standard");
             French.Add("SelectionLayoutDescription", "Sélectionnez un style de liste pour la sélection\nNormal: liste de sélection Relhax\nLegacy: liste de vue arbre OMC");
             French.Add("SelectionDefaultDescription", "Sélectionnez un style de liste pour la sélection\nNormal: liste de sélection Relhax\nLegacy: liste de vue arbre OMC");
