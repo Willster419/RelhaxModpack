@@ -498,7 +498,9 @@ namespace RelhaxModpack
             German.Add("noDescription", "Keine Beschreibung verfügbar");
             German.Add("noUpdateInfo", "Keine Aktualisierungsinformationen verfügbar");
             German.Add("noTimestamp", "Kein Zeitstempel verfügbar");
-
+            German.Add("PreviewNextPicButton", German["next"]);
+            German.Add("PreviewPreviousPicButton", German["previous"]);
+            German.Add("DevUrlHeader", "Entwickler-Link");
             German.Add("dropDownItemsInside", "Gegenstände im Inneren");
             German.Add("popular", "beliebt");
             German.Add("previewEncounteredError", "Das Vorschaufenster stellte einen Fehler fest und kann die Vorschau nicht laden");

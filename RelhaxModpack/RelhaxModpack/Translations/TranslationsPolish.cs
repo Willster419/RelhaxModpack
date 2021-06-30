@@ -198,15 +198,11 @@ namespace RelhaxModpack
             Polish.Add("EnableBordersDefaultV2Text", "Obramowanie elementów");
             Polish.Add("EnableBordersLegacyText", "Obramowanie elementów");
             Polish.Add("EnableBordersDefaultV2CBDescription", "Włącza czarne obramowanie modów i opcji konfiguracji.");
-
             Polish.Add("EnableBordersLegacyCBDescription", "Włącza czarne obramowanie modów i opcji konfiguracji.");
-
             Polish.Add("UseBetaDatabaseText", "Używaj wersji BETA bazy danych");
             Polish.Add("UseBetaDatabaseCBDescription", "Używa najnowszej wersji rozwojowej (beta) bazy danych. Stabilość modów nie jest gwarantowana!");
-
             Polish.Add("UseBetaApplicationText", "Używaj wersji BETA aplikacji");
             Polish.Add("UseBetaApplicationCBDescription", "Używa najnowszej wersji rozwojowej (beta) aplikacji. Stabilność oraz pełne tłumaczenie nie są gwarantowane!");
-
             Polish.Add("SettingsTabIntroHeader", "Witaj!");
             Polish.Add("SettingsTabSelectionViewHeader", "Opcje Widoku");
             Polish.Add("SettingsTabInstallationSettingsHeader", "Opcje Instalacji");
@@ -259,18 +255,14 @@ namespace RelhaxModpack
             Polish.Add("verifyingDownloadCache", "Sprawdzanie integralności plików: ");
             Polish.Add("InstallProgressTextBoxDescription", "Postęp instalacji będzie wyświetlany tutaj.");
             Polish.Add("testModeDatabaseNotFound", "BŁĄD KRYTYCZNY: Baza danych Trybu Testowego nie została znaleziona w lokacji:\n{0}");
-
             Polish.Add("duplicateMods", "OSTRZEŻENIE: Wykryto zduplikowany identyfikator pakietu!");
-
             Polish.Add("databaseReadFailed", "BŁĄD KRYTYCZNY: Nie udało się przetworzyć bazy danych!\n\nSzczegóły znajdziesz w pliku dziennika.");
-
             Polish.Add("configSaveSuccess", "Kolekcja zapisana pomyślnie.");
             Polish.Add("selectConfigFile", "Wybierz plik kolekcji do wczytania");
             Polish.Add("configLoadFailed", "Nie udało się załadować pliku kolekcji. Otwieranie w trybie standardowym.");
             Polish.Add("modNotFound", "Pakiet (ID = „{0}”) nie został znaleziony w bazie danych. Mógł zostać zmieniony lub usunięty.");
             Polish.Add("modDeactivated", "Poniższe pakiety zostały na chwilę obecną dezaktywowane i nie mogą być zainstalowane");
             Polish.Add("modsNotFoundTechnical", "Nie udało się znaleźć poniższych pakietów, prawdopodobnie zostały usunięte");
-
             Polish.Add("modsBrokenStructure", "Poniższe pakiety zostały na chwilę obecną dezaktywowane z powodu zmian w strukturze pakietu. Jeśli chcesz je zainstalować, musisz je zaznaczyć ponownie.");
             Polish.Add("packagesUpdatedShouldInstall", "Od czasu ostatniego użycia tego pliku kolekcji, poniższe pakiety zostały zaktualizowane. Twój plik kolekcji został automatycznie zaktualizowany (utworzono też jego jednorazową kopię zapasową)." +
                 "Jeśli jest to Twoja bieżąca instalacja i chcesz ją zachować, zaleca się instalację/aktualizację po tej wiadomości.");
@@ -351,7 +343,6 @@ namespace RelhaxModpack
             Polish.Add("noUninstallLogMessage", "Plik dziennika zawierający listę instalacyjną (installedRelhaxFiles.log) nie istnieje. Czy chcesz usunąć wszystkie modyfikacje?");
             Polish.Add("noUninstallLogHeader", "Usuń wszystkie mody");
             Polish.Add("moveOutOfTanksLocation", "Modpack nie może być uruchamiany z katalogu World_of_Tanks. Przenieś aplikację i spróbuj ponownie.");
-
             Polish.Add("moveAppOutOfDownloads", "Wykryto, że aplikacja została uruchomiona z folderu 'Pobrane'. " +
                 "Nie jest to zalecane z racji tworzenia przez aplikację wielu plików i folderów, które mogą być trudne do znalezienia w przypadku folderu 'Pobrane' z dużą ilością plików. " +
                 "Zaleca się przeniesienie aplikacji wraz z plikami do nowego/osobnego folderu.");
@@ -484,7 +475,9 @@ namespace RelhaxModpack
             Polish.Add("noDescription", "Brak opisu");
             Polish.Add("noUpdateInfo", "Brak informacji o aktualizacji");
             Polish.Add("noTimestamp", "Brak sygnatury czasowej");
-
+            Polish.Add("PreviewNextPicButton", "Następny");
+            Polish.Add("PreviewPreviousPicButton", "Poprzedni");
+            Polish.Add("DevUrlHeader", "Linki twórców");
             Polish.Add("dropDownItemsInside", "Zawiera elementy");
             Polish.Add("popular", "popularne");
             Polish.Add("previewEncounteredError", "Okno podglądu napotkało błąd. Nie udało się wygenerować podglądu.");

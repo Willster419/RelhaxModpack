@@ -480,8 +480,8 @@ namespace RelhaxModpack
             Russian.Add("noDescription", "Описание отсутствует");
             Russian.Add("noUpdateInfo", "Отсутствует информация об обновлении");
             Russian.Add("noTimestamp", "Нет метки с датой");
-
-
+            Russian.Add("PreviewNextPicButton", "след.");
+            Russian.Add("PreviewPreviousPicButton", "пред.");
             Russian.Add("DevUrlHeader", "Сайт разработчика");
             Russian.Add("dropDownItemsInside", "Элементов внутри");
             Russian.Add("popular", "популярный");

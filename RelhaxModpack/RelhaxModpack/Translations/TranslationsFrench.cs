@@ -75,7 +75,6 @@ namespace RelhaxModpack
             French.Add("SaveUserDataText", "Sauvegarder les données utilisateur");
             French.Add("SaveUserDataCBDescription", "Si cette option est sélectionnée, l'installateur va sauvegarder les données de l'utilisateur" +
                 " (comme les statistiques de la session des batailles précédentes");
-
             French.Add("CleanInstallText", "Installation propre (recommandée)");
             French.Add("CleanInstallCBDescription", "Cette option recommandée va désinstaller votre installation précédente avant d'installer la nouvelle");
             French.Add("BackupModsText", "Sauvegarder le dossier des mods");
@@ -491,7 +490,9 @@ namespace RelhaxModpack
             French.Add("noDescription", "Pas de description fournie");
             French.Add("noUpdateInfo", "Aucune information de mise à jour fournie");
             French.Add("noTimestamp", "Pas d'horodatage fourni");
-
+            French.Add("PreviewNextPicButton", French["next"]);
+            French.Add("PreviewPreviousPicButton", French["previous"]);
+            French.Add("DevUrlHeader", "Liens développeur");
             French.Add("dropDownItemsInside", "Eléments à l'intérieur");
             French.Add("popular", "Populaire");
             French.Add("previewEncounteredError", "Prévisualisation des erreurs rencontrées");
