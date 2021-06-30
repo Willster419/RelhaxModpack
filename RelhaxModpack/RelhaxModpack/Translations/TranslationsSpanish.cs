@@ -341,7 +341,7 @@ namespace RelhaxModpack
             Spanish.Add("anotherInstanceRunning", "Hay otra instancia de Relhax Manager ejecutándose");
             Spanish.Add("closeInstanceRunningForUpdate", "Por favor, cierre TODAS las instancias de Relhax Manager en ejecución antes de poder actualizar.");
             Spanish.Add("skipUpdateWarning", "Está saltándose la actualización. La compatibilidad de la base de datos no está garantizada");
-
+            Spanish.Add("patchDayMessage", "El modpack está actualmente inactivo para testear y actualizar mods durante el día de parche. Sentimos las inconveniencias cusadas.");
             Spanish.Add("configNotExist", "{0} NO existe, cargando en modo normal");
             Spanish.Add("autoAndFirst", "La primera vez no se puede cargar en modo autoinstalación, cargando en modo normal");
             Spanish.Add("confirmUninstallHeader", "Confirmación");

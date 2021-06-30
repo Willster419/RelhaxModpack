@@ -198,20 +198,14 @@ namespace RelhaxModpack
             French.Add("SelectionDefaultDescription", "Sélectionnez un style de liste pour la sélection\nNormal: liste de sélection Relhax\nLegacy: liste de vue arbre OMC");
             French.Add("SelectionLegacyDescription", "Sélectionnez un style de liste pour la sélection\nNormal: liste de sélection Relhax\nLegacy: liste de vue arbre OMC");
             French.Add("LanguageSelectionGBDescription", "Sélectionnez votre langue préférée");
-
-
             French.Add("EnableBordersDefaultV2Text", "Activer les bordures");
             French.Add("EnableBordersLegacyText", "Activer les bordures");
             French.Add("EnableBordersDefaultV2CBDescription", "Activer les bordures noires autour de chaque mod et sous-niveau de configuration.");
-
             French.Add("EnableBordersLegacyCBDescription", "Activer les bordures noires autour de chaque mod et sous-niveau de configuration.");
-
             French.Add("UseBetaDatabaseText", "Utiliser la base de données beta");
             French.Add("UseBetaDatabaseCBDescription", "Utiliser la dernière base de données beta. La stabilité des mods n'est pas garantie");
-
             French.Add("UseBetaApplicationText", "Utiliser l'application beta");
             French.Add("UseBetaApplicationCBDescription", "Utiliser la dernière version beta de l'application. Les traductions et la stabilité de l'application ne sont pas garanties");
-
             French.Add("SettingsTabIntroHeader", "Bienvenue !");
             French.Add("SettingsTabSelectionViewHeader", "Vue de sélection");
             French.Add("SettingsTabInstallationSettingsHeader", "Options d'installation");
@@ -263,18 +257,14 @@ namespace RelhaxModpack
             French.Add("verifyingDownloadCache", "Vérification de l'intégrité de ");
             French.Add("InstallProgressTextBoxDescription", "La progression d'une installation sera affichée ici");
             French.Add("testModeDatabaseNotFound", "CRITIQUE: Impossible de trouver la base de données du mode de test situé à : \n{0}");
-
             French.Add("duplicateMods", "CRITIQUE: Duplication d'identifiant de package détectée");
-
             French.Add("databaseReadFailed", "CRITIQUE: Impossible de lire la base de données");
-
             French.Add("configSaveSuccess", "Sélection sauvergardée avec succès");
             French.Add("selectConfigFile", "Trouver un fichier de sélection à charger");
             French.Add("configLoadFailed", "Le fichier de sélection ne peut pas être chargé, chargement en mode standard");
             French.Add("modNotFound", "Le package (ID = \"{0}\") n'a pas été trouvé dans la base de données. Il peut avoir été renommé ou supprimé");
             French.Add("modDeactivated", "Le package (ID = \"{0}\") est actuellement désactivé dans le modpack et ne peut pas être sélectionné pour l'installation");
             French.Add("modsNotFoundTechnical", "Les packs suivants sont introuvables et ont probablement été supprimés");
-
             French.Add("modsBrokenStructure", "Les packs suivants ont été désactivés suite à une modification dans la structure du package. Vous devez la revérifier si vous voulez les installer");
             French.Add("packagesUpdatedShouldInstall", "Les packs suivants ont été mis à jour depuis le dernier chargement de ce fichier de sélection. Votre fichier de sélection a été mis à jour avec les modifications (une sauvegarde ponctuelle a également été effectuée)." +
                 "S'il s'agit de votre installation actuelle et que vous souhaitez la conserver, il est recommandé d'installer / mettre à jour après avoir vu ce message.");
@@ -338,7 +328,8 @@ namespace RelhaxModpack
             French.Add("anotherInstanceRunning", "Une autre instance de Relhax Manager est déjà en cours d`éxecution");
             French.Add("closeInstanceRunningForUpdate", "Merci de fermer toutes les instances de Relhax Manager avant que nous puissions procéder à la mise à jour");
             French.Add("skipUpdateWarning", "Vous ignorez la mise à jour. Compatibilité de la base de données non garantie");
-
+            French.Add("patchDayMessage", "Le modpack est actuellement indisponible aujourd'hui pour tester et mettre à jour les mods. Désolé pour le dérangement." +
+              " Si vous êtes un gestionnaire de base de données, ajoutez l'argument de commande");
             French.Add("configNotExist", "{0} n'existe pas, chargement en mode normal");
             French.Add("autoAndFirst", "Le premier lancement ne peut pas être un mode d'installation automatique, chargement en mode normal");
             French.Add("confirmUninstallHeader", "Confirmation");
