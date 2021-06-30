@@ -78,6 +78,7 @@ namespace RelhaxModpack
 
             Spanish.Add("CleanInstallText", "Instalación limpia (recomendado)");
             Spanish.Add("CleanInstallCBDescription", "Esta opción recomendada desinstalará instalaciones anteriores antes de instalar la nueva");
+            Spanish.Add("BackupModsText", "Crear una copia de seguridad de la carpeta actual de Mods");
             Spanish.Add("BackupModsSizeLabelUsed", "Copias de seguridad: {0}  Tamaño: {1}");
 
             Spanish.Add("BackupModsCBDescription", "Seleccione esta opción para crear una copia de seguridad de los Mods actualmente instalados. " +
@@ -141,6 +142,7 @@ namespace RelhaxModpack
                 " en lugar de esperar a que todos los archivos sean descargados para la extracción.");
             Spanish.Add("MulticoreExtractionCoresCountLabel", "Núcleos detectados: {0}");
             Spanish.Add("MulticoreExtractionCoresCountLabelDescription", "Número de núcleos lógicos (hilos) de CPU detectados en su sistema");
+            Spanish.Add("SaveDisabledModsInSelectionText", "Conservar los mods deshabilitados cuando se guarde la selección");
             Spanish.Add("SaveDisabledModsInSelectionDescription", "Cuando un mod sea rehabilitado, será seleccionado desde su archivo de selección");
             Spanish.Add("AdvancedInstallationProgressText", "Mostrar ventana de instalación avanzada");
             Spanish.Add("AdvancedInstallationProgressDescription", "Muestra una ventana de instalación avanzada durante la extracción, útil cuando la extración multinúcleo está habilitada");
@@ -246,6 +248,7 @@ namespace RelhaxModpack
             #region ModSelectionList
             Spanish.Add("ModSelectionList", "Lista de selección");
             Spanish.Add("ContinueButtonLabel", "Instalar");
+            Spanish.Add("CancelButtonLabel", Spanish["cancel"]);
             Spanish.Add("HelpLabel", "Haga clic derecho en un componente de selección para abrir una ventana de vista previa");
             Spanish.Add("LoadSelectionButtonLabel", "Cargar selección");
             Spanish.Add("SaveSelectionButtonLabel", "Guardar selección");
@@ -256,8 +259,8 @@ namespace RelhaxModpack
             Spanish.Add("SearchTBDescription", "También puede buscar varias partes del nombre, separadas por un * (asterisco).\n Por ejemplo: config*willster419 mostrará como resultado: Willster419\'s Config");
             Spanish.Add("InstallingAsWoTVersion", "Instalando como versión de WoT: {0}");
             Spanish.Add("UsingDatabaseVersion", "Usando base de datos: {0} ({1})");
-
-
+            Spanish.Add("userMods", "Mods del usuario");
+            Spanish.Add("FirstTimeUserModsWarning", "Esta pestaña es para seleccionar archivos zip en el directorio \"RelhaxUserMods\". Deben ser archivos zip, y derían usar un directorio raíz del directorio \"World_of_Tanks\"");
             Spanish.Add("downloadingDatabase", "Descargando base de datos");
             Spanish.Add("readingDatabase", "Leyendo base de datos");
             Spanish.Add("loadingUI", "Cargando interfaz del usuario");
@@ -424,16 +427,18 @@ namespace RelhaxModpack
             Spanish.Add("Diagnostics", "Diagnósticos");
             Spanish.Add("DiagnosticsMainTextBox", "Puede utilizar las opciones a continuación para intentar diagnosticar o resolver problemas");
             Spanish.Add("LaunchWoTLauncher", "Inicia el lanzador de World of Tanks en el modo de validación de integridad");
+            Spanish.Add("CollectLogInfo", "Recoger los archivos de registro en un archivo zip para informar de un problema");
             Spanish.Add("CollectLogInfoButtonDescription", "Recopila todos los archivos de registro necesarios en un archivo ZIP.\nEsto le facilita informar de un problema");
             Spanish.Add("DownloadWGPatchFilesText", "Descargar los archivos de parche de WG para cualquier cliente mediante HTTP");
             Spanish.Add("DownloadWGPatchFilesButtonDescription", "Le guiará e instalará los archivos de parche para los juegos de Wargaming (WoT, WoWs, WoWp) mediante HTTP para que los pueda instalar más tarde.\n" +
                 "Particularmente útil para quien no puede utilizar el protocolo estándar P2P de Wargaming Game Center (WGC)");
             Spanish.Add("SelectedInstallation", "Instalación seleccionada actualmente:");
-
+            Spanish.Add("SelectedInstallationNone", "(" + Spanish["none"].ToLower() + ")");
             Spanish.Add("collectionLogInfo", "Reuniendo los archivos de registro...");
             Spanish.Add("startingLauncherRepairMode", "Inicia WoTLauncher en el modo de validación de integridad...");
             Spanish.Add("failedCreateZipfile", "No se ha podido crear el archivo zip ");
             Spanish.Add("launcherRepairModeStarted", "Modo de reparación iniciado correctamente");
+            Spanish.Add("ClearDownloadCache", "Limpiar la caché de descarga");
             Spanish.Add("ClearDownloadCacheDatabase", "Elimina el archivo de caché de descarga");
             Spanish.Add("ClearDownloadCacheDescription", "Elimina todos los archivos en la carpeta \"RelhaxDownloads\"");
             Spanish.Add("ClearDownloadCacheDatabaseDescription", "Elimina el archivo de base de datos XML. Esto causará que la integridad de todos los archivos zip vuelva a ser comprobada.\nTodos los archivos inválidos volverán a ser descargados si son seleccionados en su próxima instalación.");
@@ -448,7 +453,7 @@ namespace RelhaxModpack
             Spanish.Add("zipSavedTo", "Archivo zip guardado en: ");
             Spanish.Add("selectFilesToInclude", "Seleccione los archivos a incluir en el informe de errores");
             Spanish.Add("TestLoadImageLibraries", "Carga de prueba de las librerías de procesamiento de imágenes tipo atlas");
-
+            Spanish.Add("TestLoadImageLibrariesButtonDescription", "Comprueba las librerías de procesamiento de las imágenes tipo atlas");
             Spanish.Add("loadingAtlasImageLibraries", "Cargando librerías de procesamiento de imágenes de atlas");
             Spanish.Add("loadingAtlasImageLibrariesSuccess", "Librerías de procesamiento de imágenes de atlas cargadas correctamente");
             Spanish.Add("loadingAtlasImageLibrariesFail", "No se han podido cargar las librerías de procesamiento de imágenes de atlas");
@@ -468,11 +473,14 @@ namespace RelhaxModpack
             #region Wot Client install selection
             Spanish.Add("WoTClientSelection", "Selección de cliente de WoT");
             Spanish.Add("ClientSelectionsTextHeader", "Las siguientes instalaciones de cliente fueron detectadas automáticamente");
+            Spanish.Add("ClientSelectionsCancelButton", Spanish["cancel"]);
             Spanish.Add("ClientSelectionsManualFind", "Selección manual");
+            Spanish.Add("ClientSelectionsContinueButton", Spanish["select"]);
             Spanish.Add("AddPicturesZip", "Añadir los archivos a ZIP");
             Spanish.Add("DiagnosticsAddSelectionsPicturesLabel", "Añada archivos adicionales aquí (archivos de selección, imágenes, etc.)");
             Spanish.Add("DiagnosticsAddFilesButton", "Añadir archivos");
             Spanish.Add("DiagnosticsRemoveSelectedButton", "Eliminar seleccionados");
+            Spanish.Add("DiagnosticsContinueButton", Spanish["ContinueButton"]);
             Spanish.Add("cantRemoveDefaultFile", "No se puede eliminar un archivo que debe ser añadido por defecto.");
             #endregion
 
@@ -496,6 +504,7 @@ namespace RelhaxModpack
             #region Developer Selection Window
             Spanish.Add("DeveloperSelectionsViewer", "Visor de selecciones");
             Spanish.Add("DeveloperSelectionsTextHeader", "Selección a cargar");
+            Spanish.Add("DeveloperSelectionsCancelButton", Spanish["cancel"]);
             Spanish.Add("DeveloperSelectionsLocalFile", "Archivo local");
             Spanish.Add("DeveloperSelectionsContinueButton", "Seleccionar");
             Spanish.Add("failedToParseSelections", "No se han podido analizar las selecciones");
@@ -524,6 +533,7 @@ namespace RelhaxModpack
 
             #region News Viewer
             Spanish.Add("NewsViewer", "Novedades");
+            Spanish.Add("application_Update_TabHeader", "Aplicación");
             Spanish.Add("database_Update_TabHeader", "Base de datos");
             Spanish.Add("ViewNewsOnGoogleTranslate", "Ver en el Traductor de Google");
             #endregion
@@ -605,23 +615,34 @@ namespace RelhaxModpack
             Spanish.Add("GcDownloadStep1TabDescription", "Seleccione el cliente de Wargaming para el que recolectar datos (WoT, WoWs, WoWp)");
             Spanish.Add("GcDownloadStep1SelectClientButton", "Seleccione cliente");
             Spanish.Add("GcDownloadStep1CurrentlySelectedClient", "Cliente actualmente seleccionado: {0}");
+            Spanish.Add("GcDownloadStep1NextText", Spanish["next"]);
             Spanish.Add("GcDownloadStep1GameCenterCheckbox", "Comprobar actualizaciones de Game Center en su lugar");
             Spanish.Add("GcDownloadSelectWgClient", "Seleccione cliente de WG para el que buscar actualizaciones");
             Spanish.Add("ClientTypeValue", "Ninguno");
-
+            Spanish.Add("LangValue", Spanish["ClientTypeValue"]);
+            Spanish.Add("GcMissingFiles", "Su cliente no tiene los siguientes archivos XML de definiciones");
             Spanish.Add("GcDownloadStep2Header", "Cerrar Game Center");
             Spanish.Add("GcDownloadStep2TabDescription", "Ciera el Game Center (la aplicación detectará el cierre)");
             Spanish.Add("GcDownloadStep2GcStatus", "Game Center está {0}");
-
-
+            Spanish.Add("GcDownloadStep2GcStatusOpened", "abierto");
+            Spanish.Add("GcDownloadStep2GcStatusClosed", "cerrado");
+            Spanish.Add("GcDownloadStep2PreviousText", Spanish["previous"]);
+            Spanish.Add("GcDownloadStep2NextText", Spanish["next"]);
+            Spanish.Add("GcDownloadStep3Header", "Obtener información de actualización");
             Spanish.Add("GcDownloadStep3TabDescription", "Obteniendo lista de archivos de parche a descargar");
             Spanish.Add("GcDownloadStep3NoFilesUpToDate", "No se han encontrado archivos de parche para descargar");
+            Spanish.Add("GcDownloadStep3PreviousText", Spanish["previous"]);
+            Spanish.Add("GcDownloadStep3NextText", Spanish["next"]);
             Spanish.Add("GcDownloadStep4Header", "Descargar archivos de actualización");
             Spanish.Add("GcDownloadStep4TabDescription", "Descargando archivos de parche...");
+            Spanish.Add("GcDownloadStep4DownloadingCancelButton", Spanish["cancel"]);
             Spanish.Add("GcDownloadStep4DownloadingText", "Descargando parche {0} de  {1}: {2}");
             Spanish.Add("GcDownloadStep4DownloadComplete", "Descarga de paquetes completada");
+            Spanish.Add("GcDownloadStep4PreviousText", Spanish["previous"]);
+            Spanish.Add("GcDownloadStep4NextText", Spanish["next"]);
             Spanish.Add("GcDownloadStep5Header", "¡Completado!");
             Spanish.Add("GcDownloadStep5TabDescription", "¡El proceso se ha completado! WG Game Center debería detectar los archivos en su próxima ejecución");
+            Spanish.Add("GcDownloadStep5CloseText", Spanish["close"]);
             Spanish.Add("FirstLoadSelectLanguage", "Selección de Idioma");
             Spanish.Add("SelectLanguageHeader", "Por favor, seleccione el idioma");
             Spanish.Add("SelectLanguagesContinueButton", Spanish["ContinueButton"]);

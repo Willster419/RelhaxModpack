@@ -77,8 +77,9 @@ namespace RelhaxModpack
 
             Polish.Add("CleanInstallText", "Czysta instalacja (zalecane)");
             Polish.Add("CleanInstallCBDescription", "Odinstalowuje poprzednią instalację przed zainstalowaniem nowej. (ZALECANE)");
+            Polish.Add("BackupModsText", "Stwórz kopię zapasową modów"); // Shortened. Kept splitting into two lines. @Nullmaruzero
             Polish.Add("BackupModsSizeLabelUsed", "Kopie: {0}  Rozmiar: {1}");
-            Polish.Add("backupModsSizeCalculating", "Obliczanie..."); // ASSUMED: Used as a temporary label instead of backup sizes.
+            Polish.Add("backupModsSizeCalculating", "Obliczanie...");
             Polish.Add("BackupModsCBDescription", "Tworzy kopię zapasową wszystkich obecnie zainstalowanych modów i ich ustawień.\n" +
                      "Zostaną one spakowane w archiwum ZIP z sygnaturą czasową w nazwie i umieszczone w folderze „RelHaxModBackup”.");
             Polish.Add("SaveLastInstallText", "Zapamiętaj ostatnią kolekcję");
@@ -140,7 +141,8 @@ namespace RelhaxModpack
             Polish.Add("InstallWhileDownloadingCBDescription", "Wyodrębnia każdy pakiet zaraz po jego pobraniu, zamiast po pobraniu wszystkich pakietów.");
             Polish.Add("MulticoreExtractionCoresCountLabel", "Rdzenie CPU: {0}");
             Polish.Add("MulticoreExtractionCoresCountLabelDescription", "Liczba rdzeni logicznych procesora (wątków) wykrytych w systemie.");
-            Polish.Add("SaveDisabledModsInSelectionDescription", "Zaznacza poprzednio wybrane, ale zablokowane przez nas mody, po ich ponownym odblokowaniu.");
+            Polish.Add("SaveDisabledModsInSelectionText", "Zapamiętaj niedostępne mody");
+            Polish.Add("SaveDisabledModsInSelectionDescription", "Zaznacza poprzednio wybrane mody, które zostały przez nas zablokowane. (Jak tylko będą znów dostępne.)");
             Polish.Add("AdvancedInstallationProgressText", "Wyświetl szczegółowy podgląd instalacji");
             Polish.Add("AdvancedInstallationProgressDescription", "Wyświetla szczegółowe okno procesu instalacji. Przydatne przy włączonym wyodrębnianiu wielordzeniowym.");
             Polish.Add("ThemeSelectText", "Wybierz motyw:");
@@ -242,6 +244,7 @@ namespace RelhaxModpack
             #region ModSelectionList
             Polish.Add("ModSelectionList", "Lista Wyboru Modów");
             Polish.Add("ContinueButtonLabel", "Zainstaluj");
+            Polish.Add("CancelButtonLabel", Polish["cancel"]);
             Polish.Add("HelpLabel", "Wyświetl opis dowolnego elementu, klikając na niego prawym przyciskiem myszy.");
             Polish.Add("LoadSelectionButtonLabel", "Wczytaj kolekcję");
             Polish.Add("SaveSelectionButtonLabel", "Zapisz kolekcję");
@@ -255,7 +258,7 @@ namespace RelhaxModpack
             Polish.Add("UsingDatabaseVersion", "Aktywna baza danych: {0} ({1})");
             Polish.Add("userMods", "Własne mody"); // Changed to "own/custom mods" since it conveys a more detailed semantic meaning than "user mods". @Nullmaruzero
             Polish.Add("FirstTimeUserModsWarning", "Ta zakładka umożliwia wybór modów, które możesz umieścić w folderze \"RelhaxUserMods\"" +
-                " Muszą to być archiwa ZIP używające struktury folderów takiej samej jak folder gry (domyślnie: World_of_Tanks)."); //? Ain't sure about how the root directory thing. ASSUMED: As in the same folder structure. @Nullmaruzero
+                " Muszą to być archiwa ZIP używające struktury folderów takiej samej jak folder gry (domyślnie: World_of_Tanks).");
             Polish.Add("downloadingDatabase", "Pobieranie bazy danych");
             Polish.Add("readingDatabase", "Przetwarzanie bazy danych");
             Polish.Add("loadingUI", "Ładowanie interfejsu");
@@ -424,16 +427,18 @@ namespace RelhaxModpack
             Polish.Add("Diagnostics", "Diagnostyka");
             Polish.Add("DiagnosticsMainTextBox", "Poniższe opcje pomogą zdiagnozować i rozwiązać napotkane problemy.");
             Polish.Add("LaunchWoTLauncher", "Uruchom WoT w trybie sprawdzania integralności.");
+            Polish.Add("CollectLogInfo", "Zapisz pliki dziennika, aby zgłosić problem");
             Polish.Add("CollectLogInfoButtonDescription", "Tworzy archiwum ZIP ze wszystkimi plikami dziennika, ułatwiając zgłaszanie błędów.");
             Polish.Add("DownloadWGPatchFilesText", "Pobieranie aktualizacji dla gier WG (HTTP)");
             Polish.Add("DownloadWGPatchFilesButtonDescription", "Pobiera pliki aktualizacji dla gier Wargaming za pomocą protokołu HTTP celem późniejszej instalacji w WGC.\n" +
                 "Szczególnie przydatne dla osób, które nie mogą używać wbudowanego w Wargaming Game Center protokołu P2P.");
             Polish.Add("SelectedInstallation", "Aktywna instalacja WoT:");
-            Polish.Add("SelectedInstallationNone", "("+Polish["none"].ToLower()+")"); // This Frankenstein's monster is of my creation. @Nullmaruzero
+            Polish.Add("SelectedInstallationNone", "("+Polish["none"].ToLower()+")");
             Polish.Add("collectionLogInfo", "Zbieranie plików dziennika...");
             Polish.Add("startingLauncherRepairMode", "Uruchamianie launchera WOT w trybie sprawdzania integralności plików...");
             Polish.Add("failedCreateZipfile", "Nie udało się stworzyć archiwum ZIP ");
             Polish.Add("launcherRepairModeStarted", "Uruchomiono tryb naprawy");
+            Polish.Add("ClearDownloadCache", "Usuń tymczasowe pliki pobierania");
             Polish.Add("ClearDownloadCacheDatabase", "Usuń pliki tymczasowe bazy danych");
             Polish.Add("ClearDownloadCacheDescription", "Usuń wszystkie pliki w folderze \"RelhaxDownloads\"");
             Polish.Add("ClearDownloadCacheDatabaseDescription", "Usuń plik XML bazy danych. Spowoduje to ponowne sprawdzenie integralności wszystkich archiwów ZIP.\nWszystkie uszkodzone pliki zostaną ponownie pobrane, jeśli zostaną wybrane w następnej instalacji");
@@ -469,11 +474,14 @@ namespace RelhaxModpack
             #region Wot Client install selection
             Polish.Add("WoTClientSelection", "Wybór klienta WOT");
             Polish.Add("ClientSelectionsTextHeader", "Lista automatycznie wykrytych instalacji WOT");
+            Polish.Add("ClientSelectionsCancelButton", Polish["cancel"]);
             Polish.Add("ClientSelectionsManualFind", "Wybór Ręczny");
+            Polish.Add("ClientSelectionsContinueButton", Polish["select"]);
             Polish.Add("AddPicturesZip", "Dodaj pliki do archiwum ZIP");
             Polish.Add("DiagnosticsAddSelectionsPicturesLabel", "Dodaj wszelkie dodatkowe pliki (plik kolekcji, obrazy, itp.)");
             Polish.Add("DiagnosticsAddFilesButton", "Dodaj pliki");
             Polish.Add("DiagnosticsRemoveSelectedButton", "Usuń zaznaczone");
+            Polish.Add("DiagnosticsContinueButton", Polish["ContinueButton"]);
             Polish.Add("cantRemoveDefaultFile", "Nie można usuwać pliku dodawanego domyślnie");
             #endregion
 
@@ -495,6 +503,7 @@ namespace RelhaxModpack
             #region Developer Selection Window
             Polish.Add("DeveloperSelectionsViewer", "Podgląd wyborów");
             Polish.Add("DeveloperSelectionsTextHeader", "Kolekcja do wczytania");
+            Polish.Add("DeveloperSelectionsCancelButton", Polish["cancel"]);
             Polish.Add("DeveloperSelectionsLocalFile", "Plik lokalny");
             Polish.Add("DeveloperSelectionsContinueButton", "Wybierz");
             Polish.Add("failedToParseSelections", "Nie udało się przetworzyć kolekcji");
@@ -523,6 +532,7 @@ namespace RelhaxModpack
 
             #region News Viewer
             Polish.Add("NewsViewer", "Przegląd Wiadomości");
+            Polish.Add("application_Update_TabHeader", "Aplikacja");
             Polish.Add("database_Update_TabHeader", "Baza danych");
             Polish.Add("ViewNewsOnGoogleTranslate", "Wyświetl w Tłumaczu Google");
             #endregion
@@ -606,23 +616,34 @@ namespace RelhaxModpack
             Polish.Add("GcDownloadStep1TabDescription", "Wybierz grę WG, dla której chcesz pobrać aktualizacje (WoT, WoWs, WoWp)");
             Polish.Add("GcDownloadStep1SelectClientButton", "Wybierz klienta gry");
             Polish.Add("GcDownloadStep1CurrentlySelectedClient", "Obecnie wybrany klient: {0}");
+            Polish.Add("GcDownloadStep1NextText", Polish["next"]);
             Polish.Add("GcDownloadStep1GameCenterCheckbox", "Sprawdź aktualizacje tylko dla Wargaming Game Center");
             Polish.Add("GcDownloadSelectWgClient", "Wybierz klienta docelowej gry WG, dla której chcesz pobrać aktualizacje");
             Polish.Add("ClientTypeValue", "Brak");
-            Polish.Add("GcMissingFiles", "Twój klient nie posiada następujących plików definicji XML"); // I need to see this in action with the output. @Nullmaruzero
+            Polish.Add("LangValue", Polish["ClientTypeValue"]);
+            Polish.Add("GcMissingFiles", "Twój klient nie posiada następujących plików definicji XML");
             Polish.Add("GcDownloadStep2Header", "Zamykanie WG Game Center");
             Polish.Add("GcDownloadStep2TabDescription", "Proszę zamknąć WG Game Center (aplikacja automatycznie wykryje zamknięcie).");
             Polish.Add("GcDownloadStep2GcStatus", "Game Center jest {0}");
-            Polish.Add("GcDownloadStep2GcStatusOpened", "uruchomione"); // Lowercase for the looks 'cuz it's inlined. @Nullmaruzero
-            Polish.Add("GcDownloadStep2GcStatusClosed", "zamknięte"); // Lowercase for the looks 'cuz it's inlined. @Nullmaruzero
+            Polish.Add("GcDownloadStep2GcStatusOpened", "uruchomione");
+            Polish.Add("GcDownloadStep2GcStatusClosed", "zamknięte");
+            Polish.Add("GcDownloadStep2PreviousText", Polish["previous"]);
+            Polish.Add("GcDownloadStep2NextText", Polish["next"]);
+            Polish.Add("GcDownloadStep3Header", "Informacje o aktualizacji");
             Polish.Add("GcDownloadStep3TabDescription", "Przetwarzanie listy plików aktualizacji do pobrania");
             Polish.Add("GcDownloadStep3NoFilesUpToDate", "Brak plików do pobrania, wszystkie są aktualne.");
+            Polish.Add("GcDownloadStep3PreviousText", Polish["previous"]);
+            Polish.Add("GcDownloadStep3NextText", Polish["next"]);
             Polish.Add("GcDownloadStep4Header", "Pobieranie Aktualizacji");
             Polish.Add("GcDownloadStep4TabDescription", "Pobieranie plików aktualizacji...");
+            Polish.Add("GcDownloadStep4DownloadingCancelButton", Polish["cancel"]);
             Polish.Add("GcDownloadStep4DownloadingText", "Pobieranie aktualizacji {0} z {1}: {2}");
             Polish.Add("GcDownloadStep4DownloadComplete", "Pobieranie plików aktualizacji zakończone sukcesem!");
+            Polish.Add("GcDownloadStep4PreviousText", Polish["previous"]);
+            Polish.Add("GcDownloadStep4NextText", Polish["next"]);
             Polish.Add("GcDownloadStep5Header", "Zakończono!");
             Polish.Add("GcDownloadStep5TabDescription", "Proces zakończony sukcesem! WG Game Center powinno wykryć pobrane pliki aktualizacji przy uruchomieniu.");
+            Polish.Add("GcDownloadStep5CloseText", Polish["close"]);
             Polish.Add("FirstLoadSelectLanguage", "Wybór Języka");
             Polish.Add("SelectLanguageHeader", "Wybierz język aplikacji");
             Polish.Add("SelectLanguagesContinueButton", Polish["ContinueButton"]);

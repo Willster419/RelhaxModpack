@@ -78,6 +78,7 @@ namespace RelhaxModpack
 
             German.Add("CleanInstallText", "Saubere Installation (empfohlen)");
             German.Add("CleanInstallCBDescription", "Diese empfohlene Option deinstalliert deine vorherige Installation, bevor du die neue installierst.");
+            German.Add("BackupModsText", "Sicherung des aktuellen Mod-Verzeichnis");
             German.Add("BackupModsSizeLabelUsed", "Sicherungen: {0}  Größe: {1}");
             German.Add("backupModsSizeCalculating", "Berechne Größe des Backups...");
             German.Add("BackupModsCBDescription", "Wähle diese Option, um ein Backup deiner aktuellen Mod-Installation zu erstellen. "+
@@ -144,6 +145,7 @@ namespace RelhaxModpack
                 " und nicht erst auf das Herunterladen aller Dateien warten bevor mit dem Entpacken begonnen wird.");
             German.Add("MulticoreExtractionCoresCountLabel", "Erkannte Kerne: {0}");
             German.Add("MulticoreExtractionCoresCountLabelDescription", "Anzahl der auf deinem System erkannten logischen CPU-Kerne (Threads)");
+            German.Add("SaveDisabledModsInSelectionText", "Behalte deaktivierte Mods beim Speichern der Auswahl");
             German.Add("SaveDisabledModsInSelectionDescription", "Wenn ein Mod wieder aktiviert wird, wird er aus deiner Auswahldatei ausgewählt");
             German.Add("AdvancedInstallationProgressText", "Erweitertes Installationsfenster");
             German.Add("AdvancedInstallationProgressDescription", "Zeigt während der Extraktion ein erweitertes Installationsfenster an, das nützlich ist, wenn die Multicore-Extraktion aktiviert ist");
@@ -252,6 +254,7 @@ namespace RelhaxModpack
             #region ModSelectionList
             German.Add("ModSelectionList", "Auswahldatei");
             German.Add("ContinueButtonLabel", "Installieren");
+            German.Add("CancelButtonLabel", German["cancel"]);
             German.Add("HelpLabel", "Klicke mit der rechten Maustaste auf eine Auswahlkomponente, um ein Vorschaufenster anzuzeigen");
             German.Add("LoadSelectionButtonLabel", "Auswahl laden");
             German.Add("SaveSelectionButtonLabel", "Auswahl speichern");
@@ -434,6 +437,7 @@ namespace RelhaxModpack
             German.Add("Diagnostics", "Diagnose");
             German.Add("DiagnosticsMainTextBox", "Du kannst mit den folgenden Optionen Probleme mit dem Spiel diagnostizieren und ggf. beheben.");
             German.Add("LaunchWoTLauncher", "Starte den \"World of Tanks Launcher\" im Integritätsvalidierungsmodus");
+            German.Add("CollectLogInfo", "Sammle und packe Protokolldateien in einer ZIP-Datei um ein Problem zu melden");
             German.Add("CollectLogInfoButtonDescription", "Sammelt alle notwendigen Log-Dateien in ein .zip-Datei. \nDas macht es dir einfacher ein Problem zu melden.");
             German.Add("DownloadWGPatchFilesText", "Lade WG Patchdateien für jeden WG Client über HTTP runter");
             German.Add("DownloadWGPatchFilesButtonDescription", "Führt dich durch die Auswahl und lädt Patch-Dateien für Wargaming-Spiele (WoT, WoWs, WoWp) über HTTP herunter, damit du sie später installieren kannst. \n" +
@@ -444,6 +448,7 @@ namespace RelhaxModpack
             German.Add("startingLauncherRepairMode", "Starte den WoT Launcher im Integritätsvalidierungsmodus...");
             German.Add("failedCreateZipfile", "Fehler beim Erstellen der Zip-Datei ");
             German.Add("launcherRepairModeStarted", "Reparaturmodus wurde erfolgreich gestartet");
+            German.Add("ClearDownloadCache", "Lösche Downlaod Cache");
             German.Add("ClearDownloadCacheDatabase", "Lösche Datenbank-Cache");
             German.Add("ClearDownloadCacheDescription", "Lösche alle Daten aus dem \"RelhaxDownloads\" Ordner");
             German.Add("ClearDownloadCacheDatabaseDescription", "Lösche die XML-Datenbankdatei. Dadurch werden alle ZIP-Dateien erneut auf Integrität überprüft. \nAlle ungültigen Dateien werden erneut heruntergeladen, falls diese bei deiner nächsten Installation ausgewählt werden.");
@@ -458,7 +463,7 @@ namespace RelhaxModpack
             German.Add("zipSavedTo", "Zip-Datei gespeichert in: ");
             German.Add("selectFilesToInclude", "Wähle Dateien um diese dem Fehlerbericht hinzuzufügen");
             German.Add("TestLoadImageLibraries", "Teste das Laden der Bibliotheken zur Atlasverarbeitung");
-
+            German.Add("TestLoadImageLibrariesButtonDescription", "Testet die Atlas-Bildverarbeitungsbibliotheken");
             German.Add("loadingAtlasImageLibraries", "Lade Bibliotheken zur Atlasverarbeitung");
             German.Add("loadingAtlasImageLibrariesSuccess", "Erolgreiches Laden der Bibliotheken zur Atlasverarbeitung");
             German.Add("loadingAtlasImageLibrariesFail", "Fehler beim Laden der Bibliotheken zur Atlasverarbeitung");
@@ -478,11 +483,14 @@ namespace RelhaxModpack
             #region Wot Client install selection
             German.Add("WoTClientSelection", "Auswahl des WoT-Clients");
             German.Add("ClientSelectionsTextHeader", "Die folgenden Client-Installationen wurden automatisch erkannt");
+            German.Add("ClientSelectionsCancelButton", German["cancel"]);
             German.Add("ClientSelectionsManualFind", "Manuelle Auswahl");
+            German.Add("ClientSelectionsContinueButton", German["select"]);
             German.Add("AddPicturesZip", "Füge Dateien zum ZIP-Archiv hinzu");
             German.Add("DiagnosticsAddSelectionsPicturesLabel", "Füge zusätzliche Dateien hinzu (deine Auswahldatei, Bilder, etc.)");
             German.Add("DiagnosticsAddFilesButton", "Dateien hinzufügen");
             German.Add("DiagnosticsRemoveSelectedButton", "Entferne Ausgewähltes");
+            German.Add("DiagnosticsContinueButton", German["ContinueButton"]);
             German.Add("cantRemoveDefaultFile", "Kann keine Standard Dateien entfernen");
             #endregion
 
@@ -504,6 +512,7 @@ namespace RelhaxModpack
             #region Developer Selection Window
             German.Add("DeveloperSelectionsViewer", "Auswahl-Betrachter");
             German.Add("DeveloperSelectionsTextHeader", "Auswahl zum Laden");
+            German.Add("DeveloperSelectionsCancelButton", German["cancel"]);
             German.Add("DeveloperSelectionsLocalFile", "Lokale Datei");
             German.Add("DeveloperSelectionsContinueButton", "Auswahl bestätigen");
             German.Add("failedToParseSelections", "Auswahl konnte nicht analysiert werden");
@@ -532,6 +541,7 @@ namespace RelhaxModpack
 
             #region News Viewer
             German.Add("NewsViewer", "Nachrichten Viewer");
+            German.Add("application_Update_TabHeader", "App");
             German.Add("database_Update_TabHeader", "Datenbank");
             German.Add("ViewNewsOnGoogleTranslate", "Sieh das auf Google Translate an");
             #endregion
@@ -615,23 +625,34 @@ namespace RelhaxModpack
             German.Add("GcDownloadStep1TabDescription", "Wähle den Wargaming CLient um Daten für (WoT, WoWS, WoWP) zu sammeln");
             German.Add("GcDownloadStep1SelectClientButton", "Wähle Client");
             German.Add("GcDownloadStep1CurrentlySelectedClient", "Derzeit gewählter Client: {0}");
+            German.Add("GcDownloadStep1NextText", German["next"]);
             German.Add("GcDownloadStep1GameCenterCheckbox", "Suche stattdessen nach Game Center Updates");
             German.Add("GcDownloadSelectWgClient", "Wähle WG Client");
             German.Add("ClientTypeValue", "Nichts");
+            German.Add("LangValue", German["ClientTypeValue"]);
             German.Add("GcMissingFiles", "Deinem Clienten fehlen die folgenden XML Definitionsdateien");
             German.Add("GcDownloadStep2Header", "Schließe Game Center");
             German.Add("GcDownloadStep2TabDescription", "Schließe das Spiel (das Programm erkennt das Schließen)");
             German.Add("GcDownloadStep2GcStatus", "Game Center ist {0}");
             German.Add("GcDownloadStep2GcStatusOpened", "geöffnet");
             German.Add("GcDownloadStep2GcStatusClosed", "geschlossen");
+            German.Add("GcDownloadStep2PreviousText", German["previous"]);
+            German.Add("GcDownloadStep2NextText", German["next"]);
+            German.Add("GcDownloadStep3Header", "Hole Update Information");
             German.Add("GcDownloadStep3TabDescription", "Hole die Liste der Patchdateien für den Download");
             German.Add("GcDownloadStep3NoFilesUpToDate", "Keine Patchdateien zum Download (aktuell)");
+            German.Add("GcDownloadStep3PreviousText", German["previous"]);
+            German.Add("GcDownloadStep3NextText", German["next"]);
             German.Add("GcDownloadStep4Header", "Lade Dateien für das Update runter");
             German.Add("GcDownloadStep4TabDescription", "Lade Patchdateien runter...");
+            German.Add("GcDownloadStep4DownloadingCancelButton", German["cancel"]);
             German.Add("GcDownloadStep4DownloadingText", "Lade Patch {0} von {1} runter: {2}");
             German.Add("GcDownloadStep4DownloadComplete", "Paketdownload abgeschlossen");
+            German.Add("GcDownloadStep4PreviousText", German["previous"]);
+            German.Add("GcDownloadStep4NextText", German["next"]);
             German.Add("GcDownloadStep5Header", "Abgeschlossen");
             German.Add("GcDownloadStep5TabDescription", "Der Vorgang is fertig. Das Game Center sollte die Dateien beim Öffnen erkennen.");
+            German.Add("GcDownloadStep5CloseText", German["close"]);
             German.Add("FirstLoadSelectLanguage", "Sprachauswahl");
             German.Add("SelectLanguageHeader", "Bitte wähle deine Sprache");
             German.Add("SelectLanguagesContinueButton", German["ContinueButton"]);

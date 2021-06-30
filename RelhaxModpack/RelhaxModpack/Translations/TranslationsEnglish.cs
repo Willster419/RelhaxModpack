@@ -195,6 +195,14 @@ namespace RelhaxModpack
             //
             English.Add("CleanInstallCBDescription", "This recommended option will uninstall your previous installation before installing the new one.");
 
+            //Component: BackupModsText
+            //
+            English.Add("BackupModsText", "Backup current mods folder");
+
+            //Component: BackupModsSizeLabelUsed
+            //
+            English.Add("BackupModsSizeLabelUsed", "Backups: {0}  Size: {1}");
+
             //Component: backupModsSizeCalculating
             //
             English.Add("backupModsSizeCalculating", "Calculating backups size...");
@@ -331,6 +339,7 @@ namespace RelhaxModpack
             //Component: AutoOneclickShowWarningOnSelectionsFailText
             //
             English.Add("ForceEnabledCB", "Force all packages enabled [!]");
+
             //Component: AutoOneclickShowWarningOnSelectionsFailText
             //
             English.Add("AutoOneclickShowWarningOnSelectionsFailText", "Show warning if selection document has errors when loaded");
@@ -339,9 +348,17 @@ namespace RelhaxModpack
             //
             English.Add("ForceEnabledText", "Force all packages enabled [!]");
 
+            //Component: ForceEnabledCBDescription
+            //
+            English.Add("ForceEnabledCBDescription", "Causes all packages to be enabled. Can lead to severe stability issues of your installation");
+
             //Component: ForceVisibleText
             //
             English.Add("ForceVisibleText", "Force all packages visible [!]");
+
+            //Component: ForceVisibleCBDescription
+            //
+            English.Add("ForceVisibleCBDescription", "Causes all packages to be visible. Can lead to severe stability issues of your installation");
 
             //Component: LoadAutoSyncSelectionFileText
             // A button opening a OpenFileDialong system window for selecting the mod selection file. Used for One-Click and Auto-Install features.
@@ -408,6 +425,10 @@ namespace RelhaxModpack
             //Component: MulticoreExtractionCoresCountLabelDescription
             //
             English.Add("MulticoreExtractionCoresCountLabelDescription", "Number of logical CPU cores (threads) detected on your system");
+
+            //Component: SaveDisabledModsInSelectionText
+            //
+            English.Add("SaveDisabledModsInSelectionText", "Keep disabled mods when saving selection");
 
             //Component: SaveDisabledModsInSelectionDescription
             //
@@ -592,6 +613,10 @@ namespace RelhaxModpack
             //
             English.Add("SelectionViewGB", "Selection View");
 
+            //Component: SelectionDefaultText
+            //Mod selection view Default
+            English.Add("SelectionDefaultText", "Default");
+
             //Component: SelectionLegacyText
             //Mod selection view legacy (OMC) [Now default]
             AddTranslationToAll("SelectionLegacyText", "OMC Legacy");
@@ -614,7 +639,11 @@ namespace RelhaxModpack
 
             //Component: expandNodesDefault
             //
-            English.Add("expandNodesDefault", "Expand all");
+            English.Add("expandNodesDefault", "Expand all"); //Is this even used? I think it went with expandNodesDefaultDescription. @Nullmaruzero.
+
+            //Component: EnableBordersDefaultV2Text
+            //
+            English.Add("EnableBordersDefaultV2Text", "Enable borders");
 
             //Component: EnableBordersLegacyText
             //
@@ -746,6 +775,10 @@ namespace RelhaxModpack
             //
             English.Add("CancelButtonLabel", English["cancel"]);
 
+            //Component: HelpLabel
+            //
+            English.Add("HelpLabel", "Right-click a selection component to see a preview window");
+
             //Component: LoadSelectionButtonLabel
             //
             English.Add("LoadSelectionButtonLabel", "Load selection");
@@ -786,6 +819,15 @@ namespace RelhaxModpack
             //Component: userMods
             //
             English.Add("userMods", "User Mods");
+
+            //Component: FirstTimeUserModsWarning
+            //
+            English.Add("FirstTimeUserModsWarning", "This tab is for selecting zip files you place in the \"RelhaxUserMods\" folder." + 
+                " They must be zip files, and should use a root directory folder of the \"World_of_Tanks\" directory");
+
+            //Component: downloadingDatabase
+            //
+            English.Add("downloadingDatabase", "Downloading database");
 
             //Component: readingDatabase
             //
@@ -1382,6 +1424,10 @@ namespace RelhaxModpack
             //
             English.Add("LaunchWoTLauncher", "Start the World of Tanks launcher in integrity validation mode");
 
+            //Component: CollectLogInfo
+            //
+            English.Add("CollectLogInfo", "Collect log files into a zip file to report a problem");
+
             //Component: CollectLogInfoButtonDescription
             //
             English.Add("CollectLogInfoButtonDescription", "Collects all the necessary log files into a one ZIP files.\nThis makes it easier for you to report a problem.");
@@ -1403,6 +1449,10 @@ namespace RelhaxModpack
             // A text label with the (not selected in this case) path to the selected (active) installation.
             English.Add("SelectedInstallationNone", "(" + English["none"].ToLower() + ")");
 
+            //Component: collectionLogInfo
+            //
+            English.Add("collectionLogInfo", "Collecting log files...");
+
             //Component: startingLauncherRepairMode
             //
             English.Add("startingLauncherRepairMode", "Starting WoTLauncher in integrity validation mode...");
@@ -1414,6 +1464,10 @@ namespace RelhaxModpack
             //Component: launcherRepairModeStarted
             //
             English.Add("launcherRepairModeStarted", "Repair mode successfully started");
+
+            //Component: ClearDownloadCache
+            //
+            English.Add("ClearDownloadCache", "Clear download cache");
 
             //Component: ClearDownloadCacheDatabase
             //
@@ -1474,6 +1528,10 @@ namespace RelhaxModpack
             //Component: TestLoadImageLibrariesButtonDescription
             // A tooltip for TestLoadImageLibraries button. Does hmmmm... @Willster? :>
             English.Add("TestLoadImageLibrariesButtonDescription", "Tests the atlas image processing libraries"); // I will need your help here, @Willster. @Nullmaruzero
+
+            //Component: loadingAtlasImageLibraries
+            //
+            English.Add("loadingAtlasImageLibraries", "Loading atlas image processing libraries");
 
             //Component: loadingAtlasImageLibrariesSuccess
             //
@@ -1540,6 +1598,10 @@ namespace RelhaxModpack
             //Component: ClientSelectionsCancelButton
             //
             English.Add("ClientSelectionsCancelButton", English["cancel"]);
+
+            //Component: ClientSelectionsManualFind
+            // The text for the button that allows a user to manually locate a WoT installation. This was the previous feature before replaced with this window
+            English.Add("ClientSelectionsManualFind", "Manual Selection");
 
             //Component: ClientSelectionsContinueButton
             //
@@ -1633,6 +1695,10 @@ namespace RelhaxModpack
             //
             English.Add("DeveloperSelectionsCancelButton", English["cancel"]);
 
+            //Component: DeveloperSelectionsLocalFile
+            //The text in the first radioButton in the selection viewer, for the user to select their own personal config file to load
+            English.Add("DeveloperSelectionsLocalFile", "Local file");
+
             //Component: DeveloperSelectionsContinueButton
             //
             English.Add("DeveloperSelectionsContinueButton", "Select");
@@ -1717,6 +1783,10 @@ namespace RelhaxModpack
             //Component: NewsViewer
             //
             English.Add("NewsViewer", "News Viewer");
+
+            //Component: application_Update_TabHeader
+            //
+            English.Add("application_Update_TabHeader", "Application");
 
             //Component: database_Update_TabHeader
             //
@@ -1979,6 +2049,10 @@ namespace RelhaxModpack
             //
             English.Add("GcDownloadStep1NextText", English["next"]);
 
+            //Component: GcDownloadStep1GameCenterCheckbox
+            //
+            English.Add("GcDownloadStep1GameCenterCheckbox", "Check for game center updates instead");
+
             //Component: GcDownloadSelectWgClient
             //
             English.Add("GcDownloadSelectWgClient", "Select WG Client");
@@ -1989,7 +2063,15 @@ namespace RelhaxModpack
 
             //Component: LangValue
             //
-            English.Add("LangValue", English["ClientTypeValue"]);
+            English.Add("LangValue", English["ClientTypeValue"]); //Is this needed?
+
+            //Component: GcMissingFiles
+            //
+            English.Add("GcMissingFiles", "Your Client is missing the following xml definition files");
+
+            //Component: GcDownloadStep2Header
+            //
+            English.Add("GcDownloadStep2Header", "Close Game Center");
 
             //Component: GcDownloadStep2TabDescription
             //
@@ -2003,6 +2085,22 @@ namespace RelhaxModpack
             //Game Center is [Opened,Closed]
             English.Add("GcDownloadStep2GcStatusOpened", "opened");
 
+            //Component: GcDownloadStep2GcStatusClosed
+            //Game Center is [Opened,Closed]
+            English.Add("GcDownloadStep2GcStatusClosed", "closed");
+
+            //Component: GcDownloadStep2PreviousText
+            //
+            English.Add("GcDownloadStep2PreviousText", English["previous"]);
+
+            //Component: GcDownloadStep2NextText
+            //
+            English.Add("GcDownloadStep2NextText", English["next"]);
+
+            //Component: GcDownloadStep3Header
+            //
+            English.Add("GcDownloadStep3Header", "Get Update Information");
+
             //Component: GcDownloadStep3TabDescription
             //
             English.Add("GcDownloadStep3TabDescription", "Getting the list of patch files to download");
@@ -2010,6 +2108,10 @@ namespace RelhaxModpack
             //Component: GcDownloadStep3PreviousText
             //
             English.Add("GcDownloadStep3PreviousText", English["previous"]);
+
+            //Component: GcDownloadStep3NextText
+            //
+            English.Add("GcDownloadStep3NextText", English["next"]);
 
             //Component: GcDownloadStep4Header
             //
@@ -2019,13 +2121,29 @@ namespace RelhaxModpack
             //
             English.Add("GcDownloadStep4TabDescription", "Downloading the patch files...");
 
+            //Component: GcDownloadStep3NoFilesUpToDate
+            //
+            English.Add("GcDownloadStep3NoFilesUpToDate", "No patch files to download (up to date)");
+
             //Component: GcDownloadStep4DownloadingCancelButton
             //
             English.Add("GcDownloadStep4DownloadingCancelButton", English["cancel"]);
 
+            //Component: GcDownloadStep4DownloadingText
+            //Downloading patch 1 of 2: wg_filename.wgpkg
+            English.Add("GcDownloadStep4DownloadingText", "Downloading patch {0} of {1}: {2}");
+
             //Component: GcDownloadStep4Previous
             //
             English.Add("GcDownloadStep4PreviousText", English["previous"]);
+
+            //Component: GcDownloadStep4NextText
+            //
+            English.Add("GcDownloadStep4NextText", English["next"]);
+
+            //Component: GcDownloadStep4DownloadComplete
+            //
+            English.Add("GcDownloadStep4DownloadComplete", "Package downloads complete");
 
             //Component: GcDownloadStep5Header
             //
@@ -2050,6 +2168,10 @@ namespace RelhaxModpack
             //Component: SelectLanguagesContinueButton
             // Just a "Continue" button on the bottom. Proceeds to first-run acknowlegements window.
             English.Add("SelectLanguagesContinueButton", English["ContinueButton"]);
+
+            //Component: Credits
+            //Application window title
+            English.Add("Credits", "Relhax Modpack Credits");
 
             //Component: creditsProjectLeader
             //

@@ -240,6 +240,7 @@ namespace RelhaxModpack
             #region ModSelectionList
             Russian.Add("ModSelectionList", "Файл предустановки");
             Russian.Add("ContinueButtonLabel", "Установить");
+            Russian.Add("CancelButtonLabel", Russian["cancel"]);
             Russian.Add("HelpLabel", "Клик правой кнопкой мыши по компоненту покажет превью.");
             Russian.Add("LoadSelectionButtonLabel", "Загрузить конфигурацию");
             Russian.Add("SaveSelectionButtonLabel", "Сохранить конфигурацию");
@@ -466,11 +467,14 @@ namespace RelhaxModpack
             #region Wot Client install selection
             Russian.Add("WoTClientSelection", "Выберите клиент World of Tanks");
             Russian.Add("ClientSelectionsTextHeader", "Следующие клиенты World of Tanks были найдены автоматически");
+            Russian.Add("ClientSelectionsCancelButton", Russian["cancel"]);
             Russian.Add("ClientSelectionsManualFind", "Выбрать вручную");
+            Russian.Add("ClientSelectionsContinueButton", Russian["select"]);
             Russian.Add("AddPicturesZip", "Добавить файлы в ZIP-архив");
             Russian.Add("DiagnosticsAddSelectionsPicturesLabel", "Добавить какие-либо дополнительные файлы (файл предустановки, изображения, и т. д.)");
             Russian.Add("DiagnosticsAddFilesButton", "Добавить файлы");
             Russian.Add("DiagnosticsRemoveSelectedButton", "Удалить файл");
+            Russian.Add("DiagnosticsContinueButton", Russian["ContinueButton"]);
             Russian.Add("cantRemoveDefaultFile", "Невозможно удалить файл, добавляемый по умолчанию.");
             #endregion
 
@@ -494,6 +498,7 @@ namespace RelhaxModpack
             #region Developer Selection Window
             Russian.Add("DeveloperSelectionsViewer", "Просмотр наборов");
             Russian.Add("DeveloperSelectionsTextHeader", "Набор для загрузки");
+            Russian.Add("DeveloperSelectionsCancelButton", Russian["cancel"]);
             Russian.Add("DeveloperSelectionsLocalFile", "Локальный файл");
             Russian.Add("DeveloperSelectionsContinueButton", "Выбрать");
             Russian.Add("failedToParseSelections", "Сбой обработки набора");
@@ -606,24 +611,34 @@ namespace RelhaxModpack
             Russian.Add("GcDownloadStep1TabDescription", "Выберите клиент игры, установленной через Game Center (WoT, WoWS, WoWP)");
             Russian.Add("GcDownloadStep1SelectClientButton", "Выбрать клиент");
             Russian.Add("GcDownloadStep1CurrentlySelectedClient", "Выбран клиент {0}");
+            Russian.Add("GcDownloadStep1NextText", Russian["next"]);
             Russian.Add("GcDownloadStep1GameCenterCheckbox", "Проверить наличие обновлений для WGC вместо игры");
             Russian.Add("GcDownloadSelectWgClient", "Выбрать клиент (WGC)");
             Russian.Add("ClientTypeValue", "Нет данных");
+            Russian.Add("LangValue", Russian["ClientTypeValue"]);
             Russian.Add("GcMissingFiles", "У выбранного вами клиента отсутствуют следующие XML-файлы");
             Russian.Add("GcDownloadStep2Header", "Закрыть Game Center");
             Russian.Add("GcDownloadStep2TabDescription", "Закройте Wargaming Game Center (приложение обнаружит, что он закрылся)");
             Russian.Add("GcDownloadStep2GcStatus", "На данный момент Game Center {0}");
             Russian.Add("GcDownloadStep2GcStatusOpened", "запущен");
             Russian.Add("GcDownloadStep2GcStatusClosed", "не запущен"); // it's not "closed", it's not a shopping center. Typical Russian. - DrWeb7_1
+            Russian.Add("GcDownloadStep2PreviousText", Russian["previous"]);
+            Russian.Add("GcDownloadStep2NextText", Russian["next"]);
             Russian.Add("GcDownloadStep3Header", "Получить сведения об обновлениях");
             Russian.Add("GcDownloadStep3TabDescription", "Получение сведений о списке файлов патчей, необходимых для загрузки");
             Russian.Add("GcDownloadStep3NoFilesUpToDate", "Вы используете актуальную версию игры.");
+            Russian.Add("GcDownloadStep3PreviousText", Russian["previous"]);
+            Russian.Add("GcDownloadStep3NextText", Russian["next"]);
             Russian.Add("GcDownloadStep4Header", "Скачать файлы обновлений");
             Russian.Add("GcDownloadStep4TabDescription", "Обновление клиента игры: получение обновлений");
+            Russian.Add("GcDownloadStep4DownloadingCancelButton", Russian["cancel"]);
             Russian.Add("GcDownloadStep4DownloadingText", "Скачивание обновления {0} из {1}: {2}");
             Russian.Add("GcDownloadStep4DownloadComplete", "Получение обновлений завершено");
+            Russian.Add("GcDownloadStep4PreviousText", Russian["previous"]);
+            Russian.Add("GcDownloadStep4NextText", Russian["next"]);
             Russian.Add("GcDownloadStep5Header", "Готово!");
             Russian.Add("GcDownloadStep5TabDescription", "Процесс успешно завершён. Wargaming Game Center должен обнаружить файлы после запуска.");
+            Russian.Add("GcDownloadStep5CloseText", Russian["close"]);
             Russian.Add("FirstLoadSelectLanguage", "Язык интерфейса");
             Russian.Add("SelectLanguageHeader", "Пожалуйста, выберите язык интерфейса");
             Russian.Add("SelectLanguagesContinueButton", Russian["ContinueButton"]);
