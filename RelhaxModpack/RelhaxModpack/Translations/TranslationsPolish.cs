@@ -74,7 +74,6 @@ namespace RelhaxModpack
             Polish.Add("Forms_GER_EUButtonDescription", "Przejdź do niemieckojęzycznego forum 'World of Tanks' dla serwerów EU.");
             Polish.Add("SaveUserDataText", "Zapisz ustawienia użytkownika");
             Polish.Add("SaveUserDataCBDescription", "Zachowuje dane użytkownika (takie jak statystyki sesji z poprzednich bitew) przy instalacji modów.");
-
             Polish.Add("CleanInstallText", "Czysta instalacja (zalecane)");
             Polish.Add("CleanInstallCBDescription", "Odinstalowuje poprzednią instalację przed zainstalowaniem nowej. (ZALECANE)");
             Polish.Add("BackupModsText", "Stwórz kopię zapasową modów"); // Shortened. Kept splitting into two lines. @Nullmaruzero
@@ -100,15 +99,12 @@ namespace RelhaxModpack
             Polish.Add("viewDBUpdates", "Wyświetl ostatnie aktualizacje bazy danych");
             Polish.Add("EnableColorChangeDefaultV2Text", "Podświetlanie zmian");
             Polish.Add("EnableColorChangeDefaultV2CBDescription", "Włącza podświatlenie wybranych i zmienionych elementów.");
-
             Polish.Add("EnableColorChangeLegacyText", "Podświetlanie zmian");
             Polish.Add("EnableColorChangeLegacyCBDescription", "Włącza podświetlenie wybranych i zmienionych elementów.");
             Polish.Add("ShowOptionsCollapsedLegacyText", "Zwiń wszystkie opcje");
             Polish.Add("ShowOptionsCollapsedLegacyCBDescription", "Zwija wszystkie elementy drzewka wyboru na liście (z wyjątkiem kategorii).");
-
             Polish.Add("ClearLogFilesText", "Wyczyść pliki dziennika");
             Polish.Add("ClearLogFilesCBDescription", "Czyści pliki dziennika WoT (python.log), XVM'a (xvm.log) oraz pmod-ów (pmod.log).");
-
             Polish.Add("CreateShortcutsText", "Utwórz skróty na pulpicie");
             Polish.Add("CreateShortcutsCBDescription", "Tworzy na pulpicie skróty do modyfikacji, które są plikami wykonywalnymi EXE (np. konfigurator moda WWIIHA).");
             Polish.Add("DeleteOldPackagesText", "Usuń stare pakiety");
@@ -199,8 +195,6 @@ namespace RelhaxModpack
             Polish.Add("SelectionDefaultDescription", "Wybierz tryb widoku listy modyfikacji.\nDomyślnie: Lista wyboru RelHax\nOMC: Drzewko wyboru OMC");
             Polish.Add("SelectionLegacyDescription", "Wybierz tryb widoku listy modyfikacji.\nDomyślnie: Lista wyboru RelHax\nOMC: Drzewko wyboru OMC");
             Polish.Add("LanguageSelectionGBDescription", "Wybierz preferowany język.");
-            Polish.Add("expandNodesDefault", "Rozwiń wszystko"); //? Is this even used? @Nullmaruzero
-
             Polish.Add("EnableBordersDefaultV2Text", "Obramowanie elementów");
             Polish.Add("EnableBordersLegacyText", "Obramowanie elementów");
             Polish.Add("EnableBordersDefaultV2CBDescription", "Włącza czarne obramowanie modów i opcji konfiguracji.");

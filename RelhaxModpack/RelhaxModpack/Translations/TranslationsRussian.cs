@@ -194,9 +194,6 @@ namespace RelhaxModpack
             Russian.Add("SelectionDefaultDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
             Russian.Add("SelectionLegacyDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
             Russian.Add("LanguageSelectionGBDescription", "Выберите желаемый язык");
-            Russian.Add("expandNodesDefault", "Раскрыть все"); // It seems that's not used. - DrWeb7_1 replying to @Nullmaruzero
-            Russian.Add("expandNodesDefault2", "Раскрыть все"); // It seems that's not used. - DrWeb7_1 replying to @Nullmaruzero
-            Russian.Add("expandNodesDefaultDescription", "Выберите этот пункт для автоматического раскрытия всех списков. Применимо только для legacy.");
 
             Russian.Add("EnableBordersDefaultV2Text", "Включить границы");
             Russian.Add("EnableBordersLegacyText", "Включить границы");

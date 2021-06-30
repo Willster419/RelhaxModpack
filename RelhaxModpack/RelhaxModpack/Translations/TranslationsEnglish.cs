@@ -637,10 +637,6 @@ namespace RelhaxModpack
             //
             English.Add("LanguageSelectionGBDescription", "Select your preferred language.");
 
-            //Component: expandNodesDefault
-            //
-            English.Add("expandNodesDefault", "Expand all"); //Is this even used? I think it went with expandNodesDefaultDescription. @Nullmaruzero.
-
             //Component: EnableBordersDefaultV2Text
             //
             English.Add("EnableBordersDefaultV2Text", "Enable borders");

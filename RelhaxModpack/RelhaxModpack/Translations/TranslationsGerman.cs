@@ -209,7 +209,6 @@ namespace RelhaxModpack
             German.Add("SelectionDefaultDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             German.Add("SelectionLegacyDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             German.Add("LanguageSelectionGBDescription", "wähle Deine bevorzugte Sprache");
-            German.Add("expandNodesDefault", "Alle erweitern");
 
             German.Add("EnableBordersDefaultV2Text", "Einrahmen");
             German.Add("EnableBordersLegacyText", "Einrahmen");
