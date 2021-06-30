@@ -72,7 +72,6 @@ namespace RelhaxModpack
             Russian.Add("Forms_GER_EUButtonDescription", "Перейти на страницу модпака на форуме World of Tanks EU (страница на немецком)");
             Russian.Add("SaveUserDataText", "Сохранить пользовательские данные");
             Russian.Add("SaveUserDataCBDescription", "Установщик сохранит пользовательские данные (например, сессионную статистику из предыдущих боев)");
-
             Russian.Add("CleanInstallText", "Чистая установка (рекомендуется)");
             Russian.Add("CleanInstallCBDescription", "Перед установкой новых модификаций будут удалены все ранее установленные."); // No need to tell twice that it's a recommended option (following Windows localization style) - DrWeb7_1
             Russian.Add("BackupModsText", "Сделать резервную копию папки модификаций");

@@ -79,7 +79,7 @@ namespace RelhaxModpack
             French.Add("CleanInstallCBDescription", "Cette option recommandée va désinstaller votre installation précédente avant d'installer la nouvelle");
             French.Add("BackupModsText", "Sauvegarder le dossier des mods");
             French.Add("BackupModsSizeLabelUsed", "Sauvegardes: {0}  Taille: {1}");
-
+            French.Add("backupModsSizeCalculating", "Calcul de la taille des sauvegardes...");
             French.Add("BackupModsCBDescription", "Sélectionnez cette option pour faire une sauvegarde de votre installation actuelle." +
                      "Les sauvegardes sont stockées dans le dossier 'RelHaxModBackup' en tant que zip nommé par un horodatage." );
             French.Add("SaveLastInstallText", "Sauvegarder la denière configuration");

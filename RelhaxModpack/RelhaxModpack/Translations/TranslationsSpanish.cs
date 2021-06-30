@@ -75,12 +75,11 @@ namespace RelhaxModpack
             Spanish.Add("SaveUserDataText", "Guardar datos del usuario");
             Spanish.Add("SaveUserDataCBDescription", "Si esta opción está seleccionada, el instalador guardará datos creados por el usuario" +
                 " (como estadísticas de sesión de batallas anteriores)");
-
             Spanish.Add("CleanInstallText", "Instalación limpia (recomendado)");
             Spanish.Add("CleanInstallCBDescription", "Esta opción recomendada desinstalará instalaciones anteriores antes de instalar la nueva");
             Spanish.Add("BackupModsText", "Crear una copia de seguridad de la carpeta actual de Mods");
             Spanish.Add("BackupModsSizeLabelUsed", "Copias de seguridad: {0}  Tamaño: {1}");
-
+            Spanish.Add("backupModsSizeCalculating", "Calculando el tamaño de las copias de seguridad...");
             Spanish.Add("BackupModsCBDescription", "Seleccione esta opción para crear una copia de seguridad de los Mods actualmente instalados. " +
                     "Será almacenada en la carpeta 'RelHaxModBackup' como archivo zip, nombrado por una timestamp.");
             Spanish.Add("SaveLastInstallText", "Guardar selección de la instalación anterior");

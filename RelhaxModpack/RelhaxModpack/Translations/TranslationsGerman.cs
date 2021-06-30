@@ -75,7 +75,6 @@ namespace RelhaxModpack
             German.Add("SaveUserDataText", "Mod-Daten speichern");
             German.Add("SaveUserDataCBDescription", "Wenn dies ausgewählt ist, speichert das Installationsprogramm die vom Benutzer erstellten Daten" +
                 " (wie Sitzungsstatistiken aus früheren Gefechten)");
-
             German.Add("CleanInstallText", "Saubere Installation (empfohlen)");
             German.Add("CleanInstallCBDescription", "Diese empfohlene Option deinstalliert deine vorherige Installation, bevor du die neue installierst.");
             German.Add("BackupModsText", "Sicherung des aktuellen Mod-Verzeichnis");
