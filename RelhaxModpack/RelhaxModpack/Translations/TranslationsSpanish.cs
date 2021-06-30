@@ -100,15 +100,12 @@ namespace RelhaxModpack
             Spanish.Add("viewDBUpdates", "Ver las últimas actualizaciones de la base de datos");
             Spanish.Add("EnableColorChangeDefaultV2Text", "Activar cambio de color");
             Spanish.Add("EnableColorChangeDefaultV2CBDescription", "Activa el cambio de color al des/seleccionar un Mod o configuración");
-
             Spanish.Add("EnableColorChangeLegacyText", "Activar cambio de color");
             Spanish.Add("EnableColorChangeLegacyCBDescription", "Activa el cambio de color al des/seleccionar un Mod o configuración");
             Spanish.Add("ShowOptionsCollapsedLegacyText", "Colapsar todas las opciones al iniciar");
             Spanish.Add("ShowOptionsCollapsedLegacyCBDescription", "Cuando está marcada, todas las opciones de la lista de selección (excepto las de nivel categoría) serán colapsadas");
-
             Spanish.Add("ClearLogFilesText", "Limpiar archivos de registro");
             Spanish.Add("ClearLogFilesCBDescription", "Limpia los archivos de registro del WoT (python.log), XVM (xvm.log), y PMOD (pmod.log)");
-
             Spanish.Add("CreateShortcutsText", "Crear accesos directos en el escritorio");
             Spanish.Add("CreateShortcutsCBDescription", "Si está seleccionado, creará accesos directos en el escritorio para los mods que sean archivos .exe (p. ej. cofiguración de WWIIHA)");
             Spanish.Add("DeleteOldPackagesText", "Eliminar paquetes de archivos antiguos");
@@ -196,26 +193,19 @@ namespace RelhaxModpack
             Spanish.Add("HomepageButtonDescription", "Visita nuestra página web");
             Spanish.Add("DonateButtonDescription", "Donaciones para el desarrollo");
             Spanish.Add("FindBugAddModButtonDescription", "¿Ha encontrado un error? ¿Quiere que un mod sea añadido? Informa aquí");
-
             Spanish.Add("SelectionDefaultText", "Por defecto");
             Spanish.Add("SelectionLayoutDescription", "Selecciona un modo de la lista de selección.\nPor defecto: modo de Relhax.\nLegacy: lista en árbol de OMC");
             Spanish.Add("SelectionDefaultDescription", "Selecciona un modo de la lista de selección\nPor defecto: modo de Relhax\nLegacy: lista en árbol de OMC");
             Spanish.Add("SelectionLegacyDescription", "Selecciona un modo de la lista de selección\nPor defecto: modo de Relhax\nLegacy: lista en árbol de OMC");
             Spanish.Add("LanguageSelectionGBDescription", "Seleccione su idioma preferido");
-
-
             Spanish.Add("EnableBordersDefaultV2Text", "Habilitar bordes");
             Spanish.Add("EnableBordersLegacyText", "Habilitar bordes");
             Spanish.Add("EnableBordersDefaultV2CBDescription", "Habilita los bordes negros alrededor de cada mod y subnivel de configuración");
-
             Spanish.Add("EnableBordersLegacyCBDescription", "Habilitar los bordes negros alrededor de cada mod y subnivel de configuarción");
-
             Spanish.Add("UseBetaDatabaseText", "Utilizar la base de datos en beta");
             Spanish.Add("UseBetaDatabaseCBDescription", "Utiliza la última versión en beta de la base de datos. La estabilidad de los mods no está garantizada");
-
             Spanish.Add("UseBetaApplicationText", "Utilizar la aplicación en beta");
             Spanish.Add("UseBetaApplicationCBDescription", "Utiliza la última versión en beta de la aplicación. Las traducciones y estabilidad de la aplicación no están garantizadas");
-
             Spanish.Add("SettingsTabIntroHeader", "¡Bienvenido!");
             Spanish.Add("SettingsTabSelectionViewHeader", "Vista de selección");
             Spanish.Add("SettingsTabInstallationSettingsHeader", "Opciones de Instalación");
@@ -266,18 +256,14 @@ namespace RelhaxModpack
             Spanish.Add("verifyingDownloadCache", "Verificando la integridad de los archivos de ");
             Spanish.Add("InstallProgressTextBoxDescription", "El progreso de una instalación será mostrado aquí");
             Spanish.Add("testModeDatabaseNotFound", "CRÍTICO: No se ha encontrado base de datos del modo de testeo en:\n{0}");
-
             Spanish.Add("duplicateMods", "CRÍTICO: Detectada ID de paquete duplicada");
-
             Spanish.Add("databaseReadFailed", "CRÍTICO: No se ha podido leer la base de datos\n\nVer archivo de registro para información detallada");
-
             Spanish.Add("configSaveSuccess", "Selección guardada correctamente");
             Spanish.Add("selectConfigFile", "Busca un archivo de selección para cargar");
             Spanish.Add("configLoadFailed", "El archivo de selección no pudo ser cargado, cargando en modo estándar");
             Spanish.Add("modNotFound", "El paquete (ID = \"{0}\") no se ha encontrado en la base de datos. Puede haber sido renombrado o eliminado");
             Spanish.Add("modDeactivated", "Los siguientes paquetes están actualmente desactivados en el modpack y no han podido ser seleccionados para instalar");
             Spanish.Add("modsNotFoundTechincal", "Los siguientes paquetes no han sido encontrados, y han sido probablemente eliminados");
-
             Spanish.Add("modsBrokenStructure", "Los siguientes paquetes han sido deshabilitados debido a modificaciones en la estructura de paquetes. Deberá volver a seleccionarlos si quiere instalarlos.");
             Spanish.Add("packagesUpdatedShouldInstall", "Los siguientes paquetes han sido actualizados desde la última carga de este archivo de selección. Su archivo de selección ha sido actualizado con los cambios (y se ha creado una copia de seguridad de un sólo uso). " +
                 "Si ésta es su instalación actual, y quiere conservarla, se recomienda instalar/actualizar después de ver este mensaje.");
@@ -353,11 +339,10 @@ namespace RelhaxModpack
             Spanish.Add("extractionErrorMessage", "Error eliminando las carpetas 'res_mods' o 'mods'. World of Tanks está en ejecución o bien" +
                 " sus permisos de seguridad de archivos y carpetas son incorrectos.");
             Spanish.Add("deleteErrorHeader", "Cierre las carpetas");
-
+            Spanish.Add("deleteErrorMessage", TranslationNeeded);
             Spanish.Add("noUninstallLogMessage", "El archivo de registro que contiene la lista de archivos instalados (installedRelhaxFiles.log) no existe. ¿Quiere eliminar todos los mods en su lugar?");
             Spanish.Add("noUninstallLogHeader", "Eliminar todos los mods");
             Spanish.Add("moveOutOfTanksLocation", "El modpack no puede ser ejecutado desde el directorio de World_of_Tanks. Por favor, mueva la aplicación y vuelva a intentarlo.");
-
             Spanish.Add("moveAppOutOfDownloads", "La aplicación ha detectado que está siendo ejecutanda desde la carpeta 'Descargas'. Esto no se recomienda dado que la aplicación crea varios archivos y carpetas " +
                 "que pueden ser difíciles de encontrar en una carpeta 'Descargas' grande. Recomendamos que mueva la aplicación y todos los archivos y carpetas 'Relhax' a una nueva carpeta.");
             Spanish.Add("DatabaseVersionsSameBody", "La base de datos no ha cambiado desde su última instalación. Por tanto no hay actualizaciones para su selección de mods actual. ¿Continuar de todas formas?");
@@ -377,7 +362,7 @@ namespace RelhaxModpack
             Spanish.Add("installClearLogs", "Eliminando archivos de registro");
             Spanish.Add("installCleanMods", "Limpiando carpetas de mods");
             Spanish.Add("installExtractingMods", "Extrayendo paquete");
-
+            Spanish.Add("installZipFileEntry", "Entrada de archivo");
             Spanish.Add("installExtractingCompletedThreads", "Completados hilos de extracción");
             Spanish.Add("installExtractingOfGroup", "del grupo de instalación");
             Spanish.Add("extractingUserMod", "Extrayendo paquete de usuario");
@@ -513,13 +498,14 @@ namespace RelhaxModpack
 
             #region Advanced Installer Window
             Spanish.Add("AdvancedProgress", "Progreso detallado del instalador");
-
+            Spanish.Add("PreInstallTabHeader", "Operaciones pre-instalación");
+            Spanish.Add("ExtractionTabHeader", "Extracción");
             Spanish.Add("PostInstallTabHeader", "Operaciones post-instalación");
             Spanish.Add("AdvancedInstallBackupData", "Hacer una copia de seguridad de los datos de los mods");
             Spanish.Add("AdvancedInstallClearCache", "Limpiar caché de WoT");
             Spanish.Add("AdvancedInstalledClearLogs", "Limpiar archivos de registro");
             Spanish.Add("AdvancedInstallClearMods", "Desinstalar instalación anterior");
-
+            Spanish.Add("AdvancedInstallInstallMods", "Hilo de instalación");
             Spanish.Add("AdvancedInstallUserInstallMods", "Instalación del usuario");
             Spanish.Add("AdvancedInstallRestoreData", "Restaurar configuración");
             Spanish.Add("AdvancedInstallXmlUnpack", "Desempaquetador de XML");

@@ -505,7 +505,7 @@ namespace RelhaxModpack
             Polish.Add("AdvancedInstallClearCache", "Czyszczenie pamięci podręcznej WoT");
             Polish.Add("AdvancedInstallClearLogs", "Czyszczenie plików dziennika");
             Polish.Add("AdvancedInstallClearMods", "Dezinstalacja poprzedniej instalacji");
-            Polish.Add("AdvancedInstallInstallMods", "Proces instalacyjny"); // Saw it used as a label with a counter (1, 2, 3...). @Nullmaruzero
+            Polish.Add("AdvancedInstallInstallMods", "Wątek"); // Saw it used as a label with a counter (1, 2, 3...). @Nullmaruzero
             Polish.Add("AdvancedInstallUserInstallMods", "Instalowanie modów użytkownika");
             Polish.Add("AdvancedInstallRestoreData", "Przywracanie danych");
             Polish.Add("AdvancedInstallXmlUnpack", "Wyodrębnianie XML");

@@ -1722,6 +1722,11 @@ namespace RelhaxModpack
             English.Add("PreInstallTabHeader", "Pre-install tasks");
 
             //Component: PostInstallTabHeader
+
+            //Component: ExtractionTabHeader
+            //
+            English.Add("ExtractionTabHeader", "Extraction");
+
             //
             English.Add("PostInstallTabHeader", "Post-install tasks");
 

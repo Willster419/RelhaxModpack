@@ -100,15 +100,12 @@ namespace RelhaxModpack
             German.Add("viewDBUpdates", "Datenbankaktualisierungen anzeigen");
             German.Add("EnableColorChangeDefaultV2Text", "Farbwechsel");
             German.Add("EnableColorChangeDefaultV2CBDescription", "Die Farbe ändert sich, wenn man eine Auswahl getroffen hat");
-
             German.Add("EnableColorChangeLegacyText", "Farbwechsel");
             German.Add("EnableColorChangeLegacyCBDescription", "Die Farbe ändert sich, wenn man eine Auswahl getroffen hat");
             German.Add("ShowOptionsCollapsedLegacyText", "Optionen einklappen");
             German.Add("ShowOptionsCollapsedLegacyCBDescription", "Bei Auswahl wird die Optionen Liste bis auf die Hauptkategorien eingeklappt");
-
             German.Add("ClearLogFilesText", "Protokolldatei löschen");
             German.Add("ClearLogFilesCBDescription", "Löschen der WoT Protokolldatei, sowie XVM und PMOD Protokolldatei");
-
             German.Add("CreateShortcutsText", "Erstelle Desktop Verknüpfungen");
             German.Add("CreateShortcutsCBDescription", "Wenn diese Option aktiviert ist, werden bei der Installation die Verknüpfungen für \"World of Tanks\"," +
                 " \"World of Tanks launcher\" und, wenn bei der Installation aktiviert, auch andere Verknüpfungen zu Konfigurationsprogrammen erstellt (z.B. WWIIHA Konfiguration)");
@@ -207,19 +204,14 @@ namespace RelhaxModpack
             German.Add("SelectionDefaultDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             German.Add("SelectionLegacyDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             German.Add("LanguageSelectionGBDescription", "wähle Deine bevorzugte Sprache");
-
             German.Add("EnableBordersDefaultV2Text", "Einrahmen");
             German.Add("EnableBordersLegacyText", "Einrahmen");
             German.Add("EnableBordersDefaultV2CBDescription", "Jede Auswahl schwarz einrahmen");
-
             German.Add("EnableBordersLegacyCBDescription", "Jede Auswahl schwarz einrahmen");
-
             German.Add("UseBetaDatabaseText", "Beta-Datenbank");
             German.Add("UseBetaDatabaseCBDescription", "Verwende die letzte Beta-Version der ModPack-Datenbank. Die Stabilität der Mods kann nicht garantiert werden, jedoch werden hier auch Fehlerbehebungen als erstes getestet und implementiert.");
-
             German.Add("UseBetaApplicationText", "Beta-Version des Installers");
             German.Add("UseBetaApplicationCBDescription", "Verwende die letzte Beta-Version des ModPack Managers. Fehlerfreie Übersetzungen und Programmstabilität können nicht garantiert werden.");
-
             German.Add("SettingsTabIntroHeader", "Willkommen");
             German.Add("SettingsTabSelectionViewHeader", "Auswahlansicht");
             German.Add("SettingsTabInstallationSettingsHeader", "Installationseinstellungen");
@@ -271,18 +263,14 @@ namespace RelhaxModpack
             German.Add("verifyingDownloadCache", "Überprüfen der Dateiintegrität von ");
             German.Add("InstallProgressTextBoxDescription", "Der Fortschritt einer Installation wird hier angezeigt");
             German.Add("testModeDatabaseNotFound", "KRITISCH: Die Datanbank für den Testmodus wurde nicht gefunden:\n{0}");
-
             German.Add("duplicateMods", "KRITISCH: Doppelte Paket-ID erkannt");
-
             German.Add("databaseReadFailed", "KRITISCH: Datenbank konnte nicht gelesen werden! \n\n In der Protokolldatei stehen weitere Informationen zu diesem Fehler");
-
             German.Add("configSaveSuccess", "Auswahl erfolgreich gespeichert");
             German.Add("selectConfigFile", "Eine zu ladende Auswahldatei finden");
             German.Add("configLoadFailed", "Die Auswahldatei konnte nicht geladen werden und wurde im Standardmodus geladen");
             German.Add("modNotFound", "Das Paket (ID = \"{0}\") wurde nicht in der Datenbank gefunden. Es könnte umbenannt oder entfernt worden sein");
             German.Add("modDeactivated", "Die folgenden Pakete sind deaktiviert und können nciht zur Installation gewählt werden");
             German.Add("modsNotFoundTechnical", "Die folgenden Pakete konnten nicht gefunden werden und wurden wahrscheinlich entfernt");
-
             German.Add("modsBrokenStructure", "Die folgenden Pakete wurden aufgrund Modifizierungen an der Datenbankstruktur deaktiviert und müssen neu ausgewählt werden.");
             German.Add("packagesUpdatedShouldInstall", "Die folgenden Pakete bekamen ein Update seitdem du das letzte Mal diese Auswahldatei geladen hast. Die Datei wurde mit den Änderungen neu gespeichert (und ein einmaliges Backup wurde erstellt). " +
                 "Falls dies deine aktuelle Installation ist und du diese behalten möchtest, ist es empfehlenswert eine (Neu-)Installation auszuführen wenn du diese Nachricht liest.");
@@ -365,7 +353,6 @@ namespace RelhaxModpack
             German.Add("noUninstallLogHeader", "Entferne alle Mods");
             German.Add("moveOutOfTanksLocation", "Das Modpack kann nicht aus dem World_of_Tanks Verzeichnis laufen. Bitte verschiebe die Anwendung in ein" +
                 " anderes Verzeichnis und versuche es erneut.");
-
             German.Add("moveAppOutOfDownloads", "Die Anwendung hat festgestellt, dass sie über den Ordner \"Downloads\" gestartet wurde. Dies wird nicht empfohlen, da die Anwendung mehrere Ordner und Dateien erstellt." +
                 "Sie sollten die Anwendung und alle 'Relhax'-Dateien und -Ordner in einen eigenen neuen Ordner verschieben.");
             German.Add("DatabaseVersionsSameBody", "Die Datenbank  wurde seit deiner letzten Installation nicht verändert. Daher gibt es keine Aktuallisierungen zu deinen aktuellen" +
@@ -522,6 +509,7 @@ namespace RelhaxModpack
             #region Advanced Installer Window
             German.Add("AdvancedProgress", "Erweiterte Instaltionsfortschrittsnanziege");
             German.Add("PreInstallTabHeader", "Vorbereitung");
+            German.Add("ExtractionTabHeader", "Entpackungsvorgang");
             German.Add("PostInstallTabHeader", "Abschlußarbeiten");
             German.Add("AdvancedInstallBackupData", "Sicherungskopie der Mod-Daten");
             German.Add("AdvancedInstallClearCache", "Lösche den WoT Cache");

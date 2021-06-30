@@ -366,7 +366,7 @@ namespace RelhaxModpack
             French.Add("installClearLogs", "Suppression des fichiers de logs");
             French.Add("installCleanMods", "Nettoyage du dossier des mods");
             French.Add("installExtractingMods", "Extraction du package");
-
+            French.Add("installZipFileEntry", "Entrée de fichier");
             French.Add("installExtractingCompletedThreads", "Fils d'extraction terminés");
             French.Add("installExtractingOfGroup", "du groupe d'installation");
             French.Add("extractingUserMod", "Extraction de package utilisateur");
@@ -501,13 +501,14 @@ namespace RelhaxModpack
 
             #region Advanced Installer Window
             French.Add("AdvancedProgress", "Progression avancée du programme d'installation");
-
+            French.Add("PreInstallTabHeader", "Tâches de pré-installation");
+            French.Add("ExtractionTabHeader", "Extraction");
             French.Add("PostInstallTabHeader", "Tâches de post-insallation");
             French.Add("AdvancedInstallBackupData", "Sauvegarder les données du mod");
             French.Add("AdvancedInstallClearCache", "Effacer le cache de WoT");
             French.Add("AdvancedInstallClearLogs", "Effacer les fichiers logs");
             French.Add("AdvancedInstallClearMods", "Désinstaller l'installation précédente");
-
+            French.Add("AdvancedInstallInstallMods", "Fil d'installation");
             French.Add("AdvancedInstallUserInstallMods", "Installation utilisateur");
             French.Add("AdvancedInstallRestoreData", "Restaurer les données");
             French.Add("AdvancedInstallXmlUnpack", "Décompresseur XML");

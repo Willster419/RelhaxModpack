@@ -95,15 +95,12 @@ namespace RelhaxModpack
             Russian.Add("viewDBUpdates", "Посмотреть последние обновления базы данных");
             Russian.Add("EnableColorChangeDefaultV2Text", "Заменить цвета");
             Russian.Add("EnableColorChangeDefaultV2CBDescription", "Включить замену цветов при выборе модификации или конфигурации.");
-
             Russian.Add("EnableColorChangeLegacyText", "Заменить цвета");
             Russian.Add("EnableColorChangeLegacyCBDescription", "Включить замену цветов при выборе модификации или конфигурации.");
             Russian.Add("ShowOptionsCollapsedLegacyText", "Показывать опции свёрнутыми");
             Russian.Add("ShowOptionsCollapsedLegacyCBDescription", "Списки модификаций для выбора (кроме категорий) будут свёрнуты.");
-
             Russian.Add("ClearLogFilesText", "Очистить файлы журнала");
             Russian.Add("ClearLogFilesCBDescription", "Очистка логов World of Tanks (python.log), XVM (xvm.log) и PMOD (pmod.log).");
-
             Russian.Add("CreateShortcutsText", "Создать ярлыки на рабочем столе");
             Russian.Add("CreateShortcutsCBDescription", "Будут созданы ярлыки на рабочем столе для модификаций, являющимися EXE-файлами (как WWIIHA)");
             Russian.Add("DeleteOldPackagesText", "Удалить старые пакеты модификаций");
@@ -192,19 +189,14 @@ namespace RelhaxModpack
             Russian.Add("SelectionDefaultDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
             Russian.Add("SelectionLegacyDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
             Russian.Add("LanguageSelectionGBDescription", "Выберите желаемый язык");
-
             Russian.Add("EnableBordersDefaultV2Text", "Включить границы");
             Russian.Add("EnableBordersLegacyText", "Включить границы");
             Russian.Add("EnableBordersDefaultV2CBDescription", "Включить показ чёрных рамок вокруг наименования каждой модификации и конфигурации.");
-
             Russian.Add("EnableBordersLegacyCBDescription", "Включить показ чёрных рамок вокруг наименования каждой модификации и конфигурации.");
-
             Russian.Add("UseBetaDatabaseText", "Использовать бета-версию БД");
             Russian.Add("UseBetaDatabaseCBDescription", "Использовать последнюю доступную бета-версию БД. Стабильность модификаций не гарантирована.");
-
             Russian.Add("UseBetaApplicationText", "Использовать бета-версию программы");
             Russian.Add("UseBetaApplicationCBDescription", "Использовать последнюю доступную бета-версию программы. Корректность перевода и стабильность приложения не гарантированы.");
-
             Russian.Add("SettingsTabIntroHeader", "Добро пожаловать!");
             Russian.Add("SettingsTabSelectionViewHeader", "Выбор вида списка");
             Russian.Add("SettingsTabInstallationSettingsHeader", "Параметры установки");
@@ -254,18 +246,14 @@ namespace RelhaxModpack
             Russian.Add("verifyingDownloadCache", "Проверяется целостность файла ");
             Russian.Add("InstallProgressTextBoxDescription", "Прогресс текущей установки будет показан здесь");
             Russian.Add("testModeDatabaseNotFound", "КРИТИЧЕСКАЯ ОШИБКА: Тестовая БД не найдена по адресу:\n{0}");
-
             Russian.Add("duplicateMods", "КРИТИЧЕСКАЯ ОШИБКА: Обнаружен дубликат пакета с таким же ID");
-
             Russian.Add("databaseReadFailed", "КРИТИЧЕСКАЯ ОШИБКА: Ошибка чтения базы данных!\nПодробности в файле журнала.");
-
             Russian.Add("configSaveSuccess", "Конфигурация успешно сохранена");
             Russian.Add("selectConfigFile", "Найти файл конфигурации для загрузки");
             Russian.Add("configLoadFailed", "Файл конфигурации не может быть загружен, работа будет продолжена в обычном режиме");
             Russian.Add("modNotFound", "Пакет (ID = \"{0}\") не найден в базе данных. Вероятно, он был переименован или удалён.");
             Russian.Add("modDeactivated", "Данные пакеты на данный момент отключены в модпаке и не могут быть выбраны для установки");
             Russian.Add("modsNotFoundTechnical", "Не удалось найти данные пакеты. Вероятно, они были удалены.");
-
             Russian.Add("modsBrokenStructure", "Данные пакеты были отключены в связи с изменениями в их структуре. Вам нужно проверить их самостоятельно, если хотите произвести установку.");
             Russian.Add("packagesUpdatedShouldInstall",  "Следующие пакеты были обновлены с момента последней загрузки данной конфигурации. Файл конфигурации был обновлён и изменён (его резервная копия так же была сделана). Если она является основной, и вы хотите её сохранить, рекомендуем вам установить/обновить моды после этого уведомления.");
             Russian.Add("selectionFileIssuesTitle", "Внимание"); // I don't think it's possible to translate that directly, so leaving it as "Warning" - DrWeb7_1
@@ -345,7 +333,6 @@ namespace RelhaxModpack
             Russian.Add("noUninstallLogMessage", "Файл со списком установленных файлов (installedRelhaxFiles.log) не существует. Хотите удалить все установленные моды в таком случае?");
             Russian.Add("noUninstallLogHeader", "Удалить все моды");
             Russian.Add("moveOutOfTanksLocation", "Модпак не может быть запущен из папки с игрой. Пожалуйста, переместите его в другую папку и попробуйте ещё раз.");
-
             Russian.Add("moveAppOutOfDownloads", "Приложение было запущено из папки «Загрузки». Мы не рекомендуем использовать эту папку, поскольку приложение создаёт несколько папок и файлов, " +
                 "поиск которых может быть затруднительным в папке с загрузками. Вы должны переместить приложение и файлы/папки Relhax в другое расположение.");
             Russian.Add("DatabaseVersionsSameBody", "База данных не менялась с момента последней установки. В то же время не было обновлений к выбранным вами модификациям. Продолжить в любом случае?");
@@ -407,7 +394,7 @@ namespace RelhaxModpack
             Russian.Add("InstallationCompleteOpenXVM", "Открыть браузер на сайте XVM для активации статистики?");
             Russian.Add("InstallationCompleteCloseThisWindow", "Закрыть окно?");
             Russian.Add("InstallationCompleteCloseApp", "Закрыть приложение?");
-
+            Russian.Add("xvmUrlLocalisation", "ru");
             Russian.Add("CouldNotStartProcess", "Не удалось запустить процесс");
             #endregion
 
