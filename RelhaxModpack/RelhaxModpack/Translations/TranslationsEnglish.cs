@@ -1212,6 +1212,10 @@ namespace RelhaxModpack
             //
             English.Add("supportNotGuarnteed", "This client version is not offically supported. Mods may not work.");
 
+            //Component: couldTryBeta
+            //
+            English.Add("couldTryBeta", "If a game patch was recently released, the team is working on supporting it. You could try using the beta database.");
+
             //Component: missingMSVCPLibrariesHeader
             //
             English.Add("missingMSVCPLibrariesHeader", "Failed to load required libraries");
