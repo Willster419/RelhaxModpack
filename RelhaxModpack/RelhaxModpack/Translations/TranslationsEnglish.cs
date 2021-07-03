@@ -53,6 +53,10 @@ namespace RelhaxModpack
             //example: downloading file x "at" 10MB/s
             English.Add("at", "at");
 
+            //Component: seconds
+            // Used for download progress. Remaining time. Example: X minutes, Y seconds.
+            English.Add("seconds", "seconds");
+
             //Component: minutes
             // Used for download progress (remaining time) AND AutoSyncFrequencyComboBox autoupdate check frequency comboBox (Minutes/Hours/Days).
             English.Add("minutes", "minutes");
@@ -206,6 +210,14 @@ namespace RelhaxModpack
             //Component: backupModsSizeCalculating
             //
             English.Add("backupModsSizeCalculating", "Calculating backups size...");
+
+            //Component: BackupModsCBDescription
+            //
+            English.Add("BackupModsCBDescription", "When enabled, the installer will backup your current mods installation folders to the specified location");
+
+            //Component: BackupModsSizeLabelUsed
+            //
+            English.Add("BackupModsSizeLabelUsedDescription", "When enabled, the installer will backup your current mods installation folders to the specified location");
 
             //Component: SaveLastInstallText
             //
@@ -510,11 +522,15 @@ namespace RelhaxModpack
             //Component: ExportModeCBDescription
             //Explaining the export mode
             English.Add("ExportModeCBDescription", "Export mode will allow you to select a folder and WoT version you wish to export your mods installation to. For advanced users only." +
-                "Note it will NOT: Unpack game xml files, patch files (provided from the game), or create the atlas files. Instructions can be found in the export directory.");
+                "\nNote it will NOT: Unpack game xml files, patch files (provided from the game), or create the atlas files. Instructions can be found in the export directory.");
 
             //Component: ViewCreditsButtonText
             //
             English.Add("ViewCreditsButtonText", "View Credits");
+
+            //Component: ViewCreditsButtonText
+            //
+            English.Add("ViewCreditsButtonDescription", "See all the awesome people and projects that support the modpack!");
 
             //Component: ExportWindowDesctiption
             //
@@ -592,7 +608,7 @@ namespace RelhaxModpack
             English.Add("FacebookButtonDescription", "Go to our Facebook page");
 
             //Component: DiscordButtonDescription
-            English.Add("DiscordButtonDescription", "Go to Discord server");
+            English.Add("DiscordButtonDescription", "Go to our Discord server");
 
             //Component: TwitterButtonDescription
             English.Add("TwitterButtonDescription", "Go to our Twitter page");
@@ -1372,7 +1388,7 @@ namespace RelhaxModpack
             English.Add("DeleteBackupFolder", "Backups");
 
             //Component: installFailed
-            //Error message to show at the end of an unsucessfull instalaltion
+            //Error message to show at the end of an unsuccessful installation
             //"The installation failed at the following steps: {newline} {failed_steps_list}
             English.Add("installFailed", "The installation failed at the following steps");
             #endregion
@@ -1393,6 +1409,10 @@ namespace RelhaxModpack
             //Component: InstallationCompleteStartGameCenter
             //
             English.Add("InstallationCompleteStartGameCenter", "Start WG Game Center?");
+
+            //Component: InstallationCompleteOpenXVM
+            //
+            English.Add("InstallationCompleteOpenXVM", "Open the xvm login website?");
 
             //Component: InstallationCompleteCloseThisWindow
             //
