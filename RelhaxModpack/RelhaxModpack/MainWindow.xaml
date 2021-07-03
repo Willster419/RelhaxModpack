@@ -118,7 +118,7 @@
                             <TextBlock x:Name="ShowInstallCompleteWindowText" Text="Show install complete window" TextWrapping="Wrap"/>
                         </CheckBox>
                         <CheckBox Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
-                            <TextBlock x:Name="BackupModsText" Text="Backup mods folder before installation" TextWrapping="Wrap"/>
+                            <TextBlock x:Name="BackupModsText" Text="Backup current mods folder" TextWrapping="Wrap"/>
                         </CheckBox>
                         <TextBlock x:Name="BackupModsSizeLabelUsed" Text="Backups: {0}  Size: {1}" Margin="20,0,0,0" TextWrapping="Wrap" ToolTipService.ShowOnDisabled="True"/>
                         <CheckBox x:Name="DeleteOldPackagesCB" Tag="DeleteOldPackagesCB" Click="OnDeleteCacheFilesChanged" ToolTipService.ShowOnDisabled="True">
