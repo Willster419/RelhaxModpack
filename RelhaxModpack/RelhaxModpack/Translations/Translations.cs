@@ -53,7 +53,9 @@ namespace RelhaxModpack
             "SampleXmlOutputTextbox",
             //{0} kb of {1} kb
             "GcDownloadStep4DownloadingSizes",
+            //components of RelhaxInstallTaskReporter that should not get translated
             "TaskName",
+            "TaskStatus",
             //the name of the main relhax window
             "MainWindow"
         };
