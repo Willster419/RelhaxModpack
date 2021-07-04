@@ -53,6 +53,7 @@ namespace RelhaxModpack
             #region Tray Icon
             German.Add("MenuItemRestore", "Wiederherstellen");
             German.Add("MenuItemCheckUpdates", "Nach Updates suchen");
+            German.Add("MenuItemAppClose", German["close"]);
             German.Add("newDBApplied", "Neue Datenbankversion angewendet");
             #endregion
 
@@ -82,6 +83,7 @@ namespace RelhaxModpack
             German.Add("backupModsSizeCalculating", "Berechne Größe des Backups...");
             German.Add("BackupModsCBDescription", "Wähle diese Option, um ein Backup deiner aktuellen Mod-Installation zu erstellen. "+
                      "Diese werden im Ordner 'RelHaxModBackup' als ZIP-Datei mit einem Zeitstempel gespeichert.");
+            German.Add("BackupModsSizeLabelUsedDescription", Translations.TranslationNeeded);
             German.Add("SaveLastInstallText", "Speicherung der letzten Installation");
             German.Add("SaveLastInstallCBDescription", "Wenn diese Option aktiviert ist, wendet das Installationsprogramm automatisch deine zuletzt verwendete Auswahl an");
             German.Add("MinimizeToSystemTrayText", "Ins Benachrichtigungsfeld minimieren");
@@ -166,6 +168,7 @@ namespace RelhaxModpack
                 " Nur für fortgeschrittene Benutzer. Bitte beachten: es werden KEINE Spiel-XML-Dateien entpackt und nicht modifiziert oder Atlas Dateien erstellt (jeweils aus dem Spiel" +
                 " bereitgestellt). Anweisungen dazu findest du im Export-Verzeichnis.");
             German.Add("ViewCreditsButtonText", "Danksagung");
+            German.Add("ViewCreditsButtonDescription", "Übersicht aller großartigen Leute und Projekte, die das Modpack unterstützen");
             German.Add("ExportWindowDesctiption", "Wähle die Version von WoT, für die du exportieren möchtest");
             German.Add("HelperText", "Willkommen beim Relhax Modpack!" +
                 " \n\nIch habe versucht, das Modpack so einfach wie möglich zu gestalten. " +
@@ -199,6 +202,7 @@ namespace RelhaxModpack
             German.Add("HomepageButtonDescription", "Zu unserer Homepage");
             German.Add("DonateButtonDescription", "Spende für die Weiterentwicklung");
             German.Add("FindBugAddModButtonDescription", "Fehler gefunden? Willst Du einen Mod hinzufügen? Bitte hier melden!");
+            German.Add("SelectionViewGB", "Darstellungsart");
             German.Add("SelectionDefaultText", "Standard");
             German.Add("SelectionLayoutDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
             German.Add("SelectionDefaultDescription", "Anzeigearten und Auswahl der Modifikationen\nStandard: Relhax Listendarstellung\nalternativ: OMC Baumstruktur");
@@ -230,6 +234,7 @@ namespace RelhaxModpack
             German.Add("noAutoInstallWithBeta", "Die automatische Installation kann nicht gemeinsam mit der Beta-Datenbank genutzt werden.");
             German.Add("autoInstallWithBetaDBConfirmBody", "Die automatische Installation wird jetzt die Beta Datenbank nutzen. Diese wird häufig aktualisiert und es" +
                 " kann zu mehreren Installationen am Tag kommen. Willst du das wirklich tun?");
+            German.Add("autoInstallWithBetaDBConfirmHeader", German["verifyUninstallHeader"]);
             German.Add("ColorDumpSaveFileDialog", "Wähle, wo die Farbdatei gespeichert werden soll");
             //"branch" is this context is git respoitory branches
             German.Add("loadingBranches", "Lade Branch");
@@ -274,6 +279,7 @@ namespace RelhaxModpack
             German.Add("modsBrokenStructure", "Die folgenden Pakete wurden aufgrund Modifizierungen an der Datenbankstruktur deaktiviert und müssen neu ausgewählt werden.");
             German.Add("packagesUpdatedShouldInstall", "Die folgenden Pakete bekamen ein Update seitdem du das letzte Mal diese Auswahldatei geladen hast. Die Datei wurde mit den Änderungen neu gespeichert (und ein einmaliges Backup wurde erstellt). " +
                 "Falls dies deine aktuelle Installation ist und du diese behalten möchtest, ist es empfehlenswert eine (Neu-)Installation auszuführen wenn du diese Nachricht liest.");
+            German.Add("selectionFileIssuesTitle", "Auswahl Ladenachrichten");
             German.Add("selectionFormatOldV2", "Dieses Auswahldateiformat ist ein Vermächtnis der Version 2 und wird auf Version 3 aktualisiert. Eine V2-Sicherung wird erstellt.");
             German.Add("oldSavedConfigFile", "Die Konfigurationsdatei die benutzt wurde, wird in Zukunft immer ungenauer werden. Soll auf das neue Standardformat umgestellt werden? (Eine Sicherung des alten Formats erfolgt)");
             German.Add("prefrencesSet", "Bevorzugte Einstellungen");
@@ -288,6 +294,7 @@ namespace RelhaxModpack
             German.Add("disabled", "deaktiviert");
             German.Add("invisible", "unsichtbar");
             German.Add("SelectionFileIssuesDisplay", "Fehler beim Anwenden der Auswahldatei");
+            German.Add("selectionFileIssues", German["SelectionFileIssuesDisplay"]);
             German.Add("VersionInfo", "Porgrammaktualisierung");
             German.Add("VersionInfoYesButton", German["yes"]);
             German.Add("VersionInfoNoButton", German["no"]);
@@ -347,6 +354,7 @@ namespace RelhaxModpack
             German.Add("uninstallFail", "Das Deinstallieren war nicht erfolgreich. Bitte wiederhole den Vorgang oder sende einen Fehlerbericht.");
             German.Add("extractionErrorMessage", "Fehler beim Löschen des Ordners res_mods oder Mods. Entweder World of Tanks läuft oder deine Datei-" +
                 " und Ordnersicherheitsberechtigungen sind falsch.");
+            German.Add("extractionErrorHeader", German["error"]);
             German.Add("deleteErrorHeader", "Ausschliessen von Ordnern");
             German.Add("deleteErrorMessage", "Bitte schließe alle Explorer-Fenster in Mods oder res_mods (oder Unterordner), und klicke auf OK um fortzufahren.");
             German.Add("noUninstallLogMessage", "Die Protokolldatei mit der Liste der installierten Dateien (installedRelhaxFiles.log) existiert nicht. Möchtest Du alle Mods stattdessen entfernen?");
@@ -413,9 +421,11 @@ namespace RelhaxModpack
             German.Add("InstallationCompleteText", "Installation ist beendet. ");
             German.Add("InstallationCompleteStartWoT", "Spiel starten (WorldofTanks.exe)");
             German.Add("InstallationCompleteStartGameCenter", "WG Game Center");
+            German.Add("InstallationCompleteOpenXVM", "Öffne die XVM Login Webseite");
             German.Add("InstallationCompleteCloseThisWindow", "Schließe dieses Fenster");
             German.Add("InstallationCompleteCloseApp", "Anwendung schließen");
             German.Add("xvmUrlLocalisation", "de");
+            German.Add("CouldNotStartProcess","Konnte Prozess nicht starten");
             #endregion
 
             #region Diagnostics
@@ -558,6 +568,7 @@ namespace RelhaxModpack
             German.Add("ExportModeSelect", "Wähle WoT Client für den Export");
             German.Add("selectLocationToExport", "Wähle den Ordner für den Export der Mod-Installation");
             German.Add("ExportSelectVersionHeader", "Bitte wähle die WoT Klientversion, für die du den Export durchführen willst");
+            German.Add("ExportContinueButton", German["ContinueButton"]);
             German.Add("ExportModeMajorVersion", "Version des Online Ordners");
             German.Add("ExportModeMinorVersion", "WoT Version");
             #endregion

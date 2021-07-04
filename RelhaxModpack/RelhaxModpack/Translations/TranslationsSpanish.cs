@@ -53,6 +53,7 @@ namespace RelhaxModpack
             #region Tray Icon
             Spanish.Add("MenuItemRestore", "Restaurar");
             Spanish.Add("MenuItemCheckUpdates", "Comprobar actualizaciones");
+            Spanish.Add("MenuItemAppClose", Spanish["close"]);
             Spanish.Add("newDBApplied", "Aplicada nueva versión de la base de datos");
             #endregion
 
@@ -82,6 +83,7 @@ namespace RelhaxModpack
             Spanish.Add("backupModsSizeCalculating", "Calculando el tamaño de las copias de seguridad...");
             Spanish.Add("BackupModsCBDescription", "Seleccione esta opción para crear una copia de seguridad de los Mods actualmente instalados. " +
                     "Será almacenada en la carpeta 'RelHaxModBackup' como archivo zip, nombrado por una timestamp.");
+            Spanish.Add("BackupModsSizeLabelUsedDescription", Translations.TranslationNeeded);
             Spanish.Add("SaveLastInstallText", "Guardar selección de la instalación anterior");
             Spanish.Add("SaveLastInstallCBDescription", "Si está activada, el instalador aplicará automáticamente su última selección utilizada");
             Spanish.Add("MinimizeToSystemTrayText", "Minimizar a la bandeja del sistema");
@@ -162,6 +164,7 @@ namespace RelhaxModpack
             Spanish.Add("ExportModeCBDescription", "El modo de exportación le permitirá seleccionar una carpeta y versión de WoT a la que exportar la instalación de Mods. Sólo para usuarios avanzados." +
                 " Tenga en cuenta que NO desempaquetará archivos XML o archivos de parche (proporcionados por el juego), ni creará los archivos de tipo atlas. Habrá instrucciones en el directorio exportado.");
             Spanish.Add("ViewCreditsButtonText", "Ver créditos");
+            Spanish.Add("ViewCreditsButtonDescription", "¡Ver todas las increíbles personas y proyectos que apoyan el modpack!");
             Spanish.Add("ExportWindowDescription", "Seleccione la versión de WoT para la que quiere exportar");
             Spanish.Add("HelperText", "¡Bienvenido a RelHax Modpack!" +
                 "\nHe intentado hacer el Modpack tan sencillo como ha sido posible, pero aún así pueden surgir dudas. Mantenga el ratón sobre una opción para obtener una explicación." +
@@ -193,6 +196,7 @@ namespace RelhaxModpack
             Spanish.Add("HomepageButtonDescription", "Visita nuestra página web");
             Spanish.Add("DonateButtonDescription", "Donaciones para el desarrollo");
             Spanish.Add("FindBugAddModButtonDescription", "¿Ha encontrado un error? ¿Quiere que un mod sea añadido? Informa aquí");
+            Spanish.Add("SelectionViewGB", "Vista de selección");
             Spanish.Add("SelectionDefaultText", "Por defecto");
             Spanish.Add("SelectionLayoutDescription", "Selecciona un modo de la lista de selección.\nPor defecto: modo de Relhax.\nLegacy: lista en árbol de OMC");
             Spanish.Add("SelectionDefaultDescription", "Selecciona un modo de la lista de selección\nPor defecto: modo de Relhax\nLegacy: lista en árbol de OMC");
@@ -224,6 +228,7 @@ namespace RelhaxModpack
             Spanish.Add("noAutoInstallWithBeta", "El modo de instalación automática no puede ser utilizado con la base de datos en beta");
             Spanish.Add("autoInstallWithBetaDBConfirmBody", "La autoinstalación será habilitada con la base de datos beta. La base de datos beta es actualizada frecuentemente," +
                 " y puede resultar en múltiples instalaciones en un día. ¿Está seguro de que quiere hacer esto?");
+            Spanish.Add("autoInstallWithBetaDBConfirmHeader", Spanish["verifyUninstallHeader"]);
             Spanish.Add("ColorDumpSaveFileDialog", "Seleccione dónde quiere guardar el archivo de personalización de colores");
             //"branch" is this context is git respoitory branches
             Spanish.Add("loadingBranches", "Cargando ramas");
@@ -267,6 +272,7 @@ namespace RelhaxModpack
             Spanish.Add("modsBrokenStructure", "Los siguientes paquetes han sido deshabilitados debido a modificaciones en la estructura de paquetes. Deberá volver a seleccionarlos si quiere instalarlos.");
             Spanish.Add("packagesUpdatedShouldInstall", "Los siguientes paquetes han sido actualizados desde la última carga de este archivo de selección. Su archivo de selección ha sido actualizado con los cambios (y se ha creado una copia de seguridad de un sólo uso). " +
                 "Si ésta es su instalación actual, y quiere conservarla, se recomienda instalar/actualizar después de ver este mensaje.");
+            Spanish.Add("selectionFileIssuesTitle", "Mensajes de carga de la selección");
             Spanish.Add("selectionFormatOldV2", "Este formato de archivo de selección es de legado (V2) y será actualizado a V3. Una copia de seguridad de tipo V2 será creada.");
             Spanish.Add("oldSavedConfigFile", "El archivo de configuración que está utilizando tiene un formato antiguo y no será preciso en el futuro. ¿Convertir al nuevo formato? (Se guardará una copia de seguridad del formato original)");
             Spanish.Add("preferencesSet", "Preferencias guardadas");
@@ -281,6 +287,7 @@ namespace RelhaxModpack
             Spanish.Add("disabled", "deshabilitado");
             Spanish.Add("invisible", "invisible");
             Spanish.Add("SelectionFileIssuesDisplay", "Errores al aplicar el archivo de selección");
+            Spanish.Add("selectionFileIssues", Spanish["SelectionFileIssuesDisplay"]);
             Spanish.Add("VersionInfo", "Actualizacón de la aplicación");
             Spanish.Add("VersionInfoYesButton", Spanish["yes"]);
             Spanish.Add("VersionInfoNoButton", Spanish["no"]);
@@ -338,6 +345,7 @@ namespace RelhaxModpack
             Spanish.Add("uninstallFail", "La desinstalación ha fallado. Puede intentar otro modo de desinstalación o enviar un informe de error.");
             Spanish.Add("extractionErrorMessage", "Error eliminando las carpetas 'res_mods' o 'mods'. World of Tanks está en ejecución o bien" +
                 " sus permisos de seguridad de archivos y carpetas son incorrectos.");
+            Spanish.Add("extractionErrorHeader", Spanish["error"]);
             Spanish.Add("deleteErrorHeader", "Cierre las carpetas");
             Spanish.Add("deleteErrorMessage", "Por favor, cierre las carpetas 'mods' y 'res_mods' (y sus subcarpetas) en el explorador, y pulse OK para continuar.");
             Spanish.Add("noUninstallLogMessage", "El archivo de registro que contiene la lista de archivos instalados (installedRelhaxFiles.log) no existe. ¿Quiere eliminar todos los mods en su lugar?");
@@ -402,6 +410,7 @@ namespace RelhaxModpack
             Spanish.Add("InstallationCompleteText", "La instalación ha sido completada. Quiere...");
             Spanish.Add("InstallationCompleteStartWoT", "¿Iniciar el juego?");
             Spanish.Add("InstallationCompleteStartGameCenter", "¿Iniciar WG Game Center?");
+            Spanish.Add("InstallationCompleteOpenXVM", "¿Abrir su explorador en la página de inicio de sesión de las estadísticas de XVM?");
             Spanish.Add("InstallationCompleteCloseThisWindow", "¿Cerrar esta ventana?");
             Spanish.Add("InstallationCompleteCloseApp", "¿Cerrar la aplicación?");
             Spanish.Add("xvmUrlLocalisation", "en"); //? No Spanish on XVM website. Mistake? @Nullmaruzero
@@ -547,6 +556,7 @@ namespace RelhaxModpack
             Spanish.Add("ExportModeSelect", "Seleccione cliente de WoT para exportación");
             Spanish.Add("selectLocationToExport", "Seleccione la carpeta para exportar la instalación de mods");
             Spanish.Add("ExportSelectVersionHeader", "Por favor, seleccione la versión del cliente de WoT para la que quiere exportar");
+            Spanish.Add("ExportContinueButton", Spanish["ContinueButton"]);
             Spanish.Add("ExportModeMajorVersion", "Versión de la carpeta online");
             Spanish.Add("ExportModeMinorVersion", "Versón de WoT");
             #endregion

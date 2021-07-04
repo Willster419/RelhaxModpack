@@ -52,6 +52,7 @@ namespace RelhaxModpack
             #region Tray Icon
             Russian.Add("MenuItemRestore", "Восстановить");
             Russian.Add("MenuItemCheckUpdates", "Проверить наличие обновлений");
+            Russian.Add("MenuItemAppClose", Russian["close"]);
             Russian.Add("newDBApplied", "Применена новая версия базы данных");
             #endregion
 
@@ -78,6 +79,7 @@ namespace RelhaxModpack
             Russian.Add("BackupModsSizeLabelUsed", "Бэкапов: {0} Размер: {1}");
             Russian.Add("backupModsSizeCalculating", "Вычисление размера...");
             Russian.Add("BackupModsCBDescription", "Созданные резервные копии будут находиться в папке 'RelHaxModBackup' в виде ZIP-архива с датой создания в названии.");
+            Russian.Add("BackupModsSizeLabelUsedDescription", Translations.TranslationNeeded);
             Russian.Add("SaveLastInstallText", "Запомнить выбранные моды");
             Russian.Add("SaveLastInstallCBDescription", "Установщик автоматически выберет моды, указанные вами в прошлый раз.");
             Russian.Add("MinimizeToSystemTrayText", "Свернуть в трей");
@@ -184,6 +186,7 @@ namespace RelhaxModpack
             Russian.Add("HomepageButtonDescription", "Посетить наш веб-сайт");
             Russian.Add("DonateButtonDescription", "Поддержать копеечкой для дальнейшей разработки");
             Russian.Add("FindBugAddModButtonDescription", "Нашли баг? Хотите добавить мод? Пишите сюда!");
+            Russian.Add("SelectionViewGB", "Вид списка");
             Russian.Add("SelectionDefaultText", "Стандартный");
             Russian.Add("SelectionLayoutDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
             Russian.Add("SelectionDefaultDescription", "Выберите вид списка модов\nОбычный: как в Relhax (постранично)\nLegacy: как в OMC (деревом)");
@@ -214,6 +217,7 @@ namespace RelhaxModpack
             Russian.Add("AutoOneclickSelectionErrorsContinueHeader", "Проблемы в импорте файла конфигурации");
             Russian.Add("noAutoInstallWithBeta", "При использовании бета-версии БД установка в автоматическом режиме невозможна.");
             Russian.Add("autoInstallWithBetaDBConfirmBody", "Будет включена автоматическая установка модификаций из бета-версии БД. Она обновляется чаще основной, и вполне допустима установка неоднократная установка одних и тех те модификаций.\nВы точно хотите включить автоматическую установку?");
+            Russian.Add("autoInstallWithBetaDBConfirmHeader", Russian["verifyUninstallHeader"]);
             Russian.Add("ColorDumpSaveFileDialog", "Выберите путь для сохранения файла с настройками цветовой схемы");
             //"branch" is this context is git respoitory branches
             Russian.Add("loadingBranches", "Загружаются ветви репозитория");
@@ -272,6 +276,7 @@ namespace RelhaxModpack
             Russian.Add("disabled", "отключен");
             Russian.Add("invisible", "невидим");
             Russian.Add("SelectionFileIssuesDisplay", "Ошибка применения файла конфигурации");
+            Russian.Add("selectionFileIssues", Russian["SelectionFileIssuesDisplay"]);
             Russian.Add("VersionInfo", "Обновление приложения");
             Russian.Add("VersionInfoYesButton", Russian["yes"]);
             Russian.Add("VersionInfoNoButton", Russian["no"]);
@@ -328,6 +333,7 @@ namespace RelhaxModpack
             Russian.Add("uninstallfinished", "Удаление модов завершено.");
             Russian.Add("uninstallFail", "Не удалось завершить деинсталляцию. Вы можете попробовать другой метод или отправить отчёт об ошибке.");
             Russian.Add("extractionErrorMessage", "Возникла ошибка при удалении папки res_mods или mods. Возможно, запущен World of Tanks или неверно настроены разрешения к папкам и файлам.");
+            Russian.Add("extractionErrorHeader", Russian["error"]);
             Russian.Add("deleteErrorHeader", "Закройте папки");
             Russian.Add("deleteErrorMessage", "Закройте окна проводника, в которых открыты mods или res_mods (или глубже), и нажмите OK, чтобы продолжить.");
             Russian.Add("noUninstallLogMessage", "Файл со списком установленных файлов (installedRelhaxFiles.log) не существует. Хотите удалить все установленные моды в таком случае?");
@@ -538,6 +544,7 @@ namespace RelhaxModpack
             Russian.Add("ExportModeSelect", "Выберите клиент WoT для экспорта");
             Russian.Add("selectLocationToExport", "Выберите папку для экспорта устанавливаемых модов");
             Russian.Add("ExportSelectVersionHeader", "Выберите версию клиента игры, для которой будет произведён экспорт");
+            Russian.Add("ExportContinueButton", Russian["ContinueButton"]);
             Russian.Add("ExportModeMajorVersion", "Онлайн-версия папки");
             Russian.Add("ExportModeMinorVersion", "Версия WoT");
             #endregion
