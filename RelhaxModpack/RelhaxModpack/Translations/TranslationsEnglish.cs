@@ -125,6 +125,10 @@ namespace RelhaxModpack
             //Component: MenuItemAppClose
             //The menu item for restoring the application
             English.Add("MenuItemAppClose", English["close"]);
+
+            //Component: newDBApplied
+            //MessageBox for when a new database version is applied
+            English.Add("newDBApplied", "New database version applied");
             #endregion
 
             #region Main Window
@@ -215,9 +219,9 @@ namespace RelhaxModpack
             //
             English.Add("BackupModsCBDescription", "When enabled, the installer will backup your current mods installation folders to the specified location");
 
-            //Component: BackupModsSizeLabelUsed
+            //Component: BackupModsSizeLabelUsedDescription
             //
-            English.Add("BackupModsSizeLabelUsedDescription", "When enabled, the installer will backup your current mods installation folders to the specified location");
+            English.Add("BackupModsSizeLabelUsedDescription", English["BackupModsCBDescription"]);
 
             //Component: SaveLastInstallText
             //
@@ -347,10 +351,6 @@ namespace RelhaxModpack
             //Component: OneClickInstallText
             //
             English.Add("OneClickInstallText", "Enable one-click install");
-
-            //Component: AutoOneclickShowWarningOnSelectionsFailText
-            //
-            English.Add("ForceEnabledCB", "Force all packages enabled [!]");
 
             //Component: AutoOneclickShowWarningOnSelectionsFailText
             //
@@ -528,7 +528,7 @@ namespace RelhaxModpack
             //
             English.Add("ViewCreditsButtonText", "View Credits");
 
-            //Component: ViewCreditsButtonText
+            //Component: ViewCreditsButtonDescription
             //
             English.Add("ViewCreditsButtonDescription", "See all the awesome people and projects that support the modpack!");
 
