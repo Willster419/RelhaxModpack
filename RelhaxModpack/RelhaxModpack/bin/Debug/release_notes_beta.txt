@@ -1,3 +1,11 @@
+# Beta Application version 1.3.2.9 (2021-07-03)
+https://www.virustotal.com/gui/file-analysis/Yzg5M2Q0OTdiNzVkZDE4NmY1N2ZhOGZjOTAxMGFiMDU6MTYyNTM3ODc5MA==/detection
+- Fixed crashes in the package selection list when right clicking on a disabled package for preview.
+- Fixed crashes when selecting the category root checkbox in the package selection list.
+- Added a bunch of missing translations that managed to get lost in a migration to a different process of loading them into the application on startup.
+- Added the option in the automation runner gui to load the automation database from a local/cloned repository on the pc rather then always getting the online version.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Developer Preview application version 1.3.2.8 (2021-06-28)
 https://www.virustotal.com/gui/file-analysis/NDhjOWJiMzRhZGNiMjRkNjkwZTZmYzAyZDkzOTgyNjg6MTYyNDk0OTIzNg==/detection
 
