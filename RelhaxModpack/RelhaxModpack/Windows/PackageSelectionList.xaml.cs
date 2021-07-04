@@ -1359,7 +1359,18 @@ namespace RelhaxModpack.Windows
                 return;
 
             //if it's not mouseEventArgs, then abort because we can't determine if it's a right click
-            if (e is MouseEventArgs m)
+            if (e == null && sender is IPackageUIComponent packageSender_)
+            {
+                Logging.Error(LogOptions.ClassName, "EventArgs is null for Generic_MouseDown() method of package {0}", packageSender_.Package.PackageName);
+                return;
+            }
+            else if (sender is IPackageUIComponent packageSender__ && !packageSender__.Package.Enabled && e is MouseButtonEventArgs m_ && ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
+            {
+                if (m_.ChangedButton != MouseButton.Right)
+                    return;
+                Logging.Debug("An event occurred over a disabled component \"{0}\", with default selection view. Event name: {1}", packageSender__.Package.PackageName, m_.RoutedEvent.Name);
+            }
+            else if (e is MouseEventArgs m)
             {
                 if (m.RightButton != MouseButtonState.Pressed)
                     return;
@@ -1492,7 +1503,7 @@ namespace RelhaxModpack.Windows
                 if (packageActuallyDisabled)
                 {
                     //disabled component, display via generic handler
-                    Generic_MouseDown(pkg, null);
+                    Generic_MouseDown(pkg, e);
                 }
             }
         }
