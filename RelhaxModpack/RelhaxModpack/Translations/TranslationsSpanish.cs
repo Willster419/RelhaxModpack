@@ -19,6 +19,7 @@ namespace RelhaxModpack
             Spanish.Add("cancel", "Cancelar");
             Spanish.Add("delete", "Eliminar");
             Spanish.Add("warning", "ATENCIÓN");
+            Spanish.Add("critical", "CRÍTICO");
 
             Spanish.Add("information", "Información");
             Spanish.Add("select", "Seleccionar");
@@ -30,6 +31,7 @@ namespace RelhaxModpack
             Spanish.Add("stepsComplete", "Operaciones completadas");
             Spanish.Add("allFiles", "Todos los archivos");
             Spanish.Add("GoogleTranslateLanguageKey", "es");
+            Spanish.Add("at", "en");
 
             Spanish.Add("seconds", "segundo(s)");
             Spanish.Add("minutes", "minuto(s)");
@@ -268,14 +270,14 @@ namespace RelhaxModpack
             Spanish.Add("configLoadFailed", "El archivo de selección no pudo ser cargado, cargando en modo estándar");
             Spanish.Add("modNotFound", "El paquete (ID = \"{0}\") no se ha encontrado en la base de datos. Puede haber sido renombrado o eliminado");
             Spanish.Add("modDeactivated", "Los siguientes paquetes están actualmente desactivados en el modpack y no han podido ser seleccionados para instalar");
-            Spanish.Add("modsNotFoundTechincal", "Los siguientes paquetes no han sido encontrados, y han sido probablemente eliminados");
+            Spanish.Add("modsNotFoundTechnical", "Los siguientes paquetes no han sido encontrados, y han sido probablemente eliminados");
             Spanish.Add("modsBrokenStructure", "Los siguientes paquetes han sido deshabilitados debido a modificaciones en la estructura de paquetes. Deberá volver a seleccionarlos si quiere instalarlos.");
             Spanish.Add("packagesUpdatedShouldInstall", "Los siguientes paquetes han sido actualizados desde la última carga de este archivo de selección. Su archivo de selección ha sido actualizado con los cambios (y se ha creado una copia de seguridad de un sólo uso). " +
                 "Si ésta es su instalación actual, y quiere conservarla, se recomienda instalar/actualizar después de ver este mensaje.");
             Spanish.Add("selectionFileIssuesTitle", "Mensajes de carga de la selección");
             Spanish.Add("selectionFormatOldV2", "Este formato de archivo de selección es de legado (V2) y será actualizado a V3. Una copia de seguridad de tipo V2 será creada.");
             Spanish.Add("oldSavedConfigFile", "El archivo de configuración que está utilizando tiene un formato antiguo y no será preciso en el futuro. ¿Convertir al nuevo formato? (Se guardará una copia de seguridad del formato original)");
-            Spanish.Add("preferencesSet", "Preferencias guardadas");
+            Spanish.Add("prefrencesSet", "Preferencias guardadas");
             Spanish.Add("selectionsCleared", "Selecciones limpiadas");
             Spanish.Add("failedLoadSelection", "No se ha podido cargar la selección");
             Spanish.Add("unknownselectionFileFormat", "Versión desconocida del archivo de selección");
@@ -328,7 +330,7 @@ namespace RelhaxModpack
             Spanish.Add("fontsPromptError_1", "No se han podido instalar fuentes. Algunos mods pueden no funcionar correctamente. Fuentes disponibles en ");
             Spanish.Add("fontsPromptError_2", "\\_fonts. Puede instalarlas usted mismo o volver a ejecutar la instalación como administrador");
             Spanish.Add("cantDownloadNewVersion", "No ha sido posible descargar la nueva versión. Cerrando el programa.");
-            Spanish.Add("failedCreatureUpdateBat", "No ha sido posible crear el proceso de actualización.\n\nPor favor, elimine manualmente el archivo:\n{0}\n\nrenombre el archivo:\n{1}\na:\n{2}\n¿Ir al directorio?");
+            Spanish.Add("failedCreateUpdateBat", "No ha sido posible crear el proceso de actualización.\n\nPor favor, elimine manualmente el archivo:\n{0}\n\nrenombre el archivo:\n{1}\na:\n{2}\n¿Ir al directorio?");
             Spanish.Add("cantStartNewApp", "No ha sido posible arrancar la aplicación, pero se encuentra en \n");
             Spanish.Add("autoDetectFailed", "La detección automática ha fallado. Por favor, use la opción de 'forzar detección manual'");
             Spanish.Add("anotherInstanceRunning", "Hay otra instancia de Relhax Manager ejecutándose");
@@ -358,7 +360,7 @@ namespace RelhaxModpack
             Spanish.Add("databaseNotFound", "No se ha encontrado base de datos en la URL especificada");
             Spanish.Add("detectedClientVersion", "Versión del cliente detectada");
             Spanish.Add("supportedClientVersions", "Versiones del cliente soportadas");
-            Spanish.Add("supportNotGuaranteed", "Esta versión del cliente no está oficialmente soportada. Algunos mods pueden no funcionar.");
+            Spanish.Add("supportNotGuarnteed", "Esta versión del cliente no está oficialmente soportada. Algunos mods pueden no funcionar.");
             Spanish.Add("couldTryBeta", "Si el juego ha sido recientemente actualizado, el equipo está trabajando en proporcionarle soporte. Puede intentar usar la base de datos en beta.");
             Spanish.Add("missingMSVCPLibrariesHeader", "No se han podido cargar las librerías necesarias");
             Spanish.Add("missingMSVCPLibraries", "No se han podido cargar las librerías de procesamiento de imágenes de iconos de contorno. Esto puede indicar que le falta un paquete requerido .dll de Microsoft");
@@ -397,7 +399,7 @@ namespace RelhaxModpack
             Spanish.Add("zipReadingErrorMessage3", "no ha podido ser leído.");
             Spanish.Add("patchingSystemDeneidAccessMessage", "Se ha denegado el acceso del sistema de parcheo a la carpeta del parche. Vuelva a intentarlo como Administrador. Si vuelve a ver este mensaje," +
                 " tiene que corregir los permisos de seguridad de sus archivos y carpetas.");
-            Spanish.Add("patchingSystemDeniedAccessHeader", "Acceso denegado");
+            Spanish.Add("patchingSystemDeneidAccessHeader", "Acceso denegado");
             Spanish.Add("folderDeleteFailed", "No se ha podido eliminar la carpeta");
             Spanish.Add("fileDeleteFailed", "No se ha podido eliminar el archivo");
             Spanish.Add("DeleteBackupFolder", "Copias de seguridad");
@@ -512,7 +514,7 @@ namespace RelhaxModpack
             Spanish.Add("PostInstallTabHeader", "Operaciones post-instalación");
             Spanish.Add("AdvancedInstallBackupData", "Hacer una copia de seguridad de los datos de los mods");
             Spanish.Add("AdvancedInstallClearCache", "Limpiar caché de WoT");
-            Spanish.Add("AdvancedInstalledClearLogs", "Limpiar archivos de registro");
+            Spanish.Add("AdvancedInstallClearLogs", "Limpiar archivos de registro");
             Spanish.Add("AdvancedInstallClearMods", "Desinstalar instalación anterior");
             Spanish.Add("AdvancedInstallInstallMods", "Hilo de instalación");
             Spanish.Add("AdvancedInstallUserInstallMods", "Instalación del usuario");
@@ -539,6 +541,7 @@ namespace RelhaxModpack
             #endregion
 
             #region First Load Acknowledgements
+            Spanish.Add("FirstLoadAcknowledgments", "Primera ejecución — Acuerdo de Licencia"); // Me neither (LordFelix), so i'll follow PL procedure
             Spanish.Add("AgreementLicense", "He leído y acepto el ");
             Spanish.Add("LicenseLink", "Acuerdo de licencia");
             Spanish.Add("AgreementSupport1", "Entiendo que puedo recibir soporte en el ");
