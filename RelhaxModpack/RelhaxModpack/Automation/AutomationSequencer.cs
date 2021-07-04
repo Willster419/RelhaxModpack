@@ -28,7 +28,9 @@ namespace RelhaxModpack.Automation
 
         public const string AutomationXmlRepoFilebase = "https://raw.githubusercontent.com/Relhax-Modpack-Team/DatabaseAutoUpdateScripts/{branch}/";
 
-        public const string AutomationXmlRoot = AutomationXmlRepoFilebase + "root.xml";
+        public const string AutomationXmlRootFilename = "root.xml";
+
+        public const string AutomationRepoDefaultBranch = "master";
 
         public List<AutomationMacro> ApplicationMacros { get; } = new List<AutomationMacro>();
 
@@ -46,8 +48,6 @@ namespace RelhaxModpack.Automation
 
         public string[] AutomationBranches = null;
 
-        public bool AutomationBranchesLoaded = false;
-
         public AutomationRunMode AutomationRunMode = AutomationRunMode.Interactive;
 
         public DatabaseAutomationRunner DatabaseAutomationRunner { get; set; } = null;
@@ -62,9 +62,29 @@ namespace RelhaxModpack.Automation
 
         public string WoTModpackOnlineFolderVersion { get; set; }
 
-        private string AutomationXmlRootEscaped { get { return AutomationRunnerSettings == null? string.Empty : AutomationXmlRoot.Replace("{branch}", AutomationRunnerSettings.SelectedBranch); } }
+        private string AutomationRepoPathEscaped {
+            get
+            {
+                if (AutomationRunnerSettings == null)
+                    return null;
+                if (AutomationRunnerSettings.UseLocalRunnerDatabase && string.IsNullOrEmpty(AutomationRunnerSettings.LocalRunnerDatabaseRoot))
+                    return null;
+                return AutomationRunnerSettings.UseLocalRunnerDatabase ? Path.GetDirectoryName(AutomationRunnerSettings.LocalRunnerDatabaseRoot) : AutomationXmlRepoFilebase.Replace("{branch}", AutomationRunnerSettings.SelectedBranch);
+            }
+        }
 
-        private string AutomationXmlRepoFilebaseEscaped { get { return AutomationRunnerSettings == null ? string.Empty : AutomationXmlRepoFilebase.Replace("{branch}", AutomationRunnerSettings.SelectedBranch); } }
+        private string AutomationRepoRootXmlFilepathEscaped
+        {
+            get
+            {
+                if (AutomationRunnerSettings == null)
+                    return null;
+                if (AutomationRunnerSettings.UseLocalRunnerDatabase && string.IsNullOrEmpty(AutomationRunnerSettings.LocalRunnerDatabaseRoot))
+                    return null;
+
+                return AutomationRunnerSettings.UseLocalRunnerDatabase ? Path.Combine(AutomationRepoPathEscaped, AutomationXmlRootFilename) : AutomationRepoPathEscaped + AutomationXmlRootFilename;
+            }
+        }
 
         public string ComponentInternalName { get; } = "AutomationSequencer";
 
@@ -79,24 +99,27 @@ namespace RelhaxModpack.Automation
         /// <returns>A task of the asynchronous operation</returns>
         public async Task LoadBranchesListAsync()
         {
-            if (AutomationBranchesLoaded)
-            {
-                Logging.AutomationRunner(LogOptions.MethodName, "Branches list already loaded, ignoring this call", LogLevel.Warning);
+            if (AutomationRunnerSettings.UseLocalRunnerDatabase)
                 return;
-            }
 
             List<string> branches = await CommonUtils.GetListOfGithubRepoBranchesAsync(BranchesURL);
             AutomationBranches = branches.ToArray();
-            AutomationBranchesLoaded = true;
         }
 
         public async Task LoadRootDocumentAsync()
         {
-            if (string.IsNullOrWhiteSpace(AutomationXmlRootEscaped))
+            if (string.IsNullOrWhiteSpace(AutomationRepoRootXmlFilepathEscaped))
                 throw new ArgumentException("AutomationXmlRootEscaped cannot be null or whitespace");
 
-            string xmlString = await WebClient.DownloadStringTaskAsync(AutomationXmlRootEscaped);
-            RootDocument = XmlUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
+            if (AutomationRunnerSettings.UseLocalRunnerDatabase)
+            {
+                RootDocument = XmlUtils.LoadXmlDocument(AutomationRepoRootXmlFilepathEscaped, XmlLoadType.FromFile);
+            }
+            else
+            {
+                string xmlString = await WebClient.DownloadStringTaskAsync(AutomationRepoRootXmlFilepathEscaped);
+                RootDocument = XmlUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
+            }
         }
 
         public async Task LoadGlobalMacrosAsync()
@@ -106,9 +129,17 @@ namespace RelhaxModpack.Automation
 
             //get the url to download from
             string globalMacrosUrlFile = XmlUtils.GetXmlStringFromXPath(RootDocument, "/root.xml/GlobalMacros/@path");
-            string globalMacrosUrl = string.Format("{0}{1}", AutomationXmlRepoFilebaseEscaped, globalMacrosUrlFile);
-            string globalMacrosXml = await WebClient.DownloadStringTaskAsync(globalMacrosUrl);
-            GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosXml, XmlLoadType.FromString);
+            if (AutomationRunnerSettings.UseLocalRunnerDatabase)
+            {
+                string globalMacrosUrl = Path.Combine(AutomationRepoPathEscaped, globalMacrosUrlFile);
+                GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosUrl, XmlLoadType.FromFile);
+            }
+            else
+            {
+                string globalMacrosUrl = string.Format("{0}{1}", AutomationRepoPathEscaped, globalMacrosUrlFile);
+                string globalMacrosXml = await WebClient.DownloadStringTaskAsync(globalMacrosUrl);
+                GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosXml, XmlLoadType.FromString);
+            }
         }
 
         public async Task<bool> ParseRootDocumentAsync()
@@ -125,8 +156,25 @@ namespace RelhaxModpack.Automation
                 string sequencePackageName = result.Attributes["packageName"].Value;
                 string sequenceUID = result.Attributes["UID"].Value;
                 string sequenceUrlPath = result.Attributes["path"].Value;
+                string sequenceLoadString;
+                if (AutomationRunnerSettings.UseLocalRunnerDatabase)
+                {
+                    sequenceUrlPath = sequenceUrlPath.Replace('/', Path.DirectorySeparatorChar);
+                    sequenceLoadString = Path.Combine(AutomationRepoPathEscaped, sequenceUrlPath);
+                }
+                else
+                {
+                    sequenceLoadString = AutomationRepoPathEscaped + sequenceUrlPath;
+                }
                 Logging.AutomationRunner(LogOptions.MethodName, "Parsing sequence for package {0} (UID {1})", LogLevel.Info, sequencePackageName, sequenceUID);
-                AutomationSequences.Add(new AutomationSequence() { AutomationSequencer = this, Package = null, PackageName = sequencePackageName, PackageUID = sequenceUID, SequenceDownloadUrl = AutomationXmlRepoFilebaseEscaped + sequenceUrlPath });
+                AutomationSequences.Add(new AutomationSequence()
+                {
+                    AutomationSequencer = this,
+                    Package = null,
+                    PackageName = sequencePackageName,
+                    PackageUID = sequenceUID,
+                    SequenceDownloadUrl = sequenceLoadString
+                });
             }
 
             return true;
@@ -311,7 +359,7 @@ namespace RelhaxModpack.Automation
             ApplicationMacros.Add(new AutomationMacro() { Name = "applicationPath", Value = ApplicationConstants.ApplicationStartupPath, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "relhaxTemp", Value = ApplicationConstants.RelhaxTempFolderPath, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "workDirectory", Value = string.Format("{0}\\{1}", ApplicationConstants.RelhaxTempFolderPath, package.PackageName), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "automationRepoRoot", Value = AutomationXmlRepoFilebaseEscaped, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "automationRepoRoot", Value = AutomationRepoPathEscaped, MacroType = MacroType.ApplicationDefined });
         }
 
         public bool ParseGlobalMacros()

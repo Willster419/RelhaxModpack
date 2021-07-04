@@ -111,8 +111,15 @@ namespace RelhaxModpack.Automation
                 throw new BadMemeException("SequenceDownloadUrl is not set");
 
             Logging.Debug(LogOptions.ClassName, "Downloading sequence xml from {0}", SequenceDownloadUrl);
-            string xmlString = await WebClient.DownloadStringTaskAsync(SequenceDownloadUrl);
-            TasksDocument = XmlUtils.LoadXDocument(xmlString, XmlLoadType.FromString);
+            if (AutomationRunnerSettings.UseLocalRunnerDatabase)
+            {
+                TasksDocument = XmlUtils.LoadXDocument(SequenceDownloadUrl, XmlLoadType.FromFile);
+            }
+            else
+            {
+                string xmlString = await WebClient.DownloadStringTaskAsync(SequenceDownloadUrl);
+                TasksDocument = XmlUtils.LoadXDocument(xmlString, XmlLoadType.FromString);
+            }
         }
 
 
