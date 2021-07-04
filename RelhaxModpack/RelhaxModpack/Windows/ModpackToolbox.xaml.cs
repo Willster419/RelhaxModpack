@@ -2027,6 +2027,20 @@ namespace RelhaxModpack.Windows
                 translationsBuilder.Append(Environment.NewLine);
             }
 
+            //check if any of the other languages have any 'extra' translations we don't need anymore (i.e. aren't in english)
+            foreach (TranslationStruct translationStruct in langauges)
+            {
+                if (translationStruct.LanguageName.Equals(Translations.GetLanguageNativeName(Languages.English)))
+                    continue;
+                foreach (string key in translationStruct.Dict.Keys)
+                {
+                    if (!Translations.GetLanguageDictionaries(Languages.English).ContainsKey(key))
+                    {
+                        Logging.Warning("The key {0} exists in language {1} but not in english, is it needed?", key, translationStruct.LanguageName);
+                    }
+                }
+            }
+
             ReportProgress("Writing csv to disk");
             if (File.Exists(TranslationsCsv))
                 File.Delete(TranslationsCsv);
