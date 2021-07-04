@@ -508,9 +508,9 @@ namespace RelhaxModpack
             //
             English.Add("ViewCreditsButtonDescription", "See all the awesome people and projects that support the modpack!");
 
-            //Component: ExportWindowDesctiption
+            //Component: ExportWindowDescription
             //
-            English.Add("ExportWindowDesctiption", "Select the version of WoT you wish to export for");
+            English.Add("ExportWindowDescription", "Select the version of WoT you wish to export for");
 
             //Component: HelperText
             // A large area in the middle of the default window and view for the modpack. Introduces the user to the modpack. You may format it using linebreaks -> \n

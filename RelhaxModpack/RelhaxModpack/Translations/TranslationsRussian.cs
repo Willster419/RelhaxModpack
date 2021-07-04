@@ -161,7 +161,7 @@ namespace RelhaxModpack
                 "Учтите, что XML-файлы игры не будут распакованы или пропатчены, атласы тоже не будут созданы. Инструкции находятся в папке экспорта.");
             Russian.Add("ViewCreditsButtonText", "Авторы модпака"); // I couldn't find anything more suitable, so "Modpack Authors" will be left here. *shrug* - DrWeb7_1
             Russian.Add("ViewCreditsButtonDescription", "Познакомьтесь с замечательными людьми и проектами, поддерживающими модпак!");
-            Russian.Add("ExportWindowDesctiption", "Выберите версию WoT, для которой нужно произвести экспорт");
+            Russian.Add("ExportWindowDescription", "Выберите версию WoT, для которой нужно произвести экспорт");
             Russian.Add("HelperText", "Вас приветствует Relhax Modpack!\n\nЯ старался сделать его максимально простым для пользователя, но вопросы всё же могут возникнуть.\n\nНаведите курсор мыши на любую настройку, и вы увидите пояснение к ней.\n\nБлагодарим вас за выбор в пользу Relhax, надеюсь, вам понравится! - Willster419");
             Russian.Add("helperTextShort", "Вас приветствует Relhax Modpack!");
             Russian.Add("NotifyIfSameDatabaseText", "Сообщать об актуальности БД (только для стабильной версии)");

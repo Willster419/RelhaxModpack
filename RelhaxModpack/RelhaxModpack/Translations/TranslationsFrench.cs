@@ -169,7 +169,7 @@ namespace RelhaxModpack
                 "Notez que cela ne va PAS: décompresser les fichiers xml du jeu, les fichiers de correctifs (fournis par le jeu) ou créer les fichiers d'atlas. Les instructions se trouvent dans le répertoire d'exportation.");
             French.Add("ViewCreditsButtonText", "Voir les crédits");
             French.Add("ViewCreditsButtonDescription", "Voir toutes les personnes et les projets géniaux qui prennent en charge le modpack !");
-            French.Add("ExportWindowDesctiption", "Sélection de la version de WoT que vous souhaitez exporter");
+            French.Add("ExportWindowDescription", "Sélection de la version de WoT que vous souhaitez exporter");
             French.Add("HelperText", "Bienvenue dans le Modpack Relhax !"+
                 "\nJ'ai essayé de faire le modpack le plus simple possible, mais des questions peuvent toujours survenir. Survolez un paramètre pour voir une explication." +
                 "\nMerci d'utiliser Relhax, j'espère que vous l'apprécierez ! - Willster419");

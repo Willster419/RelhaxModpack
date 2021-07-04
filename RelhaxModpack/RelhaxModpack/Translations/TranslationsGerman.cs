@@ -169,7 +169,7 @@ namespace RelhaxModpack
                 " bereitgestellt). Anweisungen dazu findest du im Export-Verzeichnis.");
             German.Add("ViewCreditsButtonText", "Danksagung");
             German.Add("ViewCreditsButtonDescription", "Übersicht aller großartigen Leute und Projekte, die das Modpack unterstützen");
-            German.Add("ExportWindowDesctiption", "Wähle die Version von WoT, für die du exportieren möchtest");
+            German.Add("ExportWindowDescription", "Wähle die Version von WoT, für die du exportieren möchtest");
             German.Add("HelperText", "Willkommen beim Relhax Modpack!" +
                 " \n\nIch habe versucht, das Modpack so einfach wie möglich zu gestalten. " +
                 " \nZum Beispiel kannst du mit einem Klick der rechten Maustaste auf einen Eintrag eine Beschreibung oder Vorschau anzeigen." +

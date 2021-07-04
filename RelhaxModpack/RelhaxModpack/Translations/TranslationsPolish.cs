@@ -164,7 +164,7 @@ namespace RelhaxModpack
                 "UWAGA: Pomija to wyodrębnianie plików XML gry, patchy i tworzenie plików atlas. Instrukcje są dostępne w folderze docelowym po wyeksportowaniu.");
             Polish.Add("ViewCreditsButtonText", "Autorzy i współtwórcy Relhax Modpack"); // Authors and co-creators* of Relhax Modpack. (*also used as contributors) @Nullmaruzero
             Polish.Add("ViewCreditsButtonDescription", "Lista wszystkich wspaniałych ludzi i projektów, dzięki którym powstał ten modpack.");
-            Polish.Add("ExportWindowDesctiption", "Wybierz wersję docelową klienta WoT:");
+            Polish.Add("ExportWindowDescription", "Wybierz wersję docelową klienta WoT:");
             Polish.Add("HelperText", "Witaj w Modpacku Relhax!\n\nMoim celem było stworzenie paczki modów tak prostej, jak to tylko możliwe,\n" +
                 "ale jeśli nadal czujesz się nieco zagubiony, po prostu najedź kursorem na dowolną opcję i przeczytaj jej opis.\n\n" +
                 "Dzięki za wybranie tego modpacka, mam nadzieję, że Ci się spodoba! — Willster419");
