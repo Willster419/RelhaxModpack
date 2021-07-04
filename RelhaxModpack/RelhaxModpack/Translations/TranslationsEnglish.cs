@@ -474,30 +474,6 @@ namespace RelhaxModpack
             //
             English.Add("ThemeDarkDescription", "Dark Theme");
 
-            //Component: ThemeCustomText
-            //
-            English.Add("ThemeCustomText", "Custom");
-
-            //Component: ThemeCustomDescription
-            //
-            English.Add("ThemeCustomDescription", "Custom Theme");
-
-            //Component: DumpColorSettingsButtonText
-            //
-            English.Add("DumpColorSettingsButtonText", "Save current color settings");
-
-            //Component: OpenColorPickerButtonText
-            //
-            English.Add("OpenColorPickerButtonText", "Open color picker");
-
-            //Component: OpenColorPickerButtonDescription
-            // A tooltip for OpenColorPickerButton. The button opens the color picker for theming the app. *Captain Obvious flies away*...
-            English.Add("OpenColorPickerButtonDescription", "Opens color picker, allowing you to create your own theme.");
-
-            //Component: DumpColorSettingsButtonDescription
-            //
-            English.Add("DumpColorSettingsButtonDescription", "Writes an xml document of all components that can have a custom color applied, to make a custom theme");
-
             //Component: MulticoreExtractionText
             //
             English.Add("MulticoreExtractionText", "Multicore extraction mode");
