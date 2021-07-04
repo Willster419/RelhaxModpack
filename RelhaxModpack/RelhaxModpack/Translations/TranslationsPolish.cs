@@ -510,6 +510,7 @@ namespace RelhaxModpack
             #region Advanced Installer Window
             Polish.Add("AdvancedProgress", "Szczegółowy Podgląd Instalacji");
             Polish.Add("PreInstallTabHeader", "Przygotowywanie"); // => "PREPARATION(s)", otherwise it's long and clumsy. @Nullmaruzero
+            Polish.Add("ExtractionTabHeader", "Wyodrębnianie");
             Polish.Add("PostInstallTabHeader", "Zadania poinstalacyjne");
             Polish.Add("AdvancedInstallBackupData", "Tworzenie kopii zapasowej ustawień modów");
             Polish.Add("AdvancedInstallClearCache", "Czyszczenie pamięci podręcznej WoT");
