@@ -253,7 +253,18 @@ namespace RelhaxModpack.Database
         {
             foreach (Category cat in ParsedCategoryList)
             {
-                foreach (SelectablePackage sp in cat.Packages)
+                List<SelectablePackage> packagesToItterate;
+                if (cat.CategoryHeader != null)
+                {
+                    packagesToItterate = cat.CategoryHeader.Packages;
+                    cat.CategoryHeader.Parent = cat.CategoryHeader;
+                    cat.CategoryHeader.TopParent = cat.CategoryHeader;
+                }
+                else
+                {
+                    packagesToItterate = cat.Packages;
+                }
+                foreach (SelectablePackage sp in packagesToItterate)
                 {
                     BuildLinksRefrence(sp, cat, cat.CategoryHeader);
                 }
