@@ -330,7 +330,7 @@ namespace RelhaxModpack
             Russian.Add("confirmUninstallMessage", "Подтвердите необходимость удалить модификации World of Tanks в этой папке: \n\n{0}\n\nИспользуем метод «{1}»?");
             Russian.Add("uninstallingText", "Удаление...");
             Russian.Add("uninstallingFile", "Удаляется файл");
-            Russian.Add("uninstallfinished", "Удаление модов завершено.");
+            Russian.Add("uninstallFinished", "Удаление модов завершено.");
             Russian.Add("uninstallFail", "Не удалось завершить деинсталляцию. Вы можете попробовать другой метод или отправить отчёт об ошибке.");
             Russian.Add("extractionErrorMessage", "Возникла ошибка при удалении папки res_mods или mods. Возможно, запущен World of Tanks или неверно настроены разрешения к папкам и файлам.");
             Russian.Add("extractionErrorHeader", Russian["error"]);
@@ -528,6 +528,7 @@ namespace RelhaxModpack
             #endregion
 
             #region First Load Acknowledgements
+            Russian.Add("FirstLoadAcknowledgments", "Первый запуск");
             Russian.Add("AgreementLicense", "Я прочитал и согласен с ");
             Russian.Add("LicenseLink", "условиями лицензионного соглашения");
             Russian.Add("AgreementSupport1", "Я понимаю, что могу обратиться за помощью ");
