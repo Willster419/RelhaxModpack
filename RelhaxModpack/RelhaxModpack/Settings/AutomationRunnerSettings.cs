@@ -42,5 +42,9 @@ namespace RelhaxModpack.Settings
         public bool DumpParsedMacrosPerSequenceRun { get; set; } = false;
 
         public bool DumpShellEnvironmentVarsPerSequenceRun { get; set; } = false;
+
+        public bool UseLocalRunnerDatabase { get; set; } = false;
+
+        public string LocalRunnerDatabaseRoot { get; set; } = string.Empty;
     }
 }

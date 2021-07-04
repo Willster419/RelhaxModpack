@@ -14,6 +14,7 @@ using RelhaxModpack.Common;
 using System.ComponentModel;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.UI;
+using System.Threading.Tasks;
 
 namespace RelhaxModpack.Windows
 {
@@ -58,6 +59,8 @@ namespace RelhaxModpack.Windows
 
         private SaveFileDialog SaveDatabaseDialog;
 
+        private OpenFileDialog OpenRootXmlDialog;
+
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
@@ -92,25 +95,37 @@ namespace RelhaxModpack.Windows
             if (AutomationSettings.OpenLogWindowOnStartup)
                 logViewer.Show();
 
-            //load branches from the server
-            Logging.Info("Loading branches");
-            await AutomationSequencer.LoadBranchesListAsync();
+            await LoadAutomationSequencerAsync();
+        }
 
-            //ensure that the branch specified in settings exists, and if so apply it. else apply the default setting
-            if (!AutomationSequencer.AutomationBranches.Contains(AutomationSettings.SelectedBranch))
+        private async Task LoadAutomationSequencerAsync()
+        {
+            if (!AutomationSettings.UseLocalRunnerDatabase)
             {
-                Logging.Error("The selected branch does not exist on the server: {0}", AutomationSettings.SelectedBranch);
-                //TODO: command line mode should be an exit return
-            }
-            else
-            {
-                Logging.Info("Applying branch to load from: {0}", AutomationSettings.SelectedBranch);
+                //load branches from the server
+                Logging.Info("Loading branches");
+                await AutomationSequencer.LoadBranchesListAsync();
+
+                //ensure that the branch specified in settings exists, and if so apply it. else apply the default setting
+                if (!AutomationSequencer.AutomationBranches.Contains(AutomationSettings.SelectedBranch))
+                {
+                    Logging.Error("The selected branch does not exist on the server: {0}", AutomationSettings.SelectedBranch);
+                    MessageBox.Show(string.Format("The selected branch {0} does not exist on the server, setting to default", AutomationSettings.SelectedBranch));
+                    AutomationSettings.SelectedBranch = AutomationSequencer.AutomationRepoDefaultBranch;
+                    AutomamtionDatabaseSelectedBranchSetting.Text = AutomationSequencer.AutomationRepoDefaultBranch;
+                    //TODO: command line mode should be an exit return
+                }
+                else
+                {
+                    Logging.Info("Applying branch to load from: {0}", AutomationSettings.SelectedBranch);
+                }
             }
 
             //load the available package sequences from the root document
             SequencesAvailableListBox.Items.Clear();
-            SequencesAvailableListBox.Items.Add("Loading available sequences from server...");
+            SequencesAvailableListBox.Items.Add("Loading available sequences from database...");
             Logging.Info("Loading sequences from root document");
+            AutomationSequencer.AutomationSequences.Clear();
             await AutomationSequencer.LoadRootDocumentAsync();
 
             //load the available global macros
@@ -148,6 +163,8 @@ namespace RelhaxModpack.Windows
             AutomamtionDatabaseSelectedBranchSetting.Text = AutomationSettings.SelectedBranch;
             SelectDBSaveLocationSetting.Text = AutomationSettings.DatabaseSavePath;
             DumpEnvironmentVariablesAtSequenceStartSetting.IsChecked = AutomationSettings.DumpShellEnvironmentVarsPerSequenceRun;
+            UseLocalRunnerDatabaseSetting.IsChecked = AutomationSettings.UseLocalRunnerDatabase;
+            LocalRunnerDatabaseRootSetting.Text = AutomationSettings.LocalRunnerDatabaseRoot;
         }
 
         #region Progress reporting code
@@ -462,6 +479,48 @@ namespace RelhaxModpack.Windows
         private void SelectDBSaveLocationSetting_TextChanged(object sender, TextChangedEventArgs e)
         {
             AutomationSettings.DatabaseSavePath = SelectDBSaveLocationSetting.Text;
+        }
+
+        private async void UseLocalRunnerDatabaseSetting_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)UseLocalRunnerDatabaseSetting.IsChecked && string.IsNullOrEmpty(LocalRunnerDatabaseRootSetting.Text))
+            {
+                MessageBox.Show("Cannot check this setting when the path to the automation database is not set");
+                UseLocalRunnerDatabaseSetting.IsChecked = AutomationSettings.UseLocalRunnerDatabase = false;
+                return;
+            }
+            else if (!File.Exists(LocalRunnerDatabaseRootSetting.Text))
+            {
+                MessageBox.Show("The currently set path to the automation database root file does not exist");
+                return;
+            }
+            AutomationSettings.UseLocalRunnerDatabase = (bool)UseLocalRunnerDatabaseSetting.IsChecked;
+
+            await LoadAutomationSequencerAsync();
+        }
+
+        private void SelectLocalRunnerDatabaseRootButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (OpenRootXmlDialog == null)
+                OpenRootXmlDialog = new OpenFileDialog
+                {
+                    AddExtension = true,
+                    CheckPathExists = true,
+                    CheckFileExists = true,
+                    DefaultExt = "xml",
+                    InitialDirectory = string.IsNullOrWhiteSpace(LocalRunnerDatabaseRootSetting.Text) ? ApplicationConstants.ApplicationStartupPath :
+                    Directory.Exists(Path.GetDirectoryName(LocalRunnerDatabaseRootSetting.Text)) ? LocalRunnerDatabaseRootSetting.Text : ApplicationConstants.ApplicationStartupPath,
+                    Title = "Select the root xml file of the automation repository"
+                };
+
+            if (!(bool)OpenRootXmlDialog.ShowDialog())
+                return;
+            LocalRunnerDatabaseRootSetting.Text = OpenRootXmlDialog.FileName;
+        }
+
+        private void LocalRunnerDatabaseRootSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.LocalRunnerDatabaseRoot = LocalRunnerDatabaseRootSetting.Text;
         }
         #endregion
     }
