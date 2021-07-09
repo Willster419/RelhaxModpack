@@ -81,14 +81,6 @@ namespace RelhaxModpack.Automation
 
         public long ExecutionTimeProcessTaskResultsMs { get; protected set; } = 0;
 
-        public long ExecutionTimeMs
-        {
-            get
-            {
-                return ExecutionTimeValidateCommandsMs + ExecutionTimeRunTaskMs + ExecutionTimeProcessTaskResultsMs;
-            }
-        }
-
         public string ComponentInternalName { get { return ID; } }
 
         public virtual void PreProcessingHook()
@@ -259,7 +251,7 @@ namespace RelhaxModpack.Automation
             ExecutionTimeStopwatch.Stop();
             if (!EvaluateResults(nameof(ProcessTaskResults)))
                 return;
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Finished task {0}: Task end, ExecutionTimeMs: {1}", Command, ExecutionTimeMs.ToString());
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Finished task {0}: Task end, ExecutionTimeMs: {1}", Command, ExecutionTimeStopwatch.ElapsedMilliseconds);
         }
 
         protected string ProcessMacro(string argName, string arg)
