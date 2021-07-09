@@ -1093,11 +1093,28 @@ namespace RelhaxModpack.Utilities
                 //if we're doing custom typing, then get the type based on the attribute name
                 if (customTyping)
                 {
-                    string typeResult = listElement.Attribute(customTypeAttributeName).Value;
+                    XAttribute typeResultAttribute = listElement.Attribute(customTypeAttributeName);
+                    if (typeResultAttribute == null)
+                    {
+                        Logging.Error("The custom attribute {0} was missing from the xml element", customTypeAttributeName);
+                        errorOccured = true;
+                        continue;
+                    }
+
+                    string typeResult = typeResultAttribute.Value;
                     if (string.IsNullOrEmpty(typeResult))
-                        throw new BadMemeException("typeResult is null or empty - invalid attribute name");
+                    {
+                        Logging.Error("typeResult is null or empty - invalid attribute name", customTypeAttributeName);
+                        errorOccured = true;
+                        continue;
+                    }
+
                     if (!typeMapper.ContainsKey(typeResult))
-                        throw new BadMemeException(string.Format("typeResult {0} does not exist in dictionary", typeResult));
+                    {
+                        Logging.Error("typeResult {0} does not exist in dictionary", typeResult);
+                        errorOccured = true;
+                        continue;
+                    }
                     listObjectType = typeMapper[typeResult];
                 }
 
