@@ -7,6 +7,7 @@ using RelhaxModpack.Windows;
 using RelhaxModpack.Xml;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -24,6 +25,10 @@ namespace RelhaxModpack.Automation
     /// </summary>
     public class AutomationSequence : IDisposable, IComponentWithID
     {
+        public const string AutomationSequenceMacroDefinitionsXpath = "/AutomationSequence/Macros";
+
+        public const string AutomationSequenceTaskDefinitionsXpath = "/AutomationSequence/TaskDefinitions";
+
         public AutomationSequencer AutomationSequencer { get; set; } = null;
 
         public List<AutomationTask> AutomationTasks { get; } = new List<AutomationTask>();
@@ -100,12 +105,14 @@ namespace RelhaxModpack.Automation
 
         private string packageUID;
 
+        private Stopwatch ExecutionTimeStopwatch = new Stopwatch();
+
         public AutomationSequence()
         {
             WebClient = new WebClient();
         }
 
-        public async Task LoadAutomationXmlAsync()
+        public async Task<bool> LoadAutomationXmlAsync()
         {
             if (string.IsNullOrEmpty(SequenceDownloadUrl))
                 throw new BadMemeException("SequenceDownloadUrl is not set");
@@ -120,6 +127,14 @@ namespace RelhaxModpack.Automation
                 string xmlString = await WebClient.DownloadStringTaskAsync(SequenceDownloadUrl);
                 TasksDocument = XmlUtils.LoadXDocument(xmlString, XmlLoadType.FromString);
             }
+
+            if (TasksDocument == null)
+            {
+                Logging.Error("The xml document failed to download or load from disk");
+                return false;
+            }
+
+            return true;
         }
 
 
@@ -127,10 +142,17 @@ namespace RelhaxModpack.Automation
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Getting list and parsing of automation tasks");
             Logging.Debug("Getting xml node results of TaskDefinitions");
-            XPathNavigator result = XmlUtils.GetXNodeFromXpath(TasksDocument, "/AutomationSequence/TaskDefinitions");
+            XPathNavigator result = XmlUtils.GetXNodeFromXpath(TasksDocument, AutomationSequenceTaskDefinitionsXpath);
+            if (result == null)
+            {
+                Logging.Error("The xml document was valid xml and loaded, but has incorrect task definition formatting for the application (missing the TaskDefinitions root?)");
+                return false;
+            }
+
             XElement automationTaskHolder =  XElement.Parse(result.OuterXml);
 
             Logging.Debug("Getting property of automationTasks and setting list entries");
+            AutomationTasks.Clear();
             PropertyInfo listPropertyInfo = this.GetType().GetProperty(nameof(AutomationTasks));
             try
             {
@@ -159,7 +181,7 @@ namespace RelhaxModpack.Automation
         public bool ParseSequenceMacros()
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing defined macros inside the sequence");
-            XPathNavigator result = XmlUtils.GetXNodeFromXpath(TasksDocument, "/AutomationSequence/Macros");
+            XPathNavigator result = XmlUtils.GetXNodeFromXpath(TasksDocument, AutomationSequenceMacroDefinitionsXpath);
             XElement macroHolder = XElement.Parse(result.OuterXml);
             SequenceMacros.Clear();
             PropertyInfo listPropertyInfo = this.GetType().GetProperty(nameof(SequenceMacros));
@@ -184,6 +206,7 @@ namespace RelhaxModpack.Automation
 
         public async Task<bool> RunTasksAsync()
         {
+            ExecutionTimeStopwatch.Restart();
             ExitCode = SequencerExitCode.NotRun;
             if (Package == null || AutomationSequencer == null || AutomationRunnerSettings == null)
                 throw new NullReferenceException();
@@ -212,7 +235,7 @@ namespace RelhaxModpack.Automation
             }
             Directory.CreateDirectory(workingDirectory);
 
-            bool taskReturnsGood = true;
+            bool taskReturnValue = true;
             foreach (AutomationTask task in this.AutomationTasks)
             {
                 bool breakLoop = false;
@@ -223,18 +246,18 @@ namespace RelhaxModpack.Automation
                 {
                     case AutomationExitCode.None:
                         breakLoop = false;
-                        taskReturnsGood = true;
+                        taskReturnValue = true;
                         break;
 
                     case AutomationExitCode.ComparisonEqualFail:
                         breakLoop = true;
-                        taskReturnsGood = true;
+                        taskReturnValue = true;
                         break;
 
                     default:
                         Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.", task.ID);
                         breakLoop = true;
-                        taskReturnsGood = false;
+                        taskReturnValue = false;
                         break;
                 }
 
@@ -242,16 +265,18 @@ namespace RelhaxModpack.Automation
                     break;
             }
 
-            ExitCode = taskReturnsGood ? SequencerExitCode.NoTaskErrors : SequencerExitCode.TaskErrors;
+            ExitCode = taskReturnValue ? SequencerExitCode.NoTaskErrors : SequencerExitCode.TaskErrors;
 
             //dispose/cleanup the tasks
             AutomationTasks.Clear();
-            return taskReturnsGood;
+            Logging.Info("Sequence {0} completed in {1} ms", PackageName, ExecutionTimeStopwatch.ElapsedMilliseconds);
+            return taskReturnValue;
         }
 
         public void Dispose()
         {
             ((IDisposable)WebClient).Dispose();
+            ((IDisposable)ExecutionTimeStopwatch).Dispose();
         }
 
         public override string ToString()
