@@ -27,7 +27,7 @@
                     <TextBlock x:Name="SequencesAvailableTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="NoWrap" Grid.Column="0" Grid.Row="0" Text="Sequences available from server"/>
                     <TextBlock x:Name="SequencesToRunTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="NoWrap" Grid.Column="2" Grid.Row="0" Text="Sequences selected to run"/>
                     <ListBox x:Name="SequencesAvailableListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" ScrollViewer.CanContentScroll="True"
-                             ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectionMode="Extended"/>
+                             ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectionMode="Extended" MouseDoubleClick="SequencesAvailableListBox_MouseDoubleClick"/>
                     <ListBox x:Name="SequencesToRunListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="1" ScrollViewer.CanContentScroll="True"
                              ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectionMode="Extended"/>
                     <Button x:Name="MoveSequencesToRunListButton" Content="&gt;&gt;" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="30" Height="20" Grid.Column="1" Grid.Row="1" Click="MoveSequencesToRunListButton_Click"/>
@@ -39,6 +39,9 @@
                     </Button>
                     <Button x:Name="DeleteSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Center" Height="40" Grid.Column="3" Grid.Row="1" Click="DeleteSelectedSequenceButton_Click">
                         <TextBlock Text="Delete selected" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+                    <Button x:Name="ReloadSequencesButton" HorizontalAlignment="Right" Margin="0,3,269,0" VerticalAlignment="Stretch" Width="110" Grid.Row="2" Grid.Column="2" Click="ReloadSequencesButton_Click">
+                        <TextBlock Text="Reload Sequences"/>
                     </Button>
                     <Button x:Name="OpenLogfileViewerButton" HorizontalAlignment="Right" Margin="0,3,234,0" VerticalAlignment="Stretch" Width="110" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Click="OpenLogfileViewerButton_Click">
                         <TextBlock Text="Open logfile viewer"/>

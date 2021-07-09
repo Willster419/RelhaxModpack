@@ -123,9 +123,9 @@ namespace RelhaxModpack.Windows
 
             //load the available package sequences from the root document
             SequencesAvailableListBox.Items.Clear();
+            SequencesToRunListBox.Items.Clear();
             SequencesAvailableListBox.Items.Add("Loading available sequences from database...");
             Logging.Info("Loading sequences from root document");
-            AutomationSequencer.AutomationSequences.Clear();
             await AutomationSequencer.LoadRootDocumentAsync();
 
             //load the available global macros
@@ -165,6 +165,18 @@ namespace RelhaxModpack.Windows
             DumpEnvironmentVariablesAtSequenceStartSetting.IsChecked = AutomationSettings.DumpShellEnvironmentVarsPerSequenceRun;
             UseLocalRunnerDatabaseSetting.IsChecked = AutomationSettings.UseLocalRunnerDatabase;
             LocalRunnerDatabaseRootSetting.Text = AutomationSettings.LocalRunnerDatabaseRoot;
+        }
+
+        private void MoveSequenceToRunList()
+        {
+            if (SequencesAvailableListBox.SelectedItems.Count == 0)
+                return;
+
+            foreach (AutomationSequence sequence in SequencesAvailableListBox.SelectedItems)
+            {
+                if (!SequencesToRunListBox.Items.Contains(sequence))
+                    SequencesToRunListBox.Items.Add(sequence);
+            }
         }
 
         #region Progress reporting code
@@ -250,16 +262,15 @@ namespace RelhaxModpack.Windows
             public AutomationSequence Sequence;
             public int OldIndex;
         }
+
         private void MoveSequencesToRunListButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SequencesAvailableListBox.SelectedItems.Count == 0)
-                return;
+            MoveSequenceToRunList();
+        }
 
-            foreach (AutomationSequence sequence in SequencesAvailableListBox.SelectedItems)
-            {
-                if (!SequencesToRunListBox.Items.Contains(sequence))
-                    SequencesToRunListBox.Items.Add(sequence);
-            }
+        private void SequencesAvailableListBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            MoveSequenceToRunList();
         }
 
         private void MoveUpSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
@@ -362,7 +373,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Open window buttons
+        #region Bottom row buttons
         private void OpenLogfileViewerButton_Click(object sender, RoutedEventArgs e)
         {
             if (logViewer.ViewerClosed)
@@ -395,6 +406,11 @@ namespace RelhaxModpack.Windows
             {
                 htmlPathSelector.Focus();
             }
+        }
+
+        private async void ReloadSequencesButton_Click(object sender, RoutedEventArgs e)
+        {
+            await LoadAutomationSequencerAsync();
         }
         #endregion
 

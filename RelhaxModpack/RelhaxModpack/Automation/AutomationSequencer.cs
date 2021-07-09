@@ -150,6 +150,7 @@ namespace RelhaxModpack.Automation
             Logging.AutomationRunner(LogOptions.MethodName, "Checking root document for to build automation sequences", LogLevel.Info);
 
             XmlNodeList sequencesXml = XmlUtils.GetXmlNodesFromXPath(RootDocument, "//root.xml/AutomationSequence");
+            AutomationSequences.Clear();
 
             foreach (XmlElement result in sequencesXml)
             {
@@ -241,7 +242,11 @@ namespace RelhaxModpack.Automation
             {
                 Logging.Debug("Parsing sequence: {0}, {1}", automationSequence.PackageName, automationSequence.PackageUID);
 
-                await automationSequence.LoadAutomationXmlAsync();
+                if (!(await automationSequence.LoadAutomationXmlAsync()))
+                {
+                    Logging.Error("Failed to load xml for sequence {0}", automationSequence.ComponentInternalName);
+                    return false;
+                }
             }
 
             return true;
