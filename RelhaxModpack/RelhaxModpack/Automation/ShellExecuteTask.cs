@@ -47,6 +47,8 @@ namespace RelhaxModpack.Automation
             Cmd = ProcessMacro(nameof(Cmd), Cmd);
             Wd = ProcessMacro(nameof(Wd), Wd);
             Filename = ProcessMacro(nameof(Filename), Filename);
+
+            Cmd = ProcessEscapeCharacters(nameof(Cmd), Cmd);
         }
 
         public override void ValidateCommands()

@@ -264,6 +264,19 @@ namespace RelhaxModpack.Automation
             return temp;
         }
 
+        protected string ProcessEscapeCharacters(string argName, string arg)
+        {
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg '{0}'", argName);
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Before processing: '{0}'", arg);
+
+            //replace the escape characters for "{" and "}"
+            arg = arg.Replace("\\{", "{");
+            arg = arg.Replace("\\}", "}");
+
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "After processing: {0}", arg);
+            return arg;
+        }
+
         protected void ProcessMacro(string argName, ref string arg)
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg '{0}'", argName);
