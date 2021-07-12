@@ -570,6 +570,7 @@ namespace RelhaxModpack.Windows
                     PackageAuthorDisplay.IsEnabled = true;
                     PackageInstallGroupDisplay.IsEnabled = true;
                     PackagePatchGroupDisplay.IsEnabled = true;
+                    PackageUidDisplay.IsEnabled = true;
                     PackageLastUpdatedDisplay.IsEnabled = true;
                     PackageLogAtInstallDisplay.IsEnabled = true;
                     PackageEnabledDisplay.IsEnabled = true;//kinda meta
