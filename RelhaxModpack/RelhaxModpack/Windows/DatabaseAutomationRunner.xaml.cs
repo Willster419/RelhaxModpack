@@ -61,6 +61,8 @@ namespace RelhaxModpack.Windows
 
         private OpenFileDialog OpenRootXmlDialog;
 
+        private readonly Action[] settingsMethods;
+
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
@@ -75,6 +77,20 @@ namespace RelhaxModpack.Windows
             RelhaxProgressChanged = RelhaxProgressReport_ProgressChanged;
             ProgressChanged = GenericProgressChanged;
             Settings = AutomationSettings;
+
+            //https://stackoverflow.com/questions/7712137/array-containing-methods
+            settingsMethods = new Action[]
+            {
+               () => OpenLogWindowOnStartupSetting_Click(null, null),
+               () => BigmodsUsernameSetting_TextChanged(null, null),
+               () => BigmodsPasswordSetting_TextChanged(null, null),
+               () => DumpParsedMacrosPerSequenceRunSetting_Click(null, null),
+               () => DumpEnvironmentVariablesAtSequenceStartSetting_Click(null, null),
+               () => AutomamtionDatabaseSelectedBranchSetting_TextChanged(null, null),
+               () => SelectDBSaveLocationSetting_TextChanged(null, null),
+               () => UseLocalRunnerDatabaseSetting_Click(null, null),
+               () => LocalRunnerDatabaseRootSetting_TextChanged(null, null)
+            };
         }
 
         private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
@@ -537,6 +553,38 @@ namespace RelhaxModpack.Windows
         private void LocalRunnerDatabaseRootSetting_TextChanged(object sender, TextChangedEventArgs e)
         {
             AutomationSettings.LocalRunnerDatabaseRoot = LocalRunnerDatabaseRootSetting.Text;
+        }
+
+        private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            InvokeSettingsAndnSaveToSettingsFile();
+        }
+
+        private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TabItem switchToTab = null;
+            TabItem switchFromTab = null;
+
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] != null)
+                switchToTab = e.AddedItems[0] as TabItem;
+
+            if (e.RemovedItems.Count > 0 && e.RemovedItems[0] != null)
+                switchFromTab = e.RemovedItems[0] as TabItem;
+
+            if (switchToTab == null || switchFromTab == null)
+                return;
+
+            if (switchFromTab == TabItemSettings && switchToTab != TabItemSettings)
+                InvokeSettingsAndnSaveToSettingsFile();
+        }
+
+        private void InvokeSettingsAndnSaveToSettingsFile()
+        {
+            foreach (Action action in settingsMethods)
+                action();
+
+            SettingsParser parser = new SettingsParser();
+            parser.SaveSettings(Settings);
         }
         #endregion
     }
