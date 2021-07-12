@@ -255,12 +255,22 @@ namespace RelhaxModpack.Automation
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Finished task {0}: Task end, ExecutionTimeMs: {1}", Command, ExecutionTimeStopwatch.ElapsedMilliseconds);
         }
 
-        public static string ProcessMacro(string argName, string arg)
+        public static string ProcessMacro(string argName, string arg, List<AutomationMacro> macros)
         {
             //set property value to temp, making new variable
             string temp = arg;
             //use that new temp value's reference to pass into the real ProcessMacro
-            ProcessMacro(argName, ref temp);
+            ProcessMacro(argName, ref temp, macros);
+            //and return the string value
+            return temp;
+        }
+
+        public string ProcessMacro(string argName, string arg)
+        {
+            //set property value to temp, making new variable
+            string temp = arg;
+            //use that new temp value's reference to pass into the real ProcessMacro
+            ProcessMacro(argName, ref temp, this.Macros);
             //and return the string value
             return temp;
         }
@@ -278,7 +288,7 @@ namespace RelhaxModpack.Automation
             return arg;
         }
 
-        protected static void ProcessMacro(string argName, ref string arg)
+        protected static void ProcessMacro(string argName, ref string arg, List<AutomationMacro> macros)
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg '{0}'", argName);
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Before processing: '{0}'", arg);
@@ -352,7 +362,7 @@ namespace RelhaxModpack.Automation
                         splitValue = splitValue.Remove(0, 1);
                         splitValue = splitValue.Remove(splitValue.Length - 1, 1);
                         //use_{date}_val
-                        string innerResult = ProcessMacro(string.Format("{0}_capture{1}_level{2}", argName, captureCount, countDifference), splitValue);
+                        string innerResult = ProcessMacro(string.Format("{0}_capture{1}_level{2}", argName, captureCount, countDifference), splitValue, macros);
                         //use_the_date_val, if {date} = the_date
                         innerResult = "{" + innerResult + "}";
                         //{use_the_date_val}
@@ -368,7 +378,7 @@ namespace RelhaxModpack.Automation
                         Logging.Debug(Logfiles.AutomationRunner, LogOptions.None, "This match is 1 level of brackets, perform direct recursive replacement");
                     }
 
-                    string processedValue = ProcessMacro(string.Format("{0}_capture{1}_level{2}", argName, captureCount, countDifference), capturedValue);
+                    string processedValue = ProcessMacro(string.Format("{0}_capture{1}_level{2}", argName, captureCount, countDifference), capturedValue, macros);
                     Regex replaceRegex = new Regex(capture.Value);
                     arg = replaceRegex.Replace(arg, processedValue, 1);
                     captureCount++;
@@ -384,7 +394,7 @@ namespace RelhaxModpack.Automation
                         continue;
 
                     Logging.Debug(Logfiles.AutomationRunner, LogOptions.None, "Processing macro {0}, string location {1}, length {2}", capture.Value, capture.Index, capture.Length);
-                    AutomationMacro resultMacro = Macros.Find(macro => macro.Name.Equals(capture.Value));
+                    AutomationMacro resultMacro = macros.Find(macro => macro.Name.Equals(capture.Value));
                     if (resultMacro == null)
                     {
                         Logging.Warning(Logfiles.AutomationRunner, LogOptions.None, "The macro with name '{0}', does not exist, skipping. (Is this intended?)", capture.Value);

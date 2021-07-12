@@ -221,7 +221,7 @@ namespace RelhaxModpack.Automation
             //process local macros in case they were added with macros inside them
             foreach (AutomationMacro macro in SequenceMacros)
             {
-                macro.Value = AutomationTask.ProcessMacro(macro.Name, macro.Value);
+                macro.Value = AutomationTask.ProcessMacro(macro.Name, macro.Value, SequenceMacros);
                 AllMacros.Add(AutomationMacro.Copy(macro));
             }
 
