@@ -284,7 +284,6 @@ namespace RelhaxModpack.Automation
         public void Dispose()
         {
             ((IDisposable)WebClient).Dispose();
-            ((IDisposable)ExecutionTimeStopwatch).Dispose();
         }
 
         public override string ToString()
