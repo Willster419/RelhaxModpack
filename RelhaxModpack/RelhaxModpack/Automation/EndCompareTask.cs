@@ -37,6 +37,7 @@ namespace RelhaxModpack.Automation
                 Logging.Debug("Compare {0}", automationCompare.AutomationTask.ID);
                 Logging.Debug("File a: {0}, Hash: {1}", automationCompare.CompareAFilepath, automationCompare.CompareAHash);
                 Logging.Debug("File b: {0}, Hash: {1}", automationCompare.CompareBFilepath, automationCompare.CompareBHash);
+                Logging.Debug("Compare mode: {0}", automationCompare.CompareMode.ToString());
                 if (automationCompare.CompareResult)
                 {
                     Logging.Info("Compare {0} is MATCH", automationCompare.AutomationTask.ID); 
@@ -48,12 +49,16 @@ namespace RelhaxModpack.Automation
             }
 
             Logging.Info("Number of matching files: {0}", AutomationCompareTracker.NumMatches);
-            Logging.Info("Number of different files: {0}", AutomationCompareTracker.NumDifferences);
+            Logging.Info("Number of different (continue) files: {0}", AutomationCompareTracker.NumDifferencesContinue);
+            Logging.Info("Number of different (stop) files: {0}", AutomationCompareTracker.NumDifferencesStop);
 
-            if (ProcessTaskResultTrue(AutomationCompareTracker.NumDifferences + AutomationCompareTracker.NumMatches == 0, "The number of total compares is 0"))
+            if (ProcessTaskResultTrue(AutomationCompareTracker.NumDifferencesContinue + AutomationCompareTracker.NumMatches == 0, "The number of total compares is 0"))
                 return;
 
-            if (ValidateForExitTrue(AutomationCompareTracker.NumDifferences == 0, AutomationExitCode.ComparisonEqualFail, string.Format("There are no differences, no need to continue execution")))
+            if (ValidateForExitTrue(AutomationCompareTracker.NumDifferencesStop == 0, AutomationExitCode.ComparisonManualFilesToUpdate, string.Format("There are {0} files that require manual updating, cannon continue execution", AutomationCompareTracker.NumDifferencesStop)))
+                return;
+
+            if (ValidateForExitTrue(AutomationCompareTracker.NumDifferencesContinue == 0, AutomationExitCode.ComparisonNoFilesToUpdate, string.Format("There are no differences in files that need to be updated, no need to continue execution")))
                 return;
         }
     }

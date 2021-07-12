@@ -145,6 +145,7 @@
     <Compile Include="Automation\DownloadHtmlTask.cs" />
     <Compile Include="Automation\DownloadStaticTask.cs" />
     <Compile Include="Automation\EndCompareTask.cs" />
+    <Compile Include="Automation\FileCompareInverseTask.cs" />
     <Compile Include="Automation\FileCompareTask.cs" />
     <Compile Include="Automation\FileCopyTask.cs" />
     <Compile Include="Automation\FileDeleteTask.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="Utilities\Enums\ApplicationVersions.cs" />
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
     <Compile Include="Utilities\Enums\AutomationExitCode.cs" />
+    <Compile Include="Utilities\Enums\AutomationCompareMode.cs" />
     <Compile Include="Utilities\Enums\DatabaseLoadFailCode.cs" />
     <Compile Include="Utilities\Enums\DownloadProgressState.cs" />
     <Compile Include="Utilities\Enums\HtmlXpathParserExitCode.cs" />

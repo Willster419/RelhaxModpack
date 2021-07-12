@@ -33,7 +33,9 @@
 
         ParseTaskFail = 12,
 
-        ComparisonEqualFail = 42,
+        ComparisonNoFilesToUpdate = 42,
+
+        ComparisonManualFilesToUpdate = 44,
 
         GenericEndSequenceEarlyOk = 43
     }

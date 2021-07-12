@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Utilities.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,8 @@ namespace RelhaxModpack.Automation
         public string CompareAHash;
 
         public string CompareBHash;
+
+        public AutomationCompareMode CompareMode;
 
         public AutomationTask AutomationTask;
     }

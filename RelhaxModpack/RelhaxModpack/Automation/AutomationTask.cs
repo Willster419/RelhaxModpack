@@ -37,6 +37,7 @@ namespace RelhaxModpack.Automation
             { PackageDownloadTask.TaskCommandName, typeof(PackageDownloadTask) },
             { PackageUploadTask.TaskCommandName, typeof(PackageUploadTask) },
             { FileCompareTask.TaskCommandName, typeof(FileCompareTask) },
+            { FileCompareInverseTask.TaskCommandName, typeof(FileCompareInverseTask) },
             { FileCopyTask.TaskCommandName, typeof(FileCopyTask) },
             { FileDeleteTask.TaskCommandName, typeof(FileDeleteTask) },
             { FileMoveTask.TaskCommandName, typeof(FileMoveTask) },
@@ -107,7 +108,7 @@ namespace RelhaxModpack.Automation
                     Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Task: {0} ID: {1} State: {2}, ExitCode: {3}", Command, ID, state, ExitCode);
                     return true;
 
-                case AutomationExitCode.ComparisonEqualFail:
+                case AutomationExitCode.ComparisonNoFilesToUpdate:
                     Logging.Info("The task {0} (ID {1} reported exit code {2}. The Sequence will stop, but a success will be reported", Command, ID, ExitCode.ToString());
                     return true;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Utilities.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,9 @@ namespace RelhaxModpack.Automation
 
         public int NumMatches { get { return AutomationCompares.Count(compare => compare.CompareResult); } }
 
-        public int NumDifferences { get { return AutomationCompares.Count(compare => !compare.CompareResult); } }
+        public int NumDifferencesContinue { get { return AutomationCompares.Count(compare => !compare.CompareResult && compare.CompareMode == AutomationCompareMode.NoMatchContinue); } }
+
+        public int NumDifferencesStop { get { return AutomationCompares.Count(compare => !compare.CompareResult && compare.CompareMode == AutomationCompareMode.NoMatchStop); } }
 
         public List<AutomationCompare> Matches { get { return AutomationCompares.FindAll(compare => compare.CompareResult); } }
 
@@ -29,14 +32,15 @@ namespace RelhaxModpack.Automation
             AutomationCompares.Add(compare);
         }
 
-        public void AddCompare(AutomationTask task, string fileAPath, string fileAHash, string fileBPath, string fileBHash)
+        public void AddCompare(AutomationTask task, string fileAPath, string fileAHash, string fileBPath, string fileBHash, AutomationCompareMode compareMode)
         {
             AutomationCompare compare = new AutomationCompare()
             {
                 CompareAFilepath = fileAPath,
                 CompareAHash = fileAHash,
                 CompareBFilepath = fileBPath,
-                CompareBHash = fileBHash
+                CompareBHash = fileBHash,
+                CompareMode = compareMode
             };
             AddCompare(task, compare);
         }

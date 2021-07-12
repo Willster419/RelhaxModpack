@@ -237,7 +237,7 @@ namespace RelhaxModpack.Automation
             }
             Directory.CreateDirectory(workingDirectory);
 
-            bool taskReturnValue = true;
+            bool taskReturnGood = true;
             foreach (AutomationTask task in this.AutomationTasks)
             {
                 bool breakLoop = false;
@@ -248,18 +248,23 @@ namespace RelhaxModpack.Automation
                 {
                     case AutomationExitCode.None:
                         breakLoop = false;
-                        taskReturnValue = true;
+                        taskReturnGood = true;
                         break;
 
-                    case AutomationExitCode.ComparisonEqualFail:
+                    case AutomationExitCode.ComparisonNoFilesToUpdate:
                         breakLoop = true;
-                        taskReturnValue = true;
+                        taskReturnGood = true;
+                        break;
+
+                    case AutomationExitCode.ComparisonManualFilesToUpdate:
+                        breakLoop = true;
+                        taskReturnGood = true;
                         break;
 
                     default:
                         Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.", task.ID);
                         breakLoop = true;
-                        taskReturnValue = false;
+                        taskReturnGood = false;
                         break;
                 }
 
@@ -267,12 +272,13 @@ namespace RelhaxModpack.Automation
                     break;
             }
 
-            ExitCode = taskReturnValue ? SequencerExitCode.NoTaskErrors : SequencerExitCode.TaskErrors;
+            ExitCode = taskReturnGood ? SequencerExitCode.NoTaskErrors : SequencerExitCode.TaskErrors;
 
             //dispose/cleanup the tasks
             AutomationTasks.Clear();
             Logging.Info("Sequence {0} completed in {1} ms", PackageName, ExecutionTimeStopwatch.ElapsedMilliseconds);
-            return taskReturnValue;
+            Dispose();
+            return taskReturnGood;
         }
 
         public void Dispose()
