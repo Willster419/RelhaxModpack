@@ -190,7 +190,6 @@ namespace RelhaxModpack.Automation
                 bool setListEntriesResult = CommonUtils.SetListEntries(this, listPropertyInfo, macroHolder.Elements());
                 if (!setListEntriesResult)
                     return false;
-                
             }
             catch (Exception ex)
             {
@@ -218,8 +217,11 @@ namespace RelhaxModpack.Automation
             {
                 AllMacros.Add(AutomationMacro.Copy(macro));
             }
+
+            //process local macros in case they were added with macros inside them
             foreach (AutomationMacro macro in SequenceMacros)
             {
+                macro.Value = AutomationTask.ProcessMacro(macro.Name, macro.Value);
                 AllMacros.Add(AutomationMacro.Copy(macro));
             }
 

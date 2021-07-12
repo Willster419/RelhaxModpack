@@ -254,7 +254,7 @@ namespace RelhaxModpack.Automation
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Finished task {0}: Task end, ExecutionTimeMs: {1}", Command, ExecutionTimeStopwatch.ElapsedMilliseconds);
         }
 
-        protected string ProcessMacro(string argName, string arg)
+        public static string ProcessMacro(string argName, string arg)
         {
             //set property value to temp, making new variable
             string temp = arg;
@@ -264,7 +264,7 @@ namespace RelhaxModpack.Automation
             return temp;
         }
 
-        protected string ProcessEscapeCharacters(string argName, string arg)
+        protected static string ProcessEscapeCharacters(string argName, string arg)
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg '{0}'", argName);
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Before processing: '{0}'", arg);
@@ -277,7 +277,7 @@ namespace RelhaxModpack.Automation
             return arg;
         }
 
-        protected void ProcessMacro(string argName, ref string arg)
+        protected static void ProcessMacro(string argName, ref string arg)
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg '{0}'", argName);
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Before processing: '{0}'", arg);
