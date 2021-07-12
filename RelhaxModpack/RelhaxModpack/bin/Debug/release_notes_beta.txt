@@ -1,3 +1,9 @@
+# Beta Application version 1.3.2.11 (2021-07-11)
+https://www.virustotal.com/gui/file-analysis/MTA4ZTg2Yjc0YTczYWFmOTdkODdiNjY3MjBmMjhlZDU6MTYyNjA1NDgwNQ==/detection
+- Added the `Cmd` argument of the automation task `ShellExecuteTask` the ability to pass a macro syntax "{macro}" by having escape characters for the brackets.
+- Added an automation task to compare file hashes, and if they aren't equal, then the sequence ends prematurely. This target usage is for if a file has changed (like a configuration file) and the package must be updated by hand.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.2.10 (2021-07-09)
 https://www.virustotal.com/gui/file/76f45fd0c3a1b0ec20d5373ccccbcb8f282a83bd55b92580e273dbd21a855d3f/detection
 - Added text wrapping to tooltip messages so they don't go off the screen or look weird.
