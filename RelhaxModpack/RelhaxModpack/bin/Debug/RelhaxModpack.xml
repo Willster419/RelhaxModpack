@@ -5582,6 +5582,25 @@
             List of possible return code error conditions that can occur when running an automation task
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.AutomationCompareMode">
+            <summary>
+            The different behaviors of the comparison
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationCompareMode.NoMatchContinue">
+            <summary>
+            If the file hashes are different, then continue the sequence. This is the primary behavior.
+            </summary>
+            <remarks>The implied use of this mode is that if the hashes are different, then the application
+            needs to continue to update the version of the package in our database</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationCompareMode.NoMatchStop">
+            <summary>
+            If the file hashes are different, then stop the sequence with appropriate exit code.
+            </summary>
+            <remarks>If the exit code associated with this enumeration occurs, then it implies that this
+            file must be manually inspected and cannot be an automated change</remarks>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode">
             <summary>
             List of possible return code error conditions that can occur when loading the database
