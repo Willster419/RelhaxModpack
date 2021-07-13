@@ -162,6 +162,11 @@
     <Compile Include="Automation\MacroCreateTask.cs" />
     <Compile Include="Automation\MacroDeleteTask.cs" />
     <Compile Include="Automation\MacroImportTask.cs" />
+    <Compile Include="Automation\MacroStringSplitFilenameTask.cs" />
+    <Compile Include="Automation\MacroStringSplitTask.cs" />
+    <Compile Include="Automation\MacroStringTask.cs" />
+    <Compile Include="Automation\MacroSubstringFilenameTask.cs" />
+    <Compile Include="Automation\MacroSubstringTask.cs" />
     <Compile Include="Automation\MacroTask.cs" />
     <Compile Include="Automation\PackageDownloadTask.cs" />
     <Compile Include="Automation\PackageTransferTask.cs" />

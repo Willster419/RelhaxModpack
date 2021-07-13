@@ -48,7 +48,9 @@ namespace RelhaxModpack.Automation
             { UpdatePackagePropertyTask.TaskCommandName, typeof(UpdatePackagePropertyTask) },
             { RetrievePackagePropertyTask.TaskCommandName, typeof(RetrievePackagePropertyTask) },
             { MacroDeleteTask.TaskCommandName, typeof(MacroDeleteTask) },
-            { MacroCreateTask.TaskCommandName, typeof(MacroCreateTask) }
+            { MacroCreateTask.TaskCommandName, typeof(MacroCreateTask) },
+            { MacroSubstringFilenameTask.TaskCommandName, typeof(MacroSubstringFilenameTask) },
+            { MacroStringSplitFilenameTask.TaskCommandName, typeof(MacroStringSplitFilenameTask) }
         };
 
         public const string AttributeNameForMapping = "Command";
@@ -139,6 +141,11 @@ namespace RelhaxModpack.Automation
         {
             bool test_ = !test;
             return ValidateCommandTrue(test_, formattedString);
+        }
+
+        protected virtual bool ValidateCommandStringNullEmptyTrue(string argName, string arg)
+        {
+            return ValidateCommandTrue(string.IsNullOrEmpty(arg), string.Format("The arg {0} is empty string", nameof(argName)));
         }
 
         /// <summary>
