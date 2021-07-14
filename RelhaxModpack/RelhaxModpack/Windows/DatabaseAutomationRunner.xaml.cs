@@ -500,6 +500,7 @@ namespace RelhaxModpack.Windows
             if (!cancellationToken.IsCancellationRequested)
             {
                 cancellationToken.Cancel();
+                AutomationSequencer.CancelSequence();
                 Logging.Info("Cancel request sent");
             }
             else
