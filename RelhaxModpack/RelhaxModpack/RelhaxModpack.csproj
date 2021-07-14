@@ -156,6 +156,7 @@
     <Compile Include="Automation\FileTask.cs" />
     <Compile Include="Automation\HtmlBrowserParser.cs" />
     <Compile Include="Automation\HtmlWebscrapeParser.cs" />
+    <Compile Include="Automation\ICancelOperation.cs" />
     <Compile Include="Automation\IDatabaseTask.cs" />
     <Compile Include="Automation\IDownloadTask.cs" />
     <Compile Include="Automation\ImportTask.cs" />

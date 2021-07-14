@@ -16,6 +16,7 @@ using RelhaxModpack.Common;
 using RelhaxModpack.Windows;
 using RelhaxModpack.Settings;
 using System.Diagnostics;
+using System.Threading;
 
 namespace RelhaxModpack.Automation
 {
@@ -87,6 +88,15 @@ namespace RelhaxModpack.Automation
         }
 
         public string ComponentInternalName { get; } = "AutomationSequencer";
+
+        protected CancellationToken CancellationToken;
+
+        protected AutomationSequence RunningSequence;
+
+        public AutomationSequencer(CancellationToken cancellationToken) : this()
+        {
+            CancellationToken = cancellationToken;
+        }
 
         public AutomationSequencer()
         {
@@ -168,7 +178,7 @@ namespace RelhaxModpack.Automation
                     sequenceLoadString = AutomationRepoPathEscaped + sequenceUrlPath;
                 }
                 Logging.AutomationRunner(LogOptions.MethodName, "Parsing sequence for package {0} (UID {1})", LogLevel.Info, sequencePackageName, sequenceUID);
-                AutomationSequences.Add(new AutomationSequence()
+                AutomationSequences.Add(new AutomationSequence(DatabasePackages, ApplicationMacros, GlobalMacros, AutomationRunnerSettings, DatabaseManager, CancellationToken)
                 {
                     AutomationSequencer = this,
                     Package = null,
@@ -216,6 +226,7 @@ namespace RelhaxModpack.Automation
             DatabasePackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
             foreach (AutomationSequence automationSequence in sequencesToRun)
             {
+                automationSequence.DatabasePackages = DatabasePackages;
                 Logging.Debug("Linking sequence to package reference: {0}, {1}", automationSequence.PackageName, automationSequence.PackageUID);
 
                 DatabasePackage result = DatabasePackages.Find(pack => pack.UID.Equals(automationSequence.PackageUID));
@@ -269,49 +280,34 @@ namespace RelhaxModpack.Automation
 
         private async Task<bool> RunSequencesAsync(List<AutomationSequence> sequencesToRun)
         {
+            RunningSequence = null;
             if (sequencesToRun.Count == 0)
             {
                 Logging.Error(Logfiles.AutomationRunner, LogOptions.ClassName, "No sequences specified in AutomationSequences list");
                 return false;
             }
 
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "RUNNING AUTOMATION SEQUENCES. Put in caps so you know it's important");
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Running automation sequencer");
             NumErrors = 0;
-
-            if (AutomationRunnerSettings.DumpShellEnvironmentVarsPerSequenceRun)
-            {
-                //dump vars before run
-                Logging.AutomationRunner("Dumping current shell environment variables", LogLevel.Debug);
-                using (Process process = new Process()
-                {
-                    StartInfo = new ProcessStartInfo()
-                    {
-                        //Setting this property to false enables you to redirect input, output, and error streams
-                        UseShellExecute = false,
-                        RedirectStandardError = true,
-                        RedirectStandardOutput = true,
-                        CreateNoWindow = true
-                    }
-                })
-                {
-                    //https://stackoverflow.com/a/141098/3128017
-                    foreach (KeyValuePair<string, string> keyValuePair in process.StartInfo.Environment)
-                    {
-                        Logging.AutomationRunner("Key = {0}, Value = {1}", LogLevel.Debug, keyValuePair.Key, keyValuePair.Value);
-                    }
-                }
-            }
 
             foreach (AutomationSequence sequence in sequencesToRun)
             {
+                RunningSequence = sequence;
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Preparing macro lists for sequence run: {0}", sequence.ComponentInternalName);
+
                 ResetApplicationMacros(sequence);
                 ParseGlobalMacros();
                 sequence.ParseSequenceMacros();
+
                 if (AutomationRunnerSettings.DumpParsedMacrosPerSequenceRun)
                 {
                     DumpApplicationMacros();
                     DumpGlobalMacros();
+                }
+
+                if (AutomationRunnerSettings.DumpShellEnvironmentVarsPerSequenceRun)
+                {
+                    DumpShellEnvironmentVariables();
                 }
 
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Running sequence: {0}", sequence.ComponentInternalName);
@@ -339,6 +335,7 @@ namespace RelhaxModpack.Automation
             }
 
             Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence run finished with {0} errors of {1} total sequences.", NumErrors, sequencesToRun.Count);
+            RunningSequence = null;
             return NumErrors == 0;
         }
 
@@ -406,6 +403,36 @@ namespace RelhaxModpack.Automation
             {
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Macro: Name = {0}, Value = {1}", macro.Name, macro.Value);
             }
+        }
+
+        public void DumpShellEnvironmentVariables()
+        {
+            //dump vars before run
+            Logging.AutomationRunner("Dumping current shell environment variables", LogLevel.Debug);
+            using (Process process = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    //Setting this property to false enables you to redirect input, output, and error streams
+                    UseShellExecute = false,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            })
+            {
+                //https://stackoverflow.com/a/141098/3128017
+                foreach (KeyValuePair<string, string> keyValuePair in process.StartInfo.Environment)
+                {
+                    Logging.AutomationRunner("Key = {0}, Value = {1}", LogLevel.Debug, keyValuePair.Key, keyValuePair.Value);
+                }
+            }
+        }
+
+        public void CancelSequence()
+        {
+            if (RunningSequence != null)
+                RunningSequence.CancelTask();
         }
 
         public void Dispose()

@@ -14,7 +14,7 @@ using System.Xml.XPath;
 
 namespace RelhaxModpack.Automation
 {
-    public abstract class ImportTask : AutomationTask, IXmlSerializable
+    public abstract class ImportTask : AutomationTask, IXmlSerializable, ICancelOperation
     {
         public string RepoUrlPath { get; set; } = string.Empty;
 
@@ -112,6 +112,7 @@ namespace RelhaxModpack.Automation
                     xmlString = await client.DownloadStringTaskAsync(RepoUrlPath);
                 }
             }
+            catch (OperationCanceledException) { }
             catch (WebException wex)
             {
                 Logging.Exception("Failed to download the xmlString");
@@ -159,6 +160,12 @@ namespace RelhaxModpack.Automation
         {
             if (!ProcessTaskResultFalse(importResult, "The import failed"))
                 return;
+        }
+
+        public virtual void Cancel()
+        {
+            if (client != null)
+                client.CancelAsync();
         }
         #endregion
     }

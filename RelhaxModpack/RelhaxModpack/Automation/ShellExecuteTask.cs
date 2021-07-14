@@ -14,7 +14,7 @@ using ThreadState = System.Threading.ThreadState;
 
 namespace RelhaxModpack.Automation
 {
-    public class ShellExecuteTask : AutomationTask, IXmlSerializable
+    public class ShellExecuteTask : AutomationTask, IXmlSerializable, ICancelOperation
     {
         public const string TaskCommandName = "shell_exec";
 
@@ -99,10 +99,14 @@ namespace RelhaxModpack.Automation
 
                     process.WaitForExit();
                 }
+                catch (OperationCanceledException) { }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex.ToString());
-                    processStarted = false;
+                    if (ExitCode != AutomationExitCode.Cancel)
+                    {
+                        Logging.Exception(ex.ToString());
+                        processStarted = false;
+                    }
                 }
 
                 process.OutputDataReceived -= Process_OutputDataReceived;
@@ -137,6 +141,16 @@ namespace RelhaxModpack.Automation
             //check error code
             if (ProcessTaskResultTrue(exitCode != 0, string.Format("The process returned exit code {0}", exitCode)))
                 return;
+        }
+
+        public virtual void Cancel()
+        {
+            ExitCode = AutomationExitCode.Cancel;
+            if (process != null)
+            {
+                process.Kill();
+                process.Dispose();
+            }    
         }
         #endregion
     }

@@ -80,6 +80,7 @@ namespace RelhaxModpack.Automation
                     DatabasePackage.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
                     TransferSuccess = true;
                 }
+                catch (OperationCanceledException) { }
                 catch (Exception ex)
                 {
                     Logging.Exception(ex.ToString());

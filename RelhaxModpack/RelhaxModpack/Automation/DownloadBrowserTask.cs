@@ -27,8 +27,6 @@ namespace RelhaxModpack.Automation
 
         public string WaitCounts { get; set; } = "3";
 
-        protected WebBrowser Browser = null;
-
         protected string HtmlString = null;
 
         protected int waitTimeMs { get; set; }
@@ -92,6 +90,11 @@ namespace RelhaxModpack.Automation
         public override void ProcessTaskResults()
         {
             base.ProcessTaskResults();
+        }
+
+        public override void Cancel()
+        {
+            base.Cancel();
         }
         #endregion
     }

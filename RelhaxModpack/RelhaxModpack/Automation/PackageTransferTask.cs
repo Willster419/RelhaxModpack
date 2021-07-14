@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation
 {
-    public abstract class PackageTransferTask : DatabasePackageTask, IXmlSerializable
+    public abstract class PackageTransferTask : DatabasePackageTask, IXmlSerializable, ICancelOperation
     {
         public string FilePath { get; set; } = string.Empty;
 
@@ -52,5 +52,11 @@ namespace RelhaxModpack.Automation
                 return;
         }
         #endregion
+
+        public virtual void Cancel()
+        {
+            if (WebClient != null)
+                WebClient.CancelAsync();
+        }
     }
 }

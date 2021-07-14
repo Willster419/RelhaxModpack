@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -77,27 +78,17 @@ namespace RelhaxModpack.Automation
 
         public DatabaseAutomationRunner DatabaseAutomationRunner { get { return AutomationSequencer?.DatabaseAutomationRunner; } }
 
-        public List<AutomationMacro> ApplicationMacros { get { return AutomationSequencer.ApplicationMacros; } }
-
-        public List<AutomationMacro> GlobalMacros { get { return AutomationSequencer.GlobalMacros; } }
-
         public List<AutomationMacro> SequenceMacros { get; } = new List<AutomationMacro>();
 
         public List<AutomationMacro> AllMacros { get; private set; } = new List<AutomationMacro>();
 
         public AutomationCompareTracker AutomationCompareTracker { get; protected set; } = new AutomationCompareTracker();
 
-        public List<DatabasePackage> DatabasePackages { get { return AutomationSequencer.DatabasePackages; } }
-
         public SequencerExitCode ExitCode { get; set; } = SequencerExitCode.NotRun;
 
         private WebClient WebClient = null;
 
         private XDocument TasksDocument = null;
-
-        public AutomationRunnerSettings AutomationRunnerSettings { get { return AutomationSequencer.AutomationRunnerSettings; } }
-
-        public DatabaseManager DatabaseManager { get { return AutomationSequencer.DatabaseManager; } }
 
         public string ComponentInternalName { get { return ((IComponentWithID)Package).ComponentInternalName; } }
 
@@ -107,9 +98,29 @@ namespace RelhaxModpack.Automation
 
         private Stopwatch ExecutionTimeStopwatch = new Stopwatch();
 
-        public AutomationSequence()
+        public List<DatabasePackage> DatabasePackages { get; set; }
+
+        public List<AutomationMacro> ApplicationMacros { get; private set; }
+
+        public List<AutomationMacro> GlobalMacros { get; private set; }
+
+        public AutomationRunnerSettings AutomationRunnerSettings { get; private set; }
+
+        public DatabaseManager DatabaseManager { get; private set; }
+
+        private CancellationToken CancellationToken;
+
+        private AutomationTask RunningTask;
+
+        public AutomationSequence(List<DatabasePackage> databasePackages, List<AutomationMacro> applicationMacros, List<AutomationMacro> globalMacros, AutomationRunnerSettings automationRunnerSettings, DatabaseManager databaseManager, CancellationToken cancellationToken)
         {
             WebClient = new WebClient();
+            DatabasePackages = databasePackages;
+            ApplicationMacros = applicationMacros;
+            GlobalMacros = globalMacros;
+            AutomationRunnerSettings = automationRunnerSettings;
+            DatabaseManager = databaseManager;
+            CancellationToken = cancellationToken;
         }
 
         public async Task<bool> LoadAutomationXmlAsync()
@@ -206,6 +217,7 @@ namespace RelhaxModpack.Automation
         public async Task<bool> RunTasksAsync()
         {
             ExecutionTimeStopwatch.Restart();
+            RunningTask = null;
             ExitCode = SequencerExitCode.NotRun;
             if (Package == null || AutomationSequencer == null || AutomationRunnerSettings == null)
                 throw new NullReferenceException();
@@ -229,6 +241,7 @@ namespace RelhaxModpack.Automation
             string workingDirectory = Path.Combine(ApplicationConstants.RelhaxTempFolderPath, Package.PackageName);
             if (Directory.Exists(workingDirectory))
             {
+                Logging.Debug("Directory exits, delete");
                 if (!await FileUtils.DirectoryDeleteAsync(workingDirectory, true, true))
                 {
                     Logging.Error(LogOptions.ClassName, "Failed to clear the working directory");
@@ -240,42 +253,74 @@ namespace RelhaxModpack.Automation
             bool taskReturnGood = true;
             foreach (AutomationTask task in this.AutomationTasks)
             {
+                RunningTask = task;
                 bool breakLoop = false;
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task: {0}", task.ID);
-                await task.Execute();
+                try
+                {
+                    if (DatabaseAutomationRunner != null && DatabaseAutomationRunner.HighPriorityLogViewer != null)
+                        DatabaseAutomationRunner.HighPriorityLogViewer = false;
+                    await task.Execute();
+                    if (DatabaseAutomationRunner != null && DatabaseAutomationRunner.HighPriorityLogViewer != null)
+                        DatabaseAutomationRunner.HighPriorityLogViewer = true;
+                }
+                catch (Exception ex)
+                {
+                    if (task is ICancelOperation taskThatNeedsCancel)
+                        taskThatNeedsCancel.Cancel();
+
+                    if (!(ex is OperationCanceledException))
+                        Logging.Exception(ex.ToString());
+                }
 
                 switch (task.ExitCode)
                 {
                     case AutomationExitCode.None:
                         breakLoop = false;
                         taskReturnGood = true;
+                        ExitCode = SequencerExitCode.NoTaskErrors;
+                        break;
+
+                    case AutomationExitCode.Cancel:
+                        breakLoop = true;
+                        taskReturnGood = true;
+                        ExitCode = SequencerExitCode.Cancel;
                         break;
 
                     case AutomationExitCode.ComparisonNoFilesToUpdate:
                         breakLoop = true;
                         taskReturnGood = true;
+                        ExitCode = SequencerExitCode.NoTaskErrors;
                         break;
 
                     case AutomationExitCode.ComparisonManualFilesToUpdate:
                         breakLoop = true;
                         taskReturnGood = true;
+                        ExitCode = SequencerExitCode.NoTaskErrors;
                         break;
 
                     default:
                         Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.", task.ID);
                         breakLoop = true;
                         taskReturnGood = false;
+                        ExitCode = SequencerExitCode.TaskErrors;
                         break;
+                }
+
+                if (CancellationToken.IsCancellationRequested)
+                {
+                    breakLoop = true;
+                    taskReturnGood = true;
+                    ExitCode = SequencerExitCode.Cancel;
                 }
 
                 if (breakLoop)
                     break;
             }
 
-            ExitCode = taskReturnGood ? SequencerExitCode.NoTaskErrors : SequencerExitCode.TaskErrors;
-
             //dispose/cleanup the tasks
             AutomationTasks.Clear();
+            RunningTask = null;
             Logging.Info("Sequence {0} completed in {1} ms", PackageName, ExecutionTimeStopwatch.ElapsedMilliseconds);
             Dispose();
             return taskReturnGood;
@@ -289,6 +334,12 @@ namespace RelhaxModpack.Automation
         public override string ToString()
         {
             return string.Format("{0}, {1}", this.PackageName, this.PackageUID);
+        }
+
+        public void CancelTask()
+        {
+            if (RunningTask != null && RunningTask is ICancelOperation taskThatCanCancel)
+                taskThatCanCancel.Cancel();
         }
     }
 }

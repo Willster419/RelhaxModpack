@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
 {
@@ -22,13 +23,37 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class RelhaxLogViewer : RelhaxWindow
     {
-
         public bool ViewerClosed { get; set; } = false;
+
+        public bool HighPriorityLogViewer
+        {
+            get
+            {
+                return highPriorityLogViewer;
+            }
+            set
+            {
+                Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite -= OnLogMessageWriteLowPriority;
+                Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite -= OnLogMessageWriteHighPriority;
+                if (value)
+                {
+                    Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite += OnLogMessageWriteHighPriority;
+                }
+                else
+                {
+                    Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite += OnLogMessageWriteLowPriority;
+                }
+                highPriorityLogViewer = value;
+            }
+        }
+
+        private bool highPriorityLogViewer;
 
         public RelhaxLogViewer(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
-            Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite += OnLogMessageWrite;
+            highPriorityLogViewer = true;
+            Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite += OnLogMessageWriteHighPriority;
         }
 
         private void ClearLogButton_Click(object sender, RoutedEventArgs e)
@@ -36,24 +61,29 @@ namespace RelhaxModpack.Windows
             LogTextbox.Clear();
         }
 
-        private void LogTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            LogTextbox.ScrollToEnd();
-        }
-
         private void Window_Closed(object sender, EventArgs e)
         {
-            Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite -= OnLogMessageWrite;
+            Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite -= OnLogMessageWriteLowPriority;
             ViewerClosed = true;
         }
 
-        private void OnLogMessageWrite(object sender, LogMessageEventArgs e)
+        private void OnLogMessageWriteLowPriority(object sender, LogMessageEventArgs e)
         {
-            Dispatcher.Invoke((Action)(() =>
-            {
-                LogTextbox.AppendText(e.Message + Environment.NewLine);
+            Dispatcher.InvokeAsync((Action)(() => { UpdateLogDisplay(e.Message, false); }), DispatcherPriority.Send);
+        }
+
+        private void OnLogMessageWriteHighPriority(object sender, LogMessageEventArgs e)
+        {
+            Dispatcher.Invoke((Action)(() => { UpdateLogDisplay(e.Message, true); }), DispatcherPriority.Normal);
+        }
+
+        private void UpdateLogDisplay(string text, bool allowUIUpdate)
+        {
+            LogTextbox.AppendText(text + Environment.NewLine);
+            LogTextbox.ScrollToEnd();
+
+            if (allowUIUpdate)
                 UiUtils.AllowUIToUpdate();
-            }));
         }
 
         private void ToggleWordWrapCheckbox_Click(object sender, RoutedEventArgs e)
