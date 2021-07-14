@@ -218,6 +218,16 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private void MoveSequenceToAvailableList()
+        {
+            if (SequencesToRunListBox.SelectedItems.Count == 0)
+                return;
+
+            foreach (AutomationSequence sequence in SequencesToRunListBox.SelectedItems)
+                if (!SequencesAvailableListBox.Items.Contains(sequence))
+                    SequencesAvailableListBox.Items.Add(sequence);
+        }
+
         #region Progress reporting code
         private void GenericProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -312,6 +322,11 @@ namespace RelhaxModpack.Windows
             MoveSequenceToRunList();
         }
 
+        private void MoveSequencesToAvailableListButton_Click(object sender, RoutedEventArgs e)
+        {
+            //Needs to be finished and verified | Made by The Illusion
+            MoveSequenceToAvailableList();
+        }
         private void MoveUpSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
         {
             if (SequencesToRunListBox.SelectedItems.Count == 0)
@@ -644,5 +659,6 @@ namespace RelhaxModpack.Windows
             parser.SaveSettings(Settings);
         }
         #endregion
+
     }
 }
