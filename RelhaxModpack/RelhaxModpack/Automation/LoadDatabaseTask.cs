@@ -15,6 +15,8 @@ namespace RelhaxModpack.Automation
 
         public override string Command { get { return TaskCommandName; } }
 
+        protected DatabaseLoadFailCode failCode;
+
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
@@ -44,12 +46,14 @@ namespace RelhaxModpack.Automation
 
         public override async Task RunTask()
         {
-            await DatabaseManager.LoadDatabaseTestAsync(string.IsNullOrEmpty(CustomDatabasePath) ? AutomationSettings.Filename : CustomDatabasePath);
+            await base.RunTask();
+            failCode = await DatabaseManager.LoadDatabaseTestAsync(useCustomPath ? CustomDatabasePath : AutomationSettings.DatabaseSavePath);
         }
 
         public override void ProcessTaskResults()
         {
-            base.ProcessTaskResults();
+            if (ProcessTaskResultFalse(failCode == DatabaseLoadFailCode.None, string.Format("Database load result returned {0}", failCode.ToString())))
+                return;
         }
         #endregion
     }

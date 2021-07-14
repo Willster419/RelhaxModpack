@@ -151,6 +151,7 @@
     <Compile Include="Automation\AutomationSequence.cs" />
     <Compile Include="Automation\AutomationSequencer.cs" />
     <Compile Include="Automation\AutomationTask.cs" />
+    <Compile Include="Automation\CreateDirectoryTask.cs" />
     <Compile Include="Automation\DatabasePackagePropertyTask.cs" />
     <Compile Include="Automation\DatabasePackageTask.cs" />
     <Compile Include="Automation\DatabaseTask.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Automation\FileTask.cs" />
     <Compile Include="Automation\HtmlBrowserParser.cs" />
     <Compile Include="Automation\HtmlWebscrapeParser.cs" />
+    <Compile Include="Automation\ICancelOperation.cs" />
     <Compile Include="Automation\IDatabaseTask.cs" />
     <Compile Include="Automation\IDownloadTask.cs" />
     <Compile Include="Automation\ImportTask.cs" />
@@ -175,6 +177,11 @@
     <Compile Include="Automation\MacroCreateTask.cs" />
     <Compile Include="Automation\MacroDeleteTask.cs" />
     <Compile Include="Automation\MacroImportTask.cs" />
+    <Compile Include="Automation\MacroStringSplitFilenameTask.cs" />
+    <Compile Include="Automation\MacroStringSplitTask.cs" />
+    <Compile Include="Automation\MacroStringTask.cs" />
+    <Compile Include="Automation\MacroSubstringFilenameTask.cs" />
+    <Compile Include="Automation\MacroSubstringTask.cs" />
     <Compile Include="Automation\MacroTask.cs" />
     <Compile Include="Automation\PackageDownloadTask.cs" />
     <Compile Include="Automation\PackageTransferTask.cs" />

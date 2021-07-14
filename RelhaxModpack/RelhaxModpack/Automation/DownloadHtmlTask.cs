@@ -44,7 +44,6 @@ namespace RelhaxModpack.Automation
 
         public async override Task RunTask()
         {
-            DownloadSetup();
             await SetupUrl();
             if (ExitCode == AutomationExitCode.None)
                 await DownloadFile();
@@ -65,6 +64,14 @@ namespace RelhaxModpack.Automation
         public override void ProcessTaskResults()
         {
             base.ProcessTaskResults();
+        }
+
+        public override void Cancel()
+        {
+            if (htmlXpathParser != null)
+                htmlXpathParser.Cancel();
+
+            base.Cancel();
         }
         #endregion
     }

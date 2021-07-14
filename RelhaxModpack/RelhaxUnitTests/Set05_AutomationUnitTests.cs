@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
 using System.IO;
+using System.Threading;
 
 namespace RelhaxUnitTests
 {
@@ -21,6 +22,8 @@ namespace RelhaxUnitTests
             DumpParsedMacrosPerSequenceRun = true,
             SelectedBranch = "master"
         };
+
+        CancellationToken nullToken;
 
         [TestMethod]
         public async Task Test01_GetAutomationRepoBranchesTest()
@@ -141,7 +144,7 @@ namespace RelhaxUnitTests
             };
 
             //still need a automation sequence object to run this
-            AutomationSequence sequence = new AutomationSequence();
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
 
             //create a random task so we can process macros for this test
             ShellExecuteTask task = new ShellExecuteTask()
@@ -170,7 +173,7 @@ namespace RelhaxUnitTests
         public async Task Test03_DownloadBrowserTaskTest()
         {
             //still need a automation sequence object to run this
-            AutomationSequence sequence = new AutomationSequence();
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
 
             //create a random task so we can process macros for this test
             //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string

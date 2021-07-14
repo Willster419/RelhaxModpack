@@ -37,6 +37,8 @@
 
         ComparisonManualFilesToUpdate = 44,
 
-        GenericEndSequenceEarlyOk = 43
+        GenericEndSequenceEarlyOk = 43,
+
+        Cancel = 45
     }
 }

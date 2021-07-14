@@ -22,6 +22,7 @@ namespace RelhaxModpack.Automation
         }
         #endregion
 
+        #region Task execution
         public override void ProcessMacros()
         {
             base.ProcessMacros();
@@ -46,8 +47,9 @@ namespace RelhaxModpack.Automation
         public override void ProcessTaskResults()
         {
             AutomationMacro macro = Macros.Find(mac => mac.Name.Equals(MacroName));
-            if (macro == null)
-                throw new BadMemeException("you have made a mistake");
+            if (ProcessTaskResultTrue(macro == null, "Could not find newly created macro in list"))
+                return;
         }
+        #endregion
     }
 }

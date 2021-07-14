@@ -15,6 +15,7 @@ using System.ComponentModel;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.UI;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace RelhaxModpack.Windows
 {
@@ -51,6 +52,19 @@ namespace RelhaxModpack.Windows
 
         private AutomationSequencer AutomationSequencer = null;
 
+        public bool? HighPriorityLogViewer
+        {
+            get
+            {
+                return logViewer?.HighPriorityLogViewer;
+            }
+            set
+            {
+                if (logViewer != null)
+                    logViewer.HighPriorityLogViewer = (bool)value;
+            }
+        }
+
         private RelhaxLogViewer logViewer;
 
         private HtmlPathSelector htmlPathSelector;
@@ -62,6 +76,8 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog OpenRootXmlDialog;
 
         private readonly Action[] settingsMethods;
+
+        private CancellationTokenSource cancellationToken;
 
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
@@ -86,17 +102,20 @@ namespace RelhaxModpack.Windows
                () => BigmodsPasswordSetting_TextChanged(null, null),
                () => DumpParsedMacrosPerSequenceRunSetting_Click(null, null),
                () => DumpEnvironmentVariablesAtSequenceStartSetting_Click(null, null),
+               () => SequenceDebugModeSetting_Click(null, null),
                () => AutomamtionDatabaseSelectedBranchSetting_TextChanged(null, null),
                () => SelectDBSaveLocationSetting_TextChanged(null, null),
                () => UseLocalRunnerDatabaseSetting_Click(null, null),
                () => LocalRunnerDatabaseRootSetting_TextChanged(null, null)
             };
+
+            cancellationToken = new CancellationTokenSource();
         }
 
         private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings);
-            AutomationSequencer = new AutomationSequencer() { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this, DatabaseManager = databaseManager };
+            AutomationSequencer = new AutomationSequencer(cancellationToken.Token) { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this, DatabaseManager = databaseManager };
 
             LoadSettingsToUI();
 
@@ -162,12 +181,16 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
-            DownloadProgressChanged = null;
+            //close windows if open
             if (!logViewer.ViewerClosed)
                 logViewer.Close();
             if (htmlPathSelector != null && htmlPathSelector.IsLoaded)
                 htmlPathSelector.Close();
+
+            //disposal
             AutomationSequencer.Dispose();
+            cancellationToken.Dispose();
+            DownloadProgressChanged = null;
         }
 
         private void LoadSettingsToUI()
@@ -435,16 +458,28 @@ namespace RelhaxModpack.Windows
             if (SequencesToRunListBox.Items.Count == 0)
                 return;
 
-            RunSequencesButton.IsEnabled = false;
+            bool previousLoggerValue = (bool)HighPriorityLogViewer;
+            HighPriorityLogViewer = true;
+            (RunSequencesButton.Content as TextBlock).Text = "Cancel";
+            RunSequencesButton.Click -= RunSequencesButton_Click;
+            RunSequencesButton.Click += CancelSequencesButton_Click;
+            
             //load database
-            Logging.Info("Loading database");
-            await databaseManager.LoadDatabaseTestAsync(AutomationSettings.DatabaseSavePath);
+            Logging.Info("Loading database before sequence run");
+            try
+            {
+                await databaseManager.LoadDatabaseTestAsync(AutomationSettings.DatabaseSavePath);
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+            }
             AutomationSequencer.WoTClientVersion = databaseManager.WoTClientVersion;
             AutomationSequencer.WoTModpackOnlineFolderVersion = databaseManager.WoTOnlineFolderVersion;
 
-            Logging.Info(LogOptions.MethodName, "Invoking the sequencer");
             List<AutomationSequence> sequencesToRun = SequencesToRunListBox.Items.Cast<AutomationSequence>().ToList();
-            if (await AutomationSequencer.RunSequencerAsync(sequencesToRun))
+            bool sequenceRunResult = await AutomationSequencer.RunSequencerAsync(sequencesToRun);
+            if (sequenceRunResult)
             {
                 Logging.Info("Sequencer run SUCCESS, saving database");
                 databaseManager.SaveDatabase(AutomationSettings.DatabaseSavePath);
@@ -453,7 +488,24 @@ namespace RelhaxModpack.Windows
             {
                 Logging.Info("Sequencer run FAILURE");
             }
-            RunSequencesButton.IsEnabled = true;
+
+            (RunSequencesButton.Content as TextBlock).Text = "Run";
+            RunSequencesButton.Click -= CancelSequencesButton_Click;
+            RunSequencesButton.Click += RunSequencesButton_Click;
+            HighPriorityLogViewer = previousLoggerValue;
+        }
+
+        private void CancelSequencesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                cancellationToken.Cancel();
+                Logging.Info("Cancel request sent");
+            }
+            else
+            {
+                Logging.Info("Cancel request already sent");
+            }
         }
 
         #region Settings tab events
@@ -480,6 +532,11 @@ namespace RelhaxModpack.Windows
         private void DumpEnvironmentVariablesAtSequenceStartSetting_Click(object sender, RoutedEventArgs e)
         {
             AutomationSettings.DumpShellEnvironmentVarsPerSequenceRun = (bool)DumpEnvironmentVariablesAtSequenceStartSetting.IsChecked;
+        }
+
+        private void SequenceDebugModeSetting_Click(object sender, RoutedEventArgs e)
+        {
+            AutomationSettings.SequenceDebugMode = (bool)SequenceDebugModeSetting.IsChecked;
         }
 
         private void AutomamtionDatabaseSelectedBranchSetting_TextChanged(object sender, TextChangedEventArgs e)

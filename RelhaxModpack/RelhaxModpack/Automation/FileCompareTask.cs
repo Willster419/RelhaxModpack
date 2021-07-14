@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation
 {
-    public class FileCompareTask : AutomationTask, IXmlSerializable
+    public class FileCompareTask : AutomationTask, IXmlSerializable, ICancelOperation
     {
         public const string TaskCommandName = "file_compare";
 
@@ -78,6 +78,7 @@ namespace RelhaxModpack.Automation
                 await fileHashComparer.ComputeHashA(FileA);
                 await fileHashComparer.ComputeHashB(FileB);
             }
+            catch (OperationCanceledException) { }
             catch (Exception ex)
             {
                 Logging.Exception(ex.ToString());
@@ -106,6 +107,11 @@ namespace RelhaxModpack.Automation
 
             //getting to here means that successful hashes were calculated
             AutomationCompareTracker.AddCompare(this, FileA, fileAHash, FileB, fileBHash, AutomationCompareMode.NoMatchContinue);
+        }
+
+        public virtual void Cancel()
+        {
+            cancellationTokenSource.Cancel();
         }
         #endregion
     }

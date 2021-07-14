@@ -17,6 +17,7 @@ namespace RelhaxModpack.Automation
         }
         #endregion
 
+        #region Task execution
         public override void ProcessMacros()
         {
             MacroName = ProcessMacro(nameof(MacroName), MacroName);
@@ -30,9 +31,14 @@ namespace RelhaxModpack.Automation
 
         public override async Task RunTask()
         {
+            Logging.Debug("Checking for if macro {0} already exists", MacroName);
             AutomationMacro macro = Macros.Find(mac => mac.Name.Equals(MacroName));
             if (macro != null)
+            {
+                Logging.Debug("Macro found, removing");
                 Macros.Remove(macro);
+            }
         }
+        #endregion
     }
 }

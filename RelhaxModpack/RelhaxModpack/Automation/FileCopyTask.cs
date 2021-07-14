@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation
 {
-    public class FileCopyTask : FileDestinationTask
+    public class FileCopyTask : FileDestinationTask, ICancelOperation
     {
         public const string TaskCommandName = "file_copy";
 
@@ -72,6 +72,11 @@ namespace RelhaxModpack.Automation
         {
             if (!ProcessTaskResultFalse(fileCopyResult, "The file copy operation failed"))
                 return;
+        }
+
+        public virtual void Cancel()
+        {
+            cancellationTokenSource.Cancel();
         }
         #endregion
     }

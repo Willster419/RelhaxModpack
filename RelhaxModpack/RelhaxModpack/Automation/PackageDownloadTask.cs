@@ -50,7 +50,7 @@ namespace RelhaxModpack.Automation
                 }
                 try
                 {
-                    if(DatabaseAutomationRunner != null)
+                    if (DatabaseAutomationRunner != null)
                     {
                         if (DatabaseAutomationRunner.DownloadProgressChanged != null)
                         {
@@ -61,6 +61,7 @@ namespace RelhaxModpack.Automation
                     await WebClient.DownloadFileTaskAsync(serverPath, FilePath);
                     TransferSuccess = true;
                 }
+                catch (OperationCanceledException) { }
                 catch (Exception ex)
                 {
                     Logging.Exception(ex.ToString());

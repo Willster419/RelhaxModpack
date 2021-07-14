@@ -46,12 +46,13 @@ namespace RelhaxModpack.Automation
 
         public override async Task RunTask()
         {
-            DatabaseManager.SaveDatabase(string.IsNullOrEmpty(CustomDatabasePath) ? AutomationSettings.Filename : CustomDatabasePath);
+            await base.RunTask();
+            DatabaseManager.SaveDatabase(useCustomPath ? CustomDatabasePath : AutomationSettings.DatabaseSavePath);
         }
 
         public override void ProcessTaskResults()
         {
-            base.ProcessTaskResults();
+            //stub - nothing to validate
         }
         #endregion
     }

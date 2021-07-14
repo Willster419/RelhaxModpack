@@ -35,6 +35,8 @@ namespace RelhaxModpack.Automation
 
         private Dispatcher browserDispatcher;
 
+        protected bool hooked = false;
+
         public HtmlBrowserParser() : base()
         {
 
@@ -73,6 +75,7 @@ namespace RelhaxModpack.Automation
                 Logging.Debug(LogOptions.ClassName, "The browser was run, needs to be cleanup");
                 Browser.Navigated -= Browser_Navigated;
                 Browser.DocumentCompleted -= Browser_DocumentCompleted;
+                hooked = false;
                 WindowsInterop.SecurityAlertDialogWillBeShown -= this.WindowsInterop_SecurityAlertDialogWillBeShown;
                 WindowsInterop.Unhook();
 
@@ -97,7 +100,7 @@ namespace RelhaxModpack.Automation
             if (ThreadMode)
                 RunBrowserOnUIThread();
             else
-                RunBrowser(false);
+                RunBrowser();
 
             //wait for browser events to finish
             while (!(browserDocumentCompleted && browserNavigated))
@@ -166,14 +169,14 @@ namespace RelhaxModpack.Automation
         {
             Thread thread = new Thread(() =>
             {
-                RunBrowser(true);
+                RunBrowser();
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.IsBackground = true;
             thread.Start();
         }
 
-        private void RunBrowser(bool createNew)
+        private void RunBrowser()
         {
             //setup browser events and params
             if (ThreadMode)
@@ -187,6 +190,7 @@ namespace RelhaxModpack.Automation
             Browser.DocumentCompleted += Browser_DocumentCompleted;
 
             //setup windows interop events and begin listening for them
+            hooked = true;
             WindowsInterop.SecurityAlertDialogWillBeShown += new GenericDelegate<Boolean, Boolean>(this.WindowsInterop_SecurityAlertDialogWillBeShown);
             WindowsInterop.Hook();
 
@@ -213,14 +217,40 @@ namespace RelhaxModpack.Automation
         {
             browserDispatcher.Invoke(() =>
             {
-                Browser.Dispose();
-                Browser = null;
+                if (Browser != null)
+                {
+                    Browser.Stop();
+                    Browser.Dispose();
+                    Browser = null;
+                }
             });
             browserDispatcher.ShutdownFinished += (sender, args) =>
             {
                 browserDispatcher = null;
             };
             browserDispatcher.InvokeShutdown();
+        }
+
+        public override void Cancel()
+        {
+            base.Cancel();
+
+            if (ThreadMode && browserDispatcher != null)
+            {
+                if (Browser != null)
+                {
+                    Browser.Navigated -= Browser_Navigated;
+                    Browser.DocumentCompleted -= Browser_DocumentCompleted;
+                }
+
+                if (hooked)
+                {
+                    WindowsInterop.SecurityAlertDialogWillBeShown -= this.WindowsInterop_SecurityAlertDialogWillBeShown;
+                    WindowsInterop.Unhook();
+                }
+
+                CleanupBrowser();
+            }
         }
     }
 }

@@ -8,7 +8,7 @@
         Title="Log Viewer" Height="600" Width="1000" Closed="Window_Closed">
     <Grid>
         <TextBox x:Name="LogTextbox" IsReadOnly="True" IsUndoEnabled="False" HorizontalAlignment="Stretch" Margin="10,10,10,35" TextWrapping="NoWrap" VerticalAlignment="Stretch"
-                 TextChanged="LogTextbox_TextChanged" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Loaded="LogTextbox_Loaded"/>
+                 VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Loaded="LogTextbox_Loaded"/>
         <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ClearLogButton_Click"/>
         <CheckBox x:Name="ToggleWordWrapCheckbox" Content="Toggle word wrap" HorizontalAlignment="Right" Margin="0,0,90,12" VerticalAlignment="Bottom" Click="ToggleWordWrapCheckbox_Click"/>
     </Grid>

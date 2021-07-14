@@ -46,5 +46,7 @@ namespace RelhaxModpack.Settings
         public bool UseLocalRunnerDatabase { get; set; } = false;
 
         public string LocalRunnerDatabaseRoot { get; set; } = string.Empty;
+
+        public bool SequenceDebugMode { get; set; } = false;
     }
 }

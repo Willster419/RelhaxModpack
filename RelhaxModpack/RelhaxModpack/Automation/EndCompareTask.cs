@@ -55,7 +55,7 @@ namespace RelhaxModpack.Automation
             if (ProcessTaskResultTrue(AutomationCompareTracker.NumDifferencesContinue + AutomationCompareTracker.NumMatches == 0, "The number of total compares is 0"))
                 return;
 
-            if (ValidateForExitTrue(AutomationCompareTracker.NumDifferencesStop == 0, AutomationExitCode.ComparisonManualFilesToUpdate, string.Format("There are {0} files that require manual updating, cannon continue execution", AutomationCompareTracker.NumDifferencesStop)))
+            if (ValidateForExitTrue(AutomationCompareTracker.NumDifferencesStop != 0, AutomationExitCode.ComparisonManualFilesToUpdate, string.Format("There are {0} files that require manual updating, cannon continue execution", AutomationCompareTracker.NumDifferencesStop)))
                 return;
 
             if (ValidateForExitTrue(AutomationCompareTracker.NumDifferencesContinue == 0, AutomationExitCode.ComparisonNoFilesToUpdate, string.Format("There are no differences in files that need to be updated, no need to continue execution")))

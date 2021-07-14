@@ -10,7 +10,7 @@ using System.IO;
 
 namespace RelhaxModpack.Automation
 {
-    public class DownloadStaticTask : AutomationTask, IDownloadTask, IXmlSerializable
+    public class DownloadStaticTask : AutomationTask, IDownloadTask, IXmlSerializable, ICancelOperation
     {
         public const string TaskCommandName = "download_static";
 
@@ -22,6 +22,10 @@ namespace RelhaxModpack.Automation
 
         protected WebClient WebClient = null;
 
+        protected string urlFilename;
+
+        protected string destinationPathTemp;
+
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
@@ -32,23 +36,21 @@ namespace RelhaxModpack.Automation
         #region Task execution
         public override void ProcessMacros()
         {
-            DestinationPath = ProcessMacro(nameof(DestinationPath), DestinationPath);
+            destinationPathTemp = ProcessMacro(nameof(DestinationPath), DestinationPath);
             Url = ProcessMacro(nameof(Url), Url);
         }
 
         public override void ValidateCommands()
         {
             //"true" version means that the test being true is "bad"
-            if (ValidateCommandTrue(string.IsNullOrEmpty(DestinationPath), string.Format("DestinationPath is null/empty")))
-                return;
             if (ValidateCommandTrue(string.IsNullOrEmpty(Url), string.Format("Url is null/empty")))
+                return;
+            if (ValidateCommandTrue((string.IsNullOrEmpty(DestinationPath) && string.IsNullOrEmpty(destinationPathTemp)), string.Format("DestinationPath is null/empty")))
                 return;
         }
 
         public override async Task RunTask()
         {
-            DownloadSetup();
-
             await DownloadFile();
         }
 
@@ -76,11 +78,15 @@ namespace RelhaxModpack.Automation
                 }
                 try
                 {
+                    GetDownloadUrlFilename();
+                    DownloadSetup();
                     await WebClient.DownloadFileTaskAsync(Url, DestinationPath);
                 }
+                catch (OperationCanceledException) { }
                 catch (WebException wex)
                 {
-                    Logging.Exception(wex.ToString());
+                    if (wex.Status != WebExceptionStatus.RequestCanceled)
+                        Logging.Exception(wex.ToString());
                 }
                 finally
                 {
@@ -99,6 +105,24 @@ namespace RelhaxModpack.Automation
             //"false" version means that the test being false is "bad"
             if (ProcessTaskResultFalse(File.Exists(DestinationPath), string.Format("The file {0} was not detected to exist", DestinationPath)))
                 return;
+        }
+
+        protected virtual void GetDownloadUrlFilename()
+        {
+            string[] urlSplit = Url.Split('/');
+            urlFilename = urlSplit.Last();
+            Logging.Info("Url filename parsed as {0}", urlFilename);
+
+            Logging.Info("Creating macro, Name: {0}, Value: {1}", "last_download_filename", urlFilename);
+            Macros.Add(new AutomationMacro() { MacroType = MacroType.Local, Name = "last_download_filename", Value = urlFilename });
+
+            DestinationPath = ProcessMacro(nameof(DestinationPath), DestinationPath);
+        }
+
+        public virtual void Cancel()
+        {
+            if (WebClient != null)
+                WebClient.CancelAsync();
         }
         #endregion
     }

@@ -11,7 +11,7 @@ using System.Xml.XPath;
 
 namespace RelhaxModpack.Automation
 {
-    public class HtmlWebscrapeParser
+    public class HtmlWebscrapeParser : ICancelOperation
     {
         public string HtmlPath { get; set; }
 
@@ -28,6 +28,8 @@ namespace RelhaxModpack.Automation
         protected string lastUrl;
 
         protected string htmlText;
+
+        protected WebClient client;
 
         public HtmlWebscrapeParser()
         {
@@ -111,7 +113,7 @@ namespace RelhaxModpack.Automation
             ResultString = string.Empty;
             ResultNode = null;
 
-            using (WebClient client = new WebClient())
+            using (client = new WebClient())
             {
                 //https://stackoverflow.com/questions/2953403/c-sharp-passing-method-as-the-argument-in-a-method
                 Logging.Info(Logfiles.AutomationRunner, "Download html webpage to string");
@@ -119,10 +121,14 @@ namespace RelhaxModpack.Automation
                 {
                     htmlText = await client.DownloadStringTaskAsync(Url);
                 }
+                catch (OperationCanceledException) { }
                 catch (WebException wex)
                 {
-                    Logging.Exception("Failed to download URL as string");
-                    Logging.Exception(wex.ToString());
+                    if (wex.Status != WebExceptionStatus.RequestCanceled)
+                    {
+                        Logging.Exception("Failed to download URL as string");
+                        Logging.Exception(wex.ToString());
+                    }
                     return false;
                 }
             }
@@ -209,6 +215,12 @@ namespace RelhaxModpack.Automation
                 Logging.Exception(ex.ToString());
                 return false;
             }
+        }
+
+        public virtual void Cancel()
+        {
+            if (client != null)
+                client.CancelAsync();
         }
     }
 }

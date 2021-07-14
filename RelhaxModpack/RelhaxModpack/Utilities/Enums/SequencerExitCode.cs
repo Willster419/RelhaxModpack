@@ -15,6 +15,8 @@ namespace RelhaxModpack.Utilities.Enums
 
         TaskErrors,
 
-        NoTaskErrors
+        NoTaskErrors,
+
+        Cancel
     }
 }
