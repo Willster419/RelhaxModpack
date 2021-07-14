@@ -50,7 +50,8 @@ namespace RelhaxModpack.Automation
             { MacroDeleteTask.TaskCommandName, typeof(MacroDeleteTask) },
             { MacroCreateTask.TaskCommandName, typeof(MacroCreateTask) },
             { MacroSubstringFilenameTask.TaskCommandName, typeof(MacroSubstringFilenameTask) },
-            { MacroStringSplitFilenameTask.TaskCommandName, typeof(MacroStringSplitFilenameTask) }
+            { MacroStringSplitFilenameTask.TaskCommandName, typeof(MacroStringSplitFilenameTask) },
+            { CreateDirectoryTask.TaskCommandName, typeof(CreateDirectoryTask) }
         };
 
         public const string AttributeNameForMapping = "Command";
