@@ -44,7 +44,8 @@ namespace RelhaxModpack.Automation
 
         public override async Task RunTask()
         {
-            await DatabaseManager.LoadDatabaseTestAsync(string.IsNullOrEmpty(CustomDatabasePath) ? AutomationSettings.Filename : CustomDatabasePath);
+            await base.RunTask();
+            await DatabaseManager.LoadDatabaseTestAsync(useCustomPath ? CustomDatabasePath : AutomationSettings.DatabaseSavePath);
         }
 
         public override void ProcessTaskResults()

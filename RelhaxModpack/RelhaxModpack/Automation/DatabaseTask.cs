@@ -13,7 +13,11 @@ namespace RelhaxModpack.Automation
 
         protected DatabaseManager DatabaseManager { get { return AutomationSequence.DatabaseManager; } }
 
-        protected bool DatabaseManagerExitResult { get; set; }
+        protected bool DatabaseManagerExitResult { get; set; } = false;
+
+        bool customPathMacroError = false;
+
+        protected bool useCustomPath = false;
 
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
@@ -25,13 +29,25 @@ namespace RelhaxModpack.Automation
         #region Task execution
         public override void ProcessMacros()
         {
+            bool customPathEmptyBefore = string.IsNullOrEmpty(CustomDatabasePath);
             CustomDatabasePath = ProcessMacro(nameof(ProcessMacro), CustomDatabasePath);
+            bool custompathEmptyAfter = string.IsNullOrEmpty(CustomDatabasePath);
+
+            customPathMacroError = !customPathEmptyBefore && custompathEmptyAfter;
         }
 
         public override void ValidateCommands()
         {
+            if (ValidateCommandTrue(customPathMacroError, "The custom database path was a value before macro, and empty after the macro"))
+                return;
+
             if (ValidateCommandTrue(DatabaseManager == null, string.Format("DatabaseManager is null (This is an internal application error)")))
                 return;
+        }
+
+        public override async Task RunTask()
+        {
+            useCustomPath = !string.IsNullOrEmpty(CustomDatabasePath);
         }
 
         public override void ProcessTaskResults()
