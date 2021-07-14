@@ -13,8 +13,6 @@ namespace RelhaxModpack.Automation
 
         protected DatabaseManager DatabaseManager { get { return AutomationSequence.DatabaseManager; } }
 
-        protected bool DatabaseManagerExitResult { get; set; } = false;
-
         bool customPathMacroError = false;
 
         protected bool useCustomPath = false;
@@ -48,12 +46,6 @@ namespace RelhaxModpack.Automation
         public override async Task RunTask()
         {
             useCustomPath = !string.IsNullOrEmpty(CustomDatabasePath);
-        }
-
-        public override void ProcessTaskResults()
-        {
-            if (ProcessTaskResultTrue(!DatabaseManagerExitResult, string.Format("{0} returned false", nameof(DatabaseManagerExitResult))))
-                return;
         }
         #endregion
     }

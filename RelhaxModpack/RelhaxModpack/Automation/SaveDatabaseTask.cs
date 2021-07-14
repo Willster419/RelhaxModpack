@@ -52,7 +52,7 @@ namespace RelhaxModpack.Automation
 
         public override void ProcessTaskResults()
         {
-            base.ProcessTaskResults();
+            //stub - nothing to validate
         }
         #endregion
     }
