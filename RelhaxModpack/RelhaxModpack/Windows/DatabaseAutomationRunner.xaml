@@ -39,35 +39,58 @@
                              SelectionMode="Extended" MouseDoubleClick="SequencesAvailableListBox_MouseDoubleClick"/>
                     <ListBox x:Name="SequencesToRunListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="1" ScrollViewer.CanContentScroll="True"
                              ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectionMode="Extended"/>
-                    <Button Style="{StaticResource MaterialDesignIconForegroundButton}" x:Name="MoveSequencesToRunListButton"
-                            HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="30" Height="20" Grid.Column="1" Grid.Row="1" Click="MoveSequencesToRunListButton_Click"
+                    <!-- Icon Buttons -->
+                    <!-- Move Selection To Right -->
+                    <Button x:Name="MoveSequencesToAvailableListButton" Click="MoveSequencesToAvailableListButton_Click"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="10,0,0,0"
+                            ToolTip="Move The Selected Sequence To The Available Tab">
+                        <materialDesign:PackIcon Kind="ArrowCollapseLeft" />
+                    </Button>
+                    <Button x:Name="MoveSequencesToRunListButton"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Margin="10,0,0,0"
+                            Click="MoveSequencesToRunListButton_Click"
                             ToolTip="Move Selection To Right">
                         <materialDesign:PackIcon Kind="ArrowCollapseRight" />
                     </Button>
+                    <!-- Move Selection UP -->
                     <Button x:Name="MoveUpSelectedSequenceButton" Click="MoveUpSelectedSequenceButton_Click"
-                            Content="{materialDesign:PackIcon ArrowCollapseUp}"
-                            HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" 
-                            Height="20" Width="20" MinHeight="20" MinWidth="20" MaxHeight="40" MaxWidth="40">
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Margin="65,0,0,0" >
+                        <materialDesign:PackIcon Kind="ArrowCollapseUp" />
                     </Button>
-                    <Button x:Name="MoveDownSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Center" Height="45" Grid.Column="3" Grid.Row="1" Click="MoveDownSelectedSequenceButton_Click">
-                        <TextBlock Text="Move down selected" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <!-- Move Selection DOWN -->
+                    <Button x:Name="MoveDownSelectedSequenceButton" 
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Margin="120,0,0,0"
+                            Click="MoveDownSelectedSequenceButton_Click">
+                        <materialDesign:PackIcon Kind="ArrowCollapseDown" />
                     </Button>
-                    <Button x:Name="DeleteSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Center" Height="40" Grid.Column="3" Grid.Row="1" Click="DeleteSelectedSequenceButton_Click">
-                        <TextBlock Text="Delete selected" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <!-- Delete Selection -->
+                    <Button x:Name="DeleteSelectedSequenceButton"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Margin="175,0,0,0"
+                            Click="DeleteSelectedSequenceButton_Click">
+                        <materialDesign:PackIcon Kind="Delete" />
                     </Button>
-                    <Button x:Name="ReloadSequencesButton" Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                            HorizontalAlignment="Right" Margin="0,3,269,0" VerticalAlignment="Stretch" Width="110" Grid.Row="2" Grid.Column="2" 
+                    <!-- Reload | Read the files again -->
+                    <Button x:Name="ReloadSequencesButton"
+                            HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="230,0,0,0"
                             Click="ReloadSequencesButton_Click">
-                        <TextBlock Text="Reload Sequences"/>
+                        <materialDesign:PackIcon Kind="Reload" />
                     </Button>
-                    <Button x:Name="OpenLogfileViewerButton" HorizontalAlignment="Right" Margin="0,3,234,0" VerticalAlignment="Stretch" Width="110" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Click="OpenLogfileViewerButton_Click">
-                        <TextBlock Text="Open logfile viewer"/>
+                    <!-- Open Log Window? -->
+                    <Button x:Name="OpenLogfileViewerButton"
+                            HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="285,0,0,0"
+                            Click="OpenLogfileViewerButton_Click">
+                        <materialDesign:PackIcon Kind="MathLog" />
                     </Button>
-                    <Button x:Name="OpenHtmlPathSelectorButton" HorizontalAlignment="Right" Margin="0,3,90,0" VerticalAlignment="Stretch" Width="139" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Click="OpenHtmlPathSelectorButton_Click">
+                    <Button x:Name="RunSequencesButton"
+                            HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="340,0,0,0"
+                            Click="RunSequencesButton_Click">
+                        <materialDesign:PackIcon Kind="PlayBox" Height="20" Width="20"/>
+                    </Button>
+                    <!-- Text Buttons -->
+                    <Button x:Name="OpenHtmlPathSelectorButton"
+                            HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,10,0"
+                            Click="OpenHtmlPathSelectorButton_Click">
                         <TextBlock Text="Open HtmlPath Selector"/>
-                    </Button>
-                    <Button x:Name="RunSequencesButton" HorizontalAlignment="Right" Margin="0,3,10,0" VerticalAlignment="Stretch" Width="75" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Click="RunSequencesButton_Click">
-                        <TextBlock Text="Run" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
                     <ProgressBar x:Name="AutomationTaskProgressBar" HorizontalAlignment="Stretch" Margin="0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Visibility="Hidden" />
                     <TextBlock x:Name="AutomationTaskProgressTextBlock" HorizontalAlignment="Stretch" Margin="0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Visibility="Hidden" Text="Test" TextAlignment="Center"/>
