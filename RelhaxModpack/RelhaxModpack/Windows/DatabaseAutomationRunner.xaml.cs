@@ -440,6 +440,7 @@ namespace RelhaxModpack.Windows
                     Left = this.Left + this.Width + 10
                 };
                 logViewer.Show();
+                logViewer.Focus();
             }
             else
             {
