@@ -13,7 +13,7 @@ namespace RelhaxModpack.Automation
 
         public override string Command { get { return TaskCommandName; } }
 
-        protected override string XpathExpression { get { return "/AutomationSequence/Macros"; } }
+        protected override string XpathExpression { get { return AutomationSequence.AutomationSequenceMacroDefinitionsXpath; } }
 
         protected override void CreateList()
         {
@@ -47,7 +47,7 @@ namespace RelhaxModpack.Automation
                 }
                 else
                 {
-                    Logging.Info("Adding macro {{{0}}} with value {1}", macro.Name, macro.Value);
+                    Logging.Info("Adding macro {{{0}}} with value '{1}'", macro.Name, macro.Value);
                     Macros.Add(macro);
                 }
             }

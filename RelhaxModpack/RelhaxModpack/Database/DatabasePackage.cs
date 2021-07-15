@@ -312,6 +312,13 @@ namespace RelhaxModpack.Database
             //don't call the property for enabled, just the internal field
             this._Enabled = packageToCopy._Enabled;
         }
+
+        public void UpdatePackageName(string newPackageName)
+        {
+            this.ZipFile = newPackageName;
+            this.CRC = "f";
+            this.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
+        }
         #endregion
 
         #region Disposable support

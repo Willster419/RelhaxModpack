@@ -48,6 +48,13 @@ namespace RelhaxModpack.Automation
         {
             await base.RunTask();
             failCode = await DatabaseManager.LoadDatabaseTestAsync(useCustomPath ? CustomDatabasePath : AutomationSettings.DatabaseSavePath);
+
+            if (failCode == DatabaseLoadFailCode.None)
+            {
+                AutomationSequence.UpdateDatabasePackageList();
+                AutomationSequence.UpdateCurrentDatabasePackage();
+                AutomationSequence.AutomationSequencer?.UpdateDatabasePackageList();
+            }
         }
 
         public override void ProcessTaskResults()

@@ -45,14 +45,14 @@ namespace RelhaxModpack.Automation
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrue(string.IsNullOrEmpty(FileA), "The arg File1 is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(FileA), "The arg FileA is empty string"))
                 return;
-            if (ValidateCommandTrue(string.IsNullOrEmpty(FileB), "The arg File2 is empty string"))
+            if (ValidateCommandTrue(string.IsNullOrEmpty(FileB), "The arg FileB is empty string"))
                 return;
 
-            if (ValidateCommandTrue(!File.Exists(FileA), string.Format("The path for File1, {0}, does not exist", FileA)))
+            if (ValidateCommandTrue(!File.Exists(FileA), string.Format("The path for FileA, {0}, does not exist", FileA)))
                 return;
-            if (ValidateCommandTrue(!File.Exists(FileB), string.Format("The path for File1, {0}, does not exist", FileA)))
+            if (ValidateCommandTrue(!File.Exists(FileB), string.Format("The path for FileB, {0}, does not exist", FileA)))
                 return;
         }
 

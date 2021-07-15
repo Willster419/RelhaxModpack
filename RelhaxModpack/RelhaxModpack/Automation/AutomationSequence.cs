@@ -47,9 +47,7 @@ namespace RelhaxModpack.Automation
             }
             set
             {
-                if (PackageLoaded)
-                    Package.UID = value;
-                else
+                if (!PackageLoaded)
                     packageUID = value;
             }
         }
@@ -65,9 +63,7 @@ namespace RelhaxModpack.Automation
             }
             set
             {
-                if (PackageLoaded)
-                    Package.PackageName = value;
-                else
+                if (!PackageLoaded)
                     packageName = value;
             }
         }
@@ -251,8 +247,9 @@ namespace RelhaxModpack.Automation
             Directory.CreateDirectory(workingDirectory);
 
             bool taskReturnGood = true;
-            foreach (AutomationTask task in this.AutomationTasks)
+            for (int index = 0; index < AutomationTasks.Count; index++)
             {
+                AutomationTask task = AutomationTasks[index];
                 RunningTask = task;
                 bool breakLoop = false;
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task: {0}", task.ID);
@@ -278,7 +275,7 @@ namespace RelhaxModpack.Automation
                     case AutomationExitCode.None:
                         breakLoop = false;
                         taskReturnGood = true;
-                        ExitCode = SequencerExitCode.NoTaskErrors;
+                        ExitCode = SequencerExitCode.NoErrors;
                         break;
 
                     case AutomationExitCode.Cancel:
@@ -290,20 +287,20 @@ namespace RelhaxModpack.Automation
                     case AutomationExitCode.ComparisonNoFilesToUpdate:
                         breakLoop = true;
                         taskReturnGood = true;
-                        ExitCode = SequencerExitCode.NoTaskErrors;
+                        ExitCode = SequencerExitCode.NoErrors;
                         break;
 
                     case AutomationExitCode.ComparisonManualFilesToUpdate:
                         breakLoop = true;
                         taskReturnGood = true;
-                        ExitCode = SequencerExitCode.NoTaskErrors;
+                        ExitCode = SequencerExitCode.NoErrors;
                         break;
 
                     default:
                         Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.", task.ID);
                         breakLoop = true;
                         taskReturnGood = false;
-                        ExitCode = SequencerExitCode.TaskErrors;
+                        ExitCode = SequencerExitCode.Errors;
                         break;
                 }
 
@@ -324,6 +321,19 @@ namespace RelhaxModpack.Automation
             Logging.Info("Sequence {0} completed in {1} ms", PackageName, ExecutionTimeStopwatch.ElapsedMilliseconds);
             Dispose();
             return taskReturnGood;
+        }
+
+        public void UpdateDatabasePackageList()
+        {
+            DatabasePackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
+        }
+
+        public void UpdateCurrentDatabasePackage()
+        {
+            string oldPackageUID = Package.UID;
+            Package = DatabasePackages.Find(pack => pack.UID.Equals(oldPackageUID));
+            if (Package == null)
+                throw new BadMemeException("If you're reading this, then it's too late.");
         }
 
         public void Dispose()

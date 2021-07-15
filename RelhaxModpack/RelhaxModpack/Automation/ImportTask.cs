@@ -5,6 +5,7 @@ using RelhaxModpack.Xml;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -31,6 +32,8 @@ namespace RelhaxModpack.Automation
         protected IList objectList;
 
         protected XElement automationTaskHolder;
+
+        protected string fullFilepath;
 
         #region Xml Serialization
         public override string[] PropertiesForSerializationAttributes()
@@ -61,7 +64,7 @@ namespace RelhaxModpack.Automation
             ParseDownloadUrl();
 
             Logging.Debug("Downloading the file to xml string");
-            if (!await DownloadXmlStringAsync())
+            if (!await LoadXmlStringAsync())
             {
                 Logging.Error("Failed to download the xml string");
                 importResult = false;
@@ -85,31 +88,57 @@ namespace RelhaxModpack.Automation
 
             Logging.Debug("Importing into sequence run");
             ImportList();
+            importResult = true;
         }
 
         protected void ParseDownloadUrl()
         {
-            if (RepoUrlPath[0].Equals('/'))
+            if (RepoUrlPath[0].Equals('/') || RepoUrlPath[0].Equals('\\'))
             {
-                Logging.Debug("Removing extra \"/\" from the start of the URL");
+                Logging.Debug("Removing extra slash from the start of the URL");
                 RepoUrlPath = RepoUrlPath.Substring(1);
             }
 
             AutomationMacro automationXmlRepoFilebaseEscapedMacro = Macros.Find(macro => macro.Name.Equals("automationRepoRoot"));
             if (automationXmlRepoFilebaseEscapedMacro == null)
                 throw new BadMemeException("This shouldn't happen. Like literally. Should. Not. Happen.");
-            
-            RepoUrlPath = automationXmlRepoFilebaseEscapedMacro.Value + RepoUrlPath;
+
+            if (AutomationSettings.UseLocalRunnerDatabase)
+            {
+                RepoUrlPath = RepoUrlPath.Replace('/', '\\');
+                fullFilepath = Path.Combine(Path.GetDirectoryName(AutomationSettings.LocalRunnerDatabaseRoot), RepoUrlPath);
+            }
+            else
+            {
+                if (RepoUrlPath.Contains("\\"))
+                {
+                    Logging.Warning("The RepoUrlPath argument contains folder seperator chars, but should be http url slashes");
+                    RepoUrlPath = RepoUrlPath.Replace('\\', '/');
+                }
+                fullFilepath = automationXmlRepoFilebaseEscapedMacro.Value + RepoUrlPath;
+            }
+
+            Logging.Debug("Parsed RepoUrlPath to resolve to {0}", fullFilepath);
         }
 
-        protected async Task<bool> DownloadXmlStringAsync()
+        protected string LoadXmlFromDisk()
         {
-            Logging.Info("Downloading xmlString from parsed URL {0}", RepoUrlPath);
+            if (!File.Exists(fullFilepath))
+            {
+                Logging.Error("The full filepath {0} does not exist", fullFilepath);
+                return null;
+            }
+
+            return File.ReadAllText(fullFilepath);
+        }
+
+        protected async Task<string> LoadXmlFromUrlAsync()
+        {
             try
             {
                 using (client = new WebClient())
                 {
-                    xmlString = await client.DownloadStringTaskAsync(RepoUrlPath);
+                    return await client.DownloadStringTaskAsync(fullFilepath);
                 }
             }
             catch (OperationCanceledException) { }
@@ -117,9 +146,22 @@ namespace RelhaxModpack.Automation
             {
                 Logging.Exception("Failed to download the xmlString");
                 Logging.Exception(wex.ToString());
-                return false;
+                return null;
             }
-            return true;
+            return null;
+        }
+
+        protected async Task<bool> LoadXmlStringAsync()
+        {
+            if (AutomationSettings.UseLocalRunnerDatabase)
+            {
+                xmlString = LoadXmlFromDisk();
+            }
+            else
+            {
+                xmlString = await LoadXmlFromUrlAsync();
+            }
+            return !string.IsNullOrEmpty(xmlString);
         }
 
         protected bool ParseXml()
@@ -127,7 +169,7 @@ namespace RelhaxModpack.Automation
             if (string.IsNullOrEmpty(xmlString))
                 return false;
 
-            Logging.Debug("Getting xml node results of TaskDefinitions");
+            Logging.Debug("Getting xml node results");
             document = XmlUtils.LoadXDocument(xmlString, XmlLoadType.FromString);
             if (document == null)
             {

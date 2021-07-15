@@ -13,7 +13,7 @@ namespace RelhaxModpack.Automation
 
         public override string Command { get { return TaskCommandName; } }
 
-        protected override string XpathExpression { get { return "/AutomationSequence/TaskDefinitions"; } }
+        protected override string XpathExpression { get { return AutomationSequence.AutomationSequenceTaskDefinitionsXpath; } }
 
         protected List<AutomationTask> AutomationTasks { get { return AutomationSequence.AutomationTasks; } }
 
