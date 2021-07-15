@@ -1,3 +1,12 @@
+# Beta Application version 1.3.2.15 (2021-07-15)
+https://www.virustotal.com/gui/file-analysis/YWMxNmNlMzE1ZDMyNmIxMmQzYmRkMDU0N2ExMzA0ODE6MTYyNjMzNDM1NQ==/detection
+
+- Fixed (more) bugs with the LoadDatabaseTask, which also poured into the AutomationSequence and AutomationSequencer classes needing to refresh/update the internal database package lists for all effected properties.
+- Enhanced exit code handling of the AutomationSequencer to know the reason (enumerated type) rather then just a pass/fail boolean.
+- Fixed a typo when the ImportTask would load from the github automation repository.
+- Misc. Improvements to the DatabasePackage and AutomationSequence class.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.2.14 (2021-07-14)
 https://www.virustotal.com/gui/file-analysis/M2RjYTFkOWQ3Yjc1YTJiZjQ5ZWUzZTQ2ZDY5MmJiNjc6MTYyNjMxMzI0Mw==/detection
 
