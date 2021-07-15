@@ -242,10 +242,10 @@ namespace RelhaxModpack.Windows
             if (AutomationTaskProgressBar.Visibility != Visibility.Visible)
             {
                 //this only will happen once during the task's execution
-                ShowAutomationProgress(e.TotalBytesToReceive);
+                ShowAutomationProgress(e.TotalBytesToSend);
             }
-            AutomationTaskProgressBar.Value = e.BytesReceived;
-            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesReceived, e.TotalBytesToReceive);
+            AutomationTaskProgressBar.Value = e.BytesSent;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesSent, e.TotalBytesToSend);
         }
 
         private void RelhaxProgressReport_ProgressChanged(object sender, RelhaxProgress e)
