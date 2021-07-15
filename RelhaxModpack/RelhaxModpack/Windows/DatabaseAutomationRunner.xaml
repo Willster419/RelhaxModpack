@@ -18,12 +18,16 @@
         LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" EscapeKeyClosesWindow="False"
         ApplyScaling="True" ApplyCustomFont="False" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
     <Grid>
-        <TabControl Background="{DynamicResource MaterialDesignBody}" x:Name="MainTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" SelectionChanged="MainTabView_SelectionChanged">
-            <TabItem x:Name="TabItemRunSequences" Header="Run Sequences">
+        <TabControl x:Name="MainTabView"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0"
+                    SelectionChanged="MainTabView_SelectionChanged"
+                    Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+                    materialDesign:ColorZoneAssist.Mode="PrimaryMid">
+            <TabItem x:Name="TabItemRunSequences" Header="{materialDesign:PackIcon Kind=Home, Size=24}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="80"/>
                     </Grid.ColumnDefinitions>
@@ -33,72 +37,85 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
-                    <TextBlock x:Name="SequencesAvailableTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="NoWrap" Grid.Column="0" Grid.Row="0" Text="Available Sequences"/>
+                    <TextBlock x:Name="SequencesAvailableTextBlock" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"
+                               TextWrapping="NoWrap" Text="Available Sequences" 
+                                />
                     <TextBlock x:Name="SequencesToRunTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="NoWrap" Grid.Column="2" Grid.Row="0" Text="Active Sequences"/>
                     <ListBox x:Name="SequencesAvailableListBox" 
-                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" 
-                             ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2" 
+                             ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
                              SelectionMode="Extended" MouseDoubleClick="SequencesAvailableListBox_MouseDoubleClick"/>
-                    <ListBox x:Name="SequencesToRunListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="1" ScrollViewer.CanContentScroll="True"
-                             ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectionMode="Extended"/>
+                    <ListBox x:Name="SequencesToRunListBox" 
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="2" 
+                             ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectionMode="Extended"/>
                     <!-- Icon Buttons -->
                     <!-- Move Selection To Right -->
                     <Button x:Name="MoveSequencesToAvailableListButton" Click="MoveSequencesToAvailableListButton_Click"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="10,0,0,0"
+                            HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Margin="0,0,10,0"
                             ToolTip="Move The Selected Sequence To The Available Tab">
                         <materialDesign:PackIcon Kind="ArrowCollapseLeft" />
                     </Button>
+                    <!-- Move Selection To Left -->
                     <Button x:Name="MoveSequencesToRunListButton"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Margin="10,0,0,0"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="3" Margin="10,0,0,0"
                             Click="MoveSequencesToRunListButton_Click"
                             ToolTip="Move Selection To Right">
                         <materialDesign:PackIcon Kind="ArrowCollapseRight" />
                     </Button>
                     <!-- Move Selection UP -->
                     <Button x:Name="MoveUpSelectedSequenceButton" Click="MoveUpSelectedSequenceButton_Click"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Margin="65,0,0,0" >
+                            HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="2" Margin="0,0,0,65" >
                         <materialDesign:PackIcon Kind="ArrowCollapseUp" />
                     </Button>
                     <!-- Move Selection DOWN -->
                     <Button x:Name="MoveDownSelectedSequenceButton" 
-                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Margin="120,0,0,0"
+                            HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="2" Margin="0,0,0,10"
                             Click="MoveDownSelectedSequenceButton_Click">
                         <materialDesign:PackIcon Kind="ArrowCollapseDown" />
                     </Button>
                     <!-- Delete Selection -->
                     <Button x:Name="DeleteSelectedSequenceButton"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" Margin="175,0,0,0"
+                            HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="3" Grid.Row="2" Margin="0,0,0,65"
                             Click="DeleteSelectedSequenceButton_Click">
                         <materialDesign:PackIcon Kind="Delete" />
                     </Button>
                     <!-- Reload | Read the files again -->
                     <Button x:Name="ReloadSequencesButton"
-                            HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="230,0,0,0"
+                            HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="1" Margin="0,0,0,0"
                             Click="ReloadSequencesButton_Click">
                         <materialDesign:PackIcon Kind="Reload" />
                     </Button>
-                    <!-- Open Log Window? -->
-                    <Button x:Name="OpenLogfileViewerButton"
-                            HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="285,0,0,0"
-                            Click="OpenLogfileViewerButton_Click">
-                        <materialDesign:PackIcon Kind="MathLog" />
-                    </Button>
+
                     <Button x:Name="RunSequencesButton"
-                            HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Margin="340,0,0,0"
+                            HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="2" Grid.Column="3" Margin="0,0,0,10"
                             Click="RunSequencesButton_Click">
                         <materialDesign:PackIcon Kind="PlayBox" Height="20" Width="20"/>
                     </Button>
                     <!-- Text Buttons -->
+                    <!-- Open Log Window? -->
+                    <Button x:Name="OpenLogfileViewerButton"
+                            HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,205,0"
+                            Click="OpenLogfileViewerButton_Click">
+                        <TextBlock Text="Open Log Window" />
+                    </Button>
+                    <!-- Open HTML Window -->
                     <Button x:Name="OpenHtmlPathSelectorButton"
                             HorizontalAlignment="Right" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,10,0"
                             Click="OpenHtmlPathSelectorButton_Click">
                         <TextBlock Text="Open HtmlPath Selector"/>
                     </Button>
-                    <ProgressBar x:Name="AutomationTaskProgressBar" HorizontalAlignment="Stretch" Margin="0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Visibility="Hidden" />
-                    <TextBlock x:Name="AutomationTaskProgressTextBlock" HorizontalAlignment="Stretch" Margin="0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Visibility="Hidden" Text="Test" TextAlignment="Center"/>
+                    <ProgressBar 
+                        x:Name="AutomationTaskProgressBar" 
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="0" Height="10" Margin="10,0,65,0"
+                        Visibility="Hidden" />
+                    <TextBlock 
+                        x:Name="AutomationTaskProgressTextBlock"
+                        HorizontalAlignment="Stretch" Margin="0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" 
+                        Visibility="Hidden" Text="Test" TextAlignment="Center"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="TabItemSettings" Header="Settings">
+            <TabItem x:Name="TabItemSettings" Header="{materialDesign:PackIcon Kind=Cog, Size=24}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
                 <Grid>
                     <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Grid.RowDefinitions>
@@ -177,7 +194,7 @@
                                  TextWrapping="Wrap" TextChanged="LocalRunnerDatabaseRootSetting_TextChanged"/>
                     </Grid>
                     <Button x:Name="SaveSettingsButton" Click="SaveSettingsButton_Click"
-                            HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                            HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10">
                         <TextBlock Text="Save Settings"/>
                     </Button>
                     <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" />
