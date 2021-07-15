@@ -47,9 +47,7 @@ namespace RelhaxModpack.Automation
             }
             set
             {
-                if (PackageLoaded)
-                    Package.UID = value;
-                else
+                if (!PackageLoaded)
                     packageUID = value;
             }
         }
@@ -65,9 +63,7 @@ namespace RelhaxModpack.Automation
             }
             set
             {
-                if (PackageLoaded)
-                    Package.PackageName = value;
-                else
+                if (!PackageLoaded)
                     packageName = value;
             }
         }
