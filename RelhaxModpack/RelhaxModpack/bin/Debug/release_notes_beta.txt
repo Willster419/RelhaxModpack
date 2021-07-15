@@ -1,3 +1,20 @@
+# Beta Application version 1.3.2.14 (2021-07-14)
+https://www.virustotal.com/gui/file-analysis/MTA4ZTg2Yjc0YTczYWFmOTdkODdiNjY3MjBmMjhlZDU6MTYyNjA1NDgwNQ==/detection
+
+### Automation adds and edits
+- Added a cancellation framework so you can cancel run-away automation tasks.
+- Cleaned up and updated tooltip explanations for the settings options in the settings tab.
+- Added a save settings button to the settings tab.
+- Added tasks: CreateDirectoryTask, MacroStringSplitFilenameTask (and parents), MacroSubstringFilenameTask (and parents).
+- Updated/fixed tasks: LoadDatabaseTask, SaveDatabaseTask, EndCompareTask, MacroImportTask (and parents), TaskImportTask (and parents).
+  -  _This list does not include adding the cancellation framework to other tasks_.
+- Fixed location of dumping shell environment variables to the logfile when running multiple sequences.
+- Other misc fixes and improvements.
+
+### Database Editor changes
+- Changed the packageUID display property from a textBlock to a TextBox set as read-only, so you can copy-paste the value
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.2.11 (2021-07-11)
 https://www.virustotal.com/gui/file-analysis/MTA4ZTg2Yjc0YTczYWFmOTdkODdiNjY3MjBmMjhlZDU6MTYyNjA1NDgwNQ==/detection
 - Added the `Cmd` argument of the automation task `ShellExecuteTask` the ability to pass a macro syntax "{macro}" by having escape characters for the brackets.
