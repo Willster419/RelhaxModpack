@@ -323,6 +323,19 @@ namespace RelhaxModpack.Automation
             return taskReturnGood;
         }
 
+        public void UpdateDatabasePackageList()
+        {
+            DatabasePackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
+        }
+
+        public void UpdateCurrentDatabasePackage()
+        {
+            string oldPackageUID = Package.UID;
+            Package = DatabasePackages.Find(pack => pack.UID.Equals(oldPackageUID));
+            if (Package == null)
+                throw new BadMemeException("If you're reading this, then it's too late.");
+        }
+
         public void Dispose()
         {
             ((IDisposable)WebClient).Dispose();

@@ -220,7 +220,7 @@ namespace RelhaxModpack.Automation
 
         private bool LinkPackagesToAutomationSequences(List<AutomationSequence> sequencesToRun)
         {
-            DatabasePackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
+            UpdateDatabasePackageList();
             foreach (AutomationSequence automationSequence in sequencesToRun)
             {
                 automationSequence.DatabasePackages = DatabasePackages;
@@ -426,6 +426,11 @@ namespace RelhaxModpack.Automation
                     Logging.AutomationRunner("Key = {0}, Value = {1}", LogLevel.Debug, keyValuePair.Key, keyValuePair.Value);
                 }
             }
+        }
+
+        public void UpdateDatabasePackageList()
+        {
+            DatabasePackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
         }
 
         public void CancelSequence()
