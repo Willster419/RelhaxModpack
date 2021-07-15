@@ -191,7 +191,7 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
-        public async Task<bool> RunSequencerAsync(List<AutomationSequence> sequencesToRun)
+        public async Task<SequencerExitCode> RunSequencerAsync(List<AutomationSequence> sequencesToRun)
         {
             if (RootDocument == null)
                 throw new NullReferenceException();
@@ -204,21 +204,18 @@ namespace RelhaxModpack.Automation
 
             Logging.AutomationRunner("Linking database packages for each sequence");
             if (!LinkPackagesToAutomationSequences(sequencesToRun))
-                return false;
+                return SequencerExitCode.NotRun;
 
             Logging.Info("Downloading xml for each sequence");
             if (!await LoadAutomationSequencesXmlToRunAsync(sequencesToRun))
-                return false;
+                return SequencerExitCode.NotRun;
 
             Logging.Info("Parsing xml for each sequence");
             if (!ParseAutomationSequences(sequencesToRun))
-                return false;
+                return SequencerExitCode.NotRun;
 
             Logging.Info("Running sequences");
-            if (!await RunSequencesAsync(sequencesToRun))
-                return false;
-
-            return true;
+            return await RunSequencesAsync(sequencesToRun);
         }
 
         private bool LinkPackagesToAutomationSequences(List<AutomationSequence> sequencesToRun)
@@ -278,13 +275,13 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
-        private async Task<bool> RunSequencesAsync(List<AutomationSequence> sequencesToRun)
+        private async Task<SequencerExitCode> RunSequencesAsync(List<AutomationSequence> sequencesToRun)
         {
             RunningSequence = null;
             if (sequencesToRun.Count == 0)
             {
                 Logging.Error(Logfiles.AutomationRunner, LogOptions.ClassName, "No sequences specified in AutomationSequences list");
-                return false;
+                return SequencerExitCode.NotRun;
             }
 
             Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Running automation sequencer");
@@ -316,27 +313,29 @@ namespace RelhaxModpack.Automation
                 Logging.Info("----------------------- SEQUENCE RESULTS -----------------------");
                 switch (exitCode)
                 {
+                    case SequencerExitCode.Errors:
                     case SequencerExitCode.NotRun:
                         Logging.Error(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence {0} result {1}. Check the log above or enable verbose logging for details.", sequence.ComponentInternalName, exitCode.ToString());
                         NumErrors++;
-                        continue;
+                        break;
 
-                    case SequencerExitCode.TaskErrors:
-                        Logging.Error(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence {0} result {1}. Check the log above or enable verbose logging for details.", sequence.ComponentInternalName, exitCode.ToString());
-                        NumErrors++;
-                        continue;
-
-                    case SequencerExitCode.NoTaskErrors:
+                    case SequencerExitCode.NoErrors:
+                    case SequencerExitCode.Cancel:
                         Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence {0} result {1}.", sequence.ComponentInternalName, exitCode.ToString());
                         break;
                 }
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence {0} SUCCESS.", sequence.ComponentInternalName);
                 Logging.Info("----------------------------------------------------------------");
             }
 
             Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence run finished with {0} errors of {1} total sequences.", NumErrors, sequencesToRun.Count);
             RunningSequence = null;
-            return NumErrors == 0;
+
+            if (CancellationToken.IsCancellationRequested)
+                return SequencerExitCode.Cancel;
+            else if (NumErrors == 0)
+                return SequencerExitCode.NoErrors;
+            else
+                return SequencerExitCode.Errors;
         }
 
         public void ResetApplicationMacros(AutomationSequence sequence)

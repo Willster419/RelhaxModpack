@@ -478,15 +478,22 @@ namespace RelhaxModpack.Windows
             AutomationSequencer.WoTModpackOnlineFolderVersion = databaseManager.WoTOnlineFolderVersion;
 
             List<AutomationSequence> sequencesToRun = SequencesToRunListBox.Items.Cast<AutomationSequence>().ToList();
-            bool sequenceRunResult = await AutomationSequencer.RunSequencerAsync(sequencesToRun);
-            if (sequenceRunResult)
+            SequencerExitCode sequenceRunResult = await AutomationSequencer.RunSequencerAsync(sequencesToRun);
+
+            switch (sequenceRunResult)
             {
-                Logging.Info("Sequencer run SUCCESS, saving database");
-                databaseManager.SaveDatabase(AutomationSettings.DatabaseSavePath);
-            }
-            else
-            {
-                Logging.Info("Sequencer run FAILURE");
+                case SequencerExitCode.Errors:
+                case SequencerExitCode.NotRun:
+                    Logging.Info("Sequencer run FAILURE");
+                    break;
+                case SequencerExitCode.Cancel:
+                    Logging.Info("Sequencer run CANCEL");
+                    break;
+
+                case SequencerExitCode.NoErrors:
+                    Logging.Info("Sequencer run SUCCESS, saving database");
+                    databaseManager.SaveDatabase(AutomationSettings.DatabaseSavePath);
+                    break;
             }
 
             (RunSequencesButton.Content as TextBlock).Text = "Run";

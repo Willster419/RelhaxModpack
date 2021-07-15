@@ -279,7 +279,7 @@ namespace RelhaxModpack.Automation
                     case AutomationExitCode.None:
                         breakLoop = false;
                         taskReturnGood = true;
-                        ExitCode = SequencerExitCode.NoTaskErrors;
+                        ExitCode = SequencerExitCode.NoErrors;
                         break;
 
                     case AutomationExitCode.Cancel:
@@ -291,20 +291,20 @@ namespace RelhaxModpack.Automation
                     case AutomationExitCode.ComparisonNoFilesToUpdate:
                         breakLoop = true;
                         taskReturnGood = true;
-                        ExitCode = SequencerExitCode.NoTaskErrors;
+                        ExitCode = SequencerExitCode.NoErrors;
                         break;
 
                     case AutomationExitCode.ComparisonManualFilesToUpdate:
                         breakLoop = true;
                         taskReturnGood = true;
-                        ExitCode = SequencerExitCode.NoTaskErrors;
+                        ExitCode = SequencerExitCode.NoErrors;
                         break;
 
                     default:
                         Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.", task.ID);
                         breakLoop = true;
                         taskReturnGood = false;
-                        ExitCode = SequencerExitCode.TaskErrors;
+                        ExitCode = SequencerExitCode.Errors;
                         break;
                 }
 
