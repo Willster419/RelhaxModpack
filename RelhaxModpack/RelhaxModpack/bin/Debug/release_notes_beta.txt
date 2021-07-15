@@ -1,5 +1,5 @@
 # Beta Application version 1.3.2.14 (2021-07-14)
-https://www.virustotal.com/gui/file-analysis/MTA4ZTg2Yjc0YTczYWFmOTdkODdiNjY3MjBmMjhlZDU6MTYyNjA1NDgwNQ==/detection
+https://www.virustotal.com/gui/file-analysis/M2RjYTFkOWQ3Yjc1YTJiZjQ5ZWUzZTQ2ZDY5MmJiNjc6MTYyNjMxMzI0Mw==/detection
 
 ### Automation adds and edits
 - Added a cancellation framework so you can cancel run-away automation tasks.
