@@ -106,7 +106,7 @@
                             <!-- Password -->
                             <RowDefinition Name="Password" Height="50"/>
                             <!-- Spacer -->
-                            <RowDefinition Height="80"/>
+                            <RowDefinition Height="100"/>
                             <!-- Checkboxes -->
                             <RowDefinition Name="CheckBoxes" Height="40"/>
                             <!-- Buttons -->
@@ -135,16 +135,18 @@
                                    TextWrapping="Wrap" Text="Password" ToolTip="BigMods Password"/>
                         <TextBox x:Name="BigmodsPasswordSetting" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" TextChanged="BigmodsPasswordSetting_TextChanged" Margin="10,0,0,0"/>
                         <!-- CheckBox Block -->
-                        <CheckBox x:Name="OpenLogWindowOnStartupSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Content="Open Log Window" Margin="10,-55,0,0"
-                                      Click="OpenLogWindowOnStartupSetting_Click" ToolTip="When checked, the log window will start when you launch the application in this mode"/>
-                        <CheckBox x:Name="DumpParsedMacrosPerSequenceRunSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="2" VerticalAlignment="Center" Content="Log Macros" Margin="10,-20,0,0"
-                                      Click="DumpParsedMacrosPerSequenceRunSetting_Click" ToolTip="When checked, the list of macros will be dumped to the logfile at the start of each sequence"/>
-                        <CheckBox x:Name="DumpEnvironmentVariablesAtSequenceStartSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="2" VerticalAlignment="Center" Content="Log Environment Variables" Margin="10,15,0,0"
-                                      Click="DumpEnvironmentVariablesAtSequenceStartSetting_Click" ToolTip="When checked, the list of system environment variables will be dumped to the logfile at the start of the sequencer"/>
-                        <CheckBox x:Name="UseLocalRunnerDatabaseSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="2" VerticalAlignment="Center" Content="Use Local File" Margin="10,50,0,0"
-                                      Click="UseLocalRunnerDatabaseSetting_Click" ToolTip="Toggle using a local copy of the automation sequence repo, or the server version"/>
-                        <CheckBox x:Name="SequenceDebugModeSetting" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Content="Sequence debug mode" Margin="10,65,0,0"
-                                      Click="SequenceDebugModeSetting_Click" ToolTip="When selected, you will be able to manually click through each task at a time to view the log and debug errors"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2">
+                            <CheckBox x:Name="OpenLogWindowOnStartupSetting" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Content="Open Log Window"
+                                          Click="OpenLogWindowOnStartupSetting_Click" ToolTip="When checked, the log window will start when you launch the application in this mode"/>
+                            <CheckBox x:Name="DumpParsedMacrosPerSequenceRunSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="2" VerticalAlignment="Center" Content="Log Macros"
+                                          Click="DumpParsedMacrosPerSequenceRunSetting_Click" ToolTip="When checked, the list of macros will be dumped to the logfile at the start of each sequence"/>
+                            <CheckBox x:Name="DumpEnvironmentVariablesAtSequenceStartSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="2" VerticalAlignment="Center" Content="Log Environment Variables"
+                                          Click="DumpEnvironmentVariablesAtSequenceStartSetting_Click" ToolTip="When checked, the list of system environment variables will be dumped to the logfile at the start of the sequencer"/>
+                            <CheckBox x:Name="UseLocalRunnerDatabaseSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="2" VerticalAlignment="Center" Content="Use Local File"
+                                          Click="UseLocalRunnerDatabaseSetting_Click" ToolTip="Toggle using a local copy of the automation sequence repo, or the server version"/>
+                            <CheckBox x:Name="SequenceDebugModeSetting" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Content="Sequence debug mode"
+                                          Click="SequenceDebugModeSetting_Click" ToolTip="When selected, you will be able to manually click through each task at a time to view the log and debug errors"/>
+                        </StackPanel>
                         <!-- Database Branch Block -->
                         <TextBlock x:Name="AutomamtionDatabaseSelectedBranchTextBox" 
                                    HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Margin="10,0,10,0"
