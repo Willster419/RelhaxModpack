@@ -325,6 +325,12 @@ namespace RelhaxModpack.Automation
                         break;
                 }
                 Logging.Info("----------------------------------------------------------------");
+
+                if (NumErrors == 0)
+                {
+                    Logging.Info("Saving database before next sequence");
+                    DatabaseManager.SaveDatabase(AutomationRunnerSettings.DatabaseSavePath);
+                }
             }
 
             Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence run finished with {0} errors of {1} total sequences.", NumErrors, sequencesToRun.Count);
