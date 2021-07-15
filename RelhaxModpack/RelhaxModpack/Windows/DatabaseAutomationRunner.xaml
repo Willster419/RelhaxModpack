@@ -3,20 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:smtx="clr-namespace:ShowMeTheXAML"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Database Automation Runner" Height="500" Width="1000" MinHeight="500" MinWidth="800"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.Foreground="{DynamicResource MaterialDesignPaper}"
+        Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        materialDesign:ThemeAssist.Theme="Dark"
         Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="True" EscapeKeyClosesWindow="False"
-        ApplyScaling="True" ApplyCustomFont="True" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
+        LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" EscapeKeyClosesWindow="False"
+        ApplyScaling="True" ApplyCustomFont="False" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
     <Grid>
-        <TabControl x:Name="MainTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" SelectionChanged="MainTabView_SelectionChanged">
+        <TabControl Background="{DynamicResource MaterialDesignBody}" x:Name="MainTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" SelectionChanged="MainTabView_SelectionChanged">
             <TabItem x:Name="TabItemRunSequences" Header="Run Sequences">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -175,9 +177,10 @@
                                  TextWrapping="Wrap" TextChanged="LocalRunnerDatabaseRootSetting_TextChanged"/>
                     </Grid>
                     <Button x:Name="SaveSettingsButton" Click="SaveSettingsButton_Click"
-                            HorizontalAlignment="Left" VerticalAlignment="Bottom" MinHeight="20" MaxHeight="40" MinWidth="100" MaxWidth="100" Height="40" Width="100">
+                            HorizontalAlignment="Left" VerticalAlignment="Bottom">
                         <TextBlock Text="Save Settings"/>
                     </Button>
+                    <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" />
                 </Grid>
             </TabItem>
         </TabControl>
