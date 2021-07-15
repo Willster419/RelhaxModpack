@@ -47,7 +47,7 @@ namespace RelhaxModpack.Automation
                 }
                 else
                 {
-                    Logging.Info("Adding macro {{{0}}} with value {1}", macro.Name, macro.Value);
+                    Logging.Info("Adding macro {{{0}}} with value '{1}'", macro.Name, macro.Value);
                     Macros.Add(macro);
                 }
             }

@@ -251,8 +251,9 @@ namespace RelhaxModpack.Automation
             Directory.CreateDirectory(workingDirectory);
 
             bool taskReturnGood = true;
-            foreach (AutomationTask task in this.AutomationTasks)
+            for (int index = 0; index < AutomationTasks.Count; index++)
             {
+                AutomationTask task = AutomationTasks[index];
                 RunningTask = task;
                 bool breakLoop = false;
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task: {0}", task.ID);
