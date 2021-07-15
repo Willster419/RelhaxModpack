@@ -143,6 +143,8 @@
                                       Click="DumpEnvironmentVariablesAtSequenceStartSetting_Click" ToolTip="When checked, the list of system environment variables will be dumped to the logfile at the start of the sequencer"/>
                         <CheckBox x:Name="UseLocalRunnerDatabaseSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="2" VerticalAlignment="Center" Content="Use Local File" Margin="10,50,0,0"
                                       Click="UseLocalRunnerDatabaseSetting_Click" ToolTip="Toggle using a local copy of the automation sequence repo, or the server version"/>
+                        <CheckBox x:Name="SequenceDebugModeSetting" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Content="Sequence debug mode" Margin="10,65,0,0"
+                                      Click="SequenceDebugModeSetting_Click" ToolTip="When selected, you will be able to manually click through each task at a time to view the log and debug errors"/>
                         <!-- Database Branch Block -->
                         <TextBlock x:Name="AutomamtionDatabaseSelectedBranchTextBox" 
                                    HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Margin="10,0,10,0"
