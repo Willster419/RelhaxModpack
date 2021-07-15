@@ -134,12 +134,11 @@ namespace RelhaxModpack.Automation
 
         protected async Task<string> LoadXmlFromUrlAsync()
         {
-            Logging.Info("Downloading xmlString from parsed URL {0}", RepoUrlPath);
             try
             {
                 using (client = new WebClient())
                 {
-                    return await client.DownloadStringTaskAsync(RepoUrlPath);
+                    return await client.DownloadStringTaskAsync(fullFilepath);
                 }
             }
             catch (OperationCanceledException) { }
