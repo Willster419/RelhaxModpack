@@ -77,7 +77,7 @@ namespace RelhaxModpack.Windows
 
         private readonly Action[] settingsMethods;
 
-        private CancellationTokenSource cancellationToken;
+        private CancellationTokenSource cancellationTokenSource;
 
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
@@ -108,14 +108,12 @@ namespace RelhaxModpack.Windows
                () => UseLocalRunnerDatabaseSetting_Click(null, null),
                () => LocalRunnerDatabaseRootSetting_TextChanged(null, null)
             };
-
-            cancellationToken = new CancellationTokenSource();
         }
 
         private async void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
             databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings);
-            AutomationSequencer = new AutomationSequencer(cancellationToken.Token) { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this, DatabaseManager = databaseManager };
+            AutomationSequencer = new AutomationSequencer() { AutomationRunnerSettings = this.AutomationSettings, DatabaseAutomationRunner = this, DatabaseManager = databaseManager };
 
             LoadSettingsToUI();
 
@@ -189,7 +187,7 @@ namespace RelhaxModpack.Windows
 
             //disposal
             AutomationSequencer.Dispose();
-            cancellationToken.Dispose();
+            cancellationTokenSource.Dispose();
             DownloadProgressChanged = null;
         }
 
@@ -254,10 +252,10 @@ namespace RelhaxModpack.Windows
             if (AutomationTaskProgressBar.Visibility != Visibility.Visible)
             {
                 //this only will happen once during the task's execution
-                ShowAutomationProgress(e.TotalBytesToReceive);
+                ShowAutomationProgress(e.TotalBytesToSend);
             }
-            AutomationTaskProgressBar.Value = e.BytesReceived;
-            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesReceived, e.TotalBytesToReceive);
+            AutomationTaskProgressBar.Value = e.BytesSent;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", e.BytesSent, e.TotalBytesToSend);
         }
 
         private void RelhaxProgressReport_ProgressChanged(object sender, RelhaxProgress e)
@@ -493,6 +491,15 @@ namespace RelhaxModpack.Windows
             AutomationSequencer.WoTClientVersion = databaseManager.WoTClientVersion;
             AutomationSequencer.WoTModpackOnlineFolderVersion = databaseManager.WoTOnlineFolderVersion;
 
+            //handle the cancel token system
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Dispose();
+                cancellationTokenSource = null;
+            }
+            cancellationTokenSource = new CancellationTokenSource();
+            AutomationSequencer.CancellationToken = cancellationTokenSource.Token;
+
             List<AutomationSequence> sequencesToRun = SequencesToRunListBox.Items.Cast<AutomationSequence>().ToList();
             SequencerExitCode sequenceRunResult = await AutomationSequencer.RunSequencerAsync(sequencesToRun);
 
@@ -520,9 +527,9 @@ namespace RelhaxModpack.Windows
 
         private void CancelSequencesButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!cancellationToken.IsCancellationRequested)
+            if (!cancellationTokenSource.IsCancellationRequested)
             {
-                cancellationToken.Cancel();
+                cancellationTokenSource.Cancel();
                 AutomationSequencer.CancelSequence();
                 Logging.Info("Cancel request sent");
             }

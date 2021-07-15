@@ -89,14 +89,9 @@ namespace RelhaxModpack.Automation
 
         public string ComponentInternalName { get; } = "AutomationSequencer";
 
-        protected CancellationToken CancellationToken;
+        public CancellationToken CancellationToken { get; set; }
 
         protected AutomationSequence RunningSequence;
-
-        public AutomationSequencer(CancellationToken cancellationToken) : this()
-        {
-            CancellationToken = cancellationToken;
-        }
 
         public AutomationSequencer()
         {
@@ -336,7 +331,7 @@ namespace RelhaxModpack.Automation
             Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence run finished with {0} errors of {1} total sequences.", NumErrors, sequencesToRun.Count);
             RunningSequence = null;
 
-            if (CancellationToken.IsCancellationRequested)
+            if (CancellationToken != null && CancellationToken.IsCancellationRequested)
                 return SequencerExitCode.Cancel;
             else if (NumErrors == 0)
                 return SequencerExitCode.NoErrors;
