@@ -4,12 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignPaper}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="Log Viewer" Height="600" Width="1000" Closed="Window_Closed">
+        Title="Log Viewer" Height="600" Width="1000" Closed="Window_Closed" ApplyColorSettings="False" ApplyCustomFont="False">
     <Grid>
-        <TextBox x:Name="LogTextbox" IsReadOnly="True" IsUndoEnabled="False" HorizontalAlignment="Stretch" Margin="10,10,10,35" TextWrapping="NoWrap" VerticalAlignment="Stretch"
-                 VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Loaded="LogTextbox_Loaded"/>
-        <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ClearLogButton_Click"/>
-        <CheckBox x:Name="ToggleWordWrapCheckbox" Content="Toggle word wrap" HorizontalAlignment="Right" Margin="0,0,90,12" VerticalAlignment="Bottom" Click="ToggleWordWrapCheckbox_Click"/>
+        <TextBox x:Name="LogTextbox" IsReadOnly="True" IsUndoEnabled="False" HorizontalAlignment="Stretch" Margin="10,10,10,50" TextWrapping="NoWrap" VerticalAlignment="Stretch"
+                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Loaded="LogTextbox_Loaded"/>
+        <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Click="ClearLogButton_Click"/>
+        <CheckBox 
+            x:Name="ToggleWordWrapCheckbox" Click="ToggleWordWrapCheckbox_Click" IsThreeState="False" Style="{DynamicResource MaterialDesignCheckBox}" Foreground="White"
+            HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10"
+            Content="Toggle word wrap" />
     </Grid>
 </local:RelhaxWindow>
