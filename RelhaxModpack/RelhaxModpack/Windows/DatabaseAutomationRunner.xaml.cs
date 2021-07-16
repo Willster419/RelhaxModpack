@@ -186,8 +186,10 @@ namespace RelhaxModpack.Windows
                 htmlPathSelector.Close();
 
             //disposal
-            AutomationSequencer.Dispose();
-            cancellationTokenSource.Dispose();
+            if (AutomationSequencer != null)
+                AutomationSequencer.Dispose();
+            if (cancellationTokenSource != null)
+                cancellationTokenSource.Dispose();
             DownloadProgressChanged = null;
         }
 
