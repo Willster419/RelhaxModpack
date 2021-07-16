@@ -7,7 +7,7 @@
         xmlns:smtx="clr-namespace:ShowMeTheXAML"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Database Automation Runner" Height="500" Width="1000" MinHeight="500" MinWidth="800"
+        Title="Database Automation Runner" Height="600" Width="1200" MinHeight="600" MinWidth="1200"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignPaper}"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -129,8 +129,9 @@
                             <!-- Checkboxes -->
                             <RowDefinition Name="CheckBoxes" Height="40"/>
                             <!-- Buttons -->
-                            <RowDefinition Name="Buttons0" Height="60"/>
-                            <RowDefinition Name="Buttons1" Height="60"/>
+                            <RowDefinition Name="Buttons0" Height="80"/>
+                            <RowDefinition Height="10" />
+                            <RowDefinition Name="Buttons1" Height="80"/>
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -177,7 +178,7 @@
                         <!-- Database XML Block -->
                         <Button x:Name="SelectDBSaveLocationButton" Click="SelectDBSaveLocationButton_Click"
                                 HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="10,-30,10,0"
-                                    ToolTip="Select your local Database XML file. Other XML's are expected to be in that folder.">
+                                ToolTip="Select your local Database XML file. Other XML's are expected to be in that folder.">
                             <TextBlock Text="Select database.xml" TextWrapping="Wrap"/>
                         </Button>
                         <TextBox x:Name="SelectDBSaveLocationSetting" 
@@ -185,12 +186,12 @@
                                  TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="SelectDBSaveLocationSetting_TextChanged" />
                         <!-- Root XML Block -->
                         <Button x:Name="LocalRunnerDatabaseRootButton" Click="SelectLocalRunnerDatabaseRootButton_Click"
-                                HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center"  Margin="10,-30,10,0"
+                                HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center"  Margin="10,-30,10,0"
                                     ToolTip="Select the location to use for loading the local copy of the automation repo on disk. This path *must* go to the root database xml file!">
                             <TextBlock Text="Select root.xml" TextWrapping="Wrap"/>
                         </Button>
                         <TextBox x:Name="LocalRunnerDatabaseRootSetting" 
-                                 HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1" Margin="10,30,10,0"
+                                 HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1" Margin="10,30,10,0"
                                  TextWrapping="Wrap" TextChanged="LocalRunnerDatabaseRootSetting_TextChanged"/>
                     </Grid>
                     <Button x:Name="SaveSettingsButton" Click="SaveSettingsButton_Click"
