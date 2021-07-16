@@ -79,10 +79,7 @@ namespace RelhaxModpack.Automation.Tasks
 
             Logging.AutomationRunner("Running Browser execution code");
             htmlXpathParser = new HtmlBrowserParser(HtmlPath, Url, waitTimeMs, waitCounts, false, null, null);
-            HtmlXpathParserExitCode parserExitCode = await htmlXpathParser.RunParserAsync();
-
-            if (ValidateForExitTrueNew(parserExitCode != HtmlXpathParserExitCode.None, AutomationExitCode.FileDownloadFail, string.Format("The html browser parser exited with code {0}. Check the above log messages for more information.", parserExitCode)))
-                return;
+            parserExitCode = await htmlXpathParser.RunParserAsync();
 
             Url = htmlXpathParser.ResultString;
         }

@@ -21,6 +21,8 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected HtmlWebscrapeParser htmlXpathParser;
 
+        protected HtmlXpathParserExitCode parserExitCode;
+
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
@@ -53,10 +55,7 @@ namespace RelhaxModpack.Automation.Tasks
         {
             Logging.AutomationRunner("Running web scrape execution code");
             htmlXpathParser = new HtmlWebscrapeParser(HtmlPath, Url, false, null);
-            HtmlXpathParserExitCode parserExitCode = await htmlXpathParser.RunParserAsync();
-
-            if (ValidateForExitTrueNew(parserExitCode != HtmlXpathParserExitCode.None, AutomationExitCode.FileDownloadFail, string.Format("The html browser parser exited with code {0}. Check the above log messages for more information.", parserExitCode)))
-                return;
+            parserExitCode = await htmlXpathParser.RunParserAsync();
 
             Url = htmlXpathParser.ResultString;
         }
@@ -64,6 +63,9 @@ namespace RelhaxModpack.Automation.Tasks
         public override void ProcessTaskResults()
         {
             base.ProcessTaskResults();
+
+            if (ProcessTaskResultFalse(parserExitCode == HtmlXpathParserExitCode.None, string.Format("The html browser parser exited with code {0}", parserExitCode)))
+                return;
         }
 
         public override void Cancel()
