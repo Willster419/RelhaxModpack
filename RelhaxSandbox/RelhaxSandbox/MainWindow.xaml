@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:RelhaxSandbox"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxSandbox.MainWindow"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800" Loaded="Window_Loaded">
     <Window.Resources>
@@ -340,6 +342,15 @@
                 <Button x:Name="DownloadManagerTestingButton" Content="Download Manager Testing" HorizontalAlignment="Left" Margin="474,154,0,0" VerticalAlignment="Top" Width="154" Click="DownloadManagerTestingButton_Click"/>
                 <TextBlock x:Name="DownloadManagerTestingHashResult" HorizontalAlignment="Left" Margin="474,179,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="154"/>
                 <Button x:Name="ThreadingTestButton" Content="Threading test" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Width="113" Click="ThreadingTestButton_Click"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Material Design Testing 1">
+            <Grid Background="#FFE5E5E5">
+                <materialDesign:Snackbar x:Name="SnackbarTwo" IsActive="False" Background="Blue">
+                    <!--ActionContent="UNDO" -->
+                    <materialDesign:SnackbarMessage Content="I exist" Foreground="White"/>
+                </materialDesign:Snackbar>
+                <CheckBox x:Name="AlohaSnackbar" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Toggle snack bar" IsChecked="{Binding ElementName=SnackbarTwo, Path=IsActive, Mode=TwoWay}"/>
             </Grid>
         </TabItem>
     </TabControl>
