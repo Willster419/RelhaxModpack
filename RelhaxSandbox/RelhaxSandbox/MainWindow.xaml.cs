@@ -117,6 +117,9 @@ namespace RelhaxSandbox
                 taskbarInstance = TaskbarManager.Instance;
                 taskbarInstance.SetProgressState(TaskbarProgressBarState.NoProgress);
             }
+
+            //material design
+            SampleSettingNotification.MessageQueue = new MaterialDesignThemes.Wpf.SnackbarMessageQueue(new TimeSpan(0, 0, 3));
         }
 
         #region Task Reporting
@@ -861,6 +864,7 @@ namespace RelhaxSandbox
         }
         #endregion
 
+        #region stuff
         TestSubWindow window;
         private void MemoryLeakTestingButton_Click(object sender, RoutedEventArgs e)
         {
@@ -915,5 +919,14 @@ namespace RelhaxSandbox
             myThread.IsBackground = true;
             myThread.Start();
         }
+        #endregion
+
+        #region Material design
+        private void TextUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            TextboxToUpdate.Text = TextboxWithText.Text;
+            SampleSettingNotification.MessageQueue.Enqueue("Textbox Updated");
+        }
+        #endregion
     }
 }
