@@ -86,8 +86,6 @@ namespace RelhaxModpack.Automation
             Macros.Add(new AutomationMacro() { MacroType = MacroType.Local, Name = MacroName, Value = stringReturnValue });
         }
 
-        protected abstract void GetStringValue();
-
         public override void ProcessTaskResults()
         {
             base.ProcessTaskResults();

@@ -16,5 +16,7 @@ namespace RelhaxModpack.Automation
             if (ProcessTaskResultTrue(macro == null, "Could not find newly created macro in list"))
                 return;
         }
+
+        protected abstract Task GetStringValue();
     }
 }

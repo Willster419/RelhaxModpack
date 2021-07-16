@@ -46,7 +46,7 @@ namespace RelhaxModpack.Automation
             await base.RunTask();
         }
 
-        protected override void GetStringValue()
+        protected override async Task GetStringValue()
         {
             stringWithValue = Path.GetFileName(FilePath);
         }
