@@ -5,50 +5,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignPaper}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}"
         Title="Preview" Height="550" Width="450" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnPreviewWindowLoad" Closed="RelhaxWindow_Closed"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True" EscapeKeyClosesWindow="True">
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="PreviewMainGrid" x:Name="PreviewMainGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition MinHeight="50" Height="3*" x:Name="PictureRowDefinition"/>
-            <RowDefinition Height="Auto" x:Name="GridSplitterRowDefinition"/>
-            <RowDefinition MinHeight="50" Height="2*" x:Name="DescriptionUpdateRowDefinition"/>
-        </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" x:Name="PictureGrid">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
-            <ContentControl x:Name="MainContentControl" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Border x:Name="MainPreviewBorder" Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="Black"/>
-            </ContentControl>
-            <Button x:Name="PreviewNextPicButton" Tag="PreviewNextPicButton" Content="Next" HorizontalAlignment="Right" Margin="0,5,10,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="PreviewNextPicButton_Click"/>
-            <Button x:Name="PreviewPreviousPicButton" Tag="PreviewPreviousPicButton" Content="Previous" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="PreviewPreviousPicButton_Click"/>
-            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" Height="20" Margin="90,5,90,0" Grid.Row="1" VerticalAlignment="Top" Tag="PreviewIndexer">
-                <StackPanel Orientation="Horizontal" x:Name="MediaIndexer"/>
-            </Border>
-        </Grid>
-        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Height="5"/>
-        <Border Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="Black" Tag="DescriptionUpdateNotesSection">
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" >
+        <materialDesign:Card Width="Auto" Height="Auto">
+            <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="140"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Tag="DevURLPanel">
-                    <TextBlock x:Name="DevUrlHeader" Tag="DevUrlHeader" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="Developer Links" Margin="0,0,0,4"/>
-                    <StackPanel Tag="DevUrlHolde" x:Name="DevUrlHolder" HorizontalAlignment="Stretch" Height="16" Margin="5,0,0,4" VerticalAlignment="Bottom" Orientation="Horizontal"/>
+                <Image
+                    x:Name="PreviewImage"
+                    Source="{Binding CurrentDispalyMedia}"
+                    Height="140"
+                    Width="Auto"
+                    Stretch="UniformToFill"                
+                    />
+                <Button 
+                    x:Name="DevUrlHeader"
+                    Grid.Row="0"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Margin="0 0 16 -20"
+                    ToolTip="DevURLToolTip"
+                    Click="DevURL_Click"
+                    >
+                    <materialDesign:PackIcon Kind="OpenInNew" />
+                </Button>
+                <StackPanel Grid.Row="1" Margin="8 24 8 0">
+                    <TextBlock FontWeight="Bold" Text="{Binding PreviewHeader}"/>
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding PreviewDesc}"/>
                 </StackPanel>
-                <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*" MinHeight="20"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="1*" MinHeight="20"/>
-                    </Grid.RowDefinitions>
-                    <TextBox x:Name="PreviewDescriptionBox" Tag="PreviewDescriptionBox" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap"/>
-                    <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Height="5"/>
-                    <TextBox x:Name="PreviewUpdatesBox" Tag="PreviewUpdatesBox" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True"/>
-                </Grid>
             </Grid>
-        </Border>
+        </materialDesign:Card>
     </Grid>
 </local:RelhaxWindow>
