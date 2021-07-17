@@ -52,19 +52,6 @@ namespace RelhaxModpack.Windows
 
         private AutomationSequencer AutomationSequencer = null;
 
-        public bool? HighPriorityLogViewer
-        {
-            get
-            {
-                return logViewer?.HighPriorityLogViewer;
-            }
-            set
-            {
-                if (logViewer != null)
-                    logViewer.HighPriorityLogViewer = (bool)value;
-            }
-        }
-
         private RelhaxLogViewer logViewer;
 
         private HtmlPathSelector htmlPathSelector;
@@ -458,8 +445,6 @@ namespace RelhaxModpack.Windows
             if (SequencesToRunListBox.Items.Count == 0)
                 return;
 
-            bool previousLoggerValue = (bool)HighPriorityLogViewer;
-            HighPriorityLogViewer = true;
             (RunSequencesButton.Content as TextBlock).Text = "Cancel";
             RunSequencesButton.Click -= RunSequencesButton_Click;
             RunSequencesButton.Click += CancelSequencesButton_Click;
@@ -508,7 +493,6 @@ namespace RelhaxModpack.Windows
             (RunSequencesButton.Content as TextBlock).Text = "Run";
             RunSequencesButton.Click -= CancelSequencesButton_Click;
             RunSequencesButton.Click += RunSequencesButton_Click;
-            HighPriorityLogViewer = previousLoggerValue;
         }
 
         private void CancelSequencesButton_Click(object sender, RoutedEventArgs e)

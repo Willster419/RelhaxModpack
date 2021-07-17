@@ -256,11 +256,7 @@ namespace RelhaxModpack.Automation
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task: {0}", task.ID);
                 try
                 {
-                    if (DatabaseAutomationRunner != null && DatabaseAutomationRunner.HighPriorityLogViewer != null)
-                        DatabaseAutomationRunner.HighPriorityLogViewer = false;
                     await task.Execute();
-                    if (DatabaseAutomationRunner != null && DatabaseAutomationRunner.HighPriorityLogViewer != null)
-                        DatabaseAutomationRunner.HighPriorityLogViewer = true;
                 }
                 catch (Exception ex)
                 {
