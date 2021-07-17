@@ -198,7 +198,11 @@
                             HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10">
                         <TextBlock Text="Save Settings"/>
                     </Button>
-                    <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" />
+                    <!--#region Snacks-->
+                    <materialDesign:Snackbar x:Name="SaveSettingsSnack" IsActive="False">
+                        <materialDesign:SnackbarMessage Content="Settings Saved"/>
+                    </materialDesign:Snackbar>
+                    <!--#endregion-->
                 </Grid>
             </TabItem>
         </TabControl>
