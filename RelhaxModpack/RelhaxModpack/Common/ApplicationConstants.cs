@@ -426,7 +426,7 @@ namespace RelhaxModpack.Common
         /// The current distribution version of the application.
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
-        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Alpha;
+        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Beta;
 
         /// <summary>
         /// The amount so space characters to line up a continued log entry without the date/time
