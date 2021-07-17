@@ -64,6 +64,11 @@ namespace RelhaxModpack.Automation.Tasks
         public const string AttributeNameForMapping = "Command";
         #endregion //Xml serialization
 
+        public static readonly string[] SpecialCaseIgnoreMacro = new string[]
+        {
+            "last_download_filename"
+        };
+
         protected Stopwatch ExecutionTimeStopwatch = new Stopwatch();
 
         public AutomationSequence AutomationSequence { get; set; }
@@ -98,9 +103,6 @@ namespace RelhaxModpack.Automation.Tasks
         {
             //stub
         }
-
-        //these are public so they can be unit tested. Maybe protect them and have unit testing run on Execute() only?
-
 
         public abstract void ValidateCommands();
 
@@ -270,6 +272,19 @@ namespace RelhaxModpack.Automation.Tasks
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Finished task {0}: Task end, ExecutionTimeMs: {1}", Command, ExecutionTimeStopwatch.ElapsedMilliseconds);
         }
 
+        protected static string ProcessEscapeCharacters(string argName, string arg)
+        {
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg '{0}'", argName);
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Before processing: '{0}'", arg);
+
+            //replace the escape characters for "{" and "}"
+            arg = arg.Replace("\\{", "{");
+            arg = arg.Replace("\\}", "}");
+
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "After processing: {0}", arg);
+            return arg;
+        }
+
         public static string ProcessMacro(string argName, string arg, List<AutomationMacro> macros)
         {
             //set property value to temp, making new variable
@@ -290,22 +305,12 @@ namespace RelhaxModpack.Automation.Tasks
             return temp;
         }
 
-        protected static string ProcessEscapeCharacters(string argName, string arg)
+        protected static void ProcessMacro(string argName, ref string arg, List<AutomationMacro> macros, int recursionLevel = 0)
         {
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg '{0}'", argName);
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Before processing: '{0}'", arg);
-
-            //replace the escape characters for "{" and "}"
-            arg = arg.Replace("\\{", "{");
-            arg = arg.Replace("\\}", "}");
-
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "After processing: {0}", arg);
-            return arg;
-        }
-
-        protected static void ProcessMacro(string argName, ref string arg, List<AutomationMacro> macros)
-        {
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg '{0}'", argName);
+            string recursiveLevelString = string.Empty;
+            if (recursionLevel > 0)
+                recursiveLevelString = string.Format("(recursive level {0})", recursionLevel);
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg '{0}' {1}", argName, recursiveLevelString);
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Before processing: '{0}'", arg);
 
             //run regex on the arg to get the type of replacement to do. if it's recursive, then we need to process the inner one first
@@ -317,9 +322,9 @@ namespace RelhaxModpack.Automation.Tasks
                 if (startBracketsMatch.Captures.Count > 0)
                 {
                     Match endBracketsMatch = Regex.Match(arg, "}");
-                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Macros were detected in the command argument, but the syntax was incorrect. Most likely is the number of start and end brackets are unbalanced.");
-                    Logging.Error(Logfiles.AutomationRunner, LogOptions.None, "Examine the number of brackets starting and ending in the command, and try again. For debug, here's what was parsed:");
-                    Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Command value: {0}", arg);
+                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Macros were detected in the argument, but the syntax was incorrect. Most likely is the number of start and end brackets are unbalanced.");
+                    Logging.Error(Logfiles.AutomationRunner, LogOptions.None, "Examine the number of brackets starting and ending in the argument, and try again. For debug, here's what was parsed:");
+                    Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Argument value: {0}", arg);
                     Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Start brackets count: {0}", startBracketsMatch.Captures.Count);
                     foreach (Capture capture in startBracketsMatch.Captures)
                     {
@@ -330,8 +335,9 @@ namespace RelhaxModpack.Automation.Tasks
                     {
                         Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Capture location in string: {0}", capture.Index);
                     }
+                    return;
                 }
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "The command {0} has no macros, continue", argName);
+                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "The argument {0} has no macros, continue", argName);
                 return;
             }
 
@@ -344,7 +350,6 @@ namespace RelhaxModpack.Automation.Tasks
             {
                 Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Inner2Count ({0}) != Inner3Count ({1})! The macro engine is not designed for this!", inner2Count, inner3Count);
                 throw new NotImplementedException("soon tm");
-                //return;
             }
             else if (inner2Count > inner1Count)
             {
@@ -376,11 +381,14 @@ namespace RelhaxModpack.Automation.Tasks
                         string splitValue = sectionMatch.Value;
                         splitValue = splitValue.Remove(0, 1);
                         splitValue = splitValue.Remove(splitValue.Length - 1, 1);
-                        //use_{date}_val
+
+                        //we now have 'use_{date}_val', send that through the macro engine
                         string innerResult = ProcessMacro(string.Format("{0}_capture{1}_level{2}", argName, captureCount, countDifference), splitValue, macros);
-                        //use_the_date_val, if {date} = the_date
+
+                        //use_the_date_val, if {date} = the_date. put the brackets back on
                         innerResult = "{" + innerResult + "}";
-                        //{use_the_date_val}
+
+                        //{use_the_date_val}, now do the final replace of that macro
                         Regex replaceRegex2 = new Regex(sectionMatch.Value);
                         capturedValue = replaceRegex2.Replace(capturedValue, innerResult, 1);
                     }
@@ -412,15 +420,29 @@ namespace RelhaxModpack.Automation.Tasks
                     AutomationMacro resultMacro = macros.Find(macro => macro.Name.Equals(capture.Value));
                     if (resultMacro == null)
                     {
-                        Logging.Warning(Logfiles.AutomationRunner, LogOptions.None, "The macro with name '{0}', does not exist, skipping. (Is this intended?)", capture.Value);
+                        if (!SpecialCaseIgnoreMacro.Contains(capture.Value))
+                        {
+                            Logging.Warning(Logfiles.AutomationRunner, LogOptions.None, "The macro with name '{0}', does not exist, skipping. (Is this intended?)", capture.Value);
+                        }
                         continue;
+                    }
+
+                    string macroValue = resultMacro.Value;
+
+                    Match recursiveCheck = Regex.Match(macroValue, AutomationMacro.MacroReplaceRegex);
+                    if (recursiveCheck.Success)
+                    {
+                        Logging.Debug("A macro was resolved to another macro, run the macro replacement code again");
+                        string temp = macroValue;
+                        ProcessMacro(argName, ref temp, macros, recursionLevel+1);
+                        macroValue = temp;
                     }
 
                     //perform a single replace on the specified location of the string
                     //https://stackoverflow.com/a/6372134/3128017
                     Regex replaceRegex = new Regex("{" + capture.Value + "}");
-                    arg = replaceRegex.Replace(arg, resultMacro.Value, 1);
-                    Logging.Debug(Logfiles.AutomationRunner, LogOptions.None, "A single replace was done on the command string. Result: {0}", arg);
+                    arg = replaceRegex.Replace(arg, macroValue, 1);
+                    Logging.Debug(Logfiles.AutomationRunner, LogOptions.None, "A single replace was done on the argument. Result: {0}", arg);
                 }
             }
 
