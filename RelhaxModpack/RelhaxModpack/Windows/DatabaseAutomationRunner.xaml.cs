@@ -211,11 +211,10 @@ namespace RelhaxModpack.Windows
         private void MoveSequenceToAvailableList()
         {
             if (SequencesToRunListBox.SelectedItems.Count == 0)
-                return;
+            return;
 
-            foreach (AutomationSequence sequence in SequencesToRunListBox.SelectedItems)
-                if (!SequencesAvailableListBox.Items.Contains(sequence))
-                    SequencesAvailableListBox.Items.Add(sequence);
+            SequencesToRunListBox.Items.RemoveAt
+                (SequencesToRunListBox.Items.IndexOf(SequencesToRunListBox.SelectedItem));
         }
 
         #region Progress reporting code
@@ -635,7 +634,7 @@ namespace RelhaxModpack.Windows
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             InvokeSettingsAndnSaveToSettingsFile();
-            SaveSettingsSnack.MessageQueue.Enqueue(Content);
+            SaveSettingsSnack.MessageQueue.Enqueue(SaveSettingsSnackMessage.Content);
         }
 
         private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
