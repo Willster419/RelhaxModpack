@@ -8,29 +8,16 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class CreateDirectoryTask : AutomationTask, IXmlSerializable
+    public class CreateDirectoryTask : DirectoryTask, IXmlSerializable
     {
         public const string TaskCommandName = "create_directory";
 
         public override string Command { get { return TaskCommandName; } }
 
-        public string DirectoryPath { get; set; }
-
-        #region Xml Serialization
-        public override string[] PropertiesForSerializationAttributes()
-        {
-            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(DirectoryPath) }).ToArray();
-        }
-        #endregion
-
         #region Task execution
-        public override void ProcessMacros()
-        {
-            DirectoryPath = ProcessMacro(nameof(DirectoryPath), DirectoryPath);
-        }
-
         public override void ValidateCommands()
         {
+            //don't run the base because it will check to make sure the directory exists, which we know it doesn't
             if (ValidateCommandStringNullEmptyTrue(nameof(DirectoryPath), DirectoryPath))
                 return;
         }

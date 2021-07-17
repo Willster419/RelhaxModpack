@@ -142,6 +142,7 @@
     <Compile Include="Automation\Tasks\DatabasePackagePropertyTask.cs" />
     <Compile Include="Automation\Tasks\DatabasePackageTask.cs" />
     <Compile Include="Automation\Tasks\DatabaseTask.cs" />
+    <Compile Include="Automation\Tasks\DirectoryTask.cs" />
     <Compile Include="Automation\Tasks\DownloadBrowserTask.cs" />
     <Compile Include="Automation\Tasks\DownloadHtmlTask.cs" />
     <Compile Include="Automation\Tasks\DownloadStaticTask.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Automation\Tasks\FileDestinationTask.cs" />
     <Compile Include="Automation\FileHashComparer.cs" />
     <Compile Include="Automation\Tasks\FileMoveTask.cs" />
+    <Compile Include="Automation\Tasks\DirectorySearchTask.cs" />
     <Compile Include="Automation\Tasks\FileTask.cs" />
     <Compile Include="Automation\HtmlBrowserParser.cs" />
     <Compile Include="Automation\HtmlWebscrapeParser.cs" />

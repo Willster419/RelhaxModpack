@@ -57,8 +57,8 @@ namespace RelhaxModpack.Automation.Tasks
             { MacroSubstringMacroTask.TaskCommandName, typeof(MacroSubstringMacroTask) },
             { MacroSubstringFilenameTask.TaskCommandName, typeof(MacroSubstringFilenameTask) },
             { MacroSubstringHtmlTask.TaskCommandName, typeof(MacroSubstringHtmlTask) },
-            { MacroSubstringBrowserTask.TaskCommandName, typeof(MacroSubstringBrowserTask) }
-
+            { MacroSubstringBrowserTask.TaskCommandName, typeof(MacroSubstringBrowserTask) },
+            { DirectorySearchTask.TaskCommandName, typeof(DirectorySearchTask) }
         };
 
         public const string AttributeNameForMapping = "Command";
