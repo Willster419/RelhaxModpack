@@ -35,6 +35,7 @@ using System.Text;
 using Microsoft.Win32;
 using System.Linq;
 using FontFamily = System.Windows.Media.FontFamily;
+using MaterialDesignThemes.Wpf;
 
 namespace RelhaxSandbox
 {
@@ -925,7 +926,17 @@ namespace RelhaxSandbox
         private void TextUpdateButton_Click(object sender, RoutedEventArgs e)
         {
             TextboxToUpdate.Text = TextboxWithText.Text;
-            SampleSettingNotification.MessageQueue.Enqueue("Textbox Updated");
+            UpdateSnackbarText(SampleSettingNotification.MessageQueue, "Textbox Updated");
+        }
+
+        private void AnotherTextUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateSnackbarText(SampleSettingNotification.MessageQueue, "Another message");
+        }
+
+        private void UpdateSnackbarText(SnackbarMessageQueue queue, string text)
+        {
+            queue.Enqueue(text);
         }
         #endregion
     }
