@@ -4,16 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignPaper}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}"
         mc:Ignorable="d"
         Title="WoT Client Selection" Height="300" Width="400" MinWidth="400" MinHeight="300" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True" EscapeKeyClosesWindow="True">
     <Grid Tag="ClientSelectionGrid">
-        <TextBlock Tag="ClientSelectionsTextHeader" x:Name="ClientSelectionsTextHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="The following clients were automatically detected" VerticalAlignment="Top" Margin="10,10,10,0" />
-        <Button Tag="ClientSelectionsContinueButton" x:Name="ClientSelectionsContinueButton" Content="Select" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ClientSelectionsContinueButton_Click"/>
-        <Button Tag="ClientSelectionsCancelButton" x:Name="ClientSelectionsCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="ClientSelectionsCancelButton_Click"/>
-        <Border Margin="10,31,10,35" BorderThickness="3" BorderBrush="Black">
-            <StackPanel x:Name="ClientSelectionsStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="DeveloperSelectionPanel"/>
-        </Border>
-        <Button Tag="ClientSelectionsManualFind" x:Name="ClientSelectionsManualFind" Content="Manual Selection" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="125" Click="ClientSelectionsManualFind_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBlock Tag="ClientSelectionsTextHeader" x:Name="ClientSelectionsTextHeader"
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Height="19" Margin="10,5,10,0" Grid.Row="0"
+                   Style="{DynamicResource MaterialDesignTextBlock}"
+                   Foreground="White"
+                   TextWrapping="Wrap" Text="The Following Clients Were Automatically Detected"/>
+        <StackPanel x:Name="ClientSelectionsStackPanel" Tag="DeveloperSelectionPanel" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,0,10,10" Grid.Row="2">
+            <Button Tag="ClientSelectionsCancelButton" x:Name="ClientSelectionsCancelButton"
+                    Style="{DynamicResource MaterialDesignRaisedButton}"
+                    Margin="0,0,45,0"
+                    Content="Cancel"
+                    Click="ClientSelectionsCancelButton_Click"/>
+            <Button Tag="ClientSelectionsManualFind" x:Name="ClientSelectionsManualFind"
+                    Style="{DynamicResource MaterialDesignRaisedButton}"
+                    Margin="0,0,40,0"
+                    Content="Manual Selection"
+                    Click="ClientSelectionsManualFind_Click"/>
+            <Button Tag="ClientSelectionsContinueButton" x:Name="ClientSelectionsContinueButton"
+                    Style="{DynamicResource MaterialDesignRaisedButton}"
+                    Content="Select"
+                    Click="ClientSelectionsContinueButton_Click"/>
+        </StackPanel>
     </Grid>
 </local:RelhaxWindow>
