@@ -49,11 +49,15 @@ namespace RelhaxModpack.Automation.Tasks
             { RetrievePackagePropertyTask.TaskCommandName, typeof(RetrievePackagePropertyTask) },
             { MacroDeleteTask.TaskCommandName, typeof(MacroDeleteTask) },
             { MacroCreateTask.TaskCommandName, typeof(MacroCreateTask) },
-            { MacroSubstringFilenameTask.TaskCommandName, typeof(MacroSubstringFilenameTask) },
-            { MacroStringSplitFilenameTask.TaskCommandName, typeof(MacroStringSplitFilenameTask) },
             { CreateDirectoryTask.TaskCommandName, typeof(CreateDirectoryTask) },
             { MacroStringSplitMacroTask.TaskCommandName, typeof(MacroStringSplitMacroTask) },
-            { MacroSubstringMacroTask.TaskCommandName, typeof(MacroSubstringMacroTask) }
+            { MacroStringSplitFilenameTask.TaskCommandName, typeof(MacroStringSplitFilenameTask) },
+            { MacroStringSplitHtmlTask.TaskCommandName, typeof(MacroStringSplitHtmlTask) },
+            { MacroStringSplitBrowserTask.TaskCommandName, typeof(MacroStringSplitBrowserTask) },
+            { MacroSubstringMacroTask.TaskCommandName, typeof(MacroSubstringMacroTask) },
+            { MacroSubstringFilenameTask.TaskCommandName, typeof(MacroSubstringFilenameTask) },
+            { MacroSubstringHtmlTask.TaskCommandName, typeof(MacroSubstringHtmlTask) },
+            { MacroSubstringBrowserTask.TaskCommandName, typeof(MacroSubstringBrowserTask) }
 
         };
 
