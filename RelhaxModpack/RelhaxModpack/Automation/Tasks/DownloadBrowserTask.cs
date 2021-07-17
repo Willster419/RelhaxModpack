@@ -27,19 +27,9 @@ namespace RelhaxModpack.Automation.Tasks
 
         public string WaitCounts { get; set; } = "3";
 
-        protected string HtmlString = null;
+        protected int waitTimeMs;
 
-        protected int waitTimeMs { get; set; }
-
-        protected int waitCounts { get; set; }
-
-        protected int BrowserFinishedLoadingScriptsCounter = 0;
-
-        protected bool BrowserLoaded = false;
-
-        protected bool BrowserNavigated = false;
-
-        protected Dispatcher browserDispatcher = null;
+        protected int waitCounts;
 
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
