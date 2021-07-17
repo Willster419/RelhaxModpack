@@ -4,21 +4,44 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignPaper}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="Add files to zip" Height="330" Width="600" MinHeight="75" MinWidth="100"
+        Title="Add Files To Zip" Height="330" Width="600" MinHeight="75" MinWidth="100"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True"
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
     <Grid Tag="AddPIcturesMainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="DiagnosticsAddSelectionsPicturesLabel" HorizontalAlignment="Stretch" Margin="10,0,10,0" TextWrapping="Wrap" Text="Add any additional files here (your selection file, picture, etc.)" VerticalAlignment="Top" Tag="AddSelectionsPicturesLabel"/>
-        <ListBox x:FieldModifier="public" x:Name="FilesToAddList" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" AllowDrop="True" SelectionMode="Extended" DragEnter="FilesToAddList_DragEnter" Drop="FilesToAddList_Drop" Tag="DebugFilesToAddList" Margin="0,0,0,5"/>
-        <Button x:Name="DiagnosticsAddFilesButton" Content="Add Files" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="95" Click="AddFilesButton_Click" Tag="AddFilesButton"/>
+        <TextBlock x:Name="DiagnosticsAddSelectionsPicturesLabel" Foreground="White"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"
+                   TextAlignment="Left"
+                   TextWrapping="Wrap" Text="Add any additional files here (your selection file, picture, etc.)"
+                   Tag="AddSelectionsPicturesLabel"/>
         <!-- https://stackoverflow.com/questions/2984050/configure-listbox-in-wpf-so-that-i-will-be-possible-to-select-multiple-items-wit -->
-        <Button x:Name="DiagnosticsRemoveSelectedButton" Content="Remove Selected" HorizontalAlignment="Left" Margin="110,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="104" Click="RemoveSelectedButton_Click" Tag="RemoveSelectedButton"/>
-        <Button x:Name="DiagnosticsContinueButton" Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click" Tag="ContinueButton"/>
+        <ListBox x:FieldModifier="public" x:Name="FilesToAddList" 
+                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,0,5,5" Grid.Row="1"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                 AllowDrop="True" 
+                 SelectionMode="Extended" 
+                 DragEnter="FilesToAddList_DragEnter" 
+                 Drop="FilesToAddList_Drop" 
+                 Tag="DebugFilesToAddList"/>
+        <Button x:Name="DiagnosticsAddFilesButton" Content="Add Files" 
+                HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" 
+                Click="AddFilesButton_Click" Tag="AddFilesButton"/>
+        <Button x:Name="DiagnosticsRemoveSelectedButton" Content="Remove Selected" 
+                HorizontalAlignment="Left" Margin="110,0,0,5" Grid.Row="2" VerticalAlignment="Bottom"
+                Click="RemoveSelectedButton_Click" Tag="RemoveSelectedButton"/>
+        <Button x:Name="DiagnosticsContinueButton" Content="Continue" 
+                HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="2" VerticalAlignment="Bottom"
+                Click="ContinueButton_Click" Tag="ContinueButton"/>
     </Grid>
 </local:RelhaxWindow>
