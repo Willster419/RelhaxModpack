@@ -20,29 +20,52 @@
                     <RowDefinition Height="140"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Image
                     x:Name="PreviewImage"
-                    Source="{Binding CurrentDispalyMedia}"
+                    Source="{Binding}"
                     Height="140"
                     Width="Auto"
                     Stretch="UniformToFill"                
                     />
                 <Button 
-                    x:Name="DevUrlHeader"
+                    x:Name="DevUrlButton"
                     Grid.Row="0"
                     Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Margin="0 0 16 -20"
                     ToolTip="DevURLToolTip"
-                    Click="DevURL_Click"
-                    >
+                    Click="DevURL_Click">
                     <materialDesign:PackIcon Kind="OpenInNew" />
                 </Button>
                 <StackPanel Grid.Row="1" Margin="8 24 8 0">
-                    <TextBlock FontWeight="Bold" Text="{Binding PreviewHeader}"/>
-                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding PreviewDesc}"/>
+                    <TextBlock FontWeight="Bold" Text="{Binding}"/>
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding}"/>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="8" Grid.Row="3">
+                    <Button Click="PreviewPreviousPicButton_Click"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        Width="30"
+                        Padding="2 0 2 0"
+                        materialDesign:RippleAssist.IsCentered="True">
+                        <materialDesign:PackIcon Kind="ArrowLeftThick" />
+                    </Button>
+                    <Button Click="PreviewNextPicButton_Click"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        Width="30"
+                        Padding="2 0 2 0"
+                        materialDesign:RippleAssist.IsCentered="True">
+                        <materialDesign:PackIcon Kind="ArrowRightThick" />
+                    </Button>
+                    <Button
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        Width="30"
+                        Padding="2 0 2 0"
+                        materialDesign:RippleAssist.IsCentered="True">
+                        <materialDesign:PackIcon Kind="Download"/>
+                    </Button>
                 </StackPanel>
             </Grid>
         </materialDesign:Card>
