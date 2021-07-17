@@ -129,6 +129,9 @@ namespace RelhaxModpack.Windows
                 logViewer.Show();
 
             await LoadAutomationSequencerAsync();
+
+            //Material Design || SnackBars
+            SaveSettingsSnack.MessageQueue = new MaterialDesignThemes.Wpf.SnackbarMessageQueue(new TimeSpan(0, 0, 3));
         }
 
         private async Task LoadAutomationSequencerAsync()
@@ -646,6 +649,7 @@ namespace RelhaxModpack.Windows
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             InvokeSettingsAndnSaveToSettingsFile();
+            SaveSettingsSnack.MessageQueue.Enqueue(Content);
         }
 
         private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -676,5 +680,8 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
+        #region MaterialDesign
+
+        #endregion
     }
 }
