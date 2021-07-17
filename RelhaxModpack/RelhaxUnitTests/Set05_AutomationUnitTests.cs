@@ -11,6 +11,7 @@ using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
 using System.IO;
 using System.Threading;
+using RelhaxModpack.Automation.Tasks;
 
 namespace RelhaxUnitTests
 {

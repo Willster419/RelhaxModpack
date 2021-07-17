@@ -570,7 +570,7 @@
             </summary>
             <returns>A task of the asynchronous operation</returns>
         </member>
-        <member name="M:RelhaxModpack.Automation.AutomationTask.ValidateCommandTrue(System.Boolean,System.String)">
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ValidateCommandTrue(System.Boolean,System.String)">
             <summary>
             "true" version means that the test being true is "bad"
             </summary>
@@ -578,7 +578,7 @@
             <param name="formattedString"></param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Automation.AutomationTask.ValidateCommandFalse(System.Boolean,System.String)">
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ValidateCommandFalse(System.Boolean,System.String)">
             <summary>
             "false" version means that the test being false is "bad"
             </summary>
@@ -586,7 +586,7 @@
             <param name="formattedString"></param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Automation.AutomationTask.ProcessTaskResultTrue(System.Boolean,System.String)">
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessTaskResultTrue(System.Boolean,System.String)">
             <summary>
             "true" version means that the test being true is "bad"
             </summary>
@@ -594,7 +594,7 @@
             <param name="formattedString"></param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Automation.AutomationTask.ProcessTaskResultFalse(System.Boolean,System.String)">
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessTaskResultFalse(System.Boolean,System.String)">
             <summary>
             "false" version means that the test being false is "bad"
             </summary>
@@ -602,7 +602,7 @@
             <param name="formattedString"></param>
             <returns></returns>
         </member>
-        <member name="T:RelhaxModpack.Automation.IDownloadTask">
+        <member name="T:RelhaxModpack.Automation.Tasks.IDownloadTask">
             <summary>
             A task that implements this interface implies that it will always have a destination location for the resultant file
             </summary>
