@@ -24,9 +24,16 @@ namespace RelhaxModpack.Common
 
         protected RelhaxProgress progress;
 
+        protected bool verbose = false;
+
         public FileCopier()
         {
             progress = new RelhaxProgress() { };
+        }
+
+        public FileCopier(RelhaxProgress progress)
+        {
+            this.progress = progress;
         }
 
         public FileCopier(string sourceFile, string destinationFile) : this()
@@ -55,7 +62,9 @@ namespace RelhaxModpack.Common
 
             try
             {
-                Logging.Info(LogOptions.ClassName, "Starting file copy operation");
+                if (verbose)
+                    Logging.Info(LogOptions.ClassName, "Starting file copy operation");
+
                 using (FileStream SourceStream = File.Open(SourceFile, FileMode.Open, FileAccess.Read))
                 using (FileStream DestinationStream = File.Open(DestinationFile, FileMode.Create, FileAccess.Write))
                 {
@@ -81,7 +90,9 @@ namespace RelhaxModpack.Common
                 File.SetLastAccessTime(DestinationFile, File.GetLastAccessTime(SourceFile));
                 File.SetLastWriteTime(DestinationFile, File.GetLastWriteTime(SourceFile));
 
-                Logging.Info(LogOptions.ClassName, "The file copy operation completed");
+                if (verbose)
+                    Logging.Info(LogOptions.ClassName, "The file copy operation completed");
+
                 progress.ChildCurrent = progress.ChildTotal;
                 Reporter?.Report(progress);
                 return true;
