@@ -115,7 +115,7 @@
                         Visibility="Hidden" Text="Test" TextAlignment="Center"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="TabItemSettings" Header="{materialDesign:PackIcon Kind=Cog, Size=24}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+            <TabItem x:Name="TabItemSettings" Header="{materialDesign:PackIcon Kind=Cog, Size=24}" Style="{StaticResource MaterialDesignNavigationRailTabItem}" VerticalAlignment="Bottom">
                 <Grid>
                     <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Grid.RowDefinitions>
@@ -132,6 +132,7 @@
                             <RowDefinition Name="Buttons0" Height="80"/>
                             <RowDefinition Height="10" />
                             <RowDefinition Name="Buttons1" Height="80"/>
+                            <RowDefinition Name="MessageQueueTime" Height="100"/>
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -164,7 +165,7 @@
                                           Click="DumpEnvironmentVariablesAtSequenceStartSetting_Click" ToolTip="When checked, the list of system environment variables will be dumped to the logfile at the start of the sequencer"/>
                             <CheckBox x:Name="UseLocalRunnerDatabaseSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="2" VerticalAlignment="Center" Content="Use Local File"
                                           Click="UseLocalRunnerDatabaseSetting_Click" ToolTip="Toggle using a local copy of the automation sequence repo, or the server version"/>
-                            <CheckBox x:Name="SequenceDebugModeSetting" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Content="Sequence debug mode"
+                            <CheckBox x:Name="SequenceDebugModeSetting" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Content="Sequence Debug Mode"
                                           Click="SequenceDebugModeSetting_Click" ToolTip="When selected, you will be able to manually click through each task at a time to view the log and debug errors"/>
                         </StackPanel>
                         <!-- Database Branch Block -->
@@ -193,18 +194,73 @@
                         <TextBox x:Name="LocalRunnerDatabaseRootSetting" 
                                  HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1" Margin="10,30,10,0"
                                  TextWrapping="Wrap" TextChanged="LocalRunnerDatabaseRootSetting_TextChanged"/>
+                        <!-- Snack Bar Settings -->
+                        <StackPanel
+                            Margin="10,10,10,10" Grid.Row="7" Grid.Column="1">
+                            <TextBlock
+                                    Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                    Text="Snack Bar Settings"/>
+                            <TextBlock
+                                    Style="{DynamicResource MaterialDesignCaptionTextBlock}"
+                                    Text="Set Snack Bar Message Duration"/>
+                            <Grid Margin="0 10 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Slider
+                                    x:Name="MessageDurationOverrideSlider"
+                                    Minimum="1"
+                                    Maximum="10"
+                                    Value="5"
+                                    IsSnapToTickEnabled="True"
+                                    TickFrequency="0.1"
+                                    VerticalAlignment="Center"/>
+                                <TextBlock
+                                    Text="{Binding ElementName=MessageDurationOverrideSlider, Path=Value, StringFormat={}{0:F1}}"
+                                    Margin="10,0" Grid.Column="1" VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
                     </Grid>
                     <Button x:Name="SaveSettingsButton" Click="SaveSettingsButton_Click"
                             HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10">
                         <TextBlock Text="Save Settings"/>
                     </Button>
-                    <!--#region Snacks-->
-                    <materialDesign:Snackbar x:Name="SaveSettingsSnack" IsActive="False">
-                        <materialDesign:SnackbarMessage Content="Settings Saved"/>
-                    </materialDesign:Snackbar>
-                    <!--#endregion-->
+                    
+                </Grid>
+            </TabItem>
+            <TabItem Header="{materialDesign:PackIcon Kind=Plus, Size=24}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <!-- Use this tab to make new sequences. Requires some programming -->
+                <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="100"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock 
+                        x:Name="SequenceCreatorTitle" Tag="SequenceCreatorTitle_Tag"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,10" Grid.Column="1" Grid.Row="0"
+                        Text="Create New Sequences" Style="{DynamicResource MaterialDesignHeadline4TextBlock}"/>
+                    <Button x:Name="CreateNewSequences_Button"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,10">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Margin="0,0,10,0" Kind="PlusBold"/>
+                            <TextBlock Text="Create New Suquence" Tag="CreateNewSequence_Text"/>
+                        </StackPanel>
+                    </Button>
                 </Grid>
             </TabItem>
         </TabControl>
+        <!--#region Snacks-->
+        <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="DatabaseAutomationRunnerQueue"/>
+        <!--#endregion-->
     </Grid>
 </local:RelhaxCustomFeatureWindow>

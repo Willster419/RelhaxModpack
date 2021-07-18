@@ -16,6 +16,7 @@ using RelhaxModpack.Utilities;
 using RelhaxModpack.UI;
 using System.Threading.Tasks;
 using System.Threading;
+using MaterialDesignThemes.Wpf;
 
 namespace RelhaxModpack.Windows
 {
@@ -115,10 +116,7 @@ namespace RelhaxModpack.Windows
             if (AutomationSettings.OpenLogWindowOnStartup)
                 logViewer.Show();
 
-            await LoadAutomationSequencerAsync();
-
-            //Material Design || SnackBars
-            SaveSettingsSnack.MessageQueue = new MaterialDesignThemes.Wpf.SnackbarMessageQueue(new TimeSpan(0, 0, 3));
+            await LoadAutomationSequencerAsync();            
         }
 
         private async Task LoadAutomationSequencerAsync()
@@ -211,10 +209,15 @@ namespace RelhaxModpack.Windows
         private void MoveSequenceToAvailableList()
         {
             if (SequencesToRunListBox.SelectedItems.Count == 0)
-            return;
+                UpdateSnackbarText(DatabaseAutomationRunnerQueue.MessageQueue, "No Selected Sequence");
+                return;
 
-            SequencesToRunListBox.Items.RemoveAt
-                (SequencesToRunListBox.Items.IndexOf(SequencesToRunListBox.SelectedItem));
+            foreach (AutomationSequence sequence in SequencesToRunListBox.SelectedItems)
+            {
+                if (SequencesToRunListBox.Items.Contains(sequence))
+                    SequencesToRunListBox.Items.Remove(sequence);
+                UpdateSnackbarText(DatabaseAutomationRunnerQueue.MessageQueue, "Sequence Removed");
+            }
         }
 
         #region Progress reporting code
@@ -316,6 +319,12 @@ namespace RelhaxModpack.Windows
             //Needs to be finished and verified | Made by The Illusion
             MoveSequenceToAvailableList();
         }
+
+        private void MoveSequencesToAvailableListButton_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            MoveSequenceToAvailableList();
+        }
+
         private void MoveUpSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
         {
             if (SequencesToRunListBox.SelectedItems.Count == 0)
@@ -408,6 +417,7 @@ namespace RelhaxModpack.Windows
         private void DeleteSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
         {
             if (SequencesToRunListBox.SelectedItems.Count == 0)
+                UpdateSnackbarText(DatabaseAutomationRunnerQueue.MessageQueue, "No Sequence Selected");
                 return;
 
             List<AutomationSequence> itemsToRemove = SequencesToRunListBox.SelectedItems.Cast<AutomationSequence>().ToList();
@@ -634,7 +644,7 @@ namespace RelhaxModpack.Windows
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             InvokeSettingsAndnSaveToSettingsFile();
-            SaveSettingsSnack.MessageQueue.Enqueue(SaveSettingsSnackMessage.Content);
+            UpdateSnackbarText(DatabaseAutomationRunnerQueue.MessageQueue, "Saved Settings");
         }
 
         private void MainTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -666,6 +676,22 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region MaterialDesign
+
+        private void UpdateSnackbarText(SnackbarMessageQueue queue, string text)
+        {
+            var duration = MessageDurationOverrideSlider.Value;
+            //MaterialDesignThemes.Wpf.SnackbarMessage(TimeSpan(duration))
+            queue.Enqueue(text, null, null, null, true, true, TimeSpan.FromSeconds(duration));
+        }
+
+        #endregion
+
+        #region Creating New Sequences Tab
+
+        private void CreateNewSequences_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         #endregion
     }
