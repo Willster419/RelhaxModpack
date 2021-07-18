@@ -248,6 +248,21 @@ namespace RelhaxModpack.Windows
             {
                 HideAutomationProgress();
             }
+
+            switch (e.ChildCurrentProgress)
+            {
+                case "barWithTextChild":
+                    ReportRelhaxProgressBarWithTextChild(e);
+                    return;
+
+                case "barWithTextParrent":
+                    ReportRelhaxProgressBarWithTextParrent(e);
+                    return;
+
+                case "barChildTextParent":
+                    ReportRelhaxProgressBarChildTextParent(e);
+                    return;
+            }
         }
 
         private void WebClient_DownloadDataComplted(object sender, DownloadDataCompletedEventArgs e)
@@ -279,6 +294,26 @@ namespace RelhaxModpack.Windows
             AutomationTaskProgressBar.Visibility = Visibility.Hidden;
             AutomationTaskProgressTextBlock.Text = string.Empty;
             AutomationTaskProgressTextBlock.Visibility = Visibility.Hidden;
+        }
+
+        private void ReportRelhaxProgressBarWithTextChild(RelhaxProgress relhaxProgress)
+        {
+            AutomationTaskProgressBar.Value = relhaxProgress.ChildCurrent;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", relhaxProgress.ChildCurrent, relhaxProgress.ChildTotal);
+        }
+
+        private void ReportRelhaxProgressBarWithTextParrent(RelhaxProgress relhaxProgress)
+        {
+            AutomationTaskProgressBar.Value = relhaxProgress.ParrentCurrent;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", relhaxProgress.ParrentCurrent, relhaxProgress.ParrentTotal);
+        }
+
+        private void ReportRelhaxProgressBarChildTextParent(RelhaxProgress relhaxProgress)
+        {
+            if (AutomationTaskProgressBar.Maximum != relhaxProgress.ChildTotal)
+                AutomationTaskProgressBar.Maximum = relhaxProgress.ChildTotal;
+            AutomationTaskProgressBar.Value = relhaxProgress.ChildCurrent;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", relhaxProgress.ParrentCurrent, relhaxProgress.ParrentTotal);
         }
         #endregion
 
