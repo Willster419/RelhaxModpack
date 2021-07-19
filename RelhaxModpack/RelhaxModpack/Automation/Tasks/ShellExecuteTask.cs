@@ -84,7 +84,10 @@ namespace RelhaxModpack.Automation.Tasks
                 },
             };
 
-            Logging.Info("Running shell execution with Filename {0} in work directory {1} with args {1}", Filename, Wd, Cmd);
+            Logging.Info("Running shell execution");
+            Logging.Info("Filename: {0}", Filename);
+            Logging.Info("Working Directory: {0}", Wd);
+            Logging.Info("Args {0}", Cmd);
             await Task.Run(() =>
             {
                 try
