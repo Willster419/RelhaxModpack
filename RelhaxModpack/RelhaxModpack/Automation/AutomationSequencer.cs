@@ -362,6 +362,7 @@ namespace RelhaxModpack.Automation
             ApplicationMacros.Add(new AutomationMacro() { Name = "relhaxTemp", Value = ApplicationConstants.RelhaxTempFolderPath, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "workDirectory", Value = string.Format("{0}\\{1}", ApplicationConstants.RelhaxTempFolderPath, package.PackageName), MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "automationRepoRoot", Value = AutomationRepoPathEscaped, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "clientPath", Value = Path.GetDirectoryName(AutomationRunnerSettings.WoTClientInstallLocation) });
         }
 
         public bool ParseGlobalMacros()

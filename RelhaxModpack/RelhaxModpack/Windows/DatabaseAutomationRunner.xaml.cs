@@ -93,7 +93,8 @@ namespace RelhaxModpack.Windows
                () => AutomamtionDatabaseSelectedBranchSetting_TextChanged(null, null),
                () => SelectDBSaveLocationSetting_TextChanged(null, null),
                () => UseLocalRunnerDatabaseSetting_Click(null, null),
-               () => LocalRunnerDatabaseRootSetting_TextChanged(null, null)
+               () => LocalRunnerDatabaseRootSetting_TextChanged(null, null),
+               () => SelectWoTInstallLocationSetting_TextChanged(null, null)
             };
         }
 
@@ -191,6 +192,7 @@ namespace RelhaxModpack.Windows
             DumpEnvironmentVariablesAtSequenceStartSetting.IsChecked = AutomationSettings.DumpShellEnvironmentVarsPerSequenceRun;
             UseLocalRunnerDatabaseSetting.IsChecked = AutomationSettings.UseLocalRunnerDatabase;
             LocalRunnerDatabaseRootSetting.Text = AutomationSettings.LocalRunnerDatabaseRoot;
+            SelectWoTInstallLocationSetting.Text = AutomationSettings.WoTClientInstallLocation;
         }
 
         private void MoveSequenceToRunList()
@@ -679,6 +681,30 @@ namespace RelhaxModpack.Windows
             SettingsParser parser = new SettingsParser();
             parser.SaveSettings(Settings);
         }
-        #endregion
+
+        private void SelectWoTInstallLocationButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog manualWoTFind = new OpenFileDialog()
+            {
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                Title = Translations.GetTranslatedString("selectWOTExecutable"),
+                Multiselect = false,
+                ValidateNames = true
+            };
+
+            if (!(bool)manualWoTFind.ShowDialog())
+                return;
+
+            SelectWoTInstallLocationSetting.Text = manualWoTFind.FileName;
+        }
+
+        private void SelectWoTInstallLocationSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.WoTClientInstallLocation = SelectWoTInstallLocationSetting.Text;
+        }
+        #endregion 
     }
 }
