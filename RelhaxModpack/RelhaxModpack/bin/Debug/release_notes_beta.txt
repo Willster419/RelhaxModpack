@@ -1,3 +1,10 @@
+# Beta Application version 1.3.2.21 (2021-07-19)
+https://www.virustotal.com/gui/file/2e0af357139e21c7ef9d1acc160640d7e6a11f89a091d468eef64a132b1595af/detection
+
+- Improve logging of ShellExecuteTask.
+- Moved download mirror sync triggering from inside the database editor to a utility function and added it to PackageUploadTask.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.2.20 (2021-07-18)
 https://www.virustotal.com/gui/file-analysis/Mjc4NGFjMDNjYzlhODBhZTU5ZmNkYTk4MGZkYWMzYjg6MTYyNjY2MjI4OQ==/detection
 
