@@ -3304,6 +3304,7 @@ namespace RelhaxModpack
             EnableCustomFontCheckbox.IsChecked = ModpackSettings.EnableCustomFont;
             OneClickInstallCB.IsChecked = ModpackSettings.OneClickInstall;
             AutoInstallCB.IsChecked = ModpackSettings.AutoInstall;
+            MinimalistModeCB.IsChecked = ModpackSettings.MinimalistMode;
 
             //setup the languages selector
             switch (ModpackSettings.Language)
