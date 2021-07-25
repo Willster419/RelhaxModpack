@@ -2110,6 +2110,7 @@ namespace RelhaxModpack
                         break;
                     case ApplicationVersions.Stable:
                         ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+                        break;
                 }
             }
 
