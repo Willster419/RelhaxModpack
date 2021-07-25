@@ -1,4 +1,4 @@
-##### SUPPORTED LANGUAGES: [**<ins>English</ins>**](README.md), Deutch, Polski, Français, Español, Pусский.</sup>
+##### SUPPORTED LANGUAGES: [**<ins>English</ins>**](README.md), Deutch, Polski, Français, Español, Pусский.
 
 ***
 
@@ -8,7 +8,7 @@
 
 **_The fastest <abbr title="World of Tanks">WoT</abbr> modpack installer in the world. A refresh of <abbr title="Odem Mortis Community">OMC</abbr> modpack._**<br>
 
-| [Virustotal](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection) |                                                [Our Website!](https://relhaxmodpack.com/)                                                 |                                           [DOWNLOAD](#download)                                           |               [Our Discord](https://discordapp.com/invite/58fdPvK)|[License](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)|
+| [Virustotal](https://www.virustotal.com/#/file/f4e7b13d8e188fff7e604802a96acc43842394cf5d7d94ad82ffce0d20e86b6e/detection) |                                                [Our Website!](https://relhaxmodpack.com/)                                                 |                                           [Download][downloadURL]                                           |               [Our Discord](https://discordapp.com/invite/58fdPvK)|[License](https://github.com/Willster419/RelhaxModpack/blob/master/LICENSE)
 | :---: | :---: | :---: | :---: | :---: |
 |![](https://img.shields.io/github/v/release/Willster419/RelhaxModpack?color=4c6f74&label=Version)|![](https://img.shields.io/website?color=85c6cc&down_message=Offline&label=Website&up_message=Online&url=https%3A%2F%2Frelhaxmodpack.com)|![](https://img.shields.io/github/downloads/Willster419/RelhaxModpack/total?color=4c6f74&label=Downloads)|![](https://img.shields.io/discord/303262090741940226?color=85c6cc&label=Discord)|![](https://img.shields.io/github/license/Willster419/RelhaxModpack?color=4c6f74&label=License)|
 
@@ -157,9 +157,10 @@ _From the advanced settings tab, load a selection file and check the "auto insta
 ### Benchmarks
 ``Hard drive used in benchmark is a Toshiba 5400 RPM 2.5 inch [laptop hard drive], 8MB cache.``
 
+#### Performance measurements: 
+##### Time from program execution to mod selection on a hard drive.
 
 <table>
-	<sup>(1)</sup>Performance measurements: <ins>Time from program execution to mod selection on a hard drive.</ins>
   <thead>
     <tr>
       <th><abbr title="Odem Mortis Community">OMC</abbr></th>
@@ -182,13 +183,11 @@ _From the advanced settings tab, load a selection file and check the "auto insta
     </tr>
   </tfoot>
 </table>
-<sub>Less is better (seconds)</sub>
 
 
-#### Time from mod selection to install completion (installing the same number or similar mods) on a hard drive
+##### Time from mod selection to install completion (installing the same number or similar mods) on a hard drive
 
 <table>
-	<sup>(1)</sup>Performance measurements: <ins>Mod Selection: Zoom 100m patch, Relhax Sound Mod (or equivalent).</ins>
   <thead>
     <tr>
       <th><abbr title="Odem Mortis Community">OMC</abbr></th>
@@ -219,4 +218,6 @@ _From the advanced settings tab, load a selection file and check the "auto insta
 *There are no "Hacks" or illegal mods in the modpack, the name is used for artistic license.*<br>
 *This modpack complies with <abbr title="Wargaming">WG</abbr>'s fair play policy. We try to keep up to date as much as we can with their policy, but this is by no means an official guarantee.*
 ***
+[downloadURL]: https://wgmods.net/392/ "Download"
 <sup>Readme Design by [@Nullmaruzero](https://github.com/Nullmaruzero/)</sup>
+<sup>Minor Maintenance by [@The Illusion](https://github.com/Arkhorse)</sup>
