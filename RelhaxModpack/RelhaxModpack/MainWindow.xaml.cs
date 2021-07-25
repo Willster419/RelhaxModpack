@@ -2070,7 +2070,7 @@ namespace RelhaxModpack
             //if the request distribution version is alpha, correct it to stable
             if (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Alpha)
             {
-                Logging.Warning("Alpha is invalid option for ModpackSettings.ApplicationDistroVersion, setting to stable");
+                Logging.Warning("Alpha is an invalid option for ModpackSettings.ApplicationDistroVersion");
                 ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
             }
 
