@@ -1,27 +1,27 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using RelhaxModpack.Common;
+using RelhaxModpack.Database;
+using RelhaxModpack.Settings;
+using RelhaxModpack.UI;
+using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.ClassEventArgs;
+using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Xml;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Xml;
-using System.Net;
-using System.IO;
-using Microsoft.Win32;
-using RelhaxModpack.UI;
-using System.Xml.Linq;
 using System.Windows.Threading;
-using System.Reflection;
-using System.Text;
-using RelhaxModpack.Xml;
-using RelhaxModpack.Utilities;
-using RelhaxModpack.Database;
-using RelhaxModpack.Utilities.Enums;
-using RelhaxModpack.Settings;
-using RelhaxModpack.Common;
-using RelhaxModpack.Utilities.ClassEventArgs;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace RelhaxModpack.Windows
 {
@@ -42,17 +42,17 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// The list of categories
         /// </summary>
-        public List<Category> ParsedCategoryList { get; set; } = null;
+        private List<Category> ParsedCategoryList { get { return databaseManager.ParsedCategoryList; } }
 
         /// <summary>
         /// The list of global dependencies
         /// </summary>
-        public List<DatabasePackage> GlobalDependencies { get; set; } = null;
+        private List<DatabasePackage> GlobalDependencies { get { return databaseManager.GlobalDependencies; } }
 
         /// <summary>
         /// The list of dependencies
         /// </summary>
-        public List<Dependency> Dependencies { get; set; } = null;
+        private List<Dependency> Dependencies { get { return databaseManager.Dependencies; } }
 
         /// <summary>
         /// The event that a caller can subscribe to wait for when the selection window actually closes, with arguments for the installation
@@ -68,18 +68,18 @@ namespace RelhaxModpack.Windows
         /// The latest supported formatted version of WoT, in full version format (e.g. 1.7.0.1) 
         /// </summary>
         /// <remarks>This is used for patch days when a user is installing for a WoT version not yet supported</remarks>
-        public string LastSupportedWoTClientVersion { get; set; } = string.Empty;
+        public string LastSupportedWoTClientVersionFromMainWindow { get; set; } = string.Empty;
+
+        public string WotClientVersionFromMainWindow { get; set; }
+
+        public string DatabaseVersionFromMainWindow { get; set; }
+
+        public string WoTDirectoryFromMainWindow { get; set; }
 
         /// <summary>
         /// Flag to indicate if the window is loading application specific UI
         /// </summary>
         public bool LoadingUI { get; private set; } = false;
-
-        public string WoTClientVersion { get; set; }
-
-        public string DatabaseVersion { get; set; }
-
-        public string WoTDirectory { get; set; }
 
         private bool continueInstallation  = false;
         private ProgressIndicator loadingProgress = null;
@@ -91,9 +91,8 @@ namespace RelhaxModpack.Windows
         private Brush OriginalBrush = null;
         private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
         private DispatcherTimer FlashTimer = null;
-        private DatabaseVersions databaseVersion;
         private bool disposedValue;
-        private string WoTModpackOnlineFolderFromDB;
+        private DatabaseManager databaseManager;
 
         #region Boring stuff
         /// <summary>
@@ -160,7 +159,7 @@ namespace RelhaxModpack.Windows
                 GlobalDependencies = GlobalDependencies,
                 UserMods = UserCategory?.Packages,
                 IsAutoInstall = AutoInstallMode,
-                WoTModpackOnlineFolderFromDB = this.WoTModpackOnlineFolderFromDB
+                WoTModpackOnlineFolderFromDB = databaseManager.WoTOnlineFolderVersion
             });
         }
 
@@ -260,9 +259,9 @@ namespace RelhaxModpack.Windows
             Hide();
 
             //create progress reporter object. it doesn't report direct progress, but receives
-            //reports from inside wherever the reporter is used. I'm 99.99% certain when the event
+            //reports from inside wherever the reporter is used. When the event
             //is fired, it's on the UI thread (not the thread that reported) (~3ms)
-            //UI THREAD REQUIRED?
+            //UI THREAD REQUIRED
             //https://blogs.msdn.microsoft.com/dotnet/2012/06/06/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
             Progress<RelhaxProgress> progressIndicator = new Progress<RelhaxProgress>();
             progressIndicator.ProgressChanged += OnWindowLoadReportProgress;
@@ -271,7 +270,7 @@ namespace RelhaxModpack.Windows
             Task.Run(() => LoadModSelectionList(progressIndicator));
         }
 
-        private void LoadModSelectionList(IProgress<RelhaxProgress> progressIndicator)
+        private async void LoadModSelectionList(IProgress<RelhaxProgress> progressIndicator)
         {
             //create the progress object used in the reporter
             //NO UI THREAD REQUIRED
@@ -282,29 +281,9 @@ namespace RelhaxModpack.Windows
                 ReportMessage = Translations.GetTranslatedString("readingDatabase")
             };
 
-            //init the lists
-            //NO UI THREAD REQUIRED
-            ParsedCategoryList = new List<Category>();
-            GlobalDependencies = new List<DatabasePackage>();
-            Dependencies = new List<Dependency>();
-
-            //save database version to temp and process if command line test mode (~1ms from top to here)
-            //NO UI THREAD REQUIRED
-            databaseVersion = ModpackSettings.DatabaseDistroVersion;
-            if (CommandLineSettings.TestMode)
-            {
-                Logging.Info("Test mode set for installation only (not saved to settings)");
-                databaseVersion = DatabaseVersions.Test;
-            }
-
-            //load database and parse into lists (internet, milliseconds to seconds)
-            //NO UI THREAD REQUIRED
-            bool lastLoadProgress = ModSelectionLoadDatabase();
-
-            //map and link all references inside the package objects for use later
-            //NO UI THREAD REQUIRED
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
-            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            //load the database
+            databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings) { ManagerInfoZipfile = ((App)Application.Current).ManagerInfoZipfile };
+            await databaseManager.LoadDatabaseAsync();
 
             //check local download cache (files, milliseconds to seconds)
             //NO UI THREAD REQUIRED
@@ -326,156 +305,6 @@ namespace RelhaxModpack.Windows
             loadProgress.ReportMessage = Translations.GetTranslatedString("loadingUI");
             progressIndicator.Report(loadProgress);
             Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() => LoadModSelectionListUiComponents(loadProgress)));
-        }
-
-        private bool ModSelectionLoadDatabase()
-        {
-            //get the Xml database loaded into a string based on database version type (from server download, from github, from testfile
-            string modInfoXml = string.Empty;
-            Ionic.Zip.ZipFile zipfile = null;
-            switch (databaseVersion)
-            {
-                //from server download
-                case DatabaseVersions.Stable:
-                    if (string.IsNullOrEmpty(LastSupportedWoTClientVersion))
-                        throw new BadMemeException("LastSupportedWoTClientVersion is null/empty when needed for Stable installation");
-                    //make string
-                    string modInfoxmlURL = ApplicationConstants.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", LastSupportedWoTClientVersion) + "modInfo.dat";
-
-                    //download latest modInfo xml
-                    try
-                    {
-                        using (WebClient client = new WebClient())
-                        {
-                            //save zip file into memory for later
-                            zipfile = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL)));
-                            //extract modinfo xml string
-                            modInfoXml = FileUtils.GetStringFromZip(zipfile, "database.xml");
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Error);
-                        MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                        return false;
-                    }
-                    break;
-                //from github
-                case DatabaseVersions.Beta:
-                    using (WebClient client = new WebClient())
-                    {
-                        //load string constant url from manager info xml
-                        string rootXml = ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch) + ApplicationConstants.BetaDatabaseV2RootFilename;
-                        Logging.Debug("Download beta database from {0}", rootXml);
-
-                        //download the xml string into "modInfoXml"
-                        client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                        modInfoXml = client.DownloadString(rootXml);
-                    }
-                    break;
-                //from testfile
-                case DatabaseVersions.Test:
-                    //make string
-                    if (string.IsNullOrWhiteSpace(ModpackSettings.CustomModInfoPath))
-                    {
-                        ModpackSettings.CustomModInfoPath = Path.Combine(ApplicationConstants.ApplicationStartupPath, ApplicationConstants.BetaDatabaseV2RootFilename);
-                    }
-                    //load modinfo xml
-                    modInfoXml = File.ReadAllText(ModpackSettings.CustomModInfoPath);
-                    break;
-            }
-
-            //check to make sure the xml string has xml in it
-            if (string.IsNullOrWhiteSpace(modInfoXml))
-            {
-                Logging.WriteToLog("Failed to read modInfoxml xml string", Logfiles.Application, LogLevel.Error);
-                MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                return false;
-            }
-
-            //load the xml document into xml object
-            XmlDocument modInfoDocument = XmlUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromString);
-            if (modInfoDocument == null)
-            {
-                Logging.Error("Failed to parse modInfoxml from xml string");
-                MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                return false;
-            }
-
-            //get WoT online folder version macro from modInfoxml itself
-            WoTModpackOnlineFolderFromDB = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "//modInfoAlpha.xml/@onlineFolder");
-
-            //parse the modInfoXml to list in memory
-            switch (databaseVersion)
-            {
-                case DatabaseVersions.Stable:
-                    Logging.Debug("Getting xml string values from zip file");
-                    List<string> categoriesXml = new List<string>();
-
-                    string globalDependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file");
-                    Logging.Debug("Found xml entry: {0}", globalDependencyFilename);
-                    string globalDependencyXmlString = FileUtils.GetStringFromZip(zipfile, globalDependencyFilename);
-
-                    string dependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file");
-                    Logging.Debug("Found xml entry: {0}", dependencyFilename);
-                    string dependenicesXmlString = FileUtils.GetStringFromZip(zipfile, dependencyFilename);
-
-                    foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
-                    {
-                        string categoryFilename = categoryNode.Attributes["file"].Value;
-                        Logging.Debug("Found xml entry: {0}", categoryFilename);
-                        categoriesXml.Add(FileUtils.GetStringFromZip(zipfile, categoryFilename));
-                    }
-                    zipfile.Dispose();
-                    zipfile = null;
-
-                    //parse into lists
-                    if (!DatabaseUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
-                    {
-                        Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                        MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                        return false;
-                    }
-                    break;
-                //github
-                case DatabaseVersions.Beta:
-                    Logging.Debug("Init beta db download resources");
-                    //create download url list
-                    List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch), ModpackSettings.BetaDatabaseSelectedBranch);
-
-                    string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
-
-                    //parse into strings
-                    Logging.Debug("Tasks finished, extracting task results");
-                    string globalDependencyXmlStringBeta = downloadStrings[0];
-                    string dependenicesXmlStringBeta = downloadStrings[1];
-
-                    List<string> categoriesXmlBeta = new List<string>();
-                    for (int i = 2; i < downloadURLs.Count; i++)
-                    {
-                        categoriesXmlBeta.Add(downloadStrings[i]);
-                    }
-
-                    //parse into lists
-                    Logging.Debug("Sending strings to db parser");
-                    if (!DatabaseUtils.ParseDatabase1V1FromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList))
-                    {
-                        Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                        MessageBox.Show(Translations.GetTranslatedString("failedToParse") + "database V2");
-                        return false;
-                    }
-                    break;
-                //test
-                case DatabaseVersions.Test:
-                    if (!DatabaseUtils.ParseDatabase1V1FromFiles(Path.GetDirectoryName(ModpackSettings.CustomModInfoPath), modInfoDocument, GlobalDependencies, Dependencies, ParsedCategoryList))
-                    {
-                        Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                        MessageBox.Show(Translations.GetTranslatedString("failedToParse") + " modInfo.xml");
-                        return false;
-                    }
-                    break;
-            }
-            return true;
         }
 
         private void ModSelectionCheckMd5Hashes(IProgress<RelhaxProgress> progress, RelhaxProgress loadProgress, List<DatabasePackage> flatList)
@@ -581,7 +410,7 @@ namespace RelhaxModpack.Windows
             //link everything again now that the category exists (~10ms)
             //MUST HAPPEN AFTER InitDatabaseUI()
             //NO UI THREAD REQUIRED
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
             DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
             //run the loop for each category to create package UI objects (~8 sec)
@@ -603,8 +432,8 @@ namespace RelhaxModpack.Windows
 
             //update text boxes and other text properties (~2ms)
             //UI THREAD REQUIRED
-            InstallingTo.Text = string.Format(Translations.GetTranslatedString(InstallingTo.Name), WoTDirectory);
-            InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString(InstallingAsWoTVersion.Name), WoTClientVersion);
+            InstallingTo.Text = string.Format(Translations.GetTranslatedString(InstallingTo.Name), WoTDirectoryFromMainWindow);
+            InstallingAsWoTVersion.Text = string.Format(Translations.GetTranslatedString(InstallingAsWoTVersion.Name), WotClientVersionFromMainWindow);
             SearchCB.Text = Translations.GetTranslatedString("searchComboBoxInitMessage");
             string databaseSubversionInfo = string.Empty;
             switch (ModpackSettings.DatabaseDistroVersion)
@@ -616,7 +445,7 @@ namespace RelhaxModpack.Windows
                     databaseSubversionInfo = ModpackSettings.BetaDatabaseSelectedBranch;
                     break;
                 case DatabaseVersions.Stable:
-                    databaseSubversionInfo = DatabaseVersion;
+                    databaseSubversionInfo = DatabaseVersionFromMainWindow;
                     break;
             }
             UsingDatabaseVersion.Text = string.Format(Translations.GetTranslatedString(UsingDatabaseVersion.Name), ModpackSettings.DatabaseDistroVersion.ToString(), databaseSubversionInfo);
@@ -699,23 +528,6 @@ namespace RelhaxModpack.Windows
 
                 //add brush resource
                 cat.TabPage.Resources.Add("TabItemHeaderSelectedBackground", UISettings.CurrentTheme.SelectionListActiveTabHeaderBackgroundColor.Brush);
-
-                //make and attach the category header
-                cat.CategoryHeader = new SelectablePackage()
-                {
-                    Name = string.Format("----------[{0}]----------", cat.Name),
-                    TabIndex = cat.TabPage,
-                    ParentCategory = cat,
-                    Type = SelectionTypes.multi,
-                    Visible = true,
-                    Enabled = true,
-                    Level = -1,
-                    PackageName = string.Format("Category_{0}_Header", cat.Name.Replace(' ', '_'))
-                };
-
-                //creates a reference to itself
-                cat.CategoryHeader.Parent = cat.CategoryHeader;
-                cat.CategoryHeader.TopParent = cat.CategoryHeader;
 
                 switch (ModpackSettings.ModSelectionView)
                 {
@@ -896,7 +708,7 @@ namespace RelhaxModpack.Windows
             bool selectionFileOutOfDate = false;
 
             //if test mode, don't load the "default_checked" document
-            if (databaseVersion == DatabaseVersions.Test)
+            if (databaseManager.DatabaseDistroToLoad == DatabaseVersions.Test)
             {
                 Logging.Debug("Test mode is active, don't load default_checked selection");
             }
@@ -962,7 +774,7 @@ namespace RelhaxModpack.Windows
                 else
                 {
                     Logging.Error("Failed to load SelectionsDocument, AutoInstall={0}, OneClickInstall={1}, DatabaseDistro={2}, SaveSelection={3}",
-                    AutoInstallMode, ModpackSettings.OneClickInstall, databaseVersion, ModpackSettings.SaveLastSelection);
+                    AutoInstallMode, ModpackSettings.OneClickInstall, databaseManager.DatabaseDistroToLoad, ModpackSettings.SaveLastSelection);
                     Logging.Error("Failed to load SelectionsDocument, AutoSelectionFilePath={0}", ModpackSettings.AutoOneclickSelectionFilePath);
                 }
             }
@@ -977,7 +789,7 @@ namespace RelhaxModpack.Windows
                 UserMods = UserCategory.Packages,
                 IsAutoInstall = isAutoInstall,
                 IsSelectionOutOfDate = selectionFileOutOfDate,
-                WoTModpackOnlineFolderFromDB = this.WoTModpackOnlineFolderFromDB
+                WoTModpackOnlineFolderFromDB = databaseManager.WoTOnlineFolderVersion
             };
             return args;
         }
@@ -1547,7 +1359,18 @@ namespace RelhaxModpack.Windows
                 return;
 
             //if it's not mouseEventArgs, then abort because we can't determine if it's a right click
-            if (e is MouseEventArgs m)
+            if (e == null && sender is IPackageUIComponent packageSender_)
+            {
+                Logging.Error(LogOptions.ClassName, "EventArgs is null for Generic_MouseDown() method of package {0}", packageSender_.Package.PackageName);
+                return;
+            }
+            else if (sender is IPackageUIComponent packageSender__ && !packageSender__.Package.Enabled && e is MouseButtonEventArgs m_ && ModpackSettings.ModSelectionView == SelectionView.DefaultV2)
+            {
+                if (m_.ChangedButton != MouseButton.Right)
+                    return;
+                Logging.Debug("An event occurred over a disabled component \"{0}\", with default selection view. Event name: {1}", packageSender__.Package.PackageName, m_.RoutedEvent.Name);
+            }
+            else if (e is MouseEventArgs m)
             {
                 if (m.RightButton != MouseButtonState.Pressed)
                     return;
@@ -1680,7 +1503,7 @@ namespace RelhaxModpack.Windows
                 if (packageActuallyDisabled)
                 {
                     //disabled component, display via generic handler
-                    Generic_MouseDown(pkg, null);
+                    Generic_MouseDown(pkg, e);
                 }
             }
         }
@@ -2559,8 +2382,8 @@ namespace RelhaxModpack.Windows
                 new XElement("mods", new XAttribute("ver", ApplicationConstants.ConfigFileVersion2V0),
                 new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", DatabaseVersion),
-                new XAttribute("dbDistro", databaseVersion.ToString())));
+                new XAttribute("dbVersion", DatabaseVersionFromMainWindow),
+                new XAttribute("dbDistro", databaseManager.DatabaseDistroToLoad.ToString())));
 
             //relhax mods root
             doc.Element("mods").Add(new XElement("relhaxMods"));
@@ -2618,8 +2441,8 @@ namespace RelhaxModpack.Windows
                 new XAttribute("ver", ApplicationConstants.ConfigFileVersion3V0),
                 new XAttribute("date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new XAttribute("timezone", TimeZoneInfo.Local.DisplayName),
-                new XAttribute("dbVersion", DatabaseVersion),
-                new XAttribute("dbDistro", databaseVersion.ToString()));
+                new XAttribute("dbVersion", DatabaseVersionFromMainWindow),
+                new XAttribute("dbDistro", databaseManager.DatabaseDistroToLoad.ToString()));
 
             doc.Add(packagesRoot);
 
@@ -3067,7 +2890,6 @@ namespace RelhaxModpack.Windows
                             foreach (DatabasePackage package in GlobalDependencies)
                                 package.Dispose();
                             GlobalDependencies.Clear();
-                            GlobalDependencies = null;
                         }
 
                         if (Dependencies != null)
@@ -3075,7 +2897,6 @@ namespace RelhaxModpack.Windows
                             foreach (Dependency dependency in Dependencies)
                                 dependency.Dispose();
                             Dependencies.Clear();
-                            Dependencies = null;
                         }
 
                         if (ParsedCategoryList != null)
@@ -3083,9 +2904,10 @@ namespace RelhaxModpack.Windows
                             foreach (Category category in ParsedCategoryList)
                                 category.Dispose();
                             ParsedCategoryList.Clear();
-                            ParsedCategoryList = null;
                         }
                     }
+
+                    databaseManager = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer

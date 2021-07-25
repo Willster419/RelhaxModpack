@@ -610,13 +610,14 @@ namespace RelhaxSandbox
         }
 
         #region browser testing
-        private async void AutoUpdateWGClickIE_Click(object sender, RoutedEventArgs e)
+        private async void AutoUpdateWGClickIEWPF_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(AutoUpdateWGURLTextboxIE.Text))
+            if (string.IsNullOrWhiteSpace(AutoUpdateWGURLTextboxIEWPF.Text))
                 return;
-            AutoUpdateWGInfoIE.Text = "Getting info...";
+            AutoUpdateWGInfoIEWPF.Text = "Getting info...";
 
             bool browserLoaded = false;
+
             IEBrowse.LoadCompleted += (sendahh, endArgs) =>
             {
                 browserLoaded = true;
@@ -632,7 +633,7 @@ namespace RelhaxSandbox
             using (System.Windows.Forms.WebBrowser bro = new System.Windows.Forms.WebBrowser())
                 SetRegistryKey(System.Diagnostics.Process.GetCurrentProcess().ProcessName, bro.Version.Major);
 
-            IEBrowse.Navigate(AutoUpdateWGURLTextboxIE.Text);
+            IEBrowse.Navigate(AutoUpdateWGURLTextboxIEWPF.Text);
 
             while (!browserLoaded)
                 await Task.Delay(500);
@@ -645,10 +646,12 @@ namespace RelhaxSandbox
 
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(s);
+            HeadersBlockWPF.Text = s;
             HtmlNode node = document.DocumentNode;
             //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
             HtmlNodeCollection clientVersionNode = node.SelectNodes(@"//div[contains(@class, 'ModDetails_label')]");
             string version = string.Empty;
+            string downloadURL = string.Empty;
             if (clientVersionNode != null)
             {
                 HtmlNode nodeTest = clientVersionNode[3];
@@ -657,14 +660,65 @@ namespace RelhaxSandbox
             }
 
 
-            HtmlNode downloadUrlNode = node.SelectSingleNode(@"//a[contains(@class, 'ModDetails_hidden')]");
-            string downloadURL = downloadUrlNode.Attributes["href"].Value;
+            if (clientVersionNode != null)
+            {
+                HtmlNode downloadUrlNode = node.SelectSingleNode(@"//a[contains(@class, 'ModDetails_hidden')]");
+                downloadURL = downloadUrlNode.Attributes["href"].Value;
+            }
 
-            AutoUpdateWGInfoIE.Text = string.Format("For client: {0}, download link: {1}", version, downloadURL);
+            AutoUpdateWGInfoIEWPF.Text = string.Format("For client: {0}, download link: {1}", version, downloadURL);
+        }
+
+        private void AutoUpdateWGClickIEWinForms_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(AutoUpdateWGURLTextboxIEWIN.Text))
+                return;
+            AutoUpdateWGInfoIEWIN.Text = "Getting info...";
+
+            using (System.Windows.Forms.WebBrowser bro = new System.Windows.Forms.WebBrowser())
+                SetRegistryKey(System.Diagnostics.Process.GetCurrentProcess().ProcessName, bro.Version.Major);
+
+            TestBrowse.ScriptErrorsSuppressed = true;
+            Version browver = TestBrowse.Version;
+
+            TestBrowse.DocumentCompleted += TestBrowse_DocumentCompleted;
+
+            //run browser enough to get scripts parsed to get download link
+            TestBrowse.Navigate(AutoUpdateWGURLTextboxIEWIN.Text);
+        }
+
+        private async void TestBrowse_DocumentCompleted(object sender, System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e)
+        {
+            await Task.Delay(2000);
+
+            HtmlDocument document = new HtmlDocument();
+            string htmlText = TestBrowse.Document.Body.OuterHtml;
+            document.LoadHtml(htmlText);
+            HeadersBlockWIN.Text = htmlText;
+            HtmlNode node = document.DocumentNode;
+            //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
+            HtmlNodeCollection clientVersionNode = node.SelectNodes(@"//div[contains(@class, 'ModDetails_label')]");
+            string version = string.Empty;
+            string downloadURL = string.Empty;
+            if (clientVersionNode != null)
+            {
+                HtmlNode nodeTest = clientVersionNode[3];
+                HtmlNode versionNode = nodeTest.ChildNodes[0].ChildNodes[1];
+                version = versionNode.InnerText;
+            }
+
+            if (clientVersionNode != null)
+            { 
+                HtmlNode downloadUrlNode = node.SelectSingleNode(@"//a[contains(@class, 'ModDetails_hidden')]");
+                downloadURL = downloadUrlNode.Attributes["href"].Value;
+            }
+
+            AutoUpdateWGInfoIEWIN.Text = string.Format("For client: {0}, download link: {1}", version, downloadURL);
         }
 
         private void SetRegistryKey(string exeName, int IEVersion)
         {
+            //MessageBox.Show("IE version to set as " + IEVersion);
             //https://weblog.west-wind.com/posts/2011/May/21/Web-Browser-Control-Specifying-the-IE-Version#Using-the-X--UA--Compatible-HTML-Meta-Tag
             //https://stackoverflow.com/questions/17922308/use-latest-version-of-internet-explorer-in-the-webbrowser-control
 
@@ -681,13 +735,32 @@ namespace RelhaxSandbox
             else
                 registryToSet = 7000;
 
-            using (RegistryKey Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
-                RegistryKeyPermissionCheck.ReadWriteSubTree))
+            //SOFTWARE\\Wow6432Node\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION
+            string[] keys = new string[]
             {
-                if (Key.GetValue(exeName + ".exe") == null)
-                    Key.SetValue(exeName + ".exe", registryToSet, RegistryValueKind.DWord);
-                else if (((int)Key.GetValue(exeName + ".exe")) != registryToSet)
-                    Key.SetValue(exeName + ".exe", registryToSet, RegistryValueKind.DWord);
+                @"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
+                @"SOFTWARE\Wow6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
+            };
+
+            foreach (string key in keys)
+            {
+                using (RegistryKey Key = Registry.CurrentUser.CreateSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree))
+                {
+                    if (Key.GetValue(exeName + ".exe") == null)
+                        Key.SetValue(exeName + ".exe", registryToSet, RegistryValueKind.DWord);
+                    else if (((int)Key.GetValue(exeName + ".exe")) != registryToSet)
+                        Key.SetValue(exeName + ".exe", registryToSet, RegistryValueKind.DWord);
+                }
+                /*
+                 * this method requires admin
+                using (RegistryKey Key = Registry.LocalMachine.CreateSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree))
+                {
+                    if (Key.GetValue(exeName + ".exe") == null)
+                        Key.SetValue(exeName + ".exe", registryToSet, RegistryValueKind.DWord);
+                    else if (((int)Key.GetValue(exeName + ".exe")) != registryToSet)
+                        Key.SetValue(exeName + ".exe", registryToSet, RegistryValueKind.DWord);
+                }
+                */
             }
         }
         #endregion
@@ -830,12 +903,13 @@ namespace RelhaxSandbox
                 //such that it tells the dispatcher of *this* thread to 'idle' (wait for UI input)
                 //while it's technically multithreading, it doesn't allow parallelism within a window itself I.E:
 
-                //SplashWindow tempWindow = new SplashWindow();
-                //tempWindow.Show();
-                //System.Windows.Threading.Dispatcher.Run();
+                TestSubWindow tempWindow = new TestSubWindow();
+                tempWindow.Show();
+                System.Windows.Threading.Dispatcher.Run();
 
                 //https://stackoverflow.com/a/1111485/3128017
                 //https://stackoverflow.com/a/8669719/3128017
+
             });
 
             myThread.SetApartmentState(ApartmentState.STA);

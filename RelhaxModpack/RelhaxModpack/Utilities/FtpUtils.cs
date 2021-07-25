@@ -213,5 +213,27 @@ namespace RelhaxModpack.Utilities
             }
             return result;
         }
+
+        public static async Task<bool> TriggerMirrorSyncAsync()
+        {
+            using (PatientWebClient client = new PatientWebClient()
+            { Credentials = PrivateStuff.BigmodsNetworkCredentialScripts, Timeout = 100000 })
+            {
+                try
+                {
+                    string result = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsTriggerManualMirrorSyncPHP);
+                    Logging.Info(result.Replace("<br />", "\n"));
+                    if (result.ToLower().Contains("trigger=1"))
+                        return true;
+                }
+                catch (WebException wex)
+                {
+                    Logging.Error("Failed to run trigger manual sync script");
+                    Logging.Exception(wex.ToString());
+                    return false;
+                }
+            }
+            return false;
+        }
     }
 }

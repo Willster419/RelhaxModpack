@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using RelhaxModpack.Common;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +29,13 @@ namespace RelhaxModpack.Utilities
     /// </summary>
     public static class RegistryUtils
     {
+        /// <summary>
+        /// The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage
+        /// </summary>
+        public const string IE_BROWSER_EMULATION_REGPATH_32 = @"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
+
+        public const string IE_BROWSER_EMULATION_REGPATH_64 = @"SOFTWARE\Wow6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
+
         /// <summary>
         /// Checks the registry to get the latest location of where WoT is installed, includes exe in the name
         /// </summary>
@@ -198,6 +206,51 @@ namespace RelhaxModpack.Utilities
                 }
             }
             return actualLocation;
+        }
+
+        /// <summary>
+        /// Sets RelhaxModpack.exe in the registry to use the specified version of IE for embedded browser usage
+        /// </summary>
+        /// <param name="IEVersion">The version of Internet Explorer to use with the associated executable</param>
+        public static void SetRegisterKeyForIEVersion(IERegistryVersion IEVersion)
+        {
+            SetRegisterKeyForIEVersion(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe", IEVersion);
+        }
+
+        /// <summary>
+        /// Sets the given executable in the registry to use the specified version of IE for embedded browser usage
+        /// </summary>
+        /// <param name="exeName">The name of the executable to add to the registry location as a key entry</param>
+        /// <param name="IEVersion">The version of Internet Explorer to use with the associated executable</param>
+        public static void SetRegisterKeyForIEVersion(string exeName, IERegistryVersion IEVersion)
+        {
+            //https://weblog.west-wind.com/posts/2011/May/21/Web-Browser-Control-Specifying-the-IE-Version#Using-the-X--UA--Compatible-HTML-Meta-Tag
+            //https://stackoverflow.com/questions/17922308/use-latest-version-of-internet-explorer-in-the-webbrowser-control
+
+            string browserEmulationKey = Environment.Is64BitProcess ? IE_BROWSER_EMULATION_REGPATH_64 : IE_BROWSER_EMULATION_REGPATH_32;
+
+            int registryToSet = (int)IEVersion;
+            int currentRegistryValue;
+
+            using (RegistryKey Key = Registry.CurrentUser.CreateSubKey(browserEmulationKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (Key.GetValue(exeName) != null && Key.GetValue(exeName) is int IeValue)
+                    currentRegistryValue = IeValue;
+                else
+                    currentRegistryValue = -1;
+
+                Logging.Debug(LogOptions.MethodName, "RegistryCurrent: {0}, RegistryToSet: {1}", currentRegistryValue, registryToSet);
+                if (currentRegistryValue != registryToSet)
+                {
+                    Logging.Debug("Values are not same, update registry");
+                    Key.SetValue(exeName, registryToSet, RegistryValueKind.DWord);
+                    Logging.Info(LogOptions.MethodName, "IE Emulation registry updated for exe {0}", exeName);
+                }
+                else
+                {
+                    Logging.Debug("Values are same, continue");
+                }
+            }
         }
     }
 }

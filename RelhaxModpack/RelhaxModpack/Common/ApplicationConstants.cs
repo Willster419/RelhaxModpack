@@ -72,6 +72,8 @@ namespace RelhaxModpack.Common
         /// </summary>
         public const string SelectionsXml = "selections.xml";
 
+        public const string ModInfoZip = "modInfo.dat";
+
         /// <summary>
         /// The name of the 64bit folder in the 'World_of_Tanks' directory
         /// </summary>
@@ -380,7 +382,7 @@ namespace RelhaxModpack.Common
         /// <summary>
         /// The URL path of the latest application beta release notes
         /// </summary>
-        public const string ApplicationNotesBetaUrl = "https://github.com/Willster419/RelhaxModpack/raw/master/RelhaxModpack/RelhaxModpack/bin/Debug/release_notes_beta.txt";
+        public const string ApplicationNotesBetaUrl = "https://github.com/Willster419/RelhaxModpack/raw/staging/RelhaxModpack/RelhaxModpack/bin/Debug/release_notes_beta.txt";
 
         /// <summary>
         /// The URL path of the latest V2 database release notes
@@ -424,7 +426,7 @@ namespace RelhaxModpack.Common
         /// The current distribution version of the application.
         /// Alpha should NEVER be built for public distribution unless direct testing!
         /// </summary>
-        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Stable;
+        public const ApplicationVersions ApplicationVersion = ApplicationVersions.Alpha;
 
         /// <summary>
         /// The amount so space characters to line up a continued log entry without the date/time

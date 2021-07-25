@@ -69,6 +69,9 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\modpack_icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CustomMarshalers" />
     <Reference Include="DotNetZip, Version=1.13.8.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
@@ -129,20 +132,72 @@
     <Compile Include="Atlases\Packing\OutOfSpaceException.cs" />
     <Compile Include="Atlases\Packing\RectanglePacker.cs" />
     <Compile Include="Atlases\IRelhaxUnmanagedLibrary.cs" />
+    <Compile Include="Automation\AutomationCompare.cs" />
+    <Compile Include="Automation\AutomationCompareTracker.cs" />
     <Compile Include="Automation\AutomationMacro.cs" />
     <Compile Include="Automation\AutomationSequence.cs" />
     <Compile Include="Automation\AutomationSequencer.cs" />
-    <Compile Include="Automation\AutomationTask.cs" />
-    <Compile Include="Automation\DownloadBrowserTask.cs" />
-    <Compile Include="Automation\DownloadHtmlTask.cs" />
-    <Compile Include="Automation\DownloadStaticTask.cs" />
-    <Compile Include="Automation\IDownloadTask.cs" />
-    <Compile Include="Automation\ShellExecuteTask.cs" />
+    <Compile Include="Automation\Tasks\AutomationTask.cs" />
+    <Compile Include="Automation\Tasks\CreateDirectoryTask.cs" />
+    <Compile Include="Automation\Tasks\DatabasePackagePropertyTask.cs" />
+    <Compile Include="Automation\Tasks\DatabasePackageTask.cs" />
+    <Compile Include="Automation\Tasks\DatabaseTask.cs" />
+    <Compile Include="Automation\Tasks\DirectoryCopyTask.cs" />
+    <Compile Include="Automation\Tasks\DirectoryDeleteTask.cs" />
+    <Compile Include="Automation\Tasks\DirectoryTask.cs" />
+    <Compile Include="Automation\Tasks\DownloadBrowserTask.cs" />
+    <Compile Include="Automation\Tasks\DownloadHtmlTask.cs" />
+    <Compile Include="Automation\Tasks\DownloadStaticTask.cs" />
+    <Compile Include="Automation\Tasks\EndCompareTask.cs" />
+    <Compile Include="Automation\Tasks\FileCompareInverseTask.cs" />
+    <Compile Include="Automation\Tasks\FileCompareTask.cs" />
+    <Compile Include="Automation\Tasks\FileCopyTask.cs" />
+    <Compile Include="Automation\Tasks\FileDeleteTask.cs" />
+    <Compile Include="Automation\Tasks\FileDestinationTask.cs" />
+    <Compile Include="Automation\FileHashComparer.cs" />
+    <Compile Include="Automation\Tasks\FileMoveTask.cs" />
+    <Compile Include="Automation\Tasks\DirectorySearchTask.cs" />
+    <Compile Include="Automation\Tasks\FileTask.cs" />
+    <Compile Include="Automation\HtmlBrowserParser.cs" />
+    <Compile Include="Automation\HtmlWebscrapeParser.cs" />
+    <Compile Include="Automation\ICancelOperation.cs" />
+    <Compile Include="Automation\Tasks\IDatabaseTask.cs" />
+    <Compile Include="Automation\Tasks\IDownloadTask.cs" />
+    <Compile Include="Automation\Tasks\ImportTask.cs" />
+    <Compile Include="Automation\Tasks\LoadDatabaseTask.cs" />
+    <Compile Include="Automation\Tasks\MacroCreateTask.cs" />
+    <Compile Include="Automation\Tasks\MacroDeleteTask.cs" />
+    <Compile Include="Automation\Tasks\MacroImportTask.cs" />
+    <Compile Include="Automation\Tasks\MacroStringSplitBrowserTask.cs" />
+    <Compile Include="Automation\Tasks\MacroStringSplitFilenameTask.cs" />
+    <Compile Include="Automation\Tasks\MacroStringSplitHtmlTask.cs" />
+    <Compile Include="Automation\Tasks\MacroStringSplitMacroTask.cs" />
+    <Compile Include="Automation\Tasks\MacroStringSplitTask.cs" />
+    <Compile Include="Automation\Tasks\MacroStringTask.cs" />
+    <Compile Include="Automation\Tasks\MacroSubstringBrowserTask.cs" />
+    <Compile Include="Automation\Tasks\MacroSubstringFilenameTask.cs" />
+    <Compile Include="Automation\Tasks\MacroSubstringHtmlTask.cs" />
+    <Compile Include="Automation\Tasks\MacroSubstringMacroTask.cs" />
+    <Compile Include="Automation\Tasks\MacroSubstringTask.cs" />
+    <Compile Include="Automation\Tasks\MacroTask.cs" />
+    <Compile Include="Automation\Tasks\PackageDownloadTask.cs" />
+    <Compile Include="Automation\Tasks\PackageTransferTask.cs" />
+    <Compile Include="Automation\Tasks\PackageUploadTask.cs" />
+    <Compile Include="Automation\Tasks\RetrievePackagePropertyTask.cs" />
+    <Compile Include="Automation\Tasks\SaveDatabaseTask.cs" />
+    <Compile Include="Automation\Tasks\ShellExecuteTask.cs" />
+    <Compile Include="Automation\Tasks\StartCompareTask.cs" />
+    <Compile Include="Automation\Tasks\TaskImportTask.cs" />
+    <Compile Include="Automation\Tasks\UpdatePackagePropertyTask.cs" />
     <Compile Include="Common\ApplicationConstants.cs" />
     <Compile Include="Common\DownloadManager.cs" />
+    <Compile Include="Common\FileCopier.cs" />
     <Compile Include="Common\IComponentWithID.cs" />
     <Compile Include="Common\Md5DatabaseManager.cs" />
+    <Compile Include="Common\StringConstants.cs" />
+    <Compile Include="Common\WindowsInterop.cs" />
     <Compile Include="Database\Category.cs" />
+    <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Database\DatabaseUtils.cs" />
     <Compile Include="Database\IDatabaseComponent.cs" />
     <Compile Include="Database\DatabaseLogic.cs" />
@@ -181,6 +236,7 @@
     <Compile Include="UI\ComponentColorset.cs" />
     <Compile Include="UI\CustomBrush.cs" />
     <Compile Include="UI\CustomBrushConverter.cs" />
+    <Compile Include="UI\Extensions\FontExtensions.cs" />
     <Compile Include="UI\RelhaxComboBoxItem.xaml.cs">
       <DependentUpon>RelhaxComboBoxItem.xaml</DependentUpon>
     </Compile>
@@ -200,7 +256,11 @@
     <Compile Include="Utilities\Enums\ApplicationMode.cs" />
     <Compile Include="Utilities\Enums\ApplicationVersions.cs" />
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
+    <Compile Include="Utilities\Enums\AutomationExitCode.cs" />
+    <Compile Include="Utilities\Enums\AutomationCompareMode.cs" />
+    <Compile Include="Utilities\Enums\DatabaseLoadFailCode.cs" />
     <Compile Include="Utilities\Enums\DownloadProgressState.cs" />
+    <Compile Include="Utilities\Enums\HtmlXpathParserExitCode.cs" />
     <Compile Include="Utilities\Enums\InstallerExitCodes.cs" />
     <Compile Include="Utilities\Enums\InstructionsLoaderExitCode.cs" />
     <Compile Include="Utilities\Enums\InstructionsType.cs" />
@@ -210,6 +270,7 @@
     <Compile Include="Utilities\Enums\DatabaseXmlVersion.cs" />
     <Compile Include="Utilities\Enums\DownloadTypes.cs" />
     <Compile Include="Utilities\Enums\FailCode.cs" />
+    <Compile Include="Utilities\Enums\IERegistryVersion.cs" />
     <Compile Include="Utilities\Enums\KnownFolder.cs" />
     <Compile Include="Utilities\Enums\KnownFolderFlags.cs" />
     <Compile Include="Utilities\Enums\Languages.cs" />
@@ -226,6 +287,7 @@
     <Compile Include="Utilities\Enums\SelectionTypes.cs" />
     <Compile Include="Utilities\Enums\SelectionView.cs" />
     <Compile Include="Utilities\Enums\AutomationRunMode.cs" />
+    <Compile Include="Utilities\Enums\SequencerExitCode.cs" />
     <Compile Include="Utilities\Enums\UIThemes.cs" />
     <Compile Include="Utilities\Enums\UninstallerExitCodes.cs" />
     <Compile Include="Utilities\Enums\UninstallModes.cs" />
@@ -243,7 +305,13 @@
     <Compile Include="Windows\DatabaseAutomationRunner.xaml.cs">
       <DependentUpon>DatabaseAutomationRunner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\HtmlPathSelector.xaml.cs">
+      <DependentUpon>HtmlPathSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RelhaxCustomFeatureWindow.cs" />
+    <Compile Include="Windows\RelhaxLogViewer.xaml.cs">
+      <DependentUpon>RelhaxLogViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\WoTClientSelection.xaml.cs">
       <DependentUpon>WoTClientSelection.xaml</DependentUpon>
     </Compile>
@@ -335,7 +403,13 @@
     <Compile Include="Common\PatientWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Common\Translations.cs" />
+    <Compile Include="Translations\Translations.cs" />
+    <Compile Include="Translations\TranslationsEnglish.cs" />
+    <Compile Include="Translations\TranslationsFrench.cs" />
+    <Compile Include="Translations\TranslationsGerman.cs" />
+    <Compile Include="Translations\TranslationsPolish.cs" />
+    <Compile Include="Translations\TranslationsRussian.cs" />
+    <Compile Include="Translations\TranslationsSpanish.cs" />
     <Compile Include="Utilities\CommonUtils.cs" />
     <Compile Include="Windows\AddPicturesZip.xaml.cs">
       <DependentUpon>AddPicturesZip.xaml</DependentUpon>
@@ -469,6 +543,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\HtmlPathSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ModpackToolbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -537,6 +615,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\RelhaxLogViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\RelhaxMediaPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -586,6 +668,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -771,5 +854,6 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <EmbeddedResource Include="Resources\DLL\nvtt32.zip" />
     <EmbeddedResource Include="Resources\DLL\nvtt64.zip" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\packages\TeximpNet.1.4.3\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.4.3\build\TeximpNet.targets')" />
 </Project>

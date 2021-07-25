@@ -570,7 +570,39 @@
             </summary>
             <returns>A task of the asynchronous operation</returns>
         </member>
-        <member name="T:RelhaxModpack.Automation.IDownloadTask">
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ValidateCommandTrue(System.Boolean,System.String)">
+            <summary>
+            "true" version means that the test being true is "bad"
+            </summary>
+            <param name="test"></param>
+            <param name="formattedString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ValidateCommandFalse(System.Boolean,System.String)">
+            <summary>
+            "false" version means that the test being false is "bad"
+            </summary>
+            <param name="test"></param>
+            <param name="formattedString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessTaskResultTrue(System.Boolean,System.String)">
+            <summary>
+            "true" version means that the test being true is "bad"
+            </summary>
+            <param name="test"></param>
+            <param name="formattedString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Automation.Tasks.AutomationTask.ProcessTaskResultFalse(System.Boolean,System.String)">
+            <summary>
+            "false" version means that the test being false is "bad"
+            </summary>
+            <param name="test"></param>
+            <param name="formattedString"></param>
+            <returns></returns>
+        </member>
+        <member name="T:RelhaxModpack.Automation.Tasks.IDownloadTask">
             <summary>
             A task that implements this interface implies that it will always have a destination location for the resultant file
             </summary>
@@ -1120,6 +1152,91 @@
             Returns true if at least one package is enabled and checked and visible from the first level of packages in the category
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.ParsedCategoryList">
+            <summary>
+            The list of categories
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.GlobalDependencies">
+            <summary>
+            The list of global dependencies
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.Dependencies">
+            <summary>
+            The list of dependencies
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.DatabaseManager.ModpackSettings">
+            <summary>
+            A reference to the modpack settings window configuration class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+            <summary>
+            Creates an instance of the RelhaxWindow class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Settings.CommandLineSettings)">
+            <summary>
+            Creates an instance of the RelhaxWindow class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.#ctor">
+            <summary>
+            Creates an instance of the RelhaxWindow class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ParseDatabase1V1FromFiles">
+            <summary>
+            Parse a database into the version 1.1 format from files on the disk
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ParseDatabase1V1FromStrings(System.String,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Parse a database into version 1.1 from string representations of the Xml files
+            </summary>
+            <param name="globalDependenciesXml">The Xml string of the global dependencies document</param>
+            <param name="dependneciesXml">The Xml string of the dependencies document</param>
+            <param name="categoriesXml">The list of Xml strings of the categories document</param>
+            <param name="globalDependencies">The list of global dependencies</param>
+            <param name="dependencies">The list of dependencies</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ParseDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+            <summary>
+            Parse a database into version 1.1 from XDocument objects
+            </summary>
+            <param name="globalDependenciesDoc">The Xml document of global dependencies</param>
+            <param name="globalDependenciesList">The list of global dependencies</param>
+            <param name="dependenciesDoc">The Xml document of dependencies</param>
+            <param name="dependenciesList">The list of dependencies</param>
+            <param name="categoryDocuments">The list of xml documents of the category Xml documents</param>
+            <param name="parsedCategoryList">The list of categories</param>
+            <returns></returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabase(System.String)">
+            <summary>
+            Save the database to an Xml 1.1 version format
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabase1V1(System.String,System.Xml.XmlDocument)">
+            <summary>
+            Save the database to the Xml version 1.1 standard
+            </summary>
+            <param name="savePath">The path to save all the xml files to</param>
+            <param name="doc">The root XmlDocument to save the header information to</param>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabaseList1V1(System.Collections.IList,System.Xml.XmlElement,System.Xml.XmlDocument,System.String)">
+            <summary>
+            Saves a list of packages to a document
+            </summary>
+            <param name="packagesToSave">The generic list of packages to save</param>
+            <param name="documentRootElement">The element that will be holding this list</param>
+            <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
+            <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
+        </member>
         <member name="T:RelhaxModpack.Database.DatabaseBeforeAfter">
             <summary>
             Allows the old and new versions of a SelectablePackage to be saved temporarily for comparing differences between two database structures
@@ -1192,102 +1309,6 @@
             A utility class for working with database components
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabaseRoot1V1Document(System.String,System.String)">
-            <summary>
-            Downloads the root 'database.xml' file from github using the selected branch and loads it to an XmlDocument object
-            </summary>
-            <returns>the XmlDocument object of the root database file</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesList(System.Xml.XmlDocument,System.String)">
-            <summary>
-            Get a list of all URLs to each xml document file of the database
-            </summary>
-            <param name="rootDocument">The root 'database.xml' document object</param>
-            <returns>The list of URLs</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetBetaDatabase1V1FilesList(System.String,System.String)">
-            <summary>
-            Get a list of all URLs to each xml document file of the database using the selected branch and loads it to an XmlDocument object
-            </summary>
-            <returns>The list of URLs</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.ParseDatabase(System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.String)">
-            <summary>
-            Parse the Xml database of any type into lists in memory
-            </summary>
-            <param name="modInfoDocument">The root document. Can either be the entire document (Legacy) or the file with database header information only (OnePointOne)</param>
-            <param name="globalDependencies">The global dependencies list</param>
-            <param name="dependencies">The dependencies list</param>
-            <param name="parsedCategoryList">The category list</param>
-            <param name="location">The folder path to the OnePointOne+ additional xml files as part of the database</param>
-            <returns>True if database parsing was a success, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.ParseDatabase1V1FromFiles(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Parse a database into the version 1.1 format from files on the disk
-            </summary>
-            <param name="rootPath">The path to the folder that contains all the xml database files</param>
-            <param name="rootDocument">The root document object</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.ParseDatabase1V1FromStrings(System.String,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Parse a database into version 1.1 from string representations of the Xml files
-            </summary>
-            <param name="globalDependenciesXml">The Xml string of the global dependencies document</param>
-            <param name="dependneciesXml">The Xml string of the dependencies document</param>
-            <param name="categoriesXml">The list of Xml strings of the categories document</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.ParseDatabase1V1(System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Xml.Linq.XDocument,System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{System.Xml.Linq.XDocument},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Parse a database into version 1.1 from XDocument objects
-            </summary>
-            <param name="globalDependenciesDoc">The Xml document of global dependencies</param>
-            <param name="globalDependenciesList">The list of global dependencies</param>
-            <param name="dependenciesDoc">The Xml document of dependencies</param>
-            <param name="dependenciesList">The list of dependencies</param>
-            <param name="categoryDocuments">The list of xml documents of the category Xml documents</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns></returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SaveDatabase(System.String,System.String,System.String,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},RelhaxModpack.Utilities.Enums.DatabaseXmlVersion)">
-            <summary>
-            Save the database to an Xml version
-            </summary>
-            <param name="saveLocation">The folder path to save the files into</param>
-            <param name="gameVersion">The version of the game that this database supports</param>
-            <param name="onlineFolderVersion">The online folder for the zip file location of this database</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCatagoryList">The list of categories</param>
-            <param name="versionToSaveAs">The Xml version of the database to save as</param>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SaveDatabase1V1(System.String,System.Xml.XmlDocument,System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Save the database to the Xml version 1.1 standard
-            </summary>
-            <param name="savePath">The path to save all the xml files to</param>
-            <param name="doc">The root XmlDocument to save the header information to</param>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCatagoryList">The list of categories</param>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SaveDatabaseList1V1(System.Collections.IList,System.Xml.XmlElement,System.Xml.XmlDocument,System.String)">
-            <summary>
-            Saves a list of packages to a document
-            </summary>
-            <param name="packagesToSave">The generic list of packages to save</param>
-            <param name="documentRootElement">The element that will be holding this list</param>
-            <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
-            <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
-        </member>
         <member name="M:RelhaxModpack.Database.DatabaseUtils.GetFlatList(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
             <summary>
             Returns a flat list of the given recursive lists, in the order that the parameters are stated
@@ -1354,12 +1375,11 @@
             <param name="packages">The list of packages to sort</param>
             <param name="recursive">If the list should recursively sort</param>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildLinksRefrence(System.Collections.Generic.List{RelhaxModpack.Database.Category},System.Boolean)">
+        <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildLinksRefrence(System.Collections.Generic.List{RelhaxModpack.Database.Category})">
             <summary>
             Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
             </summary>
             <param name="ParsedCategoryList">The List of categories</param>
-            <param name="buildFakeParents">If the header parent SelectablePackage objects should be built as well</param>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildLinksRefrence(RelhaxModpack.Database.SelectablePackage,RelhaxModpack.Database.Category,RelhaxModpack.Database.SelectablePackage)">
             <summary>
@@ -4799,21 +4819,6 @@
             <remarks>See https://stackoverflow.com/questions/37787388/how-to-force-a-ui-update-during-a-lengthy-task-on-the-ui-thread 
             <para>and https://stackoverflow.com/questions/2329978/the-calling-thread-must-be-sta-because-many-ui-components-require-this </para></remarks>
         </member>
-        <member name="M:RelhaxModpack.UI.UiUtils.ApplyApplicationScale(RelhaxModpack.Windows.RelhaxWindow,System.Double)">
-            <summary>
-            Applies vector based application scaling to the specified window
-            </summary>
-            <param name="window">The window to apply scaling to</param>
-            <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
-        </member>
-        <member name="M:RelhaxModpack.UI.UiUtils.ApplyFontToWindow(System.Windows.Window,System.Windows.Media.FontFamily)">
-            <summary>
-            Applies the given FontFamily font type to the window
-            </summary>
-            <param name="window">The window to apply the font to</param>
-            <param name="font">The font to apply to the window</param>
-            <exception cref="T:System.ArgumentNullException">When any argument is null</exception>
-        </member>
         <member name="T:RelhaxModpack.UI.WindowColorset">
             <summary>
             Contains all color definitions to apply for that window, including the list of individual component color definitions
@@ -5572,6 +5577,40 @@
             When you click the save button, it also clicks the apply button before saving.
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.AutomationExitCode">
+            <summary>
+            List of possible return code error conditions that can occur when running an automation task
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.AutomationCompareMode">
+            <summary>
+            The different behaviors of the comparison
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationCompareMode.NoMatchContinue">
+            <summary>
+            If the file hashes are different, then continue the sequence. This is the primary behavior.
+            </summary>
+            <remarks>The implied use of this mode is that if the hashes are different, then the application
+            needs to continue to update the version of the package in our database</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationCompareMode.NoMatchStop">
+            <summary>
+            If the file hashes are different, then stop the sequence with appropriate exit code.
+            </summary>
+            <remarks>If the exit code associated with this enumeration occurs, then it implies that this
+            file must be manually inspected and cannot be an automated change</remarks>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode">
+            <summary>
+            List of possible return code error conditions that can occur when loading the database
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.DatabaseLoadFailCode.None">
+            <summary>
+            No error occurred
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.DownloadProgressState">
             <summary>
             The primary functional modes the application can run in
@@ -5595,6 +5634,16 @@
         <member name="F:RelhaxModpack.Utilities.Enums.DownloadProgressState.DownloadCompleted">
             <summary>
             The file download is completed. This will only fire once per download operation.
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode">
+            <summary>
+            List of possible return code error conditions that can occur when running the htmlPath browser parser
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.HtmlXpathParserExitCode.None">
+            <summary>
+            No error occurred
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.InstallerExitCodes">
@@ -5872,6 +5921,59 @@
             Failed to create the atlas bitmap object
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.IERegistryVersion">
+            <summary>
+            Registry key values used for specifying the emulated version of Internet Explorer to use
+            </summary>
+            <remarks>See https://stackoverflow.com/a/25650219/3128017
+            and https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/general-info/ee330730(v=vs.85)?redirectedfrom=MSDN#browser_emulation
+            for more information</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.IERegistryVersion.IE11Forced">
+            <summary>
+            Internet Explorer 11. Webpages are displayed in IE11 edge mode, regardless of the !DOCTYPE directive.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.IERegistryVersion.IE11Default">
+            <summary>
+            Internet Explorer 11. Webpages containing standards-based !DOCTYPE directives are displayed in IE11 edge mode. Default value for IE11.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.IERegistryVersion.IE10Forced">
+            <summary>
+            Internet Explorer 10. Webpages are displayed in IE10 Standards mode, regardless of the !DOCTYPE directive.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.IERegistryVersion.IE10Default">
+            <summary>
+            Internet Explorer 10. Webpages containing standards-based !DOCTYPE directives are displayed in IE10 Standards mode. Default value for Internet Explorer 10.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.IERegistryVersion.IE9Forced">
+            <summary>
+            Internet Explorer 9. Webpages are displayed in IE9 Standards mode, regardless of the !DOCTYPE directive.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.IERegistryVersion.IE9Default">
+            <summary>
+            Internet Explorer 9. Webpages containing standards-based !DOCTYPE directives are displayed in IE9 mode. Default value for Internet Explorer 9.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.IERegistryVersion.IE8Forced">
+            <summary>
+            Internet Explorer 8. Webpages are displayed in IE8 Standards mode, regardless of the !DOCTYPE directive.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.IERegistryVersion.IE8Default">
+            <summary>
+            Internet Explorer 8. Webpages containing standards-based !DOCTYPE directives are displayed in IE8 mode. Default value for Internet Explorer 8.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.IERegistryVersion.IE7Default">
+            <summary>
+            Internet Explorer 7. Webpages containing standards-based !DOCTYPE directives are displayed in IE7 Standards mode. Default value for applications hosting the WebBrowser Control.
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Utilities.Enums.KnownFolder">
             <summary>
             Standard folders registered with the system. These folders are installed with Windows Vista
@@ -6052,11 +6154,6 @@
         <member name="T:RelhaxModpack.Utilities.Enums.MacroType">
             <summary>
             The enumeration representations of the level of where the macro is defined. Implies protection level of the macro
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.Enums.MacroType.None">
-            <summary>
-            Not yet defined
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utilities.Enums.MacroType.ApplicationDefined">
@@ -6352,6 +6449,11 @@
         <member name="F:RelhaxModpack.Utilities.Enums.AutomationRunMode.Batch">
             <summary>
             Batch run mode. Will not stop on errors inside an automation script
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Utilities.Enums.SequencerExitCode">
+            <summary>
+            List of possible return code error conditions that can occur when running a sequence
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.UIThemes">
@@ -6801,6 +6903,11 @@
             A utility class to handle registry requests
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Utilities.RegistryUtils.IE_BROWSER_EMULATION_REGPATH_32">
+            <summary>
+            The registry location, within CURRENT_USER, of where to specify the version of IE to use for embedded application browser usage
+            </summary>
+        </member>
         <member name="M:RelhaxModpack.Utilities.RegistryUtils.AutoFindWoTDirectoryFirst">
             <summary>
             Checks the registry to get the latest location of where WoT is installed, includes exe in the name
@@ -6825,6 +6932,19 @@
             Finds the location of the Wargaming Game center installation directory from the registry
             </summary>
             <returns>The location of wgc.exe if found, else null</returns>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.RegistryUtils.SetRegisterKeyForIEVersion(RelhaxModpack.Utilities.Enums.IERegistryVersion)">
+            <summary>
+            Sets RelhaxModpack.exe in the registry to use the specified version of IE for embedded browser usage
+            </summary>
+            <param name="IEVersion">The version of Internet Explorer to use with the associated executable</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.RegistryUtils.SetRegisterKeyForIEVersion(System.String,RelhaxModpack.Utilities.Enums.IERegistryVersion)">
+            <summary>
+            Sets the given executable in the registry to use the specified version of IE for embedded browser usage
+            </summary>
+            <param name="exeName">The name of the executable to add to the registry location as a key entry</param>
+            <param name="IEVersion">The version of Internet Explorer to use with the associated executable</param>
         </member>
         <member name="T:RelhaxModpack.Utilities.CommonUtils">
             <summary>
@@ -7233,6 +7353,13 @@
             <param name="newObject">The new value type object created</param>
             <returns>False if the value could not be set, true otherwise</returns>
         </member>
+        <member name="M:RelhaxModpack.Utilities.CommonUtils.SetListEntries(System.Collections.IList,System.String,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement},System.String,System.Collections.Generic.Dictionary{System.String,System.Type})">
+            <summary>
+            Creates all database entries in a list property, parsing each list entry object by xmlListItems
+            </summary>
+            <param name="listProperty">A generic representation of a initialized, empty list</param>
+            <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
+        </member>
         <member name="M:RelhaxModpack.Utilities.CommonUtils.SetListEntries(RelhaxModpack.Common.IComponentWithID,System.Reflection.PropertyInfo,System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement},System.String,System.Collections.Generic.Dictionary{System.String,System.Type})">
             <summary>
             Creates all database entries in a list property, parsing each list entry object by xmlListItems
@@ -7503,6 +7630,19 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.HtmlPathSelector">
+            <summary>
+            Interaction logic for HtmlPathSelector.xaml
+            </summary>
+            <summary>
+            HtmlPathSelector
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.HtmlPathSelector.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.RelhaxCustomFeatureWindow">
             <summary>
             A class definition to specify a window that is a separate sub-function of the application:
@@ -7520,7 +7660,7 @@
             The settings definitions class for this window
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.RunStandaloneUpdateCheck">
+        <member name="P:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.RunStandAloneUpdateCheck">
             <summary>
             Controls is the application will, on startup, run a check to see if it's the latest version
             </summary>
@@ -7528,6 +7668,19 @@
         <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.#ctor(RelhaxModpack.Settings.ModpackSettings)">
             <summary>
             Creates an instance of the RelhaxCustomFeatureWindow class
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.RelhaxLogViewer">
+            <summary>
+            Interaction logic for RelhaxLogViewer.xaml
+            </summary>
+            <summary>
+            RelhaxLogViewer
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxLogViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
             </summary>
         </member>
         <member name="T:RelhaxModpack.Windows.WoTClientSelection">
@@ -8363,7 +8516,7 @@
             Flag to determine if the current installation is started from auto install mode
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Windows.PackageSelectionList.LastSupportedWoTClientVersion">
+        <member name="P:RelhaxModpack.Windows.PackageSelectionList.LastSupportedWoTClientVersionFromMainWindow">
             <summary>
             The latest supported formatted version of WoT, in full version format (e.g. 1.7.0.1) 
             </summary>
@@ -8588,6 +8741,17 @@
             <param name="e"></param>
             <remarks>This function saves the original size that the window was designed for (scaling), applies localizations, applies color settings,
             applies custom font, and applies scaling. Each application action is controlled by a boolean.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxWindow.ApplyApplicationScale(System.Double)">
+            <summary>
+            Applies vector based application scaling to the specified window
+            </summary>
+            <param name="scaleValue">The amount of scaling, in a multiplication factor, to apply to the window from</param>
+        </member>
+        <member name="M:RelhaxModpack.Windows.RelhaxWindow.ApplyFontToWindow">
+            <summary>
+            Applies the given FontFamily font type to the window
+            </summary>
         </member>
         <member name="T:RelhaxModpack.Windows.SelectionFileIssuesDisplay">
             <summary>
@@ -9628,6 +9792,36 @@
         <member name="M:RelhaxModpack.Translations.LoadTranslations(System.Boolean)">
             <summary>
             Loads all translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsEnglish">
+            <summary>
+            Loads all English translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsFrench">
+            <summary>
+            Loads all French translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsGerman">
+            <summary>
+            Loads all German translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsPolish">
+            <summary>
+            Loads all Polish translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsRussian">
+            <summary>
+            Loads all Russian translation dictionaries. Should only be done once (at application start)
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Translations.LoadTranslationsSpanish">
+            <summary>
+            Loads all Spanish translation dictionaries. Should only be done once (at application start)
             </summary>
         </member>
         <member name="T:RelhaxModpack.App">

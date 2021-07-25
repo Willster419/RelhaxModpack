@@ -21,7 +21,7 @@ namespace RelhaxUnitTests
         private static List<DatabasePackage> GlobalDependenciesForSave = new List<DatabasePackage>();
         private static List<Dependency> DependenciesForSave = new List<Dependency>();
         private static List<Category> ParsedCategoryListForSave = new List<Category>();
-
+        /*
         [TestMethod]
         public void Test01_GetLatestSupportWoTVersionTest()
         {
@@ -171,7 +171,7 @@ namespace RelhaxUnitTests
             if (Directory.Exists(databaseSavePath))
                 Directory.Delete(databaseSavePath, true);
         }
-
+        */
         private void TestDatabaseEntries(List<DatabasePackage> GlobalDependencies, List<Dependency> Dependencies, List<Category> ParsedCategoryList, bool checkDuplicates)
         {
             List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList);

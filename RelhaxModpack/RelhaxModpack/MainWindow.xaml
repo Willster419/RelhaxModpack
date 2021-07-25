@@ -15,7 +15,7 @@
     Icon="Resources/modpack_icon.ico"
     LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Window.Resources>
-        
+
     </Window.Resources>
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
         <Grid.Background>
@@ -118,7 +118,7 @@
                             <TextBlock x:Name="ShowInstallCompleteWindowText" Text="Show install complete window" TextWrapping="Wrap"/>
                         </CheckBox>
                         <CheckBox Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
-                            <TextBlock x:Name="BackupModsText" Text="Backup mods folder before installation" TextWrapping="Wrap"/>
+                            <TextBlock x:Name="BackupModsText" Text="Backup current mods folder" TextWrapping="Wrap"/>
                         </CheckBox>
                         <TextBlock x:Name="BackupModsSizeLabelUsed" Text="Backups: {0}  Size: {1}" Margin="20,0,0,0" TextWrapping="Wrap" ToolTipService.ShowOnDisabled="True"/>
                         <CheckBox x:Name="DeleteOldPackagesCB" Tag="DeleteOldPackagesCB" Click="OnDeleteCacheFilesChanged" ToolTipService.ShowOnDisabled="True">
@@ -325,15 +325,15 @@
         </Grid>
         <Grid HorizontalAlignment="Stretch" Height="25" Margin="10,596,10,0" VerticalAlignment="Top" Tag="VersionsGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Stretch" x:Name="ApplicationVersionLabel" Tag="ApplicationVersionLabel"/>
             <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Stretch" x:Name="DatabaseVersionLabel" Tag="DatabaseVersionLabel"/>
         </Grid>
         <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top">
-            <Border HorizontalAlignment="Left" Height="45" Margin="364,0,0,0" VerticalAlignment="Top" Width="150" Tag="LanguageSelectionBorder">
-                <StackPanel Orientation="Vertical" Margin="0,0,-8,0">
+            <Border HorizontalAlignment="Right" Height="45"  VerticalAlignment="Top" Width="156" Tag="LanguageSelectionBorder" Margin="0,0,2,0">
+                <StackPanel Orientation="Vertical">
                     <TextBlock x:Name="LanguageSelectionTextblock" Tag="LanguageSelectionTextBlock" Text="Language Selection" TextWrapping="Wrap" Margin="0,0,0,5"/>
                     <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0" Tag="LanguageSelectionCombobox"/>
                 </StackPanel>

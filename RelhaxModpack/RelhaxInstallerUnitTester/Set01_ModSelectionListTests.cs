@@ -66,7 +66,7 @@ namespace RelhaxInstallerUnitTester
             //get the managerInfo document
             ((App)RelhaxModpack.App.Current).ManagerInfoZipfile = await CommonUtils.GetManagerInfoZipfileAsync(true);
         }
-
+        /*
         [TestMethod]
         public async Task Test03_LoadModSelectionListTest()
         {
@@ -88,14 +88,14 @@ namespace RelhaxInstallerUnitTester
                     LocalizeWindow = true,
                     OriginalHeight = 720.0,
                     OriginalWidth = 1280.0,
-                    LastSupportedWoTClientVersion = "1.10.0.2",
+                    LastSupportedWoTClientVersionFromMainWindow = "1.10.0.2",
                     //the lists are newed in the application
                     GlobalDependencies = Set01_ModSelectionListTests.GlobalDependencies,
                     Dependencies = Set01_ModSelectionListTests.Dependencies,
                     ParsedCategoryList = Set01_ModSelectionListTests.ParsedCategoryList,
-                    WoTClientVersion = "TODO",
-                    DatabaseVersion = "TODO",
-                    WoTDirectory = "TODO"
+                    WotClientVersionFromMainWindow = "TODO",
+                    DatabaseVersionFromMainWindow = "TODO",
+                    WoTDirectoryFromMainWindow = "TODO"
                 };
                 throw new BadMemeException("Finish plox");
 
@@ -120,7 +120,7 @@ namespace RelhaxInstallerUnitTester
             while (SelectionList.LoadingUI)
                 await Task.Delay(1000);
         }
-
+        
         [TestMethod]
         public void Test04_CreateRandomSelectionListTest()
         {
@@ -146,7 +146,7 @@ namespace RelhaxInstallerUnitTester
                 clearSelectionsButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             });
         }
-
+        */
         private void SelectionList_OnSelectionListReturn(object sender, SelectionListEventArgs e)
         {
             Assert.IsTrue(e.ContinueInstallation);

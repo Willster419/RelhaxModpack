@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace RelhaxModpack.Windows
 {
@@ -29,7 +30,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Controls is the application will, on startup, run a check to see if it's the latest version
         /// </summary>
-        public bool RunStandaloneUpdateCheck { get; set; } = false;
+        public bool RunStandAloneUpdateCheck { get; set; }
 
         /// <summary>
         /// Creates an instance of the RelhaxCustomFeatureWindow class
@@ -62,7 +63,7 @@ namespace RelhaxModpack.Windows
             base.OnWindowLoaded(sender, e);
 
             //if not skipping update, and not launched from the main window, then run a stand-alone update check
-            if (!LaunchedFromMainWindow && !CommandLineSettings.SkipUpdate && RunStandaloneUpdateCheck)
+            if (!LaunchedFromMainWindow && !CommandLineSettings.SkipUpdate && RunStandAloneUpdateCheck)
             {
                 Task.Run(async () =>
                 {
@@ -72,6 +73,19 @@ namespace RelhaxModpack.Windows
                     }
                 });
             }
+        }
+
+        protected override void ApplyFontToWindow()
+        {
+            if (DefaultFontFamily == null)
+            {
+                DefaultFontFamily = this.FontFamily;
+                SelectedFontFamily = DefaultFontFamily;
+                FontList.Clear();
+                FontList.AddRange(Fonts.GetFontFamilies(Environment.GetFolderPath(Environment.SpecialFolder.Fonts)).ToList());
+            }
+
+            base.ApplyFontToWindow();
         }
     }
 }

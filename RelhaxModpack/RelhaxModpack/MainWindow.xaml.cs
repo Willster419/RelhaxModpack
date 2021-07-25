@@ -27,6 +27,7 @@ using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
 using RelhaxModpack.Utilities.ClassEventArgs;
+using RelhaxModpack.UI.Extensions;
 
 namespace RelhaxModpack
 {
@@ -92,6 +93,9 @@ namespace RelhaxModpack
         //remaining time
         private long remainingMilliseconds;
         private bool deferToDownloadReport = false;
+
+        //database manager
+        private DatabaseManager databaseManager;
 
         //task bar variables
         private TaskbarManager taskbarInstance = null;
@@ -305,6 +309,9 @@ namespace RelhaxModpack
                         throw new BadMemeException("The font was never set in the selector combobox");
                 }
             }
+
+            //setup the database manager helper class
+            databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings);
 
             //save database version to temp and process if command line test mode
             databaseVersion = ModpackSettings.DatabaseDistroVersion;
@@ -570,7 +577,7 @@ namespace RelhaxModpack
             //if current scale is not target, then update
             if (ModpackSettings.DisplayScale != currentScale)
             {
-                UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                ApplyApplicationScale(ModpackSettings.DisplayScale);
             }
 
             //apply to slider
@@ -992,10 +999,10 @@ namespace RelhaxModpack
             {
                 AutoInstallMode = (sender == null),
                 //get the last parsed from the xml file (should be the latest by default
-                LastSupportedWoTClientVersion = lastSupportedWoTVersion,
-                WoTClientVersion = this.WoTClientVersion,
-                DatabaseVersion = this.DatabaseVersion,
-                WoTDirectory = this.WoTDirectory
+                LastSupportedWoTClientVersionFromMainWindow = lastSupportedWoTVersion,
+                WotClientVersionFromMainWindow = this.WoTClientVersion,
+                DatabaseVersionFromMainWindow = this.DatabaseVersion,
+                WoTDirectoryFromMainWindow = this.WoTDirectory
             };
 
             //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
@@ -2063,8 +2070,8 @@ namespace RelhaxModpack
             //if the request distribution version is alpha, correct it to stable
             if (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Alpha)
             {
-                Logging.Warning("Alpha is invalid option for ModpackSettings.ApplicationDistroVersion, setting to stable");
-                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+                Logging.Warning("Alpha is an invalid option for ModpackSettings.ApplicationDistroVersion");
+                ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
             }
 
             //4 possibilities:
@@ -2088,6 +2095,22 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("Application was not beta: '{0}'", betaDistro);
                     ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+                }
+            }
+
+            //check if the new/regular settings file exists, and if it doesn't ,then set the application distro version to what the application was compiled as
+            if (!File.Exists(ModpackSettings.SettingsFilename))
+            {
+                Logging.Info("{0} settings file does not exist. This is a first time load, set settings application distro version to application compile ({1})", ModpackSettings.SettingsFilename, ApplicationConstants.ApplicationVersion.ToString());
+                switch (ApplicationConstants.ApplicationVersion)
+                {
+                    case ApplicationVersions.Alpha:
+                    case ApplicationVersions.Beta:
+                        ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Beta;
+                        break;
+                    case ApplicationVersions.Stable:
+                        ModpackSettings.ApplicationDistroVersion = ApplicationVersions.Stable;
+                        break;
                 }
             }
 
@@ -2620,16 +2643,11 @@ namespace RelhaxModpack
         #region Custom Font code
         private void CustomFontSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CustomFontSelector.SelectedItem == null)
+            if (CustomFontSelector.SelectedItem != null)
             {
-                UiUtils.ApplyFontToWindow(this, UiUtils.DefaultFontFamily);
-            }
-            else
-            {
-                FontFamily selectedFont = (CustomFontSelector.SelectedItem as TextBlock).FontFamily;
-                UiUtils.CustomFontFamily = selectedFont;
-                ModpackSettings.CustomFontName = selectedFont.Source.Split('#')[1];
-                UiUtils.ApplyFontToWindow(this, selectedFont);
+                SelectedFontFamily = FontList[CustomFontSelector.SelectedIndex];
+                ModpackSettings.CustomFontName = SelectedFontFamily.FontName();
+                ApplyFontToWindow();
             }
         }
 
@@ -2639,16 +2657,17 @@ namespace RelhaxModpack
             {
                 ModpackSettings.EnableCustomFont = true;
 
+                FontList.Clear();
                 string fontsfolder = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
-                List<FontFamily> fonts = Fonts.GetFontFamilies(fontsfolder).ToList();
+                FontList.AddRange(Fonts.GetFontFamilies(fontsfolder).ToList());
                 CustomFontSelector.Items.Clear();
 
-                foreach (FontFamily font in fonts)
+                foreach (FontFamily font in FontList)
                 {
                     CustomFontSelector.Items.Add(new TextBlock()
                     {
                         FontFamily = font,
-                        Text = font.Source.Split('#')[1]
+                        Text = font.FontName()
                     });
                 }
                 CustomFontSelector.IsEnabled = true;
@@ -2659,11 +2678,28 @@ namespace RelhaxModpack
                 CustomFontSelector.SelectedIndex = -1;
                 CustomFontSelector.IsEnabled = false;
 
-                if (UiUtils.DefaultFontFamily == null)
-                    UiUtils.DefaultFontFamily = this.FontFamily;
+                if (DefaultFontFamily == null)
+                    DefaultFontFamily = this.FontFamily;
 
-                UiUtils.ApplyFontToWindow(this, UiUtils.DefaultFontFamily);
+                SelectedFontFamily = DefaultFontFamily;
+                ModpackSettings.CustomFontName = SelectedFontFamily.FontName();
+                ApplyFontToWindow();
             }
+        }
+
+        protected override void ApplyFontToWindow()
+        {
+            if (DefaultFontFamily == null)
+            {
+                DefaultFontFamily = this.FontFamily;
+                SelectedFontFamily = DefaultFontFamily;
+                FontList.Clear();
+            }
+
+            if (FontList.Count == 0)
+                FontList.AddRange(Fonts.GetFontFamilies(Environment.GetFolderPath(Environment.SpecialFolder.Fonts)).ToList());
+
+            base.ApplyFontToWindow();
         }
         #endregion
 
@@ -2987,13 +3023,12 @@ namespace RelhaxModpack
                 Logging.DisposeLogging(Logfiles.Application);
 
             CommandLineSettings.ApplicationMode = ApplicationMode.PatchDesigner;
-            PatchDesigner designer = new PatchDesigner(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings };
+            PatchDesigner designer = new PatchDesigner(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings, RunStandAloneUpdateCheck = false };
 
-            //start updater logging system
+            //start patcher logging system
             if (!Logging.Init(Logfiles.PatchDesigner, ModpackSettings.VerboseLogging, true))
             {
                 MessageBox.Show("Failed to initialize logfile for patch designer");
-                designer = null;
                 return;
             }
             Logging.WriteHeader(Logfiles.PatchDesigner);
@@ -3005,11 +3040,15 @@ namespace RelhaxModpack
             //run target window as dialog
             designer.ShowDialog();
 
-            //after closed, disable redirection
+            //after window closed, disable redirection
             if (!Logging.DisableRedirection(Logfiles.Application, Logfiles.PatchDesigner))
                 Logging.TryWriteToLog("Failed to cancel redirect messages from application to patch designer", Logfiles.PatchDesigner, LogLevel.Error);
 
-            //after closed, re-init application logging and set as application run mode
+            //also de-init editor logging
+            if (!Logging.IsLogDisposed(Logfiles.PatchDesigner))
+                Logging.DisposeLogging(Logfiles.PatchDesigner);
+
+            //also re-init application logging and set as application run mode
             CommandLineSettings.ApplicationMode = ApplicationMode.Default;
             if (!Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, true))
             {
@@ -3031,13 +3070,12 @@ namespace RelhaxModpack
                 Logging.DisposeLogging(Logfiles.Application);
 
             CommandLineSettings.ApplicationMode = ApplicationMode.Editor;
-            DatabaseEditor editor = new DatabaseEditor(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings };
+            DatabaseEditor editor = new DatabaseEditor(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings, RunStandAloneUpdateCheck = false };
 
-            //start updater logging system
+            //start editor logging system
             if (!Logging.Init(Logfiles.Editor, ModpackSettings.VerboseLogging, true))
             {
                 MessageBox.Show("Failed to initialize logfile for editor");
-                editor.Close();
                 return;
             }
             Logging.WriteHeader(Logfiles.Editor);
@@ -3049,11 +3087,15 @@ namespace RelhaxModpack
             //run target window as dialog
             editor.ShowDialog();
 
-            //after closed, disable redirection
+            //after window closed, disable redirection
             if (!Logging.DisableRedirection(Logfiles.Application, Logfiles.Editor))
                 Logging.TryWriteToLog("Failed to cancel redirect messages from application to patch editor", Logfiles.Editor, LogLevel.Error);
 
-            //after closed, re-init application logging and set as application run mode
+            //also de-init editor logging
+            if (!Logging.IsLogDisposed(Logfiles.Editor))
+                Logging.DisposeLogging(Logfiles.Editor);
+
+            //also re-init application logging and set as application run mode
             CommandLineSettings.ApplicationMode = ApplicationMode.Default;
             if (!Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, true))
             {
@@ -3179,12 +3221,12 @@ namespace RelhaxModpack
                 ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
                 double oldTempValue = ModpackSettings.DisplayScale;
                 ModpackSettings.DisplayScale = ApplyCustomScalingSlider.Value;
-                UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                ApplyApplicationScale(ModpackSettings.DisplayScale);
                 ScalingConfirmation confirmation = new ScalingConfirmation(this.ModpackSettings);
                 if (!(bool)confirmation.ShowDialog())
                 {
                     ModpackSettings.DisplayScale = oldTempValue;
-                    UiUtils.ApplyApplicationScale(this, ModpackSettings.DisplayScale);
+                    ApplyApplicationScale(ModpackSettings.DisplayScale);
                     ApplyCustomScalingSlider.Value = ModpackSettings.DisplayScale;
                     ApplyCustomScalingLabel.Text = string.Format("{0}x", ApplyCustomScalingSlider.Value.ToString("N"));
                 }
@@ -3269,6 +3311,7 @@ namespace RelhaxModpack
             EnableCustomFontCheckbox.IsChecked = ModpackSettings.EnableCustomFont;
             OneClickInstallCB.IsChecked = ModpackSettings.OneClickInstall;
             AutoInstallCB.IsChecked = ModpackSettings.AutoInstall;
+            MinimalistModeCB.IsChecked = ModpackSettings.MinimalistMode;
 
             //setup the languages selector
             switch (ModpackSettings.Language)
@@ -3552,8 +3595,8 @@ namespace RelhaxModpack
         //Get all xml strings for the V2 database file format from the selected beta database github branch
         private Task<string> GetBetaDatabase1V1ForStringCompareAsync()
         {
-            return Task<string>.Run(() => {
-                List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", ModpackSettings.BetaDatabaseSelectedBranch), ModpackSettings.BetaDatabaseSelectedBranch);
+            return Task<string>.Run(async () => {
+                List<string> downloadURLs = await databaseManager.GetBetaDatabase1V1FilesListAsync();
 
                 string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
 

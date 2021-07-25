@@ -15,6 +15,8 @@ using System.Reflection;
 using RelhaxModpack.Common;
 using RelhaxModpack.Windows;
 using RelhaxModpack.Settings;
+using System.Diagnostics;
+using System.Threading;
 
 namespace RelhaxModpack.Automation
 {
@@ -27,7 +29,9 @@ namespace RelhaxModpack.Automation
 
         public const string AutomationXmlRepoFilebase = "https://raw.githubusercontent.com/Relhax-Modpack-Team/DatabaseAutoUpdateScripts/{branch}/";
 
-        public const string AutomationXmlRoot = AutomationXmlRepoFilebase + "root.xml";
+        public const string AutomationXmlRootFilename = "root.xml";
+
+        public const string AutomationRepoDefaultBranch = "master";
 
         public List<AutomationMacro> ApplicationMacros { get; } = new List<AutomationMacro>();
 
@@ -35,13 +39,15 @@ namespace RelhaxModpack.Automation
 
         public List<AutomationSequence> AutomationSequences { get; } = new List<AutomationSequence>();
 
+        public List<DatabasePackage> DatabasePackages { get; private set; }
+
+        public DatabaseManager DatabaseManager { get; set; }
+
         public AutomationRunnerSettings AutomationRunnerSettings { get; set; } = null;
 
         public int NumErrors { get; set; } = 0;
 
         public string[] AutomationBranches = null;
-
-        public bool AutomationBranchesLoaded = false;
 
         public AutomationRunMode AutomationRunMode = AutomationRunMode.Interactive;
 
@@ -57,11 +63,35 @@ namespace RelhaxModpack.Automation
 
         public string WoTModpackOnlineFolderVersion { get; set; }
 
-        private string AutomationXmlRootEscaped { get { return AutomationRunnerSettings == null? string.Empty : AutomationXmlRoot.Replace("{branch}", AutomationRunnerSettings.SelectedBranch); } }
+        private string AutomationRepoPathEscaped {
+            get
+            {
+                if (AutomationRunnerSettings == null)
+                    return null;
+                if (AutomationRunnerSettings.UseLocalRunnerDatabase && string.IsNullOrEmpty(AutomationRunnerSettings.LocalRunnerDatabaseRoot))
+                    return null;
+                return AutomationRunnerSettings.UseLocalRunnerDatabase ? Path.GetDirectoryName(AutomationRunnerSettings.LocalRunnerDatabaseRoot) : AutomationXmlRepoFilebase.Replace("{branch}", AutomationRunnerSettings.SelectedBranch);
+            }
+        }
 
-        private string AutomationXmlRepoFilebaseEscaped { get { return AutomationRunnerSettings == null ? string.Empty : AutomationXmlRepoFilebase.Replace("{branch}", AutomationRunnerSettings.SelectedBranch); } }
+        private string AutomationRepoRootXmlFilepathEscaped
+        {
+            get
+            {
+                if (AutomationRunnerSettings == null)
+                    return null;
+                if (AutomationRunnerSettings.UseLocalRunnerDatabase && string.IsNullOrEmpty(AutomationRunnerSettings.LocalRunnerDatabaseRoot))
+                    return null;
+
+                return AutomationRunnerSettings.UseLocalRunnerDatabase ? Path.Combine(AutomationRepoPathEscaped, AutomationXmlRootFilename) : AutomationRepoPathEscaped + AutomationXmlRootFilename;
+            }
+        }
 
         public string ComponentInternalName { get; } = "AutomationSequencer";
+
+        public CancellationToken CancellationToken { get; set; }
+
+        protected AutomationSequence RunningSequence;
 
         public AutomationSequencer()
         {
@@ -74,21 +104,27 @@ namespace RelhaxModpack.Automation
         /// <returns>A task of the asynchronous operation</returns>
         public async Task LoadBranchesListAsync()
         {
-            if (AutomationBranchesLoaded)
-            {
-                Logging.AutomationRunner(LogOptions.MethodName, "Branches list already loaded, ignoring this call", LogLevel.Warning);
+            if (AutomationRunnerSettings.UseLocalRunnerDatabase)
                 return;
-            }
 
             List<string> branches = await CommonUtils.GetListOfGithubRepoBranchesAsync(BranchesURL);
             AutomationBranches = branches.ToArray();
-            AutomationBranchesLoaded = true;
         }
 
         public async Task LoadRootDocumentAsync()
         {
-            string xmlString = await WebClient.DownloadStringTaskAsync(AutomationXmlRootEscaped);
-            RootDocument = XmlUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
+            if (string.IsNullOrWhiteSpace(AutomationRepoRootXmlFilepathEscaped))
+                throw new ArgumentException("AutomationXmlRootEscaped cannot be null or whitespace");
+
+            if (AutomationRunnerSettings.UseLocalRunnerDatabase)
+            {
+                RootDocument = XmlUtils.LoadXmlDocument(AutomationRepoRootXmlFilepathEscaped, XmlLoadType.FromFile);
+            }
+            else
+            {
+                string xmlString = await WebClient.DownloadStringTaskAsync(AutomationRepoRootXmlFilepathEscaped);
+                RootDocument = XmlUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
+            }
         }
 
         public async Task LoadGlobalMacrosAsync()
@@ -98,61 +134,209 @@ namespace RelhaxModpack.Automation
 
             //get the url to download from
             string globalMacrosUrlFile = XmlUtils.GetXmlStringFromXPath(RootDocument, "/root.xml/GlobalMacros/@path");
-            string globalMacrosUrl = string.Format("{0}{1}", AutomationXmlRepoFilebaseEscaped, globalMacrosUrlFile);
-            string globalMacrosXml = string.Empty;
-            globalMacrosXml = await WebClient.DownloadStringTaskAsync(globalMacrosUrl);
-            GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosXml, XmlLoadType.FromString);
+            if (AutomationRunnerSettings.UseLocalRunnerDatabase)
+            {
+                string globalMacrosUrl = Path.Combine(AutomationRepoPathEscaped, globalMacrosUrlFile);
+                GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosUrl, XmlLoadType.FromFile);
+            }
+            else
+            {
+                string globalMacrosUrl = string.Format("{0}{1}", AutomationRepoPathEscaped, globalMacrosUrlFile);
+                string globalMacrosXml = await WebClient.DownloadStringTaskAsync(globalMacrosUrl);
+                GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosXml, XmlLoadType.FromString);
+            }
         }
 
-        public async Task<bool> LoadAutomationSequencesAsync(List<DatabasePackage> packagesToRun)
+        public async Task<bool> ParseRootDocumentAsync()
         {
             if (RootDocument == null)
                 throw new NullReferenceException();
-            if (packagesToRun == null)
-                throw new NullReferenceException();
-            if (packagesToRun.Count == 0)
-                throw new BadMemeException("packagesToRun must have at least one package to run automation on");
 
-            Logging.AutomationRunner(LogOptions.MethodName, "Checking root document for to build urls to download automation sequences", LogLevel.Info);
-            foreach (DatabasePackage package in packagesToRun)
+            Logging.AutomationRunner(LogOptions.MethodName, "Checking root document for to build automation sequences", LogLevel.Info);
+
+            XmlNodeList sequencesXml = XmlUtils.GetXmlNodesFromXPath(RootDocument, "//root.xml/AutomationSequence");
+            AutomationSequences.Clear();
+
+            foreach (XmlElement result in sequencesXml)
             {
-                Logging.AutomationRunner(LogOptions.MethodName, "Parsing path for automation of package {0}", LogLevel.Info, package.PackageName);
-                //sample xpath: /root.xml/AutomationSequence[@UID='123456789ABCD']
-                XmlElement result = XmlUtils.GetXmlNodeFromXPath(RootDocument, string.Format("/root.xml/AutomationSequence[@UID='{0}']", package.UID)) as XmlElement;
-                if (result == null)
+                string sequencePackageName = result.Attributes["packageName"].Value;
+                string sequenceUID = result.Attributes["UID"].Value;
+                string sequenceUrlPath = result.Attributes["path"].Value;
+                string sequenceLoadString;
+                if (AutomationRunnerSettings.UseLocalRunnerDatabase)
                 {
-                    Logging.Error(Logfiles.AutomationRunner, "Package not found in automation database");
-                    return false;
+                    sequenceUrlPath = sequenceUrlPath.Replace('/', Path.DirectorySeparatorChar);
+                    sequenceLoadString = Path.Combine(AutomationRepoPathEscaped, sequenceUrlPath);
                 }
-
-                if (result.Attributes["packageName"].Value != package.PackageName)
+                else
                 {
-                    Logging.Warning(Logfiles.AutomationRunner, "The packageName property is out of date. From database: {0}. From Package: {1}", result.Attributes["packageName"].Value, package.PackageName);
+                    sequenceLoadString = AutomationRepoPathEscaped + sequenceUrlPath;
                 }
-
-                string pathToFileFromRepoRoot = result.Attributes["path"].Value;
-                if (string.IsNullOrEmpty(pathToFileFromRepoRoot))
+                Logging.AutomationRunner(LogOptions.MethodName, "Parsing sequence for package {0} (UID {1})", LogLevel.Info, sequencePackageName, sequenceUID);
+                AutomationSequences.Add(new AutomationSequence(DatabasePackages, ApplicationMacros, GlobalMacros, AutomationRunnerSettings, DatabaseManager, CancellationToken)
                 {
-                    Logging.Error(Logfiles.AutomationRunner, "Package path attribute not found from xml node");
-                    return false;
-                }
-                if (pathToFileFromRepoRoot[0] == '/')
-                {
-                    Logging.Warning(Logfiles.AutomationRunner, "Package path attribute starts with slash, please update entry to remove it!");
-                    pathToFileFromRepoRoot = pathToFileFromRepoRoot.Substring(1);
-                }
-                AutomationSequences.Add(new AutomationSequence() { AutomationSequencer = this, Package = package, SequenceDownloadUrl = AutomationXmlRepoFilebaseEscaped + pathToFileFromRepoRoot });
-                Logging.Debug(Logfiles.AutomationRunner, "Added automation sequence URL: {0}", AutomationSequences.Last().SequenceDownloadUrl);
-            }
-
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence xml document from its download URL");
-            foreach (AutomationSequence automationSequence in AutomationSequences)
-            {
-                Logging.Info(Logfiles.AutomationRunner, "Load automation sequence xml for package {0}", automationSequence.Package.PackageName);
-                await automationSequence.LoadAutomationXmlAsync();
+                    AutomationSequencer = this,
+                    Package = null,
+                    PackageName = sequencePackageName,
+                    PackageUID = sequenceUID,
+                    SequenceDownloadUrl = sequenceLoadString
+                });
             }
 
             return true;
+        }
+
+        public async Task<SequencerExitCode> RunSequencerAsync(List<AutomationSequence> sequencesToRun)
+        {
+            if (RootDocument == null)
+                throw new NullReferenceException();
+            if (DatabaseManager == null)
+                throw new NullReferenceException();
+            if (sequencesToRun == null)
+                throw new NullReferenceException();
+            if (sequencesToRun.Count == 0)
+                throw new BadMemeException("packagesToRun must have at least one package to run automation on");
+
+            Logging.AutomationRunner("Linking database packages for each sequence");
+            if (!LinkPackagesToAutomationSequences(sequencesToRun))
+                return SequencerExitCode.NotRun;
+
+            Logging.Info("Downloading xml for each sequence");
+            if (!await LoadAutomationSequencesXmlToRunAsync(sequencesToRun))
+                return SequencerExitCode.NotRun;
+
+            Logging.Info("Parsing xml for each sequence");
+            if (!ParseAutomationSequences(sequencesToRun))
+                return SequencerExitCode.NotRun;
+
+            Logging.Info("Running sequences");
+            return await RunSequencesAsync(sequencesToRun);
+        }
+
+        private bool LinkPackagesToAutomationSequences(List<AutomationSequence> sequencesToRun)
+        {
+            UpdateDatabasePackageList();
+            foreach (AutomationSequence automationSequence in sequencesToRun)
+            {
+                automationSequence.DatabasePackages = DatabasePackages;
+                Logging.Debug("Linking sequence to package reference: {0}, {1}", automationSequence.PackageName, automationSequence.PackageUID);
+
+                DatabasePackage result = DatabasePackages.Find(pack => pack.UID.Equals(automationSequence.PackageUID));
+                if (result == null)
+                {
+                    Logging.Error("A package does not exist in the database matching UID {0}", automationSequence.PackageUID);
+                    return false;
+                }
+
+                if (result.PackageName != automationSequence.PackageName)
+                {
+                    Logging.Warning(Logfiles.AutomationRunner, "The packageName property is out of date. From database: {0}. From Package: {1}", result.PackageName, automationSequence.PackageName);
+                }
+
+                automationSequence.Package = result;
+            }
+
+            return true;
+        }
+
+        private async Task<bool> LoadAutomationSequencesXmlToRunAsync(List<AutomationSequence> sequencesToRun)
+        {
+            foreach (AutomationSequence automationSequence in sequencesToRun)
+            {
+                Logging.Debug("Parsing sequence: {0}, {1}", automationSequence.PackageName, automationSequence.PackageUID);
+
+                if (!(await automationSequence.LoadAutomationXmlAsync()))
+                {
+                    Logging.Error("Failed to load xml for sequence {0}", automationSequence.ComponentInternalName);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool ParseAutomationSequences(List<AutomationSequence> sequencesToRun)
+        {
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence from xml to class objects");
+            foreach (AutomationSequence automationSequence in sequencesToRun)
+            {
+                Logging.Info(Logfiles.AutomationRunner, "Load automation sequence data for package {0}", automationSequence.Package.PackageName);
+                if (!automationSequence.ParseAutomationTasks())
+                {
+                    Logging.Error("Failed to parse sequence {0}, check the syntax and try again", automationSequence.ComponentInternalName);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private async Task<SequencerExitCode> RunSequencesAsync(List<AutomationSequence> sequencesToRun)
+        {
+            RunningSequence = null;
+            if (sequencesToRun.Count == 0)
+            {
+                Logging.Error(Logfiles.AutomationRunner, LogOptions.ClassName, "No sequences specified in AutomationSequences list");
+                return SequencerExitCode.NotRun;
+            }
+
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Running automation sequencer");
+            NumErrors = 0;
+
+            foreach (AutomationSequence sequence in sequencesToRun)
+            {
+                RunningSequence = sequence;
+                Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Preparing macro lists for sequence run: {0}", sequence.ComponentInternalName);
+
+                ResetApplicationMacros(sequence);
+                ParseGlobalMacros();
+                sequence.ParseSequenceMacros();
+
+                if (AutomationRunnerSettings.DumpParsedMacrosPerSequenceRun)
+                {
+                    DumpApplicationMacros();
+                    DumpGlobalMacros();
+                }
+
+                if (AutomationRunnerSettings.DumpShellEnvironmentVarsPerSequenceRun)
+                {
+                    DumpShellEnvironmentVariables();
+                }
+
+                Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Running sequence: {0}", sequence.ComponentInternalName);
+                await sequence.RunTasksAsync();
+                SequencerExitCode exitCode = sequence.ExitCode;
+                Logging.Info("----------------------- SEQUENCE RESULTS -----------------------");
+                switch (exitCode)
+                {
+                    case SequencerExitCode.Errors:
+                    case SequencerExitCode.NotRun:
+                        Logging.Error(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence {0} result {1}. Check the log above or enable verbose logging for details.", sequence.ComponentInternalName, exitCode.ToString());
+                        NumErrors++;
+                        break;
+
+                    case SequencerExitCode.NoErrors:
+                    case SequencerExitCode.Cancel:
+                        Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence {0} result {1}.", sequence.ComponentInternalName, exitCode.ToString());
+                        break;
+                }
+                Logging.Info("----------------------------------------------------------------");
+
+                if (NumErrors == 0)
+                {
+                    Logging.Info("Saving database before next sequence");
+                    DatabaseManager.SaveDatabase(AutomationRunnerSettings.DatabaseSavePath);
+                }
+            }
+
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Sequence run finished with {0} errors of {1} total sequences.", NumErrors, sequencesToRun.Count);
+            RunningSequence = null;
+
+            if (CancellationToken != null && CancellationToken.IsCancellationRequested)
+                return SequencerExitCode.Cancel;
+            else if (NumErrors == 0)
+                return SequencerExitCode.NoErrors;
+            else
+                return SequencerExitCode.Errors;
         }
 
         public void ResetApplicationMacros(AutomationSequence sequence)
@@ -162,11 +346,12 @@ namespace RelhaxModpack.Automation
             SelectablePackage selectablePackage = package as SelectablePackage;
             ApplicationMacros.Clear();
             ApplicationMacros.Add(new AutomationMacro() { Name = "date", Value = DateTime.UtcNow.ToString("yyyy-MM-dd"), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "category.name", Value = (selectablePackage != null)? selectablePackage.ParentCategory.Name : "null", MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "name", Value = (selectablePackage != null)? selectablePackage.NameFormatted : "null", MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "category.name", Value = (selectablePackage != null) ? selectablePackage.ParentCategory.Name : "null", MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "name", Value = (selectablePackage != null) ? selectablePackage.NameFormatted : "null", MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "packageName", Value = package.PackageName, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "packageUID", Value = package.UID, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "zipfile", Value = package.ZipFile, MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "level", Value = (selectablePackage != null)? selectablePackage.Level.ToString() : "null", MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "level", Value = (selectablePackage != null) ? selectablePackage.Level.ToString() : "null", MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "patchGroup", Value = package.PatchGroup.ToString(), MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "installGroup", Value = package.InstallGroupWithOffset.ToString(), MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "clientVersion", Value = WoTClientVersion, MacroType = MacroType.ApplicationDefined });
@@ -176,7 +361,8 @@ namespace RelhaxModpack.Automation
             ApplicationMacros.Add(new AutomationMacro() { Name = "applicationPath", Value = ApplicationConstants.ApplicationStartupPath, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "relhaxTemp", Value = ApplicationConstants.RelhaxTempFolderPath, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "workDirectory", Value = string.Format("{0}\\{1}", ApplicationConstants.RelhaxTempFolderPath, package.PackageName), MacroType = MacroType.ApplicationDefined });
-            ApplicationMacros.Add(new AutomationMacro() { Name = "automationRepoRoot", Value = AutomationXmlRepoFilebaseEscaped, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "automationRepoRoot", Value = AutomationRepoPathEscaped, MacroType = MacroType.ApplicationDefined });
+            ApplicationMacros.Add(new AutomationMacro() { Name = "clientPath", Value = Path.GetDirectoryName(AutomationRunnerSettings.WoTClientInstallLocation) });
         }
 
         public bool ParseGlobalMacros()
@@ -195,57 +381,10 @@ namespace RelhaxModpack.Automation
                 Logging.AutomationRunner(ex.ToString(), LogLevel.Exception);
                 return false;
             }
-            return true;
-        }
-
-        public bool ParseAutomationSequences()
-        {
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence from xml to class objects");
-            foreach (AutomationSequence automationSequence in AutomationSequences)
+            foreach(AutomationMacro macro in GlobalMacros)
             {
-                Logging.Info(Logfiles.AutomationRunner, "Load automation sequence data for package {0}", automationSequence.Package.PackageName);
-                if  (!automationSequence.ParseAutomationTasks())
-                {
-                    Logging.Error("Failed to parse sequence {0}, check the syntax and try again", automationSequence.ComponentInternalName);
-                    return false;
-                }
+                macro.MacroType = MacroType.Global;
             }
-            return true;
-        }
-
-        public async Task<bool> RunSequencesAsync()
-        {
-            if (AutomationSequences.Count == 0)
-            {
-                Logging.Warning(Logfiles.AutomationRunner, LogOptions.MethodName, "No sequences specified in AutomationSequences list, is this intended?");
-                return true;
-            }
-
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "RUNNING AUTOMATION SEQUENCES. Put in caps so you know it's important");
-            NumErrors = 0;
-            foreach (AutomationSequence sequence in AutomationSequences)
-            {
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Preparing macro lists for sequence run: {0}", sequence.ComponentInternalName);
-                ResetApplicationMacros(sequence);
-                ParseGlobalMacros();
-                if (AutomationRunnerSettings.DumpParsedMacrosPerSequenceRun)
-                {
-                    DumpApplicationMacros();
-                    DumpGlobalMacros();
-                }
-
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running sequence: {0}", sequence.ComponentInternalName);
-                bool SequenceResult = await sequence.RunTasksAsync();
-                if (!SequenceResult)
-                {
-                    Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Error with sequence '{0}'. Check the log above or enable verbose logging for details.", sequence.ComponentInternalName);
-                    NumErrors++;
-                    continue;
-                }
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Finished sequence '{0}.", sequence.ComponentInternalName);
-            }
-
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Sequence run finished with {0} errors.", NumErrors);
             return true;
         }
 
@@ -265,6 +404,41 @@ namespace RelhaxModpack.Automation
             {
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Macro: Name = {0}, Value = {1}", macro.Name, macro.Value);
             }
+        }
+
+        public void DumpShellEnvironmentVariables()
+        {
+            //dump vars before run
+            Logging.AutomationRunner("Dumping current shell environment variables", LogLevel.Debug);
+            using (Process process = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    //Setting this property to false enables you to redirect input, output, and error streams
+                    UseShellExecute = false,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            })
+            {
+                //https://stackoverflow.com/a/141098/3128017
+                foreach (KeyValuePair<string, string> keyValuePair in process.StartInfo.Environment)
+                {
+                    Logging.AutomationRunner("Key = {0}, Value = {1}", LogLevel.Debug, keyValuePair.Key, keyValuePair.Value);
+                }
+            }
+        }
+
+        public void UpdateDatabasePackageList()
+        {
+            DatabasePackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
+        }
+
+        public void CancelSequence()
+        {
+            if (RunningSequence != null)
+                RunningSequence.CancelTask();
         }
 
         public void Dispose()

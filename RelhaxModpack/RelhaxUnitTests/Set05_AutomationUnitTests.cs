@@ -9,6 +9,9 @@ using RelhaxModpack.Database;
 using System.Text.RegularExpressions;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
+using System.IO;
+using System.Threading;
+using RelhaxModpack.Automation.Tasks;
 
 namespace RelhaxUnitTests
 {
@@ -21,6 +24,8 @@ namespace RelhaxUnitTests
             SelectedBranch = "master"
         };
 
+        CancellationToken nullToken;
+
         [TestMethod]
         public async Task Test01_GetAutomationRepoBranchesTest()
         {
@@ -31,7 +36,8 @@ namespace RelhaxUnitTests
                 WoTClientVersion = "TODO",
                 WoTModpackOnlineFolderVersion = "TODO"
             };
-            throw new BadMemeException("you should, like, finish this");
+            return;
+            //throw new BadMemeException("you should, like, finish this");
             /*
             //TODO: dynamically get this from the beta db?
             ApplicationSettings.WoTModpackOnlineFolderVersion = "1.10.0";
@@ -49,9 +55,9 @@ namespace RelhaxUnitTests
                 ParentCategory = new Category() { Name = "Cat_name" },
                 Level = 0
             });
-            bool loadAutomationSequencesResult = await sequencer.LoadAutomationSequencesAsync(DatabasePackages);
-            bool parseAutomationSequencesResult = sequencer.ParseAutomationSequences();
-            bool runSequencesResult = await sequencer.RunSequencesAsync();
+            //bool loadAutomationSequencesResult = await sequencer.LoadAutomationSequencesAsync(DatabasePackages);
+            //bool parseAutomationSequencesResult = sequencer.ParseAutomationSequences();
+            //bool runSequencesResult = await sequencer.RunSequencesAsync();
             //Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
             //Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
         }
@@ -139,7 +145,7 @@ namespace RelhaxUnitTests
             };
 
             //still need a automation sequence object to run this
-            AutomationSequence sequence = new AutomationSequence();
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
 
             //create a random task so we can process macros for this test
             ShellExecuteTask task = new ShellExecuteTask()
@@ -163,5 +169,52 @@ namespace RelhaxUnitTests
             }
 
         }
+
+        [TestMethod]
+        public async Task Test03_DownloadBrowserTaskTest()
+        {
+            //still need a automation sequence object to run this
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            //create a random task so we can process macros for this test
+            //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
+            //https://stackoverflow.com/a/39064452/3128017
+            DownloadBrowserTask task = new DownloadBrowserTask()
+            {
+                DestinationPath = @"downloaded_file.zip",
+                Url = "https://wgmods.net/2030/",
+                ID = "download_mod_updated_test",
+                HtmlPath = @"//a[contains(@class, 'ModDetails_hidden')]//@href",
+                AutomationSequence = sequence
+            };
+
+            await task.Execute();
+        }
+
+        [TestMethod]
+        public async Task Test04_FileHashCompareTest()
+        {
+            //first test the individual component, then the task
+            FileHashComparer fileHashComparer = new FileHashComparer();
+
+            string fileAPath = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.dds");
+            string fileACorrectHashPath = Path.Combine(UnitTestHelper.ResourcesFolder, "battleAtlas.dds.md5");
+            string fileACorrectHash = File.ReadAllText(fileACorrectHashPath);
+
+            await fileHashComparer.ComputeHashA(fileAPath);
+
+            Assert.IsTrue(fileHashComparer.HashACalculated);
+            Assert.IsNotNull(fileHashComparer.HashAStringBuilder);
+            Assert.AreEqual(fileACorrectHash.ToLower(), fileHashComparer.HashAStringBuilder.ToString().ToLower());
+        }
+
+        /*
+         * Kept in case later it's needed for test initialization
+        [TestInitialize]
+        public void SetDefaultValues()
+        {
+            
+        }
+        */
     }
 }

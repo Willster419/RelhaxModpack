@@ -37,7 +37,7 @@ namespace RelhaxModpack.Automation
 
         public string Value { get; set; } = string.Empty;
 
-        public MacroType MacroType { get; set; } = MacroType.None;
+        public MacroType MacroType { get; set; }
 
         public static AutomationMacro Copy(AutomationMacro macroToCopy)
         {

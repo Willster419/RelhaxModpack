@@ -1,3 +1,42 @@
+# Application version 1.3.3.0 (2021-07-25)
+https://www.virustotal.com/gui/file-analysis/MTMyYjQ2ZTBlYzY1MjU0N2Q0MjU5NDc2M2ZiNzI0MDk6MTYyNzI1NTU4Mg==/detection
+
+## "It will work this time, believe me".
+
+### The beginning of the Automation system for the database to update itself and gain sentience.
+- Allows us to script the update process rather then relying on manual work.
+- Scripts written in Xml to allow leverage of already known syntax.
+- Complete with error catching and exit code parsing to know what was the reason for ending, if it was success, failure, or no changes needed to the package.
+- An automation runner window runs the `AutomationSequencer`.
+- It has a template / import system so that we can re-use tasks as needed. This is like object-oriented programming, so when we update a template, it updates for all sequences that use it. No dumb copy-pasting here!
+- An `AutomationSequencer` runs a list of `AutomationSequence` objects, called sequences for short.
+- Each sequence has a list of tasks that it will run. The types of tasks can be downloading, file IO, zip file processing, file comparison via md5 hash, and more.
+- It allows for loading from a specific branch of our repository, or a local copy.
+- A signature feature of the system is a multi-level, recursive, macro processing system using regex tag balancing. You can have macros inside macros, AND you can recursively solve macros.
+
+### Lots of code optimizations and improvements that frankly should have been done the first time around, but yeah. ThE MoRe YoU KnOw.
+- Moved several static methods and copy-paste code into re-usable managed classes. #Reuse #OOP.
+- Added a bunch of missing translations that managed to get lost in a migration to a different process of loading them into the application on startup.
+- Updated and added new translations for Russian (DrWeb7_1).
+- Added text wrapping to tooltip messages so they don't go off the screen or look weird.
+- Cleaned up and updated tooltip explanations for the settings options in the settings tab.
+- Some debug log spam cleanup.
+
+### So many bug fixes the EPA may classify this update as a biological hazard.
+- Fixed layout of database editor where it looks fine in the developer view but is wrong in runtime. Thanks to The_Illusion for pointing this out (repeatedly until I finally fixed it).
+- Fixed locations of database version and language selection text so it is aligned and doesn't wrap to a new line.
+- Fixed wrong translation key entry for Minimalist mode description.
+- Fixed not showing beta application release notes in application news viewer and version information windows.
+- Fixed code merge issues with custom scaling and font settings.
+- Fixed a bug where custom database feature windows (like the editor, patch designer, etc.) would crash on launch if a custom font was requested.
+- Fixed a bug that would not correctly detect the version of windows above windows 8.0.
+- Fixed the bug of the database editor not saving to the correct file location.
+- Fixed the bug of the database editor crashing when removing or adding, or moving a package at the top most level of a category.
+- Fixed a bug with the first time load of the beta application distribution not being set properly on startup. It was causing a loop (or weird update track, at least). Thanks for Nullmaruzero for his hours of debugging on this.
+- Fixed crashes in the package selection list when right clicking on a disabled package for preview.
+- Fixed crashes when selecting the category root checkbox in the package selection list.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Application version 1.3.1.0 (2021-05-15)
 https://www.virustotal.com/gui/file-analysis/ZDE0ZTAyNTc0ODUyNTA5ZTRmOTUyZjBiMzcwMTU4ZmQ6MTYyMTEzMDQ5NA==/detection
 
@@ -61,212 +100,4 @@ https://www.virustotal.com/gui/file-analysis/ZDE0ZTAyNTc0ODUyNTA5ZTRmOTUyZjBiMzc
 - More refactoring of enums and EventArgs into the Enums and CustomEventArgs namespace/folder.
 - Removed UI options for custom theme. Any custom theme options found will re-direct to default.
 - Updated and added new translations for English, Spanish(LordFelix), French (Tolrod22), German (Elektrosmoker), Polish (Nullmaruzero)
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.2.4.0 (2020-12-12)
-https://www.virustotal.com/gui/file-analysis/NmE4MDJiZWVhMWJhMWI4NDMyNzhmOWI5ZjNhYTg4M2Q6MTYwNzgyMTcxOA==/detection
-- Re-worked the launch process of the application so that if it is currently open, and the application is attempting to be launched in a custom mode (like editor), it won't stop because of the open main log file.
-  - In other words, you can have multiple instance (modes) of the application open.
-- Fixed memory leaks in the Mod Selection List window.
-- Fixed bugs with management of auto install timer causing high CPU usage (thanks for @JC on the discord server for reporting this).
-- Complete re-work of the database editor transfer window to allow for identify-able cod blocks based on transfer mode (Media upload, zip file upload, zip file download). What is code debt.
-- Fixed bug of application not installing mods to the correct WoT mods and res_mods folders when in beta database, if the beta database's target version does not match the client's version.
-- Fixed bug of application crashing when global dependencies comparison list attempts to check for a global dependency package in the database that no longer exists. What is quality control.
-- Fixed bug of preview window crashing when trying to right click on a picture preview. (Thanks @heavyshot of the NA server for pointing this out)
-- Disabled spell checking of database editor textboxes. The API's implementation is awful and lags out the application.
-- Added clearing of the database editor's components undo stacks when switching to a new component to display. Helps with application lag.
-- Added feature in database editor to delete a local version of an uploaded zip file after upload, or move it to a specified folder.
-- Stability improvements for FTP integration of database editor.
-- Updated Russian (DrWeb7_1), Polish (Nullmaruzero), German (Elektrosmoker), French (Toshiro), and Spanish (LordFelix) translations. So all of them I guess. Probably should have lead with that.
-- Code organization and optimizations. Like always.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.2.0.0 (2020-10-19)
-https://www.virustotal.com/gui/file-analysis/OTU5ODg1ZjAzZWEzYjIxMTQ3MDgxZTY3MjQyYTcyYTA6MTYwMzA5MzUxNA==/detection
-- Added a unit tests project to the code base solution. This will allow us to unit test individual software features and help catch bugs in the application before they get released to beta.
-- Added database property and editor code-behind for adding tags to packages to classify what type of package it is (does it have patches, scripts, images, etc.)
-- Re-worked the `ModSelectionList` loading code to be organized into loading sections and what thread each loading section  happens on.
-- The algorithm for modifying atlas image data was re-written and saw a 96% time reduction. The entire time of atlas creation has been reduced by about 15-25%, depending on your system configuration.
-- Added a check to ensure the user has the .NET Framework version 4.8 or later installed. If not the user is prompted to download the latest .NET Framework.
-- Re-worked the shortcut code to use one imported COM reference. Allows us to remove the COM reference for `IWshRuntimeLibrary`
-- Lots of refactoring and code re-organization to match what is more common in c# projects. Big thanks to 'hrobohboy' for joining the application development team and taking on code cleanup and testing frameworks.
-- Modified build script to copy nuget packages to a custom location to be embedded into the application. This means that when a nuget package is updated, the update is automatically included into the next application build.
-- Updated several of our 3rd party APIs, including `DotNetZip`, `TexImpNet`, and `HtmlAgilitypack`.
-- Renamed `DatabaseUpdater` to `ModpackToolbox`.
-  -  Added feature to export translations to a tab-delimited csv file, with text escaped.
-- Removed setting to save database as legacy in the editor. No one uses it.
-- Added several utility methods to the `Translations` class. Useful for the translators.
-- Created another unit testing project for UI testing and automated mod testing.
-- Several comment and logfile writing improvements.
-- Fixed issues with UI when running authorization section of `ModpackToolbox`.
-- Re-worked descriptions and parameter names on several common utility methods to make more sense. Which is always good.
-- Removed legacy database methods no longer used
-- Removed unused code.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.1.1.0 (2020-07-03)
-https://www.virustotal.com/gui/file-analysis/YTQ5YTlmN2MxNjE0NDZiNjhjMmQ4ZjM0ODRkMTk1ZTc6MTU5MzgwODc4NA==/detection
-- Fixed the bug with drop down combobox selections not selecting the item that you click on. (Thanks Silvers of the NA server for reporting)
-- Fixed bugs with selecting font from the MainWindow.
-- Removed redundant code in ModSelectionList and code optimizations.
-- Added ability to select custom font to use with the application. Yes that means you can select Comic Sans.
-- Disabled custom themes in RelhaxColorPicker.
-- Updated translations.
-- Updated in-code documentation.
-- Added new package property 'FromWGmods'. Allows us to display if the source for updating the package is from the official WoT mod portal (wgmods.net).
-- Fixed a bug with loading the selection list where if a non-UI thread tried to handle exceptions, it would in itself cause an exception.
-- Other database editor fixes.
-- Updated translations (all languages).
-- Removed half-baked method of updating the supported_clients xml document during the database publish/release process.
-  - Now during the publish process, it will inform you if the supported_clients xml document needs to be updated.
-- Significantly improved and moved the code to maintain the supported_clients xml document to it's own tool process.
-- Re-worked the database serialization code to promote reuse.
-- Fixed bug with categories not being serialized properly to the xml database.
-- Added showing calculated package offset values for installation in the editor.
-- Fixed a bug with the editor not showing test previews after the preview window re-work.
-- Refactored the code base to make more sense when looking at the source and doesn't lead you to question my organizational abilities as a developer.
-- Fixed potential future issues with database xpath search queries.
-- Updated Polish (Nullmaruzero) and Russian (DrWeb7_1) translations.
-- General code cleanup and optimizations.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.1.0.2 (2020-05-08)
-https://www.virustotal.com/gui/file-analysis/NjQxMzRkOWM5ZGQ1NTcxNjBiNzRiODNlZGJjMzViYzU6MTU4ODk4NTUxNg==/detection
-- Well that was quick.
-- Fixed bug of save selection confirmation window showing when the load selection V3 method is saving/updating the selection entries.
-- Added one-time check if user launched the application from the downloads folder. This is not a reccomended place to contain the modpack.
-- Added check in database updater when determining if supported_clients.xml needs to be updated on server.
-- Updated logging.
-- Fixed minor issues with printing output of database updater.
-- Added forgotten translations entries.
-- Updated documentation.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.1.0.0 (2020-05-07)
-https://www.virustotal.com/gui/file/9eb1d7fda45b74f09ba21fa2c017de720d7042ea225c680b5ac2c2ace961968e/detection
-- Update selection file format to 3.0. This allows us to track changes in each selected package
-  - We can use this to determine if the database updates apply to your selection, or if you don't need to update (if the update didn't affect any of your installed packages)
-  - This also allows us to determine during auto-update if your installation need to be updated.
-  - This makes us the first and only modpack to impliment a full "Mods as a Service" model in our application.
-  - Like WG Game Center, if you leave the application running in the background, it will determine if need to and auto-update your mods when we publish a new database version.
-  - Note that this will not apply to the developer selections, or default checked packages.
-- Update database format to version 2.1.
-- Fixed issue with editor not clearing UI when a text "filler" selection is selected
-- Added features to database updater tool: Check for duplicate packageNames, UIDs, add missing UIDs.
-- Added logging features to print the method and class name to make log reading easier.
-- Fixed bug of news reader crashing when unable to connect ot github.
-- Fixed UI bug of themes not being applied to the credits window.
-- Fixed bug with process access rights, when getting WoT's process information.
-- Fixed bug of user mods not installing when it contained a patch file, complainig of a failed download.
-- Added display of package UID in editor.
-- Updated theme definitions.
-- Fixed bug with editor add/copy package button trying to allow a package to copy from its own location.
-- Updated logging.
-- Minor general code cleanup and optimizations.
-- Updated documentation.
-- Updated Spanish (LordFelix) and Russian (DrWeb7_1) and German (Elektrosmoker) translations.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.0.4.0 (2020-04-05)
-https://www.virustotal.com/gui/file/6b6174cbd2aa27069c1e8f7119de4447821957bdab981661a47884dece853b48/detection
-- Added "Maintainers" internal database property for database managers to track who generally works on database sections.
-- Fixed issues with preview window not displaying correct package information when selecting from combobox bulk preview.
-- Adjusted display/preview window height to be 2/3 rather then 1/2.
-- Re-worked interface definitions to allow for more refrences being saved into class properties.
-- Fixed incorrect application of color to some hyperlinks in the application.
-- Re-worked messages for selection list issues (like listing disabled packages).
-- Fixed issues with the WG update utility for updating the WG game center.
-- Fixed no progress bar reporting during application update.
-- Added ability to clear game cache from diagnosstic utilities window.
-- Re-worked the version info dialog window (Arkhorse / TheIllusion).
-- Fixed bug with install group calculations based on offset max value.
-- Changed GameCenter Updater to use "game_info.xml" instead for which file to load.
-- Added feature to show a messageBox of first load of selectionList to inform users that they can right click to select a component. Added additional logic so that it will never show outside of a first load scenario.
-- Added/updated utility methods.
-- General code optimizations and cleanup.
-- Fixed/updated issues and features with the database updater.
-- Fixed/updated issues and features with the database editor.
-- Updated logging messages.
-- Updated documentation.
-- Updated translations.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.0.3.0 (2020-02-09)
-https://www.virustotal.com/gui/file/0f5e29d75dcd5b5d88f66d603c59454376028643eb754abcd2b415b8f19e6c1c/detection
-- Fixed bug in the clean/uninstall process crashing if access to mods/res_mods is denied. Now it will log the error and report.
-- Re-worked UI of database editor, changed how some list style components are edited and applied.
-- Fixed database editor views of InstallGroup to factor in the categories offset level parameter.
-- Fixed bugs with handling failed downloads in both "install while downloading" is true and false.
-- Fixed bug in test mode where default checked items were being applied.
-- Fixed bug with the selection list showing hidden packages in the search result, clicking on them results in a crash.
-- Fixed bug with the selection list of a disabled combobox item component not allowing to be previewed.
-- Fixed bug with the selection list of the first drop down item not selecting from initial state.
-- Fixed bug with the selection list of not showing packages with broken selections.
-- Added feature in the preview window showing the name of the mod/package you are previewing when previewing all items in a drop down list.
-- Fixed Windows 7 compatibility bug preventing the application from getting the update notes.
-- Added documentation as tooltips for database editor.
-- Updated Russian and Spanish translations.
-- Updated documentation.
-- Minor code readability optimizations.
-- Fixed bugs with parsing of conflicting packages and triggers.
-- Fixed bugs with WG patch download utility. WG tried to be all sneaky and change their update data structure.
-- Fixed bugs with saving triggers in database editor.
-- Minor database editor bug fixes and design optimizations.
-- Other minor code optimizations.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.0.2.0 (2020-02-01)
-https://www.virustotal.com/gui/file/d6ed6d8994f5fe51f11655c760af1e8d08e35f13fdc445acf1c75cb95e47ad69/detection
-- Fixed critical bug of application update method when it was re-written. Sorry about that everyone.
-- Added "RelhaxModpack_update.exe", "RelhaxModpack_update.zip" to list of files to check for and delete on startup.
-- Fixed minor bug displaying incorrect dependency calculation results.
-- Added/updated logging in depepndency calculation processing.
-- Fixed DevURL bugs with database editor.
-- Fixed DevURL bugs with database csv output.
-- Fixed issue loading database for csv output in database updater.
-- Added debug logging and null checks in bug isolation during application update.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.0.1.0 (2020-01-26)
-https://www.virustotal.com/gui/file/c450147a9cac4fab33d8bb56be60f7858a3c642f485f1cc16ca06d1c0f0582d5/detection
-- Fixed bug of application crashing when trying to parse invalid preview URI strings.
-- Fixed bug of application not creating atlases with new nvtt API (version conflicts between nvtt and TexImpNet APIs).
-- Changed application to not save settings nor allow UI interaction during "update mode" (when user presses yes to new version, waiting for download).
-- Fixed bug with application not loading when autoInstall was set to true with the beta database.
-- Fixed bugs with display and internal parsing of developer URLs.
-- Fixed issues with logging during application closing.
-- Added get properties to database class for getting escaped and formatted update/description strings.
-- Enabled usage of new database properties: Popular mod, controversial mod.
-- Added new database property: Obfuscated mod. Shows when a mod is encrypted and can't be scanned for viruses.
-- Fixed minor bug in logging when showing checked package.
-- Added a credits window for the team and our usage of 3rd party APIs.
-- Improved display of populer, controversial, obfuscated mod icons to show left to right of package and reduce load time.
-- Added display of popular, controversial and obfuscated mod icons to dropDown selections.
-- Added category property: OffsetInstallGroups. When false, it will not apply an additional installGroup offset to package install group calculation, allowing more parallelism and faster installations.
-- Fixed bug with beta application checkbox not being set on application start.
-- Fixed bugs with Timers vs. DispatchTimers.
-- Added statistics management tools to database updater utility.
-- Updated HtmlAgilityPack and DotNetZip APIs.
-- Improved logging.
-- Updated translations.
-- Added lots of documentation.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.0.0.1 (2020-01-11)
-(Yup, a day one patch.)
-https://www.virustotal.com/gui/file/a8e695e33b429ce7a687e57ce141665c4c19b5bfdfaf44129539730b2adbe75e/detection
-- Fixed the search combobox in the selection list. It will no longer "eat" your first type letters.
-- Fixed several bugs with database editor:
-  -  Database saving
-  -  Unsaved changes check
-  -  Disabled UI components until V2 database (needed to be enabled)
-  -  Bugs with package search combobox
-- Fixed disabled UI components until V2 patch system. (needed to be enabled)
-- Updated Spanish, Polish, Russian translations.
-- Not bad for a day one patch on initial release, if I may say so myself.
---------------------------------------------------------------------------------------------------------------------------------------------
-
-Application version 1.0.0.0 (2020-01-10)
-https://www.virustotal.com/gui/file/1df83980fa58bd12a989b38e0b143582207fb8dd99c7350bb9f86ca3049c0827/detection
-- Initial Relhax V2 1.0 release
 --------------------------------------------------------------------------------------------------------------------------------------------

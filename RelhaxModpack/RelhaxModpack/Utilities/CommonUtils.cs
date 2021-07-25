@@ -1067,20 +1067,12 @@ namespace RelhaxModpack.Utilities
         /// <summary>
         /// Creates all database entries in a list property, parsing each list entry object by xmlListItems
         /// </summary>
-        /// <param name="databasePackageObject">The database package object with the list property, for example SelectablePackage</param>
-        /// <param name="listPropertyInfo">The property metadata/info about the list property, for example Medias</param>
+        /// <param name="listProperty">A generic representation of a initialized, empty list</param>
         /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
-        public static void SetListEntries(IComponentWithID databasePackageObject, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems, string customTypeAttributeName = null, Dictionary<string, Type> typeMapper = null)
+        public static bool SetListEntries(IList listProperty, string componentWithIdInternalName, IEnumerable<XElement> xmlListItems, string customTypeAttributeName = null, Dictionary<string, Type> typeMapper = null)
         {
+            bool errorOccured = false;
             bool customTyping = !(string.IsNullOrEmpty(customTypeAttributeName));
-            if (customTyping && typeMapper == null)
-                throw new NullReferenceException(nameof(typeMapper) + " is null");
-            if (databasePackageObject == null || listPropertyInfo == null || xmlListItems == null)
-                throw new NullReferenceException(string.Format("{0}: null = {1}, {2}: null = {3}, {4}: null = {5}",
-                    nameof(databasePackageObject), databasePackageObject == null, nameof(listPropertyInfo), listPropertyInfo == null, nameof(xmlListItems), xmlListItems == null));
-
-            //get the list interfaced component
-            IList listProperty = listPropertyInfo.GetValue(databasePackageObject) as IList;
 
             //we now have the empty list, now get type of list it is, unless we have a dictionary to map it
             Type listObjectType = null;
@@ -1101,11 +1093,28 @@ namespace RelhaxModpack.Utilities
                 //if we're doing custom typing, then get the type based on the attribute name
                 if (customTyping)
                 {
-                    string typeResult = listElement.Attribute(customTypeAttributeName).Value;
+                    XAttribute typeResultAttribute = listElement.Attribute(customTypeAttributeName);
+                    if (typeResultAttribute == null)
+                    {
+                        Logging.Error("The custom attribute {0} was missing from the xml element", customTypeAttributeName);
+                        errorOccured = true;
+                        continue;
+                    }
+
+                    string typeResult = typeResultAttribute.Value;
                     if (string.IsNullOrEmpty(typeResult))
-                        throw new BadMemeException("typeResult is null or empty - invalid attribute name");
+                    {
+                        Logging.Error("typeResult is null or empty - invalid attribute name", customTypeAttributeName);
+                        errorOccured = true;
+                        continue;
+                    }
+
                     if (!typeMapper.ContainsKey(typeResult))
-                        throw new BadMemeException(string.Format("typeResult {0} does not exist in dictionary", typeResult));
+                    {
+                        Logging.Error("typeResult {0} does not exist in dictionary", typeResult);
+                        errorOccured = true;
+                        continue;
+                    }
                     listObjectType = typeMapper[typeResult];
                 }
 
@@ -1122,7 +1131,7 @@ namespace RelhaxModpack.Utilities
                 {
                     listProperty.Add(listElement.Value);
                 }
-                
+
                 object listEntryObject = Activator.CreateInstance(listObjectType);
 
                 //make sure object type is properly implemented into serialization system
@@ -1137,7 +1146,11 @@ namespace RelhaxModpack.Utilities
                 {
                     if (!listEntry.PropertiesForSerializationAttributes().Contains(listEntryAttribute.Name.LocalName))
                     {
-                        unknownAttributes.Add(listEntryAttribute.Name.LocalName);
+                        //if the 'unknown' is the custom type for mapping we added, we know what it is and thus don't add it as an unknown
+                        if (!(customTyping && listEntryAttribute.Name.LocalName.Equals(customTypeAttributeName)))
+                        {
+                            unknownAttributes.Add(listEntryAttribute.Name.LocalName);
+                        }
                         continue;
                     }
 
@@ -1147,7 +1160,8 @@ namespace RelhaxModpack.Utilities
                     if (property == null)
                     {
                         Logging.Error("Property (xml attribute) {0} exists in array for serialization, but not in class design!, ", listEntryAttribute.Name.LocalName);
-                        Logging.Error("Package: {0}, line: {1}", databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", componentWithIdInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        errorOccured = true;
                         continue;
                     }
 
@@ -1157,7 +1171,8 @@ namespace RelhaxModpack.Utilities
                     if (!SetObjectProperty(listEntry, property, listEntryAttribute.Value))
                     {
                         Logging.Error("Failed to set property {0} for element in IList", property.Name);
-                        Logging.Error("Package: {0}, line: {1}", databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", componentWithIdInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        errorOccured = true;
                     }
                 }
 
@@ -1174,7 +1189,8 @@ namespace RelhaxModpack.Utilities
                     if (property == null)
                     {
                         Logging.Error("Property (xml element) {0} exists in array for serialization, but not in class design!, ", listEntryElement.Name.LocalName);
-                        Logging.Error("Package: {0}, line: {1}", databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", componentWithIdInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                        errorOccured = true;
                         continue;
                     }
 
@@ -1183,26 +1199,53 @@ namespace RelhaxModpack.Utilities
                     if (!SetObjectProperty(listEntry, property, listEntryElement.Value))
                     {
                         Logging.Error("Failed to set property {0} for element in IList", property.Name);
-                        Logging.Error("Package: {0}, line: {1}", databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                        Logging.Error("Package: {0}, line: {1}", componentWithIdInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                        errorOccured = true;
                     }
                 }
 
                 //logging unknown and missings
                 foreach (string missingAttribute in missingAttributes)
                 {
-                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", missingAttribute, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", missingAttribute, componentWithIdInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    errorOccured = true;
                 }
                 foreach (string unknownAttribute in unknownAttributes)
                 {
-                    Logging.Error("Unknown xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Unknown xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, componentWithIdInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    errorOccured = true;
                 }
                 foreach (string unknownElement in unknownElements)
                 {
-                    Logging.Error("Unknown xml element: {0}, package: {1}, line: {2}", unknownElement, databasePackageObject.ComponentInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Unknown xml element: {0}, package: {1}, line: {2}", unknownElement, componentWithIdInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    errorOccured = true;
                 }
 
                 listProperty.Add(listEntry);
             }
+
+            return !errorOccured;
+        }
+
+        /// <summary>
+        /// Creates all database entries in a list property, parsing each list entry object by xmlListItems
+        /// </summary>
+        /// <param name="databasePackageObject">The database package object with the list property, for example SelectablePackage</param>
+        /// <param name="listPropertyInfo">The property metadata/info about the list property, for example Medias</param>
+        /// <param name="xmlListItems">The xml element holder for the property object types, for example Medias element holder</param>
+        public static bool SetListEntries(IComponentWithID databasePackageObject, PropertyInfo listPropertyInfo, IEnumerable<XElement> xmlListItems, string customTypeAttributeName = null, Dictionary<string, Type> typeMapper = null)
+        {
+            bool customTyping = !(string.IsNullOrEmpty(customTypeAttributeName));
+            if (customTyping && typeMapper == null)
+                throw new NullReferenceException(nameof(typeMapper) + " is null");
+            if (databasePackageObject == null || listPropertyInfo == null || xmlListItems == null)
+                throw new NullReferenceException(string.Format("{0}: null = {1}, {2}: null = {3}, {4}: null = {5}",
+                    nameof(databasePackageObject), databasePackageObject == null, nameof(listPropertyInfo), listPropertyInfo == null, nameof(xmlListItems), xmlListItems == null));
+
+            //get the list interfaced component
+            IList listProperty = listPropertyInfo.GetValue(databasePackageObject) as IList;
+
+            return SetListEntries(listProperty, databasePackageObject.ComponentInternalName, xmlListItems, customTypeAttributeName, typeMapper);
         }
 
         /// <summary>

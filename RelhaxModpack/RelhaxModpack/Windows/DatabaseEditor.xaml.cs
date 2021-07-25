@@ -42,14 +42,14 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public const string LoggingFilename = "RelhaxEditor.log";
 
-        public string WoTModpackOnlineFolderVersion { get; set; }
-
-        public string WoTClientVersion { get; set; }
+        private DatabaseManager databaseManager;
+        private List<DatabasePackage> GlobalDependencies { get { return databaseManager.GlobalDependencies; } }
+        private List<Dependency> Dependencies { get { return databaseManager.Dependencies; } }
+        private List<Category> ParsedCategoryList { get { return databaseManager.ParsedCategoryList; } }
+        private string WoTModpackOnlineFolderVersion { get { return databaseManager.WoTOnlineFolderVersion; } }
+        private string WoTClientVersion { get { return databaseManager.WoTClientVersion; } }
 
         private EditorSettings EditorSettings = new EditorSettings();
-        private List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
-        private List<Dependency> Dependencies = new List<Dependency>();
-        private List<Category> ParsedCategoryList = new List<Category>();
         private OpenFileDialog OpenDatabaseDialog;
         private SaveFileDialog SaveDatabaseDialog;
         private OpenFileDialog OpenZipFileDialog;
@@ -95,9 +95,12 @@ namespace RelhaxModpack.Windows
                 }
                 else
                 {
-                    Logging.Editor("file does not exist");
+                    Logging.Editor("File does not exist");
                 }
             }
+
+            //setup database manager
+            databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings);
 
             //load the trigger box with trigger options
             LoadedTriggersComboBox.Items.Clear();
@@ -166,12 +169,6 @@ namespace RelhaxModpack.Windows
                     return;
                 }
             }
-
-            Logging.TryWriteToLog("Saving editor settings", Logfiles.Editor, LogLevel.Info);
-            SettingsParser parser = new SettingsParser();
-            parser.SaveSettings(Settings);
-            Logging.TryWriteToLog("Editor settings saved", Logfiles.Editor, LogLevel.Info);
-            Logging.DisposeLogging(Logfiles.Editor);
         }
 
         private int GetMaxPatchGroups()
@@ -573,6 +570,7 @@ namespace RelhaxModpack.Windows
                     PackageAuthorDisplay.IsEnabled = true;
                     PackageInstallGroupDisplay.IsEnabled = true;
                     PackagePatchGroupDisplay.IsEnabled = true;
+                    PackageUidDisplay.IsEnabled = true;
                     PackageLastUpdatedDisplay.IsEnabled = true;
                     PackageLogAtInstallDisplay.IsEnabled = true;
                     PackageEnabledDisplay.IsEnabled = true;//kinda meta
@@ -1492,7 +1490,8 @@ namespace RelhaxModpack.Windows
             SearchBox.Items.Clear();
 
             //rebuild the levels as well
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, true);
+            DatabaseUtils.BuildTopLevelParents(ParsedCategoryList);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
             DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
             DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
@@ -1951,8 +1950,7 @@ namespace RelhaxModpack.Windows
             }
 
             //actually save
-            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(DefaultSaveLocationSetting.Text), ApplicationConstants.BetaDatabaseV2RootFilename),
-                        WoTClientVersion, WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+            databaseManager.SaveDatabase(EditorSettings.DefaultEditorSaveLocation);
 
             UnsavedChanges = false;
         }
@@ -1987,13 +1985,12 @@ namespace RelhaxModpack.Windows
                     DefaultSaveLocationSetting.Text = SaveDatabaseDialog.FileName;
 
             //actually save
-            DatabaseUtils.SaveDatabase(Path.Combine(Path.GetDirectoryName(SaveDatabaseDialog.FileName), ApplicationConstants.BetaDatabaseV2RootFilename),
-                        WoTClientVersion, WoTModpackOnlineFolderVersion, GlobalDependencies, Dependencies, ParsedCategoryList, DatabaseXmlVersion.OnePointOne);
+            databaseManager.SaveDatabase(EditorSettings.DefaultEditorSaveLocation);
 
             UnsavedChanges = false;
         }
 
-        private void LoadAsDatabaseButton_Click(object sender, RoutedEventArgs e)
+        private async void LoadAsDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
             string fileToLoad = string.Empty;
             //check if it's from the auto load function or not
@@ -2024,35 +2021,17 @@ namespace RelhaxModpack.Windows
                 fileToLoad = CommandLineSettings.EditorAutoLoadFileName;
             }
 
-            //the file exists, load it
-            XmlDocument doc = XmlUtils.LoadXmlDocument(fileToLoad, XmlLoadType.FromFile);
-            if (doc == null)
-            {
-                MessageBox.Show("Failed to load the database, check the logfile");
-                Logging.Editor("doc is null from LoadXmlDocument(fileToload, xmlType)");
-                return;
-            }
-            if (!DatabaseUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(fileToLoad)))
-            {
-                MessageBox.Show("Failed to load the database, check the logfile");
-                return;
-            }
+            //load the database into the manager
+            await databaseManager.LoadDatabaseTestAsync(fileToLoad);
 
             //build internal database links
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, true);
-            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
             DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
-            //set the onlineFolder and version
-            //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
-            //for the folder version: //modInfoAlpha.xml/@version
-            WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
-            WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
         }
 
-        private void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
+        private async void OnLoadDatabaseClick(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(DefaultSaveLocationSetting.Text))
             {
@@ -2065,31 +2044,12 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            //actually load
-            //the file exists, load it
-            XmlDocument doc = XmlUtils.LoadXmlDocument(DefaultSaveLocationSetting.Text, XmlLoadType.FromFile);
-            if (doc == null)
-            {
-                MessageBox.Show("Failed to load the database, check the logfile");
-                Logging.Editor("doc is null from LoadXmlDocument(fileToload, xmlType)");
-                return;
-            }
-            if (!DatabaseUtils.ParseDatabase(doc, GlobalDependencies, Dependencies, ParsedCategoryList, Path.GetDirectoryName(DefaultSaveLocationSetting.Text)))
-            {
-                MessageBox.Show("Failed to load the database, check the logfile");
-                return;
-            }
+            //load the database into the manager
+            await databaseManager.LoadDatabaseTestAsync(DefaultSaveLocationSetting.Text);
 
             //build internal database links
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, true);
-            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
             DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
 
-            //set the onlineFolder and version
-            //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
-            //for the folder version: //modInfoAlpha.xml/@version
-            WoTClientVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@version");
-            WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(doc, "//modInfoAlpha.xml/@onlineFolder");
             LoadUI(GlobalDependencies, Dependencies, ParsedCategoryList);
             UnsavedChanges = false;
         }
@@ -2237,23 +2197,11 @@ namespace RelhaxModpack.Windows
             Logging.Editor("Running trigger manual sync script...");
 
             string resultText = null;
-            using (PatientWebClient client = new PatientWebClient()
-            { Credentials = PrivateStuff.BigmodsNetworkCredentialScripts, Timeout = 100000 })
-            {
-                try
-                {
-                    string result = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsTriggerManualMirrorSyncPHP);
-                    Logging.Editor(result.Replace("<br />", "\n"));
-                    if (result.ToLower().Contains("trigger=1"))
-                        resultText = "SUCCESS!";
-                }
-                catch (WebException wex)
-                {
-                    Logging.Editor("Failed to run trigger manual sync script", LogLevel.Error);
-                    Logging.Editor(wex.ToString(), LogLevel.Exception);
-                    resultText = "ERROR!";
-                }
-            }
+            bool result = await FtpUtils.TriggerMirrorSyncAsync();
+            if (result)
+                resultText = "SUCCESS!";
+            else
+                resultText = "ERROR!";
 
             TriggerMirrorSyncButton.Content = resultText;
             await Task.Delay(5000);
