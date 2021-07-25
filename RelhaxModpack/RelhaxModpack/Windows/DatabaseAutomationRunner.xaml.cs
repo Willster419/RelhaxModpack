@@ -16,6 +16,7 @@ using RelhaxModpack.Utilities;
 using RelhaxModpack.UI;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
 {
@@ -66,6 +67,8 @@ namespace RelhaxModpack.Windows
 
         private CancellationTokenSource cancellationTokenSource;
 
+        private Dispatcher loggerDispatcher;
+
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
@@ -106,15 +109,7 @@ namespace RelhaxModpack.Windows
             LoadSettingsToUI();
 
             //init the log viewer window
-            logViewer = new RelhaxLogViewer(ModpackSettings)
-            {
-                WindowStartupLocation = WindowStartupLocation.Manual,
-                Top = this.Top,
-                Left = this.Left + this.Width + 10
-            };
-
-            if (AutomationSettings.OpenLogWindowOnStartup)
-                logViewer.Show();
+            FocusOrCreateLogWindow(AutomationSettings.OpenLogWindowOnStartup);
 
             await LoadAutomationSequencerAsync();
         }
@@ -168,8 +163,8 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
             //close windows if open
-            if (!logViewer.ViewerClosed)
-                logViewer.Close();
+            loggerDispatcher?.Invoke(() => { if (logViewer.IsLoaded) logViewer.Close(); });
+
             if (htmlPathSelector != null && htmlPathSelector.IsLoaded)
                 htmlPathSelector.Close();
 
@@ -439,21 +434,7 @@ namespace RelhaxModpack.Windows
         #region Bottom row buttons
         private void OpenLogfileViewerButton_Click(object sender, RoutedEventArgs e)
         {
-            if (logViewer.ViewerClosed)
-            {
-                logViewer = null;
-                logViewer = new RelhaxLogViewer(ModpackSettings)
-                {
-                    WindowStartupLocation = WindowStartupLocation.Manual,
-                    Top = this.Top,
-                    Left = this.Left + this.Width + 10
-                };
-                logViewer.Show();
-            }
-            else
-            {
-                logViewer.Focus();
-            }
+            FocusOrCreateLogWindow(true);
         }
 
         private void OpenHtmlPathSelectorButton_Click(object sender, RoutedEventArgs e)
@@ -476,6 +457,43 @@ namespace RelhaxModpack.Windows
             await LoadAutomationSequencerAsync();
         }
         #endregion
+
+        private void FocusOrCreateLogWindow(bool showOnStartup)
+        {
+            if (logViewer == null || (!(loggerDispatcher.Invoke(new Func<bool>(() => { return logViewer.IsLoaded; })))))
+            {
+                Thread thread = new Thread(() =>
+                {
+                    logViewer = new RelhaxLogViewer(ModpackSettings);
+
+                    logViewer.WindowStartupLocation = WindowStartupLocation.Manual;
+                    logViewer.Top = this.Dispatcher.Invoke(new Func<double>(() => { return this.Top; }));
+                    logViewer.Left = this.Dispatcher.Invoke(new Func<double>(() => { return this.Left + this.Width + 10; })); 
+
+                    if (showOnStartup)
+                        logViewer.Show();
+
+                    loggerDispatcher = Dispatcher.CurrentDispatcher;
+
+                    //start the windows message pump
+                    Dispatcher.Run();
+                });
+
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.IsBackground = true;
+                thread.Start();
+            }
+            else
+            {
+                loggerDispatcher?.InvokeAsync(() =>
+                {
+                    if (logViewer.WindowState == WindowState.Minimized)
+                        logViewer.WindowState = WindowState.Normal;
+                    logViewer.Focus();
+                });
+            }
+            
+        }
 
         private async void RunSequencesButton_Click(object sender, RoutedEventArgs e)
         {
