@@ -3022,13 +3022,12 @@ namespace RelhaxModpack
                 Logging.DisposeLogging(Logfiles.Application);
 
             CommandLineSettings.ApplicationMode = ApplicationMode.PatchDesigner;
-            PatchDesigner designer = new PatchDesigner(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings };
+            PatchDesigner designer = new PatchDesigner(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings, RunStandAloneUpdateCheck = false };
 
-            //start updater logging system
+            //start patcher logging system
             if (!Logging.Init(Logfiles.PatchDesigner, ModpackSettings.VerboseLogging, true))
             {
                 MessageBox.Show("Failed to initialize logfile for patch designer");
-                designer = null;
                 return;
             }
             Logging.WriteHeader(Logfiles.PatchDesigner);
@@ -3040,11 +3039,15 @@ namespace RelhaxModpack
             //run target window as dialog
             designer.ShowDialog();
 
-            //after closed, disable redirection
+            //after window closed, disable redirection
             if (!Logging.DisableRedirection(Logfiles.Application, Logfiles.PatchDesigner))
                 Logging.TryWriteToLog("Failed to cancel redirect messages from application to patch designer", Logfiles.PatchDesigner, LogLevel.Error);
 
-            //after closed, re-init application logging and set as application run mode
+            //also de-init editor logging
+            if (!Logging.IsLogDisposed(Logfiles.PatchDesigner))
+                Logging.DisposeLogging(Logfiles.PatchDesigner);
+
+            //also re-init application logging and set as application run mode
             CommandLineSettings.ApplicationMode = ApplicationMode.Default;
             if (!Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, true))
             {
@@ -3066,13 +3069,12 @@ namespace RelhaxModpack
                 Logging.DisposeLogging(Logfiles.Application);
 
             CommandLineSettings.ApplicationMode = ApplicationMode.Editor;
-            DatabaseEditor editor = new DatabaseEditor(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings };
+            DatabaseEditor editor = new DatabaseEditor(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings, RunStandAloneUpdateCheck = false };
 
-            //start updater logging system
+            //start editor logging system
             if (!Logging.Init(Logfiles.Editor, ModpackSettings.VerboseLogging, true))
             {
                 MessageBox.Show("Failed to initialize logfile for editor");
-                editor.Close();
                 return;
             }
             Logging.WriteHeader(Logfiles.Editor);
@@ -3084,11 +3086,15 @@ namespace RelhaxModpack
             //run target window as dialog
             editor.ShowDialog();
 
-            //after closed, disable redirection
+            //after window closed, disable redirection
             if (!Logging.DisableRedirection(Logfiles.Application, Logfiles.Editor))
                 Logging.TryWriteToLog("Failed to cancel redirect messages from application to patch editor", Logfiles.Editor, LogLevel.Error);
 
-            //after closed, re-init application logging and set as application run mode
+            //also de-init editor logging
+            if (!Logging.IsLogDisposed(Logfiles.Editor))
+                Logging.DisposeLogging(Logfiles.Editor);
+
+            //also re-init application logging and set as application run mode
             CommandLineSettings.ApplicationMode = ApplicationMode.Default;
             if (!Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, true))
             {
