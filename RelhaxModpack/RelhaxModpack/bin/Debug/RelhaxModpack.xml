@@ -7660,7 +7660,7 @@
             The settings definitions class for this window
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.RunStandaloneUpdateCheck">
+        <member name="P:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.RunStandAloneUpdateCheck">
             <summary>
             Controls is the application will, on startup, run a check to see if it's the latest version
             </summary>

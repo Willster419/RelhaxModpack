@@ -503,13 +503,7 @@
                             <!-- spacer -->
                             <RowDefinition Height="20"/>
                             <!-- checkboxes -->
-                            <RowDefinition Height="20"/>
-                            <!-- Popular and grey area -->
-                            <RowDefinition Height="20"/>
-                            <!-- Visible and Enabled -->
-                            <RowDefinition Height="20"/>
-                            <!-- Obfuscated and Offset InstallGroup -->
-                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="80"/>
                             <!-- space between checkboxes and download zip button -->
                             <RowDefinition Height="20"/>
                             <!-- download button -->
@@ -556,27 +550,33 @@
                         <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="13" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
                         <TextBlock x:Name="PackageCalculatedLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="14" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
                         <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="15" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                        <StackPanel Grid.Column="0" Grid.Row="17" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
-                            <CheckBox Content="Log At Install" Tag="LogAtInstallCB" x:Name="PackageLogAtInstallDisplay"/>
-                            <CheckBox Content="Show In Search" x:Name="PackageShowInSearchListDisplay" Tag="PopularModCB" Margin="8,0,0,0"/>
-                            <CheckBox Content="Popular" x:Name="PackagePopularModDisplay" Tag="PopularModCB" Margin="23,0,0,0"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="0" Grid.Row="18" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
-                            <CheckBox Content="Grey Area" x:Name="PackageGreyAreaModDisplay" Tag="PackageGreyAreaModDisplay" Margin="0,0,0,0"/>
-                            <CheckBox Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB" Margin="25,0,0,0"/>
-                            <CheckBox Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB" Margin="69,0,0,0"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="0" Grid.Row="19" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
-                            <CheckBox Content="Obfuscated" x:Name="PackageObfuscatedModDisplay" Tag="ObfuscatedCB" Margin="0,0,0,0"/>
-                            <CheckBox Content="Offset InstallGroup" x:Name="CategoryOffsetInstallGroupDisplay" Tag="OffsetInstallGroupCB" Margin="16,0,0,0"/>
-                            <CheckBox Content="From WGmods" x:Name="PackageFromWGmodsDisplay" Tag="PackageFromWGmodsCB" Margin="4,0,0,0"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="0" Grid.Row="20" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
-                            <CheckBox Content="Deprecated" x:Name="PackageDeprecatedDisplay" Tag="DeprecatedCB" Margin="0"/>
-                            <CheckBox Content="Minimalist mode exclude" x:Name="PackageMinimalistModeExcludeDisplay" Tag="MinimalistModeCB" Margin="16,0,0,0" ToolTip="When this is true, the package will be excluded from installation"/>
-                        </StackPanel>
-                        <Button Grid.Column="0" Grid.Row="22" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" />
-                        <Button Grid.Column="0" Grid.Row="24" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" />
+                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="17" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="125"/>
+                                <ColumnDefinition Width="175"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <CheckBox Grid.Row="0" Grid.Column="0" Content="Log At Install" Tag="LogAtInstallCB" x:Name="PackageLogAtInstallDisplay"/>
+                            <CheckBox Grid.Row="0" Grid.Column="1" Content="Show In Search" x:Name="PackageShowInSearchListDisplay" Tag="PopularModCB"/>
+                            <CheckBox Grid.Row="0" Grid.Column="2" Content="Popular" x:Name="PackagePopularModDisplay" Tag="PopularModCB" />
+                            <CheckBox Grid.Row="1" Grid.Column="0" Content="Grey Area" x:Name="PackageGreyAreaModDisplay" Tag="PackageGreyAreaModDisplay"/>
+                            <CheckBox Grid.Row="1" Grid.Column="1" Content="Visible" x:Name="PackageVisibleDisplay" Tag="VisibleCB"/>
+                            <CheckBox Grid.Row="1" Grid.Column="2" Content="Enabled" x:Name="PackageEnabledDisplay" Tag="EnabledCB"/>
+                            <CheckBox Grid.Row="2" Grid.Column="0" Content="Obfuscated" x:Name="PackageObfuscatedModDisplay" Tag="ObfuscatedCB"/>
+                            <CheckBox Grid.Row="2" Grid.Column="1" Content="Offset InstallGroup" x:Name="CategoryOffsetInstallGroupDisplay" Tag="OffsetInstallGroupCB"/>
+                            <CheckBox Grid.Row="2" Grid.Column="2" Content="From WGmods" x:Name="PackageFromWGmodsDisplay" Tag="PackageFromWGmodsCB"/>
+                            <CheckBox Grid.Row="3" Grid.Column="0" Content="Deprecated" x:Name="PackageDeprecatedDisplay" Tag="DeprecatedCB"/>
+                            <CheckBox Grid.Row="3" Grid.Column="1" Content="Minimalist mode exclude" x:Name="PackageMinimalistModeExcludeDisplay" Tag="MinimalistModeCB" ToolTip="When this is true, the package will be excluded from installation"/>
+                        </Grid>
+                        <Button Grid.Column="0" Grid.Row="19" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="21" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" />
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
