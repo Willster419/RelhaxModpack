@@ -2197,23 +2197,11 @@ namespace RelhaxModpack.Windows
             Logging.Editor("Running trigger manual sync script...");
 
             string resultText = null;
-            using (PatientWebClient client = new PatientWebClient()
-            { Credentials = PrivateStuff.BigmodsNetworkCredentialScripts, Timeout = 100000 })
-            {
-                try
-                {
-                    string result = await client.DownloadStringTaskAsync(PrivateStuff.BigmodsTriggerManualMirrorSyncPHP);
-                    Logging.Editor(result.Replace("<br />", "\n"));
-                    if (result.ToLower().Contains("trigger=1"))
-                        resultText = "SUCCESS!";
-                }
-                catch (WebException wex)
-                {
-                    Logging.Editor("Failed to run trigger manual sync script", LogLevel.Error);
-                    Logging.Editor(wex.ToString(), LogLevel.Exception);
-                    resultText = "ERROR!";
-                }
-            }
+            bool result = await FtpUtils.TriggerMirrorSyncAsync();
+            if (result)
+                resultText = "SUCCESS!";
+            else
+                resultText = "ERROR!";
 
             TriggerMirrorSyncButton.Content = resultText;
             await Task.Delay(5000);

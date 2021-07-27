@@ -17,6 +17,7 @@ using RelhaxModpack.UI;
 using System.Threading.Tasks;
 using System.Threading;
 using MaterialDesignThemes.Wpf;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.Windows
 {
@@ -67,6 +68,8 @@ namespace RelhaxModpack.Windows
 
         private CancellationTokenSource cancellationTokenSource;
 
+        private Dispatcher loggerDispatcher;
+
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
@@ -94,7 +97,8 @@ namespace RelhaxModpack.Windows
                () => AutomamtionDatabaseSelectedBranchSetting_TextChanged(null, null),
                () => SelectDBSaveLocationSetting_TextChanged(null, null),
                () => UseLocalRunnerDatabaseSetting_Click(null, null),
-               () => LocalRunnerDatabaseRootSetting_TextChanged(null, null)
+               () => LocalRunnerDatabaseRootSetting_TextChanged(null, null),
+               () => SelectWoTInstallLocationSetting_TextChanged(null, null)
             };
         }
 
@@ -106,15 +110,7 @@ namespace RelhaxModpack.Windows
             LoadSettingsToUI();
 
             //init the log viewer window
-            logViewer = new RelhaxLogViewer(ModpackSettings)
-            {
-                WindowStartupLocation = WindowStartupLocation.Manual,
-                Top = this.Top,
-                Left = this.Left + this.Width + 10
-            };
-
-            if (AutomationSettings.OpenLogWindowOnStartup)
-                logViewer.Show();
+            FocusOrCreateLogWindow(AutomationSettings.OpenLogWindowOnStartup);
 
             await LoadAutomationSequencerAsync();            
         }
@@ -168,8 +164,8 @@ namespace RelhaxModpack.Windows
         private void RelhaxWindow_Closed(object sender, EventArgs e)
         {
             //close windows if open
-            if (!logViewer.ViewerClosed)
-                logViewer.Close();
+            loggerDispatcher?.Invoke(() => { if (logViewer.IsLoaded) logViewer.Close(); });
+
             if (htmlPathSelector != null && htmlPathSelector.IsLoaded)
                 htmlPathSelector.Close();
 
@@ -192,6 +188,7 @@ namespace RelhaxModpack.Windows
             DumpEnvironmentVariablesAtSequenceStartSetting.IsChecked = AutomationSettings.DumpShellEnvironmentVarsPerSequenceRun;
             UseLocalRunnerDatabaseSetting.IsChecked = AutomationSettings.UseLocalRunnerDatabase;
             LocalRunnerDatabaseRootSetting.Text = AutomationSettings.LocalRunnerDatabaseRoot;
+            SelectWoTInstallLocationSetting.Text = AutomationSettings.WoTClientInstallLocation;
         }
 
         private void MoveSequenceToRunList()
@@ -263,6 +260,21 @@ namespace RelhaxModpack.Windows
             {
                 HideAutomationProgress();
             }
+
+            switch (e.ChildCurrentProgress)
+            {
+                case "barWithTextChild":
+                    ReportRelhaxProgressBarWithTextChild(e);
+                    return;
+
+                case "barWithTextParrent":
+                    ReportRelhaxProgressBarWithTextParrent(e);
+                    return;
+
+                case "barChildTextParent":
+                    ReportRelhaxProgressBarChildTextParent(e);
+                    return;
+            }
         }
 
         private void WebClient_DownloadDataComplted(object sender, DownloadDataCompletedEventArgs e)
@@ -294,6 +306,26 @@ namespace RelhaxModpack.Windows
             AutomationTaskProgressBar.Visibility = Visibility.Hidden;
             AutomationTaskProgressTextBlock.Text = string.Empty;
             AutomationTaskProgressTextBlock.Visibility = Visibility.Hidden;
+        }
+
+        private void ReportRelhaxProgressBarWithTextChild(RelhaxProgress relhaxProgress)
+        {
+            AutomationTaskProgressBar.Value = relhaxProgress.ChildCurrent;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", relhaxProgress.ChildCurrent, relhaxProgress.ChildTotal);
+        }
+
+        private void ReportRelhaxProgressBarWithTextParrent(RelhaxProgress relhaxProgress)
+        {
+            AutomationTaskProgressBar.Value = relhaxProgress.ParrentCurrent;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", relhaxProgress.ParrentCurrent, relhaxProgress.ParrentTotal);
+        }
+
+        private void ReportRelhaxProgressBarChildTextParent(RelhaxProgress relhaxProgress)
+        {
+            if (AutomationTaskProgressBar.Maximum != relhaxProgress.ChildTotal)
+                AutomationTaskProgressBar.Maximum = relhaxProgress.ChildTotal;
+            AutomationTaskProgressBar.Value = relhaxProgress.ChildCurrent;
+            AutomationTaskProgressTextBlock.Text = string.Format("{0} of {1}", relhaxProgress.ParrentCurrent, relhaxProgress.ParrentTotal);
         }
         #endregion
 
@@ -429,22 +461,7 @@ namespace RelhaxModpack.Windows
         #region Bottom row buttons
         private void OpenLogfileViewerButton_Click(object sender, RoutedEventArgs e)
         {
-            if (logViewer.ViewerClosed)
-            {
-                logViewer = null;
-                logViewer = new RelhaxLogViewer(ModpackSettings)
-                {
-                    WindowStartupLocation = WindowStartupLocation.Manual,
-                    Top = this.Top,
-                    Left = this.Left + this.Width + 10
-                };
-                logViewer.Show();
-                logViewer.Focus();
-            }
-            else
-            {
-                logViewer.Focus();
-            }
+            FocusOrCreateLogWindow(true);
         }
 
         private void OpenHtmlPathSelectorButton_Click(object sender, RoutedEventArgs e)
@@ -467,6 +484,43 @@ namespace RelhaxModpack.Windows
             await LoadAutomationSequencerAsync();
         }
         #endregion
+
+        private void FocusOrCreateLogWindow(bool showOnStartup)
+        {
+            if (logViewer == null || (!(loggerDispatcher.Invoke(new Func<bool>(() => { return logViewer.IsLoaded; })))))
+            {
+                Thread thread = new Thread(() =>
+                {
+                    logViewer = new RelhaxLogViewer(ModpackSettings);
+
+                    logViewer.WindowStartupLocation = WindowStartupLocation.Manual;
+                    logViewer.Top = this.Dispatcher.Invoke(new Func<double>(() => { return this.Top; }));
+                    logViewer.Left = this.Dispatcher.Invoke(new Func<double>(() => { return this.Left + this.Width + 10; })); 
+
+                    if (showOnStartup)
+                        logViewer.Show();
+
+                    loggerDispatcher = Dispatcher.CurrentDispatcher;
+
+                    //start the windows message pump
+                    Dispatcher.Run();
+                });
+
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.IsBackground = true;
+                thread.Start();
+            }
+            else
+            {
+                loggerDispatcher?.InvokeAsync(() =>
+                {
+                    if (logViewer.WindowState == WindowState.Minimized)
+                        logViewer.WindowState = WindowState.Normal;
+                    logViewer.Focus();
+                });
+            }
+            
+        }
 
         private async void RunSequencesButton_Click(object sender, RoutedEventArgs e)
         {
@@ -673,7 +727,31 @@ namespace RelhaxModpack.Windows
             SettingsParser parser = new SettingsParser();
             parser.SaveSettings(Settings);
         }
-        #endregion
+        
+        private void SelectWoTInstallLocationButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog manualWoTFind = new OpenFileDialog()
+            {
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Filter = "WorldOfTanks.exe|WorldOfTanks.exe",
+                Title = Translations.GetTranslatedString("selectWOTExecutable"),
+                Multiselect = false,
+                ValidateNames = true
+            };
+
+            if (!(bool)manualWoTFind.ShowDialog())
+                return;
+
+            SelectWoTInstallLocationSetting.Text = manualWoTFind.FileName;
+        }
+
+        private void SelectWoTInstallLocationSetting_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.WoTClientInstallLocation = SelectWoTInstallLocationSetting.Text;
+        }
+        #endregion 
 
         #region MaterialDesign
 
@@ -694,5 +772,7 @@ namespace RelhaxModpack.Windows
         }
 
         #endregion
+
+
     }
 }

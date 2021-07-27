@@ -155,6 +155,8 @@
     <Compile Include="Automation\Tasks\DatabasePackagePropertyTask.cs" />
     <Compile Include="Automation\Tasks\DatabasePackageTask.cs" />
     <Compile Include="Automation\Tasks\DatabaseTask.cs" />
+    <Compile Include="Automation\Tasks\DirectoryCopyTask.cs" />
+    <Compile Include="Automation\Tasks\DirectoryDeleteTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryTask.cs" />
     <Compile Include="Automation\Tasks\DownloadBrowserTask.cs" />
     <Compile Include="Automation\Tasks\DownloadHtmlTask.cs" />

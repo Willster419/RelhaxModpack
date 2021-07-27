@@ -223,7 +223,7 @@ namespace RelhaxModpack
             switch (CommandLineSettings.ApplicationMode)
             {
                 case ApplicationMode.Updater:
-                    ModpackToolbox updater = new ModpackToolbox(modpackSettings) { CommandLineSettings = CommandLineSettings };
+                    ModpackToolbox updater = new ModpackToolbox(modpackSettings) { CommandLineSettings = CommandLineSettings, LaunchedFromMainWindow = false, RunStandAloneUpdateCheck = true };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
@@ -246,7 +246,7 @@ namespace RelhaxModpack
                     updater.Show();
                     break;
                 case ApplicationMode.Editor:
-                    DatabaseEditor editor = new DatabaseEditor(modpackSettings) { CommandLineSettings = CommandLineSettings };
+                    DatabaseEditor editor = new DatabaseEditor(modpackSettings) { CommandLineSettings = CommandLineSettings, LaunchedFromMainWindow = false, RunStandAloneUpdateCheck = true };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
@@ -269,7 +269,7 @@ namespace RelhaxModpack
                     editor.Show();
                     break;
                 case ApplicationMode.PatchDesigner:
-                    PatchDesigner patcher = new PatchDesigner(modpackSettings) { CommandLineSettings = CommandLineSettings };
+                    PatchDesigner patcher = new PatchDesigner(modpackSettings) { CommandLineSettings = CommandLineSettings, LaunchedFromMainWindow = false, RunStandAloneUpdateCheck = true };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))
@@ -292,7 +292,7 @@ namespace RelhaxModpack
                     patcher.Show();
                     break;
                 case ApplicationMode.AutomationRunner:
-                    DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner(modpackSettings) { CommandLineSettings = CommandLineSettings };
+                    DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner(modpackSettings) { CommandLineSettings = CommandLineSettings, LaunchedFromMainWindow = false, RunStandAloneUpdateCheck = true };
 
                     //close application log if open
                     if (Logging.IsLogOpen(Logfiles.Application))

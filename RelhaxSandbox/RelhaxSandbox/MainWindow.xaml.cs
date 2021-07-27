@@ -908,12 +908,13 @@ namespace RelhaxSandbox
                 //such that it tells the dispatcher of *this* thread to 'idle' (wait for UI input)
                 //while it's technically multithreading, it doesn't allow parallelism within a window itself I.E:
 
-                //SplashWindow tempWindow = new SplashWindow();
-                //tempWindow.Show();
-                //System.Windows.Threading.Dispatcher.Run();
+                TestSubWindow tempWindow = new TestSubWindow();
+                tempWindow.Show();
+                System.Windows.Threading.Dispatcher.Run();
 
                 //https://stackoverflow.com/a/1111485/3128017
                 //https://stackoverflow.com/a/8669719/3128017
+
             });
 
             myThread.SetApartmentState(ApartmentState.STA);

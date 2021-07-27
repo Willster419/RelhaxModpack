@@ -127,13 +127,20 @@
                             <!-- Spacer -->
                             <RowDefinition Height="100"/>
                             <!-- Checkboxes -->
-                            <RowDefinition Name="CheckBoxes" Height="40"/>
-                            <!-- Buttons -->
-                            <RowDefinition Name="Buttons0" Height="80"/>
-                            <RowDefinition Height="10" />
-                            <RowDefinition Name="Buttons1" Height="80"/>
-                            <RowDefinition Name="MessageQueueTime" Height="100"/>
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <!-- Package db save/load -->
+                            <RowDefinition Height="40"/>
+                            <!-- Automation repo branch selection -->
+                            <RowDefinition Height="40"/>
+                            <!-- Use local automation repo on disk -->
+                            <RowDefinition Height="20"/>
+                            <!-- Select wot location for {clientPath} macro -->
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>

@@ -23,8 +23,6 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class RelhaxLogViewer : RelhaxWindow
     {
-        public bool ViewerClosed { get; set; } = false;
-
         public RelhaxLogViewer(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
@@ -39,7 +37,6 @@ namespace RelhaxModpack.Windows
         private void Window_Closed(object sender, EventArgs e)
         {
             Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite -= OnLogMessageWrite;
-            ViewerClosed = true;
         }
 
         private void OnLogMessageWrite(object sender, LogMessageEventArgs e)

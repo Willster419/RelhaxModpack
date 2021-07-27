@@ -35,6 +35,7 @@ namespace RelhaxModpack.Automation.Tasks
         }
         #endregion
 
+        #region Task Execution
         public override void ProcessMacros()
         {
             base.ProcessMacros();
@@ -87,5 +88,6 @@ namespace RelhaxModpack.Automation.Tasks
             if (ProcessTaskResultTrue(searchResults.Count() == 0, "The searchResult array returned 0 results"))
                 return;
         }
+        #endregion
     }
 }
