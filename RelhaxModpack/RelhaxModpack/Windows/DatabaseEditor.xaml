@@ -9,6 +9,12 @@
     xmlns:database="clr-namespace:RelhaxModpack.Database"
     xmlns:enums="clr-namespace:RelhaxModpack.Utilities.Enums"
     x:Class="RelhaxModpack.Windows.DatabaseEditor"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    TextElement.Foreground="{DynamicResource MaterialDesignPaper}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    TextElement.FontWeight="Medium"
+    TextElement.FontSize="14"
+    FontFamily="{materialDesign:MaterialDesignFont}"
     mc:Ignorable="d"
     Title="DatabaseEditor" Height="720" Width="1280" MinHeight="600" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
     Loaded="OnApplicationLoad" Closing="RelhaxWindow_Closing" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="True" ApplyCustomFont="True">
