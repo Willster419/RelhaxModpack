@@ -163,6 +163,7 @@ namespace RelhaxModpack.Automation
                 string sequenceUID = result.Attributes["UID"].Value;
                 string sequenceUrlPath = result.Attributes["path"].Value;
                 string sequenceLoadString;
+
                 if (AutomationRunnerSettings.UseLocalRunnerDatabase)
                 {
                     sequenceUrlPath = sequenceUrlPath.Replace('/', Path.DirectorySeparatorChar);
@@ -172,7 +173,7 @@ namespace RelhaxModpack.Automation
                 {
                     sequenceLoadString = AutomationRepoPathEscaped + sequenceUrlPath;
                 }
-                Logging.AutomationRunner(LogOptions.MethodName, "Parsing sequence for package {0} (UID {1})", LogLevel.Info, sequencePackageName, sequenceUID);
+
                 AutomationSequences.Add(new AutomationSequence(DatabasePackages, ApplicationMacros, GlobalMacros, AutomationRunnerSettings, DatabaseManager, CancellationToken)
                 {
                     AutomationSequencer = this,
