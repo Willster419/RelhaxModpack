@@ -7620,7 +7620,7 @@
             The name of the logfile
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseAutomationRunner.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+        <member name="M:RelhaxModpack.Windows.DatabaseAutomationRunner.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Create an instance of the DatabaseAutomationRunner window
             </summary>
@@ -7665,7 +7665,7 @@
             Controls is the application will, on startup, run a check to see if it's the latest version
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+        <member name="M:RelhaxModpack.Windows.RelhaxCustomFeatureWindow.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Creates an instance of the RelhaxCustomFeatureWindow class
             </summary>
@@ -8350,7 +8350,7 @@
             The name of the logfile
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.DatabaseEditor.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+        <member name="M:RelhaxModpack.Windows.DatabaseEditor.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Create an instance of the DatabaseEditor
             </summary>
@@ -8448,7 +8448,7 @@
             The name of the logfile
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.ModpackToolbox.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+        <member name="M:RelhaxModpack.Windows.ModpackToolbox.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Create an instance of the DatabaseUpdater window
             </summary>
@@ -8561,7 +8561,7 @@
             The name of the logfile
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.PatchDesigner.#ctor(RelhaxModpack.Settings.ModpackSettings)">
+        <member name="M:RelhaxModpack.Windows.PatchDesigner.#ctor(RelhaxModpack.Settings.ModpackSettings,RelhaxModpack.Utilities.Enums.Logfiles)">
             <summary>
             Create an instance of the PatchDesigner window
             </summary>
