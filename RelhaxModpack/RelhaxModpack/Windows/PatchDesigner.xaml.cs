@@ -18,13 +18,14 @@ using RelhaxModpack.Utilities.ClassEventArgs;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Installer;
 using System.Reflection;
+using System.ComponentModel;
 
 namespace RelhaxModpack.Windows
 {
     /// <summary>
     /// Interaction logic for PatchDesigner.xaml
     /// </summary>
-    public partial class PatchDesigner : RelhaxCustomFeatureWindow
+    public partial class PatchDesigner : RelhaxFeatureWindowWithChanges
     {
         /// <summary>
         /// The command line argument specified at application launch to show this window
@@ -40,8 +41,6 @@ namespace RelhaxModpack.Windows
         private OpenFileDialog OpenPatchfileDialog;
         private OpenFileDialog OpenFileToPatchDialog;
         private SaveFileDialog SavePatchfileDialog;
-        private bool UnsavedChanges = false;
-        private bool init = true;
         private Patcher Patcher = new Patcher() { DebugMode = false };
 
         //for drag drop
@@ -79,20 +78,10 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the PatchDesigner window
         /// </summary>
-        public PatchDesigner(ModpackSettings modpackSettings) : base(modpackSettings)
+        public PatchDesigner(ModpackSettings modpackSettings, Logfiles logfile) : base(modpackSettings, logfile)
         {
             InitializeComponent();
             Settings = PatchSettings;
-        }
-
-        private void RelhaxWindow_Closed(object sender, EventArgs e)
-        {
-            if (UnsavedChanges)
-            {
-                if (MessageBox.Show("You have unsaved changes, return to patcher?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    return;
-            }
-            Logging.DisposeLogging(Logfiles.PatchDesigner);
         }
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
@@ -125,7 +114,7 @@ namespace RelhaxModpack.Windows
             PatchesList.SelectedIndex = 0;
             SelectedPatch = PatchesList.Items[0] as Patch;
 
-            init = false;
+            Init = false;
         }
 
         private void PopOutReplacePatchDesigner_Closed(object sender, EventArgs e)
@@ -634,7 +623,7 @@ namespace RelhaxModpack.Windows
 
         private void ApplyChangesButton_Click(object sender, RoutedEventArgs e)
         {
-            if (init)
+            if (Init)
                 return;
 
             Logging.Patcher("[ApplyChangesButton_Click]: Applying changes to patch: {0}", LogLevel.Info, SelectedPatchToString());
@@ -646,7 +635,7 @@ namespace RelhaxModpack.Windows
 
         private void PatchesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (init)
+            if (Init)
                 return;
 
             Logging.Patcher("[PatchesList_SelectionChanged]: SaveBeforeLeave = {0}, SelectedPatch = {1}", LogLevel.Info,

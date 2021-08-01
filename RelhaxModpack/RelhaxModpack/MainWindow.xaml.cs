@@ -538,6 +538,8 @@ namespace RelhaxModpack
                 LauchEditor.IsEnabled = true;
                 LauchPatchDesigner.Visibility = Visibility.Visible;
                 LauchPatchDesigner.IsEnabled = true;
+                LauchAutomationRunner.Visibility = Visibility.Visible;
+                LauchAutomationRunner.IsEnabled = true;
 
                 //also disable update statistics
                 Logging.Info("Also disable upload statistics since this is a developer environment");
@@ -553,6 +555,8 @@ namespace RelhaxModpack
                 LauchEditor.IsEnabled = false;
                 LauchPatchDesigner.Visibility = Visibility.Hidden;
                 LauchPatchDesigner.IsEnabled = false;
+                LauchAutomationRunner.Visibility = Visibility.Hidden;
+                LauchAutomationRunner.IsEnabled = false;
             }
 
             //dispose of please wait here
@@ -3012,55 +3016,28 @@ namespace RelhaxModpack
                 Logging.Info("Cancel already started - skipping request");
             }
         }
+        #endregion
 
+        #region Custom window launching
         private void LauchPatchDesigner_Click(object sender, RoutedEventArgs e)
         {
-            if (autoInstallPeriodicTimer != null && autoInstallPeriodicTimer.IsEnabled)
-                autoInstallPeriodicTimer.Stop();
-
-            Logging.Info("Launching patch designer from MainWindow");
-            if (!Logging.IsLogDisposed(Logfiles.Application))
-                Logging.DisposeLogging(Logfiles.Application);
-
-            CommandLineSettings.ApplicationMode = ApplicationMode.PatchDesigner;
-            PatchDesigner designer = new PatchDesigner(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings, RunStandAloneUpdateCheck = false };
-
-            //start patcher logging system
-            if (!Logging.Init(Logfiles.PatchDesigner, ModpackSettings.VerboseLogging, true))
-            {
-                MessageBox.Show("Failed to initialize logfile for patch designer");
-                return;
-            }
-            Logging.WriteHeader(Logfiles.PatchDesigner);
-
-            //redirect application log file to the patcher
-            if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.PatchDesigner))
-                Logging.Error(Logfiles.PatchDesigner, LogOptions.MethodName, "Failed to redirect messages from application to patch designer");
-
-            //run target window as dialog
-            designer.ShowDialog();
-
-            //after window closed, disable redirection
-            if (!Logging.DisableRedirection(Logfiles.Application, Logfiles.PatchDesigner))
-                Logging.TryWriteToLog("Failed to cancel redirect messages from application to patch designer", Logfiles.PatchDesigner, LogLevel.Error);
-
-            //also de-init editor logging
-            if (!Logging.IsLogDisposed(Logfiles.PatchDesigner))
-                Logging.DisposeLogging(Logfiles.PatchDesigner);
-
-            //also re-init application logging and set as application run mode
-            CommandLineSettings.ApplicationMode = ApplicationMode.Default;
-            if (!Logging.Init(Logfiles.Application, ModpackSettings.VerboseLogging, true))
-            {
-                MessageBox.Show(Translations.GetTranslatedString("appFailedCreateLogfile"));
-                Application.Current.Shutdown((int)ReturnCodes.LogfileError);
-            }
-
-            if (ModpackSettings.AutoInstall)
-                autoInstallPeriodicTimer.Start();
+            PatchDesigner designer = new PatchDesigner(this.ModpackSettings, Logfiles.PatchDesigner) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings, RunStandAloneUpdateCheck = false };
+            LaunchCustomWindow(designer.Logfile, ApplicationMode.Editor, designer);
         }
 
         private void LauchEditor_Click(object sender, RoutedEventArgs e)
+        {
+            DatabaseEditor editor = new DatabaseEditor(this.ModpackSettings, Logfiles.Editor) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings, RunStandAloneUpdateCheck = false };
+            LaunchCustomWindow(editor.Logfile, ApplicationMode.Editor, editor);
+        }
+
+        private void LauchAutomationRunner_Click(object sender, RoutedEventArgs e)
+        {
+            DatabaseAutomationRunner automationRunner = new DatabaseAutomationRunner(this.ModpackSettings, Logfiles.AutomationRunner) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings, RunStandAloneUpdateCheck = false };
+            LaunchCustomWindow(automationRunner.Logfile, ApplicationMode.AutomationRunner, automationRunner);
+        }
+
+        private void LaunchCustomWindow(Logfiles logfile, ApplicationMode applicationMode, RelhaxCustomFeatureWindow window)
         {
             if (autoInstallPeriodicTimer != null && autoInstallPeriodicTimer.IsEnabled)
                 autoInstallPeriodicTimer.Stop();
@@ -3069,31 +3046,30 @@ namespace RelhaxModpack
             if (!Logging.IsLogDisposed(Logfiles.Application))
                 Logging.DisposeLogging(Logfiles.Application);
 
-            CommandLineSettings.ApplicationMode = ApplicationMode.Editor;
-            DatabaseEditor editor = new DatabaseEditor(this.ModpackSettings) { LaunchedFromMainWindow = true, CommandLineSettings = CommandLineSettings, RunStandAloneUpdateCheck = false };
+            CommandLineSettings.ApplicationMode = applicationMode;
 
             //start editor logging system
-            if (!Logging.Init(Logfiles.Editor, ModpackSettings.VerboseLogging, true))
+            if (!Logging.Init(logfile, ModpackSettings.VerboseLogging, true))
             {
-                MessageBox.Show("Failed to initialize logfile for editor");
+                MessageBox.Show("Failed to initialize logfile for {0}", logfile.ToString());
                 return;
             }
-            Logging.WriteHeader(Logfiles.Editor);
+            Logging.WriteHeader(logfile);
 
             //redirect application log file to the editor
-            if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.Editor))
-                Logging.Error(Logfiles.Editor, LogOptions.MethodName, "Failed to redirect messages from application to editor");
+            if (!Logging.RedirectLogOutput(Logfiles.Application, logfile))
+                Logging.Error(Logfiles.Editor, LogOptions.MethodName, "Failed to redirect messages from application to {0}", logfile.ToString());
 
             //run target window as dialog
-            editor.ShowDialog();
+            window.ShowDialog();
 
             //after window closed, disable redirection
-            if (!Logging.DisableRedirection(Logfiles.Application, Logfiles.Editor))
-                Logging.TryWriteToLog("Failed to cancel redirect messages from application to patch editor", Logfiles.Editor, LogLevel.Error);
+            if (!Logging.DisableRedirection(Logfiles.Application, logfile))
+                Logging.TryWriteToLog("Failed to cancel redirect messages from application to {0}", logfile, LogLevel.Error, logfile.ToString());
 
             //also de-init editor logging
-            if (!Logging.IsLogDisposed(Logfiles.Editor))
-                Logging.DisposeLogging(Logfiles.Editor);
+            if (!Logging.IsLogDisposed(logfile))
+                Logging.DisposeLogging(logfile);
 
             //also re-init application logging and set as application run mode
             CommandLineSettings.ApplicationMode = ApplicationMode.Default;

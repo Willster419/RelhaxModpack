@@ -1,5 +1,6 @@
 ﻿using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,24 +33,33 @@ namespace RelhaxModpack.Windows
         /// </summary>
         public bool RunStandAloneUpdateCheck { get; set; }
 
+        public Logfiles Logfile { get; protected set; }
+
+        public bool Init { get; protected set; } = true;
+
         /// <summary>
         /// Creates an instance of the RelhaxCustomFeatureWindow class
         /// </summary>
-        public RelhaxCustomFeatureWindow(ModpackSettings modpackSettings) : base(modpackSettings)
+        public RelhaxCustomFeatureWindow(ModpackSettings modpackSettings, Logfiles logfile) : base(modpackSettings)
         {
-            //subscribe to the loaded event to load custom settings code
-            Closed += OnWindowClosed;
+            Logfile = logfile;
         }
 
-        private void OnWindowClosed(object sender, EventArgs e)
+        protected override void OnClosed(EventArgs e)
         {
+            base.OnClosed(e);
+
             SettingsParser parser = new SettingsParser();
             parser.SaveSettings(Settings);
+
+            if (!LaunchedFromMainWindow)
+                Logging.DisposeLogging(Logfile);
         }
 
         protected override void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
             SettingsParser parser = new SettingsParser();
+
             //if it's not launched from the main window, then the ModpackSettings object has not been parsed yet. do that now.
             if (!LaunchedFromMainWindow)
             {

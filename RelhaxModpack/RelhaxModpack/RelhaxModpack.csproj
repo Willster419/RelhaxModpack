@@ -309,6 +309,7 @@
       <DependentUpon>HtmlPathSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RelhaxCustomFeatureWindow.cs" />
+    <Compile Include="Windows\RelhaxFeatureWindowWithChanges.cs" />
     <Compile Include="Windows\RelhaxLogViewer.xaml.cs">
       <DependentUpon>RelhaxLogViewer.xaml</DependentUpon>
     </Compile>

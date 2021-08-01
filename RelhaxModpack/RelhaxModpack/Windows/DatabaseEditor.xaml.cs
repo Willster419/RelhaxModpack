@@ -24,13 +24,14 @@ using RelhaxModpack.Utilities.ClassEventArgs;
 using System.Windows.Controls.Primitives;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
+using System.ComponentModel;
 
 namespace RelhaxModpack.Windows
 {
     /// <summary>
     /// Interaction logic for DatabaseEditor.xaml
     /// </summary>
-    public partial class DatabaseEditor : RelhaxCustomFeatureWindow
+    public partial class DatabaseEditor : RelhaxFeatureWindowWithChanges
     {
         /// <summary>
         /// The command line argument specified at application launch to show this window
@@ -59,10 +60,8 @@ namespace RelhaxModpack.Windows
         private Point BeforeDragDropPoint;
         private bool IsScrolling = false;
         private bool AlreadyLoggedScroll = false;
-        private bool Init = true;
         private object SelectedItem = null;
         private Preview Preview = null;
-        private bool UnsavedChanges = false;
         private DispatcherTimer DragDropTimer = null;
         private DispatcherTimer ReselectOldItem = null;
         private string[] UIHeaders = new string[]
@@ -76,7 +75,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseEditor
         /// </summary>
-        public DatabaseEditor(ModpackSettings modpackSettings) : base (modpackSettings)
+        public DatabaseEditor(ModpackSettings modpackSettings, Logfiles logfile) : base (modpackSettings, logfile)
         {
             InitializeComponent();
             Settings = EditorSettings;
@@ -155,18 +154,6 @@ namespace RelhaxModpack.Windows
                         if (!ItemToExpand.IsExpanded)
                             ItemToExpand.IsExpanded = true;
                     }
-                }
-            }
-        }
-
-        private void RelhaxWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (UnsavedChanges)
-            {
-                if (MessageBox.Show("You have unsaved changes, return to editor?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                {
-                    e.Cancel = true;
-                    return;
                 }
             }
         }

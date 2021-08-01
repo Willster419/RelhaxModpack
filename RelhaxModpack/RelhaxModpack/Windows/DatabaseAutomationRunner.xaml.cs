@@ -72,7 +72,7 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the DatabaseAutomationRunner window
         /// </summary>
-        public DatabaseAutomationRunner(ModpackSettings modpackSettings) : base(modpackSettings)
+        public DatabaseAutomationRunner(ModpackSettings modpackSettings, Logfiles logfile) : base(modpackSettings, logfile)
         {
             InitializeComponent();
             DownloadProgressChanged = WebClient_DownloadProgressChanged;
@@ -112,6 +112,8 @@ namespace RelhaxModpack.Windows
             FocusOrCreateLogWindow(AutomationSettings.OpenLogWindowOnStartup);
 
             await LoadAutomationSequencerAsync();
+
+            Init = false;
         }
 
         private async Task LoadAutomationSequencerAsync()

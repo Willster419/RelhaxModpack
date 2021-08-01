@@ -1,4 +1,4 @@
-﻿<local:RelhaxCustomFeatureWindow
+﻿<local:RelhaxFeatureWindowWithChanges
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,7 +11,7 @@
     x:Class="RelhaxModpack.Windows.DatabaseEditor"
     mc:Ignorable="d"
     Title="DatabaseEditor" Height="720" Width="1280" MinHeight="600" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
-    Loaded="OnApplicationLoad" Closing="RelhaxWindow_Closing" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="True" ApplyCustomFont="True">
+    Loaded="OnApplicationLoad" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="True" ApplyCustomFont="True">
     <local:RelhaxWindow.Resources>
         <!-- https://stackoverflow.com/questions/8198645/wpf-combobox-performance-problems-by-binding-a-large-collections -->
         <ItemsPanelTemplate x:Key="VSP">
@@ -717,4 +717,4 @@
         </Grid>
         <TextBlock x:Name="DragDropTest" HorizontalAlignment="Stretch" Margin="250,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Height="30"/>
     </Grid>
-</local:RelhaxCustomFeatureWindow>
+</local:RelhaxFeatureWindowWithChanges>

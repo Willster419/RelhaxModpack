@@ -265,6 +265,9 @@
                         <Button x:Name="LauchPatchDesigner" Tag="LauchPatchDesigner" Margin="0,2,0,0" Click="LauchPatchDesigner_Click" IsEnabled="False" Visibility="Hidden" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="LauchPatchDesignerText" Text="Launch Patch Designer" TextWrapping="Wrap"/>
                         </Button>
+                        <Button x:Name="LauchAutomationRunner" Tag="LauchAutomationRunner" Margin="0,2,0,0" Click="LauchAutomationRunner_Click" IsEnabled="False" Visibility="Hidden" ToolTipService.ShowOnDisabled="True">
+                            <TextBlock x:Name="LauchAutomationRunnerText" Text="Launch Automation Runner" TextWrapping="Wrap"/>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </TabItem>
