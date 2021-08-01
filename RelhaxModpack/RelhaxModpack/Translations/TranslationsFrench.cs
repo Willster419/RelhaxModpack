@@ -133,12 +133,15 @@ namespace RelhaxModpack
             French.Add("DeveloperSettingsHeader", "Options pour les développeurs [!]");
             French.Add("DeveloperSettingsHeaderDescription", "Les options ci-dessous peuvent causer des problèmes de stabilité ! \nS'il vous plaît, ne les utilisez pas si vous ne savez pas ce que vous faites !");
             French.Add("ApplyCustomScalingText", "Mise à l'echelle de l'application");
+            French.Add("ApplyCustomScalingTextDescription", "Appliquer la mise à l'échelle de l'affichage dans les fenêtres du programme d'installation");
             French.Add("EnableCustomFontCheckboxText", "Activer la police personnalisée");
             French.Add("EnableCustomFontCheckboxTextDescription", "Activer l'utilisation d'une police personnalisée installée sur votre système dans la plupart des fenêtres d'application");
             French.Add("LauchEditorText", "Lancer l'éditeur de la base de données");
-            French.Add("LauchPatchDesignerText", "Lancer le Patch Designer");
             French.Add("LauchEditorDescription", "Lancer l'éditeur de la base de données d'ici, au lieu de le lancer depuis une ligne de commande");
-            French.Add("ApplyCustomScalingTextDescription", "Appliquer la mise à l'échelle de l'affichage dans les fenêtres du programme d'installation");
+            French.Add("LauchPatchDesignerText", "Lancer le Patch Designer");
+            French.Add("LauchPatchDesignerDescription", Translations.TranslationNeeded);
+            French.Add("LauchAutomationRunnerText", Translations.TranslationNeeded);
+            French.Add("LauchAutomationRunnerDescription", Translations.TranslationNeeded);
             French.Add("InstallWhileDownloadingText", "Extraire pendant le téléchargement");
             French.Add("InstallWhileDownloadingCBDescription", "Si cette option est activée, l'installateur va extraire un fichier zip dès qu'il est téléchargé, au lieu" +
                 " d'attendre que chaque fichier zip soit téléchargé pour l'extraction.");

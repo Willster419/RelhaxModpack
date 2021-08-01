@@ -132,12 +132,15 @@ namespace RelhaxModpack
             German.Add("DeveloperSettingsHeader", "Entwickleroptionen [!]");
             German.Add("DeveloperSettingsHeaderDescription", "Die folgenden Optionen könnten Fehler und Instabilitäten verursachen!\nBitte wähle diese nur aus, wenn du weißt was du tust!");
             German.Add("ApplyCustomScalingText", "Anwendungsskalierung");
+            German.Add("ApplyCustomScalingTextDescription", "Wende die Anzeigeskalierung auf das Installationsfenster an");
             German.Add("EnableCustomFontCheckboxText", "Aktiviere eigene Schriftarten");
             German.Add("EnableCustomFontCheckboxTextDescription", "Aktiviere eine deiner installierten Schriftarten für die Anzeige des Textes im Programm");
             German.Add("LauchEditorText", "Starte Datenbank Editor");
-            German.Add("LauchPatchDesignerText", "Starte Patch Designer");
             German.Add("LauchEditorDescription", "Starte den Datenbank Editor von hier, anstatt über die Befehlszeile");
-            German.Add("ApplyCustomScalingTextDescription", "Wende die Anzeigeskalierung auf das Installationsfenster an");
+            German.Add("LauchPatchDesignerText", "Starte Patch Designer");
+            German.Add("LauchPatchDesignerDescription", Translations.TranslationNeeded);
+            German.Add("LauchAutomationRunnerText", Translations.TranslationNeeded);
+            German.Add("LauchAutomationRunnerDescription", Translations.TranslationNeeded);
             German.Add("InstallWhileDownloadingText", "Entpacke während des Downloads");
             German.Add("InstallWhileDownloadingCBDescription", "Wenn aktiviert, der Installer wird die Zip-Dateien sofort nach dem Download entpacken" +
                 " und nicht erst auf das Herunterladen aller Dateien warten bevor mit dem Entpacken begonnen wird.");

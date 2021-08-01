@@ -112,6 +112,7 @@ namespace RelhaxModpack
             Russian.Add("AutoInstallText", "Включить автоустановку");
             Russian.Add("AutoInstallCBDescription", "Установщик автоматически проверит наличие обновлений модификаций в указанное время и применит их, основываясь на выбранной конфигурации.");
             Russian.Add("OneClickInstallText", "Установка «в один клик»"); // How will the application treat typographic quotes? - DrWeb7_1
+            //it should treat them the same as treated in UTF-8. - Willster419
             Russian.Add("OneClickInstallCBDescription", "Установщик автоматически запустит установку модификаций сразу после выбора конфигурации.");
             Russian.Add("ForceEnabledCB", "Принудительно выбрать все пакеты [!]");
             Russian.Add("AutoOneclickShowWarningOnSelectionsFailText", "Показывать предупреждение, если шаблон предустановки загружен с ошибками.");
@@ -126,12 +127,15 @@ namespace RelhaxModpack
             Russian.Add("DeveloperSettingsHeader", "Настройки для разработчиков [!]");
             Russian.Add("DeveloperSettingsHeaderDescription", "Указанные ниже опции могут привести к нестабильному поведению игры и вызывать проблемы!\nПожалуйста, не используйте их, если не знаете, что делаете!");
             Russian.Add("ApplyCustomScalingText", "Мастшабирование приложения");
+            Russian.Add("ApplyCustomScalingTextDescription", "Применить масштабирование дисплея к окнам установщика.");
             Russian.Add("EnableCustomFontCheckboxText", "Использовать другой шрифт");
             Russian.Add("EnableCustomFontCheckboxTextDescription", "Вы можете выбрать любой установленный в системе шрифт,\nкоторый будет использован почти во всех окнах программы.");
             Russian.Add("LauchEditorText", "Запустить редактор БД");
-            Russian.Add("LauchPatchDesignerText", "Запустить конструктор патчей");
             Russian.Add("LauchEditorDescription", "Запуск редактора базы данных непосредственно здесь, а не в коммандной строке.");
-            Russian.Add("ApplyCustomScalingTextDescription", "Применить масштабирование дисплея к окнам установщика.");
+            Russian.Add("LauchPatchDesignerText", "Запустить конструктор патчей");
+            Russian.Add("LauchPatchDesignerDescription", Translations.TranslationNeeded);
+            Russian.Add("LauchAutomationRunnerText", Translations.TranslationNeeded);
+            Russian.Add("LauchAutomationRunnerDescription", Translations.TranslationNeeded);
             Russian.Add("InstallWhileDownloadingText", "Распаковка во время скачивания");
             Russian.Add("InstallWhileDownloadingCBDescription", "Установщик будет распаковывать ZIP-архив сразу после скачивания,\nа не ждать окончания загрузки всех файлов перед распаковкой.");
             Russian.Add("MulticoreExtractionCoresCountLabel", "Обнаружено ядер: {0}");

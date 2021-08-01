@@ -131,12 +131,15 @@ namespace RelhaxModpack
             Spanish.Add("DeveloperSettingsHeader", "Opciones de desarrollador [!]");
             Spanish.Add("DeveloperSettingsHeaderDescription", "¡Las opciones a continuación pueden causar problemas o inestabilidad!.\n¡Por favor, no las utilice a menos que sepa lo que está haciendo!");
             Spanish.Add("ApplyCustomScalingText", "Escalado de la aplicación");
+            Spanish.Add("ApplyCustomScalingTextDescription", "Aplica esta escala de visualización a las ventanas del instalador");
             Spanish.Add("EnableCustomFontCheckboxText", "Habilitar fuente personalizada");
             Spanish.Add("EnableCustomFontCheckboxTextDescription", "Habilita una fuente personalizada instalada en su sistema en la mayoría de las ventanas de la aplicación");
             Spanish.Add("LauchEditorText", "Iniciar editor de la base de datos");
-            Spanish.Add("LauchPatchDesignerText", "Iniciar diseñador de parche");
             Spanish.Add("LauchEditorDescription", "Inicia el editor de la base de datos desde aquí, en lugar de desde la línea de comandos");
-            Spanish.Add("ApplyCustomScalingTextDescription", "Aplica esta escala de visualización a las ventanas del instalador");
+            Spanish.Add("LauchPatchDesignerText", "Iniciar diseñador de parche");
+            Spanish.Add("LauchPatchDesignerDescription", Translations.TranslationNeeded);
+            Spanish.Add("LauchAutomationRunnerText", Translations.TranslationNeeded);
+            Spanish.Add("LauchAutomationRunnerDescription", Translations.TranslationNeeded);
             Spanish.Add("InstallWhileDownloadingText", "Extraer durante la descarga");
             Spanish.Add("InstallWhileDownloadingCBDescription", "Cuando está habilitada, el instalador extraerá cada archivo zip tan pronto como se descargue" +
                 " en lugar de esperar a que todos los archivos sean descargados para la extracción.");

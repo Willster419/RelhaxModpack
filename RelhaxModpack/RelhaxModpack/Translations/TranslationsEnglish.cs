@@ -397,6 +397,10 @@ namespace RelhaxModpack
             //
             English.Add("ApplyCustomScalingText", "Application Scaling");
 
+            //Component: ApplyCustomScalingTextDescription
+            // A tooltip for a ApplyCustomScalingText label. Describes a slider below used for changing application scaling.
+            English.Add("ApplyCustomScalingTextDescription", "Apply display scaling to the installer windows");
+
             //Component: EnableCustomFontCheckboxText
             //
             English.Add("EnableCustomFontCheckboxText", "Enable custom font");
@@ -409,17 +413,25 @@ namespace RelhaxModpack
             //button for launching the editor from the main application window
             English.Add("LauchEditorText", "Launch Database Editor");
 
-            //Component: LauchPatchDesignerText
-            //button for launching the editor from the main application window
-            English.Add("LauchPatchDesignerText", "Launch Patch Designer");
-
             //Component: LauchEditorDescription
             //button for launching the editor from the main application window
             English.Add("LauchEditorDescription", "Launch the Database Editor from here, instead of from command line");
 
-            //Component: ApplyCustomScalingTextDescription
-            // A tooltip for a ApplyCustomScalingText label. Describes a slider below used for changing application scaling.
-            English.Add("ApplyCustomScalingTextDescription", "Apply display scaling to the installer windows");
+            //Component: LauchPatchDesignerText
+            //button for launching the editor from the main application window
+            English.Add("LauchPatchDesignerText", "Launch Patch Designer");
+
+            //Component: LauchPatchDesignerDescription
+            //button for launching the editor from the main application window
+            English.Add("LauchPatchDesignerDescription", "Launch the Patch Designer from here, instead of from command line");
+
+            //Component: LauchAutomationRunnerText
+            //button for launching the automation runner from the main application window
+            English.Add("LauchAutomationRunnerText", "Launch Automation Runner");
+
+            //Component: LauchAutomationRunnerDescription
+            //button for launching the editor from the main application window
+            English.Add("LauchAutomationRunnerDescription", "Launch the Automation Runner from here, instead of from command line");
 
             //Component: InstallWhileDownloadingText
             //
