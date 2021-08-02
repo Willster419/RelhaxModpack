@@ -28,6 +28,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Green.Named.Primary.xaml"/>
+                <!--  -->
             </ResourceDictionary.MergedDictionaries>
             <!-- https://stackoverflow.com/a/32558808/3128017 of https://stackoverflow.com/questions/14033238/wpf-setting-tooltip-maxwidth -->
             <Style TargetType="ToolTip">
