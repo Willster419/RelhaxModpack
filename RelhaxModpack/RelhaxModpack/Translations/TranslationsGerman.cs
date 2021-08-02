@@ -83,7 +83,7 @@ namespace RelhaxModpack
             German.Add("backupModsSizeCalculating", "Berechne Größe des Backups...");
             German.Add("BackupModsCBDescription", "Wähle diese Option, um ein Backup deiner aktuellen Mod-Installation zu erstellen. "+
                      "Diese werden im Ordner 'RelHaxModBackup' als ZIP-Datei mit einem Zeitstempel gespeichert.");
-            German.Add("BackupModsSizeLabelUsedDescription", Translations.TranslationNeeded);
+            German.Add("BackupModsSizeLabelUsedDescription", "Wenn aktiviert, sichert der Installationsprogramm Ihre aktuellen Mods-Installationsordner an den angegebenen Ort");
             German.Add("SaveLastInstallText", "Speicherung der letzten Installation");
             German.Add("SaveLastInstallCBDescription", "Wenn diese Option aktiviert ist, wendet das Installationsprogramm automatisch deine zuletzt verwendete Auswahl an");
             German.Add("MinimizeToSystemTrayText", "Ins Benachrichtigungsfeld minimieren");
@@ -138,9 +138,9 @@ namespace RelhaxModpack
             German.Add("LauchEditorText", "Starte Datenbank Editor");
             German.Add("LauchEditorDescription", "Starte den Datenbank Editor von hier, anstatt über die Befehlszeile");
             German.Add("LauchPatchDesignerText", "Starte Patch Designer");
-            German.Add("LauchPatchDesignerDescription", Translations.TranslationNeeded);
-            German.Add("LauchAutomationRunnerText", Translations.TranslationNeeded);
-            German.Add("LauchAutomationRunnerDescription", Translations.TranslationNeeded);
+            German.Add("LauchPatchDesignerDescription", "Starte den Patch Designer von hier, anstatt über die Befehlszeile");
+            German.Add("LauchAutomationRunnerText", "Starte den Automation Runner");
+            German.Add("LauchAutomationRunnerDescription", "Starte den Automation Runner von hier, anstatt über die Befehlszeile");
             German.Add("InstallWhileDownloadingText", "Entpacke während des Downloads");
             German.Add("InstallWhileDownloadingCBDescription", "Wenn aktiviert, der Installer wird die Zip-Dateien sofort nach dem Download entpacken" +
                 " und nicht erst auf das Herunterladen aller Dateien warten bevor mit dem Entpacken begonnen wird.");
