@@ -226,6 +226,16 @@ namespace RelhaxModpack.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap modpack_icon_Transparent {
+            get {
+                object obj = ResourceManager.GetObject("modpack_icon_Transparent", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to                                  Apache License
         ///                           Version 2.0, January 2004
         ///                        http://www.apache.org/licenses/
@@ -271,6 +281,16 @@ namespace RelhaxModpack.Properties {
         internal static System.Drawing.Bitmap obfuscated_package_icon {
             get {
                 object obj = ResourceManager.GetObject("obfuscated_package_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OMC_Modpack_Logo {
+            get {
+                object obj = ResourceManager.GetObject("OMC_Modpack_Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
