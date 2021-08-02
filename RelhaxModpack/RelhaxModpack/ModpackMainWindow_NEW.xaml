@@ -1,0 +1,372 @@
+﻿<Window x:Class="RelhaxModpack.ModpackMainWindow_NEW"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RelhaxModpack"
+        xmlns:ui="clr-namespace:RelhaxModpack.UI"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignPaper}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}"
+        mc:Ignorable="d"
+        Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded"
+        Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
+        Title="Relhax Modpack" Height="720" Width="1280">
+    <Grid>
+        <Grid x:Name="ModpackMainWindow_MinorSettings" Panel.ZIndex="1000">
+            <materialDesign:PopupBox
+                        HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="15,0,0,20" 
+                        PlacementMode="TopAndAlignCentres"
+                        StaysOpen="False">
+                <StackPanel>
+                    <Grid Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                                    Tag="Word_Light"
+                                    Text="Light"
+                                    Margin="0,0,10,0"/>
+                        <ToggleButton
+                                    x:Name="DarkModeToggleButton"
+                                    Click="DarkModeToggleButton_Click"
+                                    Grid.Column="1"/>
+                        <TextBlock
+                                    Tag="Word_Dark"
+                                    Text="Dark"
+                                    Margin="10,0,0,0"/>
+                    </Grid>
+                </StackPanel>
+            </materialDesign:PopupBox>
+        </Grid>
+        <Grid x:Name="ModpackMainWindow_SnackBar" Panel.ZIndex="1001">
+            <materialDesign:Snackbar>
+                <materialDesign:SnackbarMessage Content="{materialDesign:MessageQueue}"/>
+            </materialDesign:Snackbar>
+        </Grid>
+        <TabControl x:Name="ModpackMainWindow_MainTabView"
+                    HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                    SelectionChanged="ModpackMainWindow_MainTabView_SelectionChanged"
+                    Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+                    materialDesign:ColorZoneAssist.Mode="PrimaryMid">
+            <TabItem x:Name="ModpackMainWindow_Home" Header="{materialDesign:PackIcon Kind=Home, Size=24}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <Grid Width="1200">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Image
+                                Grid.Column="0" Grid.Row="0"
+                                Source="/RelhaxModpack;component/Resources/Images/modpack_icon_Transparent.png"
+                                Stretch="Uniform"
+                                VerticalAlignment="Top"
+                                Margin="10"
+                                Height="100"
+                                Width="100"
+                                />
+                        <Image
+                            Grid.Column="2" Grid.Row="0"
+                            Source="/RelhaxModpack;component/Resources/Images/OMC_Modpack_Logo.png"
+                            Stretch="Uniform"
+                            VerticalAlignment="Top"
+                            Margin="10"
+                            Height="100"
+                            Width="100"
+                            ToolTip="Relhax is the spiritual successor to the OMC Modpack"
+                            />
+                        <StackPanel HorizontalAlignment="Center" Margin="48" Grid.Column="1" Grid.Row="0">
+                            <Grid x:Name="ModpackMainWindow_Application_Info" Grid.Row="5">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10 0 10 0" Height="20">
+                                    <TextBlock Text="Application Version: {0}" Margin="10 0 60 0" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
+                                    <TextBlock Text="Database Version: {1}" Margin="10 0 60 0" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
+                                </StackPanel>
+                            </Grid>
+                            <TextBlock
+                                Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                                TextWrapping="Wrap"
+                                Text="Welcome to the Relhax Modpack"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="42">
+                                <Border Style="{StaticResource MaterialDesignToolBarMainPanelBorderStyle}" BorderThickness="2" BorderBrush="White">
+                                    <Button
+                                        Style="{StaticResource MaterialDesignFlatButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Play" Width="40" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <TextBlock Margin="8 0 0 0" Text="Install" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Border>
+                                <Border Style="{StaticResource MaterialDesignToolBarMainPanelBorderStyle}" BorderThickness="2" BorderBrush="White">
+                                <Button
+                                        x:Name="ModpackMainpage_UninstallButton"
+                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                        Click="ModpackMainpage_UninstallButton_Click">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="DeleteForeverOutline" Width="40" Height="40" VerticalAlignment="Center"/>
+                                            <TextBlock Margin="0" Text="Uninstall" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                    <Grid x:Name="ModpackManWindow_Home_LanguageSelection" Grid.Row="2">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                            <TextBlock x:Name="ModpackMainWindow_Home_LanguageSelection_Header" Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10"
+                                       Text="Language Selection" Tag="ModpackMainWindow_Home_LanguageSelection_Header"/>
+                            <ListBox x:Name="ModpackMainWindow_Home_LanguageSelection_ListBox" Style="{StaticResource MaterialDesignChoiceChipAccentListBox}"
+                                     HorizontalAlignment="Center" VerticalAlignment="Bottom" SelectionChanged="OnLanguageSelectionChanged">
+                                <ListBoxItem Content="English" IsSelected="True"/>
+                                <ListBoxItem Content="French"/>
+                                <ListBoxItem Content="German"/>
+                                <ListBoxItem Content="Polish"/>
+                                <ListBoxItem Content="Russian"/>
+                                <ListBoxItem Content="Spanish"/>
+                            </ListBox>
+                        </StackPanel>
+                    </Grid>
+                    <Grid x:Name="ModpackMainWindow_Home_Cards" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:Card
+                                Width="220"
+                                Margin="4 2 8 16"
+                                Height="270">
+                                <Grid VerticalAlignment="Stretch" >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                        Margin="16 16 16 2"
+                                        Text="Get In Touch"
+                                        HorizontalAlignment="Center"/>
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        TextWrapping="Wrap"
+                                        Margin="16 0 16 8"
+                                        Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                        VerticalAlignment="Center"
+                                        Text="Say hello, make a feature request, or raise a bug through one of these channels:"/>
+                                    <Border
+                                        Grid.Row="2"
+                                        BorderThickness="0 1 0 0"
+                                        BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                        Margin="0 8 0 0">
+                                        <Grid Margin="8">
+                                            <Button
+                                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                                HorizontalAlignment="Left" Margin="5"
+                                                x:Name="GitHubButton" Click="GitHubButton_OnClick">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Github"/>
+                                                    <TextBlock
+                                                        Margin="8 0 0 0"
+                                                        VerticalAlignment="Center"
+                                                        Text="GitHub"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button
+                                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                                HorizontalAlignment="Right"
+                                                x:Name="TwitterButton"
+                                                Click="TwitterButton_OnClick">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Twitter"/>
+                                                    <TextBlock
+                                                        Margin="8 0 0 0"
+                                                        VerticalAlignment="Center"
+                                                        Text="Twitter"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                    <Border
+                                        Grid.Row="3"
+                                        BorderThickness="0 1 0 0"
+                                        BorderBrush="{DynamicResource MaterialDesignDivider}">
+                                        <Grid Margin="8">
+                                            <Button
+                                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                                HorizontalAlignment="Left" Margin="5"
+                                                x:Name="ChatButton"
+                                                Click="ChatButton_OnClick">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Discord"/>
+                                                    <TextBlock
+                                                        Margin="8 0 0 0"
+                                                        VerticalAlignment="Center"
+                                                        Text="Chat"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button
+                                                Style="{DynamicResource MaterialDesignFlatButton}"
+                                                Margin="0 0 10 0"
+                                                HorizontalAlignment="Right"
+                                                x:Name="EmailButton"
+                                                Click="EmailButton_OnClick">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Email"/>
+                                                    <TextBlock
+                                                        Margin="8 0 0 0"
+                                                        VerticalAlignment="Center"
+                                                        Text="Email"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </materialDesign:Card>
+                            <materialDesign:Card
+                                Width="420"
+                                Margin="8 2 4 16"
+                                Height="270">
+                                <Grid VerticalAlignment="Stretch">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <materialDesign:PackIcon
+                                        Kind="Github"
+                                        Width="160"
+                                        Height="160"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"/>
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock
+                                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                            Margin="16 16 16 8"
+                                            Text="Open Source"/>
+
+                                        <TextBlock
+                                            TextWrapping="Wrap"
+                                            Margin="16 0 16 8"
+                                            Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                            VerticalAlignment="Top"
+                                            Text="This project is completely open source. If you like it and want to say thanks you could hit the GitHub Star button, tweet or post about it, or tell your mum about it!"/>
+                                    </StackPanel>
+
+                                    <Border
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        BorderThickness="0 1 0 0"
+                                        BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                        Padding="8">
+                                        <DockPanel>
+                                            <Button
+                                                Style="{DynamicResource MaterialDesignFlatButton}" 
+                                                DockPanel.Dock="Right"
+                                                x:Name="DonateButton"
+                                                Click="DonateButton_OnClick">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Gift"/>
+                                                    <TextBlock
+                                                        Margin="8 0 0 0"
+                                                        VerticalAlignment="Center"
+                                                        Text="Donate"/>
+                                                </StackPanel>
+                                            </Button>
+
+                                            <TextBlock
+                                                Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                                TextWrapping="Wrap"
+                                                Margin="16"
+                                                VerticalAlignment="Center"
+                                                Text="Feel like you want to make a donation? It would be gratefully received. Click the button to donate via Paypal."/>
+                                        </DockPanel>
+                                    </Border>
+                                </Grid>
+                            </materialDesign:Card>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="ModpackMainWindow_Diagnostics" Header="{materialDesign:PackIcon Kind=Bug, Size=24}" Style="{StaticResource MaterialDesignNavigationRailTabItem}" ToolTip="Report A Bug">
+                
+            </TabItem>
+            <TabItem x:Name="ModpackMainWindow_LanguageSelection" Header="{materialDesign:PackIcon Kind=Language, Size=24}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                
+            </TabItem>
+            <TabItem x:Name="ModpackMainWindow_NewsView" Header="{materialDesign:PackIcon Kind=Newspaper, Size=24}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="595"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="625"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <ui:RelhaxHyperlink 
+                        x:Name="ViewNewsOnGoogleTranslate" 
+                        HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"
+                        Tag="ViewNewsOnGoogleTranslate" ToolTip="View This On Google Translate">
+                        <materialDesign:PackIcon Kind="GoogleTranslate" Height="40" Width="40" Foreground="White"/>
+                    </ui:RelhaxHyperlink>
+                    <TextBox 
+                        x:Name="DatabaseUpdateText" Tag="DatabaseUpdateText" IsReadOnly="True"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" Height="649" Width="595"
+                        TextWrapping="Wrap">
+                    </TextBox>
+                    <TextBox 
+                        x:Name="ApplicationUpdateText" Tag="ApplicationUpdateText" IsReadOnly="True"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="2" Height="649" Width="595"
+                        TextWrapping="Wrap">
+                    </TextBox>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="ModpackMainWindow_Settings" Header="{materialDesign:PackIcon Kind=Gear, Size=24}" Style="{StaticResource MaterialDesignNavigationRailTabItem}" VerticalAlignment="Bottom">
+                <Grid>
+                    <StackPanel Orientation="Vertical" Width="1200">
+                        <Expander Header="Main Settings" IsExpanded="True">
+                            <StackPanel>
+                                <Border x:Name="ModpackMainWindow_Settings_Recommended" BorderThickness="10" Style="{StaticResource MaterialDesignToolBarMainPanelBorderStyle}">
+                                    <CheckBox 
+                                        x:Name="CleanInstallCB" Tag="CleanInstallCB" Click="OnCleanInstallChanged"
+                                        Style="{StaticResource MaterialDesignAccentCheckBox}"
+                                        Height="40" Width="110" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0 0 0">
+                                        <TextBlock x:Name="CleanInstallText"
+                                                   Width="100"
+                                                   Text="Clean Install" TextWrapping="Wrap" 
+                                                   ToolTip="Enabling this will cause the application to delete both mod folders (mods &amp; res_mods)"/>
+                                    </CheckBox>
+                                </Border>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                </Grid>
+                
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
