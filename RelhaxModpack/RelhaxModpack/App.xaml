@@ -22,6 +22,7 @@
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxRadioButtonStyleDictionary.xaml"/>
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxTabItemStyleDictionary.xaml"/>
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxSelectionListTabItemStyleDictionary.xaml"/>
+                <!-- Material Design Settings. Defualt is dark. Change this using Window.Resources node -->
                 <materialDesign:CustomColorTheme BaseTheme="Dark" PrimaryColor="Aqua" SecondaryColor="DarkGreen" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
