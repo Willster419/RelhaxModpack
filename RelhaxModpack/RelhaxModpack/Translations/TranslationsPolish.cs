@@ -136,7 +136,7 @@ namespace RelhaxModpack
             Polish.Add("LauchEditorDescription", "Uruchomi edytor bazy danych stąd, zamiast z wiersza poleceń.");
             Polish.Add("LauchPatchDesignerText", "Uruchom kreator łatek");
             Polish.Add("LauchPatchDesignerDescription", "Uruchomi kreator łatek stąd, zamiast z wiersza poleceń.");
-            Polish.Add("LauchAutomationRunnerText", "Uruchom menedżera automatyzacji);
+            Polish.Add("LauchAutomationRunnerText", "Uruchom menedżera automatyzacji");
             Polish.Add("LauchAutomationRunnerDescription", "Uruchomi menedżera automatyzacji stąd, zamiast z wiersza poleceń.");
             Polish.Add("InstallWhileDownloadingText", "Wypakuj podczas pobierania");
             Polish.Add("InstallWhileDownloadingCBDescription", "Wyodrębnia każdy pakiet zaraz po jego pobraniu, zamiast po pobraniu wszystkich pakietów.");
