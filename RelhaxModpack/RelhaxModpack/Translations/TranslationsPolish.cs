@@ -133,11 +133,11 @@ namespace RelhaxModpack
             Polish.Add("EnableCustomFontCheckboxText", "Użyj własnej czcionki");
             Polish.Add("EnableCustomFontCheckboxTextDescription", "Pozwala wybrać czcionkę używaną w większości okien spośród listy zainstalowanych w systemie czcionek");
             Polish.Add("LauchEditorText", "Uruchom edytor bazy danych");
-            Polish.Add("LauchEditorDescription", "Uruchomi edytor bazy danych stąd, zamiast poprzez wiersz poleceń.");
-            Polish.Add("LauchPatchDesignerText", "Uruchom Patch Designer");
-            Polish.Add("LauchPatchDesignerDescription", Translations.TranslationNeeded);
-            Polish.Add("LauchAutomationRunnerText", Translations.TranslationNeeded);
-            Polish.Add("LauchAutomationRunnerDescription", Translations.TranslationNeeded);
+            Polish.Add("LauchEditorDescription", "Uruchomi edytor bazy danych stąd, zamiast z wiersza poleceń.");
+            Polish.Add("LauchPatchDesignerText", "Uruchom kreator łatek");
+            Polish.Add("LauchPatchDesignerDescription", "Uruchomi kreator łatek stąd, zamiast z wiersza poleceń.");
+            Polish.Add("LauchAutomationRunnerText", "Uruchom menedżera automatyzacji);
+            Polish.Add("LauchAutomationRunnerDescription", "Uruchomi menedżera automatyzacji stąd, zamiast z wiersza poleceń.");
             Polish.Add("InstallWhileDownloadingText", "Wypakuj podczas pobierania");
             Polish.Add("InstallWhileDownloadingCBDescription", "Wyodrębnia każdy pakiet zaraz po jego pobraniu, zamiast po pobraniu wszystkich pakietów.");
             Polish.Add("MulticoreExtractionCoresCountLabel", "Rdzenie CPU: {0}");
