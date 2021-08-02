@@ -15,6 +15,14 @@
         Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded"
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
         Title="Relhax Modpack" Height="720" Width="1280">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Card.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid x:Name="ModpackMainWindow_MinorSettings" Panel.ZIndex="1000">
             <materialDesign:PopupBox
@@ -103,18 +111,22 @@
                                 Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                                 TextWrapping="Wrap"
                                 Text="Welcome to the Relhax Modpack"/>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="42">
-                                <Border Style="{StaticResource MaterialDesignToolBarMainPanelBorderStyle}" BorderThickness="2" BorderBrush="White">
+                            <materialDesign:DialogHost>
+                                <materialDesign:DialogHost.DialogContent>
+                                    <!-- This will be where the Uninstall progress will be displayed. Not finished -->
+                                    <StackPanel>
+                                        
+                                    </StackPanel>
+                                </materialDesign:DialogHost.DialogContent>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="42">
                                     <Button
                                         Style="{StaticResource MaterialDesignFlatButton}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="Play" Width="40" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                            <TextBlock Margin="8 0 0 0" Text="Install" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </Border>
-                                <Border Style="{StaticResource MaterialDesignToolBarMainPanelBorderStyle}" BorderThickness="2" BorderBrush="White">
-                                <Button
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Play" Width="40" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <TextBlock Margin="8 0 0 0" Text="Install" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                    <Button
                                         x:Name="ModpackMainpage_UninstallButton"
                                         Style="{StaticResource MaterialDesignFlatButton}"
                                         Click="ModpackMainpage_UninstallButton_Click">
@@ -123,8 +135,8 @@
                                             <TextBlock Margin="0" Text="Uninstall" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
-                                </Border>
-                            </StackPanel>
+                                </StackPanel>
+                            </materialDesign:DialogHost>
                         </StackPanel>
                     </Grid>
                     <Grid x:Name="ModpackManWindow_Home_LanguageSelection" Grid.Row="2">
