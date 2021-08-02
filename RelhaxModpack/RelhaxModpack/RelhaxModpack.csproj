@@ -227,6 +227,9 @@
     <Compile Include="Database\UserFile.cs" />
     <Compile Include="Installer\Instruction.cs" />
     <Compile Include="Installer\InstructionLoader.cs" />
+    <Compile Include="ModpackMainWindow_NEW.xaml.cs">
+      <DependentUpon>ModpackMainWindow_NEW.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Patching\PatchUnitTest.cs" />
     <Compile Include="Settings\AutomationRunnerSettings.cs" />
     <Compile Include="Settings\ISettingsFile.cs" />
@@ -480,6 +483,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ModpackMainWindow_NEW.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\RelhaxComboBoxItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -869,7 +876,12 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <EmbeddedResource Include="Resources\DLL\nvtt32.zip" />
     <EmbeddedResource Include="Resources\DLL\nvtt64.zip" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Images\OMC_Modpack_Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Images\modpack_icon_Transparent.png" />
+  </ItemGroup>
   <Import Project="..\packages\TeximpNet.1.4.3\build\TeximpNet.targets" Condition="Exists('..\packages\TeximpNet.1.4.3\build\TeximpNet.targets')" />
   <Import Project="..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" />
   <Import Project="..\packages\ShowMeTheXAML.MSBuild.2.0.0\build\net472\ShowMeTheXAML.MSBuild.targets" Condition="Exists('..\packages\ShowMeTheXAML.MSBuild.2.0.0\build\net472\ShowMeTheXAML.MSBuild.targets')" />
