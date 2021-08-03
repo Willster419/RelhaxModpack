@@ -188,7 +188,7 @@ namespace RelhaxModpack.Windows
             DumpEnvironmentVariablesAtSequenceStartSetting.IsChecked = AutomationSettings.DumpShellEnvironmentVarsPerSequenceRun;
             UseLocalRunnerDatabaseSetting.IsChecked = AutomationSettings.UseLocalRunnerDatabase;
             LocalRunnerDatabaseRootSetting.Text = AutomationSettings.LocalRunnerDatabaseRoot;
-            SelectWoTInstallLocationSetting.Text = AutomationSettings.WoTClientInstallLocation;
+            //SelectWoTInstallLocationSetting.Text = AutomationSettings.WoTClientInstallLocation;
         }
 
         private void MoveSequenceToRunList()
@@ -744,12 +744,12 @@ namespace RelhaxModpack.Windows
             if (!(bool)manualWoTFind.ShowDialog())
                 return;
 
-            SelectWoTInstallLocationSetting.Text = manualWoTFind.FileName;
+            //SelectWoTInstallLocationSetting.Text = manualWoTFind.FileName;
         }
 
         private void SelectWoTInstallLocationSetting_TextChanged(object sender, TextChangedEventArgs e)
         {
-            AutomationSettings.WoTClientInstallLocation = SelectWoTInstallLocationSetting.Text;
+            //AutomationSettings.WoTClientInstallLocation = SelectWoTInstallLocationSetting.Text;
         }
         #endregion 
 

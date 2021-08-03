@@ -2461,6 +2461,24 @@
             the actual name of the original patch before processed
             </summary>
         </member>
+        <member name="T:RelhaxModpack.ModpackMainWindow_NEW">
+            <summary>
+            Interaction logic for ModpackMainWindow_NEW.xaml
+            </summary>
+            <summary>
+            ModpackMainWindow_NEW
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.ModpackMainWindow_NEW.#ctor">
+            <summary>
+            Does the stuff like __init__(self): in python
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.ModpackMainWindow_NEW.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Patching.PatchUnitTest">
             <summary>
             Represents a patch operation with a description and desired assertion condition
@@ -10014,6 +10032,11 @@
               Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Properties.Resources.modpack_icon_Transparent">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Properties.Resources.modpack_license_agrement">
              <summary>
                Looks up a localized string similar to                                  Apache License
@@ -10047,6 +10070,11 @@
              </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.obfuscated_package_icon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Properties.Resources.OMC_Modpack_Logo">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>

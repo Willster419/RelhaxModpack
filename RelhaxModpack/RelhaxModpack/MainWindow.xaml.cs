@@ -2940,6 +2940,12 @@ namespace RelhaxModpack
         #endregion
 
         #region Button click events
+
+        private void TEMP_NewWindowOpen_Click(object sender, RoutedEventArgs e)
+        {
+            ModpackMainWindow_NEW modpackMainWindow = new ModpackMainWindow_NEW();
+            modpackMainWindow.Show();
+        }
         private void ViewCreditsButton_Click(object sender, RoutedEventArgs e)
         {
             if (ModpackSettings.AutoInstall && autoInstallPeriodicTimer.IsEnabled)

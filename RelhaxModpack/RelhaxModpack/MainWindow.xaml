@@ -43,6 +43,7 @@
             <TabItem Header="Intro" x:Name="SettingsTabIntro" Tag="SettingsTabIntro" Background="#7FE5E5E5">
                 <Grid Background="#7FE5E5E5" Tag="SettingsTabIntroGrid">
                     <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="HelperText" Tag="HelperText"/>
+                    <Button x:Name="TEMP_NewWindowOpen" Content="New Window" Click="TEMP_NewWindowOpen_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Selection View" x:Name="SettingsTabSelectionView" Tag="SettingsTabSelectionView" Background="#7FE5E5E5">

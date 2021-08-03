@@ -12,7 +12,6 @@
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}"
         mc:Ignorable="d"
-        Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded"
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
         Title="Relhax Modpack" Height="720" Width="1280">
     <Window.Resources>
@@ -75,6 +74,42 @@
                         <RowDefinition Height="5"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    <materialDesign:DialogHost
+                                    x:Name="ModpackMainWindow_Uninstall_Dialog"
+                                    DialogClosing="DialogHost_DialogClosing"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <materialDesign:DialogHost.DialogContent>
+                            <!-- This will be where the Uninstall progress will be displayed. Not finished -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0" Grid.Column="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Quick"/>
+                                        <Separator Style="{StaticResource MaterialDesignSeparator}" Height="5"/>
+                                        <TextBlock Text="Full"/>
+                                    </StackPanel>
+                                    <ToggleButton x:Name="Modpack_Uninstall_Method" ClickMode="Press" Style="{StaticResource MaterialDesignSwitchToggleButton}">
+                                        <materialDesign:ToggleButtonAssist.SwitchTrackOnBackground>
+                                            <SolidColorBrush
+                                                            Color="Green" />
+                                        </materialDesign:ToggleButtonAssist.SwitchTrackOnBackground>
+                                        <materialDesign:ToggleButtonAssist.SwitchTrackOffBackground>
+                                            <SolidColorBrush
+                                                            Color="Red" />
+                                        </materialDesign:ToggleButtonAssist.SwitchTrackOffBackground>
+                                    </ToggleButton>
+                                </StackPanel>
+                                <ProgressBar x:Name="Modpack_Progress_Uninstall" Margin="10 0 10 0"/>
+                            </Grid>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
                     <Grid HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -119,23 +154,15 @@
                                         <TextBlock Margin="8 0 0 0" Text="Install" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
-                                <materialDesign:DialogHost>
-                                    <materialDesign:DialogHost.DialogContent>
-                                        <!-- This will be where the Uninstall progress will be displayed. Not finished -->
-                                        <StackPanel>
-
-                                        </StackPanel>
-                                    </materialDesign:DialogHost.DialogContent>
-                                    <Button
+                                <Button
                                         x:Name="ModpackMainpage_UninstallButton"
                                         Style="{StaticResource MaterialDesignFlatButton}"
                                         Click="ModpackMainpage_UninstallButton_Click">
-                                        <StackPanel Orientation="Horizontal">
-                                            <materialDesign:PackIcon Kind="DeleteForeverOutline" Width="40" Height="40" VerticalAlignment="Center"/>
-                                            <TextBlock Margin="0" Text="Uninstall" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </materialDesign:DialogHost>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="DeleteForeverOutline" Width="40" Height="40" VerticalAlignment="Center"/>
+                                        <TextBlock Margin="0" Text="Uninstall" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
