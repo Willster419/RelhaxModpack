@@ -83,7 +83,7 @@ namespace RelhaxModpack
             German.Add("backupModsSizeCalculating", "Berechne Größe des Backups...");
             German.Add("BackupModsCBDescription", "Wähle diese Option, um ein Backup deiner aktuellen Mod-Installation zu erstellen. "+
                      "Diese werden im Ordner 'RelHaxModBackup' als ZIP-Datei mit einem Zeitstempel gespeichert.");
-            German.Add("BackupModsSizeLabelUsedDescription", Translations.TranslationNeeded);
+            German.Add("BackupModsSizeLabelUsedDescription", German["BackupModsCBDescription"]);
             German.Add("SaveLastInstallText", "Speicherung der letzten Installation");
             German.Add("SaveLastInstallCBDescription", "Wenn diese Option aktiviert ist, wendet das Installationsprogramm automatisch deine zuletzt verwendete Auswahl an");
             German.Add("MinimizeToSystemTrayText", "Ins Benachrichtigungsfeld minimieren");

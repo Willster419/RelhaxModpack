@@ -79,7 +79,7 @@ namespace RelhaxModpack
             Russian.Add("BackupModsSizeLabelUsed", "Бэкапов: {0} Размер: {1}");
             Russian.Add("backupModsSizeCalculating", "Вычисление размера...");
             Russian.Add("BackupModsCBDescription", "Созданные резервные копии будут находиться в папке 'RelHaxModBackup' в виде ZIP-архива с датой создания в названии.");
-            Russian.Add("BackupModsSizeLabelUsedDescription", Translations.TranslationNeeded);
+            Russian.Add("BackupModsSizeLabelUsedDescription", Russian["BackupModsCBDescription"]);
             Russian.Add("SaveLastInstallText", "Запомнить выбранные моды");
             Russian.Add("SaveLastInstallCBDescription", "Установщик автоматически выберет моды, указанные вами в прошлый раз.");
             Russian.Add("MinimizeToSystemTrayText", "Свернуть в трей");
