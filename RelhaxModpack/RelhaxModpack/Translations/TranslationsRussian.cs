@@ -79,7 +79,7 @@ namespace RelhaxModpack
             Russian.Add("BackupModsSizeLabelUsed", "Бэкапов: {0} Размер: {1}");
             Russian.Add("backupModsSizeCalculating", "Вычисление размера...");
             Russian.Add("BackupModsCBDescription", "Созданные резервные копии будут находиться в папке 'RelHaxModBackup' в виде ZIP-архива с датой создания в названии.");
-            Russian.Add("BackupModsSizeLabelUsedDescription", Translations.TranslationNeeded);
+            Russian.Add("BackupModsSizeLabelUsedDescription", Russian["BackupModsCBDescription"]);
             Russian.Add("SaveLastInstallText", "Запомнить выбранные моды");
             Russian.Add("SaveLastInstallCBDescription", "Установщик автоматически выберет моды, указанные вами в прошлый раз.");
             Russian.Add("MinimizeToSystemTrayText", "Свернуть в трей");
@@ -111,8 +111,7 @@ namespace RelhaxModpack
             Russian.Add("MinimalistModeCBDescription", "В этом режиме установщик модпака исключает некоторые необязательные пакеты, такие как кнопка модпака или файлы темы Relhax.");
             Russian.Add("AutoInstallText", "Включить автоустановку");
             Russian.Add("AutoInstallCBDescription", "Установщик автоматически проверит наличие обновлений модификаций в указанное время и применит их, основываясь на выбранной конфигурации.");
-            Russian.Add("OneClickInstallText", "Установка «в один клик»"); // How will the application treat typographic quotes? - DrWeb7_1
-            //it should treat them the same as treated in UTF-8. - Willster419
+            Russian.Add("OneClickInstallText", "Установка «в один клик»");
             Russian.Add("OneClickInstallCBDescription", "Установщик автоматически запустит установку модификаций сразу после выбора конфигурации.");
             Russian.Add("ForceEnabledCB", "Принудительно выбрать все пакеты [!]");
             Russian.Add("AutoOneclickShowWarningOnSelectionsFailText", "Показывать предупреждение, если шаблон предустановки загружен с ошибками.");
@@ -131,11 +130,11 @@ namespace RelhaxModpack
             Russian.Add("EnableCustomFontCheckboxText", "Использовать другой шрифт");
             Russian.Add("EnableCustomFontCheckboxTextDescription", "Вы можете выбрать любой установленный в системе шрифт,\nкоторый будет использован почти во всех окнах программы.");
             Russian.Add("LauchEditorText", "Запустить редактор БД");
-            Russian.Add("LauchEditorDescription", "Запуск редактора базы данных непосредственно здесь, а не в коммандной строке.");
+            Russian.Add("LauchEditorDescription", "Запуск редактора базы данных непосредственно из Relhax, а не командной строки.");
             Russian.Add("LauchPatchDesignerText", "Запустить конструктор патчей");
-            Russian.Add("LauchPatchDesignerDescription", Translations.TranslationNeeded);
-            Russian.Add("LauchAutomationRunnerText", Translations.TranslationNeeded);
-            Russian.Add("LauchAutomationRunnerDescription", Translations.TranslationNeeded);
+            Russian.Add("LauchPatchDesignerDescription", "Запуск конструктора патчей непосредственно из Relhax, а не командной строки.");
+            Russian.Add("LauchAutomationRunnerText", "Запустить средства автоматизации");
+            Russian.Add("LauchAutomationRunnerDescription", "Запуск средств автоматизации непосредственно из Relhax, а не командной строки.");
             Russian.Add("InstallWhileDownloadingText", "Распаковка во время скачивания");
             Russian.Add("InstallWhileDownloadingCBDescription", "Установщик будет распаковывать ZIP-архив сразу после скачивания,\nа не ждать окончания загрузки всех файлов перед распаковкой.");
             Russian.Add("MulticoreExtractionCoresCountLabel", "Обнаружено ядер: {0}");
@@ -216,7 +215,6 @@ namespace RelhaxModpack
             Russian.Add("failedToExtractUpdateArchive", "Не удалось распаковать файлы обновлений. Проверьте права доступа к файлам или переместите приложение в папку, где разрешена запись.");
             Russian.Add("downloadingUpdate", "Загружается обновление приложения:"); // Colon is required here (at least in Russian) - DrWeb7_1
             Russian.Add("autoOneclickSelectionFileNotExist", "Указанный путь к файлу конфигурации не существует.");
-            //(removed components, disabled components, etc.)
             Russian.Add("AutoOneclickSelectionErrorsContinueBody", "Возникли проблемы при загрузке файла конфигурации (вероятно, были удалены или переименованы пакеты, и т. д.).\nПродолжить работу в любом случае?");
             Russian.Add("AutoOneclickSelectionErrorsContinueHeader", "Проблемы в импорте файла конфигурации");
             Russian.Add("noAutoInstallWithBeta", "При использовании бета-версии БД установка в автоматическом режиме невозможна.");
