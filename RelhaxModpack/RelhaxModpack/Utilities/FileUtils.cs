@@ -242,8 +242,8 @@ namespace RelhaxModpack.Utilities
                             {
                                 Logging.Debug("Deleting empty directory {0}", directory);
                                 Directory.Delete(directory, false);
-                                retryCounter = numRetrys;
                             }
+                            retryCounter = numRetrys;
                         }
                         catch (Exception ex)
                         {
