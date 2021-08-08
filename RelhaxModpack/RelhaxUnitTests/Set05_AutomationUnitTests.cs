@@ -33,6 +33,8 @@ namespace RelhaxUnitTests
             WoTClientInstallLocation = string.Empty
         };
 
+        CancellationToken nullToken;
+
         /*
          * Kept in case later it's needed for test initialization
         [TestInitialize]
