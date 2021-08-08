@@ -20,11 +20,27 @@ namespace RelhaxUnitTests
     {
         AutomationRunnerSettings AutomationRunnerSettings = new AutomationRunnerSettings()
         {
-            DumpParsedMacrosPerSequenceRun = true,
-            SelectedBranch = "master"
+            DumpParsedMacrosPerSequenceRun = false,
+            SelectedBranch = "master",
+            BigmodsPassword = string.Empty,
+            BigmodsUsername = string.Empty,
+            DatabaseSavePath = string.Empty,
+            DumpShellEnvironmentVarsPerSequenceRun = false,
+            LocalRunnerDatabaseRoot = string.Empty,
+            OpenLogWindowOnStartup = true,
+            SequenceDebugMode = false,
+            UseLocalRunnerDatabase = false,
+            WoTClientInstallLocation = string.Empty
         };
 
-        CancellationToken nullToken;
+        /*
+         * Kept in case later it's needed for test initialization
+        [TestInitialize]
+        public void SetDefaultValues()
+        {
+            
+        }
+        */
 
         [TestMethod]
         public async Task Test01_GetAutomationRepoBranchesTest()
@@ -208,13 +224,6 @@ namespace RelhaxUnitTests
             Assert.AreEqual(fileACorrectHash.ToLower(), fileHashComparer.HashAStringBuilder.ToString().ToLower());
         }
 
-        /*
-         * Kept in case later it's needed for test initialization
-        [TestInitialize]
-        public void SetDefaultValues()
-        {
-            
-        }
-        */
+        
     }
 }
