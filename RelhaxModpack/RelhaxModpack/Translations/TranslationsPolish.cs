@@ -82,7 +82,7 @@ namespace RelhaxModpack
             Polish.Add("backupModsSizeCalculating", "Obliczanie...");
             Polish.Add("BackupModsCBDescription", "Tworzy kopię zapasową wszystkich obecnie zainstalowanych modów i ich ustawień.\n" +
                      "Zostaną one spakowane w archiwum ZIP z sygnaturą czasową w nazwie i umieszczone w folderze „RelHaxModBackup”.");
-            Polish.Add("BackupModsSizeLabelUsedDescription", Translations.TranslationNeeded);
+            Polish.Add("BackupModsSizeLabelUsedDescription", Polish["BackupModsCBDescription"]);
             Polish.Add("SaveLastInstallText", "Zapamiętaj ostatnią kolekcję");
             Polish.Add("SaveLastInstallCBDescription", "Zapisuje mody wybrane przy instalacji i automatycznie przywraca je na liście wyboru przy kolejnej instalacji.");
             Polish.Add("MinimizeToSystemTrayText", "Minimalizuj do zasobnika systemowego");
