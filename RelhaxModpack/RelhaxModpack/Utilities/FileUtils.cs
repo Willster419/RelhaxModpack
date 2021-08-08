@@ -224,7 +224,7 @@ namespace RelhaxModpack.Utilities
             if (recursive)
             {
                 //get the list of all directories inside it, no need to recursively process
-                List<string> directories = DirectorySearch(startLocation, SearchOption.AllDirectories, false).ToList().Where(direct => Directory.Exists(direct)).ToList();
+                List<string> directories = FileSearch(startLocation, SearchOption.AllDirectories, false).ToList().Where(direct => Directory.Exists(direct)).ToList();
 
                 //sort and reverse the list to make longer paths on top to simulate recursively deleting from all the way down to up
                 directories.Sort();
@@ -662,7 +662,7 @@ namespace RelhaxModpack.Utilities
         /// <param name="timeout">The time in milliseconds between retries</param>
         /// <param name="applyFolderProperties">Toggle if the "Normal" file property as assigned to these files at the same time</param>
         /// <returns>The list of files if the search operation was successful, otherwise null</returns>
-        public static string[] DirectorySearch(string directoryPath, SearchOption option, bool includeDirectoryRoot, string searchPattern = "*",
+        public static string[] FileSearch(string directoryPath, SearchOption option, bool includeDirectoryRoot, string searchPattern = "*",
             uint timeout = 5, uint numRetrys = 3, bool applyFolderProperties = true)
         {
             //filter input

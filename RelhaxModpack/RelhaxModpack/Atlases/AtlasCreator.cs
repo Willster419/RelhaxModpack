@@ -382,7 +382,7 @@ namespace RelhaxModpack.Atlases
                         continue;
                     }
 
-                    customContourIconFilesList.AddRange(FileUtils.DirectorySearch(realFolder, SearchOption.TopDirectoryOnly, false, "*", 5, 3, false));
+                    customContourIconFilesList.AddRange(FileUtils.FileSearch(realFolder, SearchOption.TopDirectoryOnly, false, "*", 5, 3, false));
                 }
 
                 //filter the list to just image files

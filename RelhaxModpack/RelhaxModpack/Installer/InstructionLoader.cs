@@ -33,7 +33,7 @@ namespace RelhaxModpack.Installer
             }
 
             //search for all files that we want to use to add to
-            string[] filesList = FileUtils.DirectorySearch(folderPath, SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
+            string[] filesList = FileUtils.FileSearch(folderPath, SearchOption.TopDirectoryOnly, false, @"*.xml", 50, 3, true);
             if (filesList == null)
             {
                 Logging.Error(LogOptions.ClassName, "Failed to search for xml instruction files in directory {0}", folderPath);
