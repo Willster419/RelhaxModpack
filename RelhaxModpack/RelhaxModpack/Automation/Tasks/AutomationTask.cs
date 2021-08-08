@@ -49,7 +49,7 @@ namespace RelhaxModpack.Automation.Tasks
             { RetrievePackagePropertyTask.TaskCommandName, typeof(RetrievePackagePropertyTask) },
             { MacroDeleteTask.TaskCommandName, typeof(MacroDeleteTask) },
             { MacroCreateTask.TaskCommandName, typeof(MacroCreateTask) },
-            { CreateDirectoryTask.TaskCommandName, typeof(CreateDirectoryTask) },
+            { DirectoryCreateTask.TaskCommandName, typeof(DirectoryCreateTask) },
             { MacroStringSplitMacroTask.TaskCommandName, typeof(MacroStringSplitMacroTask) },
             { MacroStringSplitFilenameTask.TaskCommandName, typeof(MacroStringSplitFilenameTask) },
             { MacroStringSplitHtmlTask.TaskCommandName, typeof(MacroStringSplitHtmlTask) },

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class CreateDirectoryTask : DirectoryTask, IXmlSerializable
+    public class DirectoryCreateTask : DirectoryTask, IXmlSerializable
     {
         public const string TaskCommandName = "create_directory";
 

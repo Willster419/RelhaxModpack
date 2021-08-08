@@ -138,7 +138,7 @@
     <Compile Include="Automation\AutomationSequence.cs" />
     <Compile Include="Automation\AutomationSequencer.cs" />
     <Compile Include="Automation\Tasks\AutomationTask.cs" />
-    <Compile Include="Automation\Tasks\CreateDirectoryTask.cs" />
+    <Compile Include="Automation\Tasks\DirectoryCreateTask.cs" />
     <Compile Include="Automation\Tasks\DatabasePackagePropertyTask.cs" />
     <Compile Include="Automation\Tasks\DatabasePackageTask.cs" />
     <Compile Include="Automation\Tasks\DatabaseTask.cs" />
