@@ -65,21 +65,28 @@ namespace RelhaxModpack.Common
                 if (verbose)
                     Logging.Info(LogOptions.ClassName, "Starting file copy operation");
 
-                using (FileStream SourceStream = File.Open(SourceFile, FileMode.Open, FileAccess.Read))
-                using (FileStream DestinationStream = File.Open(DestinationFile, FileMode.Create, FileAccess.Write))
+                //copy a file, allowing shared mode (we can copy a file currently open)
+                //https://stackoverflow.com/questions/6167136/how-to-copy-a-file-while-it-is-being-used-by-another-process#:~:text=Well%2C%20another%20option%20is%20to%20copy%20the%20locked,by%20another%20process%2C%20bypassing%20the%20C%23%20File.Copy%20problem.
+                using (FileStream SourceStream = File.Open(SourceFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (FileStream DestinationStream = File.Open(DestinationFile, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     byte[] buffer = new byte[BYTE_CHUNKS];
                     int numBytesRead = 0;
-                    progress.ChildTotal = (int)SourceStream.Length;
-                    progress.ChildCurrent = 0;
-                    Reporter.Report(progress);
+
+                    if (progress != null)
+                    {
+                        progress.ChildTotal = (int)SourceStream.Length;
+                        progress.ChildCurrent = 0;
+                    }
+                    Reporter?.Report(progress);
 
                     while (SourceStream.Position < SourceStream.Length)
                     {
                         numBytesRead = await SourceStream.ReadAsync(buffer, 0, BYTE_CHUNKS, CancellationToken);
                         await DestinationStream.WriteAsync(buffer, 0, numBytesRead, CancellationToken);
 
-                        progress.ChildCurrent += numBytesRead;
+                        if (progress != null)
+                            progress.ChildCurrent += numBytesRead;
                         ThrowIfCancellationRequested();
                         Reporter?.Report(progress);
                     }
@@ -93,7 +100,8 @@ namespace RelhaxModpack.Common
                 if (verbose)
                     Logging.Info(LogOptions.ClassName, "The file copy operation completed");
 
-                progress.ChildCurrent = progress.ChildTotal;
+                if (progress != null)
+                    progress.ChildCurrent = progress.ChildTotal;
                 Reporter?.Report(progress);
                 return true;
             }
