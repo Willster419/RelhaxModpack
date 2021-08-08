@@ -61,7 +61,7 @@ namespace RelhaxModpack.Automation.Tasks
 
             if (!Directory.Exists(DestinationPath))
             {
-                Logging.Info("Directory {0} does not exist", DestinationPath);
+                Logging.Debug("DestinationPath {0} does not exist, create", DestinationPath);
                 Directory.CreateDirectory(DestinationPath);
             }
 
@@ -93,16 +93,6 @@ namespace RelhaxModpack.Automation.Tasks
                         Reporter = this.progress
                     };
 
-                    //create the destination folders at the target
-                    string[] directoreisToCreate = Directory.GetDirectories(DirectoryPath, SearchPattern, recursive? SearchOption.AllDirectories: SearchOption.TopDirectoryOnly);
-                    foreach (string s in directoreisToCreate)
-                    {
-                        if (!Directory.Exists(Path.Combine(DestinationPath, s)))
-                        {
-                            Directory.CreateDirectory(Path.Combine(DestinationPath, s));
-                        }
-                    }
-
                     if (reportingProgress)
                         relhaxProgress.ParrentTotal = searchResults.Count();
 
@@ -114,7 +104,12 @@ namespace RelhaxModpack.Automation.Tasks
                             relhaxProgress.ParrentCurrent++;
                             (progress as IProgress<RelhaxProgress>).Report(relhaxProgress);
                         }
+
                         string destinationFile = sourceFile.Replace(DirectoryPath, DestinationPath);
+                        string destinationPath = Path.GetDirectoryName(destinationFile);
+                        if (!Directory.Exists(destinationPath))
+                            Directory.CreateDirectory(destinationPath);
+
                         bool result = await fileCopier.CopyFileAsync(sourceFile, destinationFile);
                         if (!result)
                             return;
