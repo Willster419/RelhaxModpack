@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class DirectoryDeleteTask : DirectoryTask, IXmlSerializable, ICancelOperation
+    public class DirectoryDeleteTask : DirectorySearchTask, IXmlSerializable, ICancelOperation
     {
         public const string TaskCommandName = "directory_delete";
 
@@ -47,6 +47,10 @@ namespace RelhaxModpack.Automation.Tasks
 
         public async override Task RunTask()
         {
+            await base.RunTask();
+            if (searchResults == null || searchResults.Count() == 0)
+                return;
+
             cancellationTokenSource = new CancellationTokenSource();
 
             if (reportingProgress)
@@ -69,15 +73,11 @@ namespace RelhaxModpack.Automation.Tasks
             {
                 try
                 {
-                    //get list of all source files
-                    Logging.Debug("Getting the list of all files to delete");
-                    string[] filesToDelete = Directory.GetFiles(DirectoryPath, "*", SearchOption.AllDirectories);
-
                     if (reportingProgress)
-                        relhaxProgress.ChildTotal = filesToDelete.Count();
+                        relhaxProgress.ChildTotal = searchResults.Count();
 
                     Logging.Debug("Deleting files");
-                    foreach (string file in filesToDelete)
+                    foreach (string file in searchResults)
                     {
                         if (reportingProgress)
                         {

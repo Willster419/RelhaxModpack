@@ -12,17 +12,13 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class DirectoryCopyTask : DirectoryTask, IXmlSerializable, ICancelOperation
+    public class DirectoryCopyTask : DirectorySearchTask, IXmlSerializable, ICancelOperation
     {
         public const string TaskCommandName = "directory_copy";
 
         public override string Command { get { return TaskCommandName; } }
 
         public string DestinationPath { get; set; }
-
-        public string SearchPattern { get; set; } = "*";
-
-        public string Recursive { get; set; }
 
         protected bool good = false;
 
@@ -36,10 +32,6 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected FileCopier fileCopier;
 
-        protected bool recursive;
-
-        protected bool ableToParseRecursive = false;
-
         #region Xml Serialization
         public override string[] PropertiesForSerializationAttributes()
         {
@@ -52,14 +44,6 @@ namespace RelhaxModpack.Automation.Tasks
         {
             base.ProcessMacros();
             DestinationPath = ProcessMacro(nameof(DestinationPath), DestinationPath);
-            SearchPattern = ProcessMacro(nameof(SearchPattern), SearchPattern);
-            Recursive = ProcessMacro(nameof(Recursive), Recursive);
-
-            if (bool.TryParse(Recursive, out bool result))
-            {
-                ableToParseRecursive = true;
-                recursive = result;
-            }
         }
 
         public override void ValidateCommands()
@@ -67,17 +51,14 @@ namespace RelhaxModpack.Automation.Tasks
             base.ValidateCommands();
             if (ValidateCommandStringNullEmptyTrue(nameof(DestinationPath), DestinationPath))
                 return;
-            if (ValidateCommandStringNullEmptyTrue(nameof(SearchPattern), SearchPattern))
-                return;
-            if (ValidateCommandStringNullEmptyTrue(nameof(Recursive), Recursive))
-                return;
-
-            if (ValidateCommandFalse(ableToParseRecursive, string.Format("Unable to parse the arg Recursive from given string {0}", Recursive)))
-                return;
         }
 
         public async override Task RunTask()
         {
+            await base.RunTask();
+            if (searchResults == null || searchResults.Count() == 0)
+                return;
+
             if (!Directory.Exists(DestinationPath))
             {
                 Logging.Info("Directory {0} does not exist", DestinationPath);
@@ -122,14 +103,11 @@ namespace RelhaxModpack.Automation.Tasks
                         }
                     }
 
-                    //get list of all source files
-                    string[] filesToCopy = Directory.GetFiles(DirectoryPath, SearchPattern, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-
                     if (reportingProgress)
-                        relhaxProgress.ParrentTotal = filesToCopy.Count();
+                        relhaxProgress.ParrentTotal = searchResults.Count();
 
                     //copy each file over
-                    foreach (string sourceFile in filesToCopy)
+                    foreach (string sourceFile in searchResults)
                     {
                         if (reportingProgress)
                         {

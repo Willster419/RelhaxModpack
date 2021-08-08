@@ -1,6 +1,5 @@
 ﻿using RelhaxModpack.Database;
 using RelhaxModpack.Utilities;
-using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,18 +9,24 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class DirectoryListTask : DirectorySearchTask, IXmlSerializable
+    public abstract class DirectorySearchTask : DirectoryTask, IXmlSerializable
     {
-        public const string TaskCommandName = "directory_search";
+        public const string SEARCH_ALL = "*";
 
-        public override string Command { get { return TaskCommandName; } }
+        public string SearchPattern { get; set; } = SEARCH_ALL;
 
-        public string MacroPrefix { get; set; }
+        public string Recursive { get; set; }
+
+        protected bool recursive;
+
+        protected string[] searchResults;
+
+        protected bool ableToParseRecursive = false;
 
         #region Xml Serialization
         public override string[] PropertiesForSerializationAttributes()
         {
-            return base.PropertiesForSerializationAttributes().Concat(new string[] {nameof(MacroPrefix) }).ToArray();
+            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(SearchPattern), nameof(Recursive)}).ToArray();
         }
         #endregion
 
@@ -29,29 +34,31 @@ namespace RelhaxModpack.Automation.Tasks
         public override void ProcessMacros()
         {
             base.ProcessMacros();
-            MacroPrefix = ProcessMacro(nameof(MacroPrefix), MacroPrefix);
+            SearchPattern = ProcessMacro(nameof(SearchPattern), SearchPattern);
+            Recursive = ProcessMacro(nameof(Recursive), Recursive);
+
+            if (bool.TryParse(Recursive, out bool result))
+            {
+                ableToParseRecursive = true;
+                recursive = result;
+            }
         }
 
         public override void ValidateCommands()
         {
             base.ValidateCommands();
-            if (ValidateCommandStringNullEmptyTrue(nameof(MacroPrefix), MacroPrefix))
+            if (ValidateCommandStringNullEmptyTrue(nameof(SearchPattern), SearchPattern))
+                return;
+            if (ValidateCommandStringNullEmptyTrue(nameof(Recursive), Recursive))
+                return;
+
+            if (ValidateCommandFalse(ableToParseRecursive, string.Format("Unable to parse the arg Recursive from given string {0}", Recursive)))
                 return;
         }
 
         public async override Task RunTask()
         {
             searchResults = FileUtils.FileSearch(DirectoryPath, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly, false, SearchPattern);
-            if (searchResults == null || searchResults.Count() == 0)
-                return;
-
-            for (int i = 0; i < searchResults.Count(); i++)
-            {
-                string macroNameToAdd = string.Format("{0}_{1}", MacroPrefix, i);
-                string macroValueToAdd = searchResults[i];
-                Logging.Info("Creating macro, Name: {0}, Value: {1}", macroNameToAdd, macroValueToAdd);
-                Macros.Add(new AutomationMacro() { MacroType = MacroType.Local, Name = macroNameToAdd, Value = macroValueToAdd });
-            }
         }
 
         public override void ProcessTaskResults()
