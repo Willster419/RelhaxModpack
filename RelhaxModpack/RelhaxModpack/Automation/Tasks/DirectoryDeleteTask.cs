@@ -70,11 +70,13 @@ namespace RelhaxModpack.Automation.Tasks
                 try
                 {
                     //get list of all source files
+                    Logging.Debug("Getting the list of all files to delete");
                     string[] filesToDelete = Directory.GetFiles(DirectoryPath, "*", SearchOption.AllDirectories);
 
                     if (reportingProgress)
                         relhaxProgress.ChildTotal = filesToDelete.Count();
 
+                    Logging.Debug("Deleting files");
                     foreach (string file in filesToDelete)
                     {
                         if (reportingProgress)
@@ -93,6 +95,9 @@ namespace RelhaxModpack.Automation.Tasks
                         relhaxProgress.ChildTotal = relhaxProgress.ChildCurrent;
                         (progress as IProgress<RelhaxProgress>).Report(relhaxProgress);
                     }
+
+                    Logging.Debug("Deleting empty directories");
+                    FileUtils.ProcessEmptyDirectories(DirectoryPath, true);
 
                     good = true;
                 }
