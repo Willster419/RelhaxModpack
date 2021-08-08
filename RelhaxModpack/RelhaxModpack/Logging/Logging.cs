@@ -207,7 +207,7 @@ namespace RelhaxModpack
             Logfile sourceLogfile = GetLogfile(redirectFrom);
             if (sourceLogfile != null)
             {
-                TryWriteToLog("Failed to redirect log entries from {0} to {1}: destination is not null!", redirectTo, LogLevel.Error, redirectFrom.ToString(), redirectTo.ToString());
+                TryWriteToLog("Failed to redirect log entries from {0} to {1}: redirectFrom is not null!", redirectTo, LogLevel.Error, redirectFrom.ToString(), redirectTo.ToString());
                 return false;
             }
 
