@@ -716,6 +716,70 @@ namespace RelhaxModpack.Utilities
         }
 
         /// <summary>
+        /// Return a list of directories from a directory
+        /// </summary>
+        /// <param name="directoryPath">The directory to search for files</param>
+        /// <param name="option">Specifies to search this top directory or subdirectories to the Directory.GetFiles() method</param>
+        /// <param name="includeDirectoryRoot">Toggle if the directoryPath should be included in the list of files</param>
+        /// <param name="searchPattern">The search pattern for finding files in a directory</param>
+        /// <param name="numRetrys">The number of retires to delete a file entry before failing</param>
+        /// <param name="timeout">The time in milliseconds between retries</param>
+        /// <param name="applyFolderProperties">Toggle if the "Normal" file property as assigned to these files at the same time</param>
+        /// <returns>The list of files if the search operation was successful, otherwise null</returns>
+        public static string[] DirectorySearch(string directoryPath, SearchOption option, bool includeDirectoryRoot, string searchPattern = "*",
+            uint timeout = 5, uint numRetrys = 3, bool applyFolderProperties = true)
+        {
+            //filter input
+            if (numRetrys == 0)
+            {
+                Logging.Warning("numRetrys needs to be larger than 0! setting to 1");
+                numRetrys++;
+            }
+            //loop for how many times to try (in case the OS herped a derp, for example)
+            while (numRetrys > 0)
+            {
+                //if a timout is requested, then sleep the thread
+                if (timeout > 0)
+                    System.Threading.Thread.Sleep((int)timeout);
+                //put it in a try catch block
+                try
+                {
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Logging.WriteToLog(string.Format("Path {0} does not exist!", directoryPath), Logfiles.Application, LogLevel.Warning);
+                        return null;
+                    }
+                    if (applyFolderProperties)
+                        File.SetAttributes(directoryPath, FileAttributes.Directory);
+                    //add the directory path itself to the search
+                    List<string> directories = Directory.GetDirectories(directoryPath, searchPattern, option).ToList();
+                    if (includeDirectoryRoot)
+                        directories.Insert(0, directoryPath);
+                    return directories.ToArray();
+                }
+                catch (Exception e)
+                {
+                    //decreate the number of times we will retry to get the files
+                    numRetrys--;
+                    if (numRetrys == 0)
+                    {
+                        //give up; report it and move on
+                        Logging.WriteToLog(string.Format("Failed to get files fo directory {0}\n{1}", Path.GetFullPath(directoryPath), e.ToString()),
+                            Logfiles.Application, LogLevel.Exception);
+                        return null;
+                    }
+                    else
+                    {
+                        Logging.WriteToLog(string.Format("Failed to get files for direcotry {0}\nThis is attempt {1} of 0",
+                            Path.GetFullPath(directoryPath), numRetrys), Logfiles.Application, LogLevel.Warning);
+                    }
+                }
+            }
+            Logging.WriteToLog("Code shuld not reach this point: Utils.DirectorySearch()", Logfiles.Application, LogLevel.Error);
+            return null;
+        }
+
+        /// <summary>
         /// Applies the "Normal" file attribute to a file
         /// </summary>
         /// <param name="file">The file to apply normal attributes to</param>
