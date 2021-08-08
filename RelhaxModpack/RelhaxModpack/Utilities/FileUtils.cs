@@ -224,7 +224,7 @@ namespace RelhaxModpack.Utilities
             if (recursive)
             {
                 //get the list of all directories inside it, no need to recursively process
-                List<string> directories = FileSearch(startLocation, SearchOption.AllDirectories, false).ToList().Where(direct => Directory.Exists(direct)).ToList();
+                List<string> directories = DirectorySearch(startLocation, SearchOption.AllDirectories, false).ToList().Where(direct => Directory.Exists(direct)).ToList();
 
                 //sort and reverse the list to make longer paths on top to simulate recursively deleting from all the way down to up
                 directories.Sort();
@@ -242,6 +242,7 @@ namespace RelhaxModpack.Utilities
                             {
                                 Logging.Debug("Deleting empty directory {0}", directory);
                                 Directory.Delete(directory, false);
+                                retryCounter = numRetrys;
                             }
                         }
                         catch (Exception ex)
