@@ -58,7 +58,7 @@ namespace RelhaxModpack.Automation.Tasks
             { MacroSubstringFilenameTask.TaskCommandName, typeof(MacroSubstringFilenameTask) },
             { MacroSubstringHtmlTask.TaskCommandName, typeof(MacroSubstringHtmlTask) },
             { MacroSubstringBrowserTask.TaskCommandName, typeof(MacroSubstringBrowserTask) },
-            { DirectorySearchTask.TaskCommandName, typeof(DirectorySearchTask) },
+            { DirectoryListTask.TaskCommandName, typeof(DirectoryListTask) },
             { DirectoryCopyTask.TaskCommandName, typeof(DirectoryCopyTask) },
             { DirectoryDeleteTask.TaskCommandName, typeof(DirectoryDeleteTask) }
         };

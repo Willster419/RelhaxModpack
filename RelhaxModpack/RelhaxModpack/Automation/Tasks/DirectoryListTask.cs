@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class DirectorySearchTask : DirectoryTask, IXmlSerializable
+    public class DirectoryListTask : DirectoryTask, IXmlSerializable
     {
         public const string TaskCommandName = "directory_search";
 
