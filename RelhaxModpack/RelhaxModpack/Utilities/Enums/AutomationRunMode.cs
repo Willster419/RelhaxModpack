@@ -6,12 +6,17 @@
     public enum AutomationRunMode
     {
         /// <summary>
-        /// Gui run mode. Will not stop on errors
+        /// Debug run mode. Requires user interaction for each task, of each sequence.
+        /// </summary>
+        Debug,
+
+        /// <summary>
+        /// Gui run mode. Requires user interaction for each sequence.
         /// </summary>
         Interactive,
 
         /// <summary>
-        /// Batch run mode. Will not stop on errors inside an automation script
+        /// Batch run mode. Requires no user interaction.
         /// </summary>
         Batch
     }

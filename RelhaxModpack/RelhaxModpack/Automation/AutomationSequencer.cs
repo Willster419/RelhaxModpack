@@ -45,7 +45,7 @@ namespace RelhaxModpack.Automation
 
         public AutomationRunnerSettings AutomationRunnerSettings { get; set; }
 
-        public int NumErrors { get; set; }
+        public int NumErrors { get; private set; }
 
         public List<DatabasePackage> DatabasePackages { get; private set; }
 
@@ -59,11 +59,11 @@ namespace RelhaxModpack.Automation
 
         public string WoTModpackOnlineFolderVersion { get; set; }
 
-        private XmlDocument RootDocument = null;
+        private XmlDocument RootDocument;
 
-        private XmlDocument GlobalMacrosDocument = null;
+        private XmlDocument GlobalMacrosDocument;
 
-        private WebClient WebClient = null;
+        private WebClient WebClient;
 
         private string AutomationRepoPathEscaped {
             get
@@ -141,7 +141,7 @@ namespace RelhaxModpack.Automation
             return RootDocument != null;
         }
 
-        public async Task LoadGlobalMacrosAsync()
+        public async Task<bool> LoadGlobalMacrosAsync()
         {
             if (RootDocument == null)
                 throw new NullReferenceException();
@@ -161,6 +161,8 @@ namespace RelhaxModpack.Automation
                 string globalMacrosXml = await WebClient.DownloadStringTaskAsync(globalMacrosUrl);
                 GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosXml, XmlLoadType.FromString);
             }
+
+            return GlobalMacrosDocument != null;
         }
 
         public async Task<bool> ParseRootDocumentAsync()
@@ -220,15 +222,15 @@ namespace RelhaxModpack.Automation
 
             Logging.AutomationRunner("Linking database packages for each sequence");
             if (!LinkPackagesToAutomationSequences(sequencesToRun))
-                return SequencerExitCode.NotRun;
+                return SequencerExitCode.LinkPackagesToAutomationSequencesFail;
 
             Logging.Info("Downloading xml for each sequence");
             if (!await LoadAutomationSequencesXmlToRunAsync(sequencesToRun))
-                return SequencerExitCode.NotRun;
+                return SequencerExitCode.LoadAutomationSequencesXmlToRunAsyncFail;
 
             Logging.Info("Parsing xml for each sequence");
             if (!ParseAutomationSequences(sequencesToRun))
-                return SequencerExitCode.NotRun;
+                return SequencerExitCode.ParseAutomationSequencesPreRunFail;
 
             Logging.Info("Running sequences");
             return await RunSequencesAsync(sequencesToRun);
@@ -276,7 +278,7 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
-        public bool ParseAutomationSequences(List<AutomationSequence> sequencesToRun)
+        private bool ParseAutomationSequences(List<AutomationSequence> sequencesToRun)
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing each automationSequence from xml to class objects");
             foreach (AutomationSequence automationSequence in sequencesToRun)
@@ -360,7 +362,7 @@ namespace RelhaxModpack.Automation
                 return SequencerExitCode.Errors;
         }
 
-        public void ResetApplicationMacros(AutomationSequence sequence)
+        private void ResetApplicationMacros(AutomationSequence sequence)
         {
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.ClassName, "Resetting application macros");
             DatabasePackage package = sequence.Package;
@@ -386,7 +388,7 @@ namespace RelhaxModpack.Automation
             ApplicationMacros.Add(new AutomationMacro() { Name = "clientPath", Value = Path.GetDirectoryName(AutomationRunnerSettings.WoTClientInstallLocation) });
         }
 
-        public bool ParseGlobalMacros()
+        private bool ParseGlobalMacros()
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Parsing global macros from xml document to class objects");
             GlobalMacros.Clear();
@@ -409,7 +411,7 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
-        public void DumpApplicationMacros()
+        private void DumpApplicationMacros()
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Dumping application parsed macros. Count = {0}", ApplicationMacros.Count);
             foreach (AutomationMacro macro in ApplicationMacros)
@@ -418,7 +420,7 @@ namespace RelhaxModpack.Automation
             }
         }
 
-        public void DumpGlobalMacros()
+        private void DumpGlobalMacros()
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Dumping global parsed macros. Count = {0}", GlobalMacros.Count);
             foreach (AutomationMacro macro in GlobalMacros)
@@ -427,7 +429,7 @@ namespace RelhaxModpack.Automation
             }
         }
 
-        public void DumpShellEnvironmentVariables()
+        private void DumpShellEnvironmentVariables()
         {
             //dump vars before run
             Logging.AutomationRunner("Dumping current shell environment variables", LogLevel.Debug);

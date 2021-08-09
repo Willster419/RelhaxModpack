@@ -534,11 +534,18 @@ namespace RelhaxModpack.Windows
             switch (sequenceRunResult)
             {
                 case SequencerExitCode.Errors:
-                case SequencerExitCode.NotRun:
+                case SequencerExitCode.LinkPackagesToAutomationSequencesFail:
+                case SequencerExitCode.LoadAutomationSequencesXmlToRunAsyncFail:
+                case SequencerExitCode.ParseAutomationSequencesPreRunFail:
                     Logging.Info("Sequencer run FAILURE");
                     break;
+
                 case SequencerExitCode.Cancel:
                     Logging.Info("Sequencer run CANCEL");
+                    break;
+
+                case SequencerExitCode.NotRun:
+                    Logging.Info("Sequencer run NOT RUN");
                     break;
 
                 case SequencerExitCode.NoErrors:

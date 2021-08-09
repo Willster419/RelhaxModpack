@@ -13,6 +13,12 @@ namespace RelhaxModpack.Utilities.Enums
     {
         NotRun,
 
+        LinkPackagesToAutomationSequencesFail,
+
+        LoadAutomationSequencesXmlToRunAsyncFail,
+
+        ParseAutomationSequencesPreRunFail,
+
         Errors,
 
         NoErrors,
