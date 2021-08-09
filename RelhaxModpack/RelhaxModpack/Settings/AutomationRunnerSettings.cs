@@ -52,6 +52,6 @@ namespace RelhaxModpack.Settings
 
         public bool SequenceDebugMode { get; set; } = false;
 
-        public AutomationRunMode AutomationRunMode = AutomationRunMode.Interactive;
+        public AutomationRunMode AutomationRunMode { get; set; } = AutomationRunMode.Interactive;
     }
 }
