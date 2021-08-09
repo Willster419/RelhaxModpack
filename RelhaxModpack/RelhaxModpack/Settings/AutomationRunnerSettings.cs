@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Utilities.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,5 +51,7 @@ namespace RelhaxModpack.Settings
         public string WoTClientInstallLocation { get; set; } = string.Empty;
 
         public bool SequenceDebugMode { get; set; } = false;
+
+        public AutomationRunMode AutomationRunMode = AutomationRunMode.Interactive;
     }
 }

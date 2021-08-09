@@ -39,29 +39,31 @@ namespace RelhaxModpack.Automation
 
         public List<AutomationSequence> AutomationSequences { get; } = new List<AutomationSequence>();
 
-        public List<DatabasePackage> DatabasePackages { get; private set; }
+        public string ComponentInternalName { get; } = "AutomationSequencer";
 
         public DatabaseManager DatabaseManager { get; set; }
 
-        public AutomationRunnerSettings AutomationRunnerSettings { get; set; } = null;
+        public AutomationRunnerSettings AutomationRunnerSettings { get; set; }
 
-        public int NumErrors { get; set; } = 0;
+        public int NumErrors { get; set; }
 
-        public string[] AutomationBranches = null;
+        public List<DatabasePackage> DatabasePackages { get; private set; }
 
-        public AutomationRunMode AutomationRunMode = AutomationRunMode.Interactive;
+        public string[] AutomationBranches { get; private set; }
 
         public DatabaseAutomationRunner DatabaseAutomationRunner { get; set; } = null;
+
+        public CancellationToken CancellationToken { get; set; }
+
+        public string WoTClientVersion { get; set; }
+
+        public string WoTModpackOnlineFolderVersion { get; set; }
 
         private XmlDocument RootDocument = null;
 
         private XmlDocument GlobalMacrosDocument = null;
 
         private WebClient WebClient = null;
-
-        public string WoTClientVersion { get; set; }
-
-        public string WoTModpackOnlineFolderVersion { get; set; }
 
         private string AutomationRepoPathEscaped {
             get
@@ -87,11 +89,7 @@ namespace RelhaxModpack.Automation
             }
         }
 
-        public string ComponentInternalName { get; } = "AutomationSequencer";
-
-        public CancellationToken CancellationToken { get; set; }
-
-        protected AutomationSequence RunningSequence;
+        private AutomationSequence RunningSequence;
 
         public AutomationSequencer()
         {
@@ -102,17 +100,31 @@ namespace RelhaxModpack.Automation
         /// Load the list of branches from github
         /// </summary>
         /// <returns>A task of the asynchronous operation</returns>
-        public async Task LoadBranchesListAsync()
+        public async Task<bool> LoadBranchesListAsync()
         {
+            if (AutomationRunnerSettings == null)
+                throw new NullReferenceException();
+
             if (AutomationRunnerSettings.UseLocalRunnerDatabase)
-                return;
+            {
+                Logging.Info("UseLocalRunnerDatabase is true, no need to load branches");
+                return true;
+            }
 
             List<string> branches = await CommonUtils.GetListOfGithubRepoBranchesAsync(BranchesURL);
+
+            if (branches == null || branches.Count == 0)
+                return false;
+
             AutomationBranches = branches.ToArray();
+            return true;
         }
 
-        public async Task LoadRootDocumentAsync()
+        public async Task<bool> LoadRootDocumentAsync()
         {
+            if (AutomationRunnerSettings == null)
+                throw new NullReferenceException();
+
             if (string.IsNullOrWhiteSpace(AutomationRepoRootXmlFilepathEscaped))
                 throw new ArgumentException("AutomationXmlRootEscaped cannot be null or whitespace");
 
@@ -125,11 +137,15 @@ namespace RelhaxModpack.Automation
                 string xmlString = await WebClient.DownloadStringTaskAsync(AutomationRepoRootXmlFilepathEscaped);
                 RootDocument = XmlUtils.LoadXmlDocument(xmlString, XmlLoadType.FromString);
             }
+
+            return RootDocument != null;
         }
 
         public async Task LoadGlobalMacrosAsync()
         {
             if (RootDocument == null)
+                throw new NullReferenceException();
+            if (AutomationRunnerSettings == null)
                 throw new NullReferenceException();
 
             //get the url to download from
@@ -150,6 +166,8 @@ namespace RelhaxModpack.Automation
         public async Task<bool> ParseRootDocumentAsync()
         {
             if (RootDocument == null)
+                throw new NullReferenceException();
+            if (AutomationRunnerSettings == null)
                 throw new NullReferenceException();
 
             Logging.AutomationRunner(LogOptions.MethodName, "Checking root document for to build automation sequences", LogLevel.Info);
@@ -190,6 +208,8 @@ namespace RelhaxModpack.Automation
         public async Task<SequencerExitCode> RunSequencerAsync(List<AutomationSequence> sequencesToRun)
         {
             if (RootDocument == null)
+                throw new NullReferenceException();
+            if (AutomationRunnerSettings == null)
                 throw new NullReferenceException();
             if (DatabaseManager == null)
                 throw new NullReferenceException();
