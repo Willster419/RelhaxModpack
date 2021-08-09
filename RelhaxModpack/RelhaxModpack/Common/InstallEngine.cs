@@ -886,7 +886,7 @@ namespace RelhaxModpack
             bool success = true;
             if (Directory.Exists(resModsFolder))
             {
-                string[] filesFromResMods = FileUtils.FileSearch(resModsFolder, SearchOption.AllDirectories, true);
+                string[] filesFromResMods = FileUtils.FileSearch(resModsFolder, SearchOption.AllDirectories, true, false);
                 if (filesFromResMods != null && filesFromResMods.Count() > 0)
                 {
                     ListOfAllItems.AddRange(filesFromResMods.ToList());
@@ -900,7 +900,7 @@ namespace RelhaxModpack
             CancellationToken.ThrowIfCancellationRequested();
             if (Directory.Exists(modsFolder))
             {
-                string[] filesFromMods = FileUtils.FileSearch(modsFolder, SearchOption.AllDirectories, true);
+                string[] filesFromMods = FileUtils.FileSearch(modsFolder, SearchOption.AllDirectories, true, false);
                 if (filesFromMods != null && filesFromMods.Count() > 0)
                 {
                     ListOfAllItems.AddRange(filesFromMods.ToList());
@@ -922,7 +922,8 @@ namespace RelhaxModpack
                 if (Directory.Exists(folderPath))
                 {
                     Logging.Debug("adding installer created folder {0}", folder);
-                    ListOfAllItems.AddRange(FileUtils.FileSearch(folderPath, SearchOption.AllDirectories, true));
+                    ListOfAllItems.AddRange(FileUtils.FileSearch(folderPath, SearchOption.AllDirectories, true, true));
+                    ListOfAllItems.AddRange(FileUtils.DirectorySearch(folderPath, SearchOption.AllDirectories, true));
                 }
             }
 
@@ -1104,8 +1105,8 @@ namespace RelhaxModpack
                 Progress.Report(Prog);
 
                 //get the list of mods to add to the zip
-                List<string> filesToAdd = FileUtils.FileSearch(Path.Combine(WoTDirectory, "mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList();
-                filesToAdd.AddRange(FileUtils.FileSearch(Path.Combine(WoTDirectory, "res_mods"), SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
+                List<string> filesToAdd = FileUtils.FileSearch(Path.Combine(WoTDirectory, "mods"), SearchOption.AllDirectories, false, false, "*", 5, 3, false).ToList();
+                filesToAdd.AddRange(FileUtils.FileSearch(Path.Combine(WoTDirectory, "res_mods"), SearchOption.AllDirectories, false, false, "*", 5, 3, false).ToList());
 
                 //add them to the zip. also get the string to be the path in the zip file, meaning that the root path in the zip file starts at "World_of_Tanks"
                 foreach(string file in filesToAdd)
@@ -1115,7 +1116,7 @@ namespace RelhaxModpack
 
                 //clear the list and repeat the process for the appDataFolder
                 filesToAdd.Clear();
-                filesToAdd.AddRange(FileUtils.FileSearch(ApplicationConstants.AppDataFolder, SearchOption.AllDirectories, false, "*", 5, 3, false).ToList());
+                filesToAdd.AddRange(FileUtils.FileSearch(ApplicationConstants.AppDataFolder, SearchOption.AllDirectories, false, false, "*", 5, 3, false).ToList());
                 foreach (string file in filesToAdd)
                 {
                     backupZip.AddFile(file, Path.GetDirectoryName(Path.Combine("appData", file.Substring(ApplicationConstants.AppDataFolder.Length + 1))));
@@ -1240,7 +1241,7 @@ namespace RelhaxModpack
                     //get the list of files to replace
                     Logging.Info("Search root: {0}", macroRootPath);
                     Logging.Info("Search term: {0}", searchPattern);
-                    string[] filesToSave = FileUtils.FileSearch(macroRootPath, SearchOption.AllDirectories, false, searchPattern, 5, 3, false);
+                    string[] filesToSave = FileUtils.FileSearch(macroRootPath, SearchOption.AllDirectories, false, false, searchPattern, 5, 3, false);
 
                     //check if we have files to move
                     if(filesToSave.Count() == 0)
@@ -1788,7 +1789,7 @@ namespace RelhaxModpack
                     (int)InstallStopWatch.Elapsed.TotalMilliseconds));
 
             //check for any font files to install at all
-            string[] fontsToInstall = FileUtils.FileSearch(Path.Combine(WoTDirectory, ApplicationConstants.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, @"*", 50, 3, true);
+            string[] fontsToInstall = FileUtils.FileSearch(Path.Combine(WoTDirectory, ApplicationConstants.FontsToInstallFoldername), SearchOption.TopDirectoryOnly, false, false, @"*", 50, 3, true);
 
             //filter out fontReg
             fontsToInstall = fontsToInstall.Where(filename => !filename.Contains(".exe")).ToArray();
@@ -1802,7 +1803,7 @@ namespace RelhaxModpack
                 {
                     Logging.Debug("checking system installed fonts to remove duplicates");
 
-                    string[] fontscurrentlyInstalled = FileUtils.FileSearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly, false, @"*",5,3,false);
+                    string[] fontscurrentlyInstalled = FileUtils.FileSearch(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), SearchOption.TopDirectoryOnly, false, false, @"*",5,3,false);
                     string[] fontsNamesCurrentlyInstalled = fontscurrentlyInstalled.Select(s => Path.GetFileName(s).ToLower()).ToArray();
 
                     //remove any fonts whos filename match what is already installed
@@ -1924,7 +1925,7 @@ namespace RelhaxModpack
             List<string> zipFilesInDatabase = allFlatList.Select(package => package.ZipFile).ToList();
 
             //get a list of all files in the download cache folder
-            List<string> zipFilesInCache = FileUtils.FileSearch(ApplicationConstants.RelhaxDownloadsFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip").ToList();
+            List<string> zipFilesInCache = FileUtils.FileSearch(ApplicationConstants.RelhaxDownloadsFolderPath, SearchOption.TopDirectoryOnly, false, false, "*.zip").ToList();
             if(zipFilesInCache == null)
             {
                 Logging.Error("failed to get list of zip files in download cache, skipping this step");

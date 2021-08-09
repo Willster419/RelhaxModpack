@@ -294,7 +294,7 @@ namespace RelhaxModpack.Windows
                     continue;
                 }
                 int count = 0;
-                string[] files = FileUtils.FileSearch(folderPath, SearchOption.AllDirectories, true);
+                string[] files = FileUtils.FileSearch(folderPath, SearchOption.AllDirectories, true, false);
                 if (files != null)
                     count = files.Count();
                 Logging.Debug(LogOptions.ClassName, "Added {0} files", count);

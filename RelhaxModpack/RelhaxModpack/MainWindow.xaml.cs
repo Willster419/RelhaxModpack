@@ -3520,7 +3520,7 @@ namespace RelhaxModpack
             if (Directory.Exists(newPath) && newPath.Equals(ApplicationConstants.RelhaxUserSelectionsFolderPath))
             {
                 Logging.Warning("new folder {0} already exists, copy files over and delete old folder", Path.GetFileName(newPath));
-                foreach (string file in FileUtils.FileSearch(oldPath, SearchOption.TopDirectoryOnly, false, "*.xml", 5, 3, false))
+                foreach (string file in FileUtils.FileSearch(oldPath, SearchOption.TopDirectoryOnly, false, false, "*.xml", 5, 3, false))
                 {
                     string newFilePath = Path.Combine(ApplicationConstants.RelhaxUserSelectionsFolderPath, Path.GetFileName(file));
                     if (!File.Exists(newFilePath))
@@ -3553,7 +3553,7 @@ namespace RelhaxModpack
                 });
 
                 backupFolderTotalSize = 0;
-                backupFiles = FileUtils.FileSearch(ApplicationConstants.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, "*.zip", 5, 3, false);
+                backupFiles = FileUtils.FileSearch(ApplicationConstants.RelhaxModBackupFolderPath, SearchOption.TopDirectoryOnly, false, false, "*.zip", 5, 3, false);
                 foreach (string file in backupFiles)
                 {
                     backupFolderTotalSize += FileUtils.GetFilesize(file);

@@ -380,7 +380,7 @@ namespace RelhaxModpack.Windows
             };
 
             //get a list of all zip files in the folder
-            string[] zipFilesUserMods = FileUtils.FileSearch(ApplicationConstants.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, @"*.zip", 5, 3, true);
+            string[] zipFilesUserMods = FileUtils.FileSearch(ApplicationConstants.RelhaxUserModsFolderPath, SearchOption.TopDirectoryOnly, false, false, @"*.zip", 5, 3, true);
 
             foreach (string s in zipFilesUserMods)
             {

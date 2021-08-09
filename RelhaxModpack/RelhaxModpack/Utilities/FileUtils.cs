@@ -565,13 +565,14 @@ namespace RelhaxModpack.Utilities
         /// <param name="directoryPath">The directory to search for files</param>
         /// <param name="option">Specifies to search this top directory or subdirectories to the Directory.GetFiles() method</param>
         /// <param name="includeDirectoryRoot">Toggle if the directoryPath should be included in the list of files</param>
+        /// <param name="filesOnly">Toggle if the returned list should be pre-filtered for only have files (no directories)</param>
         /// <param name="searchPattern">The search pattern for finding files in a directory</param>
         /// <param name="numRetrys">The number of retires to delete a file entry before failing</param>
         /// <param name="timeout">The time in milliseconds between retries</param>
-        /// <param name="applyFolderProperties">Toggle if the "Normal" file property as assigned to these files at the same time</param>
+        /// <param name="applydirectoryAttributeToRoot">Toggle if the "Normal" file property as assigned to these files at the same time</param>
         /// <returns>The list of files if the search operation was successful, otherwise null</returns>
-        public static string[] FileSearch(string directoryPath, SearchOption option, bool includeDirectoryRoot, string searchPattern = "*",
-            uint timeout = 5, uint numRetrys = 3, bool applyFolderProperties = true)
+        public static string[] FileSearch(string directoryPath, SearchOption option, bool includeDirectoryRoot, bool filesOnly, string searchPattern = "*",
+            uint timeout = 5, uint numRetrys = 3, bool applydirectoryAttributeToRoot = true)
         {
             //filter input
             if (numRetrys == 0)
@@ -579,26 +580,39 @@ namespace RelhaxModpack.Utilities
                 Logging.Warning("numRetrys needs to be larger than 0! setting to 1");
                 numRetrys++;
             }
+
             //loop for how many times to try (in case the OS herped a derp, for example)
             while (numRetrys > 0)
             {
                 //if a timout is requested, then sleep the thread
                 if (timeout > 0)
                     System.Threading.Thread.Sleep((int)timeout);
+
                 //put it in a try catch block
                 try
                 {
+                    //verify the folder to search exists
                     if (!Directory.Exists(directoryPath))
                     {
                         Logging.WriteToLog(string.Format("Path {0} does not exist!", directoryPath), Logfiles.Application, LogLevel.Warning);
                         return null;
                     }
-                    if (applyFolderProperties)
+
+                    //apply the directory attribute to the directory folder
+                    if (applydirectoryAttributeToRoot)
                         File.SetAttributes(directoryPath, FileAttributes.Directory);
-                    //add the directory path itself to the search
+
+                    //do the actual file search
                     List<string> files = Directory.GetFiles(directoryPath, searchPattern, option).ToList();
+
+                    //if requested, filter out any folders
+                    if (filesOnly)
+                        files = files.Where(item => File.Exists(item)).ToList();
+
+                    //if requested, add the directory root to the list
                     if (includeDirectoryRoot)
                         files.Insert(0, directoryPath);
+
                     return files.ToArray();
                 }
                 catch (Exception e)
@@ -619,7 +633,7 @@ namespace RelhaxModpack.Utilities
                     }
                 }
             }
-            Logging.WriteToLog("Code shuld not reach this point: Utils.DirectorySearch()", Logfiles.Application, LogLevel.Error);
+            Logging.WriteToLog("Code should not reach this point: FileUtils.FileSearch()", Logfiles.Application, LogLevel.Error);
             return null;
         }
 
@@ -632,10 +646,10 @@ namespace RelhaxModpack.Utilities
         /// <param name="searchPattern">The search pattern for finding files in a directory</param>
         /// <param name="numRetrys">The number of retires to delete a file entry before failing</param>
         /// <param name="timeout">The time in milliseconds between retries</param>
-        /// <param name="applyFolderProperties">Toggle if the "Normal" file property as assigned to these files at the same time</param>
+        /// <param name="applydirectoryAttributeToRoot">Toggle if the "Normal" file property as assigned to these files at the same time</param>
         /// <returns>The list of files if the search operation was successful, otherwise null</returns>
         public static string[] DirectorySearch(string directoryPath, SearchOption option, bool includeDirectoryRoot, string searchPattern = "*",
-            uint timeout = 5, uint numRetrys = 3, bool applyFolderProperties = true)
+            uint timeout = 5, uint numRetrys = 3, bool applydirectoryAttributeToRoot = true)
         {
             //filter input
             if (numRetrys == 0)
@@ -643,26 +657,38 @@ namespace RelhaxModpack.Utilities
                 Logging.Warning("numRetrys needs to be larger than 0! setting to 1");
                 numRetrys++;
             }
+
             //loop for how many times to try (in case the OS herped a derp, for example)
             while (numRetrys > 0)
             {
                 //if a timout is requested, then sleep the thread
                 if (timeout > 0)
                     System.Threading.Thread.Sleep((int)timeout);
+
                 //put it in a try catch block
                 try
                 {
+                    //verify the folder to search exists
                     if (!Directory.Exists(directoryPath))
                     {
                         Logging.WriteToLog(string.Format("Path {0} does not exist!", directoryPath), Logfiles.Application, LogLevel.Warning);
                         return null;
                     }
-                    if (applyFolderProperties)
+
+                    //apply the directory attribute to the directory folder
+                    if (applydirectoryAttributeToRoot)
                         File.SetAttributes(directoryPath, FileAttributes.Directory);
+
                     //add the directory path itself to the search
                     List<string> directories = Directory.GetDirectories(directoryPath, searchPattern, option).ToList();
+
+                    //filter out any files
+                    directories = directories.Where(item => Directory.Exists(item)).ToList();
+
+                    //if requested, add the directory root to the list
                     if (includeDirectoryRoot)
                         directories.Insert(0, directoryPath);
+
                     return directories.ToArray();
                 }
                 catch (Exception e)
@@ -683,7 +709,7 @@ namespace RelhaxModpack.Utilities
                     }
                 }
             }
-            Logging.WriteToLog("Code shuld not reach this point: Utils.DirectorySearch()", Logfiles.Application, LogLevel.Error);
+            Logging.WriteToLog("Code shuld not reach this point: FileUtils.DirectorySearch()", Logfiles.Application, LogLevel.Error);
             return null;
         }
 
