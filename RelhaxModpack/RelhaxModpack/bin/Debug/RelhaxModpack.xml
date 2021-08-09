@@ -6441,14 +6441,19 @@
             The run mode of the automation sequencer
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationRunMode.Debug">
+            <summary>
+            Debug run mode. Requires user interaction for each task, of each sequence.
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Utilities.Enums.AutomationRunMode.Interactive">
             <summary>
-            Gui run mode. Will not stop on errors
+            Gui run mode. Requires user interaction for each sequence.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utilities.Enums.AutomationRunMode.Batch">
             <summary>
-            Batch run mode. Will not stop on errors inside an automation script
+            Batch run mode. Requires no user interaction.
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.SequencerExitCode">
