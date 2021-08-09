@@ -28,7 +28,7 @@ namespace RelhaxModpack.Utilities
         /// </summary>
         public const long BYTES_TO_MBYTES = 1048576;
 
-        #region File Utilities
+        #region Hash Utilities
         /// <summary>
         /// Creates an MD5 hash calculation of the input file
         /// </summary>
@@ -136,7 +136,9 @@ namespace RelhaxModpack.Utilities
 
             return await Task.Run(() => CreateMD5Hash(stream));
         }
+        #endregion
 
+        #region Zip file utils
         /// <summary>
         /// Gets a zip file entry in the form of a string
         /// </summary>
@@ -188,106 +190,9 @@ namespace RelhaxModpack.Utilities
                 return sr.ReadToEnd();
             }
         }
+        #endregion
 
-        /// <summary>
-        /// Deletes any empty directories from a given path
-        /// </summary>
-        /// <param name="startLocation">The location to start from. Includes deleting empty directories from this point</param>
-        /// <param name="recursive">Toggle to check inside the starting location for empty folders</param>
-        /// <param name="numRetrys">The number of times the method should retry after receiving an exception</param>
-        /// <param name="timeout">The time to wait between retries</param>
-        /// <returns>True if the operation completed successfully, false otherwise</returns>
-        public static bool ProcessEmptyDirectories(string startLocation, bool recursive, uint numRetrys = 3, uint timeout = 100)
-        {
-            //if the root does not exist then stop now
-            if (!Directory.Exists(startLocation))
-            {
-                Logging.Warning("start location {0} does not exist, skipping", startLocation);
-                return true;
-            }
-
-            //check to make sure the number of retries is between 1 and 10
-            if (numRetrys < 1)
-            {
-                Logging.WriteToLog(string.Format("numRetrys is invalid (below 1), setting to 1 (numRetryes={0})", numRetrys),
-                    Logfiles.Application, LogLevel.Warning);
-                numRetrys = 1;
-            }
-            if (numRetrys > 10)
-            {
-                Logging.WriteToLog(string.Format("numRetrys is invalid (above 10), setting to 10 (numRetryes={0})", numRetrys),
-                    Logfiles.Application, LogLevel.Warning);
-                numRetrys = 10;
-            }
-
-            uint retryCounter = 0;
-            if (recursive)
-            {
-                //get the list of all directories inside it, no need to recursively process
-                List<string> directories = DirectorySearch(startLocation, SearchOption.AllDirectories, false).ToList().Where(direct => Directory.Exists(direct)).ToList();
-
-                //sort and reverse the list to make longer paths on top to simulate recursively deleting from all the way down to up
-                directories.Sort();
-                directories.Reverse();
-
-                //now can delete for each folder
-                foreach (string directory in directories)
-                {
-                    retryCounter = 0;
-                    while (retryCounter < numRetrys)
-                    {
-                        try
-                        {
-                            if (Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
-                            {
-                                Logging.Debug("Deleting empty directory {0}", directory);
-                                Directory.Delete(directory, false);
-                            }
-                            retryCounter = numRetrys;
-                        }
-                        catch (Exception ex)
-                        {
-                            Logging.Warning("failed to delete {0}, retryCount={1}, message:\n{2}", directory, retryCounter, ex.Message);
-                            retryCounter++;
-                            System.Threading.Thread.Sleep((int)timeout);
-                            if (retryCounter == numRetrys)
-                            {
-                                Logging.Error("retries = counter, fully failed to delete directory {0}", directory);
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-
-            //and process the root
-            retryCounter = 0;
-            while (retryCounter < numRetrys)
-            {
-                try
-                {
-                    if (Directory.GetFiles(startLocation).Length == 0 && Directory.GetDirectories(startLocation).Length == 0)
-                    {
-                        Logging.Debug("Deleting empty directory {0}", startLocation);
-                        Directory.Delete(startLocation, false);
-                    }
-                    retryCounter = numRetrys;
-                }
-                catch (Exception ex)
-                {
-                    Logging.Warning("failed to delete {0}, retryCount={1}, message:\n{2}", startLocation, retryCounter, ex.Message);
-                    retryCounter++;
-                    System.Threading.Thread.Sleep((int)timeout);
-                    if (retryCounter == numRetrys)
-                    {
-                        Logging.Error("retries = counter, fully failed to delete directory {0}", startLocation);
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
+        #region File Name and Size Utils
         /// <summary>
         /// Calculates and returns the size magnitude of the file (kilo, mega, giga...)
         /// </summary>
@@ -363,7 +268,9 @@ namespace RelhaxModpack.Utilities
             }
             return fileName;
         }
+        #endregion
 
+        #region File and Directory Management
         /// <summary>
         /// Attempts to move a file from source to destination with numRetrys, with a file timeout of timeout
         /// </summary>
@@ -809,6 +716,107 @@ namespace RelhaxModpack.Utilities
             }
         }
 
+        /// <summary>
+        /// Deletes any empty directories from a given path
+        /// </summary>
+        /// <param name="startLocation">The location to start from. Includes deleting empty directories from this point</param>
+        /// <param name="recursive">Toggle to check inside the starting location for empty folders</param>
+        /// <param name="numRetrys">The number of times the method should retry after receiving an exception</param>
+        /// <param name="timeout">The time to wait between retries</param>
+        /// <returns>True if the operation completed successfully, false otherwise</returns>
+        public static bool ProcessEmptyDirectories(string startLocation, bool recursive, uint numRetrys = 3, uint timeout = 100)
+        {
+            //if the root does not exist then stop now
+            if (!Directory.Exists(startLocation))
+            {
+                Logging.Warning("start location {0} does not exist, skipping", startLocation);
+                return true;
+            }
+
+            //check to make sure the number of retries is between 1 and 10
+            if (numRetrys < 1)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (below 1), setting to 1 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 1;
+            }
+            if (numRetrys > 10)
+            {
+                Logging.WriteToLog(string.Format("numRetrys is invalid (above 10), setting to 10 (numRetryes={0})", numRetrys),
+                    Logfiles.Application, LogLevel.Warning);
+                numRetrys = 10;
+            }
+
+            uint retryCounter = 0;
+            if (recursive)
+            {
+                //get the list of all directories inside it, no need to recursively process
+                List<string> directories = DirectorySearch(startLocation, SearchOption.AllDirectories, false).ToList().Where(direct => Directory.Exists(direct)).ToList();
+
+                //sort and reverse the list to make longer paths on top to simulate recursively deleting from all the way down to up
+                directories.Sort();
+                directories.Reverse();
+
+                //now can delete for each folder
+                foreach (string directory in directories)
+                {
+                    retryCounter = 0;
+                    while (retryCounter < numRetrys)
+                    {
+                        try
+                        {
+                            if (Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
+                            {
+                                Logging.Debug("Deleting empty directory {0}", directory);
+                                Directory.Delete(directory, false);
+                            }
+                            retryCounter = numRetrys;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Warning("failed to delete {0}, retryCount={1}, message:\n{2}", directory, retryCounter, ex.Message);
+                            retryCounter++;
+                            System.Threading.Thread.Sleep((int)timeout);
+                            if (retryCounter == numRetrys)
+                            {
+                                Logging.Error("retries = counter, fully failed to delete directory {0}", directory);
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            //and process the root
+            retryCounter = 0;
+            while (retryCounter < numRetrys)
+            {
+                try
+                {
+                    if (Directory.GetFiles(startLocation).Length == 0 && Directory.GetDirectories(startLocation).Length == 0)
+                    {
+                        Logging.Debug("Deleting empty directory {0}", startLocation);
+                        Directory.Delete(startLocation, false);
+                    }
+                    retryCounter = numRetrys;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Warning("failed to delete {0}, retryCount={1}, message:\n{2}", startLocation, retryCounter, ex.Message);
+                    retryCounter++;
+                    System.Threading.Thread.Sleep((int)timeout);
+                    if (retryCounter == numRetrys)
+                    {
+                        Logging.Error("retries = counter, fully failed to delete directory {0}", startLocation);
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        #endregion
+
+        #region Other
         /// <summary>
         /// Removes the directory character and Wots 'win32' and/or 'win64' directories if it exists in the string
         /// </summary>
