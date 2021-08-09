@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RelhaxModpack;
+using RelhaxModpack.Common;
 using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxUnitTests
@@ -12,6 +14,20 @@ namespace RelhaxUnitTests
     {
         public UnitTestLogBase()
         {
+            string[] listofLogfilenames = new string[]
+            {
+                Logging.ApplicationLogFilename,
+                RelhaxModpack.Windows.DatabaseEditor.LoggingFilename,
+                RelhaxModpack.Windows.PatchDesigner.LoggingFilename,
+                RelhaxModpack.Windows.DatabaseAutomationRunner.LoggingFilename,
+                RelhaxModpack.Windows.ModpackToolbox.LoggingFilename
+            };
+            foreach (string logfile in listofLogfilenames)
+            {
+                if (File.Exists(logfile))
+                    File.Delete(logfile);
+            }
+
             //init all logs if they aren't already init
             foreach (Logfiles logfile in UnitTestHelper.AllLogFiles)
             {
@@ -22,6 +38,7 @@ namespace RelhaxUnitTests
                     if (!Logging.Init(logfile, true, false, UnitTestHelper.LogFilesWithPresetFilenames.Contains(logfile) ? null : string.Format("{0}.log", logfile.ToString())))
                         throw new BadMemeException("Failed to create a log file");
             }
+            Logging.RedirectLogOutput(Logfiles.AutomationRunner, Logfiles.Application);
         }
     }
 }
