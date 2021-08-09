@@ -6600,16 +6600,6 @@
             <param name="password">The password to use when extracting the entry. Leave blank for no password</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Utilities.FileUtils.ProcessEmptyDirectories(System.String,System.Boolean,System.UInt32,System.UInt32)">
-            <summary>
-            Deletes any empty directories from a given path
-            </summary>
-            <param name="startLocation">The location to start from. Includes deleting empty directories from this point</param>
-            <param name="recursive">Toggle to check inside the starting location for empty folders</param>
-            <param name="numRetrys">The number of times the method should retry after receiving an exception</param>
-            <param name="timeout">The time to wait between retries</param>
-            <returns>True if the operation completed successfully, false otherwise</returns>
-        </member>
         <member name="M:RelhaxModpack.Utilities.FileUtils.SizeSuffix(System.UInt64,System.UInt32,System.Boolean,System.Boolean)">
             <summary>
             Calculates and returns the size magnitude of the file (kilo, mega, giga...)
@@ -6735,6 +6725,16 @@
             Applies the "Normal" file attribute to a file
             </summary>
             <param name="file">The file to apply normal attributes to</param>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.FileUtils.ProcessEmptyDirectories(System.String,System.Boolean,System.UInt32,System.UInt32)">
+            <summary>
+            Deletes any empty directories from a given path
+            </summary>
+            <param name="startLocation">The location to start from. Includes deleting empty directories from this point</param>
+            <param name="recursive">Toggle to check inside the starting location for empty folders</param>
+            <param name="numRetrys">The number of times the method should retry after receiving an exception</param>
+            <param name="timeout">The time to wait between retries</param>
+            <returns>True if the operation completed successfully, false otherwise</returns>
         </member>
         <member name="M:RelhaxModpack.Utilities.FileUtils.RemoveWoT32bit64bitPathIfExists(System.String)">
             <summary>
