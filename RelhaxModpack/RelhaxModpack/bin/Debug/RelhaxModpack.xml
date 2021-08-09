@@ -6694,17 +6694,18 @@
             <param name="timeout">The time in milliseconds between retries</param>
             <param name="pattern">The pattern of files to search for in a directory</param>
         </member>
-        <member name="M:RelhaxModpack.Utilities.FileUtils.FileSearch(System.String,System.IO.SearchOption,System.Boolean,System.String,System.UInt32,System.UInt32,System.Boolean)">
+        <member name="M:RelhaxModpack.Utilities.FileUtils.FileSearch(System.String,System.IO.SearchOption,System.Boolean,System.Boolean,System.String,System.UInt32,System.UInt32,System.Boolean)">
             <summary>
             Return a list of files from a directory
             </summary>
             <param name="directoryPath">The directory to search for files</param>
             <param name="option">Specifies to search this top directory or subdirectories to the Directory.GetFiles() method</param>
             <param name="includeDirectoryRoot">Toggle if the directoryPath should be included in the list of files</param>
+            <param name="filesOnly">Toggle if the returned list should be pre-filtered for only have files (no directories)</param>
             <param name="searchPattern">The search pattern for finding files in a directory</param>
             <param name="numRetrys">The number of retires to delete a file entry before failing</param>
             <param name="timeout">The time in milliseconds between retries</param>
-            <param name="applyFolderProperties">Toggle if the "Normal" file property as assigned to these files at the same time</param>
+            <param name="applydirectoryAttributeToRoot">Toggle if the "Normal" file property as assigned to these files at the same time</param>
             <returns>The list of files if the search operation was successful, otherwise null</returns>
         </member>
         <member name="M:RelhaxModpack.Utilities.FileUtils.DirectorySearch(System.String,System.IO.SearchOption,System.Boolean,System.String,System.UInt32,System.UInt32,System.Boolean)">
@@ -6717,7 +6718,7 @@
             <param name="searchPattern">The search pattern for finding files in a directory</param>
             <param name="numRetrys">The number of retires to delete a file entry before failing</param>
             <param name="timeout">The time in milliseconds between retries</param>
-            <param name="applyFolderProperties">Toggle if the "Normal" file property as assigned to these files at the same time</param>
+            <param name="applydirectoryAttributeToRoot">Toggle if the "Normal" file property as assigned to these files at the same time</param>
             <returns>The list of files if the search operation was successful, otherwise null</returns>
         </member>
         <member name="M:RelhaxModpack.Utilities.FileUtils.ApplyNormalFileProperties(System.String)">
