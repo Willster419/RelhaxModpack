@@ -226,6 +226,202 @@ namespace RelhaxUnitTests
             Assert.AreEqual(fileACorrectHash.ToLower(), fileHashComparer.HashAStringBuilder.ToString().ToLower());
         }
 
-        
+        [TestMethod]
+        public async Task Test05_FileTaskSeries1Test()
+        {
+            //still need a automation sequence object to run this
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            List<AutomationTask> tasks = new List<AutomationTask>();
+
+            //create the tasks to test
+            tasks.Add(new FileCopyTask()
+            {
+                SourceFilePath = "RelhaxModpack.exe",
+                DestinationFilePath = "BestModpackEver.exe"
+            });
+
+            tasks.Add(new FileMoveTask()
+            {
+                SourceFilePath = "BestModpackEver.exe",
+                DestinationFilePath = "BestestModpackEver.exe"
+            });
+
+            tasks.Add(new FileDeleteTask()
+            {
+                SourceFilePath = "BestestModpackEver.exe"
+            });
+
+            foreach (AutomationTask task in tasks)
+            {
+                task.AutomationSequence = sequence;
+
+                await task.Execute();
+
+                Assert.IsTrue(task.ExitCode == AutomationExitCode.None);
+
+                if (task is IDisposable taskDispose)
+                    taskDispose.Dispose();
+            }
+        }
+
+        [TestMethod]
+        public async Task Test06_DirectoryTaskSeries1Test()
+        {
+            //still need a automation sequence object to run this
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            //delete previous runs
+            string[] dirsToDelete = new string[]
+            {
+                "TestDir1",
+                "copy_all_recurse_true",
+                "copy_all_recurse_false",
+                "copy_xml_recurse_true",
+            };
+
+            foreach (string path in dirsToDelete)
+                if (Directory.Exists(path))
+                    Directory.Delete(path, true);
+
+            //setup
+            string testSubDirPath = Path.Combine("TestDir1", "TestSubDir2");
+
+            //create the sub dirs
+            sequence.AutomationTasks.Add(new DirectoryCreateTask
+            {
+                ID = "dir_setup",
+                DirectoryPath = testSubDirPath
+            });
+
+            //copy over some sample files
+            sequence.AutomationTasks.Add(new FileCopyTask
+            {
+                ID = "copy_0",
+                SourceFilePath = "RelhaxModpack.exe",
+                DestinationFilePath = Path.Combine("TestDir1", "RelhaxModpack1.exe")
+            });
+
+            sequence.AutomationTasks.Add(new FileCopyTask
+            {
+                ID = "copy_1",
+                SourceFilePath = "RelhaxModpack.exe",
+                DestinationFilePath = Path.Combine(testSubDirPath, "RelhaxModpack2.exe")
+            });
+
+            sequence.AutomationTasks.Add(new FileCopyTask
+            {
+                ID = "copy_2",
+                SourceFilePath = "RelhaxModpack.xml",
+                DestinationFilePath = Path.Combine("TestDir1", "RelhaxModpack1.xml")
+            });
+
+            sequence.AutomationTasks.Add(new FileCopyTask
+            {
+                ID = "copy_3",
+                SourceFilePath = "RelhaxModpack.xml",
+                DestinationFilePath = Path.Combine(testSubDirPath, "RelhaxModpack2.xml")
+            });
+
+            await RunTasks(sequence);
+            sequence.AutomationTasks.Clear();
+
+            //copy the directory (all files)
+            sequence.AutomationTasks.Add(new DirectoryCopyTask
+            {
+                ID = "copy_all_recurse_true",
+                Recursive = true.ToString(),
+                DirectoryPath = "TestDir1",
+                DestinationPath = "copy_all_recurse_true",
+                SearchPattern = "*"
+            });
+
+            //copy the directory (top only)
+            sequence.AutomationTasks.Add(new DirectoryCopyTask
+            {
+                ID = "copy_all_recurse_false",
+                Recursive = false.ToString(),
+                DirectoryPath = "TestDir1",
+                DestinationPath = "copy_all_recurse_false",
+                SearchPattern = "*"
+            });
+
+            //copy the directory (only xml files, recursive)
+            sequence.AutomationTasks.Add(new DirectoryCopyTask
+            {
+                ID = "copy_xml_recurse_true",
+                Recursive = true.ToString(),
+                DirectoryPath = "TestDir1",
+                DestinationPath = "copy_xml_recurse_true",
+                SearchPattern = "*.xml"
+            });
+
+            await RunTasks(sequence);
+            sequence.AutomationTasks.Clear();
+
+            //check each of the tasks for file results
+            string[] filesCopyAllRecurse = Directory.GetFiles("copy_all_recurse_true", "*", SearchOption.AllDirectories);
+            string[] filesCopyAllNoRecurse = Directory.GetFiles("copy_all_recurse_false", "*", SearchOption.TopDirectoryOnly);
+            string[] filesCopyXmlRecurse = Directory.GetFiles("copy_xml_recurse_true", "*", SearchOption.AllDirectories);
+
+            Assert.AreEqual(filesCopyAllRecurse.Length, 4);
+            Assert.AreEqual(filesCopyAllNoRecurse.Length, 2);
+            Assert.AreEqual(filesCopyXmlRecurse.Length, 2);
+            foreach (string path in filesCopyXmlRecurse)
+                Assert.IsTrue(path.Contains(".xml"));
+
+            sequence.AutomationTasks.Add(new DirectoryDeleteTask
+            {
+                ID = "delete_all_recurse_false",
+                DirectoryPath = "copy_all_recurse_false",
+                Recursive = false.ToString(),
+                SearchPattern = "*"
+            });
+
+            sequence.AutomationTasks.Add(new DirectoryDeleteTask
+            {
+                ID = "delete_all_recurse_true",
+                DirectoryPath = "copy_xml_recurse_true",
+                Recursive = true.ToString(),
+                SearchPattern = "*"
+            });
+
+            sequence.AutomationTasks.Add(new DirectoryDeleteTask
+            {
+                ID = "delete_xml_recurse_true",
+                DirectoryPath = "copy_all_recurse_true",
+                Recursive = true.ToString(),
+                SearchPattern = "*.xml"
+            });
+
+            await RunTasks(sequence);
+            sequence.AutomationTasks.Clear();
+
+            Assert.IsFalse(Directory.Exists("copy_all_recurse_false"));
+            Assert.IsFalse(Directory.Exists("copy_xml_recurse_true"));
+
+            string[] filesCopyAllRecurse2 = Directory.GetFiles("copy_all_recurse_true", "*", SearchOption.AllDirectories);
+            Assert.AreEqual(filesCopyAllRecurse2.Length, 2);
+            foreach (string path in filesCopyAllRecurse2)
+                Assert.IsTrue(path.Contains(".exe"));
+
+            Directory.Delete("copy_all_recurse_true", true);
+            Directory.Delete("TestDir1", true);
+        }
+
+        private async Task RunTasks(AutomationSequence sequence)
+        {
+            foreach (AutomationTask task in sequence.AutomationTasks)
+            {
+                task.AutomationSequence = sequence;
+                Logging.Info("Running task ID: {0}", task.ID);
+
+                await task.Execute();
+
+                Assert.IsTrue(task.ExitCode == AutomationExitCode.None);
+
+                if (task is IDisposable taskDispose)
+                    taskDispose.Dispose();
+            }
+        }
     }
 }
