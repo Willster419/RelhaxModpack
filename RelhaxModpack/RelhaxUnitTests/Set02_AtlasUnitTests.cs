@@ -42,19 +42,61 @@ namespace RelhaxUnitTests
             new PackerSettings(){PowerTwo = false, SquareImage = true},
             new PackerSettings(){PowerTwo = true, SquareImage = true},
         };
+
         string[] AtlasFiles = new string[]
         {
             "vehicleMarkerAtlas",
             "battleAtlas",
         };
 
+        Logfile log;
+
+        private void LoadLibrariesForTest()
+        {
+            IRelhaxUnmanagedLibrary[] libraries = { AtlasUtils.FreeImageLibrary, AtlasUtils.NvTexLibrary };
+
+            foreach (IRelhaxUnmanagedLibrary library in libraries)
+            {
+                if (!library.IsLoaded)
+                    Assert.IsTrue(library.Load());
+            }
+        }
+
+        private void UnloadLibrariesForTest()
+        {
+            IRelhaxUnmanagedLibrary[] libraries = { AtlasUtils.FreeImageLibrary, AtlasUtils.NvTexLibrary };
+
+            foreach (IRelhaxUnmanagedLibrary library in libraries)
+            {
+                if (library.IsLoaded)
+                    Assert.IsTrue(library.Unload());
+            }
+        }
+
+        private void Ensure64BitProcess()
+        {
+            Assert.IsTrue(Environment.Is64BitProcess);
+        }
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            log = UnitTestHelper.CreateLogfile();
+            Assert.IsNotNull(log);
+            Assert.IsTrue(log.CanWrite);
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            UnitTestHelper.DestroyLogfile(ref log, false);
+            Assert.IsNull(log);
+            UnloadLibrariesForTest();
+        }
+
         [TestMethod]
         public void Test01_LoadLibrariesTest()
         {
-            Logfile log = UnitTestHelper.CreateLogfile();
-            Assert.IsNotNull(log);
-            Assert.IsTrue(log.CanWrite);
-
             IRelhaxUnmanagedLibrary[] libraries = { AtlasUtils.FreeImageLibrary, AtlasUtils.NvTexLibrary };
 
             //unload them if already loaded, just in case
@@ -88,18 +130,11 @@ namespace RelhaxUnitTests
                 library.Unload();
                 Assert.IsFalse(library.IsLoaded);
             }
-
-            UnitTestHelper.DestroyLogfile(ref log, false);
-            Assert.IsNull(log);
         }
 
         [TestMethod]
         public void Test02_TextureTest()
         {
-            Logfile log = UnitTestHelper.CreateLogfile();
-            Assert.IsNotNull(log);
-            Assert.IsTrue(log.CanWrite);
-
             //create objects
             List<Texture> texturelist = null;
             XmlNodeList xmlTextureList = null;
@@ -209,17 +244,13 @@ namespace RelhaxUnitTests
             }
 
             File.Delete(testFileOut);
-
-            UnitTestHelper.DestroyLogfile(ref log, false);
-            Assert.IsNull(log);
         }
 
         [TestMethod]
         public void Test03_DdsTest()
         {
-            Logfile log = UnitTestHelper.CreateLogfile();
-            Assert.IsNotNull(log);
-            Assert.IsTrue(log.CanWrite);
+            Ensure64BitProcess();
+            LoadLibrariesForTest();
 
             ImageHandlerSettings[] imageHandlerSettings =
             {
@@ -257,18 +288,11 @@ namespace RelhaxUnitTests
             }
 
             Directory.Delete(outputPath, true);
-
-            UnitTestHelper.DestroyLogfile(ref log, false);
-            Assert.IsNull(log);
         }
 
         [TestMethod]
         public void Test04_CustomIconsLoadingTest()
         {
-            Logfile log = UnitTestHelper.CreateLogfile();
-            Assert.IsNotNull(log);
-            Assert.IsTrue(log.CanWrite);
-
             log.Write("Asserting to start the loading of mod textures");
             List<string> modIconsLocation = new List<string>() { UnitTestHelper.ResourcesFolder };
             CancellationToken token = new CancellationToken();
@@ -294,17 +318,13 @@ namespace RelhaxUnitTests
 
             //dispose of the mod contour icons
             AtlasCreator.DisposeParsedCustomTextures();
-
-            UnitTestHelper.DestroyLogfile(ref log, false);
-            Assert.IsNull(log);
         }
 
         [TestMethod]
         public void Test05_FullAtlasTest()
         {
-            Logfile log = UnitTestHelper.CreateLogfile();
-            Assert.IsNotNull(log);
-            Assert.IsTrue(log.CanWrite);
+            Ensure64BitProcess();
+            LoadLibrariesForTest();
 
             //make sure atlas packer's relhax temp folder exists
             if (!Directory.Exists(ApplicationConstants.RelhaxTempFolderPath))
@@ -375,9 +395,6 @@ namespace RelhaxUnitTests
             }
 
             Directory.Delete(atlasCreator.Atlas.AtlasSaveDirectory, true);
-
-            UnitTestHelper.DestroyLogfile(ref log, false);
-            Assert.IsNull(log);
         }
     }
 }
