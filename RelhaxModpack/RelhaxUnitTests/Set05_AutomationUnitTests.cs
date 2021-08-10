@@ -30,7 +30,18 @@ namespace RelhaxUnitTests
             OpenLogWindowOnStartup = true,
             SequenceDebugMode = false,
             UseLocalRunnerDatabase = false,
-            WoTClientInstallLocation = string.Empty
+            WoTClientInstallLocation = string.Empty,
+            AutomationRunMode = AutomationRunMode.Interactive
+        };
+
+        ModpackSettings ModpackSettings = new ModpackSettings()
+        {
+
+        };
+
+        CommandLineSettings CommandLineSettings = new CommandLineSettings(new string[] { })
+        {
+
         };
 
         CancellationToken nullToken;
@@ -45,39 +56,19 @@ namespace RelhaxUnitTests
         */
 
         [TestMethod]
-        public async Task Test01_GetAutomationRepoBranchesTest()
+        public async Task Test01_SequencerPreRunSetupTest()
         {
             AutomationSequencer sequencer = new AutomationSequencer()
             {
                 AutomationRunnerSettings = this.AutomationRunnerSettings,
-                AutomationRunMode = AutomationRunMode.Interactive,
-                WoTClientVersion = "TODO",
-                WoTModpackOnlineFolderVersion = "TODO"
+                CancellationToken = nullToken,
+                DatabaseAutomationRunner = null,
+                DatabaseManager = null
             };
-            return;
-            //throw new BadMemeException("you should, like, finish this");
-            /*
-            //TODO: dynamically get this from the beta db?
-            ApplicationSettings.WoTModpackOnlineFolderVersion = "1.10.0";
-            ApplicationSettings.WoTClientVersion = "1.10.0.4";
-            */
 
-            await sequencer.LoadBranchesListAsync();
-            await sequencer.LoadRootDocumentAsync();
-            await sequencer.LoadGlobalMacrosAsync();
-            List<DatabasePackage> DatabasePackages = new List<DatabasePackage>();
-            DatabasePackages.Add(new SelectablePackage()
-            {
-                UID = "123456789ABCD",
-                PackageName = "Some_rofl_op_russian_medium",
-                ParentCategory = new Category() { Name = "Cat_name" },
-                Level = 0
-            });
-            //bool loadAutomationSequencesResult = await sequencer.LoadAutomationSequencesAsync(DatabasePackages);
-            //bool parseAutomationSequencesResult = sequencer.ParseAutomationSequences();
-            //bool runSequencesResult = await sequencer.RunSequencesAsync();
-            //Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
-            //Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
+            Assert.IsTrue(await sequencer.LoadBranchesListAsync());
+            Assert.IsTrue(await sequencer.LoadRootDocumentAsync());
+            Assert.IsTrue(sequencer.ParseRootDocumentAsync());
         }
 
         [TestMethod]
