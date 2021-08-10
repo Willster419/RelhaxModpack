@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RelhaxModpack;
 using RelhaxModpack.Common;
 using RelhaxModpack.Database;
+using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Xml;
@@ -17,114 +19,35 @@ namespace RelhaxUnitTests
     [TestClass]
     public class Set04_DatabaseUnitTests
     {
-        private static string LatestSupportedWoTVersion = string.Empty;
-        private static List<DatabasePackage> GlobalDependenciesForSave = new List<DatabasePackage>();
-        private static List<Dependency> DependenciesForSave = new List<Dependency>();
-        private static List<Category> ParsedCategoryListForSave = new List<Category>();
-        /*
-        [TestMethod]
-        public void Test01_GetLatestSupportWoTVersionTest()
+        const string databaseSaveFolder = "DatabaseSaveTest";
+
+        DatabaseManager databaseManager;
+
+        [TestInitialize]
+        public void Setup()
         {
-            XmlDocument rootDocument = DatabaseUtils.GetBetaDatabaseRoot1V1Document(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"), "master");
-            LatestSupportedWoTVersion = XmlUtils.GetXmlStringFromXPath(rootDocument, ApplicationConstants.DatabaseOnlineVersionXpath);
-            Assert.IsFalse(string.IsNullOrEmpty(LatestSupportedWoTVersion));
+            databaseManager = new DatabaseManager(new ModpackSettings(), new CommandLineSettings(null));
+
+            CleanDatabaseSaveFolder(true);
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            CleanDatabaseSaveFolder(false);
+        }
+
+        private void CleanDatabaseSaveFolder(bool createNew)
+        {
+            if (Directory.Exists(databaseSaveFolder))
+                Directory.Delete(databaseSaveFolder, true);
+
+            if (createNew)
+                Directory.CreateDirectory(databaseSaveFolder);
         }
 
         [TestMethod]
-        public void Test02_LoadStableDatabaseTest()
-        {
-            List<Category> ParsedCategoryList = new List<Category>();
-            List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
-            List<Dependency> Dependencies = new List<Dependency>();
-
-            string modInfoXml = string.Empty;
-            Ionic.Zip.ZipFile zipfile = null;
-            XmlDocument modInfoDocument = null;
-            List<string> categoriesXml = new List<string>();
-
-            string modInfoxmlURL = ApplicationConstants.BigmodsDatabaseRootEscaped.Replace(@"{dbVersion}", LatestSupportedWoTVersion) + "modInfo.dat";
-
-            using (WebClient client = new WebClient())
-            {
-                //save zip file into memory for later
-                zipfile = Ionic.Zip.ZipFile.Read(new MemoryStream(client.DownloadData(modInfoxmlURL)));
-
-                //extract modinfo xml string
-                modInfoXml = FileUtils.GetStringFromZip(zipfile, "database.xml");
-            }
-
-            modInfoDocument = XmlUtils.LoadXmlDocument(modInfoXml, XmlLoadType.FromString);
-
-            string globalDependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/globalDependencies/@file");
-            string globalDependencyXmlString = FileUtils.GetStringFromZip(zipfile, globalDependencyFilename);
-
-            string dependencyFilename = XmlUtils.GetXmlStringFromXPath(modInfoDocument, "/modInfoAlpha.xml/dependencies/@file");
-            string dependenicesXmlString = FileUtils.GetStringFromZip(zipfile, dependencyFilename);
-
-            foreach (XmlNode categoryNode in XmlUtils.GetXmlNodesFromXPath(modInfoDocument, "//modInfoAlpha.xml/categories/category"))
-            {
-                string categoryFilename = categoryNode.Attributes["file"].Value;
-                categoriesXml.Add(FileUtils.GetStringFromZip(zipfile, categoryFilename));
-            }
-            zipfile.Dispose();
-            zipfile = null;
-
-            DatabaseUtils.ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList);
-
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
-            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
-
-            TestDatabaseEntries(GlobalDependencies, Dependencies, ParsedCategoryList, false);
-        }
-
-        [TestMethod]
-        public void Test03_LoadBetaDatabaseTest()
-        {
-            List<Category> ParsedCategoryList = new List<Category>();
-            List<DatabasePackage> GlobalDependencies = new List<DatabasePackage>();
-            List<Dependency> Dependencies = new List<Dependency>();
-
-            string modInfoXml = string.Empty;
-
-            //load string constant url from manager info xml
-            string rootXml = ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master") + ApplicationConstants.BetaDatabaseV2RootFilename;
-
-            //download the xml string into "modInfoXml"
-            using (WebClient client = new WebClient())
-            {
-                client.Headers.Add("user-agent", "Mozilla / 4.0(compatible; MSIE 6.0; Windows NT 5.2;)");
-                modInfoXml = client.DownloadString(rootXml);
-            }
-
-            List<string> downloadURLs = DatabaseUtils.GetBetaDatabase1V1FilesList(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"), "master");
-
-            string[] downloadStrings = CommonUtils.DownloadStringsFromUrls(downloadURLs);
-
-            //parse into strings
-            string globalDependencyXmlStringBeta = downloadStrings[0];
-            string dependenicesXmlStringBeta = downloadStrings[1];
-
-            List<string> categoriesXmlBeta = new List<string>();
-            for (int i = 2; i < downloadURLs.Count; i++)
-            {
-                categoriesXmlBeta.Add(downloadStrings[i]);
-            }
-
-            //parse into lists
-            DatabaseUtils.ParseDatabase1V1FromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList);
-
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList, false);
-            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
-
-            TestDatabaseEntries(GlobalDependencies, Dependencies, ParsedCategoryList, true);
-
-            GlobalDependenciesForSave = GlobalDependencies;
-            DependenciesForSave = Dependencies;
-            ParsedCategoryListForSave = ParsedCategoryList;
-        }
-
-        [TestMethod]
-        public void Test04_TagSerialaizationTest()
+        public void Test01_TagSerialaizationTest()
         {
             string tags = "Patch,Script,Atlas,ImagePNG";
             int tagsCount = tags.Split(',').Count();
@@ -140,42 +63,67 @@ namespace RelhaxUnitTests
         }
 
         [TestMethod]
-        public void Test05_SaveDatabaseTest()
+        public async Task Test02_LoadStableDatabaseTest()
         {
-            string databaseSavePath = "DatabaseSaveTest";
+            databaseManager.ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
+            Assert.IsTrue(await databaseManager.LoadDatabaseAsync() == DatabaseLoadFailCode.None);
+            TestDatabaseEntries();
+        }
 
-            if (Directory.Exists(databaseSavePath))
-                Directory.Delete(databaseSavePath, true);
+        [TestMethod]
+        public async Task Test03_LoadBetaDatabaseTest()
+        {
+            databaseManager.ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
+            databaseManager.ModpackSettings.BetaDatabaseSelectedBranch = "master";
+            Assert.IsTrue(await databaseManager.LoadDatabaseAsync() == DatabaseLoadFailCode.None);
+            TestDatabaseEntries();
+        }
 
-            Directory.CreateDirectory(databaseSavePath);
+        [TestMethod]
+        public async Task Test04_SaveDatabaseFromBetaTest()
+        {
+            databaseManager.ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Beta;
+            databaseManager.ModpackSettings.BetaDatabaseSelectedBranch = "master";
+            Assert.IsTrue(await databaseManager.LoadDatabaseAsync() == DatabaseLoadFailCode.None);
+            databaseManager.SaveDatabase(databaseSaveFolder);
 
-            XmlDocument rootDoc = DatabaseUtils.GetBetaDatabaseRoot1V1Document(ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"), "master");
-            Assert.IsNotNull(rootDoc);
-
-            List<string> allCategoriesXml = DatabaseUtils.GetBetaDatabase1V1FilesList(rootDoc, ApplicationConstants.BetaDatabaseV2FolderURLEscaped.Replace(@"{branch}", "master"));
-
-            DatabaseUtils.SaveDatabase1V1(databaseSavePath, rootDoc, GlobalDependenciesForSave, DependenciesForSave, ParsedCategoryListForSave);
-
-            Assert.IsTrue(File.Exists(Path.Combine(databaseSavePath, ApplicationConstants.BetaDatabaseV2RootFilename)));
-            XmlDocument loadDoc = XmlUtils.LoadXmlDocument(Path.Combine(databaseSavePath, ApplicationConstants.BetaDatabaseV2RootFilename), XmlLoadType.FromFile);
+            //testing part
+            string rootDatabasePath = Path.Combine(databaseSaveFolder, ApplicationConstants.BetaDatabaseV2RootFilename);
+            Assert.IsTrue(File.Exists(rootDatabasePath));
+            XmlDocument loadDoc = XmlUtils.LoadXmlDocument(rootDatabasePath, XmlLoadType.FromFile);
             Assert.IsNotNull(loadDoc);
 
+            List<string> allCategoriesXml = await databaseManager.GetBetaDatabase1V1FilesListAsync();
             foreach (string path in allCategoriesXml)
             {
                 string endPath = path.Split('/').Last();
-                Assert.IsTrue(File.Exists(Path.Combine(databaseSavePath, endPath)));
-                loadDoc = XmlUtils.LoadXmlDocument(Path.Combine(databaseSavePath, endPath), XmlLoadType.FromFile);
+                endPath = Path.Combine(databaseSaveFolder, endPath);
+                Assert.IsTrue(File.Exists(endPath));
+                loadDoc = XmlUtils.LoadXmlDocument(endPath, XmlLoadType.FromFile);
                 Assert.IsNotNull(loadDoc);
             }
-
-            if (Directory.Exists(databaseSavePath))
-                Directory.Delete(databaseSavePath, true);
         }
-        */
-        private void TestDatabaseEntries(List<DatabasePackage> GlobalDependencies, List<Dependency> Dependencies, List<Category> ParsedCategoryList, bool checkDuplicates)
+
+        [TestMethod]
+        public async Task Test05_LoadTestDatabaseFromStableTest()
         {
-            List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList);
+            //load stable, save it to disk, then load it back as custom
+            databaseManager.ModpackSettings.DatabaseDistroVersion = DatabaseVersions.Stable;
+            Assert.IsTrue(await databaseManager.LoadDatabaseAsync() == DatabaseLoadFailCode.None);
+            databaseManager.SaveDatabase(databaseSaveFolder);
+
+            Assert.IsTrue(await databaseManager.LoadDatabaseTestAsync(Path.Combine(databaseSaveFolder, ApplicationConstants.BetaDatabaseV2RootFilename)) == DatabaseLoadFailCode.None);
+            TestDatabaseEntries();
+        }
+        
+        private void TestDatabaseEntries()
+        {
+            Assert.IsNotNull(databaseManager);
+
+            //test flat list function (all packages)
+            List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(databaseManager.GlobalDependencies, databaseManager.Dependencies, databaseManager.ParsedCategoryList);
             Assert.IsNotNull(allPackages);
+            Assert.IsFalse(allPackages.Count == 0);
 
             foreach (DatabasePackage package in allPackages)
             {
@@ -187,20 +135,19 @@ namespace RelhaxUnitTests
                 Assert.IsFalse(string.IsNullOrWhiteSpace(package.UID));
             }
 
-            List<SelectablePackage> selectablePackages = DatabaseUtils.GetFlatSelectablePackageList(ParsedCategoryList);
+            //we're not technically checking these functions, but at least they should be able to run without throwing an exception, right?
+            DatabaseUtils.BuildDependencyPackageRefrences(databaseManager.ParsedCategoryList, databaseManager.Dependencies);
+            DatabaseUtils.CalculateDependencies(databaseManager.Dependencies, databaseManager.ParsedCategoryList, true, false);
+
+            //test flat list function (selectable packages)
+            List<SelectablePackage> selectablePackages = DatabaseUtils.GetFlatSelectablePackageList(databaseManager.ParsedCategoryList);
             Assert.IsNotNull(selectablePackages);
 
-            if (checkDuplicates)
-            {
-                List<string> duplicatesPackageNames = null;
-                List<DatabasePackage> duplicatesUID = null;
-
-                duplicatesPackageNames = DatabaseUtils.CheckForDuplicates(GlobalDependencies, Dependencies, ParsedCategoryList);
-                duplicatesUID = DatabaseUtils.CheckForDuplicateUIDsPackageList(GlobalDependencies, Dependencies, ParsedCategoryList);
-
-                Assert.IsTrue(duplicatesPackageNames.Count == 0);
-                Assert.IsTrue(duplicatesUID.Count == 0);
-            }
+            //test duplicate finder functions
+            List<string> duplicatesPackageNames = DatabaseUtils.CheckForDuplicates(databaseManager.GlobalDependencies, databaseManager.Dependencies, databaseManager.ParsedCategoryList);
+            List<DatabasePackage> duplicatesUID = DatabaseUtils.CheckForDuplicateUIDsPackageList(databaseManager.GlobalDependencies, databaseManager.Dependencies, databaseManager.ParsedCategoryList);
+            Assert.IsTrue(duplicatesPackageNames.Count == 0);
+            Assert.IsTrue(duplicatesUID.Count == 0);
         }
     }
 }
