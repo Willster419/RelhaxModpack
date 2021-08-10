@@ -8489,12 +8489,6 @@
             Flag to determine if the current installation is started from auto install mode
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Windows.PackageSelectionList.LastSupportedWoTClientVersionFromMainWindow">
-            <summary>
-            The latest supported formatted version of WoT, in full version format (e.g. 1.7.0.1) 
-            </summary>
-            <remarks>This is used for patch days when a user is installing for a WoT version not yet supported</remarks>
-        </member>
         <member name="P:RelhaxModpack.Windows.PackageSelectionList.LoadingUI">
             <summary>
             Flag to indicate if the window is loading application specific UI
