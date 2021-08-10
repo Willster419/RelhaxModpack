@@ -14,10 +14,8 @@ namespace RelhaxUnitTests
         public void Test01_RegexRegressionTesting()
         {
             Logging.Info("Regex regressions start");
-            using (PatchRegression regression = new PatchRegression(PatchRegressionTypes.regex, BuildRegexUnittests()))
-            {
-                Assert.IsTrue(regression.RunRegressions());
-            }
+            PatchRegression regression = new PatchRegression(PatchRegressionTypes.regex, BuildRegexUnittests());
+            Assert.IsTrue(regression.RunRegressions());
             Logging.Info("Regex regressions end");
         }
 
@@ -25,10 +23,8 @@ namespace RelhaxUnitTests
         public void Test02_XmlRegressionTesting()
         {
             Logging.Info("Xml regressions start");
-            using (PatchRegression regression = new PatchRegression(PatchRegressionTypes.xml, BuildXmlUnittests()))
-            {
-                Assert.IsTrue(regression.RunRegressions());
-            }
+            PatchRegression regression = new PatchRegression(PatchRegressionTypes.xml, BuildXmlUnittests());
+            Assert.IsTrue(regression.RunRegressions());
             Logging.Info("Xml regressions end");
         }
 
@@ -36,10 +32,8 @@ namespace RelhaxUnitTests
         public void Test03_JsonRegressionTesting()
         {
             Logging.Info("Json regressions start");
-            using (PatchRegression regression = new PatchRegression(PatchRegressionTypes.json, BuildJsonUnittests()))
-            {
-                Assert.IsTrue(regression.RunRegressions());
-            }
+            PatchRegression regression = new PatchRegression(PatchRegressionTypes.json, BuildJsonUnittests());
+            Assert.IsTrue(regression.RunRegressions());
             Logging.Info("Json regressions end");
         }
 
@@ -47,10 +41,8 @@ namespace RelhaxUnitTests
         public void Test04_FollowPathRegressionTesting()
         {
             Logging.Info("FollowPath regressions start");
-            using (PatchRegression regression = new PatchRegression(PatchRegressionTypes.followPath, BuildFollowPathUnittests()))
-            {
-                Assert.IsTrue(regression.RunRegressions());
-            }
+            PatchRegression regression = new PatchRegression(PatchRegressionTypes.followPath, BuildFollowPathUnittests());
+            Assert.IsTrue(regression.RunRegressions());
             Logging.Info("FollowPath regressions end");
         }
 

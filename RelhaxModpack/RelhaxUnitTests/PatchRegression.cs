@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Utilities.ClassEventArgs;
 
 namespace RelhaxModpack.Patching
 {
@@ -15,7 +16,7 @@ namespace RelhaxModpack.Patching
     /// <remarks>A regression test is designed to only test one type of patch i.e. a series of XML patches.
     /// The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
     /// the results. Results are logged to a new logfile each time a regression run is started</remarks>
-    public class PatchRegression : IDisposable
+    public class PatchRegression
     {
         public const string PatchLogFolder = "patch_regressions";
 
@@ -36,6 +37,9 @@ namespace RelhaxModpack.Patching
         /// <param name="unitTestsToRun">The list of unit tests to run</param>
         public PatchRegression(PatchRegressionTypes regressionType, List<PatchUnitTest> unitTestsToRun)
         {
+            if (unitTestsToRun == null)
+                throw new NullReferenceException();
+
             string logFilename;
             UnitTests = unitTestsToRun;
             switch (regressionType)
@@ -73,6 +77,8 @@ namespace RelhaxModpack.Patching
                     RegressionLogfile = new Logfile(logFilename, Logging.ApplicationLogfileTimestamp, true);
                     break;
             }
+
+            RegressionLogfile.OnLogfileWrite += RegressionLogfile_OnLogfileWrite;
         }
 
         /// <summary>
@@ -108,6 +114,7 @@ namespace RelhaxModpack.Patching
                 Logging.Error(Path.Combine(RegressionFolderPath, Startfile));
                 return false;
             }
+
             for(int i = 1; i < UnitTests.Count+1; i++)
             {
                 string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, i.ToString("D2"), RegressionExtension));
@@ -127,7 +134,7 @@ namespace RelhaxModpack.Patching
                 File.Delete(filenameToTestPath);
             File.Copy(Path.Combine(RegressionFolderPath, Startfile), filenameToTestPath);
 
-            WriteToLogfiles("----- Unit tests start -----");
+            RegressionLogfile.Write("----- Unit tests start -----");
 
             bool breakOutEarly = false;
             foreach (PatchUnitTest unitTest in UnitTests)
@@ -135,7 +142,8 @@ namespace RelhaxModpack.Patching
                 unitTest.Patch.CompletePath = filenameToTestPath;
                 unitTest.Patch.File = filenameToTestPath;
                 unitTest.Patch.Type = RegressionTypeString;
-                WriteToLogfiles("Running test {0} of {1}: {2}", ++NumPassed, UnitTests.Count, unitTest.Description);
+                RegressionLogfile.Write(string.Format("Running test {0} of {1}: {2}", ++NumPassed, UnitTests.Count, unitTest.Description));
+
                 if(unitTest.Patch.FollowPath)
                 {
                     //delete testfile
@@ -170,18 +178,20 @@ namespace RelhaxModpack.Patching
                         File.Copy(Path.Combine(RegressionFolderPath, Startfile), filenameToTestPath);
                     }
                 }
+
                 Patcher.RunPatchFromEditor(unitTest.Patch);
                 string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, NumPassed.ToString("D2"), Path.GetExtension(Startfile)));
-                WriteToLogfiles("Checking results against check file {0}...",Path.GetFileName(checkfile));
+                RegressionLogfile.Write(string.Format("Checking results against check file {0}...", Path.GetFileName(checkfile)));
                 string patchRun = File.ReadAllText(filenameToTestPath);
                 string patchTestAgainst = File.ReadAllText(checkfile);
+
                 if (patchTestAgainst.Equals(patchRun))
                 {
-                    WriteToLogfiles("Success!");
+                    RegressionLogfile.Write("Success!");
                 }
                 else
                 {
-                    WriteToLogfiles("Failed!");
+                    RegressionLogfile.Write("Failed!");
                     breakOutEarly = true;
                     break;
                 }
@@ -189,11 +199,11 @@ namespace RelhaxModpack.Patching
 
             if (breakOutEarly)
             {
-                WriteToLogfiles("----- Unit tests finish (fail)-----");
+                RegressionLogfile.Write("----- Unit tests finish (fail)-----");
             }
             else
             {
-                WriteToLogfiles("----- Unit tests finish (pass)-----");
+                RegressionLogfile.Write("----- Unit tests finish (pass)-----");
                 //delete the test file, we don't need it. (it's the same text as the last check file anyways)
                 if (File.Exists(filenameToTestPath))
                     File.Delete(filenameToTestPath);
@@ -212,68 +222,16 @@ namespace RelhaxModpack.Patching
                     }
                 }
             }
+
             //dispose log file
             RegressionLogfile.Dispose();
+            RegressionLogfile = null;
             return true;
         }
 
-        private void WriteToLogfiles(string message, params object[] paramss)
+        private void RegressionLogfile_OnLogfileWrite(object sender, LogMessageEventArgs e)
         {
-            WriteToLogfiles(string.Format(message, paramss));
+            Logging.Info("[Regression Logfile]: {0}", e.Message);
         }
-
-        private void WriteToLogfiles(string message)
-        {
-            Logging.Debug(message);
-            RegressionLogfile.Write(message);
-        }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        /// <summary>
-        /// Dispose of managed resources
-        /// </summary>
-        /// <param name="disposing">For redundant calls</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                    if(RegressionLogfile != null)
-                    {
-                        RegressionLogfile.Dispose();
-                        RegressionLogfile = null;
-                    }
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~Regression()
-        // {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        /// <summary>
-        /// Dispose of managed resources
-        /// </summary>
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }
