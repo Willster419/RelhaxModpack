@@ -61,6 +61,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PatchRegression.cs" />
+    <Compile Include="PatchUnitTest.cs" />
     <Compile Include="Set02_AtlasUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Set01_LoggingUnitTests.cs" />

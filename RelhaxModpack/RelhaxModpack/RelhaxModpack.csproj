@@ -215,7 +215,6 @@
     <Compile Include="Database\UserFile.cs" />
     <Compile Include="Installer\Instruction.cs" />
     <Compile Include="Installer\InstructionLoader.cs" />
-    <Compile Include="Patching\PatchUnitTest.cs" />
     <Compile Include="Settings\AutomationRunnerSettings.cs" />
     <Compile Include="Settings\ISettingsFile.cs" />
     <Compile Include="Settings\ModpackToolboxSettings.cs" />
@@ -343,7 +342,6 @@
     </Compile>
     <Compile Include="Utilities\MacroUtils.cs" />
     <Compile Include="Utilities\RegistryUtils.cs" />
-    <Compile Include="Patching\PatchRegression.cs" />
     <Compile Include="Atlases\RelhaxFreeImageLibrary.cs" />
     <Compile Include="Atlases\RelhaxNvTexLibrary.cs" />
     <Compile Include="Shortcuts\ShortcutUtils.cs" />
