@@ -1187,6 +1187,13 @@
             Creates an instance of the RelhaxWindow class
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.LoadDatabaseTestAsync(System.String)">
+            <summary>
+            Load a test database from the specified location, including the root filename
+            </summary>
+            <param name="locationToLoadFrom">The path to the root xml file</param>
+            <returns>The status enumeration code of the operation</returns>
+        </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.ParseDatabase1V1FromFiles">
             <summary>
             Parse a database into the version 1.1 format from files on the disk
@@ -2460,243 +2467,6 @@
             <summary>
             the actual name of the original patch before processed
             </summary>
-        </member>
-        <member name="T:RelhaxModpack.Patching.PatchUnitTest">
-            <summary>
-            Represents a patch operation with a description and desired assertion condition
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patching.PatchUnitTest.Patch">
-            <summary>
-            The patch operation object
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patching.PatchUnitTest.Description">
-            <summary>
-            A description of what the patch should do
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patching.PatchUnitTest.ShouldPass">
-            <summary>
-            Determines if the patch should pass or fail the test
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Patching.Patch">
-            <summary>
-            A patch is an instruction object of how to modify a text file. Can be a json, xml, or plain text file
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patching.Patch.TypeRegex1">
-            <summary>
-            One of two string values used for regex type patches
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patching.Patch.TypeRegex2">
-            <summary>
-            One of two string values used for regex type patches
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patching.Patch.TypeXml">
-            <summary>
-            The string value used for xml type patches
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patching.Patch.TypeJson">
-            <summary>
-            The string value used for json type patches
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Patching.Patch.TypeXvm">
-            <summary>
-            The string value used for xvm type legacy patches
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.Type">
-            <summary>
-            The type of patch, xml or regex (direct text replacement)
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.Mode">
-            <summary>
-            If not regex, the mode that the xml patcher should use.<para/>Examples: add xml node, remove xml node, edit xml node
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.PatchPath">
-            <summary>
-            The starting path to the file
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.File">
-            <summary>
-            The path to the file, relative to patchPath
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.CompletePath">
-            <summary>
-            The complete path to the file, saved at parse time
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.Version">
-            <summary>
-            The version of the patch for parsing. Allows for multiple variations. Default to 1
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.Path">
-            <summary>
-            If xml or json, the xml xpath or json jsonpath to the node
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.Lines">
-            <summary>
-            If regex, the optional specific lines in the text file
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.Search">
-            <summary>
-            The node inner text (xml) or regex criteria to search for
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.Replace">
-            <summary>
-            The text to replace the found search text with
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.FollowPath">
-            <summary>
-            For json patches, if it should use the new method of separating the path for getting the xvm references
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.DumpPatchInfoForLog">
-            <summary>
-            Collects all patch information for logging
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.ListboxDisplay">
-            <summary>
-            Gets a listbox style UI element display-ready text
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patch.IsValidForSave">
-            <summary>
-            Gets a value that determines if all required properties are filed out to be saved to a patch file
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Patching.Patch.GetInvalidPatchesForSave(RelhaxModpack.Patching.Patch[])">
-            <summary>
-            Returns a list of patch objects that are not ready to be written to a patch file
-            </summary>
-            <param name="patchList">The list of patches to check</param>
-            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
-            <seealso cref="P:RelhaxModpack.Patching.Patch.IsValidForSave"/>
-        </member>
-        <member name="M:RelhaxModpack.Patching.Patch.GetInvalidPatchesForSave(System.Collections.Generic.List{RelhaxModpack.Patching.Patch})">
-            <summary>
-            Returns a list of patch objects that are not ready to be written to a patch file
-            </summary>
-            <param name="patchList">The list of patches to check</param>
-            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
-            <seealso cref="P:RelhaxModpack.Patching.Patch.IsValidForSave"/>
-        </member>
-        <member name="M:RelhaxModpack.Patching.Patch.GetInvalidPatchesForSave(System.Windows.Controls.ItemCollection)">
-            <summary>
-            Returns a list of patch objects that are not ready to be written to a patch file
-            </summary>
-            <param name="patchList">The list of patches to check</param>
-            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
-            <seealso cref="P:RelhaxModpack.Patching.Patch.IsValidForSave"/>
-        </member>
-        <member name="T:RelhaxModpack.Patching.PatchRegression">
-            <summary>
-            A regression object is an entire regression test suite. Manages the unit tests and runs the test assertions
-            </summary>
-            <remarks>A regression test is designed to only test one type of patch i.e. a series of XML patches.
-            The patching system works by having a starting file and making changes at each unit test. It then loads the files and compares
-            the results. Results are logged to a new logfile each time a regression run is started</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Patching.PatchRegression.#ctor(RelhaxModpack.Utilities.Enums.PatchRegressionTypes,System.Collections.Generic.List{RelhaxModpack.Patching.PatchUnitTest})">
-            <summary>
-            Make a regression object
-            </summary>
-            <param name="regressionType">The type of regressions to run</param>
-            <param name="unitTestsToRun">The list of unit tests to run</param>
-        </member>
-        <member name="M:RelhaxModpack.Patching.PatchRegression.RunRegressions">
-            <summary>
-            Run a complete regression test based on the list of unit tests
-            </summary>
-            <returns>Returns false if a setup error occurred, true otherwise</returns>
-            <remarks>The return value of the method does NOT related to the success of the Unit Tests</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Patching.PatchRegression.Dispose(System.Boolean)">
-            <summary>
-            Dispose of managed resources
-            </summary>
-            <param name="disposing">For redundant calls</param>
-        </member>
-        <member name="M:RelhaxModpack.Patching.PatchRegression.Dispose">
-            <summary>
-            Dispose of managed resources
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Patching.Patcher">
-            <summary>
-            A class for handling patch operations
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Patching.Patcher.DebugMode">
-            <summary>
-            Gets or sets if the patcher should run in debug mode
-            </summary>
-            <remarks>Debug mode will create additional files as individual steps of the patch process are outputted for debug</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Patching.Patcher.PatchJsonNullEscape">
-            <summary>
-            Provides the ability to insert a 'null' value into json configurations
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Patching.Patcher.RunPatchFromCommandline(RelhaxModpack.Patching.Patch)">
-            <summary>
-            Runs a patch operation, but first parsing the 'app' and 'versiondir' keywords
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.Patching.Patcher.RunPatch(RelhaxModpack.Patching.Patch)">
-            <summary>
-            Run a patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.Patching.Patcher.XMLPatch(RelhaxModpack.Patching.Patch)">
-            <summary>
-            Run an XML patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.Patching.Patcher.RegxPatch(RelhaxModpack.Patching.Patch,System.Int32[])">
-            <summary>
-            Run a regex patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <param name="lines">The lines to patch on the file.</param>
-            <returns>The operation exit code</returns>
-            <remarks>Can be used to "batch patch" an xml or json file. See Database examples.
-            Use -1 to indicate the whole file is being patched. Use 0 to check every line.</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Patching.Patcher.JsonPatch(RelhaxModpack.Patching.Patch)">
-            <summary>
-            Run a Json patch operation
-            </summary>
-            <param name="p">The patch instructions object</param>
-            <returns>The operation exit code</returns>
-        </member>
-        <member name="M:RelhaxModpack.Patching.Patcher.GetXvmFolderName">
-            <summary>
-            Gets the absolute path to the Xvm configuration folder
-            </summary>
-            <returns>The absolute path of the Xvm configuration folder if it exists, otherwise returns "default"</returns>
         </member>
         <member name="T:RelhaxModpack.Settings.AutomationRunnerSettings">
             <summary>
@@ -7541,6 +7311,190 @@
             <summary>
             This code added to correctly implement the disposable pattern.
             </summary>
+        </member>
+        <member name="T:RelhaxModpack.Patching.Patch">
+            <summary>
+            A patch is an instruction object of how to modify a text file. Can be a json, xml, or plain text file
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.TypeRegex1">
+            <summary>
+            One of two string values used for regex type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.TypeRegex2">
+            <summary>
+            One of two string values used for regex type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.TypeXml">
+            <summary>
+            The string value used for xml type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.TypeJson">
+            <summary>
+            The string value used for json type patches
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patch.TypeXvm">
+            <summary>
+            The string value used for xvm type legacy patches
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.Type">
+            <summary>
+            The type of patch, xml or regex (direct text replacement)
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.Mode">
+            <summary>
+            If not regex, the mode that the xml patcher should use.<para/>Examples: add xml node, remove xml node, edit xml node
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.PatchPath">
+            <summary>
+            The starting path to the file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.File">
+            <summary>
+            The path to the file, relative to patchPath
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.CompletePath">
+            <summary>
+            The complete path to the file, saved at parse time
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.Version">
+            <summary>
+            The version of the patch for parsing. Allows for multiple variations. Default to 1
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.Path">
+            <summary>
+            If xml or json, the xml xpath or json jsonpath to the node
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.Lines">
+            <summary>
+            If regex, the optional specific lines in the text file
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.Search">
+            <summary>
+            The node inner text (xml) or regex criteria to search for
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.Replace">
+            <summary>
+            The text to replace the found search text with
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.FollowPath">
+            <summary>
+            For json patches, if it should use the new method of separating the path for getting the xvm references
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.DumpPatchInfoForLog">
+            <summary>
+            Collects all patch information for logging
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.ListboxDisplay">
+            <summary>
+            Gets a listbox style UI element display-ready text
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patch.IsValidForSave">
+            <summary>
+            Gets a value that determines if all required properties are filed out to be saved to a patch file
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patch.GetInvalidPatchesForSave(RelhaxModpack.Patching.Patch[])">
+            <summary>
+            Returns a list of patch objects that are not ready to be written to a patch file
+            </summary>
+            <param name="patchList">The list of patches to check</param>
+            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+            <seealso cref="P:RelhaxModpack.Patching.Patch.IsValidForSave"/>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patch.GetInvalidPatchesForSave(System.Collections.Generic.List{RelhaxModpack.Patching.Patch})">
+            <summary>
+            Returns a list of patch objects that are not ready to be written to a patch file
+            </summary>
+            <param name="patchList">The list of patches to check</param>
+            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+            <seealso cref="P:RelhaxModpack.Patching.Patch.IsValidForSave"/>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patch.GetInvalidPatchesForSave(System.Windows.Controls.ItemCollection)">
+            <summary>
+            Returns a list of patch objects that are not ready to be written to a patch file
+            </summary>
+            <param name="patchList">The list of patches to check</param>
+            <returns>A new list of patches that are not valid to save, or an empty list of all patches are valid</returns>
+            <seealso cref="P:RelhaxModpack.Patching.Patch.IsValidForSave"/>
+        </member>
+        <member name="T:RelhaxModpack.Patching.Patcher">
+            <summary>
+            A class for handling patch operations
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Patching.Patcher.DebugMode">
+            <summary>
+            Gets or sets if the patcher should run in debug mode
+            </summary>
+            <remarks>Debug mode will create additional files as individual steps of the patch process are outputted for debug</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Patching.Patcher.PatchJsonNullEscape">
+            <summary>
+            Provides the ability to insert a 'null' value into json configurations
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.RunPatchFromCommandline(RelhaxModpack.Patching.Patch)">
+            <summary>
+            Runs a patch operation, but first parsing the 'app' and 'versiondir' keywords
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.RunPatch(RelhaxModpack.Patching.Patch)">
+            <summary>
+            Run a patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.XMLPatch(RelhaxModpack.Patching.Patch)">
+            <summary>
+            Run an XML patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.RegxPatch(RelhaxModpack.Patching.Patch,System.Int32[])">
+            <summary>
+            Run a regex patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <param name="lines">The lines to patch on the file.</param>
+            <returns>The operation exit code</returns>
+            <remarks>Can be used to "batch patch" an xml or json file. See Database examples.
+            Use -1 to indicate the whole file is being patched. Use 0 to check every line.</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.JsonPatch(RelhaxModpack.Patching.Patch)">
+            <summary>
+            Run a Json patch operation
+            </summary>
+            <param name="p">The patch instructions object</param>
+            <returns>The operation exit code</returns>
+        </member>
+        <member name="M:RelhaxModpack.Patching.Patcher.GetXvmFolderName">
+            <summary>
+            Gets the absolute path to the Xvm configuration folder
+            </summary>
+            <returns>The absolute path of the Xvm configuration folder if it exists, otherwise returns "default"</returns>
         </member>
         <member name="T:RelhaxModpack.Shortcuts.Shortcut">
             <summary>
