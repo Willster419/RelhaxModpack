@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<audio_mods.xml>
+  <loadBanks>
+    <bank>sound_bank_name</bank>
+  </loadBanks>
+  <events>
+    <event>
+      <name>vo_ally_killed_by_player</name>
+      <mod>simple_sounds_teamkill</mod>
+    </event>
+  </events>
+  <RTPCs>
+    <RTPC>RTPC/volume_slider_name</RTPC>
+  </RTPCs>
+  <random_property>better_value</random_property>
+  <random_property2>value</random_property2>
+  <prop_to_remove>value</prop_to_remove>
+  <prop_to_remove2>remove_me</prop_to_remove2>
+</audio_mods.xml>

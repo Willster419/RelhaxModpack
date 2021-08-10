@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<audio_mods.xml>
+  <loadBanks>
+  </loadBanks>
+  <events>
+  </events>
+  <RTPCs>
+  </RTPCs>
+  <random_property>value</random_property>
+  <random_property2>value</random_property2>
+  <prop_to_remove>value</prop_to_remove>
+  <prop_to_remove2>remove_me</prop_to_remove2>
+</audio_mods.xml>

@@ -1,0 +1,63 @@
+{
+  "nations": [
+    "America"
+  ],
+  "mode": "normal",
+  "ignorelist": [
+    "username",
+    "another_username",
+    "some_tomato_player",
+    "ttest"
+  ],
+  "screensavers": {
+    "starttime": [
+      13,
+      69,
+      222,
+      419,
+      420,
+      421,
+      444,
+      666,
+      6969
+    ]
+  },
+  "screensavers2": {
+    "starttime": [
+      13,
+      69,
+      222,
+      419,
+      420,
+      421,
+      444,
+      666,
+      6969
+    ]
+  },
+  "game_greeting2": "There is no russian bias",
+  "damageLog": {
+    "log": {
+      "moveInBattle": false,
+      "x": 240,
+      "y": -23
+    },
+    "lastHit": {
+      "$ref": {
+        "path": "damageLog.log"
+      },
+      "moveInBattle": true
+    }
+  },
+  "battleLoading": ${"battleLoading.xc":"battleLoading"},
+  "textFields": [
+    ${"damageLog.log.x"}
+  ],
+  "game_greeting": "I really hope the patcher can match this text",
+  "sample_object_array": [
+    {
+      "enable": "sure"
+    }
+  ],
+  "awesome": true
+}

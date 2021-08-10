@@ -1,0 +1,70 @@
+{
+  "nations": [
+    "America"
+  ],
+  "mode": "epic",
+  "ignorelist": [
+    "spaces/urmom",
+    "username",
+    "another_username",
+    "some_tomato_player",
+    "test",
+    "spaces/urmom2"
+  ],
+  "screensavers": {
+    "starttime": [
+      420,
+      420,
+      420,
+      420,
+      420,
+      420,
+      420,
+      420,
+      420
+    ]
+  },
+  "screensavers2": {
+    "starttime": [
+      420,
+      420,
+      420,
+      420,
+      420,
+      420,
+      420,
+      420,
+      420
+    ]
+  },
+  "damageLog": {
+    "log": {
+      "moveInBattle": false,
+      "x": 240,
+      "y": -23
+    },
+    "lastHit": {
+      "$ref": {
+        "path": "damageLog.log"
+      },
+      "moveInBattle": true
+    }
+  },
+  "battleLoading": ${"battleLoading.xc":"battleLoading"},
+  "textFields": [
+    ${"damageLog.log.x"}
+  ],
+  "sample_object_array": [
+    {
+      "enable": "sure"
+    }
+  ],
+  "awesome": true,
+  "memes": {
+    "awesome": true,
+    "dank": true
+  },
+  "memelist": [],
+  "objectname": {},
+  "memeville": "spaces/hangar_premium_v2"
+}

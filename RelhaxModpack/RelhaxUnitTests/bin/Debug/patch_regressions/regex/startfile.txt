@@ -1,0 +1,5 @@
+the patcher should not match this string
+the patcher should match this string
+the patcher should match this string
+the patcher should match this string
+the patcher should match this string
