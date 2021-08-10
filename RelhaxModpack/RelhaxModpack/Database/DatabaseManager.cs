@@ -103,6 +103,11 @@ namespace RelhaxModpack.Database
             return await LoadDatabaseWithOptionsAsync();
         }
 
+        /// <summary>
+        /// Load a test database from the specified location, including the root filename
+        /// </summary>
+        /// <param name="locationToLoadFrom">The path to the root xml file</param>
+        /// <returns>The status enumeration code of the operation</returns>
         public async Task<DatabaseLoadFailCode> LoadDatabaseTestAsync(string locationToLoadFrom)
         {
             //this version of the overloaded method, it's implied that we're loading in test mode
