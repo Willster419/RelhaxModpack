@@ -700,9 +700,6 @@ namespace RelhaxModpack
         #region Installation
         private void InstallModpackButton_Click(object sender, RoutedEventArgs e)
         {
-            //used for getting the last supported wot version for mod selection list
-            string lastSupportedWoTVersion = string.Empty;
-
             //toggle buttons and reset UI
             ResetUI();
             ToggleUIButtons(false);
@@ -987,14 +984,6 @@ namespace RelhaxModpack
                     {
                         Logging.Info("NotifyIfSameDatabase is selected but database distribution is {0}, skipping", ModpackSettings.DatabaseDistroVersion.ToString());
                     }
-
-                    //set the lastSupportedWoTVersion to the last one in the supported_clients.xml (it should be the latest as bottom)
-                    //only needed when database distro is stable
-                    if (supportedVersionsString.Count() > 0)
-                    {
-                        lastSupportedWoTVersion = supportedVersionsString[supportedVersionsString.Count() - 1];
-                        Logging.Debug("LastSupportedWoTVersion: {0}", lastSupportedWoTVersion);
-                    }
                 }
             }
 
@@ -1002,8 +991,6 @@ namespace RelhaxModpack
             modSelectionList = new PackageSelectionList(this.ModpackSettings, this.CommandLineSettings)
             {
                 AutoInstallMode = (sender == null),
-                //get the last parsed from the xml file (should be the latest by default
-                LastSupportedWoTClientVersionFromMainWindow = lastSupportedWoTVersion,
                 WotClientVersionFromMainWindow = this.WoTClientVersion,
                 DatabaseVersionFromMainWindow = this.DatabaseVersion,
                 WoTDirectoryFromMainWindow = this.WoTDirectory

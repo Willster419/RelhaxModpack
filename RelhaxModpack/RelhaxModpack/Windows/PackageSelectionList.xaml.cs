@@ -42,17 +42,17 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// The list of categories
         /// </summary>
-        private List<Category> ParsedCategoryList { get { return databaseManager.ParsedCategoryList; } }
+        public List<Category> ParsedCategoryList { get { return databaseManager.ParsedCategoryList; } }
 
         /// <summary>
         /// The list of global dependencies
         /// </summary>
-        private List<DatabasePackage> GlobalDependencies { get { return databaseManager.GlobalDependencies; } }
+        public List<DatabasePackage> GlobalDependencies { get { return databaseManager.GlobalDependencies; } }
 
         /// <summary>
         /// The list of dependencies
         /// </summary>
-        private List<Dependency> Dependencies { get { return databaseManager.Dependencies; } }
+        public List<Dependency> Dependencies { get { return databaseManager.Dependencies; } }
 
         /// <summary>
         /// The event that a caller can subscribe to wait for when the selection window actually closes, with arguments for the installation
@@ -63,12 +63,6 @@ namespace RelhaxModpack.Windows
         /// Flag to determine if the current installation is started from auto install mode
         /// </summary>
         public bool AutoInstallMode { get; set; } = false;
-
-        /// <summary>
-        /// The latest supported formatted version of WoT, in full version format (e.g. 1.7.0.1) 
-        /// </summary>
-        /// <remarks>This is used for patch days when a user is installing for a WoT version not yet supported</remarks>
-        public string LastSupportedWoTClientVersionFromMainWindow { get; set; } = string.Empty;
 
         public string WotClientVersionFromMainWindow { get; set; }
 
@@ -98,9 +92,15 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Create an instance of the ModSelectionList window
         /// </summary>
-        public PackageSelectionList(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings) : base(modpackSettings)
+        public PackageSelectionList(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings) : this(modpackSettings, commandLineSettings, null)
+        {
+            
+        }
+
+        public PackageSelectionList(ModpackSettings modpackSettings, CommandLineSettings commandLineSettings, DatabaseManager manager) : base(modpackSettings)
         {
             InitializeComponent();
+            databaseManager = manager;
             if (this.CommandLineSettings == null)
                 this.CommandLineSettings = commandLineSettings;
             WindowState = WindowState.Minimized;
@@ -282,7 +282,8 @@ namespace RelhaxModpack.Windows
             };
 
             //load the database
-            databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings) { ManagerInfoZipfile = ((App)Application.Current).ManagerInfoZipfile };
+            if (databaseManager == null)
+                databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings) { ManagerInfoZipfile = ((App)Application.Current).ManagerInfoZipfile };
             await databaseManager.LoadDatabaseAsync();
 
             //check local download cache (files, milliseconds to seconds)
