@@ -30,11 +30,12 @@ namespace RelhaxInstallerUnitTester
         //exists in all methods
         ModpackSettings modpackSettings;
         CommandLineSettings commandLineSettings;
+        SelectionListEventArgs args;
 
         //this technically applies to every test upon initialization, but it's placed here
         //https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2012/ms245572(v=vs.110)
         [AssemblyInitialize]
-        public static async Task Setup(TestContext context)
+        public static async Task Init(TestContext context)
         {
             foreach (string logfile in UnitTestHelper.ListOfLogfilenames)
             {
@@ -45,10 +46,10 @@ namespace RelhaxInstallerUnitTester
             //init the modpack app to load resources required by the unit tested windows
             //https://stackoverflow.com/a/20834469/3128017
             //https://stackoverflow.com/a/39841167/3128017
+
             if (Application.Current == null)
             {
                 new App { ShutdownMode = ShutdownMode.OnExplicitShutdown };
-                (Application.Current as App).InitializeComponent();
             }
 
             //if the log file isn't already open, then create it
@@ -75,7 +76,7 @@ namespace RelhaxInstallerUnitTester
         }
 
         [AssemblyCleanup]
-        public static void CleanupLogging()
+        public static void Cleanup()
         {
             //init all logs if they aren't already init
             foreach (Logfiles logfile in UnitTestHelper.AllLogFiles)
@@ -83,6 +84,8 @@ namespace RelhaxInstallerUnitTester
                 if (!Logging.IsLogDisposed(logfile))
                     Logging.DisposeLogging(logfile);
             }
+
+            Application.Current.Shutdown();
         }
 
         [TestInitialize]
@@ -132,13 +135,12 @@ namespace RelhaxInstallerUnitTester
                     DatabaseVersionFromMainWindow = "TESTING"
                 };
 
-                selectionList.Closed += (sender, e) => selectionList.Dispatcher.InvokeShutdown();
+                selectionList.Closed += (sender, e) => selectionList.Dispatcher.BeginInvokeShutdown(DispatcherPriority.ApplicationIdle);
                 selectionList.WindowState = WindowState.Normal;
                 selectionList.Show();
 
                 //start the windows message pump
                 Dispatcher.Run();
-
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.IsBackground = true;
@@ -154,7 +156,7 @@ namespace RelhaxInstallerUnitTester
             while (selectionList.LoadingUI)
                 await Task.Delay(1000);
 
-            selectionList.OnSelectionListReturn += SelectionList_OnSelectionListReturn;
+            selectionList.OnSelectionListReturn += (sender, e) => args = e;
 
             Logging.Info("Selecting 100 components");
             selectionList.Dispatcher.Invoke(() =>
@@ -175,14 +177,12 @@ namespace RelhaxInstallerUnitTester
                 Button clearSelectionsButton = buttonElement as Button;
                 clearSelectionsButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             });
-        }
-        
-        private void SelectionList_OnSelectionListReturn(object sender, SelectionListEventArgs e)
-        {
-            Assert.IsTrue(e.ContinueInstallation);
-            Assert.IsTrue(e.GlobalDependencies.Count > 0);
-            Assert.IsTrue(e.Dependencies.Count > 0);
-            Assert.IsTrue(e.ParsedCategoryList.Count > 0);
+
+            Assert.IsTrue(args.ContinueInstallation);
+            Assert.IsTrue(args.GlobalDependencies.Count > 0);
+            Assert.IsTrue(args.Dependencies.Count > 0);
+            Assert.IsTrue(args.ParsedCategoryList.Count > 0);
+
         }
     }
 }
