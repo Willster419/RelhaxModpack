@@ -17,11 +17,12 @@ using RelhaxModpack.Utilities;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
 using RelhaxModpack.Utilities.ClassEventArgs;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxInstallerUnitTester
 {
     [TestClass]
-    public class Set01_ModSelectionListTests : UnitTestLogBase
+    public class Set01_ModSelectionListTests
     {
         //declaring these objects as static will allow them to exist throughout the test
         //exists in all methods
@@ -33,6 +34,36 @@ namespace RelhaxInstallerUnitTester
         private static App app = null;
         private static ModpackSettings ModpackSettings = new ModpackSettings();
         private static SettingsParser SettingsParser = new SettingsParser();
+
+        //this technically applies to every test upon initialization, but it's placed here
+        //https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2012/ms245572(v=vs.110)
+        [AssemblyInitialize]
+        public static void SetupLogging(TestContext context)
+        {
+            foreach (string logfile in UnitTestHelper.ListOfLogfilenames)
+            {
+                if (File.Exists(logfile))
+                    File.Delete(logfile);
+            }
+
+            //if the log file isn't already open, then create it
+            if (!Logging.IsLogOpen(Logfiles.Application))
+                //init with the default name (pass in null to get default), or if no default, the name of the enumeration and ".log"
+                //throw exception if it fails to create the log file
+                if (!Logging.Init(Logfiles.Application, true, false))
+                    throw new BadMemeException("Failed to create a log file");
+        }
+
+        [AssemblyCleanup]
+        public static void CleanupLogging()
+        {
+            //init all logs if they aren't already init
+            foreach (Logfiles logfile in UnitTestHelper.AllLogFiles)
+            {
+                if (!Logging.IsLogDisposed(logfile))
+                    Logging.DisposeLogging(logfile);
+            }
+        }
 
         [TestMethod]
         public void Test01_LoadModpackSettingsTest()
