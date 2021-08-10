@@ -16,7 +16,7 @@ using RelhaxModpack.Automation.Tasks;
 namespace RelhaxUnitTests
 {
     [TestClass]
-    public class Set05_AutomationUnitTests : UnitTestLogBase
+    public class Set05_AutomationUnitTests
     {
         AutomationRunnerSettings AutomationRunnerSettings = new AutomationRunnerSettings()
         {
@@ -46,14 +46,11 @@ namespace RelhaxUnitTests
 
         CancellationToken nullToken;
 
-        /*
-         * Kept in case later it's needed for test initialization
-        [TestInitialize]
-        public void SetDefaultValues()
+        [ClassInitialize]
+        public static void SetDefaultValues(TestContext context)
         {
-            
+            Logging.RedirectLogOutput(Logfiles.AutomationRunner, Logfiles.Application);
         }
-        */
 
         [TestMethod]
         public async Task Test01_SequencerPreRunSetupTest()

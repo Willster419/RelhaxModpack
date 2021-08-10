@@ -15,7 +15,7 @@ using RelhaxModpack.Xml;
 namespace RelhaxUnitTests
 {
     [TestClass]
-    public class Set04_DatabaseUnitTests : UnitTestLogBase
+    public class Set04_DatabaseUnitTests
     {
         private static string LatestSupportedWoTVersion = string.Empty;
         private static List<DatabasePackage> GlobalDependenciesForSave = new List<DatabasePackage>();

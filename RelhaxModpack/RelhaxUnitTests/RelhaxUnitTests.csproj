@@ -70,7 +70,6 @@
     <Compile Include="Set04_DatabaseUnitTests.cs" />
     <Compile Include="Set05_AutomationUnitTests.cs" />
     <Compile Include="Set06_PatchingUnitTests.cs" />
-    <Compile Include="UnitTestLogBase.cs" />
     <Compile Include="UnitTestHelper.cs" />
   </ItemGroup>
   <ItemGroup>

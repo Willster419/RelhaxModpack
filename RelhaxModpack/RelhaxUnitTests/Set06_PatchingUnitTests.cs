@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace RelhaxUnitTests
 {
     [TestClass]
-    public class Set06_PatchingUnitTests : UnitTestLogBase
+    public class Set06_PatchingUnitTests
     {
         [TestMethod]
         public void Test01_RegexRegressionTesting()

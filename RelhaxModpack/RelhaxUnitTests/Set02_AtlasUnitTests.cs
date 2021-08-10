@@ -33,7 +33,7 @@ namespace RelhaxUnitTests
     }
 
     [TestClass]
-    public class Set02_AtlasUnitTests : UnitTestLogBase
+    public class Set02_AtlasUnitTests
     {
         List<PackerSettings> PackerSettingsToTest = new List<PackerSettings>()
         {

@@ -19,10 +19,20 @@ namespace RelhaxUnitTests
             Logfiles.Application,
             Logfiles.Editor,
             Logfiles.PatchDesigner,
-            Logfiles.Updater
+            Logfiles.Updater,
+            Logfiles.AutomationRunner
         };
 
         public static Logfiles[] AllLogFiles = LogFilesWithPresetFilenames.Concat(new Logfiles[] { Logfiles.Installer, Logfiles.Uninstaller }).ToArray();
+
+        public static string[] ListOfLogfilenames = new string[]
+        {
+            Logging.ApplicationLogFilename,
+            RelhaxModpack.Windows.DatabaseEditor.LoggingFilename,
+            RelhaxModpack.Windows.PatchDesigner.LoggingFilename,
+            RelhaxModpack.Windows.DatabaseAutomationRunner.LoggingFilename,
+            RelhaxModpack.Windows.ModpackToolbox.LoggingFilename
+        };
 
         /// <summary>
         /// The Startup root path of the application. Does not include the application name
@@ -47,7 +57,7 @@ namespace RelhaxUnitTests
         /// <summary>
         /// The string time format for log entries
         /// </summary>
-        public const string UnittestLogfileTimestamp = "yyyy-MM-dd_HH-mm-ss";
+        public const string UnitTestLogfileTimestamp = "yyyy-MM-dd_HH-mm-ss";
 
         /// <summary>
         /// Determines if the unit test should delete the log file after. Useful for if rapid testing/debugging.
@@ -71,7 +81,7 @@ namespace RelhaxUnitTests
             //the output folders should look like the following:
             //<appPath>\LogOutput\UnitTestClass\UnitTestMethod\yyyy-mm-dd_HH-mm-ss.log
             string logfilePath = Path.Combine(ApplicationProjectRoot, LogOutputRootFolder, className, methodName);
-            logfilePath = Path.Combine(logfilePath, string.Format("{0}.log", DateTime.Now.ToString(UnittestLogfileTimestamp)));
+            logfilePath = Path.Combine(logfilePath, string.Format("{0}.log", DateTime.Now.ToString(UnitTestLogfileTimestamp)));
 
             //create folder. it technically shouldn't exist yet (the whole time moving forward thing)
             if (!Directory.Exists(Path.GetDirectoryName(logfilePath)))
