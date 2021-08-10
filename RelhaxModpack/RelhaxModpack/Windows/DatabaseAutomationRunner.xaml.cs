@@ -146,13 +146,9 @@ namespace RelhaxModpack.Windows
             Logging.Info("Loading sequences from root document");
             await AutomationSequencer.LoadRootDocumentAsync();
 
-            //load the available global macros
-            Logging.Info("Loading global macros");
-            await AutomationSequencer.LoadGlobalMacrosAsync();
-
             //parse the document now that it's loaded
             Logging.Info("Parsing sequences from root document");
-            await AutomationSequencer.ParseRootDocumentAsync();
+            AutomationSequencer.ParseRootDocumentAsync();
 
             //load the sequences into the listbox view
             SequencesAvailableListBox.Items.Clear();
@@ -533,10 +529,16 @@ namespace RelhaxModpack.Windows
 
             switch (sequenceRunResult)
             {
-                case SequencerExitCode.Errors:
+                case SequencerExitCode.LoadGlobalMacrosFail:
+                case SequencerExitCode.LoadApplicationMacrosFail:
+                case SequencerExitCode.LoadLocalMacrosFail:
                 case SequencerExitCode.LinkPackagesToAutomationSequencesFail:
                 case SequencerExitCode.LoadAutomationSequencesXmlToRunAsyncFail:
                 case SequencerExitCode.ParseAutomationSequencesPreRunFail:
+                    Logging.Info("Sequencer run SETUP ERROR ({0})", sequenceRunResult.ToString());
+                    break;
+
+                case SequencerExitCode.Errors:
                     Logging.Info("Sequencer run FAILURE");
                     break;
 

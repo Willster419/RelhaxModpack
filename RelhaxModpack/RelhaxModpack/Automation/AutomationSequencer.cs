@@ -141,31 +141,7 @@ namespace RelhaxModpack.Automation
             return RootDocument != null;
         }
 
-        public async Task<bool> LoadGlobalMacrosAsync()
-        {
-            if (RootDocument == null)
-                throw new NullReferenceException();
-            if (AutomationRunnerSettings == null)
-                throw new NullReferenceException();
-
-            //get the url to download from
-            string globalMacrosUrlFile = XmlUtils.GetXmlStringFromXPath(RootDocument, "/root.xml/GlobalMacros/@path");
-            if (AutomationRunnerSettings.UseLocalRunnerDatabase)
-            {
-                string globalMacrosUrl = Path.Combine(AutomationRepoPathEscaped, globalMacrosUrlFile);
-                GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosUrl, XmlLoadType.FromFile);
-            }
-            else
-            {
-                string globalMacrosUrl = string.Format("{0}{1}", AutomationRepoPathEscaped, globalMacrosUrlFile);
-                string globalMacrosXml = await WebClient.DownloadStringTaskAsync(globalMacrosUrl);
-                GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosXml, XmlLoadType.FromString);
-            }
-
-            return GlobalMacrosDocument != null;
-        }
-
-        public async Task<bool> ParseRootDocumentAsync()
+        public bool ParseRootDocumentAsync()
         {
             if (RootDocument == null)
                 throw new NullReferenceException();
@@ -175,6 +151,8 @@ namespace RelhaxModpack.Automation
             Logging.AutomationRunner(LogOptions.MethodName, "Checking root document for to build automation sequences", LogLevel.Info);
 
             XmlNodeList sequencesXml = XmlUtils.GetXmlNodesFromXPath(RootDocument, "//root.xml/AutomationSequence");
+            if (sequencesXml == null || sequencesXml.Count == 0)
+                return false;
             AutomationSequences.Clear();
 
             foreach (XmlElement result in sequencesXml)
@@ -220,9 +198,13 @@ namespace RelhaxModpack.Automation
             if (sequencesToRun.Count == 0)
                 throw new BadMemeException("packagesToRun must have at least one package to run automation on");
 
-            Logging.AutomationRunner("Linking database packages for each sequence");
+            Logging.Info("Linking database packages for each sequence");
             if (!LinkPackagesToAutomationSequences(sequencesToRun))
                 return SequencerExitCode.LinkPackagesToAutomationSequencesFail;
+
+            Logging.Info("Downloading xml for global macros");
+            if (!await LoadGlobalMacrosAsync())
+                return SequencerExitCode.LoadGlobalMacrosFail;
 
             Logging.Info("Downloading xml for each sequence");
             if (!await LoadAutomationSequencesXmlToRunAsync(sequencesToRun))
@@ -260,6 +242,30 @@ namespace RelhaxModpack.Automation
             }
 
             return true;
+        }
+
+        private async Task<bool> LoadGlobalMacrosAsync()
+        {
+            if (RootDocument == null)
+                throw new NullReferenceException();
+            if (AutomationRunnerSettings == null)
+                throw new NullReferenceException();
+
+            //get the url to download from
+            string globalMacrosUrlFile = XmlUtils.GetXmlStringFromXPath(RootDocument, "/root.xml/GlobalMacros/@path");
+            if (AutomationRunnerSettings.UseLocalRunnerDatabase)
+            {
+                string globalMacrosUrl = Path.Combine(AutomationRepoPathEscaped, globalMacrosUrlFile);
+                GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosUrl, XmlLoadType.FromFile);
+            }
+            else
+            {
+                string globalMacrosUrl = string.Format("{0}{1}", AutomationRepoPathEscaped, globalMacrosUrlFile);
+                string globalMacrosXml = await WebClient.DownloadStringTaskAsync(globalMacrosUrl);
+                GlobalMacrosDocument = XmlUtils.LoadXmlDocument(globalMacrosXml, XmlLoadType.FromString);
+            }
+
+            return GlobalMacrosDocument != null;
         }
 
         private async Task<bool> LoadAutomationSequencesXmlToRunAsync(List<AutomationSequence> sequencesToRun)
@@ -305,21 +311,25 @@ namespace RelhaxModpack.Automation
             Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Running automation sequencer");
             NumErrors = 0;
 
+            SequencerExitCode exitCode;
             foreach (AutomationSequence sequence in sequencesToRun)
             {
                 RunningSequence = sequence;
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Preparing macro lists for sequence run: {0}", sequence.ComponentInternalName);
 
+                //handling macros (application, global, local)
                 ResetApplicationMacros(sequence);
-                ParseGlobalMacros();
-                sequence.ParseSequenceMacros();
+                if (!ParseGlobalMacros())
+                    return SequencerExitCode.LoadGlobalMacrosFail;
+                if (!sequence.ParseSequenceMacros())
+                    return SequencerExitCode.LoadLocalMacrosFail;
 
+                //handling if dumping macros and environment vars to disk
                 if (AutomationRunnerSettings.DumpParsedMacrosPerSequenceRun)
                 {
                     DumpApplicationMacros();
                     DumpGlobalMacros();
                 }
-
                 if (AutomationRunnerSettings.DumpShellEnvironmentVarsPerSequenceRun)
                 {
                     DumpShellEnvironmentVariables();
@@ -327,7 +337,7 @@ namespace RelhaxModpack.Automation
 
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Running sequence: {0}", sequence.ComponentInternalName);
                 await sequence.RunTasksAsync();
-                SequencerExitCode exitCode = sequence.ExitCode;
+                exitCode = sequence.ExitCode;
                 Logging.Info("----------------------- SEQUENCE RESULTS -----------------------");
                 switch (exitCode)
                 {
@@ -395,15 +405,18 @@ namespace RelhaxModpack.Automation
             XmlElement result = XmlUtils.GetXmlNodeFromXPath(GlobalMacrosDocument, "/GlobalMacros") as XmlElement;
             XElement globalMacrosXmlHolder = XElement.Parse(result.OuterXml);
             PropertyInfo listPropertyInfo = this.GetType().GetProperty(nameof(GlobalMacros));
+
             try
             {
-                CommonUtils.SetListEntries(this, listPropertyInfo, globalMacrosXmlHolder.Elements());
+                if (!CommonUtils.SetListEntries(this, listPropertyInfo, globalMacrosXmlHolder.Elements()))
+                    return false;
             }
             catch (Exception ex)
             {
                 Logging.AutomationRunner(ex.ToString(), LogLevel.Exception);
                 return false;
             }
+
             foreach(AutomationMacro macro in GlobalMacros)
             {
                 macro.MacroType = MacroType.Global;

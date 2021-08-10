@@ -19,6 +19,12 @@ namespace RelhaxModpack.Utilities.Enums
 
         ParseAutomationSequencesPreRunFail,
 
+        LoadGlobalMacrosFail,
+
+        LoadApplicationMacrosFail,
+
+        LoadLocalMacrosFail,
+
         Errors,
 
         NoErrors,
