@@ -17,6 +17,8 @@ namespace RelhaxModpack.Patching
     /// the results. Results are logged to a new logfile each time a regression run is started</remarks>
     public class PatchRegression : IDisposable
     {
+        public const string PatchLogFolder = "patch_regressions";
+
         private Logfile RegressionLogfile;
         private List<PatchUnitTest> UnitTests;
         private int NumPassed = 0;
@@ -42,32 +44,32 @@ namespace RelhaxModpack.Patching
                     RegressionTypeString = "json";
                     RegressionExtension = string.Format(".{0}",RegressionTypeString);
                     Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
-                    RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
-                    logFilename = Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
+                    RegressionFolderPath = Path.Combine(PatchLogFolder, RegressionTypeString);
+                    logFilename = Path.Combine(PatchLogFolder, "logs", string.Format("{0}_{1}{2}", RegressionTypeString, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
                     RegressionLogfile = new Logfile(logFilename, Logging.ApplicationLogfileTimestamp, true);
                     break;
                 case PatchRegressionTypes.regex:
                     RegressionTypeString = "regex";
                     RegressionExtension = string.Format(".{0}", "txt");
                     Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
-                    RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
-                    logFilename = Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
+                    RegressionFolderPath = Path.Combine(PatchLogFolder, RegressionTypeString);
+                    logFilename = Path.Combine(PatchLogFolder, "logs", string.Format("{0}_{1}{2}", RegressionTypeString, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
                     RegressionLogfile = new Logfile(logFilename, Logging.ApplicationLogfileTimestamp, true);
                     break;
                 case PatchRegressionTypes.xml:
                     RegressionTypeString = "xml";
                     RegressionExtension = string.Format(".{0}", RegressionTypeString);
                     Startfile = string.Format("{0}{1}", Startfile, RegressionExtension);
-                    RegressionFolderPath = Path.Combine("patch_regressions", RegressionTypeString);
-                    logFilename = Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", RegressionTypeString, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
+                    RegressionFolderPath = Path.Combine(PatchLogFolder, RegressionTypeString);
+                    logFilename = Path.Combine(PatchLogFolder, "logs", string.Format("{0}_{1}{2}", RegressionTypeString, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
                     RegressionLogfile = new Logfile(logFilename, Logging.ApplicationLogfileTimestamp, true);
                     break;
                 case PatchRegressionTypes.followPath:
                     RegressionTypeString = "json";
                     RegressionExtension = string.Format(".{0}", "xc");
                     Startfile = string.Format("{0}{1}", @"@xvm", RegressionExtension);
-                    RegressionFolderPath = Path.Combine("patch_regressions", "followPath");
-                    logFilename = Path.Combine("patch_regressions", "logs", string.Format("{0}_{1}{2}", "followPath", DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
+                    RegressionFolderPath = Path.Combine(PatchLogFolder, "followPath");
+                    logFilename = Path.Combine(PatchLogFolder, "logs", string.Format("{0}_{1}{2}", "followPath", DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), ".log"));
                     RegressionLogfile = new Logfile(logFilename, Logging.ApplicationLogfileTimestamp, true);
                     break;
             }
@@ -87,7 +89,12 @@ namespace RelhaxModpack.Patching
                 File.Delete(RegressionLogfile.Filepath);
             }
 
-            if(!RegressionLogfile.Init(true))
+            //make sure the path to the file exists
+            string logfilePath = Path.GetDirectoryName(RegressionLogfile.Filepath);
+            if (!Directory.Exists(logfilePath))
+                Directory.CreateDirectory(logfilePath);
+
+            if (!RegressionLogfile.Init(true))
             {
                 Logging.Error("failed to initialize logfile");
                 return false;
