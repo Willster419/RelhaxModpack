@@ -1,3 +1,19 @@
+# Beta Application version 1.3.3.3 (2021-08-10)
+https://www.virustotal.com/gui/file-analysis/M2YyODIzMjY5NjQ5N2ZhYWNmODYwM2ZlYjA5Zjg2M2M6MTYyODU5MTYzMw==/detection
+
+- Fixed issues with how logging was handled between the editor, patch designer and the automation runner, in terns of redirection and re-initialization.
+- Class structure improvements for windows that are custom features like the editor or patch designer. Also synchronized how the logging was handled between all of them.
+- Fixed the automation tasks DirectoryDeleteTask and DirectoryCopyTask, and enabled them to have similar features to DirectorySearchTask. In other words, they all take the same arguments and behave similar.
+- Updated all unit tests to be working with the updated code base and passing.
+- Updated/finished the automated installation unit test for future database self-checking and reporting.
+- Changed running some automation code to be only done when the automation sequence(s) are actually run.
+- Improved error code resolution for automation sequencer errors.
+- Fixed bugs with file utility methods ProcessEmptyDirectories(), FileSearch, added file utility method DirectorySearch.
+- Fixed optimization issues with the `Default` uninstall method.
+- Added translation entries and updated translations from contributers.
+- Reduce log spam in the automation runner.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Application version 1.3.3.0 (2021-07-25)
 https://www.virustotal.com/gui/file-analysis/YWQzNDAxN2E4NThhODMwNWJhZjcxMDYwNjU0ZWQ2Y2I6MTYyNzI1NTUyMA==/detection
 
