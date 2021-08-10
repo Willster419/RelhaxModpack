@@ -31,6 +31,7 @@ namespace RelhaxInstallerUnitTester
         ModpackSettings modpackSettings;
         CommandLineSettings commandLineSettings;
         SelectionListEventArgs args;
+        DatabaseManager databaseManager;
 
         //this technically applies to every test upon initialization, but it's placed here
         //https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2012/ms245572(v=vs.110)
@@ -93,7 +94,7 @@ namespace RelhaxInstallerUnitTester
         {
             modpackSettings = new ModpackSettings()
             {
-                DatabaseDistroVersion = RelhaxModpack.Utilities.Enums.DatabaseVersions.Beta,
+                DatabaseDistroVersion = DatabaseVersions.Beta,
                 SaveLastSelection = true
             };
 
@@ -101,6 +102,8 @@ namespace RelhaxInstallerUnitTester
             {
 
             };
+
+            databaseManager = new DatabaseManager(modpackSettings, commandLineSettings) { ManagerInfoZipfile = ((App)RelhaxModpack.App.Current).ManagerInfoZipfile };
         }
         
         [TestMethod]
@@ -115,7 +118,7 @@ namespace RelhaxInstallerUnitTester
             //https://www.c-sharpcorner.com/uploadfile/suchit_84/creating-wpf-windows-on-dedicated-threads/
             Thread thread = new Thread(() =>
             {
-                selectionList = new PackageSelectionList(modpackSettings, commandLineSettings, new DatabaseManager(modpackSettings, commandLineSettings) { ManagerInfoZipfile = ((App)RelhaxModpack.App.Current).ManagerInfoZipfile })
+                selectionList = new PackageSelectionList(modpackSettings, commandLineSettings, databaseManager)
                 {
                     ApplyColorSettings = false, //not cross-thread safe
                     ApplyScaling = false,
@@ -161,13 +164,14 @@ namespace RelhaxInstallerUnitTester
             Logging.Info("Selecting 100 components");
             selectionList.Dispatcher.Invoke(() =>
             {
-                List<SelectablePackage> flatList = DatabaseUtils.GetFlatSelectablePackageList(selectionList.ParsedCategoryList);
+                List<SelectablePackage> flatListRandomSelection = DatabaseUtils.GetFlatSelectablePackageList(selectionList.ParsedCategoryList);
+                flatListRandomSelection = flatListRandomSelection.FindAll(package => package.Enabled);
                 Random random = new Random();
                 for (int i = 0; i < 100; i++)
                 {
-                    int selectIndex = random.Next(0, flatList.Count);
-                    SelectablePackage package = flatList[selectIndex];
-                    Logging.Info(string.Format("Index {0} selects package {1}", selectIndex, package.PackageName));
+                    int selectIndex = random.Next(0, flatListRandomSelection.Count);
+                    SelectablePackage package = flatListRandomSelection[selectIndex];
+                    Logging.Info("Index {0} selects package {1}", selectIndex, package.PackageName);
                     package.Checked = true;
                 }
 
@@ -178,11 +182,95 @@ namespace RelhaxInstallerUnitTester
                 clearSelectionsButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             });
 
+            //run some base tests on the return args
             Assert.IsTrue(args.ContinueInstallation);
             Assert.IsTrue(args.GlobalDependencies.Count > 0);
             Assert.IsTrue(args.Dependencies.Count > 0);
             Assert.IsTrue(args.ParsedCategoryList.Count > 0);
 
+            //below this message is copy-modify-paste from the MainWindow's install and OnBeginInstall methods. Some of this should be moved into some sort of re-usable implementation. TODO
+            //setup for install
+            string wotExeFilepath = RegistryUtils.AutoFindWoTDirectoryFirst();
+            string wotExeFolderpath = Path.GetDirectoryName(wotExeFilepath);
+
+            //get version folders to install as
+            string versionXml = Path.Combine(wotExeFolderpath, ApplicationConstants.WoTVersionXml);
+            string versionTemp = XmlUtils.GetXmlStringFromXPath(versionXml, ApplicationConstants.WoTVersionXmlXpath);
+            string WoTClientVersion = versionTemp.Split('#')[0].Trim().Substring(2).Trim();
+            Logging.Info("Detected client version: {0}", WoTClientVersion);
+
+            //build macro hash for install
+            MacroUtils.BuildFilepathMacroList(WoTClientVersion, databaseManager.WoTOnlineFolderVersion, wotExeFolderpath);
+
+            //perform dependency calculations
+            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(null, null, selectionList.ParsedCategoryList);
+            List<SelectablePackage> flatListSelect = DatabaseUtils.GetFlatSelectablePackageList(selectionList.ParsedCategoryList);
+            List<Dependency> dependneciesToInstall = new List<Dependency>(DatabaseUtils.CalculateDependencies(selectionList.Dependencies, selectionList.ParsedCategoryList, false, false));
+
+            //create install list
+            List<DatabasePackage> packagesToInstall = new List<DatabasePackage>();
+            packagesToInstall.AddRange(selectionList.GlobalDependencies.FindAll(globalDep => globalDep.Enabled && !string.IsNullOrWhiteSpace(globalDep.ZipFile)));
+            packagesToInstall.AddRange(dependneciesToInstall.FindAll(dep => dep.Enabled && !string.IsNullOrWhiteSpace(dep.ZipFile)));
+            List<SelectablePackage> selectablePackagesToInstall = flatListSelect.FindAll(fl => fl.Enabled && fl.Checked && !string.IsNullOrWhiteSpace(fl.ZipFile));
+            packagesToInstall.AddRange(selectablePackagesToInstall);
+            List<SelectablePackage> userModsToInstall = args.UserMods.FindAll(mod => mod.Checked);
+
+            //while we're at it let's make a list of packages that need to be downloaded
+            List<DatabasePackage> packagesToDownload = packagesToInstall.FindAll(pack => pack.DownloadFlag);
+
+            //and check if we need to actually install anything
+            if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
+            {
+                Assert.Fail("No packages to install");
+            }
+
+            //perform list install order calculations
+            List<DatabasePackage>[] orderedPackagesToInstall = DatabaseUtils.CreateOrderedInstallList(packagesToInstall);
+
+            //first, if we have downloads to do, then start processing them
+            CancellationToken nullToken;
+            if (packagesToDownload.Count > 0)
+            {
+                DownloadManager downloadManager = new DownloadManager()
+                {
+                    CancellationToken = nullToken,
+                    RetryCount = 3,
+                    DownloadLocationBase = ApplicationConstants.RelhaxDownloadsFolderPath,
+                    UrlBase = ApplicationConstants.DownloadMirrors[selectionList.ModpackSettings.DownloadMirror].Replace("{onlineFolder}", databaseManager.WoTOnlineFolderVersion)
+                };
+
+                Logging.Info("Download while install = false and packages to download, processing downloads with await");
+                Progress<RelhaxDownloadProgress> downloadProgress = new Progress<RelhaxDownloadProgress>();
+                downloadManager.Progress = downloadProgress;
+                await downloadManager.DownloadPackagesAsync(packagesToDownload);
+                downloadManager.Dispose();
+            }
+            else
+                Logging.Info("No packages to download, continue");
+
+            InstallEngine installEngine = new InstallEngine(selectionList.ModpackSettings, selectionList.CommandLineSettings)
+            {
+                FlatListSelectablePackages = flatListSelect,
+                OrderedPackagesToInstall = orderedPackagesToInstall,
+                PackagesToInstall = packagesToInstall,
+                ParsedCategoryList = args.ParsedCategoryList,
+                Dependencies = args.Dependencies,
+                GlobalDependencies = args.GlobalDependencies,
+                UserPackagesToInstall = userModsToInstall,
+                CancellationToken = nullToken,
+                DownloadingPackages = (packagesToDownload.Count > 0),
+                DisableTriggersForInstall = true,
+                DatabaseVersion = "TESTING",
+                WoTDirectory = wotExeFolderpath,
+                WoTClientVersion = WoTClientVersion
+            };
+
+            Progress<RelhaxInstallerProgress> progress = new Progress<RelhaxInstallerProgress>();
+            RelhaxInstallFinishedEventArgs results = await installEngine.RunInstallationAsync(progress);
+            Logging.Debug("Installation has finished");
+            Assert.IsTrue(results.ExitCode == InstallerExitCodes.Success);
+            installEngine.Dispose();
+            installEngine = null;
         }
     }
 }
