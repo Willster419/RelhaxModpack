@@ -13,45 +13,45 @@ namespace RelhaxUnitTests
         [TestMethod]
         public void Test01_RegexRegressionTesting()
         {
-            Logging.Patcher("Regex regressions start");
+            Logging.Info("Regex regressions start");
             using (PatchRegression regression = new PatchRegression(PatchRegressionTypes.regex, BuildRegexUnittests()))
             {
                 Assert.IsTrue(regression.RunRegressions());
             }
-            Logging.Patcher("Regex regressions end");
+            Logging.Info("Regex regressions end");
         }
 
         [TestMethod]
         public void Test02_XmlRegressionTesting()
         {
-            Logging.Patcher("Xml regressions start");
+            Logging.Info("Xml regressions start");
             using (PatchRegression regression = new PatchRegression(PatchRegressionTypes.xml, BuildXmlUnittests()))
             {
                 Assert.IsTrue(regression.RunRegressions());
             }
-            Logging.Patcher("Xml regressions end");
+            Logging.Info("Xml regressions end");
         }
 
         [TestMethod]
         public void Test03_JsonRegressionTesting()
         {
-            Logging.Patcher("Json regressions start");
+            Logging.Info("Json regressions start");
             using (PatchRegression regression = new PatchRegression(PatchRegressionTypes.json, BuildJsonUnittests()))
             {
                 Assert.IsTrue(regression.RunRegressions());
             }
-            Logging.Patcher("Json regressions end");
+            Logging.Info("Json regressions end");
         }
 
         [TestMethod]
         public void Test04_FollowPathRegressionTesting()
         {
-            Logging.Patcher("FollowPath regressions start");
+            Logging.Info("FollowPath regressions start");
             using (PatchRegression regression = new PatchRegression(PatchRegressionTypes.followPath, BuildFollowPathUnittests()))
             {
                 Assert.IsTrue(regression.RunRegressions());
             }
-            Logging.Patcher("FollowPath regressions end");
+            Logging.Info("FollowPath regressions end");
         }
 
         #region Json regressions
