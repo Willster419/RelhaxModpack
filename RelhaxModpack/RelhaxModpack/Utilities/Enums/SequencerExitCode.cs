@@ -25,6 +25,8 @@ namespace RelhaxModpack.Utilities.Enums
 
         LoadLocalMacrosFail,
 
+        ResetApplicationMacrosFail,
+
         Errors,
 
         NoErrors,

@@ -535,6 +535,7 @@ namespace RelhaxModpack.Windows
                 case SequencerExitCode.LinkPackagesToAutomationSequencesFail:
                 case SequencerExitCode.LoadAutomationSequencesXmlToRunAsyncFail:
                 case SequencerExitCode.ParseAutomationSequencesPreRunFail:
+                case SequencerExitCode.ResetApplicationMacrosFail:
                     Logging.Info("Sequencer run SETUP ERROR ({0})", sequenceRunResult.ToString());
                     break;
 

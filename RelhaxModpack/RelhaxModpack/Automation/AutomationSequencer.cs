@@ -318,7 +318,8 @@ namespace RelhaxModpack.Automation
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Preparing macro lists for sequence run: {0}", sequence.ComponentInternalName);
 
                 //handling macros (application, global, local)
-                ResetApplicationMacros(sequence);
+                if (!ResetApplicationMacros(sequence))
+                    return SequencerExitCode.ResetApplicationMacrosFail;
                 if (!ParseGlobalMacros())
                     return SequencerExitCode.LoadGlobalMacrosFail;
                 if (!sequence.ParseSequenceMacros())
@@ -372,9 +373,22 @@ namespace RelhaxModpack.Automation
                 return SequencerExitCode.Errors;
         }
 
-        private void ResetApplicationMacros(AutomationSequence sequence)
+        private bool ResetApplicationMacros(AutomationSequence sequence)
         {
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.ClassName, "Resetting application macros");
+
+            //check that required automation settings are set for being able to reset macaros
+            if (string.IsNullOrEmpty(AutomationRunnerSettings.WoTClientInstallLocation))
+            {
+                Logging.Error("WoTClientInstallLocation is not set in settings tab!");
+                return false;
+            }
+            if (!File.Exists(AutomationRunnerSettings.WoTClientInstallLocation))
+            {
+                Logging.Error("WoTClientInstallLocation file does not exist!");
+                return false;
+            }
+
             DatabasePackage package = sequence.Package;
             SelectablePackage selectablePackage = package as SelectablePackage;
             ApplicationMacros.Clear();
@@ -396,6 +410,7 @@ namespace RelhaxModpack.Automation
             ApplicationMacros.Add(new AutomationMacro() { Name = "workDirectory", Value = string.Format("{0}\\{1}", ApplicationConstants.RelhaxTempFolderPath, package.PackageName), MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "automationRepoRoot", Value = AutomationRepoPathEscaped, MacroType = MacroType.ApplicationDefined });
             ApplicationMacros.Add(new AutomationMacro() { Name = "clientPath", Value = Path.GetDirectoryName(AutomationRunnerSettings.WoTClientInstallLocation) });
+            return true;
         }
 
         private bool ParseGlobalMacros()
