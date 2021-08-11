@@ -14,11 +14,13 @@ namespace RelhaxModpack.Automation.Tasks
 
         public string Length { get; set; } = "-1";
 
-        protected int length { get; set; } = -1;
+        protected int startIndex;
 
-        protected int startIndex { get; set; }
+        protected int length = -1;
 
         protected string stringWithValue { get; set; } = string.Empty;
+
+        protected bool taskCompleted = false;
 
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
@@ -62,7 +64,6 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
             }
 
-            //split it and if debug mode, output the string split values
             if (length > 0)
             {
                 if (startIndex + length > stringWithValue.Length)
@@ -70,7 +71,16 @@ namespace RelhaxModpack.Automation.Tasks
                     Logging.Error("The requested length of the substring {0} is greater then the length of the original string {1}", startIndex + length, stringWithValue.Length);
                     return;
                 }
-                stringReturnValue = stringWithValue.Substring(startIndex, length);
+
+                try
+                {
+                    stringReturnValue = stringWithValue.Substring(startIndex, length);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    Logging.Error(ex.Message);
+                    return;
+                }
             }
             else
             {
@@ -79,16 +89,29 @@ namespace RelhaxModpack.Automation.Tasks
                     Logging.Error("The requested start index {0} is greater then or equal to the length of the original string {1}", startIndex, stringWithValue.Length);
                     return;
                 }
-                stringReturnValue = stringReturnValue.Substring(startIndex);
+
+                try
+                {
+                    stringReturnValue = stringWithValue.Substring(startIndex);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    Logging.Error(ex.Message);
+                    return;
+                }
             }
 
             Logging.Info("Creating macro, Name: {0}, Value: {1}", MacroName, stringReturnValue);
             Macros.Add(new AutomationMacro() { MacroType = MacroType.Local, Name = MacroName, Value = stringReturnValue });
+            taskCompleted = true;
         }
 
         public override void ProcessTaskResults()
         {
             base.ProcessTaskResults();
+
+            if (ProcessTaskResultFalse(taskCompleted, "The task failed to complete, check above error messages"))
+                return;
         }
         #endregion
     }
