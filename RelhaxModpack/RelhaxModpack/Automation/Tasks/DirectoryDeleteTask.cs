@@ -17,7 +17,13 @@ namespace RelhaxModpack.Automation.Tasks
 
         public override string Command { get { return TaskCommandName; } }
 
+        public string IncludeRootInSearch { get; set; }
+
         protected bool good = false;
+
+        protected bool includeRootInSearch;
+
+        protected bool ableToParseIncludeRootInSearch = false;
 
         protected bool reportingProgress { get { return DatabaseAutomationRunner != null; } }
 
@@ -30,7 +36,7 @@ namespace RelhaxModpack.Automation.Tasks
         #region Xml Serialization
         public override string[] PropertiesForSerializationAttributes()
         {
-            return base.PropertiesForSerializationAttributes();
+            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(IncludeRootInSearch) }).ToArray();
         }
         #endregion
 
@@ -38,11 +44,25 @@ namespace RelhaxModpack.Automation.Tasks
         public override void ProcessMacros()
         {
             base.ProcessMacros();
+
+            IncludeRootInSearch = ProcessMacro(nameof(IncludeRootInSearch), IncludeRootInSearch);
+
+            if (bool.TryParse(IncludeRootInSearch, out bool result))
+            {
+                ableToParseIncludeRootInSearch = true;
+                includeRootInSearch = result;
+            }
         }
 
         public override void ValidateCommands()
         {
             base.ValidateCommands();
+
+            if (ValidateCommandStringNullEmptyTrue(nameof(IncludeRootInSearch), IncludeRootInSearch))
+                return;
+
+            if (ValidateCommandFalse(ableToParseIncludeRootInSearch, string.Format("Unable to parse the arg IncludeRootInSearch from given string {0}", IncludeRootInSearch)))
+                return;
         }
 
         public async override Task RunTask()
@@ -121,6 +141,11 @@ namespace RelhaxModpack.Automation.Tasks
                     }
                 }
             });
+        }
+
+        protected override void RunSearch()
+        {
+            searchResults = FileUtils.FileSearch(DirectoryPath, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly, includeRootInSearch, false, SearchPattern);
         }
 
         public override void ProcessTaskResults()

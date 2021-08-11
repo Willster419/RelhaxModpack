@@ -58,6 +58,11 @@ namespace RelhaxModpack.Automation.Tasks
 
         public async override Task RunTask()
         {
+            RunSearch();
+        }
+
+        protected virtual void RunSearch()
+        {
             searchResults = FileUtils.FileSearch(DirectoryPath, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly, false, false, SearchPattern);
         }
 
