@@ -42,12 +42,13 @@ namespace RelhaxModpack.Automation.Tasks
 
         public override async Task RunTask()
         {
-            string currentValue = property.GetValue(DatabasePackage).ToString();
+            string currentValue = property.GetValue(targetPackage).ToString();
 
             //add the macro so it could be used in this task (and later)
             Logging.Debug("The old value was added to the macro list (macro name is old_package_property_value)");
             Macros.Add(new AutomationMacro() { MacroType = MacroType.Local, Name = "old_package_property_value", Value = currentValue });
-            //then run the macro process again in case the user is using the old value to create the new one
+
+            //then run the macro process again in case the user is using the old value (using {old_package_property_value}, just created) to create the new one
             PropertyValue = ProcessMacro(nameof(PropertyValue), PropertyValue);
 
             Logging.Info("Applying value {0} to property {1} of type {2}", PropertyValue, property.Name, property.PropertyType.ToString());
@@ -57,6 +58,10 @@ namespace RelhaxModpack.Automation.Tasks
         public override void ProcessTaskResults()
         {
             if (ProcessTaskResultFalse(propertySet, string.Format("Failed to apply value")))
+                return;
+
+            string newValue = property.GetValue(targetPackage).ToString();
+            if (ProcessTaskResultFalse(newValue.Equals(PropertyValue), "The target package's property is not updated to PropertyValue"))
                 return;
         }
         #endregion
