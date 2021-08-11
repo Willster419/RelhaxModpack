@@ -1,3 +1,14 @@
+# Beta Application version 1.3.3.4 (2021-08-11)
+https://www.virustotal.com/gui/file-analysis/YjUwNzYzMzgwMmFlNzkxNDNiODFiN2QyOTY0YzQ3NTE6MTYyODcwNjcxNA==/detection
+
+- Added check during automation sequence run if required settings are set in the settings tab for all macros.
+- Fixed a bug with the HTML and Browser macro tasks not waiting until the WebClient request was completed.
+- Fixed bugs with Database Property tasks not using the correct target package to get/set based on target argument from task.
+- Improve logging formatting.
+- Fixed bug with macro substring tasks sometimes not getting the correct substring of the correct target variable.
+- Added option IncludeRootInSearch to include DirectoryPath in search results. This allows you to delete an empty directory.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.3.3 (2021-08-10)
 https://www.virustotal.com/gui/file-analysis/M2YyODIzMjY5NjQ5N2ZhYWNmODYwM2ZlYjA5Zjg2M2M6MTYyODU5MTYzMw==/detection
 
