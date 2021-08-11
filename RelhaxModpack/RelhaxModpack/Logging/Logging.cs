@@ -559,7 +559,7 @@ namespace RelhaxModpack
                     break;
 
                 case LogOptions.MethodAndClassName:
-                    WriteToLog(string.Format("[{0}@{1}]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug);
+                    WriteToLog(string.Format("[{1}.{0}()]: {2}", CommonUtils.GetExecutingMethodName(), CommonUtils.GetExecutingClassName(), message), Logfiles.Application, LogLevel.Debug);
                     break;
 
                 case LogOptions.MethodName:
