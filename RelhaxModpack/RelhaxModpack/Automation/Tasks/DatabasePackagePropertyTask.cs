@@ -56,7 +56,7 @@ namespace RelhaxModpack.Automation.Tasks
             {
                 //check that a property matching the given name exists. Case don't matter
                 //this MUST be done in ProcessMacros() because it goes before validateCommands
-                packageType = this.DatabasePackage.GetType();
+                packageType = targetPackage.GetType();
                 Logging.Debug("PackageType: {0}", packageType.ToString());
                 property = packageType.GetProperties().First(prop => prop.Name.ToLower().Equals(PropertyName.ToLower()));
             }
