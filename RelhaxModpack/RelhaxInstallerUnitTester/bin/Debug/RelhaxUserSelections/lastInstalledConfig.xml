@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<packages ver="3.0" date="2020-09-20 10:34:31" timezone="(UTC-07:00) Arizona" dbVersion="1.10.0.1_2020-09-07_1" dbDistro="Beta" directLoad="True">
-  <!-- Setting the nodes to be empty will yield nothing selected, and directLoad will cause it to stop checking for what's out of date -->
-  <globalPackages />
-  <dependencyPackages />
-  <relhaxPackages />
-  <userPackages />
-</packages>
