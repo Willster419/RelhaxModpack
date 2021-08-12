@@ -179,7 +179,14 @@ namespace RelhaxModpack.Patching
                     }
                 }
 
-                Patcher.RunPatchFromEditor(unitTest.Patch);
+                PatchExitCode exitCode = Patcher.RunPatchFromEditor(unitTest.Patch);
+                if (exitCode != PatchExitCode.Success)
+                {
+                    RegressionLogfile.Write(string.Format("Failed! ({0})", exitCode.ToString()));
+                    breakOutEarly = true;
+                    break;
+                }
+
                 string checkfile = Path.Combine(RegressionFolderPath, string.Format("{0}{1}{2}", CheckFilenamePrefix, NumPassed.ToString("D2"), Path.GetExtension(Startfile)));
                 RegressionLogfile.Write(string.Format("Checking results against check file {0}...", Path.GetFileName(checkfile)));
                 string patchRun = File.ReadAllText(filenameToTestPath);
@@ -204,9 +211,11 @@ namespace RelhaxModpack.Patching
             else
             {
                 RegressionLogfile.Write("----- Unit tests finish (pass)-----");
+
                 //delete the test file, we don't need it. (it's the same text as the last check file anyways)
                 if (File.Exists(filenameToTestPath))
                     File.Delete(filenameToTestPath);
+
                 if(UnitTests[0].Patch.FollowPath)
                 {
                     //delete not needed "escaped" files and put playersPanelBackup back
@@ -226,7 +235,7 @@ namespace RelhaxModpack.Patching
             //dispose log file
             RegressionLogfile.Dispose();
             RegressionLogfile = null;
-            return true;
+            return !breakOutEarly;
         }
 
         private void RegressionLogfile_OnLogfileWrite(object sender, LogMessageEventArgs e)
