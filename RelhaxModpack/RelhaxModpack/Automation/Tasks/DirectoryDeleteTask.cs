@@ -105,7 +105,9 @@ namespace RelhaxModpack.Automation.Tasks
                             (progress as IProgress<RelhaxProgress>).Report(relhaxProgress);
                         }
 
-                        bool result = FileUtils.FileDelete(file);
+                        bool result = true;
+                        if (File.Exists(file))
+                            result = FileUtils.FileDelete(file);
                         if (!result)
                             return;
                     }
@@ -145,7 +147,7 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected override void RunSearch()
         {
-            searchResults = FileUtils.FileSearch(DirectoryPath, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly, includeRootInSearch, false, SearchPattern);
+            searchResults = FileUtils.FileSearch(DirectoryPath, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly, includeRootInSearch, true, SearchPattern);
         }
 
         public override void ProcessTaskResults()
