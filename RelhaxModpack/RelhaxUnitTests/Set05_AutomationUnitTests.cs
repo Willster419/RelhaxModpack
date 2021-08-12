@@ -413,5 +413,36 @@ namespace RelhaxUnitTests
             Directory.Delete("copy_all_recurse_true", true);
             Directory.Delete("TestDir1", true);
         }
+
+        [TestMethod]
+        public async Task Test07_DeleteEmptyDirectoryTest()
+        {
+            string testDir = "test07Dir";
+            if (Directory.Exists(testDir))
+                Directory.Delete(testDir, true);
+
+            //still need a automation sequence object to run this
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            //create the tasks to test
+            sequence.AutomationTasks.Add(new DirectoryCreateTask
+            {
+                ID = "create_empty_directory",
+                DirectoryPath = testDir
+            });
+
+            sequence.AutomationTasks.Add(new DirectoryDeleteTask
+            {
+                ID = "delete_empty_directory",
+                DirectoryPath = testDir,
+                IncludeRootInSearch = true.ToString(),
+                Recursive = false.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence);
+
+            Assert.IsFalse(Directory.Exists(testDir));
+        }
     }
 }
