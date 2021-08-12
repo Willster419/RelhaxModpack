@@ -12,6 +12,7 @@ using RelhaxModpack.Common;
 using System.IO;
 using System.Threading;
 using RelhaxModpack.Automation.Tasks;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxUnitTests
 {
@@ -30,7 +31,7 @@ namespace RelhaxUnitTests
             OpenLogWindowOnStartup = true,
             SequenceDebugMode = false,
             UseLocalRunnerDatabase = false,
-            WoTClientInstallLocation = string.Empty,
+            WoTClientInstallLocation = RegistryUtils.AutoFindWoTDirectoryFirst(),
             AutomationRunMode = AutomationRunMode.Interactive
         };
 
@@ -50,6 +51,23 @@ namespace RelhaxUnitTests
         public static void SetDefaultValues(TestContext context)
         {
             Logging.RedirectLogOutput(Logfiles.AutomationRunner, Logfiles.Application);
+        }
+
+        private async Task RunTasks(AutomationSequence sequence)
+        {
+            foreach (AutomationTask task in sequence.AutomationTasks)
+            {
+                task.AutomationSequence = sequence;
+                Logging.Info("Running task ID: {0}", task.ID);
+
+                await task.Execute();
+
+                Assert.IsTrue(task.ExitCode == AutomationExitCode.None);
+
+                if (task is IDisposable taskDispose)
+                    taskDispose.Dispose();
+            }
+            sequence.AutomationTasks.Clear();
         }
 
         [TestMethod]
@@ -311,7 +329,6 @@ namespace RelhaxUnitTests
             });
 
             await RunTasks(sequence);
-            sequence.AutomationTasks.Clear();
 
             //copy the directory (all files)
             sequence.AutomationTasks.Add(new DirectoryCopyTask
@@ -320,7 +337,7 @@ namespace RelhaxUnitTests
                 Recursive = true.ToString(),
                 DirectoryPath = "TestDir1",
                 DestinationPath = "copy_all_recurse_true",
-                SearchPattern = "*"
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
             });
 
             //copy the directory (top only)
@@ -330,7 +347,7 @@ namespace RelhaxUnitTests
                 Recursive = false.ToString(),
                 DirectoryPath = "TestDir1",
                 DestinationPath = "copy_all_recurse_false",
-                SearchPattern = "*"
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
             });
 
             //copy the directory (only xml files, recursive)
@@ -344,7 +361,6 @@ namespace RelhaxUnitTests
             });
 
             await RunTasks(sequence);
-            sequence.AutomationTasks.Clear();
 
             //check each of the tasks for file results
             string[] filesCopyAllRecurse = Directory.GetFiles("copy_all_recurse_true", "*", SearchOption.AllDirectories);
@@ -362,7 +378,8 @@ namespace RelhaxUnitTests
                 ID = "delete_all_recurse_false",
                 DirectoryPath = "copy_all_recurse_false",
                 Recursive = false.ToString(),
-                SearchPattern = "*"
+                IncludeRootInSearch = false.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
             });
 
             sequence.AutomationTasks.Add(new DirectoryDeleteTask
@@ -370,7 +387,8 @@ namespace RelhaxUnitTests
                 ID = "delete_all_recurse_true",
                 DirectoryPath = "copy_xml_recurse_true",
                 Recursive = true.ToString(),
-                SearchPattern = "*"
+                IncludeRootInSearch = false.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
             });
 
             sequence.AutomationTasks.Add(new DirectoryDeleteTask
@@ -378,11 +396,11 @@ namespace RelhaxUnitTests
                 ID = "delete_xml_recurse_true",
                 DirectoryPath = "copy_all_recurse_true",
                 Recursive = true.ToString(),
+                IncludeRootInSearch = false.ToString(),
                 SearchPattern = "*.xml"
             });
 
             await RunTasks(sequence);
-            sequence.AutomationTasks.Clear();
 
             Assert.IsFalse(Directory.Exists("copy_all_recurse_false"));
             Assert.IsFalse(Directory.Exists("copy_xml_recurse_true"));
@@ -394,22 +412,6 @@ namespace RelhaxUnitTests
 
             Directory.Delete("copy_all_recurse_true", true);
             Directory.Delete("TestDir1", true);
-        }
-
-        private async Task RunTasks(AutomationSequence sequence)
-        {
-            foreach (AutomationTask task in sequence.AutomationTasks)
-            {
-                task.AutomationSequence = sequence;
-                Logging.Info("Running task ID: {0}", task.ID);
-
-                await task.Execute();
-
-                Assert.IsTrue(task.ExitCode == AutomationExitCode.None);
-
-                if (task is IDisposable taskDispose)
-                    taskDispose.Dispose();
-            }
         }
     }
 }
