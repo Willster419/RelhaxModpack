@@ -53,7 +53,7 @@ namespace RelhaxUnitTests
             Logging.RedirectLogOutput(Logfiles.AutomationRunner, Logfiles.Application);
         }
 
-        private async Task RunTasks(AutomationSequence sequence)
+        private async Task RunTasks(AutomationSequence sequence, bool clearTasks)
         {
             foreach (AutomationTask task in sequence.AutomationTasks)
             {
@@ -67,7 +67,9 @@ namespace RelhaxUnitTests
                 if (task is IDisposable taskDispose)
                     taskDispose.Dispose();
             }
-            sequence.AutomationTasks.Clear();
+
+            if (clearTasks)
+                sequence.AutomationTasks.Clear();
         }
 
         [TestMethod]
@@ -237,37 +239,26 @@ namespace RelhaxUnitTests
         {
             //still need a automation sequence object to run this
             AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
-            List<AutomationTask> tasks = new List<AutomationTask>();
 
             //create the tasks to test
-            tasks.Add(new FileCopyTask()
+            sequence.AutomationTasks.Add(new FileCopyTask()
             {
                 SourceFilePath = "RelhaxModpack.exe",
                 DestinationFilePath = "BestModpackEver.exe"
             });
 
-            tasks.Add(new FileMoveTask()
+            sequence.AutomationTasks.Add(new FileMoveTask()
             {
                 SourceFilePath = "BestModpackEver.exe",
                 DestinationFilePath = "BestestModpackEver.exe"
             });
 
-            tasks.Add(new FileDeleteTask()
+            sequence.AutomationTasks.Add(new FileDeleteTask()
             {
                 SourceFilePath = "BestestModpackEver.exe"
             });
 
-            foreach (AutomationTask task in tasks)
-            {
-                task.AutomationSequence = sequence;
-
-                await task.Execute();
-
-                Assert.IsTrue(task.ExitCode == AutomationExitCode.None);
-
-                if (task is IDisposable taskDispose)
-                    taskDispose.Dispose();
-            }
+            await RunTasks(sequence, true);
         }
 
         [TestMethod]
@@ -328,7 +319,7 @@ namespace RelhaxUnitTests
                 DestinationFilePath = Path.Combine(testSubDirPath, "RelhaxModpack2.xml")
             });
 
-            await RunTasks(sequence);
+            await RunTasks(sequence, true);
 
             //copy the directory (all files)
             sequence.AutomationTasks.Add(new DirectoryCopyTask
@@ -360,7 +351,7 @@ namespace RelhaxUnitTests
                 SearchPattern = "*.xml"
             });
 
-            await RunTasks(sequence);
+            await RunTasks(sequence, true);
 
             //check each of the tasks for file results
             string[] filesCopyAllRecurse = Directory.GetFiles("copy_all_recurse_true", "*", SearchOption.AllDirectories);
@@ -400,7 +391,7 @@ namespace RelhaxUnitTests
                 SearchPattern = "*.xml"
             });
 
-            await RunTasks(sequence);
+            await RunTasks(sequence, true);
 
             Assert.IsFalse(Directory.Exists("copy_all_recurse_false"));
             Assert.IsFalse(Directory.Exists("copy_xml_recurse_true"));
@@ -440,9 +431,95 @@ namespace RelhaxUnitTests
                 SearchPattern = DirectorySearchTask.SEARCH_ALL
             });
 
-            await RunTasks(sequence);
+            await RunTasks(sequence, true);
 
             Assert.IsFalse(Directory.Exists(testDir));
+        }
+
+        [TestMethod]
+        public async Task Test08_DirectoryFilesHashCompareTest()
+        {
+            if (Directory.Exists("TestDir1"))
+                Directory.Delete("TestDir1", true);
+            if (Directory.Exists("TestDir2"))
+                Directory.Delete("TestDir2", true);
+
+            //still need a automation sequence object to run this
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            //still testing these tasks, but they are setup tasks
+            //setup
+            string testSubDirPath = Path.Combine("TestDir1", "TestSubDir2");
+
+            //create the sub dirs
+            sequence.AutomationTasks.Add(new DirectoryCreateTask
+            {
+                ID = "dir_setup",
+                DirectoryPath = testSubDirPath
+            });
+
+            //copy over some sample files
+            sequence.AutomationTasks.Add(new FileCopyTask
+            {
+                ID = "copy_0",
+                SourceFilePath = "RelhaxModpack.exe",
+                DestinationFilePath = Path.Combine("TestDir1", "RelhaxModpack1.exe")
+            });
+
+            sequence.AutomationTasks.Add(new FileCopyTask
+            {
+                ID = "copy_1",
+                SourceFilePath = "RelhaxModpack.exe",
+                DestinationFilePath = Path.Combine(testSubDirPath, "RelhaxModpack2.exe")
+            });
+
+            sequence.AutomationTasks.Add(new FileCopyTask
+            {
+                ID = "copy_2",
+                SourceFilePath = "RelhaxModpack.xml",
+                DestinationFilePath = Path.Combine("TestDir1", "RelhaxModpack1.xml")
+            });
+
+            sequence.AutomationTasks.Add(new FileCopyTask
+            {
+                ID = "copy_3",
+                SourceFilePath = "RelhaxModpack.xml",
+                DestinationFilePath = Path.Combine(testSubDirPath, "RelhaxModpack2.xml")
+            });
+
+            sequence.AutomationTasks.Add(new DirectoryCopyTask
+            {
+                ID = "copy_4",
+                DirectoryPath = "TestDir1",
+                DestinationPath = "TestDir2",
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, true);
+
+            //these are the tasks we're testing
+            sequence.AutomationTasks.Add(new DirectoryCompareTask
+            {
+                ID = "directory_hash_compare",
+                DirectoryComparePathA = "TestDir1",
+                DirectoryComparePathB = "TestDir2",
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, false);
+
+            AutomationTask directoryCompareTask = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1];
+
+            foreach (AutomationCompare compare in directoryCompareTask.AutomationCompareTracker.AutomationCompares)
+            {
+                Assert.IsTrue(compare.CompareResult);
+            }
+
+            Directory.Delete("TestDir1", true);
+            Directory.Delete("TestDir2", true);
+            sequence.AutomationTasks.Clear();
         }
     }
 }
