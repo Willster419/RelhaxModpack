@@ -1,3 +1,10 @@
+# Beta Application version 1.3.3.6 (2021-08-14)
+https://www.virustotal.com/gui/file-analysis/MjAzZTIyZTRhM2I2NWYwMmQ1NTNhMTIwM2E5NDBlOGQ6MTYyODk5NjA4Ng==/detection
+
+- Fixed bug in RetrievePackagePropertyTask not using the given package (would always use itself).
+- Added specification of browser height and width for Browser tasks (in some webpages, it won't load html unless it's it needs to i.e. to fill the window space).
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.3.5 (2021-08-11)
 https://www.virustotal.com/gui/file-analysis/MDg1NzU4NjhjOTQwM2Y2MWI2NWM4MTA1MTgwNTIwNTk6MTYyODczOTI5MA==/detection
 
