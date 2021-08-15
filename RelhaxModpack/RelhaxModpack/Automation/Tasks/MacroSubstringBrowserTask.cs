@@ -19,14 +19,22 @@ namespace RelhaxModpack.Automation.Tasks
 
         public string WaitCounts { get; set; } = "3";
 
+        public string BrowserHeight { get; set; } = "0";
+
+        public string BrowserWidth { get; set; } = "0";
+
         protected int waitTimeMs;
 
         protected int waitCounts;
 
+        protected int browserHeight = 0;
+
+        protected int browserWidth = 0;
+
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
-            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(WaitTimeMs), nameof(WaitCounts) }).ToArray();
+            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(WaitTimeMs), nameof(WaitCounts), nameof(BrowserHeight), nameof(BrowserWidth) }).ToArray();
         }
         #endregion
 
@@ -36,6 +44,8 @@ namespace RelhaxModpack.Automation.Tasks
             base.ProcessMacros();
             waitTimeMs = int.Parse(ProcessMacro(nameof(WaitTimeMs), WaitTimeMs));
             waitCounts = int.Parse(ProcessMacro(nameof(WaitCounts), WaitCounts));
+            browserHeight = int.Parse(ProcessMacro(nameof(BrowserHeight), BrowserHeight));
+            browserWidth = int.Parse(ProcessMacro(nameof(BrowserWidth), BrowserWidth));
         }
 
         public override void ValidateCommands()
@@ -43,8 +53,11 @@ namespace RelhaxModpack.Automation.Tasks
             base.ValidateCommands();
             if (ValidateCommandTrue(waitTimeMs <= 0, string.Format("waitTimeMs must be greater then 0. Current value: {0}", waitTimeMs.ToString())))
                 return;
-
             if (ValidateCommandTrue(waitCounts <= 0, string.Format("Retries must be greater then 0. Current value: {0}", waitCounts.ToString())))
+                return;
+            if (ValidateCommandTrue(browserHeight < 0, string.Format("browserHeight must be greater then or equal to 0. Current value: {0}", browserHeight.ToString())))
+                return;
+            if (ValidateCommandTrue(browserWidth < 0, string.Format("browserWidth must be greater then or equal to 0. Current value: {0}", browserWidth.ToString())))
                 return;
         }
 
@@ -60,7 +73,7 @@ namespace RelhaxModpack.Automation.Tasks
             RegistryUtils.SetRegisterKeyForIEVersion(IERegistryVersion.IE11Forced);
 
             Logging.AutomationRunner("Running Browser execution code");
-            htmlXpathParser = new HtmlBrowserParser(HtmlPath, Url, waitTimeMs, waitCounts, false, null, null);
+            htmlXpathParser = new HtmlBrowserParser(HtmlPath, Url, waitTimeMs, waitCounts, false, null, null) { BrowserHeight = this.browserHeight, BrowserWidth = this.browserWidth };
             parserExitCode = await htmlXpathParser.RunParserAsync();
 
             stringWithValue = htmlXpathParser.ResultString;

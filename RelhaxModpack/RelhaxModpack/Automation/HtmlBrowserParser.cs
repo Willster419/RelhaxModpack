@@ -19,6 +19,10 @@ namespace RelhaxModpack.Automation
 
         public int WaitCounts { get; set; } = 3;
 
+        public int BrowserWidth { get; set; } = 0;
+
+        public int BrowserHeight { get; set; } = 0;
+
         public WebBrowser Browser { get; set; }
 
         public bool ThreadMode { get; private set; }
@@ -73,8 +77,11 @@ namespace RelhaxModpack.Automation
             else
             {
                 Logging.Debug(LogOptions.ClassName, "The browser was run, needs to be cleanup");
-                Browser.Navigated -= Browser_Navigated;
-                Browser.DocumentCompleted -= Browser_DocumentCompleted;
+                if (Browser != null)
+                {
+                    Browser.Navigated -= Browser_Navigated;
+                    Browser.DocumentCompleted -= Browser_DocumentCompleted;
+                }
                 hooked = false;
                 WindowsInterop.SecurityAlertDialogWillBeShown -= this.WindowsInterop_SecurityAlertDialogWillBeShown;
                 WindowsInterop.Unhook();
@@ -148,6 +155,13 @@ namespace RelhaxModpack.Automation
 
         private void Browser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            WebBrowser browser = (sender as WebBrowser);
+            //for some sites, it doesn't load all html unless you're scrolled enough (or the height/width is enough)
+            if (BrowserHeight > 0 && browser.Height != BrowserHeight)
+                browser.Height = BrowserHeight;
+            if (BrowserWidth > 0 && browser.Width != BrowserWidth)
+                browser.Width = BrowserWidth;
+
             Logging.Debug(LogOptions.ClassName, "The browser reports document completed");
             browserDocumentCompleted = true;
         }
