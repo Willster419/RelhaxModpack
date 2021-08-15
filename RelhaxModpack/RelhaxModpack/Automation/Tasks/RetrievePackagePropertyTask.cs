@@ -67,11 +67,11 @@ namespace RelhaxModpack.Automation.Tasks
             string valueToSave;
             if (property.PropertyType.IsValueType)
             {
-                valueToSave = property.GetValue(DatabasePackage).ToString();
+                valueToSave = property.GetValue(targetPackage).ToString();
             }
             else
             {
-                object currentValue = property.GetValue(DatabasePackage);
+                object currentValue = property.GetValue(targetPackage);
                 //to get type of array
                 //https://stackoverflow.com/a/2085186/3128017
                 Type arrayType = currentValue.GetType().GetElementType();
