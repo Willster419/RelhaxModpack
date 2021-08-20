@@ -1,6 +1,7 @@
 ﻿using RelhaxModpack.Settings;
 using RelhaxModpack.UI;
 using RelhaxModpack.Utilities.ClassEventArgs;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class RelhaxLogViewer : RelhaxWindow
     {
+        public bool SuppressDebugMessages { get; set; } = true;
+
         public RelhaxLogViewer(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
@@ -41,6 +44,9 @@ namespace RelhaxModpack.Windows
 
         private void OnLogMessageWrite(object sender, LogMessageEventArgs e)
         {
+            if (SuppressDebugMessages && e.LogLevel == LogLevel.Debug)
+                return;
+
             Dispatcher.InvokeAsync((Action)(() => { UpdateLogDisplay(e.Message); }), DispatcherPriority.Send);
         }
 

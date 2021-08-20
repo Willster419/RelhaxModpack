@@ -92,7 +92,7 @@ namespace RelhaxModpack.Windows
                () => BigmodsPasswordSetting_TextChanged(null, null),
                () => DumpParsedMacrosPerSequenceRunSetting_Click(null, null),
                () => DumpEnvironmentVariablesAtSequenceStartSetting_Click(null, null),
-               () => SequenceDebugModeSetting_Click(null, null),
+               () => SuppressDebugMessagesSetting_Click(null, null),
                () => AutomamtionDatabaseSelectedBranchSetting_TextChanged(null, null),
                () => SelectDBSaveLocationSetting_TextChanged(null, null),
                () => UseLocalRunnerDatabaseSetting_Click(null, null),
@@ -186,6 +186,7 @@ namespace RelhaxModpack.Windows
             UseLocalRunnerDatabaseSetting.IsChecked = AutomationSettings.UseLocalRunnerDatabase;
             LocalRunnerDatabaseRootSetting.Text = AutomationSettings.LocalRunnerDatabaseRoot;
             SelectWoTInstallLocationSetting.Text = AutomationSettings.WoTClientInstallLocation;
+            SuppressDebugMessagesSetting.IsChecked = AutomationSettings.SuppressDebugMessagesInLogWindow;
         }
 
         private void MoveSequenceToRunList()
@@ -501,7 +502,7 @@ namespace RelhaxModpack.Windows
             {
                 Thread thread = new Thread(() =>
                 {
-                    logViewer = new RelhaxLogViewer(ModpackSettings);
+                    logViewer = new RelhaxLogViewer(ModpackSettings) { SuppressDebugMessages = this.AutomationSettings.SuppressDebugMessagesInLogWindow };
 
                     logViewer.WindowStartupLocation = WindowStartupLocation.Manual;
                     logViewer.Top = this.Dispatcher.Invoke(new Func<double>(() => { return this.Top; }));
@@ -646,9 +647,9 @@ namespace RelhaxModpack.Windows
             AutomationSettings.DumpShellEnvironmentVarsPerSequenceRun = (bool)DumpEnvironmentVariablesAtSequenceStartSetting.IsChecked;
         }
 
-        private void SequenceDebugModeSetting_Click(object sender, RoutedEventArgs e)
+        private void SuppressDebugMessagesSetting_Click(object sender, RoutedEventArgs e)
         {
-            AutomationSettings.SequenceDebugMode = (bool)SequenceDebugModeSetting.IsChecked;
+            AutomationSettings.SuppressDebugMessagesInLogWindow = (bool)SuppressDebugMessagesSetting.IsChecked;
         }
 
         private void AutomamtionDatabaseSelectedBranchSetting_TextChanged(object sender, TextChangedEventArgs e)

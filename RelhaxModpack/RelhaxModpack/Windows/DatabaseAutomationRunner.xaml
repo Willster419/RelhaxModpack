@@ -104,8 +104,8 @@
                                       Click="DumpParsedMacrosPerSequenceRunSetting_Click" ToolTip="When checked, the list of macros will be dumped to the logfile at the start of each sequence"/>
                         <CheckBox x:Name="DumpEnvironmentVariablesAtSequenceStartSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Center" Content="Dump environment variables at the start of the sequencer" Margin="2,0,0,0"
                                       Click="DumpEnvironmentVariablesAtSequenceStartSetting_Click" ToolTip="When checked, the list of system environment variables will be dumped to the logfile at the start of the sequencer"/>
-                        <CheckBox x:Name="SequenceDebugModeSetting" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Center" Content="Enable sequence debugging / task stepping" Margin="2,0,0,0"
-                                      Click="SequenceDebugModeSetting_Click" ToolTip="When enabled, you can step through each task in a sequence by clicking on a continue button in the window"/>
+                        <CheckBox x:Name="SuppressDebugMessagesSetting" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Center" Content="Suppress debug messages in the log window" Margin="2,0,0,0"
+                                      Click="SuppressDebugMessagesSetting_Click" ToolTip="When enabled, DEBUG level messages will NOT be put out to the log window"/>
                         <Button x:Name="SelectDBSaveLocationButton" HorizontalAlignment="Stretch" Grid.Row="6" VerticalAlignment="Center" Click="SelectDBSaveLocationButton_Click"
                                     ToolTip="Select the location to use for loading and saving the database for automation runs. This path *must* go to the root database xml file!">
                             <TextBlock Text="Package database load/save root xml" TextWrapping="Wrap"/>

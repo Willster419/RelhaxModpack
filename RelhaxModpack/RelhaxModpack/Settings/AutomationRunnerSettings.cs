@@ -50,8 +50,8 @@ namespace RelhaxModpack.Settings
 
         public string WoTClientInstallLocation { get; set; } = string.Empty;
 
-        public bool SequenceDebugMode { get; set; } = false;
+        public AutomationRunMode AutomationRunMode { get; set; } = AutomationRunMode.Batch;
 
-        public AutomationRunMode AutomationRunMode { get; set; } = AutomationRunMode.Interactive;
+        public bool SuppressDebugMessagesInLogWindow { get; set; } = true;
     }
 }
