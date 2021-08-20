@@ -6213,17 +6213,17 @@
         </member>
         <member name="F:RelhaxModpack.Utilities.Enums.AutomationRunMode.Debug">
             <summary>
-            Debug run mode. Requires user interaction for each task, of each sequence.
+            Debug run mode.Requires the user to manually step through each task.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.Enums.AutomationRunMode.Interactive">
+        <member name="F:RelhaxModpack.Utilities.Enums.AutomationRunMode.Sequence">
             <summary>
-            Gui run mode. Requires user interaction for each sequence.
+            Gui run mode. Similar to batch, but will stop on a failed sequence.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Utilities.Enums.AutomationRunMode.Batch">
             <summary>
-            Batch run mode. Requires no user interaction.
+            Batch run mode. Requires no user interaction. The default run mode
             </summary>
         </member>
         <member name="T:RelhaxModpack.Utilities.Enums.SequencerExitCode">
