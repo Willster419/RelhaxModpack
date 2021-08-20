@@ -70,6 +70,7 @@ namespace RelhaxModpack.Automation.Tasks
 
         public async override Task RunTask()
         {
+            //base.RunTask() will run RunSearch()
             await base.RunTask();
 
             //check that the same number of files was returned to check for hashing
@@ -93,6 +94,11 @@ namespace RelhaxModpack.Automation.Tasks
             }
 
             //actually run the hashing
+            operationFinished = await RunFileHashing();
+        }
+
+        protected virtual async Task<bool> RunFileHashing()
+        {
             calculationProgress = new Progress<RelhaxProgress>();
             cancellationTokenSource = new CancellationTokenSource();
             progress = new RelhaxProgress() { ChildCurrentProgress = "barWithTextChild", ChildCurrent = 0, ChildTotal = directoryFilesA.Length };
@@ -131,6 +137,7 @@ namespace RelhaxModpack.Automation.Tasks
             catch (Exception ex)
             {
                 Logging.Exception(ex.ToString());
+                return false;
             }
             finally
             {
@@ -139,8 +146,8 @@ namespace RelhaxModpack.Automation.Tasks
                 {
                     calculationProgress.ProgressChanged -= DatabaseAutomationRunner.RelhaxProgressChanged;
                 }
-            }            
-            operationFinished = true;
+            }
+            return true;
         }
 
         public override void ProcessTaskResults()
