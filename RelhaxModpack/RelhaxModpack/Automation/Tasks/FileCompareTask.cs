@@ -52,7 +52,7 @@ namespace RelhaxModpack.Automation.Tasks
 
             if (ValidateCommandTrue(!File.Exists(FileA), string.Format("The path for FileA, {0}, does not exist", FileA)))
                 return;
-            if (ValidateCommandTrue(!File.Exists(FileB), string.Format("The path for FileB, {0}, does not exist", FileA)))
+            if (ValidateCommandTrue(!File.Exists(FileB), string.Format("The path for FileB, {0}, does not exist", FileB)))
                 return;
         }
 
