@@ -37,8 +37,8 @@
                     <Button x:Name="MoveDownSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Center" Height="45" Grid.Column="3" Grid.Row="1" Click="MoveDownSelectedSequenceButton_Click">
                         <TextBlock Text="Move down selected" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
-                    <Button x:Name="DeleteSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Center" Height="40" Grid.Column="3" Grid.Row="1" Click="DeleteSelectedSequenceButton_Click">
-                        <TextBlock Text="Delete selected" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <Button x:Name="RemoveSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Center" Height="40" Grid.Column="3" Grid.Row="1" Click="RemoveSelectedSequenceButton_Click">
+                        <TextBlock Text="Remove selected" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
                     <Button x:Name="ReloadSequencesButton" HorizontalAlignment="Right" Margin="0,3,269,0" VerticalAlignment="Stretch" Width="110" Grid.Row="2" Grid.Column="2" Click="ReloadSequencesButton_Click">
                         <TextBlock Text="Reload Sequences"/>

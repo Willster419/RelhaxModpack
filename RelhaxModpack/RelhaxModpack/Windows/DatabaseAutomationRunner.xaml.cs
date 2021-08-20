@@ -418,7 +418,7 @@ namespace RelhaxModpack.Windows
             }
         }
 
-        private void DeleteSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
+        private void RemoveSelectedSequenceButton_Click(object sender, RoutedEventArgs e)
         {
             if (SequencesToRunListBox.SelectedItems.Count == 0)
                 return;
