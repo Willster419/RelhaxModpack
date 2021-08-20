@@ -1,3 +1,12 @@
+# Beta Application version 1.3.3.7 (2021-08-19)
+https://www.virustotal.com/gui/file-analysis/ZGQ3NjE3NjFjYzBhZWJkNGRiNGFlMzU0ZmQ0MmRiNDk6MTYyOTQzMjg2OA==/detection
+
+- Added task DirectoryCompareCountTask, similar to DirectoryCompareTask, but when the files count or names change between directories, it counts as an update needed, not an error.
+- Removed overly complex method to check if url is valid, replaced it with a much quicker and simpler method. "Keep it stupid simple."
+- Cleanup of the automation runner UI.
+- Added option to suppress debug messages to the log window.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.3.6 (2021-08-14)
 https://www.virustotal.com/gui/file-analysis/MjAzZTIyZTRhM2I2NWYwMmQ1NTNhMTIwM2E5NDBlOGQ6MTYyODk5NjA4Ng==/detection
 
