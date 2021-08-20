@@ -195,26 +195,7 @@ namespace RelhaxModpack.Automation
 
         protected bool UrlIsValid(string url)
         {
-            try
-            {
-                //Creating the HttpWebRequest
-                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
-                //Setting the Request method HEAD, you can also use GET too.
-                request.Method = "HEAD";
-                //Getting the Web Response.
-                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
-                {
-                    //Returns TRUE if the Status code == 200
-                    response.Close();
-                    return (response.StatusCode == HttpStatusCode.OK);
-                }
-            }
-            catch (Exception ex)
-            {
-                //Any exception will returns false.
-                Logging.Exception(ex.ToString());
-                return false;
-            }
+            return url.StartsWith("http://") || url.StartsWith("https://");
         }
 
         public virtual void Cancel()
