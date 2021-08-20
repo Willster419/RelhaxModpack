@@ -29,10 +29,10 @@ namespace RelhaxUnitTests
             DumpShellEnvironmentVarsPerSequenceRun = false,
             LocalRunnerDatabaseRoot = string.Empty,
             OpenLogWindowOnStartup = true,
-            SequenceDebugMode = false,
+            SuppressDebugMessagesInLogWindow = false,
             UseLocalRunnerDatabase = false,
             WoTClientInstallLocation = RegistryUtils.AutoFindWoTDirectoryFirst(),
-            AutomationRunMode = AutomationRunMode.Interactive
+            AutomationRunMode = AutomationRunMode.Sequence
         };
 
         ModpackSettings ModpackSettings = new ModpackSettings()
