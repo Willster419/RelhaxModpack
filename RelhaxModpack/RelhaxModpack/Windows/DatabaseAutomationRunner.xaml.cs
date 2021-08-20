@@ -455,9 +455,43 @@ namespace RelhaxModpack.Windows
             await LoadAutomationSequencerAsync();
         }
 
-        private void CleanWorkingDirectoriesButton_Click(object sender, RoutedEventArgs e)
+        private async void CleanWorkingDirectoriesButton_Click(object sender, RoutedEventArgs e)
         {
+            CancellationTokenSource tokenSource;
+            Progress<RelhaxProgress> reporter = new Progress<RelhaxProgress>();
+            RelhaxProgress progress = new RelhaxProgress();
+            AutomationTaskProgressBar.Visibility = Visibility.Visible;
+            AutomationTaskProgressBar.Minimum = AutomationTaskProgressBar.Maximum = AutomationTaskProgressBar.Value = 0;
+            AutomationTaskProgressTextBlock.Visibility = Visibility.Visible;
+            AutomationTaskProgressTextBlock.Text = string.Empty;
 
+            reporter.ProgressChanged += (sender_, args) => 
+            {
+                if (AutomationTaskProgressBar.Minimum  != 0)
+                    AutomationTaskProgressBar.Minimum = 0;
+
+                if (AutomationTaskProgressBar.Maximum != args.ChildTotal)
+                    AutomationTaskProgressBar.Maximum = args.ChildTotal;
+
+                AutomationTaskProgressBar.Value = args.ChildCurrent;
+
+                AutomationTaskProgressTextBlock.Text = args.ChildCurrentProgress;
+            };
+
+            using (tokenSource = new CancellationTokenSource())
+            {
+                await AutomationSequencer.CleanWorkingDirectoriesAsync(reporter, progress, tokenSource.Token);
+            }
+
+            this.Dispatcher.InvokeAsync(async () =>
+            {
+                AutomationTaskProgressTextBlock.Text = "Done";
+                await Task.Delay(2000);
+                AutomationTaskProgressBar.Visibility = Visibility.Hidden;
+                AutomationTaskProgressBar.Minimum = AutomationTaskProgressBar.Maximum = AutomationTaskProgressBar.Value = 0;
+                AutomationTaskProgressTextBlock.Visibility = Visibility.Hidden;
+                AutomationTaskProgressTextBlock.Text = string.Empty;
+            });
         }
         #endregion
 

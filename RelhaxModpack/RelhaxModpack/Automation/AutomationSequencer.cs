@@ -17,6 +17,7 @@ using RelhaxModpack.Windows;
 using RelhaxModpack.Settings;
 using System.Diagnostics;
 using System.Threading;
+using RelhaxModpack.UI;
 
 namespace RelhaxModpack.Automation
 {
@@ -484,6 +485,70 @@ namespace RelhaxModpack.Automation
         public void UpdateDatabasePackageList()
         {
             DatabasePackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
+        }
+
+        public async Task CleanWorkingDirectoriesAsync(IProgress<RelhaxProgress> reporter, RelhaxProgress progress, CancellationToken token)
+        {
+            Logging.Info("Cleaning Working directories start");
+            await Task.Run(() => CleanWorkingDirectories(reporter, token: token, progress: progress));
+            Logging.Info("Cleaning Working directories finish");
+        }
+
+        private void CleanWorkingDirectories(IProgress<RelhaxProgress> reporter, RelhaxProgress progress, CancellationToken token)
+        {
+            if (AutomationSequences == null || AutomationSequences.Count == 0)
+                return;
+
+            //get the list of files
+            List<string> FilesToDelete = new List<string>();
+            List<string> FoldersToGetFilesFrom = AutomationSequences.Select(sequence => sequence.PackageName).ToList();
+
+            foreach (string folder in FoldersToGetFilesFrom)
+            {
+                string folderPath = Path.Combine(ApplicationConstants.RelhaxTempFolderPath, folder);
+                if (Directory.Exists(folderPath))
+                    FilesToDelete.AddRange(FileUtils.FileSearch(folderPath, SearchOption.AllDirectories, false, true));
+
+                if (token != null && token.IsCancellationRequested)
+                    return;
+            }
+
+            if (progress != null)
+            {
+                progress.ChildTotal = FilesToDelete.Count;
+                progress.ChildCurrent = progress.ParrentCurrent = 0;
+                reporter?.Report(progress);
+            }
+
+
+            foreach (string file in FilesToDelete)
+            {
+                progress.ChildCurrent++;
+                progress.ChildCurrentProgress = string.Format("Deleting file {0} of {1}", progress.ChildCurrent, progress.ChildTotal);
+                reporter.Report(progress);
+
+                FileUtils.FileDelete(file);
+                if (token != null && token.IsCancellationRequested)
+                    return;
+
+                if (progress != null)
+                {
+                    progress.ChildCurrent = progress.ChildTotal;
+                    progress.ChildCurrentProgress = string.Format("Finishing up");
+                    reporter?.Report(progress);
+                }
+            }
+
+
+            foreach (string folder in FoldersToGetFilesFrom)
+            {
+                string folderPath = Path.Combine(ApplicationConstants.RelhaxTempFolderPath, folder);
+                if (Directory.Exists(folderPath))
+                    FileUtils.DirectoryDelete(folderPath, true, true);
+
+                if (token != null && token.IsCancellationRequested)
+                    return;
+            }
         }
 
         public void CancelSequence()
