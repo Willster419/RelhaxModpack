@@ -599,6 +599,11 @@ namespace RelhaxModpack.Windows
             (RunSequencesButton.Content as TextBlock).Text = "Run";
             RunSequencesButton.Click -= CancelSequencesButton_Click;
             RunSequencesButton.Click += RunSequencesButton_Click;
+
+            AutomationTaskProgressBar.Visibility = Visibility.Hidden;
+            AutomationTaskProgressBar.Minimum = AutomationTaskProgressBar.Maximum = AutomationTaskProgressBar.Value = 0;
+            AutomationTaskProgressTextBlock.Visibility = Visibility.Hidden;
+            AutomationTaskProgressTextBlock.Text = string.Empty;
         }
 
         private void CancelSequencesButton_Click(object sender, RoutedEventArgs e)
