@@ -429,7 +429,7 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        #region Bottom row buttons
+        #region Bottom rows buttons
         private void OpenLogfileViewerButton_Click(object sender, RoutedEventArgs e)
         {
             FocusOrCreateLogWindow(true);
@@ -453,6 +453,11 @@ namespace RelhaxModpack.Windows
         private async void ReloadSequencesButton_Click(object sender, RoutedEventArgs e)
         {
             await LoadAutomationSequencerAsync();
+        }
+
+        private void CleanWorkingDirectoriesButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
         #endregion
 
@@ -735,6 +740,6 @@ namespace RelhaxModpack.Windows
         {
             AutomationSettings.WoTClientInstallLocation = SelectWoTInstallLocationSetting.Text;
         }
-        #endregion 
+        #endregion
     }
 }
