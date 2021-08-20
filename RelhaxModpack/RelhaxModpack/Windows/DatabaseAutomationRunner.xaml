@@ -42,7 +42,7 @@
                     <Button x:Name="RemoveSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Center" Height="40" Grid.Column="3" Grid.Row="1" Click="RemoveSelectedSequenceButton_Click">
                         <TextBlock Text="Remove selected" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
-                    <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="2" Grid.Column="2">
+                    <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="2" Grid.Column="2" Margin="0,0,2,0">
                         <Button x:Name="ReloadSequencesButton" HorizontalAlignment="Right" Margin="0,3,0,0" VerticalAlignment="Stretch" Padding="3,1,3,1" Click="ReloadSequencesButton_Click">
                             <TextBlock Text="Reload Sequences"/>
                         </Button>
@@ -53,16 +53,16 @@
                             <TextBlock Text="Open HtmlPath Selector"/>
                         </Button>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="3" Grid.Column="2">
+                    <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="3" Grid.Column="2" Margin="0,0,2,0">
                         <Button x:Name="CleanWorkingDirectoriesButton" HorizontalAlignment="Right" Margin="0,3,0,0" VerticalAlignment="Stretch" Padding="3,1,3,1" Click="CleanWorkingDirectoriesButton_Click">
                             <TextBlock Text="Clean Working Directories"/>
                         </Button>
                     </StackPanel>
-                    <Button x:Name="RunSequencesButton" HorizontalAlignment="Stretch" Margin="5,3,2,0" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="3" Click="RunSequencesButton_Click">
+                    <Button x:Name="RunSequencesButton" HorizontalAlignment="Stretch" Margin="3,3,2,0" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="3" Click="RunSequencesButton_Click">
                         <TextBlock Text="Run" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
-                    <ProgressBar x:Name="AutomationTaskProgressBar" HorizontalAlignment="Stretch" Margin="0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Visibility="Hidden" />
-                    <TextBlock x:Name="AutomationTaskProgressTextBlock" HorizontalAlignment="Stretch" Margin="0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Visibility="Hidden" Text="Test" TextAlignment="Center"/>
+                    <ProgressBar x:Name="AutomationTaskProgressBar" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Visibility="Hidden" Margin="0,0,2,0"/>
+                    <TextBlock x:Name="AutomationTaskProgressTextBlock" HorizontalAlignment="Stretch" Margin="0,0,2,0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" Visibility="Hidden" Text="Test" TextAlignment="Center"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabItemSettings" Header="Settings">
