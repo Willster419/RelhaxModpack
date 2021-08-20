@@ -103,7 +103,7 @@ namespace RelhaxModpack.Settings
                 {
                     if (!CommonUtils.SetObjectProperty(settingsFile, pi, settingsElement.Value))
                     {
-                        Logging.Error("Failed to set value for property {0}, value {1}, line {2}", fi.Name, settingsElement.Value, ((IXmlLineInfo)settingsElement).LineNumber);
+                        Logging.Error("Failed to set value for property {0}, value {1}, line {2}", pi.Name, settingsElement.Value, ((IXmlLineInfo)settingsElement).LineNumber);
                         continue;
                     }
                 }
