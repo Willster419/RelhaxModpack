@@ -198,7 +198,6 @@
     <Compile Include="Common\IComponentWithID.cs" />
     <Compile Include="Common\Md5DatabaseManager.cs" />
     <Compile Include="Common\StringConstants.cs" />
-    <Compile Include="Common\WindowsInterop.cs" />
     <Compile Include="Database\Category.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Database\DatabaseUtils.cs" />

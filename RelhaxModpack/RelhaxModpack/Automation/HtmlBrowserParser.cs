@@ -39,8 +39,6 @@ namespace RelhaxModpack.Automation
 
         private Dispatcher browserDispatcher;
 
-        protected bool hooked = false;
-
         public HtmlBrowserParser() : base()
         {
 
@@ -82,9 +80,6 @@ namespace RelhaxModpack.Automation
                     Browser.Navigated -= Browser_Navigated;
                     Browser.DocumentCompleted -= Browser_DocumentCompleted;
                 }
-                hooked = false;
-                WindowsInterop.SecurityAlertDialogWillBeShown -= this.WindowsInterop_SecurityAlertDialogWillBeShown;
-                WindowsInterop.Unhook();
 
                 if (ThreadMode)
                     CleanupBrowser();
@@ -172,13 +167,6 @@ namespace RelhaxModpack.Automation
             browserNavigated = true;
         }
 
-        private bool WindowsInterop_SecurityAlertDialogWillBeShown(Boolean blnIsSSLDialog)
-        {
-            // Return true to ignore and not show the 
-            // "Security Alert" dialog to the user
-            return true;
-        }
-
         private void RunBrowserOnUIThread()
         {
             Thread thread = new Thread(() =>
@@ -202,11 +190,6 @@ namespace RelhaxModpack.Automation
             Browser.ScriptErrorsSuppressed = true;
             Browser.Navigated += Browser_Navigated;
             Browser.DocumentCompleted += Browser_DocumentCompleted;
-
-            //setup windows interop events and begin listening for them
-            hooked = true;
-            WindowsInterop.SecurityAlertDialogWillBeShown += new GenericDelegate<Boolean, Boolean>(this.WindowsInterop_SecurityAlertDialogWillBeShown);
-            WindowsInterop.Hook();
 
             Logging.Debug(LogOptions.ClassName, "Running Navigate() method to load browser at URL {0}", Url);
             try
@@ -255,12 +238,6 @@ namespace RelhaxModpack.Automation
                 {
                     Browser.Navigated -= Browser_Navigated;
                     Browser.DocumentCompleted -= Browser_DocumentCompleted;
-                }
-
-                if (hooked)
-                {
-                    WindowsInterop.SecurityAlertDialogWillBeShown -= this.WindowsInterop_SecurityAlertDialogWillBeShown;
-                    WindowsInterop.Unhook();
                 }
 
                 CleanupBrowser();

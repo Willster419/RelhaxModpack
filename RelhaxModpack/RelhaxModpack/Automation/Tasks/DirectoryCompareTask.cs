@@ -83,8 +83,8 @@ namespace RelhaxModpack.Automation.Tasks
             //check that the relative paths match between the folders
             for (int i = 0; i < directoryFilesA.Length; i++)
             {
-                string relativePathA = directoryFilesA[i].Replace(DirectoryComparePathA, "");
-                string relativePathB = directoryFilesB[i].Replace(DirectoryComparePathB, "");
+                string relativePathA = directoryFilesA[i].Replace(DirectoryComparePathA, string.Empty);
+                string relativePathB = directoryFilesB[i].Replace(DirectoryComparePathB, string.Empty);
 
                 if (!relativePathA.Equals(relativePathB))
                 {
