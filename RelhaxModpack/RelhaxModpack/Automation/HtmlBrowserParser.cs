@@ -108,7 +108,7 @@ namespace RelhaxModpack.Automation
             while (!(browserDocumentCompleted && browserNavigated))
             {
                 await Task.Delay(WaitTimeMs);
-                Logging.Debug(LogOptions.ClassName, "browserDocumentCompleted: {0}, browserNavigated: {1}", browserDocumentCompleted.ToString(), browserNavigated.ToString());
+                Logging.Info(LogOptions.ClassName, "browserDocumentCompleted: {0}, browserNavigated: {1}", browserDocumentCompleted.ToString(), browserNavigated.ToString());
             }
 
             if (browserFailed)
@@ -119,11 +119,11 @@ namespace RelhaxModpack.Automation
             if (!browserFailed)
             {
                 //this wait allows the browser to finish loading external scripts
-                Logging.Debug(LogOptions.ClassName, "The browser task events completed, wait additional {0} counts", WaitCounts);
+                Logging.Info(LogOptions.ClassName, "The browser task events completed, wait additional {0} counts", WaitCounts);
                 while (browserFinishedLoadingScriptsCounter < WaitCounts)
                 {
                     await Task.Delay(WaitTimeMs);
-                    Logging.Debug(LogOptions.ClassName, "Waiting {0} of {1} counts", ++browserFinishedLoadingScriptsCounter, WaitCounts);
+                    Logging.Info(LogOptions.ClassName, "Waiting {0} of {1} counts", ++browserFinishedLoadingScriptsCounter, WaitCounts);
                 }
 
                 if (ThreadMode)
@@ -157,13 +157,13 @@ namespace RelhaxModpack.Automation
             if (BrowserWidth > 0 && browser.Width != BrowserWidth)
                 browser.Width = BrowserWidth;
 
-            Logging.Debug(LogOptions.ClassName, "The browser reports document completed");
+            Logging.Info(LogOptions.ClassName, "The browser reports document completed");
             browserDocumentCompleted = true;
         }
 
         private void Browser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
-            Logging.Debug(LogOptions.ClassName, "The browser reports navigation completed");
+            Logging.Info(LogOptions.ClassName, "The browser reports navigation completed");
             browserNavigated = true;
         }
 
@@ -191,7 +191,7 @@ namespace RelhaxModpack.Automation
             Browser.Navigated += Browser_Navigated;
             Browser.DocumentCompleted += Browser_DocumentCompleted;
 
-            Logging.Debug(LogOptions.ClassName, "Running Navigate() method to load browser at URL {0}", Url);
+            Logging.Info(LogOptions.ClassName, "Running Navigate() method to load browser at URL {0}", Url);
             try
             {
                 Browser.Navigate(Url);
