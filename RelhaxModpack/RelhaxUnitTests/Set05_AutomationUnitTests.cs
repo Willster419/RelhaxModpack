@@ -438,7 +438,7 @@ namespace RelhaxUnitTests
         }
 
         [TestMethod]
-        public async Task Test08_DirectoryFilesHashCompareTest()
+        public async Task Test08_DirectoryCompareTaskSimpleTest()
         {
             if (Directory.Exists("TestDir1"))
                 Directory.Delete("TestDir1", true);
