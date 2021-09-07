@@ -13,6 +13,7 @@ using System.IO;
 using System.Threading;
 using RelhaxModpack.Automation.Tasks;
 using RelhaxModpack.Utilities;
+using System.Linq;
 
 namespace RelhaxUnitTests
 {
@@ -520,6 +521,33 @@ namespace RelhaxUnitTests
             Directory.Delete("TestDir1", true);
             Directory.Delete("TestDir2", true);
             sequence.AutomationTasks.Clear();
+        }
+
+        [TestMethod]
+        public async Task Test09_DirectoryCompareTaskSameFilesSameCountTest()
+        {
+            string[] directoryPath = new string[] { "test_resources", "directory_compare", "same_files_same_count" };
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new DirectoryCompareTask
+            {
+                ID = "directory_compare_same_files_same_count",
+                DirectoryComparePathA = Path.Combine(directoryPath.Concat(new string[] { "directory_1", }).ToArray()),
+                DirectoryComparePathB = Path.Combine(directoryPath.Concat(new string[] { "directory_2", }).ToArray()),
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, false);
+
+            AutomationCompareTracker tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker;
+
+            foreach (AutomationCompare compare in tracker.AutomationCompares)
+            {
+                //CompareResult of true means the files are the same
+                Assert.IsTrue(compare.CompareResult);
+                Assert.IsTrue(compare.CompareMode == AutomationCompareMode.NoMatchContinue);
+            }
         }
     }
 }

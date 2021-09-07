@@ -1,0 +1,2 @@
+file_2 in folder_2 is the difference
+folder_2 is missing file_3
