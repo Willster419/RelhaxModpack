@@ -34,7 +34,7 @@ namespace RelhaxModpack.Automation.Tasks
 
             foreach (AutomationCompare automationCompare in AutomationCompareTracker.AutomationCompares)
             {
-                Logging.Debug("Compare {0}", automationCompare.AutomationTask.ID);
+                Logging.Info("Compare {0}", automationCompare.AutomationTask.ID);
                 Logging.Debug("File a: {0}, Hash: {1}", automationCompare.CompareAFilepath, automationCompare.CompareAHash);
                 Logging.Debug("File b: {0}, Hash: {1}", automationCompare.CompareBFilepath, automationCompare.CompareBHash);
                 Logging.Debug("Compare mode: {0}", automationCompare.CompareMode.ToString());
@@ -55,7 +55,7 @@ namespace RelhaxModpack.Automation.Tasks
             if (ProcessTaskResultTrue(AutomationCompareTracker.NumDifferencesContinue + AutomationCompareTracker.NumMatches == 0, "The number of total compares is 0"))
                 return;
 
-            if (ValidateForExitTrue(AutomationCompareTracker.NumDifferencesStop != 0, AutomationExitCode.ComparisonManualFilesToUpdate, string.Format("There are {0} files that require manual updating, cannon continue execution", AutomationCompareTracker.NumDifferencesStop)))
+            if (ValidateForExitTrue(AutomationCompareTracker.NumDifferencesStop != 0, AutomationExitCode.ComparisonManualFilesToUpdate, string.Format("There are {0} files that require manual updating, cannot continue execution", AutomationCompareTracker.NumDifferencesStop)))
                 return;
 
             if (ValidateForExitTrue(AutomationCompareTracker.NumDifferencesContinue == 0, AutomationExitCode.ComparisonNoFilesToUpdate, string.Format("There are no differences in files that need to be updated, no need to continue execution")))
