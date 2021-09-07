@@ -54,7 +54,7 @@ namespace RelhaxUnitTests
             Logging.RedirectLogOutput(Logfiles.AutomationRunner, Logfiles.Application);
         }
 
-        private async Task RunTasks(AutomationSequence sequence, bool clearTasks)
+        private async Task RunTasks(AutomationSequence sequence, bool clearTasks, AutomationExitCode exitCodeToTest = AutomationExitCode.None)
         {
             foreach (AutomationTask task in sequence.AutomationTasks)
             {
@@ -63,7 +63,7 @@ namespace RelhaxUnitTests
 
                 await task.Execute();
 
-                Assert.IsTrue(task.ExitCode == AutomationExitCode.None);
+                Assert.IsTrue(task.ExitCode == exitCodeToTest);
 
                 if (task is IDisposable taskDispose)
                     taskDispose.Dispose();
@@ -546,6 +546,200 @@ namespace RelhaxUnitTests
             {
                 //CompareResult of true means the files are the same
                 Assert.IsTrue(compare.CompareResult);
+                Assert.IsTrue(compare.CompareMode == AutomationCompareMode.NoMatchContinue);
+            }
+        }
+
+        [TestMethod]
+        public async Task Test10_DirectoryCompareTaskSameFilesDifferentCountTest()
+        {
+            string[] directoryPath = new string[] { "test_resources", "directory_compare", "same_files_different_count" };
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new DirectoryCompareTask
+            {
+                ID = "directory_compare_same_files_same_count",
+                DirectoryComparePathA = Path.Combine(directoryPath.Concat(new string[] { "directory_1", }).ToArray()),
+                DirectoryComparePathB = Path.Combine(directoryPath.Concat(new string[] { "directory_2", }).ToArray()),
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, true, AutomationExitCode.ProcessResultsFail);
+        }
+
+        [TestMethod]
+        public async Task Test11_DirectoryCompareTaskDifferentFilesDifferentCountTest()
+        {
+            string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_different_count" };
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new DirectoryCompareTask
+            {
+                ID = "directory_compare_different_files_different_count",
+                DirectoryComparePathA = Path.Combine(directoryPath.Concat(new string[] { "directory_1", }).ToArray()),
+                DirectoryComparePathB = Path.Combine(directoryPath.Concat(new string[] { "directory_2", }).ToArray()),
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, true, AutomationExitCode.ProcessResultsFail);
+        }
+
+        [TestMethod]
+        public async Task Test12_DirectoryCompareTaskDifferentFilesDifferentNamesTest()
+        {
+            string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_different_names" };
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new DirectoryCompareTask
+            {
+                ID = "directory_compare_different_files_different_names",
+                DirectoryComparePathA = Path.Combine(directoryPath.Concat(new string[] { "directory_1", }).ToArray()),
+                DirectoryComparePathB = Path.Combine(directoryPath.Concat(new string[] { "directory_2", }).ToArray()),
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, true, AutomationExitCode.ProcessResultsFail);
+        }
+
+        [TestMethod]
+        public async Task Test13_DirectoryCompareTaskDifferentFilesSameCountTest()
+        {
+            string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_same_count" };
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new DirectoryCompareTask
+            {
+                ID = "directory_compare_different_files_same_count",
+                DirectoryComparePathA = Path.Combine(directoryPath.Concat(new string[] { "directory_1", }).ToArray()),
+                DirectoryComparePathB = Path.Combine(directoryPath.Concat(new string[] { "directory_2", }).ToArray()),
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, false);
+
+            AutomationCompareTracker tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker;
+
+            foreach (AutomationCompare compare in tracker.AutomationCompares)
+            {
+                if (compare.CompareBFilepath.Contains("file_2.txt"))
+                    Assert.IsFalse(compare.CompareResult);
+                else
+                    Assert.IsTrue(compare.CompareResult);
+                Assert.IsTrue(compare.CompareMode == AutomationCompareMode.NoMatchContinue);
+            }
+        }
+
+        [TestMethod]
+        public async Task Test14_DirectoryCompareCountTaskSameFilesSameCountTest()
+        {
+            string[] directoryPath = new string[] { "test_resources", "directory_compare", "same_files_same_count" };
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new DirectoryCompareCountTask
+            {
+                ID = "directory_compare_count_same_files_same_count",
+                DirectoryComparePathA = Path.Combine(directoryPath.Concat(new string[] { "directory_1", }).ToArray()),
+                DirectoryComparePathB = Path.Combine(directoryPath.Concat(new string[] { "directory_2", }).ToArray()),
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, false);
+
+            AutomationCompareTracker tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker;
+
+            foreach (AutomationCompare compare in tracker.AutomationCompares)
+            {
+                Assert.IsTrue(compare.CompareResult);
+                Assert.IsTrue(compare.CompareMode == AutomationCompareMode.NoMatchContinue);
+            }
+        }
+
+        [TestMethod]
+        public async Task Test15_DirectoryCompareCountTaskSameFilesDifferentCountTest()
+        {
+            string[] directoryPath = new string[] { "test_resources", "directory_compare", "same_files_different_count" };
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new DirectoryCompareCountTask
+            {
+                ID = "directory_compare_count_same_files_same_count",
+                DirectoryComparePathA = Path.Combine(directoryPath.Concat(new string[] { "directory_1", }).ToArray()),
+                DirectoryComparePathB = Path.Combine(directoryPath.Concat(new string[] { "directory_2", }).ToArray()),
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, false);
+            Assert.IsTrue(sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker.AutomationCompares.Count == 0);
+        }
+
+        [TestMethod]
+        public async Task Test16_DirectoryCompareCountTaskDifferentFilesDifferentCountTest()
+        {
+            string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_different_count" };
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new DirectoryCompareCountTask
+            {
+                ID = "directory_compare_count_different_files_different_count",
+                DirectoryComparePathA = Path.Combine(directoryPath.Concat(new string[] { "directory_1", }).ToArray()),
+                DirectoryComparePathB = Path.Combine(directoryPath.Concat(new string[] { "directory_2", }).ToArray()),
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, false);
+            Assert.IsTrue(sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker.AutomationCompares.Count == 0);
+        }
+
+        [TestMethod]
+        public async Task Test17_DirectoryCompareCountTaskDifferentFilesDifferentNamesTest()
+        {
+            string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_different_names" };
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new DirectoryCompareCountTask
+            {
+                ID = "directory_compare_count_different_files_different_names",
+                DirectoryComparePathA = Path.Combine(directoryPath.Concat(new string[] { "directory_1", }).ToArray()),
+                DirectoryComparePathB = Path.Combine(directoryPath.Concat(new string[] { "directory_2", }).ToArray()),
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, false);
+            Assert.IsTrue(sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker.AutomationCompares.Count == 0);
+        }
+
+        [TestMethod]
+        public async Task Test18_DirectoryCompareCountTaskDifferentFilesSameCountTest()
+        {
+            string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_same_count" };
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new DirectoryCompareCountTask
+            {
+                ID = "directory_compare_count_different_files_same_count",
+                DirectoryComparePathA = Path.Combine(directoryPath.Concat(new string[] { "directory_1", }).ToArray()),
+                DirectoryComparePathB = Path.Combine(directoryPath.Concat(new string[] { "directory_2", }).ToArray()),
+                Recursive = true.ToString(),
+                SearchPattern = DirectorySearchTask.SEARCH_ALL
+            });
+
+            await RunTasks(sequence, false);
+
+            AutomationCompareTracker tracker = sequence.AutomationTasks[sequence.AutomationTasks.Count - 1].AutomationCompareTracker;
+            foreach (AutomationCompare compare in tracker.AutomationCompares)
+            {
+                if (compare.CompareBFilepath.Contains("file_2.txt"))
+                    Assert.IsFalse(compare.CompareResult);
+                else
+                    Assert.IsTrue(compare.CompareResult);
                 Assert.IsTrue(compare.CompareMode == AutomationCompareMode.NoMatchContinue);
             }
         }
