@@ -2,6 +2,7 @@
 using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +39,8 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
 
             //getting to here means that successful hashes were calculated
-            AutomationCompareTracker.AddCompare(this, FileA, fileAHash, FileB, fileBHash, AutomationCompareMode.NoMatchStop);
+            AutomationCompareFile compareFile = new AutomationCompareFile(Path.GetDirectoryName(FileA), Path.GetDirectoryName(FileB), AutomationCompareMode.NoMatchStop, Path.GetFileName(FileA), fileAHash, Path.GetFileName(FileB), fileBHash);
+            AutomationCompareTracker.AddCompare(this, compareFile);
         }
         #endregion
     }

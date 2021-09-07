@@ -79,7 +79,7 @@ namespace RelhaxModpack.Automation
 
         public List<AutomationMacro> AllMacros { get; private set; } = new List<AutomationMacro>();
 
-        public AutomationCompareTracker AutomationCompareTracker { get; protected set; } = new AutomationCompareTracker();
+        public AutomationCompareManager AutomationCompareTracker { get; protected set; } = new AutomationCompareManager();
 
         public SequencerExitCode ExitCode { get; set; } = SequencerExitCode.NotRun;
 

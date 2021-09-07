@@ -83,7 +83,7 @@ namespace RelhaxModpack.Automation.Tasks
 
         public List<AutomationMacro> Macros { get { return AutomationSequence.AllMacros; } }
 
-        public AutomationCompareTracker AutomationCompareTracker { get { return AutomationSequence.AutomationCompareTracker; } }
+        public AutomationCompareManager AutomationCompareTracker { get { return AutomationSequence.AutomationCompareTracker; } }
 
         public string ErrorMessage { get; protected set; } = string.Empty;
 

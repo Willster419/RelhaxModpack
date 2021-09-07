@@ -106,7 +106,8 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
 
             //getting to here means that successful hashes were calculated
-            AutomationCompareTracker.AddCompare(this, FileA, fileAHash, FileB, fileBHash, AutomationCompareMode.NoMatchContinue);
+            AutomationCompareFile compareFile = new AutomationCompareFile(Path.GetDirectoryName(FileA), Path.GetDirectoryName(FileB), AutomationCompareMode.NoMatchContinue, Path.GetFileName(FileA), fileAHash, Path.GetFileName(FileB), fileBHash);
+            AutomationCompareTracker.AddCompare(this, compareFile);
         }
 
         public virtual void Cancel()

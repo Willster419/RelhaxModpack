@@ -35,9 +35,9 @@ namespace RelhaxModpack.Automation.Tasks
             foreach (AutomationCompare automationCompare in AutomationCompareTracker.AutomationCompares)
             {
                 Logging.Info("Compare {0}", automationCompare.AutomationTask.ID);
-                Logging.Debug("File a: {0}, Hash: {1}", automationCompare.CompareAFilepath, automationCompare.CompareAHash);
-                Logging.Debug("File b: {0}, Hash: {1}", automationCompare.CompareBFilepath, automationCompare.CompareBHash);
                 Logging.Debug("Compare mode: {0}", automationCompare.CompareMode.ToString());
+                automationCompare.PrintToLog();
+
                 if (automationCompare.CompareResult)
                 {
                     Logging.Info("Compare {0} is MATCH", automationCompare.AutomationTask.ID); 

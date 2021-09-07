@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation
 {
-    public class AutomationCompareTracker
+    public class AutomationCompareManager
     {
         public List<AutomationCompare> AutomationCompares { get; } = new List<AutomationCompare>();
 
@@ -29,21 +29,11 @@ namespace RelhaxModpack.Automation
 
         public void AddCompare(AutomationTask task, AutomationCompare compare)
         {
+            if (compare == null)
+                throw new ArgumentNullException(nameof(compare));
+
             compare.AutomationTask = task;
             AutomationCompares.Add(compare);
-        }
-
-        public void AddCompare(AutomationTask task, string fileAPath, string fileAHash, string fileBPath, string fileBHash, AutomationCompareMode compareMode)
-        {
-            AutomationCompare compare = new AutomationCompare()
-            {
-                CompareAFilepath = fileAPath,
-                CompareAHash = fileAHash,
-                CompareBFilepath = fileBPath,
-                CompareBHash = fileBHash,
-                CompareMode = compareMode
-            };
-            AddCompare(task, compare);
         }
     }
 }

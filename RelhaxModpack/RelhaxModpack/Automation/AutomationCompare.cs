@@ -8,20 +8,25 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation
 {
-    public struct AutomationCompare
+    public abstract class AutomationCompare
     {
-        public bool CompareResult { get { return CompareAHash.Equals(CompareBHash); } }
+        public AutomationCompare(string directoryA, string directoryB, AutomationCompareMode compareMode)
+        {
+            this.CompareAPath = directoryA;
+            this.CompareBPath = directoryB;
+            this.CompareMode = compareMode;
+        }
 
-        public string CompareAFilepath;
+        public abstract bool CompareResult { get; }
 
-        public string CompareBFilepath;
+        public string CompareAPath;
 
-        public string CompareAHash;
-
-        public string CompareBHash;
+        public string CompareBPath;
 
         public AutomationCompareMode CompareMode;
 
         public AutomationTask AutomationTask;
+
+        public abstract void PrintToLog();
     }
 }

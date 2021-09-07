@@ -128,10 +128,12 @@
     <Compile Include="Atlases\Packing\RectanglePacker.cs" />
     <Compile Include="Atlases\IRelhaxUnmanagedLibrary.cs" />
     <Compile Include="Automation\AutomationCompare.cs" />
-    <Compile Include="Automation\AutomationCompareTracker.cs" />
+    <Compile Include="Automation\AutomationCompareManager.cs" />
     <Compile Include="Automation\AutomationMacro.cs" />
     <Compile Include="Automation\AutomationSequence.cs" />
     <Compile Include="Automation\AutomationSequencer.cs" />
+    <Compile Include="Automation\AutomationCompareDirectory.cs" />
+    <Compile Include="Automation\AutomationCompareFile.cs" />
     <Compile Include="Automation\Tasks\AutomationTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareCountTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareTask.cs" />
