@@ -1,4 +1,5 @@
 ﻿using RelhaxModpack.Database;
+using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
 
             //getting to here means that successful hashes were calculated
-            AutomationCompareTracker.AddCompare(this, FileA, fileAHash, FileB, fileBHash, Utilities.Enums.AutomationCompareMode.NoMatchStop);
+            AutomationCompareTracker.AddCompare(this, FileA, fileAHash, FileB, fileBHash, AutomationCompareMode.NoMatchStop);
         }
         #endregion
     }
