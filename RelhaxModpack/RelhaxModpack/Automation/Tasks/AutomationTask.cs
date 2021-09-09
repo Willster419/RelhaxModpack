@@ -62,7 +62,8 @@ namespace RelhaxModpack.Automation.Tasks
             { DirectoryCopyTask.TaskCommandName, typeof(DirectoryCopyTask) },
             { DirectoryDeleteTask.TaskCommandName, typeof(DirectoryDeleteTask) },
             { DirectoryCompareTask.TaskCommandName, typeof(DirectoryCompareTask) },
-            { DirectoryCompareCountTask.TaskCommandName, typeof(DirectoryCompareCountTask) }
+            { DirectoryCompareCountTask.TaskCommandName, typeof(DirectoryCompareCountTask) },
+            { DirectoryCompareInverseTask.TaskCommandName, typeof(DirectoryCompareInverseTask) }
         };
 
         public const string AttributeNameForMapping = "Command";
