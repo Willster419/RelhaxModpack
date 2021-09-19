@@ -1,3 +1,14 @@
+# Beta Application version 1.3.3.9 (2021-09-18)
+https://www.virustotal.com/gui/file-analysis/M2I3YzBlZjJlNjA0MTU2YTE0Mzg3NmZlNjkyZmZlYTQ6MTYzMjAxMjU4MQ==
+
+- Added task DirectoryCompareInverseTask, similar to DirectoryCompareCountTask, except files with different hashes are set into the "noMatchStop" group, implying manual updating is required.
+- Re-work automation compare system so that it can track comparisons between files (hashes are different) and directories (count or names are different).
+- Fixed the log window for automation not updating to the setting of suppression of debug messages.
+- Removed unnecessary references and interop hooks.
+- Move some logging messages from info to debug and debug to info.
+- Added more unit testing for automation sequences.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.3.7 (2021-08-19)
 https://www.virustotal.com/gui/file-analysis/ZGQ3NjE3NjFjYzBhZWJkNGRiNGFlMzU0ZmQ0MmRiNDk6MTYyOTQzMjg2OA==/detection
 
