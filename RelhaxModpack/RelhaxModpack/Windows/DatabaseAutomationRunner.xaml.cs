@@ -650,6 +650,8 @@ namespace RelhaxModpack.Windows
         private void SuppressDebugMessagesSetting_Click(object sender, RoutedEventArgs e)
         {
             AutomationSettings.SuppressDebugMessagesInLogWindow = (bool)SuppressDebugMessagesSetting.IsChecked;
+            if (logViewer != null)
+                logViewer.SuppressDebugMessages = AutomationSettings.SuppressDebugMessagesInLogWindow;
         }
 
         private void AutomamtionDatabaseSelectedBranchSetting_TextChanged(object sender, TextChangedEventArgs e)
