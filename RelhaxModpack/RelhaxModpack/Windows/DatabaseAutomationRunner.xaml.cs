@@ -592,9 +592,14 @@ namespace RelhaxModpack.Windows
                     break;
 
                 case SequencerExitCode.NoErrors:
-                    Logging.Info("Sequencer run SUCCESS, saving database");
-                    databaseManager.SaveDatabase(AutomationSettings.DatabaseSavePath);
+                    Logging.Info("Sequencer run SUCCESS");
                     break;
+            }
+
+            if (sequenceRunResult == SequencerExitCode.NoErrors || sequenceRunResult == SequencerExitCode.Errors)
+            {
+                //save database
+                databaseManager.SaveDatabase(AutomationSettings.DatabaseSavePath);
             }
 
             (RunSequencesButton.Content as TextBlock).Text = "Run";
