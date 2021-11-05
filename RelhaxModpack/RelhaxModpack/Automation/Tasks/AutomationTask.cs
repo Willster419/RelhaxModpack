@@ -74,8 +74,6 @@ namespace RelhaxModpack.Automation.Tasks
             "last_download_filename"
         };
 
-        protected Stopwatch ExecutionTimeStopwatch = new Stopwatch();
-
         public AutomationSequence AutomationSequence { get; set; }
 
         public DatabaseAutomationRunner DatabaseAutomationRunner { get { return AutomationSequence.DatabaseAutomationRunner; } }
@@ -93,14 +91,6 @@ namespace RelhaxModpack.Automation.Tasks
         public abstract string Command { get; }
 
         public string ID { get; set; } = string.Empty;
-
-        public long ExecutionTimeProcessMacrosMs { get; protected set; } = 0;
-
-        public long ExecutionTimeValidateCommandsMs { get; protected set; } = 0;
-
-        public long ExecutionTimeRunTaskMs { get; protected set; } = 0;
-
-        public long ExecutionTimeProcessTaskResultsMs { get; protected set; } = 0;
 
         public string ComponentInternalName { get { return ID; } }
 
@@ -122,11 +112,11 @@ namespace RelhaxModpack.Automation.Tasks
             switch (ExitCode)
             {
                 case AutomationExitCode.None:
-                    Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Task: {0} ID: {1} State: {2}, ExitCode: {3}", Command, ID, state, ExitCode);
+                    Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Task: {0} ID: {1} State: {2}, ExitCode: {3}", Command, ID, state, ExitCode);
                     return true;
 
                 case AutomationExitCode.ComparisonNoFilesToUpdate:
-                    Logging.Info("The task {0} (ID {1} reported exit code {2}. The Sequence will stop, but a success will be reported", Command, ID, ExitCode.ToString());
+                    Logging.Info("The task {0} (ID {1}) reported exit code {2}. The Sequence will stop, but a success will be reported", Command, ID, ExitCode.ToString());
                     return true;
 
                 default:
@@ -210,8 +200,6 @@ namespace RelhaxModpack.Automation.Tasks
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: Task start", Command);
 
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ProcessMacros() start", Command);
-            ExecutionTimeStopwatch.Restart();
             try
             {
                 ProcessMacros();
@@ -221,13 +209,9 @@ namespace RelhaxModpack.Automation.Tasks
                 ExitCode = AutomationExitCode.ExecuteException;
                 ErrorMessage = ex.ToString() + Environment.NewLine + ex.StackTrace;
             }
-            ExecutionTimeProcessMacrosMs = ExecutionTimeStopwatch.ElapsedMilliseconds;
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ProcessMacros() finish, ExecutionTime: {1}", Command, ExecutionTimeProcessMacrosMs.ToString());
             if (!EvaluateResults(nameof(ProcessMacros)))
                 return;
 
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ValidateCommands() start", Command);
-            ExecutionTimeStopwatch.Restart();
             try
             {
                 ValidateCommands();
@@ -237,13 +221,9 @@ namespace RelhaxModpack.Automation.Tasks
                 ExitCode = AutomationExitCode.ExecuteException;
                 ErrorMessage = ex.ToString() + Environment.NewLine + ex.StackTrace;
             }
-            ExecutionTimeValidateCommandsMs = ExecutionTimeStopwatch.ElapsedMilliseconds;
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ValidateCommands() finish, ExecutionTime: {1}", Command, ExecutionTimeValidateCommandsMs.ToString());
             if (!EvaluateResults(nameof(ValidateCommands)))
                 return;
 
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: RunTask() start", Command);
-            ExecutionTimeStopwatch.Restart();
             try
             {
                 await RunTask();
@@ -253,13 +233,10 @@ namespace RelhaxModpack.Automation.Tasks
                 ExitCode = AutomationExitCode.ExecuteException;
                 ErrorMessage = ex.ToString() + Environment.NewLine + ex.StackTrace;
             }
-            ExecutionTimeRunTaskMs = ExecutionTimeStopwatch.ElapsedMilliseconds;
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: RunTask() finish, ExecutionTime: {1}", Command, ExecutionTimeRunTaskMs.ToString());
             if (!EvaluateResults(nameof(RunTask)))
                 return;
 
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ProcessTaskResults() start", Command);
-            ExecutionTimeStopwatch.Restart();
             try
             {
                 ProcessTaskResults();
@@ -269,18 +246,13 @@ namespace RelhaxModpack.Automation.Tasks
                 ExitCode = AutomationExitCode.ExecuteException;
                 ErrorMessage = ex.ToString() + Environment.NewLine + ex.StackTrace;
             }
-            ExecutionTimeProcessTaskResultsMs = ExecutionTimeStopwatch.ElapsedMilliseconds;
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Running task {0}: ProcessTaskResults() finish, ExecutionTime: {1}", Command, ExecutionTimeProcessTaskResultsMs.ToString());
-            ExecutionTimeStopwatch.Stop();
             if (!EvaluateResults(nameof(ProcessTaskResults)))
                 return;
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Finished task {0}: Task end, ExecutionTimeMs: {1}", Command, ExecutionTimeStopwatch.ElapsedMilliseconds);
         }
 
         protected static string ProcessEscapeCharacters(string argName, string arg)
         {
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg escape characters '{0}'", argName);
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Before escape processing: '{0}'", arg);
 
             //replace the escape characters for "{" and "}"
             arg = arg.Replace("\\{", "{");
@@ -316,7 +288,6 @@ namespace RelhaxModpack.Automation.Tasks
             if (recursionLevel > 0)
                 recursiveLevelString = string.Format("(recursive level {0})", recursionLevel);
             Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Processing arg '{0}' {1}", argName, recursiveLevelString);
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Before processing: '{0}'", arg);
 
             //run regex on the arg to get the type of replacement to do. if it's recursive, then we need to process the inner one first
             Match result = Regex.Match(arg, AutomationMacro.MacroReplaceRegex);
@@ -327,14 +298,17 @@ namespace RelhaxModpack.Automation.Tasks
                 if (startBracketsMatch.Captures.Count > 0)
                 {
                     Match endBracketsMatch = Regex.Match(arg, "}");
+
                     Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Macros were detected in the argument, but the syntax was incorrect. Most likely is the number of start and end brackets are unbalanced.");
                     Logging.Error(Logfiles.AutomationRunner, LogOptions.None, "Examine the number of brackets starting and ending in the argument, and try again. For debug, here's what was parsed:");
+
                     Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Argument value: {0}", arg);
                     Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Start brackets count: {0}", startBracketsMatch.Captures.Count);
                     foreach (Capture capture in startBracketsMatch.Captures)
                     {
                         Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "Capture location in string: {0}", capture.Index);
                     }
+
                     Logging.Info(Logfiles.AutomationRunner, LogOptions.None, "End brackets count: {0}", endBracketsMatch.Captures.Count);
                     foreach (Capture capture in endBracketsMatch.Captures)
                     {
@@ -342,7 +316,7 @@ namespace RelhaxModpack.Automation.Tasks
                     }
                     return;
                 }
-                Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "The argument {0} has no macros, continue", argName);
+                Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "The argument {0} has no macros, continue", argName);
                 return;
             }
 
@@ -354,7 +328,7 @@ namespace RelhaxModpack.Automation.Tasks
             if (inner2Count != inner3Count)
             {
                 Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "Inner2Count ({0}) != Inner3Count ({1})! The macro engine is not designed for this!", inner2Count, inner3Count);
-                throw new NotImplementedException("soon tm");
+                throw new NotImplementedException();
             }
             else if (inner2Count > inner1Count)
             {
@@ -451,7 +425,7 @@ namespace RelhaxModpack.Automation.Tasks
                 }
             }
 
-            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "After processing: {0}", arg);
+            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "After processing: {0}", arg);
         }
     }
 }

@@ -179,7 +179,7 @@ namespace RelhaxModpack.Automation
             {
                 task.AutomationSequence = this;
                 task.PreProcessingHook();
-                Logging.Info("Processed task {0}", task.ID);
+                Logging.Debug("Processed task {0}", task.ID);
             }
 
             Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Finish parsing of tasks");
