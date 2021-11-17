@@ -479,27 +479,36 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <!-- Spacer -->
                             <RowDefinition Height="20"/>
+                            <!-- Package display name -->
                             <RowDefinition Height="20"/>
+                            <!-- Package internal name -->
                             <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
+                            <!-- Zip file -->
                             <RowDefinition Height="40"/>
+                            <!-- Package version (mod version) -->
                             <RowDefinition Height="20"/>
+                            <!-- Package author (mod author) -->
                             <RowDefinition Height="20"/>
+                            <!-- Package maintainers -->
                             <RowDefinition Height="20"/>
+                            <!-- Package selection type -->
                             <RowDefinition Height="20"/>
+                            <!-- Package install group -->
                             <RowDefinition Height="20"/>
+                            <!-- Package patch group -->
                             <RowDefinition Height="20"/>
-                            <!-- Patch Group -->
+                            <!-- Package UID -->
                             <RowDefinition Height="20"/>
-                            <!-- UID -->
+                            <!-- Tree level -->
                             <RowDefinition Height="20"/>
-                            <!-- Tree Level -->
+                            <!-- Calculated tree level from selection POV -->
                             <RowDefinition Height="20"/>
-                            <!-- Calculated Level -->
+                            <!-- Zip file last updated timestamp -->
                             <RowDefinition Height="20"/>
-                            <!-- Last Updated -->
-                            <RowDefinition Height="20"/>
+                            <!-- Last package update check timestamp -->
+                            <RowDefinition Height="40"/>
                             <!-- spacer -->
                             <RowDefinition Height="20"/>
                             <!-- checkboxes -->
@@ -518,39 +527,39 @@
                         <!-- Names -->
                         <TextBlock x:Name="PackageDisplayNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center"/>
                         <TextBlock x:Name="PackageNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="2" TextWrapping="Wrap" Text="Package Name" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageZipFileTextBlock" HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="Zip File" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageVersionTextBlock" HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageAuthorTextBlock" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Author" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageMaintainersTextBlock" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Maintainers" VerticalAlignment="Center" ToolTip="Comma separated values of Database managers of this component"/>
-                        <TextBlock x:Name="PakageTypeTextBlock" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageInstallGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="Install Group" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackagePatchGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" Text="Patch Group" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageUidTextBlock" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" Text="UID:" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="13" TextWrapping="Wrap" Text="Tree Level:" VerticalAlignment="Center" ToolTip="The sublevel in the category tree where this package exists"/>
-                        <TextBlock x:Name="PackageCalculatedLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="14" TextWrapping="Wrap" Text="Calculated Level:" VerticalAlignment="Center"
+                        <TextBlock x:Name="PackageZipFileTextBlock" HorizontalAlignment="Stretch" Grid.Row="3" TextWrapping="Wrap" Text="Zip File" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageVersionTextBlock" HorizontalAlignment="Stretch" Grid.Row="4" TextWrapping="Wrap" Text="Version" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageAuthorTextBlock" HorizontalAlignment="Stretch" Grid.Row="5" TextWrapping="Wrap" Text="Author" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageMaintainersTextBlock" HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" Text="Maintainers" VerticalAlignment="Center" ToolTip="Comma separated values of Database managers of this component"/>
+                        <TextBlock x:Name="PakageTypeTextBlock" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageInstallGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" Text="Install Group" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackagePatchGroupTextBlock" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" Text="Patch Group" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageUidTextBlock" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" Text="UID:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" Text="Tree Level:" VerticalAlignment="Center" ToolTip="The sublevel in the category tree where this package exists"/>
+                        <TextBlock x:Name="PackageCalculatedLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" Text="Calculated Level:" VerticalAlignment="Center"
                                    ToolTip="The calculated sublevel during installation, if 'Offset InstallGroup' for the category is enabled"/>
+                        <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="13" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
                         <!-- Values -->
-                        <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="15" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
                         <TextBox x:Name="PackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackagePackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox x:Name="PackageZipFileDisplay" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Stretch" />
-                        <TextBox x:Name="PackageVersionDisplay" HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox x:Name="PackageAuthorDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" />
-                        <TextBox x:Name="PackageMaintainersDisplay" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" ToolTip="Comma separated values of Database managers of this component"/>
-                        <ComboBox x:Name="PackageTypeDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center">
+                        <TextBox x:Name="PackageZipFileDisplay" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Stretch" />
+                        <TextBox x:Name="PackageVersionDisplay" HorizontalAlignment="Stretch" Grid.Row="4" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageAuthorDisplay" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <TextBox x:Name="PackageMaintainersDisplay" HorizontalAlignment="Stretch" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" ToolTip="Comma separated values of Database managers of this component"/>
+                        <ComboBox x:Name="PackageTypeDisplay" HorizontalAlignment="Stretch" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center">
                             <enums:SelectionTypes>none</enums:SelectionTypes>
                             <enums:SelectionTypes>single1</enums:SelectionTypes>
                             <enums:SelectionTypes>single_dropdown1</enums:SelectionTypes>
                             <enums:SelectionTypes>single_dropdown2</enums:SelectionTypes>
                             <enums:SelectionTypes>multi</enums:SelectionTypes>
                         </ComboBox>
-                        <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
-                        <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="11" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
-                        <TextBox x:Name="PackageUidDisplay" HorizontalAlignment="Stretch" Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" IsEnabled="True" IsReadOnly="True"/>
-                        <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="13" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
-                        <TextBlock x:Name="PackageCalculatedLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="14" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
-                        <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="15" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="17" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <ComboBox x:Name="PackageInstallGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
+                        <ComboBox x:Name="PackagePatchGroupDisplay" HorizontalAlignment="Stretch" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" IsEditable="True"/>
+                        <TextBox x:Name="PackageUidDisplay" HorizontalAlignment="Stretch" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" IsEnabled="True" IsReadOnly="True"/>
+                        <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+                        <TextBlock x:Name="PackageCalculatedLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+                        <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="13" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="16" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="125"/>
                                 <ColumnDefinition Width="175"/>
@@ -575,8 +584,8 @@
                             <CheckBox Grid.Row="3" Grid.Column="0" Content="Deprecated" x:Name="PackageDeprecatedDisplay" Tag="DeprecatedCB"/>
                             <CheckBox Grid.Row="3" Grid.Column="1" Content="Minimalist mode exclude" x:Name="PackageMinimalistModeExcludeDisplay" Tag="MinimalistModeCB" ToolTip="When this is true, the package will be excluded from installation"/>
                         </Grid>
-                        <Button Grid.Column="0" Grid.Row="19" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" />
-                        <Button Grid.Column="0" Grid.Row="21" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="18" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Download Zip" x:Name="ZipDownload" Tag="ZipDownload" Click="ZipDownload_Click" Grid.ColumnSpan="2" Width="200" />
+                        <Button Grid.Column="0" Grid.Row="20" HorizontalAlignment="Left" VerticalAlignment="Stretch" Content="Upload Zip" x:Name="ZipUload" Tag="ZipUpload" Click="ZipUpload_Click" Grid.ColumnSpan="2" Width="200" />
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
