@@ -58,7 +58,8 @@ namespace RelhaxModpack.Database
             nameof(Author),
             nameof(Maintainers),
             nameof(Deprecated),
-            nameof(MinimalistModeExclude)
+            nameof(MinimalistModeExclude),
+            nameof(LastUpdateCheck)
         };
         #endregion
 
@@ -117,6 +118,11 @@ namespace RelhaxModpack.Database
         /// Used to determine when the package entry was last modified
         /// </summary>
         public long Timestamp { get; set; } = 0;
+
+        /// <summary>
+        /// Used to determine when the last automation or human check for an update was completed
+        /// </summary>
+        public long LastUpdateCheck { get; set; } = 0;
 
         /// <summary>
         /// Size of the zip file
@@ -311,6 +317,7 @@ namespace RelhaxModpack.Database
             this.UID = packageToCopy.UID;
             //don't call the property for enabled, just the internal field
             this._Enabled = packageToCopy._Enabled;
+            this.LastUpdateCheck = packageToCopy.LastUpdateCheck;
         }
 
         public void UpdatePackageName(string newPackageName)
@@ -318,6 +325,7 @@ namespace RelhaxModpack.Database
             this.ZipFile = newPackageName;
             this.CRC = "f";
             this.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
+            this.LastUpdateCheck = this.Timestamp;
         }
         #endregion
 

@@ -798,6 +798,8 @@ namespace RelhaxModpack.Windows
             PackageAuthorDisplay.Text = package.Author;
             PackageUidDisplay.Text = package.UID;
             PackageLastUpdatedDisplay.Text = CommonUtils.ConvertFiletimeTimestampToDate(package.Timestamp);
+            PackageLastCheckForUpdateDisplay.Text = CommonUtils.ConvertFiletimeTimestampToDate(package.LastUpdateCheck);
+            PackageLastCheckForUpdateDisplay.Tag = package.LastUpdateCheck;
 
             //locate and select the patchGroup and installGroup of the package
             //if it can't, then extend the number of options until its there
@@ -1293,6 +1295,8 @@ namespace RelhaxModpack.Windows
             if (!package.InternalNotes.Equals(MacroUtils.MacroReplace(PackageInternalNotesDisplay.Text, ReplacementTypes.TextEscape)))
                 return true;
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
+                return true;
+            if (package.LastUpdateCheck != (long)PackageLastCheckForUpdateDisplay.Tag)
                 return true;
 
             if (TriggersWereModified(package.TriggersList))
@@ -3043,6 +3047,30 @@ namespace RelhaxModpack.Windows
                     Logging.Editor("Conflicting packages are not implemented for double click jump",LogLevel.Debug);
                 }
             }, System.Windows.Threading.DispatcherPriority.Background);
+        }
+        #endregion
+
+        #region Other buttons
+
+        private void PackageJustCheckedForUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedItem == null)
+                return;
+
+            DatabasePackage packToWorkOn = null;
+            if (SelectedItem is EditorComboBoxItem ecbi)
+                packToWorkOn = ecbi.Package;
+            else if (SelectedItem is DatabasePackage pack)
+                packToWorkOn = pack;
+
+            if (packToWorkOn != null)
+            {
+                long newTimestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
+                Logging.Editor("Updated the last check for update of package {0}. Old: {1}, New: {2}", LogLevel.Debug, packToWorkOn.PackageName, packToWorkOn.LastUpdateCheck, newTimestamp);
+                packToWorkOn.LastUpdateCheck = newTimestamp;
+                PackageLastCheckForUpdateDisplay.Text = CommonUtils.ConvertFiletimeTimestampToDate(packToWorkOn.LastUpdateCheck);
+                PackageLastCheckForUpdateDisplay.Tag = packToWorkOn.LastUpdateCheck;
+            }
         }
         #endregion
     }

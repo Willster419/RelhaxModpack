@@ -538,7 +538,8 @@
                         <TextBlock x:Name="PackageLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" Text="Tree Level:" VerticalAlignment="Center" ToolTip="The sublevel in the category tree where this package exists"/>
                         <TextBlock x:Name="PackageCalculatedLevelTextBlock" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" Text="Calculated Level:" VerticalAlignment="Center"
                                    ToolTip="The calculated sublevel during installation, if 'Offset InstallGroup' for the category is enabled"/>
-                        <TextBlock x:Name="PackagLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="13" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageLastUpdatedTextBlock" HorizontalAlignment="Stretch" Grid.Row="13" TextWrapping="Wrap" Text="Last Updated:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageLastCheckForUpdateTextBlock" HorizontalAlignment="Stretch" Grid.Row="14" TextWrapping="Wrap" Text="Last Check for Update:" VerticalAlignment="Center"/>
                         <!-- Values -->
                         <TextBox x:Name="PackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="PackagePackageNameDisplay" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" VerticalAlignment="Center" />
@@ -559,6 +560,8 @@
                         <TextBlock x:Name="PackageLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
                         <TextBlock x:Name="PackageCalculatedLevelDisplay" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
                         <TextBlock x:Name="PackageLastUpdatedDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="13" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="PackageLastCheckForUpdateDisplay" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="14" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                        <Button x:Name="PackageJustCheckedForUpdateButton" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="14" VerticalAlignment="Bottom" MinWidth="100" MaxWidth="140" Padding="5,0,5,0" Content="I just checked" Click="PackageJustCheckedForUpdateButton_Click"/>
                         <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="16" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="125"/>
