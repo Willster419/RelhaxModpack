@@ -45,6 +45,7 @@ namespace RelhaxModpack.Windows
         private const string UpdaterErrorExceptionCatcherLogfile = "UpdaterErrorCatcher.log";
         private const string InstallStatisticsXml = "install_statistics.xml";
         private const string TranslationsCsv = "translations.csv";
+        private const string AutomationElementsTxt = "AutomationElements.txt";
 
         private string DatabaseUpdatePath
         {
@@ -874,6 +875,12 @@ namespace RelhaxModpack.Windows
             CleanFoldersOnlineCancelStep3.Visibility = Visibility.Hidden;
             ReportProgress("Done");
             ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+
+        private void CleanFoldersCancel_Click(object sender, RoutedEventArgs e)
+        {
+            ReportProgress("Stop requested, canceling operation");
+            client.CancelAsync();
         }
         #endregion
 
@@ -2187,10 +2194,52 @@ namespace RelhaxModpack.Windows
         }
         #endregion
 
-        private void CleanFoldersCancel_Click(object sender, RoutedEventArgs e)
+        #region Create Automation Root Entries
+        private async void LoadDatabaseOutputRootAutomationText_Click(object sender, RoutedEventArgs e)
         {
-            ReportProgress("Stop requested, canceling operation");
-            client.CancelAsync();
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Loading database");
+
+            OnLoadModInfo(null, null);
+
+            //list creation and parsing
+            databaseManagerDuplicateCheck = new DatabaseManager(ModpackSettings, CommandLineSettings);
+            await databaseManagerDuplicateCheck.LoadDatabaseTestAsync(SelectModInfo.FileName);
+
+            //link stuff in memory
+            DatabaseUtils.BuildDependencyPackageRefrences(databaseManagerDuplicateCheck.ParsedCategoryList, databaseManagerDuplicateCheck.Dependencies);
+
+            ReportProgress("Database loaded");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
         }
+
+        private void OutputRootAutomationEntriesButton_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            //checks
+            if (databaseManagerDuplicateCheck == null)
+            {
+                ReportProgress("databaseManagerDuplicateCheck is null (load database)");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            if (databaseManagerDuplicateCheck.GlobalDependencies == null || databaseManagerDuplicateCheck.GlobalDependencies.Count == 0)
+            {
+                ReportProgress("databaseManagerDuplicateCheck has not been populated (load database)");
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            //script
+            StringBuilder textBuilder = new StringBuilder();
+            foreach (DatabasePackage package in databaseManagerDuplicateCheck.AllPackages())
+                textBuilder.AppendFormat("{0}{1}", package.ToAutomationElement(), Environment.NewLine);
+            File.WriteAllText(AutomationElementsTxt, textBuilder.ToString());
+            ReportProgress("Automation elements saved to " + AutomationElementsTxt);
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+        #endregion
     }
 }

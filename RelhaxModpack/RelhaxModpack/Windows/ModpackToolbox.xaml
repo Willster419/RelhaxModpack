@@ -114,8 +114,9 @@
             <TabItem x:Name="StatisticsToolsTab" Header="Other DB Tools">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="8*"/>
                         <RowDefinition Height="2*"/>
-                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="10*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -153,7 +154,7 @@
                             </Button>
                         </StackPanel>
                     </Border>
-                    <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="0" Grid.Row="1">
+                    <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
                         <StackPanel Orientation="Vertical">
                             <Button x:Name="LoadDatabaseUpdateSupportedClientsButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseUpdateSupportedClientsButton_Click">
                                 <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
@@ -179,6 +180,16 @@
                         <StackPanel Orientation="Vertical">
                             <Button x:Name="WriteTranslationsToCsvButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="WriteTranslationsToCsvButton_Click">
                                 <TextBlock Text="Create CSV of Translations"/>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1" Grid.Row="2">
+                        <StackPanel Orientation="Vertical">
+                            <Button x:Name="LoadDatabaseOutputRootAutomationText" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseOutputRootAutomationText_Click">
+                                <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
+                            </Button>
+                            <Button x:Name="OutputRootAutomationEntriesButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="OutputRootAutomationEntriesButton_Click">
+                                <TextBlock Text="Create XML automation root entries for packages" TextWrapping="Wrap"/>
                             </Button>
                         </StackPanel>
                     </Border>
