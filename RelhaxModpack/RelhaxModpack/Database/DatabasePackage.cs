@@ -327,6 +327,12 @@ namespace RelhaxModpack.Database
             this.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
             this.LastUpdateCheck = this.Timestamp;
         }
+
+        public string ToAutomationElement()
+        {
+            //example: <AutomationSequence UID="cw7xk1guapz8hayk" packageName="Dependency_OldSkool_modsCore" path="Dependencies/Dependency_OldSkool_modsCore.xml" />
+            return string.Format("<AutomationSequence UID=\"{0}\" packageName=\"{1}\" path=\"path_to/{1}.xml\"/>", UID, PackageName);
+        }
         #endregion
 
         #region Disposable support
