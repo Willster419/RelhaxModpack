@@ -119,7 +119,8 @@ namespace RelhaxModpack.Automation
                 Logging.Info(Logfiles.AutomationRunner, "Download html webpage to string");
                 try
                 {
-                    htmlText = await client.DownloadStringTaskAsync(Url);
+                    byte[] bytes = Encoding.Default.GetBytes(await client.DownloadStringTaskAsync(Url));
+                    htmlText = Encoding.UTF8.GetString(bytes);
                 }
                 catch (OperationCanceledException) { }
                 catch (WebException wex)
