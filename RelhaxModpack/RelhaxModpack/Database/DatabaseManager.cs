@@ -1083,5 +1083,12 @@ namespace RelhaxModpack.Database
             }
         }
         #endregion
+
+        #region other methods
+        public List<DatabasePackage> AllPackages()
+        {
+            return DatabaseUtils.GetFlatList(this.GlobalDependencies, this.Dependencies, this.ParsedCategoryList);
+        }
+        #endregion
     }
 }
