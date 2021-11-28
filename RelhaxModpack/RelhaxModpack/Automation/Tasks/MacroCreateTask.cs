@@ -31,8 +31,11 @@ namespace RelhaxModpack.Automation.Tasks
 
         public override void ValidateCommands()
         {
-            if (ValidateCommandTrue(string.IsNullOrEmpty(MacroValue), "The arg MacroValue is empty string"))
-                return;
+            base.ValidateCommands();
+            if (string.IsNullOrEmpty(MacroValue))
+            {
+                Logging.Info("The macro {0} resolved to an empty string", MacroName);
+            }
         }
 
         public override async Task RunTask()
