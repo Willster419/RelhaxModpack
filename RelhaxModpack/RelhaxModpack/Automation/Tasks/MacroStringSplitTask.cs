@@ -58,7 +58,7 @@ namespace RelhaxModpack.Automation.Tasks
         public override async Task RunTask()
         {
             await base.RunTask();
-            GetStringValue();
+            await GetStringValue();
 
             if (string.IsNullOrEmpty(stringWithValue))
             {
