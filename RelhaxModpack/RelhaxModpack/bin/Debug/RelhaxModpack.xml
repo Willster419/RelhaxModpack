@@ -1621,6 +1621,11 @@
             Used to determine when the package entry was last modified
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Database.DatabasePackage.LastUpdateCheck">
+            <summary>
+            Used to determine when the last automation or human check for an update was completed
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Size">
             <summary>
             Size of the zip file
