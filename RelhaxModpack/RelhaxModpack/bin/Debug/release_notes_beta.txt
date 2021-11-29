@@ -1,3 +1,17 @@
+# Beta Application version 1.3.3.10 (2021-11-28)
+https://www.virustotal.com/gui/file-analysis/YWM3ODQxNjM2YzEwZTE0OWZiNzdhY2NmYTBiYjk5ZTk6MTYzODE0OTM3Mg==
+
+- Added property `LastUpdateCheck` into database so the last time an update check was done by someone (or the automation runner) it is logged.
+- Added feature to output all automation runner root elements for each package into a text file. Allows copy paste when creating automation sequences.
+- Fixed bug in HtmlWebscrapeParser and HtmlBrowserParser that would not use UTF8 for string encoding when downloading webpages from sites that have custom symbols for a language (like russian, polish, etc).
+- Fixed behavior for MacroCreateTask that would not accept a macro value of empty text (sometimes that's the intent).
+- Fixed but with MacroStringSplitTask that wouldn't wait for getting the string for an async implementation of the method.
+- Fixed UI placement issues of components in the database editor, added xml comments for each row definition.
+- Removed Excessive logging that was used during development, but not needed anymore of the automation runner.
+- Change the behavior of running multiple sequences for automation so that it saves the database at the end of a run from sequence error or sequence pass conditions. (It won't save for internal errors).
+  - This is because for example, in a sequence of 4, if 2 fails, but 3 and 4 work, now it will save the database after all sequences are run. It wouldn't' before because 2 failed.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.3.9 (2021-09-18)
 https://www.virustotal.com/gui/file-analysis/M2I3YzBlZjJlNjA0MTU2YTE0Mzg3NmZlNjkyZmZlYTQ6MTYzMjAxMjU4MQ==
 
