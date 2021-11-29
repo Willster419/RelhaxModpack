@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -126,16 +127,19 @@ namespace RelhaxModpack.Automation
                     Logging.Info(LogOptions.ClassName, "Waiting {0} of {1} counts", ++browserFinishedLoadingScriptsCounter, WaitCounts);
                 }
 
+                string tempHtmlText = string.Empty;
                 if (ThreadMode)
                 {
                     browserDispatcher.Invoke(() => {
-                        htmlText = Browser.Document.Body.OuterHtml;
+                        tempHtmlText = Browser.Document.Body.OuterHtml;
                     });
                 }
                 else
                 {
-                    htmlText = Browser.Document.Body.OuterHtml;
+                    tempHtmlText = Browser.Document.Body.OuterHtml;
                 }
+                byte[] bytes = Encoding.Default.GetBytes(tempHtmlText);
+                htmlText = Encoding.UTF8.GetString(bytes);
 
                 if (WriteHtmlToDisk)
                 {
