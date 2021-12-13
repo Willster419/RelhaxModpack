@@ -433,7 +433,7 @@ namespace RelhaxModpack.Windows
 
         private void RemoveAllSequenceButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SequencesToRunListBox.SelectedItems.Count == 0)
+            if (SequencesToRunListBox.Items.Count == 0)
                 return;
 
             SequencesToRunListBox.Items.Clear();
