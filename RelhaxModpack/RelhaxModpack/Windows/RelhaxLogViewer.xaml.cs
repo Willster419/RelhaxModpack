@@ -29,17 +29,17 @@ namespace RelhaxModpack.Windows
         public RelhaxLogViewer(ModpackSettings modpackSettings) : base(modpackSettings)
         {
             InitializeComponent();
-            Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite += OnLogMessageWrite;
+            StartLogListener_();
         }
 
         private void ClearLogButton_Click(object sender, RoutedEventArgs e)
         {
-            LogTextbox.Clear();
+            ClearLogWindow();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite -= OnLogMessageWrite;
+            StopLogListener_();
         }
 
         private void OnLogMessageWrite(object sender, LogMessageEventArgs e)
@@ -67,6 +67,31 @@ namespace RelhaxModpack.Windows
         private void LogTextbox_Loaded(object sender, RoutedEventArgs e)
         {
             ToggleWordWrapCheckbox_Click(null, null);
+        }
+
+        public void ClearLogWindow()
+        {
+            Dispatcher.Invoke((Action)(() => { LogTextbox.Clear(); }));
+        }
+
+        private void StartLogListener_()
+        {
+            Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite += OnLogMessageWrite;
+        }
+
+        public void StartLogListener()
+        {
+            Dispatcher.Invoke(() => StartLogListener_());
+        }
+
+        private void StopLogListener_()
+        {
+            Logging.GetLogfile(Utilities.Enums.Logfiles.Application).OnLogfileWrite -= OnLogMessageWrite;
+        }
+
+        public void StopLogListener()
+        {
+            Dispatcher.Invoke(() => StopLogListener_());
         }
     }
 }

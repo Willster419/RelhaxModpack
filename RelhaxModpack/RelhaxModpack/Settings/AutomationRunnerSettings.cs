@@ -53,5 +53,9 @@ namespace RelhaxModpack.Settings
         public AutomationRunMode AutomationRunMode { get; set; } = AutomationRunMode.Batch;
 
         public bool SuppressDebugMessagesInLogWindow { get; set; } = true;
+
+        public bool ClearLogWindowOnSequenceStart { get; set; } = true;
+
+        public bool ClearLogFileOnSequenceStart { get; set; } = false;
     }
 }

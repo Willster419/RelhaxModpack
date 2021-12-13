@@ -187,6 +187,8 @@ namespace RelhaxModpack.Windows
             LocalRunnerDatabaseRootSetting.Text = AutomationSettings.LocalRunnerDatabaseRoot;
             SelectWoTInstallLocationSetting.Text = AutomationSettings.WoTClientInstallLocation;
             SuppressDebugMessagesSetting.IsChecked = AutomationSettings.SuppressDebugMessagesInLogWindow;
+            ClearLogWindowOnSequenceRunSetting.IsChecked = AutomationSettings.ClearLogWindowOnSequenceStart;
+            ClearLogFileOnSequenceRunSetting.IsChecked = AutomationSettings.ClearLogFileOnSequenceStart;
         }
 
         private void MoveSequenceToRunList()
@@ -428,6 +430,14 @@ namespace RelhaxModpack.Windows
             foreach (AutomationSequence sequence in itemsToRemove)
                 SequencesToRunListBox.Items.Remove(sequence);
         }
+
+        private void RemoveAllSequenceButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SequencesToRunListBox.SelectedItems.Count == 0)
+                return;
+
+            SequencesToRunListBox.Items.Clear();
+        }
         #endregion
 
         #region Bottom rows buttons
@@ -542,6 +552,36 @@ namespace RelhaxModpack.Windows
             RunSequencesButton.Click -= RunSequencesButton_Click;
             RunSequencesButton.Click += CancelSequencesButton_Click;
             
+
+            //clear log file and window
+            bool isLogViewerLoaded = false;
+            logViewer.Dispatcher.Invoke(() => isLogViewerLoaded = logViewer.IsLoaded);
+            if (AutomationSettings.ClearLogWindowOnSequenceStart && logViewer != null && isLogViewerLoaded)
+            {
+                logViewer.ClearLogWindow();
+            }
+
+            if (AutomationSettings.ClearLogFileOnSequenceStart)
+            {
+                logViewer?.StopLogListener();
+                if (!Logging.DisableRedirection(Logfiles.Application, Logfiles.AutomationRunner))
+                    throw new BadMemeException("Failed to disable redirection");
+
+                string logfilePath = Logging.GetLogfile(Logfiles.AutomationRunner).Filepath;
+                Logging.DisposeLogging(Logfiles.AutomationRunner);
+                File.Delete(logfilePath);
+
+                if (!Logging.Init(Logfiles.AutomationRunner, ModpackSettings.VerboseLogging, true, logfilePath))
+                    throw new BadMemeException("How did you manage to kill it and not init a new one");
+
+                Logging.WriteHeader(Logfiles.AutomationRunner);
+                if (!Logging.RedirectLogOutput(Logfiles.Application, Logfiles.AutomationRunner))
+                    throw new BadMemeException("You were just redirecting how can you not do that now");
+
+                //re-subscribe the log event to the log window
+                logViewer?.StartLogListener();
+            }
+
             //load database
             Logging.Info("Loading database before sequence run");
             try
@@ -657,6 +697,16 @@ namespace RelhaxModpack.Windows
             AutomationSettings.SuppressDebugMessagesInLogWindow = (bool)SuppressDebugMessagesSetting.IsChecked;
             if (logViewer != null)
                 logViewer.SuppressDebugMessages = AutomationSettings.SuppressDebugMessagesInLogWindow;
+        }
+
+        private void ClearLogWindowOnSequenceRunSetting_Click(object sender, RoutedEventArgs e)
+        {
+            AutomationSettings.ClearLogWindowOnSequenceStart = (bool)ClearLogWindowOnSequenceRunSetting.IsChecked;
+        }
+
+        private void ClearLogFileOnSequenceRunSetting_Click(object sender, RoutedEventArgs e)
+        {
+            AutomationSettings.ClearLogFileOnSequenceStart = (bool)ClearLogFileOnSequenceRunSetting.IsChecked;
         }
 
         private void AutomamtionDatabaseSelectedBranchSetting_TextChanged(object sender, TextChangedEventArgs e)

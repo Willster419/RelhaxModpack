@@ -42,6 +42,9 @@
                     <Button x:Name="RemoveSelectedSequenceButton" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Center" Height="40" Grid.Column="3" Grid.Row="1" Click="RemoveSelectedSequenceButton_Click">
                         <TextBlock Text="Remove selected" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
+                    <Button x:Name="RemoveAllSequenceButton" HorizontalAlignment="Stretch" Margin="0,200,0,0" VerticalAlignment="Center" Height="40" Grid.Column="3" Grid.Row="1" Click="RemoveAllSequenceButton_Click">
+                        <TextBlock Text="Remove all" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
                     <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="2" Grid.Column="2" Margin="0,0,2,0">
                         <Button x:Name="ReloadSequencesButton" HorizontalAlignment="Right" Margin="0,3,0,0" VerticalAlignment="Stretch" Padding="3,1,3,1" Click="ReloadSequencesButton_Click">
                             <TextBlock Text="Reload Sequences"/>
@@ -77,6 +80,8 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
                             <!-- Package db save/load -->
                             <RowDefinition Height="40"/>
                             <!-- Automation repo branch selection -->
@@ -106,26 +111,30 @@
                                       Click="DumpEnvironmentVariablesAtSequenceStartSetting_Click" ToolTip="When checked, the list of system environment variables will be dumped to the logfile at the start of the sequencer"/>
                         <CheckBox x:Name="SuppressDebugMessagesSetting" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Center" Content="Suppress debug messages in the log window" Margin="2,0,0,0"
                                       Click="SuppressDebugMessagesSetting_Click" ToolTip="When enabled, DEBUG level messages will NOT be put out to the log window"/>
-                        <Button x:Name="SelectDBSaveLocationButton" HorizontalAlignment="Stretch" Grid.Row="6" VerticalAlignment="Center" Click="SelectDBSaveLocationButton_Click"
+                        <CheckBox x:Name="ClearLogWindowOnSequenceRunSetting" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Center" Content="Clear log window on sequence start" Margin="2,0,0,0"
+                                      Click="ClearLogWindowOnSequenceRunSetting_Click" ToolTip="When enabled, DEBUG level messages will NOT be put out to the log window"/>
+                        <CheckBox x:Name="ClearLogFileOnSequenceRunSetting" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Center" Content="Clear log file on sequence start" Margin="2,0,0,0"
+                                      Click="ClearLogFileOnSequenceRunSetting_Click" ToolTip="When enabled, DEBUG level messages will NOT be put out to the log window"/>
+                        <Button x:Name="SelectDBSaveLocationButton" HorizontalAlignment="Stretch" Grid.Row="8" VerticalAlignment="Center" Click="SelectDBSaveLocationButton_Click"
                                     ToolTip="Select the location to use for loading and saving the database for automation runs. This path *must* go to the root database xml file!">
                             <TextBlock Text="Package database load/save root xml" TextWrapping="Wrap"/>
                         </Button>
-                        <TextBox x:Name="SelectDBSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="6" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="SelectDBSaveLocationSetting_TextChanged" Margin="2,0,0,0"/>
-                        <TextBlock x:Name="AutomamtionDatabaseSelectedBranchTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Automation repository selected branch" VerticalAlignment="Center" Grid.Column="0" Grid.Row="7" TextAlignment="Left"
+                        <TextBox x:Name="SelectDBSaveLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="8" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="SelectDBSaveLocationSetting_TextChanged" Margin="2,0,0,0"/>
+                        <TextBlock x:Name="AutomamtionDatabaseSelectedBranchTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Automation repository selected branch" VerticalAlignment="Center" Grid.Column="0" Grid.Row="9" TextAlignment="Left"
                                        ToolTip="Enter the target branch to use for the automation repo. If 'Use local repo database on disk' is checked, this setting has no effect. The default is 'master'."/>
-                        <TextBox x:Name="AutomamtionDatabaseSelectedBranchSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="AutomamtionDatabaseSelectedBranchSetting_TextChanged" Margin="2,0,0,0"/>
-                        <CheckBox x:Name="UseLocalRunnerDatabaseSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="8" VerticalAlignment="Center" Content="Use local automation repository on disk" Margin="2,0,0,0"
+                        <TextBox x:Name="AutomamtionDatabaseSelectedBranchSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="AutomamtionDatabaseSelectedBranchSetting_TextChanged" Margin="2,0,0,0"/>
+                        <CheckBox x:Name="UseLocalRunnerDatabaseSetting" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="10" VerticalAlignment="Center" Content="Use local automation repository on disk" Margin="2,0,0,0"
                                       Click="UseLocalRunnerDatabaseSetting_Click" ToolTip="Toggle using a local copy of the automation sequence repo, or the server version"/>
-                        <Button x:Name="LocalRunnerDatabaseRootButton" HorizontalAlignment="Stretch" Grid.Row="9" VerticalAlignment="Center" Click="SelectLocalRunnerDatabaseRootButton_Click"
+                        <Button x:Name="LocalRunnerDatabaseRootButton" HorizontalAlignment="Stretch" Grid.Row="11" VerticalAlignment="Center" Click="SelectLocalRunnerDatabaseRootButton_Click"
                                     ToolTip="Select the location to use for loading the local copy of the automation repo on disk. This path *must* go to the root database xml file!">
                             <TextBlock Text="Automation database root xml" TextWrapping="Wrap"/>
                         </Button>
-                        <TextBox x:Name="LocalRunnerDatabaseRootSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="9" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="LocalRunnerDatabaseRootSetting_TextChanged" Margin="2,0,0,0"/>
-                        <Button x:Name="SelectWoTInstallLocationButton" HorizontalAlignment="Stretch" Grid.Row="10" VerticalAlignment="Center" Click="SelectWoTInstallLocationButton_Click"
+                        <TextBox x:Name="LocalRunnerDatabaseRootSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="LocalRunnerDatabaseRootSetting_TextChanged" Margin="2,0,0,0"/>
+                        <Button x:Name="SelectWoTInstallLocationButton" HorizontalAlignment="Stretch" Grid.Row="12" VerticalAlignment="Center" Click="SelectWoTInstallLocationButton_Click"
                                     ToolTip="Select the location to use for the {clientPath} macro">
                             <TextBlock Text="Select WoT install location" TextWrapping="Wrap"/>
                         </Button>
-                        <TextBox x:Name="SelectWoTInstallLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="SelectWoTInstallLocationSetting_TextChanged" Margin="2,0,0,0"/>
+                        <TextBox x:Name="SelectWoTInstallLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="SelectWoTInstallLocationSetting_TextChanged" Margin="2,0,0,0"/>
                     </Grid>
                     <Button x:Name="SaveSettingsButton" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="SaveSettingsButton_Click">
                         <TextBlock Text="Save Settings"/>
