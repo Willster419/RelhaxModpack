@@ -551,7 +551,9 @@ namespace RelhaxModpack.Windows
             (RunSequencesButton.Content as TextBlock).Text = "Cancel";
             RunSequencesButton.Click -= RunSequencesButton_Click;
             RunSequencesButton.Click += CancelSequencesButton_Click;
-            
+
+            //toggle UI
+            ToggleUI(false);
 
             //clear log file and window
             bool isLogViewerLoaded = false;
@@ -605,6 +607,15 @@ namespace RelhaxModpack.Windows
             AutomationSequencer.CancellationToken = cancellationTokenSource.Token;
 
             List<AutomationSequence> sequencesToRun = SequencesToRunListBox.Items.Cast<AutomationSequence>().ToList();
+
+            //clear the sequences to run list and replace them with the list box items
+            SequencesToRunListBox.Items.Clear();
+            foreach (AutomationSequence sequence in sequencesToRun)
+            {
+                sequence.AutomationComboBoxItem = new AutomationListBoxItem() { AutomationSequence = sequence, Content = sequence };
+                SequencesToRunListBox.Items.Add(sequence.AutomationComboBoxItem);
+            }
+
             SequencerExitCode sequenceRunResult = await AutomationSequencer.RunSequencerAsync(sequencesToRun);
 
             switch (sequenceRunResult)
@@ -642,14 +653,32 @@ namespace RelhaxModpack.Windows
                 databaseManager.SaveDatabase(AutomationSettings.DatabaseSavePath);
             }
 
-            (RunSequencesButton.Content as TextBlock).Text = "Run";
+            (RunSequencesButton.Content as TextBlock).Text = "Finish";
             RunSequencesButton.Click -= CancelSequencesButton_Click;
-            RunSequencesButton.Click += RunSequencesButton_Click;
+            RunSequencesButton.Click += FinishSequences_Click;
 
             AutomationTaskProgressBar.Visibility = Visibility.Hidden;
             AutomationTaskProgressBar.Minimum = AutomationTaskProgressBar.Maximum = AutomationTaskProgressBar.Value = 0;
             AutomationTaskProgressTextBlock.Visibility = Visibility.Hidden;
             AutomationTaskProgressTextBlock.Text = string.Empty;
+        }
+
+        private void FinishSequences_Click(object sender, RoutedEventArgs e)
+        {
+            //reset sequence items back to actual sequences, not the listbox
+            List<AutomationSequence> sequencesToRun = SequencesToRunListBox.Items.Cast<AutomationListBoxItem>().ToList().Select(seq => seq.AutomationSequence).ToList();
+            SequencesToRunListBox.Items.Clear();
+            foreach (AutomationSequence sequence in sequencesToRun)
+            {
+                sequence.AutomationComboBoxItem = null;
+                SequencesToRunListBox.Items.Add(sequence);
+            }
+
+            (RunSequencesButton.Content as TextBlock).Text = "Run";
+            RunSequencesButton.Click -= FinishSequences_Click;
+            RunSequencesButton.Click += RunSequencesButton_Click;
+
+            ToggleUI(true);
         }
 
         private void CancelSequencesButton_Click(object sender, RoutedEventArgs e)
@@ -663,6 +692,29 @@ namespace RelhaxModpack.Windows
             else
             {
                 Logging.Info("Cancel request already sent");
+            }
+        }
+
+        private void ToggleUI(bool toggle)
+        {
+            Logging.Debug("The Sequence control UI was toggled: {0}", toggle);
+            Control[] controlsToToggle = new Control[]
+            {
+                SequencesAvailableListBox,
+                //SequencesToRunListBox,
+                MoveSequencesToRunListButton,
+                ReloadSequencesButton,
+                CleanWorkingDirectoriesButton,
+                OpenHtmlPathSelectorButton,
+                MoveUpSelectedSequenceButton,
+                MoveDownSelectedSequenceButton,
+                RemoveSelectedSequenceButton,
+                RemoveAllSequenceButton
+            };
+
+            foreach (Control control in controlsToToggle)
+            {
+                control.IsEnabled = toggle;
             }
         }
 

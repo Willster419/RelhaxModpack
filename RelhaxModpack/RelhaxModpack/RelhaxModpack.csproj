@@ -218,6 +218,7 @@
     <Compile Include="Settings\ISettingsFile.cs" />
     <Compile Include="Settings\ModpackToolboxSettings.cs" />
     <Compile Include="Settings\SettingsParser.cs" />
+    <Compile Include="UI\AutomationListBoxItem.cs" />
     <Compile Include="UI\BoundUISettings.cs" />
     <Compile Include="UI\ClassColorset.cs" />
     <Compile Include="UI\ClassThemeDefinitions\BorderClassThemeDefinition.cs" />

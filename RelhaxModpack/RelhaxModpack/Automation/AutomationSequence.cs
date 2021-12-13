@@ -19,6 +19,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using RelhaxModpack.Automation.Tasks;
+using RelhaxModpack.UI;
 
 namespace RelhaxModpack.Automation
 {
@@ -34,6 +35,8 @@ namespace RelhaxModpack.Automation
         public AutomationSequencer AutomationSequencer { get; set; } = null;
 
         public List<AutomationTask> AutomationTasks { get; } = new List<AutomationTask>();
+
+        public AutomationListBoxItem AutomationComboBoxItem { get; set; }
 
         public bool PackageLoaded { get { return Package != null; } }
 

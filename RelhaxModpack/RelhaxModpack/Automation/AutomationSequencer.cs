@@ -312,6 +312,17 @@ namespace RelhaxModpack.Automation
             Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Running automation sequencer");
             NumErrors = 0;
 
+            //backup the original text color if not done already, else set it if it's not already set
+            foreach (AutomationSequence sequenceToRun in sequencesToRun)
+            {
+                if (sequenceToRun.AutomationComboBoxItem == null)
+                    break;
+                if (sequenceToRun.AutomationComboBoxItem.DefaultForgroundBrush == null)
+                    sequenceToRun.AutomationComboBoxItem.DefaultForgroundBrush = sequenceToRun.AutomationComboBoxItem.Foreground;
+                else if (sequenceToRun.AutomationComboBoxItem.Foreground != sequenceToRun.AutomationComboBoxItem.DefaultForgroundBrush)
+                    sequenceToRun.AutomationComboBoxItem.Foreground = sequenceToRun.AutomationComboBoxItem.DefaultForgroundBrush;
+            }
+
             SequencerExitCode exitCode;
             foreach (AutomationSequence sequence in sequencesToRun)
             {
@@ -355,6 +366,15 @@ namespace RelhaxModpack.Automation
                         break;
                 }
                 Logging.Info("----------------------------------------------------------------");
+
+                //set color code as well if the comboboxes aren't null
+                if (sequence.AutomationComboBoxItem != null)
+                {
+                    if (sequence.ExitCode == SequencerExitCode.Errors)
+                        sequence.AutomationComboBoxItem.Foreground = System.Windows.Media.Brushes.Red;
+                    else if (sequence.ExitCode == SequencerExitCode.NoErrors)
+                        sequence.AutomationComboBoxItem.Foreground = System.Windows.Media.Brushes.Green;
+                }
 
                 if (NumErrors == 0)
                 {
