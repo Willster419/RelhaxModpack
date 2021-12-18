@@ -227,8 +227,12 @@ namespace RelhaxModpack.Utilities
             //https://weblog.west-wind.com/posts/2011/May/21/Web-Browser-Control-Specifying-the-IE-Version#Using-the-X--UA--Compatible-HTML-Meta-Tag
             //https://stackoverflow.com/questions/17922308/use-latest-version-of-internet-explorer-in-the-webbrowser-control
 
-            string browserEmulationKey = Environment.Is64BitProcess ? IE_BROWSER_EMULATION_REGPATH_64 : IE_BROWSER_EMULATION_REGPATH_32;
+            SetRegisterKeyForIEVersion(IE_BROWSER_EMULATION_REGPATH_64, exeName, IEVersion);
+            SetRegisterKeyForIEVersion(IE_BROWSER_EMULATION_REGPATH_32, exeName, IEVersion);
+        }
 
+        private static void SetRegisterKeyForIEVersion(string browserEmulationKey, string exeName, IERegistryVersion IEVersion)
+        {
             int registryToSet = (int)IEVersion;
             int currentRegistryValue;
 
