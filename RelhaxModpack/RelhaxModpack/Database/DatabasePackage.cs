@@ -58,8 +58,8 @@ namespace RelhaxModpack.Database
             nameof(Author),
             nameof(Maintainers),
             nameof(Deprecated),
-            nameof(MinimalistModeExclude)//,
-            //nameof(LastUpdateCheck)
+            nameof(MinimalistModeExclude),
+            nameof(LastUpdateCheck)
         };
         #endregion
 
