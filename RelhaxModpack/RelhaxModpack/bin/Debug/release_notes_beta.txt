@@ -1,3 +1,59 @@
+# Application version 1.3.4.0 (2021-12-19)
+https://www.virustotal.com/gui/file/f0fe66fb073e7c629c18abc73a4eb7e0c3cf68768df9d0f2f76d9411325e0ed0
+
+## "Automation is the future" ~ The guy writing the automation.
+
+### Bug fixes and improvements for the package automation update system. If only it could update itself as well...
+- Added the following automation tasks:
+  - DirectoryCompareTask: Enable searching for files and comparing them, rather then needing to specify multiple files to check.
+  - DirectoryCompareCountTask: Similar to DirectoryCompareTask, but when the files count or names change between directories, it counts as an update needed, not an error.
+  - DirectoryCompareInverseTask: Similar to DirectoryCompareCountTask, except files with different hashes are set into the "noMatchStop" group, implying manual updating is required (stops the automation sequence from continuing).
+- Fixed the following automation tasks:
+  - DirectoryDeleteTask: Fixed/synced parameters to DirectorySearchTask.
+  - DirectoryDeleteTask: Fixed bugs with deleting folders based on absolute and relative location.
+  - DirectoryCopyTask: Fixed/synced parameters to DirectorySearchTask.
+  - MacroSubstringMacroTask: Fixed bug with sometimes not getting the correct substring of the correct target variable.
+  - MacroSubstringHtmlTask: Fixed bug with sometimes not getting the correct substring of the correct target variable.
+  - MacroSubstringFilenameTask: Fixed bug with sometimes not getting the correct substring of the correct target variable.
+  - MacroSubstringBrowserTask: Fixed bug with sometimes not getting the correct substring of the correct target variable.
+  - RetrievePackagePropertyTask: Fixed bugs with task not using the correct target package to get/set based on target argument from task.
+  - UpdatePackagePropertyTask: Fixed bugs with task not using the correct target package to get/set based on target argument from task.
+  - MacroStringSplitBrowserTask: Fixed a bug with task not waiting until the WebClient request was completed.
+  - MacroStringSplitHtmlTask: Fixed a bug with task not waiting until the WebClient request was completed.
+  - MacroSubstringBrowserTask: Fixed a bug with task not waiting until the WebClient request was completed.
+  - MacroSubstringHtmlTask: Fixed a bug with task not waiting until the WebClient request was completed.
+  - MacroCreateTask: Fixed behavior that would not accept a macro value of empty text (sometimes that's the intent).
+  - ShellExecuteTask: Fixed bugs handling the created child process upon failing to launch.
+- Cleanup and bug fixes of the automation runner UI.
+- Change the behavior of running multiple sequences for automation so that it saves the database at the end of a run from sequence error or sequence pass conditions. (It won't save for internal errors).
+  - This is because for example, in a sequence of 4, if 2 fails, but 3 and 4 work, now it will save the database after all sequences are run. It wouldn't' before because 2 failed.
+- Improved error code resolution for automation sequencer errors.
+- Added check during automation sequence run if required settings are set in the settings tab for all macros.
+- Removed overly complex method to check if url is valid, replaced it with a much quicker and simpler method.
+- Added option IncludeRootInSearch to include DirectoryPath in search results. This allows you to delete an empty directory.
+
+### Testing the application, one unit at a time
+- Added several automation task unit tests and ensured they are passing.
+- Updated all appilcation and database unit tests to be working with the updated code base and passing (except the patching unit tests).
+- Updated/finished the automated installation unit test for future database self-checking and reporting.
+- When updating the modpack by a major version, we require the pull request in source code to show proof of the unit tests passing.
+
+### LOG MESSAGE SPAM! "The  b e s t  way to reach people."
+- Fixed issues with how logging was handled between the editor, patch designer and the automation runner, in terns of redirection and re-initialization.
+- Reduced the ammount of spam from the logging system when running automation sequences.
+- Moved several info level log statements from info to debug throughout the application.
+- Improved log formatting in the automation runner.
+- Added option to suppress logging output messages that are of level debug to the automation log output console.
+
+### Other bug fixes and improvements
+- Added property `LastUpdateCheck` into database so the last time an update check was done by someone (or the automation runner) it is logged.
+- Added feature to output all automation runner root elements for each package into a text file. Allows copy paste when creating automation sequences.
+- Fixed bugs with file utility methods ProcessEmptyDirectories(), FileSearch, added file utility method DirectorySearch.
+- Fixed optimization issues with the `Default` uninstall method.
+- Class structure improvements for windows that are custom features like the editor or patch designer. Also synchronized how the logging was handled between all of them.
+- Added translation entries and updated translations from contributers.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.3.11 (2021-12-19)
 (not officially released, contains update history from 1.3.3.10 to 1.3.4.0)
 
