@@ -30,7 +30,9 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected ProcessStartInfo startInfo = null;
 
-        protected bool processStarted;
+        protected bool processStarted = false;
+
+        protected bool processCompleted = false;
 
         protected int exitCode;
 
@@ -95,12 +97,12 @@ namespace RelhaxModpack.Automation.Tasks
                     process.OutputDataReceived += Process_OutputDataReceived;
                     process.ErrorDataReceived += Process_ErrorDataReceived;
                     processStarted = process.Start();
-                    processStarted = true;
 
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
 
                     process.WaitForExit();
+                    processCompleted = true;
                 }
                 catch (OperationCanceledException) { }
                 catch (Exception ex)
@@ -114,7 +116,12 @@ namespace RelhaxModpack.Automation.Tasks
 
                 process.OutputDataReceived -= Process_OutputDataReceived;
                 process.ErrorDataReceived -= Process_ErrorDataReceived;
-                exitCode = process.ExitCode;
+
+                if (processCompleted)
+                    exitCode = process.ExitCode;
+                else
+                    exitCode = -1;
+
                 process.Dispose();
             });
             Logging.Info("Shell execution finishes");
