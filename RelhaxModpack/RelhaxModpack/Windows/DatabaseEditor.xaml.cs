@@ -566,6 +566,7 @@ namespace RelhaxModpack.Windows
                     ApplyButton.IsEnabled = true;
                     ZipDownload.IsEnabled = true;
                     ZipUload.IsEnabled = true;
+                    PackageJustCheckedForUpdateButton.IsEnabled = true;
 
                     //all have internal notes and triggers
                     foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(TriggersTab, false))
