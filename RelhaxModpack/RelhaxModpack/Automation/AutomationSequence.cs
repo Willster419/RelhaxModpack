@@ -251,6 +251,7 @@ namespace RelhaxModpack.Automation
             Directory.CreateDirectory(workingDirectory);
 
             bool taskReturnGood = true;
+            bool updatePackageLastCheck = false;
             for (int index = 0; index < AutomationTasks.Count; index++)
             {
                 AutomationTask task = AutomationTasks[index];
@@ -275,24 +276,28 @@ namespace RelhaxModpack.Automation
                     case AutomationExitCode.None:
                         breakLoop = false;
                         taskReturnGood = true;
+                        updatePackageLastCheck = true;
                         ExitCode = SequencerExitCode.NoErrors;
                         break;
 
                     case AutomationExitCode.Cancel:
                         breakLoop = true;
                         taskReturnGood = true;
+                        updatePackageLastCheck = false;
                         ExitCode = SequencerExitCode.Cancel;
                         break;
 
                     case AutomationExitCode.ComparisonNoFilesToUpdate:
                         breakLoop = true;
                         taskReturnGood = true;
+                        updatePackageLastCheck = true;
                         ExitCode = SequencerExitCode.NoErrors;
                         break;
 
                     case AutomationExitCode.ComparisonManualFilesToUpdate:
                         breakLoop = true;
                         taskReturnGood = true;
+                        updatePackageLastCheck = false;
                         ExitCode = SequencerExitCode.NoErrors;
                         break;
 
@@ -300,6 +305,7 @@ namespace RelhaxModpack.Automation
                         Logging.Error(Logfiles.AutomationRunner, LogOptions.MethodName, "The task, '{0}', failed to execute. Check the task error output above for more details. You may want to enable verbose logging.", task.ID);
                         breakLoop = true;
                         taskReturnGood = false;
+                        updatePackageLastCheck = false;
                         ExitCode = SequencerExitCode.Errors;
                         break;
                 }
@@ -314,6 +320,10 @@ namespace RelhaxModpack.Automation
                 if (breakLoop)
                     break;
             }
+
+            //if it completed as updated or no update available, then mark the package as checked for latest updates
+            if (updatePackageLastCheck)
+                Package.LastUpdateCheck = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
 
             //dispose/cleanup the tasks
             AutomationTasks.Clear();
