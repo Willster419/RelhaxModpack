@@ -1,3 +1,13 @@
+# Beta Application version 1.3.3.11 (2021-12-19)
+(not officially released, contains update history from 1.3.3.10 to 1.3.4.0)
+
+- Add option for clearing the automation log file and console window when running a new set of automation sequences.
+- Added toggling of automation runner UI during run to prevent invalid UI input states.
+- Added reporting of each sequence run status by setting the color of the text of the corresponding UI object in the list to eithor green or red for passed or failed.
+- Need to set IE browser emulation for 32 and 64bit entries in the registry.
+- Fixed bugs in the ShellExecuteTask.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Beta Application version 1.3.3.10 (2021-11-28)
 https://www.virustotal.com/gui/file-analysis/YWM3ODQxNjM2YzEwZTE0OWZiNzdhY2NmYTBiYjk5ZTk6MTYzODE0OTM3Mg==
 
