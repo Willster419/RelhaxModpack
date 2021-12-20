@@ -735,7 +735,8 @@ echo } &gt;&gt; "$(ProjectDir)\Common\CiInfo.cs"
 if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>if exist "$(TargetDir)sign_modpack.bat" call "$(TargetDir)sign_modpack.bat"
+    <PostBuildEvent>if exist "$(TargetDir)sign_modpack.bat" ping 127.0.0.1 -n 2 &gt; nul
+if exist "$(TargetDir)sign_modpack.bat" call "$(TargetDir)sign_modpack.bat"
 if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuffNull.cs" "$(ProjectDir)\PrivateStuff\PrivateStuff.cs"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
