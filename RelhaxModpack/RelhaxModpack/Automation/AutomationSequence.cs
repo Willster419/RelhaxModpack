@@ -298,7 +298,7 @@ namespace RelhaxModpack.Automation
                         breakLoop = true;
                         taskReturnGood = true;
                         updatePackageLastCheck = false;
-                        ExitCode = SequencerExitCode.NoErrors;
+                        ExitCode = SequencerExitCode.Errors;
                         break;
 
                     default:
