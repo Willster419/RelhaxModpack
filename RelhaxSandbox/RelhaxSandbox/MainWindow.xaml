@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:RelhaxSandbox"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxSandbox.MainWindow"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:Controls="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls.WebView"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800" Loaded="Window_Loaded">
     <Window.Resources>
@@ -300,6 +301,18 @@
                     </WindowsFormsHost.Child>
                 </WindowsFormsHost>
                 <TextBox x:Name="HeadersBlockWIN" HorizontalAlignment="Stretch" Margin="10,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="93" ScrollViewer.CanContentScroll="True" 
+                         ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="EDGE BROWSER">
+            <Grid>
+                <TextBlock x:Name="AutoUpdateWGURLHeaderEDGE" HorizontalAlignment="Left" Margin="10,4,0,0" TextWrapping="Wrap" Text="URL" VerticalAlignment="Top"/>
+                <TextBox x:Name="AutoUpdateWGURLTextboxEDGE" HorizontalAlignment="Stretch" Height="23" Margin="36,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="https://wgmods.net/392/"/>
+                <TextBlock x:Name="AutoUpdateWGInfoEDGE" HorizontalAlignment="Left" Margin="128,33,0,0" TextWrapping="Wrap" Text="Data here" VerticalAlignment="Top"/>
+                <Button x:Name="AutoUpdateWGClickEDGE" Content="Get Info (Edge)" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="113" Click="AutoUpdateWGClickEDGE_Click"/>
+                <!-- <wv2:WebView2 x:Name="TestBrowseEdge" HorizontalAlignment="Stretch" Margin="10,56,10,108" VerticalAlignment="Stretch" Visibility="Visible"></wv2:WebView2> -->
+                <Controls:WebView x:Name="TestBrowseEdge" HorizontalAlignment="Stretch" Margin="10,56,10,108" VerticalAlignment="Stretch" Visibility="Visible"/>
+                <TextBox x:Name="HeadersBlockEDGE" HorizontalAlignment="Stretch" Margin="10,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="93" ScrollViewer.CanContentScroll="True" 
                          ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
             </Grid>
         </TabItem>

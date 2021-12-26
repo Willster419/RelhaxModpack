@@ -35,6 +35,7 @@ using System.Text;
 using Microsoft.Win32;
 using System.Linq;
 using FontFamily = System.Windows.Media.FontFamily;
+using System.Net.Http;
 
 namespace RelhaxSandbox
 {
@@ -714,6 +715,50 @@ namespace RelhaxSandbox
             }
 
             AutoUpdateWGInfoIEWIN.Text = string.Format("For client: {0}, download link: {1}", version, downloadURL);
+        }
+
+        private void AutoUpdateWGClickEDGE_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(AutoUpdateWGURLTextboxEDGE.Text))
+                return;
+            AutoUpdateWGInfoEDGE.Text = "Getting info...";
+
+            TestBrowseEdge.NavigationCompleted += TestBrowseEdge_NavigationCompleted;
+
+            TestBrowseEdge.Navigate(AutoUpdateWGURLTextboxEDGE.Text);
+
+            //how to post example. First arg is the url to post to, third arg is content and 4th arg is headers
+            //TestBrowseEdge.Navigate(new Uri("string"), HttpMethod.Post, null, null);
+        }
+
+        private async void TestBrowseEdge_NavigationCompleted(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlNavigationCompletedEventArgs e)
+        {
+            await Task.Delay(2000);
+
+            HtmlDocument document = new HtmlDocument();
+            string html = TestBrowseEdge.InvokeScript("eval", new string[] { "document.documentElement.outerHTML;" });
+            document.LoadHtml(html);
+            HeadersBlockEDGE.Text = html;
+
+            HtmlNode node = document.DocumentNode;
+            //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
+            HtmlNodeCollection clientVersionNode = node.SelectNodes(@"//div[contains(@class, 'ModDetails_label')]");
+            string version = string.Empty;
+            string downloadURL = string.Empty;
+            if (clientVersionNode != null)
+            {
+                HtmlNode nodeTest = clientVersionNode[3];
+                HtmlNode versionNode = nodeTest.ChildNodes[0].ChildNodes[1];
+                version = versionNode.InnerText;
+            }
+
+            if (clientVersionNode != null)
+            {
+                HtmlNode downloadUrlNode = node.SelectSingleNode(@"//a[contains(@class, 'ModDetails_hidden')]");
+                downloadURL = downloadUrlNode.Attributes["href"].Value;
+            }
+
+            AutoUpdateWGInfoEDGE.Text = string.Format("For client: {0}, download link: {1}", version, downloadURL);
         }
 
         private void SetRegistryKey(string exeName, int IEVersion)
