@@ -770,7 +770,6 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <!-- <Message Text="ReferenceCopyLocalPaths: @(ReferenceCopyLocalPaths)" /> -->
     <!-- <Message Text="NugetPkgs: @(NugetPkgs)" /> -->
     <!-- <Message Text="NugetDlls: @(NugetDlls)" /> -->
-    <!-- Get the dlls to include by determining if they have a hint path. Any with it are nuget dlls to include-->
     <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/makedir-task?view=vs-2019 -->
     <MakeDir Directories="$(DllOutputDir)" />
     <!-- https://docs.microsoft.com/en-us/visualstudio/msbuild/copy-task?view=vs-2019 -->
