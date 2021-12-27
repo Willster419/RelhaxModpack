@@ -254,6 +254,11 @@ namespace RelhaxUnitTests
                 DestinationFilePath = "BestestModpackEver.exe"
             });
 
+            sequence.AutomationTasks.Add(new FileExistsTask()
+            {
+                SourceFilePath = "BestestModpackEver.exe"
+            });
+
             sequence.AutomationTasks.Add(new FileDeleteTask()
             {
                 SourceFilePath = "BestestModpackEver.exe"
@@ -885,5 +890,19 @@ namespace RelhaxUnitTests
             Assert.IsTrue(tracker.NumDifferencesStop > 0);
         }
         #endregion
+
+        [TestMethod]
+        public async Task Test24_FileDoesNotExistTask()
+        {
+            //still need a automation sequence object to run this
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new FileExistsTask()
+            {
+                SourceFilePath = "not_a_file.lol"
+            });
+
+            await RunTasks(sequence, true, AutomationExitCode.ProcessResultsFail);
+        }
     }
 }
