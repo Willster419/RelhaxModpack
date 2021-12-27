@@ -204,7 +204,7 @@
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell">
       <Version>1.1.4</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.Toolkit.Wpf.UI.Controls.WebView">
+    <PackageReference Include="Microsoft.Toolkit.Forms.UI.Controls.WebView">
       <Version>6.1.2</Version>
     </PackageReference>
     <PackageReference Include="NAudio">
