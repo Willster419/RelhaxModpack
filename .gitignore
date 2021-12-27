@@ -201,15 +201,5 @@ FakesAssemblies/
 /RelhaxDocumentation/RelhaxDocumentation/Help
 *.code-workspace
 /RelhaxModpack/RelhaxUnitTests/Resources/atlas_out
-/RelhaxModpack/RelhaxModpack/Resources/DLL/DotNetZip.dll
-/RelhaxModpack/RelhaxModpack/Resources/DLL/FreeImage32.zip
-/RelhaxModpack/RelhaxModpack/Resources/DLL/FreeImage64.zip
-/RelhaxModpack/RelhaxModpack/Resources/DLL/HtmlAgilityPack.dll
-/RelhaxModpack/RelhaxModpack/Resources/DLL/Microsoft.WindowsAPICodePack.dll
-/RelhaxModpack/RelhaxModpack/Resources/DLL/Microsoft.WindowsAPICodePack.Shell.dll
-/RelhaxModpack/RelhaxModpack/Resources/DLL/NAudio.dll
-/RelhaxModpack/RelhaxModpack/Resources/DLL/Newtonsoft.Json.dll
-/RelhaxModpack/RelhaxModpack/Resources/DLL/nvtt32.zip
-/RelhaxModpack/RelhaxModpack/Resources/DLL/nvtt64.zip
-/RelhaxModpack/RelhaxModpack/Resources/DLL/TeximpNet.dll
 /RelhaxModpack/.vsBack/
+/RelhaxModpack/RelhaxModpack/Resources/DLL
