@@ -759,9 +759,7 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
       <!-- This will force the nuget dlls into a subdir called 'libs'. 
            Usefull for if you want to test dynamic assembly loading but don't want to 
            change each nuget package reference node to explicitly not copy to the output directory -->
-      <ReferenceCopyLocalPaths Condition=" '%(ReferenceCopyLocalPaths.NuGetPackageId)' != '' "
-        Update="%(ReferenceCopyLocalPaths)"
-        DestinationSubDirectory="libs\" />
+      <ReferenceCopyLocalPaths Condition=" '%(ReferenceCopyLocalPaths.NuGetPackageId)' != '' " Update="%(ReferenceCopyLocalPaths)" DestinationSubDirectory="libs\" />
       <NugetPkgs Include="@(ReferenceCopyLocalPaths)" Condition=" '%(ReferenceCopyLocalPaths.NuGetPackageId)' != '' " />
       <NugetDlls Include="@(NugetPkgs)" Condition=" '%(NugetPkgs.Extension)' == '.dll' " />
     </ItemGroup>
