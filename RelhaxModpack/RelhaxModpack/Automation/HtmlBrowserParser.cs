@@ -4,13 +4,15 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Threading;
 using System.Xml.XPath;
 using HtmlAgilityPack;
+using Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT;
+using Microsoft.Toolkit.Forms.UI.Controls;
 using RelhaxModpack.Common;
 using RelhaxModpack.Utilities.Enums;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
+using System.ComponentModel;
 
 namespace RelhaxModpack.Automation
 {
@@ -24,15 +26,15 @@ namespace RelhaxModpack.Automation
 
         public int BrowserHeight { get; set; } = 0;
 
-        public WebBrowser Browser { get; set; }
+        public WebView Browser { get; set; }
 
         public bool ThreadMode { get; private set; }
 
         private int browserFinishedLoadingScriptsCounter;
 
-        private bool browserDocumentCompleted;
+        private bool browserContentLoaded;
 
-        private bool browserNavigated;
+        private bool browserNavigationCompleted;
 
         private bool browserFailed;
 
@@ -51,7 +53,7 @@ namespace RelhaxModpack.Automation
             this.WaitCounts = waitCounts;
         }
 
-        public HtmlBrowserParser(string htmlpath, string url, int waitTimeMs, int waitCounts, bool writeHtmlToDisk, string htmlFilePath, WebBrowser browser) : base(htmlpath, url, writeHtmlToDisk, htmlFilePath)
+        public HtmlBrowserParser(string htmlpath, string url, int waitTimeMs, int waitCounts, bool writeHtmlToDisk, string htmlFilePath, WebView browser) : base(htmlpath, url, writeHtmlToDisk, htmlFilePath)
         {
             this.WaitTimeMs = waitTimeMs;
             this.WaitCounts = waitCounts;
@@ -78,8 +80,8 @@ namespace RelhaxModpack.Automation
                 Logging.Debug(LogOptions.ClassName, "The browser was run, needs to be cleanup");
                 if (Browser != null)
                 {
-                    Browser.Navigated -= Browser_Navigated;
-                    Browser.DocumentCompleted -= Browser_DocumentCompleted;
+                    Browser.NavigationCompleted -= Browser_NavigationCompleted;
+                    Browser.DOMContentLoaded -= Browser_DOMContentLoaded;
                 }
 
                 if (ThreadMode)
@@ -93,8 +95,8 @@ namespace RelhaxModpack.Automation
         {
             //reset internals
             browserFinishedLoadingScriptsCounter = 0;
-            browserDocumentCompleted = false;
-            browserNavigated = false;
+            browserContentLoaded = false;
+            browserNavigationCompleted = false;
             browserDispatcher = null;
             browserFailed = false;
             ThreadMode = Browser == null;
@@ -106,10 +108,10 @@ namespace RelhaxModpack.Automation
                 RunBrowser();
 
             //wait for browser events to finish
-            while (!(browserDocumentCompleted && browserNavigated))
+            while (!(browserContentLoaded && browserNavigationCompleted))
             {
                 await Task.Delay(WaitTimeMs);
-                Logging.Info(LogOptions.ClassName, "browserDocumentCompleted: {0}, browserNavigated: {1}", browserDocumentCompleted.ToString(), browserNavigated.ToString());
+                Logging.Info(LogOptions.ClassName, "browserContentLoaded: {0}, browserNavigationCompleted: {1}", browserContentLoaded.ToString(), browserNavigationCompleted.ToString());
             }
 
             if (browserFailed)
@@ -131,12 +133,12 @@ namespace RelhaxModpack.Automation
                 if (ThreadMode)
                 {
                     browserDispatcher.Invoke(() => {
-                        tempHtmlText = Browser.Document.Body.OuterHtml;
+                        tempHtmlText = GetBrowserHtml();
                     });
                 }
                 else
                 {
-                    tempHtmlText = Browser.Document.Body.OuterHtml;
+                    tempHtmlText = GetBrowserHtml();
                 }
                 byte[] bytes = Encoding.Default.GetBytes(tempHtmlText);
                 htmlText = Encoding.UTF8.GetString(bytes);
@@ -152,9 +154,14 @@ namespace RelhaxModpack.Automation
             return true;
         }
 
-        private void Browser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        protected virtual string GetBrowserHtml()
         {
-            WebBrowser browser = (sender as WebBrowser);
+            return Browser.InvokeScript("eval", new string[] { "document.documentElement.outerHTML;" });
+        }
+
+        private void Browser_DOMContentLoaded(object sender, WebViewControlDOMContentLoadedEventArgs e)
+        {
+            WebView browser = (sender as WebView);
             //for some sites, it doesn't load all html unless you're scrolled enough (or the height/width is enough)
             if (BrowserHeight > 0 && browser.Height != BrowserHeight)
                 browser.Height = BrowserHeight;
@@ -162,13 +169,13 @@ namespace RelhaxModpack.Automation
                 browser.Width = BrowserWidth;
 
             Logging.Info(LogOptions.ClassName, "The browser reports document completed");
-            browserDocumentCompleted = true;
+            browserContentLoaded = true;
         }
 
-        private void Browser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
+        private void Browser_NavigationCompleted(object sender, WebViewControlNavigationCompletedEventArgs e)
         {
             Logging.Info(LogOptions.ClassName, "The browser reports navigation completed");
-            browserNavigated = true;
+            browserNavigationCompleted = true;
         }
 
         private void RunBrowserOnUIThread()
@@ -187,13 +194,14 @@ namespace RelhaxModpack.Automation
             //setup browser events and params
             if (ThreadMode)
             {
-                Browser = new WebBrowser();
+                Browser = new WebView();
+                ((ISupportInitialize)Browser).BeginInit();
+                ((ISupportInitialize)Browser).EndInit();
                 browserDispatcher = Dispatcher.CurrentDispatcher;
             }
 
-            Browser.ScriptErrorsSuppressed = true;
-            Browser.Navigated += Browser_Navigated;
-            Browser.DocumentCompleted += Browser_DocumentCompleted;
+            Browser.NavigationCompleted += Browser_NavigationCompleted;
+            Browser.DOMContentLoaded += Browser_DOMContentLoaded;
 
             Logging.Info(LogOptions.ClassName, "Running Navigate() method to load browser at URL {0}", Url);
             try
@@ -203,8 +211,8 @@ namespace RelhaxModpack.Automation
             catch (Exception ex)
             {
                 Logging.Exception(ex.ToString());
-                browserNavigated = true;
-                browserDocumentCompleted = true;
+                browserNavigationCompleted = true;
+                browserContentLoaded = true;
                 browserFailed = true;
             }
 
@@ -240,8 +248,8 @@ namespace RelhaxModpack.Automation
             {
                 if (Browser != null)
                 {
-                    Browser.Navigated -= Browser_Navigated;
-                    Browser.DocumentCompleted -= Browser_DocumentCompleted;
+                    Browser.NavigationCompleted -= Browser_NavigationCompleted;
+                    Browser.DOMContentLoaded -= Browser_DOMContentLoaded;
                 }
 
                 CleanupBrowser();

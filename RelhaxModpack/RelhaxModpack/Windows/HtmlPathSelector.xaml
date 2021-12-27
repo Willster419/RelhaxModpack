@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:winforms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:controls="clr-namespace:Microsoft.Toolkit.Forms.UI.Controls;assembly=Microsoft.Toolkit.Forms.UI.Controls.WebView"
         mc:Ignorable="d"
         Title="HtmlPathSelector" Height="475" Width="800" MinHeight="475" MinWidth="800" Loaded="RelhaxWindow_Loaded">
     <Grid>
@@ -17,7 +18,7 @@
         <TextBlock x:Name="SetDelayValueTextBlock" HorizontalAlignment="Right" Margin="0,96,10,0" TextWrapping="NoWrap" Text="Number" VerticalAlignment="Top" Width="50"/>
         <WindowsFormsHost x:Name="WinFormsBrowserHost" HorizontalAlignment="Stretch"  Margin="10,124,10,66" VerticalAlignment="Stretch">
             <WindowsFormsHost.Child>
-                <winforms:WebBrowser x:Name="Browser" ScriptErrorsSuppressed="True" Dock="Fill" Anchor="Bottom,Left,Right,Top"/>
+                <controls:WebView x:Name="Browser" Dock="Fill" Anchor="Bottom,Left,Right,Top"/>
             </WindowsFormsHost.Child>
         </WindowsFormsHost>
         <TextBox x:Name="HtmlPathResultsTextBox" HorizontalAlignment="Stretch" Margin="10,0,10,10" TextWrapping="NoWrap" Text="HtmlPath results will show here" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Visible" Height="51"/>
