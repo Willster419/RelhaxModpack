@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    class FileExistsTask : FileTask, IXmlSerializable
+    public class FileExistsTask : FileTask, IXmlSerializable
     {
         public const string TaskCommandName = "file_exists";
 
@@ -33,10 +33,9 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
-        public override Task RunTask()
+        public async override Task RunTask()
         {
-            //stub, not needed
-            return null;
+            //stub
         }
 
         public override void ProcessTaskResults()
