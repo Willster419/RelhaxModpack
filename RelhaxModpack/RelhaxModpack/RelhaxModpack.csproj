@@ -846,18 +846,7 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
   </Target>
   <!-- Then include the newly copied files as embeded resources -->
   <ItemGroup>
-    <EmbeddedResource Include="Resources\DLL\DotNetZip.dll" />
-    <EmbeddedResource Include="Resources\DLL\Microsoft.WindowsAPICodePack.dll" />
-    <EmbeddedResource Include="Resources\DLL\Microsoft.WindowsAPICodePack.Shell.dll" />
-    <EmbeddedResource Include="Resources\DLL\NAudio.dll" />
-    <EmbeddedResource Include="Resources\DLL\Newtonsoft.Json.dll" />
-    <EmbeddedResource Include="Resources\DLL\TeximpNet.dll" />
-    <EmbeddedResource Include="Resources\DLL\HtmlAgilityPack.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\DLL\FreeImage32.zip" />
-    <EmbeddedResource Include="Resources\DLL\FreeImage64.zip" />
-    <EmbeddedResource Include="Resources\DLL\nvtt32.zip" />
-    <EmbeddedResource Include="Resources\DLL\nvtt64.zip" />
+    <EmbeddedResource Include="Resources\DLL\*.dll" />
+    <EmbeddedResource Include="Resources\DLL\*.zip" />
   </ItemGroup>
 </Project>
