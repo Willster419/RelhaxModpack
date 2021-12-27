@@ -105,7 +105,7 @@
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell">
       <Version>1.1.4</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.Toolkit.Wpf.UI.Controls.WebView">
+    <PackageReference Include="Microsoft.Toolkit.Forms.UI.Controls.WebView">
       <Version>6.1.2</Version>
     </PackageReference>
     <PackageReference Include="MSBuildTasks">
@@ -853,7 +853,7 @@ if exist "$(ProjectDir)\relhaxmodpackprivatesettings\PrivateStuff.cs" copy "$(Pr
     <EmbeddedResource Include="Resources\DLL\Newtonsoft.Json.dll" />
     <EmbeddedResource Include="Resources\DLL\TeximpNet.dll" />
     <EmbeddedResource Include="Resources\DLL\HtmlAgilityPack.dll" />
-    <EmbeddedResource Include="Resources\DLL\Microsoft.Toolkit.Wpf.UI.Controls.WebView.dll" />
+    <EmbeddedResource Include="Resources\DLL\Microsoft.Toolkit.Forms.UI.Controls.WebView.dll" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\DLL\FreeImage32.zip" />
