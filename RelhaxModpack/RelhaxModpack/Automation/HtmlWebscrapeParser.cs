@@ -187,9 +187,14 @@ namespace RelhaxModpack.Automation
             }
             else
             {
-                Logging.Info(LogOptions.ClassName, "HtmlPath results in node value '{0}' of type '{1}'", ResultNode.InnerXml, ResultNode.NodeType.ToString());
+                Logging.Info(LogOptions.ClassName, "HtmlPath results in node of type '{0}'", ResultNode.NodeType.ToString());
                 Logging.Info(LogOptions.ClassName, "Result value as text: {0}\nResult inner html: {1}\nResult outer html: {2}", ResultNode.Value, ResultNode.InnerXml, ResultNode.OuterXml);
                 ResultString = ResultNode.ToString();
+                if (ResultNode.NodeType == XPathNodeType.Root)
+                {
+                    Logging.Info("The type is root, returning inner html value");
+                    ResultString = ResultNode.InnerXml;
+                }
                 return true;
             }
         }
