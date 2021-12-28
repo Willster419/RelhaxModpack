@@ -904,5 +904,29 @@ namespace RelhaxUnitTests
 
             await RunTasks(sequence, true, AutomationExitCode.ProcessResultsFail);
         }
+
+        [TestMethod]
+        public async Task Test25_JsonParseTask()
+        {
+            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+
+            sequence.AutomationTasks.Add(new MacroSubstringHtmlTask()
+            {
+                MacroName = "json_response",
+                Length = "-1",
+                StartIndex = "0",
+                HtmlPath = "/",
+                Url = "https://gitlab.com/api/v4/projects/26506974/releases"
+            });
+
+            sequence.AutomationTasks.Add(new MacroStringInputMacroJsonTask()
+            {
+                MacroName = "json_parsed_result",
+                InputMacroName = "json_response",
+                Jsonpath = "$[0].assets.links[0].url"
+            });
+
+            await RunTasks(sequence, true);
+        }
     }
 }
