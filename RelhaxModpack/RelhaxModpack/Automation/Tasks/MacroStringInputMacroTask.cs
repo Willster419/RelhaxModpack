@@ -34,7 +34,7 @@ namespace RelhaxModpack.Automation.Tasks
             if (ValidateCommandStringNullEmptyTrue(nameof(InputMacroName), InputMacroName))
                 return;
             AutomationMacro result = Macros.Find(mac => mac.Name.Equals(InputMacroName));
-            if (ValidateCommandTrue(result == null, string.Format("The macro \"{0}\" was not found in the macro list")))
+            if (ValidateCommandTrue(result == null, string.Format("The macro \"{0}\" was not found in the macro list", InputMacroName)))
                 return;
             inputMacroText = result.Value;
         }
