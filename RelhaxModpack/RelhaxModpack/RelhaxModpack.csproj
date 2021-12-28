@@ -180,6 +180,8 @@
     <Compile Include="Automation\Tasks\MacroCreateTask.cs" />
     <Compile Include="Automation\Tasks\MacroDeleteTask.cs" />
     <Compile Include="Automation\Tasks\MacroImportTask.cs" />
+    <Compile Include="Automation\Tasks\MacroStringInputMacroJsonTask.cs" />
+    <Compile Include="Automation\Tasks\MacroStringInputMacroTask.cs" />
     <Compile Include="Automation\Tasks\MacroStringSplitBrowserTask.cs" />
     <Compile Include="Automation\Tasks\MacroStringSplitFilenameTask.cs" />
     <Compile Include="Automation\Tasks\MacroStringSplitHtmlTask.cs" />
