@@ -56,12 +56,12 @@ namespace RelhaxModpack.Automation.Tasks
                 CommentHandling = CommentHandling.Ignore,
                 LineInfoHandling = LineInfoHandling.Load
             };
-            JObject root;
+            JToken root;
 
             //attempt to load the json text to serialized form
             try
             {
-                root = JObject.Parse(inputMacroText, settings);
+                root = JToken.Parse(inputMacroText, settings);
             }
             catch (JsonReaderException j)
             {
