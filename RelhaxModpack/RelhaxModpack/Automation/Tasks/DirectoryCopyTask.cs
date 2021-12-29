@@ -12,13 +12,11 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class DirectoryCopyTask : DirectorySearchTask, IXmlSerializable, ICancelOperation
+    public class DirectoryCopyTask : DirectoryDestinationTask, IXmlSerializable, ICancelOperation
     {
         public const string TaskCommandName = "directory_copy";
 
         public override string Command { get { return TaskCommandName; } }
-
-        public string DestinationPath { get; set; }
 
         protected bool good = false;
 
@@ -35,7 +33,7 @@ namespace RelhaxModpack.Automation.Tasks
         #region Xml Serialization
         public override string[] PropertiesForSerializationAttributes()
         {
-            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(DestinationPath) }).ToArray();
+            return base.PropertiesForSerializationAttributes();
         }
         #endregion
 
@@ -43,14 +41,11 @@ namespace RelhaxModpack.Automation.Tasks
         public override void ProcessMacros()
         {
             base.ProcessMacros();
-            DestinationPath = ProcessMacro(nameof(DestinationPath), DestinationPath);
         }
 
         public override void ValidateCommands()
         {
             base.ValidateCommands();
-            if (ValidateCommandStringNullEmptyTrue(nameof(DestinationPath), DestinationPath))
-                return;
         }
 
         public async override Task RunTask()
@@ -58,12 +53,6 @@ namespace RelhaxModpack.Automation.Tasks
             await base.RunTask();
             if (searchResults == null || searchResults.Count() == 0)
                 return;
-
-            if (!Directory.Exists(DestinationPath))
-            {
-                Logging.Debug("DestinationPath {0} does not exist, create", DestinationPath);
-                Directory.CreateDirectory(DestinationPath);
-            }
 
             cancellationTokenSource = new CancellationTokenSource();
 
