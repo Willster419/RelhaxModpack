@@ -8,6 +8,7 @@
     xmlns:RelhaxModpack="clr-namespace:RelhaxModpack"
     xmlns:database="clr-namespace:RelhaxModpack.Database"
     xmlns:enums="clr-namespace:RelhaxModpack.Utilities.Enums"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
     x:Class="RelhaxModpack.Windows.DatabaseEditor"
     mc:Ignorable="d"
     Title="DatabaseEditor" Height="720" Width="1280" MinHeight="600" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
@@ -719,6 +720,185 @@
                         <ListBox x:Name="PackageConflictingPackagesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" MouseDoubleClick="PackageConflictingPackagesDisplay_MouseDoubleClick" DisplayMemberPath="ComponentInternalName"/>
                         <Button Content="Remove Conflicting package" x:Name="ConflictingPackagesRemoveConflictingPackage" Tag="ConflictingPackagesButton1" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="171" Click="ConflictingPackagesRemoveConflictingPackage_Click"/>
                         <TextBlock x:Name="ConflictingPackagesMessagebox" HorizontalAlignment="Left" Height="20" Margin="0,209,0,0" TextWrapping="Wrap" Text="To add a package to the list, search it above and right click it" VerticalAlignment="Top" />
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="PatchesTab" Header="Patches">
+                    <Grid Background="#FFE5E5E5">
+                        <!-- NEWLINE =&#10; -->
+                        <ListBox x:Name="PackagePatchesDisplay" HorizontalAlignment="Stretch" Height="188" VerticalAlignment="Top" />
+                        <TextBlock x:Name="PatchFilePathLabel" HorizontalAlignment="Left" Margin="0,193,0,0" TextWrapping="Wrap" Text="Patch file path" VerticalAlignment="Top" ToolTip="'file' parameter of patch xml"/>
+                        <TextBox x:Name="PatchFilePathTextbox" HorizontalAlignment="Stretch" Height="37" Margin="0,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="'file' parameter of patch xml"/>
+                        <Grid HorizontalAlignment="Stretch" Height="116" Margin="0,251,0,0" VerticalAlignment="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="22"/>
+                                <RowDefinition Height="22"/>
+                                <RowDefinition Height="22"/>
+                                <RowDefinition Height="22"/>
+                                <RowDefinition Height="22"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Tag="PatchVersionHeader" x:Name="PatchVersionHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" Text="Patch Version"
+                                   ToolTip="Select the version of the patch file to be used in the installer.&#10;Version 2 allows for the use of followPath option for json."/>
+                            <ComboBox Tag="PatchVersionCombobox" x:Name="PatchVersionCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Grid.Row="0" Margin="0,1,0,1"
+                                  ToolTip="Select the version of the patch file to be used in the installer.&#10;Version 2 allows for the use of followPath option for json.">
+                                <System:Int32>1</System:Int32>
+                                <System:Int32>2</System:Int32>
+                            </ComboBox>
+                            <TextBlock Tag="PatchPathHeader" x:Name="PatchPathHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Stretch" Grid.Row="1"
+                                   ToolTip="app = World_of_Tanks directory &#10;appData = C:\Users\{username}\AppData\Roaming\Wargaming.net\WorldOfTanks"/>
+                            <ComboBox Tag="PatchPathCombobox" x:Name="PatchPathCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Margin="0,1,0,1" Grid.Row="1"
+                                  ToolTip="app = World_of_Tanks directory &#10;appData = C:\Users\{username}\AppData\Roaming\Wargaming.net\WorldOfTanks">
+                                <System:String>app</System:String>
+                                <System:String>appData</System:String>
+                            </ComboBox>
+                            <TextBlock Tag="PatchTypeHeader" x:Name="PatchTypeHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Patch Type" VerticalAlignment="Stretch" Grid.Row="2" />
+                            <ComboBox Tag="PatchTypeCombobox" x:Name="PatchTypeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Margin="0,1,0,1" Grid.Column="1" Grid.Row="2">
+                                <System:String>json</System:String>
+                                <System:String>xml</System:String>
+                                <System:String>regex</System:String>
+                            </ComboBox>
+                            <TextBlock Tag="PatchModeHeader" x:Name="PatchModeHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Stretch" Height="22" Grid.Row="3" />
+                            <ComboBox Tag="PatchModeCombobox" x:Name="PatchModeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Margin="0,1,0,1" Grid.Row="3"/>
+                            <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path" HorizontalAlignment="Stretch" Margin="0,2,0,0" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="4" ToolTipService.ShowOnDisabled="True"
+                                  ToolTip="Follow files based on xvm configuration multiple file structure"/>
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,372,0,25">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Tag="PatchLinesPathHeader" x:Name="PatchLinesPathHeader" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Path" VerticalAlignment="Stretch"/>
+                            <TextBox Tag="PatchLinesPathTextbox" x:Name="PatchLinesPathTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="1" />
+                            <TextBlock Tag="PatchSearchHeader" x:Name="PatchSearchHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Search" VerticalAlignment="Stretch"  Grid.Row="2"/>
+                            <TextBox Tag="PatchSearchTextbox" x:Name="PatchSearchTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch"  Grid.Row="3" AcceptsReturn="True" AcceptsTab="True"/>
+                            <TextBlock Tag="PatchReplaceHeader" x:Name="PatchReplaceHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Replace" VerticalAlignment="Stretch" Grid.Row="4"/>
+                            <CheckBox x:Name="PopOutReplaceBlockCB" Content="Pop-out replace textbox" HorizontalAlignment="Right" Margin="0,0,2,4" VerticalAlignment="Bottom" 
+                                      ToolTip="Show a larger window to write the replace text field" Grid.Row="4"/>
+                            <TextBox Tag="PatchReplaceTextbox" x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="5" AcceptsReturn="True" AcceptsTab="True"/>
+                        </Grid>
+                        <Button Tag="TestPatchButton" x:Name="TestPatchButton" Content="Test Patch..." HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom" Width="75" />
+                        <Button Tag="ApplyPatchChangesButton" x:Name="ApplyPatchChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" />
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="AtlasesTab" Header="Atlases">
+                    <Grid Background="#FFE5E5E5">
+                        <!-- NEWLINE =&#10; -->
+                        <ListBox x:Name="PackageAtlasesDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top"/>
+                        <Grid HorizontalAlignment="Stretch" Height="468" Margin="0,0,0,25" VerticalAlignment="Bottom">
+                            <Grid.RowDefinitions>
+                                <!-- Pkg -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="35"/>
+                                <!-- DirectoryInArchive -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="35"/>
+                                <!-- AtlasFile MapFile -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <!-- PowOf2 and Square and fast image packer -->
+                                <RowDefinition Height="20"/>
+                                <!-- Atlas Width and Height -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <!-- AtlasSaveDirectory -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="35"/>
+                                <!-- ImageFolders -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="60"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="AtlasPkgLabel" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Package location" VerticalAlignment="Bottom" ToolTip="'pkg' parameter of atlas xml"/>
+                            <TextBox x:Name="AtlasPkgTextbox" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'pkg' parameter of atlas xml"/>
+                            <TextBlock x:Name="AtlasDirectoryInArchiveLabel" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Directory In Archive" VerticalAlignment="Bottom" ToolTip="'DirectoryInAtchive' parameter of atlas xml"/>
+                            <TextBox x:Name="AtlasDirectoryInArchiveTextbox" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'DirectoryInAtchive' parameter of atlas xml"/>
+                            <TextBlock x:Name="AtlasAtlasFileLabel" Grid.Row="4" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Atlas file in archive" VerticalAlignment="Bottom" ToolTip="'AtlasFile' parameter of atlas xml"/>
+                            <TextBox x:Name="AtlasAtlasFileTextbox" Grid.Row="5" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'AtlasFile' parameter of atlas xml"/>
+                            <TextBlock x:Name="AtlasMapFileLabel" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Map file in archive" VerticalAlignment="Bottom" ToolTip="'MapFile' parameter of atlas xml"/>
+                            <TextBox x:Name="AtlasMapFileTextbox" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'MapFile' parameter of atlas xml"/>
+                            <CheckBox x:Name="AtlasPowOf2Checkbox" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Power of 2" ToolTip="'PowOf2' in xml, require the built atlas file to be a size power of 2"/>
+                            <CheckBox x:Name="AtlasSquareCheckbox" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Square" ToolTip="'Square' in xml, require the built atlas file be square" Margin="80,0,0,0"/>
+                            <CheckBox x:Name="AtlasFastImagePackerCheckbox" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Fast Image Packer" ToolTip="'FastImagePacker' in xml, accept the first pass of packing" Margin="140,0,0,0"/>
+                            <TextBlock x:Name="AtlasPaddingLabel" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Padding" VerticalAlignment="Center" ToolTip="'Padding' parameter of atlas xml"/>
+                            <TextBox x:Name="AtlasPaddingTextbox" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'Padding' parameter of atlas xml" Margin="48,0,0,0"/>
+                            <TextBlock x:Name="AtlasAtlasWidthLabel" Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Atlas Width" VerticalAlignment="Bottom" ToolTip="'AtlasWidth' parameter of atlas xml"/>
+                            <TextBox x:Name="AtlasAtlasWidthTextbox" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'AtlasHeight' parameter of atlas xml"/>
+                            <TextBlock x:Name="AtlasAtlasHeightLabel" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Atlas Height" VerticalAlignment="Bottom" ToolTip="'AtlasWidth' parameter of atlas xml"/>
+                            <TextBox x:Name="AtlasAtlasHeightTextbox" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'AtlasHeight' parameter of atlas xml"/>
+                            <TextBlock x:Name="AtlasAtlasSaveDirectoryLabel" Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Atlas Save Directory" VerticalAlignment="Bottom" ToolTip="'AtlasSaveDirectory' parameter of atlas xml"/>
+                            <TextBox x:Name="AtlasAtlasSaveDirectoryTextbox" Grid.Row="10" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'AtlasSaveDirectory' parameter of atlas xml"/>
+                            <TextBlock x:Name="AtlasImageFoldersLabel" Grid.Row="11" Grid.ColumnSpan="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="ImageFolders" VerticalAlignment="Bottom" ToolTip="'ImageFolders' parameter of atlas xml"/>
+                            <TextBox x:Name="AtlasImageFoldersTextbox" Grid.Row="12" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'ImageFolders' parameter of atlas xml, each entry seperated by newline" AcceptsReturn="True"/>
+                        </Grid>
+                        <Button Tag="ApplyAtlasChangesButton" x:Name="ApplyAtlasChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" />
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="XmlUnpackShortcutTab" Header="XmlUnpack/Shortcut">
+                    <Grid Background="#FFE5E5E5">
+                        <ListBox x:Name="PackageXmlUnpackDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top"/>
+                        <Grid HorizontalAlignment="Stretch" Height="261" Margin="0,0,0,232" VerticalAlignment="Bottom">
+                            <Grid.RowDefinitions>
+                                <!-- Pkg -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="35"/>
+                                <!-- DirectoryInArchive -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="35"/>
+                                <!-- FileName -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <!-- ExtractDirectory -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="35"/>
+                                <!-- NewFilename -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="2"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock x:Name="XmlUnpackPkgLabel" Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Package location" VerticalAlignment="Bottom" ToolTip="'pkg' parameter of XmlUnpack xml"/>
+                            <TextBox x:Name="XmlUnpackPkgTextbox" Grid.Row="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'pkg' parameter of XmlUnpack xml"/>
+                            <TextBlock x:Name="XmlUnpackDirectoryInArchiveLabel" Grid.Row="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Directory In Archive" VerticalAlignment="Bottom" ToolTip="'DirectoryInArchive' parameter of XmlUnpack xml"/>
+                            <TextBox x:Name="XmlUnpackDirectoryInArchiveTextbox" Grid.Row="3" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'DirectoryInArchive' parameter of XmlUnpack xml"/>
+                            <TextBlock x:Name="XmlUnpackFilenameLabel" Grid.Row="4" HorizontalAlignment="Left" TextWrapping="Wrap" Text="File name" VerticalAlignment="Bottom" ToolTip="'Filename' parameter of XmlUnpack xml"/>
+                            <TextBox x:Name="XmlUnpackFilenameTextbox" Grid.Row="5" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'Filename' parameter of XmlUnpack xml"/>
+                            <TextBlock x:Name="XmlUnpackExtractDirectoryLabel" Grid.Row="6" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Extract Directory" VerticalAlignment="Bottom" ToolTip="'ExtractDirectory' parameter of XmlUnpack xml"/>
+                            <TextBox x:Name="XmlUnpackExtractDirectoryTextbox" Grid.Row="7" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'ExtractDirectory' parameter of XmlUnpack xml"/>
+                            <TextBlock x:Name="XmlUnpackNewFilenameLabel" Grid.Row="8" HorizontalAlignment="Left" TextWrapping="Wrap" Text="New Filename" VerticalAlignment="Bottom" ToolTip="'NewFilename' parameter of XmlUnpack xml"/>
+                            <TextBox x:Name="XmlUnpackNewFilenameTextbox" Grid.Row="9" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'NewFilename' parameter of XmlUnpack xml" AcceptsReturn="True"/>
+                            <Rectangle x:Name="XmlUnpackShortcutDivider" Grid.Row="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Black"/>
+                        </Grid>
+                        <Button Tag="ApplyXmlUnpackChangesButton" x:Name="ApplyXmlUnpackChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" />
+                        <ListBox x:Name="PackageShortcutDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top" Margin="0,334,0,0"/>
+                        <Grid HorizontalAlignment="Stretch" Height="134" Margin="0,0,0,25" VerticalAlignment="Bottom">
+                            <Grid.RowDefinitions>
+                                <!-- Path -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="35"/>
+                                <!-- Name -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="35"/>
+                                <!-- Enabled -->
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock x:Name="ShortcutPathLabel" Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Path" VerticalAlignment="Bottom" ToolTip="'Path' parameter of shortcut xml, the target of the shortcut"/>
+                            <TextBox x:Name="ShortcutPathTextbox" Grid.Row="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'Path' parameter of shortcut xml, the target of the shortcut"/>
+                            <TextBlock x:Name="ShortcutDirectoryInArchiveLabel" Grid.Row="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Directory In Archive" VerticalAlignment="Bottom" ToolTip="'Name' parameter of shortcut xml, the name of the shortcut"/>
+                            <TextBox x:Name="ShortcutDirectoryInArchiveTextbox" Grid.Row="3" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'Name' parameter of shortcut xml, the name of the shortcut"/>
+                            <CheckBox x:Name="ShortcutEnabledCheckbox" Grid.Row="4" HorizontalAlignment="Left" Content="Enabled" VerticalAlignment="Bottom" ToolTip="'Enabled' parameter of shortcut xml"/>
+                        </Grid>
                     </Grid>
                 </TabItem>
             </TabControl>
