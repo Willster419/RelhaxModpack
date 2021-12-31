@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Settings;
+﻿using RelhaxModpack.Database;
+using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
@@ -391,15 +392,20 @@ namespace RelhaxModpack.Common
         #endregion
 
         #region Application and Database properties
+        public const string DatabaseMetadataXpath = "/modInfoAlpha.xml/@";
         /// <summary>
         /// The xpath string to get the onlineFolder attribute from the document root
         /// </summary>
-        public const string DatabaseOnlineFolderXpath = "/modInfoAlpha.xml/@onlineFolder";
+        public const string DatabaseOnlineFolderXpath = DatabaseMetadataXpath + DatabaseManager.WoTOnlineFolderVersionXmlString;
 
         /// <summary>
         /// The xpath string to get the database version info attribute from the document root
         /// </summary>
-        public const string DatabaseOnlineVersionXpath = "/modInfoAlpha.xml/@version";
+        public const string DatabaseClientVersionXpath = DatabaseMetadataXpath + DatabaseManager.WoTClientVersionXmlString;
+
+        public const string DatabaseDocumentVersionXpath = DatabaseMetadataXpath + DatabaseManager.DocumentVersionXmlString;
+
+        public const string DatabaseSchemaVersionXpath = DatabaseMetadataXpath + DatabaseManager.SchemaVersionXmlString;
 
         /// <summary>
         /// The old V2 config file version for saving the user's selection preferences

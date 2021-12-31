@@ -15,7 +15,7 @@ namespace RelhaxModpack.Database
     /// </summary>
     public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
     {
-        #region Xml serialization
+        #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
         /// </summary>
@@ -58,6 +58,36 @@ namespace RelhaxModpack.Database
             nameof(Dependencies),
             nameof(Packages)
         };
+        #endregion
+
+        #region Xml serialization V2
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = base.GetXmlDatabasePropertiesV1Dot0();
+            List<XmlDatabaseProperty> xmlDatabasePropertiesAddAfter = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(Name), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Name) },
+                new XmlDatabaseProperty() { XmlName = nameof(Type), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Type) },
+                new XmlDatabaseProperty() { XmlName = nameof(Visible), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Visible) },
+                //list elements
+                new XmlDatabaseProperty() { XmlName = nameof(Description), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Description) },
+                new XmlDatabaseProperty() { XmlName = nameof(UpdateComment), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(UpdateComment) },
+                new XmlDatabaseProperty() { XmlName = nameof(PopularMod), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(PopularMod) },
+                new XmlDatabaseProperty() { XmlName = nameof(GreyAreaMod), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(GreyAreaMod) },
+                new XmlDatabaseProperty() { XmlName = nameof(ObfuscatedMod), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ObfuscatedMod) },
+                new XmlDatabaseProperty() { XmlName = nameof(FromWGmods), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(FromWGmods) },
+                new XmlDatabaseProperty() { XmlName = nameof(ShowInSearchList), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ShowInSearchList) },
+                new XmlDatabaseProperty() { XmlName = nameof(Medias), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Medias) },
+                new XmlDatabaseProperty() { XmlName = nameof(UserFiles), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(UserFiles) },
+                new XmlDatabaseProperty() { XmlName = nameof(ConflictingPackages), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ConflictingPackages) },
+                new XmlDatabaseProperty() { XmlName = nameof(Dependencies), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Dependencies) },
+                new XmlDatabaseProperty() { XmlName = nameof(Packages), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Packages) },
+            };
+            //add stuff after base
+            xmlDatabaseProperties.AddRange(xmlDatabasePropertiesAddAfter);
+            return xmlDatabaseProperties;
+        }
         #endregion
 
         #region Selection file processing

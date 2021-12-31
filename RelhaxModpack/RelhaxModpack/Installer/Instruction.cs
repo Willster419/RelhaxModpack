@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Installer
 {
-    public abstract class Instruction
+    public abstract class Instruction : XmlDatabaseComponent
     {
         public abstract string[] PropertiesToSerialize();
 
         public abstract string RootObjectPath { get; }
+
+        public string SchemaVersionLocal { get; set; }
 
         /// <summary>
         /// A single string with the filename of the processingNativeFile (needed for tracing work instructions after installation)

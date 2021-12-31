@@ -1,14 +1,15 @@
 ﻿using RelhaxModpack.Database;
 using RelhaxModpack.Utilities.Enums;
+using System.Collections.Generic;
 
 namespace RelhaxModpack.Database
 {
     /// <summary>
     /// A media object is a preview-able component stored in a list in SelectablePackages
     /// </summary>
-    public class Media : IXmlSerializable
+    public class Media : XmlDatabaseComponent, IXmlSerializable
     {
-        #region Xml serialization
+        #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
         /// </summary>
@@ -16,7 +17,6 @@ namespace RelhaxModpack.Database
         /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
         public string[] PropertiesForSerializationAttributes()
         {
-            //return new string[] { nameof(MediaType), nameof(URL) };
             return new string[] { nameof(URL), nameof(MediaType) };
         }
 
@@ -28,6 +28,19 @@ namespace RelhaxModpack.Database
         public string[] PropertiesForSerializationElements()
         {
             return new string[] { };
+        }
+        #endregion
+
+        #region Xml serialization V2
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(URL), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(URL) },
+                new XmlDatabaseProperty() { XmlName = nameof(MediaType), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(MediaType) }
+            };
+            return xmlDatabaseProperties;
         }
         #endregion
 

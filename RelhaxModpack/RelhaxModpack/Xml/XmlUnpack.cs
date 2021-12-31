@@ -1,12 +1,15 @@
-﻿using RelhaxModpack.Installer;
+﻿using RelhaxModpack.Database;
+using RelhaxModpack.Installer;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RelhaxModpack.Xml
 {
     /// <summary>
     /// Represents a set of xml instructions for extracting and copying xml files into another location. Includes xml binary decompression
     /// </summary>
-    public class XmlUnpack : Instruction
+    public class XmlUnpack : PackageExtractInstruction
     {
         public const string XmlUnpackXmlSearchPath = "/files/file";
 
@@ -24,20 +27,24 @@ namespace RelhaxModpack.Xml
             };
         }
 
-        /// <summary>
-        /// Path and name to the package file
-        /// </summary>
-        public string Pkg { get; set; } = string.Empty;
+        #region Xml serialization V2
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(FileName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(FileName) },
+                new XmlDatabaseProperty() { XmlName = nameof(ExtractDirectory), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(ExtractDirectory) },
+                new XmlDatabaseProperty() { XmlName = nameof(NewFileName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(NewFileName) }
+            };
+            return base.GetXmlDatabasePropertiesV1Dot0().Concat(xmlDatabaseProperties).ToList();
+        }
+        #endregion
 
         /// <summary>
         /// Name of the file to extract
         /// </summary>
         public string FileName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Path inside the pkg file to the filename to process
-        /// </summary>
-        public string DirectoryInArchive { get; set; } = string.Empty;
 
         /// <summary>
         /// Path to place the extracted or copied file

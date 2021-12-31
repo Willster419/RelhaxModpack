@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Installer;
+﻿using RelhaxModpack.Database;
+using RelhaxModpack.Installer;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +12,7 @@ namespace RelhaxModpack.Atlases
     /// <summary>
     /// A class that serves as a description of an atlas file with processing instructions
     /// </summary>
-    public class Atlas : Instruction
+    public class Atlas : PackageExtractInstruction
     {
 
         public const string AtlasXmlSearchPath = "/atlases/atlas";
@@ -37,11 +38,26 @@ namespace RelhaxModpack.Atlases
             };
         }
 
-        /// <summary>
-        /// Complete path to the package file
-        /// </summary>
-        /// <remarks>This is loaded from the xml file. The package itself is a non-compressed zip file</remarks>
-        public string Pkg { get; set; } = string.Empty;
+        #region Xml serialization V2
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(AtlasFile), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(AtlasFile) },
+                new XmlDatabaseProperty() { XmlName = nameof(MapFile), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(MapFile) },
+                new XmlDatabaseProperty() { XmlName = nameof(PowOf2), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PowOf2) },
+                new XmlDatabaseProperty() { XmlName = nameof(Square), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Square) },
+                new XmlDatabaseProperty() { XmlName = nameof(AtlasWidth), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(AtlasWidth) },
+                new XmlDatabaseProperty() { XmlName = nameof(AtlasHeight), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(AtlasHeight) },
+                new XmlDatabaseProperty() { XmlName = nameof(FastImagePacker), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(FastImagePacker) },
+                new XmlDatabaseProperty() { XmlName = nameof(Padding), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Padding) },
+                new XmlDatabaseProperty() { XmlName = nameof(AtlasSaveDirectory), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(AtlasSaveDirectory) },
+                new XmlDatabaseProperty() { XmlName = nameof(ImageFolders), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ImageFolders) }
+            };
+            return base.GetXmlDatabasePropertiesV1Dot0().Concat(xmlDatabaseProperties).ToList();
+        }
+        #endregion
 
         /// <summary>
         /// File name of the atlas image file to extract
@@ -54,12 +70,6 @@ namespace RelhaxModpack.Atlases
         /// </summary>
         /// <remarks>This is loaded from the xml file</remarks>
         public string MapFile { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Path inside the pkg file to the filename to process. If Pkg is empty, this is the path to the atlas and map file
-        /// </summary>
-        /// <remarks>This is loaded from the xml file</remarks>
-        public string DirectoryInArchive { get; set; } = string.Empty;
 
         /// <summary>
         /// Path to place the generated atlas image file and xml map

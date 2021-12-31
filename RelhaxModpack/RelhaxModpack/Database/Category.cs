@@ -10,9 +10,9 @@ namespace RelhaxModpack.Database
     /// <summary>
     /// a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
     /// </summary>
-    public class Category : IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
+    public class Category : CoreDatabaseComponent, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
     {
-        #region Xml serialization
+        #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
         /// </summary>
@@ -34,6 +34,22 @@ namespace RelhaxModpack.Database
         }
         #endregion
 
+        #region Xml serialization V2
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = base.GetXmlDatabasePropertiesV1Dot0();
+            List<XmlDatabaseProperty> xmlDatabasePropertiesAddBefore = new List<XmlDatabaseProperty>()
+            {
+                new XmlDatabaseProperty() { XmlName = nameof(Name), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Name) },
+                new XmlDatabaseProperty() { XmlName = nameof(OffsetInstallGroups), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(OffsetInstallGroups) }
+            };
+            xmlDatabaseProperties.InsertRange(0, xmlDatabasePropertiesAddBefore);
+            xmlDatabaseProperties.Add(new XmlDatabaseProperty() { XmlName = nameof(Dependencies), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Dependencies) });
+            xmlDatabaseProperties.Add(new XmlDatabaseProperty() { XmlName = nameof(Packages), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Packages) });
+            return xmlDatabaseProperties;
+        }
+        #endregion
+
         #region Database Properties
         /// <summary>
         /// The category name displayed to the user in the selection list
@@ -51,19 +67,6 @@ namespace RelhaxModpack.Database
         public bool OffsetInstallGroups { get; set; } = true;
 
         /// <summary>
-        /// A list of database managers who are known to maintain this component
-        /// </summary>
-        public string Maintainers { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Returns a list database managers who are known to maintain this component
-        /// </summary>
-        public List<string> MaintainersList
-        {
-            get { return Maintainers.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
-        }
-
-        /// <summary>
         /// The list of packages contained in this category
         /// </summary>
         public List<SelectablePackage> Packages { get; set; } = new List<SelectablePackage>();
@@ -71,7 +74,7 @@ namespace RelhaxModpack.Database
         /// <summary>
         /// When a databasePackage, the internal packageName. When category, the category name
         /// </summary>
-        public string ComponentInternalName { get { return Name; } }
+        public override string ComponentInternalName { get { return Name; } }
 
         /// <summary>
         /// List of dependencies of this category (Any package selected in this category needs these dependencies)

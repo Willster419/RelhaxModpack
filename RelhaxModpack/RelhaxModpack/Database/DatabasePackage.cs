@@ -11,9 +11,9 @@ namespace RelhaxModpack.Database
     /// <summary>
     /// A database component is the base class for all other packages
     /// </summary>
-    public class DatabasePackage : IDatabaseComponent, IXmlSerializable, IDisposable
+    public class DatabasePackage : CoreDatabaseComponent, IDatabaseComponent, IXmlSerializable, IDisposable
     {
-        #region Xml serialization
+        #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
         /// </summary>
@@ -63,6 +63,45 @@ namespace RelhaxModpack.Database
         };
         #endregion
 
+        #region Xml serialization V2
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = base.GetXmlDatabasePropertiesV1Dot0();
+            List<XmlDatabaseProperty> xmlDatabasePropertiesAddBefore = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(PackageName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PackageName) },
+                new XmlDatabaseProperty() { XmlName = nameof(Enabled), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Enabled) },
+                new XmlDatabaseProperty() { XmlName = nameof(Tags), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Tags) },
+                new XmlDatabaseProperty() { XmlName = nameof(InstallGroup), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(InstallGroup) },
+                new XmlDatabaseProperty() { XmlName = nameof(PatchGroup), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PatchGroup) },
+                new XmlDatabaseProperty() { XmlName = nameof(UID), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(UID) },
+                //list elements
+                new XmlDatabaseProperty() { XmlName = nameof(Size), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Size) },
+                new XmlDatabaseProperty() { XmlName = nameof(Version), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Version) },
+                new XmlDatabaseProperty() { XmlName = nameof(ZipFile), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ZipFile) },
+                new XmlDatabaseProperty() { XmlName = nameof(CRC), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(CRC) },
+                new XmlDatabaseProperty() { XmlName = nameof(Timestamp), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Timestamp) },
+                new XmlDatabaseProperty() { XmlName = nameof(LogAtInstall), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(LogAtInstall) },
+                new XmlDatabaseProperty() { XmlName = nameof(Triggers), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Triggers) },
+                new XmlDatabaseProperty() { XmlName = nameof(DevURL), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(DevURL) },
+                new XmlDatabaseProperty() { XmlName = nameof(InternalNotes), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(InternalNotes) },
+                new XmlDatabaseProperty() { XmlName = nameof(Author), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Author) },
+            };
+            List<XmlDatabaseProperty> xmlDatabasePropertiesAddAfter = new List<XmlDatabaseProperty>()
+            {
+                new XmlDatabaseProperty() { XmlName = nameof(Deprecated), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Deprecated) },
+                new XmlDatabaseProperty() { XmlName = nameof(MinimalistModeExclude), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(MinimalistModeExclude) },
+                new XmlDatabaseProperty() { XmlName = nameof(LastUpdateCheck), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(LastUpdateCheck) }
+            };
+            //add stuff before base
+            xmlDatabaseProperties.InsertRange(0, xmlDatabasePropertiesAddBefore);
+            //add stuff after base
+            xmlDatabaseProperties.AddRange(xmlDatabasePropertiesAddAfter);
+            return xmlDatabaseProperties;
+        }
+        #endregion
+
         #region Selection file processing
         private static readonly List<string> PackagePropertiesToSaveForSelectionFile = new List<string>()
         {
@@ -100,19 +139,6 @@ namespace RelhaxModpack.Database
         /// A method to keep track of the version of the package
         /// </summary>
         public string Version { get; set; } = string.Empty;
-
-        /// <summary>
-        /// A list of database managers who are known to maintain this component
-        /// </summary>
-        public string Maintainers { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Returns a list database managers who are known to maintain this component
-        /// </summary>
-        public List<string> MaintainersList
-        {
-            get { return Maintainers.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
-        }
 
         /// <summary>
         /// Used to determine when the package entry was last modified
@@ -259,7 +285,7 @@ namespace RelhaxModpack.Database
         /// <summary>
         /// When a databasePackage, the internal packageName. When category, the category name
         /// </summary>
-        public string ComponentInternalName { get { return PackageName; } }
+        public override string ComponentInternalName { get { return PackageName; } }
 
         /// <summary>
         /// String representation of the object
@@ -323,8 +349,8 @@ namespace RelhaxModpack.Database
         public void UpdatePackageName(string newPackageName)
         {
             this.ZipFile = newPackageName;
-            this.CRC = "f";
-            this.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
+            this.CRC = string.IsNullOrEmpty(ZipFile)? string.Empty : "f";
+            this.Timestamp = string.IsNullOrEmpty(ZipFile) ? 0 : CommonUtils.GetCurrentUniversalFiletimeTimestamp();
             this.LastUpdateCheck = this.Timestamp;
         }
 

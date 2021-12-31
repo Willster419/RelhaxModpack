@@ -212,6 +212,7 @@
     <Compile Include="Common\Md5DatabaseManager.cs" />
     <Compile Include="Common\StringConstants.cs" />
     <Compile Include="Database\Category.cs" />
+    <Compile Include="Database\CoreDatabaseComponent.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Database\DatabaseUtils.cs" />
     <Compile Include="Database\IDatabaseComponent.cs" />
@@ -222,11 +223,14 @@
     <Compile Include="Database\IXmlSerializable.cs" />
     <Compile Include="Database\Media.cs" />
     <Compile Include="Database\PackageComparer.cs" />
+    <Compile Include="Database\PackageExtractInstruction.cs" />
     <Compile Include="Database\PackageTagsList.cs" />
     <Compile Include="Database\PackageTagsListConverter.cs" />
     <Compile Include="Database\SelectablePackage.cs" />
     <Compile Include="Database\Trigger.cs" />
     <Compile Include="Database\UserFile.cs" />
+    <Compile Include="Database\XmlDatabaseComponent.cs" />
+    <Compile Include="Database\XmlDatabaseProperty.cs" />
     <Compile Include="Installer\Instruction.cs" />
     <Compile Include="Installer\InstructionLoader.cs" />
     <Compile Include="Settings\AutomationRunnerSettings.cs" />
@@ -307,6 +311,7 @@
     <Compile Include="Utilities\Enums\UninstallerExitCodes.cs" />
     <Compile Include="Utilities\Enums\UninstallModes.cs" />
     <Compile Include="Utilities\Enums\UpdateTypes.cs" />
+    <Compile Include="Utilities\Enums\XmlEntryType.cs" />
     <Compile Include="Utilities\Enums\XmlLoadType.cs" />
     <Compile Include="Utilities\ClassEventArgs\EditorTransferEventArgs.cs" />
     <Compile Include="Utilities\FileUtils.cs" />

@@ -24,6 +24,8 @@ namespace RelhaxModpack.Database
     {
         public const string DocumentVersion1V1 = "1.1";
 
+        public const string DocumentVersion1V2 = "1.2";
+
         public const string WoTClientVersionXmlString = "version";
 
         public const string WoTOnlineFolderVersionXmlString = "onlineFolder";
@@ -54,6 +56,8 @@ namespace RelhaxModpack.Database
         public string WoTOnlineFolderVersion { get; private set; }
 
         public string DocumentVersion { get; private set; }
+
+        public string SchemaVersion { get; private set; }
 
         /// <summary>
         /// A reference to the modpack settings window configuration class
@@ -422,6 +426,7 @@ namespace RelhaxModpack.Database
             WoTOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(DatabaseRootXmlDocument, ApplicationConstants.DatabaseOnlineFolderXpath);
             WoTClientVersion = XmlUtils.GetXmlStringFromXPath(DatabaseRootXmlDocument, ApplicationConstants.DatabaseClientVersionXpath);
             DocumentVersion = XmlUtils.GetXmlStringFromXPath(DatabaseRootXmlDocument, ApplicationConstants.DatabaseDocumentVersionXpath);
+            SchemaVersion = XmlUtils.GetXmlStringFromXPath(DatabaseRootXmlDocument, ApplicationConstants.DatabaseSchemaVersionXpath);
         }
         #endregion
 
@@ -482,6 +487,7 @@ namespace RelhaxModpack.Database
             switch (DocumentVersion)
             {
                 case DocumentVersion1V1:
+                case DocumentVersion1V2:
                     if (!ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
                     {
                         Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
@@ -519,6 +525,7 @@ namespace RelhaxModpack.Database
             switch (DocumentVersion)
             {
                 case DocumentVersion1V1:
+                case DocumentVersion1V2:
                     if (!ParseDatabase1V1FromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList))
                     {
                         Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
@@ -538,6 +545,7 @@ namespace RelhaxModpack.Database
             switch (DocumentVersion)
             {
                 case DocumentVersion1V1:
+                case DocumentVersion1V2:
                     if (!ParseDatabase1V1FromFiles())
                     {
                         Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
@@ -689,10 +697,77 @@ namespace RelhaxModpack.Database
             {
                 case DocumentVersion1V1:
                     return ParseDatabase1V1(globalDependenciesDoc, globalDependenciesList, dependenciesDoc, dependenciesList, categoryDocuments, parsedCategoryList);
+                case DocumentVersion1V2:
+                    return ParseDatabase1V2(globalDependenciesDoc, globalDependenciesList, dependenciesDoc, dependenciesList, categoryDocuments, parsedCategoryList);
                 default:
                     Logging.Error("Unknown document version to parse: {0}", DocumentVersion);
                     return false;
             }
+        }
+
+        public bool ParseDatabase1V2(XDocument globalDependenciesDoc, List<DatabasePackage> globalDependenciesList, XDocument dependenciesDoc,
+            List<Dependency> dependenciesList, List<XDocument> categoryDocuments, List<Category> parsedCategoryList)
+        {
+            //parsing the global dependencies
+            Logging.Debug("[ParseDatabase1V2]: Parsing GlobalDependencies");
+            bool globalParsed = ParseDatabase1V2Packages(globalDependenciesDoc.XPathSelectElements("/GlobalDependencies/GlobalDependency").ToList(), globalDependenciesList);
+
+            //parsing the logical dependnecies
+            Logging.Debug("[ParseDatabase1V2]: Parsing Dependencies");
+            bool depsParsed = ParseDatabase1V2Packages(dependenciesDoc.XPathSelectElements("/Dependencies/Dependency").ToList(), dependenciesList);
+
+            //parsing the categories
+            bool categoriesParsed = true;
+            for (int i = 0; i < categoryDocuments.Count; i++)
+            {
+                XElement categoryXml = categoryDocuments[i].XPathSelectElement(@"/Category");
+                Category category = parsedCategoryList[i];
+
+                //parse the list of packages
+                Logging.Debug("[ParseDatabase1V2]: Parsing Packages for category {0}", i);
+                if (!ParseDatabase1V2Package(categoryXml, category, category.GetType()))
+                {
+                    categoriesParsed = false;
+                }
+                parsedCategoryList.Add(category);
+            }
+            return globalParsed && depsParsed && categoriesParsed;
+        }
+
+        private bool ParseDatabase1V2Packages(List<XElement> xmlPackageNodesList, IList genericPackageList)
+        {
+            bool parsed = true;
+
+            //get the type of element in the list
+            Type listObjectType = genericPackageList.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1).FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
+
+            //for each Xml package entry
+            int index = 0;
+            foreach (XElement xmlPackageNode in xmlPackageNodesList)
+            {
+                XmlDatabaseComponent component = genericPackageList[index] as XmlDatabaseComponent;
+
+                if (!ParseDatabase1V2Package(xmlPackageNode, component, listObjectType))
+                    parsed = false;
+            }
+            return parsed;
+        }
+
+        private bool ParseDatabase1V2Package(XElement xmlPackageNode, XmlDatabaseComponent component, Type componentType)
+        {
+            if (xmlPackageNode == null)
+                throw new ArgumentNullException(nameof(xmlPackageNode));
+
+            if (component == null)
+            {
+                //make sure object type is properly implemented into serialization system
+                if (!(Activator.CreateInstance(componentType) is XmlDatabaseComponent _component))
+                    throw new BadMemeException("Type of this list is not of XmlDatabaseComponent");
+                else
+                    component = _component;
+            }
+
+            return component.FromXml(xmlPackageNode, XmlDatabaseComponent.SchemaV1Dot0);
         }
 
         /// <summary>
@@ -888,9 +963,170 @@ namespace RelhaxModpack.Database
                 case DocumentVersion1V1:
                     SaveDatabase1V1(CustomDatabaseLocation);
                     return;
+                case DocumentVersion1V2:
+                    SaveDatabase1V2(CustomDatabaseLocation);
+                    return;
                 default:
                     Logging.Error("Unknown document version to save as: {0}", documentVersion);
                     return;
+            }
+        }
+
+        private void SaveDatabase1V2(string savePath)
+        {
+            string rootDocPath = Path.Combine(savePath, "database.xml");
+
+            //load or create document
+            XDocument doc;
+            if (File.Exists(rootDocPath))
+                doc = XmlUtils.LoadXDocument(rootDocPath, XmlLoadType.FromFile);
+            else
+                doc = new XDocument(new XDeclaration("1.0", "UTF-8", "yes"));
+
+            string docContentsBeforeSave = doc.Root.ToString();
+
+            //get or create the top element
+            XElement topElement = doc.Root;
+            if (topElement == null)
+            {
+                topElement = new XElement("modInfoAlpha.xml");
+                doc.Add(topElement);
+            }
+
+            //update or create the top attributes
+            UpdateAttribute(topElement, WoTClientVersionXmlString, WoTClientVersion.Trim());
+            UpdateAttribute(topElement, WoTOnlineFolderVersionXmlString, WoTOnlineFolderVersion.Trim());
+            UpdateAttribute(topElement, DocumentVersionXmlString, DocumentVersion);
+            UpdateAttribute(topElement, SchemaVersionXmlString, SchemaVersion);
+
+            //add the elements if they don't already exist
+            UpdateElement(topElement, "globalDependencies");
+            UpdateElement(topElement, "dependencies");
+            XElement categories = topElement.Element("categories");
+            if (categories == null)
+            {
+                categories = new XElement("categories");
+                topElement.Add(categories);
+            }
+
+            //add category element if don't already exist
+            foreach (Category category in ParsedCategoryList)
+            {
+                if (string.IsNullOrWhiteSpace(category.XmlFilename))
+                {
+                    category.XmlFilename = category.Name.Replace(" ", string.Empty).Replace("/", "_").Replace("\\", "_") + ".xml";
+                    UpdateElement(categories, "category", category.XmlFilename);
+                }
+                UpdateElement(categories, "category");
+            }
+            
+            //check if the document has changed and needs to be saved
+            string docContentsAfterSave = doc.Root.ToString();
+            if (!docContentsBeforeSave.Equals(docContentsAfterSave))
+                doc.Save(rootDocPath);
+
+            //check each document file if it needs to be saved
+            UpdateDatabaseComponentFile(Path.Combine(savePath, "globalDependencies.xml"), "GlobalDependencies");
+            UpdateDatabaseComponentFile(Path.Combine(savePath, "dependencies.xml"), "Dependencies");
+            foreach (Category cat in ParsedCategoryList)
+                UpdateDatabaseComponentFile(Path.Combine(savePath, cat.XmlFilename), cat.GetType().Name, cat);
+        }
+
+        private void UpdateDatabaseComponentFile(string documentPath, string rootElementHolder, CoreDatabaseComponent component = null)
+        {
+            //load or create document
+            XDocument doc;
+            if (File.Exists(documentPath))
+                doc = XmlUtils.LoadXDocument(documentPath, XmlLoadType.FromFile);
+            else
+                doc = new XDocument(new XDeclaration("1.0", "UTF-8", "yes"));
+
+            string docContentsBeforeSave = doc.Root.ToString();
+
+            //get or create the top element
+            XElement topElement = doc.Root;
+            if (topElement == null)
+            {
+                topElement = new XElement(rootElementHolder);
+                doc.Add(topElement);
+            }
+            else if (!topElement.Name.Equals(rootElementHolder))
+            {
+                Logging.Warning("Expected component of type '{0}', but found '{1}'. It was removed", rootElementHolder, topElement.Name);
+                topElement.Remove();
+                topElement = new XElement(rootElementHolder);
+                doc.Add(topElement);
+            }
+
+            //if dependency or global, they have an extra container
+            switch(rootElementHolder)
+            {
+                case "GlobalDependencies":
+                    UpdateDatabaseDependencyFile(topElement, GlobalDependencies);
+                    break;
+                case "Dependencies":
+                    UpdateDatabaseDependencyFile(topElement, Dependencies);
+                    break;
+                case "Category":
+                    component.ToXml(topElement, SchemaVersion);
+                    break;
+            }                
+
+            string docContentsAfterSave = doc.Root.ToString();
+            if (!docContentsBeforeSave.Equals(docContentsAfterSave))
+                doc.Save(documentPath);
+        }
+
+        private void UpdateDatabaseDependencyFile(XElement rootElementHolder, IList packages)
+        {
+            List<XElement> xElements = rootElementHolder.Elements(packages[0].GetType().Name).ToList();
+            int index = 0;
+            foreach(DatabasePackage package in packages)
+            {
+                XElement packageHolder = xElements[index];
+                if (packageHolder == null)
+                {
+                    packageHolder = new XElement(package.GetType().Name);
+                    rootElementHolder.Add(packageHolder);
+                    xElements = rootElementHolder.Elements(packages[0].GetType().Name).ToList();
+                }
+                else if (!packageHolder.Attribute("UID").Value.Equals(package.UID))
+                {
+                    packageHolder.Remove();
+                    packageHolder = new XElement(package.GetType().Name);
+                    rootElementHolder.Add(packageHolder);
+                    xElements = rootElementHolder.Elements(packages[0].GetType().Name).ToList();
+                }
+                package.ToXml(packageHolder, SchemaVersion);
+                index++;
+            }
+        }
+
+        private void UpdateAttribute(XElement element, string attributeName, string attributeValue)
+        {
+            XAttribute attribute = element.Attribute(attributeName);
+            if (attribute == null)
+            {
+                element.Add(new XAttribute(attributeName, attributeValue));
+            }
+            else
+            {
+                if (attribute.Value != attributeValue)
+                    attribute.Value = attributeValue;
+            }
+        }
+
+        private void UpdateElement(XElement topElement, string elementName, string elementValue = null)
+        {
+            if (string.IsNullOrEmpty(elementValue))
+                elementValue = elementName + ".xml";
+
+            XElement listElement = topElement.Element(elementName);
+            if (listElement == null)
+                topElement.Add(new XElement(elementName, new XAttribute("file", elementValue)));
+            else
+            {
+                UpdateAttribute(listElement, "file", elementValue);
             }
         }
 

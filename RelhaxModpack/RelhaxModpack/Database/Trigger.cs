@@ -11,9 +11,9 @@ namespace RelhaxModpack.Database
     /// Represents a trigger object used in the installer as an event starter.
     /// For example, a contour icon trigger exists to start the building of contour icons
     /// </summary>
-    public class Trigger : IXmlSerializable
+    public class Trigger : XmlDatabaseComponent, IXmlSerializable
     {
-        #region Xml serialization
+        #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
         /// </summary>
@@ -32,6 +32,18 @@ namespace RelhaxModpack.Database
         public string[] PropertiesForSerializationElements()
         {
             return new string[] { };
+        }
+        #endregion
+
+        #region Xml serialization V2
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(Name), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Name) }
+            };
+            return xmlDatabaseProperties;
         }
         #endregion
 

@@ -307,7 +307,7 @@ namespace RelhaxModpack.Windows
                 //for the onlineFolder version: //modInfoAlpha.xml/@onlineFolder
                 //for the folder version: //modInfoAlpha.xml/@version
                 WoTModpackOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, ApplicationConstants.DatabaseOnlineFolderXpath);
-                WoTClientVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, ApplicationConstants.DatabaseOnlineVersionXpath);
+                WoTClientVersion = XmlUtils.GetXmlStringFromXPath(SelectModInfo.FileName, ApplicationConstants.DatabaseClientVersionXpath);
                 string versionInfo = string.Format("{0} = {1},  {2} = {3}", nameof(WoTModpackOnlineFolderVersion), WoTModpackOnlineFolderVersion, nameof(WoTClientVersion), WoTClientVersion);
                 ReportProgress(versionInfo);
                 ReportProgress("Database loaded");

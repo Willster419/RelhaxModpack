@@ -11,7 +11,7 @@ namespace RelhaxModpack.Database
     /// </summary>
     public class Dependency : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
     {
-        #region Xml serialization
+        #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
         /// </summary>
@@ -36,6 +36,20 @@ namespace RelhaxModpack.Database
         {
             nameof(Dependencies)
         };
+        #endregion
+
+        #region Xml serialization V2
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = base.GetXmlDatabasePropertiesV1Dot0();
+            List<XmlDatabaseProperty> xmlDatabasePropertiesAddAfter = new List<XmlDatabaseProperty>()
+            {
+                new XmlDatabaseProperty() { XmlName = nameof(LastUpdateCheck), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Dependencies) }
+            };
+            //add stuff after base
+            xmlDatabaseProperties.AddRange(xmlDatabasePropertiesAddAfter);
+            return xmlDatabaseProperties;
+        }
         #endregion
 
         #region Database Properties

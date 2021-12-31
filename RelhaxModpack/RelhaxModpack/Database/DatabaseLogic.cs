@@ -25,9 +25,9 @@ namespace RelhaxModpack.Database
     /// <summary>
     /// Used for database dependency calculation. Determines what dependent packages use the package that this object is attached to
     /// </summary>
-    public class DatabaseLogic : IXmlSerializable
+    public class DatabaseLogic : XmlDatabaseComponent, IXmlSerializable
     {
-        #region Xml serialization
+        #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
         /// </summary>
@@ -46,6 +46,20 @@ namespace RelhaxModpack.Database
         public string[] PropertiesForSerializationElements()
         {
             return new string[] { };
+        }
+        #endregion
+
+        #region Xml serialization V2
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(PackageName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PackageName) },
+                new XmlDatabaseProperty() { XmlName = nameof(NotFlag), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(NotFlag) },
+                new XmlDatabaseProperty() { XmlName = nameof(Logic), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Logic) }
+            };
+            return xmlDatabaseProperties;
         }
         #endregion
 

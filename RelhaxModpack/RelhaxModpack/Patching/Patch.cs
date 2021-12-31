@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Linq;
 using RelhaxModpack.Common;
 using RelhaxModpack.Installer;
+using RelhaxModpack.Database;
 
 namespace RelhaxModpack.Patching
 {
@@ -12,7 +13,6 @@ namespace RelhaxModpack.Patching
     /// </summary>
     public class Patch : Instruction
     {
-
         /// <summary>
         /// One of two string values used for regex type patches
         /// </summary>
@@ -58,6 +58,27 @@ namespace RelhaxModpack.Patching
                 nameof(Replace)
             };
         }
+
+        #region Xml serialization V2
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(Type), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Type) },
+                new XmlDatabaseProperty() { XmlName = nameof(Mode), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Mode) },
+                new XmlDatabaseProperty() { XmlName = nameof(PatchPath), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PatchPath) },
+                new XmlDatabaseProperty() { XmlName = nameof(File), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(File) },
+                new XmlDatabaseProperty() { XmlName = nameof(Version), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Version) },
+                new XmlDatabaseProperty() { XmlName = nameof(Search), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Search) },
+                new XmlDatabaseProperty() { XmlName = nameof(Replace), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Replace) },
+                new XmlDatabaseProperty() { XmlName = nameof(FollowPath), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(FollowPath) },
+                new XmlDatabaseProperty() { XmlName = nameof(Path), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Path) },
+                new XmlDatabaseProperty() { XmlName = nameof(Line), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Line) }
+            };
+            return xmlDatabaseProperties;
+        }
+        #endregion
 
         /// <summary>
         /// The type of patch, xml or regex (direct text replacement)

@@ -1018,6 +1018,21 @@ namespace RelhaxModpack.Utilities
             }
         }
 
+        public static bool SetListIndexValueType(IList list, int index, Type typeToSet, string valueToSet)
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(typeToSet);
+                list[index] = converter.ConvertFrom(valueToSet);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex.ToString());
+                return false;
+            }
+        }
+
         /// <summary>
         /// Attempts to set a field value of a class or structure object instance with the string valueToSet
         /// </summary>
