@@ -441,12 +441,6 @@
             A class that serves as a description of an atlas file with processing instructions
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Atlases.Atlas.Pkg">
-            <summary>
-            Complete path to the package file
-            </summary>
-            <remarks>This is loaded from the xml file. The package itself is a non-compressed zip file</remarks>
-        </member>
         <member name="P:RelhaxModpack.Atlases.Atlas.AtlasFile">
             <summary>
             File name of the atlas image file to extract
@@ -456,12 +450,6 @@
         <member name="P:RelhaxModpack.Atlases.Atlas.MapFile">
             <summary>
             File name of the atlas map file to extract
-            </summary>
-            <remarks>This is loaded from the xml file</remarks>
-        </member>
-        <member name="P:RelhaxModpack.Atlases.Atlas.DirectoryInArchive">
-            <summary>
-            Path inside the pkg file to the filename to process. If Pkg is empty, this is the path to the atlas and map file
             </summary>
             <remarks>This is loaded from the xml file</remarks>
         </member>
@@ -960,7 +948,7 @@
             The xpath string to get the onlineFolder attribute from the document root
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseOnlineVersionXpath">
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseClientVersionXpath">
             <summary>
             The xpath string to get the database version info attribute from the document root
             </summary>
@@ -1076,16 +1064,6 @@
             Get or set if the installGroup property of all packages in this category will be offset by each package's level in the package tree
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Database.Category.Maintainers">
-            <summary>
-            A list of database managers who are known to maintain this component
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.Category.MaintainersList">
-            <summary>
-            Returns a list database managers who are known to maintain this component
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Database.Category.Packages">
             <summary>
             The list of packages contained in this category
@@ -1150,6 +1128,27 @@
         <member name="M:RelhaxModpack.Database.Category.IsAnyPackageCheckedEnabledVisible">
             <summary>
             Returns true if at least one package is enabled and checked and visible from the first level of packages in the category
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.CoreDatabaseComponent.EditorTreeViewItem">
+            <summary>
+            Reference for the UI element of this package in the database editor
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.CoreDatabaseComponent.Maintainers">
+            <summary>
+            A list of database managers who are known to maintain this component
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.CoreDatabaseComponent.ComponentInternalName">
+            <summary>
+            The internal ID of the component. Can be anything used to identify it.
+            </summary>
+            <remarks>When a databasePackage, the internal packageName. When category, the category name.</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Database.CoreDatabaseComponent.MaintainersList">
+            <summary>
+            Returns a list database managers who are known to maintain this component
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseManager.ParsedCategoryList">
@@ -1223,17 +1222,16 @@
             <param name="parsedCategoryList">The list of categories</param>
             <returns></returns>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabase(System.String)">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabase(System.String,System.String)">
             <summary>
-            Save the database to an Xml 1.1 version format
+            Save the database to an Xml version format
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabase1V1(System.String,System.Xml.XmlDocument)">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabase1V1(System.String)">
             <summary>
             Save the database to the Xml version 1.1 standard
             </summary>
             <param name="savePath">The path to save all the xml files to</param>
-            <param name="doc">The root XmlDocument to save the header information to</param>
         </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.SaveDatabaseList1V1(System.Collections.IList,System.Xml.XmlElement,System.Xml.XmlDocument,System.String)">
             <summary>
@@ -1606,16 +1604,6 @@
             A method to keep track of the version of the package
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Database.DatabasePackage.Maintainers">
-            <summary>
-            A list of database managers who are known to maintain this component
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.DatabasePackage.MaintainersList">
-            <summary>
-            Returns a list database managers who are known to maintain this component
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Database.DatabasePackage.Timestamp">
             <summary>
             Used to determine when the package entry was last modified
@@ -1956,6 +1944,18 @@
             </summary>
             <param name="package">The package to get the hash code</param>
             <returns>The hash code of the PackageName of the Package</returns>
+        </member>
+        <member name="P:RelhaxModpack.Database.PackageExtractInstruction.Pkg">
+            <summary>
+            Complete path to the package file
+            </summary>
+            <remarks>This is loaded from the xml file. The package itself is a non-compressed zip file</remarks>
+        </member>
+        <member name="P:RelhaxModpack.Database.PackageExtractInstruction.DirectoryInArchive">
+            <summary>
+            Path inside the pkg file to the filename to process. If Pkg is empty, this is the path to the atlas and map file
+            </summary>
+            <remarks>This is loaded from the xml file</remarks>
         </member>
         <member name="T:RelhaxModpack.Database.PackageTagsList">
             <summary>
@@ -8829,19 +8829,9 @@
             Represents a set of xml instructions for extracting and copying xml files into another location. Includes xml binary decompression
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Xml.XmlUnpack.Pkg">
-            <summary>
-            Path and name to the package file
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Xml.XmlUnpack.FileName">
             <summary>
             Name of the file to extract
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Xml.XmlUnpack.DirectoryInArchive">
-            <summary>
-            Path inside the pkg file to the filename to process
             </summary>
         </member>
         <member name="P:RelhaxModpack.Xml.XmlUnpack.ExtractDirectory">
