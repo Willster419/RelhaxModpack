@@ -8,8 +8,7 @@ namespace RelhaxModpack.Xml
     /// </summary>
     public class XmlUnpack : Instruction
     {
-
-        public const string XmlUnpackXmlSearchPath = "//files/file";
+        public const string XmlUnpackXmlSearchPath = "/files/file";
 
         public override string RootObjectPath { get { return XmlUnpackXmlSearchPath; } }
 

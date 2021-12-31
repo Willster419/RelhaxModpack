@@ -38,7 +38,7 @@ namespace RelhaxModpack.Patching
         /// </summary>
         public const string TypeXvm = "xvm";
 
-        public const string PatchXmlSearchPath = "//patchs/patch";
+        public const string PatchXmlSearchPath = "/patchs/patch";
 
         public override string RootObjectPath { get { return PatchXmlSearchPath; } }
 

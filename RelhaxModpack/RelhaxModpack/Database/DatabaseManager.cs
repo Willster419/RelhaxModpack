@@ -22,6 +22,16 @@ namespace RelhaxModpack.Database
 {
     public class DatabaseManager
     {
+        public const string DocumentVersion1V1 = "1.1";
+
+        public const string WoTClientVersionXmlString = "version";
+
+        public const string WoTOnlineFolderVersionXmlString = "onlineFolder";
+
+        public const string DocumentVersionXmlString = "documentVersion";
+
+        public const string SchemaVersionXmlString = "schemaVersion";
+
         /// <summary>
         /// The list of categories
         /// </summary>
@@ -42,6 +52,8 @@ namespace RelhaxModpack.Database
         public string WoTClientVersion { get; private set; }
 
         public string WoTOnlineFolderVersion { get; private set; }
+
+        public string DocumentVersion { get; private set; }
 
         /// <summary>
         /// A reference to the modpack settings window configuration class
@@ -154,14 +166,22 @@ namespace RelhaxModpack.Database
 
             Init();
 
+            DatabaseLoadFailCode databaseLoadFailCode;
+
             //run the stuff. the method names are self-explanatory
-            await LoadRootDatabaseXmlStringAsync();
+            databaseLoadFailCode = await LoadRootDatabaseXmlStringAsync();
+            if (databaseLoadFailCode != DatabaseLoadFailCode.None)
+                return databaseLoadFailCode;
 
-            ParseRootDatabaseFromString();
+            databaseLoadFailCode = ParseRootDatabaseFromString();
+            if (databaseLoadFailCode != DatabaseLoadFailCode.None)
+                return databaseLoadFailCode;
 
-            LoadWoTVersionInfoFromXmlDocument();
+            LoadMetadataInfoFromRootXmlDocument();
 
-            await ParseDatabaseXmlAsync();
+            databaseLoadFailCode = await ParseDatabaseXmlAsync();
+            if (databaseLoadFailCode != DatabaseLoadFailCode.None)
+                return databaseLoadFailCode;
 
             DatabaseUtils.BuildTopLevelParents(ParsedCategoryList);
             DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
@@ -178,7 +198,7 @@ namespace RelhaxModpack.Database
             lastSupportedWoTClient = clientVersion;
             await LoadRootDatabaseXmlStringStableAsync();
             ParseRootDatabaseFromString();
-            LoadWoTVersionInfoFromXmlDocument();
+            LoadMetadataInfoFromRootXmlDocument();
             ParseDatabaseXmlStable();
             DatabaseUtils.BuildTopLevelParents(ParsedCategoryList);
             DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
@@ -206,6 +226,9 @@ namespace RelhaxModpack.Database
                 ParsedCategoryList.Clear();
 
             databaseRootXmlString = null;
+
+            if (modInfoZipFile != null)
+                modInfoZipFile.Dispose();
             modInfoZipFile = null;
         }
         #endregion
@@ -388,16 +411,17 @@ namespace RelhaxModpack.Database
 
             ParseRootDatabaseFromString();
 
-            LoadWoTVersionInfoFromXmlDocument();
+            LoadMetadataInfoFromRootXmlDocument();
 
             return DatabaseLoadFailCode.None;
         }
 
-        private void LoadWoTVersionInfoFromXmlDocument()
+        private void LoadMetadataInfoFromRootXmlDocument()
         {
             //get WoT xml version attributes from database root
             WoTOnlineFolderVersion = XmlUtils.GetXmlStringFromXPath(DatabaseRootXmlDocument, ApplicationConstants.DatabaseOnlineFolderXpath);
-            WoTClientVersion = XmlUtils.GetXmlStringFromXPath(DatabaseRootXmlDocument, ApplicationConstants.DatabaseOnlineVersionXpath);
+            WoTClientVersion = XmlUtils.GetXmlStringFromXPath(DatabaseRootXmlDocument, ApplicationConstants.DatabaseClientVersionXpath);
+            DocumentVersion = XmlUtils.GetXmlStringFromXPath(DatabaseRootXmlDocument, ApplicationConstants.DatabaseDocumentVersionXpath);
         }
         #endregion
 
@@ -455,11 +479,20 @@ namespace RelhaxModpack.Database
             modInfoZipFile = null;
 
             //parse into lists
-            if (!ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
+            switch (DocumentVersion)
             {
-                Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                return DatabaseLoadFailCode.FailedToParseDatabase;
+                case DocumentVersion1V1:
+                    if (!ParseDatabase1V1FromStrings(globalDependencyXmlString, dependenicesXmlString, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
+                    {
+                        Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                        return DatabaseLoadFailCode.FailedToParseDatabase;
+                    }
+                    break;
+                default:
+                    Logging.Error("Unknown document version to load: {0}", DocumentVersion);
+                    return DatabaseLoadFailCode.FailedToParseDatabase;
             }
+            
             return DatabaseLoadFailCode.None;
         }
 
@@ -483,21 +516,37 @@ namespace RelhaxModpack.Database
             }
 
             //parse into lists
-            Logging.Debug("Sending strings to db loader method");
-            if (!ParseDatabase1V1FromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList))
+            switch (DocumentVersion)
             {
-                Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                return DatabaseLoadFailCode.FailedToParseDatabase;
+                case DocumentVersion1V1:
+                    if (!ParseDatabase1V1FromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList))
+                    {
+                        Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                        return DatabaseLoadFailCode.FailedToParseDatabase;
+                    }
+                    break;
+                default:
+                    Logging.Error("Unknown document version to load: {0}", DocumentVersion);
+                    return DatabaseLoadFailCode.FailedToParseDatabase;
             }
             return DatabaseLoadFailCode.None;
         }
 
         private DatabaseLoadFailCode ParseDatabaseXmlTest()
         {
-            if (!ParseDatabase1V1FromFiles())
+            //parse into lists
+            switch (DocumentVersion)
             {
-                Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
-                return DatabaseLoadFailCode.FailedToParseDatabase;
+                case DocumentVersion1V1:
+                    if (!ParseDatabase1V1FromFiles())
+                    {
+                        Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
+                        return DatabaseLoadFailCode.FailedToParseDatabase;
+                    }
+                    break;
+                default:
+                    Logging.Error("Unknown document version to load: {0}", DocumentVersion);
+                    return DatabaseLoadFailCode.FailedToParseDatabase;
             }
             return DatabaseLoadFailCode.None;
         }
@@ -580,7 +629,7 @@ namespace RelhaxModpack.Database
                 categoryDocuments.Add(catDoc);
             }
             //run the loading method
-            return ParseDatabase1V1(globalDepsDoc, GlobalDependencies, depsDoc, Dependencies, categoryDocuments, ParsedCategoryList);
+            return ParseDatabase(globalDepsDoc, GlobalDependencies, depsDoc, Dependencies, categoryDocuments, ParsedCategoryList);
         }
 
         /// <summary>
@@ -631,7 +680,19 @@ namespace RelhaxModpack.Database
                 }
             }
 
-            return ParseDatabase1V1(globalDependenciesdoc, globalDependencies, dependenciesdoc, dependencies, categoryDocuments, parsedCategoryList);
+            return ParseDatabase(globalDependenciesdoc, globalDependencies, dependenciesdoc, dependencies, categoryDocuments, parsedCategoryList);
+        }
+        public bool ParseDatabase(XDocument globalDependenciesDoc, List<DatabasePackage> globalDependenciesList, XDocument dependenciesDoc,
+            List<Dependency> dependenciesList, List<XDocument> categoryDocuments, List<Category> parsedCategoryList)
+        {
+            switch(DocumentVersion)
+            {
+                case DocumentVersion1V1:
+                    return ParseDatabase1V1(globalDependenciesDoc, globalDependenciesList, dependenciesDoc, dependenciesList, categoryDocuments, parsedCategoryList);
+                default:
+                    Logging.Error("Unknown document version to parse: {0}", DocumentVersion);
+                    return false;
+            }
         }
 
         /// <summary>
@@ -810,9 +871,34 @@ namespace RelhaxModpack.Database
 
         #region Database Saving
         /// <summary>
-        /// Save the database to an Xml 1.1 version format
+        /// Save the database to an Xml version format
         /// </summary>
-        public void SaveDatabase(string saveLocation)
+        public void SaveDatabase(string saveLocation, string documentVersion = null)
+        {
+            if (string.IsNullOrEmpty(documentVersion))
+                documentVersion = this.DocumentVersion;
+
+            //
+            CustomDatabaseLocation = saveLocation;
+            if (Path.HasExtension(CustomDatabaseLocation))
+                CustomDatabaseLocation = Path.GetDirectoryName(CustomDatabaseLocation);
+
+            switch (documentVersion)
+            {
+                case DocumentVersion1V1:
+                    SaveDatabase1V1(CustomDatabaseLocation);
+                    return;
+                default:
+                    Logging.Error("Unknown document version to save as: {0}", documentVersion);
+                    return;
+            }
+        }
+
+        /// <summary>
+        /// Save the database to the Xml version 1.1 standard
+        /// </summary>
+        /// <param name="savePath">The path to save all the xml files to</param>
+        private void SaveDatabase1V1(string savePath)
         {
             //make root of document
             XmlDocument doc = new XmlDocument();
@@ -829,26 +915,11 @@ namespace RelhaxModpack.Database
             root.SetAttribute("version", WoTClientVersion.Trim());
             root.SetAttribute("onlineFolder", WoTOnlineFolderVersion.Trim());
 
+            //create root document (contains filenames for all other xml documents)
+            root.SetAttribute("documentVersion", DocumentVersion1V1);
+
             //put root element into document
             doc.AppendChild(root);
-
-            //
-            CustomDatabaseLocation = saveLocation;
-            if (Path.HasExtension(CustomDatabaseLocation))
-                CustomDatabaseLocation = Path.GetDirectoryName(CustomDatabaseLocation);
-            SaveDatabase1V1(CustomDatabaseLocation, doc);
-        }
-
-        /// <summary>
-        /// Save the database to the Xml version 1.1 standard
-        /// </summary>
-        /// <param name="savePath">The path to save all the xml files to</param>
-        /// <param name="doc">The root XmlDocument to save the header information to</param>
-        private void SaveDatabase1V1(string savePath, XmlDocument doc)
-        {
-            //create root document (contains filenames for all other xml documents)
-            XmlElement root = doc.DocumentElement;
-            root.SetAttribute("documentVersion", "1.1");
 
             //create and append globalDependencies
             XmlElement xmlGlobalDependencies = doc.CreateElement("globalDependencies");
@@ -879,7 +950,7 @@ namespace RelhaxModpack.Database
             //save the actual xml files for database entries
             //globalDependency
             XmlDocument xmlGlobalDependenciesFile = new XmlDocument();
-            XmlDeclaration xmlDeclaration = xmlGlobalDependenciesFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            xmlDeclaration = xmlGlobalDependenciesFile.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             xmlGlobalDependenciesFile.AppendChild(xmlDeclaration);
             XmlElement xmlGlobalDependenciesFileRoot = xmlGlobalDependenciesFile.CreateElement("GlobalDependencies");
             SaveDatabaseList1V1(GlobalDependencies, xmlGlobalDependenciesFileRoot, xmlGlobalDependenciesFile, "GlobalDependency");

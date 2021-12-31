@@ -420,7 +420,7 @@ namespace RelhaxModpack.Common
         /// <summary>
         /// The xpath to the version information used by the modpack to determine the WoT client version
         /// </summary>
-        public const string WoTVersionXmlXpath = "//version.xml/version";
+        public const string WoTVersionXmlXpath = "/version.xml/version";
 
         /// <summary>
         /// The current distribution version of the application.

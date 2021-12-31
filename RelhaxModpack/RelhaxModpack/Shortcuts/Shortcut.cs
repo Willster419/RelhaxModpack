@@ -12,7 +12,7 @@ namespace RelhaxModpack.Shortcuts
     public class Shortcut : Instruction
     {
 
-        public const string ShortcutXmlSearchPath = "//shortcuts/shortcut";
+        public const string ShortcutXmlSearchPath = "/shortcuts/shortcut";
 
         public override string RootObjectPath { get { return ShortcutXmlSearchPath; } }
 

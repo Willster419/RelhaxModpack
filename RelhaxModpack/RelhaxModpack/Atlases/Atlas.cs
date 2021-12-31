@@ -14,7 +14,7 @@ namespace RelhaxModpack.Atlases
     public class Atlas : Instruction
     {
 
-        public const string AtlasXmlSearchPath = "//atlases/atlas";
+        public const string AtlasXmlSearchPath = "/atlases/atlas";
 
         public override string RootObjectPath { get { return AtlasXmlSearchPath; } }
 
