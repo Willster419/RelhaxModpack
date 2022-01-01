@@ -80,6 +80,25 @@ namespace RelhaxModpack.Database
                 continueProcessingProperty = false;
             }
         }
+
+        protected override void OnParsingPropertyFromXmlElement(XmlDatabaseProperty propertyFromXml, XElement propertyElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
+        {
+            continueProcessingProperty = true;
+            if (propertyFromXml.PropertyName.Equals(nameof(Packages)) && schemaVersion.Equals(SchemaV1Dot0))
+            {
+                //manually parse these because in this schema (in converting from old db load method), there is no "Packages" folder for categories
+                List<XElement> xmlPackages = propertyElement.Elements("Package").ToList();
+
+                foreach(XElement element in xmlPackages)
+                {
+                    object listEntryObject = Activator.CreateInstance(typeof(SelectablePackage));
+                    XmlDatabaseComponent component = listEntryObject as XmlDatabaseComponent;
+                    component.FromXml(element, schemaVersion);
+                    Packages.Add(component as SelectablePackage);
+                }
+                continueProcessingProperty = false;
+            }
+        }
         #endregion
 
         #region Database Properties
