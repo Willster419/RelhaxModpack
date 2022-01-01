@@ -50,6 +50,8 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Xml serialization V2
+        public const string XmlElementName = "Dependency";
+
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
@@ -60,6 +62,17 @@ namespace RelhaxModpack.Database
                 new XmlDatabaseProperty() { XmlName = nameof(Logic), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Logic) }
             };
             return xmlDatabaseProperties;
+        }
+
+        public override string GetXmlElementName(string schemaVersion)
+        {
+            switch (schemaVersion)
+            {
+                case SchemaV1Dot0:
+                    return XmlElementName;
+                default:
+                    return base.GetXmlElementName(schemaVersion);
+            }
         }
         #endregion
 
