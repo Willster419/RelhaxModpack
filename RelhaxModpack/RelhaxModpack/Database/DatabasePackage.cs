@@ -64,6 +64,7 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Xml serialization V2
+        public const string XmlElementName = "Package";
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = base.GetXmlDatabasePropertiesV1Dot0();
@@ -99,6 +100,17 @@ namespace RelhaxModpack.Database
             //add stuff after base
             xmlDatabaseProperties.AddRange(xmlDatabasePropertiesAddAfter);
             return xmlDatabaseProperties;
+        }
+
+        public override string GetXmlElementName(string schemaVersion)
+        {
+            switch (schemaVersion)
+            {
+                case SchemaV1Dot0:
+                    return XmlElementName;
+                default:
+                    return base.GetXmlElementName(schemaVersion);
+            }
         }
         #endregion
 

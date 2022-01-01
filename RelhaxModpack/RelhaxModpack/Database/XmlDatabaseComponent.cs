@@ -18,8 +18,6 @@ namespace RelhaxModpack.Database
     {
         public const string SchemaV1Dot0 = "1.0";
 
-        public string XmlElementName { get { return this.GetType().Name; } }
-
         public virtual List<XmlDatabaseProperty> GetXmlDatabaseProperties(string schemaVersion)
         {
             switch (schemaVersion)
@@ -34,6 +32,11 @@ namespace RelhaxModpack.Database
         }
 
         protected abstract List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0();
+
+        public virtual string GetXmlElementName(string schemaVersion)
+        {
+            return this.GetType().Name;
+        }
 
         public virtual bool ToXml(XElement propertyElement, string schemaVersion)
         {
@@ -125,9 +128,9 @@ namespace RelhaxModpack.Database
                     foreach (object obj in list)
                     {
                         //check to make sure an entry exists
-                        if (elements[index] == null)
+                        if (index >= elements.Count || elements[index] == null)
                         {
-                            elements.Add(new XElement(XmlElementName, null));
+                            element.Add(new XElement(GetXmlElementName(schemaVersion), null));
                             elements = element.Elements().ToList();
                         }
 

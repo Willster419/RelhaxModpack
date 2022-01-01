@@ -1092,17 +1092,17 @@ namespace RelhaxModpack.Database
                 {
                     packageHolder = new XElement(package.GetType().Name);
                     rootElementHolder.Add(packageHolder);
-                    xElements = rootElementHolder.Elements(packages[0].GetType().Name).ToList();
-                }
-                else if (!packageHolder.Attribute("UID").Value.Equals(package.UID))
-                {
-                    packageHolder.Remove();
-                    packageHolder = new XElement(package.GetType().Name);
-                    //rootElementHolder.Add(packageHolder);
-                    xElements = rootElementHolder.Elements(packages[0].GetType().Name).ToList();
+                    xElements = rootElementHolder.Elements(xmlElementName).ToList();
                 }
                 package.ToXml(packageHolder, SchemaVersion);
                 index++;
+            }
+
+            //remove any extra XElements after the end of the loop
+            while (index < xElements.Count)
+            {
+                xElements.Last().Remove();
+                xElements = rootElementHolder.Elements(xmlElementName).ToList();
             }
         }
 

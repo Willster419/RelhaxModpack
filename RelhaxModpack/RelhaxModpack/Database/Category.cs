@@ -51,30 +51,31 @@ namespace RelhaxModpack.Database
             return xmlDatabaseProperties;
         }
 
-        protected override void OnParsingPropertyToXmlElement(XmlDatabaseProperty propertyFromXml, XElement propertyElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
+        protected override void OnParsingPropertyToXmlElement(XmlDatabaseProperty thisPropertyXml, XElement propertyXmlElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
         {
             continueProcessingProperty = true;
-            if (propertyFromXml.PropertyName.Equals(nameof(Packages)) && schemaVersion.Equals(SchemaV1Dot0))
+            if (thisPropertyXml.PropertyName.Equals(nameof(Packages)) && schemaVersion.Equals(SchemaV1Dot0))
             {
                 //manually parse these because in this schema (in converting from old db load method), there is no "Packages" folder for categories
-                List<XElement> xmlPackages = propertyElement.Elements("Package").ToList();
+                List<XElement> xmlPackages = propertyXmlElement.Elements("Package").ToList();
                 int index = 0;
                 foreach(SelectablePackage package in Packages)
                 {
                     if (index >= xmlPackages.Count || xmlPackages[index] == null)
                     {
-                        xmlPackages[index] = new XElement(propertyFromXml.XmlName);
-                        xmlPackages = propertyElement.Elements(propertyFromXml.XmlName).ToList();
-                    }
-                    else if (!xmlPackages[index].Attribute("UID").Value.Equals(package.UID))
-                    {
-                        xmlPackages[index].Remove();
-                        xmlPackages[index] = new XElement(propertyFromXml.XmlName);
-                        //propertyElement.Add(xmlPackages[index]);
-                        xmlPackages = propertyElement.Elements(propertyFromXml.XmlName).ToList();
+                        XElement element = new XElement(thisPropertyXml.XmlName);
+                        propertyXmlElement.Add(element);
+                        xmlPackages = propertyXmlElement.Elements("Package").ToList();
                     }
                     package.ToXml(xmlPackages[index], schemaVersion);
                     index++;
+                }
+
+                //remove any extra XElements after the end of the loop
+                while (index < xmlPackages.Count)
+                {
+                    xmlPackages.Last().Remove();
+                    xmlPackages = xmlPackages[index].Elements("Package").ToList();
                 }
                 continueProcessingProperty = false;
             }
