@@ -65,6 +65,7 @@ namespace RelhaxModpack.Database
 
         #region Xml serialization V2
         public const string XmlElementName = "Package";
+
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = base.GetXmlDatabasePropertiesV1Dot0();
