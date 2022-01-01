@@ -15,5 +15,10 @@ namespace RelhaxModpack.Database
         public XmlEntryType XmlEntryType { get; set; }
 
         public string PropertyName { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} = {1}, {2} = {3}, {4} = {5}", nameof(XmlName), XmlName, nameof(XmlEntryType), XmlEntryType.ToString(), nameof(PropertyName), PropertyName);
+        }
     }
 }
