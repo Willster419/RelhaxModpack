@@ -52,9 +52,12 @@ namespace RelhaxModpack.Database
             List<XmlDatabaseProperty> propertiesThatAreAttributes = xmlDatabaseProperties.FindAll(property => property.XmlEntryType == Utilities.Enums.XmlEntryType.XmlAttribute);
             List<XmlDatabaseProperty> propertiesThatAreElements = xmlDatabaseProperties.FindAll(property => property.XmlEntryType == Utilities.Enums.XmlEntryType.XmlElement);
 
+            List<XAttribute> attributes = new List<XAttribute>();
+
             //first handle attributes
-            foreach (XmlDatabaseProperty propertyFromXml in propertiesThatAreAttributes)
+            for (int i = 0; i < propertiesThatAreAttributes.Count; i++)
             {
+                XmlDatabaseProperty propertyFromXml = propertiesThatAreAttributes[i];
                 //get the property that corresponds to the xml attribute entry
                 PropertyInfo propertyInfo = this.GetType().GetProperty(propertyFromXml.PropertyName);
                 if (propertyInfo == null)
@@ -67,19 +70,10 @@ namespace RelhaxModpack.Database
 
                 //get the value of this component's property
                 object valueOfProperty = propertyInfo.GetValue(this);
-
-                //get the xml attribute that corresponds to this object's property. if it does not exist, then create it
-                XAttribute attribute = propertyElement.Attributes().ToList().Find(attributeToFind => attributeToFind.Name.LocalName.ToLower().Equals(propertyFromXml.XmlName.ToLower()));
-                if (attribute == null)
-                    attribute = new XAttribute(propertyFromXml.XmlName, valueOfProperty);
-                else
-                {
-                    // check if it's in sync with the attribute value. A null value is treated as out of date
-                    bool valuesInSync = valueOfProperty.ToString().Equals(attribute.Value);
-                    if (!valuesInSync)
-                        attribute.Value = valueOfProperty.ToString();
-                }
+                attributes.Add(new XAttribute(propertyFromXml.XmlName, valueOfProperty.ToString()));
             }
+            //replace all the attributes cause we can't edit individual lists of attributes. why would we want to do that, microsoft??
+            propertyElement.ReplaceAttributes(attributes);
 
             //then handle elements. create a temp version for its default values
             object objectForDefaults = Activator.CreateInstance(this.GetType());
@@ -112,10 +106,35 @@ namespace RelhaxModpack.Database
                     //if the element entry in the xml is null (nothing in it) and the count of items in the list is 0, (nothing in it), then nothing to do
                     if (element == null && list.Count == 0)
                         continue;
+                    else if (list.Count == 0)
+                    {
+                        element.Remove();
+                        continue;
+                    }
                     else if (element == null)
                     {
                         element = new XElement(propertyFromXml.XmlName);
-                        propertyElement.Add(element);
+                        if (i+1 == propertiesThatAreElements.Count)
+                            propertyElement.Add(element);
+                        else
+                        {
+                            bool valueApplied = false;
+                            XmlDatabaseProperty nextPropertyFromXml;
+                            XElement elementAfterThisOne;
+                            for (int j = i + 1; j < propertiesThatAreElements.Count; j++)
+                            {
+                                nextPropertyFromXml = propertiesThatAreElements[j];
+                                elementAfterThisOne = propertyElement.Elements().ToList().Find(elementToFind => elementToFind.Name.LocalName.ToLower().Equals(nextPropertyFromXml.XmlName.ToLower()));
+                                if (elementAfterThisOne != null)
+                                {
+                                    valueApplied = true;
+                                    elementAfterThisOne.AddBeforeSelf(element);
+                                    break;
+                                }
+                            }
+                            if (!valueApplied)
+                                propertyElement.Add(element);
+                        }
                     }
 
                     //get type of object that this list stores
@@ -130,7 +149,10 @@ namespace RelhaxModpack.Database
                         //check to make sure an entry exists
                         if (index >= elements.Count || elements[index] == null)
                         {
-                            element.Add(new XElement(GetXmlElementName(schemaVersion), null));
+                            string elementName = listObjectType.Name;
+                            if (obj is XmlDatabaseComponent comp)
+                                elementName = comp.GetXmlElementName(schemaVersion);
+                            element.Add(new XElement(elementName, null));
                             elements = element.Elements().ToList();
                         }
 
@@ -152,6 +174,13 @@ namespace RelhaxModpack.Database
                             break;
                         }
                         index++;
+                    }
+
+                    //remove any extras that exist on the xml side
+                    while (index < elements.Count)
+                    {
+                        elements.Last().Remove();
+                        elements = element.Elements().ToList();
                     }
                 }
                 else
