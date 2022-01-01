@@ -63,7 +63,7 @@ namespace RelhaxModpack.Database
                 {
                     if (index >= xmlPackages.Count || xmlPackages[index] == null)
                     {
-                        XElement element = new XElement(thisPropertyXml.XmlName);
+                        XElement element = new XElement("Package");
                         propertyXmlElement.Add(element);
                         xmlPackages = propertyXmlElement.Elements("Package").ToList();
                     }
