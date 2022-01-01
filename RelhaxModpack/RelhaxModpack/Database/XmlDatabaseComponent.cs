@@ -256,7 +256,7 @@ namespace RelhaxModpack.Database
             //get the list of xml database properties and if they are attributes or elements
             List<XmlDatabaseProperty> xmlDatabaseProperties = this.GetXmlDatabaseProperties(schemaVersion);
             List<XmlDatabaseProperty> propertiesThatAreAttributes = xmlDatabaseProperties.FindAll(property => property.XmlEntryType == Utilities.Enums.XmlEntryType.XmlAttribute);
-            List<XmlDatabaseProperty> propertiesThatAreElements = xmlDatabaseProperties.FindAll(property => property.XmlEntryType == Utilities.Enums.XmlEntryType.XmlAttribute);
+            List<XmlDatabaseProperty> propertiesThatAreElements = xmlDatabaseProperties.FindAll(property => property.XmlEntryType == Utilities.Enums.XmlEntryType.XmlElement);
 
             //first handle attributes
             foreach (XmlDatabaseProperty propertyFromXml in propertiesThatAreAttributes)
@@ -292,8 +292,6 @@ namespace RelhaxModpack.Database
             {
                 //get the element, ignoring case. If it does not exist, then we assume that the property is to take the default value
                 XElement element = propertyElement.Elements().ToList().Find(elementToFind => elementToFind.Name.LocalName.ToLower().Equals(propertyFromXml.XmlName.ToLower()));
-                if (element == null)
-                    continue;
 
                 //get the propertyInfo object representing the same name corresponding field or property in the memory database entry
                 PropertyInfo propertyInfo = this.GetType().GetProperty(propertyFromXml.PropertyName);
@@ -308,8 +306,13 @@ namespace RelhaxModpack.Database
                 //get the value of this component's property
                 object valueOfProperty = propertyInfo.GetValue(this);
 
+                OnParsingPropertyFromXmlElement(propertyFromXml, propertyElement, schemaVersion, propertyInfo, valueOfProperty, element, out bool continueProcessingProperty);
+
+                if (!continueProcessingProperty || element == null)
+                    continue;
+
                 //check if the property is a list type. if it is, then we need to load it by creating it and calling it's own version of FromXml
-                if (valueOfProperty.GetType() is IList list)
+                if (valueOfProperty is IList list)
                 {
                     //get type of object that this list stores
                     //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item//https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
@@ -320,9 +323,8 @@ namespace RelhaxModpack.Database
                     foreach (XElement listElement in element.Elements())
                     {
                         object listEntryObject = Activator.CreateInstance(listObjectType);
-                        if (listEntryObject is XmlDatabaseComponent)
+                        if (listEntryObject is XmlDatabaseComponent xmlDatabaseComponent)
                         {
-                            XmlDatabaseComponent xmlDatabaseComponent = listEntryObject as XmlDatabaseComponent;
                             //load this object from xml
                             xmlDatabaseComponent.FromXml(listElement, schemaVersion);
                         }
@@ -346,7 +348,9 @@ namespace RelhaxModpack.Database
                         {
                             Logging.Error("Unknown class type to load that is not of XmlDatabaseComponent: '{0}' of database component '{1}' of ID '{2}', line {3}",
                                 listEntryObject.GetType().ToString(), propertyElement.Name.LocalName, (this is CoreDatabaseComponent)? (this as CoreDatabaseComponent).ComponentInternalName : "N/A", ((IXmlLineInfo)element).LineNumber);
+                            continue;
                         }
+                        list.Add(listEntryObject);
                     }
                 }
                 //else try to update the property if it needs it
@@ -379,6 +383,12 @@ namespace RelhaxModpack.Database
         }
 
         protected virtual void OnParsingPropertyToXmlElement(XmlDatabaseProperty propertyFromXml, XElement propertyElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
+        {
+            //stub
+            continueProcessingProperty = true;
+        }
+
+        protected virtual void OnParsingPropertyFromXmlElement(XmlDatabaseProperty propertyFromXml, XElement propertyElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
         {
             //stub
             continueProcessingProperty = true;
