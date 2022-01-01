@@ -17,7 +17,7 @@ namespace RelhaxModpack.Database
         /// <summary>
         /// A list of database managers who are known to maintain this component
         /// </summary>
-        public string Maintainers { get; set; }
+        public string Maintainers { get; set; } = string.Empty;
 
         /// <summary>
         /// The internal ID of the component. Can be anything used to identify it.
