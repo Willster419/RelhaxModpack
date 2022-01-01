@@ -890,5 +890,13 @@ namespace RelhaxModpack.Windows
             AutomationSettings.WoTClientInstallLocation = SelectWoTInstallLocationSetting.Text;
         }
         #endregion
+
+        #region Keyboard shortcuts
+        private void SequencesToRunListBox_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Delete)
+                RemoveSelectedSequenceButton_Click(null, null);
+        }
+        #endregion
     }
 }
