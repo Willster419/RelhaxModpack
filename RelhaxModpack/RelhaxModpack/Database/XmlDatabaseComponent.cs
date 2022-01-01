@@ -164,8 +164,9 @@ namespace RelhaxModpack.Database
                         else if (obj.GetType().IsValueType)
                         {
                             XElement listElement = elements[index];
-                            if (listElement.Value != obj.ToString())
-                                listElement.Value = obj.ToString();
+                            string objectString = obj.ToString();
+                            if (listElement.Value != objectString)
+                                listElement.Value = objectString;
                         }
                         else
                         {
@@ -205,7 +206,7 @@ namespace RelhaxModpack.Database
 
                     if (element == null)
                     {
-                        element = new XElement(propertyFromXml.XmlName, valueOfProperty);
+                        element = new XElement(propertyFromXml.XmlName, valueOfProperty.ToString());
                         if (i+1 == propertiesThatAreElements.Count)
                             propertyElement.Add(element);
                         else
@@ -230,11 +231,12 @@ namespace RelhaxModpack.Database
                     }
                     else
                     {
-                        string value = valueOfProperty.ToString();
+                        string objectString = valueOfProperty.ToString();
+                            
                         // check if it's in sync with the element value. A null value is treated as out of date
-                        bool valuesInSync = value.Equals(element.Value);
+                        bool valuesInSync = objectString.Equals(element.Value);
                         if (!valuesInSync)
-                            element.Value = value;
+                            element.Value = objectString;
                     }
                 }
             }

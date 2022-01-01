@@ -1942,7 +1942,7 @@ namespace RelhaxModpack.Windows
             }
 
             //actually save
-            databaseManager.SaveDatabase(EditorSettings.DefaultEditorSaveLocation);
+            databaseManager.SaveDatabase(EditorSettings.DefaultEditorSaveLocation, DatabaseManager.DocumentVersion1V2);
 
             UnsavedChanges = false;
         }
