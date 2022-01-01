@@ -1098,7 +1098,7 @@ namespace RelhaxModpack.Database
                 {
                     packageHolder.Remove();
                     packageHolder = new XElement(package.GetType().Name);
-                    rootElementHolder.Add(packageHolder);
+                    //rootElementHolder.Add(packageHolder);
                     xElements = rootElementHolder.Elements(packages[0].GetType().Name).ToList();
                 }
                 package.ToXml(packageHolder, SchemaVersion);
