@@ -80,8 +80,9 @@ namespace RelhaxModpack.Database
 
             //then handle elements. create a temp version for its default values
             object objectForDefaults = Activator.CreateInstance(this.GetType());
-            foreach (XmlDatabaseProperty propertyFromXml in propertiesThatAreElements)
+            for (int i = 0; i < propertiesThatAreElements.Count; i++)
             {
+                XmlDatabaseProperty propertyFromXml = propertiesThatAreElements[i];
                 //get the property that corresponds to the xml attribute entry
                 PropertyInfo propertyInfo = this.GetType().GetProperty(propertyFromXml.PropertyName);
                 if (propertyInfo == null)
@@ -116,7 +117,7 @@ namespace RelhaxModpack.Database
 
                     //get type of object that this list stores
                     //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item//https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
-                    Type listObjectType = list.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1).FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
+                    Type listObjectType = list.GetType().GetInterfaces().Where(j => j.IsGenericType && j.GenericTypeArguments.Length == 1).FirstOrDefault(j => j.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
 
                     //get all elements of this xml element (for example, get all Media objects of xml element/list Medias
                     int index = 0;
@@ -173,7 +174,27 @@ namespace RelhaxModpack.Database
                     if (element == null)
                     {
                         element = new XElement(propertyFromXml.XmlName, valueOfProperty);
-                        propertyElement.Add(element);
+                        if (i+1 == propertiesThatAreElements.Count)
+                            propertyElement.Add(element);
+                        else
+                        {
+                            bool valueApplied = false;
+                            XmlDatabaseProperty nextPropertyFromXml;
+                            XElement elementAfterThisOne;
+                            for (int j = i+1; j < propertiesThatAreElements.Count; j++)
+                            {
+                                nextPropertyFromXml = propertiesThatAreElements[j];
+                                elementAfterThisOne = propertyElement.Elements().ToList().Find(elementToFind => elementToFind.Name.LocalName.ToLower().Equals(nextPropertyFromXml.XmlName.ToLower()));
+                                if (elementAfterThisOne != null)
+                                {
+                                    valueApplied = true;
+                                    elementAfterThisOne.AddBeforeSelf(element);
+                                    break;
+                                }
+                            }
+                            if (!valueApplied)
+                                propertyElement.Add(element);
+                        }
                     }
                     else
                     {
