@@ -18,6 +18,7 @@ using RelhaxModpack.Xml;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
+using RelhaxModpack.Utilities;
 
 namespace RelhaxModpack.Windows
 {
@@ -79,6 +80,7 @@ namespace RelhaxModpack.Windows
             {
                 try
                 {
+                    CommonUtils.CheckAndEnableTLS();
                     selectionsXMlString = await client.DownloadStringTaskAsync(ApplicationConstants.SelectionsRoot + ApplicationConstants.SelectionsXml);
                 }
                 catch(Exception ex)
