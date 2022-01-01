@@ -983,8 +983,6 @@ namespace RelhaxModpack.Database
             else
                 doc = new XDocument(new XDeclaration("1.0", "UTF-8", "yes"));
 
-            string docContentsBeforeSave = doc.Root.ToString();
-
             //get or create the top element
             XElement topElement = doc.Root;
             if (topElement == null)
@@ -992,6 +990,8 @@ namespace RelhaxModpack.Database
                 topElement = new XElement("modInfoAlpha.xml");
                 doc.Add(topElement);
             }
+
+            string docContentsBeforeSave = doc.Root.ToString();
 
             //update or create the top attributes
             UpdateAttribute(topElement, WoTClientVersionXmlString, WoTClientVersion.Trim());
@@ -1043,8 +1043,6 @@ namespace RelhaxModpack.Database
             else
                 doc = new XDocument(new XDeclaration("1.0", "UTF-8", "yes"));
 
-            string docContentsBeforeSave = doc.Root.ToString();
-
             //get or create the top element
             XElement topElement = doc.Root;
             if (topElement == null)
@@ -1060,8 +1058,10 @@ namespace RelhaxModpack.Database
                 doc.Add(topElement);
             }
 
+            string docContentsBeforeSave = doc.Root.ToString();
+
             //if dependency or global, they have an extra container
-            switch(rootElementHolder)
+            switch (rootElementHolder)
             {
                 case "GlobalDependencies":
                     UpdateDatabaseDependencyFile(topElement, GlobalDependencies, "GlobalDependency");
@@ -1090,7 +1090,7 @@ namespace RelhaxModpack.Database
                     packageHolder = xElements[index];
                 if (packageHolder == null)
                 {
-                    packageHolder = new XElement(package.GetType().Name);
+                    packageHolder = new XElement(xmlElementName);
                     rootElementHolder.Add(packageHolder);
                     xElements = rootElementHolder.Elements(xmlElementName).ToList();
                 }
