@@ -4,6 +4,8 @@ using RelhaxModpack.Database;
 using System.Windows.Controls;
 using System;
 using System.Linq;
+using System.Xml.Linq;
+using System.Reflection;
 
 namespace RelhaxModpack.Database
 {
@@ -47,6 +49,35 @@ namespace RelhaxModpack.Database
             xmlDatabaseProperties.Add(new XmlDatabaseProperty() { XmlName = nameof(Dependencies), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Dependencies) });
             xmlDatabaseProperties.Add(new XmlDatabaseProperty() { XmlName = nameof(Packages), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Packages) });
             return xmlDatabaseProperties;
+        }
+
+        protected override void OnParsingPropertyToXmlElement(XmlDatabaseProperty propertyFromXml, XElement propertyElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
+        {
+            continueProcessingProperty = true;
+            if (propertyFromXml.PropertyName.Equals(nameof(Packages)) && schemaVersion.Equals(SchemaV1Dot0))
+            {
+                //manually parse these because in this schema (in converting from old db load method), there is no "Packages" folder for categories
+                List<XElement> xmlPackages = propertyElement.Elements("Package").ToList();
+                int index = 0;
+                foreach(SelectablePackage package in Packages)
+                {
+                    if (index >= xmlPackages.Count || xmlPackages[index] == null)
+                    {
+                        xmlPackages[index] = new XElement(propertyFromXml.XmlName);
+                        xmlPackages = propertyElement.Elements(propertyFromXml.XmlName).ToList();
+                    }
+                    else if (!xmlPackages[index].Attribute("UID").Value.Equals(package.UID))
+                    {
+                        xmlPackages[index].Remove();
+                        xmlPackages[index] = new XElement(propertyFromXml.XmlName);
+                        //propertyElement.Add(xmlPackages[index]);
+                        xmlPackages = propertyElement.Elements(propertyFromXml.XmlName).ToList();
+                    }
+                    package.ToXml(xmlPackages[index], schemaVersion);
+                    index++;
+                }
+                continueProcessingProperty = false;
+            }
         }
         #endregion
 

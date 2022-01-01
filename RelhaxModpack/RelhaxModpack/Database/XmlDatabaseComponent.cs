@@ -98,6 +98,10 @@ namespace RelhaxModpack.Database
                 //get the xml element that corresponds to this object's property
                 XElement element = propertyElement.Elements().ToList().Find(elementToFind => elementToFind.Name.LocalName.ToLower().Equals(propertyFromXml.XmlName.ToLower()));
 
+                OnParsingPropertyToXmlElement(propertyFromXml, propertyElement, schemaVersion, propertyInfo, valueOfProperty, element, out bool continueProcessing);
+                if (!continueProcessing)
+                    continue;
+
                 //check if the property is a list type. if it is, then we need to load it by creating it and calling it's own version of FromXml
                 if (valueOfProperty is IList list)
                 {
@@ -317,6 +321,12 @@ namespace RelhaxModpack.Database
                 }
             }
             return true;
+        }
+
+        protected virtual void OnParsingPropertyToXmlElement(XmlDatabaseProperty propertyFromXml, XElement propertyElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
+        {
+            //stub
+            continueProcessingProperty = true;
         }
     }
 }
