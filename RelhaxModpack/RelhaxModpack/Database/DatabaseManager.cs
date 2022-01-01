@@ -721,7 +721,16 @@ namespace RelhaxModpack.Database
             for (int i = 0; i < categoryDocuments.Count; i++)
             {
                 XElement categoryXml = categoryDocuments[i].XPathSelectElement(@"/Category");
-                Category category = parsedCategoryList[i];
+                Category category = i >= parsedCategoryList.Count? null : parsedCategoryList[i];
+
+                if (category == null)
+                {
+                    //make sure object type is properly implemented into serialization system
+                    if (!(Activator.CreateInstance(typeof(Category)) is XmlDatabaseComponent _component))
+                        throw new BadMemeException("Type of this list is not of XmlDatabaseComponent");
+                    else
+                        category = _component as Category;
+                }
 
                 //parse the list of packages
                 Logging.Debug("[ParseDatabase1V2]: Parsing Packages for category {0}", i);
@@ -745,12 +754,42 @@ namespace RelhaxModpack.Database
             int index = 0;
             foreach (XElement xmlPackageNode in xmlPackageNodesList)
             {
-                XmlDatabaseComponent component = genericPackageList[index] as XmlDatabaseComponent;
+
+                XmlDatabaseComponent component = index >= genericPackageList.Count? null : genericPackageList[index] as XmlDatabaseComponent;
+
+                if (component == null)
+                {
+                    //make sure object type is properly implemented into serialization system
+                    if (!(Activator.CreateInstance(listObjectType) is XmlDatabaseComponent _component))
+                        throw new BadMemeException("Type of this list is not of XmlDatabaseComponent");
+                    else
+                        component = _component;
+                }
+
+                //string beforeLoad = GetXmlStringOfComponent(new XElement(component.GetXmlElementName(SchemaVersion)), component);
 
                 if (!ParseDatabase1V2Package(xmlPackageNode, component, listObjectType))
                     parsed = false;
+
+                //string afterLoad = GetXmlStringOfComponent(new XElement(component.GetXmlElementName(SchemaVersion)), component);
+
+                //if (beforeLoad != afterLoad)
+                genericPackageList.Add(component);
+                index++;
             }
             return parsed;
+        }
+
+        private string GetXmlStringOfComponent(XElement element, XmlDatabaseComponent component)
+        {
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+
+            if (component == null)
+                throw new ArgumentNullException(nameof(component));
+
+            component.ToXml(element, SchemaVersion);
+            return element.ToString();
         }
 
         private bool ParseDatabase1V2Package(XElement xmlPackageNode, XmlDatabaseComponent component, Type componentType)
@@ -759,13 +798,7 @@ namespace RelhaxModpack.Database
                 throw new ArgumentNullException(nameof(xmlPackageNode));
 
             if (component == null)
-            {
-                //make sure object type is properly implemented into serialization system
-                if (!(Activator.CreateInstance(componentType) is XmlDatabaseComponent _component))
-                    throw new BadMemeException("Type of this list is not of XmlDatabaseComponent");
-                else
-                    component = _component;
-            }
+                throw new ArgumentNullException(nameof(component));
 
             return component.FromXml(xmlPackageNode, XmlDatabaseComponent.SchemaV1Dot0);
         }
