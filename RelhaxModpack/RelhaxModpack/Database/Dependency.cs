@@ -44,7 +44,7 @@ namespace RelhaxModpack.Database
             List<XmlDatabaseProperty> xmlDatabaseProperties = base.GetXmlDatabasePropertiesV1Dot0();
             List<XmlDatabaseProperty> xmlDatabasePropertiesAddAfter = new List<XmlDatabaseProperty>()
             {
-                new XmlDatabaseProperty() { XmlName = nameof(LastUpdateCheck), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Dependencies) }
+                new XmlDatabaseProperty() { XmlName = nameof(Dependencies), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Dependencies) }
             };
             //add stuff after base
             xmlDatabaseProperties.AddRange(xmlDatabasePropertiesAddAfter);

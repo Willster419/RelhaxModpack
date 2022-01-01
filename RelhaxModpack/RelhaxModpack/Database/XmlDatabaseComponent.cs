@@ -47,7 +47,7 @@ namespace RelhaxModpack.Database
             //get the list of xml database properties and if they are attributes or elements
             List<XmlDatabaseProperty> xmlDatabaseProperties = this.GetXmlDatabaseProperties(schemaVersion);
             List<XmlDatabaseProperty> propertiesThatAreAttributes = xmlDatabaseProperties.FindAll(property => property.XmlEntryType == Utilities.Enums.XmlEntryType.XmlAttribute);
-            List<XmlDatabaseProperty> propertiesThatAreElements = xmlDatabaseProperties.FindAll(property => property.XmlEntryType == Utilities.Enums.XmlEntryType.XmlAttribute);
+            List<XmlDatabaseProperty> propertiesThatAreElements = xmlDatabaseProperties.FindAll(property => property.XmlEntryType == Utilities.Enums.XmlEntryType.XmlElement);
 
             //first handle attributes
             foreach (XmlDatabaseProperty propertyFromXml in propertiesThatAreAttributes)
@@ -99,8 +99,17 @@ namespace RelhaxModpack.Database
                 XElement element = propertyElement.Elements().ToList().Find(elementToFind => elementToFind.Name.LocalName.ToLower().Equals(propertyFromXml.XmlName.ToLower()));
 
                 //check if the property is a list type. if it is, then we need to load it by creating it and calling it's own version of FromXml
-                if (element != null && valueOfProperty.GetType() is IList list)
+                if (valueOfProperty is IList list)
                 {
+                    //if the element entry in the xml is null (nothing in it) and the count of items in the list is 0, (nothing in it), then nothing to do
+                    if (element == null && list.Count == 0)
+                        continue;
+                    else if (element == null)
+                    {
+                        element = new XElement(propertyFromXml.XmlName);
+                        propertyElement.Add(element);
+                    }
+
                     //get type of object that this list stores
                     //https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item//https://stackoverflow.com/questions/34211815/how-to-get-the-underlying-type-of-an-ilist-item
                     Type listObjectType = list.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GenericTypeArguments.Length == 1).FirstOrDefault(i => i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GenericTypeArguments[0];
@@ -120,7 +129,6 @@ namespace RelhaxModpack.Database
                         //check if the list entry is a XmlDatabaseComponent or a value type
                         if (obj is XmlDatabaseComponent component)
                         {
-                            
                             component.ToXml(elements[index], schemaVersion);
                         }
                         else if (obj.GetType().IsValueType)
@@ -132,35 +140,45 @@ namespace RelhaxModpack.Database
                         else
                         {
                             Logging.Error("Unknown class type to save in schema that is not of XmlDatabaseComponent: '{0}' of database component '{1}' of ID '{2}', line {3}",
-                                obj.GetType().ToString(), propertyElement.Name.LocalName, (this is CoreDatabaseComponent)? (this as CoreDatabaseComponent).ComponentInternalName : "N/A", ((IXmlLineInfo)element).LineNumber);
+                                obj.GetType().ToString(), propertyElement.Name.LocalName, (this is CoreDatabaseComponent) ? (this as CoreDatabaseComponent).ComponentInternalName : "N/A", ((IXmlLineInfo)element).LineNumber);
                             break;
                         }
                         index++;
                     }
                 }
-
-                //get the default value
-                object defaultValueOfProperty = propertyInfo.GetValue(objectForDefaults);
-
-                //check if the default value matches what the current value is
-                bool valueIsDefault = defaultValueOfProperty.Equals(valueOfProperty);
-
-                //if the element value is null, then remove the element value if it exists
-                if (valueOfProperty == null || valueIsDefault)
-                {
-                    if (element != null)
-                        element.Remove();
-                    continue;
-                }
-
-                if (element == null)
-                    element = new XElement(propertyFromXml.XmlName, valueOfProperty);
                 else
                 {
-                    // check if it's in sync with the element value. A null value is treated as out of date
-                    bool valuesInSync = valueOfProperty.ToString().Equals(element.Value);
-                    if (!valuesInSync)
-                        element.Value = valueOfProperty.ToString();
+                    //get the default value
+                    object defaultValueOfProperty = propertyInfo.GetValue(objectForDefaults);
+
+                    //check if the default value matches what the current value is
+                    bool valueIsDefault = false;
+                    if (defaultValueOfProperty == null && valueOfProperty == null)
+                        valueIsDefault = true;
+                    else if (defaultValueOfProperty != null && defaultValueOfProperty.Equals(valueOfProperty))
+                        valueIsDefault = true;
+
+                    //if the element value is null, then remove the element value if it exists
+                    if (valueOfProperty == null || valueIsDefault)
+                    {
+                        if (element != null)
+                            element.Remove();
+                        continue;
+                    }
+
+                    if (element == null)
+                    {
+                        element = new XElement(propertyFromXml.XmlName, valueOfProperty);
+                        propertyElement.Add(element);
+                    }
+                    else
+                    {
+                        string value = valueOfProperty.ToString();
+                        // check if it's in sync with the element value. A null value is treated as out of date
+                        bool valuesInSync = value.Equals(element.Value);
+                        if (!valuesInSync)
+                            element.Value = value;
+                    }
                 }
             }
 

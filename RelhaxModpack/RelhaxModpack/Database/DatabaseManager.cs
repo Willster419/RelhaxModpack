@@ -997,17 +997,20 @@ namespace RelhaxModpack.Database
             UpdateAttribute(topElement, WoTClientVersionXmlString, WoTClientVersion.Trim());
             UpdateAttribute(topElement, WoTOnlineFolderVersionXmlString, WoTOnlineFolderVersion.Trim());
             UpdateAttribute(topElement, DocumentVersionXmlString, DocumentVersion);
+            if (string.IsNullOrEmpty(SchemaVersion))
+                SchemaVersion = XmlDatabaseComponent.SchemaV1Dot0;
             UpdateAttribute(topElement, SchemaVersionXmlString, SchemaVersion);
 
             //add the elements if they don't already exist
             UpdateElement(topElement, "globalDependencies");
             UpdateElement(topElement, "dependencies");
+
+            //always add the category element
             XElement categories = topElement.Element("categories");
-            if (categories == null)
-            {
-                categories = new XElement("categories");
-                topElement.Add(categories);
-            }
+            if (categories != null)
+                categories.Remove();
+            categories = new XElement("categories");
+            topElement.Add(categories);
 
             //add category element if don't already exist
             foreach (Category category in ParsedCategoryList)
@@ -1015,9 +1018,8 @@ namespace RelhaxModpack.Database
                 if (string.IsNullOrWhiteSpace(category.XmlFilename))
                 {
                     category.XmlFilename = category.Name.Replace(" ", string.Empty).Replace("/", "_").Replace("\\", "_") + ".xml";
-                    UpdateElement(categories, "category", category.XmlFilename);
                 }
-                UpdateElement(categories, "category");
+                categories.Add(new XElement("category", new XAttribute("file", category.XmlFilename)));
             }
             
             //check if the document has changed and needs to be saved
@@ -1050,7 +1052,7 @@ namespace RelhaxModpack.Database
                 topElement = new XElement(rootElementHolder);
                 doc.Add(topElement);
             }
-            else if (!topElement.Name.Equals(rootElementHolder))
+            else if (!topElement.Name.LocalName.Equals(rootElementHolder))
             {
                 Logging.Warning("Expected component of type '{0}', but found '{1}'. It was removed", rootElementHolder, topElement.Name);
                 topElement.Remove();
@@ -1062,10 +1064,10 @@ namespace RelhaxModpack.Database
             switch(rootElementHolder)
             {
                 case "GlobalDependencies":
-                    UpdateDatabaseDependencyFile(topElement, GlobalDependencies);
+                    UpdateDatabaseDependencyFile(topElement, GlobalDependencies, "GlobalDependency");
                     break;
                 case "Dependencies":
-                    UpdateDatabaseDependencyFile(topElement, Dependencies);
+                    UpdateDatabaseDependencyFile(topElement, Dependencies, typeof(Dependency).Name);
                     break;
                 case "Category":
                     component.ToXml(topElement, SchemaVersion);
@@ -1077,13 +1079,15 @@ namespace RelhaxModpack.Database
                 doc.Save(documentPath);
         }
 
-        private void UpdateDatabaseDependencyFile(XElement rootElementHolder, IList packages)
+        private void UpdateDatabaseDependencyFile(XElement rootElementHolder, IList packages, string xmlElementName)
         {
-            List<XElement> xElements = rootElementHolder.Elements(packages[0].GetType().Name).ToList();
+            List<XElement> xElements = rootElementHolder.Elements(xmlElementName).ToList();
             int index = 0;
             foreach(DatabasePackage package in packages)
             {
-                XElement packageHolder = xElements[index];
+                XElement packageHolder = null;
+                if (index < xElements.Count)
+                    packageHolder = xElements[index];
                 if (packageHolder == null)
                 {
                     packageHolder = new XElement(package.GetType().Name);
@@ -1107,23 +1111,25 @@ namespace RelhaxModpack.Database
             XAttribute attribute = element.Attribute(attributeName);
             if (attribute == null)
             {
-                element.Add(new XAttribute(attributeName, attributeValue));
+                attribute = new XAttribute(attributeName, attributeValue);
+                element.Add(attribute);
             }
-            else
+            else if(attribute.Value != attributeValue)
             {
-                if (attribute.Value != attributeValue)
-                    attribute.Value = attributeValue;
+                attribute.Value = attributeValue;
             }
         }
 
-        private void UpdateElement(XElement topElement, string elementName, string elementValue = null)
+        private void UpdateElement(XElement topElement, string elementName)
         {
-            if (string.IsNullOrEmpty(elementValue))
-                elementValue = elementName + ".xml";
+            string elementValue = elementName + ".xml";
 
             XElement listElement = topElement.Element(elementName);
             if (listElement == null)
-                topElement.Add(new XElement(elementName, new XAttribute("file", elementValue)));
+            {
+                listElement = new XElement(elementName, new XAttribute("file", elementValue));
+                topElement.Add(listElement);
+            }
             else
             {
                 UpdateAttribute(listElement, "file", elementValue);
