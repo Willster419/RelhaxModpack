@@ -60,6 +60,11 @@ namespace RelhaxModpack.Patching
             this.Line = patchToCopy.Line;
         }
 
+        public static Patch Copy(Patch shortcutToCopy)
+        {
+            return new Patch(shortcutToCopy);
+        }
+
         public override string RootObjectPath { get { return PatchXmlSearchPath; } }
 
         public override string[] PropertiesToSerialize()
@@ -262,9 +267,43 @@ namespace RelhaxModpack.Patching
             return GetInvalidPatchesForSave(patchList.Cast<Patch>().ToList());
         }
 
-        public static Patch Copy(Patch shortcutToCopy)
+        public override bool InstructionsEqual(Instruction instructionToCompare)
         {
-            return new Patch(shortcutToCopy);
+            Patch patchToCompare = instructionToCompare as Patch;
+            if (patchToCompare == null)
+                return false;
+
+            if (!this.Type.Equals(patchToCompare.Type))
+                return false;
+
+            if (!this.Mode.Equals(patchToCompare.Mode))
+                return false;
+
+            if (!this.PatchPath.Equals(patchToCompare.PatchPath))
+                return false;
+
+            if (!this.File.Equals(patchToCompare.File))
+                return false;
+
+            if (!this.Version.Equals(patchToCompare.Version))
+                return false;
+
+            if (!this.Search.Equals(patchToCompare.Search))
+                return false;
+
+            if (!this.Replace.Equals(patchToCompare.Replace))
+                return false;
+
+            if (!this.FollowPath.Equals(patchToCompare.FollowPath))
+                return false;
+
+            if (!this.Path.Equals(patchToCompare.Path))
+                return false;
+
+            if (!this.Line.Equals(patchToCompare.Line))
+                return false;
+
+            return true;
         }
     }
 }

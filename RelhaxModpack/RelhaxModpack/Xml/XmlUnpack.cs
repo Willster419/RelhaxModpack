@@ -13,6 +13,23 @@ namespace RelhaxModpack.Xml
     {
         public const string XmlUnpackXmlSearchPath = "/files/file";
 
+        public XmlUnpack() : base()
+        {
+
+        }
+
+        public XmlUnpack(XmlUnpack xmlUnpackToCopy) : base(xmlUnpackToCopy)
+        {
+            this.FileName = xmlUnpackToCopy.FileName;
+            this.ExtractDirectory = xmlUnpackToCopy.ExtractDirectory;
+            this.NewFileName = xmlUnpackToCopy.NewFileName;
+        }
+
+        public static XmlUnpack Copy(XmlUnpack xmlUnpackToCopy)
+        {
+            return new XmlUnpack(xmlUnpackToCopy);
+        }
+
         public override string RootObjectPath { get { return XmlUnpackXmlSearchPath; } }
 
         public override string[] PropertiesToSerialize()
@@ -83,21 +100,26 @@ namespace RelhaxModpack.Xml
             return string.Format("NativeProcessingFile={0}, FileName={1}", NativeProcessingFile, FileName);
         }
 
-        public static XmlUnpack Copy(XmlUnpack xmlUnpackToCopy)
+        public override bool InstructionsEqual(Instruction instructionToCompare)
         {
-            return new XmlUnpack(xmlUnpackToCopy);
-        }
+            if (!base.InstructionsEqual(instructionToCompare))
+                return false;
 
-        public XmlUnpack() : base()
-        {
+            XmlUnpack xmlUnpackToCompare = instructionToCompare as XmlUnpack;
 
-        }
+            if (xmlUnpackToCompare == null)
+                return false;
 
-        public XmlUnpack(XmlUnpack xmlUnpackToCopy) : base(xmlUnpackToCopy)
-        {
-            this.FileName = xmlUnpackToCopy.FileName;
-            this.ExtractDirectory = xmlUnpackToCopy.ExtractDirectory;
-            this.NewFileName = xmlUnpackToCopy.NewFileName;
+            if (!this.FileName.Equals(xmlUnpackToCompare.FileName))
+                return false;
+
+            if (!this.ExtractDirectory.Equals(xmlUnpackToCompare.ExtractDirectory))
+                return false;
+
+            if (!this.NewFileName.Equals(xmlUnpackToCompare.NewFileName))
+                return false;
+
+            return true;
         }
     }
 }

@@ -12,8 +12,24 @@ namespace RelhaxModpack.Shortcuts
     /// </summary>
     public class Shortcut : Instruction
     {
-
         public const string ShortcutXmlSearchPath = "/shortcuts/shortcut";
+
+        public Shortcut() : base()
+        {
+
+        }
+
+        public Shortcut(Shortcut shortcutToCopy) : base()
+        {
+            this.Path = shortcutToCopy.Path;
+            this.Name = shortcutToCopy.Name;
+            this.Enabled = shortcutToCopy.Enabled;
+        }
+
+        public static Shortcut Copy(Shortcut shortcutToCopy)
+        {
+            return new Shortcut(shortcutToCopy);
+        }
 
         public override string RootObjectPath { get { return ShortcutXmlSearchPath; } }
 
@@ -65,21 +81,23 @@ namespace RelhaxModpack.Shortcuts
             return string.Format("Name={0} Target={1}", Name, Path);
         }
 
-        public static Shortcut Copy(Shortcut shortcutToCopy)
+        public override bool InstructionsEqual(Instruction instructionToCompare)
         {
-            return new Shortcut(shortcutToCopy);
-        }
+            Shortcut shortcutToCompare = instructionToCompare as Shortcut;
 
-        public Shortcut() : base()
-        {
+            if (shortcutToCompare == null)
+                return false;
 
-        }
+            if (!this.Path.Equals(shortcutToCompare.Path))
+                return false;
 
-        public Shortcut(Shortcut shortcutToCopy) : base()
-        {
-            this.Path = shortcutToCopy.Path;
-            this.Name = shortcutToCopy.Name;
-            this.Enabled = shortcutToCopy.Enabled;
+            if (!this.Name.Equals(shortcutToCompare.Name))
+                return false;
+
+            if (!this.Enabled.Equals(shortcutToCompare.Enabled))
+                return false;
+
+            return true;
         }
     }
 

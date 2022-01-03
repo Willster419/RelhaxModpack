@@ -16,6 +16,32 @@ namespace RelhaxModpack.Atlases
     {
         public const string AtlasXmlSearchPath = "/atlases/atlas";
 
+        public Atlas() : base()
+        {
+
+        }
+
+        public Atlas(Atlas atlasToCopy) : base(atlasToCopy)
+        {
+            this.AtlasFile = atlasToCopy.AtlasFile;
+            this.MapFile = atlasToCopy.MapFile;
+            this.PowOf2 = atlasToCopy.PowOf2;
+            this.Square = atlasToCopy.Square;
+            this.AtlasWidth = atlasToCopy.AtlasWidth;
+            this.AtlasHeight = atlasToCopy.AtlasHeight;
+            this.FastImagePacker = atlasToCopy.FastImagePacker;
+            this.Padding = atlasToCopy.Padding;
+            this.AtlasSaveDirectory = atlasToCopy.AtlasSaveDirectory;
+
+            foreach (string s in atlasToCopy.ImageFolders)
+                this.ImageFolders.Add(s);
+        }
+
+        public static Atlas Copy(Atlas atlasToCopy)
+        {
+            return new Atlas(atlasToCopy);
+        }
+
         public override string RootObjectPath { get { return AtlasXmlSearchPath; } }
 
         public override string[] PropertiesToSerialize()
@@ -157,30 +183,51 @@ namespace RelhaxModpack.Atlases
             return string.Format("AtlasFile: {0}", string.IsNullOrEmpty(AtlasFile) ? "(empty)" : AtlasFile);
         }
 
-        public static Atlas Copy(Atlas atlasToCopy)
+        public override bool InstructionsEqual(Instruction instructionToCompare)
         {
-            return new Atlas(atlasToCopy);
-        }
+            if (!base.InstructionsEqual(instructionToCompare))
+                return false;
 
-        public Atlas() : base()
-        {
+            Atlas atlasToCompare = instructionToCompare as Atlas;
 
-        }
+            if (atlasToCompare == null)
+                return false;
 
-        public Atlas(Atlas atlasToCopy) : base(atlasToCopy)
-        {
-            this.AtlasFile = atlasToCopy.AtlasFile;
-            this.MapFile = atlasToCopy.MapFile;
-            this.PowOf2 = atlasToCopy.PowOf2;
-            this.Square = atlasToCopy.Square;
-            this.AtlasWidth = atlasToCopy.AtlasWidth;
-            this.AtlasHeight = atlasToCopy.AtlasHeight;
-            this.FastImagePacker = atlasToCopy.FastImagePacker;
-            this.Padding = atlasToCopy.Padding;
-            this.AtlasSaveDirectory = atlasToCopy.AtlasSaveDirectory;
+            if (!this.AtlasFile.Equals(atlasToCompare.AtlasFile))
+                return false;
 
-            foreach (string s in atlasToCopy.ImageFolders)
-                this.ImageFolders.Add(s);
+            if (!this.MapFile.Equals(atlasToCompare.MapFile))
+                return false;
+
+            if (!this.PowOf2.Equals(atlasToCompare.PowOf2))
+                return false;
+
+            if (!this.Square.Equals(atlasToCompare.Square))
+                return false;
+
+            if (!this.AtlasWidth.Equals(atlasToCompare.AtlasWidth))
+                return false;
+
+            if (!this.AtlasHeight.Equals(atlasToCompare.AtlasHeight))
+                return false;
+
+            if (!this.FastImagePacker.Equals(atlasToCompare.FastImagePacker))
+                return false;
+
+            if (!this.Padding.Equals(atlasToCompare.Padding))
+                return false;
+
+            if (!this.AtlasSaveDirectory.Equals(atlasToCompare.AtlasSaveDirectory))
+                return false;
+
+            if (this.ImageFolders.Count != atlasToCompare.ImageFolders.Count)
+                return false;
+
+            for (int i = 0; i < this.ImageFolders.Count; i++)
+                if (!this.ImageFolders[i].Equals(atlasToCompare.ImageFolders[i]))
+                    return false;
+
+            return true;
         }
     }
 }

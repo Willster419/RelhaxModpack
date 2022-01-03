@@ -34,5 +34,7 @@ namespace RelhaxModpack.Installer
         /// the actual name of the original patch before processed
         /// </summary>
         public string ActualPatchName { get; set; } = string.Empty;
+
+        public abstract bool InstructionsEqual(Instruction instructionToCompare);
     }
 }

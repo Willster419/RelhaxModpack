@@ -44,5 +44,20 @@ namespace RelhaxModpack.Database
         /// </summary>
         /// <remarks>This is loaded from the xml file</remarks>
         public string DirectoryInArchive { get; set; } = string.Empty;
+
+        public override bool InstructionsEqual(Instruction instructionToCompare)
+        {
+            PackageExtractInstruction packageExtractInstructionToCompare = instructionToCompare as PackageExtractInstruction;
+            if (packageExtractInstructionToCompare == null)
+                return false;
+
+            if (!this.Pkg.Equals(packageExtractInstructionToCompare.Pkg))
+                return false;
+
+            if (!this.DirectoryInArchive.Equals(packageExtractInstructionToCompare.DirectoryInArchive))
+                return false;
+
+            return true;
+        }
     }
 }
