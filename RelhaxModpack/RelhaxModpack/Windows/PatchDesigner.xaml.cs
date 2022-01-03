@@ -55,26 +55,6 @@ namespace RelhaxModpack.Windows
         //internal selected patch
         private Patch SelectedPatch = null;
 
-        //valid xml modes to put into mode combobox
-        private readonly string[] validXmlModes = new string[]
-        {
-            "add",
-            "edit",
-            "remove"
-        };
-
-        //valid json modes to put into mode combobox
-        private readonly string[] validJsonModes = new string[]
-        {
-            "add",
-            "arrayadd",
-            "remove",
-            "arrayremove",
-            "edit",
-            "arrayedit",
-            "arrayclear"
-        };
-
         /// <summary>
         /// Create an instance of the PatchDesigner window
         /// </summary>
@@ -204,7 +184,7 @@ namespace RelhaxModpack.Windows
                 PatchLinesPathHeader.Text = "Path";
 
                 //also fill mode with json options
-                foreach (string s in validJsonModes)
+                foreach (string s in Patch.ValidJsonModes)
                 {
                     PatchModeCombobox.Items.Add(s);
                 }
@@ -215,7 +195,7 @@ namespace RelhaxModpack.Windows
                 PatchModeCombobox.IsEnabled = true;
                 PatchLinesPathHeader.Text = "Path";
 
-                foreach (string s in validXmlModes)
+                foreach (string s in Patch.ValidXmlModes)
                 {
                     PatchModeCombobox.Items.Add(s);
                 }
@@ -552,10 +532,10 @@ namespace RelhaxModpack.Windows
                         Logging.Patcher("invalid xpath", LogLevel.Error);
                         return;
                     }
-                    if (!validXmlModes.Contains((PatchModeCombobox.SelectedItem as string).ToLower()))
+                    if (!Patch.ValidXmlModes.Contains((PatchModeCombobox.SelectedItem as string).ToLower()))
                     {
                         Logging.Patcher("Type=xml, invalid patch type: {0}", LogLevel.Error, PatchModeCombobox.SelectedItem as string);
-                        Logging.Patcher("valid types are: {0}", LogLevel.Error, string.Join(",",validXmlModes));
+                        Logging.Patcher("valid types are: {0}", LogLevel.Error, string.Join(",", Patch.ValidXmlModes));
                         return;
                     }
                     patchToTest.Path = PatchLinesPathTextbox.Text;
@@ -567,10 +547,10 @@ namespace RelhaxModpack.Windows
                         Logging.Patcher("invalid jsonpath");
                         return;
                     }
-                    if (!validJsonModes.Contains((PatchModeCombobox.SelectedItem as string).ToLower()))
+                    if (!Patch.ValidJsonModes.Contains((PatchModeCombobox.SelectedItem as string).ToLower()))
                     {
                         Logging.Patcher("Type=json, invalid patch type: {0}", LogLevel.Info, PatchModeCombobox.SelectedItem as string);
-                        Logging.Patcher("valid types are: {0}", LogLevel.Info, string.Join(",", validJsonModes));
+                        Logging.Patcher("valid types are: {0}", LogLevel.Info, string.Join(",", Patch.ValidJsonModes));
                         return;
                     }
                     patchToTest.Path = PatchLinesPathTextbox.Text;

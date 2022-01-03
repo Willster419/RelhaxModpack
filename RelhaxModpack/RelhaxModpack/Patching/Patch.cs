@@ -38,6 +38,26 @@ namespace RelhaxModpack.Patching
         /// </summary>
         public const string TypeXvm = "xvm";
 
+        //valid xml modes to put into mode combobox
+        public static readonly string[] ValidXmlModes = new string[]
+        {
+            "add",
+            "edit",
+            "remove"
+        };
+
+        //valid json modes to put into mode combobox
+        public static readonly string[] ValidJsonModes = new string[]
+        {
+            "add",
+            "arrayadd",
+            "remove",
+            "arrayremove",
+            "edit",
+            "arrayedit",
+            "arrayclear"
+        };
+
         public const string PatchXmlSearchPath = "/patchs/patch";
 
         public Patch() : base()
@@ -304,6 +324,11 @@ namespace RelhaxModpack.Patching
                 return false;
 
             return true;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("File={0}", string.IsNullOrEmpty(File) ? "(empty)": File);
         }
     }
 }

@@ -78,7 +78,7 @@ namespace RelhaxModpack.Shortcuts
         /// <returns>The name and target of the shortcut</returns>
         public override string ToString()
         {
-            return string.Format("Name={0} Target={1}", Name, Path);
+            return string.Format("Name={0}", Name);
         }
 
         public override bool InstructionsEqual(Instruction instructionToCompare)

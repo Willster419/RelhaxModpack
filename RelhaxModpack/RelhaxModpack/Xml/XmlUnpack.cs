@@ -97,7 +97,7 @@ namespace RelhaxModpack.Xml
         /// <returns>The native name of the unpack instruction file and file target</returns>
         public override string ToString()
         {
-            return string.Format("NativeProcessingFile={0}, FileName={1}", NativeProcessingFile, FileName);
+            return string.Format("FileName={0}", FileName);
         }
 
         public override bool InstructionsEqual(Instruction instructionToCompare)
