@@ -75,7 +75,7 @@ namespace RelhaxModpack.Automation.Tasks
                 try
                 {
                     await WebClient.UploadFileTaskAsync(uploadUrl, FilePath);
-                    DatabasePackage.UpdatePackageName(ZipFileName);
+                    DatabasePackage.UpdateZipfile(ZipFileName);
                     FtpUtils.TriggerMirrorSyncAsync();
                     TransferSuccess = true;
                 }

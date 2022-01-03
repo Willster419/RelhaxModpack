@@ -371,9 +371,9 @@ namespace RelhaxModpack.Database
             this.LastUpdateCheck = packageToCopy.LastUpdateCheck;
         }
 
-        public void UpdatePackageName(string newPackageName)
+        public void UpdateZipfile(string newZipfile)
         {
-            this.ZipFile = newPackageName;
+            this.ZipFile = newZipfile;
             this.CRC = string.IsNullOrEmpty(ZipFile)? string.Empty : "f";
             this.Timestamp = string.IsNullOrEmpty(ZipFile) ? 0 : CommonUtils.GetCurrentUniversalFiletimeTimestamp();
             this.LastUpdateCheck = this.Timestamp;

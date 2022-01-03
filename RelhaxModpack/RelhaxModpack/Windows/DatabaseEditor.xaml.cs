@@ -1055,7 +1055,7 @@ namespace RelhaxModpack.Windows
             }
 
             //check if package UID changed. it shouldn't
-            if(!package.UID.Equals(PackageUidDisplay.Text))
+            if (!package.UID.Equals(PackageUidDisplay.Text))
             {
                 Logging.Editor("The package UID changed. Old = {0}, New = {1}", LogLevel.Error, package.UID, PackageUidDisplay);
                 return false;
@@ -1086,14 +1086,11 @@ namespace RelhaxModpack.Windows
             //if the zipfile was updated, then update the last modified date
             if (!package.ZipFile.Equals(PackageZipFileDisplay.Text))
             {
-                package.CRC = "f";
-                package.ZipFile = PackageZipFileDisplay.Text;
-                package.Timestamp = CommonUtils.GetCurrentUniversalFiletimeTimestamp();
-                PackageLastUpdatedDisplay.Text = CommonUtils.ConvertFiletimeTimestampToDate(package.Timestamp);
+                package.UpdateZipfile(PackageZipFileDisplay.Text);
             }
 
             //this gets dependencies and selectable packages
-            if(package is IComponentWithDependencies componentWithDependencies)
+            if (package is IComponentWithDependencies componentWithDependencies)
             {
                 componentWithDependencies.Dependencies.Clear();
                 foreach (DatabaseLogic dl in PackageDependenciesDisplay.Items)
