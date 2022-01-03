@@ -1,6 +1,10 @@
-﻿using RelhaxModpack.Common;
+﻿using RelhaxModpack.Atlases;
+using RelhaxModpack.Common;
+using RelhaxModpack.Patching;
+using RelhaxModpack.Shortcuts;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
+using RelhaxModpack.Xml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -285,6 +289,14 @@ namespace RelhaxModpack.Database
         /// </summary>
         /// <seealso cref="Settings.ModpackSettings.MinimalistMode"/>
         public bool MinimalistModeExclude { get; set; } = false;
+
+        public List<Patch> Patches { get; set; } = new List<Patch>();
+
+        public List<XmlUnpack> XmlUnpacks { get; set; } = new List<XmlUnpack>();
+
+        public List<Atlas> Atlases { get; set; } = new List<Atlas>();
+
+        public List<Shortcut> Shortcuts { get; set; } = new List<Shortcut>();
         #endregion
 
         #region UI Properties
