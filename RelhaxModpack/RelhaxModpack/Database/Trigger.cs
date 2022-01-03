@@ -13,6 +13,16 @@ namespace RelhaxModpack.Database
     /// </summary>
     public class Trigger : XmlDatabaseComponent, IXmlSerializable
     {
+        public Trigger() : base()
+        {
+
+        }
+
+        public Trigger(Trigger triggerToCopy) : base(triggerToCopy)
+        {
+            this.Name = triggerToCopy.Name;
+        }
+
         #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes

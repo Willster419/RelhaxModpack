@@ -9,6 +9,16 @@ namespace RelhaxModpack.Database
 {
     public abstract class CoreDatabaseComponent : XmlDatabaseComponent
     {
+        public CoreDatabaseComponent() : base()
+        {
+
+        }
+
+        public CoreDatabaseComponent(CoreDatabaseComponent componentToCopy) : base (componentToCopy)
+        {
+            this.Maintainers = componentToCopy.Maintainers;
+        }
+
         /// <summary>
         /// Reference for the UI element of this package in the database editor
         /// </summary>

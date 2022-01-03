@@ -25,6 +25,9 @@ using System.Windows.Controls.Primitives;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
 using System.ComponentModel;
+using RelhaxModpack.Patching;
+using RelhaxModpack.Atlases;
+using RelhaxModpack.Shortcuts;
 
 namespace RelhaxModpack.Windows
 {
@@ -1383,7 +1386,7 @@ namespace RelhaxModpack.Windows
                 Logging.Editor("Effects is copy, making new copy instance of {0}", LogLevel.Info, packageToMove.PackageName);
                 if (packageCurrentlyOver is SelectablePackage)
                 {
-                    packageToMove = new SelectablePackage(packageToMove, false);
+                    packageToMove = new SelectablePackage (packageToMove, false);
                 }
                 else if (packageCurrentlyOver is Dependency)
                 {
@@ -1391,7 +1394,7 @@ namespace RelhaxModpack.Windows
                 }
                 else
                 {
-                    packageToMove = new DatabasePackage(packageToMove, false);
+                    packageToMove = new DatabasePackage(packageToMove);
                 }
 
                 //also make a new UID for the package as well
@@ -1428,7 +1431,7 @@ namespace RelhaxModpack.Windows
             else
             {
                 if ((packageToMove is Dependency) || (packageToMove is SelectablePackage))
-                    packageToMove = new DatabasePackage(packageToMove, false);
+                    packageToMove = new DatabasePackage(packageToMove);
                 GlobalDependencies.Insert(GlobalDependencies.IndexOf(packageCurrentlyOver) + 1, (DatabasePackage)packageToMove);
             }
 

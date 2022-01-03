@@ -27,6 +27,23 @@ namespace RelhaxModpack.Database
     /// </summary>
     public class DatabaseLogic : XmlDatabaseComponent, IXmlSerializable
     {
+        public DatabaseLogic() : base()
+        {
+
+        }
+
+        public DatabaseLogic(DatabaseLogic databaseLogicToCopy) : base(databaseLogicToCopy)
+        {
+            this.PackageName = databaseLogicToCopy.PackageName;
+            this.PackageUID = databaseLogicToCopy.PackageUID;
+            this.WillBeInstalled = databaseLogicToCopy.WillBeInstalled;
+            this.NotFlag = databaseLogicToCopy.NotFlag;
+            this.Logic = databaseLogicToCopy.Logic;
+            this.RefrenceLinked = databaseLogicToCopy.RefrenceLinked;
+            this.DependencyPackageRefrence = databaseLogicToCopy.DependencyPackageRefrence;
+            this.ParentPackageRefrence = databaseLogicToCopy.ParentPackageRefrence;
+        }
+
         #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
@@ -135,17 +152,7 @@ namespace RelhaxModpack.Database
         /// <returns>A new DatabaseLogic object with the same values</returns>
         public static DatabaseLogic Copy(DatabaseLogic databaseLogicToCopy)
         {
-            return new DatabaseLogic()
-            {
-                PackageName = databaseLogicToCopy.PackageName,
-                PackageUID = databaseLogicToCopy.PackageUID,
-                WillBeInstalled = databaseLogicToCopy.WillBeInstalled,
-                NotFlag = databaseLogicToCopy.NotFlag,
-                Logic = databaseLogicToCopy.Logic,
-                RefrenceLinked = databaseLogicToCopy.RefrenceLinked,
-                DependencyPackageRefrence = databaseLogicToCopy.DependencyPackageRefrence,
-                ParentPackageRefrence = databaseLogicToCopy.ParentPackageRefrence
-            };
+            return new DatabaseLogic(databaseLogicToCopy);
         }
     }
 }

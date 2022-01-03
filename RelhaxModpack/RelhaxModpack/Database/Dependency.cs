@@ -11,6 +11,36 @@ namespace RelhaxModpack.Database
     /// </summary>
     public class Dependency : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
     {
+        /// <summary>
+        /// Create an instance of the Dependency class and over-ride DatabasePackage default values
+        /// </summary>
+        public Dependency() : base()
+        {
+            //https://stackoverflow.com/questions/326223/overriding-fields-or-properties-in-subclasses
+            //the custom constructor will be called after the base one
+        }
+
+        /// <summary>
+        /// Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects
+        /// </summary>
+        /// <param name="packageToCopyFrom">The package to copy the information from</param>
+        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
+        public Dependency(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom)
+        {
+            if (deep && packageToCopyFrom is Dependency dep)
+            {
+                foreach (DatabaseLogic logic in dep.Dependencies)
+                    this.Dependencies.Add(DatabaseLogic.Copy(logic));
+            }
+        }
+
+        protected override void InitComponent()
+        {
+            base.InitComponent();
+            InstallGroup = 2;
+            PatchGroup = 2;
+        }
+
         #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
@@ -62,50 +92,6 @@ namespace RelhaxModpack.Database
         /// List of dependencies this dependency calls on
         /// </summary>
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
-        #endregion
-
-        #region Other Properties and Methods
-        /// <summary>
-        /// Create an instance of the Dependency class and over-ride DatabasePackage default values
-        /// </summary>
-        public Dependency()
-        {
-            //https://stackoverflow.com/questions/326223/overriding-fields-or-properties-in-subclasses
-            //the custom constructor will be called after the base one
-            InstallGroup = 2;
-            PatchGroup = 2;
-        }
-
-        /// <summary>
-        /// Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects
-        /// </summary>
-        /// <param name="packageToCopyFrom">The package to copy the information from</param>
-        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
-        public Dependency(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom, deep)
-        {
-            InstallGroup = 2;
-            PatchGroup = 2;
-            if (packageToCopyFrom is Dependency dep)
-            {
-                this.DatabasePackageLogic = new List<DatabaseLogic>();
-                this.Dependencies = new List<DatabaseLogic>();
-
-                if (deep)
-                {
-                    foreach (DatabaseLogic logic in dep.Dependencies)
-                        this.Dependencies.Add(DatabaseLogic.Copy(logic));
-                }
-            }
-            else if (packageToCopyFrom is SelectablePackage sp)
-            {
-                this.Dependencies = new List<DatabaseLogic>();
-                if(deep)
-                {
-                    foreach (DatabaseLogic logic in sp.Dependencies)
-                        this.Dependencies.Add(DatabaseLogic.Copy(logic));
-                }
-            }
-        }
         #endregion
 
         #region Disposable support

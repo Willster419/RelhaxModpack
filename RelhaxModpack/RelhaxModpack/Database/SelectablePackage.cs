@@ -15,6 +15,57 @@ namespace RelhaxModpack.Database
     /// </summary>
     public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
     {
+        /// <summary>
+        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
+        /// </summary>
+        public SelectablePackage() : base()
+        {
+
+        }
+
+        /// <summary>
+        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
+        /// </summary>
+        /// <param name="packageToCopyFrom">The package to copy the information from</param>
+        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
+        public SelectablePackage(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom)
+        {
+            if (deep && packageToCopyFrom is Dependency dependnecy)
+                foreach (DatabaseLogic file in dependnecy.Dependencies)
+                    this.Dependencies.Add(DatabaseLogic.Copy(file));
+
+            if (packageToCopyFrom is SelectablePackage spat)
+            {
+                this.Type = spat.Type;
+                this.Name = "WRITE_NEW_NAME";
+                this.Visible = spat.Visible;
+
+                this.Level = -2;
+                this.ShowInSearchList = spat.ShowInSearchList;
+
+                if (deep)
+                {
+                    this.UpdateComment = spat.UpdateComment;
+                    this.Description = spat.Description;
+                    this.PopularMod = spat.PopularMod;
+                    this._Checked = spat._Checked;
+
+                    foreach (UserFile file in spat.UserFiles)
+                        this.UserFiles.Add(UserFile.DeepCopy(file));
+
+                    foreach (Media file in spat.Medias)
+                        this.Medias.Add(Media.Copy(file));
+                }
+            }
+        }
+
+        protected override void InitComponent()
+        {
+            base.InitComponent();
+            InstallGroup = 4;
+            PatchGroup = 4;
+        }
+
         #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
@@ -107,15 +158,6 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Database Properties
-        /// <summary>
-        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
-        /// </summary>
-        public SelectablePackage()
-        {
-            InstallGroup = 4;
-            PatchGroup = 4;
-        }
-
         /// <summary>
         /// The display name of the package
         /// </summary>
@@ -837,63 +879,6 @@ namespace RelhaxModpack.Database
                 }
 
                 return true;
-            }
-        }
-
-        /// <summary>
-        /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
-        /// </summary>
-        /// <param name="packageToCopyFrom">The package to copy the information from</param>
-        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
-        public SelectablePackage(DatabasePackage packageToCopyFrom, bool deep) : base(packageToCopyFrom,deep)
-        {
-            InstallGroup = 4;
-            PatchGroup = 4;
-
-            if (packageToCopyFrom is Dependency dep)
-            {
-                if(deep)
-                {
-                    foreach (DatabaseLogic file in dep.Dependencies)
-                        this.Dependencies.Add(DatabaseLogic.Copy(file));
-                }
-            }
-            else if (packageToCopyFrom is SelectablePackage sp)
-            {
-                this.Type = sp.Type;
-                this.Name = "WRITE_NEW_NAME";
-                this.Visible = sp.Visible;
-                this.Size = 0;
-
-                this.UpdateComment = string.Empty;
-                this.Description = string.Empty;
-                this.PopularMod = false;
-                this._Checked = false;
-
-                this.Level = -2;
-                this.UserFiles = new List<UserFile>();
-                this.Packages = new List<SelectablePackage>();
-                this.Medias = new List<Media>();
-                this.Dependencies = new List<DatabaseLogic>();
-                this.ConflictingPackages = string.Empty;
-                this.ShowInSearchList = sp.ShowInSearchList;
-
-                if (deep)
-                {
-                    this.UpdateComment = sp.UpdateComment;
-                    this.Description = sp.Description;
-                    this.PopularMod = sp.PopularMod;
-                    this._Checked = sp._Checked;
-
-                    foreach (UserFile file in this.UserFiles)
-                        this.UserFiles.Add(UserFile.DeepCopy(file));
-
-                    foreach (Media file in this.Medias)
-                        this.Medias.Add(Media.Copy(file));
-
-                    foreach (DatabaseLogic file in this.Dependencies)
-                        this.Dependencies.Add(DatabaseLogic.Copy(file));
-                }
             }
         }
         #endregion

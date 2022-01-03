@@ -14,6 +14,16 @@ namespace RelhaxModpack.Database
     /// </summary>
     public class Category : CoreDatabaseComponent, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
     {
+        public Category() : base()
+        {
+
+        }
+
+        public Category(Category categoryToCopy) : base(categoryToCopy)
+        {
+
+        }
+
         #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes

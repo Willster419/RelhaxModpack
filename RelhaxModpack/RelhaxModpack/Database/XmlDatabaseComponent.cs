@@ -18,6 +18,16 @@ namespace RelhaxModpack.Database
     {
         public const string SchemaV1Dot0 = "1.0";
 
+        public XmlDatabaseComponent()
+        {
+
+        }
+
+        public XmlDatabaseComponent(XmlDatabaseComponent componentToCopyFrom)
+        {
+
+        }
+
         public virtual List<XmlDatabaseProperty> GetXmlDatabaseProperties(string schemaVersion)
         {
             switch (schemaVersion)

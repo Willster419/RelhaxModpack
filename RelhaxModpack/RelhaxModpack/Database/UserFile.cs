@@ -12,6 +12,13 @@ namespace RelhaxModpack.Database
     /// </summary>
     public struct UserDataFile
     {
+        public UserDataFile(UserDataFile dataFileToCopy)
+        {
+            this.WoTRoot = dataFileToCopy.WoTRoot;
+            this.TempSaveRoot = dataFileToCopy.TempSaveRoot;
+            this.FilePath = dataFileToCopy.FilePath;
+        }
+
         /// <summary>
         /// The WoT root directory where the UserDataFile is from
         /// </summary>
@@ -32,6 +39,23 @@ namespace RelhaxModpack.Database
     /// </summary>
     public class UserFile : XmlDatabaseComponent, IXmlSerializable
     {
+        public UserFile() : base()
+        {
+
+        }
+
+        public UserFile(UserFile userfileToCopy) : base(userfileToCopy)
+        {
+            this.Pattern = userfileToCopy.Pattern;
+        }
+
+        public UserFile(UserFile userfileToCopy, bool deep) : this(userfileToCopy)
+        {
+            if (deep)
+                foreach (UserDataFile dataFile in userfileToCopy.FilesSaved)
+                    this.FilesSaved.Add(new UserDataFile(dataFile));
+        }
+
         #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
@@ -92,12 +116,7 @@ namespace RelhaxModpack.Database
         /// <returns>A new UserFile object with the same values</returns>
         public static UserFile Copy(UserFile userFileToCopy)
         {
-            UserFile file =  new UserFile()
-            {
-                Pattern = userFileToCopy.Pattern,
-            };
-
-            return file;
+            return new UserFile(userFileToCopy);
         }
 
         /// <summary>
@@ -106,15 +125,8 @@ namespace RelhaxModpack.Database
         /// <param name="userFileToCopy">The object to copy</param>
         /// <returns>A new UserFile object with the same values and new list elements with the same values</returns>
         public static UserFile DeepCopy(UserFile userFileToCopy)
-        {
-            UserFile file = new UserFile()
-            {
-                Pattern = userFileToCopy.Pattern,
-            };
-
-            file.FilesSaved.AddRange(userFileToCopy.FilesSaved);
-
-            return file;
+        {       
+            return new UserFile(userFileToCopy, true);
         }
     }
 }

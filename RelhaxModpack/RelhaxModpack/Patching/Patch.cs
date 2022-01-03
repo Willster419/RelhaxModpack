@@ -40,6 +40,26 @@ namespace RelhaxModpack.Patching
 
         public const string PatchXmlSearchPath = "/patchs/patch";
 
+        public Patch() : base()
+        {
+
+        }
+
+        public Patch(Patch patchToCopy) : base(patchToCopy)
+        {
+            this.Path = patchToCopy.Path;
+            this.Type = patchToCopy.Type;
+            this.Mode = patchToCopy.Mode;
+            this.PatchPath = patchToCopy.PatchPath;
+            this.File = patchToCopy.File;
+            this.Version = patchToCopy.Version;
+            this.Search = patchToCopy.Search;
+            this.Replace = patchToCopy.Replace;
+            this.FollowPath = patchToCopy.FollowPath;
+            this.Path = patchToCopy.Path;
+            this.Line = patchToCopy.Line;
+        }
+
         public override string RootObjectPath { get { return PatchXmlSearchPath; } }
 
         public override string[] PropertiesToSerialize()
@@ -245,26 +265,6 @@ namespace RelhaxModpack.Patching
         public static Patch Copy(Patch shortcutToCopy)
         {
             return new Patch(shortcutToCopy);
-        }
-
-        public Patch() : base()
-        {
-
-        }
-
-        public Patch(Patch shortcutToCopy) : base()
-        {
-            this.Path = shortcutToCopy.Path;
-            this.Type = shortcutToCopy.Type;
-            this.Mode = shortcutToCopy.Mode;
-            this.PatchPath = shortcutToCopy.PatchPath;
-            this.File = shortcutToCopy.File;
-            this.Version = shortcutToCopy.Version;
-            this.Search = shortcutToCopy.Search;
-            this.Replace = shortcutToCopy.Replace;
-            this.FollowPath = shortcutToCopy.FollowPath;
-            this.Path = shortcutToCopy.Path;
-            this.Line = shortcutToCopy.Line;
         }
     }
 }

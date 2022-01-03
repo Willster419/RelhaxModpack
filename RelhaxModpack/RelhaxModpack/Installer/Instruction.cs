@@ -9,6 +9,16 @@ namespace RelhaxModpack.Installer
 {
     public abstract class Instruction : XmlDatabaseComponent
     {
+        public Instruction() : base()
+        {
+
+        }
+
+        public Instruction(Instruction instructionToCopy) : base(instructionToCopy)
+        {
+
+        }
+
         public abstract string[] PropertiesToSerialize();
 
         public abstract string RootObjectPath { get; }

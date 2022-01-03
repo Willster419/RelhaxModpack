@@ -17,6 +17,42 @@ namespace RelhaxModpack.Database
     /// </summary>
     public class DatabasePackage : CoreDatabaseComponent, IDatabaseComponent, IXmlSerializable, IDisposable
     {
+        /// <summary>
+        /// Creates an instance of the DatabasePackage class
+        /// </summary>
+        public DatabasePackage() : base()
+        {
+            InitComponent();
+        }
+
+        /// <summary>
+        /// Creates an instance of the DatabasePackage class based on the provided DatabasePackage
+        /// </summary>
+        /// <param name="packageToCopy">The package to copy the information from</param>
+        public DatabasePackage(DatabasePackage packageToCopy) : base(packageToCopy)
+        {
+            InitComponent();
+            this.PackageName = packageToCopy.PackageName;
+            this.Version = packageToCopy.Version;
+            this.Timestamp = packageToCopy.Timestamp;
+            this.ZipFile = packageToCopy.ZipFile;
+            this.CRC = packageToCopy.CRC;
+            this.LogAtInstall = packageToCopy.LogAtInstall;
+            this.Triggers = packageToCopy.Triggers;
+            this.DevURL = packageToCopy.DevURL;
+            this.InstallGroup = packageToCopy.InstallGroup;
+            this.PatchGroup = packageToCopy.PatchGroup;
+            this.UID = packageToCopy.UID;
+            //don't call the property for enabled, just the internal field
+            this._Enabled = packageToCopy._Enabled;
+            this.LastUpdateCheck = packageToCopy.LastUpdateCheck;
+        }
+
+        protected virtual void InitComponent()
+        {
+            //stub
+        }
+
         #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
@@ -338,38 +374,6 @@ namespace RelhaxModpack.Database
         /// </summary>
         public virtual string CompleteUIDPath
         { get { return UID; } }
-
-        /// <summary>
-        /// Creates an instance of the DatabasePackage class
-        /// </summary>
-        public DatabasePackage()
-        {
-
-        }
-
-        /// <summary>
-        /// Creates an instance of the DatabasePackage class based on the provided DatabasePackage
-        /// </summary>
-        /// <param name="packageToCopy">The package to copy the information from</param>
-        /// <param name="deep">Set to true to copy list objects, false to use new lists</param>
-        public DatabasePackage(DatabasePackage packageToCopy, bool deep)
-        {
-            this.PackageName = packageToCopy.PackageName;
-            this.Version = packageToCopy.Version;
-            this.Timestamp = packageToCopy.Timestamp;
-            this.ZipFile = packageToCopy.ZipFile;
-            this.CRC = packageToCopy.CRC;
-            this.LogAtInstall = packageToCopy.LogAtInstall;
-            this.Triggers = packageToCopy.Triggers;
-            this.DevURL = packageToCopy.DevURL;
-            this.InstallGroup = packageToCopy.InstallGroup;
-            this.PatchGroup = packageToCopy.PatchGroup;
-            this.Maintainers = packageToCopy.Maintainers;
-            this.UID = packageToCopy.UID;
-            //don't call the property for enabled, just the internal field
-            this._Enabled = packageToCopy._Enabled;
-            this.LastUpdateCheck = packageToCopy.LastUpdateCheck;
-        }
 
         public void UpdateZipfile(string newZipfile)
         {

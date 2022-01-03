@@ -9,6 +9,17 @@ namespace RelhaxModpack.Database
     /// </summary>
     public class Media : XmlDatabaseComponent, IXmlSerializable
     {
+        public Media() : base()
+        {
+
+        }
+
+        public Media(Media mediaToCopy) : base(mediaToCopy)
+        {
+            this.URL = mediaToCopy.URL;
+            this.MediaType = mediaToCopy.MediaType;
+        }
+
         #region Xml serialization V1
         /// <summary>
         /// Defines a list of properties in the class to be serialized into xml attributes
@@ -80,11 +91,7 @@ namespace RelhaxModpack.Database
         /// <returns>A new Media object with the same values</returns>
         public static Media Copy(Media mediaToCopy)
         {
-            return new Media()
-            {
-                URL = mediaToCopy.URL,
-                MediaType = mediaToCopy.MediaType
-            };
+            return new Media(mediaToCopy);
         }
     }
 }

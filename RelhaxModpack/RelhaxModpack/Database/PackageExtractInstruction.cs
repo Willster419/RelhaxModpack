@@ -9,6 +9,17 @@ namespace RelhaxModpack.Database
 {
     public abstract class PackageExtractInstruction : Instruction
     {
+        public PackageExtractInstruction() : base()
+        {
+
+        }
+
+        public PackageExtractInstruction(PackageExtractInstruction packageExtractInstructionToCopyFrom) : base(packageExtractInstructionToCopyFrom)
+        {
+            this.Pkg = packageExtractInstructionToCopyFrom.Pkg;
+            this.DirectoryInArchive = packageExtractInstructionToCopyFrom.DirectoryInArchive;
+        }
+
         #region Xml serialization V2
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
         {
@@ -33,16 +44,5 @@ namespace RelhaxModpack.Database
         /// </summary>
         /// <remarks>This is loaded from the xml file</remarks>
         public string DirectoryInArchive { get; set; } = string.Empty;
-
-        public PackageExtractInstruction() : base()
-        {
-
-        }
-
-        public PackageExtractInstruction(PackageExtractInstruction packageExtractInstructionToCopyFrom) : base()
-        {
-            this.Pkg = packageExtractInstructionToCopyFrom.Pkg;
-            this.DirectoryInArchive = packageExtractInstructionToCopyFrom.DirectoryInArchive;
-        }
     }
 }
