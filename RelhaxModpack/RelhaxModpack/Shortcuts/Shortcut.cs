@@ -64,6 +64,23 @@ namespace RelhaxModpack.Shortcuts
         {
             return string.Format("Name={0} Target={1}", Name, Path);
         }
+
+        public static Shortcut Copy(Shortcut shortcutToCopy)
+        {
+            return new Shortcut(shortcutToCopy);
+        }
+
+        public Shortcut() : base()
+        {
+
+        }
+
+        public Shortcut(Shortcut shortcutToCopy) : base()
+        {
+            this.Path = shortcutToCopy.Path;
+            this.Name = shortcutToCopy.Name;
+            this.Enabled = shortcutToCopy.Enabled;
+        }
     }
 
     

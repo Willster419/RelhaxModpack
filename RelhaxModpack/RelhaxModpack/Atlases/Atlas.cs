@@ -14,7 +14,6 @@ namespace RelhaxModpack.Atlases
     /// </summary>
     public class Atlas : PackageExtractInstruction
     {
-
         public const string AtlasXmlSearchPath = "/atlases/atlas";
 
         public override string RootObjectPath { get { return AtlasXmlSearchPath; } }
@@ -156,6 +155,32 @@ namespace RelhaxModpack.Atlases
         public override string ToString()
         {
             return string.Format("AtlasFile: {0}", string.IsNullOrEmpty(AtlasFile) ? "(empty)" : AtlasFile);
+        }
+
+        public static Atlas Copy(Atlas atlasToCopy)
+        {
+            return new Atlas(atlasToCopy);
+        }
+
+        public Atlas() : base()
+        {
+
+        }
+
+        public Atlas(Atlas atlasToCopy) : base(atlasToCopy)
+        {
+            this.AtlasFile = atlasToCopy.AtlasFile;
+            this.MapFile = atlasToCopy.MapFile;
+            this.PowOf2 = atlasToCopy.PowOf2;
+            this.Square = atlasToCopy.Square;
+            this.AtlasWidth = atlasToCopy.AtlasWidth;
+            this.AtlasHeight = atlasToCopy.AtlasHeight;
+            this.FastImagePacker = atlasToCopy.FastImagePacker;
+            this.Padding = atlasToCopy.Padding;
+            this.AtlasSaveDirectory = atlasToCopy.AtlasSaveDirectory;
+
+            foreach (string s in atlasToCopy.ImageFolders)
+                this.ImageFolders.Add(s);
         }
     }
 }

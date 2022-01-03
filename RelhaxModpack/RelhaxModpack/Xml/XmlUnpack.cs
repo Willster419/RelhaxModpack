@@ -82,5 +82,22 @@ namespace RelhaxModpack.Xml
         {
             return string.Format("NativeProcessingFile={0}, FileName={1}", NativeProcessingFile, FileName);
         }
+
+        public static XmlUnpack Copy(XmlUnpack xmlUnpackToCopy)
+        {
+            return new XmlUnpack(xmlUnpackToCopy);
+        }
+
+        public XmlUnpack() : base()
+        {
+
+        }
+
+        public XmlUnpack(XmlUnpack xmlUnpackToCopy) : base(xmlUnpackToCopy)
+        {
+            this.FileName = xmlUnpackToCopy.FileName;
+            this.ExtractDirectory = xmlUnpackToCopy.ExtractDirectory;
+            this.NewFileName = xmlUnpackToCopy.NewFileName;
+        }
     }
 }

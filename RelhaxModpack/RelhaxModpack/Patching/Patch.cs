@@ -241,5 +241,30 @@ namespace RelhaxModpack.Patching
             //https://stackoverflow.com/questions/471595/casting-an-item-collection-from-a-listbox-to-a-generic-list
             return GetInvalidPatchesForSave(patchList.Cast<Patch>().ToList());
         }
+
+        public static Patch Copy(Patch shortcutToCopy)
+        {
+            return new Patch(shortcutToCopy);
+        }
+
+        public Patch() : base()
+        {
+
+        }
+
+        public Patch(Patch shortcutToCopy) : base()
+        {
+            this.Path = shortcutToCopy.Path;
+            this.Type = shortcutToCopy.Type;
+            this.Mode = shortcutToCopy.Mode;
+            this.PatchPath = shortcutToCopy.PatchPath;
+            this.File = shortcutToCopy.File;
+            this.Version = shortcutToCopy.Version;
+            this.Search = shortcutToCopy.Search;
+            this.Replace = shortcutToCopy.Replace;
+            this.FollowPath = shortcutToCopy.FollowPath;
+            this.Path = shortcutToCopy.Path;
+            this.Line = shortcutToCopy.Line;
+        }
     }
 }

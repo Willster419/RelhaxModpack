@@ -33,5 +33,16 @@ namespace RelhaxModpack.Database
         /// </summary>
         /// <remarks>This is loaded from the xml file</remarks>
         public string DirectoryInArchive { get; set; } = string.Empty;
+
+        public PackageExtractInstruction() : base()
+        {
+
+        }
+
+        public PackageExtractInstruction(PackageExtractInstruction packageExtractInstructionToCopyFrom) : base()
+        {
+            this.Pkg = packageExtractInstructionToCopyFrom.Pkg;
+            this.DirectoryInArchive = packageExtractInstructionToCopyFrom.DirectoryInArchive;
+        }
     }
 }
