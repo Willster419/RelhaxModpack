@@ -1567,6 +1567,17 @@
             A database component is the base class for all other packages
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.#ctor">
+            <summary>
+            Creates an instance of the DatabasePackage class
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.#ctor(RelhaxModpack.Database.DatabasePackage)">
+            <summary>
+            Creates an instance of the DatabasePackage class based on the provided DatabasePackage
+            </summary>
+            <param name="packageToCopy">The package to copy the information from</param>
+        </member>
         <member name="M:RelhaxModpack.Database.DatabasePackage.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes
@@ -1752,23 +1763,23 @@
             Provides a complete tree style path to the package using its UID, starting with the category
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabasePackage.#ctor">
-            <summary>
-            Creates an instance of the DatabasePackage class
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabasePackage.#ctor(RelhaxModpack.Database.DatabasePackage,System.Boolean)">
-            <summary>
-            Creates an instance of the DatabasePackage class based on the provided DatabasePackage
-            </summary>
-            <param name="packageToCopy">The package to copy the information from</param>
-            <param name="deep">Set to true to copy list objects, false to use new lists</param>
-        </member>
         <member name="T:RelhaxModpack.Database.Dependency">
             <summary>
             Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
             for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency
             </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.Dependency.#ctor">
+            <summary>
+            Create an instance of the Dependency class and over-ride DatabasePackage default values
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.Dependency.#ctor(RelhaxModpack.Database.DatabasePackage,System.Boolean)">
+            <summary>
+            Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects
+            </summary>
+            <param name="packageToCopyFrom">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
         </member>
         <member name="M:RelhaxModpack.Database.Dependency.PropertiesForSerializationAttributes">
             <summary>
@@ -1793,18 +1804,6 @@
             <summary>
             List of dependencies this dependency calls on
             </summary>
-        </member>
-        <member name="M:RelhaxModpack.Database.Dependency.#ctor">
-            <summary>
-            Create an instance of the Dependency class and over-ride DatabasePackage default values
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Database.Dependency.#ctor(RelhaxModpack.Database.DatabasePackage,System.Boolean)">
-            <summary>
-            Create an instance of the Dependency class and over-ride DatabasePackage default values, while using values provided for copy objects
-            </summary>
-            <param name="packageToCopyFrom">The package to copy the information from</param>
-            <param name="deep">Set to true to copy list objects, false to use new lists</param>
         </member>
         <member name="T:RelhaxModpack.Database.IComponentWithDependencies">
             <summary>
@@ -2007,6 +2006,18 @@
             A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
             </summary>
         </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.#ctor">
+            <summary>
+            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.SelectablePackage.#ctor(RelhaxModpack.Database.DatabasePackage,System.Boolean)">
+            <summary>
+            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
+            </summary>
+            <param name="packageToCopyFrom">The package to copy the information from</param>
+            <param name="deep">Set to true to copy list objects, false to use new lists</param>
+        </member>
         <member name="M:RelhaxModpack.Database.SelectablePackage.PropertiesForSerializationAttributes">
             <summary>
             Defines a list of properties in the class to be serialized into xml attributes
@@ -2026,11 +2037,6 @@
             Defines a list of properties in the class to be serialized into xml attributes for selection files
             </summary>
             <returns>The base array, with SelectablePackage options concatenated</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.SelectablePackage.#ctor">
-            <summary>
-            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
-            </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.Name">
             <summary>
@@ -2340,13 +2346,6 @@
             Returns true if the structure above and below this package is valid (all mandatory child options checked, parent checked), false otherwise
             </summary>
             <remarks>This assumes that the database linking/reference code has been run, otherwise a null exception will occur</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Database.SelectablePackage.#ctor(RelhaxModpack.Database.DatabasePackage,System.Boolean)">
-            <summary>
-            Create an instance of the SelectablePackage class and over-ride DatabasePackage default values, while using values provided for copy objects
-            </summary>
-            <param name="packageToCopyFrom">The package to copy the information from</param>
-            <param name="deep">Set to true to copy list objects, false to use new lists</param>
         </member>
         <member name="T:RelhaxModpack.Database.Trigger">
             <summary>
