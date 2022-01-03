@@ -28,6 +28,7 @@ using System.ComponentModel;
 using RelhaxModpack.Patching;
 using RelhaxModpack.Atlases;
 using RelhaxModpack.Shortcuts;
+using RelhaxModpack.Installer;
 
 namespace RelhaxModpack.Windows
 {
@@ -73,6 +74,8 @@ namespace RelhaxModpack.Windows
             "-----Dependencies-----",
         };
         private readonly string UpdatedPackageNewCRC = "f";
+        private PopOutReplacePatchDesigner popOutReplacePatchDesigner = null;
+        private Patcher Patcher = new Patcher() { DebugMode = false };
 
         #region Stuff
         /// <summary>
@@ -470,6 +473,20 @@ namespace RelhaxModpack.Windows
 
             //for each tab, disable all UI components
             List<Control> controlsToDisable = new List<Control>();
+            ComboBox[] comboboxesToSkip = new ComboBox[]
+            {
+                PackageInstallGroupDisplay,
+                PackagePatchGroupDisplay,
+                LoadedDependenciesList,
+                LoadedTriggersComboBox,
+                LoadedLogicsList,
+                PackageTypeDisplay,
+                MediaTypesList,
+                LoadedTagsComboBox,
+                PatchVersionCombobox,
+                PatchPathCombobox,
+                PatchTypeCombobox
+            };
             foreach (TabItem tabItem in RightTab.Items)
             {
                 foreach (FrameworkElement element in UiUtils.GetAllWindowComponentsLogical(tabItem, false))
@@ -488,10 +505,7 @@ namespace RelhaxModpack.Windows
                     else if (element is ComboBox cbox)
                     {
                         //don't clear these, they are static. just un-select anything that could be selected
-                        if (cbox.Name.Equals(nameof(PackageInstallGroupDisplay)) || cbox.Name.Equals(nameof(PackagePatchGroupDisplay)) ||
-                            cbox.Name.Equals(nameof(LoadedDependenciesList)) || cbox.Name.Equals(nameof(LoadedTriggersComboBox)) ||
-                            cbox.Name.Equals(nameof(LoadedLogicsList)) || cbox.Name.Equals(nameof(PackageTypeDisplay)) ||
-                            cbox.Name.Equals(nameof(MediaTypesList)) || cbox.Name.Equals(nameof(LoadedTagsComboBox)))
+                        if (comboboxesToSkip.Contains(cbox))
                         {
                             cbox.SelectedIndex = -1;
                             continue;
@@ -583,6 +597,21 @@ namespace RelhaxModpack.Windows
                             control.IsEnabled = true;
                     }
                     foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(TagsTab, false))
+                    {
+                        if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                            control.IsEnabled = true;
+                    }
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(PatchesTab, false))
+                    {
+                        if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                            control.IsEnabled = true;
+                    }
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(XmlUnpackShortcutTab, false))
+                    {
+                        if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
+                            control.IsEnabled = true;
+                    }
+                    foreach (FrameworkElement control in UiUtils.GetAllWindowComponentsLogical(AtlasesTab, false))
                     {
                         if (control is CheckBox || control is ComboBox || control is Button || control is TextBox || control is ListBox)
                             control.IsEnabled = true;
@@ -864,6 +893,22 @@ namespace RelhaxModpack.Windows
             foreach (PackageTags packageTag in package.Tags)
                 PackageTagsDisplay.Items.Add(packageTag);
 
+            //patches
+            foreach (Patch patch in package.Patches)
+                PackagePatchesDisplay.Items.Add(patch);
+
+            //atlases
+            foreach (Atlas atlas in package.Atlases)
+                PackageAtlasesDisplay.Items.Add(atlas);
+
+            //shortcuts
+            foreach (Shortcut shortcut in package.Shortcuts)
+                PackageShortcutDisplay.Items.Add(shortcut);
+
+            //xml unpacks
+            foreach (XmlUnpack xmlUnpack in package.XmlUnpacks)
+                PackageXmlUnpackDisplay.Items.Add(xmlUnpack);
+
             //then handle if dependency
             if (package is Dependency dependency)
             {
@@ -1102,6 +1147,23 @@ namespace RelhaxModpack.Windows
                 }
             }
 
+            //add the list items by making new versions
+            package.Patches.Clear();
+            foreach (Patch component in PackagePatchesDisplay.Items)
+                package.Patches.Add(new Patch(component));
+
+            package.XmlUnpacks.Clear();
+            foreach (XmlUnpack component in PackageXmlUnpackDisplay.Items)
+                package.XmlUnpacks.Add(new XmlUnpack(component));
+
+            package.Atlases.Clear();
+            foreach (Atlas component in PackageAtlasesDisplay.Items)
+                package.Atlases.Add(new Atlas(component));
+
+            package.Shortcuts.Clear();
+            foreach (Shortcut component in PackageShortcutDisplay.Items)
+                package.Shortcuts.Add(new Shortcut(component));
+
             //if it's a selectablePackage
             if (package is SelectablePackage selectablePackage)
             {
@@ -1248,6 +1310,23 @@ namespace RelhaxModpack.Windows
             return false;
         }
 
+        private bool InstructionsModified(List<Instruction> instructions, ItemCollection listboxCollection)
+        {
+            if (instructions.Count != listboxCollection.Count)
+                return true;
+
+            for (int i = 0; i < instructions.Count; i++)
+            {
+                Instruction instructionFromEditorList = listboxCollection[i] as Instruction;
+                Instruction instructionFromDatabase = instructions[i];
+
+                if (!instructionFromDatabase.InstructionsEqual(instructionFromEditorList))
+                    return true;
+            }
+
+            return false;
+        }
+
         private bool CategoryWasModified(Category category)
         {
             if (!category.Name.Equals(PackageNameDisplay.Text))
@@ -1311,6 +1390,18 @@ namespace RelhaxModpack.Windows
                 if (DependenciesWereModified(componentWithDependencies.Dependencies))
                     return true;
             }
+
+            if (InstructionsModified(package.Patches.Cast<Instruction>().ToList(), PackagePatchesDisplay.Items))
+                return true;
+
+            if (InstructionsModified(package.Atlases.Cast<Instruction>().ToList(), PackageAtlasesDisplay.Items))
+                return true;
+
+            if (InstructionsModified(package.XmlUnpacks.Cast<Instruction>().ToList(), PackageXmlUnpackDisplay.Items))
+                return true;
+
+            if (InstructionsModified(package.Shortcuts.Cast<Instruction>().ToList(), PackageShortcutDisplay.Items))
+                return true;
 
             //see if it's a selectablePackage
             if (package is SelectablePackage selectablePackage)
@@ -3052,7 +3143,6 @@ namespace RelhaxModpack.Windows
         #endregion
 
         #region Other buttons
-
         private void PackageJustCheckedForUpdateButton_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedItem == null)
@@ -3072,6 +3162,614 @@ namespace RelhaxModpack.Windows
                 PackageLastCheckForUpdateDisplay.Text = CommonUtils.ConvertFiletimeTimestampToDate(packToWorkOn.LastUpdateCheck);
                 PackageLastCheckForUpdateDisplay.Tag = packToWorkOn.LastUpdateCheck;
             }
+        }
+        #endregion
+
+        #region Patch buttons and events
+        private void PackagePatchesDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PackagePatchesDisplay.SelectedItem == null)
+                return;
+
+            Patch selectedPatch = PackagePatchesDisplay.SelectedItem as Patch;
+
+            DisplayPatch(selectedPatch);
+        }
+
+        private void MoveUpPatchButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoveSelection(PackagePatchesDisplay, true);
+        }
+
+        private void MoveDownPatchButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoveSelection(PackagePatchesDisplay, false);
+        }
+
+        private void RemovePatchButton_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveSelection(PackagePatchesDisplay);
+        }
+
+        private void AddNewPatchButton_Click(object sender, RoutedEventArgs e)
+        {
+            PackagePatchesDisplay.Items.Add(new Patch());
+        }
+
+        private void ApplyPatchChangesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PackagePatchesDisplay.SelectedItem == null)
+                return;
+
+            //check to make sure at least valid settings are set before saving
+            if (PatchPathCombobox.SelectedItem == null)
+            {
+                MessageBox.Show("invalid patch path selection");
+                return;
+            }
+            else if (PatchTypeCombobox.SelectedItem == null)
+            {
+                MessageBox.Show("invalid patch type selection");
+                return;
+            }
+            else if (PatchModeCombobox.SelectedItem == null)
+            {
+                MessageBox.Show("invalid patch mode selection");
+                return;
+            }
+
+            SaveApplyPatch(PackagePatchesDisplay.SelectedItem as Patch);
+        }
+
+        private void PatchVersionCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //only patch versions 2+ will support the followPath option
+            if (PatchVersionCombobox.SelectedIndex == 0)
+            {
+                PatchFollowPathSetting.IsChecked = false;
+                PatchFollowPathSetting.IsEnabled = false;
+            }
+            else
+            {
+                PatchFollowPathSetting.IsEnabled = true;
+            }
+        }
+
+        private void PatchTypeCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PatchTypeCombobox.SelectedItem == null)
+                return;
+
+            //if the selection is json, enable the follow path selection box. else disable
+            PatchModeCombobox.Items.Clear();
+            if (PatchTypeCombobox.SelectedItem.Equals(Patch.TypeJson))
+            {
+                PatchFollowPathSetting.IsEnabled = true;
+                PatchModeCombobox.IsEnabled = true;
+                PatchLinesPathHeader.Text = "Path";
+
+                //also fill mode with json options
+                foreach (string s in Patch.ValidJsonModes)
+                {
+                    PatchModeCombobox.Items.Add(s);
+                }
+            }
+            else if (PatchTypeCombobox.SelectedItem.Equals(Patch.TypeXml))
+            {
+                PatchFollowPathSetting.IsEnabled = false;
+                PatchModeCombobox.IsEnabled = true;
+                PatchLinesPathHeader.Text = "Path";
+
+                foreach (string s in Patch.ValidXmlModes)
+                {
+                    PatchModeCombobox.Items.Add(s);
+                }
+            }
+            else//regex
+            {
+                PatchFollowPathSetting.IsEnabled = false;
+                PatchModeCombobox.IsEnabled = false;
+                PatchLinesPathHeader.Text = "Line(s)";
+            }
+        }
+
+        private void DisplayPatch(Patch patch)
+        {
+            //reset to nothing, then only set if the patch option is valid
+            PatchFilePathTextbox.Clear();
+            PatchPathCombobox.SelectedItem = null;
+            PatchTypeCombobox.SelectedItem = null;
+            PatchModeCombobox.SelectedItem = null;
+            PatchFollowPathSetting.IsChecked = false;
+            PatchLinesPathTextbox.Clear();
+            PatchSearchTextbox.Clear();
+            PatchReplaceTextbox.Clear();
+
+            if (popOutReplacePatchDesigner != null)
+                popOutReplacePatchDesigner.PatchReplaceTextbox.Clear();
+
+            if (!string.IsNullOrWhiteSpace(patch.File))
+                PatchFilePathTextbox.Text = patch.File;
+
+            if (!string.IsNullOrWhiteSpace(patch.PatchPath))
+                switch (patch.PatchPath.ToLower())
+                {
+                    default:
+                        Logging.Editor("Unknown patchPath: {0}, set to app", LogLevel.Error, patch.PatchPath);
+                        PatchPathCombobox.SelectedItem = 0;
+                        break;
+                    case @"{app}":
+                    case "app":
+                        PatchPathCombobox.SelectedIndex = 0;
+                        break;
+                    case @"{appdata}":
+                    case "appdata":
+                        PatchPathCombobox.SelectedIndex = 1;
+                        break;
+                }
+
+            if (PatchTypeCombobox.Items.Contains(patch.Type))
+                PatchTypeCombobox.SelectedItem = patch.Type;
+            else
+                PatchTypeCombobox.SelectedIndex = 0;
+
+            if (!string.IsNullOrWhiteSpace(patch.Mode))
+                PatchModeCombobox.SelectedItem = patch.Mode;
+
+            //set the version. it's at least version 1
+            if (PatchVersionCombobox.Items.Contains(patch.Version))
+                PatchVersionCombobox.SelectedItem = patch.Version;
+            else
+                PatchVersionCombobox.SelectedIndex = 0;
+
+            //only set the followPath setting if the version is > 1
+            //else it is set off by the selectedValueChanged event in PatchVersionCombobox
+            if (patch.Version > 1)
+            {
+                PatchFollowPathSetting.IsChecked = patch.FollowPath;
+            }
+            else if (patch.FollowPath && (patch.Version == 1 || !patch.Type.Equals(Patch.TypeJson)))
+            {
+                Logging.Editor("Patch option followPath can't be enabled (not supported). Disabling.", LogLevel.Error);
+                Logging.Editor("Version: {0}, Type: {1}", LogLevel.Error, patch.Version, patch.Type);
+                patch.FollowPath = false;
+            }
+
+            if (patch.Type.Equals(Patch.TypeRegex1) || patch.Type.Equals(Patch.TypeRegex2))
+            {
+                PatchModeCombobox.IsEnabled = false;
+                if (patch.Lines == null || patch.Lines.Count() == 0)
+                    PatchLinesPathTextbox.Clear();
+                else if (patch.Lines.Count() > 0)
+                    PatchLinesPathTextbox.Text = string.Join(",", patch.Lines);
+            }
+            else
+            {
+                PatchModeCombobox.IsEnabled = true;
+                if (!string.IsNullOrWhiteSpace(patch.Path))
+                    PatchLinesPathTextbox.Text = patch.Path;
+            }
+
+            if (!string.IsNullOrWhiteSpace(patch.Search))
+                PatchSearchTextbox.Text = patch.Search;
+
+            if (!string.IsNullOrWhiteSpace(patch.Replace))
+                PatchReplaceTextbox.Text = patch.Replace;
+        }
+
+        private void SaveApplyPatch(Patch patch)
+        {
+            UnsavedChanges = true;
+
+            //save all UI settings to patch object
+            patch.PatchPath = PatchPathCombobox.SelectedItem as string;
+            patch.Type = PatchTypeCombobox.SelectedItem as string;
+            patch.Mode = PatchModeCombobox.SelectedItem as string;
+            patch.Version = (int)PatchVersionCombobox.SelectedItem;
+            patch.FollowPath = (bool)PatchFollowPathSetting.IsChecked;
+            patch.File = PatchFilePathTextbox.Text;
+
+            if (patch.Type.ToLower().Equals(Patch.TypeRegex1) || patch.Type.ToLower().Equals(Patch.TypeRegex2))
+            {
+                patch.Line = PatchLinesPathTextbox.Text;
+            }
+            else
+            {
+                patch.Path = PatchLinesPathTextbox.Text;
+            }
+
+            patch.Search = PatchSearchTextbox.Text;
+            patch.Replace = PatchReplaceTextbox.Text;
+
+            PackagePatchesDisplay.Items.Refresh();
+        }
+
+        private void PopOutReplaceBlockCB_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)PopOutReplaceBlockCB.IsChecked)
+            {
+                popOutReplacePatchDesigner = new PopOutReplacePatchDesigner(this.ModpackSettings);
+                popOutReplacePatchDesigner.Closed += PopOutReplacePatchDesigner_Closed;
+                popOutReplacePatchDesigner.Show();
+                PatchReplaceTextbox.IsEnabled = false;
+                popOutReplacePatchDesigner.PatchReplaceTextbox.Text = PatchReplaceTextbox.Text;
+            }
+            else
+            {
+                PatchReplaceTextbox.IsEnabled = true;
+                PatchReplaceTextbox.Text = popOutReplacePatchDesigner.PatchReplaceTextbox.Text;
+                popOutReplacePatchDesigner.Close();
+                popOutReplacePatchDesigner = null;
+            }
+        }
+        private void PopOutReplacePatchDesigner_Closed(object sender, EventArgs e)
+        {
+            PopOutReplaceBlockCB.IsChecked = false;
+            PopOutReplaceBlockCB_Click(null, null);
+        }
+
+        private void TestPatchButton_Click(object sender, RoutedEventArgs e)
+        {
+            //file dialog to select file to patch
+            Logging.Info("Select a file from the dialog window");
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Title = "Select a file to patch",
+                AddExtension = true,
+                CheckPathExists = true,
+                CheckFileExists = true,
+                Multiselect = false
+            };
+
+            if (!(bool)openFileDialog.ShowDialog())
+                return;
+
+            //run patcher (see patch designer for reference)
+            Logging.Editor("Checking UI elements for valid patch information...", LogLevel.Info);
+
+            //make new patch element
+            Patch patchToTest = new Patch(PackagePatchesDisplay.SelectedItem as Patch)
+            {
+                CompletePath = openFileDialog.FileName,
+                File = openFileDialog.FileName
+            };
+
+            //check input from UI left panel side:
+            //file location
+            Logging.Editor("File to Patch location: {0}", LogLevel.Info, openFileDialog.FileName);
+
+            //check patch type
+            if (PatchTypeCombobox.SelectedItem == null)
+            {
+                Logging.Editor("Invalid Patch Type, aborting", LogLevel.Info);
+                return;
+            }
+            patchToTest.Type = PatchTypeCombobox.SelectedItem as string;
+
+            //check patch mode
+            switch (patchToTest.Type.ToLower())
+            {
+                case Patch.TypeRegex1:
+                case Patch.TypeRegex2:
+                    if (!string.IsNullOrWhiteSpace(PatchModeCombobox.SelectedItem as string))
+                    {
+                        Logging.Editor("Type=regex, invalid patch type: {0}", LogLevel.Error, PatchModeCombobox.SelectedItem as string);
+                        Logging.Editor("valid types are: (null)");
+                        return;
+                    }
+                    //set the lines
+                    if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
+                    {
+                        Logging.Editor("Type=regex, Lines to patch is blank", LogLevel.Error);
+                        return;
+                    }
+                    else
+                    {
+                        patchToTest.Line = PatchLinesPathTextbox.Text;
+                    }
+                    break;
+                case Patch.TypeXml:
+                    //check if path/lines is valid (has string values)
+                    if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
+                    {
+                        Logging.Editor("invalid xpath", LogLevel.Error);
+                        return;
+                    }
+                    if (!Patch.ValidXmlModes.Contains((PatchModeCombobox.SelectedItem as string).ToLower()))
+                    {
+                        Logging.Editor("Type=xml, invalid patch type: {0}", LogLevel.Error, PatchModeCombobox.SelectedItem as string);
+                        Logging.Editor("valid types are: {0}", LogLevel.Error, string.Join(",", Patch.ValidXmlModes));
+                        return;
+                    }
+                    patchToTest.Path = PatchLinesPathTextbox.Text;
+                    break;
+                case Patch.TypeJson:
+                    //check if path/lines is valid (has string values)
+                    if (string.IsNullOrWhiteSpace(PatchLinesPathTextbox.Text))
+                    {
+                        Logging.Editor("invalid jsonpath");
+                        return;
+                    }
+                    if (!Patch.ValidJsonModes.Contains((PatchModeCombobox.SelectedItem as string).ToLower()))
+                    {
+                        Logging.Editor("Type=json, invalid patch type: {0}", LogLevel.Info, PatchModeCombobox.SelectedItem as string);
+                        Logging.Editor("valid types are: {0}", LogLevel.Info, string.Join(",", Patch.ValidJsonModes));
+                        return;
+                    }
+                    patchToTest.Path = PatchLinesPathTextbox.Text;
+                    break;
+                default:
+                    throw new BadMemeException("invalid patch type, but you should probably make this a enum not strings");
+            }
+
+            patchToTest.Mode = PatchModeCombobox.SelectedItem as string;
+            //check followPath true ONLY for json
+            if (!patchToTest.Type.Equals(Patch.TypeJson) && (bool)PatchFollowPathSetting.IsChecked)
+            {
+                Logging.Editor("Types=json, followPathSetting must be false!");
+                return;
+            }
+
+            //check search and replace
+            if (string.IsNullOrWhiteSpace(PatchReplaceTextbox.Text) && string.IsNullOrWhiteSpace(PatchSearchTextbox.Text))
+            {
+                Logging.Editor("patch replace and search are blank, invalid patch");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(PatchSearchTextbox.Text))
+            {
+                Logging.Editor("patch search is blank (is this the intent?)", LogLevel.Warning);
+            }
+            patchToTest.Search = PatchSearchTextbox.Text;
+
+            if (string.IsNullOrWhiteSpace(PatchReplaceTextbox.Text))
+            {
+                Logging.Editor("patch replace is blank (is this the intent?)", LogLevel.Info);
+            }
+            patchToTest.Replace = PatchReplaceTextbox.Text;
+
+            //put patch into patch test methods
+            Logging.Editor("Running patch...", LogLevel.Info);
+            switch (Patcher.RunPatchFromEditor(patchToTest))
+            {
+                case PatchExitCode.Error:
+                    Logging.Editor("Patch failed with errors. Check the log for details.", LogLevel.Error);
+                    break;
+                case PatchExitCode.Warning:
+                    Logging.Editor("Patch completed with warnings. Check the log for details.", LogLevel.Warning);
+                    break;
+                case PatchExitCode.Success:
+                    Logging.Editor("Patch completed successfully!", LogLevel.Info);
+                    break;
+            }
+        }
+        #endregion
+
+        #region Atlas buttons and events
+        private void PackageAtlasesDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PackageAtlasesDisplay.SelectedItem == null)
+                return;
+            DisplayAtlas(PackageAtlasesDisplay.SelectedItem as Atlas);
+        }
+
+        private void MoveUpAtlasButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoveSelection(PackageAtlasesDisplay, true);
+        }
+
+        private void MoveDownAtlasButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoveSelection(PackageAtlasesDisplay, false);
+        }
+
+        private void RemoveAtlasButton_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveSelection(PackageAtlasesDisplay);
+        }
+
+        private void AddNewAtlasButton_Click(object sender, RoutedEventArgs e)
+        {
+            PackageAtlasesDisplay.Items.Add(new Atlas());
+        }
+
+        private void ApplyAtlasChangesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PackageAtlasesDisplay.SelectedItem == null)
+                return;
+            SaveAtlas(PackageAtlasesDisplay.SelectedItem as Atlas);
+            PackageAtlasesDisplay.Items.Refresh();
+        }
+
+        private void DisplayAtlas(Atlas atlas)
+        {
+            AtlasPkgTextbox.Text = atlas.Pkg;
+            AtlasDirectoryInArchiveTextbox.Text = atlas.DirectoryInArchive;
+            AtlasAtlasFileTextbox.Text = atlas.AtlasFile;
+            AtlasMapFileTextbox.Text = atlas.MapFile;
+            AtlasPowOf2Checkbox.IsChecked = atlas.PowOf2;
+            AtlasSquareCheckbox.IsChecked = atlas.Square;
+            AtlasFastImagePackerCheckbox.IsChecked = atlas.FastImagePacker;
+            AtlasPaddingTextbox.Text = atlas.Padding.ToString();
+            AtlasAtlasWidthTextbox.Text = atlas.AtlasWidth.ToString();
+            AtlasAtlasHeightTextbox.Text = atlas.AtlasHeight.ToString();
+            AtlasAtlasSaveDirectoryTextbox.Text = atlas.AtlasSaveDirectory;
+            AtlasImageFoldersTextbox.Text = string.Join(Environment.NewLine, atlas.ImageFolders);
+        }
+
+        private void SaveAtlas(Atlas atlas)
+        {
+            UnsavedChanges = true;
+            atlas.Pkg = AtlasPkgTextbox.Text;
+            atlas.DirectoryInArchive = AtlasDirectoryInArchiveTextbox.Text;
+            atlas.AtlasFile = AtlasAtlasFileTextbox.Text;
+            atlas.MapFile = AtlasMapFileTextbox.Text;
+            atlas.PowOf2 = (bool)AtlasPowOf2Checkbox.IsChecked;
+            atlas.Square = (bool)AtlasSquareCheckbox.IsChecked;
+            atlas.FastImagePacker = (bool)AtlasFastImagePackerCheckbox.IsChecked;
+            atlas.Padding = CommonUtils.ParseInt(AtlasPaddingTextbox.Text, 1);
+            atlas.AtlasWidth = CommonUtils.ParseInt(AtlasAtlasWidthTextbox.Text, 0);
+            atlas.AtlasHeight = CommonUtils.ParseInt(AtlasAtlasHeightTextbox.Text, 0);
+            atlas.AtlasSaveDirectory = AtlasAtlasSaveDirectoryTextbox.Text;
+            atlas.ImageFolders.Clear();
+            foreach (string s in AtlasImageFoldersTextbox.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+                atlas.ImageFolders.Add(s.Trim());
+        }
+        #endregion
+
+        #region XmlUnpack buttons and events
+        private void PackageXmlUnpackDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PackageXmlUnpackDisplay.SelectedItem == null)
+                return;
+            DisplayXmlUnpack(PackageXmlUnpackDisplay.SelectedItem as XmlUnpack);
+        }
+
+        private void MoveUpXmlUnpackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoveSelection(PackageXmlUnpackDisplay, true);
+        }
+
+        private void MoveDownXmlUnpackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoveSelection(PackageXmlUnpackDisplay, false);
+        }
+
+        private void RemoveXmlUnpackButton_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveSelection(PackageXmlUnpackDisplay);
+        }
+
+        private void AddNewXmlUnpackButton_Click(object sender, RoutedEventArgs e)
+        {
+            PackageXmlUnpackDisplay.Items.Add(new XmlUnpack());
+        }
+
+        private void ApplyXmlUnpackChangesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PackageXmlUnpackDisplay.SelectedItem == null)
+                return;
+            SaveXmlUnpack(PackageXmlUnpackDisplay.SelectedItem as XmlUnpack);
+            PackageXmlUnpackDisplay.Items.Refresh();
+        }
+
+        private void DisplayXmlUnpack(XmlUnpack xmlUnpack)
+        {
+            XmlUnpackPkgTextbox.Text = xmlUnpack.Pkg;
+            XmlUnpackDirectoryInArchiveTextbox.Text = xmlUnpack.DirectoryInArchive;
+            XmlUnpackFilenameTextbox.Text = xmlUnpack.FileName;
+            XmlUnpackExtractDirectoryTextbox.Text = xmlUnpack.ExtractDirectory;
+            XmlUnpackNewFilenameTextbox.Text = xmlUnpack.NewFileName;
+        }
+
+        private void SaveXmlUnpack(XmlUnpack xmlUnpack)
+        {
+            UnsavedChanges = true;
+            xmlUnpack.Pkg = XmlUnpackPkgTextbox.Text;
+            xmlUnpack.DirectoryInArchive = XmlUnpackDirectoryInArchiveTextbox.Text;
+            xmlUnpack.FileName = XmlUnpackFilenameTextbox.Text;
+            xmlUnpack.ExtractDirectory = XmlUnpackExtractDirectoryTextbox.Text;
+            xmlUnpack.NewFileName = XmlUnpackNewFilenameTextbox.Text;
+        }
+        #endregion
+
+        #region Shortcut buttons and events
+        private void PackageShortcutDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PackageShortcutDisplay.SelectedItem == null)
+                return;
+            DisplayShortcut(PackageShortcutDisplay.SelectedItem as Shortcut);
+        }
+
+        private void MoveUpShortcutButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoveSelection(PackageShortcutDisplay, true);
+        }
+
+        private void MoveDownShortcutButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoveSelection(PackageShortcutDisplay, false);
+        }
+
+        private void RemoveShortcutButton_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveSelection(PackageShortcutDisplay);
+        }
+
+        private void AddNewShortcutButton_Click(object sender, RoutedEventArgs e)
+        {
+            PackageShortcutDisplay.Items.Add(new Shortcut());
+        }
+
+        private void ApplyShortcutButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PackageShortcutDisplay.SelectedItem == null)
+                return;
+            SaveShortcut(PackageShortcutDisplay.SelectedItem as Shortcut);
+            PackageShortcutDisplay.Items.Refresh();
+        }
+
+        private void DisplayShortcut(Shortcut shortcut)
+        {
+            ShortcutPathTextbox.Text = shortcut.Path;
+            ShortcutNameTextbox.Text = shortcut.Name;
+            ShortcutEnabledCheckbox.IsChecked = shortcut.Enabled;
+        }
+
+        private void SaveShortcut(Shortcut shortcut)
+        {
+            UnsavedChanges = true;
+            shortcut.Path = ShortcutPathTextbox.Text;
+            shortcut.Name = ShortcutNameTextbox.Text;
+            shortcut.Enabled = (bool)ShortcutEnabledCheckbox.IsChecked;
+        }
+        #endregion
+
+        #region instruction generic methods
+        private void MoveUpSelection(ListBox listbox)
+        {
+            if (listbox.SelectedIndex == 0)
+                return;
+
+            object itemToMove = listbox.SelectedItem;
+            int oldIndex = listbox.SelectedIndex;
+            listbox.Items.Remove(itemToMove);
+            listbox.Items.Insert(oldIndex - 1, itemToMove);
+        }
+
+        private void MoveDownSelection(ListBox listbox)
+        {
+            if (listbox.SelectedIndex == listbox.Items.Count - 1)
+                return;
+
+            object itemToMove = listbox.SelectedItem;
+            int oldIndex = listbox.SelectedIndex;
+            listbox.Items.Remove(itemToMove);
+            listbox.Items.Insert(oldIndex + 1, itemToMove);
+        }
+
+        private void MoveSelection(ListBox listbox, bool UpDown)
+        {
+            //up=true, down=false
+            if (listbox.SelectedItem == null)
+                return;
+
+            if (listbox.Items.Count < 2)
+                return;
+
+            if (UpDown)
+                MoveUpSelection(listbox);
+            else
+                MoveDownSelection(listbox);
+        }
+
+        private void RemoveSelection(ListBox listbox)
+        {
+            if (listbox.SelectedItem == null)
+                return;
+
+            listbox.Items.Remove(listbox.SelectedItem);
         }
         #endregion
     }

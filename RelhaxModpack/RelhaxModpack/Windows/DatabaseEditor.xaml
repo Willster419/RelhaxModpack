@@ -725,7 +725,7 @@
                 <TabItem x:Name="PatchesTab" Header="Patches">
                     <Grid Background="#FFE5E5E5">
                         <!-- NEWLINE =&#10; -->
-                        <ListBox x:Name="PackagePatchesDisplay" HorizontalAlignment="Stretch" Height="188" VerticalAlignment="Top" />
+                        <ListBox x:Name="PackagePatchesDisplay" HorizontalAlignment="Stretch" Height="188" VerticalAlignment="Top" SelectionChanged="PackagePatchesDisplay_SelectionChanged"/>
                         <TextBlock x:Name="PatchFilePathLabel" HorizontalAlignment="Left" Margin="0,193,0,0" TextWrapping="Wrap" Text="Patch file path" VerticalAlignment="Top" ToolTip="'file' parameter of patch xml"/>
                         <TextBox x:Name="PatchFilePathTextbox" HorizontalAlignment="Stretch" Height="37" Margin="0,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="'file' parameter of patch xml"/>
                         <Grid HorizontalAlignment="Stretch" Height="116" Margin="0,251,0,0" VerticalAlignment="Top">
@@ -743,7 +743,7 @@
                             <TextBlock Tag="PatchVersionHeader" x:Name="PatchVersionHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" Text="Patch Version"
                                    ToolTip="Select the version of the patch file to be used in the installer.&#10;Version 2 allows for the use of followPath option for json."/>
                             <ComboBox Tag="PatchVersionCombobox" x:Name="PatchVersionCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Grid.Row="0" Margin="0,1,0,1"
-                                  ToolTip="Select the version of the patch file to be used in the installer.&#10;Version 2 allows for the use of followPath option for json.">
+                                  ToolTip="Select the version of the patch file to be used in the installer.&#10;Version 2 allows for the use of followPath option for json." SelectionChanged="PatchVersionCombobox_SelectionChanged">
                                 <System:Int32>1</System:Int32>
                                 <System:Int32>2</System:Int32>
                             </ComboBox>
@@ -755,7 +755,7 @@
                                 <System:String>appData</System:String>
                             </ComboBox>
                             <TextBlock Tag="PatchTypeHeader" x:Name="PatchTypeHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Patch Type" VerticalAlignment="Stretch" Grid.Row="2" />
-                            <ComboBox Tag="PatchTypeCombobox" x:Name="PatchTypeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Margin="0,1,0,1" Grid.Column="1" Grid.Row="2">
+                            <ComboBox Tag="PatchTypeCombobox" x:Name="PatchTypeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Margin="0,1,0,1" Grid.Column="1" Grid.Row="2" SelectionChanged="PatchTypeCombobox_SelectionChanged">
                                 <System:String>json</System:String>
                                 <System:String>xml</System:String>
                                 <System:String>regex</System:String>
@@ -780,17 +780,21 @@
                             <TextBox Tag="PatchSearchTextbox" x:Name="PatchSearchTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch"  Grid.Row="3" AcceptsReturn="True" AcceptsTab="True"/>
                             <TextBlock Tag="PatchReplaceHeader" x:Name="PatchReplaceHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Replace" VerticalAlignment="Stretch" Grid.Row="4"/>
                             <CheckBox x:Name="PopOutReplaceBlockCB" Content="Pop-out replace textbox" HorizontalAlignment="Right" Margin="0,0,2,4" VerticalAlignment="Bottom" 
-                                      ToolTip="Show a larger window to write the replace text field" Grid.Row="4"/>
+                                      ToolTip="Show a larger window to write the replace text field" Grid.Row="4" Click="PopOutReplaceBlockCB_Click"/>
                             <TextBox Tag="PatchReplaceTextbox" x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="5" AcceptsReturn="True" AcceptsTab="True"/>
                         </Grid>
-                        <Button Tag="TestPatchButton" x:Name="TestPatchButton" Content="Test Patch..." HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom" Width="75" />
-                        <Button Tag="ApplyPatchChangesButton" x:Name="ApplyPatchChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" />
+                        <Button x:Name="MoveUpPatchButton" Content="Move Up" HorizontalAlignment="Right" Margin="0,0,389,0" VerticalAlignment="Bottom" Width="60" Click="MoveUpPatchButton_Click"/>
+                        <Button x:Name="MoveDownPatchButton" Content="Move Down" HorizontalAlignment="Right" Margin="0,0,308,0" VerticalAlignment="Bottom" Width="76" Click="MoveDownPatchButton_Click"/>
+                        <Button x:Name="RemovePatchButton" Content="Remove" HorizontalAlignment="Right" Margin="0,0,245,0" VerticalAlignment="Bottom" Width="58" Click="RemovePatchButton_Click"/>
+                        <Button x:Name="AddNewPatchButton" Content="Add new" HorizontalAlignment="Right" Margin="0,0,182,0" VerticalAlignment="Bottom" Width="58" Click="AddNewPatchButton_Click"/>
+                        <Button Tag="TestPatchButton" x:Name="TestPatchButton" Content="Test Patch..." HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom" Width="75" Click="TestPatchButton_Click"/>
+                        <Button Tag="ApplyPatchChangesButton" x:Name="ApplyPatchChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" Click="ApplyPatchChangesButton_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="AtlasesTab" Header="Atlases">
                     <Grid Background="#FFE5E5E5">
                         <!-- NEWLINE =&#10; -->
-                        <ListBox x:Name="PackageAtlasesDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top"/>
+                        <ListBox x:Name="PackageAtlasesDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top" SelectionChanged="PackageAtlasesDisplay_SelectionChanged"/>
                         <Grid HorizontalAlignment="Stretch" Height="468" Margin="0,0,0,25" VerticalAlignment="Bottom">
                             <Grid.RowDefinitions>
                                 <!-- Pkg -->
@@ -841,13 +845,17 @@
                             <TextBlock x:Name="AtlasImageFoldersLabel" Grid.Row="11" Grid.ColumnSpan="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="ImageFolders" VerticalAlignment="Bottom" ToolTip="'ImageFolders' parameter of atlas xml"/>
                             <TextBox x:Name="AtlasImageFoldersTextbox" Grid.Row="12" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'ImageFolders' parameter of atlas xml, each entry seperated by newline" AcceptsReturn="True"/>
                         </Grid>
-                        <Button Tag="ApplyAtlasChangesButton" x:Name="ApplyAtlasChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" />
+                        <Button x:Name="MoveUpAtlasButton" Content="Move Up" HorizontalAlignment="Right" Margin="0,0,309,0" VerticalAlignment="Bottom" Width="60" Click="MoveUpAtlasButton_Click"/>
+                        <Button x:Name="MoveDownAtlasButton" Content="Move Down" HorizontalAlignment="Right" Margin="0,0,228,0" VerticalAlignment="Bottom" Width="76" Click="MoveDownAtlasButton_Click"/>
+                        <Button x:Name="RemoveAtlasButton" Content="Remove" HorizontalAlignment="Right" Margin="0,0,165,0" VerticalAlignment="Bottom" Width="58" Click="RemoveAtlasButton_Click"/>
+                        <Button x:Name="AddNewAtlasButton" Content="Add new" HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom" Width="58" Click="AddNewAtlasButton_Click"/>
+                        <Button Tag="ApplyAtlasChangesButton" x:Name="ApplyAtlasChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" Click="ApplyAtlasChangesButton_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="XmlUnpackShortcutTab" Header="XmlUnpack/Shortcut">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox x:Name="PackageXmlUnpackDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top"/>
-                        <Grid HorizontalAlignment="Stretch" Height="261" Margin="0,0,0,232" VerticalAlignment="Bottom">
+                        <ListBox x:Name="PackageXmlUnpackDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top" SelectionChanged="PackageXmlUnpackDisplay_SelectionChanged"/>
+                        <Grid HorizontalAlignment="Stretch" Height="287" Margin="0,0,0,206" VerticalAlignment="Bottom">
                             <Grid.RowDefinitions>
                                 <!-- Pkg -->
                                 <RowDefinition Height="20"/>
@@ -864,7 +872,7 @@
                                 <!-- NewFilename -->
                                 <RowDefinition Height="20"/>
                                 <RowDefinition Height="20"/>
-                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="25"/>
                                 <RowDefinition Height="2"/>
                             </Grid.RowDefinitions>
                             <TextBlock x:Name="XmlUnpackPkgLabel" Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Package location" VerticalAlignment="Bottom" ToolTip="'pkg' parameter of XmlUnpack xml"/>
@@ -878,10 +886,15 @@
                             <TextBlock x:Name="XmlUnpackNewFilenameLabel" Grid.Row="8" HorizontalAlignment="Left" TextWrapping="Wrap" Text="New Filename" VerticalAlignment="Bottom" ToolTip="'NewFilename' parameter of XmlUnpack xml"/>
                             <TextBox x:Name="XmlUnpackNewFilenameTextbox" Grid.Row="9" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'NewFilename' parameter of XmlUnpack xml" AcceptsReturn="True"/>
                             <Rectangle x:Name="XmlUnpackShortcutDivider" Grid.Row="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Black"/>
+                            
+                            <Button x:Name="MoveUpXmlUnpackButton" Grid.Row="10" Content="Move Up" HorizontalAlignment="Right" Margin="0,0,309,1" VerticalAlignment="Bottom" Width="60" Click="MoveUpXmlUnpackButton_Click"/>
+                            <Button x:Name="MoveDownXmlUnpackButton" Grid.Row="10" Content="Move Down" HorizontalAlignment="Right" Margin="0,0,228,1" VerticalAlignment="Bottom" Width="76" Click="MoveDownXmlUnpackButton_Click"/>
+                            <Button x:Name="RemoveXmlUnpackButton" Content="Remove" HorizontalAlignment="Right" Margin="0,0,165,1" VerticalAlignment="Bottom" Width="58" Click="RemoveXmlUnpackButton_Click" Grid.Row="10"/>
+                            <Button x:Name="AddNewXmlUnpackButton" Content="Add new" HorizontalAlignment="Right" Margin="0,0,102,1" VerticalAlignment="Bottom" Width="58" Click="AddNewXmlUnpackButton_Click" Grid.Row="10"/>
+                            <Button Tag="ApplyXmlUnpackChangesButton" x:Name="ApplyXmlUnpackChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" Margin="0,0,0,1" Grid.Row="10" Click="ApplyXmlUnpackChangesButton_Click"/>
                         </Grid>
-                        <Button Tag="ApplyXmlUnpackChangesButton" x:Name="ApplyXmlUnpackChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" />
-                        <ListBox x:Name="PackageShortcutDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top" Margin="0,334,0,0"/>
-                        <Grid HorizontalAlignment="Stretch" Height="134" Margin="0,0,0,25" VerticalAlignment="Bottom">
+                        <ListBox x:Name="PackageShortcutDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top" Margin="0,360,0,0" SelectionChanged="PackageShortcutDisplay_SelectionChanged"/>
+                        <Grid HorizontalAlignment="Stretch" Height="133" VerticalAlignment="Bottom">
                             <Grid.RowDefinitions>
                                 <!-- Path -->
                                 <RowDefinition Height="20"/>
@@ -895,9 +908,14 @@
                             </Grid.RowDefinitions>
                             <TextBlock x:Name="ShortcutPathLabel" Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Path" VerticalAlignment="Bottom" ToolTip="'Path' parameter of shortcut xml, the target of the shortcut"/>
                             <TextBox x:Name="ShortcutPathTextbox" Grid.Row="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'Path' parameter of shortcut xml, the target of the shortcut"/>
-                            <TextBlock x:Name="ShortcutDirectoryInArchiveLabel" Grid.Row="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Directory In Archive" VerticalAlignment="Bottom" ToolTip="'Name' parameter of shortcut xml, the name of the shortcut"/>
-                            <TextBox x:Name="ShortcutDirectoryInArchiveTextbox" Grid.Row="3" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'Name' parameter of shortcut xml, the name of the shortcut"/>
+                            <TextBlock x:Name="ShortcutNameLabel" Grid.Row="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Shortcut name" VerticalAlignment="Bottom" ToolTip="'Name' parameter of shortcut xml, the name of the shortcut"/>
+                            <TextBox x:Name="ShortcutNameTextbox" Grid.Row="3" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'Name' parameter of shortcut xml, the name of the shortcut"/>
                             <CheckBox x:Name="ShortcutEnabledCheckbox" Grid.Row="4" HorizontalAlignment="Left" Content="Enabled" VerticalAlignment="Bottom" ToolTip="'Enabled' parameter of shortcut xml"/>
+                            <Button x:Name="MoveUpShortcutButton" Grid.Row="4" Content="Move Up" HorizontalAlignment="Right" Margin="0,1,309,0" VerticalAlignment="Bottom" Width="60" Click="MoveUpShortcutButton_Click"/>
+                            <Button x:Name="MoveDownShortcutButton" Grid.Row="4" Content="Move Down" HorizontalAlignment="Right" Margin="0,1,228,0" VerticalAlignment="Bottom" Width="76" Click="MoveDownShortcutButton_Click"/>
+                            <Button x:Name="RemoveShortcutButton" Grid.Row="4" Content="Remove" HorizontalAlignment="Right" Margin="0,1,165,0" VerticalAlignment="Bottom" Width="58" Click="RemoveShortcutButton_Click"/>
+                            <Button x:Name="AddNewShortcutButton" Grid.Row="4" Content="Add new" HorizontalAlignment="Right" Margin="0,1,102,0" VerticalAlignment="Bottom" Width="58" Click="AddNewShortcutButton_Click"/>
+                            <Button x:Name="ApplyShortcutButton" Grid.Row="4" Content="Apply Changes" HorizontalAlignment="Right" Margin="0,1,0,0" VerticalAlignment="Bottom" Width="97" Click="ApplyShortcutButton_Click"/>
                         </Grid>
                     </Grid>
                 </TabItem>
