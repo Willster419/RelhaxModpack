@@ -113,86 +113,95 @@
             </TabItem>
             <TabItem x:Name="StatisticsToolsTab" Header="Other DB Tools">
                 <Grid Background="#FFE5E5E5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="8*"/>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="10*"/>
-                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Border BorderThickness="1" BorderBrush="Black" Margin="1">
-                        <StackPanel Orientation="Vertical">
-                            <Button x:Name="DatabaseStatsSave" Click="DatabaseStatsSave_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,2,2,0">
-                                <TextBlock Text="Save live stats to FTP folder with new name" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="DatabaseStatsUpdateCurrent" Click="DatabaseStatsUpdateCurrent_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,2,2,0">
-                                <TextBlock Text="Update live stats with new packageNames" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="DatabaseStatsMakeNew" Click="DatabaseStatsMakeNew_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,2,2,0">
-                                <TextBlock Text="Create new stats with new packageNames (overwrite live)" TextWrapping="Wrap"/>
-                            </Button>
-                        </StackPanel>
-                    </Border>
-                    <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1">
-                        <StackPanel Orientation="Vertical">
-                            <Button x:Name="AnotherLoadDatabaseButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Grid.Column="1" Click="AnotherLoadDatabaseButton_Click">
-                                <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="DatabaseDuplicatePNsCheck" Grid.Column="1" Margin="0,2,2,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="DatabaseDuplicatePNsCheck_Click">
-                                <TextBlock Text="Check for duplicate PackageNames" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="DatabaseDuplicateUIDsCheck" Grid.Column="1" Margin="0,2,2,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="DatabaseDuplicateUIDsCheck_Click">
-                                <TextBlock Text="Check for duplicate UIDs" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="AddMissingUIDs" Grid.Column="1" Margin="0,2,2,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="AddMissingUIDs_Click">
-                                <TextBlock Text="Check for missing and assign new UIDs" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="SaveDatabaseDuplicateCheckButton" Grid.Column="1" Margin="0,2,2,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="SaveDatabaseDuplicateCheckButton_Click">
-                                <TextBlock Text="Save Database (V2)" TextWrapping="Wrap"/>
-                            </Button>
-                        </StackPanel>
-                    </Border>
-                    <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
-                        <StackPanel Orientation="Vertical">
-                            <Button x:Name="LoadDatabaseUpdateSupportedClientsButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseUpdateSupportedClientsButton_Click">
-                                <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="LoadSupportedClientsDocumentButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadSupportedClientsDocumentButton_Click">
-                                <TextBlock Text="Load Supported Clients xml" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="CheckClientsToRemoveFromDocumentButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="CheckClientsToRemoveFromDocumentButton_Click">
-                                <TextBlock Text="Remove clients from xml and server" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="CheckClientsToAddToDocumentButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="CheckClientsToAddToDocumentButton_Click">
-                                <TextBlock Text="Add clients to and upload supported_clients.xml" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="RunScriptCreateModInfo" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="RunPhpScriptCreateModInfo">
-                                <TextBlock Text="Run script CreateManagerInfo.php"/>
-                            </Button>
-                            <Button x:Name="RunScriptCreateManagerInfo" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="RunPhpScriptCreateManagerInfo">
-                                <TextBlock Text="Run script CreateModInfo.php"/>
-                            </Button>
-                        </StackPanel>
-                    </Border>
-                    <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1" Grid.Row="1">
-                        <StackPanel Orientation="Vertical">
-                            <Button x:Name="WriteTranslationsToCsvButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="WriteTranslationsToCsvButton_Click">
-                                <TextBlock Text="Create CSV of Translations"/>
-                            </Button>
-                        </StackPanel>
-                    </Border>
-                    <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1" Grid.Row="2">
-                        <StackPanel Orientation="Vertical">
-                            <Button x:Name="LoadDatabaseOutputRootAutomationText" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseOutputRootAutomationText_Click">
-                                <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
-                            </Button>
-                            <Button x:Name="OutputRootAutomationEntriesButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="OutputRootAutomationEntriesButton_Click">
-                                <TextBlock Text="Create XML automation root entries for packages" TextWrapping="Wrap"/>
-                            </Button>
-                        </StackPanel>
-                    </Border>
+                    <StackPanel Orientation="Vertical" Grid.Column="0">
+                        <Border BorderThickness="1" BorderBrush="Black" Margin="1">
+                            <StackPanel Orientation="Vertical">
+                                <Button x:Name="DatabaseStatsSave" Click="DatabaseStatsSave_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,2,2,0">
+                                    <TextBlock Text="Save live stats to FTP folder with new name" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="DatabaseStatsUpdateCurrent" Click="DatabaseStatsUpdateCurrent_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,2,2,0">
+                                    <TextBlock Text="Update live stats with new packageNames" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="DatabaseStatsMakeNew" Click="DatabaseStatsMakeNew_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,2,2,0">
+                                    <TextBlock Text="Create new stats with new packageNames (overwrite live)" TextWrapping="Wrap"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                        <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
+                            <StackPanel Orientation="Vertical">
+                                <Button x:Name="LoadDatabaseUpdateSupportedClientsButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseUpdateSupportedClientsButton_Click">
+                                    <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="LoadSupportedClientsDocumentButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadSupportedClientsDocumentButton_Click">
+                                    <TextBlock Text="Load Supported Clients xml" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="CheckClientsToRemoveFromDocumentButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="CheckClientsToRemoveFromDocumentButton_Click">
+                                    <TextBlock Text="Remove clients from xml and server" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="CheckClientsToAddToDocumentButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="CheckClientsToAddToDocumentButton_Click">
+                                    <TextBlock Text="Add clients to and upload supported_clients.xml" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="RunScriptCreateModInfo" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="RunPhpScriptCreateModInfo">
+                                    <TextBlock Text="Run script CreateManagerInfo.php"/>
+                                </Button>
+                                <Button x:Name="RunScriptCreateManagerInfo" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="RunPhpScriptCreateManagerInfo">
+                                    <TextBlock Text="Run script CreateModInfo.php"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1">
+                            <StackPanel Orientation="Vertical">
+                                <Button x:Name="AnotherLoadDatabaseButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Grid.Column="1" Click="AnotherLoadDatabaseButton_Click">
+                                    <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="DatabaseDuplicatePNsCheck" Grid.Column="1" Margin="0,2,2,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="DatabaseDuplicatePNsCheck_Click">
+                                    <TextBlock Text="Check for duplicate PackageNames" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="DatabaseDuplicateUIDsCheck" Grid.Column="1" Margin="0,2,2,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="DatabaseDuplicateUIDsCheck_Click">
+                                    <TextBlock Text="Check for duplicate UIDs" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="AddMissingUIDs" Grid.Column="1" Margin="0,2,2,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="AddMissingUIDs_Click">
+                                    <TextBlock Text="Check for missing and assign new UIDs" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="SaveDatabaseDuplicateCheckButton" Grid.Column="1" Margin="0,2,2,0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="SaveDatabaseDuplicateCheckButton_Click">
+                                    <TextBlock Text="Save Database (V2)" TextWrapping="Wrap"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                        <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1" Grid.Row="1">
+                            <StackPanel Orientation="Vertical">
+                                <Button x:Name="WriteTranslationsToCsvButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="WriteTranslationsToCsvButton_Click">
+                                    <TextBlock Text="Create CSV of Translations"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                        <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1" Grid.Row="2">
+                            <StackPanel Orientation="Vertical">
+                                <Button x:Name="LoadDatabaseOutputRootAutomationText" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseOutputRootAutomationText_Click">
+                                    <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="OutputRootAutomationEntriesButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="OutputRootAutomationEntriesButton_Click">
+                                    <TextBlock Text="Create XML automation root entries for packages" TextWrapping="Wrap"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                        <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1" Grid.Row="2">
+                            <StackPanel Orientation="Vertical">
+                                <Button x:Name="LoadDatabaseConvertInstructionsToDbButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseConvertInstructionsToDbButton_Click">
+                                    <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
+                                </Button>
+                                <Button x:Name="ConvertInstructionsToDbButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="ConvertInstructionsToDbButton_Click">
+                                    <TextBlock Text="Convert zip package instructions to new db schema (1.0)" TextWrapping="Wrap"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -18,6 +18,12 @@ using RelhaxModpack.Database;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
+using Ionic.Zip;
+using System.Xml.Linq;
+using System.Xml.XPath;
+using RelhaxModpack.Patching;
+using RelhaxModpack.Atlases;
+using RelhaxModpack.Shortcuts;
 
 namespace RelhaxModpack.Windows
 {
@@ -46,6 +52,7 @@ namespace RelhaxModpack.Windows
         private const string InstallStatisticsXml = "install_statistics.xml";
         private const string TranslationsCsv = "translations.csv";
         private const string AutomationElementsTxt = "AutomationElements.txt";
+        private const string LastInstructionConvertedPackageTxt = "lastInstructionConvertedPackage.txt";
 
         private string DatabaseUpdatePath
         {
@@ -2239,6 +2246,222 @@ namespace RelhaxModpack.Windows
             File.WriteAllText(AutomationElementsTxt, textBuilder.ToString());
             ReportProgress("Automation elements saved to " + AutomationElementsTxt);
             ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+        #endregion
+
+        #region Convert Instruction entries in zip files into new db schema
+        private async void LoadDatabaseConvertInstructionsToDbButton_Click(object sender, RoutedEventArgs e)
+        {
+            //init UI
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            ReportProgress("Loading database");
+
+            OnLoadModInfo(null, null);
+
+            //list creation and parsing
+            databaseManagerDuplicateCheck = new DatabaseManager(ModpackSettings, CommandLineSettings);
+            await databaseManagerDuplicateCheck.LoadDatabaseTestAsync(SelectModInfo.FileName);
+
+            //link stuff in memory
+            DatabaseUtils.BuildDependencyPackageRefrences(databaseManagerDuplicateCheck.ParsedCategoryList, databaseManagerDuplicateCheck.Dependencies);
+
+            ReportProgress("Database loaded");
+            ToggleUI((TabController.SelectedItem as TabItem), true);
+        }
+
+        private async void ConvertInstructionsToDbButton_Click(object sender, RoutedEventArgs e)
+        {
+            string[] rootFoldersToReplace = new string[]
+            {
+                ApplicationConstants.PatchFolderName,
+                ApplicationConstants.ShortcutFolderName,
+                ApplicationConstants.XmlUnpackFolderName,
+                ApplicationConstants.AtlasCreationFoldername
+            };
+
+            string[] xpathToTestFor = new string[]
+            {
+                Patch.PatchXmlSearchPath,
+                Atlas.AtlasXmlSearchPath,
+                XmlUnpack.XmlUnpackXmlSearchPath,
+                Shortcut.ShortcutXmlSearchPath
+            };
+
+            ToggleUI((TabController.SelectedItem as TabItem), false);
+            string lastConvertedPackageUID = string.Empty;
+            if (File.Exists(LastInstructionConvertedPackageTxt))
+            {
+                lastConvertedPackageUID = File.ReadAllText(LastInstructionConvertedPackageTxt).Trim();
+                ReportProgress(string.Format("Last instruction converted: {0}", lastConvertedPackageUID));
+            }
+            else
+            {
+                ReportProgress("Last instruction converted text files does not exist, assuming starting from beginning");
+            }
+
+            ReportProgress("Getting list of packages with zip files");
+            List<DatabasePackage> packagesWithZipfiles = databaseManagerDuplicateCheck.AllPackages().FindAll(package => !string.IsNullOrEmpty(package.ZipFile));
+
+            DatabasePackage packageLastConverted = string.IsNullOrEmpty(lastConvertedPackageUID) ? packagesWithZipfiles[0] : packagesWithZipfiles.Find(package => package.UID.Equals(lastConvertedPackageUID));
+            if (packageLastConverted == null)
+            {
+                ReportProgress(string.Format("Unable to find package with UID {0}", lastConvertedPackageUID));
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
+            for (int i = packagesWithZipfiles.IndexOf(packageLastConverted); i < packagesWithZipfiles.Count; i++)
+            {
+                DatabasePackage packageToConvert = packagesWithZipfiles[i];
+                ReportProgress(string.Format("Converting package {0}, UID {1}", packageToConvert.PackageName, packageToConvert.UID));
+
+                ReportProgress("Downloading package zipfile");
+                if (File.Exists(packageToConvert.ZipFile))
+                    File.Delete(packageToConvert.ZipFile);
+
+                using (WebClient client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential})
+                {
+                    string downloadUrlString = string.Format("{0}{1}/{2}", PrivateStuff.BigmodsFTPRootWoT, databaseManagerDuplicateCheck.WoTOnlineFolderVersion, packageToConvert.ZipFile);
+                    JobProgressBar.Maximum = await FtpUtils.FtpGetFilesizeAsync(downloadUrlString, PrivateStuff.BigmodsNetworkCredential);
+                    JobProgressBar.Minimum = 0;
+                    client.DownloadProgressChanged += (_sender, args) =>
+                    {
+                        JobProgressBar.Value = args.BytesReceived;
+                    };
+                    await client.DownloadFileTaskAsync(downloadUrlString, packageToConvert.ZipFile);
+
+                    ReportProgress("Reading zip file for instructions");
+                    bool zipfileModified = false;
+                    using (ZipFile zip = new ZipFile(packageToConvert.ZipFile))
+                    {
+                        for (int j = 0; j < zip.Entries.Count; j++)
+                        {
+                            ZipEntry zipEntry = zip[j];
+                            string[] splitEntryName = zipEntry.FileName.Split('/');
+                            string rootFolder = splitEntryName[0];
+                            if (rootFoldersToReplace.Contains(rootFolder) && !zipEntry.IsDirectory)
+                            {
+                                zipfileModified = true;
+                                string potentialFile = splitEntryName[1];
+                                string xmlString;
+                                ReportProgress(string.Format("Processing Entry {0}", potentialFile));
+                                UiUtils.AllowUIToUpdate();
+                                using (MemoryStream ms = new MemoryStream() { Position = 0 })
+                                using (StreamReader sr = new StreamReader(ms))
+                                {
+                                    zipEntry.Extract(ms);
+
+                                    //read stream
+                                    ms.Position = 0;
+                                    xmlString = sr.ReadToEnd();
+                                }
+
+                                if (string.IsNullOrEmpty(xmlString))
+                                {
+                                    ReportProgress("ERROR: string is empty after extraction");
+                                    continue;
+                                }
+
+                                XDocument doc = XmlUtils.LoadXDocument(xmlString, XmlLoadType.FromString);
+
+                                List<XElement> results = null;
+                                XmlDatabaseComponent component = null;
+                                string usedXpath = null;
+                                foreach (string xpath in xpathToTestFor)
+                                {
+                                    List<XElement> results_ = doc.XPathSelectElements(xpath).ToList();
+                                    if (results_ != null && results_.Count > 0)
+                                    {
+                                        results = results_;
+                                        usedXpath = xpath;
+                                        break;
+                                    }
+                                }
+
+                                if (results == null)
+                                {
+                                    ReportProgress("ERROR: unable to detect instruction type");
+                                    continue;
+                                }
+
+                                foreach (XElement element in results)
+                                {
+                                    //create correct object
+                                    switch (usedXpath)
+                                    {
+                                        case Patch.PatchXmlSearchPath:
+                                            component = new Patch();
+                                            break;
+                                        case Atlas.AtlasXmlSearchPath:
+                                            component = new Atlas();
+                                            break;
+                                        case XmlUnpack.XmlUnpackXmlSearchPath:
+                                            component = new XmlUnpack();
+                                            break;
+                                        case Shortcut.ShortcutXmlSearchPath:
+                                            component = new Shortcut();
+                                            break;
+                                    }
+
+                                    //parse from xml
+                                    component.FromXml(element, XmlDatabaseComponent.SchemaV1Dot0);
+
+                                    //add to correct list
+                                    switch (usedXpath)
+                                    {
+                                        case Patch.PatchXmlSearchPath:
+                                            packageToConvert.Patches.Add(component as Patch);
+                                            break;
+                                        case Atlas.AtlasXmlSearchPath:
+                                            packageToConvert.Atlases.Add(component as Atlas);
+                                            break;
+                                        case XmlUnpack.XmlUnpackXmlSearchPath:
+                                            packageToConvert.XmlUnpacks.Add(component as XmlUnpack);
+                                            break;
+                                        case Shortcut.ShortcutXmlSearchPath:
+                                            packageToConvert.Shortcuts.Add(component as Shortcut);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (zipfileModified)
+                        {
+                            foreach (string s in rootFoldersToReplace)
+                            {
+                                if (zip.ContainsEntry(s))
+                                {
+                                    ZipEntry entry = zip[s];
+                                    zip.RemoveEntry(entry);
+                                }
+                            }
+                        }
+                    }
+
+                    if (zipfileModified)
+                    {
+                        ReportProgress("Zip file was modified, upload new one");
+                        string newZipfileName = packageToConvert.ZipFile.Replace(".zip", "_converted.zip");
+                        string uploadUrlString = string.Format("{0}{1}/{2}", PrivateStuff.BigmodsFTPRootWoT, databaseManagerDuplicateCheck.WoTOnlineFolderVersion, newZipfileName);
+                        JobProgressBar.Maximum = FileUtils.GetFilesize(packageToConvert.ZipFile);
+                        client.UploadProgressChanged += (__sender, args) =>
+                        {
+                            JobProgressBar.Value = args.BytesSent;
+                        };
+                        await client.UploadFileTaskAsync(uploadUrlString, packageToConvert.ZipFile);
+                        File.Delete(packageToConvert.ZipFile);
+                        databaseManagerDuplicateCheck.SaveDatabase(SelectModInfo.FileName);
+                    }
+                    else
+                        ReportProgress("Zip file was not modified");
+                }
+
+                File.Delete(LastInstructionConvertedPackageTxt);
+                lastConvertedPackageUID = packageToConvert.UID;
+                File.WriteAllText(LastInstructionConvertedPackageTxt, lastConvertedPackageUID);
+                await FtpUtils.TriggerMirrorSyncAsync();
+            }
         }
         #endregion
     }
