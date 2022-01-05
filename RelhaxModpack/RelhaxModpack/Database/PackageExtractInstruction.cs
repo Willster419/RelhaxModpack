@@ -26,6 +26,17 @@ namespace RelhaxModpack.Database
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
             {
                 //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(Pkg), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Pkg) },
+                new XmlDatabaseProperty() { XmlName = nameof(DirectoryInArchive), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(DirectoryInArchive) }
+            };
+            return xmlDatabaseProperties;
+        }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
                 new XmlDatabaseProperty() { XmlName = nameof(Pkg), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Pkg) },
                 new XmlDatabaseProperty() { XmlName = nameof(DirectoryInArchive), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(DirectoryInArchive) }
             };

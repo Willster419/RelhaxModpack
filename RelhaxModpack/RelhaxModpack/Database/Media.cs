@@ -53,6 +53,17 @@ namespace RelhaxModpack.Database
             };
             return xmlDatabaseProperties;
         }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(MediaType), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(MediaType) },
+                new XmlDatabaseProperty() { XmlName = nameof(URL), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(URL) }
+            };
+            return xmlDatabaseProperties;
+        }
         #endregion
 
         /// <summary>

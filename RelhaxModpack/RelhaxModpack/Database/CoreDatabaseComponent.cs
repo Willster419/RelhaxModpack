@@ -50,5 +50,10 @@ namespace RelhaxModpack.Database
                 new XmlDatabaseProperty() { XmlName = nameof(Maintainers), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Maintainers)}
             };
         }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
+        {
+            return this.GetXmlDatabasePropertiesV1Dot0();
+        }
     }
 }

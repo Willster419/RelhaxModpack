@@ -69,7 +69,24 @@ namespace RelhaxModpack.Atlases
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
             {
-                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(AtlasFile), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(AtlasFile) },
+                new XmlDatabaseProperty() { XmlName = nameof(MapFile), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(MapFile) },
+                new XmlDatabaseProperty() { XmlName = nameof(PowOf2), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(PowOf2) },
+                new XmlDatabaseProperty() { XmlName = nameof(Square), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Square) },
+                new XmlDatabaseProperty() { XmlName = nameof(AtlasWidth), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(AtlasWidth) },
+                new XmlDatabaseProperty() { XmlName = nameof(AtlasHeight), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(AtlasHeight) },
+                new XmlDatabaseProperty() { XmlName = nameof(FastImagePacker), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(FastImagePacker) },
+                new XmlDatabaseProperty() { XmlName = nameof(Padding), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Padding) },
+                new XmlDatabaseProperty() { XmlName = nameof(AtlasSaveDirectory), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(AtlasSaveDirectory) },
+                new XmlDatabaseProperty() { XmlName = nameof(ImageFolders), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ImageFolders) }
+            };
+            return base.GetXmlDatabasePropertiesV1Dot0().Concat(xmlDatabaseProperties).ToList();
+        }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
                 new XmlDatabaseProperty() { XmlName = nameof(AtlasFile), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(AtlasFile) },
                 new XmlDatabaseProperty() { XmlName = nameof(MapFile), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(MapFile) },
                 new XmlDatabaseProperty() { XmlName = nameof(PowOf2), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PowOf2) },
@@ -81,7 +98,7 @@ namespace RelhaxModpack.Atlases
                 new XmlDatabaseProperty() { XmlName = nameof(AtlasSaveDirectory), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(AtlasSaveDirectory) },
                 new XmlDatabaseProperty() { XmlName = nameof(ImageFolders), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ImageFolders) }
             };
-            return base.GetXmlDatabasePropertiesV1Dot0().Concat(xmlDatabaseProperties).ToList();
+            return base.GetXmlDatabasePropertiesV1Dot1().Concat(xmlDatabaseProperties).ToList();
         }
         #endregion
 

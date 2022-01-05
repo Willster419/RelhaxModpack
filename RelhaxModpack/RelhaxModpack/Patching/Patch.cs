@@ -109,7 +109,24 @@ namespace RelhaxModpack.Patching
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
             {
-                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(Type), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Type) },
+                new XmlDatabaseProperty() { XmlName = nameof(Mode), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Mode) },
+                new XmlDatabaseProperty() { XmlName = nameof(PatchPath), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(PatchPath) },
+                new XmlDatabaseProperty() { XmlName = nameof(File), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(File) },
+                new XmlDatabaseProperty() { XmlName = nameof(Version), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Version) },
+                new XmlDatabaseProperty() { XmlName = nameof(Search), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Search) },
+                new XmlDatabaseProperty() { XmlName = nameof(Replace), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Replace) },
+                new XmlDatabaseProperty() { XmlName = nameof(FollowPath), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(FollowPath) },
+                new XmlDatabaseProperty() { XmlName = nameof(Path), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Path) },
+                new XmlDatabaseProperty() { XmlName = nameof(Line), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Line) }
+            };
+            return xmlDatabaseProperties;
+        }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
                 new XmlDatabaseProperty() { XmlName = nameof(Type), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Type) },
                 new XmlDatabaseProperty() { XmlName = nameof(Mode), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Mode) },
                 new XmlDatabaseProperty() { XmlName = nameof(PatchPath), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PatchPath) },

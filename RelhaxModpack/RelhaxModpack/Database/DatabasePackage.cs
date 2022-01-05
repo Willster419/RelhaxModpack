@@ -143,6 +143,11 @@ namespace RelhaxModpack.Database
             return xmlDatabaseProperties;
         }
 
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
+        {
+            return this.GetXmlDatabasePropertiesV1Dot0();
+        }
+
         public override string GetXmlElementName(string schemaVersion)
         {
             switch (schemaVersion)

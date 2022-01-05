@@ -51,6 +51,18 @@ namespace RelhaxModpack.Xml
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
             {
                 //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(FileName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(FileName) },
+                new XmlDatabaseProperty() { XmlName = nameof(ExtractDirectory), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ExtractDirectory) },
+                new XmlDatabaseProperty() { XmlName = nameof(NewFileName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(NewFileName) }
+            };
+            return base.GetXmlDatabasePropertiesV1Dot0().Concat(xmlDatabaseProperties).ToList();
+        }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
                 new XmlDatabaseProperty() { XmlName = nameof(FileName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(FileName) },
                 new XmlDatabaseProperty() { XmlName = nameof(ExtractDirectory), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(ExtractDirectory) },
                 new XmlDatabaseProperty() { XmlName = nameof(NewFileName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(NewFileName) }

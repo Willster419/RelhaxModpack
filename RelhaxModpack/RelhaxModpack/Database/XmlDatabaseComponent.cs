@@ -18,6 +18,8 @@ namespace RelhaxModpack.Database
     {
         public const string SchemaV1Dot0 = "1.0";
 
+        public const string SchemaV1Dot1 = "1.1";
+
         public XmlDatabaseComponent()
         {
 
@@ -35,6 +37,9 @@ namespace RelhaxModpack.Database
                 case SchemaV1Dot0:
                     return GetXmlDatabasePropertiesV1Dot0();
 
+                case SchemaV1Dot1:
+                    return GetXmlDatabasePropertiesV1Dot1();
+
                 default:
                     Logging.Error("Unknown schema type: {0}", string.IsNullOrEmpty(schemaVersion) ? "(null)" : schemaVersion);
                     return null;
@@ -42,6 +47,8 @@ namespace RelhaxModpack.Database
         }
 
         protected abstract List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0();
+
+        protected abstract List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1();
 
         public virtual string GetXmlElementName(string schemaVersion)
         {

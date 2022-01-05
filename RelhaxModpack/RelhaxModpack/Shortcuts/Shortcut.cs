@@ -50,6 +50,18 @@ namespace RelhaxModpack.Shortcuts
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
             {
                 //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(Path), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Path) },
+                new XmlDatabaseProperty() { XmlName = nameof(Name), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Name) },
+                new XmlDatabaseProperty() { XmlName = nameof(Enabled), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Enabled) }
+            };
+            return xmlDatabaseProperties;
+        }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
                 new XmlDatabaseProperty() { XmlName = nameof(Path), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Path) },
                 new XmlDatabaseProperty() { XmlName = nameof(Name), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Name) },
                 new XmlDatabaseProperty() { XmlName = nameof(Enabled), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Enabled) }

@@ -138,7 +138,7 @@ namespace RelhaxModpack.Patching
         private PatchExitCode RunPatch(Patch p)
         {
             //dump info for logging
-            Logging.Debug(p.DumpPatchInfoForLog);
+            Logging.Debug(p.DumpInfoToLog);
 
             //check if file exists
             if (!File.Exists(p.CompletePath))

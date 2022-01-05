@@ -734,7 +734,7 @@ namespace RelhaxModpack.Windows
             foreach (Patch patch in PatchesList)
             {
                 Logging.Patcher("[SavePatchToXmlDocument]: Saving patch {0} of {1}: {2}", LogLevel.Info, ++counter, PatchesList.Count, patch.ToString());
-                Logging.Patcher("{0}", LogLevel.Info, patch.DumpPatchInfoForLog);
+                Logging.Patcher("{0}", LogLevel.Info, patch.DumpInfoToLog);
                 XmlElement xmlPatch = doc.CreateElement("patch");
                 patchHolder.AppendChild(xmlPatch);
 

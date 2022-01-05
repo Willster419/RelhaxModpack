@@ -139,6 +139,11 @@ namespace RelhaxModpack.Database
             xmlDatabaseProperties.AddRange(xmlDatabasePropertiesAddAfter);
             return xmlDatabaseProperties;
         }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
+        {
+            return this.GetXmlDatabasePropertiesV1Dot0();
+        }
         #endregion
 
         #region Selection file processing

@@ -61,6 +61,11 @@ namespace RelhaxModpack.Database
             return xmlDatabaseProperties;
         }
 
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
+        {
+            return this.GetXmlDatabasePropertiesV1Dot0();
+        }
+
         protected override void OnParsingPropertyToXmlElement(XmlDatabaseProperty thisPropertyXml, XElement propertyXmlElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
         {
             continueProcessingProperty = true;

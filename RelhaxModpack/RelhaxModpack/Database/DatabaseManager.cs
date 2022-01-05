@@ -800,7 +800,7 @@ namespace RelhaxModpack.Database
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
 
-            return component.FromXml(xmlPackageNode, XmlDatabaseComponent.SchemaV1Dot0);
+            return component.FromXml(xmlPackageNode, string.IsNullOrEmpty(SchemaVersion)? XmlDatabaseComponent.SchemaV1Dot0 : SchemaVersion);
         }
 
         /// <summary>
