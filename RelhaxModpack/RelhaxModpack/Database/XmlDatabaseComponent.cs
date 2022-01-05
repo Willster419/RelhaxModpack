@@ -339,8 +339,13 @@ namespace RelhaxModpack.Database
                     int index = 0;
                     foreach (XElement listElement in element.Elements())
                     {
-                        object listEntryObject = Activator.CreateInstance(listObjectType);
-                        if (listEntryObject is XmlDatabaseComponent xmlDatabaseComponent)
+                        object listEntryObject = null;
+
+                        //don't construct an object if it's not a class/struct
+                        if (!listObjectType.IsValueType)
+                            listEntryObject = Activator.CreateInstance(listObjectType);
+
+                        if (!listObjectType.IsValueType && listEntryObject is XmlDatabaseComponent xmlDatabaseComponent)
                         {
                             //load this object from xml
                             xmlDatabaseComponent.FromXml(listElement, schemaVersion);
@@ -348,7 +353,9 @@ namespace RelhaxModpack.Database
                         else if (listEntryObject.GetType().IsValueType)
                         {
                             //get the element in the list here
-                            object entryInList = list[index];
+                            object entryInList = null;
+                            if (index < list.Count)
+                                entryInList = list[index];
                             
                             //if they are not equal, then update the property
                             if (entryInList == null || !entryInList.ToString().Equals(listElement.Value))
