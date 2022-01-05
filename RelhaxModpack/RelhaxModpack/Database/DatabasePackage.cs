@@ -134,7 +134,11 @@ namespace RelhaxModpack.Database
             {
                 new XmlDatabaseProperty() { XmlName = nameof(Deprecated), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Deprecated) },
                 new XmlDatabaseProperty() { XmlName = nameof(MinimalistModeExclude), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(MinimalistModeExclude) },
-                new XmlDatabaseProperty() { XmlName = nameof(LastUpdateCheck), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(LastUpdateCheck) }
+                new XmlDatabaseProperty() { XmlName = nameof(LastUpdateCheck), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(LastUpdateCheck) },
+                new XmlDatabaseProperty() { XmlName = nameof(Patches), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Patches) },
+                new XmlDatabaseProperty() { XmlName = nameof(XmlUnpacks), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(XmlUnpacks) },
+                new XmlDatabaseProperty() { XmlName = nameof(Atlases), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Atlases) },
+                new XmlDatabaseProperty() { XmlName = nameof(Shortcuts), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Shortcuts) }
             };
             //add stuff before base
             xmlDatabaseProperties.InsertRange(0, xmlDatabasePropertiesAddBefore);

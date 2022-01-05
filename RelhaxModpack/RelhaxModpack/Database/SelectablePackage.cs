@@ -135,8 +135,10 @@ namespace RelhaxModpack.Database
                 new XmlDatabaseProperty() { XmlName = nameof(Dependencies), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Dependencies) },
                 new XmlDatabaseProperty() { XmlName = nameof(Packages), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Packages) },
             };
-            //add stuff after base
-            xmlDatabaseProperties.AddRange(xmlDatabasePropertiesAddAfter);
+            //add stuff before a property
+            XmlDatabaseProperty propToInsertBelow = xmlDatabaseProperties.Find(property => property.PropertyName.Equals(nameof(Patches)));
+            int indexToInsertBelow = xmlDatabaseProperties.IndexOf(propToInsertBelow);
+            xmlDatabaseProperties.InsertRange(indexToInsertBelow, xmlDatabasePropertiesAddAfter);
             return xmlDatabaseProperties;
         }
 
