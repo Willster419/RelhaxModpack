@@ -341,16 +341,18 @@ namespace RelhaxModpack.Database
                     {
                         object listEntryObject = null;
 
+                        bool isvalueOrString = listObjectType.IsValueType || listObjectType.Equals(typeof(string));
+
                         //don't construct an object if it's not a class/struct
-                        if (!listObjectType.IsValueType)
+                        if (!isvalueOrString)
                             listEntryObject = Activator.CreateInstance(listObjectType);
 
-                        if (!listObjectType.IsValueType && listEntryObject is XmlDatabaseComponent xmlDatabaseComponent)
+                        if (!isvalueOrString && listEntryObject is XmlDatabaseComponent xmlDatabaseComponent)
                         {
                             //load this object from xml
                             xmlDatabaseComponent.FromXml(listElement, schemaVersion);
                         }
-                        else if (listEntryObject.GetType().IsValueType)
+                        else if (isvalueOrString)
                         {
                             //get the element in the list here
                             object entryInList = null;
