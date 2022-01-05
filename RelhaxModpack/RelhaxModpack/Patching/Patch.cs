@@ -194,7 +194,7 @@ namespace RelhaxModpack.Patching
         /// <summary>
         /// Collects all patch information for logging
         /// </summary>
-        public string DumpPatchInfoForLog
+        public override string DumpInfoToLog
         {
             get
             {
