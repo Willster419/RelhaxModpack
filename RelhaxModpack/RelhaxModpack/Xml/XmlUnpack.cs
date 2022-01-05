@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Database;
+﻿using RelhaxModpack.Common;
+using RelhaxModpack.Database;
 using RelhaxModpack.Installer;
 using System;
 using System.Collections.Generic;
@@ -76,18 +77,11 @@ namespace RelhaxModpack.Xml
         /// <summary>
         /// Collect all properties of the extraction instructions to dump into the log file
         /// </summary>
-        public string DumpInfoToLog
+        public override string DumpInfoToLog
         {
             get
             {
-                return string.Format("NativeProcessingFile={0}, ActualPatchName={1}, Pkg={2}, DirectoryInArchive={3}, FileName={4}, ExtractDirectory={5}, NewFileName={6}",
-                NativeProcessingFile,
-                ActualPatchName,
-                Pkg,
-                DirectoryInArchive,
-                FileName,
-                ExtractDirectory,
-                NewFileName);
+                return $"{base.DumpInfoToLog}{Environment.NewLine}{ApplicationConstants.LogSpacingLineup}{nameof(FileName)}={FileName}, {nameof(ExtractDirectory)}={ExtractDirectory} {nameof(NewFileName)}={NewFileName}";
             }
         }
 

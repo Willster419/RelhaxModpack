@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Database;
+﻿using RelhaxModpack.Common;
+using RelhaxModpack.Database;
 using RelhaxModpack.Installer;
 using System;
 using System.Collections.Generic;
@@ -79,6 +80,14 @@ namespace RelhaxModpack.Shortcuts
         public override string ToString()
         {
             return string.Format("Name={0}", Name);
+        }
+
+        public override string DumpInfoToLog
+        {
+            get
+            {
+                return string.Format( "{0}{1}{2}, {3}={4}, {5}={6}, {7}={8}", base.DumpInfoToLog, Environment.NewLine, ApplicationConstants.LogSpacingLineup, nameof(Path), Path, nameof(Name), Name, nameof(Enabled), Enabled);
+            }
         }
 
         public override bool InstructionsEqual(Instruction instructionToCompare)

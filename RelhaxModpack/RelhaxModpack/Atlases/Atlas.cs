@@ -1,4 +1,5 @@
-﻿using RelhaxModpack.Database;
+﻿using RelhaxModpack.Common;
+using RelhaxModpack.Database;
 using RelhaxModpack.Installer;
 using System;
 using System.Collections.Generic;
@@ -180,7 +181,18 @@ namespace RelhaxModpack.Atlases
         /// <returns>The atlas file name</returns>
         public override string ToString()
         {
-            return string.Format("AtlasFile: {0}", string.IsNullOrEmpty(AtlasFile) ? "(empty)" : AtlasFile);
+            return string.Format("{0}: {1}", nameof(AtlasFile), string.IsNullOrEmpty(AtlasFile) ? "(empty)" : AtlasFile);
+        }
+
+        public override string DumpInfoToLog
+        {
+            get
+            {
+                return $"{base.DumpInfoToLog}{Environment.NewLine}{ApplicationConstants.LogSpacingLineup}{nameof(AtlasFile)}={AtlasFile} {nameof(MapFile)}={MapFile}{Environment.NewLine}{ApplicationConstants.LogSpacingLineup}" +
+                    $"{nameof(PowOf2)}={PowOf2} {nameof(Square)}={Square} {nameof(AtlasWidth)}={AtlasWidth} {nameof(AtlasHeight)}={AtlasHeight} {nameof(FastImagePacker)}={FastImagePacker} {nameof(Padding)}={Padding}" +
+                    $"{Environment.NewLine}{ApplicationConstants.LogSpacingLineup}{nameof(AtlasSaveDirectory)}={AtlasSaveDirectory}{Environment.NewLine}{ApplicationConstants.LogSpacingLineup}" +
+                    $"{nameof(ImageFolders)}={string.Join(", ", ImageFolders)}";
+            }
         }
 
         public override bool InstructionsEqual(Instruction instructionToCompare)

@@ -198,23 +198,10 @@ namespace RelhaxModpack.Patching
         {
             get
             {
-                return string.Format("{0} patch, Version={1}, NativeProcessingFile={2}, ActualFile={3}," +
-                    "{4}{5}PatchPath={6}, FileToPatch={7}," +
-                    "{8}{9}Lines={10}, Path={11}, Search={12}, Replace={13}",
-                    Type.ToLower(),
-                    Version,
-                    NativeProcessingFile,
-                    ActualPatchName,
-                    Environment.NewLine,
-                    ApplicationConstants.LogSpacingLineup,
-                    PatchPath,
-                    File,
-                    Environment.NewLine,
-                    ApplicationConstants.LogSpacingLineup,
-                    Lines == null ? "null" : string.Join(",", Lines),
-                    string.IsNullOrEmpty(Path) ? "null" :Path,
-                    Search,
-                    Replace);
+                string linesString = Lines == null ? "null" : string.Join(",", Lines);
+                string pathString = string.IsNullOrEmpty(Path) ? "null" : Path;
+                return $"{base.DumpInfoToLog}{Environment.NewLine}{ApplicationConstants.LogSpacingLineup}{nameof(Type)}={Type} {nameof(Mode)}={Mode} {nameof(Version)}={Version}{nameof(PatchPath)}={PatchPath} {nameof(FollowPath)}={FollowPath}" +
+                    $"{Environment.NewLine}{ApplicationConstants.LogSpacingLineup}{nameof(File)}={File} {nameof(Lines)}={linesString} {nameof(Path)}={pathString} {nameof(Search)}={Search} {nameof(Replace)}={Replace}";
             }
         }
 

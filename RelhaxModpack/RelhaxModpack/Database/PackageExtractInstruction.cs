@@ -59,5 +59,13 @@ namespace RelhaxModpack.Database
 
             return true;
         }
+
+        public override string DumpInfoToLog
+        {
+            get
+            {
+                return string.Format("{0}, {1}={2}, {3}={4}", base.DumpInfoToLog, nameof(Pkg), Pkg, nameof(DirectoryInArchive), DirectoryInArchive);
+            }
+        }
     }
 }

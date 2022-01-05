@@ -35,6 +35,14 @@ namespace RelhaxModpack.Installer
         /// </summary>
         public string ActualPatchName { get; set; } = string.Empty;
 
+        public virtual string DumpInfoToLog
+        {
+            get
+            {
+                return string.Format("{0}={1}, {1}={2}", nameof(NativeProcessingFile), NativeProcessingFile, nameof(ActualPatchName), ActualPatchName);
+            }
+        }
+
         public abstract bool InstructionsEqual(Instruction instructionToCompare);
     }
 }
