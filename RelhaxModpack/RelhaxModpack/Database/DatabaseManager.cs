@@ -978,6 +978,21 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Database Saving
+        public void SaveDatabase(string saveLocation, string documentVersion, string schemaVersion = null)
+        {
+            if (string.IsNullOrEmpty(saveLocation))
+                throw new BadMemeException("saveLocation is null or empty");
+
+            if (string.IsNullOrEmpty(documentVersion))
+                throw new BadMemeException("documentVersion is null or empty");
+
+            DocumentVersion = documentVersion;
+            if (!string.IsNullOrEmpty(schemaVersion))
+                SchemaVersion = schemaVersion;
+
+            SaveDatabase(saveLocation, DocumentVersion);
+        }
+
         /// <summary>
         /// Save the database to an Xml version format
         /// </summary>
