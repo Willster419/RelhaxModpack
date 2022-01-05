@@ -2353,20 +2353,6 @@
             For example, a contour icon trigger exists to start the building of contour icons
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Database.Trigger.PropertiesForSerializationAttributes">
-            <summary>
-            Defines a list of properties in the class to be serialized into xml attributes
-            </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Database.Trigger.PropertiesForSerializationElements">
-            <summary>
-            Defines a list of properties in the class to be serialized into xml elements
-            </summary>
-            <returns>A list of string property names</returns>
-            <remarks>Xml attributes will always be written, xml elements are optional</remarks>
-        </member>
         <member name="P:RelhaxModpack.Database.Trigger.Name">
             <summary>
             The name of the trigger
@@ -7401,7 +7387,7 @@
             For json patches, if it should use the new method of separating the path for getting the xvm references
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Patching.Patch.DumpPatchInfoForLog">
+        <member name="P:RelhaxModpack.Patching.Patch.DumpInfoToLog">
             <summary>
             Collects all patch information for logging
             </summary>
