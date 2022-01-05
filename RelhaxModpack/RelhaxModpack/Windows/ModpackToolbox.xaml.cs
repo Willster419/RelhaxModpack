@@ -2279,6 +2279,15 @@ namespace RelhaxModpack.Windows
                 ApplicationConstants.AtlasCreationFoldername
             };
 
+            string[] rootFoldersToRemove = new string[]
+            {
+                ApplicationConstants.PatchFolderName,
+                ApplicationConstants.ShortcutFolderName,
+                ApplicationConstants.XmlUnpackFolderName,
+                ApplicationConstants.AtlasCreationFoldername,
+                ApplicationConstants.ReadmeFromZipfileFolderName
+            };
+
             string[] xpathToTestFor = new string[]
             {
                 Patch.PatchXmlSearchPath,
@@ -2332,6 +2341,7 @@ namespace RelhaxModpack.Windows
 
                     ReportProgress("Reading zip file for instructions");
                     bool zipfileModified = false;
+                    bool zipIsNowEmpty = false;
                     using (ZipFile zip = new ZipFile(packageToConvert.ZipFile))
                     {
                         for (int j = 0; j < zip.Entries.Count; j++)
@@ -2428,30 +2438,44 @@ namespace RelhaxModpack.Windows
 
                         if (zipfileModified)
                         {
-                            foreach (string s in rootFoldersToReplace)
+                            bool zipWasActuallyModified = false;
+                            foreach (string folderEntry in rootFoldersToRemove)
                             {
-                                if (zip.ContainsEntry(s))
-                                {
-                                    ZipEntry entry = zip[s];
-                                    zip.RemoveEntry(entry);
-                                }
+                                List<ZipEntry> zipsToRemove = zip.Entries.ToList().FindAll(entry => entry.FileName.StartsWith(folderEntry));
+                                if (zipsToRemove.Count > 0)
+                                    zipWasActuallyModified = true;
+                                zip.RemoveEntries(zipsToRemove);
                             }
+                            zipIsNowEmpty = zip.Entries.Count == 0;
+                            if (zipfileModified && !zipWasActuallyModified)
+                                throw new BadMemeException("Zip had instructions extracted but they wern't removed from the zip file. Hmmmmmmmmmm");
                         }
                     }
 
                     if (zipfileModified)
                     {
-                        ReportProgress("Zip file was modified, upload new one");
-                        string newZipfileName = packageToConvert.ZipFile.Replace(".zip", "_converted.zip");
-                        string uploadUrlString = string.Format("{0}{1}/{2}", PrivateStuff.BigmodsFTPRootWoT, databaseManagerDuplicateCheck.WoTOnlineFolderVersion, newZipfileName);
-                        JobProgressBar.Maximum = FileUtils.GetFilesize(packageToConvert.ZipFile);
-                        client.UploadProgressChanged += (__sender, args) =>
+                        string zipToDelete = packageToConvert.ZipFile;
+                        if (!zipIsNowEmpty)
                         {
-                            JobProgressBar.Value = args.BytesSent;
-                        };
-                        await client.UploadFileTaskAsync(uploadUrlString, packageToConvert.ZipFile);
-                        File.Delete(packageToConvert.ZipFile);
-                        databaseManagerDuplicateCheck.SaveDatabase(SelectModInfo.FileName);
+                            ReportProgress("Zip file was modified, upload new one");
+                            string newZipfileName = packageToConvert.ZipFile.Replace(".zip", "_converted.zip");
+                            packageToConvert.UpdateZipfile(newZipfileName);
+
+                            string uploadUrlString = string.Format("{0}{1}/{2}", PrivateStuff.BigmodsFTPRootWoT, databaseManagerDuplicateCheck.WoTOnlineFolderVersion, packageToConvert.ZipFile);
+                            JobProgressBar.Maximum = FileUtils.GetFilesize(packageToConvert.ZipFile);
+                            client.UploadProgressChanged += (__sender, args) =>
+                            {
+                                JobProgressBar.Value = args.BytesSent;
+                            };
+                            await client.UploadFileTaskAsync(uploadUrlString, packageToConvert.ZipFile);
+                        }
+                        else
+                        {
+                            ReportProgress("Zip is now empty");
+                            packageToConvert.UpdateZipfile(string.Empty);
+                        }
+                        File.Delete(zipToDelete);
+                        databaseManagerDuplicateCheck.SaveDatabase(SelectModInfo.FileName, DatabaseManager.DocumentVersion1V2, XmlDatabaseComponent.SchemaV1Dot0);
                     }
                     else
                         ReportProgress("Zip file was not modified");
