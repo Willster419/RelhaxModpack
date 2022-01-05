@@ -11,51 +11,17 @@ namespace RelhaxModpack.Database
     /// Represents a trigger object used in the installer as an event starter.
     /// For example, a contour icon trigger exists to start the building of contour icons
     /// </summary>
-    public class Trigger : XmlDatabaseComponent, IXmlSerializable
+    public class Trigger
     {
         public Trigger() : base()
         {
 
         }
 
-        public Trigger(Trigger triggerToCopy) : base(triggerToCopy)
+        public Trigger(Trigger triggerToCopy)
         {
             this.Name = triggerToCopy.Name;
         }
-
-        #region Xml serialization V1
-        /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml attributes
-        /// </summary>
-        /// <returns>A list of string property names</returns>
-        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
-        public string[] PropertiesForSerializationAttributes()
-        {
-            return new string[] { nameof(Name) };
-        }
-
-        /// <summary>
-        /// Defines a list of properties in the class to be serialized into xml elements
-        /// </summary>
-        /// <returns>A list of string property names</returns>
-        /// <remarks>Xml attributes will always be written, xml elements are optional</remarks>
-        public string[] PropertiesForSerializationElements()
-        {
-            return new string[] { };
-        }
-        #endregion
-
-        #region Xml serialization V2
-        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
-        {
-            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
-            {
-                //list attributes
-                new XmlDatabaseProperty() { XmlName = nameof(Name), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Name) }
-            };
-            return xmlDatabaseProperties;
-        }
-        #endregion
 
         /// <summary>
         /// The name of the trigger
