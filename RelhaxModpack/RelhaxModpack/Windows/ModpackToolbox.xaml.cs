@@ -2449,12 +2449,14 @@ namespace RelhaxModpack.Windows
                             zipIsNowEmpty = zip.Entries.Count == 0;
                             if (zipfileModified && !zipWasActuallyModified)
                                 throw new BadMemeException("Zip had instructions extracted but they wern't removed from the zip file. Hmmmmmmmmmm");
+                            if (!zipIsNowEmpty)
+                                zip.Save();
                         }
                     }
+                    string zipToDelete = packageToConvert.ZipFile;
 
                     if (zipfileModified)
                     {
-                        string zipToDelete = packageToConvert.ZipFile;
                         if (!zipIsNowEmpty)
                         {
                             ReportProgress("Zip file was modified, upload new one");
@@ -2462,23 +2464,24 @@ namespace RelhaxModpack.Windows
                             packageToConvert.UpdateZipfile(newZipfileName);
 
                             string uploadUrlString = string.Format("{0}{1}/{2}", PrivateStuff.BigmodsFTPRootWoT, databaseManagerDuplicateCheck.WoTOnlineFolderVersion, packageToConvert.ZipFile);
-                            JobProgressBar.Maximum = FileUtils.GetFilesize(packageToConvert.ZipFile);
+                            JobProgressBar.Maximum = FileUtils.GetFilesize(zipToDelete);
                             client.UploadProgressChanged += (__sender, args) =>
                             {
                                 JobProgressBar.Value = args.BytesSent;
                             };
-                            await client.UploadFileTaskAsync(uploadUrlString, packageToConvert.ZipFile);
+                            await client.UploadFileTaskAsync(uploadUrlString, zipToDelete);
                         }
                         else
                         {
                             ReportProgress("Zip is now empty");
                             packageToConvert.UpdateZipfile(string.Empty);
                         }
-                        File.Delete(zipToDelete);
                         databaseManagerDuplicateCheck.SaveDatabase(SelectModInfo.FileName, DatabaseManager.DocumentVersion1V2, XmlDatabaseComponent.SchemaV1Dot0);
                     }
                     else
                         ReportProgress("Zip file was not modified");
+
+                    File.Delete(zipToDelete);
                 }
 
                 File.Delete(LastInstructionConvertedPackageTxt);
