@@ -163,6 +163,13 @@ namespace RelhaxModpack.Database
                     List<XElement> elements = element.Elements().ToList();
                     foreach (object obj in list)
                     {
+                        if (obj == null)
+                        {
+                            Logging.Error("List object is null in XmlDatabaseComponent: '{0}' of database component '{1}' of ID '{2}', line {3}",
+                                obj.GetType().ToString(), propertyElement.Name.LocalName, (this is CoreDatabaseComponent) ? (this as CoreDatabaseComponent).ComponentInternalName : "N/A", ((IXmlLineInfo)element).LineNumber);
+                            continue;
+                        }
+
                         //check to make sure an entry exists
                         if (index >= elements.Count || elements[index] == null)
                         {
@@ -178,7 +185,7 @@ namespace RelhaxModpack.Database
                         {
                             component.ToXml(elements[index], schemaVersion);
                         }
-                        else if (obj.GetType().IsValueType)
+                        else if (obj.GetType().IsValueType || obj.GetType().Equals(typeof(string)))
                         {
                             XElement listElement = elements[index];
                             string objectString = obj.ToString();
@@ -351,6 +358,7 @@ namespace RelhaxModpack.Database
                         {
                             //load this object from xml
                             xmlDatabaseComponent.FromXml(listElement, schemaVersion);
+                            list.Add(listEntryObject);
                         }
                         else if (isvalueOrString)
                         {
@@ -358,25 +366,27 @@ namespace RelhaxModpack.Database
                             object entryInList = null;
                             if (index < list.Count)
                                 entryInList = list[index];
-                            
+
                             //if they are not equal, then update the property
                             if (entryInList == null || !entryInList.ToString().Equals(listElement.Value))
                             {
-                                if (!CommonUtils.SetListIndexValueType(list, index, listObjectType, listElement.Value))
+                                bool setValue = CommonUtils.SetListIndexValueType(list, index, listObjectType, listElement.Value);
+                                index++;
+                                if (!setValue)
                                 {
                                     Logging.Error("Failed to set value of list '{0}' index value {1} of component '{2}', ID {3}, line {4}",
-                                        propertyInfo.Name, index, this.GetType().ToString(), (this is CoreDatabaseComponent)? (this as CoreDatabaseComponent).ComponentInternalName : "N/A", ((IXmlLineInfo)listElement).LineNumber);
+                                        propertyInfo.Name, index-1, this.GetType().ToString(), (this is CoreDatabaseComponent)? (this as CoreDatabaseComponent).ComponentInternalName : "N/A", ((IXmlLineInfo)listElement).LineNumber);
+                                    continue;
                                 }
                             }
-                            index++;
                         }
                         else
                         {
                             Logging.Error("Unknown class type to load that is not of XmlDatabaseComponent: '{0}' of database component '{1}' of ID '{2}', line {3}",
                                 listEntryObject.GetType().ToString(), propertyElement.Name.LocalName, (this is CoreDatabaseComponent)? (this as CoreDatabaseComponent).ComponentInternalName : "N/A", ((IXmlLineInfo)element).LineNumber);
+                            index++;
                             continue;
                         }
-                        list.Add(listEntryObject);
                     }
                 }
                 //else try to update the property if it needs it
