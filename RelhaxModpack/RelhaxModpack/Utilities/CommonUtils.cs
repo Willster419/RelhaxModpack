@@ -1023,7 +1023,11 @@ namespace RelhaxModpack.Utilities
             try
             {
                 var converter = TypeDescriptor.GetConverter(typeToSet);
-                list[index] = converter.ConvertFrom(valueToSet);
+                object convertedObject = converter.ConvertFrom(valueToSet);
+                if (index < list.Count)
+                    list[index] = convertedObject;
+                else
+                    list.Add(convertedObject);
                 return true;
             }
             catch (Exception ex)
