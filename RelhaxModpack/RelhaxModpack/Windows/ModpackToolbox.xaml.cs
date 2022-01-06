@@ -2514,6 +2514,9 @@ namespace RelhaxModpack.Windows
                 File.WriteAllText(LastInstructionConvertedPackageTxt, lastConvertedPackageUID);
                 await FtpUtils.TriggerMirrorSyncAsync();
             }
+
+            ReportProgress(string.Format("Done"));
+            ToggleUI((TabController.SelectedItem as TabItem), true);
         }
         #endregion
     }
