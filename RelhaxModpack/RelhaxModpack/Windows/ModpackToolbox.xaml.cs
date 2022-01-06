@@ -308,6 +308,11 @@ namespace RelhaxModpack.Windows
 
         private void OnLoadModInfo(object sender, RoutedEventArgs e)
         {
+            OnLoadModInfo();
+        }
+
+        private bool OnLoadModInfo()
+        {
             if ((bool)SelectModInfo.ShowDialog())
             {
                 LogOutput.Text = "Loading database...";
@@ -318,9 +323,13 @@ namespace RelhaxModpack.Windows
                 string versionInfo = string.Format("{0} = {1},  {2} = {3}", nameof(WoTModpackOnlineFolderVersion), WoTModpackOnlineFolderVersion, nameof(WoTClientVersion), WoTClientVersion);
                 ReportProgress(versionInfo);
                 ReportProgress("Database loaded");
+                return true;
             }
             else
+            {
                 ReportProgress("Canceled loading database");
+                return false;
+            }
         }
 
         private void ReportProgress(string message)
@@ -1650,7 +1659,11 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), false);
             ReportProgress("Loading database");
 
-            OnLoadModInfo(null, null);
+            if (!OnLoadModInfo())
+            {
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
 
             //list creation and parsing
             databaseManagerDuplicateCheck = new DatabaseManager(ModpackSettings, CommandLineSettings);
@@ -1812,8 +1825,12 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), false);
             ReportProgress("Loading database");
 
-            OnLoadModInfo(null, null);
-            
+            if (!OnLoadModInfo())
+            {
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
+
             ToggleUI((TabController.SelectedItem as TabItem), true);
         }
 
@@ -2208,7 +2225,11 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), false);
             ReportProgress("Loading database");
 
-            OnLoadModInfo(null, null);
+            if (!OnLoadModInfo())
+            {
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
 
             //list creation and parsing
             databaseManagerDuplicateCheck = new DatabaseManager(ModpackSettings, CommandLineSettings);
@@ -2256,7 +2277,11 @@ namespace RelhaxModpack.Windows
             ToggleUI((TabController.SelectedItem as TabItem), false);
             ReportProgress("Loading database");
 
-            OnLoadModInfo(null, null);
+            if (!OnLoadModInfo())
+            {
+                ToggleUI((TabController.SelectedItem as TabItem), true);
+                return;
+            }
 
             //list creation and parsing
             databaseManagerDuplicateCheck = new DatabaseManager(ModpackSettings, CommandLineSettings);
@@ -2476,7 +2501,7 @@ namespace RelhaxModpack.Windows
                             ReportProgress("Zip is now empty");
                             packageToConvert.UpdateZipfile(string.Empty);
                         }
-                        databaseManagerDuplicateCheck.SaveDatabase(SelectModInfo.FileName, DatabaseManager.DocumentVersion1V2, XmlDatabaseComponent.SchemaV1Dot0);
+                        databaseManagerDuplicateCheck.SaveDatabase(SelectModInfo.FileName, DatabaseManager.DocumentVersion1V2, XmlDatabaseComponent.SchemaV1Dot1);
                     }
                     else
                         ReportProgress("Zip file was not modified");
