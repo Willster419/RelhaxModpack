@@ -157,6 +157,7 @@ namespace RelhaxModpack.Database
             switch (schemaVersion)
             {
                 case SchemaV1Dot0:
+                case SchemaV1Dot1:
                     return XmlElementName;
                 default:
                     return base.GetXmlElementName(schemaVersion);
