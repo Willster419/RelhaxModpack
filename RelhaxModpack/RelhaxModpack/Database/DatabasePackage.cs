@@ -1,11 +1,13 @@
 ﻿using RelhaxModpack.Atlases;
 using RelhaxModpack.Common;
+using RelhaxModpack.Installer;
 using RelhaxModpack.Patching;
 using RelhaxModpack.Shortcuts;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Xml;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
@@ -397,6 +399,23 @@ namespace RelhaxModpack.Database
         {
             //example: <AutomationSequence UID="cw7xk1guapz8hayk" packageName="Dependency_OldSkool_modsCore" path="Dependencies/Dependency_OldSkool_modsCore.xml" />
             return string.Format("<AutomationSequence UID=\"{0}\" packageName=\"{1}\" path=\"path_to/{1}.xml\"/>", UID, PackageName);
+        }
+
+        public IList GetInstructions(InstructionsType instructionsType)
+        {
+            switch (instructionsType)
+            {
+                case InstructionsType.Atlas:
+                    return this.Atlases;
+                case InstructionsType.Patch:
+                    return this.Patches;
+                case InstructionsType.Shortcut:
+                    return this.Shortcuts;
+                case InstructionsType.UnpackCopy:
+                    return this.XmlUnpacks;
+                default:
+                    return null;
+            }
         }
         #endregion
 
