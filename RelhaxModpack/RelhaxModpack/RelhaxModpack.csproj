@@ -318,7 +318,7 @@
     <Compile Include="Utilities\FtpUtils.cs" />
     <Compile Include="Common\GlobalSuppressions.cs" />
     <Compile Include="Atlases\Atlas.cs" />
-    <Compile Include="Common\InstallEngine.cs" />
+    <Compile Include="Installer\InstallEngine.cs" />
     <Compile Include="Patching\Patch.cs" />
     <Compile Include="Shortcuts\Shortcut.cs" />
     <Compile Include="Atlases\Texture.cs" />
