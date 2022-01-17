@@ -16,6 +16,8 @@ using System.Net;
 using System.IO;
 using System.Xml.XPath;
 using RelhaxModpack.Common;
+using RelhaxModpack.Installer;
+using RelhaxModpack.Patching;
 
 namespace RelhaxModpack.Database
 {
@@ -740,6 +742,65 @@ namespace RelhaxModpack.Database
         public static int GetMaxPatchGroupNumber(List<DatabasePackage> listToCheck)
         {
             return listToCheck.Max(ma => ma.PatchGroup);
+        }
+
+        public static List<Patch> CreateOrderedPatchesList(List<DatabasePackage> databasePackages)
+        {
+            if (databasePackages == null)
+                throw new NullReferenceException(nameof(databasePackages));
+
+            //filter out packages that don't have any patches
+            List<DatabasePackage> packagesWithPatches = databasePackages.FindAll(package => package.Patches != null && package.Patches.Count > 0);
+
+            //attach the packages to the instructions
+            foreach (DatabasePackage package in packagesWithPatches)
+                foreach (Patch patch in package.Patches)
+                    patch.Package = package;
+
+            List<Patch> orderedPatches = new List<Patch>();
+
+            //first loop at each patch group number
+            for (int i = 0; i < GetMaxPatchGroupNumber(packagesWithPatches); i++)
+            {
+                //then loop at each install group number
+                for (int j = 0; j < GetMaxInstallGroupNumberWithOffset(packagesWithPatches); j++)
+                {
+                    List<DatabasePackage> packagesWithCorrectOffsets = packagesWithPatches.FindAll(package => package.PatchGroup == i && package.InstallGroupWithOffset == j);
+                    foreach (DatabasePackage packageWithCorrectOffsets in packagesWithCorrectOffsets)
+                        orderedPatches.AddRange(packageWithCorrectOffsets.Patches);
+                }
+            }
+
+            return orderedPatches;
+        }
+
+        public static IList CreateOrderedInstructionList(List<DatabasePackage> databasePackages, InstructionsType instructionsType)
+        {
+            if (databasePackages == null)
+                throw new NullReferenceException(nameof(databasePackages));
+
+            //filter out packages that don't have any patches
+            List<DatabasePackage> packagesWithInstructions = databasePackages.FindAll(package => package.GetInstructions(instructionsType) != null && package.GetInstructions(instructionsType).Count > 0);
+
+            //attach the packages to the instructions
+            foreach (DatabasePackage package in packagesWithInstructions)
+                foreach (Instruction instruction in package.GetInstructions(instructionsType))
+                    instruction.Package = package;
+
+            List<Instruction> orderedInstructions = new List<Instruction>();
+
+            //loop at each install group number
+            for (int j = 0; j < GetMaxInstallGroupNumberWithOffset(packagesWithInstructions); j++)
+            {
+                List<DatabasePackage> packagesWithCorrectOffsets = packagesWithInstructions.FindAll(package => package.InstallGroupWithOffset == j);
+                foreach (DatabasePackage packageWithCorrectOffsets in packagesWithCorrectOffsets)
+                {
+                    List<Instruction> instructions = packageWithCorrectOffsets.GetInstructions(instructionsType) as List<Instruction>;
+                    orderedInstructions.AddRange(instructions);
+                }
+            }
+
+            return orderedInstructions;
         }
     }
 }
