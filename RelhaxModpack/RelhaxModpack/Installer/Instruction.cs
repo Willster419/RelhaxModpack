@@ -35,6 +35,8 @@ namespace RelhaxModpack.Installer
         /// </summary>
         public string ActualPatchName { get; set; } = string.Empty;
 
+        public DatabasePackage Package { get; set; }
+
         public virtual string DumpInfoToLog
         {
             get
