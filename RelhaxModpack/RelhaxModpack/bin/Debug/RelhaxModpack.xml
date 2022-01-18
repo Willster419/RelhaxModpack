@@ -7187,14 +7187,9 @@
             List of packages that have zip files to install and are enabled (and checked if selectable) and ordered into installGroups
             </summary>
         </member>
-        <member name="P:RelhaxModpack.InstallEngine.PackagesToInstall">
+        <member name="P:RelhaxModpack.InstallEngine.PackagesToInstallWithZipfile">
             <summary>
             List of packages that have zip files to install and are enabled (and checked if selectable)
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.InstallEngine.FlatListSelectablePackages">
-            <summary>
-            Flat list of all selectable packages
             </summary>
         </member>
         <member name="P:RelhaxModpack.InstallEngine.UserPackagesToInstall">
