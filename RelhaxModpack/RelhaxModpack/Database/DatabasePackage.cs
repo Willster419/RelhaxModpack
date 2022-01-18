@@ -401,18 +401,18 @@ namespace RelhaxModpack.Database
             return string.Format("<AutomationSequence UID=\"{0}\" packageName=\"{1}\" path=\"path_to/{1}.xml\"/>", UID, PackageName);
         }
 
-        public IList GetInstructions(InstructionsType instructionsType)
+        public List<Instruction> GetInstructions(InstructionsType instructionsType)
         {
             switch (instructionsType)
             {
                 case InstructionsType.Atlas:
-                    return this.Atlases;
+                    return this.Atlases.Cast<Instruction>().ToList();
                 case InstructionsType.Patch:
-                    return this.Patches;
+                    return this.Patches.Cast<Instruction>().ToList();
                 case InstructionsType.Shortcut:
-                    return this.Shortcuts;
+                    return this.Shortcuts.Cast<Instruction>().ToList();
                 case InstructionsType.UnpackCopy:
-                    return this.XmlUnpacks;
+                    return this.XmlUnpacks.Cast<Instruction>().ToList();
                 default:
                     return null;
             }

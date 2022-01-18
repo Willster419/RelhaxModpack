@@ -1071,24 +1071,22 @@ namespace RelhaxModpack
             //build macro hash for install
             MacroUtils.BuildFilepathMacroList(WoTClientVersion, WoTModpackOnlineFolderVersion, WoTDirectory);
 
-            //perform dependency calculations
-            //get a flat list of packages to install
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(null, null, parsedCategoryList);
-            List<SelectablePackage> flatListSelect = DatabaseUtils.GetFlatSelectablePackageList(parsedCategoryList);
-
+            //perform list calculations
             Logging.Debug("Starting Utils.CalculateDependencies()");
             List<Dependency> dependneciesToInstall = new List<Dependency>(DatabaseUtils.CalculateDependencies(dependencies, parsedCategoryList, false, ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test));
             Logging.Debug("Finished Utils.CalculateDependencies()");
 
-            //make a flat list of all packages to install (including those without a zip file) for statistic data gathering
+            //make a flat list of all packages to install
+            List<DatabasePackage> packagesSelectedToInstall = DatabaseUtils.CreateListOfPackagesToInstall(globalDependencies, dependneciesToInstall, parsedCategoryList);
+
+            //make a flat list of all packages to install that will actually be installed (actually have a zip file)
+            List<DatabasePackage> packagesToInstallWithZipfile = DatabaseUtils.CreateListOfPackagesWithZipFilesToInstall(globalDependencies, dependneciesToInstall, parsedCategoryList);
+
+            //gather stats
             if (ModpackSettings.AllowStatisticDataGather)
             {
-                List<DatabasePackage> packagesToGather = new List<DatabasePackage>();
-                packagesToGather.AddRange(globalDependencies.Where(globalDep => globalDep.Enabled).ToList());
-                packagesToGather.AddRange(dependneciesToInstall.Where(dep => dep.Enabled).ToList());
-                packagesToGather.AddRange(flatListSelect.Where(fl => fl.Enabled && fl.Checked).ToList());
                 //https://stackoverflow.com/questions/13781468/get-list-of-properties-from-list-of-objects
-                List<string> packageNamesToUpload = packagesToGather.Select(pack => pack.PackageName).ToList();
+                List<string> packageNamesToUpload = packagesSelectedToInstall.Select(pack => pack.PackageName).ToList();
 
                 Task.Run(async () =>
                 {
@@ -1125,28 +1123,24 @@ namespace RelhaxModpack
                 });
             }
 
-            //make a flat list of all packages to install that will actually be installed
-            List<DatabasePackage> packagesToInstall = new List<DatabasePackage>();
-            packagesToInstall.AddRange(globalDependencies.Where(globalDep => globalDep.Enabled && !string.IsNullOrWhiteSpace(globalDep.ZipFile)).ToList());
-            packagesToInstall.AddRange(dependneciesToInstall.Where(dep => dep.Enabled && !string.IsNullOrWhiteSpace(dep.ZipFile)).ToList());
-            List<SelectablePackage> selectablePackagesToInstall = flatListSelect.Where(fl => fl.Enabled && fl.Checked && !string.IsNullOrWhiteSpace(fl.ZipFile)).ToList();
-            packagesToInstall.AddRange(selectablePackagesToInstall);
+            //create list of user mods to install
             List<SelectablePackage> userModsToInstall = UserMods.Where(mod => mod.Checked).ToList();
 
             //if minimalist mode, exclude packages that we don't *need* to install
             if (ModpackSettings.MinimalistMode)
             {
                 Logging.Debug("Minimalist mode enabled, exclude packages from installation");
-                int numPackagesBefore = packagesToInstall.Count;
-                packagesToInstall.RemoveAll(selectablePack => selectablePack.MinimalistModeExclude);
-                int numPackagesAfter = packagesToInstall.Count;
+                int numPackagesBefore = packagesToInstallWithZipfile.Count;
+                packagesToInstallWithZipfile.RemoveAll(selectablePack => selectablePack.MinimalistModeExclude);
+                int numPackagesAfter = packagesToInstallWithZipfile.Count;
                 Logging.Info("Minimalist mode check removed {0} packages not explicitly required for install", numPackagesBefore - numPackagesAfter);
             }
 
             //while we're at it let's make a list of packages that need to be downloaded
-            List<DatabasePackage> packagesToDownload = packagesToInstall.Where(pack => pack.DownloadFlag).ToList();
+            List<DatabasePackage> packagesToDownload = packagesToInstallWithZipfile.Where(pack => pack.DownloadFlag).ToList();
 
             //and check if we need to actually install anything
+            List<SelectablePackage> selectablePackagesToInstall = DatabaseUtils.CreateListOfSelectablePackagesToInstall(parsedCategoryList);
             if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
             {
                 Logging.Info("No packages selected to install, return");
@@ -1156,7 +1150,7 @@ namespace RelhaxModpack
             }
 
             //perform list install order calculations
-            List<DatabasePackage>[] orderedPackagesToInstall = DatabaseUtils.CreateOrderedInstallList(packagesToInstall);
+            List<DatabasePackage>[] orderedPackagesToInstall = DatabaseUtils.CreateOrderedInstallList(packagesToInstallWithZipfile);
 
             //we now have a list of enabled, checked and actual zip file mods that we are going to install based on install groups
             //log the time to process lists
@@ -1374,7 +1368,7 @@ namespace RelhaxModpack
                 Logging.Debug("AdvancedInstallProgress is false");
 
             //make sure each trigger list for each package is unique
-            foreach (DatabasePackage package in packagesToInstall)
+            foreach (DatabasePackage package in packagesToInstallWithZipfile)
             {
                 //for debug, get the list of duplicates
                 //https://stackoverflow.com/questions/3811464/how-to-get-duplicate-items-from-a-list-using-linq
@@ -1403,9 +1397,9 @@ namespace RelhaxModpack
             //and create and link the install engine
             installEngine = new InstallEngine(ModpackSettings, CommandLineSettings)
             {
-                FlatListSelectablePackages = flatListSelect,
                 OrderedPackagesToInstall = orderedPackagesToInstall,
-                PackagesToInstall = packagesToInstall,
+                PackagesToInstallWithZipfile = packagesToInstallWithZipfile,
+                PackagesToInstall = packagesSelectedToInstall,
                 ParsedCategoryList = parsedCategoryList,
                 Dependencies = dependencies,
                 GlobalDependencies = globalDependencies,

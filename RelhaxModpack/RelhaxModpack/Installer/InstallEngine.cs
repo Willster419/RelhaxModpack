@@ -23,6 +23,7 @@ using RelhaxModpack.Settings;
 using RelhaxModpack.Common;
 using RelhaxModpack.Utilities.ClassEventArgs;
 using RelhaxModpack.Installer;
+using System.Collections;
 
 namespace RelhaxModpack
 {
@@ -62,15 +63,12 @@ namespace RelhaxModpack
         /// </summary>
         public List<DatabasePackage>[] OrderedPackagesToInstall { get; set; }
 
-        /// <summary>
-        /// List of packages that have zip files to install and are enabled (and checked if selectable)
-        /// </summary>
         public List<DatabasePackage> PackagesToInstall { get; set; }
 
         /// <summary>
-        /// Flat list of all selectable packages
+        /// List of packages that have zip files to install and are enabled (and checked if selectable)
         /// </summary>
-        public List<SelectablePackage> FlatListSelectablePackages { get; set; }
+        public List<DatabasePackage> PackagesToInstallWithZipfile { get; set; }
 
         /// <summary>
         /// List of user packages placed in the RelhaxUserMods folder and selected for installation
@@ -361,16 +359,24 @@ namespace RelhaxModpack
         private RelhaxInstallFinishedEventArgs RunInstallation()
         {
             //rookie mistake checks
-            if(OrderedPackagesToInstall == null || OrderedPackagesToInstall.Count() == 0)
-                throw new BadMemeException("WOW you really suck at programming");
+            if (OrderedPackagesToInstall == null || OrderedPackagesToInstall.Count() == 0)
+                throw new ArgumentException(string.Format("{0} was null or 0 count", nameof(OrderedPackagesToInstall)));
+
+            if (PackagesToInstall == null || PackagesToInstall.Count() == 0)
+                throw new ArgumentException(string.Format("{0} was null or 0 count", nameof(OrderedPackagesToInstall)));
+
+            if (PackagesToInstallWithZipfile == null || PackagesToInstallWithZipfile.Count() == 0)
+                throw new ArgumentException(string.Format("{0} was null or 0 count", nameof(OrderedPackagesToInstall)));
+
+            if (UserPackagesToInstall == null)
+                throw new ArgumentException(string.Format("{0} was null", nameof(UserPackagesToInstall)));
 
             Logging.Info("Installation starts now from RunInstallation() in Install Engine");
-            //do more stuff here I'm sure like init log files
-            //also check enabled just to be safe
-            List<SelectablePackage> selectedPackages = FlatListSelectablePackages.Where(package => package.Checked && package.Enabled).ToList();
 
             //do any list processing here
-            if(!DisableTriggersForInstall)
+            List<SelectablePackage> selectedPackages = DatabaseUtils.CreateListOfSelectablePackagesToInstall(ParsedCategoryList);
+
+            if (!DisableTriggersForInstall)
             {
                 //process any packages that have triggers
                 //reset the internal list first
@@ -383,7 +389,7 @@ namespace RelhaxModpack
                     trig.Fired = false;
                     trig.TriggerTask = null;
                 }
-                foreach (DatabasePackage package in PackagesToInstall)
+                foreach (DatabasePackage package in PackagesToInstallWithZipfile)
                 {
                     if (package.TriggersList.Count > 0)
                     {
@@ -410,7 +416,7 @@ namespace RelhaxModpack
             }
 
             //process packages with data (cache) for cache backup and restore
-            List<SelectablePackage> packagesWithData = selectedPackages.Where(package => package.UserFiles.Count > 0).ToList();
+            List<SelectablePackage> packagesWithData = selectedPackages.FindAll(package => package.UserFiles.Count > 0);
 
             //and reset the stopwatch
             InstallStopWatch.Restart();
@@ -646,11 +652,10 @@ namespace RelhaxModpack
             CancellationToken.ThrowIfCancellationRequested();
 
             Logging.Info(string.Format("Unpack of xml files, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-            InstructionLoader copyUnpackPatchInstructionLoader = new InstructionLoader();
-            List<XmlUnpack> xmlUnpacks = copyUnpackPatchInstructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.XmlUnpackFolderName), InstructionsType.UnpackCopy, XmlUnpack.XmlUnpackXmlSearchPath, null)?.Cast<XmlUnpack>()?.ToList();
-
-            if (xmlUnpacks != null && xmlUnpacks.Count > 0)
+            List<Instruction> xmlUnpacks_ = DatabaseUtils.CreateOrderedInstructionList(PackagesToInstall, InstructionsType.UnpackCopy);
+            if (xmlUnpacks_ != null && xmlUnpacks_.Count > 0)
             {
+                List<XmlUnpack> xmlUnpacks = xmlUnpacks_.Cast<XmlUnpack>().ToList();
                 //perform macro replacement on all xml unpack entries
                 foreach (XmlUnpack xmlUnpack in xmlUnpacks)
                 {
@@ -698,14 +703,14 @@ namespace RelhaxModpack
             Prog.ParrentCurrentProgress = string.Empty;
             Prog.ChildCurrentProgress = string.Empty;
 
-            List<Patch> pathces = copyUnpackPatchInstructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.PatchFolderName), InstructionsType.Patch, Patch.PatchXmlSearchPath,OriginalPatchNames)?.Cast<Patch>()?.ToList();
-            if (pathces != null && pathces.Count > 0)
+            List<Patch> patches = DatabaseUtils.CreateOrderedPatchesList(PackagesToInstall);
+            if (patches != null && patches.Count > 0)
             {
                 //no need to installer log patches, since it's operating on files that already exist
                 PatchTask = Task.Run(() =>
                 {
                     ProgPatch = CopyProgress(Prog);
-                    ProgPatch.ParrentTotal = pathces.Count;
+                    ProgPatch.ParrentTotal = patches.Count;
                     ProgPatch.InstallStatus = InstallerExitCodes.PatchError;
                     LockProgress();
 
@@ -713,7 +718,7 @@ namespace RelhaxModpack
                     if (Patcher == null)
                         Patcher = new Patcher() { DebugMode = false, WoTDirectory = this.WoTDirectory };
 
-                    foreach (Patch patch in pathces)
+                    foreach (Patch patch in patches)
                     {
                         ProgPatch.Filename = patch.File;
                         ProgPatch.ParrentCurrent++;
@@ -725,6 +730,7 @@ namespace RelhaxModpack
                                 InstallFinishedArgs.InstallFailedSteps.Add(InstallerExitCodes.PatchError);
                         }
                     }
+
                     Logging.Info("Patching of files complete, took {0} msec", (int)(InstallStopWatch.Elapsed.TotalMilliseconds - OldTime.TotalMilliseconds));
                     ProgPatch.TotalCurrent = (int)InstallerExitCodes.PatchError;
                     InstallFinishedArgs.ExitCode = InstallerExitCodes.PatchError;
@@ -738,7 +744,7 @@ namespace RelhaxModpack
             PatchTaskReadyForWait = true;
 
             //step 10: create shortcuts (async option)
-            if(DisableTriggersForInstall)
+            if (DisableTriggersForInstall)
             {
                 CreateShortcuts();
             }
@@ -1395,7 +1401,7 @@ namespace RelhaxModpack
                 numThreads, ModpackSettings.MulticoreExtraction, ApplicationConstants.NumLogicalProcesors));
 
             //setup progress reporting for parent
-            Prog.ParrentTotal = PackagesToInstall.Count();
+            Prog.ParrentTotal = PackagesToInstallWithZipfile.Count();
             Prog.TotalInstallGroups = (uint)OrderedPackagesToInstall.Count();
 
             for (int i = 0; i < OrderedPackagesToInstall.Count(); i++)
@@ -1594,11 +1600,11 @@ namespace RelhaxModpack
                 (int)InstallStopWatch.Elapsed.TotalMilliseconds));
             if (ModpackSettings.CreateShortcuts)
             {
-                InstructionLoader instructionLoader = new InstructionLoader();
                 CancellationToken.ThrowIfCancellationRequested();
-                List<Shortcut> shortcuts = instructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.ShortcutFolderName), InstructionsType.Shortcut, Shortcut.ShortcutXmlSearchPath, null)?.Cast<Shortcut>()?.ToList();
-                if (shortcuts != null && shortcuts.Count > 0)
+                List<Instruction> shortcuts_ = DatabaseUtils.CreateOrderedInstructionList(PackagesToInstall, InstructionsType.Shortcut);
+                if (shortcuts_ != null && shortcuts_.Count > 0)
                 {
+                    List<Shortcut> shortcuts = shortcuts_.Cast<Shortcut>().ToList();
                     CancellationToken.ThrowIfCancellationRequested();
                     StringBuilder shortcutBuilder = new StringBuilder();
                     shortcutBuilder.AppendLine("/*   Shortcuts   */");
@@ -1650,10 +1656,10 @@ namespace RelhaxModpack
             CancellationToken.ThrowIfCancellationRequested();
 
             //create and parse atlas lists from xml files
-            InstructionLoader instructionLoader = new InstructionLoader();
-            List<Atlas> atlases = instructionLoader.CreateInstructionsList(Path.Combine(WoTDirectory, ApplicationConstants.AtlasCreationFoldername), InstructionsType.Atlas, Atlas.AtlasXmlSearchPath, null)?.Cast<Atlas>()?.ToList();
-            if (atlases!= null && atlases.Count > 0)
+            List<Instruction> atlases_ = DatabaseUtils.CreateOrderedInstructionList(PackagesToInstall, InstructionsType.Atlas);
+            if (atlases_ != null && atlases_.Count > 0)
             {
+                List<Atlas> atlases = atlases_.Cast<Atlas>().ToList();
                 //initial progress report
                 ProgAtlas = CopyProgress(Prog);
                 ProgAtlas.ParrentTotal = atlases.Count;
@@ -2081,15 +2087,17 @@ namespace RelhaxModpack
                     {
                         zip.IsUserMod = userMod;
                         zip.ThreadID = threadNum;
-                        //update args and logging here...
+
                         //first for loop takes care of any path replacing in the zipfile
                         for(int j = 0; j < zip.Entries.Count; j++)
                         {
                             CancellationToken.ThrowIfCancellationRequested();
+
                             //check for versiondir
                             string zipEntryName = zip[j].FileName;
                             if (zipEntryName.Contains("versiondir"))
                                 zipEntryName = zipEntryName.Replace("versiondir", WoTClientVersion);
+
                             //check for xvmConfigFolderName
                             if (zipEntryName.Contains("configs/xvm/xvmConfigFolderName"))
                             {
@@ -2106,50 +2114,16 @@ namespace RelhaxModpack
                                 }
                                 zipEntryName = zipEntryName.Replace("configs/xvm/xvmConfigFolderName", string.Format("configs/xvm/{0}",XvmFolderName));
                             }
+
+                            //check for patches
                             if(Regex.IsMatch(zipEntryName, @"_patch.*\.xml"))
                             {
-                                //format for new patch names
-                                //patchGroup_origName_0 <- can be increased for uniqueness
-                                //patchGroup takes care of the global->dep->selectable package order
-
-                                //build the patch name manually
-                                StringBuilder sb = new StringBuilder();
-
-                                //first get the "_patch/" prefix (that does not change)
-                                sb.Append(zipEntryName.Substring(0,7));
-
-                                //pad and add the patchGroup name
-                                sb.Append(package.PatchGroup.ToString("D3") + "_");
-
-                                //pad and add the installGroup name
-                                //this will help maintain the patching order similarly expected with extractions of installGroup
-                                sb.Append(package.InstallGroupWithOffset.ToString("D3") + "_");
-
-                                //name else doesn't need to change, to set the rest of the name and use it
-                                sb.Append(zipEntryName.Substring(7));
-
-                                //save the original and new names to the list to apply later
-                                //lock on a static
-                                lock(duplicatePatchNameObjectLocker)
-                                {
-                                    //key is sb, sb is new name for disk, is native processing file
-                                    //value is original name from zip file
-                                    string key = sb.ToString().Substring(7);
-                                    string value = zipEntryName.Substring(7);
-                                    while (OriginalPatchNames.ContainsKey(key))
-                                    {
-                                        string orig = key;
-                                        //add a underscore before the dot for the file extension
-                                        key = string.Join("_.", key.Split('.'));
-                                        //also update the stringbuilder
-                                        sb = new StringBuilder(string.Format("{0}{1}",sb.ToString().Substring(0,7),key));
-                                        Logging.Warning("patchfile \"{0}\" has same name as patch in other zip file! Please fix! Using name \"{1}\" instead", orig, key);
-                                    }
-                                    OriginalPatchNames.Add(key, value);
-                                }
-                                //and save it to the string
-                                zipEntryName = sb.ToString();
+                                Logging.Error("The package {0} contains patches, they will be ignored", package.PackageName);
+                                zip.RemoveEntry(zipEntryName);
+                                j--;
+                                continue;
                             }
+
                             //save zip entry file modifications back to zipfile
                             zip[j].FileName = zipEntryName;
                         }

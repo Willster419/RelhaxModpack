@@ -203,22 +203,19 @@ namespace RelhaxInstallerUnitTester
             MacroUtils.BuildFilepathMacroList(WoTClientVersion, databaseManager.WoTOnlineFolderVersion, wotExeFolderpath);
 
             //perform dependency calculations
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(null, null, selectionList.ParsedCategoryList);
-            List<SelectablePackage> flatListSelect = DatabaseUtils.GetFlatSelectablePackageList(selectionList.ParsedCategoryList);
             List<Dependency> dependneciesToInstall = new List<Dependency>(DatabaseUtils.CalculateDependencies(selectionList.Dependencies, selectionList.ParsedCategoryList, false, false));
 
             //create install list
-            List<DatabasePackage> packagesToInstall = new List<DatabasePackage>();
-            packagesToInstall.AddRange(selectionList.GlobalDependencies.FindAll(globalDep => globalDep.Enabled && !string.IsNullOrWhiteSpace(globalDep.ZipFile)));
-            packagesToInstall.AddRange(dependneciesToInstall.FindAll(dep => dep.Enabled && !string.IsNullOrWhiteSpace(dep.ZipFile)));
-            List<SelectablePackage> selectablePackagesToInstall = flatListSelect.FindAll(fl => fl.Enabled && fl.Checked && !string.IsNullOrWhiteSpace(fl.ZipFile));
-            packagesToInstall.AddRange(selectablePackagesToInstall);
+            List<DatabasePackage> packagesToInstall = DatabaseUtils.CreateListOfPackagesWithZipFilesToInstall(selectionList.GlobalDependencies, selectionList.Dependencies, selectionList.ParsedCategoryList);
+
+            //user mod calculation
             List<SelectablePackage> userModsToInstall = args.UserMods.FindAll(mod => mod.Checked);
 
             //while we're at it let's make a list of packages that need to be downloaded
             List<DatabasePackage> packagesToDownload = packagesToInstall.FindAll(pack => pack.DownloadFlag);
 
             //and check if we need to actually install anything
+            List<SelectablePackage> selectablePackagesToInstall = DatabaseUtils.CreateListOfSelectablePackagesToInstall(selectionList.ParsedCategoryList);
             if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
             {
                 Assert.Fail("No packages to install");
@@ -250,9 +247,8 @@ namespace RelhaxInstallerUnitTester
 
             InstallEngine installEngine = new InstallEngine(selectionList.ModpackSettings, selectionList.CommandLineSettings)
             {
-                FlatListSelectablePackages = flatListSelect,
                 OrderedPackagesToInstall = orderedPackagesToInstall,
-                PackagesToInstall = packagesToInstall,
+                PackagesToInstallWithZipfile = packagesToInstall,
                 ParsedCategoryList = args.ParsedCategoryList,
                 Dependencies = args.Dependencies,
                 GlobalDependencies = args.GlobalDependencies,

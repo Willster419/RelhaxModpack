@@ -760,10 +760,10 @@ namespace RelhaxModpack.Database
             List<Patch> orderedPatches = new List<Patch>();
 
             //first loop at each patch group number
-            for (int i = 0; i < GetMaxPatchGroupNumber(packagesWithPatches); i++)
+            for (int i = 0; i <= GetMaxPatchGroupNumber(packagesWithPatches); i++)
             {
                 //then loop at each install group number
-                for (int j = 0; j < GetMaxInstallGroupNumberWithOffset(packagesWithPatches); j++)
+                for (int j = 0; j <= GetMaxInstallGroupNumberWithOffset(packagesWithPatches); j++)
                 {
                     List<DatabasePackage> packagesWithCorrectOffsets = packagesWithPatches.FindAll(package => package.PatchGroup == i && package.InstallGroupWithOffset == j);
                     foreach (DatabasePackage packageWithCorrectOffsets in packagesWithCorrectOffsets)
@@ -774,13 +774,17 @@ namespace RelhaxModpack.Database
             return orderedPatches;
         }
 
-        public static IList CreateOrderedInstructionList(List<DatabasePackage> databasePackages, InstructionsType instructionsType)
+        public static List<Instruction> CreateOrderedInstructionList(List<DatabasePackage> databasePackages, InstructionsType instructionsType)
         {
             if (databasePackages == null)
                 throw new NullReferenceException(nameof(databasePackages));
 
-            //filter out packages that don't have any patches
+            //filter out packages that don't have any instructions of the given type
             List<DatabasePackage> packagesWithInstructions = databasePackages.FindAll(package => package.GetInstructions(instructionsType) != null && package.GetInstructions(instructionsType).Count > 0);
+
+            //if there are none, then nothing to do
+            if (packagesWithInstructions.Count == 0)
+                return null;
 
             //attach the packages to the instructions
             foreach (DatabasePackage package in packagesWithInstructions)
@@ -790,17 +794,61 @@ namespace RelhaxModpack.Database
             List<Instruction> orderedInstructions = new List<Instruction>();
 
             //loop at each install group number
-            for (int j = 0; j < GetMaxInstallGroupNumberWithOffset(packagesWithInstructions); j++)
+            for (int j = 0; j <= GetMaxInstallGroupNumberWithOffset(packagesWithInstructions); j++)
             {
                 List<DatabasePackage> packagesWithCorrectOffsets = packagesWithInstructions.FindAll(package => package.InstallGroupWithOffset == j);
                 foreach (DatabasePackage packageWithCorrectOffsets in packagesWithCorrectOffsets)
                 {
-                    List<Instruction> instructions = packageWithCorrectOffsets.GetInstructions(instructionsType) as List<Instruction>;
-                    orderedInstructions.AddRange(instructions);
+                    orderedInstructions.AddRange(packageWithCorrectOffsets.GetInstructions(instructionsType));
                 }
             }
 
             return orderedInstructions;
+        }
+
+        public static List<DatabasePackage> CreateListOfPackagesToInstall(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
+            return CreateListOfPackagesToInstall(globalDependencies, dependencies, GetFlatSelectablePackageList(parsedCategoryList));
+        }
+
+        public static List<DatabasePackage> CreateListOfPackagesToInstall(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<SelectablePackage> packages)
+        {
+            List<DatabasePackage> packagesToInstall = new List<DatabasePackage>();
+            packagesToInstall.AddRange(globalDependencies.FindAll(globalDep => globalDep.Enabled));
+            packagesToInstall.AddRange(dependencies.FindAll(dep => dep.Enabled));
+            List<SelectablePackage> selectablePackagesToInstall = packages.FindAll(fl => fl.Enabled && fl.Checked);
+            packagesToInstall.AddRange(selectablePackagesToInstall);
+            return packagesToInstall;
+        }
+
+        public static List<SelectablePackage> CreateListOfSelectablePackagesToInstall(List<Category> parsedCategorylist)
+        {
+            return CreateListOfSelectablePackagesToInstall(GetFlatSelectablePackageList(parsedCategorylist));
+        }
+
+        public static List<SelectablePackage> CreateListOfSelectablePackagesToInstall(List<SelectablePackage> packages)
+        {
+            return packages.FindAll(fl => fl.Enabled && fl.Checked);
+        }
+
+        public static List<DatabasePackage> CreateListOfPackagesWithZipFilesToInstall(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
+            return CreateListOfPackagesWithZipFilesToInstall(globalDependencies, dependencies, GetFlatSelectablePackageList(parsedCategoryList));
+        }
+
+        public static List<DatabasePackage> CreateListOfPackagesWithZipFilesToInstall(List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<SelectablePackage> packages)
+        {
+            return CreateListOfPackagesToInstall(globalDependencies, dependencies, packages).FindAll(package => !string.IsNullOrWhiteSpace(package.ZipFile));
+        }
+
+        public static List<SelectablePackage> CreateListOfSelectablePackagesWithZipFilesToInstall(List<Category> parsedCategorylist)
+        {
+            return CreateListOfSelectablePackagesWithZipFilesToInstall(GetFlatSelectablePackageList(parsedCategorylist));
+        }
+
+        public static List<SelectablePackage> CreateListOfSelectablePackagesWithZipFilesToInstall(List<SelectablePackage> packages)
+        {
+            return CreateListOfSelectablePackagesToInstall(packages).FindAll(package => !string.IsNullOrWhiteSpace(package.ZipFile));
         }
     }
 }
