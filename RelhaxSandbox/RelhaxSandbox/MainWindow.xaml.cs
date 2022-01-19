@@ -676,11 +676,9 @@ namespace RelhaxSandbox
                 return;
             AutoUpdateWGInfoIEWIN.Text = "Getting info...";
 
-            using (System.Windows.Forms.WebBrowser bro = new System.Windows.Forms.WebBrowser())
-                SetRegistryKey(System.Diagnostics.Process.GetCurrentProcess().ProcessName, bro.Version.Major);
+            SetRegistryKey(System.Diagnostics.Process.GetCurrentProcess().ProcessName, TestBrowse.Version.Major);
 
             TestBrowse.ScriptErrorsSuppressed = true;
-            Version browver = TestBrowse.Version;
 
             TestBrowse.DocumentCompleted += TestBrowse_DocumentCompleted;
 
