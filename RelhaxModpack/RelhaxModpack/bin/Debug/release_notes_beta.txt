@@ -1,3 +1,48 @@
+# Application version 1.3.5.0 (2022-01-19)
+https://www.virustotal.com/gui/file/2da65e991ef0290c9239ee97580c2e0755f853c115a1e15e62f22345fe1f5377
+
+## "Working is good, but working efficiently is better"
+
+### A new way to load and save Xml documents
+- The system to save and load database packages to and from xml documents was completely re-written with a new, more modular implementation. It separates the physical loading of xml from web or disk into xml class objects (serialized into xml document objects), and the parsing of serialized xml objects to and from class properties via a map, or schema. Now, those are managed by two different version fields `documentVersion` and `schemaVersion`.
+  - The document physical loading system was re-worked to be less hard-coded, and the saving now works on the idea of *updating*, rather then *replacing* the previous document information. For example, it won't save a file (or certain parts of it) if no changes occurred (before it would always delete and  re-save).
+  - This allows for comments in the database that will be ignored by the system, but not removed when updating the physical file.
+  - The schema system allows us to map database properties to xml elements or attributes (if not a list property), which also use an updating method rather then replacing method, with the exception of attributes.
+  - The system also maintains ordering of what's listed in the schema.
+
+### (Another) class re-structuring to make it more like a program, and not a script
+- With the new xml serialization system, the class structure of database components was completely re-worked to now have all serializable components derive from the XmlDatabaseComponent class.
+  - Now components can call `ToXml()` and `FromXml()` on them selves, while passing xml objects, to recursively save/load themselves and child components.
+  - It also enables abstract 'middleman' classes that can handle common methods and objects between multiple components.
+- A more robust copy system was implemented using the constructors and derived versions of them.
+- An instruction compare system was also built-into the new class structure, for Instruction objects and their derivatives.
+
+### Instructions have been moved into the database
+- Post-install instructions (patches, atlas creation, shortcut creation, xml unpack/copy) were previously saved in the modpack packages and extracted with the package files into custom folders. This is bad for 2 reasons:
+  - First, the instructions would be taking up space in the package zip files (sometimes, it was the only thing in a package's zip file), and then take up time being extracted to disk, while needing to maintain instruction order, and THEN would be loaded from disk from xml into a document the installer could act on. Gross.
+  - Second, and most important, instructions weren't kept under source control. To update an instruction, it would require updating the package, and we were unable to effectively track instruction updates, who updated it, the exact changes, etc.
+- Now, the instructions have been incorporated into the database: The application already has them parsed and loaded when running an install, and only needs to calculate the order to apply the instructions, which takes milliseconds.
+
+### Automation system additions and fixes
+- Added the following tasks:
+  - DirectoryMoveTask: Attempt to move a file the 'quick' way of updating its location on the same volume. If attempting to move a file across volumes, it will fail.
+  - FileExistsTask: Ensure a file exists. That's it.
+  - MacroStringInputMacroJsonTask: Use JsonPath to search for a value by looking inside a macro.
+- Improved class structure and re-usability by adding abstract classes DirectoryDestinationTask and MacroStringInputMacroTask, to manage the destination directory of a IO task and get the value of a given macro, respectively.
+- Added the ability to specify which browser engine to use (IE11 or Edge) for DownloadBrowserTask, MacroStringSplitBrowserTask, MacroSubstringBrowserTask, implemented through a BrowserManager class.
+- Fixed cleanup and disposal of unmanaged browser resources for DownloadBrowserTask, MacroStringSplitBrowserTask, MacroSubstringBrowserTask.
+- Fixed a bug with the Macro tasks that would allow updating/replacement of macros that are Application defined, and now warns when replacing a global macro.
+- Fixed a bug during HTMLPath parsing that would return an empty string if the returned element was the root of the document.
+- Fixed log string formatting issues with several tasks.
+
+### Other bug fixes and improvements
+- The browser engine EdgeHTML (used for the Microsoft Edge browser) is now usable in the modpack for html parsing of some websites that don't support IE11.
+- Updated 3rd dependency libraries DotNetZip, HtmlAgilityPack, Newtonsoft.Json, MSTest.TestAdapter, MSTest.TestFramework.
+- Both `RelhaxSandbox` and `RelhaxModpack` projects were converted from Nuget Package config to Nuget Package Reference style of managing Nuget packages.
+- The `RelhaxSandbox` project test implementations of embedded browsers was cleaned up.
+- Other misc bug fixes and optimizations.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Application version 1.3.4.0 (2021-12-19)
 https://www.virustotal.com/gui/file/f0fe66fb073e7c629c18abc73a4eb7e0c3cf68768df9d0f2f76d9411325e0ed0
 
