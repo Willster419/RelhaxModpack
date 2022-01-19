@@ -169,13 +169,12 @@ namespace RelhaxModpack.Automation
                     {
                         IsScriptNotifyAllowed = false
                     };
-                    ((ISupportInitialize)Browser).BeginInit();
-                    ((ISupportInitialize)Browser).EndInit();
                     break;
                 case BrowserType.WebView2:
                 default:
                     throw new NotImplementedException();
             }
+            isLoaded = true;
         }
 
         public void Subscribe()
