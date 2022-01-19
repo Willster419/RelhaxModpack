@@ -42,10 +42,8 @@ namespace RelhaxModpack.Automation
             this.Url = url;
         }
 
-        public HtmlWebscrapeParser(string htmlpath, string url, bool writeHtmlToDisk, string htmlFilePath)
+        public HtmlWebscrapeParser(string htmlpath, string url, bool writeHtmlToDisk, string htmlFilePath): this(htmlpath, url)
         {
-            this.HtmlPath = htmlpath;
-            this.Url = url;
             this.WriteHtmlToDisk = writeHtmlToDisk;
             this.HtmlFilePath = htmlFilePath;
         }
