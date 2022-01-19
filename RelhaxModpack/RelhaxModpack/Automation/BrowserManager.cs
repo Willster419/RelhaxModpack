@@ -163,8 +163,6 @@ namespace RelhaxModpack.Automation
                     {
                         ScriptErrorsSuppressed = true
                     };
-                    ((ISupportInitialize)Browser).BeginInit();
-                    ((ISupportInitialize)Browser).EndInit();
                     break;
                 case BrowserType.WebView:
                     webView = new WebView()
@@ -238,22 +236,22 @@ namespace RelhaxModpack.Automation
 
         private void WebView_DOMContentLoaded(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlDOMContentLoadedEventArgs e)
         {
-            OnDocumentCompleted?.Invoke(sender, e);
+            OnDocumentCompleted?.Invoke(this, e);
         }
 
         private void WebBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            OnDocumentCompleted?.Invoke(sender, e);
+            OnDocumentCompleted?.Invoke(this, e);
         }
 
         private void WebView_NavigationCompleted(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlNavigationCompletedEventArgs e)
         {
-            OnNavigationCompleted?.Invoke(sender, e);
+            OnNavigationCompleted?.Invoke(this, e);
         }
 
         private void WebBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
-            OnNavigationCompleted?.Invoke(sender, e);
+            OnNavigationCompleted?.Invoke(this, e);
         }
 
         public void Navigate(string url)
