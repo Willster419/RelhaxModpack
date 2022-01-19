@@ -23,6 +23,8 @@ namespace RelhaxModpack.Automation.Tasks
 
         public string BrowserWidth { get; set; } = "0";
 
+        public string BrowserEngine { get; set; } = BrowserType.WebBrowser.ToString();
+
         protected int waitTimeMs;
 
         protected int waitCounts;
@@ -31,10 +33,12 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected int browserWidth = 0;
 
+        protected BrowserType browserEngine = BrowserType.WebBrowser;
+
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
-            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(WaitTimeMs), nameof(WaitCounts), nameof(BrowserHeight), nameof(BrowserWidth) }).ToArray();
+            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(WaitTimeMs), nameof(WaitCounts), nameof(BrowserHeight), nameof(BrowserWidth), nameof(BrowserEngine) }).ToArray();
         }
         #endregion
 
@@ -46,6 +50,7 @@ namespace RelhaxModpack.Automation.Tasks
             waitCounts = int.Parse(ProcessMacro(nameof(WaitCounts), WaitCounts));
             browserHeight = int.Parse(ProcessMacro(nameof(BrowserHeight), BrowserHeight));
             browserWidth = int.Parse(ProcessMacro(nameof(BrowserWidth), BrowserWidth));
+            browserEngine = (BrowserType)Enum.Parse(typeof(BrowserType), ProcessMacro(nameof(BrowserEngine), BrowserEngine));
         }
 
         public override void ValidateCommands()
@@ -73,7 +78,7 @@ namespace RelhaxModpack.Automation.Tasks
             RegistryUtils.SetRegisterKeyForIEVersion(IERegistryVersion.IE11Forced);
 
             Logging.AutomationRunner("Running Browser execution code");
-            htmlXpathParser = new HtmlBrowserParser(HtmlPath, Url, waitTimeMs, waitCounts, false, null, null) { BrowserHeight = this.browserHeight, BrowserWidth = this.browserWidth };
+            htmlXpathParser = new HtmlBrowserParser(HtmlPath, Url, waitTimeMs, waitCounts, false, null, browserEngine) { BrowserHeight = this.browserHeight, BrowserWidth = this.browserWidth };
             parserExitCode = await htmlXpathParser.RunParserAsync();
 
             stringWithValue = htmlXpathParser.ResultString;

@@ -144,6 +144,7 @@
     <Compile Include="Automation\AutomationSequencer.cs" />
     <Compile Include="Automation\AutomationCompareDirectory.cs" />
     <Compile Include="Automation\AutomationCompareFile.cs" />
+    <Compile Include="Automation\BrowserManager.cs" />
     <Compile Include="Automation\Tasks\AutomationTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareCountTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareInverseTask.cs" />
@@ -277,6 +278,7 @@
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
     <Compile Include="Utilities\Enums\AutomationExitCode.cs" />
     <Compile Include="Utilities\Enums\AutomationCompareMode.cs" />
+    <Compile Include="Utilities\Enums\BrowserType.cs" />
     <Compile Include="Utilities\Enums\DatabaseLoadFailCode.cs" />
     <Compile Include="Utilities\Enums\DownloadProgressState.cs" />
     <Compile Include="Utilities\Enums\HtmlXpathParserExitCode.cs" />
