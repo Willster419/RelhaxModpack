@@ -10,17 +10,26 @@
         Title="HtmlPathSelector" Height="475" Width="800" MinHeight="475" MinWidth="800" Loaded="RelhaxWindow_Loaded">
     <Grid>
         <TextBox x:Name="UrlTextBox" HorizontalAlignment="Stretch" Height="37" Margin="10,10,122,0" TextWrapping="Wrap" Text="Enter URL here" VerticalAlignment="Top"/>
-        <Button x:Name="UrlGoButton" Content="GO (Browser Load)" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="107" Click="UrlGoButton_Click"/>
-        <Button x:Name="HtmlScrapeGoButton" Content="GO (Web Scrape)" HorizontalAlignment="Right" Margin="0,35,10,0" VerticalAlignment="Top" Width="107" Click="HtmlScrapeGoButton_Click"/>
+        <Button x:Name="GoButton" Content="GO" HorizontalAlignment="Right" Margin="0,71,10,0" VerticalAlignment="Top" Width="107" Click="GoButton_Click"/>
         <TextBox x:Name="HtmlPathTextBox" HorizontalAlignment="Stretch" Height="39" Margin="10,52,122,0" TextWrapping="Wrap" Text="Enter HtmlPath here" VerticalAlignment="Top"/>
         <TextBlock x:Name="SetDelayHeaderTextBlock" HorizontalAlignment="Left" Margin="10,96,0,0" TextWrapping="Wrap" Text="Set browser script execution delay" VerticalAlignment="Top"/>
         <Slider x:Name="SetDelaySlider" HorizontalAlignment="Stretch" Margin="196,96,65,0" VerticalAlignment="Top" Minimum="2000" Maximum="10000" LargeChange="100" SmallChange="10" TickFrequency="10" ValueChanged="SetDelaySlider_ValueChanged" IsSnapToTickEnabled="True"/>
         <TextBlock x:Name="SetDelayValueTextBlock" HorizontalAlignment="Right" Margin="0,96,10,0" TextWrapping="NoWrap" Text="Number" VerticalAlignment="Top" Width="50"/>
-        <WindowsFormsHost x:Name="WinFormsBrowserHost" HorizontalAlignment="Stretch"  Margin="10,124,10,66" VerticalAlignment="Stretch">
+        <WindowsFormsHost x:Name="WinFormsIEHost" HorizontalAlignment="Stretch"  Margin="10,124,10,66" VerticalAlignment="Stretch" Visibility="Visible" IsEnabled="True">
             <WindowsFormsHost.Child>
-                <controls:WebView x:Name="Browser" Dock="Fill" Anchor="Bottom,Left,Right,Top"/>
+                <winforms:WebBrowser x:Name="IEBrowser" Dock="Fill" Anchor="Bottom,Left,Right,Top"/>
+            </WindowsFormsHost.Child>
+        </WindowsFormsHost>
+        <WindowsFormsHost x:Name="WinFormsEdgeHost" HorizontalAlignment="Stretch"  Margin="10,124,10,66" VerticalAlignment="Stretch"  Visibility="Hidden" IsEnabled="False">
+            <WindowsFormsHost.Child>
+                <controls:WebView x:Name="EdgeBrowser" Dock="Fill" Anchor="Bottom,Left,Right,Top"/>
             </WindowsFormsHost.Child>
         </WindowsFormsHost>
         <TextBox x:Name="HtmlPathResultsTextBox" HorizontalAlignment="Stretch" Margin="10,0,10,10" TextWrapping="NoWrap" Text="HtmlPath results will show here" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Visible" Height="51"/>
+        <Grid HorizontalAlignment="Right" Height="55" Margin="0,11,10,0" VerticalAlignment="Top" Width="107">
+            <RadioButton x:Name="HtmlEngineRadioButton" Content="HTML Engine" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" ToolTip="Use the raw HTML webscrape engine for loading a webpage. Try this first as it is the fastest."/>
+            <RadioButton x:Name="IEEngineRadioButton" Content="IE Engine" HorizontalAlignment="Right" Margin="0,20,40,0" VerticalAlignment="Top" ToolTip="Use the IE engine (default) for loading a webpage. Use this is most scenarios that require javascript/a proper browser."/>
+            <RadioButton x:Name="EdgeEngineRadioButton" Content="Edge Engine" HorizontalAlignment="Right" Margin="0,40,22,0" VerticalAlignment="Top" ToolTip="Use the EdgeHTML engine for loading a webpage. Use this when the IE engine is not supported."/>
+        </Grid>
     </Grid>
 </local:RelhaxWindow>

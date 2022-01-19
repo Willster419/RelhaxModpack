@@ -70,6 +70,17 @@ namespace RelhaxModpack.Automation
             ThreadMode = false;
         }
 
+        public HtmlBrowserParser(string htmlpath, string url, int waitTimeMs, int waitCounts, bool writeHtmlToDisk, string htmlFilePath, WebBrowser browser) : base(htmlpath, url, writeHtmlToDisk, htmlFilePath)
+        {
+            if (browser == null)
+                throw new NullReferenceException();
+            this.WaitTimeMs = waitTimeMs;
+            this.WaitCounts = waitCounts;
+            this.BrowserManager = new BrowserManager(browser);
+            BrowserType = BrowserManager.BrowserType;
+            ThreadMode = false;
+        }
+
         public override async Task<HtmlXpathParserExitCode> RunParserAsync(string url, string htmlPath)
         {
             return await base.RunParserAsync(url, htmlPath);
