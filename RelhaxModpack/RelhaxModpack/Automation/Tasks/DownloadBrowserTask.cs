@@ -77,6 +77,7 @@ namespace RelhaxModpack.Automation.Tasks
         public async override Task RunTask()
         {
             await base.RunTask();
+            (htmlXpathParser as HtmlBrowserParser).CleanupBrowser();
         }
 
         protected async override Task SetupUrl()

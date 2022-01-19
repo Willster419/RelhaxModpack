@@ -207,7 +207,7 @@ namespace RelhaxModpack.Automation
             browserNavigationCompleted = true;
         }
 
-        private void CleanupBrowser()
+        public void CleanupBrowser()
         {
             browserDispatcher.Invoke(() =>
             {
