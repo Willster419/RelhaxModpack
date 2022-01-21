@@ -1,3 +1,10 @@
+# Application version 1.3.5.1 (2022-01-21)
+https://www.virustotal.com/gui/file/d220b81bc03569ff0fce2f70df233d404964cbe9fd2cc7d61fd6409bdc8f1778
+
+- Fixed bugs with modpack toolbox for database publishing.
+- Fixed issues and optimized code in DatabaseManager.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 # Application version 1.3.5.0 (2022-01-19)
 https://www.virustotal.com/gui/file/2da65e991ef0290c9239ee97580c2e0755f853c115a1e15e62f22345fe1f5377
 
