@@ -209,6 +209,25 @@ namespace RelhaxModpack.Database
             DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
             return DatabaseLoadFailCode.None;
         }
+
+        public DatabaseLoadFailCode LoadDatabaseCustomFromStringsAsync(XmlDocument rootDocument, string globalDependenciesXml, string dependneciesXml, List<string> categoriesXml)
+        {
+            if (string.IsNullOrWhiteSpace(globalDependenciesXml))
+                throw new ArgumentException("Was null or empty", nameof(globalDependenciesXml));
+            if (string.IsNullOrWhiteSpace(dependneciesXml))
+                throw new ArgumentException("Was null or empty", nameof(dependneciesXml));
+            if (categoriesXml == null || categoriesXml.Count == 0)
+                throw new ArgumentException("Was null or count was 0", nameof(globalDependenciesXml));
+
+            Init();
+            DatabaseRootXmlDocument = rootDocument;
+            LoadMetadataInfoFromRootXmlDocument();
+            ParseDatabaseFromStrings(globalDependenciesXml, dependneciesXml, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList);
+            DatabaseUtils.BuildTopLevelParents(ParsedCategoryList);
+            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
+            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            return DatabaseLoadFailCode.None;
+        }
         #endregion
 
         #region Initializations
@@ -378,15 +397,6 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Parse the root xml document into xml object
-        public DatabaseLoadFailCode ParseRootDatabaseXmlFromString(string xmlString)
-        {
-            if (string.IsNullOrEmpty(xmlString))
-                throw new NullReferenceException();
-
-            databaseRootXmlString = xmlString;
-            return ParseRootDatabaseFromString();
-        }
-
         private DatabaseLoadFailCode ParseRootDatabaseFromString()
         {
             //load the xml document into xml object
@@ -521,12 +531,18 @@ namespace RelhaxModpack.Database
                 categoriesXmlBeta.Add(downloadStrings[i]);
             }
 
+            return ParseDatabaseFromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList);
+        }
+
+        private DatabaseLoadFailCode ParseDatabaseFromStrings(string globalDependenciesXml, string dependneciesXml, List<string> categoriesXml,
+            List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        {
             //parse into lists
             switch (DocumentVersion)
             {
                 case DocumentVersion1V1:
                 case DocumentVersion1V2:
-                    if (!ParseDatabase1V1FromStrings(globalDependencyXmlStringBeta, dependenicesXmlStringBeta, categoriesXmlBeta, GlobalDependencies, Dependencies, ParsedCategoryList))
+                    if (!ParseDatabase1V1FromStrings(globalDependenciesXml, dependneciesXml, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList))
                     {
                         Logging.WriteToLog("Failed to parse database", Logfiles.Application, LogLevel.Error);
                         return DatabaseLoadFailCode.FailedToParseDatabase;
@@ -650,7 +666,7 @@ namespace RelhaxModpack.Database
         /// <param name="dependencies">The list of dependencies</param>
         /// <param name="parsedCategoryList">The list of categories</param>
         /// <returns></returns>
-        public bool ParseDatabase1V1FromStrings(string globalDependenciesXml, string dependneciesXml, List<string> categoriesXml,
+        private bool ParseDatabase1V1FromStrings(string globalDependenciesXml, string dependneciesXml, List<string> categoriesXml,
             List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
         {
             Logging.Debug(LogOptions.MethodName, "Parsing global dependencies");
@@ -690,6 +706,7 @@ namespace RelhaxModpack.Database
 
             return ParseDatabase(globalDependenciesdoc, globalDependencies, dependenciesdoc, dependencies, categoryDocuments, parsedCategoryList);
         }
+
         public bool ParseDatabase(XDocument globalDependenciesDoc, List<DatabasePackage> globalDependenciesList, XDocument dependenciesDoc,
             List<Dependency> dependenciesList, List<XDocument> categoryDocuments, List<Category> parsedCategoryList)
         {

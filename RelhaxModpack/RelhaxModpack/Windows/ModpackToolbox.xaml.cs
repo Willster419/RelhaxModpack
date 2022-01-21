@@ -408,15 +408,17 @@ namespace RelhaxModpack.Windows
             JobProgressBar.Value = prog;
         }
 
-        private async Task<bool> LoadDatabase1V1FromBigmods(string lastWoTClientVersion, List<DatabasePackage> globalDependencies, List<Dependency> dependencies, List<Category> parsedCategoryList)
+        private async Task<DatabaseManager> LoadDatabase1V1FromBigmods(string lastWoTClientVersion)
         {
             using (client = new WebClient() { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
                 DatabaseManager databaseManager = new DatabaseManager(ModpackSettings, CommandLineSettings);
                 string databaseFtpPath = string.Format("{0}{1}/", PrivateStuff.BigmodsFTPModpackDatabase, lastWoTClientVersion);
+
                 ReportProgress(string.Format("FTP path parsed as {0}", databaseFtpPath));
                 ReportProgress("Downloading documents");
                 ReportProgress("Download root document");
+
                 string rootDatabase = await client.DownloadStringTaskAsync(databaseFtpPath + "database.xml");
                 XmlDocument root1V1Document = XmlUtils.LoadXmlDocument(rootDatabase, XmlLoadType.FromString);
 
@@ -434,7 +436,11 @@ namespace RelhaxModpack.Windows
                 }
 
                 ReportProgress("Parsing to lists");
-                return databaseManager.ParseDatabase1V1FromStrings(globalDependenciesStrings1V1, dependneciesStrings1V1, categoriesStrings1V1, globalDependencies, dependencies, parsedCategoryList);
+                DatabaseLoadFailCode code = databaseManager.LoadDatabaseCustomFromStringsAsync(root1V1Document, globalDependenciesStrings1V1, dependneciesStrings1V1, categoriesStrings1V1);
+                if (code != DatabaseLoadFailCode.None)
+                    return null;
+
+                return databaseManager;
             }
         }
 
@@ -966,10 +972,6 @@ namespace RelhaxModpack.Windows
 
             SetProgress(20);
 
-            //bulid link refrences (parent/child, levels, etc)
-            DatabaseUtils.BuildTopLevelParents(currentDatabaseManager.ParsedCategoryList);
-            DatabaseUtils.BuildLinksRefrence(currentDatabaseManager.ParsedCategoryList);
-            DatabaseUtils.BuildLevelPerPackage(currentDatabaseManager.ParsedCategoryList);
             List<DatabasePackage> flatListCurrent = DatabaseUtils.GetFlatList(currentDatabaseManager.GlobalDependencies, currentDatabaseManager.Dependencies, currentDatabaseManager.ParsedCategoryList);
 
             //check for duplicates
@@ -1038,22 +1040,25 @@ namespace RelhaxModpack.Windows
             SetProgress(40);
 
             //make a flat list of old (last supported modInfoxml) for comparison
-            List<DatabasePackage> globalDependenciesOld = new List<DatabasePackage>();
-            List<Dependency> dependenciesOld = new List<Dependency>();
-            List<Category> parsedCateogryListOld = new List<Category>();
+            List<DatabasePackage> globalDependenciesOld;
+            List<Dependency> dependenciesOld;
+            List<Category> parsedCateogryListOld;
 
             //get last supported wot version for comparison
             ReportProgress("Getting last supported database files");
             LastSupportedTanksVersion = lastWoTClientVersion;
 
-            //get strings for 1v1 parsing
-            //BigmodsFTPModpackDatabase -> .../database/
-            if (!await LoadDatabase1V1FromBigmods(lastWoTClientVersion, globalDependenciesOld, dependenciesOld, parsedCateogryListOld))
+            //get strings for parsing
+            DatabaseManager manager = await LoadDatabase1V1FromBigmods(lastWoTClientVersion);
+            if (manager == null)
             {
                 ReportProgress("Failed to parse modInfo to lists");
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
+            globalDependenciesOld = manager.GlobalDependencies;
+            dependenciesOld = manager.Dependencies;
+            parsedCateogryListOld = manager.ParsedCategoryList;
 
             //build link references of old document
             DatabaseUtils.BuildTopLevelParents(parsedCateogryListOld);
@@ -1547,12 +1552,16 @@ namespace RelhaxModpack.Windows
                 ReportProgress("Done, parsed as " + supportedClientLast);
 
                 ReportProgress("Loading current database from bigmods");
-                if (!await LoadDatabase1V1FromBigmods(supportedClientLast, globalDependencies, dependencies, parsedCategoryList))
+                DatabaseManager manager = await LoadDatabase1V1FromBigmods(supportedClientLast);
+                if (manager == null)
                 {
                     ReportProgress("Failed to parse modInfo to lists");
                     ToggleUI((TabController.SelectedItem as TabItem), true);
                     return;
                 }
+                globalDependencies = manager.GlobalDependencies;
+                dependencies = manager.Dependencies;
+                parsedCategoryList = manager.ParsedCategoryList;
 
                 //download current install statistics
                 ReportProgress("Downloading current install statistics");
@@ -1611,12 +1620,16 @@ namespace RelhaxModpack.Windows
                 ReportProgress("Done, parsed as " + supportedClientLast);
 
                 ReportProgress("Loading current database from bigmods");
-                if (!await LoadDatabase1V1FromBigmods(supportedClientLast, globalDependencies, dependencies, parsedCategoryList))
+                DatabaseManager manager = await LoadDatabase1V1FromBigmods(supportedClientLast);
+                if (manager == null)
                 {
                     ReportProgress("Failed to parse modInfo to lists");
                     ToggleUI((TabController.SelectedItem as TabItem), true);
                     return;
                 }
+                globalDependencies = manager.GlobalDependencies;
+                dependencies = manager.Dependencies;
+                parsedCategoryList = manager.ParsedCategoryList;
             }
 
             ReportProgress("Creating new xml document");
