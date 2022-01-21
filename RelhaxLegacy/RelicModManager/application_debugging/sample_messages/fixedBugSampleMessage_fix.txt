@@ -1,9 +1,0 @@
-Subject: Relhax bug fix status update
-
-Hello username of server!
-(This is a copy and paste message)
-I am writing to inform you that your bug, "bugname", has been fixed, as far as I can tell. If it hasn't, please reply to this message and the bug will be re-opened. You can see the updated bug status in the spreadsheet: https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing
-Additional Info:
-<none>
-Thanks for using Relhax!
-Willster419

@@ -1,9 +1,0 @@
-Subject: Relhax feature request status update
-
-Hello username of server!
-(This is a copy and paste message)
-I am writing to inform you that your feature, "featurename", has had its status updated. You can see the updated bug status in the spreadsheet: https://docs.google.com/spreadsheets/d/1LmPCMAx0RajW4lVYAnguHjjd8jArtWuZIGciFN76AI4/edit?usp=sharing
-Additional Info:
-<none>
-Thanks for using Relhax!
-Willster419

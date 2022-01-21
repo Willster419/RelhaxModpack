@@ -1,8 +1,0 @@
-date reported: 2018-11-01
-affected users: marauder German guy from discord
-issue: when pressing next on modSelectionList, application crashes
-steps:
----2018-11-01---
-german error translates to: "The root element does not exist." Seems to be an XML error might be an issue with saving configs.
--Issue was actually that when the user presses "install relhax mod", the xml string for supported_clients is empty, and causes an xml exception. Fix is here at:
-  https://github.com/Willster419/RelhaxModpack/commit/eed4c2bf6327a85d88cbd0bd6d0bc8b0e11203c5

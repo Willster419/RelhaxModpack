@@ -1,7 +1,0 @@
-date reported: 2018-06-26
-affected users: unknown (emailed)
-issue: settings file access is denied
-steps:
----2018-06-30---
--user has application in root (C:\) directory, which could cause problems with the application. told him to try placing the modpack in his downloads folder, and report.
--Additonally, try running as admin
