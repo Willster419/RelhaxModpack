@@ -9,7 +9,7 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class AutomationCompareDirectory : AutomationCompare
     {
-        public AutomationCompareDirectory(string directoryA, string directoryB, AutomationCompareMode compareMode, int numFilesA, int numFilesB, int indexOfFilenameChange = 0) : base(directoryA, directoryB, compareMode)
+        public AutomationCompareDirectory(string directoryA, string directoryB, AutomationCompareMode compareMode, int numFilesA, int numFilesB, int indexOfFilenameChange = -1) : base(directoryA, directoryB, compareMode)
         {
             this.CompareANumFiles = numFilesA;
             this.CompareBNumFiles = numFilesB;
@@ -22,7 +22,7 @@ namespace RelhaxModpack.Automation.Tasks
             {
                 if (CompareBNumFiles != CompareANumFiles)
                     return false;
-                else if (IndexOfFilenameChange != 0)
+                else if (IndexOfFilenameChange != -1)
                     return false;
                 else return true;
             } 
@@ -37,7 +37,7 @@ namespace RelhaxModpack.Automation.Tasks
         public override void PrintToLog()
         {
             Logging.Debug("A Directory {0}, Count {1}", CompareAPath, CompareANumFiles);
-            Logging.Debug("B File {0}, Count {1}", CompareBPath, CompareBNumFiles);
+            Logging.Debug("B Directory {0}, Count {1}", CompareBPath, CompareBNumFiles);
         }
     }
 }
