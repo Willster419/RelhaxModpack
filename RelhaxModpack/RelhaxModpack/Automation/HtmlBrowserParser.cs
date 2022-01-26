@@ -139,8 +139,7 @@ namespace RelhaxModpack.Automation
                 {
                     tempHtmlText = BrowserManager.GetHtmlDocument();
                 }
-                byte[] bytes = Encoding.Default.GetBytes(tempHtmlText);
-                htmlText = Encoding.UTF8.GetString(bytes);
+                htmlText = tempHtmlText;
 
                 if (WriteHtmlToDisk)
                 {
