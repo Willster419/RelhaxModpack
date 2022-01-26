@@ -111,14 +111,13 @@ namespace RelhaxModpack.Automation
             ResultString = string.Empty;
             ResultNode = null;
 
-            using (client = new WebClient())
+            using (client = new WebClient() { Encoding = Encoding.UTF8 })
             {
                 //https://stackoverflow.com/questions/2953403/c-sharp-passing-method-as-the-argument-in-a-method
                 Logging.Info(Logfiles.AutomationRunner, "Download html webpage to string");
                 try
                 {
-                    byte[] bytes = Encoding.Default.GetBytes(await client.DownloadStringTaskAsync(Url));
-                    htmlText = Encoding.UTF8.GetString(bytes);
+                    htmlText = await client.DownloadStringTaskAsync(Url);
                 }
                 catch (OperationCanceledException) { }
                 catch (WebException wex)
