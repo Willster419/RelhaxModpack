@@ -212,7 +212,7 @@ namespace RelhaxModpack.Automation
 
             if (!isSubscribed)
             {
-                Logging.Warning(LogOptions.ClassName, "Browser is alreay unsubscribed, ignoring request");
+                Logging.Warning(LogOptions.ClassName, "Browser is already unsubscribed, ignoring request");
                 return;
             }
 
