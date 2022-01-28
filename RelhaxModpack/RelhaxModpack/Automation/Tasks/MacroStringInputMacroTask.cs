@@ -54,7 +54,7 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected override Task GetStringValue()
         {
-            Logging.Error("Do not call GetStringValue() for any task deriving from MacroStringInputMacroTask (did you mean to impliment GetStringReturnValue?)");
+            Logging.Error("Do not call GetStringValue() for any task deriving from MacroStringInputMacroTask (did you mean to implement GetStringReturnValue?)");
             throw new NotImplementedException();
         }
 
