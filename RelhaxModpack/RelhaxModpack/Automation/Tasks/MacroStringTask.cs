@@ -18,5 +18,10 @@ namespace RelhaxModpack.Automation.Tasks
         }
 
         protected abstract Task GetStringValue();
+
+        protected virtual void ProcessEscapeCharacters()
+        {
+            //stub
+        }
     }
 }

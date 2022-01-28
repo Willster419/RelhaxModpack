@@ -59,6 +59,13 @@ namespace RelhaxModpack.Automation.Tasks
             parserExitCode = await htmlXpathParser.RunParserAsync();
 
             stringWithValue = htmlXpathParser.ResultString;
+            ProcessEscapeCharacters();
+        }
+
+        protected override void ProcessEscapeCharacters()
+        {
+            base.ProcessEscapeCharacters();
+            stringWithValue = stringWithValue.Replace("&quot;", "\"").Replace("&apos;", "'").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&");
         }
 
         public override void ProcessTaskResults()

@@ -83,6 +83,7 @@ namespace RelhaxModpack.Automation.Tasks
             parserExitCode = await htmlXpathParser.RunParserAsync();
 
             stringWithValue = htmlXpathParser.ResultString;
+            ProcessEscapeCharacters();
         }
 
         public override void ProcessTaskResults()
