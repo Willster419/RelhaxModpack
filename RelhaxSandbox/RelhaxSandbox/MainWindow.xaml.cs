@@ -959,5 +959,211 @@ namespace RelhaxSandbox
             myThread.IsBackground = true;
             myThread.Start();
         }
+
+        #region Browser session testing
+        private void BrowserSessionTestStartButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(BrowserSessionTestUrlTextbox.Text))
+                return;
+
+            BrowserSessionTestResultsTextbox.Text = "Starting browser...";
+
+            SetRegistryKey(System.Diagnostics.Process.GetCurrentProcess().ProcessName, TestBrowse.Version.Major);
+
+            SessionTestWebBrowser.ScriptErrorsSuppressed = true;
+
+            SessionTestWebBrowser.DocumentCompleted += SessionTestWebBrowser_DocumentCompleted; ;
+
+            SessionTestWebBrowser.Navigate(BrowserSessionTestUrlTextbox.Text);
+        }
+
+        private bool running = false;
+        private async void SessionTestWebBrowser_DocumentCompleted(object sender, System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e)
+        {
+            if (running)
+                return;
+            running = true;
+
+            //get htmlpath to the button
+            await Task.Delay(2000);
+
+            HtmlDocument document = new HtmlDocument();
+            string htmlText = SessionTestWebBrowser.Document.Body.OuterHtml;
+            document.LoadHtml(htmlText);
+            HtmlNode node = document.DocumentNode;
+            //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
+            HtmlNode urlNode = node.SelectSingleNode(@"//a[contains(@class, 'button download-file-button') and contains(text(), 'Download file')]/@href");
+
+            string downloadUrl = null;
+            if (urlNode != null)
+            {
+                downloadUrl = urlNode.Attributes["href"].Value;
+                downloadUrl = "https://disk.yandex.com" + downloadUrl;
+                SessionTestWebBrowser.Navigate(downloadUrl);
+                using (WebClient client = new WebClient() { })
+                {
+                    if (File.Exists("LampLights.zip"))
+                        File.Delete("LampLights.zip");
+                    client.Headers.Add(HttpRequestHeader.Accept, "image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*");
+                    client.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-US");
+                    client.Headers.Add("Ua-Cpu", "AMD64");
+                    client.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+                    client.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko");
+                    //keep-alive is set by default
+                    client.Headers.Add(HttpRequestHeader.Cookie, SessionTestWebBrowser.Document.Cookie);
+                    //await client.DownloadFileTaskAsync(downloadUrl, "LampLights.zip");
+                }
+            }
+            else
+            {
+
+            }
+
+            //AutoUpdateWGInfoIEWIN.Text = string.Format("For client: {0}, download link: {1}", version, downloadURL);
+
+
+            running = false;
+        }
+
+        private async void HttpClientTestButtonYandex_Click(object sender, RoutedEventArgs e)
+        {
+            //https://stackoverflow.com/questions/45831967/http-call-in-c-sharp-is-returning-garbage-data-in-the-response
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                UseDefaultCredentials = true,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+            using (HttpClient client = new HttpClient(handler, true))
+            {
+                client.DefaultRequestHeaders.Accept.ParseAdd("image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*");
+                client.DefaultRequestHeaders.AcceptLanguage.ParseAdd("en-US");
+                client.DefaultRequestHeaders.Add("Ua-Cpu", "AMD64");
+                client.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip, deflate");
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko");
+                HttpResponseMessage response = await client.GetAsync("https://disk.yandex.com/d/jBxXcD2fc6mLT");
+                response.EnsureSuccessStatusCode();
+                string responseBody1 = await response.Content.ReadAsStringAsync();
+                File.WriteAllText("HttpClientResponse1.html", responseBody1);
+                // Above three lines can be replaced with new helper method below
+                // string responseBody = await client.GetStringAsync(uri);
+
+                //now parse the response for the download link
+                HtmlDocument document = new HtmlDocument();
+                document.LoadHtml(responseBody1);
+                HtmlNode node = document.DocumentNode;
+                //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
+                HtmlNode urlNode = node.SelectSingleNode(@"//a[contains(@class, 'button download-file-button') and contains(text(), 'Download file')]/@href");
+                string downloadUrl = urlNode.Attributes["href"].Value;
+                downloadUrl = "https://disk.yandex.com" + downloadUrl;
+                response = await client.GetAsync(downloadUrl);
+                response.EnsureSuccessStatusCode();
+
+                if (File.Exists("LampLights.zip"))
+                    File.Delete("LampLights.zip");
+                using (Stream stream = await response.Content.ReadAsStreamAsync())
+                using (FileStream filestream = new FileStream("LampLights.zip", FileMode.Create))
+                {
+                    await (stream as MemoryStream).CopyToAsync(filestream);
+                    filestream.Flush();
+                }
+                //string responseBody2 = await response.Content.ReadAsStringAsync();
+                //File.WriteAllText("HttpClientResponse2.html", responseBody2);
+
+            }
+        }
+
+        private async void HttpClientTestButtonGdrive_Click(object sender, RoutedEventArgs e)
+        {
+            CookieContainer cookieContainer = new CookieContainer()
+            {
+
+            };
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                UseDefaultCredentials = true,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                UseCookies = true,
+                CookieContainer = cookieContainer
+            };
+            using (HttpClient client = new HttpClient(handler, true))
+            {
+                client.DefaultRequestHeaders.Accept.ParseAdd("image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*");
+                client.DefaultRequestHeaders.AcceptLanguage.ParseAdd("en-US");
+                client.DefaultRequestHeaders.Add("Ua-Cpu", "AMD64");
+                client.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip, deflate");
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko");
+                //https://wotsite.net/ozvuchka-dlya-world-of-tanks/12454-
+                HttpResponseMessage response = await client.GetAsync("https://drive.google.com/uc?id=1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u&export=download");
+                response.EnsureSuccessStatusCode();
+                string responseHeaders = response.Headers.ToString();
+                string responseBody1 = await response.Content.ReadAsStringAsync();
+                File.WriteAllText("HttpClientResponseGdrive1.html", responseBody1);
+
+                HtmlDocument document = new HtmlDocument();
+                document.LoadHtml(responseBody1);
+                HtmlNode node = document.DocumentNode;
+                HtmlNode urlNode = node.SelectSingleNode(@"//a[contains(@href, '1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u') and contains(@id, 'uc-download-link')]//@href");
+                string downloadUrl = urlNode.Attributes["href"].Value;
+                downloadUrl = downloadUrl.Replace("&amp;", "&");
+                downloadUrl = "https://drive.google.com" + downloadUrl;
+                File.WriteAllText("directDownloadUrl.txt", downloadUrl);
+                response = await client.GetAsync(downloadUrl);
+                response.EnsureSuccessStatusCode();
+
+                if (File.Exists("The Fast and the Furious.rar"))
+                    File.Delete("The Fast and the Furious.rar");
+                using (Stream stream = await response.Content.ReadAsStreamAsync())
+                using (FileStream filestream = new FileStream("The Fast and the Furious.rar", FileMode.Create))
+                {
+                    await (stream as MemoryStream).CopyToAsync(filestream);
+                    filestream.Flush();
+                }
+            }
+        }
+
+        class MyWebClient : WebClient
+        {
+            CookieContainer c = new CookieContainer();
+
+            protected override WebRequest GetWebRequest(Uri u)
+            {
+                var r = (HttpWebRequest)base.GetWebRequest(u);
+                r.CookieContainer = c;
+                return r;
+            }
+        }
+
+        //this is for showing how to do it via WebClient for a SO user: https://stackoverflow.com/questions/34323143/downloading-large-google-drive-files-with-webclient-in-c-sharp
+        private async void WebClientTestButtonGdrive_Click(object sender, RoutedEventArgs e)
+        {
+            using (MyWebClient client = new MyWebClient())
+            {
+                //set headers
+                //client.Headers.Add(HttpRequestHeader.Accept, "image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*");
+                //client.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-US");
+                //client.Headers.Add("Ua-Cpu", "AMD64");
+                //client.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+                //client.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko");
+                //client.Headers.Add(HttpRequestHeader.Cookie, SessionTestWebBrowser.Document.Cookie);
+
+                //get the warning page
+                string htmlPage = await client.DownloadStringTaskAsync("https://drive.google.com/uc?id=1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u&export=download");
+
+                //use HtmlAgilityPack to get the url with the confirm parameter in the url
+                HtmlDocument document = new HtmlDocument();
+                document.LoadHtml(htmlPage);
+                HtmlNode node = document.DocumentNode;
+                HtmlNode urlNode = node.SelectSingleNode(@"//a[contains(@href, '1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u') and contains(@id, 'uc-download-link')]//@href");
+                string downloadUrl = urlNode.Attributes["href"].Value;
+                downloadUrl = downloadUrl.Replace("&amp;", "&");
+                downloadUrl = "https://drive.google.com" + downloadUrl;
+
+                //download the file
+                if (File.Exists("The Fast and the Furious.rar"))
+                    File.Delete("The Fast and the Furious.rar");
+                await client.DownloadFileTaskAsync(downloadUrl, "The Fast and the Furious.rar");
+            }
+        }
+        #endregion
     }
 }

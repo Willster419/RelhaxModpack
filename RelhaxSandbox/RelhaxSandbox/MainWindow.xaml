@@ -320,6 +320,20 @@
                          ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
             </Grid>
         </TabItem>
+        <TabItem Header="Browser session test">
+            <Grid>
+                <TextBlock HorizontalAlignment="Left" Margin="10,4,0,0" TextWrapping="Wrap" Text="URL" VerticalAlignment="Top"/>
+                <TextBox x:Name="BrowserSessionTestUrlTextbox" HorizontalAlignment="Stretch" Height="23" Margin="36,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="https://disk.yandex.com/d/jBxXcD2fc6mLT"/>
+                <Button x:Name="BrowserSessionTestStartButton" Content="GO" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Width="113" Click="BrowserSessionTestStartButton_Click"/>
+                <WindowsFormsHost HorizontalAlignment="Stretch" Margin="10,56,10,108" VerticalAlignment="Stretch" Visibility="Visible">
+                    <WindowsFormsHost.Child>
+                        <wf:WebBrowser x:Name="SessionTestWebBrowser"/>
+                    </WindowsFormsHost.Child>
+                </WindowsFormsHost>
+                <TextBox x:Name="BrowserSessionTestResultsTextbox" HorizontalAlignment="Stretch" Margin="10,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="93" ScrollViewer.CanContentScroll="True" 
+                         ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+            </Grid>
+        </TabItem>
         <TabItem Header="Other tests 2">
             <Grid>
                 <RichTextBox HorizontalAlignment="Left" Height="167" Margin="167,31,0,0" VerticalAlignment="Top" Width="302">
@@ -357,6 +371,11 @@
                 <Button x:Name="DownloadManagerTestingButton" Content="Download Manager Testing" HorizontalAlignment="Left" Margin="474,154,0,0" VerticalAlignment="Top" Width="154" Click="DownloadManagerTestingButton_Click"/>
                 <TextBlock x:Name="DownloadManagerTestingHashResult" HorizontalAlignment="Left" Margin="474,179,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="154"/>
                 <Button x:Name="ThreadingTestButton" Content="Threading test" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Width="113" Click="ThreadingTestButton_Click"/>
+                <Button x:Name="HttpClientTestButtonYandex" Content="HttpClient Test (Yandex)" HorizontalAlignment="Left" Margin="474,200,0,0" VerticalAlignment="Top" Width="154" Click="HttpClientTestButtonYandex_Click"/>
+                <Button x:Name="HttpClientTestButtonGdrive" Content="HttpClient Test (Gdrive)" HorizontalAlignment="Left" Margin="474,225,0,0" VerticalAlignment="Top" Width="154" Click="HttpClientTestButtonGdrive_Click"/>
+                <Button x:Name="WebClientTestButtonGdrive" HorizontalAlignment="Left" Margin="474,250,0,0" VerticalAlignment="Top" Width="154" Height="40" Click="WebClientTestButtonGdrive_Click">
+                    <TextBlock Text="Custom WebClient test (Gdrive)" TextWrapping="Wrap"/>
+                </Button>
             </Grid>
         </TabItem>
     </TabControl>
