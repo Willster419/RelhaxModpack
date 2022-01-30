@@ -1103,20 +1103,44 @@ namespace RelhaxSandbox
                 document.LoadHtml(responseBody1);
                 HtmlNode node = document.DocumentNode;
                 HtmlNode urlNode = node.SelectSingleNode(@"//a[contains(@href, '1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u') and contains(@id, 'uc-download-link')]//@href");
+                if (urlNode == null)
+                {
+                    return;
+                }
                 string downloadUrl = urlNode.Attributes["href"].Value;
                 downloadUrl = downloadUrl.Replace("&amp;", "&");
                 downloadUrl = "https://drive.google.com" + downloadUrl;
                 File.WriteAllText("directDownloadUrl.txt", downloadUrl);
-                response = await client.GetAsync(downloadUrl);
-                response.EnsureSuccessStatusCode();
-
                 if (File.Exists("The Fast and the Furious.rar"))
                     File.Delete("The Fast and the Furious.rar");
+
+                // OLD METHOD
+                /*
+                //response = await client.GetAsync(downloadUrl);
+                response.EnsureSuccessStatusCode();
                 using (Stream stream = await response.Content.ReadAsStreamAsync())
                 using (FileStream filestream = new FileStream("The Fast and the Furious.rar", FileMode.Create))
                 {
                     await (stream as MemoryStream).CopyToAsync(filestream);
                     filestream.Flush();
+                }
+                */
+
+                // NEW STREAM METHOD (allows progress report)
+                response = await client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
+                Stream fileDownload = await response.Content.ReadAsStreamAsync();
+                long contentLength = (long)response.Content.Headers.ContentLength;
+                using (FileStream filestream = new FileStream("The Fast and the Furious.rar", FileMode.Create))
+                {
+                    byte[] buffer = new byte[4096];
+                    int ammountRead = await fileDownload.ReadAsync(buffer, 0, 4096);
+                    while (ammountRead != 0)
+                    {
+                        await filestream.WriteAsync(buffer, 0, ammountRead);
+                        ammountRead = await fileDownload.ReadAsync(buffer, 0, 4096);
+                    }
+                    await filestream.FlushAsync();
                 }
             }
         }
