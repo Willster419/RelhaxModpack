@@ -373,9 +373,14 @@
                 <Button x:Name="ThreadingTestButton" Content="Threading test" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Width="113" Click="ThreadingTestButton_Click"/>
                 <Button x:Name="HttpClientTestButtonYandex" Content="HttpClient Test (Yandex)" HorizontalAlignment="Left" Margin="474,200,0,0" VerticalAlignment="Top" Width="154" Click="HttpClientTestButtonYandex_Click"/>
                 <Button x:Name="HttpClientTestButtonGdrive" Content="HttpClient Test (Gdrive)" HorizontalAlignment="Left" Margin="474,225,0,0" VerticalAlignment="Top" Width="154" Click="HttpClientTestButtonGdrive_Click"/>
-                <Button x:Name="WebClientTestButtonGdrive" HorizontalAlignment="Left" Margin="474,250,0,0" VerticalAlignment="Top" Width="154" Height="40" Click="WebClientTestButtonGdrive_Click">
+                <Button x:Name="WebClientTestButtonGdrive" HorizontalAlignment="Left" Margin="474,250,0,0" VerticalAlignment="Top" Width="154" Click="WebClientTestButtonGdrive_Click">
                     <TextBlock Text="Custom WebClient test (Gdrive)" TextWrapping="Wrap"/>
                 </Button>
+                <Button x:Name="HttpClientTestButtonKR" HorizontalAlignment="Left" Margin="474,291,0,0" VerticalAlignment="Top" Width="154" Click="HttpClientTestButtonKR_Click">
+                    <TextBlock Text="HttpClient Test (KoreanRandom)" TextWrapping="Wrap"/>
+                </Button>
+                <TextBox x:Name="HttpClientTestUsernameBox" HorizontalAlignment="Left" Height="23" Margin="633,201,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Width="120"/>
+                <TextBox x:Name="HttpClientTestPasswordBox" HorizontalAlignment="Left" Height="23" Margin="633,226,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Width="120"/>
             </Grid>
         </TabItem>
     </TabControl>

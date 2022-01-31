@@ -36,6 +36,7 @@ using Microsoft.Win32;
 using System.Linq;
 using FontFamily = System.Windows.Media.FontFamily;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace RelhaxSandbox
 {
@@ -987,40 +988,20 @@ namespace RelhaxSandbox
             //get htmlpath to the button
             await Task.Delay(2000);
 
-            HtmlDocument document = new HtmlDocument();
             string htmlText = SessionTestWebBrowser.Document.Body.OuterHtml;
-            document.LoadHtml(htmlText);
-            HtmlNode node = document.DocumentNode;
-            //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
-            HtmlNode urlNode = node.SelectSingleNode(@"//a[contains(@class, 'button download-file-button') and contains(text(), 'Download file')]/@href");
-
-            string downloadUrl = null;
-            if (urlNode != null)
+            string downloadUrl = GetHtmlNode(htmlText, @"//a[contains(@class, 'button download-file-button') and contains(text(), 'Download file')]/@href", "href");
+            downloadUrl = "https://disk.yandex.com" + downloadUrl;
+            SessionTestWebBrowser.Navigate(downloadUrl);
+            using (WebClient client = new WebClient() { })
             {
-                downloadUrl = urlNode.Attributes["href"].Value;
-                downloadUrl = "https://disk.yandex.com" + downloadUrl;
-                SessionTestWebBrowser.Navigate(downloadUrl);
-                using (WebClient client = new WebClient() { })
-                {
-                    if (File.Exists("LampLights.zip"))
-                        File.Delete("LampLights.zip");
-                    client.Headers.Add(HttpRequestHeader.Accept, "image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*");
-                    client.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-US");
-                    client.Headers.Add("Ua-Cpu", "AMD64");
-                    client.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
-                    client.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko");
-                    //keep-alive is set by default
-                    client.Headers.Add(HttpRequestHeader.Cookie, SessionTestWebBrowser.Document.Cookie);
-                    //await client.DownloadFileTaskAsync(downloadUrl, "LampLights.zip");
-                }
+                if (File.Exists("LampLights.zip"))
+                    File.Delete("LampLights.zip");
+                ApplyHeaders(client);
+                //keep-alive is set by default
+                //TODO: cookies listed in string, probably need to parse
+                client.Headers.Add(HttpRequestHeader.Cookie, SessionTestWebBrowser.Document.Cookie);
+                //await client.DownloadFileTaskAsync(downloadUrl, "LampLights.zip");
             }
-            else
-            {
-
-            }
-
-            //AutoUpdateWGInfoIEWIN.Text = string.Format("For client: {0}, download link: {1}", version, downloadURL);
-
 
             running = false;
         }
@@ -1035,11 +1016,7 @@ namespace RelhaxSandbox
             };
             using (HttpClient client = new HttpClient(handler, true))
             {
-                client.DefaultRequestHeaders.Accept.ParseAdd("image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*");
-                client.DefaultRequestHeaders.AcceptLanguage.ParseAdd("en-US");
-                client.DefaultRequestHeaders.Add("Ua-Cpu", "AMD64");
-                client.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip, deflate");
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko");
+                ApplyHeaders(client);
                 HttpResponseMessage response = await client.GetAsync("https://disk.yandex.com/d/jBxXcD2fc6mLT");
                 response.EnsureSuccessStatusCode();
                 string responseBody1 = await response.Content.ReadAsStringAsync();
@@ -1048,12 +1025,7 @@ namespace RelhaxSandbox
                 // string responseBody = await client.GetStringAsync(uri);
 
                 //now parse the response for the download link
-                HtmlDocument document = new HtmlDocument();
-                document.LoadHtml(responseBody1);
-                HtmlNode node = document.DocumentNode;
-                //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
-                HtmlNode urlNode = node.SelectSingleNode(@"//a[contains(@class, 'button download-file-button') and contains(text(), 'Download file')]/@href");
-                string downloadUrl = urlNode.Attributes["href"].Value;
+                string downloadUrl = GetHtmlNode(responseBody1, @"//a[contains(@class, 'button download-file-button') and contains(text(), 'Download file')]/@href", "href");
                 downloadUrl = "https://disk.yandex.com" + downloadUrl;
                 response = await client.GetAsync(downloadUrl);
                 response.EnsureSuccessStatusCode();
@@ -1087,11 +1059,7 @@ namespace RelhaxSandbox
             };
             using (HttpClient client = new HttpClient(handler, true))
             {
-                client.DefaultRequestHeaders.Accept.ParseAdd("image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*");
-                client.DefaultRequestHeaders.AcceptLanguage.ParseAdd("en-US");
-                client.DefaultRequestHeaders.Add("Ua-Cpu", "AMD64");
-                client.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip, deflate");
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko");
+                ApplyHeaders(client);
                 //https://wotsite.net/ozvuchka-dlya-world-of-tanks/12454-
                 HttpResponseMessage response = await client.GetAsync("https://drive.google.com/uc?id=1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u&export=download");
                 response.EnsureSuccessStatusCode();
@@ -1099,15 +1067,7 @@ namespace RelhaxSandbox
                 string responseBody1 = await response.Content.ReadAsStringAsync();
                 File.WriteAllText("HttpClientResponseGdrive1.html", responseBody1);
 
-                HtmlDocument document = new HtmlDocument();
-                document.LoadHtml(responseBody1);
-                HtmlNode node = document.DocumentNode;
-                HtmlNode urlNode = node.SelectSingleNode(@"//a[contains(@href, '1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u') and contains(@id, 'uc-download-link')]//@href");
-                if (urlNode == null)
-                {
-                    return;
-                }
-                string downloadUrl = urlNode.Attributes["href"].Value;
+                string downloadUrl = GetHtmlNode(responseBody1, @"//a[contains(@href, '1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u') and contains(@id, 'uc-download-link')]//@href", "href");
                 downloadUrl = downloadUrl.Replace("&amp;", "&");
                 downloadUrl = "https://drive.google.com" + downloadUrl;
                 File.WriteAllText("directDownloadUrl.txt", downloadUrl);
@@ -1162,7 +1122,7 @@ namespace RelhaxSandbox
         {
             using (MyWebClient client = new MyWebClient())
             {
-                //set headers
+                //set headers (we don't actually need to for gdrive)
                 //client.Headers.Add(HttpRequestHeader.Accept, "image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*");
                 //client.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-US");
                 //client.Headers.Add("Ua-Cpu", "AMD64");
@@ -1174,12 +1134,7 @@ namespace RelhaxSandbox
                 string htmlPage = await client.DownloadStringTaskAsync("https://drive.google.com/uc?id=1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u&export=download");
 
                 //use HtmlAgilityPack to get the url with the confirm parameter in the url
-                HtmlDocument document = new HtmlDocument();
-                document.LoadHtml(htmlPage);
-                HtmlNode node = document.DocumentNode;
-                HtmlNode urlNode = node.SelectSingleNode(@"//a[contains(@href, '1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u') and contains(@id, 'uc-download-link')]//@href");
-                string downloadUrl = urlNode.Attributes["href"].Value;
-                downloadUrl = downloadUrl.Replace("&amp;", "&");
+                string downloadUrl = GetHtmlNode(htmlPage, @"//a[contains(@href, '1ZNPXp2QhO5NjwAV50ges-hedSSgYOg1u') and contains(@id, 'uc-download-link')]//@href", "href");
                 downloadUrl = "https://drive.google.com" + downloadUrl;
 
                 //download the file
@@ -1187,6 +1142,70 @@ namespace RelhaxSandbox
                     File.Delete("The Fast and the Furious.rar");
                 await client.DownloadFileTaskAsync(downloadUrl, "The Fast and the Furious.rar");
             }
+        }
+
+        private async void HttpClientTestButtonKR_Click(object sender, RoutedEventArgs e)
+        {
+            CookieContainer cookieContainer = new CookieContainer()
+            {
+
+            };
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                UseDefaultCredentials = true,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                UseCookies = true,
+                CookieContainer = cookieContainer
+            };
+            using (HttpClient client = new HttpClient(handler, true))
+            {
+                ApplyHeaders(client);
+                HttpResponseMessage response = await client.GetAsync("https://koreanrandom.com/forum/login/");
+                response.EnsureSuccessStatusCode();
+                string responseBody1 = await response.Content.ReadAsStringAsync();
+                string csrfKey = GetHtmlNode(responseBody1, @"//input[contains(@type, 'hidden') and contains(@name, 'csrfKey')]//@value", "value");
+                string postString = string.Format("csrfKey={0}&auth={1}&password={2}&_processLogin=usernamepassword&_processLogin=usernamepassword", csrfKey, HttpClientTestUsernameBox.Text, HttpClientTestPasswordBox.Text);
+                HttpContent httpContent = new StringContent(postString, Encoding.UTF8);
+                httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                response = await client.PostAsync("https://koreanrandom.com/forum/login/", httpContent);
+                response = await client.GetAsync("https://koreanrandom.com/forum/topic/37259-%D0%BF%D1%80%D0%B8%D1%86%D0%B5%D0%BB-%D0%B1%D0%B5%D0%B7-%D1%81%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0%D0%BC%D0%B8-xvm");
+                responseBody1 = await response.Content.ReadAsStringAsync();
+                File.WriteAllText("HttpClientResponseKR.html", responseBody1);
+                string attachmentLink = GetHtmlNode(responseBody1, @"//a[@data-fileid = '147700']//@href", "href");
+                string pythonExtension = await client.GetStringAsync(attachmentLink);
+                File.WriteAllText("targetInfo.py", pythonExtension);
+            }
+        }
+
+        private void ApplyHeaders(HttpClient client)
+        {
+            client.DefaultRequestHeaders.Accept.ParseAdd("image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*");
+            client.DefaultRequestHeaders.AcceptLanguage.ParseAdd("en-US");
+            client.DefaultRequestHeaders.Add("Ua-Cpu", "AMD64");
+            client.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip, deflate");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko");
+        }
+
+        private void ApplyHeaders(WebClient client)
+        {
+            client.Headers.Add(HttpRequestHeader.Accept, "image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*");
+            client.Headers.Add(HttpRequestHeader.AcceptLanguage, "en-US");
+            client.Headers.Add("Ua-Cpu", "AMD64");
+            client.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+            client.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.2; Win64; x64; Trident/7.0; rv:11.0) like Gecko");
+        }
+
+        private string GetHtmlNode(string htmlPage, string htmlPath, string attribute)
+        {
+            HtmlDocument document = new HtmlDocument();
+            document.LoadHtml(htmlPage);
+            HtmlNode node = document.DocumentNode;
+            HtmlNode urlNode = node.SelectSingleNode(htmlPath);
+            if (urlNode == null)
+                return null;
+            string downloadUrl = urlNode.Attributes[attribute].Value;
+            downloadUrl = downloadUrl.Replace("&amp;", "&");
+            return downloadUrl;
         }
         #endregion
     }
