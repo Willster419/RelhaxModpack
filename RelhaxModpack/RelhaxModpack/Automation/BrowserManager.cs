@@ -184,7 +184,7 @@ namespace RelhaxModpack.Automation
 
             if (isSubscribed)
             {
-                Logging.Warning(LogOptions.ClassName, "Browser is alreay subscribed, ignoring request");
+                Logging.Warning(LogOptions.ClassName, "Browser is already subscribed, ignoring request");
                 return;
             }
 

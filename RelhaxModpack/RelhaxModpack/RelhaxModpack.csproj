@@ -139,12 +139,22 @@
     <Compile Include="Atlases\IRelhaxUnmanagedLibrary.cs" />
     <Compile Include="Automation\AutomationCompare.cs" />
     <Compile Include="Automation\AutomationCompareManager.cs" />
+    <Compile Include="Automation\AutomationHttpClient.cs" />
     <Compile Include="Automation\AutomationMacro.cs" />
     <Compile Include="Automation\AutomationSequence.cs" />
     <Compile Include="Automation\AutomationSequencer.cs" />
     <Compile Include="Automation\AutomationCompareDirectory.cs" />
     <Compile Include="Automation\AutomationCompareFile.cs" />
+    <Compile Include="Automation\AutomationWebBrowser.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Automation\AutomationWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Automation\AutomationWebViewWrapper.cs" />
     <Compile Include="Automation\BrowserManager.cs" />
+    <Compile Include="Automation\BrowserSessionManager.cs" />
+    <Compile Include="Automation\IAutomationBrowserSession.cs" />
     <Compile Include="Automation\Tasks\AutomationTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareCountTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareInverseTask.cs" />
@@ -278,6 +288,7 @@
     <Compile Include="Utilities\Enums\ApplyBehavior.cs" />
     <Compile Include="Utilities\Enums\AutomationExitCode.cs" />
     <Compile Include="Utilities\Enums\AutomationCompareMode.cs" />
+    <Compile Include="Utilities\Enums\BrowserSessionType.cs" />
     <Compile Include="Utilities\Enums\BrowserType.cs" />
     <Compile Include="Utilities\Enums\DatabaseLoadFailCode.cs" />
     <Compile Include="Utilities\Enums\DownloadProgressState.cs" />

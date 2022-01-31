@@ -84,6 +84,8 @@ namespace RelhaxModpack.Automation
 
         public AutomationCompareManager AutomationCompareTracker { get; protected set; } = new AutomationCompareManager();
 
+        public BrowserSessionManager BrowserSessionManager { get; protected set; }
+
         public SequencerExitCode ExitCode { get; set; } = SequencerExitCode.NotRun;
 
         private WebClient WebClient = null;
