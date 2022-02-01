@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace RelhaxModpack.Automation
 {
-    public class HtmlBrowserParser : HtmlWebscrapeParser
+    public class HtmlBrowserParser : HtmlWebscrapeParser, IDisposable
     {
         public int WaitTimeMs { get; set; } = 2000;
 
@@ -23,62 +23,37 @@ namespace RelhaxModpack.Automation
 
         public BrowserType BrowserType { get; private set; }
 
-        public BrowserManager BrowserManager { get; set; }
+        public BrowserManager BrowserManager { get; protected set; }
 
-        public bool ThreadMode { get; private set; }
+        protected Dispatcher browserDispatcher;
 
-        private int browserFinishedLoadingScriptsCounter;
+        public event BrowserManagerDelegate BrowserCreated;
 
-        private bool browserContentLoaded;
-
-        private bool browserNavigationCompleted;
-
-        private bool browserFailed;
-
-        private Dispatcher browserDispatcher;
+        protected CancellationTokenSource cancellationTokenSource;
 
         public HtmlBrowserParser(BrowserType browserType) : base()
         {
             this.BrowserType = browserType;
-            ThreadMode = true;
+            cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public HtmlBrowserParser(string htmlpath, string url, int waitTimeMs, int waitCounts, BrowserType browserType) : base(htmlpath, url)
+        public HtmlBrowserParser(string htmlpath, string url, int waitTimeMs, int waitCounts, bool writeHtmlToDisk, string htmlFilePath, BrowserType browserType)
+            : base(htmlpath, url, writeHtmlToDisk, htmlFilePath)
         {
             this.WaitTimeMs = waitTimeMs;
             this.WaitCounts = waitCounts;
             this.BrowserType = browserType;
-            ThreadMode = true;
+            cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public HtmlBrowserParser(string htmlpath, string url, int waitTimeMs, int waitCounts, bool writeHtmlToDisk, string htmlFilePath, BrowserType browserType) : base(htmlpath, url, writeHtmlToDisk, htmlFilePath)
+        public HtmlBrowserParser(string htmlpath, string url, int waitTimeMs, int waitCounts, bool writeHtmlToDisk, string htmlFilePath, BrowserType browserType, Dispatcher browserDispatcher)
+            : base(htmlpath, url, writeHtmlToDisk, htmlFilePath)
         {
             this.WaitTimeMs = waitTimeMs;
             this.WaitCounts = waitCounts;
             this.BrowserType = browserType;
-            ThreadMode = true;
-        }
-
-        public HtmlBrowserParser(string htmlpath, string url, int waitTimeMs, int waitCounts, bool writeHtmlToDisk, string htmlFilePath, WebView browser) : base(htmlpath, url, writeHtmlToDisk, htmlFilePath)
-        {
-            if (browser == null)
-                throw new NullReferenceException();
-            this.WaitTimeMs = waitTimeMs;
-            this.WaitCounts = waitCounts;
-            this.BrowserManager = new BrowserManager(browser);
-            BrowserType = BrowserManager.BrowserType;
-            ThreadMode = false;
-        }
-
-        public HtmlBrowserParser(string htmlpath, string url, int waitTimeMs, int waitCounts, bool writeHtmlToDisk, string htmlFilePath, WebBrowser browser) : base(htmlpath, url, writeHtmlToDisk, htmlFilePath)
-        {
-            if (browser == null)
-                throw new NullReferenceException();
-            this.WaitTimeMs = waitTimeMs;
-            this.WaitCounts = waitCounts;
-            this.BrowserManager = new BrowserManager(browser);
-            BrowserType = BrowserManager.BrowserType;
-            ThreadMode = false;
+            this.browserDispatcher = browserDispatcher;
+            cancellationTokenSource = new CancellationTokenSource();
         }
 
         public override async Task<HtmlXpathParserExitCode> RunParserAsync(string url, string htmlPath)
@@ -93,160 +68,49 @@ namespace RelhaxModpack.Automation
 
         protected override async Task<bool> GetHtmlDocumentAsync()
         {
-            //reset internals
-            browserFinishedLoadingScriptsCounter = 0;
-            browserContentLoaded = false;
-            browserNavigationCompleted = false;
-            browserDispatcher = null;
-            browserFailed = false;
+            BrowserManager = new BrowserManager(BrowserType, browserDispatcher);
+            BrowserManager.BrowserCreated += (sender, args) => { this.BrowserCreated?.Invoke(this, args); };
 
             //run browser enough to get scripts parsed to get download link
-            if (ThreadMode)
-                RunBrowserOnUIThread();
-            else
-                RunBrowser();
-
-            //wait for browser events to finish
-            while (!(browserContentLoaded && browserNavigationCompleted))
-            {
-                await Task.Delay(WaitTimeMs);
-                Logging.Info(LogOptions.ClassName, "browserContentLoaded: {0}, browserNavigationCompleted: {1}", browserContentLoaded.ToString(), browserNavigationCompleted.ToString());
-            }
-
-            if (browserFailed)
+            bool browserResult = await BrowserManager.NavigateWithDelayAsync(this.Url, cancellationTokenSource.Token);
+            if (!browserResult)
             {
                 Logging.Error(LogOptions.ClassName, "The browser failed to navigate");
+                return false;
             }
 
-            if (!browserFailed)
+            htmlText = BrowserManager.GetHtmlDocument();
+            if (string.IsNullOrEmpty(htmlText))
             {
-                //this wait allows the browser to finish loading external scripts
-                Logging.Info(LogOptions.ClassName, "The browser task events completed, wait additional {0} counts", WaitCounts);
-                while (browserFinishedLoadingScriptsCounter < WaitCounts)
-                {
-                    await Task.Delay(WaitTimeMs);
-                    Logging.Info(LogOptions.ClassName, "Waiting {0} of {1} counts", ++browserFinishedLoadingScriptsCounter, WaitCounts);
-                }
+                Logging.Error(LogOptions.ClassName, "The browser failed to navigate");
+                return false;
+            }
 
-                string tempHtmlText = string.Empty;
-                if (ThreadMode)
+            if (WriteHtmlToDisk)
+            {
+                //save to string
+                if (!TryWriteHtmlToDisk())
                 {
-                    browserDispatcher.Invoke(() => {
-                        tempHtmlText = BrowserManager.GetHtmlDocument();
-                    });
-                }
-                else
-                {
-                    tempHtmlText = BrowserManager.GetHtmlDocument();
-                }
-                htmlText = tempHtmlText;
-
-                if (WriteHtmlToDisk)
-                {
-                    //save to string
-                    if (!TryWriteHtmlToDisk())
-                        return false;
+                    Logging.Error("Failed to write html to disk");
+                    return false;
                 }
             }
 
             return true;
         }
 
-        private void RunBrowserOnUIThread()
-        {
-            Thread thread = new Thread(() =>
-            {
-                RunBrowser();
-            });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.IsBackground = true;
-            thread.Start();
-        }
-
-        private void RunBrowser()
-        {
-            //setup browser events and params
-            if (ThreadMode && BrowserManager == null)
-            {
-                BrowserManager = new BrowserManager(this.BrowserType);
-                BrowserManager.Init();
-                browserDispatcher = Dispatcher.CurrentDispatcher;
-            }
-
-            if (!BrowserManager.IsSubscribed)
-                BrowserManager.Subscribe();
-
-            BrowserManager.OnNavigationCompleted += BrowserManager_OnNavigationCompleted;
-            BrowserManager.OnDocumentCompleted += BrowserManager_OnDocumentCompleted;
-
-            Logging.Info(LogOptions.ClassName, "Running Navigate() method to load browser at URL {0}", Url);
-            try
-            {
-                BrowserManager.Navigate(Url);
-            }
-            catch (Exception ex)
-            {
-                Logging.Exception(ex.ToString());
-                browserNavigationCompleted = true;
-                browserContentLoaded = true;
-                browserFailed = true;
-            }
-
-            if (ThreadMode)
-            {
-                Dispatcher.Run();
-            }
-        }
-
-        private void BrowserManager_OnDocumentCompleted(object sender, EventArgs e)
-        {
-            Control browser = (sender as BrowserManager).Browser;
-            //for some sites, it doesn't load all html unless you're scrolled enough (or the height/width is enough)
-            if (BrowserHeight > 0 && browser.Height != BrowserHeight)
-                browser.Height = BrowserHeight;
-            if (BrowserWidth > 0 && browser.Width != BrowserWidth)
-                browser.Width = BrowserWidth;
-
-            Logging.Info(LogOptions.ClassName, "The browser reports document completed");
-            browserContentLoaded = true;
-        }
-
-        private void BrowserManager_OnNavigationCompleted(object sender, EventArgs e)
-        {
-            Logging.Info(LogOptions.ClassName, "The browser reports navigation completed");
-            browserNavigationCompleted = true;
-        }
-
-        public void CleanupBrowser()
-        {
-            browserDispatcher.Invoke(() =>
-            {
-                if (BrowserManager != null)
-                {
-                    BrowserManager.Cleanup();
-                    BrowserManager = null;
-                }
-            });
-            browserDispatcher.ShutdownFinished += (sender, args) =>
-            {
-                browserDispatcher = null;
-            };
-            browserDispatcher.InvokeShutdown();
-        }
-
         public override void Cancel()
         {
             base.Cancel();
+            cancellationTokenSource.Cancel();
+            BrowserManager.Cancel();
+        }
 
-            if (ThreadMode && browserDispatcher != null)
-            {
-                if (BrowserManager != null && BrowserManager.IsSubscribed)
-                {
-                    BrowserManager.Unsubscribe();
-                }
-
-                CleanupBrowser();
-            }
+        public void Dispose()
+        {
+            BrowserManager.BrowserCreated -= this.BrowserCreated;
+            ((IDisposable)BrowserManager).Dispose();
+            ((IDisposable)cancellationTokenSource).Dispose();
         }
     }
 }

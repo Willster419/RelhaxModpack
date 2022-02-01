@@ -152,10 +152,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Automation\AutomationWebViewWrapper.cs" />
-    <Compile Include="Automation\BrowserManager.cs" />
     <Compile Include="Automation\BrowserSessionManager.cs" />
+    <Compile Include="Automation\IAutomationBrowser.cs" />
     <Compile Include="Automation\IAutomationBrowserSession.cs" />
     <Compile Include="Automation\Tasks\AutomationTask.cs" />
+    <Compile Include="Automation\BrowserManager.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareCountTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareInverseTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareTask.cs" />

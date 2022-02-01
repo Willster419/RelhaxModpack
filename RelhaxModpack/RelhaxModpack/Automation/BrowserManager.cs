@@ -5,52 +5,45 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
+using System.Windows.Threading;
 
 namespace RelhaxModpack.Automation
 {
     public delegate void BrowserManagerDelegate(object sender, EventArgs e);
 
-    public class BrowserManager : IDisposable
+    public class BrowserManager : IAutomationBrowser, IDisposable
     {
-        public event BrowserManagerDelegate OnDocumentCompleted;
+        public event BrowserManagerDelegate DocumentCompleted;
 
-        public event BrowserManagerDelegate OnNavigationCompleted;
+        public event BrowserManagerDelegate NavigationCompleted;
 
-        private WebView webView;
+        public int WaitTimeMs { get; set; } = 2000;
 
-        private WebBrowser webBrowser;
+        public int WaitCounts { get; set; } = 3;
 
-        private BrowserType browserType;
+        protected IAutomationBrowser browser;
 
-        private bool isLoaded = false;
+        protected BrowserType browserType;
 
-        private bool isSubscribed = false;
+        protected Dispatcher dispatcher;
 
-        public BrowserManager(BrowserType  browserType)
+        protected bool OnCustomThread;
+
+        protected ManualResetEvent manualResetEvent;
+
+        protected int browserFinishedLoadingScriptsCounter;
+
+        public event BrowserManagerDelegate BrowserCreated;
+
+        public BrowserManager(BrowserType browserType, Dispatcher dispatcher = null)
         {
             this.browserType = browserType;
-        }
-
-        public BrowserManager(WebView webView)
-        {
-            if (webView == null)
-                throw new NullReferenceException();
-
-            this.browserType = BrowserType.WebView;
-            this.webView = webView;
-            isLoaded = true;
-        }
-
-        public BrowserManager(WebBrowser webBrowser)
-        {
-            if (webBrowser == null)
-                throw new NullReferenceException();
-
-            this.browserType = BrowserType.WebBrowser;
-            this.webBrowser = webBrowser;
-            isLoaded = true;
+            this.dispatcher = dispatcher;
+            this.OnCustomThread = this.dispatcher == null;
         }
 
         public BrowserType BrowserType
@@ -59,277 +52,162 @@ namespace RelhaxModpack.Automation
         public Control Browser
         {
             get
-            {
-                switch (browserType)
-                {
-                    case BrowserType.WebBrowser:
-                        return webBrowser;
-                    case BrowserType.WebView:
-                        return webView;
-                    case BrowserType.WebView2:
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
+            { return browser.Browser; }
         }
 
         public int Height
         {
             get
-            {
-                if (Browser == null)
-                    throw new NullReferenceException();
-                return Browser.Height;
-            }
+            { return Browser.Height; }
             set
-            {
-                if (Browser == null)
-                    throw new NullReferenceException();
-                Browser.Height = value;
-            }
+            { Browser.Height = value; }
         }
 
         public int Width
         {
             get
-            {
-                if (Browser == null)
-                    throw new NullReferenceException();
-                return Browser.Width;
-            }
+            { return Browser.Width; }
             set
-            {
-                if (Browser == null)
-                    throw new NullReferenceException();
-                Browser.Width = value;
-            }
-        }
-
-        public bool? IsDisposed
-        { 
-            get
-            {
-                if (Browser == null)
-                    return null;
-                else 
-                    return Browser.IsDisposed;
-            } 
-        }
-
-        public bool? IsLoaded
-        {
-            get
-            {
-                if (Browser == null)
-                    return null;
-                else
-                    return isLoaded;
-            }
-        }
-
-        public bool IsSubscribed
-        {
-            get
-            {
-                if (Browser == null)
-                    return false;
-                else
-                    return isSubscribed;
-            }
+            { Browser.Width = value; }
         }
 
         public string GetHtmlDocument()
         {
-            switch (browserType)
-            {
-                case BrowserType.WebBrowser:
-                    return webBrowser.Document.Body.OuterHtml;
-                case BrowserType.WebView:
-                    return webView.InvokeScript("eval", new string[] { "document.documentElement.outerHTML;" });
-                case BrowserType.WebView2:
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        public void Init(bool @override = false)
-        {
-            if (isLoaded && !@override)
-                return;
-            switch (browserType)
-            {
-                case BrowserType.WebBrowser:
-                    webBrowser = new WebBrowser()
-                    {
-                        ScriptErrorsSuppressed = true
-                    };
-                    break;
-                case BrowserType.WebView:
-                    webView = new WebView()
-                    {
-                        IsScriptNotifyAllowed = false
-                    };
-                    break;
-                case BrowserType.WebView2:
-                default:
-                    throw new NotImplementedException();
-            }
-            isLoaded = true;
-        }
-
-        public void Subscribe()
-        {
-            if (Browser == null)
-                throw new NullReferenceException();
-
-            if (isSubscribed)
-            {
-                Logging.Warning(LogOptions.ClassName, "Browser is already subscribed, ignoring request");
-                return;
-            }
-
-            switch (browserType)
-            {
-                case BrowserType.WebBrowser:
-                    webBrowser.Navigated += WebBrowser_Navigated;
-                    webBrowser.DocumentCompleted += WebBrowser_DocumentCompleted;
-                    break;
-                case BrowserType.WebView:
-                    webView.NavigationCompleted += WebView_NavigationCompleted;
-                    webView.DOMContentLoaded += WebView_DOMContentLoaded;
-                    break;
-                case BrowserType.WebView2:
-                default:
-                    throw new NotImplementedException();
-            }
-            isSubscribed = true;
-        }
-
-        public void Unsubscribe()
-        {
-            if (Browser == null)
-                throw new NullReferenceException();
-
-            if (!isSubscribed)
-            {
-                Logging.Warning(LogOptions.ClassName, "Browser is already unsubscribed, ignoring request");
-                return;
-            }
-
-            switch (browserType)
-            {
-                case BrowserType.WebBrowser:
-                    webBrowser.Navigated -= WebBrowser_Navigated;
-                    webBrowser.DocumentCompleted -= WebBrowser_DocumentCompleted;
-                    break;
-                case BrowserType.WebView:
-                    webView.NavigationCompleted -= WebView_NavigationCompleted;
-                    webView.DOMContentLoaded -= WebView_DOMContentLoaded;
-                    break;
-                case BrowserType.WebView2:
-                default:
-                    throw new NotImplementedException();
-            }
-            isSubscribed = false;
-        }
-
-        private void WebView_DOMContentLoaded(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlDOMContentLoadedEventArgs e)
-        {
-            OnDocumentCompleted?.Invoke(this, e);
-        }
-
-        private void WebBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            OnDocumentCompleted?.Invoke(this, e);
-        }
-
-        private void WebView_NavigationCompleted(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlNavigationCompletedEventArgs e)
-        {
-            OnNavigationCompleted?.Invoke(this, e);
-        }
-
-        private void WebBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
-        {
-            OnNavigationCompleted?.Invoke(this, e);
+            return browser.GetHtmlDocument();
         }
 
         public void Navigate(string url)
         {
+            browser.Navigate(url);
+        }
+
+        protected void SetDispatcher()
+        {
+            if (dispatcher != null)
+                return;
+
+            Thread thread = new Thread(() =>
+            {
+                this.dispatcher = Dispatcher.CurrentDispatcher;
+                Dispatcher.Run();
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.IsBackground = true;
+            thread.Start();
+            while (this.dispatcher == null)
+                Thread.Sleep(1);
+        }
+
+        public async Task<bool> NavigateWithDelayAsync(string url, CancellationToken token)
+        {
+            browserFinishedLoadingScriptsCounter = 0;
+            SetDispatcher();
+
+            this.dispatcher.Invoke(() => this.CreateBrowser());
+
+            manualResetEvent = new ManualResetEvent(false);
+
+            browser.DocumentCompleted += (sender, args) =>
+            {
+                Logging.Debug("The browser reports document completed");
+                manualResetEvent.Set();
+            };
+
+            Logging.Debug("Browser dispatch navigate start");
+            this.dispatcher.InvokeAsync(() =>
+            {
+                this.Navigate(url);
+            });
+            Logging.Debug("Browser dispatch navigate finish, wait on ManualResetEvent");
+
+            await Task.Run(() => { manualResetEvent.WaitOne(); });
+
+            if (this.browser == null)
+            {
+                Logging.Debug("Browser was disposed, cancel or error happened");
+                return false;
+            }
+
+            //now wait for the timeout
+            //this wait allows the browser to finish loading external scripts
+            Logging.Info(LogOptions.ClassName, "The browser task events completed, wait additional {0} counts", WaitCounts);
+            while (browserFinishedLoadingScriptsCounter < WaitCounts)
+            {
+                if (token != null && token.IsCancellationRequested)
+                {
+                    Logging.Debug("Cancel happened");
+                    return false;
+                }
+                await Task.Delay(WaitTimeMs);
+                Logging.Info(LogOptions.ClassName, "Waiting {0} of {1} counts", ++browserFinishedLoadingScriptsCounter, WaitCounts);
+            }
+
+            return true;
+        }
+
+        protected void CreateBrowser()
+        {
             switch (browserType)
             {
                 case BrowserType.WebBrowser:
-                    webBrowser.Navigate(url);
+                    browser = new AutomationWebBrowser();
                     break;
                 case BrowserType.WebView:
-                    webView.Navigate(url);
+                    browser = new AutomationWebViewWrapper();
                     break;
                 case BrowserType.WebView2:
                 default:
                     throw new NotImplementedException();
             }
+            browser.DocumentCompleted += DocumentCompleted;
+            browser.NavigationCompleted += DocumentCompleted;
+            BrowserCreated?.Invoke(this, new EventArgs());
         }
 
         public void Cancel()
         {
-            if (Browser == null)
-                return;
-            switch (browserType)
-            {
-                case BrowserType.WebBrowser:
-                    webBrowser.Stop();
-                    break;
-                case BrowserType.WebView:
-                    webView.Stop();
-                    break;
-                case BrowserType.WebView2:
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        public void Cleanup()
-        {
-            Cancel();
-            Dispose();
+            Logging.Debug(LogOptions.ClassName, "Cancel called for Browser Manager");
+            this.browser.Cancel();
+            DisposeBrowser();
+            this.manualResetEvent.Set();
         }
 
         public void Dispose()
         {
-            if (Browser != null)
-                Unsubscribe();
+            DisposeBrowser();
+            manualResetEvent.Dispose();
+            if (this.OnCustomThread)
+                ShutdownDispatcher();
 
-            switch (browserType)
+            if (DocumentCompleted != null)
+                DocumentCompleted = null;
+
+            if (NavigationCompleted != null)
+                NavigationCompleted = null;
+        }
+
+        public void DisposeBrowser()
+        {
+            this.dispatcher.Invoke(() =>
             {
-                case BrowserType.WebBrowser:
-                    if (webBrowser != null)
+                if (browser != null)
+                {
+                    if (!browser.Browser.IsDisposed)
                     {
-                        if (!webBrowser.IsDisposed)
-                        {
-                            webBrowser.Dispose();
-                        }
-                        webBrowser = null;
+                        browser.Cancel();
+                        browser.Dispose();
                     }
-                    break;
-                case BrowserType.WebView:
-                    if (webView != null)
-                    {
-                        if (!webView.IsDisposed)
-                        {
-                            webView.Dispose();
-                        }
-                        webView = null;
-                    }
-                    break;
-                case BrowserType.WebView2:
-                default:
-                    throw new NotImplementedException();
-            }
+                }
+            });
+        }
 
-            if (OnDocumentCompleted != null)
-                OnDocumentCompleted = null;
-
-            if (OnNavigationCompleted != null)
-                OnNavigationCompleted = null;
+        protected void ShutdownDispatcher()
+        {
+            this.dispatcher.ShutdownFinished += (sender, args) =>
+            {
+                this.dispatcher = null;
+            };
+            this.dispatcher.InvokeShutdown();
         }
     }
 }
