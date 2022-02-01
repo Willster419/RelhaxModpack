@@ -1172,6 +1172,9 @@ namespace RelhaxSandbox
                 responseBody1 = await response.Content.ReadAsStringAsync();
                 File.WriteAllText("HttpClientResponseKR.html", responseBody1);
                 string attachmentLink = GetHtmlNode(responseBody1, @"//a[@data-fileid = '147700']//@href", "href");
+                //NOTE: if trying to download the attachment while not being logged in, it will fail on an exception representing http error 403
+                //best practice to ALWAYS use EnsureSuccessStatusCode();
+                //also does it for WebClient
                 string pythonExtension = await client.GetStringAsync(attachmentLink);
                 File.WriteAllText("targetInfo.py", pythonExtension);
             }
