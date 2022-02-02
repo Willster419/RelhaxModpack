@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public abstract class MacroTask : AutomationTask
+    public abstract class BrowserSessionMacroTask : BrowserSessionUrlTask
     {
         public string MacroName { get; set; }
 
@@ -29,12 +29,7 @@ namespace RelhaxModpack.Automation.Tasks
                 return;
         }
 
-        public override async Task RunTask()
-        {
-            CheckIfMacroExits();
-        }
-
-        protected virtual void CheckIfMacroExits()
+        protected virtual bool CheckIfMacroExits()
         {
             Logging.Debug("Checking for if macro {0} already exists", MacroName);
             AutomationMacro macro = Macros.Find(mac => mac.Name.Equals(MacroName));
@@ -43,7 +38,7 @@ namespace RelhaxModpack.Automation.Tasks
                 if (macro.MacroType == Utilities.Enums.MacroType.ApplicationDefined)
                 {
                     Logging.Error("Cannot replace value of application defined macro {0}", macro.Name);
-                    return;
+                    return false;
                 }
                 else if (macro.MacroType == Utilities.Enums.MacroType.Global)
                 {
@@ -52,6 +47,7 @@ namespace RelhaxModpack.Automation.Tasks
                 Logging.Debug("Macro found, removing");
                 Macros.Remove(macro);
             }
+            return true;
         }
         #endregion
     }

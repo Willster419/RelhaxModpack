@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class MacroStringSplitHtmlTask : MacroStringSplitTask, IXmlSerializable, ICancelOperation
+    public class MacroStringSplitHtmlTask : MacroStringSplitTask, IXmlSerializable, ICancelOperation, IHtmlParseTask
     {
         public const string TaskCommandName = "macro_string_split_html";
 

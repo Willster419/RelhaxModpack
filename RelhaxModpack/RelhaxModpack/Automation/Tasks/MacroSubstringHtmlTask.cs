@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class MacroSubstringHtmlTask : MacroSubstringTask, IXmlSerializable, ICancelOperation
+    public class MacroSubstringHtmlTask : MacroSubstringTask, IXmlSerializable, ICancelOperation, IHtmlParseTask
     {
         public const string TaskCommandName = "macro_substring_html";
 

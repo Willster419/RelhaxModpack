@@ -12,8 +12,10 @@
 
         InvalidParameters,
 
-        ErrorBrowserNavigation,
+        ErrorHtmlText,
 
-        ErrorHtmlParsing
+        ErrorHtmlParsing,
+
+        ErrorSavingToDisk
     }
 }

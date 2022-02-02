@@ -10,7 +10,7 @@ using System.Windows.Threading;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class MacroStringSplitBrowserTask : MacroStringSplitHtmlTask, IXmlSerializable
+    public class MacroStringSplitBrowserTask : MacroStringSplitHtmlTask, IXmlSerializable, IHtmlParseTask
     {
         public const string TaskCommandName = "macro_string_split_browser";
 

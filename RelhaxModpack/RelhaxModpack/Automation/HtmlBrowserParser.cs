@@ -56,16 +56,6 @@ namespace RelhaxModpack.Automation
             cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public override async Task<HtmlXpathParserExitCode> RunParserAsync(string url, string htmlPath)
-        {
-            return await base.RunParserAsync(url, htmlPath);
-        }
-
-        public override async Task<HtmlXpathParserExitCode> RunParserAsync()
-        {
-            return await base.RunParserAsync();
-        }
-
         protected override async Task<bool> GetHtmlDocumentAsync()
         {
             BrowserManager = new BrowserManager(BrowserType, browserDispatcher);
@@ -84,16 +74,6 @@ namespace RelhaxModpack.Automation
             {
                 Logging.Error(LogOptions.ClassName, "The browser failed to navigate");
                 return false;
-            }
-
-            if (WriteHtmlToDisk)
-            {
-                //save to string
-                if (!TryWriteHtmlToDisk())
-                {
-                    Logging.Error("Failed to write html to disk");
-                    return false;
-                }
             }
 
             return true;

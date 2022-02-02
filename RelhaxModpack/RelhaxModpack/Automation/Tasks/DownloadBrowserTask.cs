@@ -17,7 +17,7 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class DownloadBrowserTask : DownloadHtmlTask, IDownloadTask, IXmlSerializable
+    public class DownloadBrowserTask : DownloadHtmlTask, IDownloadTask, IXmlSerializable, IHtmlParseTask
     {
         public const string TaskCommandName = "download_browser";
 

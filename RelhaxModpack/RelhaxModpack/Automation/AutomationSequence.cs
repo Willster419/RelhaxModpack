@@ -348,6 +348,21 @@ namespace RelhaxModpack.Automation
                 throw new BadMemeException("If you're reading this, then it's too late.");
         }
 
+        public void ResetBrowserSessionManager(BrowserSessionType type)
+        {
+            ClearBrowserSessionManager();
+            BrowserSessionManager = new BrowserSessionManager(type);
+        }
+
+        public void ClearBrowserSessionManager()
+        {
+            if (BrowserSessionManager != null)
+            {
+                BrowserSessionManager.Dispose();
+                BrowserSessionManager = null;
+            }
+        }
+
         public void Dispose()
         {
             ((IDisposable)WebClient).Dispose();

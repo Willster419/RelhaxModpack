@@ -11,7 +11,7 @@ using HtmlAgilityPack;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class DownloadHtmlTask : DownloadStaticTask, IDownloadTask, IXmlSerializable
+    public class DownloadHtmlTask : DownloadStaticTask, IDownloadTask, IXmlSerializable, IHtmlParseTask
     {
         public const string TaskCommandName = "download_html";
 

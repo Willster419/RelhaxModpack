@@ -56,7 +56,7 @@ namespace RelhaxModpack.Automation.Tasks
 
         protected void DownloadSetup()
         {
-            Logging.Info(Logfiles.AutomationRunner, LogOptions.MethodName, "Verifying that destination path ({0}) exists and deleting file if exists", DestinationPath);
+            Logging.Debug(Logfiles.AutomationRunner, LogOptions.MethodName, "Verifying that destination path ({0}) exists and deleting file if exists", DestinationPath);
             string directoryPath = Path.GetDirectoryName(DestinationPath);
             if ((!string.IsNullOrWhiteSpace(directoryPath)) && (!Directory.Exists(directoryPath)))
                 Directory.CreateDirectory(directoryPath);

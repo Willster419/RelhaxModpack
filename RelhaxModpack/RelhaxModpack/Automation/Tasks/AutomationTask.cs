@@ -66,7 +66,13 @@ namespace RelhaxModpack.Automation.Tasks
             { DirectoryCompareInverseTask.TaskCommandName, typeof(DirectoryCompareInverseTask) },
             { FileExistsTask.TaskCommandName, typeof(FileExistsTask) },
             { MacroStringInputMacroJsonTask.TaskCommandName, typeof(MacroStringInputMacroJsonTask) },
-            { DirectoryMoveTask.TaskCommandName, typeof(DirectoryMoveTask) }
+            { DirectoryMoveTask.TaskCommandName, typeof(DirectoryMoveTask) },
+            { StartBrowserSessionTask.TaskCommandName, typeof(StartBrowserSessionTask) },
+            { EndBrowserSessionTask.TaskCommandName, typeof(EndBrowserSessionTask) },
+            { BrowserSessionSetHeaderTask.TaskCommandName, typeof(BrowserSessionSetHeaderTask) },
+            { BrowserSessionGetTask.TaskCommandName, typeof(BrowserSessionGetTask) },
+            { BrowserSessionPostTask.TaskCommandName, typeof(BrowserSessionPostTask) },
+            { BrowserSessionDownloadFileTask.TaskCommandName, typeof(BrowserSessionDownloadFileTask) },
         };
 
         public const string AttributeNameForMapping = "Command";
@@ -86,6 +92,8 @@ namespace RelhaxModpack.Automation.Tasks
         public List<AutomationMacro> Macros { get { return AutomationSequence.AllMacros; } }
 
         public AutomationCompareManager AutomationCompareTracker { get { return AutomationSequence.AutomationCompareTracker; } }
+
+        protected BrowserSessionManager BrowserSessionManager { get { return AutomationSequence.BrowserSessionManager; } }
 
         public string ErrorMessage { get; protected set; } = string.Empty;
 
@@ -251,6 +259,9 @@ namespace RelhaxModpack.Automation.Tasks
             }
             if (!EvaluateResults(nameof(ProcessTaskResults)))
                 return;
+
+            if (this is IDisposable disposable)
+                disposable.Dispose();
         }
 
         protected static string ProcessEscapeCharacters(string argName, string arg)

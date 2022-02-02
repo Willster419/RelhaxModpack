@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class MacroSubstringBrowserTask : MacroSubstringHtmlTask, IXmlSerializable
+    public class MacroSubstringBrowserTask : MacroSubstringHtmlTask, IXmlSerializable, IHtmlParseTask
     {
         public const string TaskCommandName = "macro_substring_browser";
 

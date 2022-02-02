@@ -153,10 +153,19 @@
     </Compile>
     <Compile Include="Automation\AutomationWebViewWrapper.cs" />
     <Compile Include="Automation\BrowserSessionManager.cs" />
+    <Compile Include="Automation\HtmlParser.cs" />
+    <Compile Include="Automation\HtmlTextParser.cs" />
     <Compile Include="Automation\IAutomationBrowser.cs" />
     <Compile Include="Automation\IAutomationBrowserSession.cs" />
     <Compile Include="Automation\Tasks\AutomationTask.cs" />
     <Compile Include="Automation\BrowserManager.cs" />
+    <Compile Include="Automation\Tasks\BrowserSessionDownloadFileTask.cs" />
+    <Compile Include="Automation\Tasks\BrowserSessionGetTask.cs" />
+    <Compile Include="Automation\Tasks\BrowserSessionMacroTask.cs" />
+    <Compile Include="Automation\Tasks\BrowserSessionParseTask.cs" />
+    <Compile Include="Automation\Tasks\BrowserSessionPostTask.cs" />
+    <Compile Include="Automation\Tasks\BrowserSessionSetHeaderTask.cs" />
+    <Compile Include="Automation\Tasks\BrowserSessionUrlTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareCountTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareInverseTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareTask.cs" />
@@ -173,6 +182,7 @@
     <Compile Include="Automation\Tasks\DownloadBrowserTask.cs" />
     <Compile Include="Automation\Tasks\DownloadHtmlTask.cs" />
     <Compile Include="Automation\Tasks\DownloadStaticTask.cs" />
+    <Compile Include="Automation\Tasks\EndBrowserSessionTask.cs" />
     <Compile Include="Automation\Tasks\EndCompareTask.cs" />
     <Compile Include="Automation\Tasks\FileCompareInverseTask.cs" />
     <Compile Include="Automation\Tasks\FileCompareTask.cs" />
@@ -189,6 +199,7 @@
     <Compile Include="Automation\ICancelOperation.cs" />
     <Compile Include="Automation\Tasks\IDatabaseTask.cs" />
     <Compile Include="Automation\Tasks\IDownloadTask.cs" />
+    <Compile Include="Automation\Tasks\IHtmlParseTask.cs" />
     <Compile Include="Automation\Tasks\ImportTask.cs" />
     <Compile Include="Automation\Tasks\LoadDatabaseTask.cs" />
     <Compile Include="Automation\Tasks\MacroCreateTask.cs" />
@@ -214,6 +225,7 @@
     <Compile Include="Automation\Tasks\RetrievePackagePropertyTask.cs" />
     <Compile Include="Automation\Tasks\SaveDatabaseTask.cs" />
     <Compile Include="Automation\Tasks\ShellExecuteTask.cs" />
+    <Compile Include="Automation\Tasks\StartBrowserSessionTask.cs" />
     <Compile Include="Automation\Tasks\StartCompareTask.cs" />
     <Compile Include="Automation\Tasks\TaskImportTask.cs" />
     <Compile Include="Automation\Tasks\UpdatePackagePropertyTask.cs" />
