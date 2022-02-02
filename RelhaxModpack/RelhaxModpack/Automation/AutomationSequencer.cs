@@ -38,7 +38,11 @@ namespace RelhaxModpack.Automation
 
         public List<AutomationMacro> GlobalMacros { get; } = new List<AutomationMacro>();
 
+        private List<AutomationMacro> UserMacros { get; } = new List<AutomationMacro>();
+
         public List<AutomationSequence> AutomationSequences { get; } = new List<AutomationSequence>();
+
+        public Dictionary<string, string> UserMacrosDictionary { get; } = new Dictionary<string, string>();
 
         public string ComponentInternalName { get; } = "AutomationSequencer";
 
@@ -173,7 +177,7 @@ namespace RelhaxModpack.Automation
                     sequenceLoadString = AutomationRepoPathEscaped + sequenceUrlPath;
                 }
 
-                AutomationSequences.Add(new AutomationSequence(DatabasePackages, ApplicationMacros, GlobalMacros, AutomationRunnerSettings, DatabaseManager, CancellationToken)
+                AutomationSequences.Add(new AutomationSequence(DatabasePackages, ApplicationMacros, GlobalMacros, UserMacros, AutomationRunnerSettings, DatabaseManager, CancellationToken)
                 {
                     AutomationSequencer = this,
                     Package = null,
@@ -329,11 +333,12 @@ namespace RelhaxModpack.Automation
                 RunningSequence = sequence;
                 Logging.Info(Logfiles.AutomationRunner, LogOptions.ClassName, "Preparing macro lists for sequence run: {0}", sequence.ComponentInternalName);
 
-                //handling macros (application, global, local)
+                //handling macros (application, global, local/user)
                 if (!ResetApplicationMacros(sequence))
                     return SequencerExitCode.ResetApplicationMacrosFail;
                 if (!ParseGlobalMacros())
                     return SequencerExitCode.LoadGlobalMacrosFail;
+                LoadUserMacros();
                 if (!sequence.ParseSequenceMacros())
                     return SequencerExitCode.LoadLocalMacrosFail;
 
@@ -458,6 +463,15 @@ namespace RelhaxModpack.Automation
                 macro.MacroType = MacroType.Global;
             }
             return true;
+        }
+
+        private void LoadUserMacros()
+        {
+            UserMacros.Clear();
+            foreach(KeyValuePair<string, string> userMacro in UserMacrosDictionary)
+            {
+                UserMacros.Add(new AutomationMacro() { Name = userMacro.Key, Value = userMacro.Value, MacroType = MacroType.Local });
+            }
         }
 
         private void DumpApplicationMacros()

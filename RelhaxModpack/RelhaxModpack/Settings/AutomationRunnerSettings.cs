@@ -57,5 +57,17 @@ namespace RelhaxModpack.Settings
         public bool ClearLogWindowOnSequenceStart { get; set; } = true;
 
         public bool ClearLogFileOnSequenceStart { get; set; } = false;
+
+        public string UserMacro1Name { get; set; } = string.Empty;
+
+        public string UserMacro1Value { get; set; } = string.Empty;
+
+        public string UserMacro2Name { get; set; } = string.Empty;
+
+        public string UserMacro2Value { get; set; } = string.Empty;
+
+        public string UserMacro3Name { get; set; } = string.Empty;
+
+        public string UserMacro3Value { get; set; } = string.Empty;
     }
 }

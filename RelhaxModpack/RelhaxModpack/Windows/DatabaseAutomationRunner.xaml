@@ -92,6 +92,9 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
@@ -135,6 +138,33 @@
                             <TextBlock Text="Select WoT install location" TextWrapping="Wrap"/>
                         </Button>
                         <TextBox x:Name="SelectWoTInstallLocationSetting" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="SelectWoTInstallLocationSetting_TextChanged" Margin="2,0,0,0"/>
+                        <TextBlock Text="User Macro 1" ToolTip="Put the name of the macro in the left box, the value in the right box" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="0" Grid.Row="13"/>
+                        <Grid Background="#FFE5E5E5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="13">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="UserMacro1Name" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,1,0" TextChanged="UserMacro1Name_TextChanged"/>
+                            <TextBox x:Name="UserMacro1Value" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="1,0,1,0" TextChanged="UserMacro1Value_TextChanged"/>
+                        </Grid>
+                        <TextBlock Text="User Macro 2" ToolTip="Put the name of the macro in the left box, the value in the right box" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="0" Grid.Row="14"/>
+                        <Grid Background="#FFE5E5E5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="UserMacro2Name" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,1,0" TextChanged="UserMacro2Name_TextChanged"/>
+                            <TextBox x:Name="UserMacro2Value" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="1,0,1,0" TextChanged="UserMacro2Value_TextChanged"/>
+                        </Grid>
+                        <TextBlock Text="User Macro 3" ToolTip="Put the name of the macro in the left box, the value in the right box" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="0" Grid.Row="15"/>
+                        <Grid Background="#FFE5E5E5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="UserMacro3Name" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,1,0" TextChanged="UserMacro3Name_TextChanged"/>
+                            <TextBox x:Name="UserMacro3Value" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="1,0,1,0" TextChanged="UserMacro3Value_TextChanged"/>
+                        </Grid>
                     </Grid>
                     <Button x:Name="SaveSettingsButton" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="SaveSettingsButton_Click">
                         <TextBlock Text="Save Settings"/>

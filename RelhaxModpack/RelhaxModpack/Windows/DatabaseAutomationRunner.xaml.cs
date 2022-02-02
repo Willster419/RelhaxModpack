@@ -97,7 +97,13 @@ namespace RelhaxModpack.Windows
                () => SelectDBSaveLocationSetting_TextChanged(null, null),
                () => UseLocalRunnerDatabaseSetting_Click(null, null),
                () => LocalRunnerDatabaseRootSetting_TextChanged(null, null),
-               () => SelectWoTInstallLocationSetting_TextChanged(null, null)
+               () => SelectWoTInstallLocationSetting_TextChanged(null, null),
+               () => UserMacro1Name_TextChanged(null, null),
+               () => UserMacro1Value_TextChanged(null, null),
+               () => UserMacro2Name_TextChanged(null, null),
+               () => UserMacro2Value_TextChanged(null, null),
+               () => UserMacro3Name_TextChanged(null, null),
+               () => UserMacro3Value_TextChanged(null, null)
             };
         }
 
@@ -189,6 +195,12 @@ namespace RelhaxModpack.Windows
             SuppressDebugMessagesSetting.IsChecked = AutomationSettings.SuppressDebugMessagesInLogWindow;
             ClearLogWindowOnSequenceRunSetting.IsChecked = AutomationSettings.ClearLogWindowOnSequenceStart;
             ClearLogFileOnSequenceRunSetting.IsChecked = AutomationSettings.ClearLogFileOnSequenceStart;
+            UserMacro1Name.Text = AutomationSettings.UserMacro1Name;
+            UserMacro1Value.Text = AutomationSettings.UserMacro1Value;
+            UserMacro2Name.Text = AutomationSettings.UserMacro2Name;
+            UserMacro2Value.Text = AutomationSettings.UserMacro2Value;
+            UserMacro3Name.Text = AutomationSettings.UserMacro3Name;
+            UserMacro3Value.Text = AutomationSettings.UserMacro3Value;
         }
 
         private void MoveSequenceToRunList()
@@ -888,6 +900,36 @@ namespace RelhaxModpack.Windows
         private void SelectWoTInstallLocationSetting_TextChanged(object sender, TextChangedEventArgs e)
         {
             AutomationSettings.WoTClientInstallLocation = SelectWoTInstallLocationSetting.Text;
+        }
+
+        private void UserMacro1Name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.UserMacro1Name = UserMacro1Name.Text;
+        }
+
+        private void UserMacro1Value_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.UserMacro1Value = UserMacro1Value.Text;
+        }
+
+        private void UserMacro2Name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.UserMacro2Name = UserMacro2Name.Text;
+        }
+
+        private void UserMacro2Value_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.UserMacro2Value = UserMacro2Value.Text;
+        }
+
+        private void UserMacro3Name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.UserMacro3Name = UserMacro3Name.Text;
+        }
+
+        private void UserMacro3Value_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AutomationSettings.UserMacro3Value = UserMacro3Value.Text;
         }
         #endregion
 

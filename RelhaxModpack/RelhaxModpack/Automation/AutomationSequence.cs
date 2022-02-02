@@ -106,6 +106,8 @@ namespace RelhaxModpack.Automation
 
         public List<AutomationMacro> GlobalMacros { get; private set; }
 
+        public List<AutomationMacro> UserMacros { get; private set; }
+
         public AutomationRunnerSettings AutomationRunnerSettings { get; private set; }
 
         public DatabaseManager DatabaseManager { get; private set; }
@@ -114,7 +116,7 @@ namespace RelhaxModpack.Automation
 
         private AutomationTask RunningTask;
 
-        public AutomationSequence(List<DatabasePackage> databasePackages, List<AutomationMacro> applicationMacros, List<AutomationMacro> globalMacros, AutomationRunnerSettings automationRunnerSettings, DatabaseManager databaseManager, CancellationToken cancellationToken)
+        public AutomationSequence(List<DatabasePackage> databasePackages, List<AutomationMacro> applicationMacros, List<AutomationMacro> globalMacros, List<AutomationMacro> userMacros, AutomationRunnerSettings automationRunnerSettings, DatabaseManager databaseManager, CancellationToken cancellationToken)
         {
             WebClient = new WebClient();
             DatabasePackages = databasePackages;
@@ -123,6 +125,7 @@ namespace RelhaxModpack.Automation
             AutomationRunnerSettings = automationRunnerSettings;
             DatabaseManager = databaseManager;
             CancellationToken = cancellationToken;
+            UserMacros = userMacros;
         }
 
         public async Task<bool> LoadAutomationXmlAsync()
@@ -231,11 +234,12 @@ namespace RelhaxModpack.Automation
             {
                 AllMacros.Add(AutomationMacro.Copy(macro));
             }
-
-            //process local macros in case they were added with macros inside them
             foreach (AutomationMacro macro in SequenceMacros)
             {
-                macro.Value = AutomationTask.ProcessMacro(macro.Name, macro.Value, SequenceMacros);
+                AllMacros.Add(AutomationMacro.Copy(macro));
+            }
+            foreach (AutomationMacro macro in UserMacros)
+            {
                 AllMacros.Add(AutomationMacro.Copy(macro));
             }
 
