@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class FileExistsTask : FileTask, IXmlSerializable
+    public class FileExistsTask : FileSourceTask, IXmlSerializable
     {
         public const string TaskCommandName = "file_exists";
 

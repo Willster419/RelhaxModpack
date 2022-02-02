@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public abstract class FileTask : AutomationTask, IXmlSerializable
+    public abstract class FileSourceTask : AutomationTask, IXmlSerializable
     {
         public string SourceFilePath { get; set; } = string.Empty;
 

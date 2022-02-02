@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class FileDeleteTask : FileTask
+    public class FileDeleteTask : FileSourceTask
     {
         public const string TaskCommandName = "file_delete";
 

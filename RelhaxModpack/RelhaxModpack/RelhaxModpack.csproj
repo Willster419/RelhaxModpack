@@ -193,7 +193,7 @@
     <Compile Include="Automation\Tasks\FileExistsTask.cs" />
     <Compile Include="Automation\Tasks\FileMoveTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryListTask.cs" />
-    <Compile Include="Automation\Tasks\FileTask.cs" />
+    <Compile Include="Automation\Tasks\FileSourceTask.cs" />
     <Compile Include="Automation\HtmlBrowserParser.cs" />
     <Compile Include="Automation\HtmlWebscrapeParser.cs" />
     <Compile Include="Automation\ICancelOperation.cs" />
