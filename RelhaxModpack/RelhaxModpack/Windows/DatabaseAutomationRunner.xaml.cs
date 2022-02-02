@@ -730,6 +730,15 @@ namespace RelhaxModpack.Windows
             }
         }
 
+        private void InvokeSettingsAndnSaveToSettingsFile()
+        {
+            foreach (Action action in settingsMethods)
+                action();
+
+            SettingsParser parser = new SettingsParser();
+            parser.SaveSettings(Settings);
+        }
+
         #region Settings tab events
         private void OpenLogWindowOnStartupSetting_Click(object sender, RoutedEventArgs e)
         {
@@ -867,15 +876,6 @@ namespace RelhaxModpack.Windows
 
             if (switchFromTab == TabItemSettings && switchToTab != TabItemSettings)
                 InvokeSettingsAndnSaveToSettingsFile();
-        }
-
-        private void InvokeSettingsAndnSaveToSettingsFile()
-        {
-            foreach (Action action in settingsMethods)
-                action();
-
-            SettingsParser parser = new SettingsParser();
-            parser.SaveSettings(Settings);
         }
 
         private void SelectWoTInstallLocationButton_Click(object sender, RoutedEventArgs e)
