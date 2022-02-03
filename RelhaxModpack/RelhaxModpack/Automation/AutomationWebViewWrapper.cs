@@ -78,6 +78,11 @@ namespace RelhaxModpack.Automation
             throw new NotImplementedException();
         }
 
+        public void RemoveHeader(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task DownloadFileAsync(string url, string filepath)
         {
             await DownloadFileAsync(url, filepath, default);
@@ -93,7 +98,7 @@ namespace RelhaxModpack.Automation
             throw new NotImplementedException();
         }
 
-        public async Task<string> PostRequestStringAsync(string url, string postData)
+        public async Task<string> PostRequestStringAsync(string url, string postData, string contentType)
         {
             throw new NotImplementedException();
         }

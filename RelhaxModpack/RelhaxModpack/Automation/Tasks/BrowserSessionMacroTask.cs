@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Utilities.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +21,13 @@ namespace RelhaxModpack.Automation.Tasks
         #region Task execution
         public override void ProcessMacros()
         {
+            base.ProcessMacros();
             MacroName = ProcessMacro(nameof(MacroName), MacroName);
         }
 
         public override void ValidateCommands()
         {
+            base.ValidateCommands();
             if (ValidateCommandTrue(string.IsNullOrEmpty(MacroName), "The arg MacroName is empty string"))
                 return;
         }
@@ -48,6 +51,12 @@ namespace RelhaxModpack.Automation.Tasks
                 Macros.Remove(macro);
             }
             return true;
+        }
+
+        protected virtual void CreateMacro(string value)
+        {
+            Logging.Info("Creating macro, Name: {0}, Value: {1}", MacroName, value);
+            Macros.Add(new AutomationMacro() { MacroType = MacroType.Local, Name = MacroName, Value = value });
         }
         #endregion
     }

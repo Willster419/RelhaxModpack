@@ -6,34 +6,26 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Automation.Tasks
 {
-    public class BrowserSessionSetHeaderTask : AutomationTask
+    public class BrowserSessionSetHeaderTask : BrowserSessionHeaderTask
     {
         public const string TaskCommandName = "browser_session_set_header";
 
         public override string Command { get { return TaskCommandName; } }
-
-        public string Name { get; set; }
 
         public string Value { get; set; }
 
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
-            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(Name), nameof(Value) }).ToArray();
+            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(Value) }).ToArray();
         }
         #endregion
 
         #region Task execution
         public override void ProcessMacros()
         {
-            Name = ProcessMacro(nameof(Name), Name);
+            base.ProcessMacros();
             Value = ProcessMacro(nameof(Value), Value);
-        }
-
-        public override void ValidateCommands()
-        {
-            if (ValidateCommandTrue(string.IsNullOrEmpty(Name), string.Format("The parameter {0} is null or empty", nameof(Name))))
-                return;
         }
 
         public override async Task RunTask()

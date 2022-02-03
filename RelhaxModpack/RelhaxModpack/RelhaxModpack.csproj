@@ -161,9 +161,11 @@
     <Compile Include="Automation\BrowserManager.cs" />
     <Compile Include="Automation\Tasks\BrowserSessionDownloadFileTask.cs" />
     <Compile Include="Automation\Tasks\BrowserSessionGetTask.cs" />
+    <Compile Include="Automation\Tasks\BrowserSessionHeaderTask.cs" />
     <Compile Include="Automation\Tasks\BrowserSessionMacroTask.cs" />
     <Compile Include="Automation\Tasks\BrowserSessionParseTask.cs" />
     <Compile Include="Automation\Tasks\BrowserSessionPostTask.cs" />
+    <Compile Include="Automation\Tasks\BrowserSessionRemoveHeaderTask.cs" />
     <Compile Include="Automation\Tasks\BrowserSessionSetHeaderTask.cs" />
     <Compile Include="Automation\Tasks\BrowserSessionUrlTask.cs" />
     <Compile Include="Automation\Tasks\DirectoryCompareCountTask.cs" />

@@ -41,6 +41,11 @@ namespace RelhaxModpack.Automation
             this.Headers.Add(name, value);
         }
 
+        public void RemoveHeader(string name)
+        {
+            this.Headers.Remove(name);
+        }
+
         public async Task DownloadFileAsync(string url, string filepath)
         {
             await this.DownloadFileTaskAsync(url, filepath);
@@ -62,9 +67,16 @@ namespace RelhaxModpack.Automation
             return await this.DownloadStringTaskAsync(url);
         }
 
-        public async Task<string> PostRequestStringAsync(string url, string postData)
+        public async Task<string> PostRequestStringAsync(string url, string postData, string contentType)
         {
-            return await this.UploadStringTaskAsync(url, "POST", postData);
+            string oldContent = this.Headers.Get("Content-Type");
+            this.Headers[HttpRequestHeader.ContentType] = contentType;
+            string result = await this.UploadStringTaskAsync(url, "POST", postData);
+            if (string.IsNullOrEmpty(oldContent))
+                this.Headers.Remove("Content-Type");
+            else
+                this.Headers[HttpRequestHeader.ContentType] = oldContent;
+            return result;
         }
     }
 }

@@ -46,13 +46,14 @@ namespace RelhaxModpack.Automation.Tasks
         {
             CreateLastDownloadFilenameMacro();
             DownloadSetup();
+            await DownloadFile();
         }
 
         public override void ProcessTaskResults()
         {
-            if (ProcessTaskResultFalse(File.Exists(DestinationPath), string.Format("The file {0} does not exist after task completes", DestinationPath)))
-                return;
             if (ProcessTaskResultFalse(downloaded, "The download failed"))
+                return;
+            if (ProcessTaskResultFalse(File.Exists(DestinationPath), string.Format("The file {0} does not exist after task completes", DestinationPath)))
                 return;
         }
 
@@ -77,6 +78,7 @@ namespace RelhaxModpack.Automation.Tasks
             try
             {
                 await BrowserSessionManager.DownloadFileAsync(Url, DestinationPath, cancellationTokenSource.Token);
+                downloaded = true;
             }
             catch (OperationCanceledException) { }
             catch (Exception ex)

@@ -70,6 +70,7 @@ namespace RelhaxModpack.Automation.Tasks
             { StartBrowserSessionTask.TaskCommandName, typeof(StartBrowserSessionTask) },
             { EndBrowserSessionTask.TaskCommandName, typeof(EndBrowserSessionTask) },
             { BrowserSessionSetHeaderTask.TaskCommandName, typeof(BrowserSessionSetHeaderTask) },
+            { BrowserSessionRemoveHeaderTask.TaskCommandName, typeof(BrowserSessionRemoveHeaderTask) },
             { BrowserSessionGetTask.TaskCommandName, typeof(BrowserSessionGetTask) },
             { BrowserSessionPostTask.TaskCommandName, typeof(BrowserSessionPostTask) },
             { BrowserSessionDownloadFileTask.TaskCommandName, typeof(BrowserSessionDownloadFileTask) },

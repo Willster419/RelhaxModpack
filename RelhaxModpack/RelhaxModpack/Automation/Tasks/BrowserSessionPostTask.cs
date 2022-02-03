@@ -8,16 +8,18 @@ namespace RelhaxModpack.Automation.Tasks
 {
     public class BrowserSessionPostTask: BrowserSessionParseTask, IHtmlParseTask
     {
-        public const string TaskCommandName = "browser_session_get_request";
+        public const string TaskCommandName = "browser_session_post_request";
 
         public override string Command { get { return TaskCommandName; } }
 
         public string PostData { get; set; }
 
+        public string ContentType { get; set; }
+
         #region Xml serialization
         public override string[] PropertiesForSerializationAttributes()
         {
-            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(PostData) }).ToArray();
+            return base.PropertiesForSerializationAttributes().Concat(new string[] { nameof(PostData), nameof(ContentType) }).ToArray();
         }
         #endregion
 
@@ -26,12 +28,15 @@ namespace RelhaxModpack.Automation.Tasks
         {
             base.ProcessMacros();
             PostData = ProcessMacro(nameof(PostData), PostData);
+            ContentType = ProcessMacro(nameof(ContentType), ContentType);
         }
 
         public override void ValidateCommands()
         {
             base.ValidateCommands();
             if (ValidateCommandStringNullEmptyTrue(nameof(PostData), PostData))
+                return;
+            if (ValidateCommandStringNullEmptyTrue(nameof(ContentType), ContentType))
                 return;
         }
 
@@ -49,7 +54,7 @@ namespace RelhaxModpack.Automation.Tasks
         {
             try
             {
-                htmlText = await BrowserSessionManager.PostRequestStringAsync(Url, PostData);
+                htmlText = await BrowserSessionManager.PostRequestStringAsync(Url, PostData, ContentType);
                 return true;
             }
             catch (Exception ex)

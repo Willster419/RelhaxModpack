@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +24,13 @@ namespace RelhaxModpack.Automation
                     browserSession = new AutomationWebClient();
                     break;
                 case BrowserSessionType.HttpClient:
-                    browserSession = new AutomationHttpClient();
+                    HttpClientHandler handler = new HttpClientHandler()
+                    {
+                        UseDefaultCredentials = true,
+                        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                        UseCookies = true
+                    };
+                    browserSession = new AutomationHttpClient(handler, true);
                     break;
                 case BrowserSessionType.WebBrowser:
                     browserSession = new AutomationWebBrowser();
@@ -46,6 +54,11 @@ namespace RelhaxModpack.Automation
             browserSession.SetHeader(name, value);
         }
 
+        public void RemoveHeader(string name)
+        {
+            browserSession.RemoveHeader(name);
+        }
+
         public async Task DownloadFileAsync(string url, string filepath)
         {
             await browserSession.DownloadFileAsync(url, filepath);
@@ -61,9 +74,9 @@ namespace RelhaxModpack.Automation
             return await browserSession.GetRequestStringAsync(url);
         }
 
-        public async Task<string> PostRequestStringAsync(string url, string postData)
+        public async Task<string> PostRequestStringAsync(string url, string postData, string contentType)
         {
-            return await browserSession.PostRequestStringAsync(url, postData);
+            return await browserSession.PostRequestStringAsync(url, postData, contentType);
         }
 
         public void Dispose()

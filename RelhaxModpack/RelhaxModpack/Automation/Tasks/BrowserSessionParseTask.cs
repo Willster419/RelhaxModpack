@@ -11,13 +11,13 @@ namespace RelhaxModpack.Automation.Tasks
     {
         public string ParseResult { get; set; }
 
-        public string HtmlPath { get; set; }
+        public string HtmlPath { get; set; } = string.Empty;
 
         public string WriteHtmlResult { get; set; }
 
         protected bool parseResult;
 
-        protected bool writeHtmlResult;
+        protected bool writeHtmlResult = false;
 
         protected string htmlText;
 
@@ -41,13 +41,22 @@ namespace RelhaxModpack.Automation.Tasks
         #region Task execution
         public override void ProcessMacros()
         {
-            HtmlPath = ProcessMacro(nameof(HtmlPath), HtmlPath);
+            base.ProcessMacros();
             parseResult = bool.Parse(ProcessMacro(nameof(ParseResult), ParseResult));
-            writeHtmlResult = bool.Parse(ProcessMacro(nameof(WriteHtmlResult), WriteHtmlResult));
+            if (parseResult)
+            {
+                HtmlPath = ProcessMacro(nameof(HtmlPath), HtmlPath);
+                writeHtmlResult = bool.Parse(ProcessMacro(nameof(WriteHtmlResult), WriteHtmlResult));
+            }
         }
 
         public override void ValidateCommands()
         {
+            //don't call base, need to do it manually because parsing macro is based on parseResult
+            if (ValidateCommandTrue(string.IsNullOrEmpty(Url), string.Format("The parameter {0} is null or empty", nameof(Url))))
+                return;
+            if (ValidateCommandTrue(parseResult && string.IsNullOrEmpty(MacroName), "The arg MacroName is empty string"))
+                return;
             if (ValidateCommandTrue(parseResult && string.IsNullOrEmpty(HtmlPath), string.Format("ParseResult is true but HtmlPath is null or empty")))
                 return;
             if (ValidateCommandTrue(parseResult && string.IsNullOrEmpty(WriteHtmlResult), string.Format("ParseResult is true but WriteHtmlResult is null or empty")))
@@ -71,6 +80,10 @@ namespace RelhaxModpack.Automation.Tasks
                     return;
                 }
                 ParseHtmlResult();
+                if (parserExitCode == HtmlXpathParserExitCode.None)
+                {
+                    CreateMacro(htmlPathResult);
+                }
             }
         }
 

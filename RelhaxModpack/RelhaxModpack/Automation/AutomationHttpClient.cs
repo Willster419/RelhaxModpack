@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -17,19 +18,45 @@ namespace RelhaxModpack.Automation
 
         protected const int BUFFER_SIZE = 4096;
 
+        public AutomationHttpClient() : base()
+        {
+
+        }
+
+        public AutomationHttpClient(HttpClientHandler httpClientHandler) : base (httpClientHandler)
+        {
+
+        }
+
+        public AutomationHttpClient(HttpClientHandler httpClientHandler, bool dispose): base(httpClientHandler, dispose)
+        {
+
+        }
+
         public void SetHeader(string name, string value)
         {
             this.DefaultRequestHeaders.Add(name, value);
         }
 
-        public async Task<string> GetRequestStringAsync(string url)
+        public void RemoveHeader(string name)
         {
-            return await this.GetStringAsync(url);
+            this.DefaultRequestHeaders.Remove(name);
         }
 
-        public async Task<string> PostRequestStringAsync(string url, string postData)
+        public async Task<string> GetRequestStringAsync(string url)
         {
-            return await this.PostRequestStringAsync(url, postData);
+            HttpResponseMessage response = await this.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> PostRequestStringAsync(string url, string postData, string contentType)
+        {
+            HttpContent httpContent = new StringContent(postData, Encoding.UTF8);
+            httpContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+            HttpResponseMessage response = await this.PostAsync(url, httpContent);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
         public async Task DownloadFileAsync(string url, string filepath)

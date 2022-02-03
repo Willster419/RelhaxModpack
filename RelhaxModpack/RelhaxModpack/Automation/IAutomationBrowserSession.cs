@@ -16,12 +16,14 @@ namespace RelhaxModpack.Automation
 
         void SetHeader(string name, string value);
 
+        void RemoveHeader(string name);
+
         Task DownloadFileAsync(string url, string filepath);
 
         Task DownloadFileAsync(string url, string filepath, CancellationToken token);
 
         Task<string> GetRequestStringAsync(string url);
 
-        Task<string> PostRequestStringAsync(string url, string postData);
+        Task<string> PostRequestStringAsync(string url, string postData, string contentType);
     }
 }

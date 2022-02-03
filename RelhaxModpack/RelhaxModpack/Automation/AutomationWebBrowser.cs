@@ -38,6 +38,11 @@ namespace RelhaxModpack.Automation
             throw new NotImplementedException();
         }
 
+        public void RemoveHeader(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void OnNavigated(WebBrowserNavigatedEventArgs e)
         {
             base.OnNavigated(e);
@@ -65,7 +70,7 @@ namespace RelhaxModpack.Automation
             throw new NotImplementedException();
         }
 
-        public async Task<string> PostRequestStringAsync(string url, string postData)
+        public async Task<string> PostRequestStringAsync(string url, string postData, string contentType)
         {
             throw new NotImplementedException();
         }
