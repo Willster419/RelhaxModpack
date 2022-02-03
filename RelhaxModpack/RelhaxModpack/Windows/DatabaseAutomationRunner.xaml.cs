@@ -628,6 +628,12 @@ namespace RelhaxModpack.Windows
                 SequencesToRunListBox.Items.Add(sequence.AutomationComboBoxItem);
             }
 
+            //add the user macros
+            AutomationSequencer.UserMacrosDictionary.Clear();
+            AutomationSequencer.UserMacrosDictionary.Add(AutomationSettings.UserMacro1Name, AutomationSettings.UserMacro1Value);
+            AutomationSequencer.UserMacrosDictionary.Add(AutomationSettings.UserMacro2Name, AutomationSettings.UserMacro2Value);
+            AutomationSequencer.UserMacrosDictionary.Add(AutomationSettings.UserMacro3Name, AutomationSettings.UserMacro3Value);
+
             SequencerExitCode sequenceRunResult = await AutomationSequencer.RunSequencerAsync(sequencesToRun);
 
             switch (sequenceRunResult)
