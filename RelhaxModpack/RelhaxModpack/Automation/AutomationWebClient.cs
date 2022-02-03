@@ -20,9 +20,11 @@ namespace RelhaxModpack.Automation
         //https://stackoverflow.com/questions/34323143/downloading-large-google-drive-files-with-webclient-in-c-sharp
         protected override WebRequest GetWebRequest(Uri u)
         {
-            var r = (HttpWebRequest)base.GetWebRequest(u);
-            r.CookieContainer = cookieContainer;
-            return r;
+            HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(u);
+            request.CookieContainer = cookieContainer;
+            //https://dennymichael.net/2013/06/14/c-enable-automatic-decompression-on-system-net-webclient/
+            request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            return request;
         }
 
         protected override void OnDownloadProgressChanged(DownloadProgressChangedEventArgs e)
