@@ -1179,7 +1179,7 @@ namespace RelhaxModpack.Utilities
                     if (property == null)
                     {
                         Logging.Error("Property (xml attribute) {0} exists in array for serialization, but not in class design!, ", listEntryAttribute.Name.LocalName);
-                        Logging.Error("Package: {0}, line: {1}", componentWithIdInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        Logging.Error("Component: {0}, ID: {1}, line: {2}", componentWithIdInternalName, listEntry.ToString(), ((IXmlLineInfo)listElement).LineNumber);
                         errorOccured = true;
                         continue;
                     }
@@ -1190,7 +1190,7 @@ namespace RelhaxModpack.Utilities
                     if (!SetObjectProperty(listEntry, property, listEntryAttribute.Value))
                     {
                         Logging.Error("Failed to set property {0} for element in IList", property.Name);
-                        Logging.Error("Package: {0}, line: {1}", componentWithIdInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                        Logging.Error("Component: {0}, ID: {1}, line: {2}", componentWithIdInternalName, listEntry.ToString(), ((IXmlLineInfo)listElement).LineNumber);
                         errorOccured = true;
                     }
                 }
@@ -1208,7 +1208,7 @@ namespace RelhaxModpack.Utilities
                     if (property == null)
                     {
                         Logging.Error("Property (xml element) {0} exists in array for serialization, but not in class design!, ", listEntryElement.Name.LocalName);
-                        Logging.Error("Package: {0}, line: {1}", componentWithIdInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                        Logging.Error("Component: {0}, ID: {1}, line: {2}", componentWithIdInternalName, listEntry.ToString(), ((IXmlLineInfo)listElement).LineNumber);
                         errorOccured = true;
                         continue;
                     }
@@ -1218,7 +1218,7 @@ namespace RelhaxModpack.Utilities
                     if (!SetObjectProperty(listEntry, property, listEntryElement.Value))
                     {
                         Logging.Error("Failed to set property {0} for element in IList", property.Name);
-                        Logging.Error("Package: {0}, line: {1}", componentWithIdInternalName, ((IXmlLineInfo)listEntryElement).LineNumber);
+                        Logging.Error("Component: {0}, ID: {1}, line: {2}", componentWithIdInternalName, listEntry.ToString(), ((IXmlLineInfo)listElement).LineNumber);
                         errorOccured = true;
                     }
                 }
@@ -1226,17 +1226,17 @@ namespace RelhaxModpack.Utilities
                 //logging unknown and missings
                 foreach (string missingAttribute in missingAttributes)
                 {
-                    Logging.Error("Missing xml attribute: {0}, package: {1}, line: {2}", missingAttribute, componentWithIdInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Missing xml attribute: {0}, Component: {1}, ID: {2}, line: {3}", missingAttribute, componentWithIdInternalName, listEntry.ToString(), ((IXmlLineInfo)listElement).LineNumber);
                     errorOccured = true;
                 }
                 foreach (string unknownAttribute in unknownAttributes)
                 {
-                    Logging.Error("Unknown xml attribute: {0}, package: {1}, line: {2}", unknownAttribute, componentWithIdInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Unknown xml attribute: {0}, Component: {1}, ID: {2}, line: {3}", unknownAttribute, componentWithIdInternalName, listEntry.ToString(), ((IXmlLineInfo)listElement).LineNumber);
                     errorOccured = true;
                 }
                 foreach (string unknownElement in unknownElements)
                 {
-                    Logging.Error("Unknown xml element: {0}, package: {1}, line: {2}", unknownElement, componentWithIdInternalName, ((IXmlLineInfo)listElement).LineNumber);
+                    Logging.Error("Unknown xml element: {0}, Component: {1}, ID: {2}, line: {3}", unknownElement, componentWithIdInternalName, listEntry.ToString(), ((IXmlLineInfo)listElement).LineNumber);
                     errorOccured = true;
                 }
 
