@@ -73,7 +73,9 @@ namespace RelhaxModpack.Automation
 
         public string GetHtmlDocument()
         {
-            return browser.GetHtmlDocument();
+            string htmlDocument = null;
+            this.dispatcher.Invoke(() => htmlDocument = browser.GetHtmlDocument());
+            return htmlDocument;
         }
 
         public void Navigate(string url)
