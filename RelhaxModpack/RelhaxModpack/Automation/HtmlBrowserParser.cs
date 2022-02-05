@@ -58,8 +58,13 @@ namespace RelhaxModpack.Automation
 
         protected override async Task<bool> GetHtmlDocumentAsync()
         {
-            BrowserManager = new BrowserManager(BrowserType, browserDispatcher);
-            BrowserManager.BrowserCreated += (sender, args) => { this.BrowserCreated?.Invoke(this, args); };
+            BrowserManager = new BrowserManager(BrowserType, browserDispatcher) { WaitCounts = this.WaitCounts, WaitTimeMs = this.WaitTimeMs };
+            BrowserManager.BrowserCreated += (sender, args) =>
+            {
+                BrowserManager.Height = this.BrowserHeight;
+                BrowserManager.Width = this.BrowserWidth;
+                this.BrowserCreated?.Invoke(this, args);
+            };
 
             //run browser enough to get scripts parsed to get download link
             bool browserResult = await BrowserManager.NavigateWithDelayAsync(this.Url, cancellationTokenSource.Token);
