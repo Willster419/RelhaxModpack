@@ -1019,8 +1019,7 @@ namespace RelhaxModpack
                         WoTModpackOnlineFolderVersion = e.WoTModpackOnlineFolderFromDB;
                     }
 
-                    OnBeginInstallation(new List<Category>(e.ParsedCategoryList), new List<Dependency>(e.Dependencies),
-                        new List<DatabasePackage>(e.GlobalDependencies), new List<SelectablePackage>(e.UserMods), e.IsAutoInstall);
+                    OnBeginInstallation(e.DatabaseManager, e.UserMods, e.IsAutoInstall);
                 }
             }
             else
@@ -1036,18 +1035,8 @@ namespace RelhaxModpack
             GC.Collect();
         }
 
-        private async void OnBeginInstallation(List<Category> parsedCategoryList, List<Dependency> dependencies, List<DatabasePackage> globalDependencies, List<SelectablePackage> UserMods, bool isAutoInstall)
+        private async void OnBeginInstallation(DatabaseManager databaseManager, List<SelectablePackage> UserMods, bool isAutoInstall)
         {
-            //rookie mistake checks
-            if (parsedCategoryList == null || dependencies == null || globalDependencies == null ||
-                parsedCategoryList.Count == 0 || dependencies.Count == 0 || globalDependencies.Count == 0)
-                throw new BadMemeException("You suck at starting installations LEARN2CODE");
-
-            //start the timer
-            Logging.Info("Starting an installation (timer starts now)");
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Restart();
-
             //check if wot is running
             while (CommonUtils.IsProcessRunning(ApplicationConstants.WoTProcessName, WoTDirectory))
             {
@@ -1071,22 +1060,32 @@ namespace RelhaxModpack
             //build macro hash for install
             MacroUtils.BuildFilepathMacroList(WoTClientVersion, WoTModpackOnlineFolderVersion, WoTDirectory);
 
-            //perform list calculations
-            Logging.Debug("Starting Utils.CalculateDependencies()");
-            List<Dependency> dependneciesToInstall = new List<Dependency>(DatabaseUtils.CalculateDependencies(dependencies, parsedCategoryList, false, ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test));
-            Logging.Debug("Finished Utils.CalculateDependencies()");
+            //start the timer
+            Logging.Info("Starting an installation (timer starts now)");
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Restart();
 
-            //make a flat list of all packages to install
-            List<DatabasePackage> packagesSelectedToInstall = DatabaseUtils.CreateListOfPackagesToInstall(globalDependencies, dependneciesToInstall, parsedCategoryList);
+            //run database list calculations
+            databaseManager.CalculateInstallLists(false, ModpackSettings.DatabaseDistroVersion == DatabaseVersions.Test);
+            List<DatabasePackage> packagesToInstall = databaseManager.PackagesToInstall;
+            List<DatabasePackage> packagesToInstallWithZipfile = databaseManager.PackagesToInstallWithZipFile;
+            List<DatabasePackage> packagesToDownload = databaseManager.PackagesToDownload;
+            List<SelectablePackage> selectablePackagesToInstall = databaseManager.SelectablePackagesToInstall;
+            List<DatabasePackage>[] orderedPackagesToInstall = databaseManager.PackagesToInstallByInstallGroup;
 
-            //make a flat list of all packages to install that will actually be installed (actually have a zip file)
-            List<DatabasePackage> packagesToInstallWithZipfile = DatabaseUtils.CreateListOfPackagesWithZipFilesToInstall(globalDependencies, dependneciesToInstall, parsedCategoryList);
+            //create list of user mods to install
+            List<SelectablePackage> userModsToInstall = UserMods.Where(mod => mod.Checked).ToList();
+
+            //we now have a list of enabled, checked and actual zip file mods that we are going to install based on install groups
+            //log the time to process lists
+            TimeSpan lastTime = stopwatch.Elapsed;
+            Logging.Info(string.Format("Took {0} ms to process lists", stopwatch.ElapsedMilliseconds));
 
             //gather stats
             if (ModpackSettings.AllowStatisticDataGather)
             {
                 //https://stackoverflow.com/questions/13781468/get-list-of-properties-from-list-of-objects
-                List<string> packageNamesToUpload = packagesSelectedToInstall.Select(pack => pack.PackageName).ToList();
+                List<string> packageNamesToUpload = packagesToInstall.Select(pack => pack.PackageName).ToList();
 
                 Task.Run(async () =>
                 {
@@ -1123,24 +1122,7 @@ namespace RelhaxModpack
                 });
             }
 
-            //create list of user mods to install
-            List<SelectablePackage> userModsToInstall = UserMods.Where(mod => mod.Checked).ToList();
-
-            //if minimalist mode, exclude packages that we don't *need* to install
-            if (ModpackSettings.MinimalistMode)
-            {
-                Logging.Debug("Minimalist mode enabled, exclude packages from installation");
-                int numPackagesBefore = packagesToInstallWithZipfile.Count;
-                packagesToInstallWithZipfile.RemoveAll(selectablePack => selectablePack.MinimalistModeExclude);
-                int numPackagesAfter = packagesToInstallWithZipfile.Count;
-                Logging.Info("Minimalist mode check removed {0} packages not explicitly required for install", numPackagesBefore - numPackagesAfter);
-            }
-
-            //while we're at it let's make a list of packages that need to be downloaded
-            List<DatabasePackage> packagesToDownload = packagesToInstallWithZipfile.Where(pack => pack.DownloadFlag).ToList();
-
             //and check if we need to actually install anything
-            List<SelectablePackage> selectablePackagesToInstall = DatabaseUtils.CreateListOfSelectablePackagesToInstall(parsedCategoryList);
             if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
             {
                 Logging.Info("No packages selected to install, return");
@@ -1148,14 +1130,6 @@ namespace RelhaxModpack
                 ToggleUIButtons(true);
                 return;
             }
-
-            //perform list install order calculations
-            List<DatabasePackage>[] orderedPackagesToInstall = DatabaseUtils.CreateOrderedInstallList(packagesToInstallWithZipfile);
-
-            //we now have a list of enabled, checked and actual zip file mods that we are going to install based on install groups
-            //log the time to process lists
-            TimeSpan lastTime = stopwatch.Elapsed;
-            Logging.Info(string.Format("Took {0} msec to process lists", stopwatch.ElapsedMilliseconds));
 
             //first, if we have downloads to do, then start processing them
             if (packagesToDownload.Count > 0)
@@ -1397,12 +1371,7 @@ namespace RelhaxModpack
             //and create and link the install engine
             installEngine = new InstallEngine(ModpackSettings, CommandLineSettings)
             {
-                OrderedPackagesToInstall = orderedPackagesToInstall,
-                PackagesToInstallWithZipfile = packagesToInstallWithZipfile,
-                PackagesToInstall = packagesSelectedToInstall,
-                ParsedCategoryList = parsedCategoryList,
-                Dependencies = dependencies,
-                GlobalDependencies = globalDependencies,
+                DatabaseManager = databaseManager,
                 UserPackagesToInstall = userModsToInstall,
                 CancellationToken = installerCancellationTokenSource.Token,
                 DownloadingPackages = (packagesToDownload.Count > 0),

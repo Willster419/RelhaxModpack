@@ -116,7 +116,8 @@ namespace RelhaxModpack.Automation
 
         private AutomationTask RunningTask;
 
-        public AutomationSequence(List<DatabasePackage> databasePackages, List<AutomationMacro> applicationMacros, List<AutomationMacro> globalMacros, List<AutomationMacro> userMacros, AutomationRunnerSettings automationRunnerSettings, DatabaseManager databaseManager, CancellationToken cancellationToken)
+        public AutomationSequence(List<DatabasePackage> databasePackages, List<AutomationMacro> applicationMacros, List<AutomationMacro> globalMacros,
+            List<AutomationMacro> userMacros, AutomationRunnerSettings automationRunnerSettings, DatabaseManager databaseManager, CancellationToken cancellationToken)
         {
             WebClient = new WebClient();
             DatabasePackages = databasePackages;
@@ -341,7 +342,7 @@ namespace RelhaxModpack.Automation
 
         public void UpdateDatabasePackageList()
         {
-            DatabasePackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
+            DatabasePackages = DatabaseManager.GetFlatList();
         }
 
         public void UpdateCurrentDatabasePackage()

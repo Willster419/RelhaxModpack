@@ -121,7 +121,7 @@ namespace RelhaxUnitTests
             Assert.IsNotNull(databaseManager);
 
             //test flat list function (all packages)
-            List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(databaseManager.GlobalDependencies, databaseManager.Dependencies, databaseManager.ParsedCategoryList);
+            List<DatabasePackage> allPackages = databaseManager.GetFlatList();
             Assert.IsNotNull(allPackages);
             Assert.IsFalse(allPackages.Count == 0);
 
@@ -136,16 +136,16 @@ namespace RelhaxUnitTests
             }
 
             //we're not technically checking these functions, but at least they should be able to run without throwing an exception, right?
-            DatabaseUtils.BuildDependencyPackageRefrences(databaseManager.ParsedCategoryList, databaseManager.Dependencies);
-            DatabaseUtils.CalculateDependencies(databaseManager.Dependencies, databaseManager.ParsedCategoryList, true, false);
+            databaseManager.ProcessDatabase();
+            databaseManager.CalculateInstallLists(true, false);
 
             //test flat list function (selectable packages)
-            List<SelectablePackage> selectablePackages = DatabaseUtils.GetFlatSelectablePackageList(databaseManager.ParsedCategoryList);
+            List<SelectablePackage> selectablePackages = databaseManager.GetFlatSelectablePackageList();
             Assert.IsNotNull(selectablePackages);
 
             //test duplicate finder functions
-            List<string> duplicatesPackageNames = DatabaseUtils.CheckForDuplicates(databaseManager.GlobalDependencies, databaseManager.Dependencies, databaseManager.ParsedCategoryList);
-            List<DatabasePackage> duplicatesUID = DatabaseUtils.CheckForDuplicateUIDsPackageList(databaseManager.GlobalDependencies, databaseManager.Dependencies, databaseManager.ParsedCategoryList);
+            List<string> duplicatesPackageNames = databaseManager.CheckForDuplicatePackageNamesStringsList();
+            List<DatabasePackage> duplicatesUID = databaseManager.CheckForDuplicateUIDsPackageList();
             Assert.IsTrue(duplicatesPackageNames.Count == 0);
             Assert.IsTrue(duplicatesUID.Count == 0);
         }

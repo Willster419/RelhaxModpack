@@ -18,20 +18,7 @@ namespace RelhaxModpack.Utilities.ClassEventArgs
         /// </summary>
         public bool ContinueInstallation = false;
 
-        /// <summary>
-        /// The list of categories
-        /// </summary>
-        public List<Category> ParsedCategoryList;
-
-        /// <summary>
-        /// The list of dependencies
-        /// </summary>
-        public List<Dependency> Dependencies;
-
-        /// <summary>
-        /// The list of global dependencies
-        /// </summary>
-        public List<DatabasePackage> GlobalDependencies;
+        public DatabaseManager DatabaseManager;
 
         /// <summary>
         /// The list of use mods

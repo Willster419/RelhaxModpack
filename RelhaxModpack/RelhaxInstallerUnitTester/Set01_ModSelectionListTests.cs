@@ -164,7 +164,7 @@ namespace RelhaxInstallerUnitTester
             Logging.Info("Selecting 100 components");
             selectionList.Dispatcher.Invoke(() =>
             {
-                List<SelectablePackage> flatListRandomSelection = DatabaseUtils.GetFlatSelectablePackageList(selectionList.ParsedCategoryList);
+                List<SelectablePackage> flatListRandomSelection = databaseManager.GetFlatSelectablePackageList();
                 flatListRandomSelection = flatListRandomSelection.FindAll(package => package.Enabled);
                 Random random = new Random();
                 for (int i = 0; i < 100; i++)
@@ -184,11 +184,10 @@ namespace RelhaxInstallerUnitTester
 
             //run some base tests on the return args
             Assert.IsTrue(args.ContinueInstallation);
-            Assert.IsTrue(args.GlobalDependencies.Count > 0);
-            Assert.IsTrue(args.Dependencies.Count > 0);
-            Assert.IsTrue(args.ParsedCategoryList.Count > 0);
+            Assert.IsTrue(args.DatabaseManager.GlobalDependencies.Count > 0);
+            Assert.IsTrue(args.DatabaseManager.Dependencies.Count > 0);
+            Assert.IsTrue(args.DatabaseManager.ParsedCategoryList.Count > 0);
 
-            //below this message is copy-modify-paste from the MainWindow's install and OnBeginInstall methods. Some of this should be moved into some sort of re-usable implementation. TODO
             //setup for install
             string wotExeFilepath = RegistryUtils.AutoFindWoTDirectoryFirst();
             string wotExeFolderpath = Path.GetDirectoryName(wotExeFilepath);
@@ -202,27 +201,23 @@ namespace RelhaxInstallerUnitTester
             //build macro hash for install
             MacroUtils.BuildFilepathMacroList(WoTClientVersion, databaseManager.WoTOnlineFolderVersion, wotExeFolderpath);
 
-            //perform dependency calculations
-            List<Dependency> dependneciesToInstall = new List<Dependency>(DatabaseUtils.CalculateDependencies(selectionList.Dependencies, selectionList.ParsedCategoryList, false, false));
-
-            //create install list
-            List<DatabasePackage> packagesToInstall = DatabaseUtils.CreateListOfPackagesWithZipFilesToInstall(selectionList.GlobalDependencies, selectionList.Dependencies, selectionList.ParsedCategoryList);
+            //perform installation calculations
+            databaseManager.CalculateInstallLists(true, false);
+            List<Dependency> dependneciesToInstall = databaseManager.DependenciesToInstall;
+            List<DatabasePackage> packagesToInstall = databaseManager.PackagesToInstall;
+            List<DatabasePackage> packagesToDownload = databaseManager.PackagesToDownload;
+            List<SelectablePackage> selectablePackagesToInstall = databaseManager.SelectablePackagesToInstall;
 
             //user mod calculation
             List<SelectablePackage> userModsToInstall = args.UserMods.FindAll(mod => mod.Checked);
 
-            //while we're at it let's make a list of packages that need to be downloaded
-            List<DatabasePackage> packagesToDownload = packagesToInstall.FindAll(pack => pack.DownloadFlag);
-
-            //and check if we need to actually install anything
-            List<SelectablePackage> selectablePackagesToInstall = DatabaseUtils.CreateListOfSelectablePackagesToInstall(selectionList.ParsedCategoryList);
             if (selectablePackagesToInstall.Count == 0 && userModsToInstall.Count == 0)
             {
                 Assert.Fail("No packages to install");
             }
 
             //perform list install order calculations
-            List<DatabasePackage>[] orderedPackagesToInstall = DatabaseUtils.CreateOrderedInstallList(packagesToInstall);
+            List<DatabasePackage>[] orderedPackagesToInstall = databaseManager.PackagesToInstallByInstallGroup;
 
             //first, if we have downloads to do, then start processing them
             CancellationToken nullToken;
@@ -247,11 +242,7 @@ namespace RelhaxInstallerUnitTester
 
             InstallEngine installEngine = new InstallEngine(selectionList.ModpackSettings, selectionList.CommandLineSettings)
             {
-                OrderedPackagesToInstall = orderedPackagesToInstall,
-                PackagesToInstallWithZipfile = packagesToInstall,
-                ParsedCategoryList = args.ParsedCategoryList,
-                Dependencies = args.Dependencies,
-                GlobalDependencies = args.GlobalDependencies,
+                DatabaseManager = databaseManager,
                 UserPackagesToInstall = userModsToInstall,
                 CancellationToken = nullToken,
                 DownloadingPackages = (packagesToDownload.Count > 0),

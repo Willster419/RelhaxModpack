@@ -350,6 +350,7 @@
     <Compile Include="Patching\Patch.cs" />
     <Compile Include="Shortcuts\Shortcut.cs" />
     <Compile Include="Atlases\Texture.cs" />
+    <Compile Include="Utilities\Structs\VersionInfos.cs" />
     <Compile Include="Windows\DatabaseAutomationRunner.xaml.cs">
       <DependentUpon>DatabaseAutomationRunner.xaml</DependentUpon>
     </Compile>

@@ -70,6 +70,8 @@ namespace RelhaxModpack.Windows
 
         public string WoTDirectoryFromMainWindow { get; set; }
 
+        public DatabaseManager DatabaseManager { get { return databaseManager; } }
+
         /// <summary>
         /// Flag to indicate if the window is loading application specific UI
         /// </summary>
@@ -154,9 +156,7 @@ namespace RelhaxModpack.Windows
             OnSelectionListReturn?.Invoke(this, new SelectionListEventArgs()
             {
                 ContinueInstallation = continueInstallation,
-                ParsedCategoryList = ParsedCategoryList,
-                Dependencies = Dependencies,
-                GlobalDependencies = GlobalDependencies,
+                DatabaseManager = databaseManager,
                 UserMods = UserCategory?.Packages,
                 IsAutoInstall = AutoInstallMode,
                 WoTModpackOnlineFolderFromDB = databaseManager.WoTOnlineFolderVersion
@@ -289,12 +289,12 @@ namespace RelhaxModpack.Windows
             //check local download cache (files, milliseconds to seconds)
             //NO UI THREAD REQUIRED
             //UI PROGRESS REPORTING
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList);
+            List<DatabasePackage> flatList = databaseManager.GetFlatList();
             ModSelectionCheckMd5Hashes(progressIndicator, loadProgress, flatList);
 
             //sort the database for UI display (~3ms)
             //NO UI THREAD REQUIRED
-            DatabaseUtils.SortDatabase(ParsedCategoryList);
+            databaseManager.SortDatabase();
 
             //create new user mods category and add zip files in the user packages folder as SelectablePackage objects (~5ms)
             //NO UI THREAD REQUIRED
@@ -411,8 +411,7 @@ namespace RelhaxModpack.Windows
             //link everything again now that the category exists (~10ms)
             //MUST HAPPEN AFTER InitDatabaseUI()
             //NO UI THREAD REQUIRED
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
-            DatabaseUtils.BuildDependencyPackageRefrences(ParsedCategoryList, Dependencies);
+            databaseManager.ProcessDatabase();
 
             //run the loop for each category to create package UI objects (~8 sec)
             //UI THREAD REQUIRED
@@ -784,9 +783,7 @@ namespace RelhaxModpack.Windows
             SelectionListEventArgs args = new SelectionListEventArgs()
             {
                 ContinueInstallation = loadSuccess,
-                ParsedCategoryList = ParsedCategoryList,
-                Dependencies = Dependencies,
-                GlobalDependencies = GlobalDependencies,
+                DatabaseManager = databaseManager,
                 UserMods = UserCategory.Packages,
                 IsAutoInstall = isAutoInstall,
                 IsSelectionOutOfDate = selectionFileOutOfDate,
@@ -1000,10 +997,9 @@ namespace RelhaxModpack.Windows
         /// <summary>
         /// Clears all selections in the given lists by setting the checked properties to false
         /// </summary>
-        /// <param name="ParsedCategoryList">The list of Categories</param>
-        private void ClearSelections(List<Category> ParsedCategoryList)
+        private void ClearSelections(List<SelectablePackage> packagesToClear)
         {
-            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in packagesToClear)
             {
                 if (ModpackSettings.SaveDisabledMods && package.FlagForSelectionSave)
                 {
@@ -1012,6 +1008,8 @@ namespace RelhaxModpack.Windows
                 }
                 package.Checked = false;
             }
+
+            //process if the category header should be checked
             foreach (Category category in ParsedCategoryList)
                 if (category.CategoryHeader != null && category.CategoryHeader.Checked)
                     category.CategoryHeader.Checked = false;
@@ -1617,11 +1615,14 @@ namespace RelhaxModpack.Windows
         private void OnClearSelectionsClick(object sender, RoutedEventArgs e)
         {
             Logging.Info("Clearing selections");
+
             //clear in lists
-            ClearSelections(ParsedCategoryList);
-            ClearSelections(new List<Category>() { UserCategory});
+            ClearSelections(databaseManager.GetFlatSelectablePackageList());
+            ClearSelections(UserCategory.GetFlatPackageList());
+
             //update selection list UI
             ModTabGroups_SelectionChanged(null, null);
+
             Logging.Info("Selections cleared");
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
         }
@@ -1672,7 +1673,8 @@ namespace RelhaxModpack.Windows
                 Logging.Info(LogOptions.MethodAndClassName, "This selection file is V2 but upgrade will be ignored");
 
             //first uncheck everything
-            ClearSelections(ParsedCategoryList);
+            List<SelectablePackage> packages = databaseManager.GetFlatSelectablePackageList();
+            ClearSelections(packages);
 
             //get a list of all the mods currently in the selection
             XmlNodeList xmlSelections = document.SelectNodes("//mods/relhaxMods/mod");
@@ -1694,7 +1696,7 @@ namespace RelhaxModpack.Windows
                 stringUserSelections.Add(node.InnerText);
 
             //check the mods in the actual list if it's in the list
-            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in packages)
             {
                 //also check to only "check" the mod if it is visible OR if the command line settings to force visible all components
                 if (stringSelections.Contains(package.PackageName) && (package.Visible || ModpackSettings.ForceVisible))
@@ -1845,7 +1847,7 @@ namespace RelhaxModpack.Windows
             }
 
             //first uncheck everything
-            ClearSelections(ParsedCategoryList);
+            ClearSelections(databaseManager.GetFlatSelectablePackageList());
 
             //get a list of all the mods currently in the selection
             XmlNodeList xmlGlobalSelections = document.SelectNodes("/packages/globalPackages/package");
@@ -1865,7 +1867,7 @@ namespace RelhaxModpack.Windows
             List<DatabasePackage> userPackagesFromSelection = new List<DatabasePackage>();
             List<SelectablePackage> packagesFromSelection = new List<SelectablePackage>();
 
-            List<SelectablePackage> packagesFromDatabase = DatabaseUtils.GetFlatSelectablePackageList(ParsedCategoryList);
+            List<SelectablePackage> packagesFromDatabase = databaseManager.GetFlatSelectablePackageList();
 
             List<SelectablePackage> brokenStructurePackages = new List<SelectablePackage>();
             List<SelectablePackage> removedPackages = new List<SelectablePackage>();
@@ -2088,7 +2090,8 @@ namespace RelhaxModpack.Windows
             //check if dependencies are out of date
             Logging.Debug(LogOptions.MethodName, "Processing dependencies from selection");
             Logging.Debug(LogOptions.MethodName, "First calculate dependencies from currently selected packages");
-            List<Dependency> dependenciesCalculatedFromLoadedSelection = DatabaseUtils.CalculateDependencies(Dependencies, ParsedCategoryList, true, false);
+            databaseManager.CalculateInstallLists(true, false);
+            List<Dependency> dependenciesCalculatedFromLoadedSelection = databaseManager.DependenciesToInstall;
 
             Logging.Debug(LogOptions.MethodName, "Check if number if calculated dependencies == number of loaded dependencies from file");
             if (dependenciesCalculatedFromLoadedSelection.Count != dependenciesFromSelection.Count)
@@ -2397,7 +2400,7 @@ namespace RelhaxModpack.Windows
             var nodeUserMods = doc.Descendants("userMods").FirstOrDefault();
 
             //check relhax Mods
-            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in databaseManager.GetFlatSelectablePackageList())
             {
                 if (package.Checked)
                 {
@@ -2477,7 +2480,8 @@ namespace RelhaxModpack.Windows
 
             //calculate dependencies for adding
             Logging.Debug("Running dependency calculation on database");
-            List<Dependency> dependenciesToInstall = DatabaseUtils.CalculateDependencies(Dependencies, ParsedCategoryList, true, false);
+            databaseManager.CalculateInstallLists(true, false);
+            List<Dependency> dependenciesToInstall = databaseManager.DependenciesToInstall;
 
             Logging.Debug("Saving calculated dependencies to document");
             foreach (Dependency dependency in dependenciesToInstall)
@@ -2496,7 +2500,7 @@ namespace RelhaxModpack.Windows
 
             //check relhax Mods
             Logging.Debug("Starting selection save of Relhax packages");
-            foreach (SelectablePackage package in DatabaseUtils.GetFlatList(null, null, ParsedCategoryList))
+            foreach (SelectablePackage package in databaseManager.GetFlatSelectablePackageList())
             {
                 XElement xPackage = null;
                 if (package.Checked)
@@ -2707,13 +2711,13 @@ namespace RelhaxModpack.Windows
                     if((bool)SearchThisTabOnlyCB.IsChecked)
                     {
                         TabItem selected = (TabItem)ModTabGroups.SelectedItem;
-                        searchComponents.AddRange(DatabaseUtils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
+                        searchComponents.AddRange(databaseManager.GetFlatSelectablePackageList().Where(
                             term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.IsStructureVisible && term.ShowInSearchList && term.ParentCategory.TabPage.Equals(selected)));
                     }
                     else
                     {
                         //get a list of components that match the search term
-                        searchComponents.AddRange(DatabaseUtils.GetFlatSelectablePackageList(ParsedCategoryList).Where(
+                        searchComponents.AddRange(databaseManager.GetFlatSelectablePackageList().Where(
                             term => term.NameFormatted.ToLower().Contains(searchTerm.ToLower()) && term.IsStructureVisible && term.ShowInSearchList));
                     }
                 }
@@ -2907,8 +2911,6 @@ namespace RelhaxModpack.Windows
                             ParsedCategoryList.Clear();
                         }
                     }
-
-                    databaseManager = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer

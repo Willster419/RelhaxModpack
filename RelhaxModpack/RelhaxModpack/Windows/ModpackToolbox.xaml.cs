@@ -24,6 +24,7 @@ using System.Xml.XPath;
 using RelhaxModpack.Patching;
 using RelhaxModpack.Atlases;
 using RelhaxModpack.Shortcuts;
+using RelhaxModpack.Utilities.Structs;
 
 namespace RelhaxModpack.Windows
 {
@@ -32,6 +33,38 @@ namespace RelhaxModpack.Windows
     /// </summary>
     public partial class ModpackToolbox : RelhaxCustomFeatureWindow
     {
+        /// <summary>
+        /// Allows the old and new versions of a SelectablePackage to be saved temporarily for comparing differences between two database structures
+        /// </summary>
+        public struct DatabaseBeforeAfter
+        {
+            /// <summary>
+            /// The package reference for the database before changes
+            /// </summary>
+            public SelectablePackage Before;
+
+            /// <summary>
+            /// The package reference for the database after changes
+            /// </summary>
+            public SelectablePackage After;
+        }
+
+        /// <summary>
+        /// Allows the old and new versions of a DatabasePackage to be saved temporarily for comparing differences between two database structures
+        /// </summary>
+        public struct DatabaseBeforeAfter2
+        {
+            /// <summary>
+            /// The package reference for the database before changes
+            /// </summary>
+            public DatabasePackage Before;
+
+            /// <summary>
+            /// The package reference for the database after changes
+            /// </summary>
+            public DatabasePackage After;
+        }
+
         /// <summary>
         /// The command line argument specified at application launch to show this window
         /// </summary>
@@ -789,7 +822,7 @@ namespace RelhaxModpack.Windows
                 }
 
                 //if the list of zip files does not already have it, then add it
-                flatList = DatabaseUtils.GetFlatList(databaseManager.GlobalDependencies, databaseManager.Dependencies, databaseManager.ParsedCategoryList);
+                flatList = databaseManager.GetFlatList();
                 foreach (DatabasePackage package in flatList)
                     if(!string.IsNullOrWhiteSpace(package.ZipFile) && !allUsedZipFiles.Contains(package.ZipFile))
                             allUsedZipFiles.Add(package.ZipFile);
@@ -972,11 +1005,11 @@ namespace RelhaxModpack.Windows
 
             SetProgress(20);
 
-            List<DatabasePackage> flatListCurrent = DatabaseUtils.GetFlatList(currentDatabaseManager.GlobalDependencies, currentDatabaseManager.Dependencies, currentDatabaseManager.ParsedCategoryList);
+            List<DatabasePackage> flatListCurrent = currentDatabaseManager.GetFlatList();
 
             //check for duplicates
             ReportProgress("Checking for duplicate database packageName entries");
-            List<string> duplicates = DatabaseUtils.CheckForDuplicates(currentDatabaseManager.GlobalDependencies, currentDatabaseManager.Dependencies, currentDatabaseManager.ParsedCategoryList);
+            List<string> duplicates = currentDatabaseManager.CheckForDuplicatePackageNamesStringsList();
             if (duplicates.Count > 0)
             {
                 ReportProgress("ERROR: Duplicates found!");
@@ -987,7 +1020,7 @@ namespace RelhaxModpack.Windows
             }
 
             ReportProgress("Checking for duplicate database UID entries");
-            List<DatabasePackage> duplicatesList = DatabaseUtils.CheckForDuplicateUIDsPackageList(currentDatabaseManager.GlobalDependencies, currentDatabaseManager.Dependencies, currentDatabaseManager.ParsedCategoryList);
+            List<DatabasePackage> duplicatesList = currentDatabaseManager.CheckForDuplicateUIDsPackageList();
             if (duplicatesList.Count > 0)
             {
                 ReportProgress("ERROR: The following packages are duplicate UIDs:");
@@ -1056,15 +1089,13 @@ namespace RelhaxModpack.Windows
                 ToggleUI((TabController.SelectedItem as TabItem), true);
                 return;
             }
+
+            //build link references of old document
+            manager.ProcessDatabase();
             globalDependenciesOld = manager.GlobalDependencies;
             dependenciesOld = manager.Dependencies;
             parsedCateogryListOld = manager.ParsedCategoryList;
-
-            //build link references of old document
-            DatabaseUtils.BuildTopLevelParents(parsedCateogryListOld);
-            DatabaseUtils.BuildLinksRefrence(parsedCateogryListOld);
-            DatabaseUtils.BuildLevelPerPackage(parsedCateogryListOld);
-            List<DatabasePackage> flatListOld = DatabaseUtils.GetFlatList(globalDependenciesOld, dependenciesOld, parsedCateogryListOld);
+            List<DatabasePackage> flatListOld = manager.GetFlatList();
 
             //check if any packages had a UID change, because this is not allowed
             //check based on packageName, loop through new
@@ -1541,6 +1572,7 @@ namespace RelhaxModpack.Windows
             List<Dependency> dependencies = new List<Dependency>();
             List<Category> parsedCategoryList = new List<Category>();
             string currentInstallStatsXml = string.Empty;
+            DatabaseManager manager;
 
             using (client = new WebClient { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
@@ -1552,16 +1584,13 @@ namespace RelhaxModpack.Windows
                 ReportProgress("Done, parsed as " + supportedClientLast);
 
                 ReportProgress("Loading current database from bigmods");
-                DatabaseManager manager = await LoadDatabase1V1FromBigmods(supportedClientLast);
+                manager = await LoadDatabase1V1FromBigmods(supportedClientLast);
                 if (manager == null)
                 {
                     ReportProgress("Failed to parse modInfo to lists");
                     ToggleUI((TabController.SelectedItem as TabItem), true);
                     return;
                 }
-                globalDependencies = manager.GlobalDependencies;
-                dependencies = manager.Dependencies;
-                parsedCategoryList = manager.ParsedCategoryList;
 
                 //download current install statistics
                 ReportProgress("Downloading current install statistics");
@@ -1570,10 +1599,10 @@ namespace RelhaxModpack.Windows
 
             ReportProgress("Preparing lists for merge");
             XmlDocument installStats = XmlUtils.LoadXmlDocument(currentInstallStatsXml, XmlLoadType.FromString);
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, parsedCategoryList);
+            List<DatabasePackage> flatList = manager.GetFlatList();
 
             //replace any non existent entries in installStats with empty entries where installCount = 0
-            foreach(DatabasePackage package in flatList)
+            foreach (DatabasePackage package in flatList)
             {
                 //@"//package[@name='Dependency_global_WoT_xml_Creation']"
                 string xPath = string.Format(@"//package[@name='{0}']", package.PackageName);
@@ -1609,6 +1638,7 @@ namespace RelhaxModpack.Windows
             List<DatabasePackage> globalDependencies = new List<DatabasePackage>();
             List<Dependency> dependencies = new List<Dependency>();
             List<Category> parsedCategoryList = new List<Category>();
+            DatabaseManager manager;
 
             using (client = new WebClient { Credentials = PrivateStuff.BigmodsNetworkCredential })
             {
@@ -1620,20 +1650,17 @@ namespace RelhaxModpack.Windows
                 ReportProgress("Done, parsed as " + supportedClientLast);
 
                 ReportProgress("Loading current database from bigmods");
-                DatabaseManager manager = await LoadDatabase1V1FromBigmods(supportedClientLast);
+                manager = await LoadDatabase1V1FromBigmods(supportedClientLast);
                 if (manager == null)
                 {
                     ReportProgress("Failed to parse modInfo to lists");
                     ToggleUI((TabController.SelectedItem as TabItem), true);
                     return;
                 }
-                globalDependencies = manager.GlobalDependencies;
-                dependencies = manager.Dependencies;
-                parsedCategoryList = manager.ParsedCategoryList;
             }
 
             ReportProgress("Creating new xml document");
-            List<DatabasePackage> flatList = DatabaseUtils.GetFlatList(globalDependencies, dependencies, parsedCategoryList);
+            List<DatabasePackage> flatList = manager.GetFlatList();
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
             doc.AppendChild(xmlDeclaration);
@@ -1683,7 +1710,7 @@ namespace RelhaxModpack.Windows
             await databaseManagerDuplicateCheck.LoadDatabaseTestAsync(SelectModInfo.FileName);
 
             //link stuff in memory
-            DatabaseUtils.BuildDependencyPackageRefrences(databaseManagerDuplicateCheck.ParsedCategoryList, databaseManagerDuplicateCheck.Dependencies);
+            databaseManagerDuplicateCheck.ProcessDatabase();
 
             ReportProgress("Database loaded");
             ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -1710,9 +1737,9 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            List<string> duplicatesList = DatabaseUtils.CheckForDuplicates(databaseManagerDuplicateCheck.GlobalDependencies, databaseManagerDuplicateCheck.Dependencies, databaseManagerDuplicateCheck.ParsedCategoryList);
+            List<string> duplicatesList = databaseManagerDuplicateCheck.CheckForDuplicatePackageNamesStringsList();
 
-            if(duplicatesList == null || duplicatesList.Count == 0)
+            if (duplicatesList == null || duplicatesList.Count == 0)
             {
                 ReportProgress("No duplicates");
             }
@@ -1747,7 +1774,7 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            List<DatabasePackage> duplicatesList = DatabaseUtils.CheckForDuplicateUIDsPackageList(databaseManagerDuplicateCheck.GlobalDependencies, databaseManagerDuplicateCheck.Dependencies, databaseManagerDuplicateCheck.ParsedCategoryList);
+            List<DatabasePackage> duplicatesList = databaseManagerDuplicateCheck.CheckForDuplicateUIDsPackageList();
 
             if (duplicatesList.Count == 0)
             {
@@ -1785,7 +1812,7 @@ namespace RelhaxModpack.Windows
             }
 
             //create a flat list
-            List<DatabasePackage> allPackages = DatabaseUtils.GetFlatList(databaseManagerDuplicateCheck.GlobalDependencies, databaseManagerDuplicateCheck.Dependencies, databaseManagerDuplicateCheck.ParsedCategoryList);
+            List<DatabasePackage> allPackages = databaseManagerDuplicateCheck.GetFlatList();
 
             foreach (DatabasePackage packageToAddUID in allPackages)
             {
@@ -2133,15 +2160,13 @@ namespace RelhaxModpack.Windows
             SetProgress(20);
 
             //bulid link refrences (parent/child, levels, etc)
-            DatabaseUtils.BuildTopLevelParents(databaseManager.ParsedCategoryList);
-            DatabaseUtils.BuildLinksRefrence(databaseManager.ParsedCategoryList);
-            DatabaseUtils.BuildLevelPerPackage(databaseManager.ParsedCategoryList);
+            databaseManager.ProcessDatabase();
             client = new WebClient();
 
             //get an estimate count beforehand
             int numToTest = 0;
             int totalTested = 0;
-            foreach (SelectablePackage selectablePackage in DatabaseUtils.GetFlatSelectablePackageList(databaseManager.ParsedCategoryList))
+            foreach (SelectablePackage selectablePackage in databaseManager.GetFlatSelectablePackageList())
             {
                 if (selectablePackage.Medias == null || selectablePackage.Medias.Count == 0)
                     continue;
@@ -2159,7 +2184,7 @@ namespace RelhaxModpack.Windows
             CleanMediasCancel.Visibility = Visibility.Visible;
             CleanMediasCancel.IsEnabled = true;
 
-            foreach (SelectablePackage selectablePackage in DatabaseUtils.GetFlatSelectablePackageList(databaseManager.ParsedCategoryList))
+            foreach (SelectablePackage selectablePackage in databaseManager.GetFlatSelectablePackageList())
             {
                 if (selectablePackage.Medias == null || selectablePackage.Medias.Count == 0)
                     continue;
@@ -2249,7 +2274,7 @@ namespace RelhaxModpack.Windows
             await databaseManagerDuplicateCheck.LoadDatabaseTestAsync(SelectModInfo.FileName);
 
             //link stuff in memory
-            DatabaseUtils.BuildDependencyPackageRefrences(databaseManagerDuplicateCheck.ParsedCategoryList, databaseManagerDuplicateCheck.Dependencies);
+            databaseManagerDuplicateCheck.ProcessDatabase();
 
             ReportProgress("Database loaded");
             ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -2275,7 +2300,7 @@ namespace RelhaxModpack.Windows
 
             //script
             StringBuilder textBuilder = new StringBuilder();
-            foreach (DatabasePackage package in databaseManagerDuplicateCheck.AllPackages())
+            foreach (DatabasePackage package in databaseManagerDuplicateCheck.GetFlatList())
                 textBuilder.AppendFormat("{0}{1}", package.ToAutomationElement(), Environment.NewLine);
             File.WriteAllText(AutomationElementsTxt, textBuilder.ToString());
             ReportProgress("Automation elements saved to " + AutomationElementsTxt);
@@ -2301,7 +2326,7 @@ namespace RelhaxModpack.Windows
             await databaseManagerDuplicateCheck.LoadDatabaseTestAsync(SelectModInfo.FileName);
 
             //link stuff in memory
-            DatabaseUtils.BuildDependencyPackageRefrences(databaseManagerDuplicateCheck.ParsedCategoryList, databaseManagerDuplicateCheck.Dependencies);
+            databaseManagerDuplicateCheck.ProcessDatabase();
 
             ReportProgress("Database loaded");
             ToggleUI((TabController.SelectedItem as TabItem), true);
@@ -2347,7 +2372,7 @@ namespace RelhaxModpack.Windows
             }
 
             ReportProgress("Getting list of packages with zip files");
-            List<DatabasePackage> packagesWithZipfiles = databaseManagerDuplicateCheck.AllPackages().FindAll(package => !string.IsNullOrEmpty(package.ZipFile));
+            List<DatabasePackage> packagesWithZipfiles = databaseManagerDuplicateCheck.GetFlatList().FindAll(package => !string.IsNullOrEmpty(package.ZipFile));
 
             DatabasePackage packageLastConverted = string.IsNullOrEmpty(lastConvertedPackageUID) ? packagesWithZipfiles[0] : packagesWithZipfiles.Find(package => package.UID.Equals(lastConvertedPackageUID));
             if (packageLastConverted == null)
@@ -2413,7 +2438,7 @@ namespace RelhaxModpack.Windows
                                 XDocument doc = XmlUtils.LoadXDocument(xmlString, XmlLoadType.FromString);
 
                                 List<XElement> results = null;
-                                XmlDatabaseComponent component = null;
+                                XmlComponent component = null;
                                 string usedXpath = null;
                                 foreach (string xpath in xpathToTestFor)
                                 {
@@ -2452,7 +2477,7 @@ namespace RelhaxModpack.Windows
                                     }
 
                                     //parse from xml
-                                    component.FromXml(element, XmlDatabaseComponent.SchemaV1Dot0);
+                                    component.FromXml(element, XmlComponent.SchemaV1Dot0);
 
                                     //add to correct list
                                     switch (usedXpath)
@@ -2514,7 +2539,7 @@ namespace RelhaxModpack.Windows
                             ReportProgress("Zip is now empty");
                             packageToConvert.UpdateZipfile(string.Empty);
                         }
-                        databaseManagerDuplicateCheck.SaveDatabase(SelectModInfo.FileName, DatabaseManager.DocumentVersion1V2, XmlDatabaseComponent.SchemaV1Dot1);
+                        databaseManagerDuplicateCheck.SaveDatabase(SelectModInfo.FileName, DatabaseManager.DocumentVersion1V2, XmlComponent.SchemaV1Dot1);
                     }
                     else
                         ReportProgress("Zip file was not modified");

@@ -518,7 +518,7 @@ namespace RelhaxModpack.Automation
 
         public void UpdateDatabasePackageList()
         {
-            DatabasePackages = DatabaseUtils.GetFlatList(DatabaseManager.GlobalDependencies, DatabaseManager.Dependencies, DatabaseManager.ParsedCategoryList);
+            DatabasePackages = DatabaseManager.GetFlatList();
         }
 
         public async Task CleanWorkingDirectoriesAsync(IProgress<RelhaxProgress> reporter, RelhaxProgress progress, CancellationToken token)

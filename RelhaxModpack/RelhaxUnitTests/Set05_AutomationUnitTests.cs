@@ -172,7 +172,7 @@ namespace RelhaxUnitTests
             };
 
             //still need a automation sequence object to run this
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             //create a random task so we can process macros for this test
             ShellExecuteTask task = new ShellExecuteTask()
@@ -201,7 +201,7 @@ namespace RelhaxUnitTests
         public async Task Test03_DownloadBrowserTaskTest()
         {
             //still need a automation sequence object to run this
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             //create a random task so we can process macros for this test
             //https://stackoverflow.com/questions/1390568/how-can-i-match-on-an-attribute-that-contains-a-certain-string
@@ -239,7 +239,7 @@ namespace RelhaxUnitTests
         public async Task Test05_FileTaskSeries1Test()
         {
             //still need a automation sequence object to run this
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             //create the tasks to test
             sequence.AutomationTasks.Add(new FileCopyTask()
@@ -271,7 +271,7 @@ namespace RelhaxUnitTests
         public async Task Test06_DirectoryTaskSeries1Test()
         {
             //still need a automation sequence object to run this
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             //delete previous runs
             string[] dirsToDelete = new string[]
@@ -419,7 +419,7 @@ namespace RelhaxUnitTests
                 Directory.Delete(testDir, true);
 
             //still need a automation sequence object to run this
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             //create the tasks to test
             sequence.AutomationTasks.Add(new DirectoryCreateTask
@@ -451,7 +451,7 @@ namespace RelhaxUnitTests
                 Directory.Delete("TestDir2", true);
 
             //still need a automation sequence object to run this
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             //still testing these tasks, but they are setup tasks
             //setup
@@ -533,7 +533,7 @@ namespace RelhaxUnitTests
         public async Task Test09_DirectoryCompareTaskSameFilesSameCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "same_files_same_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareTask
             {
@@ -565,7 +565,7 @@ namespace RelhaxUnitTests
         public async Task Test10_DirectoryCompareTaskSameFilesDifferentCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "same_files_different_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareTask
             {
@@ -583,7 +583,7 @@ namespace RelhaxUnitTests
         public async Task Test11_DirectoryCompareTaskDifferentFilesDifferentCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_different_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareTask
             {
@@ -601,7 +601,7 @@ namespace RelhaxUnitTests
         public async Task Test12_DirectoryCompareTaskDifferentFilesDifferentNamesTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_different_names" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareTask
             {
@@ -619,7 +619,7 @@ namespace RelhaxUnitTests
         public async Task Test13_DirectoryCompareTaskDifferentFilesSameCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_same_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareTask
             {
@@ -655,7 +655,7 @@ namespace RelhaxUnitTests
         public async Task Test14_DirectoryCompareCountTaskSameFilesSameCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "same_files_same_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareCountTask
             {
@@ -681,7 +681,7 @@ namespace RelhaxUnitTests
         public async Task Test15_DirectoryCompareCountTaskSameFilesDifferentCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "same_files_different_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareCountTask
             {
@@ -702,7 +702,7 @@ namespace RelhaxUnitTests
         public async Task Test16_DirectoryCompareCountTaskDifferentFilesDifferentCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_different_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareCountTask
             {
@@ -723,7 +723,7 @@ namespace RelhaxUnitTests
         public async Task Test17_DirectoryCompareCountTaskDifferentFilesDifferentNamesTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_different_names" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareCountTask
             {
@@ -744,7 +744,7 @@ namespace RelhaxUnitTests
         public async Task Test18_DirectoryCompareCountTaskDifferentFilesSameCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_same_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareCountTask
             {
@@ -774,7 +774,7 @@ namespace RelhaxUnitTests
         public async Task Test19_DirectoryCompareInverseTaskSameFilesSameCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "same_files_same_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareInverseTask
             {
@@ -806,7 +806,7 @@ namespace RelhaxUnitTests
         public async Task Test20_DirectoryCompareInverseTaskSameFilesDifferentCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "same_files_different_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareInverseTask
             {
@@ -824,7 +824,7 @@ namespace RelhaxUnitTests
         public async Task Test21_DirectoryCompareInverseTaskDifferentFilesDifferentCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_different_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareInverseTask
             {
@@ -842,7 +842,7 @@ namespace RelhaxUnitTests
         public async Task Test22_DirectoryCompareInverseTaskDifferentFilesDifferentNamesTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_different_names" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareInverseTask
             {
@@ -860,7 +860,7 @@ namespace RelhaxUnitTests
         public async Task Test23_DirectoryCompareInverseTaskDifferentFilesSameCountTest()
         {
             string[] directoryPath = new string[] { "test_resources", "directory_compare", "different_files_same_count" };
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new DirectoryCompareInverseTask
             {
@@ -895,7 +895,7 @@ namespace RelhaxUnitTests
         public async Task Test24_FileDoesNotExistTask()
         {
             //still need a automation sequence object to run this
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new FileExistsTask()
             {
@@ -908,7 +908,7 @@ namespace RelhaxUnitTests
         [TestMethod]
         public async Task Test25_JsonParseTask()
         {
-            AutomationSequence sequence = new AutomationSequence(null, null, null, AutomationRunnerSettings, null, nullToken);
+            AutomationSequence sequence = new AutomationSequence(null, null, null, null, AutomationRunnerSettings, null, nullToken);
 
             sequence.AutomationTasks.Add(new MacroSubstringHtmlTask()
             {

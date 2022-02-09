@@ -61,14 +61,23 @@ namespace RelhaxModpack
         /// <summary>
         /// List of packages that have zip files to install and are enabled (and checked if selectable) and ordered into installGroups
         /// </summary>
-        public List<DatabasePackage>[] OrderedPackagesToInstall { get; set; }
+        public List<DatabasePackage>[] OrderedPackagesToInstall
+        {
+            get { return DatabaseManager.PackagesToInstallByInstallGroup; }
+        }
 
-        public List<DatabasePackage> PackagesToInstall { get; set; }
+        public List<DatabasePackage> PackagesToInstall
+        {
+            get { return DatabaseManager.PackagesToInstall; }
+        }
 
         /// <summary>
         /// List of packages that have zip files to install and are enabled (and checked if selectable)
         /// </summary>
-        public List<DatabasePackage> PackagesToInstallWithZipfile { get; set; }
+        public List<DatabasePackage> PackagesToInstallWithZipfile
+        {
+            get { return DatabaseManager.PackagesToInstallWithZipFile; }
+        }
 
         /// <summary>
         /// List of user packages placed in the RelhaxUserMods folder and selected for installation
@@ -79,17 +88,28 @@ namespace RelhaxModpack
         /// <summary>
         /// A reference for the list of parsed categories
         /// </summary>
-        public List<Category> ParsedCategoryList { get; set; }
+        public List<Category> ParsedCategoryList
+        {
+            get { return DatabaseManager.ParsedCategoryList; }
+        }
 
         /// <summary>
         /// A reference for the list of parsed dependencies
         /// </summary>
-        public List<Dependency> Dependencies { get; set; }
+        public List<Dependency> Dependencies
+        {
+            get { return DatabaseManager.Dependencies; }
+        }
 
         /// <summary>
         /// A reference for the list of parsed globally installed dependencies
         /// </summary>
-        public List<DatabasePackage> GlobalDependencies { get; set; }
+        public List<DatabasePackage> GlobalDependencies
+        {
+            get { return DatabaseManager.GlobalDependencies; }
+        }
+
+        public DatabaseManager DatabaseManager { get; set; }
 
         /// <summary>
         /// The Modpack settings configuration class
@@ -374,7 +394,7 @@ namespace RelhaxModpack
             Logging.Info("Installation starts now from RunInstallation() in Install Engine");
 
             //do any list processing here
-            List<SelectablePackage> selectedPackages = DatabaseUtils.CreateListOfSelectablePackagesToInstall(ParsedCategoryList);
+            List<SelectablePackage> selectedPackages = DatabaseManager.SelectablePackagesToInstall;
 
             if (!DisableTriggersForInstall)
             {
@@ -652,10 +672,9 @@ namespace RelhaxModpack
             CancellationToken.ThrowIfCancellationRequested();
 
             Logging.Info(string.Format("Unpack of xml files, current install time = {0} msec", (int)InstallStopWatch.Elapsed.TotalMilliseconds));
-            List<Instruction> xmlUnpacks_ = DatabaseUtils.CreateOrderedInstructionList(PackagesToInstall, InstructionsType.UnpackCopy);
-            if (xmlUnpacks_ != null && xmlUnpacks_.Count > 0)
+            if (DatabaseManager.XmlUnpacksToInstall != null && DatabaseManager.XmlUnpacksToInstall.Count > 0)
             {
-                List<XmlUnpack> xmlUnpacks = xmlUnpacks_.Cast<XmlUnpack>().ToList();
+                List<XmlUnpack> xmlUnpacks = DatabaseManager.XmlUnpacksToInstall;
                 //perform macro replacement on all xml unpack entries
                 foreach (XmlUnpack xmlUnpack in xmlUnpacks)
                 {
@@ -703,7 +722,7 @@ namespace RelhaxModpack
             Prog.ParrentCurrentProgress = string.Empty;
             Prog.ChildCurrentProgress = string.Empty;
 
-            List<Patch> patches = DatabaseUtils.CreateOrderedPatchesList(PackagesToInstall);
+            List<Patch> patches = DatabaseManager.PatchesToInstall;
             if (patches != null && patches.Count > 0)
             {
                 //no need to installer log patches, since it's operating on files that already exist
@@ -1601,10 +1620,9 @@ namespace RelhaxModpack
             if (ModpackSettings.CreateShortcuts)
             {
                 CancellationToken.ThrowIfCancellationRequested();
-                List<Instruction> shortcuts_ = DatabaseUtils.CreateOrderedInstructionList(PackagesToInstall, InstructionsType.Shortcut);
-                if (shortcuts_ != null && shortcuts_.Count > 0)
+                if (DatabaseManager.ShortcutsToInstall != null && DatabaseManager.ShortcutsToInstall.Count > 0)
                 {
-                    List<Shortcut> shortcuts = shortcuts_.Cast<Shortcut>().ToList();
+                    List<Shortcut> shortcuts = DatabaseManager.ShortcutsToInstall;
                     CancellationToken.ThrowIfCancellationRequested();
                     StringBuilder shortcutBuilder = new StringBuilder();
                     shortcutBuilder.AppendLine("/*   Shortcuts   */");
@@ -1656,10 +1674,9 @@ namespace RelhaxModpack
             CancellationToken.ThrowIfCancellationRequested();
 
             //create and parse atlas lists from xml files
-            List<Instruction> atlases_ = DatabaseUtils.CreateOrderedInstructionList(PackagesToInstall, InstructionsType.Atlas);
-            if (atlases_ != null && atlases_.Count > 0)
+            if (DatabaseManager.AtlasesToInstall != null && DatabaseManager.AtlasesToInstall.Count > 0)
             {
-                List<Atlas> atlases = atlases_.Cast<Atlas>().ToList();
+                List<Atlas> atlases = DatabaseManager.AtlasesToInstall;
                 //initial progress report
                 ProgAtlas = CopyProgress(Prog);
                 ProgAtlas.ParrentTotal = atlases.Count;
@@ -1925,7 +1942,7 @@ namespace RelhaxModpack
             CancellationToken.ThrowIfCancellationRequested();
 
             //get a list of all packages in the database with zip files
-            List<DatabasePackage> allFlatList = DatabaseUtils.GetFlatList(GlobalDependencies, Dependencies, ParsedCategoryList).Where(package => !string.IsNullOrWhiteSpace(package.ZipFile)).ToList();
+            List<DatabasePackage> allFlatList = DatabaseManager.PackagesToInstallWithZipFile;
 
             //convert it to a list of strings
             List<string> zipFilesInDatabase = allFlatList.Select(package => package.ZipFile).ToList();
@@ -2432,86 +2449,34 @@ namespace RelhaxModpack
         private bool disposedValue = false; // To detect redundant calls
 
         /// <summary>
-        /// Dispose of the Installation engine
-        /// </summary>
-        /// <param name="disposing">Flag to indicate if the engine should additionally dispose of managed resources</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                    if (InstallerCreatedTasks != null)
-                    {
-                        for (int i = 0; i < InstallerCreatedTasks.Count; i++)
-                        {
-                            Task tsk = InstallerCreatedTasks[i];
-                            if (tsk != null)
-                            {
-                                tsk.Dispose();
-                                tsk = null;
-                            }
-                        }
-                        InstallerCreatedTasks = null;
-                    }
-                    
-                    if (UserPackagesToInstall != null)
-                    {
-                        foreach (DatabasePackage package in UserPackagesToInstall)
-                            package.Dispose();
-                        UserPackagesToInstall.Clear();
-                        UserPackagesToInstall = null;
-                    }
-
-                    if (GlobalDependencies != null)
-                    {
-                        foreach (DatabasePackage package in GlobalDependencies)
-                            package.Dispose();
-                        GlobalDependencies.Clear();
-                        GlobalDependencies = null;
-                    }
-
-                    if (Dependencies != null)
-                    {
-                        foreach (Dependency dependency in Dependencies)
-                            dependency.Dispose();
-                        Dependencies.Clear();
-                        Dependencies = null;
-                    }
-
-                    if (ParsedCategoryList != null)
-                    {
-                        foreach (Category category in ParsedCategoryList)
-                            category.Dispose();
-                        ParsedCategoryList.Clear();
-                        ParsedCategoryList = null;
-                    }
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~InstallEngine() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        /// <summary>
         /// This code added to correctly implement the disposable pattern.
         /// </summary>
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            GC.SuppressFinalize(this);
+            if (disposedValue)
+                return;
+
+            disposedValue = true;
+            if (InstallerCreatedTasks != null)
+            {
+                for (int i = 0; i < InstallerCreatedTasks.Count; i++)
+                {
+                    Task tsk = InstallerCreatedTasks[i];
+                    if (tsk != null)
+                    {
+                        tsk.Dispose();
+                    }
+                }
+                InstallerCreatedTasks = null;
+            }
+
+            if (UserPackagesToInstall != null)
+            {
+                foreach (DatabasePackage package in UserPackagesToInstall)
+                    package.Dispose();
+                UserPackagesToInstall.Clear();
+                UserPackagesToInstall = null;
+            }
         }
         #endregion
     }

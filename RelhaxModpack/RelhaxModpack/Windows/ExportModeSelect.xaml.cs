@@ -2,6 +2,7 @@
 using RelhaxModpack.Database;
 using RelhaxModpack.Settings;
 using RelhaxModpack.Utilities;
+using RelhaxModpack.Utilities.Structs;
 using RelhaxModpack.Xml;
 using System.Collections.Generic;
 using System.Windows;

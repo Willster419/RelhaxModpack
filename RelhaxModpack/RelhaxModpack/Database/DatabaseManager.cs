@@ -17,11 +17,32 @@ using System.Collections;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using RelhaxModpack.Patching;
+using RelhaxModpack.Installer;
+using RelhaxModpack.Shortcuts;
+using RelhaxModpack.Atlases;
 
 namespace RelhaxModpack.Database
 {
     public class DatabaseManager
     {
+        /// <summary>
+        /// A structure used to keep a reference of a component and a dependency that it calls
+        /// </summary>
+        /// <remarks>This is used to determine if any packages call any dependencies who's packageName does not exist in the database</remarks>
+        public struct LogicTracking
+        {
+            /// <summary>
+            /// The database component what has dependencies
+            /// </summary>
+            public IComponentWithDependencies ComponentWithDependencies;
+
+            /// <summary>
+            /// The called dependency from the component
+            /// </summary>
+            public DatabaseLogic DatabaseLogic;
+        }
+
         public const string DocumentVersion1V1 = "1.1";
 
         public const string DocumentVersion1V2 = "1.2";
@@ -68,18 +89,57 @@ namespace RelhaxModpack.Database
 
         public ZipFile ManagerInfoZipfile { get; set; }
 
+        public DatabaseVersions DatabaseDistroToLoad { get; private set; }
+
+        public List<Dependency> DependenciesToInstall { get { return dependenciesToInstall; } }
+
+        public List<DatabasePackage> PackagesToInstall { get { return packagesToInstall; } }
+
+        public List<SelectablePackage> SelectablePackagesToInstall { get { return selectablePackagesToInstall; } }
+
+        public List<DatabasePackage> PackagesToInstallWithZipFile { get { return packagesToInstall?.FindAll(package => !string.IsNullOrWhiteSpace(package.ZipFile)); } }
+
+        public List<SelectablePackage> SelectablePackagesToInstallWithZipFiles { get { return selectablePackagesToInstall?.FindAll(package => !string.IsNullOrWhiteSpace(package.ZipFile)); } }
+
+        public List<DatabasePackage> PackagesToDownload { get { return PackagesToInstallWithZipFile?.FindAll(pack => pack.DownloadFlag); } }
+
+        public List<DatabasePackage>[] PackagesToInstallByInstallGroup { get { return orderedListPackagesToInstall; } }
+
+        public List<Patch> PatchesToInstall { get { return patchesToInstall; } }
+
+        public List<XmlUnpack> XmlUnpacksToInstall { get { return xmlUnpacksToInstall; } }
+
+        public List<Shortcut> ShortcutsToInstall { get { return shortcutsToInstall; } }
+
+        public List<Atlas> AtlasesToInstall { get { return atlasesToInstall; } }
+
         private string databaseRootXmlString;
 
         private ZipFile modInfoZipFile;
 
-        //options set for each public entrypoint
+        //options set for each public entry point
         private string lastSupportedWoTClient;
 
         private string CustomDatabaseLocation;
 
         private string BetaDatabaseBranch;
 
-        public DatabaseVersions DatabaseDistroToLoad { get; private set; }
+        //lists from install calculation
+        private List<Dependency> dependenciesToInstall;
+
+        private List<DatabasePackage> packagesToInstall;
+
+        private List<SelectablePackage> selectablePackagesToInstall;
+
+        private List<DatabasePackage>[] orderedListPackagesToInstall;
+
+        private List<Patch> patchesToInstall;
+
+        private List<XmlUnpack> xmlUnpacksToInstall;
+
+        private List<Shortcut> shortcutsToInstall;
+
+        private List<Atlas> atlasesToInstall;
 
         /// <summary>
         /// Creates an instance of the RelhaxWindow class
@@ -187,9 +247,7 @@ namespace RelhaxModpack.Database
             if (databaseLoadFailCode != DatabaseLoadFailCode.None)
                 return databaseLoadFailCode;
 
-            DatabaseUtils.BuildTopLevelParents(ParsedCategoryList);
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
-            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            ProcessDatabase();
 
             return DatabaseLoadFailCode.None;
         }
@@ -204,9 +262,7 @@ namespace RelhaxModpack.Database
             ParseRootDatabaseFromString();
             LoadMetadataInfoFromRootXmlDocument();
             ParseDatabaseXmlStable();
-            DatabaseUtils.BuildTopLevelParents(ParsedCategoryList);
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
-            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            ProcessDatabase();
             return DatabaseLoadFailCode.None;
         }
 
@@ -223,9 +279,7 @@ namespace RelhaxModpack.Database
             DatabaseRootXmlDocument = rootDocument;
             LoadMetadataInfoFromRootXmlDocument();
             ParseDatabaseFromStrings(globalDependenciesXml, dependneciesXml, categoriesXml, GlobalDependencies, Dependencies, ParsedCategoryList);
-            DatabaseUtils.BuildTopLevelParents(ParsedCategoryList);
-            DatabaseUtils.BuildLinksRefrence(ParsedCategoryList);
-            DatabaseUtils.BuildLevelPerPackage(ParsedCategoryList);
+            ProcessDatabase();
             return DatabaseLoadFailCode.None;
         }
         #endregion
@@ -743,7 +797,7 @@ namespace RelhaxModpack.Database
                 if (category == null)
                 {
                     //make sure object type is properly implemented into serialization system
-                    if (!(Activator.CreateInstance(typeof(Category)) is XmlDatabaseComponent _component))
+                    if (!(Activator.CreateInstance(typeof(Category)) is XmlComponent _component))
                         throw new BadMemeException("Type of this list is not of XmlDatabaseComponent");
                     else
                         category = _component as Category;
@@ -772,12 +826,12 @@ namespace RelhaxModpack.Database
             foreach (XElement xmlPackageNode in xmlPackageNodesList)
             {
 
-                XmlDatabaseComponent component = index >= genericPackageList.Count? null : genericPackageList[index] as XmlDatabaseComponent;
+                XmlComponent component = index >= genericPackageList.Count? null : genericPackageList[index] as XmlComponent;
 
                 if (component == null)
                 {
                     //make sure object type is properly implemented into serialization system
-                    if (!(Activator.CreateInstance(listObjectType) is XmlDatabaseComponent _component))
+                    if (!(Activator.CreateInstance(listObjectType) is XmlComponent _component))
                         throw new BadMemeException("Type of this list is not of XmlDatabaseComponent");
                     else
                         component = _component;
@@ -797,7 +851,7 @@ namespace RelhaxModpack.Database
             return parsed;
         }
 
-        private string GetXmlStringOfComponent(XElement element, XmlDatabaseComponent component)
+        private string GetXmlStringOfComponent(XElement element, XmlComponent component)
         {
             if (element == null)
                 throw new ArgumentNullException(nameof(element));
@@ -809,7 +863,7 @@ namespace RelhaxModpack.Database
             return element.ToString();
         }
 
-        private bool ParseDatabase1V2Package(XElement xmlPackageNode, XmlDatabaseComponent component, Type componentType)
+        private bool ParseDatabase1V2Package(XElement xmlPackageNode, XmlComponent component, Type componentType)
         {
             if (xmlPackageNode == null)
                 throw new ArgumentNullException(nameof(xmlPackageNode));
@@ -817,7 +871,7 @@ namespace RelhaxModpack.Database
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
 
-            return component.FromXml(xmlPackageNode, string.IsNullOrEmpty(SchemaVersion)? XmlDatabaseComponent.SchemaV1Dot0 : SchemaVersion);
+            return component.FromXml(xmlPackageNode, string.IsNullOrEmpty(SchemaVersion)? XmlComponent.SchemaV1Dot0 : SchemaVersion);
         }
 
         /// <summary>
@@ -1063,7 +1117,7 @@ namespace RelhaxModpack.Database
             UpdateAttribute(topElement, WoTOnlineFolderVersionXmlString, WoTOnlineFolderVersion.Trim());
             UpdateAttribute(topElement, DocumentVersionXmlString, DocumentVersion);
             if (string.IsNullOrEmpty(SchemaVersion))
-                SchemaVersion = XmlDatabaseComponent.SchemaV1Dot0;
+                SchemaVersion = XmlComponent.SchemaV1Dot0;
             UpdateAttribute(topElement, SchemaVersionXmlString, SchemaVersion);
 
             //add the elements if they don't already exist
@@ -1462,10 +1516,792 @@ namespace RelhaxModpack.Database
         }
         #endregion
 
-        #region other methods
-        public List<DatabasePackage> AllPackages()
+        #region Process database after loading
+        public void ProcessDatabase()
         {
-            return DatabaseUtils.GetFlatList(this.GlobalDependencies, this.Dependencies, this.ParsedCategoryList);
+            CreateTopLevelParents();
+            ProcessPackageLinks();
+            ProcessLevelPerPackage();
+            ProcessDependencyPackageRefrences();
+            ProcessConflictingPackages();
+            ProcessInstructions(InstructionsType.Atlas);
+            ProcessInstructions(InstructionsType.Shortcut);
+            ProcessInstructions(InstructionsType.UnpackCopy);
+            ProcessInstructions(InstructionsType.Patch);
+        }
+
+        private void CreateTopLevelParents()
+        {
+            foreach (Category cat in ParsedCategoryList)
+            {
+                if (cat.CategoryHeader != null)
+                    Logging.Warning("The category {0} already has a category header, overwriting", cat.Name);
+                cat.CategoryHeader = new SelectablePackage()
+                {
+                    Name = string.Format("----------[{0}]----------", cat.Name),
+                    TabIndex = cat.TabPage,
+                    ParentCategory = cat,
+                    Type = SelectionTypes.multi,
+                    Visible = true,
+                    Enabled = true,
+                    Level = -1,
+                    PackageName = string.Format("Category_{0}_Header", cat.Name.Replace(' ', '_')),
+                    Packages = cat.Packages
+                };
+            }
+        }
+
+        /// <summary>
+        /// Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
+        /// </summary>
+        private void ProcessPackageLinks()
+        {
+            foreach (Category cat in ParsedCategoryList)
+            {
+                List<SelectablePackage> packagesToItterate;
+                if (cat.CategoryHeader != null)
+                {
+                    packagesToItterate = cat.CategoryHeader.Packages;
+                    cat.CategoryHeader.Parent = cat.CategoryHeader;
+                    cat.CategoryHeader.TopParent = cat.CategoryHeader;
+                }
+                else
+                {
+                    packagesToItterate = cat.Packages;
+                }
+                foreach (SelectablePackage sp in packagesToItterate)
+                {
+                    ProcessPackageLinks(sp, cat, cat.CategoryHeader);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
+        /// </summary>
+        /// <param name="sp">The package to perform linking on</param>
+        /// <param name="cat">The category that the SelectablePackagesp belongs to</param>
+        /// <param name="parent">The tree parent of sp</param>
+        private void ProcessPackageLinks(SelectablePackage sp, Category cat, SelectablePackage parent)
+        {
+            sp.Parent = parent;
+            sp.TopParent = cat.CategoryHeader;
+            sp.ParentCategory = cat;
+            if (sp.Packages.Count > 0)
+            {
+                foreach (SelectablePackage sp2 in sp.Packages)
+                {
+                    ProcessPackageLinks(sp2, cat, sp);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Assigns the level parameter to the packages based on how recursively deep they are in the package sub lists
+        /// </summary>
+        private void ProcessLevelPerPackage()
+        {
+            //root level direct form category is 0
+            int startingLevel = 0;
+            foreach (Category cat in ParsedCategoryList)
+            {
+                foreach (SelectablePackage package in cat.Packages)
+                {
+                    package.Level = startingLevel;
+                    if (package.Packages.Count > 0)
+                        //increase the level BEFORE it calls the method
+                        ProcessLevelPerPackage(package.Packages, startingLevel + 1);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Assigns the level parameter to the packages based on how recursively deep they are in the package sub lists
+        /// </summary>
+        /// <param name="packages">The list of package values to</param>
+        /// <param name="level">The level to assign the level parameter</param>
+        private void ProcessLevelPerPackage(List<SelectablePackage> packages, int level)
+        {
+            foreach (SelectablePackage package in packages)
+            {
+                package.Level = level;
+                if (package.Packages.Count > 0)
+                    //increase the level BEFORE it calls the method
+                    ProcessLevelPerPackage(package.Packages, level + 1);
+            }
+        }
+
+        /// <summary>
+        /// Links the databasePackage objects with dependencies objects to have those objects link references to the parent and the dependency object
+        /// </summary>
+        private void ProcessDependencyPackageRefrences()
+        {
+            List<IComponentWithDependencies> componentsWithDependencies_ = new List<IComponentWithDependencies>();
+
+            //get all categories where at least one dependency exists
+            componentsWithDependencies_.AddRange(ParsedCategoryList.Where(cat => cat.Dependencies.Count > 0));
+
+            //get all packages and dependencies where at least one dependency exists
+            componentsWithDependencies_.AddRange(GetFlatList().OfType<IComponentWithDependencies>().Where(component => component.Dependencies.Count > 0).ToList());
+
+            foreach (IComponentWithDependencies componentWithDependencies in componentsWithDependencies_)
+            {
+                foreach (DatabaseLogic logic in componentWithDependencies.Dependencies)
+                {
+                    logic.ParentPackageRefrence = componentWithDependencies;
+
+                    if (!string.IsNullOrEmpty(logic.PackageUID))
+                        logic.DependencyPackageRefrence = Dependencies.Find(dependency => dependency.UID.Equals(logic.PackageUID));
+                    else
+                        logic.DependencyPackageRefrence = Dependencies.Find(dependency => dependency.PackageName.Equals(logic.PackageName));
+
+                    if (logic.DependencyPackageRefrence == null)
+                    {
+                        Logging.Error("DatabaseLogic component from package {0} was unable to link to dependency {1} (does the dependency not exist or bad reference?)", componentWithDependencies.ComponentInternalName, logic.PackageName);
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(logic.PackageUID))
+                    {
+                        logic.PackageUID = logic.DependencyPackageRefrence.UID;
+                        Logging.Warning($"The dependency reference {logic.PackageName} of package {componentWithDependencies.ComponentInternalName} has been updated to set the package UID of {logic.PackageUID}. The database should be saved");
+                    }
+                }
+            }
+        }
+
+        private void ProcessConflictingPackages()
+        {
+            List<SelectablePackage> packages = GetFlatSelectablePackageList().FindAll(pack => pack.ConflictingPackagesNew != null && pack.ConflictingPackagesNew.Count > 0);
+            foreach (SelectablePackage package in packages)
+            {
+                foreach (ConflictingPackage conflictingPackageEntry in package.ConflictingPackagesNew)
+                {
+                    if (string.IsNullOrEmpty(conflictingPackageEntry.PackageUID) && string.IsNullOrEmpty(conflictingPackageEntry.PackageName))
+                        throw new BadMemeException($"The package {package.PackageName} conflicting package does not have a packageName or packageUID");
+
+                    SelectablePackage conflictingPackage;
+                    string lookupProperty;
+                    if (string.IsNullOrEmpty(conflictingPackageEntry.PackageUID))
+                    {
+                        lookupProperty = conflictingPackageEntry.PackageName;
+                        conflictingPackage = GetSelectablePackageByPackageName(packages, conflictingPackageEntry.PackageName);
+                        conflictingPackageEntry.PackageUID = conflictingPackage.UID;
+                        Logging.Warning($"The conflicting entry {lookupProperty} did not have a UID assigned, the database should now be saved");
+                    }
+                    else
+                    {
+                        lookupProperty = conflictingPackageEntry.PackageUID;
+                        conflictingPackage = GetSelectablePackageByUid(packages, conflictingPackageEntry.PackageUID);
+                    }
+
+                    if (conflictingPackage == null)
+                        throw new BadMemeException($"Package {package.PackageName} conflicting package failed to look up a package by property '{lookupProperty}'");
+
+                    conflictingPackageEntry.ConflictingSelectablePackage = conflictingPackage;
+                }
+            }
+        }
+
+        private void ProcessInstructions(InstructionsType instructionsType)
+        {
+            //filter out packages that don't have any instructions of the given type
+            List<DatabasePackage> packagesWithInstructions = GetFlatList().FindAll(package => package.GetInstructions(instructionsType) != null && package.GetInstructions(instructionsType).Count > 0);
+
+            //attach the packages to the instructions
+            foreach (DatabasePackage package in packagesWithInstructions)
+                foreach (Instruction instruction in package.GetInstructions(instructionsType))
+                    instruction.Package = package;
+        }
+        #endregion
+
+        #region Install-time calculations
+        public void CalculateInstallLists(bool suppressFrequentDependencyCalculationMessages, bool showDependencyCalculationErrorMessages)
+        {
+            CalculateDependencies(suppressFrequentDependencyCalculationMessages, showDependencyCalculationErrorMessages);
+            CreateListOfPackagesToInstall();
+            CreateOrderedInstallList(PackagesToInstallWithZipFile);
+            patchesToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.Patch).Cast<Patch>().ToList();
+            atlasesToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.Atlas).Cast<Atlas>().ToList();
+            xmlUnpacksToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.UnpackCopy).Cast<XmlUnpack>().ToList();
+            shortcutsToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.Shortcut).Cast<Shortcut>().ToList();
+        }
+
+        /// <summary>
+        /// Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
+        /// </summary>
+        /// <param name="suppressSomeLogging">Flag for it some of the more verbose logging should be suppressed</param>
+        private void CalculateDependencies(bool suppressSomeLogging, bool showDependencyCalculationErrorMessages)
+        {
+            //flat list is packages
+            List<SelectablePackage> flatListSelect = GetFlatSelectablePackageList();
+
+            //1- build the list of calling mods that need it
+            dependenciesToInstall = new List<Dependency>();
+
+            //create list to track all database dependency references
+            List<LogicTracking> refrencedDependencies = new List<LogicTracking>();
+
+            Logging.Debug("Starting step 1 of 4 in dependency calculation: adding from categories");
+            foreach (Category category in ParsedCategoryList)
+            {
+                foreach (DatabaseLogic logic in category.Dependencies)
+                {
+                    refrencedDependencies.Add(new LogicTracking
+                    {
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = category
+                    });
+                    foreach (Dependency dependency in Dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
+                        {
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Category \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                                category.Name, dependency.PackageName, logic.Logic, logic.NotFlag);
+                            dependency.DatabasePackageLogic.Add(new DatabaseLogic()
+                            {
+                                PackageName = category.Name,
+                                WillBeInstalled = category.AnyPackagesChecked(),
+                                Logic = logic.Logic,
+                                NotFlag = logic.NotFlag
+                            });
+
+                            //log that the categories dependency reference was linked properly
+                            logic.RefrenceLinked = true;
+                        }
+                    }
+                }
+            }
+            Logging.Debug("Step 1 complete");
+
+            Logging.Debug("Starting step 2 of 4 in dependency calculation: adding from selectable packages that use each dependency");
+            foreach (SelectablePackage package in flatListSelect)
+            {
+                //got though each logic property. if the package called is this dependency, then add it to it's list
+                foreach (DatabaseLogic logic in package.Dependencies)
+                {
+                    refrencedDependencies.Add(new LogicTracking
+                    {
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = package
+                    });
+                    foreach (Dependency dependency in Dependencies)
+                    {
+                        if (logic.PackageName.Equals(dependency.PackageName))
+                        {
+                            if (!suppressSomeLogging)
+                                Logging.Debug("SelectablePackage \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                                package.PackageName, dependency.PackageName, logic.Logic, logic.NotFlag);
+                            dependency.DatabasePackageLogic.Add(new DatabaseLogic()
+                            {
+                                //set PackageName to the selectablepackage package name so later we know where this logic entry came from
+                                PackageName = package.PackageName,
+                                WillBeInstalled = package.Checked,
+                                Logic = logic.Logic,
+                                NotFlag = logic.NotFlag
+                            });
+
+                            //log that the categories dependency reference was linked properly
+                            logic.RefrenceLinked = true;
+                        }
+                    }
+                }
+            }
+            Logging.Debug("Step 2 complete");
+
+
+            Logging.Debug("Starting step 3 of 4 in dependency calculation: adding dependencies that use each dependency");
+            //for each dependency go through each dependency's package logic and if it's called then add it
+            foreach (Dependency processingDependency in Dependencies)
+            {
+                foreach (DatabaseLogic logic in processingDependency.Dependencies)
+                {
+                    refrencedDependencies.Add(new LogicTracking
+                    {
+                        DatabaseLogic = logic,
+                        ComponentWithDependencies = processingDependency
+                    });
+                    foreach (Dependency dependency in Dependencies)
+                    {
+                        if (processingDependency.PackageName.Equals(dependency.PackageName))
+                            continue;
+                        if (logic.PackageName.Equals(dependency.PackageName))
+                        {
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Dependency \"{0}\" logic entry added to dependency \"{1}\" of logic type \"{2}\", NotFlag value of \"{3}\"",
+                                processingDependency.PackageName, dependency.PackageName, logic.Logic, logic.NotFlag);
+                            dependency.DatabasePackageLogic.Add(new DatabaseLogic()
+                            {
+                                PackageName = processingDependency.PackageName,
+                                //by default, dependences that are dependent on dependencies start as false until proven needed
+                                WillBeInstalled = false,
+                                Logic = logic.Logic,
+                                NotFlag = logic.NotFlag
+                            });
+
+                            //log that the categories dependency reference was linked properly
+                            logic.RefrenceLinked = true;
+                        }
+                    }
+                }
+            }
+            Logging.Debug("Step 3 complete");
+
+            //3a - check if any dependency references were never matched
+            //like if a category references dependency the_dependency_packageName, but that package does not exist
+            refrencedDependencies = refrencedDependencies.Where((refrence) => !refrence.DatabaseLogic.RefrenceLinked).ToList();
+            Logging.Debug("Broken dependency references count: {0}", refrencedDependencies.Count);
+            if (refrencedDependencies.Count > 0)
+            {
+                Logging.Error("The following packages call references to dependencies that do not exist:");
+                foreach (LogicTracking logicTracking in refrencedDependencies)
+                {
+                    Logging.Error("Package: {0} => broken reference: {1}",
+                        logicTracking.ComponentWithDependencies.ComponentInternalName, logicTracking.DatabaseLogic.PackageName);
+                }
+            }
+
+            //4 - run calculations IN DEPENDENCY LIST ORDER FROM TOP DOWN
+            List<Dependency> notProcessedDependnecies = new List<Dependency>(Dependencies);
+            Logging.Debug("Starting step 4 of 4 in dependency calculation: calculating dependencies from top down (perspective to list)");
+            int calcNumber = 1;
+            foreach (Dependency dependency in Dependencies)
+            {
+                //first check if this dependency is referencing a dependency that has not yet been processed
+                //if so then note it in the log
+                if (!suppressSomeLogging)
+                    Logging.Debug(string.Empty);
+                if (!suppressSomeLogging)
+                    Logging.Debug("Calculating if dependency {0} will be installed, {1} of {2}", dependency.PackageName, calcNumber++, Dependencies.Count);
+
+                foreach (DatabaseLogic login in dependency.DatabasePackageLogic)
+                {
+                    List<Dependency> matches = notProcessedDependnecies.Where(dep => login.PackageName.Equals(dep.PackageName)).ToList();
+                    if (matches.Count > 0)
+                    {
+                        string errorMessage = string.Format("Dependency {0} is referenced by the dependency {1} which has not yet been processed! " +
+                            "This will lead to logic errors in database calculation! Tip: this dependency ({0}) should be BELOW ({1}) in the" +
+                            "list of dependencies in the editor. Order matters!", dependency.PackageName, login.PackageName);
+                        Logging.Error(errorMessage);
+                        if (showDependencyCalculationErrorMessages)
+                            MessageBox.Show(errorMessage);
+                    }
+                }
+
+                //two types of logics - OR and AND (with NOT flags)
+                //each can be calculated separately
+                List<DatabaseLogic> localOR = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.OR).ToList();
+                List<DatabaseLogic> logicalAND = dependency.DatabasePackageLogic.Where(logic => logic.Logic == Logic.AND).ToList();
+
+                //debug logging
+                if (!suppressSomeLogging)
+                    Logging.Debug("Logical OR count: {0}", localOR.Count);
+                if (!suppressSomeLogging)
+                    Logging.Debug("Logical AND count: {0}", logicalAND.Count);
+
+                //if there are no logical ands, then only do ors, vise versa
+                bool ORsPass = localOR.Count > 0 ? false : true;
+                bool ANDSPass = logicalAND.Count > 0 ? false : true;
+
+                //if ors and ands are both true already, then something's broken
+                if (ORsPass && ANDSPass)
+                {
+                    Logging.Warning("Logic ORs and ANDs already pass for dependency package {0} (nothing uses it?)", dependency.PackageName);
+                    if (!suppressSomeLogging)
+                        Logging.Debug("Skip calculation logic and remove from not processed list");
+
+                    //remove it from list of not processed dependencies
+                    notProcessedDependnecies.RemoveAt(0);
+                    continue;
+                }
+
+                //calc the ORs first
+                if (!suppressSomeLogging)
+                    Logging.Debug("Processing OR logic");
+                foreach (DatabaseLogic orLogic in localOR)
+                {
+                    //OR logic - if any mod/dependency is checked, then it's installed and can stop there
+                    //because only one of them needs to be true
+                    //same case goes for negatives - if mod is NOT checked and negateFlag
+                    if (!orLogic.WillBeInstalled)
+                    {
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Skipping logic check of package {0} because it is not set for installation!", orLogic.PackageName);
+                        continue;
+                    }
+                    else
+                    {
+                        if (!orLogic.NotFlag)
+                        {
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                            ORsPass = true;
+                            break;
+                        }
+                        else if (orLogic.NotFlag)
+                        {
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), sets orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                            ORsPass = true;
+                            break;
+                        }
+                        else
+                        {
+                            if (!suppressSomeLogging)
+                                Logging.Debug("Package {0}, checked={1}, notFlag={2}, does not set orLogic to pass!", orLogic.PackageName, orLogic.WillBeInstalled, orLogic.NotFlag);
+                        }
+                    }
+                }
+
+                //now calc the ands
+                if (!suppressSomeLogging)
+                    Logging.Debug("Processing AND logic");
+                foreach (DatabaseLogic andLogic in logicalAND)
+                {
+                    if (andLogic.WillBeInstalled && !andLogic.NotFlag)
+                    {
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, is checked and notFlag is false (package must be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
+                        ANDSPass = true;
+                    }
+                    else if (!andLogic.WillBeInstalled && andLogic.NotFlag)
+                    {
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, is NOT checked and notFlag is true (package must NOT be checked), correct AND logic, continue", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
+                        ANDSPass = true;
+                    }
+                    else
+                    {
+                        if (!suppressSomeLogging)
+                            Logging.Debug("Package {0}, checked={1}, notFlag={2}, incorrect AND logic, set ANDSPass=false and stop processing!", andLogic.PackageName, andLogic.WillBeInstalled, andLogic.NotFlag);
+                        ANDSPass = false;
+                        break;
+                    }
+                }
+
+                string final = string.Format("Final result for dependency {0}: AND={1}, OR={2}", dependency.PackageName, ANDSPass, ORsPass);
+                if (ANDSPass && ORsPass)
+                {
+                    if (suppressSomeLogging)
+                        Logging.Info(LogOptions.MethodAndClassName, "Dependency {0} WILL be installed!", dependency.PackageName);
+                    else
+                        Logging.Debug("{0} (AND and OR) = TRUE, dependency WILL be installed!", final);
+                    dependenciesToInstall.Add(dependency);
+                }
+                else
+                {
+                    if (!suppressSomeLogging)
+                        Logging.Debug("{0} (AND and OR) = FALSE, dependency WILL NOT be installed!", final);
+                }
+
+                if (dependency.DatabasePackageLogic.Count > 0 && (ANDSPass && ORsPass))
+                {
+                    if (!suppressSomeLogging)
+                        Logging.Debug("Updating future references (like logicalDependnecies) for if dependency was checked");
+                    //update any dependencies that use it
+                    foreach (DatabaseLogic callingLogic in dependency.Dependencies)
+                    {
+                        //get the dependency (if it is a dependency) that called this dependency
+                        List<Dependency> found = Dependencies.FindAll(dep => dep.PackageName.Equals(callingLogic.PackageName));
+
+                        if (found.Count > 0)
+                        {
+                            Dependency refrenced = found[0];
+                            //now get the logic entry that references the original calculated dependency
+                            List<DatabaseLogic> foundLogic = refrenced.DatabasePackageLogic.Where(logic => logic.PackageName.Equals(dependency.PackageName)).ToList();
+                            if (foundLogic.Count > 0)
+                            {
+                                Logging.Debug("Logic reference entry for dependency {0} updated to {1}", refrenced.PackageName, ANDSPass && ORsPass);
+                                foundLogic[0].WillBeInstalled = ANDSPass && ORsPass;
+                            }
+                            else
+                            {
+                                Logging.Error("Found logics count is 0 for updating references");
+                            }
+                        }
+                        else
+                        {
+                            Logging.Error("Found count is 0 for updating references");
+                        }
+                    }
+                }
+
+                //remove it from list of not processed dependencies
+                notProcessedDependnecies.RemoveAt(0);
+            }
+
+            Logging.Debug("Step 4 complete");
+        }
+
+        private void CreateListOfPackagesToInstall()
+        {
+            packagesToInstall = new List<DatabasePackage>();
+            packagesToInstall.AddRange(GlobalDependencies.FindAll(globalDep => globalDep.Enabled));
+            packagesToInstall.AddRange(dependenciesToInstall.FindAll(dep => dep.Enabled));
+            selectablePackagesToInstall = GetFlatSelectablePackageList().FindAll(fl => fl.Enabled && fl.Checked);
+            packagesToInstall.AddRange(selectablePackagesToInstall);
+            if (ModpackSettings.MinimalistMode)
+            {
+                selectablePackagesToInstall.RemoveAll(selectablePack => selectablePack.MinimalistModeExclude);
+                packagesToInstall.RemoveAll(pack => pack.MinimalistModeExclude);
+            }
+        }
+
+        /// <summary>
+        /// Creates an array of DatabasePackage lists sorted by Installation groups i.e. list in array index 0 is packages of install group 0
+        /// </summary>
+        /// <param name="packagesToInstallWithZipfile"></param>
+        /// <returns>The array of DatabasePackage lists</returns>
+        private void CreateOrderedInstallList(List<DatabasePackage> packagesToInstallWithZipfile)
+        {
+            //get the max number of defined groups
+            int maxGrops = packagesToInstallWithZipfile.Select(max => max.InstallGroupWithOffset).Max();
+
+            //make the list to return
+            //make it maxGroups +1 because group 4 exists, but making a array of 4 is 0-3
+            orderedListPackagesToInstall = new List<DatabasePackage>[maxGrops + 1];
+
+            //new up the lists
+            for (int i = 0; i < orderedListPackagesToInstall.Count(); i++)
+                orderedListPackagesToInstall[i] = new List<DatabasePackage>();
+
+            foreach (DatabasePackage package in packagesToInstallWithZipfile)
+            {
+                orderedListPackagesToInstall[package.InstallGroupWithOffset].Add(package);
+            }
+        }
+
+        private List<Instruction> CreateOrderedPatchesList(List<DatabasePackage> packagesWithInstructions)
+        {
+            List<Instruction> orderedInstructions = new List<Instruction>();
+
+            //first loop at each patch group number
+            for (int i = 0; i <= GetMaxPatchGroupNumber(packagesWithInstructions); i++)
+            {
+                //then loop at each install group number
+                for (int j = 0; j <= GetMaxInstallGroupNumberWithOffset(packagesWithInstructions); j++)
+                {
+                    List<DatabasePackage> packagesWithCorrectOffsets = packagesWithInstructions.FindAll(package => package.PatchGroup == i && package.InstallGroupWithOffset == j);
+                    foreach (DatabasePackage packageWithCorrectOffsets in packagesWithCorrectOffsets)
+                    {
+                        orderedInstructions.AddRange(packageWithCorrectOffsets.Patches);
+                    }
+                }
+            }
+
+            return orderedInstructions;
+        }
+
+        private List<Instruction> CreateOrderedInstructionsList(List<DatabasePackage> packagesWithInstructions, InstructionsType instructionsType)
+        {
+            List<Instruction> orderedInstructions = new List<Instruction>();
+
+            //loop at each install group number
+            for (int j = 0; j <= GetMaxInstallGroupNumberWithOffset(packagesWithInstructions); j++)
+            {
+                List<DatabasePackage> packagesWithCorrectOffsets = packagesWithInstructions.FindAll(package => package.InstallGroupWithOffset == j);
+                foreach (DatabasePackage packageWithCorrectOffsets in packagesWithCorrectOffsets)
+                {
+                    orderedInstructions.AddRange(packageWithCorrectOffsets.GetInstructions(instructionsType));
+                }
+            }
+
+            return orderedInstructions;
+        }
+
+        private List<Instruction> CreateOrderedInstructionList(List<DatabasePackage> packagesToInstall, InstructionsType instructionsType)
+        {
+            if (packagesToInstall == null)
+                throw new NullReferenceException(nameof(packagesToInstall));
+
+            //filter out packages that don't have any instructions of the given type
+            List<DatabasePackage> packagesWithInstructions = packagesToInstall.FindAll(package => package.GetInstructions(instructionsType) != null && package.GetInstructions(instructionsType).Count > 0);
+
+            //if there are none, then nothing to do
+            if (packagesWithInstructions == null || packagesWithInstructions.Count == 0)
+                return null;
+
+            switch (instructionsType)
+            {
+                case InstructionsType.Patch:
+                    return CreateOrderedPatchesList(packagesWithInstructions);
+                default:
+                    return CreateOrderedInstructionsList(packagesWithInstructions, instructionsType);
+            }
+        }
+        #endregion
+
+        #region Utility methods
+        public SelectablePackage GetSelectablePackageByUid(string targetUid)
+        {
+            return GetSelectablePackageByUid(GetFlatSelectablePackageList(), targetUid);
+        }
+
+        private SelectablePackage GetSelectablePackageByUid(List<SelectablePackage> packages, string targetUid)
+        {
+            return packages.First(pack => pack.UID.Equals(targetUid));
+        }
+
+        public SelectablePackage GetSelectablePackageByPackageName(string targetPackageName)
+        {
+            return GetSelectablePackageByPackageName(GetFlatSelectablePackageList(), targetPackageName);
+        }
+
+        private SelectablePackage GetSelectablePackageByPackageName(List<SelectablePackage> packages, string targetPackageName)
+        {
+            return packages.First(pack => pack.UID.Equals(targetPackageName));
+        }
+
+        /// <summary>
+        /// Gets the maximum InstallGroup number from a list of Packages
+        /// </summary>
+        /// <returns>The maximum InstallGroup number</returns>
+        public int GetMaxInstallGroupNumber()
+        {
+            return GetFlatList().Max(ma => ma.InstallGroup);
+        }
+
+        /// <summary>
+        /// Gets the maximum InstallGroup number from a list of Packages factoring in the offset that a category may apply to it
+        /// </summary>
+        /// <returns>The maximum InstallGroup number</returns>
+        public int GetMaxInstallGroupNumberWithOffset()
+        {
+            return GetMaxInstallGroupNumberWithOffset(GetFlatList().FindAll(package => package.Patches != null && package.Patches.Count > 0));
+        }
+
+        private int GetMaxInstallGroupNumberWithOffset(List<DatabasePackage> listToCheck)
+        {
+            return listToCheck.Max(ma => ma.InstallGroupWithOffset);
+        }
+
+        /// <summary>
+        /// Gets the maximum PatchGroup number from a list of Packages
+        /// </summary>
+        /// <returns>The maximum PatchGroup number</returns>
+        public int GetMaxPatchGroupNumber()
+        {
+            return GetMaxPatchGroupNumber(GetFlatList().FindAll(package => package.Patches != null && package.Patches.Count > 0));
+        }
+
+        private int GetMaxPatchGroupNumber(List<DatabasePackage> listToCheck)
+        {
+            return listToCheck.Max(ma => ma.PatchGroup);
+        }/// <summary>
+         /// Returns a flat list of the given recursive lists, in the order that the parameters are stated
+         /// </summary>
+         /// <returns>The flat list</returns>
+         /// <remarks>In the case of Categories, the flat list has the sub-level packages added at the level of the parent</remarks>
+        public List<DatabasePackage> GetFlatList()
+        {
+            List<DatabasePackage> flatList = new List<DatabasePackage>();
+            flatList.AddRange(GlobalDependencies);
+            flatList.AddRange(Dependencies);
+            flatList.AddRange(GetFlatSelectablePackageList());
+            return flatList;
+        }
+
+        /// <summary>
+        /// Returns a flat list of the given recursive lists, in the order that the parameters are stated
+        /// </summary>
+        /// <returns>The flat list</returns>
+        /// <remarks>In the case of Categories, the flat list has the sub-level packages added at the level of the parent</remarks>
+        public List<SelectablePackage> GetFlatSelectablePackageList()
+        {
+            List<SelectablePackage> flatList = new List<SelectablePackage>();
+            foreach (Category cat in ParsedCategoryList)
+                flatList.AddRange(cat.GetFlatPackageList());
+            return flatList;
+        }
+
+        /// <summary>
+        /// Checks for any duplicate UID entries inside the provided lists
+        /// </summary>
+        /// <returns>A list of packages with duplicate UIDs, or an empty list if no duplicates</returns>
+        public List<DatabasePackage> CheckForDuplicateUIDsPackageList()
+        {
+            List<DatabasePackage> duplicatesList = new List<DatabasePackage>();
+            List<DatabasePackage> flatList = GetFlatList();
+            foreach (DatabasePackage package in flatList)
+            {
+                List<DatabasePackage> packagesWithMatchingUID = flatList.FindAll(item => item.UID.Equals(package.UID));
+                //by default it will at least match itself
+                if (packagesWithMatchingUID.Count > 1)
+                    duplicatesList.Add(package);
+            }
+            return duplicatesList;
+        }
+
+        /// <summary>
+        /// Checks for any duplicate UID entries inside the provided lists
+        /// </summary>
+        /// <returns>A list of duplicate UIDs, or an empty list if no duplicates</returns>
+        public List<string> CheckForDuplicateUIDsStringsList()
+        {
+            return CheckForDuplicateUIDsPackageList().Select(package => package.UID).ToList();
+        }
+
+        /// <summary>
+        /// Checks for any duplicate PackageName entries inside the provided lists
+        /// </summary>
+        /// <returns>A list of duplicate packages, or an empty list if no duplicates</returns>
+        public List<string> CheckForDuplicatePackageNamesStringsList()
+        {
+            List<string> duplicatesList = new List<string>();
+            List<DatabasePackage> flatList = GetFlatList();
+            foreach (DatabasePackage package in flatList)
+            {
+                List<DatabasePackage> packagesWithPackagename = flatList.Where(item => item.PackageName.Equals(package.PackageName)).ToList();
+                if (packagesWithPackagename.Count > 1)
+                    duplicatesList.Add(package.PackageName);
+            }
+            return duplicatesList;
+        }
+
+        /// <summary>
+        /// Checks if a packageName exists within a list of packages
+        /// </summary>
+        /// <param name="nameToCheck">The PackageName parameter to check</param>
+        /// <returns>True if the nameToCheck exists in the list, false otherwise</returns>
+        public bool IsDuplicatePackageName(string nameToCheck)
+        {
+            return GetFlatList().Find(pack => pack.PackageName.Equals(nameToCheck)) != null;
+        }
+
+        /// <summary>
+        /// Sorts the packages inside each Category object
+        /// </summary>
+        public void SortDatabase()
+        {
+            //the first level of packages are always sorted
+            foreach (Category cat in ParsedCategoryList)
+            {
+                SortDatabase(cat.Packages);
+            }
+        }
+
+        /// <summary>
+        /// Sorts a list of packages
+        /// </summary>
+        /// <param name="packages">The list of packages to sort</param>
+        /// <param name="recursive">If the list should recursively sort</param>
+        private void SortDatabase(List<SelectablePackage> packages, bool recursive = true)
+        {
+            //sorts packages in alphabetical order
+            packages.Sort(SelectablePackage.CompareModsName);
+            if (recursive)
+            {
+                //if set in the database, child elements can be sorted as well
+                foreach (SelectablePackage child in packages)
+                {
+                    if (child.SortChildPackages)
+                    {
+                        Logging.Debug("Sorting packages of package {0}", child.PackageName);
+                        SortDatabase(child.Packages);
+                    }
+                }
+            }
         }
         #endregion
     }
