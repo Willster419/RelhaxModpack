@@ -14,18 +14,20 @@ using System.Xml.Linq;
 
 namespace RelhaxModpack.Database
 {
-    public abstract class XmlDatabaseComponent
+    public abstract class XmlComponent
     {
         public const string SchemaV1Dot0 = "1.0";
 
         public const string SchemaV1Dot1 = "1.1";
 
-        public XmlDatabaseComponent()
+        public const string SchemaV1Dot2 = "1.2";
+
+        public XmlComponent()
         {
 
         }
 
-        public XmlDatabaseComponent(XmlDatabaseComponent componentToCopyFrom)
+        public XmlComponent(XmlComponent componentToCopyFrom)
         {
 
         }
@@ -40,6 +42,9 @@ namespace RelhaxModpack.Database
                 case SchemaV1Dot1:
                     return GetXmlDatabasePropertiesV1Dot1();
 
+                case SchemaV1Dot2:
+                    return GetXmlDatabasePropertiesV1Dot2();
+
                 default:
                     Logging.Error("Unknown schema type: {0}", string.IsNullOrEmpty(schemaVersion) ? "(null)" : schemaVersion);
                     return null;
@@ -49,6 +54,8 @@ namespace RelhaxModpack.Database
         protected abstract List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0();
 
         protected abstract List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1();
+
+        protected abstract List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2();
 
         public virtual string GetXmlElementName(string schemaVersion)
         {
@@ -174,14 +181,14 @@ namespace RelhaxModpack.Database
                         if (index >= elements.Count || elements[index] == null)
                         {
                             string elementName = listObjectType.Name;
-                            if (obj is XmlDatabaseComponent comp)
+                            if (obj is XmlComponent comp)
                                 elementName = comp.GetXmlElementName(schemaVersion);
                             element.Add(new XElement(elementName, null));
                             elements = element.Elements().ToList();
                         }
 
                         //check if the list entry is a XmlDatabaseComponent or a value type
-                        if (obj is XmlDatabaseComponent component)
+                        if (obj is XmlComponent component)
                         {
                             component.ToXml(elements[index], schemaVersion);
                         }
@@ -354,7 +361,7 @@ namespace RelhaxModpack.Database
                         if (!isvalueOrString)
                             listEntryObject = Activator.CreateInstance(listObjectType);
 
-                        if (!isvalueOrString && listEntryObject is XmlDatabaseComponent xmlDatabaseComponent)
+                        if (!isvalueOrString && listEntryObject is XmlComponent xmlDatabaseComponent)
                         {
                             //load this object from xml
                             xmlDatabaseComponent.FromXml(listElement, schemaVersion);

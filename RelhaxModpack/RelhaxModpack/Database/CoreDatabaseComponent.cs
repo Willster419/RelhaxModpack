@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace RelhaxModpack.Database
 {
-    public abstract class CoreDatabaseComponent : XmlDatabaseComponent
+    public abstract class CoreDatabaseComponent : XmlComponent
     {
         public CoreDatabaseComponent() : base()
         {

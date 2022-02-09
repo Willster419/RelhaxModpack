@@ -32,6 +32,7 @@ namespace RelhaxModpack.Shortcuts
             return new Shortcut(shortcutToCopy);
         }
 
+        #region Xml serialization V1
         public override string RootObjectPath { get { return ShortcutXmlSearchPath; } }
 
         public override string[] PropertiesToSerialize()
@@ -43,6 +44,7 @@ namespace RelhaxModpack.Shortcuts
                 nameof(Enabled)
             };
         }
+        #endregion
 
         #region Xml serialization V2
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
@@ -67,6 +69,11 @@ namespace RelhaxModpack.Shortcuts
                 new XmlDatabaseProperty() { XmlName = nameof(Enabled), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Enabled) }
             };
             return xmlDatabaseProperties;
+        }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
+        {
+            return this.GetXmlDatabasePropertiesV1Dot1();
         }
         #endregion
 

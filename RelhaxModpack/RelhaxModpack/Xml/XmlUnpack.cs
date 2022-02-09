@@ -31,6 +31,7 @@ namespace RelhaxModpack.Xml
             return new XmlUnpack(xmlUnpackToCopy);
         }
 
+        #region Xml serialization V1
         public override string RootObjectPath { get { return XmlUnpackXmlSearchPath; } }
 
         public override string[] PropertiesToSerialize()
@@ -44,6 +45,7 @@ namespace RelhaxModpack.Xml
                 nameof(NewFileName)
             };
         }
+        #endregion
 
         #region Xml serialization V2
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
@@ -68,6 +70,11 @@ namespace RelhaxModpack.Xml
                 new XmlDatabaseProperty() { XmlName = nameof(NewFileName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(NewFileName) }
             };
             return base.GetXmlDatabasePropertiesV1Dot0().Concat(xmlDatabaseProperties).ToList();
+        }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
+        {
+            return this.GetXmlDatabasePropertiesV1Dot1();
         }
         #endregion
 

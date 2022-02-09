@@ -146,6 +146,36 @@ namespace RelhaxModpack.Database
         {
             return this.GetXmlDatabasePropertiesV1Dot0();
         }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = base.GetXmlDatabasePropertiesV1Dot0();
+            List<XmlDatabaseProperty> xmlDatabasePropertiesAddAfter = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(Name), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Name) },
+                new XmlDatabaseProperty() { XmlName = nameof(Type), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Type) },
+                new XmlDatabaseProperty() { XmlName = nameof(Visible), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Visible) },
+                //list elements
+                new XmlDatabaseProperty() { XmlName = nameof(Description), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Description) },
+                new XmlDatabaseProperty() { XmlName = nameof(UpdateComment), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(UpdateComment) },
+                new XmlDatabaseProperty() { XmlName = nameof(PopularMod), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(PopularMod) },
+                new XmlDatabaseProperty() { XmlName = nameof(GreyAreaMod), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(GreyAreaMod) },
+                new XmlDatabaseProperty() { XmlName = nameof(ObfuscatedMod), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ObfuscatedMod) },
+                new XmlDatabaseProperty() { XmlName = nameof(FromWGmods), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(FromWGmods) },
+                new XmlDatabaseProperty() { XmlName = nameof(ShowInSearchList), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ShowInSearchList) },
+                new XmlDatabaseProperty() { XmlName = nameof(Medias), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Medias) },
+                new XmlDatabaseProperty() { XmlName = nameof(UserFiles), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(UserFiles) },
+                new XmlDatabaseProperty() { XmlName = "ConflictingPackages", XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ConflictingPackagesNew) },
+                new XmlDatabaseProperty() { XmlName = nameof(Dependencies), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Dependencies) }
+            };
+            //add stuff before a property
+            XmlDatabaseProperty propToInsertBelow = xmlDatabaseProperties.Find(property => property.PropertyName.Equals(nameof(Patches)));
+            int indexToInsertBelow = xmlDatabaseProperties.IndexOf(propToInsertBelow);
+            xmlDatabaseProperties.InsertRange(indexToInsertBelow, xmlDatabasePropertiesAddAfter);
+            xmlDatabaseProperties.Add(new XmlDatabaseProperty() { XmlName = nameof(Packages), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Packages) });
+            return xmlDatabaseProperties;
+        }
         #endregion
 
         #region Selection file processing
@@ -482,7 +512,19 @@ namespace RelhaxModpack.Database
         /// </summary>
         public List<string> ConflictingPackagesList
         {
-            get { return ConflictingPackages.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).ToList(); }
+            get { return ConflictingPackages.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
+        }
+
+        public List<ConflictingPackage> ConflictingPackagesNew { get; set; } = new List<ConflictingPackage>();
+
+        public List<SelectablePackage> ConflictingPackagesProcessed
+        {
+            get
+            {
+                if (ConflictingPackagesNew.Count == 0)
+                    return null;
+                return ConflictingPackagesNew.Select(conf => conf.ConflictingSelectablePackage).ToList();
+            }
         }
 
         /// <summary>

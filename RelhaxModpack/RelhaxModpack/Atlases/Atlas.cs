@@ -43,6 +43,7 @@ namespace RelhaxModpack.Atlases
             return new Atlas(atlasToCopy);
         }
 
+        #region Xml serialization V1
         public override string RootObjectPath { get { return AtlasXmlSearchPath; } }
 
         public override string[] PropertiesToSerialize()
@@ -63,6 +64,7 @@ namespace RelhaxModpack.Atlases
                 nameof(ImageFolders)
             };
         }
+        #endregion
 
         #region Xml serialization V2
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
@@ -99,6 +101,11 @@ namespace RelhaxModpack.Atlases
                 new XmlDatabaseProperty() { XmlName = nameof(ImageFolders), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(ImageFolders) }
             };
             return base.GetXmlDatabasePropertiesV1Dot1().Concat(xmlDatabaseProperties).ToList();
+        }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
+        {
+            return this.GetXmlDatabasePropertiesV1Dot1();
         }
         #endregion
 

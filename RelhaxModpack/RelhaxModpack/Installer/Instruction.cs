@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RelhaxModpack.Installer
 {
-    public abstract class Instruction : XmlDatabaseComponent
+    public abstract class Instruction : XmlComponent
     {
         public Instruction() : base()
         {

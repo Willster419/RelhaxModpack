@@ -7,7 +7,7 @@ namespace RelhaxModpack.Database
     /// <summary>
     /// A media object is a preview-able component stored in a list in SelectablePackages
     /// </summary>
-    public class Media : XmlDatabaseComponent, IXmlSerializable
+    public class Media : XmlComponent, IXmlSerializable
     {
         public Media() : base()
         {
@@ -63,6 +63,11 @@ namespace RelhaxModpack.Database
                 new XmlDatabaseProperty() { XmlName = nameof(URL), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(URL) }
             };
             return xmlDatabaseProperties;
+        }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
+        {
+            return this.GetXmlDatabasePropertiesV1Dot1();
         }
         #endregion
 

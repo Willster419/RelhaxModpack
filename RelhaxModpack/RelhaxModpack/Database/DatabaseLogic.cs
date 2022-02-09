@@ -25,7 +25,7 @@ namespace RelhaxModpack.Database
     /// <summary>
     /// Used for database dependency calculation. Determines what dependent packages use the package that this object is attached to
     /// </summary>
-    public class DatabaseLogic : XmlDatabaseComponent, IXmlSerializable
+    public class DatabaseLogic : XmlComponent, IXmlSerializable
     {
         public DatabaseLogic() : base()
         {
@@ -86,12 +86,26 @@ namespace RelhaxModpack.Database
             return this.GetXmlDatabasePropertiesV1Dot0();
         }
 
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
+        {
+            List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
+            {
+                //list attributes
+                new XmlDatabaseProperty() { XmlName = nameof(PackageName), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PackageName) },
+                new XmlDatabaseProperty() { XmlName = nameof(PackageUID), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(PackageUID) },
+                new XmlDatabaseProperty() { XmlName = nameof(NotFlag), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(NotFlag) },
+                new XmlDatabaseProperty() { XmlName = nameof(Logic), XmlEntryType = Utilities.Enums.XmlEntryType.XmlAttribute, PropertyName = nameof(Logic) }
+            };
+            return xmlDatabaseProperties;
+        }
+
         public override string GetXmlElementName(string schemaVersion)
         {
             switch (schemaVersion)
             {
                 case SchemaV1Dot0:
                 case SchemaV1Dot1:
+                case SchemaV1Dot2:
                     return XmlElementName;
                 default:
                     return base.GetXmlElementName(schemaVersion);

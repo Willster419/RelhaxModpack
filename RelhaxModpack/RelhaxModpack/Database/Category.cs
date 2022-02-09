@@ -66,6 +66,11 @@ namespace RelhaxModpack.Database
             return this.GetXmlDatabasePropertiesV1Dot0();
         }
 
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
+        {
+            return this.GetXmlDatabasePropertiesV1Dot1();
+        }
+
         protected override void OnParsingPropertyToXmlElement(XmlDatabaseProperty thisPropertyXml, XElement propertyXmlElement, string schemaVersion, PropertyInfo propertyInfo, object valueOfProperty, XElement elementOfProperty, out bool continueProcessingProperty)
         {
             continueProcessingProperty = true;
@@ -107,7 +112,7 @@ namespace RelhaxModpack.Database
                 foreach(XElement element in xmlPackages)
                 {
                     object listEntryObject = Activator.CreateInstance(typeof(SelectablePackage));
-                    XmlDatabaseComponent component = listEntryObject as XmlDatabaseComponent;
+                    XmlComponent component = listEntryObject as XmlComponent;
                     component.FromXml(element, schemaVersion);
                     Packages.Add(component as SelectablePackage);
                 }

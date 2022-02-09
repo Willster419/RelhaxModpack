@@ -85,6 +85,7 @@ namespace RelhaxModpack.Patching
             return new Patch(shortcutToCopy);
         }
 
+        #region Xml serialization V1
         public override string RootObjectPath { get { return PatchXmlSearchPath; } }
 
         public override string[] PropertiesToSerialize()
@@ -103,6 +104,7 @@ namespace RelhaxModpack.Patching
                 nameof(Replace)
             };
         }
+        #endregion
 
         #region Xml serialization V2
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
@@ -139,6 +141,11 @@ namespace RelhaxModpack.Patching
                 new XmlDatabaseProperty() { XmlName = nameof(Line), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Line) }
             };
             return xmlDatabaseProperties;
+        }
+
+        protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
+        {
+            return this.GetXmlDatabasePropertiesV1Dot1();
         }
         #endregion
 

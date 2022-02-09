@@ -238,9 +238,9 @@
     <Compile Include="Common\Md5DatabaseManager.cs" />
     <Compile Include="Common\StringConstants.cs" />
     <Compile Include="Database\Category.cs" />
+    <Compile Include="Database\ConflictingPackage.cs" />
     <Compile Include="Database\CoreDatabaseComponent.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
-    <Compile Include="Database\DatabaseUtils.cs" />
     <Compile Include="Database\IDatabaseComponent.cs" />
     <Compile Include="Database\DatabaseLogic.cs" />
     <Compile Include="Database\DatabasePackage.cs" />
@@ -255,7 +255,7 @@
     <Compile Include="Database\SelectablePackage.cs" />
     <Compile Include="Database\Trigger.cs" />
     <Compile Include="Database\UserFile.cs" />
-    <Compile Include="Database\XmlDatabaseComponent.cs" />
+    <Compile Include="Database\XmlComponent.cs" />
     <Compile Include="Database\XmlDatabaseProperty.cs" />
     <Compile Include="Installer\Instruction.cs" />
     <Compile Include="Installer\InstructionLoader.cs" />
