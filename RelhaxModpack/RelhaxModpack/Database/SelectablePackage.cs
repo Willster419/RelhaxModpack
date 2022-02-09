@@ -13,7 +13,7 @@ namespace RelhaxModpack.Database
     /// <summary>
     /// A package that can be selected in the UI, most commonly a mod or a configuration parameter for a mod
     /// </summary>
-    public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
+    public class SelectablePackage : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         /// <summary>
         /// Create an instance of the SelectablePackage class and over-ride DatabasePackage default values
@@ -929,104 +929,6 @@ namespace RelhaxModpack.Database
 
                 return true;
             }
-        }
-        #endregion
-
-        #region Disposable support
-        private bool disposedValue = false;
-
-        protected override void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    if(Packages != null)
-                    {
-                        if (Packages.Count > 0)
-                        {
-                            foreach (SelectablePackage package in Packages)
-                                package.Dispose();
-                        }
-                        Packages.Clear();
-                        Packages = null;
-                    }
-                    if (Dependencies != null)
-                    {
-                        Dependency.ClearLogics(Dependencies);
-                        Dependencies = null;
-                    }
-                    // TODO: dispose managed state (managed objects)
-                    if (ParentCategory != null)
-                        ParentCategory = null;
-                    if (Parent != null)
-                        Parent = null;
-                    if (TopParent != null)
-                        TopParent = null;
-                    if (UserFiles != null)
-                    {
-                        foreach (UserFile file in UserFiles)
-                        {
-                            file.FilesSaved.Clear();
-                        }
-                        UserFiles.Clear();
-                        UserFiles = null;
-                    }
-                    if (Medias != null)
-                    {
-                        foreach (Media media in Medias)
-                            media.SelectablePackageParent = null;
-                        Medias.Clear();
-                        Medias = null;
-                    }
-                    if (UIComponent != null)
-                    {
-                        UIComponent.Package = null;
-                        UIComponent = null;
-                    }
-                    if (ParentUIComponent != null)
-                    {
-                        ParentUIComponent.Package = null;
-                        ParentUIComponent = null;
-                    }
-                    if (TopParentUIComponent != null)
-                    {
-                        TopParentUIComponent.Package = null;
-                        TopParentUIComponent = null;
-                    }
-                    if (RelhaxWPFComboBoxList != null)
-                    {
-                        for (int i = 0; i < RelhaxWPFComboBoxList.Count(); i++)
-                            if (RelhaxWPFComboBoxList[i] != null)
-                                RelhaxWPFComboBoxList[i] = null;
-                        RelhaxWPFComboBoxList = null;
-                    }
-                    if (ChildBorder != null)
-                        ChildBorder = null;
-                    if (ChildStackPanel != null)
-                        ChildStackPanel = null;
-                    if (ParentBorder != null)
-                        ParentBorder = null;
-                    if (ParentStackPanel != null)
-                        ParentStackPanel = null;
-                    if (ContentControl != null)
-                        ContentControl = null;
-                    if (ScrollViewer != null)
-                        ScrollViewer = null;
-                    if (TreeViewItem != null)
-                        TreeViewItem = null;
-                    if (TreeView != null)
-                        TreeView = null;
-                    if (TabIndex != null)
-                        TabIndex = null;
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
-
-            base.Dispose(disposing);
         }
         #endregion
     }

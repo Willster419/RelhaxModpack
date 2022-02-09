@@ -11,7 +11,7 @@ namespace RelhaxModpack.Database
     /// Represents a trigger object used in the installer as an event starter.
     /// For example, a contour icon trigger exists to start the building of contour icons
     /// </summary>
-    public class Trigger
+    public class Trigger : IDisposable
     {
         public Trigger() : base()
         {
@@ -47,5 +47,10 @@ namespace RelhaxModpack.Database
         /// The reference for the task that the trigger should perform
         /// </summary>
         public Task TriggerTask { get; set; }
+
+        public void Dispose()
+        {
+            TriggerTask.Dispose();
+        }
     }
 }

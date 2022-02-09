@@ -12,7 +12,7 @@ namespace RelhaxModpack.Database
     /// <summary>
     /// a category is what makes up each tab in the mod selection display window. It holds the first level of list of SelectablePackages
     /// </summary>
-    public class Category : CoreDatabaseComponent, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
+    public class Category : CoreDatabaseComponent, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         public Category() : base()
         {
@@ -258,63 +258,6 @@ namespace RelhaxModpack.Database
                     anyPackages = true;
             }
             return anyPackages;
-        }
-        #endregion
-
-        #region Disposable Support
-
-        private bool disposedValue;
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                    if (Packages != null)
-                    {
-                        if (Packages.Count > 0)
-                        {
-                            foreach (SelectablePackage package in GetFlatPackageList())
-                                package.Dispose();
-                        }
-                        Packages.Clear();
-                        Packages = null;
-                    }
-                    if (Dependencies != null)
-                    {
-                        Dependency.ClearLogics(Dependencies);
-                        Dependencies = null;
-                    }
-                    if (TabPage != null)
-                        TabPage = null;
-                    if (CategoryHeader != null)
-                    {
-                        CategoryHeader.Dispose();
-                        CategoryHeader = null;
-                    }
-                    if (EditorTreeViewItem != null)
-                        EditorTreeViewItem = null;
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
-        }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~Category()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
-
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
         }
         #endregion
     }

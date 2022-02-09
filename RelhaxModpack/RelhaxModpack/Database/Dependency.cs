@@ -9,7 +9,7 @@ namespace RelhaxModpack.Database
     /// Represents a package with logical calculations. A dependency is only installed when a selectable package is checked
     /// for installation and is dependent on the dependency i.e. 6th sense sound and icon mods require the 6th sense script dependency
     /// </summary>
-    public class Dependency : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable, IDisposable
+    public class Dependency : DatabasePackage, IDatabaseComponent, IComponentWithDependencies, IXmlSerializable
     {
         /// <summary>
         /// Create an instance of the Dependency class and over-ride DatabasePackage default values
@@ -97,50 +97,6 @@ namespace RelhaxModpack.Database
         /// List of dependencies this dependency calls on
         /// </summary>
         public List<DatabaseLogic> Dependencies { get; set; } = new List<DatabaseLogic>();
-        #endregion
-
-        #region Disposable support
-        private bool disposedValue = false;
-
-        protected override void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                    if (DatabasePackageLogic != null)
-                    {
-                        ClearLogics(DatabasePackageLogic);
-                        DatabasePackageLogic = null;
-                    }
-
-                    if (Dependencies != null)
-                    {
-                        ClearLogics(Dependencies);
-                        Dependencies = null;
-                    }
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
-
-            base.Dispose(disposing);
-        }
-
-        public static void ClearLogics(List<DatabaseLogic> logics)
-        {
-            foreach (DatabaseLogic logic in logics)
-            {
-                if (logic.ParentPackageRefrence != null)
-                    logic.ParentPackageRefrence = null;
-                if (logic.DependencyPackageRefrence != null)
-                    logic.DependencyPackageRefrence = null;
-            }
-            logics.Clear();
-        }
         #endregion
     }
 }

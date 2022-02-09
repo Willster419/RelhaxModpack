@@ -1030,7 +1030,6 @@ namespace RelhaxModpack
             //do a collection to free up memory
             //regardless if we start an install, we should set the selection list to null to free memory
             modSelectionList.OnSelectionListReturn -= ModSelectionList_OnSelectionListReturn;
-            modSelectionList.Dispose();
             modSelectionList = null;
             GC.Collect();
         }

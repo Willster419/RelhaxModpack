@@ -160,7 +160,7 @@ namespace RelhaxModpack
         /// <summary>
         /// A list of all current trigger event objects. For more information, see the trigger class
         /// </summary>
-        public static List<Trigger> Triggers = new List<Trigger>
+        public static readonly List<Trigger> Triggers = new List<Trigger>
         {
             new Trigger(){ Fired = false, Name = TriggerContouricons,    NumberProcessed = 0, Total = 0, TriggerTask = null },
             new Trigger(){ Fired = false, Name = TriggerInstallFonts,    NumberProcessed = 0, Total = 0, TriggerTask = null },
@@ -419,7 +419,7 @@ namespace RelhaxModpack
                             Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
                             if (match == null)
                             {
-                                Logging.Debug("trigger match is null (no match!) {0}", triggerFromPackage);
+                                Logging.Error("trigger match is null (no match!) {0}", triggerFromPackage);
                                 continue;
                             }
                             match.Total++;
@@ -2468,14 +2468,6 @@ namespace RelhaxModpack
                     }
                 }
                 InstallerCreatedTasks = null;
-            }
-
-            if (UserPackagesToInstall != null)
-            {
-                foreach (DatabasePackage package in UserPackagesToInstall)
-                    package.Dispose();
-                UserPackagesToInstall.Clear();
-                UserPackagesToInstall = null;
             }
         }
         #endregion

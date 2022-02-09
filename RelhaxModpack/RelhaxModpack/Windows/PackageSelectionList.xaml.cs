@@ -37,7 +37,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Interaction logic for PackageSelectionList.xaml
     /// </summary>
-    public partial class PackageSelectionList : RelhaxWindow, IDisposable
+    public partial class PackageSelectionList : RelhaxWindow
     {
         /// <summary>
         /// The list of categories
@@ -143,6 +143,17 @@ namespace RelhaxModpack.Windows
             {
                 previewWindow.Close();
                 previewWindow = null;
+            }
+
+            //stop timer if on
+            if (FlashTimer != null)
+            {
+                FlashTimer.IsEnabled = false;
+                FlashTimer.Stop();
+                if (FlashTimer.Tag != null)
+                    FlashTimer.Tag = null;
+                FlashTimer.Tick -= OnFlashTimerTick;
+                FlashTimer = null;
             }
 
             //save width and height settings
@@ -2848,89 +2859,5 @@ namespace RelhaxModpack.Windows
             }
         }
         #endregion
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                    if (loadingProgress != null)
-                        loadingProgress = null;
-
-                    if (previewWindow != null)
-                        previewWindow = null;
-
-                    if (OriginalBrush != null)
-                        OriginalBrush = null;
-
-                    if (HighlightBrush != null)
-                        HighlightBrush = null;
-
-                    if (FlashTimer != null)
-                    {
-                        FlashTimer.IsEnabled = false;
-                        FlashTimer.Stop();
-                        if (FlashTimer.Tag != null)
-                            FlashTimer.Tag = null;
-                        FlashTimer.Tick -= OnFlashTimerTick;
-                        FlashTimer = null;
-                    }
-
-                    //public resources
-                    if (OnSelectionListReturn != null)
-                        OnSelectionListReturn = null;
-
-                    if (!continueInstallation)
-                    {
-                        if (UserCategory != null)
-                        {
-                            UserCategory.Dispose();
-                            UserCategory = null;
-                        }
-
-                        if (GlobalDependencies != null)
-                        {
-                            foreach (DatabasePackage package in GlobalDependencies)
-                                package.Dispose();
-                            GlobalDependencies.Clear();
-                        }
-
-                        if (Dependencies != null)
-                        {
-                            foreach (Dependency dependency in Dependencies)
-                                dependency.Dispose();
-                            Dependencies.Clear();
-                        }
-
-                        if (ParsedCategoryList != null)
-                        {
-                            foreach (Category category in ParsedCategoryList)
-                                category.Dispose();
-                            ParsedCategoryList.Clear();
-                        }
-                    }
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
-        }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~ModSelectionList()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
-
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
     }
 }
