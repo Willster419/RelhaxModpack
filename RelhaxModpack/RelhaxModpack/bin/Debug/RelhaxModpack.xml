@@ -1130,6 +1130,16 @@
             Returns true if at least one package is enabled and checked and visible from the first level of packages in the category
             </summary>
         </member>
+        <member name="P:RelhaxModpack.Database.ConflictingPackage.PackageName">
+            <summary>
+            The name of the package that *this* package is dependent on
+            </summary>
+        </member>
+        <member name="P:RelhaxModpack.Database.ConflictingPackage.PackageUID">
+            <summary>
+            The UID of the package that *this* package is dependent on
+            </summary>
+        </member>
         <member name="P:RelhaxModpack.Database.CoreDatabaseComponent.EditorTreeViewItem">
             <summary>
             Reference for the UI element of this package in the database editor
@@ -1149,6 +1159,22 @@
         <member name="P:RelhaxModpack.Database.CoreDatabaseComponent.MaintainersList">
             <summary>
             Returns a list database managers who are known to maintain this component
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Database.DatabaseManager.LogicTracking">
+            <summary>
+            A structure used to keep a reference of a component and a dependency that it calls
+            </summary>
+            <remarks>This is used to determine if any packages call any dependencies who's packageName does not exist in the database</remarks>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabaseManager.LogicTracking.ComponentWithDependencies">
+            <summary>
+            The database component what has dependencies
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Database.DatabaseManager.LogicTracking.DatabaseLogic">
+            <summary>
+            The called dependency from the component
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.DatabaseManager.ParsedCategoryList">
@@ -1242,151 +1268,12 @@
             <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
             <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
         </member>
-        <member name="T:RelhaxModpack.Database.DatabaseBeforeAfter">
-            <summary>
-            Allows the old and new versions of a SelectablePackage to be saved temporarily for comparing differences between two database structures
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.DatabaseBeforeAfter.Before">
-            <summary>
-            The package reference for the database before changes
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.DatabaseBeforeAfter.After">
-            <summary>
-            The package reference for the database after changes
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Database.DatabaseBeforeAfter2">
-            <summary>
-            Allows the old and new versions of a DatabasePackage to be saved temporarily for comparing differences between two database structures
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.DatabaseBeforeAfter2.Before">
-            <summary>
-            The package reference for the database before changes
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.DatabaseBeforeAfter2.After">
-            <summary>
-            The package reference for the database after changes
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Database.VersionInfos">
-            <summary>
-            A structure object to contain the WoT client version and online folder version. Allows for LINQ searching
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.VersionInfos.WoTClientVersion">
-            <summary>
-            The WoT client version e.g. 1.5.1.3
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.VersionInfos.WoTOnlineFolderVersion">
-            <summary>
-            The online folder number (major game version) that contains the game zip files
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Database.VersionInfos.ToString">
-            <summary>
-            Overrides the ToString() function to display the two properties
-            </summary>
-            <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
-        </member>
-        <member name="T:RelhaxModpack.Database.LogicTracking">
-            <summary>
-            A structure used to keep a reference of a component and a dependency that it calls
-            </summary>
-            <remarks>This is used to determine if any packages call any dependencies who's packageName does not exist in the database</remarks>
-        </member>
-        <member name="F:RelhaxModpack.Database.LogicTracking.ComponentWithDependencies">
-            <summary>
-            The database component what has dependencies
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.LogicTracking.DatabaseLogic">
-            <summary>
-            The called dependency from the component
-            </summary>
-        </member>
-        <member name="T:RelhaxModpack.Database.DatabaseUtils">
-            <summary>
-            A utility class for working with database components
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetFlatList(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Returns a flat list of the given recursive lists, in the order that the parameters are stated
-            </summary>
-            <param name="globalDependnecies">The list of global dependences</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of Categories</param>
-            <returns>The flat list</returns>
-            <remarks>In the case of Categories, the flat list has the sub-level packages added at the level of the parent</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetFlatSelectablePackageList(System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Returns a flat list of the given recursive lists, in the order that the parameters are stated
-            </summary>
-            <param name="parsedCategoryList">The list of Categories</param>
-            <returns>The flat list</returns>
-            <remarks>In the case of Categories, the flat list has the sub-level packages added at the level of the parent</remarks>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.CheckForDuplicateUIDsPackageList(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Checks for any duplicate UID entries inside the provided lists
-            </summary>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns>A list of packages with duplicate UIDs, or an empty list if no duplicates</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.CheckForDuplicateUIDsStringsList(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Checks for any duplicate UID entries inside the provided lists
-            </summary>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns>A list of duplicate UIDs, or an empty list if no duplicates</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.CheckForDuplicates(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Checks for any duplicate PackageName entries inside the provided lists
-            </summary>
-            <param name="globalDependencies">The list of global dependencies</param>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of categories</param>
-            <returns>A list of duplicate packages, or an empty list if no duplicates</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.IsDuplicateName(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage},System.String)">
-            <summary>
-            Checks if a packageName exists within a list of packages
-            </summary>
-            <param name="packagesToCheckWith">The list of packages to check inside</param>
-            <param name="nameToCheck">The PackageName parameter to check</param>
-            <returns>True if the nameToCheck exists in the list, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SortDatabase(System.Collections.Generic.List{RelhaxModpack.Database.Category})">
-            <summary>
-            Sorts the packages inside each Category object
-            </summary>
-            <param name="parsedCategoryList">The list of categories to sort</param>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.SortDatabase(System.Collections.Generic.List{RelhaxModpack.Database.SelectablePackage},System.Boolean)">
-            <summary>
-            Sorts a list of packages
-            </summary>
-            <param name="packages">The list of packages to sort</param>
-            <param name="recursive">If the list should recursively sort</param>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildLinksRefrence(System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessPackageLinks">
             <summary>
             Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
             </summary>
-            <param name="ParsedCategoryList">The List of categories</param>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildLinksRefrence(RelhaxModpack.Database.SelectablePackage,RelhaxModpack.Database.Category,RelhaxModpack.Database.SelectablePackage)">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessPackageLinks(RelhaxModpack.Database.SelectablePackage,RelhaxModpack.Database.Category,RelhaxModpack.Database.SelectablePackage)">
             <summary>
             Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
             </summary>
@@ -1394,63 +1281,104 @@
             <param name="cat">The category that the SelectablePackagesp belongs to</param>
             <param name="parent">The tree parent of sp</param>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildLevelPerPackage(System.Collections.Generic.List{RelhaxModpack.Database.Category},System.Int32)">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessLevelPerPackage">
             <summary>
             Assigns the level parameter to the packages based on how recursively deep they are in the package sub lists
             </summary>
-            <param name="ParsedCategoryList">The list of assign package values to</param>
-            <param name="startingLevel">The starting level to assign the level parameter</param>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildLevelPerPackage(System.Collections.Generic.List{RelhaxModpack.Database.SelectablePackage},System.Int32)">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessLevelPerPackage(System.Collections.Generic.List{RelhaxModpack.Database.SelectablePackage},System.Int32)">
             <summary>
             Assigns the level parameter to the packages based on how recursively deep they are in the package sub lists
             </summary>
             <param name="packages">The list of package values to</param>
             <param name="level">The level to assign the level parameter</param>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.BuildDependencyPackageRefrences(System.Collections.Generic.List{RelhaxModpack.Database.Category},System.Collections.Generic.List{RelhaxModpack.Database.Dependency})">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessDependencyPackageRefrences">
             <summary>
             Links the databasePackage objects with dependencies objects to have those objects link references to the parent and the dependency object
             </summary>
-            <param name="componentsWithDependencies">List of all DatabasePackage objects that have dependencies</param>
-            <param name="dependencies">List of all Dependencies that exist in the database</param>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.CalculateDependencies(System.Collections.Generic.List{RelhaxModpack.Database.Dependency},System.Collections.Generic.List{RelhaxModpack.Database.Category},System.Boolean,System.Boolean)">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.CalculateDependencies(System.Boolean,System.Boolean)">
             <summary>
             Calculates which packages and dependencies are dependent on other dependencies and if each dependency that is selected for install is enabled for installation
             </summary>
-            <param name="dependencies">The list of dependencies</param>
-            <param name="parsedCategoryList">The list of Categories</param>
             <param name="suppressSomeLogging">Flag for it some of the more verbose logging should be suppressed</param>
-            <returns>A list of calculated dependencies to install</returns>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.CreateOrderedInstallList(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage})">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.CreateOrderedInstallList(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage})">
             <summary>
             Creates an array of DatabasePackage lists sorted by Installation groups i.e. list in array index 0 is packages of install group 0
             </summary>
-            <param name="packagesToInstall"></param>
+            <param name="packagesToInstallWithZipfile"></param>
             <returns>The array of DatabasePackage lists</returns>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetMaxInstallGroupNumber(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage})">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.GetMaxInstallGroupNumber">
             <summary>
             Gets the maximum InstallGroup number from a list of Packages
             </summary>
-            <param name="listToCheck">The list of DatabasePackages</param>
             <returns>The maximum InstallGroup number</returns>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetMaxInstallGroupNumberWithOffset(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage})">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.GetMaxInstallGroupNumberWithOffset">
             <summary>
             Gets the maximum InstallGroup number from a list of Packages factoring in the offset that a category may apply to it
             </summary>
-            <param name="listToCheck">The list of DatabasePackages</param>
             <returns>The maximum InstallGroup number</returns>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseUtils.GetMaxPatchGroupNumber(System.Collections.Generic.List{RelhaxModpack.Database.DatabasePackage})">
+        <member name="M:RelhaxModpack.Database.DatabaseManager.GetMaxPatchGroupNumber">
             <summary>
             Gets the maximum PatchGroup number from a list of Packages
             </summary>
-            <param name="listToCheck">The list of DatabasePackages</param>
             <returns>The maximum PatchGroup number</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.GetFlatList">
+            <summary>
+            Returns a flat list of the given recursive lists, in the order that the parameters are stated
+            </summary>
+            <returns>The flat list</returns>
+            <remarks>In the case of Categories, the flat list has the sub-level packages added at the level of the parent</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.GetFlatSelectablePackageList">
+            <summary>
+            Returns a flat list of the given recursive lists, in the order that the parameters are stated
+            </summary>
+            <returns>The flat list</returns>
+            <remarks>In the case of Categories, the flat list has the sub-level packages added at the level of the parent</remarks>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.CheckForDuplicateUIDsPackageList">
+            <summary>
+            Checks for any duplicate UID entries inside the provided lists
+            </summary>
+            <returns>A list of packages with duplicate UIDs, or an empty list if no duplicates</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.CheckForDuplicateUIDsStringsList">
+            <summary>
+            Checks for any duplicate UID entries inside the provided lists
+            </summary>
+            <returns>A list of duplicate UIDs, or an empty list if no duplicates</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.CheckForDuplicatePackageNamesStringsList">
+            <summary>
+            Checks for any duplicate PackageName entries inside the provided lists
+            </summary>
+            <returns>A list of duplicate packages, or an empty list if no duplicates</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.IsDuplicatePackageName(System.String)">
+            <summary>
+            Checks if a packageName exists within a list of packages
+            </summary>
+            <param name="nameToCheck">The PackageName parameter to check</param>
+            <returns>True if the nameToCheck exists in the list, false otherwise</returns>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.SortDatabase">
+            <summary>
+            Sorts the packages inside each Category object
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabaseManager.SortDatabase(System.Collections.Generic.List{RelhaxModpack.Database.SelectablePackage},System.Boolean)">
+            <summary>
+            Sorts a list of packages
+            </summary>
+            <param name="packages">The list of packages to sort</param>
+            <param name="recursive">If the list should recursively sort</param>
         </member>
         <member name="T:RelhaxModpack.Database.IDatabaseComponent">
             <summary>
@@ -5206,21 +5134,6 @@
             If the installation should be continued or if the user canceled
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.ParsedCategoryList">
-            <summary>
-            The list of categories
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.Dependencies">
-            <summary>
-            The list of dependencies
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.GlobalDependencies">
-            <summary>
-            The list of global dependencies
-            </summary>
-        </member>
         <member name="F:RelhaxModpack.Utilities.ClassEventArgs.SelectionListEventArgs.UserMods">
             <summary>
             The list of use mods
@@ -6619,6 +6532,22 @@
             <param name="credentials">The FTP server credentials</param>
             <returns>The size of the file in bytes</returns>
         </member>
+        <member name="F:RelhaxModpack.Utilities.Structs.VersionInfos.WoTClientVersion">
+            <summary>
+            The WoT client version e.g. 1.5.1.3
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Utilities.Structs.VersionInfos.WoTOnlineFolderVersion">
+            <summary>
+            The online folder number (major game version) that contains the game zip files
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Utilities.Structs.VersionInfos.ToString">
+            <summary>
+            Overrides the ToString() function to display the two properties
+            </summary>
+            <returns>Displays the WoTClientVersion and WoTOnlineFolderVersion</returns>
+        </member>
         <member name="T:RelhaxModpack.Utilities.MacroUtils">
             <summary>
             A utility class to handle macros
@@ -7285,12 +7214,6 @@
             <param name="UninstallMode">Selects which uninstall method</param>
             <param name="logToUninstaller">if to </param>
             <returns>true if the uninstall processes completed, false otherwise</returns>
-        </member>
-        <member name="M:RelhaxModpack.InstallEngine.Dispose(System.Boolean)">
-            <summary>
-            Dispose of the Installation engine
-            </summary>
-            <param name="disposing">Flag to indicate if the engine should additionally dispose of managed resources</param>
         </member>
         <member name="M:RelhaxModpack.InstallEngine.Dispose">
             <summary>
@@ -8396,6 +8319,36 @@
             ModpackToolbox
             </summary>
         </member>
+        <member name="T:RelhaxModpack.Windows.ModpackToolbox.DatabaseBeforeAfter">
+            <summary>
+            Allows the old and new versions of a SelectablePackage to be saved temporarily for comparing differences between two database structures
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.ModpackToolbox.DatabaseBeforeAfter.Before">
+            <summary>
+            The package reference for the database before changes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.ModpackToolbox.DatabaseBeforeAfter.After">
+            <summary>
+            The package reference for the database after changes
+            </summary>
+        </member>
+        <member name="T:RelhaxModpack.Windows.ModpackToolbox.DatabaseBeforeAfter2">
+            <summary>
+            Allows the old and new versions of a DatabasePackage to be saved temporarily for comparing differences between two database structures
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.ModpackToolbox.DatabaseBeforeAfter2.Before">
+            <summary>
+            The package reference for the database before changes
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Windows.ModpackToolbox.DatabaseBeforeAfter2.After">
+            <summary>
+            The package reference for the database after changes
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Windows.ModpackToolbox.CommandLineArg">
             <summary>
             The command line argument specified at application launch to show this window
@@ -8484,11 +8437,10 @@
             Create an instance of the ModSelectionList window
             </summary>
         </member>
-        <member name="M:RelhaxModpack.Windows.PackageSelectionList.ClearSelections(System.Collections.Generic.List{RelhaxModpack.Database.Category})">
+        <member name="M:RelhaxModpack.Windows.PackageSelectionList.ClearSelections(System.Collections.Generic.List{RelhaxModpack.Database.SelectablePackage})">
             <summary>
             Clears all selections in the given lists by setting the checked properties to false
             </summary>
-            <param name="ParsedCategoryList">The list of Categories</param>
         </member>
         <member name="M:RelhaxModpack.Windows.PackageSelectionList.InitializeComponent">
             <summary>
