@@ -53,5 +53,7 @@ namespace RelhaxModpack.Database
         public string PackageUID { get; set; } = string.Empty;
 
         public SelectablePackage ConflictingSelectablePackage { get; set; }
+
+        public SelectablePackage ParentSelectablePackage { get; set; }
     }
 }

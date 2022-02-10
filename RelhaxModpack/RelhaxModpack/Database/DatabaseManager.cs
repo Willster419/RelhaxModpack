@@ -1677,6 +1677,8 @@ namespace RelhaxModpack.Database
             {
                 foreach (ConflictingPackage conflictingPackageEntry in package.ConflictingPackagesNew)
                 {
+                    conflictingPackageEntry.ParentSelectablePackage = package;
+
                     if (string.IsNullOrEmpty(conflictingPackageEntry.PackageUID) && string.IsNullOrEmpty(conflictingPackageEntry.PackageName))
                         throw new BadMemeException($"The package {package.PackageName} conflicting package does not have a packageName or packageUID");
 
