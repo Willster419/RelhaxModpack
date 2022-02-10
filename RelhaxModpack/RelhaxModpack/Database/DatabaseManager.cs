@@ -2144,7 +2144,7 @@ namespace RelhaxModpack.Database
 
         private SelectablePackage GetSelectablePackageByUid(List<SelectablePackage> packages, string targetUid)
         {
-            return packages.First(pack => pack.UID.Equals(targetUid));
+            return packages.FirstOrDefault(pack => pack.UID.Equals(targetUid));
         }
 
         public SelectablePackage GetSelectablePackageByPackageName(string targetPackageName)
@@ -2154,7 +2154,7 @@ namespace RelhaxModpack.Database
 
         private SelectablePackage GetSelectablePackageByPackageName(List<SelectablePackage> packages, string targetPackageName)
         {
-            return packages.First(pack => pack.UID.Equals(targetPackageName));
+            return packages.FirstOrDefault(pack => pack.UID.Equals(targetPackageName));
         }
 
         /// <summary>
