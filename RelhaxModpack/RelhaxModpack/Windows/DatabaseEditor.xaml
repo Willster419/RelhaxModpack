@@ -717,7 +717,7 @@
                 </TabItem>
                 <TabItem x:Name="ConflictingPackagesTab" Header="Conflicting Packages">
                     <Grid Background="#FFE5E5E5">
-                        <ListBox x:Name="PackageConflictingPackagesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" MouseDoubleClick="PackageConflictingPackagesDisplay_MouseDoubleClick" DisplayMemberPath="ComponentInternalName"/>
+                        <ListBox x:Name="PackageConflictingPackagesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" MouseDoubleClick="PackageConflictingPackagesDisplay_MouseDoubleClick"/>
                         <Button Content="Remove Conflicting package" x:Name="ConflictingPackagesRemoveConflictingPackage" Tag="ConflictingPackagesButton1" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="171" Click="ConflictingPackagesRemoveConflictingPackage_Click"/>
                         <TextBlock x:Name="ConflictingPackagesMessagebox" HorizontalAlignment="Left" Height="20" Margin="0,209,0,0" TextWrapping="Wrap" Text="To add a package to the list, search it above and right click it" VerticalAlignment="Top" />
                     </Grid>

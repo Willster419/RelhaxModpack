@@ -922,6 +922,9 @@ namespace RelhaxModpack.Windows
                 ConflictingPackagesTab.Header = "Dependency Usage";
                 ConflictingPackagesMessagebox.Text = "List packages that use this dependency";
 
+                //set the property to use for the components added inside it
+                PackageConflictingPackagesDisplay.DisplayMemberPath = "ComponentInternalName";
+
                 //display all the dependencies and packages that use the selected dependency
                 //check dependencies that use this dependency
                 foreach (Dependency dependencyy in Dependencies)
@@ -988,10 +991,28 @@ namespace RelhaxModpack.Windows
                     PackageUserFilesDisplay.Items.Add(data.Pattern);
                 }
 
+                //reset the property to use for the components added inside it
                 PackageConflictingPackagesDisplay.Items.Clear();
-                foreach (string s in selectablePackage.ConflictingPackagesList)
+
+                if (string.IsNullOrEmpty(databaseManager.SchemaVersion) ||
+                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot0) ||
+                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot1))
                 {
-                    PackageConflictingPackagesDisplay.Items.Add(s);
+                    foreach (string s in selectablePackage.ConflictingPackagesList)
+                    {
+                        PackageConflictingPackagesDisplay.Items.Add(new ListBoxItem() { Tag = s, Content = s });
+                    }
+                }
+                else if (databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot2))
+                {
+                    foreach (ConflictingPackage conflictingPackage in selectablePackage.ConflictingPackagesNew)
+                    {
+                        PackageConflictingPackagesDisplay.Items.Add(new ListBoxItem() { Tag = conflictingPackage, Content = conflictingPackage.ToString() });
+                    }
+                }
+                else
+                {
+                    throw new BadMemeException("Invalid schema for displaying conflicting package element");
                 }
 
                 //set the conflicting packages tab
@@ -1177,7 +1198,25 @@ namespace RelhaxModpack.Windows
                 selectablePackage.Type = (SelectionTypes)PackageTypeDisplay.SelectedItem;
                 selectablePackage.Description = MacroUtils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
                 selectablePackage.UpdateComment = MacroUtils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
-                selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items.Cast<string>());
+
+                if (string.IsNullOrEmpty(databaseManager.SchemaVersion) ||
+                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot0) ||
+                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot1))
+                {
+                    selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items.Cast<string>());
+                }
+                else if (databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot2))
+                {
+                    selectablePackage.ConflictingPackagesNew.Clear();
+                    foreach (ListBoxItem listBoxItem in PackageConflictingPackagesDisplay.Items)
+                    {
+                        selectablePackage.ConflictingPackagesNew.Add(new ConflictingPackage(listBoxItem.Tag as ConflictingPackage));
+                    }
+                }
+                else
+                {
+                    throw new BadMemeException("Invalid schema for saving conflicting package element");
+                }
 
                 selectablePackage.UserFiles.Clear();
                 foreach (string uf in PackageUserFilesDisplay.Items)
@@ -1310,6 +1349,23 @@ namespace RelhaxModpack.Windows
             return false;
         }
 
+        private bool ConflictingPackagesModified(List<ConflictingPackage> conflictingPackages)
+        {
+            if (conflictingPackages.Count != PackageConflictingPackagesDisplay.Items.Count)
+                return true;
+
+            int i = 0;
+            foreach (ListBoxItem conflict in PackageConflictingPackagesDisplay.Items)
+            {
+                ConflictingPackage packageInListbox = conflict.Tag as ConflictingPackage;
+                if (!packageInListbox.IsEqual(conflictingPackages[i]))
+                    return true;
+                i++;
+            }
+
+            return false;
+        }
+
         private bool InstructionsModified(List<Instruction> instructions, ItemCollection listboxCollection)
         {
             if (instructions.Count != listboxCollection.Count)
@@ -1434,8 +1490,22 @@ namespace RelhaxModpack.Windows
                 if (MediasModified(selectablePackage.Medias))
                     return true;
 
-                if (ConflictingPackagesModified(selectablePackage.ConflictingPackagesList))
-                    return true;
+                if (string.IsNullOrEmpty(databaseManager.SchemaVersion) ||
+                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot0) ||
+                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot1))
+                {
+                    if (ConflictingPackagesModified(selectablePackage.ConflictingPackagesList))
+                        return true;
+                }
+                else if (databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot2))
+                {
+                    if (ConflictingPackagesModified(selectablePackage.ConflictingPackagesNew))
+                        return true;
+                }
+                else
+                {
+                    throw new BadMemeException("Invalid schema for displaying conflicting package element");
+                }
             }
             return false;
         }
@@ -2966,7 +3036,28 @@ namespace RelhaxModpack.Windows
                         }
                         Logging.Editor("Mouse right click with conflicting packages add, does not exist, adding");
 
-                        PackageConflictingPackagesDisplay.Items.Add(item.Package.PackageName);
+                        if (string.IsNullOrEmpty(databaseManager.SchemaVersion) ||
+                            databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot0) ||
+                            databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot1))
+                        {
+                            PackageConflictingPackagesDisplay.Items.Add(item.Package.PackageName);
+                        }
+                        else if (databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot2))
+                        {
+                            ListBoxItem lbi = new ListBoxItem();
+                            lbi.Tag = new ConflictingPackage()
+                            {
+                                PackageName = item.Package.PackageName,
+                                PackageUID = item.Package.UID,
+                                ParentSelectablePackage = item.Package as SelectablePackage,
+                                ConflictingSelectablePackage = databaseManager.GetSelectablePackageByUid(item.Package.UID)
+                            };
+                            PackageConflictingPackagesDisplay.Items.Add(lbi);
+                        }
+                        else
+                        {
+                            throw new BadMemeException("Invalid schema for displaying conflicting package element");
+                        }
 
                         UnsavedChanges = true;
                     }
@@ -3109,7 +3200,7 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            //items in list are string (conflict) or DatabasePackage or category
+            //items in list are conflict or DatabasePackage or category
             Logging.Editor("PackageConflictingPackagesDisplay_MouseDoubleClick(), selectedItem = {0}", LogLevel.Info, SelectedItem);
             Dispatcher.InvokeAsync(() =>
             {
@@ -3125,9 +3216,31 @@ namespace RelhaxModpack.Windows
                     category.EditorTreeViewItem.IsSelected = true;
                     SelectDatabaseObject(category, GetPackageTreeViewItem(GetDatabasePackage(SelectedItem)));
                 }
-                else if (PackageConflictingPackagesDisplay.SelectedItem is string)
+                else if (PackageConflictingPackagesDisplay.SelectedItem is ListBoxItem listBoxItem)
                 {
-                    Logging.Editor("Conflicting packages are not implemented for double click jump",LogLevel.Debug);
+                    SelectablePackage conflictingPackage = null;
+                    if (string.IsNullOrEmpty(databaseManager.SchemaVersion) ||
+                        databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot0) ||
+                        databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot1))
+                    {
+                        conflictingPackage = databaseManager.GetSelectablePackageByPackageName(listBoxItem.Tag as string);
+                    }
+                    else if (databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot2))
+                    {
+                        ConflictingPackage conflictingPackageEntry = listBoxItem.Tag as ConflictingPackage;
+                        if (conflictingPackageEntry != null)
+                            conflictingPackage = conflictingPackageEntry.ConflictingSelectablePackage;
+                    }
+                    else
+                    {
+                        throw new BadMemeException("Invalid schema for displaying conflicting package element");
+                    }
+
+                    if (conflictingPackage == null)
+                    {
+                        MessageBox.Show("Failed to find package in the database");
+                        return;
+                    }
                 }
             }, System.Windows.Threading.DispatcherPriority.Background);
         }
