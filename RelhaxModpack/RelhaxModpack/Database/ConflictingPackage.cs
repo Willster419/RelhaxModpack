@@ -17,6 +17,8 @@ namespace RelhaxModpack.Database
         {
             this.PackageName = conflictingPackageToCopy.PackageName;
             this.PackageUID = conflictingPackageToCopy.PackageUID;
+            this.ConflictingSelectablePackage = conflictingPackageToCopy.ConflictingSelectablePackage;
+            this.ParentSelectablePackage = conflictingPackageToCopy.ParentSelectablePackage;
         }
 
         #region Xml serialization V2
@@ -55,5 +57,16 @@ namespace RelhaxModpack.Database
         public SelectablePackage ConflictingSelectablePackage { get; set; }
 
         public SelectablePackage ParentSelectablePackage { get; set; }
+
+        public bool IsEqual(ConflictingPackage packageToCompare)
+        {
+            return packageToCompare.PackageName.Equals(this.PackageName) && packageToCompare.PackageUID.Equals(this.PackageUID);
+        }
+
+
+        public override string ToString()
+        {
+            return $"{nameof(PackageName)}: {PackageName}, {nameof(PackageUID)}: {PackageUID}";
+        }
     }
 }
