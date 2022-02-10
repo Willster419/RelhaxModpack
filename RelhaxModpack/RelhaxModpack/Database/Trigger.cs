@@ -50,7 +50,8 @@ namespace RelhaxModpack.Database
 
         public void Dispose()
         {
-            TriggerTask.Dispose();
+            if (TriggerTask != null)
+                TriggerTask.Dispose();
         }
     }
 }
