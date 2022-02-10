@@ -399,31 +399,30 @@ namespace RelhaxModpack
             if (!DisableTriggersForInstall)
             {
                 //process any packages that have triggers
-                //reset the internal list first
                 foreach (Trigger trig in Triggers)
                 {
-                    if (trig.Total != 0)
-                        trig.Total = 0;
-                    if (trig.NumberProcessed != 0)
-                        trig.NumberProcessed = 0;
+                    //reset the internal list first
+                    trig.Total = 0;
+                    trig.NumberProcessed = 0;
                     trig.Fired = false;
                     trig.TriggerTask = null;
                 }
-                foreach (DatabasePackage package in PackagesToInstallWithZipfile)
+
+                //match the trigger name in the package with the readonly triggers set in the installer
+                foreach (DatabasePackage package in DatabaseManager.PackagesToInstallWithTriggers)
                 {
-                    if (package.TriggersList.Count > 0)
+                    foreach (string triggerFromPackage in package.TriggersList)
                     {
-                        foreach (string triggerFromPackage in package.TriggersList)
+                        //in theory, each database package trigger is unique in each package AND in installer
+                        Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
+                        if (match == null)
                         {
-                            //in theory, each database package trigger is unique in each package AND in installer
-                            Trigger match = Triggers.Find(search => search.Name.ToLower().Equals(triggerFromPackage.ToLower()));
-                            if (match == null)
-                            {
-                                Logging.Error("trigger match is null (no match!) {0}", triggerFromPackage);
-                                continue;
-                            }
-                            match.Total++;
+                            Logging.Error("Trigger from package {0} has no matches (old/invalid trigger)?", triggerFromPackage);
+                            continue;
                         }
+
+                        //increment the total so during an install, we know how many to look for
+                        match.Total++;
                     }
                 }
             }
@@ -788,11 +787,13 @@ namespace RelhaxModpack
                ShortcutsTask,
                FontsTask
             */
+            //TODO: rather then polling for bools, using a semaphore or some sort of hardware level, thread safe blocking method would be better
             while(!(PatchTaskReadyForWait && ShortcutsTaskReadyForWait && FontsTaskReadyForWait && AtlasTasksReadyForWait))
             {
                 CancellationToken.ThrowIfCancellationRequested();
                 Task.Delay(200);
             }
+
             if(PatchTask != null)
                 concurrentTasksAfterMainExtractoin.Add(PatchTask);
             if (ShortcutsTask != null)
@@ -830,17 +831,10 @@ namespace RelhaxModpack
             if (!DisableTriggersForInstall)
             {
                 //check if any triggers are still running
-                foreach (Trigger trigger in Triggers)
-                {
-                    if (trigger.TriggerTask != null)
-                    {
-                        Logging.Debug("Start waiting for task {0} to complete at time {1}", trigger.Name, (int)InstallStopWatch.Elapsed.TotalMilliseconds);
-                        trigger.TriggerTask.Wait();
-                        Logging.Debug("Task {0} finished or was already done at time {1}", trigger.Name, (int)InstallStopWatch.Elapsed.TotalMilliseconds);
-                    }
-                    else
-                        Logging.Debug("Trigger task {0} is null, skipping", trigger.Name);
-                }
+                List<Task> tasksRunning = Triggers.Select(trig => trig.TriggerTask).ToList().FindAll(trigger => trigger != null && !trigger.IsCompleted);
+                Logging.Debug("Start waiting for triggered tasks to complete at time {1}", (int)InstallStopWatch.Elapsed.TotalMilliseconds);
+                Task.WaitAll(tasksRunning.ToArray());
+                Logging.Debug("Finished waiting for triggered tasks to complete at time {1}", (int)InstallStopWatch.Elapsed.TotalMilliseconds);
             }
 
             //report to log install is finished

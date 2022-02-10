@@ -105,6 +105,8 @@ namespace RelhaxModpack.Database
 
         public List<DatabasePackage>[] PackagesToInstallByInstallGroup { get { return orderedListPackagesToInstall; } }
 
+        public List<DatabasePackage> PackagesToInstallWithTriggers { get { return packagesToInstall?.FindAll(package => !string.IsNullOrWhiteSpace(package.Triggers)); } }
+
         public List<Patch> PatchesToInstall { get { return patchesToInstall; } }
 
         public List<XmlUnpack> XmlUnpacksToInstall { get { return xmlUnpacksToInstall; } }
