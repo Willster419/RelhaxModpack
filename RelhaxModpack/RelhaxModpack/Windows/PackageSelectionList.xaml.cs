@@ -1026,16 +1026,17 @@ namespace RelhaxModpack.Windows
                     category.CategoryHeader.Checked = false;
         }
 
-        //generic handler to disable the auto check like in forms, but for WPF
+        //generic handler for WPF components
         private void OnWPFComponentCheck(object sender, RoutedEventArgs e)
         {
             if (LoadingUI)
                 return;
-            if (sender is RelhaxWPFCheckBox cb)
+
+            if (sender is RelhaxWPFCheckBox)
             {
                 OnMultiPackageClick(sender, e);
             }
-            else if (sender is RelhaxWPFRadioButton rb)
+            else if (sender is RelhaxWPFRadioButton)
             {
                 OnSinglePackageClick(sender, e);
             }
@@ -1049,6 +1050,11 @@ namespace RelhaxModpack.Windows
 
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
+
+            if (spc.AnyConflictingPackages())
+            {
+
+            }
 
             if (!spc.IsStructureEnabled)
                 return;
@@ -1086,6 +1092,11 @@ namespace RelhaxModpack.Windows
             RelhaxComboBoxItem cb2 = relhaxWPFComboBox.SelectedItem as RelhaxComboBoxItem;
 
             SelectablePackage spc = cb2.Package;
+
+            if (spc.AnyConflictingPackages())
+            {
+
+            }
 
             if (!spc.IsStructureEnabled)
                 return;
@@ -1132,6 +1143,11 @@ namespace RelhaxModpack.Windows
 
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
+
+            if (spc.AnyConflictingPackages())
+            {
+
+            }
 
             if (!spc.IsStructureEnabled)
                 return;

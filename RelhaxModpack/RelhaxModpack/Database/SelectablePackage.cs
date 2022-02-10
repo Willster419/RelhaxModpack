@@ -930,6 +930,46 @@ namespace RelhaxModpack.Database
                 return true;
             }
         }
+
+        public bool AnyConflictingPackages()
+        {
+            if (ConflictingPackagesProcessed == null)
+            {
+                Logging.Debug(LogOptions.MethodName, "No conflicting packages to process");
+                return false;
+            }
+
+            foreach (SelectablePackage conflictingPackage in ConflictingPackagesProcessed)
+            {
+                if (conflictingPackage.Checked)
+                {
+                    Logging.Debug(LogOptions.MethodName, "Conflicting package found: {0}", conflictingPackage.PackageName);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void UncheckConflictingPackages(bool forced)
+        {
+            if (ConflictingPackagesProcessed == null && !forced)
+            {
+                Logging.Warning(LogOptions.MethodName, "No conflicting packages to process (is this intended)?");
+                return;
+            }
+
+            foreach (SelectablePackage conflictingPackage in ConflictingPackagesProcessed)
+            {
+                Logging.Debug("Unchecking conflicting package {0}", conflictingPackage.PackageName);
+                conflictingPackage.Checked = false;
+            }
+        }
+
+        public void ForceCheckPackage()
+        {
+            UncheckConflictingPackages(true);
+            this.Checked = true;
+        }
         #endregion
     }
 }
