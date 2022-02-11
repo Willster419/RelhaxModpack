@@ -7483,6 +7483,19 @@
             </summary>
             <remarks>This is *not* loaded from the xml file and is used internally</remarks>
         </member>
+        <member name="T:RelhaxModpack.Windows.ConflictingPackageDialog">
+            <summary>
+            Interaction logic for ConflictingPackageDialog.xaml
+            </summary>
+            <summary>
+            ConflictingPackageDialog
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Windows.ConflictingPackageDialog.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:RelhaxModpack.Windows.DatabaseAutomationRunner">
             <summary>
             Interaction logic for DatabaseAutomationRunner.xaml
