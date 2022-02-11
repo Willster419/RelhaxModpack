@@ -1053,7 +1053,8 @@ namespace RelhaxModpack.Windows
 
             if (spc.AnyConflictingPackages())
             {
-
+                if (!ConflictingPackageContinueOptionA(sender, spc, e))
+                    return;
             }
 
             if (!spc.IsStructureEnabled)
@@ -1095,7 +1096,8 @@ namespace RelhaxModpack.Windows
 
             if (spc.AnyConflictingPackages())
             {
-
+                if (!ConflictingPackageContinueOptionA(sender, spc, e))
+                    return;
             }
 
             if (!spc.IsStructureEnabled)
@@ -1146,7 +1148,8 @@ namespace RelhaxModpack.Windows
 
             if (spc.AnyConflictingPackages())
             {
-
+                if (!ConflictingPackageContinueOptionA(sender, spc, e))
+                    return;
             }
 
             if (!spc.IsStructureEnabled)
@@ -1316,6 +1319,35 @@ namespace RelhaxModpack.Windows
                 if (childPackage.Packages.Count > 0)
                     PropagateDownNotChecked(childPackage);
             }
+        }
+
+        private bool ConflictingPackageContinueOptionA(object sender, SelectablePackage selectablePackage, EventArgs e)
+        {
+            //returning true means continue with selection, "option A"
+            ConflictingPackageDialog conflictingPackageDialog = new ConflictingPackageDialog(ModpackSettings, selectablePackage);
+            conflictingPackageDialog.ShowDialog();
+
+            if (conflictingPackageDialog.OptionASelected)
+            {
+                Logging.Debug("User selected option a, unchecking all conflicting packages");
+                foreach (SelectablePackage conflictingPackage in selectablePackage.ConflictingPackagesProcessed)
+                {
+                    switch (conflictingPackage.Type)
+                    {
+                        case SelectionTypes.multi:
+                            OnMultiPackageClick(sender, e);
+                            break;
+                        case SelectionTypes.single1:
+                            OnSinglePackageClick(sender, e);
+                            break;
+                        case SelectionTypes.single_dropdown1:
+                        case SelectionTypes.single_dropdown2:
+                            OnSingleDDPackageClick(sender, e);
+                            break;
+                    }
+                }
+            }
+            return conflictingPackageDialog.OptionASelected;
         }
 
         private void ModTabGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)

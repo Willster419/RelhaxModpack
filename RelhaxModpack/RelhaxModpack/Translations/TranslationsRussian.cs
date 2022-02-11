@@ -651,6 +651,36 @@ namespace RelhaxModpack
             Russian.Add("creditsWargaming", "за создание легко автоматизируемой системы модификаций");
             Russian.Add("creditsUsersLikeU", "Таким пользователям, как вы");
             #endregion
+
+            #region Conflicting Packages Dialog
+            //Component: ConflictingPackageDialog
+            //Application window title
+            Russian.Add("ConflictingPackageDialog", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartA
+            //
+            Russian.Add("conflictingPackageMessagePartA", TranslationNeeded);
+
+            //Component: conflictingPackagePackageOfCategory
+            //
+            Russian.Add("conflictingPackagePackageOfCategory", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartB
+            //
+            Russian.Add("conflictingPackageMessagePartB", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartC
+            //
+            Russian.Add("conflictingPackageMessagePartC", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartD
+            //
+            Russian.Add("conflictingPackageMessagePartD", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartE
+            //
+            Russian.Add("conflictingPackageMessagePartE", TranslationNeeded);
+            #endregion
         }
     }
 }

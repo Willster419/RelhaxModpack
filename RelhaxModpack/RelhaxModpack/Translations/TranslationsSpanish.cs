@@ -666,6 +666,36 @@ namespace RelhaxModpack
             Spanish.Add("creditsWargaming", "Crear un método sencillo para automatizar el sistema de mods");
             Spanish.Add("creditsUsersLikeU", "Usuarios como usted");
             #endregion
+
+            #region Conflicting Packages Dialog
+            //Component: ConflictingPackageDialog
+            //Application window title
+            Spanish.Add("ConflictingPackageDialog", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartA
+            //
+            Spanish.Add("conflictingPackageMessagePartA", TranslationNeeded);
+
+            //Component: conflictingPackagePackageOfCategory
+            //
+            Spanish.Add("conflictingPackagePackageOfCategory", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartB
+            //
+            Spanish.Add("conflictingPackageMessagePartB", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartC
+            //
+            Spanish.Add("conflictingPackageMessagePartC", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartD
+            //
+            Spanish.Add("conflictingPackageMessagePartD", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartE
+            //
+            Spanish.Add("conflictingPackageMessagePartE", TranslationNeeded);
+            #endregion
         }
     }
 }

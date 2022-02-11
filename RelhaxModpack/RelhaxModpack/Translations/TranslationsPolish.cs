@@ -666,6 +666,36 @@ namespace RelhaxModpack
             Polish.Add("creditsWargaming", "Za stworzenie łatwego w automatyzacji systemu modów");
             Polish.Add("creditsUsersLikeU", "Dla użytkowników takich jak Ty");
             #endregion
+
+            #region Conflicting Packages Dialog
+            //Component: ConflictingPackageDialog
+            //Application window title
+            Polish.Add("ConflictingPackageDialog", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartA
+            //
+            Polish.Add("conflictingPackageMessagePartA", TranslationNeeded);
+
+            //Component: conflictingPackagePackageOfCategory
+            //
+            Polish.Add("conflictingPackagePackageOfCategory", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartB
+            //
+            Polish.Add("conflictingPackageMessagePartB", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartC
+            //
+            Polish.Add("conflictingPackageMessagePartC", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartD
+            //
+            Polish.Add("conflictingPackageMessagePartD", TranslationNeeded);
+
+            //Component: conflictingPackageMessagePartE
+            //
+            Polish.Add("conflictingPackageMessagePartE", TranslationNeeded);
+            #endregion
         }
     }
 }

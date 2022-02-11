@@ -2246,6 +2246,44 @@ namespace RelhaxModpack
             // Exlamation mark at the end is hard-coded. @Nullmaruzero
             English.Add("creditsUsersLikeU", "Users like you");
             #endregion
+
+            #region Conflicting Packages Dialog
+            //Component: ConflictingPackageDialog
+            //Application window title
+            English.Add("ConflictingPackageDialog", "Conflicting package dialog");
+
+            //Component: conflictingPackageMessageOptionA
+            //
+            English.Add("conflictingPackageMessageOptionA", "Option A");
+
+            //Component: conflictingPackageMessageOptionB
+            //
+            English.Add("conflictingPackageMessageOptionB", "Option B");
+
+            //Component: conflictingPackageMessagePartA
+            //
+            English.Add("conflictingPackageMessagePartA", "You have selected package \"{0}\", but it conflicts with the following package(s):");
+
+            //Component: conflictingPackagePackageOfCategory
+            //
+            English.Add("conflictingPackagePackageOfCategory", "- {0}, of category {1}");
+
+            //Component: conflictingPackageMessagePartB
+            //
+            English.Add("conflictingPackageMessagePartB", GetTranslatedString("conflictingPackageMessageOptionA") + ": Select the package, which will un-check all conflicting package(s)");
+
+            //Component: conflictingPackageMessagePartC
+            //
+            English.Add("conflictingPackageMessagePartC", GetTranslatedString("conflictingPackageMessageOptionB") + ": Don't select the package, which will keep the conflicting package(s)");
+
+            //Component: conflictingPackageMessagePartD
+            //
+            English.Add("conflictingPackageMessagePartD", "Closing the window will select option b");
+
+            //Component: conflictingPackageMessagePartE
+            //
+            English.Add("conflictingPackageMessagePartE", "Please select an option");
+            #endregion
         }
     }
 }

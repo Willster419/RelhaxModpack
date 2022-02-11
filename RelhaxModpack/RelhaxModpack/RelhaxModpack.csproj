@@ -351,6 +351,9 @@
     <Compile Include="Shortcuts\Shortcut.cs" />
     <Compile Include="Atlases\Texture.cs" />
     <Compile Include="Utilities\Structs\VersionInfos.cs" />
+    <Compile Include="Windows\ConflictingPackageDialog.xaml.cs">
+      <DependentUpon>ConflictingPackageDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DatabaseAutomationRunner.xaml.cs">
       <DependentUpon>DatabaseAutomationRunner.xaml</DependentUpon>
     </Compile>
@@ -569,6 +572,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AskCloseWoT.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ConflictingPackageDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
