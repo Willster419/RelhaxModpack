@@ -311,6 +311,11 @@ namespace RelhaxModpack.Windows
             //NO UI THREAD REQUIRED
             InitUsermods();
 
+            //link everything again now that the category exists (~10ms)
+            //MUST HAPPEN AFTER InitDatabaseUI()
+            //NO UI THREAD REQUIRED
+            databaseManager.ProcessDatabase();
+
             //kick off running the UI part of the loading
             //UI THREAD REQUIRED
             loadProgress.ChildCurrent = 0;
@@ -418,11 +423,6 @@ namespace RelhaxModpack.Windows
             //initialize the categories lists and tab items (~50ms)
             //UI THREAD REQUIRED
             InitDatabaseUI(ParsedCategoryList);
-
-            //link everything again now that the category exists (~10ms)
-            //MUST HAPPEN AFTER InitDatabaseUI()
-            //NO UI THREAD REQUIRED
-            databaseManager.ProcessDatabase();
 
             //run the loop for each category to create package UI objects (~8 sec)
             //UI THREAD REQUIRED
