@@ -1339,8 +1339,9 @@ namespace RelhaxModpack.Windows
                 return true;
 
             int i = 0;
-            foreach (string conflict in PackageConflictingPackagesDisplay.Items)
+            foreach (ListBoxItem item in PackageConflictingPackagesDisplay.Items)
             {
+                string conflict = item.Tag as string;
                 if (!conflict.Equals(conflictEntries[i]))
                     return true;
                 i++;
