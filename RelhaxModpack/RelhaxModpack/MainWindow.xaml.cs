@@ -163,8 +163,6 @@ namespace RelhaxModpack
                 Forms_ENG_EUButton,
                 Forms_GER_EUButton,
                 Forms_ENG_NAButton,
-                FacebookButton,
-                TwitterButton,
                 DiscordButton,
                 HomepageButton,
                 FindBugAddModButton,

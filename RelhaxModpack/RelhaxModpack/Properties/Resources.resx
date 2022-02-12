@@ -127,9 +127,6 @@
   <data name="EMail" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\EMail.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="facebook_brand" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\facebook brand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="flag_de" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\flag de.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -165,9 +162,6 @@
   </data>
   <data name="TeximpNet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Licences\TeximpNet.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="twitter_brand" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\twitter brand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WoT_brand_light_grey" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\WoT brand light grey.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

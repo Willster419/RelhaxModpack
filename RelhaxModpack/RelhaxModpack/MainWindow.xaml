@@ -296,13 +296,7 @@
             <ui:LinkButton Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="Forms_ENG_NAButton" x:Name="Forms_ENG_NAButton" Click="LinkButton_Click" Link="http://forum.worldoftanks.com/index.php?/topic/535868-">
                 <Image Source="Resources/Images/flag us.png" Stretch="None"/>
             </ui:LinkButton>
-            <ui:LinkButton Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="FacebookButton" x:Name="FacebookButton" Click="LinkButton_Click" Link="https://www.facebook.com/relhax.modpack.1">
-                <Image Source="Resources/Images/facebook brand.png" Stretch="None"/>
-            </ui:LinkButton>
-            <ui:LinkButton Grid.Column="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="TwitterButton" x:Name="TwitterButton" Click="LinkButton_Click" Link="https://twitter.com/relhaxmodpack">
-                <Image Source="Resources/Images/twitter brand.png" Stretch="None"/>
-            </ui:LinkButton>
-            <ui:LinkButton Grid.Column="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="DiscordButton" x:Name="DiscordButton" Click="LinkButton_Click" Link="https://discord.gg/58fdPvK">
+            <ui:LinkButton Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="DiscordButton" x:Name="DiscordButton" Click="LinkButton_Click" Link="https://discord.gg/58fdPvK">
                 <Image Source="Resources/Images/discord brand.png" Stretch="None"/>
             </ui:LinkButton>
             <ui:LinkButton Grid.Column="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="HomepageButton" x:Name="HomepageButton" Click="LinkButton_Click" Link="https://relhaxmodpack.com/">
@@ -332,7 +326,7 @@
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Stretch" x:Name="ApplicationVersionLabel" Tag="ApplicationVersionLabel"/>
-            <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Stretch" x:Name="DatabaseVersionLabel" Tag="DatabaseVersionLabel"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Stretch" x:Name="DatabaseVersionLabel" Tag="DatabaseVersionLabel"/>
         </Grid>
         <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top">
             <Border HorizontalAlignment="Right" Height="45"  VerticalAlignment="Top" Width="156" Tag="LanguageSelectionBorder" Margin="0,0,2,0">

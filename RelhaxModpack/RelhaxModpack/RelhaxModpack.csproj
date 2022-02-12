@@ -751,13 +751,11 @@
     <Resource Include="Resources\Images\discord brand.png" />
     <Resource Include="Resources\Images\donation.png" />
     <Resource Include="Resources\Images\EMail.png" />
-    <Resource Include="Resources\Images\facebook brand.png" />
     <Resource Include="Resources\Images\flag de.png" />
     <Resource Include="Resources\Images\flag gb.png" />
     <Resource Include="Resources\Images\flag us.png" />
     <Resource Include="Resources\Images\Home.png" />
     <Resource Include="Resources\Images\report.png" />
-    <Resource Include="Resources\Images\twitter brand.png" />
     <Resource Include="Resources\Images\WoT brand light grey.png" />
     <Resource Include="Resources\Images\wgmods_logo_full.png" />
     <Resource Include="Resources\Images\wgmods_package.png" />
