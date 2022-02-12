@@ -9857,11 +9857,6 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Properties.Resources.facebook_brand">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
         <member name="P:RelhaxModpack.Properties.Resources.flag_de">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -10006,11 +10001,6 @@
             
             The above co [rest of string was truncated]&quot;;.
              </summary>
-        </member>
-        <member name="P:RelhaxModpack.Properties.Resources.twitter_brand">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
         </member>
         <member name="P:RelhaxModpack.Properties.Resources.WindowsAPICodePack">
              <summary>
