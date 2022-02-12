@@ -310,7 +310,7 @@
                     <Image Source="Resources/Images/Home.png" Stretch="None"/>
                 </Border>
             </ui:LinkButton>
-            <ui:LinkButton Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="FindBugAddModButton" x:Name="FindBugAddModButton" Click="LinkButton_Click" Link="https://forums.relhaxmodpack.com/">
+            <ui:LinkButton Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="FindBugAddModButton" x:Name="FindBugAddModButton" Click="LinkButton_Click" Link="https://github.com/Willster419/RelhaxModpackDatabase/issues">
                 <Border Background="Transparent" Tag="FindBugAddModButtonImageBorder">
                     <Image Source="Resources/Images/report.png" Stretch="None"/>
                 </Border>
