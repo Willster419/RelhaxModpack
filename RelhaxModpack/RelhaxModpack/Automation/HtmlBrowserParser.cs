@@ -93,8 +93,15 @@ namespace RelhaxModpack.Automation
 
         public void Dispose()
         {
-            BrowserManager.BrowserCreated -= this.BrowserCreated;
-            ((IDisposable)BrowserManager).Dispose();
+            if (BrowserManager != null)
+            {
+                BrowserManager.BrowserCreated -= this.BrowserCreated;
+                ((IDisposable)BrowserManager).Dispose();
+            }
+            else
+            {
+                Logging.Warning(LogOptions.MethodName, "BrowserManager is already null (is this the intent)?");
+            }
             ((IDisposable)cancellationTokenSource).Dispose();
         }
     }
