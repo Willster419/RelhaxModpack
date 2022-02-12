@@ -3239,7 +3239,7 @@ namespace RelhaxModpack.Windows
 
                     if (conflictingPackage == null)
                     {
-                        MessageBox.Show("Failed to find package in the database");
+                        MessageBox.Show("Cannot add a package that isn't a SelectablePackage");
                         return;
                     }
                 }
