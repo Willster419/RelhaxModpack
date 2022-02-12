@@ -37,8 +37,8 @@ namespace RelhaxModpack.Automation
 
         public FileHashComparer()
         {
-            hashProgressA = new RelhaxProgress();
-            hashProgressB = new RelhaxProgress();
+            hashProgressA = new RelhaxProgress() { ChildCurrentProgress = "barWithTextChild" };
+            hashProgressB = new RelhaxProgress() { ChildCurrentProgress = "barWithTextChild" };
         }
 
         public async Task ComputeHashA(string filenameA)
