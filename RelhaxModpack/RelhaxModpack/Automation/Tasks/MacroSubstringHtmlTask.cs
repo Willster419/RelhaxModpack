@@ -65,7 +65,10 @@ namespace RelhaxModpack.Automation.Tasks
         protected override void ProcessEscapeCharacters()
         {
             base.ProcessEscapeCharacters();
-            stringWithValue = stringWithValue.Replace("&quot;", "\"").Replace("&apos;", "'").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&");
+            if (string.IsNullOrEmpty(stringWithValue))
+                return;
+            else
+                stringWithValue = stringWithValue.Replace("&quot;", "\"").Replace("&apos;", "'").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&");
         }
 
         public override void ProcessTaskResults()
