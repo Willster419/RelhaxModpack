@@ -200,6 +200,11 @@ namespace RelhaxModpack.Database
                     ConflictingPackagesNew.Add(conflictingPackage);
                 }
             }
+            else if (ConflictingPackagesNew.Count > 0)
+            {
+                foreach (ConflictingPackage package in ConflictingPackagesNew)
+                    package.ParentSelectablePackage = this;
+            }
         }
 
         protected override void OnStartedSavingToXml(XElement propertyElement, string targetSchemaVersion)
