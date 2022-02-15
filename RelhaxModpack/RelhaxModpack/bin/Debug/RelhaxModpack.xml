@@ -1268,31 +1268,6 @@
             <param name="docToMakeElementsFrom">The document needed to create xml elements and attributes</param>
             <param name="nameToSaveElementsBy">The string name to save the xml element name by</param>
         </member>
-        <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessPackageLinks">
-            <summary>
-            Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessPackageLinks(RelhaxModpack.Database.SelectablePackage,RelhaxModpack.Database.Category,RelhaxModpack.Database.SelectablePackage)">
-            <summary>
-            Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
-            </summary>
-            <param name="sp">The package to perform linking on</param>
-            <param name="cat">The category that the SelectablePackagesp belongs to</param>
-            <param name="parent">The tree parent of sp</param>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessLevelPerPackage">
-            <summary>
-            Assigns the level parameter to the packages based on how recursively deep they are in the package sub lists
-            </summary>
-        </member>
-        <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessLevelPerPackage(System.Collections.Generic.List{RelhaxModpack.Database.SelectablePackage},System.Int32)">
-            <summary>
-            Assigns the level parameter to the packages based on how recursively deep they are in the package sub lists
-            </summary>
-            <param name="packages">The list of package values to</param>
-            <param name="level">The level to assign the level parameter</param>
-        </member>
         <member name="M:RelhaxModpack.Database.DatabaseManager.ProcessDependencyPackageRefrences">
             <summary>
             Links the databasePackage objects with dependencies objects to have those objects link references to the parent and the dependency object
@@ -1689,6 +1664,11 @@
         <member name="P:RelhaxModpack.Database.DatabasePackage.CompleteUIDPath">
             <summary>
             Provides a complete tree style path to the package using its UID, starting with the category
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.Database.DatabasePackage.ProcessInstructions">
+            <summary>
+            Add this package reference to each instruction entry
             </summary>
         </member>
         <member name="T:RelhaxModpack.Database.Dependency">
@@ -2114,11 +2094,6 @@
             <summary>
             A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
             Refer to examples for more information
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Database.SelectablePackage.ConflictingPackagesList">
-            <summary>
-            Returns a list of the ConflictingPackages string property
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.ShowInSearchList">
