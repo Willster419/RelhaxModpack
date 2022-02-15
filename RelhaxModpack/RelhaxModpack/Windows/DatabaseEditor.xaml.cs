@@ -3156,6 +3156,9 @@ namespace RelhaxModpack.Windows
                         MessageBox.Show("Cannot add a package that isn't a SelectablePackage");
                         return;
                     }
+
+                    conflictingPackage.EditorTreeViewItem.BringIntoView();
+                    conflictingPackage.EditorTreeViewItem.IsSelected = true;
                 }
             }, System.Windows.Threading.DispatcherPriority.Background);
         }
