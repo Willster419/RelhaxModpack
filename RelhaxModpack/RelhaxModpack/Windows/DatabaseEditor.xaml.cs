@@ -2986,6 +2986,7 @@ namespace RelhaxModpack.Windows
                             ConflictingSelectablePackage = databaseManager.GetSelectablePackageByUid(item.Package.UID)
                         };
                         PackageConflictingPackagesDisplay.Items.Add(lbi);
+                        databaseManager.ProcessDatabase();
 
                         UnsavedChanges = true;
                     }
