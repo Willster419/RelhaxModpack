@@ -1597,7 +1597,7 @@ namespace RelhaxModpack.Database
                         if (conflictingPackage != null)
                         {
                             conflictingPackageEntry.PackageUID = conflictingPackage.UID;
-                        } 
+                        }
                     }
                     else
                     {
@@ -1622,7 +1622,7 @@ namespace RelhaxModpack.Database
                                 return false;
                             return _package.UID.Equals(conflictingPackageEntry.PackageUID);
                         });
-                        if (alreadyConflictingEntry!= null)
+                        if (alreadyConflictingEntry != null)
                         {
                             Logging.Warning($"Package {package.PackageName} already has conflicting package entry '{lookupProperty}'. Skipping this entry.");
                             package.ConflictingPackagesNew.Remove(conflictingPackageEntry);
@@ -1632,6 +1632,29 @@ namespace RelhaxModpack.Database
                     }
 
                     conflictingPackageEntry.ConflictingSelectablePackage = conflictingPackage;
+                }
+            }
+
+            //now check that the package that it conflicts with is also entered as conflicting with the original package
+            //(if it is listed in package A that it conflicts with package B, then it stands to reason that package B should have a corresponding entry)
+            List<SelectablePackage> _packages = GetFlatSelectablePackageList().FindAll(pack => pack.ConflictingPackagesNew != null && pack.ConflictingPackagesNew.Count > 0);
+            foreach (SelectablePackage _package in packages)
+            {
+                foreach (SelectablePackage conflictingPackage in _package.ConflictingPackagesProcessed)
+                {
+                    ConflictingPackage result = conflictingPackage.ConflictingPackagesNew.Find(_ => _.PackageUID.Equals(_package.UID));
+                    if (result == null)
+                    {
+                        conflictingPackage.ConflictingPackagesNew.Add(new ConflictingPackage()
+                        {
+                            LoadedSchemaVersion = conflictingPackage.LoadedSchemaVersion,
+                            PackageName = _package.PackageName,
+                            PackageUID = _package.UID,
+                            ParentSelectablePackage = conflictingPackage,
+                            ConflictingSelectablePackage = _package
+                        });
+                        Logging.Info($"Package {_package.PackageName} is set to conflict with {conflictingPackage.PackageName}, but {conflictingPackage.PackageName} does not have a matching entry for {_package.PackageName}. It was created");
+                    }
                 }
             }
         }
