@@ -1579,17 +1579,21 @@ namespace RelhaxModpack.Database
                 for (int i = 0; i < package.ConflictingPackagesNew.Count; i++)
                 {
                     ConflictingPackage conflictingPackageEntry = package.ConflictingPackagesNew[i];
-                    conflictingPackageEntry.ParentSelectablePackage = package;
 
                     if (string.IsNullOrEmpty(conflictingPackageEntry.PackageUID) && string.IsNullOrEmpty(conflictingPackageEntry.PackageName))
-                        throw new BadMemeException($"The package {package.PackageName} conflicting package does not have a packageName or packageUID");
+                    {
+                        Logging.Error($"The package {package.PackageName} conflicting package entry {i} does not have a packageName or packageUID. It was removed.");
+                        package.ConflictingPackagesNew.Remove(conflictingPackageEntry);
+                        i--;
+                        continue;
+                    }
 
                     SelectablePackage conflictingPackage;
                     string lookupProperty;
                     if (string.IsNullOrEmpty(conflictingPackageEntry.PackageUID))
                     {
                         lookupProperty = conflictingPackageEntry.PackageName;
-                        conflictingPackage = GetSelectablePackageByPackageName(packages, conflictingPackageEntry.PackageName);
+                        conflictingPackage = GetSelectablePackageByPackageName(conflictingPackageEntry.PackageName);
                         if (conflictingPackage != null)
                         {
                             conflictingPackageEntry.PackageUID = conflictingPackage.UID;
@@ -1598,7 +1602,7 @@ namespace RelhaxModpack.Database
                     else
                     {
                         lookupProperty = conflictingPackageEntry.PackageUID;
-                        conflictingPackage = GetSelectablePackageByUid(packages, conflictingPackageEntry.PackageUID);
+                        conflictingPackage = GetSelectablePackageByUid(conflictingPackageEntry.PackageUID);
                     }
 
                     if (conflictingPackage == null)
@@ -1606,6 +1610,25 @@ namespace RelhaxModpack.Database
                         Logging.Error($"Package {package.PackageName} conflicting package failed to look up a package by property '{lookupProperty}'. It was removed.");
                         package.ConflictingPackagesNew.Remove(conflictingPackageEntry);
                         i--;
+                        continue;
+                    }
+
+                    //make sure the entry doesn't already exist
+                    if (package.ConflictingPackagesProcessed != null && package.ConflictingPackagesProcessed.Count > 0)
+                    {
+                        SelectablePackage alreadyConflictingEntry = package.ConflictingPackagesProcessed.Find(_package =>
+                        {
+                            if (_package == null)
+                                return false;
+                            return _package.UID.Equals(conflictingPackageEntry.PackageUID);
+                        });
+                        if (alreadyConflictingEntry!= null)
+                        {
+                            Logging.Warning($"Package {package.PackageName} already has conflicting package entry '{lookupProperty}'. Skipping this entry.");
+                            package.ConflictingPackagesNew.Remove(conflictingPackageEntry);
+                            i--;
+                            continue;
+                        }
                     }
 
                     conflictingPackageEntry.ConflictingSelectablePackage = conflictingPackage;
@@ -2049,7 +2072,7 @@ namespace RelhaxModpack.Database
 
         private SelectablePackage GetSelectablePackageByPackageName(List<SelectablePackage> packages, string targetPackageName)
         {
-            return packages.FirstOrDefault(pack => pack.UID.Equals(targetPackageName));
+            return packages.FirstOrDefault(pack => pack.PackageName.Equals(targetPackageName));
         }
 
         /// <summary>
