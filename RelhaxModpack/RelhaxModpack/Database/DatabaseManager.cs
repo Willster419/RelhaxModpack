@@ -47,6 +47,8 @@ namespace RelhaxModpack.Database
 
         public const string DocumentVersion1V2 = "1.2";
 
+        public const string LatestSchema = XmlComponent.SchemaV1Dot2;
+
         public const string WoTClientVersionXmlString = "version";
 
         public const string WoTOnlineFolderVersionXmlString = "onlineFolder";
@@ -1521,116 +1523,14 @@ namespace RelhaxModpack.Database
         #region Process database after loading
         public void ProcessDatabase()
         {
-            CreateTopLevelParents();
-            ProcessPackageLinks();
-            ProcessLevelPerPackage();
+            foreach (Category category in ParsedCategoryList)
+            {
+                category.DatabaseManager = this;
+                category.ProcessPackages();
+            }
+
             ProcessDependencyPackageRefrences();
             ProcessConflictingPackages();
-            ProcessInstructions(InstructionsType.Atlas);
-            ProcessInstructions(InstructionsType.Shortcut);
-            ProcessInstructions(InstructionsType.UnpackCopy);
-            ProcessInstructions(InstructionsType.Patch);
-        }
-
-        private void CreateTopLevelParents()
-        {
-            foreach (Category cat in ParsedCategoryList)
-            {
-                if (cat.CategoryHeader != null)
-                    Logging.Warning("The category {0} already has a category header, overwriting", cat.Name);
-                cat.CategoryHeader = new SelectablePackage()
-                {
-                    Name = string.Format("----------[{0}]----------", cat.Name),
-                    TabIndex = cat.TabPage,
-                    ParentCategory = cat,
-                    Type = SelectionTypes.multi,
-                    Visible = true,
-                    Enabled = true,
-                    Level = -1,
-                    PackageName = string.Format("Category_{0}_Header", cat.Name.Replace(' ', '_')),
-                    Packages = cat.Packages
-                };
-            }
-        }
-
-        /// <summary>
-        /// Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
-        /// </summary>
-        private void ProcessPackageLinks()
-        {
-            foreach (Category cat in ParsedCategoryList)
-            {
-                List<SelectablePackage> packagesToItterate;
-                if (cat.CategoryHeader != null)
-                {
-                    packagesToItterate = cat.CategoryHeader.Packages;
-                    cat.CategoryHeader.Parent = cat.CategoryHeader;
-                    cat.CategoryHeader.TopParent = cat.CategoryHeader;
-                }
-                else
-                {
-                    packagesToItterate = cat.Packages;
-                }
-                foreach (SelectablePackage sp in packagesToItterate)
-                {
-                    ProcessPackageLinks(sp, cat, cat.CategoryHeader);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Links all the references (like parent, etc) for each class object making it possible to traverse the list tree in memory
-        /// </summary>
-        /// <param name="sp">The package to perform linking on</param>
-        /// <param name="cat">The category that the SelectablePackagesp belongs to</param>
-        /// <param name="parent">The tree parent of sp</param>
-        private void ProcessPackageLinks(SelectablePackage sp, Category cat, SelectablePackage parent)
-        {
-            sp.Parent = parent;
-            sp.TopParent = cat.CategoryHeader;
-            sp.ParentCategory = cat;
-            if (sp.Packages.Count > 0)
-            {
-                foreach (SelectablePackage sp2 in sp.Packages)
-                {
-                    ProcessPackageLinks(sp2, cat, sp);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Assigns the level parameter to the packages based on how recursively deep they are in the package sub lists
-        /// </summary>
-        private void ProcessLevelPerPackage()
-        {
-            //root level direct form category is 0
-            int startingLevel = 0;
-            foreach (Category cat in ParsedCategoryList)
-            {
-                foreach (SelectablePackage package in cat.Packages)
-                {
-                    package.Level = startingLevel;
-                    if (package.Packages.Count > 0)
-                        //increase the level BEFORE it calls the method
-                        ProcessLevelPerPackage(package.Packages, startingLevel + 1);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Assigns the level parameter to the packages based on how recursively deep they are in the package sub lists
-        /// </summary>
-        /// <param name="packages">The list of package values to</param>
-        /// <param name="level">The level to assign the level parameter</param>
-        private void ProcessLevelPerPackage(List<SelectablePackage> packages, int level)
-        {
-            foreach (SelectablePackage package in packages)
-            {
-                package.Level = level;
-                if (package.Packages.Count > 0)
-                    //increase the level BEFORE it calls the method
-                    ProcessLevelPerPackage(package.Packages, level + 1);
-            }
         }
 
         /// <summary>
@@ -1666,7 +1566,6 @@ namespace RelhaxModpack.Database
                     if (string.IsNullOrEmpty(logic.PackageUID))
                     {
                         logic.PackageUID = logic.DependencyPackageRefrence.UID;
-                        Logging.Warning($"The dependency reference {logic.PackageName} of package {componentWithDependencies.ComponentInternalName} has been updated to set the package UID of {logic.PackageUID}. The database should be saved");
                     }
                 }
             }
@@ -1677,8 +1576,9 @@ namespace RelhaxModpack.Database
             List<SelectablePackage> packages = GetFlatSelectablePackageList().FindAll(pack => pack.ConflictingPackagesNew != null && pack.ConflictingPackagesNew.Count > 0);
             foreach (SelectablePackage package in packages)
             {
-                foreach (ConflictingPackage conflictingPackageEntry in package.ConflictingPackagesNew)
+                for (int i = 0; i < package.ConflictingPackagesNew.Count; i++)
                 {
+                    ConflictingPackage conflictingPackageEntry = package.ConflictingPackagesNew[i];
                     conflictingPackageEntry.ParentSelectablePackage = package;
 
                     if (string.IsNullOrEmpty(conflictingPackageEntry.PackageUID) && string.IsNullOrEmpty(conflictingPackageEntry.PackageName))
@@ -1690,8 +1590,10 @@ namespace RelhaxModpack.Database
                     {
                         lookupProperty = conflictingPackageEntry.PackageName;
                         conflictingPackage = GetSelectablePackageByPackageName(packages, conflictingPackageEntry.PackageName);
-                        conflictingPackageEntry.PackageUID = conflictingPackage.UID;
-                        Logging.Warning($"The conflicting entry {lookupProperty} did not have a UID assigned, the database should now be saved");
+                        if (conflictingPackage != null)
+                        {
+                            conflictingPackageEntry.PackageUID = conflictingPackage.UID;
+                        } 
                     }
                     else
                     {
@@ -1700,22 +1602,15 @@ namespace RelhaxModpack.Database
                     }
 
                     if (conflictingPackage == null)
-                        throw new BadMemeException($"Package {package.PackageName} conflicting package failed to look up a package by property '{lookupProperty}'");
+                    {
+                        Logging.Error($"Package {package.PackageName} conflicting package failed to look up a package by property '{lookupProperty}'. It was removed.");
+                        package.ConflictingPackagesNew.Remove(conflictingPackageEntry);
+                        i--;
+                    }
 
                     conflictingPackageEntry.ConflictingSelectablePackage = conflictingPackage;
                 }
             }
-        }
-
-        private void ProcessInstructions(InstructionsType instructionsType)
-        {
-            //filter out packages that don't have any instructions of the given type
-            List<DatabasePackage> packagesWithInstructions = GetFlatList().FindAll(package => package.GetInstructions(instructionsType) != null && package.GetInstructions(instructionsType).Count > 0);
-
-            //attach the packages to the instructions
-            foreach (DatabasePackage package in packagesWithInstructions)
-                foreach (Instruction instruction in package.GetInstructions(instructionsType))
-                    instruction.Package = package;
         }
         #endregion
 

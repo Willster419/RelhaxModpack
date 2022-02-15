@@ -7,6 +7,7 @@ using System.Text;
 using RelhaxModpack.Utilities;
 using RelhaxModpack.Utilities.Enums;
 using RelhaxModpack.Settings;
+using System.Xml.Linq;
 
 namespace RelhaxModpack.Database
 {
@@ -175,6 +176,55 @@ namespace RelhaxModpack.Database
             xmlDatabaseProperties.InsertRange(indexToInsertBelow, xmlDatabasePropertiesAddAfter);
             xmlDatabaseProperties.Add(new XmlDatabaseProperty() { XmlName = nameof(Packages), XmlEntryType = Utilities.Enums.XmlEntryType.XmlElement, PropertyName = nameof(Packages) });
             return xmlDatabaseProperties;
+        }
+
+        protected override void OnFinishedLoadingFromXml(XElement propertyElement, bool loadStatus)
+        {
+            base.OnFinishedLoadingFromXml(propertyElement, loadStatus);
+
+            if (!string.IsNullOrEmpty(ConflictingPackages) && ConflictingPackagesNew.Count == 0)
+            {
+                string[] conflictingPackagesByPackageName = ConflictingPackages.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string conflictingPackageName in conflictingPackagesByPackageName)
+                {
+                    //convert the old package references to the new format
+                    ConflictingPackage conflictingPackage = new ConflictingPackage()
+                    {
+                        ParentSelectablePackage = this,
+                        ConflictingSelectablePackage = null,
+                        LoadedSchemaVersion = this.LoadedSchemaVersion,
+                        PackageName = conflictingPackageName,
+                        PackageUID = string.Empty
+                    };
+                    ConflictingPackagesNew.Add(conflictingPackage);
+                }
+            }
+        }
+
+        protected override void OnStartedSavingToXml(XElement propertyElement, string targetSchemaVersion)
+        {
+            base.OnStartedSavingToXml(propertyElement, targetSchemaVersion);
+
+            if (ConflictingPackagesProcessed != null && ConflictingPackagesProcessed.Count > 0)
+            {
+                bool loadedConflictingPackagesSchemaIsOld = string.IsNullOrEmpty(LoadedSchemaVersion) || LoadedSchemaVersion.Equals(XmlComponent.SchemaV1Dot0) || LoadedSchemaVersion.Equals(XmlComponent.SchemaV1Dot1);
+                bool targetConflictingPackagesSchemaIsOld = string.IsNullOrEmpty(targetSchemaVersion) || targetSchemaVersion.Equals(XmlComponent.SchemaV1Dot0) || targetSchemaVersion.Equals(XmlComponent.SchemaV1Dot1);
+
+                if (loadedConflictingPackagesSchemaIsOld && targetConflictingPackagesSchemaIsOld)
+                {
+                    //need to convert the entries of conflictingPackages to the simple packageName format
+                    string[] conflictingPackagesByPackagename = this.ConflictingPackagesProcessed.Select(conf => conf.PackageName).ToArray();
+                    ConflictingPackages = string.Join(",", conflictingPackagesByPackagename);
+                }
+                else if (loadedConflictingPackagesSchemaIsOld && !targetConflictingPackagesSchemaIsOld)
+                {
+                    //need to remove the old xml entry for conflicting packages and replace it with our new one
+                    XElement element = propertyElement.Elements().ToList().Find(elementToFind => elementToFind.Name.LocalName.ToLower().Equals(nameof(ConflictingPackages).ToLower()));
+                    if (element != null)
+                        element.Remove();
+                }
+            }
         }
         #endregion
 
@@ -505,15 +555,8 @@ namespace RelhaxModpack.Database
         /// A list of any SelectablePackages that conflict with this mod. A conflict will result the package not being processed.
         /// Refer to examples for more information
         /// </summary>
+        [Obsolete("The ConflictingPackages property has been replaced with ConflictingPackagesNew")]
         public string ConflictingPackages { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Returns a list of the ConflictingPackages string property
-        /// </summary>
-        public List<string> ConflictingPackagesList
-        {
-            get { return ConflictingPackages.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
-        }
 
         public List<ConflictingPackage> ConflictingPackagesNew { get; set; } = new List<ConflictingPackage>();
 
@@ -531,7 +574,6 @@ namespace RelhaxModpack.Database
         /// Toggle if the package should appear in the search list
         /// </summary>
         public bool ShowInSearchList { get; set; } = true;
-
         #endregion
 
         #region UI Properties Shared

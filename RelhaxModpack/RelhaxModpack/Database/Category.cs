@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Xml.Linq;
 using System.Reflection;
+using RelhaxModpack.Utilities.Enums;
 
 namespace RelhaxModpack.Database
 {
@@ -119,6 +120,30 @@ namespace RelhaxModpack.Database
                 continueProcessingProperty = false;
             }
         }
+
+        protected override void OnFinishedLoadingFromXml(XElement propertyElement, bool loadStatus)
+        {
+            base.OnFinishedLoadingFromXml(propertyElement, loadStatus);
+
+            //create the top parent category header
+            if (CategoryHeader != null)
+                Logging.Warning("The category {0} already has a category header, overwriting", Name);
+            CategoryHeader = new SelectablePackage()
+            {
+                Name = string.Format("----------[{0}]----------", Name),
+                TabIndex = TabPage,
+                ParentCategory = this,
+                Type = SelectionTypes.multi,
+                Visible = true,
+                Enabled = true,
+                Level = -1,
+                PackageName = string.Format("Category_{0}_Header", Name.Replace(' ', '_')),
+                Packages = Packages
+            };
+            //also assign the parent references
+            CategoryHeader.Parent = CategoryHeader;
+            CategoryHeader.TopParent = CategoryHeader;
+        }
         #endregion
 
         #region Database Properties
@@ -171,6 +196,8 @@ namespace RelhaxModpack.Database
         #endregion
 
         #region Other Properties and Methods
+        public DatabaseManager DatabaseManager { get; set; }
+
         /// <summary>
         /// Sorts the Categories by their name property. Currently not implemented.
         /// </summary>
@@ -258,6 +285,26 @@ namespace RelhaxModpack.Database
                     anyPackages = true;
             }
             return anyPackages;
+        }
+
+        public void ProcessPackages()
+        {
+            foreach (SelectablePackage sp in Packages)
+            {
+                ProcessPackages(sp, CategoryHeader, 0);
+            }
+        }
+
+        private void ProcessPackages(SelectablePackage sp, SelectablePackage parent, int level)
+        {
+            sp.Parent = parent;
+            sp.TopParent = this.CategoryHeader;
+            sp.ParentCategory = this;
+            sp.Level = level;
+            foreach (SelectablePackage sp2 in sp.Packages)
+            {
+                ProcessPackages(sp2, sp, level + 1);
+            }
         }
         #endregion
     }

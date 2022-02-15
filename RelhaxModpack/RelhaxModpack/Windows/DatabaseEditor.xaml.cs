@@ -994,25 +994,9 @@ namespace RelhaxModpack.Windows
                 //reset the property to use for the components added inside it
                 PackageConflictingPackagesDisplay.Items.Clear();
 
-                if (string.IsNullOrEmpty(databaseManager.SchemaVersion) ||
-                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot0) ||
-                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot1))
+                foreach (ConflictingPackage conflictingPackage in selectablePackage.ConflictingPackagesNew)
                 {
-                    foreach (string s in selectablePackage.ConflictingPackagesList)
-                    {
-                        PackageConflictingPackagesDisplay.Items.Add(new ListBoxItem() { Tag = s, Content = s });
-                    }
-                }
-                else if (databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot2))
-                {
-                    foreach (ConflictingPackage conflictingPackage in selectablePackage.ConflictingPackagesNew)
-                    {
-                        PackageConflictingPackagesDisplay.Items.Add(new ListBoxItem() { Tag = conflictingPackage, Content = conflictingPackage.ToString() });
-                    }
-                }
-                else
-                {
-                    throw new BadMemeException("Invalid schema for displaying conflicting package element");
+                    PackageConflictingPackagesDisplay.Items.Add(new ListBoxItem() { Tag = conflictingPackage, Content = conflictingPackage.ToString() });
                 }
 
                 //set the conflicting packages tab
@@ -1199,23 +1183,10 @@ namespace RelhaxModpack.Windows
                 selectablePackage.Description = MacroUtils.MacroReplace(PackageDescriptionDisplay.Text,ReplacementTypes.TextEscape);
                 selectablePackage.UpdateComment = MacroUtils.MacroReplace(PackageUpdateNotesDisplay.Text,ReplacementTypes.TextEscape);
 
-                if (string.IsNullOrEmpty(databaseManager.SchemaVersion) ||
-                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot0) ||
-                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot1))
+                selectablePackage.ConflictingPackagesNew.Clear();
+                foreach (ListBoxItem listBoxItem in PackageConflictingPackagesDisplay.Items)
                 {
-                    selectablePackage.ConflictingPackages = string.Join(",", PackageConflictingPackagesDisplay.Items.Cast<string>());
-                }
-                else if (databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot2))
-                {
-                    selectablePackage.ConflictingPackagesNew.Clear();
-                    foreach (ListBoxItem listBoxItem in PackageConflictingPackagesDisplay.Items)
-                    {
-                        selectablePackage.ConflictingPackagesNew.Add(new ConflictingPackage(listBoxItem.Tag as ConflictingPackage));
-                    }
-                }
-                else
-                {
-                    throw new BadMemeException("Invalid schema for saving conflicting package element");
+                    selectablePackage.ConflictingPackagesNew.Add(new ConflictingPackage(listBoxItem.Tag as ConflictingPackage));
                 }
 
                 selectablePackage.UserFiles.Clear();
@@ -1326,23 +1297,6 @@ namespace RelhaxModpack.Windows
                 if (!media.URL.Equals(mediaInDatabase.URL))
                     return true;
                 if (!media.MediaType.Equals(mediaInDatabase.MediaType))
-                    return true;
-                i++;
-            }
-
-            return false;
-        }
-
-        private bool ConflictingPackagesModified(List<string> conflictEntries)
-        {
-            if (conflictEntries.Count != PackageConflictingPackagesDisplay.Items.Count)
-                return true;
-
-            int i = 0;
-            foreach (ListBoxItem item in PackageConflictingPackagesDisplay.Items)
-            {
-                string conflict = item.Tag as string;
-                if (!conflict.Equals(conflictEntries[i]))
                     return true;
                 i++;
             }
@@ -1491,22 +1445,8 @@ namespace RelhaxModpack.Windows
                 if (MediasModified(selectablePackage.Medias))
                     return true;
 
-                if (string.IsNullOrEmpty(databaseManager.SchemaVersion) ||
-                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot0) ||
-                    databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot1))
-                {
-                    if (ConflictingPackagesModified(selectablePackage.ConflictingPackagesList))
-                        return true;
-                }
-                else if (databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot2))
-                {
-                    if (ConflictingPackagesModified(selectablePackage.ConflictingPackagesNew))
-                        return true;
-                }
-                else
-                {
-                    throw new BadMemeException("Invalid schema for displaying conflicting package element");
-                }
+                if (ConflictingPackagesModified(selectablePackage.ConflictingPackagesNew))
+                    return true;
             }
             return false;
         }
@@ -3024,11 +2964,11 @@ namespace RelhaxModpack.Windows
                     //if it's the right mouse and we're in the conflicting packages view, the user is trying to add the element
                     if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
                     {
-                        Logging.Editor("Mouse right click with trigger add, checking if already exists");
+                        Logging.Editor("Mouse right click with conflictingPackages visible, checking if package entry already exists");
                         SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
-                        foreach (string s in selectedPackage.ConflictingPackagesList)
+                        foreach (ConflictingPackage conflictingPackageFromSelectedPackage in selectedPackage.ConflictingPackagesNew)
                         {
-                            if (s.Equals(item.Package.PackageName))
+                            if (conflictingPackageFromSelectedPackage.PackageName.Equals(item.Package.PackageName) && conflictingPackageFromSelectedPackage.PackageUID.Equals(item.Package.UID));
                             {
                                 Logging.Editor("Mouse right click with conflicting packages add, skipping adding cause already exists: {0}", LogLevel.Info, item.Package.PackageName);
                                 MessageBox.Show("Conflict PackageName already exists");
@@ -3037,28 +2977,15 @@ namespace RelhaxModpack.Windows
                         }
                         Logging.Editor("Mouse right click with conflicting packages add, does not exist, adding");
 
-                        if (string.IsNullOrEmpty(databaseManager.SchemaVersion) ||
-                            databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot0) ||
-                            databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot1))
+                        ListBoxItem lbi = new ListBoxItem();
+                        lbi.Tag = new ConflictingPackage()
                         {
-                            PackageConflictingPackagesDisplay.Items.Add(item.Package.PackageName);
-                        }
-                        else if (databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot2))
-                        {
-                            ListBoxItem lbi = new ListBoxItem();
-                            lbi.Tag = new ConflictingPackage()
-                            {
-                                PackageName = item.Package.PackageName,
-                                PackageUID = item.Package.UID,
-                                ParentSelectablePackage = item.Package as SelectablePackage,
-                                ConflictingSelectablePackage = databaseManager.GetSelectablePackageByUid(item.Package.UID)
-                            };
-                            PackageConflictingPackagesDisplay.Items.Add(lbi);
-                        }
-                        else
-                        {
-                            throw new BadMemeException("Invalid schema for displaying conflicting package element");
-                        }
+                            PackageName = item.Package.PackageName,
+                            PackageUID = item.Package.UID,
+                            ParentSelectablePackage = item.Package as SelectablePackage,
+                            ConflictingSelectablePackage = databaseManager.GetSelectablePackageByUid(item.Package.UID)
+                        };
+                        PackageConflictingPackagesDisplay.Items.Add(lbi);
 
                         UnsavedChanges = true;
                     }
@@ -3220,22 +3147,9 @@ namespace RelhaxModpack.Windows
                 else if (PackageConflictingPackagesDisplay.SelectedItem is ListBoxItem listBoxItem)
                 {
                     SelectablePackage conflictingPackage = null;
-                    if (string.IsNullOrEmpty(databaseManager.SchemaVersion) ||
-                        databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot0) ||
-                        databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot1))
-                    {
-                        conflictingPackage = databaseManager.GetSelectablePackageByPackageName(listBoxItem.Tag as string);
-                    }
-                    else if (databaseManager.SchemaVersion.Equals(XmlComponent.SchemaV1Dot2))
-                    {
-                        ConflictingPackage conflictingPackageEntry = listBoxItem.Tag as ConflictingPackage;
-                        if (conflictingPackageEntry != null)
-                            conflictingPackage = conflictingPackageEntry.ConflictingSelectablePackage;
-                    }
-                    else
-                    {
-                        throw new BadMemeException("Invalid schema for displaying conflicting package element");
-                    }
+                    ConflictingPackage conflictingPackageEntry = listBoxItem.Tag as ConflictingPackage;
+                    if (conflictingPackageEntry != null)
+                        conflictingPackage = conflictingPackageEntry.ConflictingSelectablePackage;
 
                     if (conflictingPackage == null)
                     {

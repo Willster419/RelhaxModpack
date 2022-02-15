@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace RelhaxModpack.Database
 {
@@ -170,6 +171,13 @@ namespace RelhaxModpack.Database
                 default:
                     return base.GetXmlElementName(schemaVersion);
             }
+        }
+
+        protected override void OnFinishedLoadingFromXml(XElement propertyElement, bool loadStatus)
+        {
+            base.OnFinishedLoadingFromXml(propertyElement, loadStatus);
+
+            ProcessInstructions();
         }
         #endregion
 
@@ -422,6 +430,26 @@ namespace RelhaxModpack.Database
                 default:
                     return null;
             }
+        }
+
+        public List<Instruction> GetInstructions()
+        {
+            List<Instruction> instructions = new List<Instruction>();
+            instructions.AddRange(Atlases.Cast<Instruction>().ToList());
+            instructions.AddRange(Patches.Cast<Instruction>().ToList());
+            instructions.AddRange(Shortcuts.Cast<Instruction>().ToList());
+            instructions.AddRange(XmlUnpacks.Cast<Instruction>().ToList());
+            return instructions;
+        }
+
+        /// <summary>
+        /// Add this package reference to each instruction entry
+        /// </summary>
+        public void ProcessInstructions()
+        {
+            //process instruction package links
+            foreach (Instruction instruction in this.GetInstructions())
+                instruction.Package = this;
         }
         #endregion
     }

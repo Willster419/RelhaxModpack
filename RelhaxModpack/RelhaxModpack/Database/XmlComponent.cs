@@ -22,6 +22,8 @@ namespace RelhaxModpack.Database
 
         public const string SchemaV1Dot2 = "1.2";
 
+        public string LoadedSchemaVersion { get; set; }
+
         public XmlComponent()
         {
 
@@ -68,6 +70,8 @@ namespace RelhaxModpack.Database
                 throw new ArgumentNullException(nameof(propertyElement));
             if (string.IsNullOrEmpty(schemaVersion))
                 throw new BadMemeException(string.Format("{0} is null or empty", nameof(schemaVersion)));
+
+            OnStartedSavingToXml(propertyElement, schemaVersion);
 
             bool good = true;
 
@@ -272,6 +276,8 @@ namespace RelhaxModpack.Database
                 }
             }
 
+            OnFinishedSavingToXml(propertyElement, schemaVersion, good);
+
             return good;
         }
 
@@ -281,6 +287,10 @@ namespace RelhaxModpack.Database
                 throw new ArgumentNullException(nameof(propertyElement));
             if (string.IsNullOrEmpty(schemaVersion))
                 throw new BadMemeException(string.Format("{0} is null or empty", nameof(schemaVersion)));
+
+            LoadedSchemaVersion = schemaVersion;
+
+            OnStartedLoadingFromXml(propertyElement);
 
             bool good = true;
 
@@ -404,6 +414,8 @@ namespace RelhaxModpack.Database
                 }
             }
 
+            OnFinishedLoadingFromXml(propertyElement, good);
+
             return good;
         }
 
@@ -435,6 +447,26 @@ namespace RelhaxModpack.Database
         {
             //stub
             continueProcessingProperty = true;
+        }
+    
+        protected virtual void OnStartedLoadingFromXml(XElement propertyElement)
+        {
+
+        }
+
+        protected virtual void OnFinishedLoadingFromXml(XElement propertyElement, bool loadStatus)
+        {
+
+        }
+
+        protected virtual void OnStartedSavingToXml(XElement propertyElement, string targetSchemaVersion)
+        {
+
+        }
+
+        protected virtual void OnFinishedSavingToXml(XElement propertyElement, string targetSchemaVersion, bool saveStatus)
+        {
+
         }
     }
 }
