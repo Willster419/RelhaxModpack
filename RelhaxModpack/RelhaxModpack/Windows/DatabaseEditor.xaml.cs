@@ -2740,6 +2740,25 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
+            //remove it from the current database, but also from the packages that it conflicts with
+            ListBoxItem selectedListBoxItem = PackageConflictingPackagesDisplay.SelectedItem as ListBoxItem;
+            ConflictingPackage packageBReference = selectedListBoxItem.Tag as ConflictingPackage;
+            if (packageBReference == null)
+                return;
+
+            //we are in "package a", this entry (selected item) is "package b"
+            //go to the package b selectablePacakge reference and remove the conflictingPackage entry to package a
+            //then remove the package b conflictingPackage reference in package a
+            SelectablePackage conflictingPackageB = packageBReference.ConflictingSelectablePackage;
+            SelectablePackage conflictingPackageA = packageBReference.ParentSelectablePackage;
+            if (conflictingPackageA == null || conflictingPackageB == null)
+                return;
+
+            ConflictingPackage packageAReference = conflictingPackageB.ConflictingPackagesNew.Find(pack => pack.PackageUID.Equals(conflictingPackageA.UID));
+            if (packageAReference == null)
+                return;
+
+            conflictingPackageB.ConflictingPackagesNew.Remove(packageAReference);
             PackageConflictingPackagesDisplay.Items.Remove(PackageConflictingPackagesDisplay.SelectedItem);
 
             UnsavedChanges = true;
