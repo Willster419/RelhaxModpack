@@ -2981,7 +2981,7 @@ namespace RelhaxModpack.Windows
                 if (item.IsHighlighted && item.IsMouseOver)
                 {
                     //if it's the right mouse and we're in the conflicting packages view, the user is trying to add the element
-                    if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
+                    if (e.RightButton == MouseButtonState.Pressed && RightTab.SelectedItem.Equals(ConflictingPackagesTab) && SelectedItem != null)
                     {
                         SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
                         if (!(item.Package is SelectablePackage))
@@ -2990,6 +2990,12 @@ namespace RelhaxModpack.Windows
                             return;
                         }
                         SelectablePackage conflictingPackage = item.Package as SelectablePackage;
+
+                        if (selectedPackage.UID.Equals(conflictingPackage.UID))
+                        {
+                            MessageBox.Show("Can't add itself as a conflict");
+                            return;
+                        }
 
                         Logging.Editor("Mouse right click with conflictingPackages visible, checking if package entry already exists");
                         foreach (ConflictingPackage conflictingPackageFromSelectedPackage in selectedPackage.ConflictingPackagesNew)
