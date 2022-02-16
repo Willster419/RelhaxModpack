@@ -1264,6 +1264,10 @@ namespace RelhaxModpack
             //
             English.Add("installZipFileEntry", "File entry");
 
+            //Component: installExtractingCompletedThreads
+            //
+            English.Add("installExtractingCompletedThreads", "Completed threads");
+
             //Component: installExtractingOfGroup
             //
             English.Add("installExtractingOfGroup", "of install group");
