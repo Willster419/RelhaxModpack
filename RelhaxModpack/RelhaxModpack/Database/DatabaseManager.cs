@@ -1638,7 +1638,7 @@ namespace RelhaxModpack.Database
             //now check that the package that it conflicts with is also entered as conflicting with the original package
             //(if it is listed in package A that it conflicts with package B, then it stands to reason that package B should have a corresponding entry)
             List<SelectablePackage> _packages = GetFlatSelectablePackageList().FindAll(pack => pack.ConflictingPackagesNew != null && pack.ConflictingPackagesNew.Count > 0);
-            foreach (SelectablePackage _package in packages)
+            foreach (SelectablePackage _package in _packages)
             {
                 foreach (SelectablePackage conflictingPackage in _package.ConflictingPackagesProcessed)
                 {
