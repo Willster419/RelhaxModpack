@@ -1031,16 +1031,19 @@ namespace RelhaxModpack.Database
 
         public void UncheckConflictingPackages(bool forced)
         {
-            if (ConflictingPackagesProcessed == null && !forced)
+            if (GetConflictingPackages() == null && !forced)
             {
                 Logging.Warning(LogOptions.MethodName, "No conflicting packages to process (is this intended)?");
                 return;
             }
 
-            foreach (SelectablePackage conflictingPackage in ConflictingPackagesProcessed)
+            foreach (SelectablePackage conflictingPackage in GetConflictingPackages())
             {
-                Logging.Debug("Unchecking conflicting package {0}", conflictingPackage.PackageName);
-                conflictingPackage.Checked = false;
+                if (conflictingPackage.Enabled && conflictingPackage.Checked)
+                {
+                    Logging.Debug("Unchecking conflicting package {0}", conflictingPackage.PackageName);
+                    conflictingPackage.Checked = false;
+                }
             }
         }
 
