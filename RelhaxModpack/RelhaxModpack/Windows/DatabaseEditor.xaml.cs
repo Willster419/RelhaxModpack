@@ -3010,16 +3010,25 @@ namespace RelhaxModpack.Windows
                         Logging.Editor("Mouse right click with conflicting packages add, does not exist, adding");
 
                         ListBoxItem lbi = new ListBoxItem();
-                        lbi.Tag = new ConflictingPackage()
+                        ConflictingPackage conflictingPackageEntryOfSelectedPackage = new ConflictingPackage()
                         {
                             PackageName = conflictingPackage.PackageName,
                             PackageUID = conflictingPackage.UID,
-                            ParentSelectablePackage = conflictingPackage,
-                            ConflictingSelectablePackage = databaseManager.GetSelectablePackageByUid(conflictingPackage.UID)
+                            ParentSelectablePackage = selectedPackage,
+                            ConflictingSelectablePackage = conflictingPackage
                         };
+                        lbi.Tag = conflictingPackageEntryOfSelectedPackage;
                         lbi.Content = (lbi.Tag as ConflictingPackage).ToString();
                         PackageConflictingPackagesDisplay.Items.Add(lbi);
-                        databaseManager.ProcessDatabase();
+
+                        //then add-back so that the conflicting package references are circular
+                        conflictingPackage.ConflictingPackagesNew.Add(new ConflictingPackage()
+                        {
+                            PackageName = selectedPackage.PackageName,
+                            PackageUID = selectedPackage.UID,
+                            ParentSelectablePackage = conflictingPackage,
+                            ConflictingSelectablePackage = selectedPackage
+                        });
 
                         UnsavedChanges = true;
                     }
