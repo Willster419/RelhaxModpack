@@ -2983,14 +2983,21 @@ namespace RelhaxModpack.Windows
                     //if it's the right mouse and we're in the conflicting packages view, the user is trying to add the element
                     if (e.RightButton == MouseButtonState.Pressed && ConflictingPackagesTab.IsVisible && SelectedItem != null)
                     {
-                        Logging.Editor("Mouse right click with conflictingPackages visible, checking if package entry already exists");
                         SelectablePackage selectedPackage = GetSelectablePackage(SelectedItem);
+                        if (!(item.Package is SelectablePackage))
+                        {
+                            MessageBox.Show("Conflicting package must be a selectable package");
+                            return;
+                        }
+                        SelectablePackage conflictingPackage = item.Package as SelectablePackage;
+
+                        Logging.Editor("Mouse right click with conflictingPackages visible, checking if package entry already exists");
                         foreach (ConflictingPackage conflictingPackageFromSelectedPackage in selectedPackage.ConflictingPackagesNew)
                         {
-                            if (conflictingPackageFromSelectedPackage.PackageName.Equals(item.Package.PackageName) && conflictingPackageFromSelectedPackage.PackageUID.Equals(item.Package.UID));
+                            if (conflictingPackageFromSelectedPackage.PackageName.Equals(conflictingPackage.PackageName) && conflictingPackageFromSelectedPackage.PackageUID.Equals(conflictingPackage.UID))
                             {
-                                Logging.Editor("Mouse right click with conflicting packages add, skipping adding cause already exists: {0}", LogLevel.Info, item.Package.PackageName);
-                                MessageBox.Show("Conflict PackageName already exists");
+                                Logging.Editor("Mouse right click with conflicting packages add, skipping adding cause already exists: {0}", LogLevel.Info, conflictingPackage.PackageName);
+                                MessageBox.Show("Conflict entry already exists");
                                 return;
                             }
                         }
@@ -2999,11 +3006,12 @@ namespace RelhaxModpack.Windows
                         ListBoxItem lbi = new ListBoxItem();
                         lbi.Tag = new ConflictingPackage()
                         {
-                            PackageName = item.Package.PackageName,
-                            PackageUID = item.Package.UID,
-                            ParentSelectablePackage = item.Package as SelectablePackage,
-                            ConflictingSelectablePackage = databaseManager.GetSelectablePackageByUid(item.Package.UID)
+                            PackageName = conflictingPackage.PackageName,
+                            PackageUID = conflictingPackage.UID,
+                            ParentSelectablePackage = conflictingPackage,
+                            ConflictingSelectablePackage = databaseManager.GetSelectablePackageByUid(conflictingPackage.UID)
                         };
+                        lbi.Content = (lbi.Tag as ConflictingPackage).ToString();
                         PackageConflictingPackagesDisplay.Items.Add(lbi);
                         databaseManager.ProcessDatabase();
 
