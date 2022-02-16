@@ -87,7 +87,6 @@ namespace RelhaxModpack.Windows
         private Brush OriginalBrush = null;
         private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
         private DispatcherTimer FlashTimer = null;
-        private bool disposedValue;
         private DatabaseManager databaseManager;
         private bool processingConflict = false;
 
@@ -2073,11 +2072,19 @@ namespace RelhaxModpack.Windows
                     }
                 }
 
-                //getting here means the package is visible and enabled and not removed, so check it
+                //getting here means the package is visible and enabled and not removed
                 if (packageFromDatabase.Enabled && packageFromDatabase.Visible)
                 {
-                    Logging.Info(LogOptions.MethodName, "Checking package {0}", packageFromDatabase.PackageName);
-                    packageFromDatabase.Checked = true;
+                    //check if there are any conflicting packages with it
+                    if (packageFromDatabase.AnyConflictingPackages())
+                    {
+                        packageFromDatabase.ForceCheckPackage();
+                    }
+                    else
+                    {
+                        Logging.Info(LogOptions.MethodName, "Checking package {0}", packageFromDatabase.PackageName);
+                        packageFromDatabase.Checked = true;
+                    }
                 }
                 else
                     Logging.Error("Package {0} was processed to be ready for selection, but is not! Enabled={1}, Visible={2}", packageFromDatabase.Enabled, packageFromDatabase.Visible);
