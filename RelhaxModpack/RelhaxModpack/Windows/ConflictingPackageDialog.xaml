@@ -5,23 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="ConflictingPackageDialog" Height="450" Width="800" MinHeight="300" MinWidth="500" Loaded="RelhaxWindow_Loaded">
+        Title="ConflictingPackageDialog" Height="450" Width="800" MinHeight="300" MinWidth="500" Loaded="RelhaxWindow_Loaded"
+        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="ConflictingPackageTextbox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" VerticalScrollBarVisibility="Visible"/>
+        <TextBox x:Name="ConflictingPackageTextbox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="10,10,10,0"/>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="6*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="SelectOptionAButton" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" Click="SelectOptionAButton_Click">
+            <Button x:Name="SelectOptionAButton" Grid.Column="0" HorizontalAlignment="Stretch" Click="SelectOptionAButton_Click" Margin="10,10,0,10">
                 <TextBlock x:Name="SelectOptionATextblock" TextWrapping="WrapWithOverflow" Text="Option A"/>
             </Button>
-            <Button x:Name="SelectOptionBButton" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Stretch" Click="SelectOptionBButton_Click">
+            <Button x:Name="SelectOptionBButton" Grid.Column="2" HorizontalAlignment="Stretch" Click="SelectOptionBButton_Click" Margin="0,10,10,10">
                 <TextBlock x:Name="SelectOptionBTextblock" TextWrapping="WrapWithOverflow" Text="Option B"/>
             </Button>
         </Grid>

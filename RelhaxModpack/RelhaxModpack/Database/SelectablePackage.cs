@@ -980,21 +980,53 @@ namespace RelhaxModpack.Database
 
         public bool AnyConflictingPackages()
         {
-            if (ConflictingPackagesProcessed == null)
+            foreach (SelectablePackage conflictingPackage in GetConflictingPackages())
             {
-                Logging.Debug(LogOptions.MethodName, "No conflicting packages to process");
-                return false;
-            }
-
-            foreach (SelectablePackage conflictingPackage in ConflictingPackagesProcessed)
-            {
-                if (conflictingPackage.Checked)
+                if (conflictingPackage.Enabled && conflictingPackage.Checked)
                 {
                     Logging.Debug(LogOptions.MethodName, "Conflicting package found: {0}", conflictingPackage.PackageName);
                     return true;
                 }
             }
             return false;
+        }
+
+        public List<SelectablePackage> GetConflictingPackages()
+        {
+            List<SelectablePackage> conflictingPackages = new List<SelectablePackage>();
+
+            conflictingPackages.AddRange(GetConflictingPackagesUp());
+            conflictingPackages.AddRange(GetConflictingPackagesDown());
+
+            return conflictingPackages;
+        }
+
+        private List<SelectablePackage> GetConflictingPackagesUp()
+        {
+            List<SelectablePackage> conflictingPackages = new List<SelectablePackage>();
+            if (ConflictingPackagesProcessed != null)
+                conflictingPackages.AddRange(ConflictingPackagesProcessed);
+
+            if (!Parent.Equals(TopParent))
+            {
+                conflictingPackages.AddRange(Parent.GetConflictingPackagesUp());
+            }
+
+            return conflictingPackages;
+        }
+
+        private List<SelectablePackage> GetConflictingPackagesDown()
+        {
+            List<SelectablePackage> conflictingPackages = new List<SelectablePackage>();
+            
+            foreach (SelectablePackage childPackage in Packages.FindAll(cp => cp.Type == SelectionTypes.single1 || cp.Type == SelectionTypes.single_dropdown1 || cp.Type == SelectionTypes.single_dropdown2))
+            {
+                if (childPackage.ConflictingPackagesProcessed != null)
+                    conflictingPackages.AddRange(childPackage.ConflictingPackagesProcessed);
+                conflictingPackages.AddRange(childPackage.GetConflictingPackagesDown());
+            }
+
+            return conflictingPackages;
         }
 
         public void UncheckConflictingPackages(bool forced)

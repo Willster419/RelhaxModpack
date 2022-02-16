@@ -2270,11 +2270,11 @@ namespace RelhaxModpack
 
             //Component: conflictingPackageMessagePartB
             //
-            English.Add("conflictingPackageMessagePartB", GetTranslatedString("conflictingPackageMessageOptionA") + ": Select the package, which will un-check all conflicting package(s)");
+            English.Add("conflictingPackageMessagePartB", English["conflictingPackageMessageOptionA"] + ": Select \"{0}\", which will un-check all conflicting package(s)");
 
             //Component: conflictingPackageMessagePartC
             //
-            English.Add("conflictingPackageMessagePartC", GetTranslatedString("conflictingPackageMessageOptionB") + ": Don't select the package, which will keep the conflicting package(s)");
+            English.Add("conflictingPackageMessagePartC", English["conflictingPackageMessageOptionB"] + ": Don't select \"{0}\", which will keep the conflicting package(s)");
 
             //Component: conflictingPackageMessagePartD
             //

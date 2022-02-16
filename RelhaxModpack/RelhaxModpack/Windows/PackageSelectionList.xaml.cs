@@ -89,6 +89,7 @@ namespace RelhaxModpack.Windows
         private DispatcherTimer FlashTimer = null;
         private bool disposedValue;
         private DatabaseManager databaseManager;
+        private bool processingConflict = false;
 
         #region Boring stuff
         /// <summary>
@@ -1051,7 +1052,7 @@ namespace RelhaxModpack.Windows
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
 
-            if (spc.AnyConflictingPackages())
+            if (!processingConflict && spc.AnyConflictingPackages())
             {
                 if (!ConflictingPackageContinueOptionA(sender, spc, e))
                     return;
@@ -1094,7 +1095,7 @@ namespace RelhaxModpack.Windows
 
             SelectablePackage spc = cb2.Package;
 
-            if (spc.AnyConflictingPackages())
+            if (!processingConflict && spc.AnyConflictingPackages())
             {
                 if (!ConflictingPackageContinueOptionA(sender, spc, e))
                     return;
@@ -1146,7 +1147,7 @@ namespace RelhaxModpack.Windows
             IPackageUIComponent ipc = (IPackageUIComponent)sender;
             SelectablePackage spc = ipc.Package;
 
-            if (spc.AnyConflictingPackages())
+            if (!processingConflict && spc.AnyConflictingPackages())
             {
                 if (!ConflictingPackageContinueOptionA(sender, spc, e))
                     return;
@@ -1294,7 +1295,7 @@ namespace RelhaxModpack.Windows
         {
             if (spc.Level == -1)
                 return;
-            //if nothing checked at this level, uncheck the parent and propagate up not checked again
+            //if nothing checked at this level, un-check the parent and propagate up not checked again
             bool anythingChecked = false;
             foreach (SelectablePackage childPackage in spc.Parent.Packages)
             {
@@ -1329,23 +1330,35 @@ namespace RelhaxModpack.Windows
 
             if (conflictingPackageDialog.OptionASelected)
             {
-                Logging.Debug("User selected option a, unchecking all conflicting packages");
-                foreach (SelectablePackage conflictingPackage in selectablePackage.ConflictingPackagesProcessed)
+                Logging.Debug("User selected option a, un-checking all conflicting packages");
+                processingConflict = true;
+                foreach (SelectablePackage conflictingPackage in selectablePackage.GetConflictingPackages())
                 {
-                    switch (conflictingPackage.Type)
+                    if (conflictingPackage.Enabled && conflictingPackage.Checked)
                     {
-                        case SelectionTypes.multi:
-                            OnMultiPackageClick(sender, e);
-                            break;
-                        case SelectionTypes.single1:
-                            OnSinglePackageClick(sender, e);
-                            break;
-                        case SelectionTypes.single_dropdown1:
-                        case SelectionTypes.single_dropdown2:
-                            OnSingleDDPackageClick(sender, e);
-                            break;
+                        switch (conflictingPackage.Type)
+                        {
+                            case SelectionTypes.multi:
+                                OnMultiPackageClick(conflictingPackage.UIComponent, e);
+                                break;
+                            case SelectionTypes.single1:
+                                OnSinglePackageClick(conflictingPackage.UIComponent, e);
+                                break;
+                            case SelectionTypes.single_dropdown1:
+                                OnSingleDDPackageClick(conflictingPackage.RelhaxWPFComboBoxList[0], e);
+                                break;
+                            case SelectionTypes.single_dropdown2:
+                                OnSingleDDPackageClick(conflictingPackage.RelhaxWPFComboBoxList[1], e);
+                                break;
+                        }
                     }
                 }
+                processingConflict = false;
+            }
+            else
+            {
+                Logging.Debug("User selected option b, un-checking package user originally selected {0}", selectablePackage.PackageName);
+                selectablePackage.Checked = false;
             }
             return conflictingPackageDialog.OptionASelected;
         }

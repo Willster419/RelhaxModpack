@@ -49,14 +49,14 @@ namespace RelhaxModpack.Windows
             messageBuilder.AppendLine(string.Format(Translations.GetTranslatedString("conflictingPackageMessagePartA"), PackageToTryToSelect.NameFormatted));
             messageBuilder.AppendLine();
 
-            foreach (SelectablePackage conflictingPackage in PackageToTryToSelect.ConflictingPackagesProcessed)
+            foreach (SelectablePackage conflictingPackage in PackageToTryToSelect.GetConflictingPackages())
             {
                 messageBuilder.AppendLine(string.Format(Translations.GetTranslatedString("conflictingPackagePackageOfCategory"), conflictingPackage.NameFormatted, conflictingPackage.ParentCategory.Name));
             }
             messageBuilder.AppendLine();
 
-            messageBuilder.AppendLine(Translations.GetTranslatedString("conflictingPackageMessagePartB"));
-            messageBuilder.AppendLine(Translations.GetTranslatedString("conflictingPackageMessagePartC"));
+            messageBuilder.AppendLine(string.Format(Translations.GetTranslatedString("conflictingPackageMessagePartB"), PackageToTryToSelect.NameFormatted));
+            messageBuilder.AppendLine(string.Format(Translations.GetTranslatedString("conflictingPackageMessagePartC"), PackageToTryToSelect.NameFormatted));
             messageBuilder.AppendLine();
 
             messageBuilder.AppendLine(Translations.GetTranslatedString("conflictingPackageMessagePartD"));
