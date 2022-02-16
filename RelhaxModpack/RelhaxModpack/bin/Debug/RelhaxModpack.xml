@@ -2276,11 +2276,6 @@
             Flag to determine if the trigger task has started
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Database.Trigger.TriggerTask">
-            <summary>
-            The reference for the task that the trigger should perform
-            </summary>
-        </member>
         <member name="T:RelhaxModpack.Database.UserDataFile">
             <summary>
             A structure that is used to track the relative path of a user file (like session stats),
