@@ -162,9 +162,9 @@ namespace RelhaxModpack
         /// </summary>
         public static readonly List<Trigger> Triggers = new List<Trigger>
         {
-            new Trigger(){ Fired = false, Name = TriggerContouricons,    NumberProcessed = 0, Total = 0, TriggerTask = null },
-            new Trigger(){ Fired = false, Name = TriggerInstallFonts,    NumberProcessed = 0, Total = 0, TriggerTask = null },
-            new Trigger(){ Fired = false, Name = TriggerCreateShortcuts, NumberProcessed = 0, Total = 0, TriggerTask = null }
+            new Trigger(){ Fired = false, Name = TriggerContouricons,    NumberProcessed = 0, Total = 0},
+            new Trigger(){ Fired = false, Name = TriggerInstallFonts,    NumberProcessed = 0, Total = 0},
+            new Trigger(){ Fired = false, Name = TriggerCreateShortcuts, NumberProcessed = 0, Total = 0}
         };
 
         /// <summary>
@@ -405,7 +405,6 @@ namespace RelhaxModpack
                     trig.Total = 0;
                     trig.NumberProcessed = 0;
                     trig.Fired = false;
-                    trig.TriggerTask = null;
                 }
 
                 //match the trigger name in the package with the readonly triggers set in the installer
@@ -827,15 +826,6 @@ namespace RelhaxModpack
             }
             else
                 Logging.Info("...skipped (ModpackSettings.DeleteCacheFiles = false)");
-
-            if (!DisableTriggersForInstall)
-            {
-                //check if any triggers are still running
-                List<Task> tasksRunning = Triggers.Select(trig => trig.TriggerTask).ToList().FindAll(trigger => trigger != null && !trigger.IsCompleted);
-                Logging.Debug("Start waiting for triggered tasks to complete at time {1}", (int)InstallStopWatch.Elapsed.TotalMilliseconds);
-                Task.WaitAll(tasksRunning.ToArray());
-                Logging.Debug("Finished waiting for triggered tasks to complete at time {1}", (int)InstallStopWatch.Elapsed.TotalMilliseconds);
-            }
 
             //report to log install is finished
             OldTime = InstallStopWatch.Elapsed;
