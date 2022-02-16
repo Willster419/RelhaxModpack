@@ -1661,10 +1661,10 @@ namespace RelhaxModpack.Database
             CalculateDependencies(suppressFrequentDependencyCalculationMessages, showDependencyCalculationErrorMessages);
             CreateListOfPackagesToInstall();
             CreateOrderedInstallList(PackagesToInstallWithZipFile);
-            patchesToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.Patch).Cast<Patch>().ToList();
-            atlasesToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.Atlas).Cast<Atlas>().ToList();
-            xmlUnpacksToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.UnpackCopy).Cast<XmlUnpack>().ToList();
-            shortcutsToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.Shortcut).Cast<Shortcut>().ToList();
+            patchesToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.Patch)?.Cast<Patch>()?.ToList();
+            atlasesToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.Atlas)?.Cast<Atlas>()?.ToList();
+            xmlUnpacksToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.UnpackCopy)?.Cast<XmlUnpack>()?.ToList();
+            shortcutsToInstall = CreateOrderedInstructionList(packagesToInstall, InstructionsType.Shortcut)?.Cast<Shortcut>()?.ToList();
         }
 
         /// <summary>
