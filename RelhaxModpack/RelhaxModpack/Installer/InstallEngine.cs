@@ -162,9 +162,9 @@ namespace RelhaxModpack
         /// </summary>
         public static readonly List<Trigger> Triggers = new List<Trigger>
         {
-            new Trigger(){ Fired = false, Name = TriggerContouricons,    NumberProcessed = 0, Total = 0},
-            new Trigger(){ Fired = false, Name = TriggerInstallFonts,    NumberProcessed = 0, Total = 0},
-            new Trigger(){ Fired = false, Name = TriggerCreateShortcuts, NumberProcessed = 0, Total = 0}
+            new Trigger(){ Fired = false, Name = TriggerContouricons,    NumberProcessed = 0, Total = 0 },
+            new Trigger(){ Fired = false, Name = TriggerInstallFonts,    NumberProcessed = 0, Total = 0 },
+            new Trigger(){ Fired = false, Name = TriggerCreateShortcuts, NumberProcessed = 0, Total = 0 }
         };
 
         /// <summary>
@@ -761,19 +761,19 @@ namespace RelhaxModpack
             PatchTaskReadyForWait = true;
 
             //step 10: create shortcuts (async option)
-            if (DisableTriggersForInstall)
+            if (DisableTriggersForInstall || !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerCreateShortcuts)).Fired)
             {
                 CreateShortcuts();
             }
 
             //step 11: create atlases (async option)
-            if (DisableTriggersForInstall)
+            if (DisableTriggersForInstall || !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerContouricons)).Fired)
             {
                 CreateAtlases();
             }
 
             //step 12: install fonts (async operation)
-            if (DisableTriggersForInstall)
+            if (DisableTriggersForInstall || !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerInstallFonts)).Fired)
             {
                 InstallFonts();
             }
@@ -1468,7 +1468,7 @@ namespace RelhaxModpack
                     //https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming
                     Task[] tasks = new Task[numThreads];
                     if (tasks.Count() != packageThreads.Count())
-                        throw new BadMemeException("ohhhhhhhhh, NOW you f*cked UP!");
+                        throw new BadMemeException(":nice:");
 
                     //start the threads
                     Logging.Debug("Starting {0} threads", tasks.Count());
@@ -1525,6 +1525,15 @@ namespace RelhaxModpack
                     Logging.Debug("All threads started on group {0}, master thread now waiting on Task.WaitAll(tasks)", i);
                     Task.WaitAll(tasks.Where(task => task != null).ToArray());
                     CancellationToken.ThrowIfCancellationRequested();
+                }
+
+                if (!DisableTriggersForInstall)
+                {
+                    Logging.Info("Processing triggers for install group {0}", i);
+                    foreach (DatabasePackage package in DatabaseManager.PackagesToInstallWithTriggers.FindAll(_ => _.InstallGroupWithOffset == i && string.IsNullOrWhiteSpace(_.ZipFile)))
+                    {
+                        ProcessTriggers(package.TriggersList);
+                    }
                 }
 
                 Logging.Info("Install Group " + i + " finishes now");
@@ -2051,10 +2060,9 @@ namespace RelhaxModpack
                     Prog.CompletedPackagesOfAThread[threadNum]++;
 
                     //after zip file extraction, process triggers (if enabled)
-                    if (!DisableTriggersForInstall)
+                    if (!DisableTriggersForInstall && package.TriggersList.Count > 0)
                     {
-                        if (package.TriggersList.Count > 0)
-                            ProcessTriggers(package.TriggersList);
+                        ProcessTriggers(package.TriggersList);
                     }
                 }
 

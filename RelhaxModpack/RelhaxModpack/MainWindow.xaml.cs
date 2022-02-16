@@ -155,7 +155,7 @@ namespace RelhaxModpack
             WindowState = WindowState.Minimized;
             disabledBlacklist = new Control[]
             {
-                DisableTriggersCB
+                
             };
             enabledBlacklist = new Control[]
             {
@@ -248,10 +248,6 @@ namespace RelhaxModpack
 
             //create tray icons and menus
             CreateTray();
-
-            //apply forced debugging settings
-#warning forced trigger disable is active
-            ModpackSettings.DisableTriggers = true;
 
             //apply UI coloring settings
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));

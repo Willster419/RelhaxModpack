@@ -212,7 +212,7 @@
                         <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Click="OnVerboseLoggingChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="VerboseLoggingText" Text="Verbose Logging" TextWrapping="Wrap"/>
                         </CheckBox>
-                        <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Click="OnDisableTriggersChanged" IsChecked="True" IsEnabled="False" ToolTipService.ShowOnDisabled="True">
+                        <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Click="OnDisableTriggersChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="DisableTriggersText" Text="Disable Triggers" TextWrapping="Wrap"/>
                         </CheckBox>
                         <CheckBox x:Name="AllowStatsGatherCB" Tag="AllowStatsGatherCB" Click="OnAllowStatsGatherChanged" ToolTipService.ShowOnDisabled="True">
