@@ -1614,15 +1614,10 @@ namespace RelhaxModpack.Database
                     }
 
                     //make sure the entry doesn't already exist
-                    if (package.ConflictingPackagesProcessed != null && package.ConflictingPackagesProcessed.Count > 0)
+                    if (package.ConflictingPackagesProcessed != null && package.ConflictingPackagesProcessed.Count > 1)
                     {
-                        SelectablePackage alreadyConflictingEntry = package.ConflictingPackagesProcessed.Find(_package =>
-                        {
-                            if (_package == null)
-                                return false;
-                            return _package.UID.Equals(conflictingPackageEntry.PackageUID);
-                        });
-                        if (alreadyConflictingEntry != null)
+                        List<ConflictingPackage> matchingEntries = package.ConflictingPackagesNew.FindAll(_ => _.IsEqual(conflictingPackageEntry));
+                        if (matchingEntries != null && matchingEntries.Count > 1)
                         {
                             Logging.Warning($"Package {package.PackageName} already has conflicting package entry '{lookupProperty}'. Skipping this entry.");
                             package.ConflictingPackagesNew.Remove(conflictingPackageEntry);
