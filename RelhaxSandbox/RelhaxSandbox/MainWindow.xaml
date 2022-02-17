@@ -383,5 +383,29 @@
                 <TextBox x:Name="HttpClientTestPasswordBox" HorizontalAlignment="Left" Height="23" Margin="633,226,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Width="120"/>
             </Grid>
         </TabItem>
+        <TabItem Header="WPF style/dark theme testing">
+            <Grid>
+                <CheckBox x:Name="darkThemeCheckbox" Content="Dark Theme" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="False" Click="darkThemeCheckbox_Click"/>
+                <Button Content="Button" HorizontalAlignment="Left" Margin="663,149,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource DarkThemeStyleButton}"/>
+                <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="507,28,0,0" VerticalAlignment="Top"/>
+                <Grid HorizontalAlignment="Left" Height="100" Margin="548,58,0,0" VerticalAlignment="Top" Width="100" Style="{StaticResource DarkThemeStyle}"/>
+                <Button HorizontalAlignment="Left" Margin="663,117,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource DarkThemeStyleButton}">
+                    <TextBlock Text="Button"/>
+                </Button>
+                <ComboBox HorizontalAlignment="Left" Margin="640,21,0,0" VerticalAlignment="Top" Width="120"/>
+                <RadioButton Content="RadioButton" HorizontalAlignment="Left" Margin="653,70,0,0" VerticalAlignment="Top" />
+                <StackPanel HorizontalAlignment="Left" Height="100" Margin="640,228,0,0" VerticalAlignment="Top" Width="100" Background="BlanchedAlmond" />
+                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="653,189,0,0" VerticalAlignment="Top" Width="100" Value="50" Style="{StaticResource DarkThemeStyleProgressBar}"/>
+                <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="100" Margin="535,203,0,0" VerticalAlignment="Top" Width="100"/>
+                <TabControl HorizontalAlignment="Left" Height="107" Margin="327,164,0,0" VerticalAlignment="Top" Width="191">
+                    <TabItem Header="TabItem">
+                        <Grid Background="#FFE5E5E5"/>
+                    </TabItem>
+                    <TabItem Header="TabItem">
+                        <Grid Background="#FFE5E5E5"/>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </TabItem>
     </TabControl>
 </Window>

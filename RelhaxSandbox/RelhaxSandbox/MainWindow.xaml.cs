@@ -37,6 +37,7 @@ using System.Linq;
 using FontFamily = System.Windows.Media.FontFamily;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.ComponentModel;
 
 namespace RelhaxSandbox
 {
@@ -48,10 +49,11 @@ namespace RelhaxSandbox
         MediaFile = 3,
         HTML = 4
     }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private CancellationToken ct;
         private CancellationTokenSource tokenSource2;
@@ -1209,6 +1211,34 @@ namespace RelhaxSandbox
             string downloadUrl = urlNode.Attributes[attribute].Value;
             downloadUrl = downloadUrl.Replace("&amp;", "&");
             return downloadUrl;
+        }
+        #endregion
+
+        #region dark theme testing in a way that doesn't suck
+        private bool _darkTheme = false;
+        public bool DarkTheme
+        {
+            get { return _darkTheme; }
+            set
+            {
+                _darkTheme = value;
+                OnPropertyChanged(nameof(DarkTheme));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private void darkThemeCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+            DarkTheme = (bool)darkThemeCheckbox.IsChecked;
         }
         #endregion
     }

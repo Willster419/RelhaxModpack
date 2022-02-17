@@ -11,6 +11,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="RelhaxThemes.xaml"/>
+                <ResourceDictionary Source="RelhaxDarkTheme2022.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- https://www.wpf-tutorial.com/wpf-application/resources/ -->
             <sys:Boolean x:Key="ApplyColorSettings">False</sys:Boolean>
