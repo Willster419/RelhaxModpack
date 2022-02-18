@@ -391,7 +391,7 @@
                 <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="100" Margin="507,53,0,0" VerticalAlignment="Top" Width="100" Style="{StaticResource DarkThemeStyleBackground}"/>
                 <TabControl HorizontalAlignment="Left" Height="346" Margin="10,30,0,0" VerticalAlignment="Top" Width="492" Style="{StaticResource DarkThemeStyleBackground}">
                     <TabItem Header="TabItem" Style="{StaticResource DarkThemeStyleTabItem}">
-                        <Grid Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
+                        <Grid x:Name="darkThemeGrid" Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
                             <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Style="{StaticResource DarkThemeStyleCheckbox}"/>
                             <ComboBox HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="120" Style="{StaticResource DarkThemeStyleCombobox}">
                                 <System:String>test1</System:String>
