@@ -1240,6 +1240,15 @@ namespace RelhaxSandbox
         {
             DarkTheme = (bool)darkThemeCheckbox.IsChecked;
         }
+
+        private void toggleEnableCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (FrameworkElement frameworkElement in darkThemeGrid.Children)
+            {
+                if (frameworkElement is Control control)
+                    control.IsEnabled = (bool)toggleEnableCheckbox.IsChecked;
+            }
+        }
         #endregion
     }
 }

@@ -386,6 +386,7 @@
         <TabItem Header="WPF dark theme (redo) testing" IsSelected="True">
             <Grid>
                 <CheckBox x:Name="darkThemeCheckbox" Content="Dark Theme" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="False" Click="darkThemeCheckbox_Click"/>
+                <CheckBox x:Name="toggleEnableCheckbox" Content="Enable" HorizontalAlignment="Left" Margin="187,10,0,0" VerticalAlignment="Top" IsChecked="True" Click="toggleEnableCheckbox_Click"/>
                 <StackPanel HorizontalAlignment="Left" Height="100" Margin="507,158,0,0" VerticalAlignment="Top" Width="100" Style="{StaticResource DarkThemeStyleBackground}"/>
                 <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="100" Margin="507,53,0,0" VerticalAlignment="Top" Width="100" Style="{StaticResource DarkThemeStyleBackground}"/>
                 <TabControl HorizontalAlignment="Left" Height="346" Margin="10,30,0,0" VerticalAlignment="Top" Width="492" Style="{StaticResource DarkThemeStyleBackground}">
