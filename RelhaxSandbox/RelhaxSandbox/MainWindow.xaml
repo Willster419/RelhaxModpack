@@ -392,7 +392,11 @@
                     <TabItem Header="TabItem" Style="{StaticResource DarkThemeStyleTabItem}">
                         <Grid Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
                             <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Style="{StaticResource DarkThemeStyleCheckbox}"/>
-                            <ComboBox HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="120" Style="{StaticResource DarkThemeStyleCombobox}"/>
+                            <ComboBox HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="120" Style="{StaticResource DarkThemeStyleCombobox}">
+                                <System:String>test1</System:String>
+                                <System:String>test2</System:String>
+                                <System:String>test3</System:String>
+                            </ComboBox>
                             <RadioButton Content="RadioButton" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Style="{StaticResource DarkThemeStyleRadioButton}"/>
                             <RadioButton Content="RadioButton" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Style="{StaticResource DarkThemeStyleRadioButton}"/>
                             <Button HorizontalAlignment="Left" Margin="10,97,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource DarkThemeStyleButton}">
