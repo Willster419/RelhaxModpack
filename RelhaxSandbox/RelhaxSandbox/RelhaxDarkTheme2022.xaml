@@ -4,18 +4,19 @@
     xmlns:local="clr-namespace:RelhaxSandbox">
     <!-- Testing re-implementation of dark theme -->
     <!-- add some static colors -->
+    <Color x:Key="DarkThemeHighlightColor" A="255" R="134" B="134" G="134"/>
+    <Color x:Key="DarkThemeSelectedColor" A="255" R="150" B="150" G="150"/>
+    <Color x:Key="DarkThemeButtonColor" A="255" R="42" B="42" G="42"/>
     <SolidColorBrush x:Key="DefaultGridColorInTabItem" Color="#FFE5E5E5"/>
     <SolidColorBrush x:Key="DarkThemeTextColor" Color="White"/>
     <SolidColorBrush x:Key="DarkThemeBackground" Color="#1A1A1A"/>
-    <SolidColorBrush x:Key="DarkThemeButton" Color="#2A2A2A"/>
+    <SolidColorBrush x:Key="DarkThemeButton" Color="{StaticResource DarkThemeButtonColor}"/>
     <SolidColorBrush x:Key="DarkThemeActiveTab" Color="#646464"/>
     <SolidColorBrush x:Key="DarkThemeImageButtonBackground" Color="#AFAFAF"/>
     <LinearGradientBrush x:Key="DarkThemeProgressBarForeground" StartPoint="0.25, 0" EndPoint="0.75, 1">
         <GradientStop Color="#5F5F5F5F" Offset="0"/>
         <GradientStop Color="#0000FF" Offset="1"/>
     </LinearGradientBrush>
-    <Color x:Key="DarkThemeHighlightColor" A="255" R="134" B="134" G="134"/>
-    <Color x:Key="DarkThemeSelectedColor" A="255" R="150" B="150" G="150"/>
     <SolidColorBrush x:Key="DarkThemeCheckboxHighlight" Color="{StaticResource DarkThemeHighlightColor}"/>
     <SolidColorBrush x:Key="DarkThemeRadioButtonHighlight" Color="{StaticResource DarkThemeHighlightColor}"/>
     <SolidColorBrush x:Key="DarkThemeButtonHighlight" Color="{StaticResource DarkThemeHighlightColor}"/>
