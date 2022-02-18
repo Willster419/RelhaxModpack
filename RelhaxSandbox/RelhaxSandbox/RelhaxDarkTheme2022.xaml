@@ -120,6 +120,13 @@
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource DarkThemeCheckboxHighlight}"/>
                         </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Value="True"/>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource DarkThemeActiveTab}"/>
+                        </MultiDataTrigger>
                         <!-- copied from original, moved down for ordering -->
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Background}"/>
@@ -194,6 +201,13 @@
                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Background" TargetName="radioButtonBorder" Value="{StaticResource DarkThemeRadioButtonHighlight}"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Value="True"/>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="radioButtonBorder" Value="{StaticResource DarkThemeActiveTab}"/>
                         </MultiDataTrigger>
                         <!-- copied from original, moved down for ordering -->
                         <Trigger Property="IsPressed" Value="true">
@@ -458,6 +472,14 @@
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Background" TargetName="border" Value="{StaticResource DarkThemeButtonHighlight}"/>
                         </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Value="True"/>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource DarkThemeActiveTab}"/>
+                        </MultiDataTrigger>
+                        <!-- copied from original, moved down for ordering -->
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" TargetName="border" Value="#FFC4E5F6"/>
                             <Setter Property="BorderBrush" TargetName="border" Value="#FF2C628B"/>
