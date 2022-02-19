@@ -5,6 +5,7 @@ using RelhaxModpack.UI.Extensions;
 using RelhaxModpack.Utilities.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace RelhaxModpack.Windows
     /// <summary>
     /// Defines a window with translation and custom UI color
     /// </summary>
-    public class RelhaxWindow : Window
+    public class RelhaxWindow : Window, INotifyPropertyChanged
     {
         /// <summary>
         /// Controls if the window should have translation applied
@@ -132,13 +133,6 @@ namespace RelhaxModpack.Windows
                 Translations.LocalizeWindow(this, ApplyToolTips);
             }
 
-            //apply UI color changes
-            if(ApplyColorSettings)
-            {
-                UISettings.ApplyCustomStyles(this);
-                UISettings.ApplyUIColorSettings(this);
-            }
-
             //apply font changes
             if(ApplyCustomFont && ModpackSettings.EnableCustomFont)
             {
@@ -210,5 +204,30 @@ namespace RelhaxModpack.Windows
                     control.FontFamily = this.SelectedFontFamily;
             }
         }
+
+        #region Dark theme done in a way that's actually good
+        /// <summary>
+        /// Toggle if the application should present in dark theme
+        /// </summary>
+        public bool DarkTheme
+        {
+            get { return this.ModpackSettings.ApplicationTheme == UIThemes.Dark; }
+            set
+            {
+                this.ModpackSettings.ApplicationTheme = value ? UIThemes.Dark : UIThemes.Default;
+                OnPropertyChanged(nameof(DarkTheme));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
     }
 }

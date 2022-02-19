@@ -487,9 +487,6 @@ namespace RelhaxModpack.Windows
             //set the loading flag back to false
             LoadingUI = false;
 
-            //set the UI tab color to null so it's grabbed first time
-            UISettings.NotSelectedTabColor = null;
-
             //set tabs UI coloring, MUST be after LoadingUI set to false! (?ms)
             //UI THREAD REQUIRED
             ModTabGroups_SelectionChanged(null, null);
@@ -528,29 +525,24 @@ namespace RelhaxModpack.Windows
                 cat.TabPage = new TabItem()
                 {
                     Header = cat.Name,
-                    //HorizontalAlignment = HorizontalAlignment.Left,
-                    //VerticalAlignment = VerticalAlignment.Center,
-                    //MinWidth = 50,
-                    //MaxWidth = 150,
-                    //Width = 0
                     Tag = cat,
                     Style = (Style)Application.Current.Resources["RelhaxSelectionListTabItemStyle"]
                 };
 
-                //add brush resource
-                cat.TabPage.Resources.Add("TabItemHeaderSelectedBackground", UISettings.CurrentTheme.SelectionListActiveTabHeaderBackgroundColor.Brush);
+                //init common stuff used between both
+                cat.CategoryHeader.RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
+                cat.CategoryHeader.ChildStackPanel = new StackPanel();
 
                 switch (ModpackSettings.ModSelectionView)
                 {
                     case SelectionView.Legacy:
                         cat.CategoryHeader.TreeViewItem = new StretchingTreeViewItem()
                         {
-                            Background = System.Windows.Media.Brushes.Transparent,
-                            HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
-                            HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch,
+                            Background = Brushes.Transparent,
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            HorizontalContentAlignment = HorizontalAlignment.Stretch,
                             IsExpanded = true
                         };
-                        cat.CategoryHeader.RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                         cat.CategoryHeader.TreeView = new StretchingTreeView()
                         {
                             Background = Brushes.Transparent,
@@ -558,14 +550,16 @@ namespace RelhaxModpack.Windows
                             HorizontalContentAlignment = HorizontalAlignment.Stretch
                         };
                         cat.CategoryHeader.TreeView.MouseDown += Lsl_MouseDown;
-                        cat.CategoryHeader.ChildStackPanel = new StackPanel();
-                        cat.CategoryHeader.ChildBorder = new Border()
+                        cat.CategoryHeader.ChildBorder = new RelhaxBorder()
                         {
-                            BorderBrush = UISettings.CurrentTheme.SelectionListBorderColor.Brush,
                             BorderThickness = ModpackSettings.EnableBordersLegacyView ? new Thickness(1) : new Thickness(0),
                             Child = cat.CategoryHeader.ChildStackPanel,
-                            Margin = new Thickness(-25, 0, 0, 0),
-                            Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
+                            Margin = new Thickness(-25, 0, 0, 0)
+                        };
+                        cat.CategoryHeader.ParentBorder = new RelhaxBorder()
+                        {
+                            Child = cat.CategoryHeader.TreeView,
+                            Padding = new Thickness(2)
                         };
                         if (cat.CategoryHeader.TreeView.Items.Count > 0)
                             cat.CategoryHeader.TreeView.Items.Clear();
@@ -578,49 +572,43 @@ namespace RelhaxModpack.Windows
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
-                            HorizontalAlignment = HorizontalAlignment.Left,
-                            Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
+                            HorizontalAlignment = HorizontalAlignment.Left
                         };
-                        cat.CategoryHeader.UIComponent = box;
                         box.Click += OnWPFComponentCheck;
-                        cat.CategoryHeader.ParentUIComponent = cat.CategoryHeader.TopParentUIComponent = cat.CategoryHeader.UIComponent;
+                        cat.CategoryHeader.ParentUIComponent = cat.CategoryHeader.TopParentUIComponent = cat.CategoryHeader.UIComponent = box;
                         cat.CategoryHeader.TreeViewItem.Header = cat.CategoryHeader.UIComponent;
                         cat.CategoryHeader.TreeView.Items.Add(cat.CategoryHeader.TreeViewItem);
+                        //TabPage -> ParentBorder -> TreeView -> TreeViewItem (CategoryHeader) -> UIComponent
                         cat.TabPage.Content = cat.CategoryHeader.TreeView;
                         cat.CategoryHeader.Packages = cat.Packages;
                         break;
                     case SelectionView.DefaultV2:
-                        cat.CategoryHeader.RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                         cat.CategoryHeader.ContentControl = new ContentControl();
                         cat.CategoryHeader.ParentStackPanel = new StackPanel();
-                        cat.CategoryHeader.ParentBorder = new Border()
+                        cat.CategoryHeader.ParentBorder = new RelhaxBorder()
                         {
                             Child = cat.CategoryHeader.ParentStackPanel,
-                            Padding = new Thickness(2),
-                            Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush,
+                            Padding = new Thickness(2)
                         };
                         cat.CategoryHeader.ScrollViewer = new ScrollViewer()
                         {
                             Content = cat.CategoryHeader.ParentBorder
                         };
-                        //tab page -> scrollViewer -> Border -> stackPanel
+                        //TabPage -> ScrollViewer -> ParentBorder -> ParentStackPanel
                         cat.TabPage.Content = cat.CategoryHeader.ScrollViewer;
                         //create checkbox for inside selecteionlist
                         RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
-                            Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             HorizontalAlignment = HorizontalAlignment.Left
                         };
                         cb2.Click += OnWPFComponentCheck;
                         //set it's parent and top parent to itself
                         cat.CategoryHeader.UIComponent = cat.CategoryHeader.ParentUIComponent = cat.CategoryHeader.TopParentUIComponent = cb2;
                         //create and link the child borderand stackpanel
-                        cat.CategoryHeader.ChildStackPanel = new StackPanel();
-                        cat.CategoryHeader.ChildBorder = new Border()
+                        cat.CategoryHeader.ChildBorder = new RelhaxBorder()
                         {
-                            BorderBrush = UISettings.CurrentTheme.SelectionListBorderColor.Brush,
                             BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
                             Child = cat.CategoryHeader.ChildStackPanel,
                             Padding = new Thickness(15, 0, 0, 0)
@@ -683,7 +671,6 @@ namespace RelhaxModpack.Windows
                 Header = Translations.GetTranslatedString("userMods"),
                 Style = (Style)Application.Current.Resources["RelhaxSelectionListTabItemStyle"]
             };
-            userTab.Resources.Add("TabItemHeaderSelectedBackground", UISettings.CurrentTheme.SelectionListActiveTabHeaderBackgroundColor.Brush);
             userTab.RequestBringIntoView += OnUserModsTabSelected;
             userTab.Content = userStackPanel;
             ModTabGroups.Items.Add(userTab);
@@ -699,8 +686,7 @@ namespace RelhaxModpack.Windows
                     VerticalContentAlignment = VerticalAlignment.Center,
                     IsChecked = false,
                     IsEnabled = true,
-                    Content = package.NameDisplay,
-                    Foreground = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush
+                    Content = package.NameDisplay
                 };
                 package.UIComponent = userMod;
                 userMod.Click += OnUserPackageClick;
@@ -843,12 +829,10 @@ namespace RelhaxModpack.Windows
                 if (package.ChildBorder == null && package.Packages.Count > 0)
                 {
                     package.ChildStackPanel = new StackPanel();
-                    package.ChildBorder = new Border()
+                    package.ChildBorder = new RelhaxBorder()
                     {
-                        BorderBrush = BorderBrush = UISettings.CurrentTheme.SelectionListBorderColor.Brush,
                         BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
-                        Child = package.ChildStackPanel,
-                        Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush
+                        Child = package.ChildStackPanel
                     };
                     //custom settings for each border
                     switch(ModpackSettings.ModSelectionView)
@@ -876,7 +860,6 @@ namespace RelhaxModpack.Windows
                             VerticalContentAlignment = VerticalAlignment.Center,
                             Content = package.NameDisplay,
                             IsEnabled = package.IsStructureEnabled,
-                            Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
                             IsChecked = false
                         };
                         ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFRadioButton, true);
@@ -897,8 +880,7 @@ namespace RelhaxModpack.Windows
                             VerticalContentAlignment = VerticalAlignment.Center,
                             Content = package.NameDisplay,
                             IsEnabled = package.IsStructureEnabled,
-                            IsChecked = false,
-                            Foreground = BorderBrush = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush,
+                            IsChecked = false                          
                         };
                         ToolTipService.SetShowOnDisabled(package.UIComponent as RelhaxWPFCheckBox, true);
                         break;
@@ -1376,20 +1358,6 @@ namespace RelhaxModpack.Windows
             foreach (Category category in listWithUserCat)
             {
                 TabItem TabIndex = category.TabPage;
-                //if the color is not saved yet, then save what the default currently is
-                if (UISettings.NotSelectedTabColor == null)
-                {
-                    //windows 10 uses a linear gradient brush (at least mine does)
-                    //windows 7 in classic theme uses a solid color brush
-                    if (UISettings.CurrentTheme.Equals(Themes.Default))
-                    {
-                        UISettings.NotSelectedTabColor = TabIndex.Background;
-                    }
-                    else
-                    {
-                        UISettings.NotSelectedTabColor = UISettings.CurrentTheme.SelectionListNotActiveHasNoSelectionsBackgroundColor.Brush;
-                    }
-                }
 
                 //3 possible conditions:
                 // if (active){ }
@@ -1402,19 +1370,19 @@ namespace RelhaxModpack.Windows
                 if (TabIndex.IsSelected)
                 {
                     //brush is set in tab resources when created as trigger
-                    TabIndex.Foreground = UISettings.CurrentTheme.SelectionListActiveTabHeaderTextColor.Brush;
+                    //TabIndex.Foreground = UISettings.CurrentTheme.SelectionListActiveTabHeaderTextColor.Brush;
                 }
                 else
                 {
                     if (category.AnyPackagesChecked())
                     {
-                        TabIndex.Background = UISettings.CurrentTheme.SelectionListNotActiveHasSelectionsBackgroundColor.Brush;
-                        TabIndex.Foreground = UISettings.CurrentTheme.SelectionListNotActiveHasSelectionsTextColor.Brush;
+                        //TabIndex.Background = UISettings.CurrentTheme.SelectionListNotActiveHasSelectionsBackgroundColor.Brush;
+                        //TabIndex.Foreground = UISettings.CurrentTheme.SelectionListNotActiveHasSelectionsTextColor.Brush;
                     }
                     else
                     {
-                        TabIndex.Background = UISettings.NotSelectedTabColor;
-                        TabIndex.Foreground = UISettings.CurrentTheme.SelectionListNotActiveHasNoSelectionsTextColor.Brush;
+                        //TabIndex.Background = UISettings.NotSelectedTabColor;
+                        //TabIndex.Foreground = UISettings.CurrentTheme.SelectionListNotActiveHasNoSelectionsTextColor.Brush;
                     }
                 }
             }

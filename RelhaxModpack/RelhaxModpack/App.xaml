@@ -10,17 +10,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- https://stackoverflow.com/questions/44469204/in-wpf-how-to-reference-a-staticresource-in-app-xaml-from-merged-dictionary -->
-                <ResourceDictionary>
-                    <localUI:CustomBrushConverter x:Key="CustomToBrushConverter"/>
-                </ResourceDictionary>
-                <!-- <ResourceDictionary Source="RelhaxThemes.xaml"/> -->
+                <ResourceDictionary Source="UI/StyleDictionaries/RelhaxCommonStyleDictionary.xaml"/>
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxButtonStyleDictionary.xaml"/>
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxCheckboxStyleDictionary.xaml"/>
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxComboboxStyleDictionary.xaml"/>
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxRadioButtonStyleDictionary.xaml"/>
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxTabItemStyleDictionary.xaml"/>
-                <ResourceDictionary Source="UI/StyleDictionaries/RelhaxSelectionListTabItemStyleDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- https://stackoverflow.com/a/32558808/3128017 of https://stackoverflow.com/questions/14033238/wpf-setting-tooltip-maxwidth -->
             <Style TargetType="ToolTip">

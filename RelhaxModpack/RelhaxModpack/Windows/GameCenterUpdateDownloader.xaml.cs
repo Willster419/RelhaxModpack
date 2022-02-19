@@ -153,11 +153,6 @@ namespace RelhaxModpack.Windows
 
         private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (TabItem item in GcDownloadMainTabControl.Items)
-            {
-                item.Background = UISettings.CurrentTheme.TabItemColorset.BackgroundBrush.Brush;
-            }
-
             Logging.Debug("GameCenterDownloader: SelectedClient = {0}", SelectedClient);
             GcDownloadStep1Init();
             init = false;
@@ -179,7 +174,6 @@ namespace RelhaxModpack.Windows
                 {
                     item.IsEnabled = true;
                 }
-                item.Background = UISettings.CurrentTheme.TabItemColorset.BackgroundBrush.Brush;
             }
         }
 
@@ -328,7 +322,6 @@ namespace RelhaxModpack.Windows
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
                     Text = gameCenterProperty.GetRequestParamater,
-                    Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
                 };
                 //https://stackoverflow.com/questions/18659435/programmatically-add-label-to-grid
                 Grid.SetColumn(gameCenterProperty.KeyBlock, 0);
@@ -344,7 +337,7 @@ namespace RelhaxModpack.Windows
                 Grid.SetRow(gameCenterProperty.ValueBlock, i);
                 GcDownloadStep1KeyValueGrid.Children.Add(gameCenterProperty.ValueBlock);
 
-                string completeLocationPath = string.Empty;
+                string completeLocationPath;
                 if ((bool)GcDownloadStep1GameCenterCheckbox.IsChecked)
                     completeLocationPath = gameCenterProperty.FileName.Equals(WgcNotificationsXml) ? notificationsXmlPathWgc : versionXmlPathWgc;
                 else
@@ -710,8 +703,7 @@ namespace RelhaxModpack.Windows
                     GcDownloadStep3StackPanel.Children.Clear();
                     GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                     {
-                        Text = Translations.GetTranslatedString("error"),
-                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                        Text = Translations.GetTranslatedString("error")
                     });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
@@ -747,8 +739,7 @@ namespace RelhaxModpack.Windows
                     GcDownloadStep3StackPanel.Children.Clear();
                     GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                     {
-                        Text = Translations.GetTranslatedString("error"),
-                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                        Text = Translations.GetTranslatedString("error")
                     });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
@@ -759,8 +750,7 @@ namespace RelhaxModpack.Windows
                     GcDownloadStep3StackPanel.Children.Clear();
                     GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                     {
-                        Text = Translations.GetTranslatedString("error"),
-                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                        Text = Translations.GetTranslatedString("error")
                     });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
@@ -772,8 +762,7 @@ namespace RelhaxModpack.Windows
                     GcDownloadStep3StackPanel.Children.Clear();
                     GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                     {
-                        Text = Translations.GetTranslatedString("error"),
-                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                        Text = Translations.GetTranslatedString("error")
                     });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
@@ -788,8 +777,7 @@ namespace RelhaxModpack.Windows
                 GcDownloadStep3StackPanel.Children.Clear();
                 GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                 {
-                    Text = Translations.GetTranslatedString("GcDownloadStep3NoFilesUpToDate"),
-                    Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                    Text = Translations.GetTranslatedString("GcDownloadStep3NoFilesUpToDate")
                 });
                 GcDownloadStep3NextButton.IsEnabled = false;
                 return;
@@ -803,8 +791,7 @@ namespace RelhaxModpack.Windows
                 GcDownloadStep3StackPanel.Children.Clear();
                 GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                 {
-                    Text = Translations.GetTranslatedString("error"),
-                    Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                    Text = Translations.GetTranslatedString("error")
                 });
                 GcDownloadStep3NextButton.IsEnabled = false;
                 return;
@@ -830,8 +817,7 @@ namespace RelhaxModpack.Windows
                     GcDownloadStep3StackPanel.Children.Clear();
                     GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                     {
-                        Text = Translations.GetTranslatedString("error"),
-                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                        Text = Translations.GetTranslatedString("error")
                     });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
@@ -846,8 +832,7 @@ namespace RelhaxModpack.Windows
                     GcDownloadStep3StackPanel.Children.Clear();
                     GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                     {
-                        Text = Translations.GetTranslatedString("error"),
-                        Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                        Text = Translations.GetTranslatedString("error")
                     });
                     GcDownloadStep3NextButton.IsEnabled = false;
                     return;
@@ -865,8 +850,7 @@ namespace RelhaxModpack.Windows
             {
                 GcDownloadStep3StackPanel.Children.Add(new TextBlock()
                 {
-                    Text = string.Format("File={0}, Size={1}", pfp.Filename, FileUtils.SizeSuffix(pfp.Size, 1, true, false)),
-                    Foreground = UISettings.CurrentTheme.TextblockColorset.ForegroundBrush.Brush
+                    Text = string.Format("File={0}, Size={1}", pfp.Filename, FileUtils.SizeSuffix(pfp.Size, 1, true, false))
                 });
             }
             GcDownloadStep3NextButton.IsEnabled = true;

@@ -264,24 +264,8 @@
     <Compile Include="Settings\ModpackToolboxSettings.cs" />
     <Compile Include="Settings\SettingsParser.cs" />
     <Compile Include="UI\AutomationListBoxItem.cs" />
-    <Compile Include="UI\BoundUISettings.cs" />
-    <Compile Include="UI\ClassColorset.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\BorderClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\ButtonClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\CheckboxClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\ComboboxClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\ControlClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\IClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\PanelClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\ProgressbarClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\RadioButtonClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\RelhaxHyperlinkClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\TabItemClassThemeDefinition.cs" />
-    <Compile Include="UI\ClassThemeDefinitions\TextBlockClassThemeDefinition.cs" />
-    <Compile Include="UI\ComponentColorset.cs" />
-    <Compile Include="UI\CustomBrush.cs" />
-    <Compile Include="UI\CustomBrushConverter.cs" />
     <Compile Include="UI\Extensions\FontExtensions.cs" />
+    <Compile Include="UI\RelhaxBorder.cs" />
     <Compile Include="UI\RelhaxComboBoxItem.xaml.cs">
       <DependentUpon>RelhaxComboBoxItem.xaml</DependentUpon>
     </Compile>
@@ -290,10 +274,7 @@
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\RelhaxInstallerProgress.cs" />
-    <Compile Include="UI\Theme.cs" />
-    <Compile Include="UI\Themes.cs" />
     <Compile Include="UI\UiUtils.cs" />
-    <Compile Include="UI\WindowColorset.cs" />
     <Compile Include="UI\ZoomBorder.cs" />
     <Compile Include="Utilities\ClassEventArgs\LogMessageEventArgs.cs" />
     <Compile Include="Utilities\ClassEventArgs\RelhaxInstallFinishedEventArgs.cs" />
@@ -376,7 +357,6 @@
     <Compile Include="Settings\EditorSettings.cs" />
     <Compile Include="Settings\ModpackSettings.cs" />
     <Compile Include="Settings\CommandLineSettings.cs" />
-    <Compile Include="Settings\UISettings.cs" />
     <Compile Include="UI\EditorComboBoxItem.cs" />
     <Compile Include="UI\EditorSearchBoxItem.cs" />
     <Compile Include="UI\LinkButton.cs" />
@@ -497,9 +477,6 @@
     <Compile Include="Windows\ScalingConfirmation.xaml.cs">
       <DependentUpon>ScalingConfirmation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\TemplateWindow.xaml.cs">
-      <DependentUpon>TemplateWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
     </Compile>
@@ -520,6 +497,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UI\RelhaxComboBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\StyleDictionaries\RelhaxCommonStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -544,10 +525,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\StyleDictionaries\RelhaxButtonStyleDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\StyleDictionaries\RelhaxSelectionListTabItemStyleDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -684,10 +661,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ScalingConfirmation.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\TemplateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

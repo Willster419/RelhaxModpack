@@ -13,11 +13,6 @@
         /// <summary>
         /// The dark application theme
         /// </summary>
-        Dark,
-
-        /// <summary>
-        /// A custom application theme from the UISettings.xml
-        /// </summary>
-        Custom
+        Dark
     }
 }

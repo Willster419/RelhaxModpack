@@ -26,15 +26,5 @@ namespace RelhaxModpack.UI
         /// </summary>
         /// <param name="Checked">The value of the checked property</param>
         void OnCheckedChanged(bool Checked);
-
-        /// <summary>
-        /// The color of the text of the UI display
-        /// </summary>
-        Brush TextColor { get; set; }
-
-        /// <summary>
-        /// The color of the back panel of the UI display
-        /// </summary>
-        Brush PanelColor { get; set; }
     }
 }

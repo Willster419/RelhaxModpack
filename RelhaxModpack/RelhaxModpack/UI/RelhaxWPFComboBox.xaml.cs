@@ -125,6 +125,18 @@ namespace RelhaxModpack.UI
                 //reset to first selection option
                 this.SelectedIndex = 0;
             }
+
+            if (spc.ChangeColorOnValueChecked && spc.Visible && spc.IsStructureVisible)
+            {
+                if (spc.Checked || spc.AnyPackagesChecked())
+                {
+                    spc.ParentBorder.IsChildPackageChecked = true;
+                }
+                else
+                {
+                    spc.ParentBorder.IsChildPackageChecked = false;
+                }
+            }
         }
 
         private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)

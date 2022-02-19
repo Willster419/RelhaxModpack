@@ -52,32 +52,17 @@ namespace RelhaxModpack.UI
         public void OnCheckedChanged(bool Checked)
         {
             IsChecked = Checked;
-        }
 
-        /// <summary>
-        /// Set the color of the RadioButton Foreground property
-        /// </summary>
-        public Brush TextColor
-        {
-            get
-            { return Foreground; }
-            set
-            { Foreground = value; }
-        }
-
-        /// <summary>
-        /// Set the brush of the RadioButton Panel Background property 
-        /// </summary>
-        public Brush PanelColor
-        {
-            get
+            if (Package.ChangeColorOnValueChecked && Package.Visible && Package.IsStructureVisible)
             {
-                return Package.ParentBorder == null ? null : Package.ParentBorder.Background;
-            }
-            set
-            {
-                if (Package.ParentBorder != null)
-                    Package.ParentBorder.Background = value;
+                if (Checked || Package.AnyPackagesChecked())
+                {
+                    Package.ParentBorder.IsChildPackageChecked = true;
+                }
+                else
+                {
+                    Package.ParentBorder.IsChildPackageChecked = false;
+                }
             }
         }
 

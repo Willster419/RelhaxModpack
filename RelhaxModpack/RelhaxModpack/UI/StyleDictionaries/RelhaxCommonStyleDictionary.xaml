@@ -1,0 +1,78 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:RelhaxModpack.Windows"
+                    xmlns:ui="clr-namespace:RelhaxModpack.UI">
+    <!-- dark theme done in a way that's actually good. uses all the WPF -->
+    <!-- add some static colors -->
+    <Color x:Key="DarkThemeHighlightColor" A="255" R="134" B="134" G="134"/>
+    <Color x:Key="DarkThemeSelectedColor" A="255" R="150" B="150" G="150"/>
+    <Color x:Key="DarkThemeButtonColor" A="255" R="42" B="42" G="42"/>
+    <SolidColorBrush x:Key="DefaultGridColorInTabItem" Color="#FFE5E5E5"/>
+    <SolidColorBrush x:Key="DarkThemeTextColor" Color="White"/>
+    <SolidColorBrush x:Key="DarkThemeBackground" Color="#1A1A1A"/>
+    <SolidColorBrush x:Key="DarkThemeButton" Color="{StaticResource DarkThemeButtonColor}"/>
+    <SolidColorBrush x:Key="DarkThemeActiveTab" Color="#646464"/>
+    <SolidColorBrush x:Key="DarkThemeImageButtonBackground" Color="#AFAFAF"/>
+    <LinearGradientBrush x:Key="DarkThemeProgressBarForeground" StartPoint="0.25, 0" EndPoint="0.75, 1">
+        <GradientStop Color="#5F5F5F5F" Offset="0"/>
+        <GradientStop Color="#0000FF" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="DarkThemeCheckboxHighlight" Color="{StaticResource DarkThemeHighlightColor}"/>
+    <SolidColorBrush x:Key="DarkThemeRadioButtonHighlight" Color="{StaticResource DarkThemeHighlightColor}"/>
+    <SolidColorBrush x:Key="DarkThemeButtonHighlight" Color="{StaticResource DarkThemeHighlightColor}"/>
+    <SolidColorBrush x:Key="DarkThemeTabItemHighlightColorBrush" Color="{StaticResource DarkThemeHighlightColor}"/>
+    <SolidColorBrush x:Key="DarkThemeTabItemSelectedColorBrush" Color="{StaticResource DarkThemeSelectedColor}"/>
+
+    <!-- Looks like this can be used for panel & border (and others) -->
+    <Style x:Key="DarkThemeStyleBackground">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                <Setter Property="Control.Background" Value="{StaticResource DarkThemeBackground}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="DarkThemeStyleBackgroundGridInTabItem">
+        <Setter Property="Control.Background" Value="{StaticResource DefaultGridColorInTabItem}"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                <Setter Property="Control.Background" Value="{StaticResource DarkThemeBackground}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="DarkThemeStyleBackgroundForeground">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                <Setter Property="Control.Foreground" Value="{StaticResource DarkThemeTextColor}"/>
+                <Setter Property="Control.Background" Value="{StaticResource DarkThemeBackground}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- I don't do anything fancy with the progressBar so just modifying the properties will do -->
+    <Style x:Key="DarkThemeStyleProgressBar">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                <Setter Property="ProgressBar.Background" Value="{StaticResource DarkThemeButton}"/>
+                <Setter Property="ProgressBar.Foreground" Value="{StaticResource DarkThemeProgressBarForeground}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Custom border definition with IsChildPackageChecked property to use for checked style triggers -->
+    <Style TargetType="{x:Type ui:RelhaxBorder}" BasedOn="{StaticResource {x:Type Border}}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsChildPackageChecked, RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter Property="Background" Value="BlanchedAlmond"/>
+            </DataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                    <Condition Binding="{Binding IsChildPackageChecked, RelativeSource={RelativeSource Self}}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource DarkThemeActiveTab}"/>
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

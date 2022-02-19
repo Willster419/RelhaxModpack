@@ -249,16 +249,8 @@ namespace RelhaxModpack
             //create tray icons and menus
             CreateTray();
 
-            //apply UI coloring settings
+            //apply UI settings
             progressIndicator.UpdateProgress(2, Translations.GetTranslatedString("loadingSettings"));
-            if(ModpackSettings.ApplicationTheme == UIThemes.Custom)
-            {
-                Logging.Warning("UIThemes was set to custom, but this feature is no longer supported. Setting to default");
-                ModpackSettings.ApplicationTheme = UIThemes.Default;
-            }
-
-            //apply custom UI theming (only need to explicitly call this for MainWindow)
-            UISettings.ApplyCustomStyles(this);
 
             //note: if loadSettings load the language, apply to UI sets the UI option and triggers translation of MainWindow
             //note: in WPF, the enabled trigger will occur in the loading event, so this will launch the checked events
@@ -2800,22 +2792,7 @@ namespace RelhaxModpack
 
         private void OnThemeChanged(object sender, RoutedEventArgs e)
         {
-            //set ModpackSettings theme value
-            if ((bool)ThemeDefault.IsChecked)
-                ModpackSettings.ApplicationTheme = UIThemes.Default;
-            else if ((bool)ThemeDark.IsChecked)
-                ModpackSettings.ApplicationTheme = UIThemes.Dark;
-
-            //try to apply it
-            UISettings.ApplyUIColorSettings(this);
-
-            //load the result back in
-            if (UISettings.CurrentTheme.Equals(Themes.Default))
-                ThemeDefault.IsChecked = true;
-            else if (UISettings.CurrentTheme.Equals(Themes.Dark))
-                ThemeDark.IsChecked = true;
-            else //disabling custom theme
-                ThemeDefault.IsChecked = true;
+            this.DarkTheme = (bool)ThemeDark.IsChecked;
         }
 
         private void OnSaveDisabledModsInSelectionChanged(object sender, RoutedEventArgs e)
@@ -3286,11 +3263,8 @@ namespace RelhaxModpack
                 case UIThemes.Dark:
                     ThemeDark.IsChecked = true;
                     break;
-                case UIThemes.Custom: //disabling custom theme
-                    Logging.Warning("UIThemes was set to custom, but this feature is no longer supported. Setting to default");
-                    ThemeDefault.IsChecked = true;
-                    break;
             }
+            DarkTheme = ModpackSettings.ApplicationTheme == UIThemes.Dark;
 
             //apply beta application settings
             UseBetaApplicationCB.IsChecked = (ModpackSettings.ApplicationDistroVersion == ApplicationVersions.Beta);

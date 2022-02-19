@@ -22,7 +22,8 @@ namespace RelhaxModpack.UI
     /// </summary>
     public partial class RelhaxWPFCheckBox : CheckBox, IPackageUIComponent
     {
-        private bool iconsSet = false;
+        protected bool iconsSet = false;
+
         /// <summary>
         /// Create an instance of the RelhaxWPFCheckBox class
         /// </summary>
@@ -40,7 +41,7 @@ namespace RelhaxModpack.UI
         /// Change any UI parent class properties that depends on the enabled SelectablePackage
         /// </summary>
         /// <param name="Enabled">The value from the SelectablePackage</param>
-        public void OnEnabledChanged(bool Enabled)
+        public virtual void OnEnabledChanged(bool Enabled)
         {
             IsEnabled = Enabled;
         }
@@ -49,35 +50,20 @@ namespace RelhaxModpack.UI
         /// Change any UI parent class properties that depends on the checked SelectablePackage
         /// </summary>
         /// <param name="Checked">The value from the SelectablePackage</param>
-        public void OnCheckedChanged(bool Checked)
+        public virtual void OnCheckedChanged(bool Checked)
         {
             IsChecked = Checked;
-        }
 
-        /// <summary>
-        /// Set the color of the Checkbox Foreground property
-        /// </summary>
-        public Brush TextColor
-        {
-            get
-            { return Foreground; }
-            set
-            { Foreground = value; }
-        }
-
-        /// <summary>
-        /// Set the brush of the Checkbox Panel Background property 
-        /// </summary>
-        public Brush PanelColor
-        {
-            get
+            if (Package.ChangeColorOnValueChecked && Package.Visible && Package.IsStructureVisible)
             {
-                return Package.ParentBorder == null ? null : Package.ParentBorder.Background;
-            }
-            set
-            {
-                if (Package.ParentBorder != null)
-                    Package.ParentBorder.Background = value;
+                if (Checked || Package.AnyPackagesChecked())
+                {
+                    Package.ParentBorder.IsChildPackageChecked = true;
+                }
+                else
+                {
+                    Package.ParentBorder.IsChildPackageChecked = false;
+                }
             }
         }
 

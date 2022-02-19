@@ -109,9 +109,6 @@ namespace RelhaxModpack.Windows
                 return;
             }
 
-            //get windowComponent
-            WindowColorset developerSelectionColorset = UISettings.CurrentTheme.WindowColorsets[typeof(DeveloperSelectionsViewer)];
-
             //load selections into stackpanel
             bool firstOne = true;
             foreach (XmlNode node in selectionsList)
@@ -125,7 +122,6 @@ namespace RelhaxModpack.Windows
                 };
                 DeveloperSelectionsStackPanel.Children.Add(selectionButton);
                 firstOne = false;
-                UISettings.ApplyThemeToRootComponent(selectionButton, developerSelectionColorset.ComponentColorsets != null, developerSelectionColorset, true);
             }
 
             //enable the button to select them

@@ -55,7 +55,7 @@ namespace RelhaxModpack.UI
         public RelhaxInstallTaskReporter(string uniqueID)
         {
             InitializeComponent();
-            //dynamically create the tags and then apply the theme to itsself
+            //dynamically create the tags and then apply the theme to itself
             MainBorder.Tag = string.Format("{0}_{1}", uniqueID, MainBorder.Name);
             TaskName.Tag = string.Format("{0}_{1}", uniqueID,TaskName.Name);
             TaskStatus.Tag = string.Format("{0}_{1}", uniqueID, TaskStatus.Name);
@@ -258,18 +258,5 @@ namespace RelhaxModpack.UI
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-
-        private void RelhaxTaskReporter_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (LoadedAfterApply)
-            {
-                WindowColorset advancedColorset = null;
-                if (UISettings.CurrentTheme.WindowColorsets != null && UISettings.CurrentTheme.WindowColorsets.ContainsKey(typeof(AdvancedProgress)))
-                {
-                    advancedColorset = UISettings.CurrentTheme.WindowColorsets[typeof(AdvancedProgress)];
-                }
-                UISettings.ApplyThemeToRootComponent(this, false, advancedColorset);
-            }
-        }
     }
 }

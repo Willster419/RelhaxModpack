@@ -443,75 +443,6 @@ namespace RelhaxModpack.Database
                         Parent.RelhaxWPFComboBoxList[dropDownSelectionType].OnDropDownSelectionChanged(this, value);
                     }
                 }
-
-                if(ChangeColorOnValueChecked && Visible && IsStructureVisible)
-                {
-                    //if the UI component is not null, it's a checkbox or radiobutton
-                    if (UIComponent != null)
-                    {
-                        //set panel and text color based on true or false for checkbox or radiobutton
-                        switch (_Checked)
-                        {
-                            case true:
-                                if (UIComponent.PanelColor != UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush)
-                                    UIComponent.PanelColor = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
-                                UIComponent.TextColor = UISettings.CurrentTheme.SelectionListSelectedTextColor.Brush;
-                                break;
-                            case false:
-                                if (!AnyPackagesChecked())
-                                {
-                                    if (UIComponent.PanelColor != UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush)
-                                        UIComponent.PanelColor = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
-                                    UIComponent.TextColor = UISettings.CurrentTheme.SelectionListNotSelectedTextColor.Brush;
-                                }
-                                break;
-                        }
-                    }
-                    //null UI component is a combobox
-                    else if (dropDownSelectionType > -1)
-                    {
-                        //set panel and text color based on true of false for dropdown option
-                        switch (_Checked)
-                        {
-                            case true:
-                                if (ParentBorder.Background != UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush)
-                                    ParentBorder.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
-                                break;
-                            case false:
-                                if (!AnyPackagesChecked())
-                                {
-                                    if (ParentBorder.Background != UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush)
-                                        ParentBorder.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
-                                }
-                                break;
-                        }
-                    }
-
-                    //toggle the Tab Color based on if anything is selected, done for level -1 top item
-                    if (Level == -1)
-                    {
-                        //workarounds
-                        //top item is not going to correct color
-                        if (ModSelectionView == SelectionView.Legacy)
-                        {
-                            if (_Checked)
-                            {
-                                TreeView.Background = UISettings.CurrentTheme.SelectionListSelectedPanelColor.Brush;
-                            }
-                            else
-                            {
-                                TreeView.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
-                            }
-                        }
-                        else if (ModSelectionView == SelectionView.DefaultV2)
-                        {
-                            if (!_Checked)
-                            {
-                                ParentBorder.Background = UISettings.CurrentTheme.SelectionListNotSelectedPanelColor.Brush;
-                            }
-                        }
-                    }
-                }
             }
         }
 
@@ -605,7 +536,7 @@ namespace RelhaxModpack.Database
         /// <summary>
         /// The border for the legacy view to allow for putting all children in the border. sits inside TreeViewItem. WPF component
         /// </summary>
-        public Border ChildBorder;
+        public RelhaxBorder ChildBorder;
 
         /// <summary>
         /// The StackPanel to allow the child TreeViewItems to stack upon each other. sits inside the border. WPF component
@@ -615,7 +546,7 @@ namespace RelhaxModpack.Database
         /// <summary>
         /// The border that this component is in. WPF component
         /// </summary>
-        public Border ParentBorder;
+        public RelhaxBorder ParentBorder;
 
         /// <summary>
         /// The StackPanel that this item is inside. WPF component
