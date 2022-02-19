@@ -579,7 +579,7 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.TreeViewItem.Header = cat.CategoryHeader.UIComponent;
                         cat.CategoryHeader.TreeView.Items.Add(cat.CategoryHeader.TreeViewItem);
                         //TabPage -> ParentBorder -> TreeView -> TreeViewItem (CategoryHeader) -> UIComponent
-                        cat.TabPage.Content = cat.CategoryHeader.TreeView;
+                        cat.TabPage.Content = cat.CategoryHeader.ParentBorder;
                         cat.CategoryHeader.Packages = cat.Packages;
                         break;
                     case SelectionView.DefaultV2:
