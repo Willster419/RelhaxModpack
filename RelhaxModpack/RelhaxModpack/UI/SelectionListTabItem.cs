@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RelhaxModpack.Database;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -16,17 +17,19 @@ using System.Windows.Shapes;
 
 namespace RelhaxModpack.UI
 {
-    public class RelhaxBorder : Border, INotifyPropertyChanged
+    public class SelectionListTabItem : TabItem, INotifyPropertyChanged, IOnCheckedComponent
     {
-        static RelhaxBorder()
+        static SelectionListTabItem()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(RelhaxBorder), new FrameworkPropertyMetadata(typeof(RelhaxBorder)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(SelectionListTabItem), new FrameworkPropertyMetadata(typeof(SelectionListTabItem)));
         }
 
-        public RelhaxBorder() : base()
+        public SelectionListTabItem() : base()
         {
 
         }
+
+        public SelectablePackage Package { get; set; }
 
         protected bool _isChildPackageChecked = false;
 
@@ -47,6 +50,21 @@ namespace RelhaxModpack.UI
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        public void OnCheckedChanged(bool Checked)
+        {
+            if (Package.ChangeColorOnValueChecked && Package.Visible && Package.IsStructureVisible)
+            {
+                if (Checked || Package.AnyPackagesChecked())
+                {
+                    this.IsChildPackageChecked = true;
+                }
+                else
+                {
+                    this.IsChildPackageChecked = false;
+                }
             }
         }
     }

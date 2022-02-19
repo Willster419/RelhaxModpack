@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:RelhaxModpack.Windows">
+                    xmlns:local="clr-namespace:RelhaxModpack.Windows"
+                    xmlns:Ui="clr-namespace:RelhaxModpack.UI">
     <!-- Checkbox theme -->
     <Style x:Key="DarkThemeStyleCheckbox" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -86,5 +87,8 @@
                 <!-- highlight -->
             </DataTrigger>
         </Style.Triggers>
+    </Style>
+
+    <Style TargetType="{x:Type Ui:RelhaxWPFCheckBoxHeader}" BasedOn="{StaticResource DarkThemeStyleCheckbox}">
     </Style>
 </ResourceDictionary>

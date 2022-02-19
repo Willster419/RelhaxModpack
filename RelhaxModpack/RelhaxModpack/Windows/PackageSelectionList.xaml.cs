@@ -526,12 +526,13 @@ namespace RelhaxModpack.Windows
                 {
                     Header = cat.Name,
                     Tag = cat,
-                    Style = (Style)Application.Current.Resources["RelhaxSelectionListTabItemStyle"]
+                    //Package = cat.CategoryHeader
                 };
 
                 //init common stuff used between both
                 cat.CategoryHeader.RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                 cat.CategoryHeader.ChildStackPanel = new StackPanel();
+                cat.CategoryHeader.TabIndex = cat.TabPage;
 
                 switch (ModpackSettings.ModSelectionView)
                 {
@@ -664,17 +665,29 @@ namespace RelhaxModpack.Windows
 
         private void AddUserMods()
         {
+            //NOTE: this is UI thread
+
+            UserCategory.CategoryHeader = new SelectablePackage()
+            {
+                Name = string.Format("----------[{0}]----------", "USER"),
+                Type = SelectionTypes.multi,
+                Visible = true,
+                Enabled = true,
+                Level = -1,
+                PackageName = string.Format("Category_User_Header", Name.Replace(' ', '_'))
+            };
+            UserCategory.CategoryHeader.ParentCategory = UserCategory;
             StackPanel userStackPanel = new StackPanel();
             TabItem userTab = new TabItem()
             {
                 Name = "UserMods",
-                Header = Translations.GetTranslatedString("userMods"),
-                Style = (Style)Application.Current.Resources["RelhaxSelectionListTabItemStyle"]
+                Header = Translations.GetTranslatedString("userMods")
             };
             userTab.RequestBringIntoView += OnUserModsTabSelected;
             userTab.Content = userStackPanel;
             ModTabGroups.Items.Add(userTab);
             UserCategory.TabPage = userTab;
+            UserCategory.CategoryHeader.TabIndex = userTab;
 
             foreach(SelectablePackage package in UserCategory.Packages)
             {
@@ -689,6 +702,7 @@ namespace RelhaxModpack.Windows
                     Content = package.NameDisplay
                 };
                 package.UIComponent = userMod;
+                package.TabIndex = userTab;
                 userMod.Click += OnUserPackageClick;
                 userStackPanel.Children.Add(userMod);
             }
@@ -1117,6 +1131,8 @@ namespace RelhaxModpack.Windows
                 spc.Checked = true;
             else
                 spc.Checked = false;
+
+            //spc.TabIndex.OnCheckedChanged(spc.Checked);
         }
 
         //when a multi mod is selected
