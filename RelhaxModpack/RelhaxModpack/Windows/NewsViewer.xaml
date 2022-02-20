@@ -28,7 +28,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <!--Foreground="#FF0066CC"-->
-        <ui:RelhaxHyperlink x:Name="ViewNewsOnGoogleTranslate" HorizontalAlignment="Left" Margin="5,0,0,10" VerticalAlignment="Bottom" Tag="ViewNewsOnGoogleTranslate" Text="View this on Google Translate" Foreground="#FF0066CC"/>
+        <ui:RelhaxHyperlink x:Name="ViewNewsOnGoogleTranslate" HorizontalAlignment="Left" Margin="5,0,0,10" VerticalAlignment="Bottom" Tag="ViewNewsOnGoogleTranslate" Text="View this on Google Translate"/>
     </Grid>
 </local:RelhaxWindow>

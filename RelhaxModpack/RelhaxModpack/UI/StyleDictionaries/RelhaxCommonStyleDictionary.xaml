@@ -70,7 +70,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- direct application of {DarkThemeStyleBackgroundForeground} to components based on type -->
+    <!-- direct application of {DarkThemeStyleBackground(Foreground)} to components based on type -->
     <Style TargetType="TextBlock" BasedOn="{StaticResource DarkThemeStyleBackgroundForeground}">
         
     </Style>
