@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="RelhaxModpack.Windows.PatchDesigner"
         mc:Ignorable="d"
-        Title="PatchTester" Height="575" Width="800" MinHeight="550" MinWidth="640"
+        Title="Patch Tester (Deprecated)" Height="575" Width="800" MinHeight="550" MinWidth="640"
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
         Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="False" ApplyToolTips="False">
@@ -22,7 +22,7 @@
         </Grid.ColumnDefinitions>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
             <TabItem Tag="DesignerTab" x:Name="DesignerTab" Header="Designer">
-                <Grid Background="#FFE5E5E5">
+                <Grid Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
                     <Button Tag="LocateFileToPatchButton" x:Name="LocateFileToPatchButton" Content="Open file to patch" HorizontalAlignment="Right" VerticalAlignment="Top"
                             Width="120" Height="22" Click="LocateFileToPatchButton_Click"/>
                     <TextBlock Tag="LocateFileToPatchButton" x:Name="FileLocationHeader" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Target file location"
@@ -114,7 +114,7 @@
         <!-- create the second tab with patching help, log output, settings -->
         <TabControl Tag="RightSideTabControl" x:Name="RightSideTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2">
             <TabItem Tag="PatchesListTab"  x:Name="PatchesListTab" Header="Patches list">
-                <Grid Background="#FFE5E5E5">
+                <Grid Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
                     <ListBox Tag="PatchesList" x:Name="PatchesList" HorizontalAlignment="Stretch"  Margin="0,21,0,20" VerticalAlignment="Stretch" SelectionChanged="PatchesList_SelectionChanged" ScrollViewer.ScrollChanged="PatchesList_ScrollChanged"
                              PreviewMouseUp="PatchesList_PreviewMouseUp" PreviewMouseDown="PatchesList_PreviewMouseDown" MouseMove="PatchesList_MouseMove" DragOver="PatchesList_DragOver" Drop="PatchesList_Drop" AllowDrop="True" DisplayMemberPath="ListboxDisplay"/>
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Patches list (click and drag to order)" VerticalAlignment="Top"/>
@@ -123,14 +123,14 @@
                 </Grid>
             </TabItem>
             <TabItem Tag="LogOutputTab" x:Name="LogOutputTab" Header="Log Output">
-                <Grid Background="#FFE5E5E5">
+                <Grid Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
                     <Button Tag="ClearLogButton" x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="ClearLogButton_Click"/>
                     <TextBox Tag="LogOutput" x:Name="LogOutput" HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch" IsReadOnly="True"
                              AllowDrop="False" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"/>
                 </Grid>
             </TabItem>
             <TabItem Tag="SettingsTab" x:Name="SettingsTab" Header="Settings">
-                <Grid Background="#FFE5E5E5">
+                <Grid Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20"/>
                         <RowDefinition Height="20"/>
