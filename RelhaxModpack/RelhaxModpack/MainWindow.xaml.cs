@@ -520,8 +520,6 @@ namespace RelhaxModpack
                 Logging.Info("{0} found, enabling manager tools buttons", ApplicationConstants.EditorLaunchFromMainWindowFilename);
                 LauchEditor.Visibility = Visibility.Visible;
                 LauchEditor.IsEnabled = true;
-                LauchPatchDesigner.Visibility = Visibility.Visible;
-                LauchPatchDesigner.IsEnabled = true;
                 LauchAutomationRunner.Visibility = Visibility.Visible;
                 LauchAutomationRunner.IsEnabled = true;
 
@@ -537,8 +535,6 @@ namespace RelhaxModpack
             {
                 LauchEditor.Visibility = Visibility.Hidden;
                 LauchEditor.IsEnabled = false;
-                LauchPatchDesigner.Visibility = Visibility.Hidden;
-                LauchPatchDesigner.IsEnabled = false;
                 LauchAutomationRunner.Visibility = Visibility.Hidden;
                 LauchAutomationRunner.IsEnabled = false;
             }
