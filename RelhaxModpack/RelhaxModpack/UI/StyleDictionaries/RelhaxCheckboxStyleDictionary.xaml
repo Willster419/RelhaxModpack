@@ -2,8 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:RelhaxModpack.Windows"
                     xmlns:Ui="clr-namespace:RelhaxModpack.UI">
+    <SolidColorBrush x:Key="OptionMark.Static.Background" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="OptionMark.Static.Border" Color="#FF707070"/>
+    <SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="#FFF3F9FF"/>
+    <SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="#FF5593FF"/>
+    <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="#FF212121"/>
+    <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="#FFE6E6E6"/>
+    <SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="#FFBCBCBC"/>
+    <SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="#FF707070"/>
+    <SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="#FFD9ECFF"/>
+    <SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="#FF3C77DD"/>
+    <SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="#FF212121"/>
+    <SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="#FF212121"/>
     <!-- Checkbox theme -->
-    <Style x:Key="DarkThemeStyleCheckbox" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource OptionMark.Static.Border}"/>
