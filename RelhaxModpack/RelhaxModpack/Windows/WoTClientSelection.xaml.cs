@@ -51,8 +51,7 @@ namespace RelhaxModpack.Windows
                 {
                     Content = path,
                     Tag = path,
-                    IsChecked = firstOne,
-                    Style = (Style)Application.Current.Resources["RelhaxRadioButtonStyle"]
+                    IsChecked = firstOne
                 };
                 ClientSelectionsStackPanel.Children.Add(selectionButton);
                 firstOne = false;
