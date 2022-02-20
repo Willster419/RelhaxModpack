@@ -641,33 +641,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Conflicting Packages Dialog
-            //Component: ConflictingPackageDialog
-            //Application window title
-            Spanish.Add("ConflictingPackageDialog", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartA
-            //
-            Spanish.Add("conflictingPackageMessagePartA", TranslationNeeded);
-
-            //Component: conflictingPackagePackageOfCategory
-            //
-            Spanish.Add("conflictingPackagePackageOfCategory", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartB
-            //
-            Spanish.Add("conflictingPackageMessagePartB", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartC
-            //
-            Spanish.Add("conflictingPackageMessagePartC", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartD
-            //
-            Spanish.Add("conflictingPackageMessagePartD", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartE
-            //
-            Spanish.Add("conflictingPackageMessagePartE", TranslationNeeded);
+            Spanish.Add("ConflictingPackageDialog", "Conflicto de paquetes");
+            Spanish.Add("conflictingPackageMessageOptionA", "Opción A");
+            Spanish.Add("conflictingPackageMessageOptionB", "Opción B");
+            Spanish.Add("conflictingPackageMessagePartA", "Ha seleccionado el paquete \"{0}\", pero entra en conflicto con los siguientes paquetes:");
+            Spanish.Add("conflictingPackagePackageOfCategory", "- {0}, de la categoría {1}");
+            Spanish.Add("conflictingPackageMessagePartB", Spanish["conflictingPackageMessageOptionA"] + ": Seleccionar \"{0}\", lo que deseleccionará todos los paquetes en conflicto");
+            Spanish.Add("conflictingPackageMessagePartC", Spanish["conflictingPackageMessageOptionB"] + ": No seleccionar \"{0}\", lo que mantendrá todos los paquetes en conflicto");
+            Spanish.Add("conflictingPackageMessagePartD", "Cerrar la ventana seleccionará la opción B");
+            Spanish.Add("conflictingPackageMessagePartE", "Por favor, elija una opción");
             #endregion
         }
     }

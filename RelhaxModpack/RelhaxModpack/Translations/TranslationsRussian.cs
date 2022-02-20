@@ -626,33 +626,15 @@ namespace RelhaxModpack
             #endregion
 
             #region Conflicting Packages Dialog
-            //Component: ConflictingPackageDialog
-            //Application window title
-            Russian.Add("ConflictingPackageDialog", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartA
-            //
-            Russian.Add("conflictingPackageMessagePartA", TranslationNeeded);
-
-            //Component: conflictingPackagePackageOfCategory
-            //
-            Russian.Add("conflictingPackagePackageOfCategory", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartB
-            //
-            Russian.Add("conflictingPackageMessagePartB", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartC
-            //
-            Russian.Add("conflictingPackageMessagePartC", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartD
-            //
-            Russian.Add("conflictingPackageMessagePartD", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartE
-            //
-            Russian.Add("conflictingPackageMessagePartE", TranslationNeeded);
+            Russian.Add("ConflictingPackageDialog", "Обнаружен конфликт пакетов");
+            Russian.Add("conflictingPackageMessageOptionA", "Вариант A");
+            Russian.Add("conflictingPackageMessageOptionB", "Вариант B");
+            Russian.Add("conflictingPackageMessagePartA", "Вы выбрали пакет \"{0}\", но он конфликтует со следующими пакетами:");
+            Russian.Add("conflictingPackagePackageOfCategory", "- {0}, категория {1}");
+            Russian.Add("conflictingPackageMessagePartB", Russian["conflictingPackageMessageOptionA"] + ": установить \"{0}\", и отказаться от установки всех конфликтующих пакетов");
+            Russian.Add("conflictingPackageMessagePartC", Russian["conflictingPackageMessageOptionB"] + ": не устанавливать \"{0}\", сохранив конфликтующие пакеты");
+            Russian.Add("conflictingPackageMessagePartD", "Закрытие окна равносильно выбору варианта B.");
+            Russian.Add("conflictingPackageMessagePartE", "Выберите действие");
             #endregion
         }
     }
