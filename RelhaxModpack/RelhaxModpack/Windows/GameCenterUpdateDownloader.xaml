@@ -7,9 +7,19 @@
         mc:Ignorable="d"
         Title="Game Center Update Downloader" Height="420" Width="650" MinWidth="650" MinHeight="420"
         Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
+        </Style>
+        <Style TargetType="TabControl" BasedOn="{StaticResource DarkThemeStyleBackground}">
+            <Setter Property="Background" Value="#7FE5E5E5"/>
+        </Style>
+        <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+            <Setter Property="Background" Value="#7FE5E5E5"/>
+        </Style>
+    </Window.Resources>
     <TabControl x:Name="GcDownloadMainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="GcDownloadMainTabControl_SelectionChanged" >
         <TabItem Header="Select Game Client" IsEnabled="True" IsSelected="True" x:Name="GcDownloadStep1">
-            <Grid Background="#FFE5E5E5" Tag="GcDownloadStep1Grid">
+            <Grid Tag="GcDownloadStep1Grid">
                 <Button x:Name="GcDownloadStep1Next" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" IsEnabled="False"
                         Tag="GcDownloadStep1Next" Click="GcDownloadStep1Next_Click">
                     <TextBlock x:Name="GcDownloadStep1NextText" Text="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
@@ -41,7 +51,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Close Game Center" IsEnabled="False" x:Name="GcDownloadStep2">
-            <Grid Background="#FFE5E5E5" Tag="GcDownloadStep2Grid">
+            <Grid Tag="GcDownloadStep2Grid">
                 <Button x:Name="GcDownloadStep2PreviousButton" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="GcDownloadStep2PreviousButton_Click" Tag="GcDownloadStep2PreviousButton">
                     <TextBlock x:Name="GcDownloadStep2PreviousText" Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Button>
@@ -53,7 +63,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Get Update Information" IsEnabled="False" x:Name="GcDownloadStep3">
-            <Grid Background="#FFE5E5E5" Tag="GcDownloadStep3Grid">
+            <Grid Tag="GcDownloadStep3Grid">
                 <Button x:Name="GcDownloadStep3PreviousButton" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="GcDownloadStep3PreviousButton_Click" Tag="GcDownloadStep3PreviousButton">
                     <TextBlock x:Name="GcDownloadStep3PreviousText" Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Button>
@@ -67,7 +77,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Download Update Files" IsEnabled="False" x:Name="GcDownloadStep4">
-            <Grid Background="#FFE5E5E5" Tag="GcDownloadStep4Gred">
+            <Grid Tag="GcDownloadStep4Gred">
                 <Button x:Name="GcDownloadStep4PreviousButton" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="GcDownloadStep4PreviousButton_Click" Tag="GcDownloadStep4PreviousButton">
                     <TextBlock x:Name="GcDownloadStep4PreviousText" Text="Previous" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Button>
@@ -83,7 +93,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Complete!" IsEnabled="False" x:Name="GcDownloadStep5">
-            <Grid Background="#FFE5E5E5" Tag="GcDownloadStep5Grid">
+            <Grid Tag="GcDownloadStep5Grid">
                 <TextBlock x:Name="GcDownloadStep5TabDescription" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top"
                             Text="The process is complete! The game center should detect the files when opened." Tag="GcDownloadStep5TabDescription"/>
                 <Button x:Name="GcDownloadStep5CloseButton" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="GcDownloadStep5CloseButton_Click" Tag="GcDownloadStep5CloseButton">

@@ -22,6 +22,7 @@
     <SolidColorBrush x:Key="DarkThemeButtonHighlight" Color="{StaticResource DarkThemeHighlightColor}"/>
     <SolidColorBrush x:Key="DarkThemeTabItemHighlightColorBrush" Color="{StaticResource DarkThemeHighlightColor}"/>
     <SolidColorBrush x:Key="DarkThemeTabItemSelectedColorBrush" Color="{StaticResource DarkThemeSelectedColor}"/>
+    <SolidColorBrush x:Key="DarkThemeDisabledTabItem" Color="#424242"/>
     
     <!-- Resuable styles for multiple components -->
     <Style x:Key="OptionMarkFocusVisual">

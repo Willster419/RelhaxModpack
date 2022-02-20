@@ -210,6 +210,14 @@
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Background" TargetName="innerBorder" Value="{StaticResource DarkThemeTabItemSelectedColorBrush}"/>
                         </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource DarkThemeDisabledTabItem}"/>
+                            <Setter Property="Opacity" TargetName="contentPresenter" Value="1.00"/>
+                        </MultiDataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
