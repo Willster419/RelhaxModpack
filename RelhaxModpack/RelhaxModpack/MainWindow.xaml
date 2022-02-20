@@ -15,7 +15,23 @@
     Icon="Resources/modpack_icon.ico"
     LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
     <Window.Resources>
-
+        <Style TargetType="TabControl" BasedOn="{StaticResource DarkThemeStyleBackground}">
+            <Setter Property="Background" Value="#7FE5E5E5"/>
+        </Style>
+        <Style TargetType="TabItem" BasedOn="{StaticResource DarkThemeStyleBackground}">
+            <Setter Property="Background" Value="#7FE5E5E5"/>
+        </Style>
+        <Style TargetType="ui:LinkButton" BasedOn="{StaticResource {x:Type Button}}">
+            
+        </Style>
+        <Style x:Key="linkButtonBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type windows:RelhaxWindow}}}" Value="True">
+                    <Setter Property="Control.Background" Value="LightGray"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
         <Grid.Background>
@@ -39,13 +55,13 @@
             <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Margin="2" Content="Diagnostic Utilities"
                     Tag="DiagnosticUtilitiesButton" x:Name="DiagnosticUtilitiesButton" Click="DiagnosticUtilitiesButton_Click" ToolTipService.ShowOnDisabled="True"/>
         </Grid>
-        <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Background="#7FE5E5E5" Tag="SettingsTagGroup">
-            <TabItem Header="Intro" x:Name="SettingsTabIntro" Tag="SettingsTabIntro" Background="#7FE5E5E5">
+        <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Tag="SettingsTagGroup">
+            <TabItem Header="Intro" x:Name="SettingsTabIntro" Tag="SettingsTabIntro">
                 <Grid Background="#7FE5E5E5" Tag="SettingsTabIntroGrid">
                     <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="HelperText" Tag="HelperText"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Selection View" x:Name="SettingsTabSelectionView" Tag="SettingsTabSelectionView" Background="#7FE5E5E5">
+            <TabItem Header="Selection View" x:Name="SettingsTabSelectionView" Tag="SettingsTabSelectionView">
                 <Grid Background="#7FE5E5E5" Tag="SettingsTabSelectionViewGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -81,7 +97,7 @@
                     </CheckBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Installation Settings" x:Name="SettingsTabInstallationSettings" Tag="SettingsTabInstallationSettings" Background="#7FE5E5E5">
+            <TabItem Header="Installation Settings" x:Name="SettingsTabInstallationSettings" Tag="SettingsTabInstallationSettings">
                 <Grid Background="#7FE5E5E5" Tag="SettingsTabInstallationSettingsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -130,7 +146,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Application Settings" x:Name="SettingsTabApplicationSettings" Tag="SettingsTabApplicationSettings" Background="#7FE5E5E5">
+            <TabItem Header="Application Settings" x:Name="SettingsTabApplicationSettings" Tag="SettingsTabApplicationSettings">
                 <Grid Background="#7FE5E5E5" Tag="SettingsTabApplicationSettingsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -193,7 +209,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Advanced Settings" x:Name="SettingsTabAdvancedSettings" Tag="SettingsTabAdvancedSettings" Background="#7FE5E5E5">
+            <TabItem Header="Advanced Settings" x:Name="SettingsTabAdvancedSettings" Tag="SettingsTabAdvancedSettings">
                 <Grid Background="#7FE5E5E5" Tag="SettingsTabAdvancedSettingsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -300,22 +316,22 @@
                 <Image Source="Resources/Images/discord brand.png" Stretch="None"/>
             </ui:LinkButton>
             <ui:LinkButton Grid.Column="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="HomepageButton" x:Name="HomepageButton" Click="LinkButton_Click" Link="https://relhaxmodpack.com/">
-                <Border Background="Transparent" Tag="HomepageButtonImageBorder">
+                <Border Tag="HomepageButtonImageBorder" Style="{StaticResource linkButtonBorderStyle}">
                     <Image Source="Resources/Images/Home.png" Stretch="None"/>
                 </Border>
             </ui:LinkButton>
             <ui:LinkButton Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="FindBugAddModButton" x:Name="FindBugAddModButton" Click="LinkButton_Click" Link="https://github.com/Willster419/RelhaxModpackDatabase/issues">
-                <Border Background="Transparent" Tag="FindBugAddModButtonImageBorder">
+                <Border Tag="FindBugAddModButtonImageBorder" Style="{StaticResource linkButtonBorderStyle}">
                     <Image Source="Resources/Images/report.png" Stretch="None"/>
                 </Border>
             </ui:LinkButton>
             <ui:LinkButton Grid.Column="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="SendEmailButton" x:Name="SendEmailButton" Click="LinkButton_Click" Link="mailto:info@relhaxmodpack.com">
-                <Border Background="Transparent" Tag="SendEmailButtonImageBorder">
+                <Border Tag="SendEmailButtonImageBorder" Style="{StaticResource linkButtonBorderStyle}">
                     <Image Source="Resources/Images/EMail.png" Stretch="None"/>
                 </Border>
             </ui:LinkButton>
             <ui:LinkButton Grid.Column="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="DonateButton" x:Name="DonateButton" Click="LinkButton_Click" Link="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=76KNV8KXKYNG2">
-                <Border Background="Transparent" Tag="DonateButtonImageBorder">
+                <Border Tag="DonateButtonImageBorder" Style="{StaticResource linkButtonBorderStyle}">
                     <Image Source="Resources/Images/donation.png" Stretch="None"/>
                 </Border>
             </ui:LinkButton>
