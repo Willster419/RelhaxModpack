@@ -7246,22 +7246,6 @@
             Controls if the window should have tool tips applied
             </summary>
         </member>
-        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyColorSettings">
-            <summary>
-            Controls if the window should have color settings applied
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyScaling">
-            <summary>
-            Controls if the window should apply scaling values set from the main window
-            </summary>
-        </member>
-        <member name="P:RelhaxModpack.Windows.RelhaxWindow.ApplyCustomFont">
-            <summary>
-            Controls if the window should apply custom font to this window.
-            </summary>
-            <remarks>This setting works in tandem with the ModpackSettings setting to use custom font.</remarks>
-        </member>
         <member name="P:RelhaxModpack.Windows.RelhaxWindow.EscapeKeyClosesWindow">
             <summary>
             Controls if pressing the escape key while the window is open will close it.
