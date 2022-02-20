@@ -74,6 +74,12 @@
     <Style TargetType="TextBlock" BasedOn="{StaticResource DarkThemeStyleBackgroundForeground}">
         
     </Style>
+    <Style TargetType="TextBox" BasedOn="{StaticResource DarkThemeStyleBackgroundForeground}">
+
+    </Style>
+    <Style TargetType="TabControl" BasedOn="{StaticResource DarkThemeStyleBackground}">
+        
+    </Style>
 
     <!-- I don't do anything fancy with the progressBar so just modifying the properties will do -->
     <Style TargetType="ProgressBar">
