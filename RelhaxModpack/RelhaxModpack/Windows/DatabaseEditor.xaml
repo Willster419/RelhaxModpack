@@ -165,6 +165,37 @@
                                 <Setter Property="Background" TargetName="splitBorder" Value="{StaticResource ComboBox.Disabled.Editable.Button.Background}"/>
                                 <Setter Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource ComboBox.Disabled.Editable.Button.Border}"/>
                             </MultiDataTrigger>
+                            <!-- custom triggers begin here -->
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource DarkThemeCombobox}"/>
+                                <Setter Property="Fill" TargetName="arrow" Value="White"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource DarkThemeComboboxHighlight}"/>
+                                <Setter Property="Background" TargetName="splitBorder" Value="{StaticResource DarkThemeComboboxHighlight}"/>
+                                <Setter Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource DarkThemeComboboxHighlight}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ComboBox.Pressed.Background}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource DarkThemeActiveTab}"/>
+                            </MultiDataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -281,6 +312,19 @@
                     <Setter Property="Canvas.Top" TargetName="opaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}"/>
                     <Setter Property="Canvas.Left" TargetName="opaqueRect" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}"/>
                 </Trigger>
+                <!-- custom triggers begin here -->
+                <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                    <Setter Property="Background" TargetName="dropDownBorder" Value="{StaticResource DarkThemeCombobox}"/>
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource DarkThemeCombobox}"/>
+                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                        <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Background" TargetName="dropDownBorder" Value="{StaticResource DarkThemeActiveTab}"/>
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource DarkThemeActiveTab}"/>
+                </MultiDataTrigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
         <Style x:Key="ComboBoxStyle1" TargetType="{x:Type ComboBox}">
@@ -302,6 +346,10 @@
                     <Setter Property="Padding" Value="2"/>
                     <Setter Property="Template" Value="{StaticResource ComboBoxEditableTemplate}"/>
                 </Trigger>
+                <!-- custom triggers -->
+                <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource DarkThemeTextColor}"/>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
     </local:RelhaxWindow.Resources>
