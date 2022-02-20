@@ -1248,6 +1248,9 @@ namespace RelhaxSandbox
                 if (frameworkElement is Control control)
                     control.IsEnabled = (bool)toggleEnableCheckbox.IsChecked;
             }
+
+            darkThemeTab1.IsEnabled = (bool)toggleEnableCheckbox.IsChecked;
+            darkThemeTab2.IsEnabled = (bool)toggleEnableCheckbox.IsChecked;
         }
         #endregion
     }

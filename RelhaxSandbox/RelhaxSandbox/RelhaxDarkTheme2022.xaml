@@ -13,6 +13,7 @@
     <SolidColorBrush x:Key="DarkThemeButton" Color="{StaticResource DarkThemeButtonColor}"/>
     <SolidColorBrush x:Key="DarkThemeActiveTab" Color="#646464"/>
     <SolidColorBrush x:Key="DarkThemeImageButtonBackground" Color="#AFAFAF"/>
+    <SolidColorBrush x:Key="DarkThemeDisabledTabItem" Color="#424242"/>
     <LinearGradientBrush x:Key="DarkThemeProgressBarForeground" StartPoint="0.25, 0" EndPoint="0.75, 1">
         <GradientStop Color="#5F5F5F5F" Offset="0"/>
         <GradientStop Color="#0000FF" Offset="1"/>
@@ -422,6 +423,14 @@
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Background" TargetName="innerBorder" Value="{StaticResource DarkThemeTabItemSelectedColorBrush}"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Value="True"/>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource DarkThemeDisabledTabItem}"/>
+                            <Setter Property="Opacity" TargetName="contentPresenter" Value="1.00"/>
                         </MultiDataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
