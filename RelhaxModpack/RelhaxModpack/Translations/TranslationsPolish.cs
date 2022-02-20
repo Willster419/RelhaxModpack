@@ -563,6 +563,7 @@ namespace RelhaxModpack
             Polish.Add("selectLocationToExport", "Wybierz folder docelowy eksportu instalacji");
             Polish.Add("ExportSelectVersionHeader", "Wybierz wersję docelową klienta WoT");
             Polish.Add("ExportContinueButton", Polish["ContinueButton"]);
+            Polish.Add("ExportCancelButton", Polish["cancel"]);
             Polish.Add("ExportModeMajorVersion", "Wersja online folderu");
             Polish.Add("ExportModeMinorVersion", "Wersja WOT");
             #endregion
@@ -582,34 +583,6 @@ namespace RelhaxModpack
             Polish.Add("ScalingConfirmationRevertTime", "Automatyczne przywrócenie za {0} sekund(y)");
             Polish.Add("ScalingConfirmationKeep", "Zachowaj");
             Polish.Add("ScalingConfirmationDiscard", "Porzuć");
-            #endregion
-
-            #region Color Picker
-            Polish.Add("RelhaxColorPicker", "Schemat Kolorów");
-            Polish.Add("ColorType", "Typ wypełnienia");
-            Polish.Add("SampleTextColor", "Przykładowy Tekst");
-            Polish.Add("MainColor", "Kolor Podstawowy");
-            Polish.Add("MainColorAlpha", "Widoczność (alpha)");
-            Polish.Add("MainColorRed", "Czerwony");
-            Polish.Add("MainColorBlue", "Niebieski");
-            Polish.Add("MainColorGreen", "Zielony");
-            Polish.Add("TextColor", "Kolor Tekstu");
-            Polish.Add("TextColorAlpha", "Widoczność (alpha)");
-            Polish.Add("TextColorRed", "Czerwony");
-            Polish.Add("TextColorBlue", "Niebieski");
-            Polish.Add("TextColorGreen", "Zielony");
-            Polish.Add("SecondColor", "Drugi Kolor");
-            Polish.Add("SecondColorAlpha", "Widoczność (alpha)");
-            Polish.Add("SecondColorRed", "Czerwony");
-            Polish.Add("SecondColorBlue", "Niebieski");
-            Polish.Add("SecondColorGreen", "Zielony");
-            Polish.Add("PointsBlock", "Koordynaty Punktów");
-            Polish.Add("Point1X", "Punkt X1");
-            Polish.Add("Point1Y", "Punkt Y1");
-            Polish.Add("Point2X", "Punkt X2");
-            Polish.Add("Point2Y", "Punkt Y2");
-            Polish.Add("BrushesLink", "Więcej o typach wypełnienia");
-            Polish.Add("SampleXmlOutput", "Kod wynikowy XML");
             #endregion
 
             #region Game Center download utility

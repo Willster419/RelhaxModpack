@@ -563,6 +563,7 @@ namespace RelhaxModpack
             Spanish.Add("selectLocationToExport", "Seleccione la carpeta para exportar la instalación de mods");
             Spanish.Add("ExportSelectVersionHeader", "Por favor, seleccione la versión del cliente de WoT para la que quiere exportar");
             Spanish.Add("ExportContinueButton", Spanish["ContinueButton"]);
+            Spanish.Add("ExportCancelButton", Spanish["cancel"]);
             Spanish.Add("ExportModeMajorVersion", "Versión de la carpeta online");
             Spanish.Add("ExportModeMinorVersion", "Versón de WoT");
             #endregion
@@ -582,34 +583,6 @@ namespace RelhaxModpack
             Spanish.Add("ScalingConfirmationRevertTime", "Revirtiendo cambios en {0} segundo(s)");
             Spanish.Add("ScalingConfirmationKeep", "Mantener");
             Spanish.Add("ScalingConfirmationDiscard", "Descartar");
-            #endregion
-
-            #region Color Picker
-            Spanish.Add("RelhaxColorPicker", "Selector de colores");
-            Spanish.Add("ColorType", "Tipo de pincel");
-            Spanish.Add("SampleTextColor", "Texto de muestra");
-            Spanish.Add("MainColor", "Color Principal");
-            Spanish.Add("MainColorAlpha", "Opacidad (alfa)");
-            Spanish.Add("MainColorRed", "Rojo");
-            Spanish.Add("MainColorBlue", "Azul");
-            Spanish.Add("MainColorGreen", "Verde");
-            Spanish.Add("TextColor", "Color del Texto");
-            Spanish.Add("TextColorAlpha", "Opacidad (alfa)");
-            Spanish.Add("TextColorRed", "Rojo");
-            Spanish.Add("TextColorBlue", "Azul");
-            Spanish.Add("TextColorGreen", "Verde");
-            Spanish.Add("SecondColor", "Color Secundario");
-            Spanish.Add("SecondColorAlpha", "Opacidad (alfa)");
-            Spanish.Add("SecondColorRed", "Rojo");
-            Spanish.Add("SecondColorBlue", "Azul");
-            Spanish.Add("SecondColorGreen", "Verde");
-            Spanish.Add("PointsBlock", "Coordenadas del punto");
-            Spanish.Add("Point1X", "X del Punto 1");
-            Spanish.Add("Point1Y", "Y del Punto 1");
-            Spanish.Add("Point2X", "X del Punto 2");
-            Spanish.Add("Point2Y", "Y del Punto 2");
-            Spanish.Add("BrushesLink", "Lea sobre los tipos de pincel aquí");
-            Spanish.Add("SampleXmlOutput", "Salida de XML de muestra");
             #endregion
 
             #region Game Center download utility

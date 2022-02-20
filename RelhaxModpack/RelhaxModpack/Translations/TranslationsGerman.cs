@@ -572,6 +572,7 @@ namespace RelhaxModpack
             German.Add("selectLocationToExport", "Wähle den Ordner für den Export der Mod-Installation");
             German.Add("ExportSelectVersionHeader", "Bitte wähle die WoT Klientversion, für die du den Export durchführen willst");
             German.Add("ExportContinueButton", German["ContinueButton"]);
+            German.Add("ExportCancelButton", German["cancel"]);
             German.Add("ExportModeMajorVersion", "Version des Online Ordners");
             German.Add("ExportModeMinorVersion", "WoT Version");
             #endregion
@@ -591,34 +592,6 @@ namespace RelhaxModpack
             German.Add("ScalingConfirmationRevertTime", "Rückgängig machen in {0} Sekunde(n)");
             German.Add("ScalingConfirmationKeep", "Behalten");
             German.Add("ScalingConfirmationDiscard", "Verwerfen");
-            #endregion
-
-            #region Color Picker
-            German.Add("RelhaxColorPicker", "Farbauswahl");
-            German.Add("ColorType", "Pinseltyp");
-            German.Add("SampleTextColor", "Dies ist ein Text zum Testen");
-            German.Add("MainColor", "Primärfarbe");
-            German.Add("MainColorAlpha", "Sichtbarkeit (Alpha)");
-            German.Add("MainColorRed", "Rot");
-            German.Add("MainColorBlue", "Blau");
-            German.Add("MainColorGreen", "Grün");
-            German.Add("TextColor", "Textfarbe");
-            German.Add("TextColorAlpha", "Sichtbarkeit (Alpha)");
-            German.Add("TextColorRed", "Rot");
-            German.Add("TextColorBlue", "Blau");
-            German.Add("TextColorGreen", "Grün");
-            German.Add("SecondColor", "Sekundärfarbe");
-            German.Add("SecondColorAlpha", "Sichtbarkeit (Alpha)");
-            German.Add("SecondColorRed", "Rot");
-            German.Add("SecondColorBlue", "Blau");
-            German.Add("SecondColorGreen", "Grün");
-            German.Add("PointsBlock", "Punkt Koordinaten");
-            German.Add("Point1X", "Punkt 1 X");
-            German.Add("Point1Y", "Punkt 1 Y");
-            German.Add("Point2X", "Punkt 2 X");
-            German.Add("Point2Y", "Punkt 2 Y");
-            German.Add("BrushesLink", "Lies mehr über den Pinseltyp hier");
-            German.Add("SampleXmlOutput", "XML Sample Ausgabe");
             #endregion
 
             #region Game Center download utility

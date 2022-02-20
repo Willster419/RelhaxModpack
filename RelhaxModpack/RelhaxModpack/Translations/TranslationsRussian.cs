@@ -548,6 +548,7 @@ namespace RelhaxModpack
             Russian.Add("selectLocationToExport", "Выберите папку для экспорта устанавливаемых модов");
             Russian.Add("ExportSelectVersionHeader", "Выберите версию клиента игры, для которой будет произведён экспорт");
             Russian.Add("ExportContinueButton", Russian["ContinueButton"]);
+            Russian.Add("ExportCancelButton", Russian["cancel"]);
             Russian.Add("ExportModeMajorVersion", "Онлайн-версия папки");
             Russian.Add("ExportModeMinorVersion", "Версия WoT");
             #endregion
@@ -567,34 +568,6 @@ namespace RelhaxModpack
             Russian.Add("ScalingConfirmationRevertTime", "Отмена изменений через {0} сек.");
             Russian.Add("ScalingConfirmationKeep", "Сохранить");
             Russian.Add("ScalingConfirmationDiscard", "Отменить");
-            #endregion
-
-            #region Color Picker
-            Russian.Add("RelhaxColorPicker", "Палитра");
-            Russian.Add("ColorType", "Тип кисти");
-            Russian.Add("SampleTextColor", "Пример текста");
-            Russian.Add("MainColor", "Основной цвет");
-            Russian.Add("MainColorAlpha", "Прозрачность (альфа-канал)");
-            Russian.Add("MainColorRed", "Красный");
-            Russian.Add("MainColorBlue", "Синий");
-            Russian.Add("MainColorGreen", "Зелёный");
-            Russian.Add("TextColor", "Цвет текста");
-            Russian.Add("TextColorAlpha", "Прозрачность (альфа-канал)");
-            Russian.Add("TextColorRed", "Красный");
-            Russian.Add("TextColorBlue", "Синий");
-            Russian.Add("TextColorGreen", "Зелёный");
-            Russian.Add("SecondColor", "Второй цвет");
-            Russian.Add("SecondColorAlpha", "Прозрачность (альфа-канал)");
-            Russian.Add("SecondColorRed", "Красный");
-            Russian.Add("SecondColorBlue", "Синий");
-            Russian.Add("SecondColorGreen", "Зелёный");
-            Russian.Add("PointsBlock", "Координаты точки");
-            Russian.Add("Point1X", "Точка 1 по X");
-            Russian.Add("Point1Y", "Точка 1 по Y");
-            Russian.Add("Point2X", "Точка 2 по X");
-            Russian.Add("Point2Y", "Точка 2 по Y");
-            Russian.Add("BrushesLink", "Про тип кистей можно прочитать здесь");
-            Russian.Add("SampleXmlOutput", "Пример на XML");
             #endregion
 
             #region Game Center download utility

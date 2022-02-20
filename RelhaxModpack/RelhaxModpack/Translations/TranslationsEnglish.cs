@@ -1886,6 +1886,10 @@ namespace RelhaxModpack
             //
             English.Add("ExportContinueButton", English["ContinueButton"]);
 
+            //Component: ExportCancelButton
+            //
+            English.Add("ExportCancelButton", English["cancel"]);
+
             //Component: ExportModeMinorVersion
             //
             English.Add("ExportModeMinorVersion", "WoT version");
@@ -1937,108 +1941,6 @@ namespace RelhaxModpack
             //Component: ScalingConfirmationDiscard
             //
             English.Add("ScalingConfirmationDiscard", "Discard");
-            #endregion
-
-            #region Color Picker
-            //Component: RelhaxColorPicker
-            //
-            English.Add("RelhaxColorPicker", "Color Picker");
-
-            //Component: ColorType
-            //
-            English.Add("ColorType", "Brush type");
-
-            //Component: SampleTextColor
-            //
-            English.Add("SampleTextColor", "Sample Text");
-
-            //Component: MainColor
-            //
-            English.Add("MainColor", "Main Color");
-
-            //Component: MainColorAlpha
-            //
-            English.Add("MainColorAlpha", "Alpha");
-
-            //Component: MainColorRed
-            //
-            English.Add("MainColorRed", "Red");
-
-            //Component: MainColorBlue
-            //
-            English.Add("MainColorBlue", "Blue");
-
-            //Component: MainColorGreen
-            //
-            English.Add("MainColorGreen", "Green");
-
-            //Component: TextColor
-            //
-            English.Add("TextColor", "Text Color");
-
-            //Component: TextColorAlpha
-            //
-            English.Add("TextColorAlpha", "Alpha");
-
-            //Component: TextColorRed
-            //
-            English.Add("TextColorRed", "Red");
-
-            //Component: TextColorBlue
-            //
-            English.Add("TextColorBlue", "Blue");
-
-            //Component: TextColorGreen
-            //
-            English.Add("TextColorGreen", "Green");
-
-            //Component: SecondColor
-            //
-            English.Add("SecondColor", "Second Color");
-
-            //Component: SecondColorAlpha
-            //
-            English.Add("SecondColorAlpha", "Alpha");
-
-            //Component: SecondColorRed
-            //
-            English.Add("SecondColorRed", "Red");
-
-            //Component: SecondColorBlue
-            //
-            English.Add("SecondColorBlue", "Blue");
-
-            //Component: SecondColorGreen
-            //
-            English.Add("SecondColorGreen", "Green");
-
-            //Component: PointsBlock
-            //
-            English.Add("PointsBlock", "Point Coordinates");
-
-            //Component: Point1X
-            //
-            English.Add("Point1X", "Point 1 X");
-
-            //Component: Point1Y
-            //
-            English.Add("Point1Y", "Point 1 Y");
-
-            //Component: Point2X
-            //
-            English.Add("Point2X", "Point 2 X");
-
-            //Component: Point2Y
-            //
-            English.Add("Point2Y", "Point 2 Y");
-
-            //Component: BrushesLink
-            //
-            English.Add("BrushesLink", "Read about brush types here");
-
-            //Component: SampleXmlOutput
-            //
-            English.Add("SampleXmlOutput", "Sample XML output");
             #endregion
 
             #region Game Center download utility

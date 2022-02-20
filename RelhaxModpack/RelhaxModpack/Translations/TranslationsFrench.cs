@@ -566,6 +566,7 @@ namespace RelhaxModpack
             French.Add("selectLocationToExport", "Sélectionner le dossier où exporter l'installation de mods");
             French.Add("ExportSelectVersionHeader", "Merci de sélectionner la version de votre client WoT pour laquelle vous voulez exporter");
             French.Add("ExportContinueButton", French["ContinueButton"]);
+            French.Add("ExportCancelButton", French["cancel"]);
             French.Add("ExportModeMajorVersion", "Version du dossier en ligne");
             French.Add("ExportModeMinorVersion", "Version de WoT");
             #endregion
@@ -585,34 +586,6 @@ namespace RelhaxModpack
             French.Add("ScalingConfirmationRevertTime", "Retour dans {0} seconde(s)");
             French.Add("ScalingConfirmationKeep", "Garder");
             French.Add("ScalingConfirmationDiscard", "Jeter");
-            #endregion
-
-            #region Color Picker
-            French.Add("RelhaxColorPicker", "Pipette de couleurs");
-            French.Add("ColorType", "Type de pinceau");
-            French.Add("SampleTextColor", "Exemple de texte");
-            French.Add("MainColor", "Couleur principale");
-            French.Add("MainColorAlpha", "Alpha");
-            French.Add("MainColorRed", "Rouge");
-            French.Add("MainColorBlue", "Bleu");
-            French.Add("MainColorGreen", "Vert");
-            French.Add("TextColor", "Couleur du texte");
-            French.Add("TextColorAlpha", "Alpha");
-            French.Add("TextColorRed", "Rouge");
-            French.Add("TextColorBlue", "Bleu");
-            French.Add("TextColorGreen", "Vert");
-            French.Add("SecondColor", "Deuxième couleur");
-            French.Add("SecondColorAlpha", "Alpha");
-            French.Add("SecondColorRed", "Rouge");
-            French.Add("SecondColorBlue", "Bleu");
-            French.Add("SecondColorGreen", "Vert");
-            French.Add("PointsBlock", "Coordonnées du point");
-            French.Add("Point1X", "Point 1 X");
-            French.Add("Point1Y", "Point 1 Y");
-            French.Add("Point2X", "Point 2 X");
-            French.Add("Point2Y", "Point 2 Y");
-            French.Add("BrushesLink", "En savoir plus sur les types de pinceau");
-            French.Add("SampleXmlOutput", "Exemple de sortie XML");
             #endregion
 
             #region Game Center download utility
