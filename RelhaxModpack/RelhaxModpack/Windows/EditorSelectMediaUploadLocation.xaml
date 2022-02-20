@@ -8,10 +8,10 @@
         Title="Select Media Upload location" Height="500" Width="600" MinHeight="300" MinWidth="400"
         Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded" LocalizeWindow="False" ApplyToolTips="False">
     <Grid>
-        <TreeView x:Name="FTPTreeView" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,30" />
+        <TreeView x:Name="FTPTreeView" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,30" Style="{StaticResource DarkThemeStyleBackground}"/>
         <Button x:Name="OpenFolderButton" Content="Open Selected Folder" HorizontalAlignment="Right" Margin="0,0,166,5" VerticalAlignment="Bottom" Width="131" Click="OpenFolderButton_Click"/>
         <Button x:Name="SelectFolderUploadButton" Content="Select Folder for Upload" HorizontalAlignment="Right" Margin="0,0,10,5" VerticalAlignment="Bottom" Width="151" Click="SelectFolderUploadButton_Click"/>
-        <Button x:Name="MakeFolderButton" Content="Make Fodler under selected" HorizontalAlignment="Right" Margin="0,0,302,5" VerticalAlignment="Bottom" Width="158" Click="MakeFolderButton_Click"/>
+        <Button x:Name="MakeFolderButton" Content="Make Folder under selected" HorizontalAlignment="Right" Margin="0,0,302,5" VerticalAlignment="Bottom" Width="158" Click="MakeFolderButton_Click"/>
         <TextBlock x:Name="StatusTextBlock" HorizontalAlignment="Left" Margin="10,0,0,7" TextWrapping="Wrap" VerticalAlignment="Bottom" />
     </Grid>
 </local:RelhaxWindow>
