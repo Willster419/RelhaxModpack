@@ -8,17 +8,22 @@
         mc:Ignorable="d"
         Title="News Viewer" Height="450" Width="420" MinWidth="420" MinHeight="450" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True" EscapeKeyClosesWindow="True">
+    <Window.Resources>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Background" Value="#FFE5E5E5"/>
+        </Style>
+    </Window.Resources>
     <Grid Tag="NewViewGrid">
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,31">
             <TabItem Tag="database_Update_Tab" x:Name="database_Update_Tab" Header="Database News">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="DatabaseUpdateText" Tag="DatabaseUpdateText" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
+                    <TextBox x:Name="DatabaseUpdateText" Tag="DatabaseUpdateText" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
                     </TextBox>
                 </Grid>
             </TabItem>
             <TabItem Tag="application_Update_Tab" x:Name="application_Update_Tab" Header="Application News">
                 <Grid>
-                    <TextBox x:Name="ApplicationUpdateText" Tag="ApplicationUpdateText" Background="#FFE5E5E5" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
+                    <TextBox x:Name="ApplicationUpdateText" Tag="ApplicationUpdateText" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
                     </TextBox>
                 </Grid>
             </TabItem>
