@@ -88,7 +88,11 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
-
-    <Style TargetType="{x:Type Ui:RelhaxWPFCheckBoxHeader}" BasedOn="{StaticResource DarkThemeStyleCheckbox}">
+<!--
+    <Style TargetType="{x:Type Ui:RelhaxWPFCheckBox}" BasedOn="{DynamicResource {x:Type CheckBox}}">
     </Style>
+
+    <Style TargetType="{x:Type Ui:RelhaxWPFCheckBoxHeader}" BasedOn="{DynamicResource {x:Type Ui:RelhaxWPFCheckBox}}">
+    </Style>
+    -->
 </ResourceDictionary>
