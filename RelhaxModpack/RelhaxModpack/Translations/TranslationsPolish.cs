@@ -431,7 +431,7 @@ namespace RelhaxModpack
             Polish.Add("DownloadWGPatchFilesButtonDescription", "Pobiera pliki aktualizacji dla gier Wargaming za pomocą protokołu HTTP celem późniejszej instalacji w WGC.\n" +
                 "Szczególnie przydatne dla osób, które nie mogą używać wbudowanego w Wargaming Game Center protokołu P2P.");
             Polish.Add("SelectedInstallation", "Aktywna instalacja WoT:");
-            Polish.Add("SelectedInstallationNone", "("+Polish["none"].ToLower()+")");
+            Polish.Add("SelectedInstallationNone", "(" + Polish["none"].ToLower() + ")");
             Polish.Add("collectionLogInfo", "Zbieranie plików dziennika...");
             Polish.Add("startingLauncherRepairMode", "Uruchamianie launchera WOT w trybie sprawdzania integralności plików...");
             Polish.Add("failedCreateZipfile", "Nie udało się stworzyć archiwum ZIP ");
@@ -702,7 +702,8 @@ namespace RelhaxModpack
 
             //Component: conflictingPackageMessagePartE
             //
-            English.Add("conflictingPackageMessagePartE", "Którą opcję wybierasz?");
-            #endregion        }
+            Polish.Add("conflictingPackageMessagePartE", "Którą opcję wybierasz?");
+            #endregion
         }
     }
+}
