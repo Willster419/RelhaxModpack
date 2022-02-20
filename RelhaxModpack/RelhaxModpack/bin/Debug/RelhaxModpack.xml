@@ -2983,7 +2983,17 @@
             </summary>
             <returns>True if the provided arguments will return a custom array, false otherwise</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:RelhaxModpack.UI.RelhaxBorder" -->
+        <member name="P:RelhaxModpack.UI.IOnCheckedComponent.Package">
+            <summary>
+            The package that the UI component belongs to
+            </summary>
+        </member>
+        <member name="M:RelhaxModpack.UI.IOnCheckedComponent.OnCheckedChanged(System.Boolean)">
+            <summary>
+            Method signature for when the checked property changes
+            </summary>
+            <param name="Checked">The value of the checked property</param>
+        </member>
         <member name="T:RelhaxModpack.UI.RelhaxComboBoxItem">
             <summary>
             Interaction logic for RelhaxComboBoxItem.xaml
@@ -3565,22 +3575,11 @@
             and allow for easy implementation of another UI.
             </summary>
         </member>
-        <member name="P:RelhaxModpack.UI.IPackageUIComponent.Package">
-            <summary>
-            The package that the UI component belongs to
-            </summary>
-        </member>
         <member name="M:RelhaxModpack.UI.IPackageUIComponent.OnEnabledChanged(System.Boolean)">
             <summary>
             Method signature for when the enabled property changes
             </summary>
             <param name="Enabled">The value of the enabled property</param>
-        </member>
-        <member name="M:RelhaxModpack.UI.IPackageUIComponent.OnCheckedChanged(System.Boolean)">
-            <summary>
-            Method signature for when the checked property changes
-            </summary>
-            <param name="Checked">The value of the checked property</param>
         </member>
         <member name="T:RelhaxModpack.UI.RelhaxMediaPlayer">
             <summary>
