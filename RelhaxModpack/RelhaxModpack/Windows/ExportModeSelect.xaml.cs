@@ -58,8 +58,7 @@ namespace RelhaxModpack.Windows
                 RadioButton button = new RadioButton()
                 {
                     Tag = versionInfo,
-                    Content = string.Format("{0} = {1}, {2} = {3}", Translations.GetTranslatedString("ExportModeMajorVersion"), versionInfo.WoTOnlineFolderVersion,
-                        Translations.GetTranslatedString("ExportModeMinorVersion"), versionInfo.WoTClientVersion)
+                    Content = string.Format("{0} = {1}", Translations.GetTranslatedString("ExportModeMinorVersion"), versionInfo.WoTClientVersion)
                 };
                 ExportSelectVersionPanel.Children.Add(button);
             }
