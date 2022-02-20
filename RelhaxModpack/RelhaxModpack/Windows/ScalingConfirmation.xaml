@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Scaling Confirmation" Height="150" Width="300" ApplyToolTips="False" LocalizeWindow="True" Loaded="RelhaxWindow_Loaded" Closed="RelhaxWindow_Closed" EscapeKeyClosesWindow="True">
     <Grid Tag="ScalingConfirmationMainGrid">
-        <TextBlock x:Name="ScalingConfirmationHeader" Tag="ScalingConfirmationHeader" HorizontalAlignment="Stretch" Margin="10,10,0,0" TextWrapping="Wrap"
+        <TextBlock x:Name="ScalingConfirmationHeader" Tag="ScalingConfirmationHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap"
                    Text="The scaling value has changed. Would you like to keep it?" VerticalAlignment="Top"/>
         <TextBlock x:Name="ScalingConfirmationRevertTime" Tag="ScalingConfirmationRevertTime" HorizontalAlignment="Stretch" Margin="10,60,0,0" TextWrapping="Wrap" Text="Reverting in {0} Seconds" VerticalAlignment="Top"/>
         <Button x:Name="ScalingConfirmationKeep" Tag="ScalingConfirmationKeep" Content="Keep" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ScalingConfirmationKeep_Click"/>
