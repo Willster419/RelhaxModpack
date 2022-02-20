@@ -32,6 +32,7 @@
         </Style.Triggers>
     </Style>
 
+    <!-- used for the grids with that color when in the tabItem -->
     <Style x:Key="DarkThemeStyleBackgroundGridInTabItem">
         <Setter Property="Control.Background" Value="{StaticResource DefaultGridColorInTabItem}"/>
         <Style.Triggers>
@@ -51,7 +52,7 @@
     </Style>
 
     <!-- I don't do anything fancy with the progressBar so just modifying the properties will do -->
-    <Style x:Key="DarkThemeStyleProgressBar">
+    <Style TargetType="ProgressBar">
         <Style.Triggers>
             <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
                 <Setter Property="ProgressBar.Background" Value="{StaticResource DarkThemeButton}"/>
