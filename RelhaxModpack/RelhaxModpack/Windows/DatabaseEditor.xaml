@@ -14,6 +14,23 @@
     Title="DatabaseEditor" Height="720" Width="1280" MinHeight="600" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
     Loaded="OnApplicationLoad" LocalizeWindow="False" ApplyToolTips="False">
     <local:RelhaxWindow.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
+            
+        </Style>
+        <Style TargetType="RichTextBox" BasedOn="{StaticResource DarkThemeStyleBackgroundForeground}">
+
+        </Style>
+        <Style TargetType="ListBox" BasedOn="{StaticResource DarkThemeStyleBackground}">
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                        <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Background" Value="{StaticResource DarkThemeActiveTab}"/>
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
         <!-- https://stackoverflow.com/questions/8198645/wpf-combobox-performance-problems-by-binding-a-large-collections -->
         <ItemsPanelTemplate x:Key="VSP">
             <VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"/>
@@ -334,7 +351,7 @@
                     <TreeView x:Name="DatabaseTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="True" Drop="OnTreeViewDatabaseDrop"
                               DragOver="OnTreeViewDatabaseDragOver"  ScrollViewer.ScrollChanged="OnTreeViewScroll" PreviewMouseDown="OnTreeViewMouseDownPreview"
                               PreviewMouseUp="OnTreeViewMouseUpPreview" SelectedItemChanged="DatabaseTreeView_SelectedItemChanged" KeyDown="DatabaseTreeView_KeyDown"
-                              PreviewMouseMove="DatabaseTreeView_PreviewMouseMove">
+                              PreviewMouseMove="DatabaseTreeView_PreviewMouseMove" Style="{StaticResource DarkThemeStyleBackground}">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -343,7 +360,7 @@
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="InstallGroupsTab" Header="Install Groups" ToolTip="View the current install groups that will be formed when an installation is started">
-                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="False">
+                    <TreeView x:Name="InstallGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="False" Style="{StaticResource DarkThemeStyleBackground}">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -352,7 +369,7 @@
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="PatchGroupsTab" Header="Patch Groups" ToolTip="View the current patch groups that will be formed when an installation is started">
-                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="False">
+                    <TreeView x:Name="PatchGroupsTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AllowDrop="False" Style="{StaticResource DarkThemeStyleBackground}">
                         <TreeView.Resources>
                             <!-- Style the inactive selection the same as active -->
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
@@ -361,7 +378,7 @@
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="SettingsTab" Header="Settings" ToolTip="View and edit settings of this tool">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="20"/>
@@ -428,7 +445,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionHelperTab" Header="How to use" ToolTip="Read some documentation on this tool">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <RichTextBox x:Name="DescriptionHelperTextBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True"
                                      HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" IsReadOnly="True" SpellCheck.IsEnabled="True" IsDocumentEnabled="True">
                             <FlowDocument>
@@ -474,7 +491,7 @@
             </TabControl>
             <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,20,0,0" x:Name="RightTab">
                 <TabItem x:Name="BasicTab" Header="Basic">
-                    <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFE5E5E5">
+                    <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition/>
@@ -593,29 +610,29 @@
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DescriptionTab" Header="Description">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <TextBox x:Name="PackageDescriptionDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True" MouseDoubleClick="PackageDisplayUrlParse_MouseDoubleClick"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DevURLTab" Header="Dev URL">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <!--https://stackoverflow.com/questions/2650144/multiline-for-wpf-textbox-->
                         <TextBox x:Name="PackageDevURLDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,21,0,0" AcceptsReturn="True" AcceptsTab="True" MouseDoubleClick="PackageDevURLDisplay_MouseDoubleClick"/>
                         <TextBlock x:Name="PackageDevURLHeader" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Enter DevUrl's here, separated by new lines" VerticalAlignment="Top"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="InternalNotesTab" Header="Internal Notes">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <TextBox x:Name="PackageInternalNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True" MouseDoubleClick="PackageDisplayUrlParse_MouseDoubleClick"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="UpdateNotesTab" Header="Update Notes">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <TextBox x:Name="PackageUpdateNotesDisplay" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True" MouseDoubleClick="PackageDisplayUrlParse_MouseDoubleClick"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="DependenciesTab" Header="Dependencies">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <ListBox x:Name="PackageDependenciesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageDependenciesDisplay_SelectionChanged" DisplayMemberPath="PackageName"
                                  MouseDoubleClick="PackageDependenciesDisplay_MouseDoubleClick"/>
                         <Button Content="Add selected" x:Name="DependenciesAddSelected" Tag="DependenciesAddSelected" HorizontalAlignment="Left" Margin="0,210,0,0" VerticalAlignment="Top" Width="400" Click="DependenciesAddSelected_Click"/>
@@ -631,7 +648,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="MediasTab" Header="Medias">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <ListBox x:Name="PackageMediasDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageMediasDisplay_SelectionChanged" AllowDrop="True" DragOver="PackageMediasDisplay_DragOver" Drop="PackageMediasDisplay_Drop" MouseMove="PackageMediasDisplay_MouseMove" PreviewMouseDown="PackageMediasDisplay_PreviewMouseDown" PreviewMouseUp="PackageMediasDisplay_PreviewMouseUp" ScrollViewer.ScrollChanged="PackageMediasDisplay_ScrollChanged"/>
                         <Button Content="Add Media" x:Name="MediaAddMediaButton" Tag="MediaAddMediaButton" HorizontalAlignment="Left" Margin="10,511,0,0" VerticalAlignment="Top" Width="100" Click="MediaAddMediaButton_Click"/>
                         <Button Content="Apply Edit" x:Name="MediaApplyEditButton" Tag="MediaApplyEditButton" HorizontalAlignment="Left" Margin="230,511,0,0" VerticalAlignment="Top" Width="100" Click="MediaApplyEditButton_Click"/>
@@ -652,7 +669,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="UserDatasTab" Header="User files">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <ListBox x:Name="PackageUserFilesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageUserdatasDisplay_SelectionChanged" />
                         <Button Content="Add User file" x:Name="UserdataApplyUsedataButton" Tag="UserdataApplyUsedataButton" HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top" Width="467" Click="UserdataAddUserdataButton_Click"/>
                         <Button Content="Apply Edit" x:Name="UserdataApplyEditButton" HorizontalAlignment="Left" Margin="10,341,0,0" VerticalAlignment="Top" Width="467" Click="UserdataApplyEditButton_Click"/>
@@ -661,7 +678,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="TriggersTab" Header="Triggers">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <ListBox x:Name="PackageTriggersDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" SelectionChanged="PackageTriggersDisplay_SelectionChanged" />
                         <Button Content="Add Trigger" x:Name="TriggerAddSelectedTrigger" Tag="TriggerAddSelectedTrigger" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="467" Click="TriggerAddSelectedTrigger_Click"/>
                         <Button Content="Remove Trigger" x:Name="TriggerRemoveTrigger" Tag="TriggerRemoveTrigger" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="467" Click="TriggerRemoveTrigger_Click"/>
@@ -682,7 +699,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="TagsTab" Header="Tags">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <ListBox x:Name="PackageTagsDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top"/>
                         <Button Content="Add Tag" x:Name="TagAddSelectedTag" Tag="TagAddSelectedTag" HorizontalAlignment="Left" Margin="0,209,0,0" VerticalAlignment="Top" Width="467" Click="TagAddSelectedTag_Click"/>
                         <Button Content="Remove Tag" x:Name="TagRemoveTag" Tag="TagRemoveTag" HorizontalAlignment="Left" Margin="0,234,0,0" VerticalAlignment="Top" Width="467" Click="TagRemoveTag_Click"/>
@@ -716,14 +733,14 @@
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="ConflictingPackagesTab" Header="Conflicting Packages">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <ListBox x:Name="PackageConflictingPackagesDisplay" HorizontalAlignment="Stretch" Height="179" VerticalAlignment="Top" MouseDoubleClick="PackageConflictingPackagesDisplay_MouseDoubleClick"/>
                         <Button Content="Remove Conflicting package" x:Name="ConflictingPackagesRemoveConflictingPackage" Tag="ConflictingPackagesButton1" HorizontalAlignment="Left" Margin="0,184,0,0" VerticalAlignment="Top" Width="171" Click="ConflictingPackagesRemoveConflictingPackage_Click"/>
                         <TextBlock x:Name="ConflictingPackagesMessagebox" HorizontalAlignment="Left" Height="20" Margin="0,209,0,0" TextWrapping="Wrap" Text="To add a package to the list, search it above and right click it" VerticalAlignment="Top" />
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="PatchesTab" Header="Patches">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <!-- NEWLINE =&#10; -->
                         <ListBox x:Name="PackagePatchesDisplay" HorizontalAlignment="Stretch" Height="188" VerticalAlignment="Top" SelectionChanged="PackagePatchesDisplay_SelectionChanged"/>
                         <TextBlock x:Name="PatchFilePathLabel" HorizontalAlignment="Left" Margin="0,193,0,0" TextWrapping="Wrap" Text="Patch file path" VerticalAlignment="Top" ToolTip="'file' parameter of patch xml"/>
@@ -792,7 +809,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="AtlasesTab" Header="Atlases">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <!-- NEWLINE =&#10; -->
                         <ListBox x:Name="PackageAtlasesDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top" SelectionChanged="PackageAtlasesDisplay_SelectionChanged"/>
                         <Grid HorizontalAlignment="Stretch" Height="468" Margin="0,0,0,25" VerticalAlignment="Bottom">
@@ -853,7 +870,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="XmlUnpackShortcutTab" Header="XmlUnpack/Shortcut">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <ListBox x:Name="PackageXmlUnpackDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top" SelectionChanged="PackageXmlUnpackDisplay_SelectionChanged"/>
                         <Grid HorizontalAlignment="Stretch" Height="287" Margin="0,0,0,206" VerticalAlignment="Bottom">
                             <Grid.RowDefinitions>
@@ -885,8 +902,19 @@
                             <TextBox x:Name="XmlUnpackExtractDirectoryTextbox" Grid.Row="7" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'ExtractDirectory' parameter of XmlUnpack xml"/>
                             <TextBlock x:Name="XmlUnpackNewFilenameLabel" Grid.Row="8" HorizontalAlignment="Left" TextWrapping="Wrap" Text="New Filename" VerticalAlignment="Bottom" ToolTip="'NewFilename' parameter of XmlUnpack xml"/>
                             <TextBox x:Name="XmlUnpackNewFilenameTextbox" Grid.Row="9" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'NewFilename' parameter of XmlUnpack xml" AcceptsReturn="True"/>
-                            <Rectangle x:Name="XmlUnpackShortcutDivider" Grid.Row="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Black"/>
-                            
+                            <Rectangle x:Name="XmlUnpackShortcutDivider" Grid.Row="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Rectangle.Resources>
+                                    <Style TargetType="Rectangle">
+                                        <Setter Property="Fill" Value="Black"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                                                <Setter Property="Fill" Value="White"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Rectangle.Resources>
+                            </Rectangle>
+
                             <Button x:Name="MoveUpXmlUnpackButton" Grid.Row="10" Content="Move Up" HorizontalAlignment="Right" Margin="0,0,309,1" VerticalAlignment="Bottom" Width="60" Click="MoveUpXmlUnpackButton_Click"/>
                             <Button x:Name="MoveDownXmlUnpackButton" Grid.Row="10" Content="Move Down" HorizontalAlignment="Right" Margin="0,0,228,1" VerticalAlignment="Bottom" Width="76" Click="MoveDownXmlUnpackButton_Click"/>
                             <Button x:Name="RemoveXmlUnpackButton" Content="Remove" HorizontalAlignment="Right" Margin="0,0,165,1" VerticalAlignment="Bottom" Width="58" Click="RemoveXmlUnpackButton_Click" Grid.Row="10"/>
