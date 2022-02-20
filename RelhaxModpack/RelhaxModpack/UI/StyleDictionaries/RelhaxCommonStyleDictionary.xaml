@@ -80,6 +80,9 @@
     <Style TargetType="TabControl" BasedOn="{StaticResource DarkThemeStyleBackground}">
         
     </Style>
+    <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeStyleBackground}">
+        
+    </Style>
 
     <!-- I don't do anything fancy with the progressBar so just modifying the properties will do -->
     <Style TargetType="ProgressBar">
