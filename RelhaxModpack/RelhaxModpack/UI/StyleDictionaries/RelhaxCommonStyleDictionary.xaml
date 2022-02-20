@@ -24,7 +24,7 @@
     <SolidColorBrush x:Key="DarkThemeTabItemSelectedColorBrush" Color="{StaticResource DarkThemeSelectedColor}"/>
     <SolidColorBrush x:Key="DarkThemeDisabledTabItem" Color="#424242"/>
     
-    <!-- Resuable styles for multiple components -->
+    <!-- Re-usable styles for multiple components -->
     <Style x:Key="OptionMarkFocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -82,6 +82,9 @@
         
     </Style>
     <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeStyleBackground}">
+        
+    </Style>
+    <Style TargetType="ListBox" BasedOn="{StaticResource DarkThemeStyleBackground}">
         
     </Style>
 
