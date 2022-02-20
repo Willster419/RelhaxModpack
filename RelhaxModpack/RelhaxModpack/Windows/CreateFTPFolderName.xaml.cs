@@ -52,6 +52,11 @@ namespace RelhaxModpack.Windows
             InitializeComponent();
         }
 
+        private void RelhaxWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            FolderNameTextBox.Focus();
+        }
+
         private void FolderNameTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter && e.IsDown)
@@ -85,7 +90,20 @@ namespace RelhaxModpack.Windows
             CreatingFolderTextBlock.Visibility = Visibility.Visible;
             try
             {
-                await FtpUtils.FtpMakeFolderAsync(string.Format("{0}{1}", FTPPath, folderName), Credential);
+                string[] folders = await FtpUtils.FtpListFilesFoldersAsync(FTPPath, Credential);
+                if (folders.Contains(folderName))
+                {
+                    CreatingFolderTextBlock.Text = "Folder already exists";
+                    FTPReturnFolderName = string.Empty;
+                    FTPReturnPath = FTPPath;
+                    DialogResult = false;
+                    Close();
+                    return;
+                }
+                else
+                {
+                    await FtpUtils.FtpMakeFolderAsync(string.Format("{0}{1}", FTPPath, folderName), Credential);
+                }
             }
             catch(Exception ex)
             {
