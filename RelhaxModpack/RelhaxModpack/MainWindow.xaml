@@ -13,7 +13,7 @@
     Loaded="TheMainWindow_Loaded"
     Closing="TheMainWindow_Closing"
     Icon="Resources/modpack_icon.ico"
-    LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
+    LocalizeWindow="False" ApplyToolTips="False">
     <Window.Resources>
         <Style TargetType="TabControl" BasedOn="{StaticResource DarkThemeStyleBackground}">
             <Setter Property="Background" Value="#7FE5E5E5"/>

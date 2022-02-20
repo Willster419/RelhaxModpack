@@ -32,22 +32,6 @@ namespace RelhaxModpack.Windows
         public bool ApplyToolTips { get; set; } = false;
 
         /// <summary>
-        /// Controls if the window should have color settings applied
-        /// </summary>
-        public bool ApplyColorSettings { get; set; } = false;
-
-        /// <summary>
-        /// Controls if the window should apply scaling values set from the main window
-        /// </summary>
-        public bool ApplyScaling { get; set; } = true;
-
-        /// <summary>
-        /// Controls if the window should apply custom font to this window.
-        /// </summary>
-        /// <remarks>This setting works in tandem with the ModpackSettings setting to use custom font.</remarks>
-        public bool ApplyCustomFont { get; set; } = false;
-
-        /// <summary>
         /// Controls if pressing the escape key while the window is open will close it.
         /// </summary>
         public bool EscapeKeyClosesWindow { get; set; } = false;
@@ -134,21 +118,17 @@ namespace RelhaxModpack.Windows
             }
 
             //apply font changes
-            if(ApplyCustomFont && ModpackSettings.EnableCustomFont)
+            if(ModpackSettings.EnableCustomFont)
             {
                 ApplyFontToWindow();
             }
 
-            //apply scaling
-            if (ApplyScaling)
+            //get current scaling of window (like from display settings)
+            double currentScale = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;
+            //if current scale is not target(modpackSetting), then update
+            if (ModpackSettings.DisplayScale != currentScale)
             {
-                //get current scaling of window (like from display settings)
-                double currentScale = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;
-                //if current scale is not target(modpackSetting), then update
-                if (ModpackSettings.DisplayScale != currentScale)
-                {
-                    ApplyApplicationScale(ModpackSettings.DisplayScale);
-                }
+                ApplyApplicationScale(ModpackSettings.DisplayScale);
             }
 
             Loaded -= OnWindowLoaded;

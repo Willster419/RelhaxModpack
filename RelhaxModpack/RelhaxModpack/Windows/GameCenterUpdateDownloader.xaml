@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Game Center Update Downloader" Height="420" Width="650" MinWidth="650" MinHeight="420"
-        Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyColorSettings="True" ApplyScaling="True" ApplyToolTips="False">
+        Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False">
     <TabControl x:Name="GcDownloadMainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="GcDownloadMainTabControl_SelectionChanged" >
         <TabItem Header="Select Game Client" IsEnabled="True" IsSelected="True" x:Name="GcDownloadStep1">
             <Grid Background="#FFE5E5E5" Tag="GcDownloadStep1Grid">

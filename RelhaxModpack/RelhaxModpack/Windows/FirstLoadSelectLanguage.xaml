@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Language Selection" Height="200" Width="400" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="True" ApplyColorSettings="False" ApplyScaling="False" ApplyToolTips="False">
+        LocalizeWindow="True" ApplyToolTips="False">
     <Grid>
         <TextBlock HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Please select your language"
                    VerticalAlignment="Top" x:Name="SelectLanguageHeader"/>

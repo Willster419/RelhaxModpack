@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="SelectionFileIssuesDisplay" Height="420" Width="650" MinHeight="200" MinWidth="200" Closing="RelhaxWindow_Closing"
-        ApplyColorSettings="True" ApplyScaling="True" ApplyToolTips="False" LocalizeWindow="False" EscapeKeyClosesWindow="True">
+        ApplyToolTips="False" LocalizeWindow="False" EscapeKeyClosesWindow="True">
     <Grid Tag="RelhaxMessageGrid">
         <TextBlock x:Name="MessageWindowHeader" Tag="MessageWindowHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Text="Please read the following messages about loading your selection file"/>
         <Button x:Name="MessageWindowCloseButton" Tag="MessageWindowCloseButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="MessageWindowCloseButton_Click"/>

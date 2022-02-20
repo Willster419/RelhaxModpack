@@ -7,7 +7,7 @@
         x:Class="RelhaxModpack.Windows.ModpackToolbox"
         mc:Ignorable="d"
         Title="Modpack Toolbox" Height="480" Width="1200" MinHeight="300" MinWidth="400"
-        Loaded="RelhaxWindow_Loaded" Closing="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
+        Loaded="RelhaxWindow_Loaded" Closing="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="390" MinWidth="200"/>

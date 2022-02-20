@@ -7,7 +7,7 @@
         xmlns:ui="clr-namespace:RelhaxModpack.UI"
         mc:Ignorable="d"
         Title="First Load Acknowledgments" Height="260" Width="600" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
+        LocalizeWindow="True" ApplyToolTips="False">
     <Grid>
         <StackPanel>
             <CheckBox x:Name="license_Agree" HorizontalAlignment="Stretch" Margin="10,10,10,0" VerticalAlignment="Top" Click="CheckForContinueButton">

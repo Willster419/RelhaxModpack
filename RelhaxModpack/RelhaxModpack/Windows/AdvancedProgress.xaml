@@ -8,7 +8,7 @@
         xmlns:user="clr-namespace:RelhaxModpack.UI"
         mc:Ignorable="d"
         Title="Advanced Installer Progress" Height="768" Width="1024"
-        LocalizeWindow="true" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
+        LocalizeWindow="true" ApplyToolTips="False">
     <TabControl x:Name="MainTabControl" Tag="AdvancedInstallMainTabControl">
         <TabItem Header="Pre-install tasks" x:Name="PreInstallTab" Tag="PreInstallTab">
             <ScrollViewer VerticalScrollBarVisibility="Visible">

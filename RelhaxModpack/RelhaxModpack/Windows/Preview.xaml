@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Preview" Height="550" Width="450" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="OnPreviewWindowLoad" Closed="RelhaxWindow_Closed"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True" EscapeKeyClosesWindow="True">
+        LocalizeWindow="True" ApplyToolTips="False" EscapeKeyClosesWindow="True">
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="PreviewMainGrid" x:Name="PreviewMainGrid">
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="50" Height="3*" x:Name="PictureRowDefinition"/>

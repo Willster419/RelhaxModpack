@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="Create FTP folder name" Height="120" Width="300" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
+        Title="Create FTP folder name" Height="120" Width="300" LocalizeWindow="False" ApplyToolTips="False">
     <Grid>
         <Button Tag="OKButton" x:Name="OKButton" Content="OK" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="OKButton_Click"/>
         <TextBox Tag="FolderNameTextBox" x:Name="FolderNameTextBox" HorizontalAlignment="Stretch" Height="23" Margin="10,31,10,0" TextWrapping="Wrap" VerticalAlignment="Top" KeyDown="FolderNameTextBox_KeyDown" />

@@ -120,8 +120,6 @@ namespace RelhaxInstallerUnitTester
             {
                 selectionList = new PackageSelectionList(modpackSettings, commandLineSettings, databaseManager)
                 {
-                    ApplyColorSettings = false, //not cross-thread safe
-                    ApplyScaling = false,
                     ApplyToolTips = true,
                     AutoInstallMode = false,
                     LocalizeWindow = true,

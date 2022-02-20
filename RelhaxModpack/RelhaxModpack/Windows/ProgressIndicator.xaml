@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Loading" Height="200" Width="350" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" ResizeMode="NoResize" Loaded="OnWindowLoad"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
+        LocalizeWindow="True" ApplyToolTips="False">
     <Grid Tag="ProgressIndicatorGrid">
         <TextBlock HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Loading, please wait" VerticalAlignment="Top"
                    TextAlignment="Center" Tag="LoadingHeader" x:Name="LoadingHeader"/>

@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         Title="Database Automation Runner" Height="520" Width="1000" MinHeight="480" MinWidth="800"
         Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" EscapeKeyClosesWindow="False"
-        ApplyScaling="True" ApplyCustomFont="True">
+        LocalizeWindow="False" ApplyToolTips="False" EscapeKeyClosesWindow="False">
     <Grid>
         <TabControl x:Name="MainTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" SelectionChanged="MainTabView_SelectionChanged">
             <TabItem x:Name="TabItemRunSequences" Header="Run Sequences">

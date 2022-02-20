@@ -9,7 +9,7 @@
         Title="PatchTester" Height="575" Width="800" MinHeight="550" MinWidth="640"
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
         Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="False">
+        LocalizeWindow="False" ApplyToolTips="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

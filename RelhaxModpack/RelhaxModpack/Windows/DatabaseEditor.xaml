@@ -12,7 +12,7 @@
     x:Class="RelhaxModpack.Windows.DatabaseEditor"
     mc:Ignorable="d"
     Title="DatabaseEditor" Height="720" Width="1280" MinHeight="600" MinWidth="800" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
-    Loaded="OnApplicationLoad" LocalizeWindow="False" ApplyToolTips="False" ApplyColorSettings="False" ApplyScaling="True" ApplyCustomFont="True">
+    Loaded="OnApplicationLoad" LocalizeWindow="False" ApplyToolTips="False">
     <local:RelhaxWindow.Resources>
         <!-- https://stackoverflow.com/questions/8198645/wpf-combobox-performance-problems-by-binding-a-large-collections -->
         <ItemsPanelTemplate x:Key="VSP">

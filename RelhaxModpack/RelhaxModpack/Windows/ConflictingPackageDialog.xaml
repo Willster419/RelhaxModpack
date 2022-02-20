@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="ConflictingPackageDialog" Height="450" Width="800" MinHeight="300" MinWidth="500" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
+        LocalizeWindow="True" ApplyToolTips="False">
     <Grid Tag="RootGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

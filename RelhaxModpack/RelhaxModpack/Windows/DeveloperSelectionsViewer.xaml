@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Developer Selections Window" Height="300" Width="300" Loaded="OnApplicationLoading" Closed="OnApplicationClosed" MinWidth="300" MinHeight="300"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True" EscapeKeyClosesWindow="True">
+        LocalizeWindow="True" ApplyToolTips="False" EscapeKeyClosesWindow="True">
     <Grid Tag="DeveloperSelectionsGrid">
         <Button Tag="DeveloperSelectionsContinueButton" x:Name="DeveloperSelectionsContinueButton" Content="Select" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click"/>
         <Button Tag="DeveloperSelectionsCancelButton" x:Name="DeveloperSelectionsCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="CancelButton_Click"/>

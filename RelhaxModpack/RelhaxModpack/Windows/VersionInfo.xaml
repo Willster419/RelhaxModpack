@@ -7,7 +7,7 @@
         xmlns:ui="clr-namespace:RelhaxModpack.UI"
         mc:Ignorable="d"
         Title="Application Update" Height="450" Width="715" ResizeMode="CanResize" MinHeight="315" MinWidth="500" Icon="/RelhaxModpack;component/Resources/modpack_icon.ico" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True" EscapeKeyClosesWindow="True">
+        LocalizeWindow="True" ApplyToolTips="False" EscapeKeyClosesWindow="True">
     <Grid Tag="VersionInfoGrid">
         <TextBlock x:Name="NewVersionAvailable" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="NewVersionAvailable" Text="New version available:"/>
         <TextBox x:Name="ApplicationUpdateNotes" HorizontalAlignment="Stretch" Margin="10,31,10,76" TextWrapping="Wrap" VerticalAlignment="Stretch" Tag="ApplicationUpdateNotes" IsReadOnly="True"/>

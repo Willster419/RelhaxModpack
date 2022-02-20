@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Diagnostics" Height="420" Width="525" ResizeMode="CanMinimize"
-        Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True" EscapeKeyClosesWindow="True">
+        Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" EscapeKeyClosesWindow="True">
     <Grid Tag="DiagnosticsGrid">
         <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="42" Margin="10,10,10,0" TextWrapping="Wrap"
                  Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>

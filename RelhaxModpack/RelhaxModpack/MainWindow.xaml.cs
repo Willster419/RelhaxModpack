@@ -219,8 +219,6 @@ namespace RelhaxModpack
             //set this window to use RelhaxWindow properties
             LocalizeWindow = true;
             ApplyToolTips = true;
-            ApplyColorSettings = true;
-            ApplyScaling = true;
 
             //apply translation settings now that they are loaded
             Translations.SetLanguage(ModpackSettings.Language);

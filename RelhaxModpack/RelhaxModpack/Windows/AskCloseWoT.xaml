@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
-        Title="WoT is Running" Height="150" Width="400" LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True">
+        Title="WoT is Running" Height="150" Width="400" LocalizeWindow="True" ApplyToolTips="False">
     <Grid Tag="WoTRunningGrid">
         <TextBlock x:Name="WoTRunningHeader" Tag="WoTRunningHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="It looks like your WoT install is currently open. Please close it before we can proceed" VerticalAlignment="Top"/>
         <Button x:Name="WoTRunningCancelInstallButton" Tag="WoTRunningCancelInstallButton" Content="Cancel Installation" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="135" Click="WoTRunningCancelInstallButton_Click"/>

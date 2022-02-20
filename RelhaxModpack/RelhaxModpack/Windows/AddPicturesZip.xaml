@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Add files to zip" Height="330" Width="600" MinHeight="75" MinWidth="100"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True"
+        LocalizeWindow="True" ApplyToolTips="False"
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
     <Grid Tag="AddPIcturesMainGrid">
         <Grid.RowDefinitions>

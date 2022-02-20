@@ -7,7 +7,7 @@
         xmlns:ui="clr-namespace:RelhaxModpack.UI"
         mc:Ignorable="d"
         Title="News Viewer" Height="450" Width="420" MinWidth="420" MinHeight="450" Loaded="RelhaxWindow_Loaded"
-        LocalizeWindow="True" ApplyToolTips="False" ApplyColorSettings="True" ApplyScaling="True" EscapeKeyClosesWindow="True">
+        LocalizeWindow="True" ApplyToolTips="False" EscapeKeyClosesWindow="True">
     <Window.Resources>
         <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Background" Value="#FFE5E5E5"/>
