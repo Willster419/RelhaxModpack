@@ -42,13 +42,17 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="DarkThemeStyleBackgroundForeground">
+    <Style x:Key="DarkThemeStyleBackgroundForeground" BasedOn="{StaticResource DarkThemeStyleBackground}">
         <Style.Triggers>
             <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
                 <Setter Property="Control.Foreground" Value="{StaticResource DarkThemeTextColor}"/>
-                <Setter Property="Control.Background" Value="{StaticResource DarkThemeBackground}"/>
             </DataTrigger>
         </Style.Triggers>
+    </Style>
+
+    <!-- direct application of {DarkThemeStyleBackgroundForeground} to components based on type -->
+    <Style TargetType="TextBlock" BasedOn="{StaticResource DarkThemeStyleBackgroundForeground}">
+        
     </Style>
 
     <!-- I don't do anything fancy with the progressBar so just modifying the properties will do -->
