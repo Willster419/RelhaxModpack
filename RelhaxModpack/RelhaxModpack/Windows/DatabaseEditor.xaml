@@ -15,7 +15,7 @@
     Loaded="OnApplicationLoad" LocalizeWindow="False" ApplyToolTips="False">
     <local:RelhaxWindow.Resources>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
-            
+
         </Style>
         <Style TargetType="RichTextBox" BasedOn="{StaticResource DarkThemeStyleBackgroundForeground}">
 
@@ -489,7 +489,7 @@
                     </Grid>
                 </TabItem>
             </TabControl>
-            <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,20,0,0" x:Name="RightTab">
+            <TabControl Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,22,0,0" x:Name="RightTab">
                 <TabItem x:Name="BasicTab" Header="Basic">
                     <Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
@@ -811,8 +811,8 @@
                 <TabItem x:Name="AtlasesTab" Header="Atlases">
                     <Grid>
                         <!-- NEWLINE =&#10; -->
-                        <ListBox x:Name="PackageAtlasesDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top" SelectionChanged="PackageAtlasesDisplay_SelectionChanged"/>
-                        <Grid HorizontalAlignment="Stretch" Height="468" Margin="0,0,0,25" VerticalAlignment="Bottom">
+                        <ListBox x:Name="PackageAtlasesDisplay" HorizontalAlignment="Stretch" Height="63" VerticalAlignment="Top" SelectionChanged="PackageAtlasesDisplay_SelectionChanged"/>
+                        <Grid HorizontalAlignment="Stretch" Height="461" Margin="0,69,0,0" VerticalAlignment="Top">
                             <Grid.RowDefinitions>
                                 <!-- Pkg -->
                                 <RowDefinition Height="20"/>
@@ -862,17 +862,17 @@
                             <TextBlock x:Name="AtlasImageFoldersLabel" Grid.Row="11" Grid.ColumnSpan="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="ImageFolders" VerticalAlignment="Bottom" ToolTip="'ImageFolders' parameter of atlas xml"/>
                             <TextBox x:Name="AtlasImageFoldersTextbox" Grid.Row="12" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'ImageFolders' parameter of atlas xml, each entry seperated by newline" AcceptsReturn="True"/>
                         </Grid>
-                        <Button x:Name="MoveUpAtlasButton" Content="Move Up" HorizontalAlignment="Right" Margin="0,0,309,0" VerticalAlignment="Bottom" Width="60" Click="MoveUpAtlasButton_Click"/>
-                        <Button x:Name="MoveDownAtlasButton" Content="Move Down" HorizontalAlignment="Right" Margin="0,0,228,0" VerticalAlignment="Bottom" Width="76" Click="MoveDownAtlasButton_Click"/>
-                        <Button x:Name="RemoveAtlasButton" Content="Remove" HorizontalAlignment="Right" Margin="0,0,165,0" VerticalAlignment="Bottom" Width="58" Click="RemoveAtlasButton_Click"/>
-                        <Button x:Name="AddNewAtlasButton" Content="Add new" HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom" Width="58" Click="AddNewAtlasButton_Click"/>
-                        <Button Tag="ApplyAtlasChangesButton" x:Name="ApplyAtlasChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" Click="ApplyAtlasChangesButton_Click"/>
+                        <Button x:Name="MoveUpAtlasButton" Content="Move Up" HorizontalAlignment="Right" Margin="0,0,309,1" VerticalAlignment="Bottom" Width="60" Click="MoveUpAtlasButton_Click"/>
+                        <Button x:Name="MoveDownAtlasButton" Content="Move Down" HorizontalAlignment="Right" Margin="0,0,228,1" VerticalAlignment="Bottom" Width="76" Click="MoveDownAtlasButton_Click"/>
+                        <Button x:Name="RemoveAtlasButton" Content="Remove" HorizontalAlignment="Right" Margin="0,0,165,1" VerticalAlignment="Bottom" Width="58" Click="RemoveAtlasButton_Click"/>
+                        <Button x:Name="AddNewAtlasButton" Content="Add new" HorizontalAlignment="Right" Margin="0,0,102,1" VerticalAlignment="Bottom" Width="58" Click="AddNewAtlasButton_Click"/>
+                        <Button Tag="ApplyAtlasChangesButton" x:Name="ApplyAtlasChangesButton" Margin="0,0,0,1" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="97" Click="ApplyAtlasChangesButton_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="XmlUnpackShortcutTab" Header="XmlUnpack/Shortcut">
                     <Grid>
-                        <ListBox x:Name="PackageXmlUnpackDisplay" HorizontalAlignment="Stretch" Height="68" VerticalAlignment="Top" SelectionChanged="PackageXmlUnpackDisplay_SelectionChanged"/>
-                        <Grid HorizontalAlignment="Stretch" Height="287" Margin="0,0,0,206" VerticalAlignment="Bottom">
+                        <ListBox x:Name="PackageXmlUnpackDisplay" HorizontalAlignment="Stretch" Height="63" VerticalAlignment="Top" SelectionChanged="PackageXmlUnpackDisplay_SelectionChanged"/>
+                        <Grid HorizontalAlignment="Stretch" Height="281" Margin="0,68,0,0" VerticalAlignment="Top">
                             <Grid.RowDefinitions>
                                 <!-- Pkg -->
                                 <RowDefinition Height="20"/>
@@ -932,18 +932,17 @@
                                 <RowDefinition Height="35"/>
                                 <!-- Enabled -->
                                 <RowDefinition Height="20"/>
-                                <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
                             <TextBlock x:Name="ShortcutPathLabel" Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Path" VerticalAlignment="Bottom" ToolTip="'Path' parameter of shortcut xml, the target of the shortcut"/>
                             <TextBox x:Name="ShortcutPathTextbox" Grid.Row="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'Path' parameter of shortcut xml, the target of the shortcut"/>
                             <TextBlock x:Name="ShortcutNameLabel" Grid.Row="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Shortcut name" VerticalAlignment="Bottom" ToolTip="'Name' parameter of shortcut xml, the name of the shortcut"/>
                             <TextBox x:Name="ShortcutNameTextbox" Grid.Row="3" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" ToolTip="'Name' parameter of shortcut xml, the name of the shortcut"/>
-                            <CheckBox x:Name="ShortcutEnabledCheckbox" Grid.Row="4" HorizontalAlignment="Left" Content="Enabled" VerticalAlignment="Bottom" ToolTip="'Enabled' parameter of shortcut xml"/>
-                            <Button x:Name="MoveUpShortcutButton" Grid.Row="4" Content="Move Up" HorizontalAlignment="Right" Margin="0,1,309,0" VerticalAlignment="Bottom" Width="60" Click="MoveUpShortcutButton_Click"/>
-                            <Button x:Name="MoveDownShortcutButton" Grid.Row="4" Content="Move Down" HorizontalAlignment="Right" Margin="0,1,228,0" VerticalAlignment="Bottom" Width="76" Click="MoveDownShortcutButton_Click"/>
-                            <Button x:Name="RemoveShortcutButton" Grid.Row="4" Content="Remove" HorizontalAlignment="Right" Margin="0,1,165,0" VerticalAlignment="Bottom" Width="58" Click="RemoveShortcutButton_Click"/>
-                            <Button x:Name="AddNewShortcutButton" Grid.Row="4" Content="Add new" HorizontalAlignment="Right" Margin="0,1,102,0" VerticalAlignment="Bottom" Width="58" Click="AddNewShortcutButton_Click"/>
-                            <Button x:Name="ApplyShortcutButton" Grid.Row="4" Content="Apply Changes" HorizontalAlignment="Right" Margin="0,1,0,0" VerticalAlignment="Bottom" Width="97" Click="ApplyShortcutButton_Click"/>
+                            <CheckBox x:Name="ShortcutEnabledCheckbox" Grid.Row="4" HorizontalAlignment="Left" Content="Enabled" VerticalAlignment="Bottom" ToolTip="'Enabled' parameter of shortcut xml" Margin="0,0,0,3"/>
+                            <Button x:Name="MoveUpShortcutButton" Grid.Row="4" Content="Move Up" HorizontalAlignment="Right" Margin="0,1,309,1" VerticalAlignment="Bottom" Width="60" Click="MoveUpShortcutButton_Click"/>
+                            <Button x:Name="MoveDownShortcutButton" Grid.Row="4" Content="Move Down" HorizontalAlignment="Right" Margin="0,1,228,1" VerticalAlignment="Bottom" Width="76" Click="MoveDownShortcutButton_Click"/>
+                            <Button x:Name="RemoveShortcutButton" Grid.Row="4" Content="Remove" HorizontalAlignment="Right" Margin="0,1,165,1" VerticalAlignment="Bottom" Width="58" Click="RemoveShortcutButton_Click"/>
+                            <Button x:Name="AddNewShortcutButton" Grid.Row="4" Content="Add new" HorizontalAlignment="Right" Margin="0,1,102,1" VerticalAlignment="Bottom" Width="58" Click="AddNewShortcutButton_Click"/>
+                            <Button x:Name="ApplyShortcutButton" Grid.Row="4" Content="Apply Changes" HorizontalAlignment="Right" Margin="0,1,0,1" VerticalAlignment="Bottom" Width="97" Click="ApplyShortcutButton_Click"/>
                         </Grid>
                     </Grid>
                 </TabItem>
