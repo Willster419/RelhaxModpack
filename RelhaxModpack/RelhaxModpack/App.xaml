@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxRadioButtonStyleDictionary.xaml"/>
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxTabItemStyleDictionary.xaml"/>
                 <ResourceDictionary Source="UI/StyleDictionaries/RelhaxSelectionListTabItemStyleDictionary.xaml"/>
+                <ResourceDictionary Source="UI/StyleDictionaries/RelhaxListBoxStyleDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- https://stackoverflow.com/a/32558808/3128017 of https://stackoverflow.com/questions/14033238/wpf-setting-tooltip-maxwidth -->
             <Style TargetType="ToolTip">

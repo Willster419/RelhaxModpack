@@ -20,17 +20,6 @@
         <Style TargetType="RichTextBox" BasedOn="{StaticResource DarkThemeStyleBackgroundForeground}">
 
         </Style>
-        <Style TargetType="ListBox" BasedOn="{StaticResource DarkThemeStyleBackground}">
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
-                        <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Background" Value="{StaticResource DarkThemeActiveTab}"/>
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
         <!-- https://stackoverflow.com/questions/8198645/wpf-combobox-performance-problems-by-binding-a-large-collections -->
         <ItemsPanelTemplate x:Key="VSP">
             <VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"/>
