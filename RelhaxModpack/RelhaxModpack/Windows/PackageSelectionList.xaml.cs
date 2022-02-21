@@ -191,7 +191,7 @@ namespace RelhaxModpack.Windows
             switch (numTicks++)
             {
                 case 0:
-                    control.IsHighlightedForView = false;
+                    control.IsHighlightedForView = true;
                     break;
                 case NUM_FLASH_TICKS:
                     //stop the timer and reset everything
@@ -557,7 +557,7 @@ namespace RelhaxModpack.Windows
                         //for root element, hook into expandable element
                         cat.CategoryHeader.TreeViewItem.Collapsed += TreeViewItem_Collapsed;
                         cat.CategoryHeader.TreeViewItem.Expanded += (sender, e) => { e.Handled = true; };
-                        RelhaxWPFCheckBox box = new RelhaxWPFCheckBox()
+                        RelhaxWPFCheckBox box = new RelhaxWPFCheckBoxHeader()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
@@ -586,7 +586,7 @@ namespace RelhaxModpack.Windows
                         //TabPage -> ScrollViewer -> ParentBorder -> ParentStackPanel
                         cat.TabPage.Content = cat.CategoryHeader.ScrollViewer;
                         //create checkbox for inside selecteionlist
-                        RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
+                        RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBoxHeader()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
