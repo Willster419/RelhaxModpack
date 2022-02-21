@@ -8,6 +8,18 @@
         mc:Ignorable="d"
         Title="Modpack Toolbox" Height="480" Width="1200" MinHeight="300" MinWidth="400"
         Loaded="RelhaxWindow_Loaded" Closing="OnApplicationClose" LocalizeWindow="False" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
+        </Style>
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                    <Setter Property="BorderBrush" Value="White"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="390" MinWidth="200"/>
@@ -18,18 +30,17 @@
         <Grid Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="179,269,0,0" VerticalAlignment="Top" Width="100"/>
         <TabControl x:Name="TabController" HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" SelectionChanged="TabControl_SelectionChanged" >
             <TabItem x:Name="AuthStatusTab" Header="Authorization Status">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <TextBlock x:Name="PasswordLabel" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Please enter password to use this tool" VerticalAlignment="Top"/>
                     <TextBox x:Name="PaswordTextbox" HorizontalAlignment="Stretch" Height="46" Margin="10,26,10,0" TextWrapping="Wrap" VerticalAlignment="Top" KeyDown="PaswordTextbox_KeyDown"/>
                     <Button x:Name="LoadPasswordFromTextButton" Content="From above textbox" HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top" Width="129" Click="LoadPasswordFromText_Click"/>
                     <TextBlock x:Name="AuthStatusTextblock" HorizontalAlignment="Left" Margin="224,80,0,0" TextWrapping="Wrap" Text="Current status: Denied" VerticalAlignment="Top" Foreground="#FFEE1111" Width="150"/>
                     <TextBlock HorizontalAlignment="Left" Margin="10,103,0,0" TextWrapping="Wrap" Text="Without the password, the only sections available are MD5 generation and database output." VerticalAlignment="Top" Width="364" Height="38"/>
                     <Button x:Name="LoadPasswordFromFileButton" Content="From file" HorizontalAlignment="Left" Margin="144,78,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="LoadPasswordFromFileButton_Click"/>
-
                 </Grid>
             </TabItem>
             <TabItem x:Name="UpdateDatabaseV2Tab" Header="Update Database">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <TextBox x:Name="UpdateDatabaseV2Step0" Height="23" TextWrapping="Wrap" Text="Step 0: Pull latest database!!!"
                                  TextAlignment="Left" IsReadOnly="True"/>
@@ -56,7 +67,7 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="UpdateApplicationV2Tab" Header="Update Application">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <StackPanel>
                         <TextBox x:Name="UpdateApplicationV2Step0"  Height="23" TextWrapping="Wrap" Text="Step 0: Verify Application Works, is number updated"/>
                         <TextBox x:Name="UpdateApplicationV2Step1"  Height="23" TextWrapping="Wrap" Text="Step 1: Modify setting for beta, create and sign beta version"/>
@@ -74,7 +85,7 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="CleanZipFoldersTab" Header="Clean Zip folders">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <StackPanel>
                         <Button x:Name="CleanFoldersOnlineStep1" Content="Step 1: Parse online folders via supported__clients.xml" HorizontalContentAlignment="Left" Click="CleanFoldersOnlineStep1_Click"/>
                         <ComboBox x:Name="CleanFoldersOnlineStep2b"/>
@@ -87,7 +98,7 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="CleanMediasTab" Header="Clean Media Entries">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <StackPanel>
                         <Button x:Name="CleanMediasStep1" Content="Step 1: Load database" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
                         <Button x:Name="CleanMediasStep2" Content="Step 2: Try to download all media to test for errors" HorizontalContentAlignment="Left" Click="CleanMediasStep2_Click"/>
@@ -96,7 +107,7 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="DatabaseOutputTab" Header="Database Output">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <StackPanel >
                         <Button x:Name="DatabaseOutputStep1" Content="Step 1: Load database" HorizontalContentAlignment="Left" Click="OnLoadModInfo"/>
                         <Button x:Name="DatabaseOutputStep2a" Content="Step 2a: Generate internal spreadsheet (csv)" HorizontalContentAlignment="Left" Click="DatabaseOutputStep2a_Click"/>
@@ -105,20 +116,20 @@
                 </Grid>
             </TabItem>
             <TabItem x:Name="GenerateHashesTab" Header="Generate MD5">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <StackPanel >
                         <Button x:Name="GenerateMD5Button" Content="Load files to hash" Click="GenerateMD5Button_Click"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem x:Name="StatisticsToolsTab" Header="Other DB Tools">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.Column="0">
-                        <Border BorderThickness="1" BorderBrush="Black" Margin="1">
+                        <Border BorderThickness="1" Margin="1">
                             <StackPanel Orientation="Vertical">
                                 <Button x:Name="DatabaseStatsSave" Click="DatabaseStatsSave_Click" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,2,2,0">
                                     <TextBlock Text="Save live stats to FTP folder with new name" TextWrapping="Wrap"/>
@@ -131,7 +142,7 @@
                                 </Button>
                             </StackPanel>
                         </Border>
-                        <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
+                        <Border BorderThickness="1" Margin="1" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
                             <StackPanel Orientation="Vertical">
                                 <Button x:Name="LoadDatabaseUpdateSupportedClientsButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseUpdateSupportedClientsButton_Click">
                                     <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
@@ -155,7 +166,7 @@
                         </Border>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1">
+                        <Border BorderThickness="1" Margin="1" Grid.Column="1">
                             <StackPanel Orientation="Vertical">
                                 <Button x:Name="AnotherLoadDatabaseButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Grid.Column="1" Click="AnotherLoadDatabaseButton_Click">
                                     <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
@@ -174,14 +185,14 @@
                                 </Button>
                             </StackPanel>
                         </Border>
-                        <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1" Grid.Row="1">
+                        <Border BorderThickness="1" Margin="1" Grid.Column="1" Grid.Row="1">
                             <StackPanel Orientation="Vertical">
                                 <Button x:Name="WriteTranslationsToCsvButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="WriteTranslationsToCsvButton_Click">
                                     <TextBlock Text="Create CSV of Translations"/>
                                 </Button>
                             </StackPanel>
                         </Border>
-                        <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1" Grid.Row="2">
+                        <Border BorderThickness="1" Margin="1" Grid.Column="1" Grid.Row="2">
                             <StackPanel Orientation="Vertical">
                                 <Button x:Name="LoadDatabaseOutputRootAutomationText" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseOutputRootAutomationText_Click">
                                     <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
@@ -191,7 +202,7 @@
                                 </Button>
                             </StackPanel>
                         </Border>
-                        <Border BorderThickness="1" BorderBrush="Black" Margin="1" Grid.Column="1" Grid.Row="2">
+                        <Border BorderThickness="1" Margin="1" Grid.Column="1" Grid.Row="2">
                             <StackPanel Orientation="Vertical">
                                 <Button x:Name="LoadDatabaseConvertInstructionsToDbButton" HorizontalAlignment="Stretch" Margin="0,2,2,0" VerticalAlignment="Top" Click="LoadDatabaseConvertInstructionsToDbButton_Click">
                                     <TextBlock Text="Load Database (V2)" TextWrapping="Wrap"/>
