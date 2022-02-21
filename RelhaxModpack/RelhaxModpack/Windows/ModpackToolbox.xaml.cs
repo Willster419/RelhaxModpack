@@ -2148,7 +2148,7 @@ namespace RelhaxModpack.Windows
             DatabaseLoadFailCode failCode = await databaseManager.LoadDatabaseTestAsync(SelectModInfo.FileName);
 
 
-            ReportProgress("Parsing database 1.1 document");
+            ReportProgress("Parsing database document");
             //parse main database
             if (failCode != DatabaseLoadFailCode.None)
             {
