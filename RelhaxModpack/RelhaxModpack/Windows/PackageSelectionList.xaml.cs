@@ -393,6 +393,7 @@ namespace RelhaxModpack.Windows
                 {
                     ZipFile = s,
                     Name = Path.GetFileNameWithoutExtension(s),
+                    PackageName = Path.GetFileNameWithoutExtension(s),
                     Enabled = true,
                     Level = 0,
                     PatchGroup = 9,
@@ -2234,6 +2235,13 @@ namespace RelhaxModpack.Windows
                 Logging.Info(LogOptions.MethodName, "Checking user package {0}", userPackage.PackageName);
                 userPackageFromDatabase.Enabled = true;
                 userPackageFromDatabase.Checked = true;
+
+                //check the header as well
+                if (!UserCategory.CategoryHeader.Checked)
+                {
+                    UserCategory.CategoryHeader.Checked = true;
+                    UserCategory.TabPage.OnCheckedChanged(true);
+                }
 
                 //check crc for up to date
                 if (!userPackage.CRC.Equals(FileUtils.CreateMD5Hash(userPackage.ZipFile)))
