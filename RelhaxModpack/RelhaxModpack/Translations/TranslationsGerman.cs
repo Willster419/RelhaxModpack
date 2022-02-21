@@ -649,32 +649,14 @@ namespace RelhaxModpack
             #endregion
 
             #region Conflicting Packages Dialog
-            //Component: ConflictingPackageDialog
-            //Application window title
             German.Add("ConflictingPackageDialog", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartA
-            //
+            German.Add("conflictingPackageMessageOptionA", TranslationNeeded);
+            German.Add("conflictingPackageMessageOptionB", TranslationNeeded);
             German.Add("conflictingPackageMessagePartA", TranslationNeeded);
-
-            //Component: conflictingPackagePackageOfCategory
-            //
             German.Add("conflictingPackagePackageOfCategory", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartB
-            //
             German.Add("conflictingPackageMessagePartB", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartC
-            //
             German.Add("conflictingPackageMessagePartC", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartD
-            //
             German.Add("conflictingPackageMessagePartD", TranslationNeeded);
-
-            //Component: conflictingPackageMessagePartE
-            //
             German.Add("conflictingPackageMessagePartE", TranslationNeeded);
             #endregion
         }

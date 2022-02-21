@@ -640,40 +640,14 @@ namespace RelhaxModpack
             #endregion
 
             #region Conflicting Packages Dialog
-            //Component: ConflictingPackageDialog
-            //Application window title
             Polish.Add("ConflictingPackageDialog", "Konflikt Modów");
-
-            //Component: conflictingPackageMessageOptionA
-            //
             Polish.Add("conflictingPackageMessageOptionA", "Opcja A");
-
-            //Component: conflictingPackageMessageOptionB
-            //
             Polish.Add("conflictingPackageMessageOptionB", "Opcja B");
-
-            //Component: conflictingPackageMessagePartA
-            //
             Polish.Add("conflictingPackageMessagePartA", "Wybrano pakiet \"{0}\", który konfliktuje z innymi opcjami, które wybrano:");
-
-            //Component: conflictingPackagePackageOfCategory
-            //
             Polish.Add("conflictingPackagePackageOfCategory", "- {0} w kategorii {1}");
-
-            //Component: conflictingPackageMessagePartB
-            //
             Polish.Add("conflictingPackageMessagePartB", Polish["conflictingPackageMessageOptionA"] + ": Wybierz \"{0}\" i pomiń konfliktujące z tym pakiety");
-
-            //Component: conflictingPackageMessagePartC
-            //
             Polish.Add("conflictingPackageMessagePartC", Polish["conflictingPackageMessageOptionB"] + ": Zostaw konfliktujące pakiety, ale pomiń \"{0}\"");
-
-            //Component: conflictingPackageMessagePartD
-            //
             Polish.Add("conflictingPackageMessagePartD", "Zamknięcie tego okna spowoduje automatyczny wybór Opcji B");
-
-            //Component: conflictingPackageMessagePartE
-            //
             Polish.Add("conflictingPackageMessagePartE", "Którą opcję wybierasz?");
             #endregion
         }
