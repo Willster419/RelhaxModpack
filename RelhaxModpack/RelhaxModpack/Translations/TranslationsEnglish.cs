@@ -1766,6 +1766,10 @@ namespace RelhaxModpack
             //
             English.Add("AdvancedInstallInstallMods", "Install Thread");
 
+            //Component: AdvancedInstallUserInstallMods
+            //
+            English.Add("AdvancedInstallUserInstallMods", "User packages");
+
             //Component: AdvancedInstallRestoreData
             //
             English.Add("AdvancedInstallRestoreData", "Restore Data");

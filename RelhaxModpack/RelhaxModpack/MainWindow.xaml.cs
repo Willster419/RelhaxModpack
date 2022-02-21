@@ -1305,7 +1305,7 @@ namespace RelhaxModpack
                     RelhaxInstallTaskReporter reporter = new RelhaxInstallTaskReporter(nameof(AdvancedProgressWindow.ExtractionUserModsReporter))
                     {
                         IsSubProgressActive = true,
-                        TaskTitle = Translations.GetTranslatedString("AdvancedInstallInstallUserMods"),
+                        TaskTitle = Translations.GetTranslatedString("AdvancedInstallUserInstallMods"),
                         ReportState = TaskReportState.Inactive,
                         LoadedAfterApply = false
                     };
