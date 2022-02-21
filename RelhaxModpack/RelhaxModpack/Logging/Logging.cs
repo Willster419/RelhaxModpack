@@ -378,31 +378,31 @@ namespace RelhaxModpack
             switch (logfile)
             {
                 case Logfiles.Application:
-                    ApplicationLogfile.Dispose();
+                    ApplicationLogfile?.Dispose();
                     ApplicationLogfile = null;
                     break;
                 case Logfiles.Installer:
-                    InstallLogfile.Dispose();
+                    InstallLogfile?.Dispose();
                     InstallLogfile = null;
                     break;
                 case Logfiles.Uninstaller:
-                    UninstallLogfile.Dispose();
+                    UninstallLogfile?.Dispose();
                     UninstallLogfile = null;
                     break;
                 case Logfiles.Editor:
-                    EditorLogfile.Dispose();
+                    EditorLogfile?.Dispose();
                     EditorLogfile = null;
                     break;
                 case Logfiles.PatchDesigner:
-                    PatcherLogfile.Dispose();
+                    PatcherLogfile?.Dispose();
                     PatcherLogfile = null;
                     break;
                 case Logfiles.Updater:
-                    UpdaterLogfile.Dispose();
+                    UpdaterLogfile?.Dispose();
                     UpdaterLogfile = null;
                     break;
                 case Logfiles.AutomationRunner:
-                    AutomationLogfile.Dispose();
+                    AutomationLogfile?.Dispose();
                     AutomationLogfile = null;
                     break;
             }
