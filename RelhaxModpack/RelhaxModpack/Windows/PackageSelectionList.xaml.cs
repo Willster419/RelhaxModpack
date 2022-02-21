@@ -823,12 +823,6 @@ namespace RelhaxModpack.Windows
                 if (ModpackSettings.ForceEnabled && !package.IsStructureEnabled)
                     package.Enabled = true;
 
-                //set all media's package reference back to itself
-                foreach(Media media in package.Medias)
-                {
-                    media.SelectablePackageParent = package;
-                }
-
                 //special code for the borders and stackpanels for child UI component display
                 //if the child container for sub options hsa yet to be made AND there are sub options, make it
                 if (package.ChildBorder == null && package.Packages.Count > 0)

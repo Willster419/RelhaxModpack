@@ -205,6 +205,9 @@ namespace RelhaxModpack.Database
                 foreach (ConflictingPackage package in ConflictingPackagesNew)
                     package.ParentSelectablePackage = this;
             }
+
+            foreach (Media media in this.Medias)
+                media.SelectablePackageParent = this;
         }
 
         protected override void OnStartedSavingToXml(XElement propertyElement, string targetSchemaVersion)
