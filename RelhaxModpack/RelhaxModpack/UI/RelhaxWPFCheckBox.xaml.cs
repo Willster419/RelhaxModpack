@@ -76,13 +76,12 @@ namespace RelhaxModpack.UI
         {
             IsChecked = Checked;
 
+            if (Package.Visible && Package.IsStructureVisible && Package.Level == -1)
+                Package.TabIndex.OnCheckedChanged(Checked);
+
             if (Package.ChangeColorOnValueChecked && Package.Visible && Package.IsStructureVisible)
             {
-                if (Package.Level == -1)
-                {
-                    Package.TabIndex.OnCheckedChanged(Checked);
-                }
-                else if (Checked || Package.AnyPackagesChecked())
+                if ((Checked || Package.AnyPackagesChecked()) && Package.Level > -1)
                 {
                     Package.ParentBorder.IsChildPackageChecked = true;
                 }

@@ -55,7 +55,7 @@ namespace RelhaxModpack.UI
 
         public void OnCheckedChanged(bool Checked)
         {
-            if (Package.ChangeColorOnValueChecked && Package.Visible && Package.IsStructureVisible)
+            if (Package.Visible && Package.IsStructureVisible)
             {
                 if (Checked || Package.AnyPackagesChecked())
                 {
