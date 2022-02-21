@@ -14,7 +14,6 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="30">
             <TextBlock x:Name="HavingProblemsTextBlock" HorizontalAlignment="Left" Margin="10,0,0,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Tag="HavingProblemsTextBlock"
                        Text="If you are having problems updating, please"/>
-            <!-- <ui:RelhaxHyperlink x:Name="ViewNewsOnGoogleTranslate" Tag="ViewNewsOnGoogleTranslate" Text="View this on Google Translate" Foreground="#FF0066CC"/> -->
             <ui:RelhaxHyperlink Tag="ManualUpdateLink" x:Name="ManualUpdateLink" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Foreground="#FF0066CC"
                                 URL="https://github.com/Willster419/RelhaxModpack/releases/latest" Text="Click Here"/>
         </StackPanel>
