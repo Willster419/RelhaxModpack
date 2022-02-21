@@ -2,71 +2,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:RelhaxModpack.UI"
+             xmlns:local="clr-namespace:RelhaxModpack.Windows"
+             xmlns:Ui="clr-namespace:RelhaxModpack.UI"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              x:Name="comboBox"
              x:Class="RelhaxModpack.UI.RelhaxWPFComboBox"
              mc:Ignorable="d"
              SelectionChanged="ComboBox_SelectionChanged">
     <ComboBox.Resources>
-        <Style x:Key="FocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <DataTemplate x:Key="realTemp" DataType="{x:Type local:RelhaxComboBoxItem}">
+        <DataTemplate x:Key="realTemp" DataType="{x:Type Ui:RelhaxComboBoxItem}">
             <!-- https://stackoverflow.com/a/13968498/3128017 -->
             <StackPanel x:Name="templateRootPanel" Background="Transparent" SnapsToDevicePixels="True" Orientation="Horizontal" Loaded="TemplateRootPanel_Loaded">
                 <ContentPresenter Name="MyContent" Content="{Binding}"/>
             </StackPanel>
         </DataTemplate>
-        <LinearGradientBrush x:Key="ComboBox.Static.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#FFF0F0F0" Offset="0.0"/>
-            <GradientStop Color="#FFE5E5E5" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.Static.Border" Color="#FFACACAC"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Editable.Border" Color="#FFABADB3"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Background" Color="Transparent"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Border" Color="Transparent"/>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="#FF000000"/>
-        <LinearGradientBrush x:Key="ComboBox.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#FFECF4FC" Offset="0.0"/>
-            <GradientStop Color="#FFDCECFC" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="#FF7EB4EA"/>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border" Color="#FF7EB4EA"/>
-        <LinearGradientBrush x:Key="ComboBox.MouseOver.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#FFEBF4FC" Offset="0.0"/>
-            <GradientStop Color="#FFDCECFC" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Border" Color="#FF7EB4EA"/>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="#FF000000"/>
-        <LinearGradientBrush x:Key="ComboBox.Pressed.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#FFDAECFC" Offset="0.0"/>
-            <GradientStop Color="#FFC4E0FC" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="#FF569DE5"/>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Border" Color="#FF569DE5"/>
-        <LinearGradientBrush x:Key="ComboBox.Pressed.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#FFDAEBFC" Offset="0.0"/>
-            <GradientStop Color="#FFC4E0FC" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Border" Color="#FF569DE5"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="#FFBFBFBF"/>
         <SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="DarkGray"/>
         <SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="Transparent"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border" Color="#FFBFBFBF"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background" Color="Transparent"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Border" Color="Transparent"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FF606060"/>
         <Style x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="IsTabStop" Value="false"/>
@@ -75,9 +26,9 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border x:Name="templateRoot" BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{TemplateBinding BorderThickness}" Background="{StaticResource ComboBox.Static.Background}" SnapsToDevicePixels="true">
-                            <Border x:Name="splitBorder" BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
-                                <Path x:Name="arrow" Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" Fill="{StaticResource ComboBox.Static.Glyph}" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center"/>
+                        <Border x:Name="templateRoot" SnapsToDevicePixels="true" Background="{StaticResource ComboBox.Static.Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{StaticResource ComboBox.Static.Border}">
+                            <Border x:Name="splitBorder" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" SnapsToDevicePixels="true" Margin="0" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="Transparent">
+                                <Path x:Name="arrow" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Center" Fill="{StaticResource ComboBox.Static.Glyph}" Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z"/>
                             </Border>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -156,7 +107,54 @@
                                 <Setter Property="Background" TargetName="splitBorder" Value="{StaticResource ComboBox.Disabled.Editable.Button.Background}"/>
                                 <Setter Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource ComboBox.Disabled.Editable.Button.Border}"/>
                             </MultiDataTrigger>
+                            <!-- custom triggers begin here -->
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource DarkThemeCombobox}"/>
+                                <Setter Property="Fill" TargetName="arrow" Value="White"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource DarkThemeComboboxHighlight}"/>
+                                <Setter Property="Background" TargetName="splitBorder" Value="{StaticResource DarkThemeComboboxHighlight}"/>
+                                <Setter Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource DarkThemeComboboxHighlight}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ComboBox.Pressed.Background}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource DarkThemeActiveTab}"/>
+                            </MultiDataTrigger>
                         </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <ScrollViewer x:Name="PART_ContentHost" Background="Transparent" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -203,25 +201,12 @@
                     <Setter Property="Canvas.Top" TargetName="opaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}"/>
                     <Setter Property="Canvas.Left" TargetName="opaqueRect" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}"/>
                 </Trigger>
+                <!-- custom triggers begin here -->
+                <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                    <Setter Property="Background" TargetName="dropDownBorder" Value="{StaticResource DarkThemeActiveTab}"/>
+                </DataTrigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-        <SolidColorBrush x:Key="TextBox.Static.Background" Color="#FFFFFFFF"/>
-        <Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
-            <Setter Property="OverridesDefaultStyle" Value="true"/>
-            <Setter Property="AllowDrop" Value="true"/>
-            <Setter Property="MinWidth" Value="0"/>
-            <Setter Property="MinHeight" Value="0"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
-            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TextBox}">
-                        <ScrollViewer x:Name="PART_ContentHost" Background="Transparent" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <ControlTemplate x:Key="ComboBoxEditableTemplate" TargetType="{x:Type ComboBox}">
             <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
                 <Grid.ColumnDefinitions>
@@ -272,9 +257,22 @@
                     <Setter Property="Canvas.Top" TargetName="opaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}"/>
                     <Setter Property="Canvas.Left" TargetName="opaqueRect" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}"/>
                 </Trigger>
+                <!-- custom triggers begin here -->
+                <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                    <Setter Property="Background" TargetName="dropDownBorder" Value="{StaticResource DarkThemeCombobox}"/>
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource DarkThemeCombobox}"/>
+                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                        <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Background" TargetName="dropDownBorder" Value="{StaticResource DarkThemeActiveTab}"/>
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource DarkThemeActiveTab}"/>
+                </MultiDataTrigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-        <Style TargetType="{x:Type local:RelhaxWPFComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Style TargetType="Ui:RelhaxWPFComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
             <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
@@ -293,6 +291,10 @@
                     <Setter Property="Padding" Value="2"/>
                     <Setter Property="Template" Value="{StaticResource ComboBoxEditableTemplate}"/>
                 </Trigger>
+                <!-- custom triggers -->
+                <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource DarkThemeTextColor}"/>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
     </ComboBox.Resources>
