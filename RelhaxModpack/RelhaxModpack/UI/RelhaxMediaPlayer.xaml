@@ -12,15 +12,15 @@
     <Grid Loaded="OnComponentLoad">
         <TextBlock x:Name="FileName" Tag="FileName" HorizontalAlignment="Stretch" Margin="5,5,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         <Slider x:Name="Seekbar" HorizontalAlignment="Stretch" Margin="5,22,0,0" VerticalAlignment="Top" MouseMove="OnSeekbarMouseMove" IsSnapToTickEnabled="True" PreviewMouseLeftButtonDown="Seekbar_MouseLeftButtonDown" />
-        <Button x:Name="StopButton" Tag="StopButton" HorizontalAlignment="Left" Margin="5,45,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="StopButton_Click">
-            <Button.Background>
-                <ImageBrush ImageSource="/RelhaxModpack;component/Resources/Images/stop2.png"/>
-            </Button.Background>
+        <Button x:Name="StopButton" Tag="StopButton" HorizontalAlignment="Left" Margin="5,45,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="StopButton_Click" Background="DarkGray">
+            <Button.Content>
+                <Image Source="/RelhaxModpack;component/Resources/Images/stop2.png"/>
+            </Button.Content>
         </Button>
-        <Button x:Name="PlayPause" Tag="PlayPause" HorizontalAlignment="Left" Margin="50,45,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="PlayPause_Click">
-            <Button.Background>
-                <ImageBrush ImageSource="/RelhaxModpack;component/Resources/Images/play_pause.png"/>
-            </Button.Background>
+        <Button x:Name="PlayPause" Tag="PlayPause" HorizontalAlignment="Left" Margin="50,45,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="PlayPause_Click" Background="DarkGray">
+            <Button.Content>
+                <Image Source="/RelhaxModpack;component/Resources/Images/play_pause.png"/>
+            </Button.Content>
         </Button>
         <Slider x:Name="Volume" HorizontalAlignment="Left" Margin="130,55,0,0" VerticalAlignment="Top" Width="150" ValueChanged="OnVolumeScroll" IsSnapToTickEnabled="True"/>
         <TextBlock x:Name="VolumeNumber" Text="00" Tag="VolumeNumber" HorizontalAlignment="Left" Margin="285,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="18"/>
