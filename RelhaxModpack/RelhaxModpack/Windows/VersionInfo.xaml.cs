@@ -92,6 +92,14 @@ namespace RelhaxModpack.Windows
                 };
                 client.DownloadStringAsync(temp);
             }
+
+            VersionInfoYesButton.Content = SetFirstCharToUpper(VersionInfoYesButton.Content as string);
+            VersionInfoNoButton.Content = SetFirstCharToUpper(VersionInfoNoButton.Content as string);
+        }
+
+        private string SetFirstCharToUpper(string stringToSetUpper)
+        {
+            return char.ToUpper(stringToSetUpper[0]) + stringToSetUpper.Substring(1);
         }
 
         private void TheHyperlink_Click(object sender, RoutedEventArgs e)
