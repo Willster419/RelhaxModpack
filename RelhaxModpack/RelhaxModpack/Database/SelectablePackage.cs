@@ -558,6 +558,11 @@ namespace RelhaxModpack.Database
         /// </summary>
         public bool ChangeColorOnValueChecked { get; set; } = false;
 
+        /// <summary>
+        /// The TabItem UI reference
+        /// </summary>
+        public TabItem TabIndex;
+
         public SelectionView ModSelectionView { get; set; }
 
         public bool ForceVisible { get; set; }
@@ -587,11 +592,6 @@ namespace RelhaxModpack.Database
         /// The TreeView that this package is in. legacy WPF component
         /// </summary>
         public StretchingTreeView @TreeView;
-
-        /// <summary>
-        /// The TabItem UI reference
-        /// </summary>
-        public TabItem TabIndex;
         #endregion
 
         #region Other Properties and Methods
