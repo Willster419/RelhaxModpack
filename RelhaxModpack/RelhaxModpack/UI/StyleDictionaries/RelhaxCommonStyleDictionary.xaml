@@ -72,6 +72,10 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
+    
+    <Style x:Key="DarkThemeGrid" TargetType="Grid" BasedOn="{StaticResource DarkThemeStyleBackground}">
+
+    </Style>
 
     <!-- direct application of {DarkThemeStyleBackground(Foreground)} to components based on type -->
     <Style TargetType="TextBlock" BasedOn="{StaticResource DarkThemeStyleBackgroundForeground}">
@@ -81,9 +85,6 @@
 
     </Style>
     <Style TargetType="TabControl" BasedOn="{StaticResource DarkThemeStyleBackground}">
-        
-    </Style>
-    <Style x:Key="DarkThemeGrid" TargetType="Grid" BasedOn="{StaticResource DarkThemeStyleBackground}">
         
     </Style>
 
