@@ -654,7 +654,6 @@ namespace RelhaxModpack.Windows
         private void AddUserMods()
         {
             //NOTE: this is UI thread
-
             UserCategory.CategoryHeader = new SelectablePackage()
             {
                 Name = string.Format("----------[{0}]----------", "USER"),
