@@ -93,8 +93,8 @@ namespace RelhaxModpack.Windows
                 client.DownloadStringAsync(temp);
             }
 
-            VersionInfoYesButton.Content = SetFirstCharToUpper(VersionInfoYesButton.Content as string);
-            VersionInfoNoButton.Content = SetFirstCharToUpper(VersionInfoNoButton.Content as string);
+            VersionInfoYesText.Text = SetFirstCharToUpper(VersionInfoYesText.Text);
+            VersionInfoNoText.Text = SetFirstCharToUpper(VersionInfoNoText.Text);
         }
 
         private string SetFirstCharToUpper(string stringToSetUpper)

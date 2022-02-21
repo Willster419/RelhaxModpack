@@ -18,11 +18,11 @@ namespace RelhaxModpack
 
             #region General expressions
             // Confirm "yes" button used in multiple places.
-            // REFERRERS: VersionInfoYesButton;
+            // REFERRERS: VersionInfoYesText;
             English.Add("yes", "yes");
 
             // Decline button used in multiple places.
-            // REFERRERS: VersionInfoNoButton;
+            // REFERRERS: VersionInfoNoText;
             English.Add("no", "no");
 
             // Cancel button (phrase) used in multiple places.
@@ -962,13 +962,13 @@ namespace RelhaxModpack
             //
             English.Add("selectionFileIssuesHeader", "Please read the following messages related to your selection file");
 
-            //Component: VersionInfoYesButton
+            //Component: VersionInfoYesText
             // A button in VersionInfo window confirming the installation of the new available version of the application.
-            English.Add("VersionInfoYesButton", English["yes"]);
+            English.Add("VersionInfoYesText", English["yes"]);
 
-            //Component: VersionInfoNoButton
+            //Component: VersionInfoNoText
             // A button in VersionInfo window aborting the installation of the new available version of the application.
-            English.Add("VersionInfoNoButton", English["no"]);
+            English.Add("VersionInfoNoText", English["no"]);
 
             //--- Fix my description.
             //  Without it, the update windows displays the bare string name.

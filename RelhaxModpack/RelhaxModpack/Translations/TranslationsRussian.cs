@@ -280,8 +280,8 @@ namespace RelhaxModpack
             Russian.Add("SelectionFileIssuesDisplay", "Ошибка применения файла конфигурации");
             Russian.Add("selectionFileIssues", Russian["SelectionFileIssuesDisplay"]);
             Russian.Add("VersionInfo", "Обновление приложения");
-            Russian.Add("VersionInfoYesButton", Russian["yes"]);
-            Russian.Add("VersionInfoNoButton", Russian["no"]);
+            Russian.Add("VersionInfoYesText", Russian["yes"]);
+            Russian.Add("VersionInfoNoText", Russian["no"]);
             Russian.Add("NewVersionAvailable", "Доступна новая версия");
             Russian.Add("HavingProblemsTextBlock", "Если возникли проблемы в процессе обновления, пожалуйста,");
             Russian.Add("ManualUpdateLink", "нажмите сюда.");

@@ -295,8 +295,8 @@ namespace RelhaxModpack
             Spanish.Add("selectionFileIssues", Spanish["SelectionFileIssuesDisplay"]);
             Spanish.Add("selectionFileIssuesHeader", TranslationNeeded);
             Spanish.Add("VersionInfo", "Actualizacón de la aplicación");
-            Spanish.Add("VersionInfoYesButton", Spanish["yes"]);
-            Spanish.Add("VersionInfoNoButton", Spanish["no"]);
+            Spanish.Add("VersionInfoYesText", Spanish["yes"]);
+            Spanish.Add("VersionInfoNoText", Spanish["no"]);
             Spanish.Add("NewVersionAvailable", "Nueva versión disponible");
             Spanish.Add("HavingProblemsTextBlock", "Si tiene problemas actualizando, por favor");
             Spanish.Add("ManualUpdateLink", "Haga clic aquí");

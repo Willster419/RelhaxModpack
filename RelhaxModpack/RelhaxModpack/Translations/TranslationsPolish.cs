@@ -291,8 +291,8 @@ namespace RelhaxModpack
             Polish.Add("selectionFileIssues", Polish["SelectionFileIssuesDisplay"]);
             Polish.Add("selectionFileIssuesHeader", TranslationNeeded);
             Polish.Add("VersionInfo", "Aktualizacja Aplikacji");
-            Polish.Add("VersionInfoYesButton", Polish["yes"]);
-            Polish.Add("VersionInfoNoButton", Polish["no"]);
+            Polish.Add("VersionInfoYesText", Polish["yes"]);
+            Polish.Add("VersionInfoNoText", Polish["no"]);
             Polish.Add("NewVersionAvailable", "Nowa wersja dostępna");
             Polish.Add("HavingProblemsTextBlock", "Jeśli masz problem z aktualizacją,");
             Polish.Add("ManualUpdateLink", "kliknij tutaj");
