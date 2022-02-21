@@ -102,6 +102,9 @@
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="Background" Value="White"/>
         <Style.Triggers>
+            <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                <Setter Property="BorderBrush" Value="White"/>
+            </DataTrigger>
             <DataTrigger Binding="{Binding IsChildPackageChecked, RelativeSource={RelativeSource Self}}" Value="True">
                 <Setter Property="Background" Value="BlanchedAlmond"/>
             </DataTrigger>
@@ -111,7 +114,6 @@
                     <Condition Binding="{Binding IsChildPackageChecked, RelativeSource={RelativeSource Self}}" Value="True"/>
                 </MultiDataTrigger.Conditions>
                 <Setter Property="Background" Value="{StaticResource DarkThemeActiveTab}"/>
-                <Setter Property="BorderBrush" Value="White"/>
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>
