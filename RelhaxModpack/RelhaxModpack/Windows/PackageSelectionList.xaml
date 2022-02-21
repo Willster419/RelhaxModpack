@@ -11,6 +11,9 @@
         <ItemsPanelTemplate x:Key="VSP">
             <VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"/>
         </ItemsPanelTemplate>
+        <Style TargetType="TabControl" BasedOn="{StaticResource DarkThemeStyleBackground}">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
     </local:RelhaxWindow.Resources>
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="ModSelectionGrid">
         <Grid HorizontalAlignment="Stretch" Height="84" Margin="10,10,10,0" VerticalAlignment="Top">
