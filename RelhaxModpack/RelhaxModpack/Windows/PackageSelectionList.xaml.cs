@@ -672,15 +672,6 @@ namespace RelhaxModpack.Windows
                 PackageName = string.Format("Category_User_Header", Name.Replace(' ', '_'))
             };
 
-            RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
-            {
-                Package = UserCategory.CategoryHeader,
-                Content = UserCategory.CategoryHeader.NameFormatted,
-                HorizontalAlignment = HorizontalAlignment.Left
-            };
-
-            UserCategory.CategoryHeader.UIComponent = cb2;
-            UserCategory.CategoryHeader.TopParentUIComponent = UserCategory.CategoryHeader.ParentUIComponent = UserCategory.CategoryHeader.UIComponent;
             UserCategory.CategoryHeader.ChangeColorOnValueChecked =
                         (ModpackSettings.ModSelectionView == SelectionView.DefaultV2 && ModpackSettings.EnableColorChangeDefaultV2View) ||
                         (ModpackSettings.ModSelectionView == SelectionView.Legacy && ModpackSettings.EnableColorChangeLegacyView);
@@ -1669,6 +1660,7 @@ namespace RelhaxModpack.Windows
             ClearSelections(databaseManager.GetFlatSelectablePackageList());
             ClearSelections(UserCategory.GetFlatPackageList());
             UserCategory.CategoryHeader.Checked = false;
+            UserCategory.TabPage.OnCheckedChanged(false);
 
             Logging.Info("Selections cleared");
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
