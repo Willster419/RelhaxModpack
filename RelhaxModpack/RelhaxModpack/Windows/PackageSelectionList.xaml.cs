@@ -859,7 +859,9 @@ namespace RelhaxModpack.Windows
                             HorizontalAlignment = HorizontalAlignment.Left,
                             HorizontalContentAlignment = HorizontalAlignment.Left,
                             VerticalContentAlignment = VerticalAlignment.Center,
-                            Content = package.NameDisplay,
+                            //don't set a style so that it will use the default, which means it won't override applying the dark theme
+                            //we don't want to do that because we want to use the checkBox's/radioButton's Foreground property
+                            Content = new TextBlock() { Text = package.NameDisplay, Style = null },
                             IsEnabled = package.IsStructureEnabled,
                             IsChecked = false
                         };
@@ -879,7 +881,9 @@ namespace RelhaxModpack.Windows
                             HorizontalAlignment = HorizontalAlignment.Left,
                             HorizontalContentAlignment = HorizontalAlignment.Left,
                             VerticalContentAlignment = VerticalAlignment.Center,
-                            Content = package.NameDisplay,
+                            //don't set a style so that it will use the default, which means it won't override applying the dark theme
+                            //we don't want to do that because we want to use the checkBox's/radioButton's Foreground property
+                            Content = new TextBlock() { Text = package.NameDisplay, Style = null },
                             IsEnabled = package.IsStructureEnabled,
                             IsChecked = false                          
                         };
