@@ -432,7 +432,7 @@ namespace RelhaxModpack
             Polish.Add("DownloadWGPatchFilesButtonDescription", "Pobiera pliki aktualizacji dla gier Wargaming za pomocą protokołu HTTP celem późniejszej instalacji w WGC.\n" +
                 "Szczególnie przydatne dla osób, które nie mogą używać wbudowanego w Wargaming Game Center protokołu P2P.");
             Polish.Add("SelectedInstallation", "Aktywna instalacja WoT:");
-            Polish.Add("SelectedInstallationNone", "("+Polish["none"].ToLower()+")");
+            Polish.Add("SelectedInstallationNone", "(" + Polish["none"].ToLower() + ")");
             Polish.Add("collectionLogInfo", "Zbieranie plików dziennika...");
             Polish.Add("startingLauncherRepairMode", "Uruchamianie launchera WOT w trybie sprawdzania integralności plików...");
             Polish.Add("failedCreateZipfile", "Nie udało się stworzyć archiwum ZIP ");
@@ -642,31 +642,39 @@ namespace RelhaxModpack
             #region Conflicting Packages Dialog
             //Component: ConflictingPackageDialog
             //Application window title
-            Polish.Add("ConflictingPackageDialog", TranslationNeeded);
+            Polish.Add("ConflictingPackageDialog", "Konflikt Modów");
+
+            //Component: conflictingPackageMessageOptionA
+            //
+            Polish.Add("conflictingPackageMessageOptionA", "Opcja A");
+
+            //Component: conflictingPackageMessageOptionB
+            //
+            Polish.Add("conflictingPackageMessageOptionB", "Opcja B");
 
             //Component: conflictingPackageMessagePartA
             //
-            Polish.Add("conflictingPackageMessagePartA", TranslationNeeded);
+            Polish.Add("conflictingPackageMessagePartA", "Wybrano pakiet \"{0}\", który konfliktuje z innymi opcjami, które wybrano:");
 
             //Component: conflictingPackagePackageOfCategory
             //
-            Polish.Add("conflictingPackagePackageOfCategory", TranslationNeeded);
+            Polish.Add("conflictingPackagePackageOfCategory", "- {0} w kategorii {1}");
 
             //Component: conflictingPackageMessagePartB
             //
-            Polish.Add("conflictingPackageMessagePartB", TranslationNeeded);
+            Polish.Add("conflictingPackageMessagePartB", Polish["conflictingPackageMessageOptionA"] + ": Wybierz \"{0}\" i pomiń konfliktujące z tym pakiety");
 
             //Component: conflictingPackageMessagePartC
             //
-            Polish.Add("conflictingPackageMessagePartC", TranslationNeeded);
+            Polish.Add("conflictingPackageMessagePartC", Polish["conflictingPackageMessageOptionB"] + ": Zostaw konfliktujące pakiety, ale pomiń \"{0}\"");
 
             //Component: conflictingPackageMessagePartD
             //
-            Polish.Add("conflictingPackageMessagePartD", TranslationNeeded);
+            Polish.Add("conflictingPackageMessagePartD", "Zamknięcie tego okna spowoduje automatyczny wybór Opcji B");
 
             //Component: conflictingPackageMessagePartE
             //
-            Polish.Add("conflictingPackageMessagePartE", TranslationNeeded);
+            Polish.Add("conflictingPackageMessagePartE", "Którą opcję wybierasz?");
             #endregion
         }
     }
