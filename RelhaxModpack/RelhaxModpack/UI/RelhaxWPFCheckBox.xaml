@@ -4,40 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:RelhaxModpack.UI"
+             xmlns:Ui="clr-namespace:RelhaxModpack.UI"
+             xmlns:local="clr-namespace:RelhaxModpack.Windows"
              mc:Ignorable="d">
     <CheckBox.Resources>
-        <Style x:Key="FocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <SolidColorBrush x:Key="OptionMark.Static.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="OptionMark.Static.Border" Color="#FF707070"/>
-        <Style x:Key="OptionMarkFocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="#FFF3F9FF"/>
-        <SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="#FF5593FF"/>
-        <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="#FF212121"/>
         <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="DarkGray"/>
         <SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="Transparent"/>
-        <SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="#FF707070"/>
-        <SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="#FFD9ECFF"/>
-        <SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="#FF3C77DD"/>
-        <SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="#FF212121"/>
-        <SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="#FF212121"/>
-        <Style TargetType="{x:Type local:RelhaxWPFCheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+        <!-- Checkbox theme -->
+        <Style TargetType="Ui:RelhaxWPFCheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>
             <Setter Property="BorderBrush" Value="{StaticResource OptionMark.Static.Border}"/>
@@ -76,12 +50,6 @@
                                 <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
                                 <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
                             </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Border}"/>
-                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
-                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
-                            </Trigger>
                             <Trigger Property="IsChecked" Value="true">
                                 <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
                                 <Setter Property="Opacity" TargetName="indeterminateMark" Value="0"/>
@@ -90,10 +58,45 @@
                                 <Setter Property="Opacity" TargetName="optionMark" Value="0"/>
                                 <Setter Property="Opacity" TargetName="indeterminateMark" Value="1"/>
                             </Trigger>
+                            <!-- Custom triggers begin here -->
+                            <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource DarkThemeBackground}"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource DarkThemeTextColor}"/>
+                            </DataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource DarkThemeCheckboxHighlight}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True"/>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource DarkThemeActiveTab}"/>
+                            </MultiDataTrigger>
+                            <!-- copied from original, moved down for ordering -->
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Border}"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource DarkThemeBackground}"/>
+                    <Setter Property="Foreground" Value="{StaticResource DarkThemeTextColor}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsHighlightedForView, RelativeSource={RelativeSource Self}}" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource PackageUiComponentHighlightBrush}"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
     </CheckBox.Resources>
 </CheckBox>

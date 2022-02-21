@@ -15,7 +15,7 @@
     <SolidColorBrush x:Key="RadioButton.Pressed.Glyph" Color="#FF212121"/>
     <SolidColorBrush x:Key="RadioButton.Static.Glyph" Color="#FF212121"/>
     <!-- RadioButton theme -->
-    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+    <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource RadioButton.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.Border}"/>
@@ -90,13 +90,6 @@
             <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
                 <Setter Property="Background" Value="{StaticResource DarkThemeBackground}"/>
                 <Setter Property="Foreground" Value="{StaticResource DarkThemeTextColor}"/>
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-    <Style TargetType="{x:Type Ui:RelhaxWPFRadioButton}" BasedOn="{DynamicResource {x:Type RadioButton}}">
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding IsHighlightedForView, RelativeSource={RelativeSource Self}}" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource PackageUiComponentHighlightBrush}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

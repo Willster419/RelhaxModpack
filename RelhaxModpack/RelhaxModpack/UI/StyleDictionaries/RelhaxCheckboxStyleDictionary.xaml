@@ -15,7 +15,7 @@
     <SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="#FF212121"/>
     <SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="#FF212121"/>
     <!-- Checkbox theme -->
-    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+    <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource OptionMark.Static.Border}"/>
@@ -96,13 +96,6 @@
             <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
                 <Setter Property="Background" Value="{StaticResource DarkThemeBackground}"/>
                 <Setter Property="Foreground" Value="{StaticResource DarkThemeTextColor}"/>
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-    <Style TargetType="{x:Type Ui:RelhaxWPFCheckBox}" BasedOn="{DynamicResource {x:Type CheckBox}}">
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding IsHighlightedForView, RelativeSource={RelativeSource Self}}" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource PackageUiComponentHighlightBrush}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
