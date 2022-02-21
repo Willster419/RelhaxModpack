@@ -182,7 +182,7 @@ namespace RelhaxModpack.Database
         /// <summary>
         /// The TabItem object reference
         /// </summary>
-        public TabItem TabPage { get; set; } = null;
+        public SelectionListTabItem TabPage { get; set; } = null;
 
         /// <summary>
         /// The package created at selection list building that represents the header of this category

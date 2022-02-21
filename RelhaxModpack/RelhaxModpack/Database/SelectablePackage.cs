@@ -561,7 +561,7 @@ namespace RelhaxModpack.Database
         /// <summary>
         /// The TabItem UI reference
         /// </summary>
-        public TabItem TabIndex;
+        public SelectionListTabItem TabIndex;
 
         public SelectionView ModSelectionView { get; set; }
 

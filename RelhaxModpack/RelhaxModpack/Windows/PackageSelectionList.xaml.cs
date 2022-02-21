@@ -510,11 +510,11 @@ namespace RelhaxModpack.Windows
                 //build per category tab here
                 //like all the UI stuff and linking internally
                 //make the tab page
-                cat.TabPage = new TabItem()
+                cat.TabPage = new SelectionListTabItem()
                 {
                     Header = cat.Name,
                     Tag = cat,
-                    //Package = cat.CategoryHeader
+                    Package = cat.CategoryHeader
                 };
 
                 //init common stuff used between both
@@ -665,7 +665,7 @@ namespace RelhaxModpack.Windows
             };
             UserCategory.CategoryHeader.ParentCategory = UserCategory;
             StackPanel userStackPanel = new StackPanel();
-            TabItem userTab = new TabItem()
+            SelectionListTabItem userTab = new SelectionListTabItem()
             {
                 Name = "UserMods",
                 Header = Translations.GetTranslatedString("userMods")
@@ -1119,7 +1119,7 @@ namespace RelhaxModpack.Windows
             else
                 spc.Checked = false;
 
-            //spc.TabIndex.OnCheckedChanged(spc.Checked);
+            spc.TabIndex.OnCheckedChanged(spc.Checked);
         }
 
         //when a multi mod is selected
