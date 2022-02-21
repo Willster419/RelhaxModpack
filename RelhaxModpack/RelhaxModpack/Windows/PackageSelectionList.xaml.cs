@@ -529,6 +529,7 @@ namespace RelhaxModpack.Windows
                     case SelectionView.Legacy:
                         cat.CategoryHeader.TreeViewItem = new StretchingTreeViewItem()
                         {
+                            Name = $"_{cat.CategoryHeader.PackageName}_TreeViewItem".Replace(".", "_").Replace("-", "_").Replace("&", "_"),
                             Background = Brushes.Transparent,
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             HorizontalContentAlignment = HorizontalAlignment.Stretch,
@@ -536,6 +537,7 @@ namespace RelhaxModpack.Windows
                         };
                         cat.CategoryHeader.TreeView = new StretchingTreeView()
                         {
+                            Name = $"_{cat.CategoryHeader.PackageName}_TreeView".Replace(".", "_").Replace("-", "_").Replace("&", "_"),
                             Background = Brushes.Transparent,
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             HorizontalContentAlignment = HorizontalAlignment.Stretch
@@ -543,12 +545,14 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.TreeView.MouseDown += Lsl_MouseDown;
                         cat.CategoryHeader.ChildBorder = new RelhaxBorder()
                         {
+                            Name = $"_{cat.CategoryHeader.PackageName}_ChildRelhaxBorder".Replace(".", "_").Replace("-", "_").Replace("&", "_"),
                             BorderThickness = ModpackSettings.EnableBordersLegacyView ? new Thickness(1) : new Thickness(0),
                             Child = cat.CategoryHeader.ChildStackPanel,
                             Margin = new Thickness(-25, 0, 0, 0)
                         };
                         cat.CategoryHeader.ParentBorder = new RelhaxBorder()
                         {
+                            Name = $"_{cat.CategoryHeader.PackageName}_ParentRelhaxBorder".Replace(".", "_").Replace("-", "_").Replace("&", "_"),
                             Child = cat.CategoryHeader.TreeView,
                             Padding = new Thickness(2)
                         };
@@ -561,6 +565,7 @@ namespace RelhaxModpack.Windows
                         cat.CategoryHeader.TreeViewItem.Expanded += (sender, e) => { e.Handled = true; };
                         RelhaxWPFCheckBox box = new RelhaxWPFCheckBox()
                         {
+                            Name = $"_{cat.CategoryHeader.PackageName}_RelhaxWpfCheckBox".Replace(".", "_").Replace("-", "_").Replace("&", "_"),
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
                             HorizontalAlignment = HorizontalAlignment.Left
@@ -625,6 +630,7 @@ namespace RelhaxModpack.Windows
                         case SelectionView.Legacy:
                             package.TreeViewItem = new StretchingTreeViewItem()
                             {
+                                Name = $"_{package.PackageName}_TreeViewItem".Replace(".", "_").Replace("-", "_").Replace("&", "_"),
                                 Background = System.Windows.Media.Brushes.Transparent,
                                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                                 HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch
@@ -827,9 +833,10 @@ namespace RelhaxModpack.Windows
                 //if the child container for sub options hsa yet to be made AND there are sub options, make it
                 if (package.ChildBorder == null && package.Packages.Count > 0)
                 {
-                    package.ChildStackPanel = new StackPanel();
+                    package.ChildStackPanel = new StackPanel() { Name = $"_{package.PackageName}_StackPanel".Replace(".", "_").Replace("-", "_").Replace("&", "_") };
                     package.ChildBorder = new RelhaxBorder()
                     {
+                        Name = $"_{package.PackageName}_ChildRelhaxBorder".Replace(".", "_").Replace("-", "_").Replace("&", "_"),
                         BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
                         Child = package.ChildStackPanel
                     };
@@ -852,6 +859,7 @@ namespace RelhaxModpack.Windows
                     case SelectionTypes.single1:
                         package.UIComponent = new RelhaxWPFRadioButton()
                         {
+                            Name = $"_{package.PackageName}_RelhaxWpfRadioButton".Replace(".", "_").Replace("-", "_").Replace("&", "_"),
                             ToolTip = package.ToolTipString,
                             Package = package,
                             HorizontalAlignment = HorizontalAlignment.Left,
@@ -874,6 +882,7 @@ namespace RelhaxModpack.Windows
                     case SelectionTypes.multi:
                         package.UIComponent = new RelhaxWPFCheckBox()
                         {
+                            Name = $"_{package.PackageName}_RelhaxWpfCheckBox".Replace(".", "_").Replace("-", "_").Replace("&", "_"),
                             ToolTip = package.ToolTipString,
                             Package = package,
                             HorizontalAlignment = HorizontalAlignment.Left,
