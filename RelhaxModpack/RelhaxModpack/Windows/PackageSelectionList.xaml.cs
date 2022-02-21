@@ -521,6 +521,12 @@ namespace RelhaxModpack.Windows
                 cat.CategoryHeader.RelhaxWPFComboBoxList = new RelhaxWPFComboBox[2];
                 cat.CategoryHeader.ChildStackPanel = new StackPanel();
                 cat.CategoryHeader.TabIndex = cat.TabPage;
+                cat.CategoryHeader.ChangeColorOnValueChecked =
+                        (ModpackSettings.ModSelectionView == SelectionView.DefaultV2 && ModpackSettings.EnableColorChangeDefaultV2View) ||
+                        (ModpackSettings.ModSelectionView == SelectionView.Legacy && ModpackSettings.EnableColorChangeLegacyView);
+                cat.CategoryHeader.ModSelectionView = ModpackSettings.ModSelectionView;
+                cat.CategoryHeader.ForceEnabled = ModpackSettings.ForceEnabled;
+                cat.CategoryHeader.ForceVisible = ModpackSettings.ForceVisible;
 
                 switch (ModpackSettings.ModSelectionView)
                 {
