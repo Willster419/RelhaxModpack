@@ -29,7 +29,7 @@
                         <!-- NOTE: triggers are processed and applied in the order that they are listed. In this example, because the custom triggers
                              are set *after* the original ones above, these will be processed and applied *after* the above ones -->
                         <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource DarkThemeButton}"/>
+                            <Setter Property="Background" Value="{StaticResource DarkThemeButton}"/>
                         </DataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
