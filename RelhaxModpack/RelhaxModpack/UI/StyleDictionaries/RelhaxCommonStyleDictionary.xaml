@@ -98,7 +98,7 @@
     </Style>
 
     <!-- Custom border definition with IsChildPackageChecked property to use for checked style triggers -->
-    <Style TargetType="{x:Type ui:RelhaxBorder}" BasedOn="{StaticResource DarkThemeStyleBackground}">
+    <Style TargetType="ui:RelhaxBorder" BasedOn="{StaticResource DarkThemeStyleBackground}">
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="Background" Value="White"/>
         <Style.Triggers>
