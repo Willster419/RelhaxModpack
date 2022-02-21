@@ -671,17 +671,47 @@ namespace RelhaxModpack.Windows
                 Level = -1,
                 PackageName = string.Format("Category_User_Header", Name.Replace(' ', '_'))
             };
+
+            RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
+            {
+                Package = UserCategory.CategoryHeader,
+                Content = UserCategory.CategoryHeader.NameFormatted,
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
+
+            UserCategory.CategoryHeader.UIComponent = cb2;
+            UserCategory.CategoryHeader.TopParentUIComponent = UserCategory.CategoryHeader.ParentUIComponent = UserCategory.CategoryHeader.UIComponent;
+            UserCategory.CategoryHeader.ChangeColorOnValueChecked =
+                        (ModpackSettings.ModSelectionView == SelectionView.DefaultV2 && ModpackSettings.EnableColorChangeDefaultV2View) ||
+                        (ModpackSettings.ModSelectionView == SelectionView.Legacy && ModpackSettings.EnableColorChangeLegacyView);
             UserCategory.CategoryHeader.Parent = UserCategory.CategoryHeader;
+            UserCategory.CategoryHeader.TopParent = UserCategory.CategoryHeader;
             UserCategory.CategoryHeader.ParentCategory = UserCategory;
+
             StackPanel userStackPanel = new StackPanel();
             SelectionListTabItem userTab = new SelectionListTabItem()
             {
                 Name = "UserMods",
                 Header = new TextBlock() { Text = Translations.GetTranslatedString("userMods"), Style = this.Resources["selectionTextBlockStyle"] as Style }
             };
+
+            RelhaxBorder border = new RelhaxBorder()
+            {
+                BorderThickness = ModpackSettings.EnableBordersDefaultV2View ? new Thickness(1) : new Thickness(0),
+                Child = userStackPanel
+            };
+
+            ScrollViewer viewer = new ScrollViewer()
+            {
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                Content = border
+            };
+
             userTab.Package = UserCategory.CategoryHeader;
+            userTab.Package.ParentBorder = border;
+            userTab.Package.ScrollViewer = viewer;
             userTab.RequestBringIntoView += OnUserModsTabSelected;
-            userTab.Content = userStackPanel;
+            userTab.Content = viewer;
             ModTabGroups.Items.Add(userTab);
             UserCategory.TabPage = userTab;
             UserCategory.CategoryHeader.TabIndex = userTab;
@@ -698,11 +728,21 @@ namespace RelhaxModpack.Windows
                     IsEnabled = true,
                     Content = package.NameDisplay
                 };
+                package.Parent = UserCategory.CategoryHeader;
+                package.TopParent = UserCategory.CategoryHeader;
+                package.ParentBorder = border;
+                package.ScrollViewer = viewer;
+                package.Visible = true;
+                package.ChangeColorOnValueChecked =
+                        (ModpackSettings.ModSelectionView == SelectionView.DefaultV2 && ModpackSettings.EnableColorChangeDefaultV2View) ||
+                        (ModpackSettings.ModSelectionView == SelectionView.Legacy && ModpackSettings.EnableColorChangeLegacyView);
+                package.ModSelectionView = ModpackSettings.ModSelectionView;
                 package.UIComponent = userMod;
                 package.TabIndex = userTab;
                 userMod.Click += OnUserPackageClick;
                 userStackPanel.Children.Add(userMod);
             }
+            UserCategory.CategoryHeader.Packages = UserCategory.Packages;
         }
 
         private SelectionListEventArgs GetSelectionStatus()
@@ -1628,6 +1668,7 @@ namespace RelhaxModpack.Windows
             //clear in lists
             ClearSelections(databaseManager.GetFlatSelectablePackageList());
             ClearSelections(UserCategory.GetFlatPackageList());
+            UserCategory.CategoryHeader.Checked = false;
 
             Logging.Info("Selections cleared");
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));
