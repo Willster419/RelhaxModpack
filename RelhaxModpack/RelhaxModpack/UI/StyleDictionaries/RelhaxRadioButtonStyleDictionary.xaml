@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:RelhaxModpack.Windows">
+                    xmlns:local="clr-namespace:RelhaxModpack.Windows"
+                    xmlns:Ui="clr-namespace:RelhaxModpack.UI">
     <SolidColorBrush x:Key="RadioButton.Static.Background" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="RadioButton.Static.Border" Color="#FF707070"/>
     <SolidColorBrush x:Key="RadioButton.MouseOver.Background" Color="#FFF3F9FF"/>
@@ -87,9 +88,15 @@
         </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
-                <Setter Property="Control.Background" Value="{StaticResource DarkThemeBackground}"/>
-                <Setter Property="Control.Foreground" Value="{StaticResource DarkThemeTextColor}"/>
-                <!-- highlight -->
+                <Setter Property="Background" Value="{StaticResource DarkThemeBackground}"/>
+                <Setter Property="Foreground" Value="{StaticResource DarkThemeTextColor}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style TargetType="{x:Type Ui:RelhaxWPFRadioButton}" BasedOn="{DynamicResource {x:Type RadioButton}}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsHighlightedForView, RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource PackageUiComponentHighlightBrush}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

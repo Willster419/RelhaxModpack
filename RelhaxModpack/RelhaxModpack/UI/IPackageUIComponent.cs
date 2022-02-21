@@ -15,5 +15,7 @@ namespace RelhaxModpack.UI
         /// </summary>
         /// <param name="Enabled">The value of the enabled property</param>
         void OnEnabledChanged(bool Enabled);
+
+        bool IsHighlightedForView { get; set; }
     }
 }

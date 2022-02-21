@@ -7,7 +7,6 @@
     <Color x:Key="DarkThemeHighlightColor" A="255" R="134" B="134" G="134"/>
     <Color x:Key="DarkThemeSelectedColor" A="255" R="150" B="150" G="150"/>
     <Color x:Key="DarkThemeButtonColor" A="255" R="42" B="42" G="42"/>
-    <SolidColorBrush x:Key="DefaultGridColorInTabItem" Color="#FFE5E5E5"/>
     <SolidColorBrush x:Key="DarkThemeTextColor" Color="White"/>
     <SolidColorBrush x:Key="DarkThemeBackground" Color="#1A1A1A"/>
     <SolidColorBrush x:Key="DarkThemeButton" Color="{StaticResource DarkThemeButtonColor}"/>
@@ -23,7 +22,10 @@
     <SolidColorBrush x:Key="DarkThemeTabItemHighlightColorBrush" Color="{StaticResource DarkThemeHighlightColor}"/>
     <SolidColorBrush x:Key="DarkThemeTabItemSelectedColorBrush" Color="{StaticResource DarkThemeSelectedColor}"/>
     <SolidColorBrush x:Key="DarkThemeDisabledTabItem" Color="#424242"/>
-    
+
+    <SolidColorBrush x:Key="DefaultGridColorInTabItem" Color="#FFE5E5E5"/>
+    <SolidColorBrush x:Key="PackageUiComponentHighlightBrush" Color="Blue"/>
+
     <!-- Re-usable styles for multiple components -->
     <Style x:Key="OptionMarkFocusVisual">
         <Setter Property="Control.Template">

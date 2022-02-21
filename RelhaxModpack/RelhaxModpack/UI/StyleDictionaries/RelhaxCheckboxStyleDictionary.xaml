@@ -94,17 +94,16 @@
         </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
-                <Setter Property="Control.Background" Value="{StaticResource DarkThemeBackground}"/>
-                <Setter Property="Control.Foreground" Value="{StaticResource DarkThemeTextColor}"/>
-                <!-- highlight -->
+                <Setter Property="Background" Value="{StaticResource DarkThemeBackground}"/>
+                <Setter Property="Foreground" Value="{StaticResource DarkThemeTextColor}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
-<!--
     <Style TargetType="{x:Type Ui:RelhaxWPFCheckBox}" BasedOn="{DynamicResource {x:Type CheckBox}}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsHighlightedForView, RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource PackageUiComponentHighlightBrush}"/>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
-
-    <Style TargetType="{x:Type Ui:RelhaxWPFCheckBoxHeader}" BasedOn="{DynamicResource {x:Type Ui:RelhaxWPFCheckBox}}">
-    </Style>
-    -->
 </ResourceDictionary>

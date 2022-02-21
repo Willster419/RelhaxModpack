@@ -20,7 +20,7 @@ namespace RelhaxModpack.UI
     /// <summary>
     /// Interaction logic for RelhaxWPFRadioButton.xaml
     /// </summary>
-    public partial class RelhaxWPFRadioButton : RadioButton, IPackageUIComponent
+    public partial class RelhaxWPFRadioButton : RadioButton, IPackageUIComponent, INotifyPropertyChanged
     {
         private bool iconsSet = false;
         /// <summary>
@@ -35,6 +35,28 @@ namespace RelhaxModpack.UI
         /// The package associated with this UI component
         /// </summary>
         public SelectablePackage Package { get; set; }
+
+        protected bool _isHighlightedForView = false;
+
+        public bool IsHighlightedForView
+        {
+            get { return _isHighlightedForView; }
+            set
+            {
+                _isHighlightedForView = value;
+                OnPropertyChanged(nameof(IsHighlightedForView));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
 
         /// <summary>
         /// Change any UI parent class properties that depends on the enabled SelectablePackage

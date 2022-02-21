@@ -84,8 +84,6 @@ namespace RelhaxModpack.Windows
         private const int FLASH_TICK_INTERVAL = 250;
         private const int NUM_FLASH_TICKS = 5;
         private int numTicks = 0;
-        private Brush OriginalBrush = null;
-        private Brush HighlightBrush = new SolidColorBrush(Colors.Blue);
         private DispatcherTimer FlashTimer = null;
         private DatabaseManager databaseManager;
         private bool processingConflict = false;
@@ -183,37 +181,27 @@ namespace RelhaxModpack.Windows
             }
             SelectablePackage packageToChange = (SelectablePackage)FlashTimer.Tag;
 
-            if(!(packageToChange.UIComponent is Control))
+            if(!(packageToChange.UIComponent is IPackageUIComponent))
             {
                 Logging.Error("packageToChange.UiComponent is not of Control type");
                 return;
             }
-            Control control = (Control)packageToChange.UIComponent;
+            IPackageUIComponent control = packageToChange.UIComponent;
 
             switch (numTicks++)
             {
                 case 0:
-                    //backup the current color and set the background to the flash color
-                    OriginalBrush = control.Foreground;
-                    control.Foreground = HighlightBrush;
+                    control.IsHighlightedForView = false;
                     break;
                 case NUM_FLASH_TICKS:
-                    //stop the timer and reset everyting
+                    //stop the timer and reset everything
+                    control.IsHighlightedForView = false;
                     FlashTimer.Stop();
                     numTicks = 0;
-                    control.Foreground = OriginalBrush;
-                    OriginalBrush = null;
                     break;
                 default:
                     //toggle the color
-                    if (control.Foreground.Equals(HighlightBrush))
-                    {
-                        control.Foreground = OriginalBrush;
-                    }
-                    else if (control.Foreground.Equals(OriginalBrush))
-                    {
-                        control.Foreground = HighlightBrush;
-                    }
+                    control.IsHighlightedForView = !control.IsHighlightedForView;
                     break;
             }
         }
