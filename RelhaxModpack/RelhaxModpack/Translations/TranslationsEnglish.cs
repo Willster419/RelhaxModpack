@@ -1842,16 +1842,8 @@ namespace RelhaxModpack
 
             //Component: AgreementSupport1
             // The second acknowledgement checkbox, inlines with link to forums, the conjunction phrase and discord server link.
-            // EXAMPLE: [x] I understand that I can receive support on the dedicated {Forums} {or} {Discord}
+            // EXAMPLE: [x] I understand that I can receive support on the dedicated 
             English.Add("AgreementSupport1", "I understand that I can receive support on the dedicated ");
-
-            //Component: AgreementSupportForums
-            // First of the inlined elements for AgreementSupport1, a link to the forums.
-            English.Add("AgreementSupportForums", "Forums");
-
-            //Component: AgreementSupport2
-            // Second of the inlined elements for AgreementSupport1, conjunction between a forum link and discord server link.
-            English.Add("AgreementSupport2", " or ");
 
             //Component: AgreementSupportDiscord
             // Third and the last inlined elements for AgreementSupport1, a link to Relhax Discord server.

@@ -23,8 +23,6 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                     <TextBlock x:Name="AgreementSupport1" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                Text="I understand that I can receive support on the dedicated "/>
-                    <ui:RelhaxHyperlink x:Name="AgreementSupportForums" URL="https://forums.relhaxmodpack.com/index.php?board=6.0" Text="Forums"/>
-                    <TextBlock x:Name="AgreementSupport2" Text=" or " VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     <ui:RelhaxHyperlink x:Name="AgreementSupportDiscord" URL="https://discord.gg/eURMQ2Y" Text="Discord"/>
                 </StackPanel>
             </CheckBox>

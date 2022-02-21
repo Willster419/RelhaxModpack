@@ -22,7 +22,7 @@
     <!-- Set a default color above as Foreground -->
     <TextBlock x:Name="ParentTextBlock">
         <Hyperlink x:Name="TheHyperlink" Click="TheHyperlink_Click">
-            <TextBlock x:Name="ChildTextblock" TextDecorations="{Binding ElementName=TheHyperlink}" Style="{StaticResource textBlockStyle}"/>
+            <TextBlock x:Name="ChildTextblock" Style="{StaticResource textBlockStyle}"/>
         </Hyperlink>
     </TextBlock>
 </UserControl>

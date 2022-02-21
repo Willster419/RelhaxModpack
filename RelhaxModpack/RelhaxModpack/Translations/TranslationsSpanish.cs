@@ -549,8 +549,6 @@ namespace RelhaxModpack
             Spanish.Add("AgreementLicense", "He leído y acepto el ");
             Spanish.Add("LicenseLink", "Acuerdo de licencia");
             Spanish.Add("AgreementSupport1", "Entiendo que puedo recibir soporte en el ");
-            Spanish.Add("AgreementSupportForums", "Foro");
-            Spanish.Add("AgreementSupport2", " dedicado y en ");
             Spanish.Add("AgreementSupportDiscord", "Discord");
             Spanish.Add("AgreementHoster", "Entiendo que Relhax sólo es un servicio de alojamiento e instalación de mods, y Relhax no mantiene cada mod incluido en este modpack");
             Spanish.Add("AgreementAnonData", "Entiendo que Relhax V2 recoge datos anónimos de uso para mejorar la aplicación, lo cual puede ser deshabilitado en la pestaña de opciones avanzadas");

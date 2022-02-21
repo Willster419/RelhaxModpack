@@ -534,8 +534,6 @@ namespace RelhaxModpack
             Russian.Add("AgreementLicense", "Я прочитал и согласен с ");
             Russian.Add("LicenseLink", "условиями лицензионного соглашения");
             Russian.Add("AgreementSupport1", "Я понимаю, что могу обратиться за помощью ");
-            Russian.Add("AgreementSupportForums", "на форум");
-            Russian.Add("AgreementSupport2", " или на сервер ");
             Russian.Add("AgreementSupportDiscord", "Discord");
             Russian.Add("AgreementHoster", "Я понимаю, что Relhax является площадкой хостинга модификаций и сервисом их установки и то, что Relhax не занимается разработкой каждой из них.");
             Russian.Add("AgreementAnonData", "Я понимаю, что Relhax V2 собирает анонимные сведения об использовании для улучшения приложения и знаю, что могу отключить сбор данных в разделе расширенных настроек");
