@@ -563,7 +563,7 @@ namespace RelhaxModpack.Windows
                         //for root element, hook into expandable element
                         cat.CategoryHeader.TreeViewItem.Collapsed += TreeViewItem_Collapsed;
                         cat.CategoryHeader.TreeViewItem.Expanded += (sender, e) => { e.Handled = true; };
-                        RelhaxWPFCheckBox box = new RelhaxWPFCheckBoxHeader()
+                        RelhaxWPFCheckBox box = new RelhaxWPFCheckBox()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
@@ -592,7 +592,7 @@ namespace RelhaxModpack.Windows
                         //TabPage -> ScrollViewer -> ParentBorder -> ParentStackPanel
                         cat.TabPage.Content = cat.CategoryHeader.ScrollViewer;
                         //create checkbox for inside selecteionlist
-                        RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBoxHeader()
+                        RelhaxWPFCheckBox cb2 = new RelhaxWPFCheckBox()
                         {
                             Package = cat.CategoryHeader,
                             Content = cat.CategoryHeader.NameFormatted,
