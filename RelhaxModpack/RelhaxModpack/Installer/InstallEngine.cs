@@ -763,18 +763,30 @@ namespace RelhaxModpack
             //step 10: create shortcuts (async option)
             if (DisableTriggersForInstall || !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerCreateShortcuts)).Fired)
             {
+                if (!DisableTriggersForInstall && !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerCreateShortcuts)).Fired)
+                {
+                    Logging.Error($"The trigger {TriggerCreateShortcuts} was never fired during installation, firing now");
+                }
                 CreateShortcuts();
             }
 
             //step 11: create atlases (async option)
             if (DisableTriggersForInstall || !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerContouricons)).Fired)
             {
+                if (!DisableTriggersForInstall && !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerContouricons)).Fired)
+                {
+                    Logging.Error($"The trigger {TriggerContouricons} was never fired during installation, firing now");
+                }
                 CreateAtlases();
             }
 
             //step 12: install fonts (async operation)
             if (DisableTriggersForInstall || !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerInstallFonts)).Fired)
             {
+                if (!DisableTriggersForInstall && !Triggers.Find(trig => trig.Name.ToLower().Equals(TriggerInstallFonts)).Fired)
+                {
+                    Logging.Error($"The trigger {TriggerInstallFonts} was never fired during installation, firing now");
+                }
                 InstallFonts();
             }
 
