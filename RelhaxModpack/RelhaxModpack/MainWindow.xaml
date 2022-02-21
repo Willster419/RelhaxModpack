@@ -27,6 +27,7 @@
         <Style TargetType="ui:LinkButton" BasedOn="{StaticResource {x:Type Button}}">
             
         </Style>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
         <Style x:Key="linkButtonBorderStyle" TargetType="Border">
             <Setter Property="Background" Value="Transparent"/>
             <Style.Triggers>

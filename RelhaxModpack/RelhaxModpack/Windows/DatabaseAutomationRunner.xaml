@@ -8,6 +8,9 @@
         Title="Database Automation Runner" Height="520" Width="1000" MinHeight="480" MinWidth="800"
         Closed="RelhaxWindow_Closed" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="False" ApplyToolTips="False" EscapeKeyClosesWindow="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid>
         <TabControl x:Name="MainTabView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" SelectionChanged="MainTabView_SelectionChanged">
             <TabItem x:Name="TabItemRunSequences" Header="Run Sequences">

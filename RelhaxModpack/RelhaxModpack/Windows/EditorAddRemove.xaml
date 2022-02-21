@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Add or Move Package" Height="200" Width="250" MinHeight="200" MinWidth="250"
         Loaded="RelhaxWindow_Loaded" LocalizeWindow="False" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid>
         <TextBlock Tag="CategoryTextBox" x:Name="CategoryTextBox" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Select the Category to add to" VerticalAlignment="Top"/>
         <ComboBox Tag="CategoryComboBox" x:Name="CategoryComboBox" HorizontalAlignment="Stretch" Margin="10,31,10,0" VerticalAlignment="Top" SelectionChanged="CategoryComboBox_SelectionChanged" />

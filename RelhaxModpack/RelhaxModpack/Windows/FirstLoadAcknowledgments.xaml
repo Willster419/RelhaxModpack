@@ -8,6 +8,9 @@
         mc:Ignorable="d"
         Title="First Load Acknowledgments" Height="260" Width="600" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid>
         <StackPanel>
             <CheckBox x:Name="license_Agree" HorizontalAlignment="Stretch" Margin="10,10,10,0" VerticalAlignment="Top" Click="CheckForContinueButton">

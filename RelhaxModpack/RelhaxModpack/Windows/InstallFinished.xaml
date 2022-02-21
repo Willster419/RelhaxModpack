@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Install Finished" Height="202" Width="300" MinHeight="220" MinWidth="300"
         LocalizeWindow="True" ApplyToolTips="False" EscapeKeyClosesWindow="True">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid Tag="InstallFinishedMainGrid">
         <TextBox Tag="InstallFinishedInstallationCompleteText" x:Name="InstallationCompleteText" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap"
                  Text="Installation Complete, would you like to..." VerticalAlignment="Top" TextAlignment="Left" Height="32"/>

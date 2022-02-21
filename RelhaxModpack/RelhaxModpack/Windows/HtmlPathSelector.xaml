@@ -8,6 +8,9 @@
         xmlns:controls="clr-namespace:Microsoft.Toolkit.Forms.UI.Controls;assembly=Microsoft.Toolkit.Forms.UI.Controls.WebView"
         mc:Ignorable="d"
         Title="HtmlPathSelector" Height="475" Width="800" MinHeight="475" MinWidth="800" Loaded="RelhaxWindow_Loaded" Closing="RelhaxWindow_Closing">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid>
         <TextBox x:Name="UrlTextBox" HorizontalAlignment="Stretch" Height="37" Margin="10,10,122,0" TextWrapping="Wrap" Text="Enter URL here" VerticalAlignment="Top"/>
         <Button x:Name="GoButton" Content="GO" HorizontalAlignment="Right" Margin="0,71,10,0" VerticalAlignment="Top" Width="107" Click="GoButton_Click"/>

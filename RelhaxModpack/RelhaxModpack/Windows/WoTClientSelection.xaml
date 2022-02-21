@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="WoT Client Selection" Height="300" Width="400" MinWidth="400" MinHeight="300" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False" EscapeKeyClosesWindow="True">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid Tag="ClientSelectionGrid">
         <TextBlock Tag="ClientSelectionsTextHeader" x:Name="ClientSelectionsTextHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="The following clients were automatically detected" VerticalAlignment="Top" Margin="10,10,10,0" />
         <Button Tag="ClientSelectionsContinueButton" x:Name="ClientSelectionsContinueButton" Content="Select" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ClientSelectionsContinueButton_Click"/>

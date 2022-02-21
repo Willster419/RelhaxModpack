@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Diagnostics" Height="420" Width="525" ResizeMode="CanMinimize"
         Loaded="RelhaxWindow_Loaded" LocalizeWindow="True" ApplyToolTips="False" EscapeKeyClosesWindow="True">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid Tag="DiagnosticsGrid">
         <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="42" Margin="10,10,10,0" TextWrapping="Wrap"
                  Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
@@ -31,15 +34,21 @@
                 <TextBlock x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"
                            Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
-            <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCache" Content="Clear download cache" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"
-                    Click="ClearDownloadCache_Click" Grid.Column="1" ToolTipService.ShowOnDisabled="True"/>
+            <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCacheButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"
+                    Click="ClearDownloadCache_Click" Grid.Column="1" ToolTipService.ShowOnDisabled="True">
+                <TextBlock x:Name="ClearDownloadCache" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"
+                           Text="Clear download cache" />
+            </Button>
             <Button Tag="CollectLogInfo" x:Name="CollectLogInfoButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CollectLogInfo_Click"
                     Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
                 <TextBlock x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem"
                            Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
-            <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabase" Content="Delete download cache database file" HorizontalAlignment="Stretch"
-                    VerticalAlignment="Top" Margin="2,2,2,2" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click" ToolTipService.ShowOnDisabled="True"/>
+            <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabaseButton" HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top" Margin="2,2,2,2" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click" ToolTipService.ShowOnDisabled="True">
+                <TextBlock x:Name="ClearDownloadCacheDatabase" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"
+                           Text="Delete download cache database file" />
+            </Button>
             <Button Tag="TestLoadImageLibraries" x:Name="TestLoadImageLibrariesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" ToolTipService.ShowOnDisabled="True"
                     Click="TestLoadImageLibrariesButton_Click" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="1">
                 <TextBlock x:Name="TestLoadImageLibraries" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"

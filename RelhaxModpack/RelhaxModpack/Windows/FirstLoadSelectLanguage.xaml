@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Language Selection" Height="200" Width="400" ResizeMode="NoResize" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid>
         <TextBlock HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Please select your language"
                    VerticalAlignment="Top" x:Name="SelectLanguageHeader"/>

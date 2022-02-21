@@ -8,6 +8,9 @@
         Title="Add files to zip" Height="330" Width="600" MinHeight="75" MinWidth="100"
         LocalizeWindow="True" ApplyToolTips="False"
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid Tag="AddPIcturesMainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>

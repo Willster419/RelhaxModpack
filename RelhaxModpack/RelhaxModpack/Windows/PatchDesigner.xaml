@@ -10,6 +10,10 @@
         Icon="/RelhaxModpack;component/Resources/modpack_icon.ico"
         Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="False" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+        <Style TargetType="RichTextBox" BasedOn="{StaticResource DarkThemeStyleBackgroundForeground}"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

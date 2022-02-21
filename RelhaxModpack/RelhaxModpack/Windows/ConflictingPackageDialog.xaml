@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="ConflictingPackageDialog" Height="450" Width="800" MinHeight="300" MinWidth="500" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid Tag="RootGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

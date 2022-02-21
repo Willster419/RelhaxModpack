@@ -298,6 +298,7 @@ namespace RelhaxModpack
             German.Add("invisible", "unsichtbar");
             German.Add("SelectionFileIssuesDisplay", "Fehler beim Anwenden der Auswahldatei");
             German.Add("selectionFileIssues", German["SelectionFileIssuesDisplay"]);
+            German.Add("selectionFileIssuesHeader", TranslationNeeded);
             German.Add("VersionInfo", "Porgrammaktualisierung");
             German.Add("VersionInfoYesButton", German["yes"]);
             German.Add("VersionInfoNoButton", German["no"]);

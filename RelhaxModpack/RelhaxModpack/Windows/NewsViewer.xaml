@@ -12,6 +12,7 @@
         <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Background" Value="#FFE5E5E5"/>
         </Style>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
     <Grid Tag="NewViewGrid">
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,31">

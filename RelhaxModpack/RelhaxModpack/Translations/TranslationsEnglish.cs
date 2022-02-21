@@ -958,6 +958,10 @@ namespace RelhaxModpack
             //alias of SelectionFileIssuesDisplay
             English.Add("selectionFileIssues", English["SelectionFileIssuesDisplay"]);
 
+            //Component: selectionFileIssuesHeader
+            //
+            English.Add("selectionFileIssuesHeader", "Please read the following messages related to your selection file");
+
             //Component: VersionInfoYesButton
             // A button in VersionInfo window confirming the installation of the new available version of the application.
             English.Add("VersionInfoYesButton", English["yes"]);

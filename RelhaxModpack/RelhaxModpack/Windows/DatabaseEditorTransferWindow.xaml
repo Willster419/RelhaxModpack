@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Download/Update file" Height="200" Width="350" MinHeight="200" MinWidth="350"
         LocalizeWindow="False" ApplyToolTips="False" Loaded="RelhaxWindow_Loaded">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid>
         <TextBlock x:Name="ProgressHeader" HorizontalAlignment="Stretch" Margin="10,10,128,0" TextWrapping="Wrap" Text="Downloaded X of Y kb" VerticalAlignment="Top"/>
         <ProgressBar x:Name="ProgressProgressBar" HorizontalAlignment="Stretch" Height="20" Margin="10,30,10,0" VerticalAlignment="Top" />

@@ -7,7 +7,10 @@
                     mc:Ignorable="d"
                     Title="Credits" Loaded="RelhaxWindow_Loaded"
                     Height="625" Width="600" MinHeight="100" MinWidth="100"
-                    ApplyToolTips="False" LocalizeWindow="False" EscapeKeyClosesWindow="True">  
+                    ApplyToolTips="False" LocalizeWindow="False" EscapeKeyClosesWindow="True">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid Tag="RelhaxCreditsGrid">
         <TextBox Tag="CreditsTextBox" x:Name="CreditsTextBox" HorizontalAlignment="Stretch" Margin="10,10,10,10" TextWrapping="Wrap" VerticalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
     </Grid>

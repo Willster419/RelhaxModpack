@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Scaling Confirmation" Height="150" Width="300" ApplyToolTips="False" LocalizeWindow="True" Loaded="RelhaxWindow_Loaded" Closed="RelhaxWindow_Closed" EscapeKeyClosesWindow="True">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid Tag="ScalingConfirmationMainGrid">
         <TextBlock x:Name="ScalingConfirmationHeader" Tag="ScalingConfirmationHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap"
                    Text="The scaling value has changed. Would you like to keep it?" VerticalAlignment="Top"/>

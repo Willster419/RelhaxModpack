@@ -423,7 +423,7 @@
     <Compile Include="Windows\PopOutReplacePatchDesigner.xaml.cs">
       <DependentUpon>PopOutReplacePatchDesigner.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\RelhaxMediaPlayer.xaml.cs">
+    <Compile Include="UI\RelhaxMediaPlayer.xaml.cs">
       <DependentUpon>RelhaxMediaPlayer.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\RelhaxProgress.cs" />
@@ -663,7 +663,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\RelhaxMediaPlayer.xaml">
+    <Page Include="UI\RelhaxMediaPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

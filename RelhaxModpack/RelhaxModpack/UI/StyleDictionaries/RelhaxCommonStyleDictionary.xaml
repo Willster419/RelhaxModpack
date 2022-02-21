@@ -83,7 +83,7 @@
     <Style TargetType="TabControl" BasedOn="{StaticResource DarkThemeStyleBackground}">
         
     </Style>
-    <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeStyleBackground}">
+    <Style x:Key="DarkThemeGrid" TargetType="Grid" BasedOn="{StaticResource DarkThemeStyleBackground}">
         
     </Style>
 

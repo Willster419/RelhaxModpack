@@ -14,6 +14,7 @@
         </ItemsPanelTemplate>
         <Style TargetType="{x:Type ui:SelectionListTabControl}" BasedOn="{StaticResource DarkThemeStyleBackground}">
         </Style>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
         <Style x:Key="selectionTextBlockStyle" TargetType="TextBlock">
             <Style.Triggers>
                 <MultiDataTrigger>

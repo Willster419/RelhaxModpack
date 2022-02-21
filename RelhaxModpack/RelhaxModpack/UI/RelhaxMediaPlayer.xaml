@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:RelhaxModpack.UI"
              mc:Ignorable="d"
              d:DesignHeight="90" d:DesignWidth="400" MinWidth="400" MinHeight="90">
+    <UserControl.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </UserControl.Resources>
     <Grid Loaded="OnComponentLoad">
         <TextBlock x:Name="FileName" Tag="FileName" HorizontalAlignment="Stretch" Margin="5,5,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
         <Slider x:Name="Seekbar" HorizontalAlignment="Stretch" Margin="5,22,0,0" VerticalAlignment="Top" MouseMove="OnSeekbarMouseMove" IsSnapToTickEnabled="True" PreviewMouseLeftButtonDown="Seekbar_MouseLeftButtonDown" />

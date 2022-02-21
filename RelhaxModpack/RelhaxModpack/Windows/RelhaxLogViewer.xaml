@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:RelhaxModpack.Windows"
         mc:Ignorable="d"
         Title="Log Viewer" Height="600" Width="1000" Closed="Window_Closed">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid>
         <TextBox x:Name="LogTextbox" IsReadOnly="True" IsUndoEnabled="False" HorizontalAlignment="Stretch" Margin="10,10,10,35" TextWrapping="NoWrap" VerticalAlignment="Stretch"
                  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Loaded="LogTextbox_Loaded"/>

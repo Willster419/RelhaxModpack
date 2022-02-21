@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Select WoT client for export" Height="400" Width="400" Loaded="RelhaxWindow_Loaded"
         LocalizeWindow="True" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid Tag="ExportModeGrid">
         <TextBlock x:Name="ExportSelectVersionHeader" Tag="ExportSelectVersionHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Please select the version of the WoT client you want to export for" VerticalAlignment="Top" Height="30" />
         <StackPanel x:Name="ExportSelectVersionPanel" Tag="ExportSelectVersionPanel" HorizontalAlignment="Stretch" Margin="10,45,10,35" VerticalAlignment="Stretch" />

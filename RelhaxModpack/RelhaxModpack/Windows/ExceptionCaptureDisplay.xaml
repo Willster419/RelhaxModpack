@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Exception Capture Display" Height="450" Width="800"
         LocalizeWindow="False" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid x:Name="MainLayoutGrid">
         <TextBlock x:Name="ExceptionCaptureHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="ExceptionCaptureHeader"
                    Text="The application as encountered an exception and needs to close. Please send this exception data (as well as &quot;relhax.log&quot;) file to the developer"/>

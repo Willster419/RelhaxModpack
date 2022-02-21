@@ -8,6 +8,9 @@
         Title="Replace"
         Height="450" Width="800" MinHeight="200" MinWidth="300"
         LocalizeWindow="False" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
+    </Window.Resources>
     <Grid>
         <TextBox Tag="PatchReplaceTextbox" x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" Margin="2,3,3,22" TextWrapping="{Binding IsChecked, ElementName=TextWrapCheckbox}"
                   VerticalAlignment="Stretch" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
