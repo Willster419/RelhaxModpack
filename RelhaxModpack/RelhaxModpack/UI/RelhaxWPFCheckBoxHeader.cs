@@ -17,14 +17,9 @@ namespace RelhaxModpack.UI
 {
     public class RelhaxWPFCheckBoxHeader : RelhaxWPFCheckBox
     {
-        static RelhaxWPFCheckBoxHeader()
+        public RelhaxWPFCheckBoxHeader()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(RelhaxWPFCheckBoxHeader), new FrameworkPropertyMetadata(typeof(RelhaxWPFCheckBoxHeader)));
-        }
-
-        public RelhaxWPFCheckBoxHeader() : base()
-        {
-
+            InitializeComponent();
         }
 
         public override void OnCheckedChanged(bool Checked)
