@@ -95,6 +95,7 @@
                 </DataTrigger>
                 <DataTrigger Binding="{Binding IsHighlightedForView, RelativeSource={RelativeSource Self}}" Value="True">
                     <Setter Property="Foreground" Value="{StaticResource PackageUiComponentHighlightBrush}"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
