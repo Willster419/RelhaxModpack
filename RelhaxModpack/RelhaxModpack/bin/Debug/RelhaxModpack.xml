@@ -2146,6 +2146,11 @@
             Gets or sets if the UI background components of this package should change color when the checked value changes
             </summary>
         </member>
+        <member name="F:RelhaxModpack.Database.SelectablePackage.TabIndex">
+            <summary>
+            The TabItem UI reference
+            </summary>
+        </member>
         <member name="F:RelhaxModpack.Database.SelectablePackage.ContentControl">
             <summary>
             ContentControl item to allow for right-clicking of disabled components. defaultv2 WPF component
@@ -2164,11 +2169,6 @@
         <member name="F:RelhaxModpack.Database.SelectablePackage.TreeView">
             <summary>
             The TreeView that this package is in. legacy WPF component
-            </summary>
-        </member>
-        <member name="F:RelhaxModpack.Database.SelectablePackage.TabIndex">
-            <summary>
-            The TabItem UI reference
             </summary>
         </member>
         <member name="P:RelhaxModpack.Database.SelectablePackage.InstallGroupWithOffset">
