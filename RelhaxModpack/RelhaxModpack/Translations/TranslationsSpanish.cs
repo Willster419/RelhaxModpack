@@ -137,9 +137,9 @@ namespace RelhaxModpack
             Spanish.Add("LauchEditorText", "Iniciar editor de la base de datos");
             Spanish.Add("LauchEditorDescription", "Inicia el editor de la base de datos desde aquí, en lugar de desde la línea de comandos");
             Spanish.Add("LauchPatchDesignerText", "Iniciar diseñador de parche");
-            Spanish.Add("LauchPatchDesignerDescription", Translations.TranslationNeeded);
-            Spanish.Add("LauchAutomationRunnerText", Translations.TranslationNeeded);
-            Spanish.Add("LauchAutomationRunnerDescription", Translations.TranslationNeeded);
+            Spanish.Add("LauchPatchDesignerDescription", "Ejecutar el diseñador de parches desde aquí, en lugar de desde la línea de comandos");
+            Spanish.Add("LauchAutomationRunnerText", "Ejecutar el automatizador");
+            Spanish.Add("LauchAutomationRunnerDescription", "Ejecutar el automatizador desde aquí, en lugar de desde la línea de comandos");
             Spanish.Add("InstallWhileDownloadingText", "Extraer durante la descarga");
             Spanish.Add("InstallWhileDownloadingCBDescription", "Cuando está habilitada, el instalador extraerá cada archivo zip tan pronto como se descargue" +
                 " en lugar de esperar a que todos los archivos sean descargados para la extracción.");
@@ -293,7 +293,7 @@ namespace RelhaxModpack
             Spanish.Add("invisible", "invisible");
             Spanish.Add("SelectionFileIssuesDisplay", "Errores al aplicar el archivo de selección");
             Spanish.Add("selectionFileIssues", Spanish["SelectionFileIssuesDisplay"]);
-            Spanish.Add("selectionFileIssuesHeader", TranslationNeeded);
+            Spanish.Add("selectionFileIssuesHeader", "Por favor, lea los siguientes mensajes relacionados con su archivo de selección");
             Spanish.Add("VersionInfo", "Actualizacón de la aplicación");
             Spanish.Add("VersionInfoYesText", Spanish["yes"]);
             Spanish.Add("VersionInfoNoText", Spanish["no"]);
