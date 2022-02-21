@@ -7,10 +7,20 @@
         mc:Ignorable="d"
         Title="Developer Selections Window" Height="300" Width="300" Loaded="OnApplicationLoading" Closed="OnApplicationClosed" MinWidth="300" MinHeight="300"
         LocalizeWindow="True" ApplyToolTips="False" EscapeKeyClosesWindow="True">
+    <Window.Resources>
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DarkTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RelhaxWindow}}}" Value="True">
+                    <Setter Property="BorderBrush" Value="White"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid Tag="DeveloperSelectionsGrid">
         <Button Tag="DeveloperSelectionsContinueButton" x:Name="DeveloperSelectionsContinueButton" Content="Select" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click"/>
         <Button Tag="DeveloperSelectionsCancelButton" x:Name="DeveloperSelectionsCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="CancelButton_Click"/>
-        <Border Margin="10,31,10,35" BorderThickness="3" BorderBrush="Black">
+        <Border Margin="10,31,10,35" BorderThickness="3">
             <StackPanel x:Name="DeveloperSelectionsStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="DeveloperSelectionPanel"/>
         </Border>
         <TextBlock Tag="DeveloperSelectionsTextHeader" x:Name="DeveloperSelectionsTextHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Selection to load" VerticalAlignment="Top" Margin="10,10,10,0" />
