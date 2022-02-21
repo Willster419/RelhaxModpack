@@ -10,13 +10,13 @@
     <Window.Resources>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="ClientSelectionGrid">
-        <TextBlock Tag="ClientSelectionsTextHeader" x:Name="ClientSelectionsTextHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="The following clients were automatically detected" VerticalAlignment="Top" Margin="10,10,10,0" />
-        <Button Tag="ClientSelectionsContinueButton" x:Name="ClientSelectionsContinueButton" Content="Select" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ClientSelectionsContinueButton_Click"/>
-        <Button Tag="ClientSelectionsCancelButton" x:Name="ClientSelectionsCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="ClientSelectionsCancelButton_Click"/>
+    <Grid >
+        <TextBlock x:Name="ClientSelectionsTextHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="The following clients were automatically detected" VerticalAlignment="Top" Margin="10,10,10,0" />
+        <Button x:Name="ClientSelectionsContinueButton" Content="Select" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ClientSelectionsContinueButton_Click"/>
+        <Button x:Name="ClientSelectionsCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="ClientSelectionsCancelButton_Click"/>
         <Border Margin="10,31,10,35" BorderThickness="3" BorderBrush="Black">
-            <StackPanel x:Name="ClientSelectionsStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="DeveloperSelectionPanel"/>
+            <StackPanel x:Name="ClientSelectionsStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" />
         </Border>
-        <Button Tag="ClientSelectionsManualFind" x:Name="ClientSelectionsManualFind" Content="Manual Selection" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="125" Click="ClientSelectionsManualFind_Click"/>
+        <Button x:Name="ClientSelectionsManualFind" Content="Manual Selection" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="125" Click="ClientSelectionsManualFind_Click"/>
     </Grid>
 </local:RelhaxWindow>

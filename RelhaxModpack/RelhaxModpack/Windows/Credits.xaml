@@ -11,7 +11,7 @@
     <Window.Resources>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="RelhaxCreditsGrid">
-        <TextBox Tag="CreditsTextBox" x:Name="CreditsTextBox" HorizontalAlignment="Stretch" Margin="10,10,10,10" TextWrapping="Wrap" VerticalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
+    <Grid >
+        <TextBox x:Name="CreditsTextBox" HorizontalAlignment="Stretch" Margin="10,10,10,10" TextWrapping="Wrap" VerticalAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
     </Grid>
 </local:RelhaxWindow>

@@ -39,6 +39,6 @@
                  Text="It looks like you are running an upgrade from V1 to V2 for the first time. Pressing continue will result in an upgrade to file structure that cannot be reverted. It is recommended to make a backup of your V1 folder before continuing" Margin="10,0" Foreground="Red" Visibility="Hidden"  >
             </TextBlock>
         </StackPanel>
-        <Button Content="Continue" Tag="ContinueButton" x:Name="ContinueButton" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="99" IsEnabled="False" Click="Continue_Button_Click"/>
+        <Button Content="Continue" x:Name="ContinueButton" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="99" IsEnabled="False" Click="Continue_Button_Click"/>
     </Grid>
 </local:RelhaxWindow>

@@ -25,21 +25,21 @@
             <ColumnDefinition Width="*" MinWidth="300"/>
         </Grid.ColumnDefinitions>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
-            <TabItem Tag="DesignerTab" x:Name="DesignerTab" Header="Designer">
+            <TabItem x:Name="DesignerTab" Header="Designer">
                 <Grid Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
-                    <Button Tag="LocateFileToPatchButton" x:Name="LocateFileToPatchButton" Content="Open file to patch" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    <Button x:Name="LocateFileToPatchButton" Content="Open file to patch" HorizontalAlignment="Right" VerticalAlignment="Top"
                             Width="120" Height="22" Click="LocateFileToPatchButton_Click"/>
-                    <TextBlock Tag="LocateFileToPatchButton" x:Name="FileLocationHeader" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Target file location"
+                    <TextBlock x:Name="FileLocationHeader" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Target file location"
                                VerticalAlignment="Top" Height="22" Padding="0,3,0,0" ToolTip="The target file is the file you wish to patch"/>
                     <!-- NEWLINE =&#10; -->
-                    <ComboBox Tag="FilePathType" x:Name="FilePathTypeCombobox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"
+                    <ComboBox x:Name="FilePathTypeCombobox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"
                                   Margin="129,0,0,0" SelectionChanged="FilePathTypeCombobox_Selected" Height="21" ToolTip="Relative = Use defined macros in settings + 'Patch file path' to set filepath
                               &#10;Absolute = Use 'Patch file path' only to directly map to file
                               &#10;For example, you could set the app macro to your World_of_Tanks directory">
                         <System:String>Relative</System:String>
                         <System:String>Absolute</System:String>
                     </ComboBox>
-                    <TextBox Tag="FileToPatchTextbox" x:Name="FileToPatchTextbox" HorizontalAlignment="Stretch" Height="56" TextWrapping="Wrap" VerticalAlignment="Top"
+                    <TextBox x:Name="FileToPatchTextbox" HorizontalAlignment="Stretch" Height="56" TextWrapping="Wrap" VerticalAlignment="Top"
                              Margin="0,27,0,0" ToolTip="The target file is the file you wish to patch"/>
                     <TextBlock x:Name="PatchFilePathLabel" HorizontalAlignment="Left" Margin="0,88,0,0" TextWrapping="Wrap" Text="Patch file path" VerticalAlignment="Top"
                                ToolTip="'file' parameter of patch xml"/>
@@ -57,29 +57,29 @@
                             <RowDefinition Height="22"/>
                             <RowDefinition Height="22"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Tag="PatchVersionHeader" x:Name="PatchVersionHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" Text="Patch Version"
+                        <TextBlock x:Name="PatchVersionHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" Text="Patch Version"
                                    ToolTip="Select the version of the patch file to be used in the installer.&#10;Version 2 allows for the use of followPath option for json."/>
-                        <ComboBox Tag="PatchVersionCombobox" x:Name="PatchVersionCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Grid.Row="0" Margin="0,1,0,1" SelectionChanged="PatchVersionCombobox_SelectionChanged"
+                        <ComboBox x:Name="PatchVersionCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Grid.Row="0" Margin="0,1,0,1" SelectionChanged="PatchVersionCombobox_SelectionChanged"
                                   ToolTip="Select the version of the patch file to be used in the installer.&#10;Version 2 allows for the use of followPath option for json.">
                             <System:Int32>1</System:Int32>
                             <System:Int32>2</System:Int32>
                         </ComboBox>
-                        <TextBlock Tag="PatchPathHeader" x:Name="PatchPathHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Stretch" Grid.Row="1"
+                        <TextBlock x:Name="PatchPathHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Patch Path Macro" VerticalAlignment="Stretch" Grid.Row="1"
                                    ToolTip="app = World_of_Tanks directory &#10;appData = C:\Users\{username}\AppData\Roaming\Wargaming.net\WorldOfTanks"/>
-                        <ComboBox Tag="PatchPathCombobox" x:Name="PatchPathCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Margin="0,1,0,1" Grid.Row="1"
+                        <ComboBox x:Name="PatchPathCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Margin="0,1,0,1" Grid.Row="1"
                                   ToolTip="app = World_of_Tanks directory &#10;appData = C:\Users\{username}\AppData\Roaming\Wargaming.net\WorldOfTanks">
                             <System:String>app</System:String>
                             <System:String>appData</System:String>
                         </ComboBox>
-                        <TextBlock Tag="PatchTypeHeader" x:Name="PatchTypeHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Patch Type" VerticalAlignment="Stretch" Grid.Row="2" />
-                        <ComboBox Tag="PatchTypeCombobox" x:Name="PatchTypeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Margin="0,1,0,1" SelectionChanged="PatchTypeCombobox_SelectionChanged" Grid.Column="1" Grid.Row="2">
+                        <TextBlock x:Name="PatchTypeHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Patch Type" VerticalAlignment="Stretch" Grid.Row="2" />
+                        <ComboBox x:Name="PatchTypeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Margin="0,1,0,1" SelectionChanged="PatchTypeCombobox_SelectionChanged" Grid.Column="1" Grid.Row="2">
                             <System:String>json</System:String>
                             <System:String>xml</System:String>
                             <System:String>regex</System:String>
                         </ComboBox>
-                        <TextBlock Tag="PatchModeHeader" x:Name="PatchModeHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Stretch" Height="22" Grid.Row="3" />
-                        <ComboBox Tag="PatchModeCombobox" x:Name="PatchModeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Margin="0,1,0,1" Grid.Row="3"/>
-                        <CheckBox Tag="PatchFollowPathSetting" x:Name="PatchFollowPathSetting" Content="Follow Path" HorizontalAlignment="Stretch" Margin="0,2,0,0" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="4" ToolTipService.ShowOnDisabled="True"
+                        <TextBlock x:Name="PatchModeHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Mode" VerticalAlignment="Stretch" Height="22" Grid.Row="3" />
+                        <ComboBox x:Name="PatchModeCombobox" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="120" Grid.Column="1" Margin="0,1,0,1" Grid.Row="3"/>
+                        <CheckBox x:Name="PatchFollowPathSetting" Content="Follow Path" HorizontalAlignment="Stretch" Margin="0,2,0,0" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="4" ToolTipService.ShowOnDisabled="True"
                                   ToolTip="Follow files based on xvm configuration multiple file structure"/>
                     </Grid>
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,265,0,25">
@@ -91,24 +91,24 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Tag="PatchLinesPathHeader" x:Name="PatchLinesPathHeader" HorizontalAlignment="Left" TextWrapping="Wrap"
+                        <TextBlock x:Name="PatchLinesPathHeader" HorizontalAlignment="Left" TextWrapping="Wrap"
                                Text="Path" VerticalAlignment="Stretch"/>
-                        <TextBox Tag="PatchLinesPathTextbox" x:Name="PatchLinesPathTextbox" HorizontalAlignment="Stretch"  
+                        <TextBox x:Name="PatchLinesPathTextbox" HorizontalAlignment="Stretch"  
                              TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="1" />
-                        <TextBlock Tag="PatchSearchHeader" x:Name="PatchSearchHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap"
+                        <TextBlock x:Name="PatchSearchHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap"
                                Text="Search" VerticalAlignment="Stretch"  Grid.Row="2"/>
-                        <TextBox Tag="PatchSearchTextbox" x:Name="PatchSearchTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap"
+                        <TextBox x:Name="PatchSearchTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap"
                              VerticalAlignment="Stretch"  Grid.Row="3" AcceptsReturn="True" AcceptsTab="True"/>
-                        <TextBlock Tag="PatchReplaceHeader" x:Name="PatchReplaceHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap"
+                        <TextBlock x:Name="PatchReplaceHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap"
                                Text="Replace" VerticalAlignment="Stretch" Grid.Row="4"/>
                         <CheckBox x:Name="PopOutReplaceBlockCB" Content="Pop-out replace textbox" HorizontalAlignment="Right" Margin="0,0,2,4" VerticalAlignment="Bottom"
                               Click="PopOutReplaceBlockCB_Click" ToolTip="Show a larger window to write the replace text field" Grid.Row="4"/>
-                        <TextBox Tag="PatchReplaceTextbox" x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap"
+                        <TextBox x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" TextWrapping="Wrap"
                              VerticalAlignment="Stretch" Grid.Row="5" AcceptsReturn="True" AcceptsTab="True"/>
                     </Grid>
-                    <Button Tag="TestPatchButton" x:Name="TestPatchButton" Content="Test Patch..." HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom"
+                    <Button x:Name="TestPatchButton" Content="Test Patch..." HorizontalAlignment="Right" Margin="0,0,102,0" VerticalAlignment="Bottom"
                             Width="75" Click="TestPatchButton_Click"/>
-                    <Button Tag="ApplyChangesButton" x:Name="ApplyChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    <Button x:Name="ApplyChangesButton" Content="Apply Changes" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                             Width="97" Click="ApplyChangesButton_Click"/>
                 </Grid>
             </TabItem>
@@ -116,24 +116,24 @@
         <!-- create the splitter to allow for dynamic resizing like the editor -->
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
         <!-- create the second tab with patching help, log output, settings -->
-        <TabControl Tag="RightSideTabControl" x:Name="RightSideTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2">
-            <TabItem Tag="PatchesListTab"  x:Name="PatchesListTab" Header="Patches list">
+        <TabControl x:Name="RightSideTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2">
+            <TabItem x:Name="PatchesListTab" Header="Patches list">
                 <Grid Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
-                    <ListBox Tag="PatchesList" x:Name="PatchesList" HorizontalAlignment="Stretch"  Margin="0,21,0,20" VerticalAlignment="Stretch" SelectionChanged="PatchesList_SelectionChanged" ScrollViewer.ScrollChanged="PatchesList_ScrollChanged"
+                    <ListBox x:Name="PatchesList" HorizontalAlignment="Stretch"  Margin="0,21,0,20" VerticalAlignment="Stretch" SelectionChanged="PatchesList_SelectionChanged" ScrollViewer.ScrollChanged="PatchesList_ScrollChanged"
                              PreviewMouseUp="PatchesList_PreviewMouseUp" PreviewMouseDown="PatchesList_PreviewMouseDown" MouseMove="PatchesList_MouseMove" DragOver="PatchesList_DragOver" Drop="PatchesList_Drop" AllowDrop="True" DisplayMemberPath="ListboxDisplay"/>
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Patches list (click and drag to order)" VerticalAlignment="Top"/>
-                    <Button Tag="RemovePatchButton" x:Name="RemovePatchButton" Content="Remove Patch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="95" Click="RemovePatchButton_Click"/>
-                    <Button Tag="AddPatchButton" x:Name="AddPatchButton" Content="Add new patch" HorizontalAlignment="Right" Margin="0,0,100,0" VerticalAlignment="Bottom" Width="95" Click="AddPatchButton_Click"/>
+                    <Button x:Name="RemovePatchButton" Content="Remove Patch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="95" Click="RemovePatchButton_Click"/>
+                    <Button x:Name="AddPatchButton" Content="Add new patch" HorizontalAlignment="Right" Margin="0,0,100,0" VerticalAlignment="Bottom" Width="95" Click="AddPatchButton_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Tag="LogOutputTab" x:Name="LogOutputTab" Header="Log Output">
+            <TabItem x:Name="LogOutputTab" Header="Log Output">
                 <Grid Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
-                    <Button Tag="ClearLogButton" x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="ClearLogButton_Click"/>
-                    <TextBox Tag="LogOutput" x:Name="LogOutput" HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch" IsReadOnly="True"
+                    <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="ClearLogButton_Click"/>
+                    <TextBox x:Name="LogOutput" HorizontalAlignment="Stretch" Margin="0,0,0,20" TextWrapping="Wrap" VerticalAlignment="Stretch" IsReadOnly="True"
                              AllowDrop="False" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"/>
                 </Grid>
             </TabItem>
-            <TabItem Tag="SettingsTab" x:Name="SettingsTab" Header="Settings">
+            <TabItem x:Name="SettingsTab" Header="Settings">
                 <Grid Style="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20"/>
@@ -147,33 +147,33 @@
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
                     <!-- https://stackoverflow.com/questions/6312371/how-to-use-a-literal-curly-brace-in-xaml -->
-                    <TextBlock Tag="VersionDirMacroHeader" x:Name="VersionDirMacroHeader" HorizontalAlignment="Stretch"    VerticalAlignment="Center"
+                    <TextBlock x:Name="VersionDirMacroHeader" HorizontalAlignment="Stretch"    VerticalAlignment="Center"
                                Grid.Column="0" Grid.Row="0" TextWrapping="Wrap" Text="{}{versiondir} macro"
                                ToolTip="Set this for Relative file location mode. See relative file location tooltip."/>
-                    <TextBox Tag="VersionDirMacroTextbox" x:Name="VersionDirMacroTextbox"   HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                    <TextBox x:Name="VersionDirMacroTextbox"   HorizontalAlignment="Stretch" VerticalAlignment="Center"
                              Grid.Column="1" Grid.Row="0" TextWrapping="Wrap" TextChanged="VersionDirMacroTextbox_TextChanged"/>
-                    <TextBlock Tag="AppMacroHeader" x:Name="AppMacroHeader" HorizontalAlignment="Stretch"    VerticalAlignment="Center" Grid.Column="0"
+                    <TextBlock x:Name="AppMacroHeader" HorizontalAlignment="Stretch"    VerticalAlignment="Center" Grid.Column="0"
                                Grid.Row="1" TextWrapping="Wrap" Text="{}{app} macro" ToolTip="Set this for Relative file location mode. See relative file location tooltip."/>
-                    <TextBox Tag="AppMacroTextbox" x:Name="AppMacroTextbox"   HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1"
+                    <TextBox x:Name="AppMacroTextbox"   HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1"
                              Grid.Row="1" TextWrapping="Wrap" TextChanged="AppMacroTextbox_TextChanged"/>
-                    <TextBlock Tag="SaveOnSelectionChangeHeader" x:Name="SaveOnSelectionChangeHeader" HorizontalAlignment="Left" VerticalAlignment="Center"
+                    <TextBlock x:Name="SaveOnSelectionChangeHeader" HorizontalAlignment="Left" VerticalAlignment="Center"
                                Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" Text="Save on selection change"/>
-                    <CheckBox Tag="SaveOnSelectionChangeBheckbox" x:Name="SaveOnSelectionChangeBheckbox"  HorizontalAlignment="Left" VerticalAlignment="Center"
+                    <CheckBox x:Name="SaveOnSelectionChangeBheckbox"  HorizontalAlignment="Left" VerticalAlignment="Center"
                               Grid.Column="1" Grid.Row="2" Click="SaveOnSelectionChangeBheckbox_Click"/>
-                    <TextBlock Tag="ApplyBehaviorHeader" x:Name="ApplyBehaviorHeader" HorizontalAlignment="Left"    VerticalAlignment="Center"
+                    <TextBlock x:Name="ApplyBehaviorHeader" HorizontalAlignment="Left"    VerticalAlignment="Center"
                                Grid.Column="0" Grid.Row="3" TextWrapping="Wrap" Text="Apply Behavior"/>
                     <!--put more apply behavior here-->
                     <StackPanel HorizontalAlignment="Left"   VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Orientation="Vertical">
-                        <RadioButton Tag="ApplyBehaviorDefault" x:Name="ApplyBehaviorDefault" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Default"
+                        <RadioButton x:Name="ApplyBehaviorDefault" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Default"
                                      Checked="ApplyBehavior_Changed"/>
-                        <RadioButton Tag="ApplyBehaviorApplyTriggersSave" x:Name="ApplyBehaviorApplyTriggersSave" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        <RadioButton x:Name="ApplyBehaviorApplyTriggersSave" HorizontalAlignment="Left" VerticalAlignment="Center"
                                      Content="Apply triggers save" Checked="ApplyBehavior_Changed"/>
-                        <RadioButton Tag="ApplyBehaviorSaveTribbersApply" x:Name="ApplyBehaviorSaveTribbersApply" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        <RadioButton x:Name="ApplyBehaviorSaveTribbersApply" HorizontalAlignment="Left" VerticalAlignment="Center"
                                      Content="Save triggers apply" Checked="ApplyBehavior_Changed"/>
                     </StackPanel>
-                    <TextBlock Tag="SwitchToLogTabHeader" x:Name="SwitchToLogTabHeader" HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="0"
+                    <TextBlock x:Name="SwitchToLogTabHeader" HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="0"
                                Grid.Row="7" TextWrapping="Wrap" Text="Switch to log tab when testing"/>
-                    <CheckBox Tag="SwitchToLogTabCheckbox" x:Name="SwitchToLogTabCheckbox"  HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="1"
+                    <CheckBox x:Name="SwitchToLogTabCheckbox"  HorizontalAlignment="Left"    VerticalAlignment="Center" Grid.Column="1"
                               Grid.Row="8" Click="SwitchToLogTabCheckbox_Click"/>
 
                 </Grid>
@@ -209,9 +209,9 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Tag="LoadPatchXmlButton" x:Name="LoadPatchXmlButton" Content="Load patch Xml" HorizontalAlignment="Left" Margin="3,3,0,0" Grid.Row="1" Grid.RowSpan="2"
+        <Button x:Name="LoadPatchXmlButton" Content="Load patch Xml" HorizontalAlignment="Left" Margin="3,3,0,0" Grid.Row="1" Grid.RowSpan="2"
                 VerticalAlignment="Top" Width="93" Click="LoadPatchXmlButton_Click"/>
-        <Button Tag="SavePatchXmlButton" x:Name="SavePatchXmlButton" Content="Save patch Xml" HorizontalAlignment="Left" Margin="101,3,0,0" Grid.Row="1" Grid.RowSpan="2"
+        <Button x:Name="SavePatchXmlButton" Content="Save patch Xml" HorizontalAlignment="Left" Margin="101,3,0,0" Grid.Row="1" Grid.RowSpan="2"
                 VerticalAlignment="Top" Width="95" Click="SavePatchXmlButton_Click"/>
     </Grid>
 </local:RelhaxFeatureWindowWithChanges>

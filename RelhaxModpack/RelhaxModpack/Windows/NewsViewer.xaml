@@ -14,21 +14,21 @@
         </Style>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="NewViewGrid">
+    <Grid >
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,31">
-            <TabItem Tag="database_Update_Tab" x:Name="database_Update_Tab" Header="Database News">
+            <TabItem x:Name="database_Update_Tab" Header="Database News">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="DatabaseUpdateText" Tag="DatabaseUpdateText" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
+                    <TextBox x:Name="DatabaseUpdateText" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
                     </TextBox>
                 </Grid>
             </TabItem>
-            <TabItem Tag="application_Update_Tab" x:Name="application_Update_Tab" Header="Application News">
+            <TabItem x:Name="application_Update_Tab" Header="Application News">
                 <Grid>
-                    <TextBox x:Name="ApplicationUpdateText" Tag="ApplicationUpdateText" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
+                    <TextBox x:Name="ApplicationUpdateText" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
                     </TextBox>
                 </Grid>
             </TabItem>
         </TabControl>
-        <ui:RelhaxHyperlink x:Name="ViewNewsOnGoogleTranslate" HorizontalAlignment="Left" Margin="5,0,0,10" VerticalAlignment="Bottom" Tag="ViewNewsOnGoogleTranslate" Text="View this on Google Translate"/>
+        <ui:RelhaxHyperlink x:Name="ViewNewsOnGoogleTranslate" HorizontalAlignment="Left" Margin="5,0,0,10" VerticalAlignment="Bottom" Text="View this on Google Translate"/>
     </Grid>
 </local:RelhaxWindow>

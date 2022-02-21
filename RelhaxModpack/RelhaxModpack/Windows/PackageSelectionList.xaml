@@ -35,44 +35,44 @@
             </Style.Triggers>
         </Style>
     </local:RelhaxWindow.Resources>
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tag="ModSelectionGrid">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
         <Grid HorizontalAlignment="Stretch" Height="84" Margin="10,10,10,0" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="255"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <TextBlock x:Name="HelpLabel" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="HelpLabel" Text="Right-click a selection component to see a preview window"/>
-                <TextBlock x:Name="InstallingTo" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" Tag="InstallingTo"/>
-                <TextBlock x:Name="InstallingAsWoTVersion" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="InstallingAsWoTVersion" Text="Installing as WoT version: "/>
-                <TextBlock x:Name="UsingDatabaseVersion" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="UsingDatabaseVersion" Text="Using database: "/>
+                <TextBlock x:Name="HelpLabel" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Right-click a selection component to see a preview window"/>
+                <TextBlock x:Name="InstallingTo" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Installing to: " VerticalAlignment="Top" />
+                <TextBlock x:Name="InstallingAsWoTVersion" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Installing as WoT version: "/>
+                <TextBlock x:Name="UsingDatabaseVersion" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Using database: "/>
             </StackPanel>
             <Button x:Name="CollapseAllRealButton" HorizontalAlignment="Left" Margin="0,0,130,0" VerticalAlignment="Top" Width="125" Height="35"
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="CollapseAllRealButton_Click" Tag="CollapseAllButton" Grid.Column="2">
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="CollapseAllRealButton_Click" Grid.Column="2">
                 <TextBlock x:Name="CollapseAllButton" Text="Collapse current tab" TextWrapping="Wrap" TextAlignment="Center"/>
             </Button>
             <Button x:Name="ExpandAllRealButton" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Top" Width="125" Height="35"
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ExpandAllRealButton_Click" Tag="ExpandAllButton" Grid.Column="1">
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ExpandAllRealButton_Click" Grid.Column="1">
                 <TextBlock x:Name="ExpandAllButton" Text="Expand current tab" TextWrapping="Wrap" TextAlignment="Center"/>
             </Button>
-            <ComboBox x:Name="SearchCB" Tag="SearchCB" HorizontalAlignment="Left" Margin="0,40,0,0" VerticalAlignment="Top" Width="255" DropDownOpened="SearchCB_DropDownOpened" Grid.Column="2"
+            <ComboBox x:Name="SearchCB" HorizontalAlignment="Left" Margin="0,40,0,0" VerticalAlignment="Top" Width="255" DropDownOpened="SearchCB_DropDownOpened" Grid.Column="2"
                   KeyUp="SearchCB_KeyUp" IsEditable="True" IsTextSearchEnabled="False" PreviewMouseDown="SearchCB_PreviewMouseDown" ItemsSource="{Binding}" ItemsPanel="{StaticResource VSP}"/>
-            <CheckBox x:Name="SearchThisTabOnlyCB" Tag="SearchThisTabOnlyCB" Content="Search in this tab only" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,64,0,0" Grid.Column="1" Width="255"/>
+            <CheckBox x:Name="SearchThisTabOnlyCB" Content="Search in this tab only" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,64,0,0" Grid.Column="1" Width="255"/>
         </Grid>
-        <ui:SelectionListTabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,94,10,60" VerticalAlignment="Stretch" Tag="SelectionListTabs"/>
-        <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" Tag="ContinueButton" >
+        <ui:SelectionListTabControl x:Name="ModTabGroups" HorizontalAlignment="Stretch" Margin="10,94,10,60" VerticalAlignment="Stretch" />
+        <Button HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnContinueInstallation" >
             <TextBlock x:Name="ContinueButtonLabel" Text="Install" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,135,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnCancelInstallation" Tag="CancelButton" >
+        <Button HorizontalAlignment="Right" Margin="0,0,135,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnCancelInstallation" >
             <TextBlock x:Name="CancelButtonLabel" Text="Cancel" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,260,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnSaveSelectionClick" Tag="SaveSelectionButton" >
+        <Button HorizontalAlignment="Right" Margin="0,0,260,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnSaveSelectionClick" >
             <TextBlock x:Name="SaveSelectionButtonLabel" Text="Save selection" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,385,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnLoadSelectionClick" Tag="LoadSelectionButton" >
+        <Button HorizontalAlignment="Right" Margin="0,0,385,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnLoadSelectionClick" >
             <TextBlock x:Name="LoadSelectionButtonLabel" Text="Load Selection" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
-        <Button HorizontalAlignment="Right" Margin="0,0,510,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnClearSelectionsClick" Tag="ClearSelectionsButton">
+        <Button HorizontalAlignment="Right" Margin="0,0,510,10" VerticalAlignment="Bottom" Width="120" Height="45" Click="OnClearSelectionsClick" >
             <TextBlock x:Name="ClearSelectionsButtonLabel" Text="Clear Selections" TextWrapping="Wrap" TextAlignment="Center"/>
         </Button>
     </Grid>

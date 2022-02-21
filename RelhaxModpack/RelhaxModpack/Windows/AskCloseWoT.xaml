@@ -9,10 +9,10 @@
     <Window.Resources>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="WoTRunningGrid">
-        <TextBlock x:Name="WoTRunningHeader" Tag="WoTRunningHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="It looks like your WoT install is currently open. Please close it before we can proceed" VerticalAlignment="Top"/>
-        <Button x:Name="WoTRunningCancelInstallButton" Tag="WoTRunningCancelInstallButton" Content="Cancel Installation" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="135" Click="WoTRunningCancelInstallButton_Click"/>
-        <Button x:Name="WoTRunningRetryButton" Tag="WoTRunningRetryButton" Content="Re-detect" HorizontalAlignment="Left" Margin="307,0,0,10" VerticalAlignment="Bottom" Width="75" Click="WoTRunningRetryButton_Click"/>
-        <Button x:Name="WoTRunningForceCloseButton" Tag="WoTRunningForceCloseButton" Content="Force close the game" HorizontalAlignment="Left" Margin="150,0,0,10" VerticalAlignment="Bottom" Width="152" Click="WoTRunningForceCloseButton_Click"/>
+    <Grid >
+        <TextBlock x:Name="WoTRunningHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="It looks like your WoT install is currently open. Please close it before we can proceed" VerticalAlignment="Top"/>
+        <Button x:Name="WoTRunningCancelInstallButton" Content="Cancel Installation" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="135" Click="WoTRunningCancelInstallButton_Click"/>
+        <Button x:Name="WoTRunningRetryButton" Content="Re-detect" HorizontalAlignment="Left" Margin="307,0,0,10" VerticalAlignment="Bottom" Width="75" Click="WoTRunningRetryButton_Click"/>
+        <Button x:Name="WoTRunningForceCloseButton" Content="Force close the game" HorizontalAlignment="Left" Margin="150,0,0,10" VerticalAlignment="Bottom" Width="152" Click="WoTRunningForceCloseButton_Click"/>
     </Grid>
 </local:RelhaxWindow>

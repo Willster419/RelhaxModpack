@@ -9,7 +9,7 @@
         Height="450" Width="800" MinHeight="200" MinWidth="300"
         LocalizeWindow="False" ApplyToolTips="False">
     <Grid Style="{StaticResource DarkThemeGrid}">
-        <TextBox Tag="PatchReplaceTextbox" x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" Margin="2,3,3,22"
+        <TextBox x:Name="PatchReplaceTextbox" HorizontalAlignment="Stretch" Margin="2,3,3,22"
                   VerticalAlignment="Stretch" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                   AcceptsReturn="True" AcceptsTab="True">
             <TextBox.Style>

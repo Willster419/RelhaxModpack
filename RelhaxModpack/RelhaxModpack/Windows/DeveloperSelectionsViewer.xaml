@@ -18,13 +18,13 @@
         </Style>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="DeveloperSelectionsGrid">
-        <Button Tag="DeveloperSelectionsContinueButton" x:Name="DeveloperSelectionsContinueButton" Content="Select" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click"/>
-        <Button Tag="DeveloperSelectionsCancelButton" x:Name="DeveloperSelectionsCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="CancelButton_Click"/>
+    <Grid >
+        <Button x:Name="DeveloperSelectionsContinueButton" Content="Select" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click"/>
+        <Button x:Name="DeveloperSelectionsCancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="CancelButton_Click"/>
         <Border Margin="10,31,10,35" BorderThickness="3">
-            <StackPanel x:Name="DeveloperSelectionsStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="DeveloperSelectionPanel"/>
+            <StackPanel x:Name="DeveloperSelectionsStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" />
         </Border>
-        <TextBlock Tag="DeveloperSelectionsTextHeader" x:Name="DeveloperSelectionsTextHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Selection to load" VerticalAlignment="Top" Margin="10,10,10,0" />
-        <Button Tag="DeveloperSelectionsLocalFile" x:Name="DeveloperSelectionsLocalFile" Content="Local file" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="102" Click="LocalFile_Click"/>
+        <TextBlock x:Name="DeveloperSelectionsTextHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Selection to load" VerticalAlignment="Top" Margin="10,10,10,0" />
+        <Button x:Name="DeveloperSelectionsLocalFile" Content="Local file" HorizontalAlignment="Right" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="102" Click="LocalFile_Click"/>
     </Grid>
 </local:RelhaxWindow>

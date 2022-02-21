@@ -10,10 +10,10 @@
     <Window.Resources>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="ProgressIndicatorGrid">
+    <Grid >
         <TextBlock HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Loading, please wait" VerticalAlignment="Top"
-                   TextAlignment="Center" Tag="LoadingHeader" x:Name="LoadingHeader"/>
-        <TextBox HorizontalAlignment="Stretch" Margin="10,31,10,39" TextWrapping="Wrap" VerticalAlignment="Stretch" x:Name="LoadingText" Tag="LoadingText" />
-        <ProgressBar HorizontalAlignment="Stretch" Height="24" Margin="10,0,10,10" VerticalAlignment="Bottom" Tag="LoadingProgressBar" x:Name="LoadingProgressBar"/>
+                   TextAlignment="Center" x:Name="LoadingHeader"/>
+        <TextBox HorizontalAlignment="Stretch" Margin="10,31,10,39" TextWrapping="Wrap" VerticalAlignment="Stretch" x:Name="LoadingText" />
+        <ProgressBar HorizontalAlignment="Stretch" Height="24" Margin="10,0,10,10" VerticalAlignment="Bottom" x:Name="LoadingProgressBar"/>
     </Grid>
 </local:RelhaxWindow>

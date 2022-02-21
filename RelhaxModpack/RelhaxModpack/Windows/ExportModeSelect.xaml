@@ -10,10 +10,10 @@
     <Window.Resources>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="ExportModeGrid">
-        <TextBlock x:Name="ExportSelectVersionHeader" Tag="ExportSelectVersionHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Please select the version of the WoT client you want to export for" VerticalAlignment="Top" Height="30" />
-        <StackPanel x:Name="ExportSelectVersionPanel" Tag="ExportSelectVersionPanel" HorizontalAlignment="Stretch" Margin="10,45,10,35" VerticalAlignment="Stretch" />
-        <Button x:Name="ExportContinueButton" Tag="ExportContinueButton" Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ExportContinueButton_Click"/>
-        <Button x:Name="ExportCancelButton" Tag="ExportCancelButton" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Width="75" Click="ExportCancelButton_Click"/>
+    <Grid >
+        <TextBlock x:Name="ExportSelectVersionHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Please select the version of the WoT client you want to export for" VerticalAlignment="Top" Height="30" />
+        <StackPanel x:Name="ExportSelectVersionPanel" HorizontalAlignment="Stretch" Margin="10,45,10,35" VerticalAlignment="Stretch" />
+        <Button x:Name="ExportContinueButton" Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ExportContinueButton_Click"/>
+        <Button x:Name="ExportCancelButton" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Width="75" Click="ExportCancelButton_Click"/>
     </Grid>
 </local:RelhaxWindow>

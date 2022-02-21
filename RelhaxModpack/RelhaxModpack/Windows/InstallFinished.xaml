@@ -10,27 +10,27 @@
     <Window.Resources>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="InstallFinishedMainGrid">
-        <TextBox Tag="InstallFinishedInstallationCompleteText" x:Name="InstallationCompleteText" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap"
+    <Grid >
+        <TextBox x:Name="InstallationCompleteText" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap"
                  Text="Installation Complete, would you like to..." VerticalAlignment="Top" TextAlignment="Left" Height="32"/>
         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,47,10,10">
-            <Button x:Name="InstallationCompleteStartWoTButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Tag="InstallationCompleteStartWoT"
+            <Button x:Name="InstallationCompleteStartWoTButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" 
                     Click="InstallationCompleteStartWoTButton_Click" >
                 <TextBlock x:Name="InstallationCompleteStartWoT" Text="Start the game? (WorldofTanks.exe)" TextWrapping="Wrap"/>
             </Button>
-            <Button x:Name="InstallationCompleteStartGameCenterButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Tag="InstallationCompleteStartGameCenter" 
+            <Button x:Name="InstallationCompleteStartGameCenterButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" 
                     Click="InstallationCompleteStartGameCenterButton_Click" >
                 <TextBlock x:Name="InstallationCompleteStartGameCenter" Text="Start WG Game Center (WoTLauncher.exe)?" TextWrapping="Wrap"/>
             </Button>
-            <Button x:Name="InstallationCompleteOpenXVMButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Tag="InstallationCompleteOpenXVM" 
+            <Button x:Name="InstallationCompleteOpenXVMButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" 
                     Click="InstallationCompleteOpenXVMButton_Click" >
                 <TextBlock x:Name="InstallationCompleteOpenXVM" Text="Open your web browser to the xvm statistics login website?" TextWrapping="Wrap"/>
             </Button>
-            <Button x:Name="InstallationCompleteCloseThisWindowButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Tag="InstallationCompleteCloseThisWindowButton"
+            <Button x:Name="InstallationCompleteCloseThisWindowButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" 
                     Click="InstallationCompleteCloseThisWindowButton_Click" >
                 <TextBlock x:Name="InstallationCompleteCloseThisWindow" Text="Close this window?" TextWrapping="Wrap"/>
             </Button>
-            <Button x:Name="InstallationCompleteCloseAppButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" Tag="InstallationCompleteCloseAppButton"
+            <Button x:Name="InstallationCompleteCloseAppButton" HorizontalAlignment="Stretch" Margin="0,0,0,2" VerticalAlignment="Top" 
                     Click="InstallationCompleteCloseAppButton_Click" >
                 <TextBlock x:Name="InstallationCompleteCloseApp" Text="Close the application?" TextWrapping="Wrap"/>
             </Button>

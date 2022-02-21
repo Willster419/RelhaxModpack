@@ -11,13 +11,13 @@
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
     <Grid>
-        <TextBlock Tag="CategoryTextBox" x:Name="CategoryTextBox" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Select the Category to add to" VerticalAlignment="Top"/>
-        <ComboBox Tag="CategoryComboBox" x:Name="CategoryComboBox" HorizontalAlignment="Stretch" Margin="10,31,10,0" VerticalAlignment="Top" SelectionChanged="CategoryComboBox_SelectionChanged" />
-        <TextBlock Tag="PackageTextBox" x:Name="PackageTextBox" HorizontalAlignment="Stretch" Margin="10,58,10,0" TextWrapping="Wrap" Text="Select the Package to add to" VerticalAlignment="Top"/>
-        <ComboBox Tag="PackageComboBox" x:Name="PackageComboBox" HorizontalAlignment="Stretch" Margin="10,79,10,0" VerticalAlignment="Top" SelectionChanged="PackageComboBox_SelectionChanged" />
-        <Button Tag="OKButton" x:Name="OKButton" Content="OK" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="OKButton_Click" IsEnabled="False"/>
-        <Button Tag="CancelButton" x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="CancelButton_Click"/>
-        <RadioButton Tag="AddSameLevelRadioButton" x:Name="AddSameLevelRadioButton" Content="Same Level" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" IsChecked="True" Checked="AddSameLevelRadioButton_Checked"/>
-        <RadioButton Tag="AddNewLevelRadioButton" x:Name="AddNewLevelRadioButton" Content="New Level" HorizontalAlignment="Right" Margin="0,106,10,0" VerticalAlignment="Top" Checked="AddNewLevelRadioButton_Checked"/>
+        <TextBlock x:Name="CategoryTextBox" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" Text="Select the Category to add to" VerticalAlignment="Top"/>
+        <ComboBox x:Name="CategoryComboBox" HorizontalAlignment="Stretch" Margin="10,31,10,0" VerticalAlignment="Top" SelectionChanged="CategoryComboBox_SelectionChanged" />
+        <TextBlock x:Name="PackageTextBox" HorizontalAlignment="Stretch" Margin="10,58,10,0" TextWrapping="Wrap" Text="Select the Package to add to" VerticalAlignment="Top"/>
+        <ComboBox x:Name="PackageComboBox" HorizontalAlignment="Stretch" Margin="10,79,10,0" VerticalAlignment="Top" SelectionChanged="PackageComboBox_SelectionChanged" />
+        <Button x:Name="OKButton" Content="OK" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="OKButton_Click" IsEnabled="False"/>
+        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" Click="CancelButton_Click"/>
+        <RadioButton x:Name="AddSameLevelRadioButton" Content="Same Level" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" IsChecked="True" Checked="AddSameLevelRadioButton_Checked"/>
+        <RadioButton x:Name="AddNewLevelRadioButton" Content="New Level" HorizontalAlignment="Right" Margin="0,106,10,0" VerticalAlignment="Top" Checked="AddNewLevelRadioButton_Checked"/>
     </Grid>
 </local:RelhaxWindow>

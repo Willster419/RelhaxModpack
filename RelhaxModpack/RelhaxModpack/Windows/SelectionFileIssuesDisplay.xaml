@@ -10,9 +10,9 @@
     <Window.Resources>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="RelhaxMessageGrid">
-        <TextBlock x:Name="MessageWindowHeader" Tag="MessageWindowHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Text="Please read the following messages about loading your selection file"/>
-        <Button x:Name="MessageWindowCloseButton" Tag="MessageWindowCloseButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="MessageWindowCloseButton_Click"/>
-        <TextBox x:Name="MessageWindowBody" Tag="MessageWindowBody" HorizontalAlignment="Stretch"  Margin="10,45,10,35" TextWrapping="Wrap" VerticalAlignment="Stretch" IsUndoEnabled="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto"/>
+    <Grid >
+        <TextBlock x:Name="MessageWindowHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Text="Please read the following messages about loading your selection file"/>
+        <Button x:Name="MessageWindowCloseButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="MessageWindowCloseButton_Click"/>
+        <TextBox x:Name="MessageWindowBody" HorizontalAlignment="Stretch"  Margin="10,45,10,35" TextWrapping="Wrap" VerticalAlignment="Stretch" IsUndoEnabled="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto"/>
     </Grid>
 </local:RelhaxWindow>

@@ -10,12 +10,12 @@
     <Window.Resources>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="DiagnosticsGrid">
-        <TextBox x:Name="DiagnosticsMainTextBox" Tag="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="42" Margin="10,10,10,0" TextWrapping="Wrap"
+    <Grid >
+        <TextBox x:Name="DiagnosticsMainTextBox" HorizontalAlignment="Stretch" Height="42" Margin="10,10,10,0" TextWrapping="Wrap"
                  Text="Helpful explanation window" VerticalAlignment="Top" IsReadOnly="True"/>
-        <TextBlock Tag="SelectedInstallation" x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="12,57,8,0" TextWrapping="Wrap"
+        <TextBlock x:Name="SelectedInstallation" HorizontalAlignment="Stretch" Margin="12,57,8,0" TextWrapping="Wrap"
                    Text="Currently Selected Installation:" VerticalAlignment="Top" Height="34" ToolTipService.ShowOnDisabled="True"/>
-        <TextBox Tag="DiagnosticsStatusTextBox" x:Name="DiagnosticsStatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="12,0,8,10" TextWrapping="Wrap"
+        <TextBox x:Name="DiagnosticsStatusTextBox" HorizontalAlignment="Stretch" Height="50" Margin="12,0,8,10" TextWrapping="Wrap"
                  VerticalAlignment="Bottom" IsReadOnly="True"/>
         <Grid HorizontalAlignment="Stretch" Margin="12,96,8,65" VerticalAlignment="Stretch" >
             <Grid.RowDefinitions>
@@ -29,47 +29,47 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="ChangeInstallButton" Tag="ChangeInstall" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ChangeInstall_Click"
+            <Button x:Name="ChangeInstallButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ChangeInstall_Click"
                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
                 <TextBlock x:Name="ChangeInstall" Text="Change the currently selected WoT installation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"
                            Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
-            <Button Tag="ClearDownloadCache" x:Name="ClearDownloadCacheButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"
+            <Button x:Name="ClearDownloadCacheButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"
                     Click="ClearDownloadCache_Click" Grid.Column="1" ToolTipService.ShowOnDisabled="True">
                 <TextBlock x:Name="ClearDownloadCache" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"
                            Text="Clear download cache" />
             </Button>
-            <Button Tag="CollectLogInfo" x:Name="CollectLogInfoButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CollectLogInfo_Click"
+            <Button x:Name="CollectLogInfoButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CollectLogInfo_Click"
                     Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
                 <TextBlock x:Name="CollectLogInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Collect log files into a zip file to report a problem"
                            Margin="2,0,2,0" TextAlignment="Center"/>
             </Button>
-            <Button Tag="ClearDownloadCacheDatabase" x:Name="ClearDownloadCacheDatabaseButton" HorizontalAlignment="Stretch"
+            <Button x:Name="ClearDownloadCacheDatabaseButton" HorizontalAlignment="Stretch"
                     VerticalAlignment="Top" Margin="2,2,2,2" Grid.Column="1" Grid.Row="1"  Click="ClearDownloadCacheDatabase_Click" ToolTipService.ShowOnDisabled="True">
                 <TextBlock x:Name="ClearDownloadCacheDatabase" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"
                            Text="Delete download cache database file" />
             </Button>
-            <Button Tag="TestLoadImageLibraries" x:Name="TestLoadImageLibrariesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" ToolTipService.ShowOnDisabled="True"
+            <Button x:Name="TestLoadImageLibrariesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" ToolTipService.ShowOnDisabled="True"
                     Click="TestLoadImageLibrariesButton_Click" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="1">
                 <TextBlock x:Name="TestLoadImageLibraries" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
                            Text="Test loading the atlas image processing libraries"/>
             </Button>
-            <Button Tag="DownloadWGPatchFiles" x:Name="DownloadWGPatchFilesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" ToolTipService.ShowOnDisabled="True"
+            <Button x:Name="DownloadWGPatchFilesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" ToolTipService.ShowOnDisabled="True"
                     Click="DownloadWGPatchFiles_Click" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="0">
                 <TextBlock x:Name="DownloadWGPatchFilesText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
                            Text="Download WG Patch files for any WG client via HTTP"/>
             </Button>
-            <Button Tag="CleanupModFiles" x:Name="CleanupModFilesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CleanupModFilesButton_Click"
+            <Button x:Name="CleanupModFilesButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top"  Click="CleanupModFilesButton_Click"
                     Grid.Row="3" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
                 <TextBlock x:Name="CleanupModFilesText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="2,0,2,0" TextAlignment="Center"
                            Text="Cleanup mod files placed in incorrect locations" />
             </Button>
-            <Button Tag="ClearGameCache" x:Name="ClearGameCacheButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ClearGameCacheButton_Click"
+            <Button x:Name="ClearGameCacheButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="ClearGameCacheButton_Click"
                     Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
                 <TextBlock x:Name="CleanGameCacheText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
                            Text="Clear game cache files"/>
             </Button>
-            <Button Tag="TrimRelhaxLogfile" x:Name="TrimRelhaxLogfileButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="TrimRelhaxLogfileButton_Click"
+            <Button x:Name="TrimRelhaxLogfileButton" HorizontalAlignment="Stretch" Margin="2,2,2,2" VerticalAlignment="Top" Click="TrimRelhaxLogfileButton_Click"
                     Grid.Row="4" Grid.Column="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ToolTipService.ShowOnDisabled="True">
                 <TextBlock x:Name="TrimRelhaxLogfileText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Center"
                            Text="Trim the Relhax log file to the last 3 launches"/>

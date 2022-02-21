@@ -14,20 +14,20 @@
         </Style>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <TabControl x:Name="MainTabControl" Tag="AdvancedInstallMainTabControl">
-        <TabItem Header="Pre-install tasks" x:Name="PreInstallTab" Tag="PreInstallTab">
+    <TabControl x:Name="MainTabControl" >
+        <TabItem Header="Pre-install tasks" x:Name="PreInstallTab" >
             <ScrollViewer VerticalScrollBarVisibility="Visible">
-                <StackPanel x:Name="PreInstallPanel" CanVerticallyScroll="True" Tag="PreInstallPanel"/>
+                <StackPanel x:Name="PreInstallPanel" CanVerticallyScroll="True" />
             </ScrollViewer>
         </TabItem>
-        <TabItem Header="Extraction" x:Name="ExtractionTab" Tag="ExtractionTab">
+        <TabItem Header="Extraction" x:Name="ExtractionTab" >
             <ScrollViewer VerticalScrollBarVisibility="Visible">
-                <StackPanel x:Name="ExtractionPanel" CanVerticallyScroll="True" Tag="ExtractionPanel"/>
+                <StackPanel x:Name="ExtractionPanel" CanVerticallyScroll="True" />
             </ScrollViewer>
         </TabItem>
-        <TabItem Header="Post-install tasks" x:Name="PostInstallTab" Tag="PostInstallTab">
+        <TabItem Header="Post-install tasks" x:Name="PostInstallTab" >
             <ScrollViewer VerticalScrollBarVisibility="Visible">
-                <StackPanel x:Name="PostInstallPanel" CanVerticallyScroll="True" Tag="PostInstallPanel"/>
+                <StackPanel x:Name="PostInstallPanel" CanVerticallyScroll="True" />
             </ScrollViewer>
         </TabItem>
     </TabControl>

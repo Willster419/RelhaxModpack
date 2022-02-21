@@ -11,17 +11,17 @@
     <Window.Resources>
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
-    <Grid Tag="AddPIcturesMainGrid">
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="DiagnosticsAddSelectionsPicturesLabel" HorizontalAlignment="Stretch" Margin="10,0,10,0" TextWrapping="Wrap" Text="Add any additional files here (your selection file, picture, etc.)" VerticalAlignment="Top" Tag="AddSelectionsPicturesLabel"/>
-        <ListBox x:FieldModifier="public" x:Name="FilesToAddList" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" AllowDrop="True" SelectionMode="Extended" DragEnter="FilesToAddList_DragEnter" Drop="FilesToAddList_Drop" Tag="DebugFilesToAddList" Margin="0,0,0,5"/>
-        <Button x:Name="DiagnosticsAddFilesButton" Content="Add Files" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="95" Click="AddFilesButton_Click" Tag="AddFilesButton"/>
+        <TextBlock x:Name="DiagnosticsAddSelectionsPicturesLabel" HorizontalAlignment="Stretch" Margin="10,0,10,0" TextWrapping="Wrap" Text="Add any additional files here (your selection file, picture, etc.)" VerticalAlignment="Top" />
+        <ListBox x:FieldModifier="public" x:Name="FilesToAddList" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" AllowDrop="True" SelectionMode="Extended" DragEnter="FilesToAddList_DragEnter" Drop="FilesToAddList_Drop" Margin="0,0,0,5"/>
+        <Button x:Name="DiagnosticsAddFilesButton" Content="Add Files" HorizontalAlignment="Left" Margin="10,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="95" Click="AddFilesButton_Click" />
         <!-- https://stackoverflow.com/questions/2984050/configure-listbox-in-wpf-so-that-i-will-be-possible-to-select-multiple-items-wit -->
-        <Button x:Name="DiagnosticsRemoveSelectedButton" Content="Remove Selected" HorizontalAlignment="Left" Margin="110,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="104" Click="RemoveSelectedButton_Click" Tag="RemoveSelectedButton"/>
-        <Button x:Name="DiagnosticsContinueButton" Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click" Tag="ContinueButton"/>
+        <Button x:Name="DiagnosticsRemoveSelectedButton" Content="Remove Selected" HorizontalAlignment="Left" Margin="110,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Width="104" Click="RemoveSelectedButton_Click" />
+        <Button x:Name="DiagnosticsContinueButton" Content="Continue" HorizontalAlignment="Right" Margin="0,0,10,5" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Click="ContinueButton_Click" />
     </Grid>
 </local:RelhaxWindow>

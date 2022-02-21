@@ -52,238 +52,238 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="0" Margin="2" Content="Install"
-                    Tag="InstallModpackButton" x:Name="InstallModpackButton" Click="InstallModpackButton_Click" ToolTipService.ShowOnDisabled="True"/>
+                    x:Name="InstallModpackButton" Click="InstallModpackButton_Click" ToolTipService.ShowOnDisabled="True"/>
                 <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="1" Margin="2" Content="Uninstall"
-                    Tag="UninstallModpackButton" x:Name="UninstallModpackButton" Click="UninstallModpackButton_Click" ToolTipService.ShowOnDisabled="True"/>
+                    x:Name="UninstallModpackButton" Click="UninstallModpackButton_Click" ToolTipService.ShowOnDisabled="True"/>
                 <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Margin="2" Content="View News"
-                    Tag="ViewNewsButton" x:Name="ViewNewsButton" Click="ViewNewsButton_Click" ToolTipService.ShowOnDisabled="True"/>
+                    x:Name="ViewNewsButton" Click="ViewNewsButton_Click" ToolTipService.ShowOnDisabled="True"/>
                 <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Margin="2" Content="Diagnostic Utilities"
-                    Tag="DiagnosticUtilitiesButton" x:Name="DiagnosticUtilitiesButton" Click="DiagnosticUtilitiesButton_Click" ToolTipService.ShowOnDisabled="True"/>
+                    x:Name="DiagnosticUtilitiesButton" Click="DiagnosticUtilitiesButton_Click" ToolTipService.ShowOnDisabled="True"/>
             </Grid>
-            <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" Tag="SettingsTagGroup">
-                <TabItem Header="Intro" x:Name="SettingsTabIntro" Tag="SettingsTabIntro">
-                    <Grid Tag="SettingsTabIntroGrid" Style="{StaticResource TabGrids}">
-                        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="HelperText" Tag="HelperText"/>
+            <TabControl HorizontalAlignment="Stretch" Height="254" Margin="12,81,12,0" VerticalAlignment="Top" >
+                <TabItem Header="Intro" x:Name="SettingsTabIntro" >
+                    <Grid Style="{StaticResource TabGrids}">
+                        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="HelperText" />
                     </Grid>
                 </TabItem>
-                <TabItem Header="Selection View" x:Name="SettingsTabSelectionView" Tag="SettingsTabSelectionView">
-                    <Grid Tag="SettingsTabSelectionViewGrid" Style="{StaticResource TabGrids}">
+                <TabItem Header="Selection View" x:Name="SettingsTabSelectionView" >
+                    <Grid Style="{StaticResource TabGrids}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <RadioButton Tag="SelectionDefault" x:Name="SelectionDefault" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        <RadioButton x:Name="SelectionDefault" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top"
                                  Click="OnSelectionViewChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="SelectionDefaultText" Text="Default" TextWrapping="Wrap"/>
                         </RadioButton>
-                        <CheckBox Tag="EnableBordersDefaultV2CB" x:Name="EnableBordersDefaultV2CB" Grid.Column="0" HorizontalAlignment="Left" Margin="10,20,0,0"
+                        <CheckBox x:Name="EnableBordersDefaultV2CB" Grid.Column="0" HorizontalAlignment="Left" Margin="10,20,0,0"
                               VerticalAlignment="Top" Click="OnDefaultBordersV2Changed" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="EnableBordersDefaultV2Text" Text="Enable Borders" TextWrapping="Wrap"/>
                         </CheckBox>
-                        <CheckBox Tag="EnableColorChangeDefaultV2CB" x:Name="EnableColorChangeDefaultV2CB" Grid.Column="0" HorizontalAlignment="Left" Margin="10,40,0,0"
+                        <CheckBox x:Name="EnableColorChangeDefaultV2CB" Grid.Column="0" HorizontalAlignment="Left" Margin="10,40,0,0"
                               VerticalAlignment="Top" Click="OnDefaultSelectColorChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="EnableColorChangeDefaultV2Text" Text="Enable Color Change" TextWrapping="Wrap"/>
                         </CheckBox>
-                        <RadioButton Tag="SelectionLegacy" x:Name="SelectionLegacy" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        <RadioButton x:Name="SelectionLegacy" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"
                                  Click="OnSelectionViewChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="SelectionLegacyText" Text="Legacy" TextWrapping="Wrap"/>
                         </RadioButton>
-                        <CheckBox Tag="EnableBordersLegacyCB" x:Name="EnableBordersLegacyCB" Grid.Column="1" HorizontalAlignment="Left" Margin="10,20,0,0"
+                        <CheckBox x:Name="EnableBordersLegacyCB" Grid.Column="1" HorizontalAlignment="Left" Margin="10,20,0,0"
                               VerticalAlignment="Top" Click="OnLegacyBordersChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="EnableBordersLegacyText" Text="Enable Borders" TextWrapping="Wrap"/>
                         </CheckBox>
-                        <CheckBox Tag="EnableColorChangeLegacyCB" x:Name="EnableColorChangeLegacyCB" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0"
+                        <CheckBox x:Name="EnableColorChangeLegacyCB" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0"
                               VerticalAlignment="Top" Click="OnLegacySelectColorChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="EnableColorChangeLegacyText" Text="Enable Color Change" TextWrapping="Wrap"/>
                         </CheckBox>
-                        <CheckBox Tag="ShowOptionsCollapsedLegacyCB" x:Name="ShowOptionsCollapsedLegacyCB" Grid.Column="1" HorizontalAlignment="Left" Margin="10,60,0,0"
+                        <CheckBox x:Name="ShowOptionsCollapsedLegacyCB" Grid.Column="1" HorizontalAlignment="Left" Margin="10,60,0,0"
                               VerticalAlignment="Top" Click="OnShowOptionsCollapsedLegacyChanged" ToolTipService.ShowOnDisabled="True">
                             <TextBlock x:Name="ShowOptionsCollapsedLegacyText" Text="Show options collapsed on start" TextWrapping="Wrap"/>
                         </CheckBox>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Installation Settings" x:Name="SettingsTabInstallationSettings" Tag="SettingsTabInstallationSettings">
-                    <Grid Tag="SettingsTabInstallationSettingsGrid" Style="{StaticResource TabGrids}">
+                <TabItem Header="Installation Settings" x:Name="SettingsTabInstallationSettings" >
+                    <Grid Style="{StaticResource TabGrids}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <CheckBox Tag="CleanInstallCB" x:Name="CleanInstallCB" Click="OnCleanInstallChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="CleanInstallCB" Click="OnCleanInstallChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="CleanInstallText" Text="Clean installation (Recommended)" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox Tag="ClearLogFilesCB" x:Name="ClearLogFilesCB" Click="OnClearLogFilesChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="ClearLogFilesCB" Click="OnClearLogFilesChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ClearLogFilesText" Text="Clear log files" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox Tag="ClearCacheCB" x:Name="ClearCacheCB" Click="OnClearWoTCacheChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="ClearCacheCB" Click="OnClearWoTCacheChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ClearCacheText" Text="Clear WoT cache data" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox Tag="SaveUserDataCB" x:Name="SaveUserDataCB" Click="OnSaveUserDataChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="SaveUserDataCB" Click="OnSaveUserDataChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="SaveUserDataText" Text="Save user created data" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox Tag="CreateShortcutsCB" x:Name="CreateShortcutsCB" Click="OnCreateShortcutsChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="CreateShortcutsCB" Click="OnCreateShortcutsChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="CreateShortcutsText" Text="Create shortcuts" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox IsEnabled="True" Tag="MulticoreExtractionCB" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox IsEnabled="True" x:Name="MulticoreExtractionCB" Click="OnMulticoreExtractionChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="MulticoreExtractionText" Text="Multicore extraction mode" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <TextBlock Text="Detected Cores: {0}" Tag="MulticoreExtractionCoresCountLabel" x:Name="MulticoreExtractionCoresCountLabel" IsEnabled="True"
+                            <TextBlock Text="Detected Cores: {0}" x:Name="MulticoreExtractionCoresCountLabel" IsEnabled="True"
                                    Padding="20,0,0,0" TextWrapping="Wrap" ToolTipService.ShowOnDisabled="True"/>
-                            <CheckBox IsEnabled="True" Tag="InstallWhileDownloadingCB" x:Name="InstallWhileDownloadingCB" Click="OnImmidateExtarctionChanged"
+                            <CheckBox IsEnabled="True" x:Name="InstallWhileDownloadingCB" Click="OnImmidateExtarctionChanged"
                                   ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="InstallWhileDownloadingText" Text="Extract while downloading" TextWrapping="Wrap"/>
                             </CheckBox>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <CheckBox Tag="ShowInstallCompleteWindowCB" x:Name="ShowInstallCompleteWindowCB" Click="OnShowInstallCompleteWindowChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="ShowInstallCompleteWindowCB" Click="OnShowInstallCompleteWindowChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ShowInstallCompleteWindowText" Text="Show install complete window" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox Tag="BackupModsCB" x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="BackupModsCB" Click="OnBackupModsChanged" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="BackupModsText" Text="Backup current mods folder" TextWrapping="Wrap"/>
                             </CheckBox>
                             <TextBlock x:Name="BackupModsSizeLabelUsed" Text="Backups: {0}  Size: {1}" Margin="20,0,0,0" TextWrapping="Wrap" ToolTipService.ShowOnDisabled="True"/>
-                            <CheckBox x:Name="DeleteOldPackagesCB" Tag="DeleteOldPackagesCB" Click="OnDeleteCacheFilesChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="DeleteOldPackagesCB" Click="OnDeleteCacheFilesChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="DeleteOldPackagesText" Text="Delete old packages" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="MinimalistModeCB" Tag="MinimalistModeCB" Click="OnMinimalistModeChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="MinimalistModeCB" Click="OnMinimalistModeChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="MinimalistModeText" Text="Minimalist Mode" TextWrapping="Wrap"/>
                             </CheckBox>
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Application Settings" x:Name="SettingsTabApplicationSettings" Tag="SettingsTabApplicationSettings">
-                    <Grid Tag="SettingsTabApplicationSettingsGrid" Style="{StaticResource TabGrids}">
+                <TabItem Header="Application Settings" x:Name="SettingsTabApplicationSettings" >
+                    <Grid Style="{StaticResource TabGrids}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <CheckBox Tag="SaveLastInstallCB" x:Name="SaveLastInstallCB" Click="OnSaveLastInstallChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="SaveLastInstallCB" Click="OnSaveLastInstallChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="SaveLastInstallText" Text="Save mod selection of last installation" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="NotifyIfSameDatabaseCB" Tag="NotifyIfSameDatabaseCB" Click="OnInformIfNoNewDatabaseChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="NotifyIfSameDatabaseCB" Click="OnInformIfNoNewDatabaseChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="NotifyIfSameDatabaseText" Text="Inform if no new database available (stable database only)" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox Tag="ForceManuelGameDetectionCB" x:Name="ForceManuelGameDetectionCB" Click="OnForceManuelGameDetectionChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="ForceManuelGameDetectionCB" Click="OnForceManuelGameDetectionChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ForceManuelGameDetectionText" Text="Force manual game detection" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="SaveDisabledModsInSelection" Tag="SaveDisabledModsInSelection" Click="OnSaveDisabledModsInSelectionChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="SaveDisabledModsInSelection" Click="OnSaveDisabledModsInSelectionChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="SaveDisabledModsInSelectionText" Text="Keep disabled mods when saving selection" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="AdvancedInstallationProgress" Tag="AdvancedInstallationProgress" IsEnabled="True" Click="OnAdvancedInstallationProgressChanged"
+                            <CheckBox x:Name="AdvancedInstallationProgress" IsEnabled="True" Click="OnAdvancedInstallationProgressChanged"
                                   ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="AdvancedInstallationProgressText" Text="Show advanced installation progress window" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="MinimizeToSystemTray" Tag="MinimizeToSystemTray" Click="OnMinimizeToSystemTrayChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="MinimizeToSystemTray" Click="OnMinimizeToSystemTrayChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="MinimizeToSystemTrayText" Text="Minimize to system tray" TextWrapping="Wrap"/>
                             </CheckBox>
                             <!-- Use a margin of 20 to give it a tree affect-->
-                            <CheckBox Tag="UseBetaDatabaseCB" x:Name="UseBetaDatabaseCB" Click="OnUseBetaDatabaseChanged">
+                            <CheckBox x:Name="UseBetaDatabaseCB" Click="OnUseBetaDatabaseChanged">
                                 <TextBlock x:Name="UseBetaDatabaseText" Text="Use beta database" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <ComboBox Tag="UseBetaDatabaseBranches" x:Name="UseBetaDatabaseBranches" SelectionChanged="OnBetaDatabaseBranchSelectionChanged"
+                            <ComboBox x:Name="UseBetaDatabaseBranches" SelectionChanged="OnBetaDatabaseBranchSelectionChanged"
                                   Margin="20,0,0,0" IsEnabled="False" ToolTipService.ShowOnDisabled="True"/>
-                            <CheckBox Tag="UseBetaApplicationCB" x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="UseBetaApplicationCB" Click="OnUseBetaAppChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="UseBetaApplicationText" Text="Use beta application" TextWrapping="Wrap"/>
                             </CheckBox>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
                             <TextBlock x:Name="ThemeSelectText" Text="Select theme:" ToolTipService.ShowOnDisabled="True"/>
                             <StackPanel Orientation="Vertical" Margin="15,0,0,0">
-                                <RadioButton x:Name="ThemeDefault" Tag="ThemeDefault" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True">
+                                <RadioButton x:Name="ThemeDefault" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True">
                                     <TextBlock x:Name="ThemeDefaultText" Text="Default" TextWrapping="Wrap"/>
                                 </RadioButton>
-                                <RadioButton x:Name="ThemeDark" Tag="ThemeDark" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True">
+                                <RadioButton x:Name="ThemeDark" Checked="OnThemeChanged" ToolTipService.ShowOnDisabled="True">
                                     <TextBlock x:Name="ThemeDarkText" Text="Dark" TextWrapping="Wrap"/>
                                 </RadioButton>
                             </StackPanel>
-                            <TextBlock x:Name="ApplyCustomScalingText" Tag="ApplyCustomScalingCB" Text="Application scaling" ToolTipService.ShowOnDisabled="True"/>
+                            <TextBlock x:Name="ApplyCustomScalingText" Text="Application scaling" ToolTipService.ShowOnDisabled="True"/>
                             <!-- https://stackoverflow.com/questions/832216/wpf-how-to-make-controls-stretch-in-a-stackpanel -->
                             <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
-                                <TextBlock x:Name="ApplyCustomScalingLabel" Tag="ApplyCustomScalingLabel" DockPanel.Dock="Right" Text="0.00x" Margin="0,0,5,0" IsEnabled="True" TextWrapping="Wrap"/>
-                                <Slider x:Name="ApplyCustomScalingSlider" Tag="ApplyCustomScalingSlider" Margin="5,0,5,0" Minimum="1" Maximum="3" Value="1"
+                                <TextBlock x:Name="ApplyCustomScalingLabel" DockPanel.Dock="Right" Text="0.00x" Margin="0,0,5,0" IsEnabled="True" TextWrapping="Wrap"/>
+                                <Slider x:Name="ApplyCustomScalingSlider" Margin="5,0,5,0" Minimum="1" Maximum="3" Value="1"
                                     IsEnabled="True" HorizontalAlignment="Stretch" DockPanel.Dock="Left" PreviewMouseUp="ApplyCustomScalingSlider_MouseUp"
                                     SmallChange="0.25" IsSnapToTickEnabled="True" LargeChange="0.25" TickFrequency="0.25" ToolTipService.ShowOnDisabled="True"/>
                             </DockPanel>
-                            <CheckBox x:Name="EnableCustomFontCheckbox" Tag="EnableCustomFontCheckbox" IsEnabled="True" ToolTipService.ShowOnDisabled="True" Click="EnableCustomFontCheckbox_Click">
+                            <CheckBox x:Name="EnableCustomFontCheckbox" IsEnabled="True" ToolTipService.ShowOnDisabled="True" Click="EnableCustomFontCheckbox_Click">
                                 <TextBlock x:Name="EnableCustomFontCheckboxText" Text="Enable custom font" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <ComboBox x:Name="CustomFontSelector" Tag="CustomFontSelector" Margin="20,0,0,0" IsEnabled="True" ToolTipService.ShowOnDisabled="True" SelectionChanged="CustomFontSelector_SelectionChanged"/>
-                            <TextBlock Tag="SelectDownloadMirrorTextBlock" x:Name="SelectDownloadMirrorTextBlock" Text="Select a download mirror" TextWrapping="Wrap"/>
-                            <ComboBox Tag="SelectDownloadMirrorComboBox" x:Name="SelectDownloadMirrorCombobox" SelectionChanged="SelectDownloadMirrorCombobox_SelectionChanged" Margin="20,0,0,0"/>
+                            <ComboBox x:Name="CustomFontSelector" Margin="20,0,0,0" IsEnabled="True" ToolTipService.ShowOnDisabled="True" SelectionChanged="CustomFontSelector_SelectionChanged"/>
+                            <TextBlock x:Name="SelectDownloadMirrorTextBlock" Text="Select a download mirror" TextWrapping="Wrap"/>
+                            <ComboBox x:Name="SelectDownloadMirrorCombobox" SelectionChanged="SelectDownloadMirrorCombobox_SelectionChanged" Margin="20,0,0,0"/>
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Advanced Settings" x:Name="SettingsTabAdvancedSettings" Tag="SettingsTabAdvancedSettings">
-                    <Grid Tag="SettingsTabAdvancedSettingsGrid" Style="{StaticResource TabGrids}">
+                <TabItem Header="Advanced Settings" x:Name="SettingsTabAdvancedSettings" >
+                    <Grid Style="{StaticResource TabGrids}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="Uninstall Mode:" Tag="UninstallModeGroupBox" x:Name="UninstallModeGroupBox" TextWrapping="Wrap" ToolTipService.ShowOnDisabled="True"/>
+                            <TextBlock Text="Uninstall Mode:" x:Name="UninstallModeGroupBox" TextWrapping="Wrap" ToolTipService.ShowOnDisabled="True"/>
                             <StackPanel Orientation="Horizontal">
-                                <RadioButton x:Name="UninstallDefault" Tag="UninstallDefault" Margin="20,0,0,0" Checked="OnUninstallChangedToDefault" ToolTipService.ShowOnDisabled="True">
+                                <RadioButton x:Name="UninstallDefault" Margin="20,0,0,0" Checked="OnUninstallChangedToDefault" ToolTipService.ShowOnDisabled="True">
                                     <TextBlock x:Name="UninstallDefaultText" Text="Default" TextWrapping="Wrap"/>
                                 </RadioButton>
-                                <RadioButton x:Name="UninstallQuick" Tag="UninstallQuick" Margin="5,0,0,0" Checked="OnUninstallChangedToQuick" ToolTipService.ShowOnDisabled="True">
+                                <RadioButton x:Name="UninstallQuick" Margin="5,0,0,0" Checked="OnUninstallChangedToQuick" ToolTipService.ShowOnDisabled="True">
                                     <TextBlock x:Name="UninstallQuickText" Text="Quick" TextWrapping="Wrap"/>
                                 </RadioButton>
                             </StackPanel>
-                            <CheckBox x:Name="VerboseLoggingCB" Tag="VerboseLoggingCB" Click="OnVerboseLoggingChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="VerboseLoggingCB" Click="OnVerboseLoggingChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="VerboseLoggingText" Text="Verbose Logging" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="DisableTriggersCB" Tag="DisableTriggersCB" Click="OnDisableTriggersChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="DisableTriggersCB" Click="OnDisableTriggersChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="DisableTriggersText" Text="Disable Triggers" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="AllowStatsGatherCB" Tag="AllowStatsGatherCB" Click="OnAllowStatsGatherChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="AllowStatsGatherCB" Click="OnAllowStatsGatherChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="AllowStatsGatherText" Text="Allow statistics gathering of mod usage" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <TextBlock x:Name="DeveloperSettingsHeader" Tag="DeveloperSettingsHeader" Text="Developer Settings" TextWrapping="Wrap" ToolTipService.ShowOnDisabled="True"/>
-                            <CheckBox x:Name="ForceEnabledCB" Tag="ForceEnabledCB" Margin="15,0,0,0" Click="OnForcePackagesEnabledChanged" ToolTipService.ShowOnDisabled="True">
+                            <TextBlock x:Name="DeveloperSettingsHeader" Text="Developer Settings" TextWrapping="Wrap" ToolTipService.ShowOnDisabled="True"/>
+                            <CheckBox x:Name="ForceEnabledCB" Margin="15,0,0,0" Click="OnForcePackagesEnabledChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ForceEnabledText" Text="Force all components enabled" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="ForceVisibleCB" Tag="ForceVisibleCB" Margin="15,0,0,0" Click="OnForcePackagesVisibleChanged" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="ForceVisibleCB" Margin="15,0,0,0" Click="OnForcePackagesVisibleChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ForceVisibleText" Text="Force all components visible" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="ExportModeCB" Tag="ExportModeCB" Margin="15,0,0,0" Click="OnExportModeChanged" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="ExportModeCB" Margin="15,0,0,0" Click="OnExportModeChanged" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ExportModeText" Text="Export mode" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <Button x:Name="ViewCreditsButton" Tag="ViewCreditsButton" HorizontalAlignment="Stretch" Margin="0,3,3,0"
+                            <Button x:Name="ViewCreditsButton" HorizontalAlignment="Stretch" Margin="0,3,3,0"
                                 Click="ViewCreditsButton_Click" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="ViewCreditsButtonText" Text="View Credits" TextWrapping="Wrap"/>
                             </Button>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <CheckBox x:Name="AutoInstallCB" Tag="EnableModsAutoSyncCheckbox" IsEnabled="True" Click="AutoInstallCB_Click" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="AutoInstallCB" IsEnabled="True" Click="AutoInstallCB_Click" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="AutoInstallText" Text="Enable auto install" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="OneClickInstallCB" Tag="AutoInstallCheckbox" IsEnabled="True" Click="OneClickInstallCB_Click" ToolTipService.ShowOnDisabled="True">
+                            <CheckBox x:Name="OneClickInstallCB" IsEnabled="True" Click="OneClickInstallCB_Click" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="OneClickInstallText" Text="Enable one-click install" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <CheckBox x:Name="AutoOneclickShowWarningOnSelectionsFailButton" Tag="AutoOneclickShowWarningOnSelectionsFailButton" IsEnabled="True"
+                            <CheckBox x:Name="AutoOneclickShowWarningOnSelectionsFailButton" IsEnabled="True"
                                   Margin="15,2,0,0" Click="OnAutoOneclickShowWarningOnSelectionsFailToLoadChanged" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="AutoOneclickShowWarningOnSelectionsFailText" Text="Show warning if selection document has errors when loaded" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <TextBox Tag="AutoSyncSelectionFileTextBox"  x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0"
+                            <TextBox x:Name="AutoInstallOneClickInstallSelectionFilePath" Height="46" TextWrapping="Wrap" Margin="0,3,0,0"
                                  VerticalScrollBarVisibility="Auto" ToolTipService.ShowOnDisabled="True" TextChanged="OnAutoInstallOneClickInstallSelectionFilePathTextChanged"/>
-                            <Button x:Name="LoadAutoSyncSelectionFile" Tag="LoadAutoSyncSelectionFile" HorizontalAlignment="Stretch" Margin="0,3,0,0"
+                            <Button x:Name="LoadAutoSyncSelectionFile" HorizontalAlignment="Stretch" Margin="0,3,0,0"
                                 Click="LoadAutoSyncSelectionFile_Click" IsEnabled="True" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="LoadAutoSyncSelectionFileText" Text="Load selection file" TextWrapping="Wrap"/>
                             </Button>
                             <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
-                                <TextBlock Tag="AutoSyncCheckFrequencyTextBox" x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap"
+                                <TextBlock x:Name="AutoSyncCheckFrequencyTextBox"  TextWrapping="Wrap"
                                        Text="Frequency: every" ToolTipService.ShowOnDisabled="True"/>
-                                <TextBox Tag="AutoSyncFrequencyTexbox" x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Width="25" Margin="5,0,0,0"
+                                <TextBox x:Name="AutoSyncFrequencyTexbox" Height="23" TextWrapping="Wrap" Width="25" Margin="5,0,0,0"
                                      IsEnabled="True" TextChanged="OnAutoSyncFrequencyTexboxTextChanged" ToolTipService.ShowOnDisabled="True"/>
-                                <ComboBox x:Name="AutoSyncFrequencyComboBox" Tag="AutoSyncFrequencyComboBox" Margin="5,0,0,0" Width="91" IsEnabled="True" SelectedIndex="0"
+                                <ComboBox x:Name="AutoSyncFrequencyComboBox" Margin="5,0,0,0" Width="91" IsEnabled="True" SelectedIndex="0"
                                       SelectionChanged="OnAutoSyncFrequencyComboBoxTimeUnitSelectionChanged" ToolTipService.ShowOnDisabled="True">
                                 </ComboBox>
                             </StackPanel>
-                            <Button x:Name="LauchEditor" Tag="LauchEditor" Margin="0,2,0,0" Click="LauchEditor_Click" IsEnabled="False" Visibility="Hidden" ToolTipService.ShowOnDisabled="True">
+                            <Button x:Name="LauchEditor" Margin="0,2,0,0" Click="LauchEditor_Click" IsEnabled="False" Visibility="Hidden" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="LauchEditorText" Text="Launch Database Editor" TextWrapping="Wrap"/>
                             </Button>
-                            <Button x:Name="LauchAutomationRunner" Tag="LauchAutomationRunner" Margin="0,2,0,0" Click="LauchAutomationRunner_Click" IsEnabled="False" Visibility="Hidden" ToolTipService.ShowOnDisabled="True">
+                            <Button x:Name="LauchAutomationRunner" Margin="0,2,0,0" Click="LauchAutomationRunner_Click" IsEnabled="False" Visibility="Hidden" ToolTipService.ShowOnDisabled="True">
                                 <TextBlock x:Name="LauchAutomationRunnerText" Text="Launch Automation Runner" TextWrapping="Wrap"/>
                             </Button>
                         </StackPanel>
@@ -305,59 +305,59 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <ui:LinkButton x:Name="Forms_ENG_EUButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Tag="Forms_ENG_EUButton"  Margin="3,0,3,0" Click="LinkButton_Click" Link="http://forum.worldoftanks.eu/index.php?/topic/623269-">
+                <ui:LinkButton x:Name="Forms_ENG_EUButton" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Margin="3,0,3,0" Click="LinkButton_Click" Link="http://forum.worldoftanks.eu/index.php?/topic/623269-">
                     <Image Source="Resources/Images/flag gb.png" Stretch="None" x:Name="EU_ENG_forms_image" Margin="0.6,0,0,0"/>
                 </ui:LinkButton>
-                <ui:LinkButton Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="Forms_GER_EUButton" x:Name="Forms_GER_EUButton" Click="LinkButton_Click" Link="http://forum.worldoftanks.eu/index.php?/topic/624499-">
+                <ui:LinkButton Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_GER_EUButton" Click="LinkButton_Click" Link="http://forum.worldoftanks.eu/index.php?/topic/624499-">
                     <Image Source="Resources/Images/flag de.png" Stretch="None" Margin="0.6,0,0,0"/>
                 </ui:LinkButton>
-                <ui:LinkButton Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="Forms_ENG_NAButton" x:Name="Forms_ENG_NAButton" Click="LinkButton_Click" Link="http://forum.worldoftanks.com/index.php?/topic/535868-">
+                <ui:LinkButton Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="Forms_ENG_NAButton" Click="LinkButton_Click" Link="http://forum.worldoftanks.com/index.php?/topic/535868-">
                     <Image Source="Resources/Images/flag us.png" Stretch="None" Margin="0.6,0,0,0"/>
                 </ui:LinkButton>
-                <ui:LinkButton Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="DiscordButton" x:Name="DiscordButton" Click="LinkButton_Click" Link="https://discord.gg/58fdPvK">
+                <ui:LinkButton Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="DiscordButton" Click="LinkButton_Click" Link="https://discord.gg/58fdPvK">
                     <Image Source="Resources/Images/discord brand.png" Stretch="None"/>
                 </ui:LinkButton>
-                <ui:LinkButton Grid.Column="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="HomepageButton" x:Name="HomepageButton" Click="LinkButton_Click" Link="https://relhaxmodpack.com/">
-                    <Border Tag="HomepageButtonImageBorder" Style="{StaticResource linkButtonBorderStyle}">
+                <ui:LinkButton Grid.Column="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="HomepageButton" Click="LinkButton_Click" Link="https://relhaxmodpack.com/">
+                    <Border Style="{StaticResource linkButtonBorderStyle}">
                         <Image Source="Resources/Images/Home.png" Stretch="None"/>
                     </Border>
                 </ui:LinkButton>
-                <ui:LinkButton Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="FindBugAddModButton" x:Name="FindBugAddModButton" Click="LinkButton_Click" Link="https://github.com/Willster419/RelhaxModpackDatabase/issues">
-                    <Border Tag="FindBugAddModButtonImageBorder" Style="{StaticResource linkButtonBorderStyle}">
+                <ui:LinkButton Grid.Column="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="FindBugAddModButton" Click="LinkButton_Click" Link="https://github.com/Willster419/RelhaxModpackDatabase/issues">
+                    <Border Style="{StaticResource linkButtonBorderStyle}">
                         <Image Source="Resources/Images/report.png" Stretch="None"/>
                     </Border>
                 </ui:LinkButton>
-                <ui:LinkButton Grid.Column="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="SendEmailButton" x:Name="SendEmailButton" Click="LinkButton_Click" Link="mailto:info@relhaxmodpack.com">
-                    <Border Tag="SendEmailButtonImageBorder" Style="{StaticResource linkButtonBorderStyle}">
+                <ui:LinkButton Grid.Column="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="SendEmailButton" Click="LinkButton_Click" Link="mailto:info@relhaxmodpack.com">
+                    <Border Style="{StaticResource linkButtonBorderStyle}">
                         <Image Source="Resources/Images/EMail.png" Stretch="None"/>
                     </Border>
                 </ui:LinkButton>
-                <ui:LinkButton Grid.Column="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" Tag="DonateButton" x:Name="DonateButton" Click="LinkButton_Click" Link="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=76KNV8KXKYNG2">
-                    <Border Tag="DonateButtonImageBorder" Style="{StaticResource linkButtonBorderStyle}">
+                <ui:LinkButton Grid.Column="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,3,0" x:Name="DonateButton" Click="LinkButton_Click" Link="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=76KNV8KXKYNG2">
+                    <Border Style="{StaticResource linkButtonBorderStyle}">
                         <Image Source="Resources/Images/donation.png" Stretch="None"/>
                     </Border>
                 </ui:LinkButton>
             </Grid>
-            <Grid HorizontalAlignment="Stretch" Height="25" Margin="10,596,10,0" VerticalAlignment="Top" Tag="VersionsGrid" Background="Transparent">
+            <Grid HorizontalAlignment="Stretch" Height="25" Margin="10,596,10,0" VerticalAlignment="Top" Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Stretch" x:Name="ApplicationVersionLabel" Tag="ApplicationVersionLabel"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Stretch" x:Name="DatabaseVersionLabel" Tag="DatabaseVersionLabel"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Application Version V{version}" VerticalAlignment="Stretch" x:Name="ApplicationVersionLabel" />
+                <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" TextWrapping="Wrap" Text="Database Version V{version}" VerticalAlignment="Stretch" x:Name="DatabaseVersionLabel" />
             </Grid>
             <Grid HorizontalAlignment="Stretch" Height="208" Margin="10,340,10,0" VerticalAlignment="Top" Background="Transparent">
-                <Border HorizontalAlignment="Right" Height="45"  VerticalAlignment="Top" Width="156" Tag="LanguageSelectionBorder" Margin="0,0,2,0" Style="{StaticResource DarkThemeStyleBackground}">
+                <Border HorizontalAlignment="Right" Height="45"  VerticalAlignment="Top" Width="156" Margin="0,0,2,0" Style="{StaticResource DarkThemeStyleBackground}">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock x:Name="LanguageSelectionTextblock" Tag="LanguageSelectionTextBlock" Text="Language Selection" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                        <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0" Tag="LanguageSelectionCombobox"/>
+                        <TextBlock x:Name="LanguageSelectionTextblock" Text="Language Selection" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                        <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LanguagesSelector" SelectionChanged="OnLanguageSelectionChanged" Margin="0,0,0,0" />
                     </StackPanel>
                 </Border>
-                <Button Tag="CancelDownloadButton" x:Name="CancelDownloadInstallButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Visibility="Hidden" IsEnabled="False"/>
-                <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap" IsReadOnly="True" Tag="InstallProgressTextBox" IsUndoEnabled="False"/>
-                <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,147,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar" Tag="TotalProgressBar"/>
-                <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,167,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar" Tag="ParentProgressBar"/>
-                <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar" Tag="ChildProgressBar"/>
+                <Button x:Name="CancelDownloadInstallButton" Content="Cancel" HorizontalAlignment="Left" Margin="235,14,0,0" VerticalAlignment="Top" Width="118" Height="31" Visibility="Hidden" IsEnabled="False"/>
+                <TextBox HorizontalAlignment="Stretch" Height="92" Margin="2,50,2,0" VerticalAlignment="Top" x:Name="InstallProgressTextBox" TextWrapping="Wrap" IsReadOnly="True" IsUndoEnabled="False"/>
+                <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,147,2,0" VerticalAlignment="Top" x:Name="TotalProgressBar" />
+                <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,167,2,0" VerticalAlignment="Top" x:Name="ParentProgressBar" />
+                <ProgressBar HorizontalAlignment="Stretch" Height="15" Margin="2,187,2,0" VerticalAlignment="Top" x:Name="ChildProgressBar" />
             </Grid>
         </Grid>
     </Grid>

@@ -11,8 +11,8 @@
         <Style TargetType="Grid" BasedOn="{StaticResource DarkThemeGrid}"/>
     </Window.Resources>
     <Grid x:Name="MainLayoutGrid">
-        <TextBlock x:Name="ExceptionCaptureHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Tag="ExceptionCaptureHeader"
+        <TextBlock x:Name="ExceptionCaptureHeader" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" 
                    Text="The application as encountered an exception and needs to close. Please send this exception data (as well as &quot;relhax.log&quot;) file to the developer"/>
-        <TextBox x:Name="ExceptionCaptureText" HorizontalAlignment="Stretch"  Margin="10,31,10,10" TextWrapping="Wrap" VerticalAlignment="Stretch" IsReadOnly="True" Tag="ExceptionCaptureText"/>
+        <TextBox x:Name="ExceptionCaptureText" HorizontalAlignment="Stretch"  Margin="10,31,10,10" TextWrapping="Wrap" VerticalAlignment="Stretch" IsReadOnly="True" />
     </Grid>
 </local:RelhaxWindow>
