@@ -475,10 +475,6 @@ namespace RelhaxModpack.Windows
             //set the loading flag back to false
             LoadingUI = false;
 
-            //set tabs UI coloring, MUST be after LoadingUI set to false! (?ms)
-            //UI THREAD REQUIRED
-            ModTabGroups_SelectionChanged(null, null);
-
             //close the loading window (?ms)
             //UI THREAD REQUIRED
             loadingProgress.Close();
@@ -512,7 +508,7 @@ namespace RelhaxModpack.Windows
                 //make the tab page
                 cat.TabPage = new SelectionListTabItem()
                 {
-                    Header = cat.Name,
+                    Header = new TextBlock() { Text = cat.Name, Style = this.Resources["selectionTextBlockStyle"] as Style },
                     Tag = cat,
                     Package = cat.CategoryHeader
                 };
@@ -669,13 +665,15 @@ namespace RelhaxModpack.Windows
                 Level = -1,
                 PackageName = string.Format("Category_User_Header", Name.Replace(' ', '_'))
             };
+            UserCategory.CategoryHeader.Parent = UserCategory.CategoryHeader;
             UserCategory.CategoryHeader.ParentCategory = UserCategory;
             StackPanel userStackPanel = new StackPanel();
             SelectionListTabItem userTab = new SelectionListTabItem()
             {
                 Name = "UserMods",
-                Header = Translations.GetTranslatedString("userMods")
+                Header = new TextBlock() { Text = Translations.GetTranslatedString("userMods"), Style = this.Resources["selectionTextBlockStyle"] as Style }
             };
+            userTab.Package = UserCategory.CategoryHeader;
             userTab.RequestBringIntoView += OnUserModsTabSelected;
             userTab.Content = userStackPanel;
             ModTabGroups.Items.Add(userTab);
@@ -1356,50 +1354,6 @@ namespace RelhaxModpack.Windows
             }
             return conflictingPackageDialog.OptionASelected;
         }
-
-        private void ModTabGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (LoadingUI)
-                return;
-            if (ParsedCategoryList == null)
-                return;
-
-            List<Category> listWithUserCat = new List<Category>();
-            listWithUserCat.AddRange(ParsedCategoryList);
-            listWithUserCat.Add(UserCategory);
-
-            foreach (Category category in listWithUserCat)
-            {
-                TabItem TabIndex = category.TabPage;
-
-                //3 possible conditions:
-                // if (active){ }
-                // else
-                // {
-                //  if (has selections) { }
-                //  else{ }
-                // }
-
-                if (TabIndex.IsSelected)
-                {
-                    //brush is set in tab resources when created as trigger
-                    //TabIndex.Foreground = UISettings.CurrentTheme.SelectionListActiveTabHeaderTextColor.Brush;
-                }
-                else
-                {
-                    if (category.AnyPackagesChecked())
-                    {
-                        //TabIndex.Background = UISettings.CurrentTheme.SelectionListNotActiveHasSelectionsBackgroundColor.Brush;
-                        //TabIndex.Foreground = UISettings.CurrentTheme.SelectionListNotActiveHasSelectionsTextColor.Brush;
-                    }
-                    else
-                    {
-                        //TabIndex.Background = UISettings.NotSelectedTabColor;
-                        //TabIndex.Foreground = UISettings.CurrentTheme.SelectionListNotActiveHasNoSelectionsTextColor.Brush;
-                    }
-                }
-            }
-        }
         #endregion
 
         #region Preview Code
@@ -1671,9 +1625,6 @@ namespace RelhaxModpack.Windows
             //clear in lists
             ClearSelections(databaseManager.GetFlatSelectablePackageList());
             ClearSelections(UserCategory.GetFlatPackageList());
-
-            //update selection list UI
-            ModTabGroups_SelectionChanged(null, null);
 
             Logging.Info("Selections cleared");
             MessageBox.Show(Translations.GetTranslatedString("selectionsCleared"));

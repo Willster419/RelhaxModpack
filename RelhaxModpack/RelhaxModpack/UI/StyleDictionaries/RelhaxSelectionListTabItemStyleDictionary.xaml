@@ -175,7 +175,7 @@
                         </MultiDataTrigger>
                         <!-- Custom triggers start here -->
                         <DataTrigger Binding="{Binding IsChildPackageChecked, RelativeSource={RelativeSource Self}}" Value="True">
-                            <Setter Property="Background" TargetName="innerBorder" Value="BlanchedAlmond"/>
+                            <Setter Property="Background" TargetName="mainBorder" Value="BlanchedAlmond"/>
                         </DataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>

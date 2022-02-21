@@ -275,6 +275,7 @@
       <DependentUpon>RelhaxHyperlink.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\RelhaxInstallerProgress.cs" />
+    <Compile Include="UI\SelectionListTabControl.cs" />
     <Compile Include="UI\SelectionListTabItem.cs" />
     <Compile Include="UI\UiUtils.cs" />
     <Compile Include="UI\ZoomBorder.cs" />
