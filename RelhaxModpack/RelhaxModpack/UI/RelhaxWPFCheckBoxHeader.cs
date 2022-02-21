@@ -31,7 +31,7 @@ namespace RelhaxModpack.UI
         {
             base.OnCheckedChanged(Checked);
 
-            //Package.TabIndex.OnCheckedChanged(Checked);
+            Package.TabIndex.OnCheckedChanged(Checked);
         }
     }
 }
