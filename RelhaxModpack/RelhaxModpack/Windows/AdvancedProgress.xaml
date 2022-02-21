@@ -9,20 +9,24 @@
         mc:Ignorable="d"
         Title="Advanced Installer Progress" Height="768" Width="1024"
         LocalizeWindow="true" ApplyToolTips="False">
+    <Window.Resources>
+        <Style TargetType="StackPanel" BasedOn="{StaticResource DarkThemeStyleBackgroundGridInTabItem}">
+        </Style>
+    </Window.Resources>
     <TabControl x:Name="MainTabControl" Tag="AdvancedInstallMainTabControl">
         <TabItem Header="Pre-install tasks" x:Name="PreInstallTab" Tag="PreInstallTab">
             <ScrollViewer VerticalScrollBarVisibility="Visible">
-                <StackPanel Background="#FFE5E5E5" x:Name="PreInstallPanel" CanVerticallyScroll="True" Tag="PreInstallPanel"/>
+                <StackPanel x:Name="PreInstallPanel" CanVerticallyScroll="True" Tag="PreInstallPanel"/>
             </ScrollViewer>
         </TabItem>
         <TabItem Header="Extraction" x:Name="ExtractionTab" Tag="ExtractionTab">
             <ScrollViewer VerticalScrollBarVisibility="Visible">
-                <StackPanel Background="#FFE5E5E5" x:Name="ExtractionPanel" CanVerticallyScroll="True" Tag="ExtractionPanel"/>
+                <StackPanel x:Name="ExtractionPanel" CanVerticallyScroll="True" Tag="ExtractionPanel"/>
             </ScrollViewer>
         </TabItem>
         <TabItem Header="Post-install tasks" x:Name="PostInstallTab" Tag="PostInstallTab">
             <ScrollViewer VerticalScrollBarVisibility="Visible">
-                <StackPanel Background="#FFE5E5E5" x:Name="PostInstallPanel" CanVerticallyScroll="True" Tag="PostInstallPanel"/>
+                <StackPanel x:Name="PostInstallPanel" CanVerticallyScroll="True" Tag="PostInstallPanel"/>
             </ScrollViewer>
         </TabItem>
     </TabControl>
