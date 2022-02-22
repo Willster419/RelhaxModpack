@@ -186,7 +186,11 @@ namespace RelhaxModpack
 
             //delete the updater scripts if they exist
 #pragma warning disable CS0618
-            foreach (string s in new string[] { ApplicationConstants.RelicBatchUpdateScript, ApplicationConstants.RelicBatchUpdateScriptOld, "RelhaxModpack_update.exe", "RelhaxModpack_update.zip", })
+            foreach (string s in new string[] {
+                ApplicationConstants.RelicBatchUpdateScript,
+                ApplicationConstants.RelicBatchUpdateScriptOld,
+                ApplicationConstants.ApplicationUpdateFileNameZip,
+                ApplicationConstants.ApplicationUpdateFilenameExe, })
             {
                 if (File.Exists(s))
                 {
@@ -412,9 +416,9 @@ namespace RelhaxModpack
                         ApplicationConstants.ApplicationBetaUpdateURL;
 
                     //make sure to delete it if it's currently three
-                    if (File.Exists(ApplicationConstants.ApplicationUpdateFileName))
-                        File.Delete(ApplicationConstants.ApplicationUpdateFileName);
-                    client.DownloadFileAsync(new Uri(modpackURL), ApplicationConstants.ApplicationUpdateFileName);
+                    if (File.Exists(ApplicationConstants.ApplicationUpdateFileNameZip))
+                        File.Delete(ApplicationConstants.ApplicationUpdateFileNameZip);
+                    client.DownloadFileAsync(new Uri(modpackURL), ApplicationConstants.ApplicationUpdateFileNameZip);
                 }
 
                 //getting here means it's out of date and the update was accepted and started. just return
@@ -2127,7 +2131,7 @@ namespace RelhaxModpack
             Logging.Debug("Extracting update zip file");
             try
             {
-                using (ZipFile zip = ZipFile.Read(ApplicationConstants.ApplicationUpdateFileName))
+                using (ZipFile zip = ZipFile.Read(ApplicationConstants.ApplicationUpdateFileNameZip))
                 {
                     zip.ExtractAll(ApplicationConstants.ApplicationStartupPath, ExtractExistingFileAction.OverwriteSilently);
                 }

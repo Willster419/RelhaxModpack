@@ -597,154 +597,214 @@
         </member>
         <member name="T:RelhaxModpack.Common.ApplicationConstants">
             <summary>
-            Contains all constant and static read-only fields to exist throughout the entire application
+            Contains all constant and static read-only fields to exist throughout the entire application.
             </summary>
-        </member>
-        <member name="F:RelhaxModpack.Common.ApplicationConstants.UISettingsColorFile">
-            <summary>
-            The name of the settings color file
-            </summary>
-            <remarks>Stores all settings</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.LastSavedConfigFilename">
             <summary>
-            The name of the selection file when used in the setting "save last installed selection"
+            The name of the selection file when used in the setting "save last installed selection".
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.EditorLaunchFromMainWindowFilename">
             <summary>
-            The file in the application root directory used to unlock the "launch editor" button
+            The file in the application root directory used to unlock the "launch editor" button.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.BetaDatabaseV2RootFilename">
             <summary>
-            The filename of the V2 root database document. All category names and filenames, and version info is in this document
+            The filename of the V2 root database document. All category names and filenames, and version info is in this document.
             </summary>
         </member>
-        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationUpdateFileName">
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationUpdateFileNameZip">
             <summary>
-            The filename to download the latest stable or beta application zip file as
+            The filename to download the latest stable or beta application zip file as for the update system.
             </summary>
+            <remarks>
+            The update system works by downloading the zip file, extracting the executable, and launching it with the same
+            command-line arguments that were supplied to this instance.
+            </remarks>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.ApplicationUpdateFilenameExe"/>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationUpdateFilenameExe">
+            <summary>
+            The filename to extract the application as when being updated via the update system.
+            </summary>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.ApplicationUpdateFileNameZip"/>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelicBatchUpdateScript">
             <summary>
-            The filename to save the self updater script as
+            The filename to save the self updater script as.
             </summary>
+            <remarks>
+            Something something downloading batch files is scary to anti-virus.
+            </remarks>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.RelicBatchUpdateScriptServer"/>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelicBatchUpdateScriptServer">
             <summary>
-            The filename of the self updater script inside the manager zip file
+            The filename of the self updater script inside the manager zip file.
             </summary>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.RelicBatchUpdateScript"/>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationFilenameStable">
             <summary>
-            The name of the application executable when compiled with stable distribution
+            The name of the application executable when compiled with stable distribution.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationFilenameBeta">
             <summary>
-            The name of the application executable when compiled with beta distribution
+            The name of the application executable when compiled with beta distribution.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelicBatchUpdateScriptOld">
             <summary>
-            The old V1 filename to save the self updater script as
+            The old V1 filename to save the self updater script as.
             </summary>
+            <remarks>
+            This should only be used to check for and delete a possible old file instance from a legacy version of the application.
+            </remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.SelectionsXml">
             <summary>
-            The root filename of the list of selection files
+            The root filename of the list of selection files.
+            </summary>
+            <remarks>
+            This file contains the display names and file names of developer selections shown in the "Developer Selections" window.
+            </remarks>
+            <seealso cref="T:RelhaxModpack.Windows.DeveloperSelectionsViewer"/>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.ModInfoZip">
+            <summary>
+            The file downloaded upon startup to check for application updates, database versions, supported clients, update scripts, and the default_checked.xml selection file.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.WoT64bitFolder">
             <summary>
-            The name of the 64bit folder in the 'World_of_Tanks' directory
+            The name of the 64bit folder in the 'World_of_Tanks' directory.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.WoT32bitFolder">
             <summary>
-            The name of the 32bit folder in the 'World_of_Tanks' directory
+            The name of the 32bit folder in the 'World_of_Tanks' directory.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ModsDir">
             <summary>
-            The name of the 'mods' directory
+            The name of the 'mods' directory, stored in the root World_of_Tanks folder.
             </summary>
+            <remarks>
+            The 'new' method for installing mods into the client. It mostly contains configuration data and mod packages, which are zip files with no compression.
+            </remarks>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.ResModsDir"/>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ResModsDir">
             <summary>
-            The name of the 'res_mods' directory
+            The name of the 'res_mods' directory, stored in the root World_of_Tanks folder.
             </summary>
+            <remarks>
+            The 'old' method for installing mods into the client. It's for legacy mods that haven't been updated to the package structure. All files are dumped into the folder and loaded as they are, to replace stock files.
+            </remarks>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.ModsDir"/>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.WoTVersionXml">
             <summary>
-            The name of the version xml used for getting the current client version information
+            The name of the xml file in the World_of_Tanks folder used for getting the current client version information.
             </summary>
+            <remarks>
+            At the time of this writing, the version is stored as something like "". Using string splitting and trimming, the number combination before the # is the same number used for the version dirs in the mods and res_mods folders.
+            The xpath to get the version is /version.xml/version.
+            </remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.PatchFolderName">
             <summary>
-            The name of the installer folder to hold all patch xml files in
+            The name of the installer folder that used to hold all patch instruction files in for processing.
             </summary>
+            <remarks>
+            The installer used to create this folder to write, order and process patches that would be inside the package zip files. Now, the information is stored in the database.
+            </remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ShortcutFolderName">
             <summary>
-            The name of the installer folder to hold all shortcut xml files in
+            The name of the installer folder that used to hold all shortcut instruction files in for processing.
             </summary>
+            <remarks>
+            The installer used to create this folder to write and process shortcut creation instructions for processing. Now, the information is stored in the database.
+            </remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.XmlUnpackFolderName">
             <summary>
-            The name of the installer folder to hold all xml unpack entries in
+            The name of the installer folder that used to hold xml unpack instruction files in for processing.
             </summary>
+            <remarks>
+            The installer used to create this folder to write and process xml unpack instructions for processing. Now, the information is stored in the database.
+            </remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.AtlasCreationFoldername">
             <summary>
-            The name of the installer folder to hold all xml atlas creation instructions in
+            The name of the installer folder that used to hold atlas creation instruction files in for processing.
             </summary>
+            <remarks>
+            The installer used to create this folder to write and process atlas creation instructions for processing. Now, the information is stored in the database.
+            </remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.FontsToInstallFoldername">
             <summary>
-            The name of the installer folder to hold all fonts to install (or check if needs to install)
+            The name of the installer folder that is used to temporarily extract font files to for installation.
             </summary>
+            <remarks>
+            The installer uses this folder to list all fonts to install via the application fontReg.exe
+            </remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ReadmeFromZipfileFolderName">
             <summary>
-            The name of the temporary install folder to hold database manager readme files. The end user does not need this folder
-            and will be deleted at the end of the installation
+            The name of the temporary install folder that used to hold database manager readme files. The end user does not need this folder
+            and will be deleted at the end of the installation.
             </summary>
+            <remarks>
+            The purpose of this folder has been superseded by the "InternalNotes" field in a package's xml entry.
+            </remarks>
+            <seealso cref="P:RelhaxModpack.Database.DatabasePackage.InternalNotes"/>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.AutoUpdateZipFolderName">
             <summary>
             The name of the temporary install folder that holds the auto update information of the database editor.
             </summary>
+            <remarks>This is legacy and not used. It should be only used to check for and delete from legacy installations.</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.DefaultCheckedSelectionfile">
             <summary>
-            The filename of the selection file used to select mods on default loading of the mod selection list
+            The filename of the selection file used to select default packages upon loading of the package selection list.
             </summary>
+            <remarks>When loading from a stable or beta database distrobution (so not test mode), it will auto-check these when loading the package selection list window.</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.SupportedClients">
             <summary>
-            The filename of the xml document inside the manager info zip file containing the list of supported WoT clients
+            The filename of the xml document inside the manager info archive file containing the list of supported WoT clients and their respective 'online folder' that holds all the zip packages.
             </summary>
+            <remarks>
+            If the user attempts to install to a version of WoT that isn't supported, it will use the last one listed in the document, assuming that it is the most recent.
+            This is also used for export mode to select what version of the WoT client to export an installation for.
+            </remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ManagerVersion">
             <summary>
-            The filename of the xml document inside the manager info zip file containing manager version information
+            The filename of the xml document inside the manager info archive file containing manager version information and the latest supported database tag.
             </summary>
+            <remarks>This file is used to determine if the application is out of date.</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.PmodLog">
             <summary>
-            The name of the pmod log file
+            The name of the pmod log file.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.XvmLog">
             <summary>
-            The name of the xvm log file
+            The name of the xvm log file.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.PythonLog">
             <summary>
-            The name of the WoT python debug log file
+            The name of the WoT python debug log file.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.LogsFolder">
@@ -754,213 +814,236 @@
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.DotNetFrameworkLatestDownloadURL">
             <summary>
-            URL to get the latest version of the .NET Framework
+            URL to get the latest version of the .NET Framework.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationStartupPath">
             <summary>
-            The Startup root path of the application. Does not include the application name
+            The Startup root path of the application. Does not include the application name.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxDownloadsFolderPath">
             <summary>
-            The absolute path of the application zip file and zip database file folder
+            The absolute path of the application zip file and zip database file folder.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxDownloadsFolderPathOld">
             <summary>
-            The old absolute path of the application zip file and zip database file folder
+            The old absolute path of the application zip file and zip database file folder.
             </summary>
             [Obsolete]
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxModBackupFolderPath">
             <summary>
-            The absolute path of the application mod backup folder
+            The absolute path of the application mod backup folder.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxModBackupFolderPathOld">
             <summary>
-            The old absolute path of the application mod backup folder
+            The old absolute path of the application mod backup folder.
             </summary>
             [Obsolete]
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxUserSelectionsFolderPath">
             <summary>
-            The absolute path of the application user selections folder. Default location 
+            The absolute path of the application user selections folder. Default location .
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxUserSelectionsFolderPathOld">
             <summary>
-            The old absolute path of the application user selections folder. Old Default location
+            The old absolute path of the application user selections folder. Old Default location.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxUserModsFolderPath">
             <summary>
-            The absolute path of the application folder where users can place custom mod zip files
+            The absolute path of the application folder where users can place custom mod zip files.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxUserModsFolderPathOld">
             <summary>
-            The old absolute path of the application folder where users can place custom mod zip files
+            The old absolute path of the application folder where users can place custom mod zip files.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxTempFolderPath">
             <summary>
-            The absolute path of the application temporary folder
+            The absolute path of the application temporary folder.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxTempFolderPathOld">
             <summary>
-            The old absolute path of the application temporary folder
+            The old absolute path of the application temporary folder.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxLibrariesFolderPath">
             <summary>
-            The absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
+            The absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries.
             </summary>
+            <remarks>The atlas creation libraries are extracted to this location to be used to create the map files.</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxLibrariesFolderPathOld">
             <summary>
-            The old absolute path of the application 3rd party dll references folder. Currently used to hold atlas file libraries
+            The old absolute path of the application 3rd party dll references folder.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ManagerInfoDatFile">
             <summary>
-            The location of the manager info zip file. Contains several xml files with database and client definitions
+            The location of the manager info zip file. Contains several xml files with database and client definitions.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.LastInstalledConfigFilepath">
             <summary>
-            The absolute path of the selection file used for saving last selection
+            The absolute path of the selection file used for saving last saved selection (when the setting is enabled and the user presses install).
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.WoT64bitFolderWithSlash">
             <summary>
-            The WoT 64bit folder name with the folder separator before it
+            The WoT 64bit folder name with the folder separator before it.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.WoT32bitFolderWithSlash">
             <summary>
-            The WoT 32bit folder name with the folder separator before it
+            The WoT 32bit folder name with the folder separator before it.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.AppDataFolder">
             <summary>
-            The location of the WoT app data folder parsed at installation time
+            The location of the WoT app data folder parsed.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxSettingsFilepath">
             <summary>
-            The absolute path of the V2 settings file used for saving ModpackSettings
+            The absolute path of the V2 settings file used for saving ModpackSettings.
             </summary>
+            <seealso cref="T:RelhaxModpack.Settings.ModpackSettings"/>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.RelhaxLogFilepath">
             <summary>
-            The absolute path of the Relhax log file
+            The absolute path of the Relhax main log file.
             </summary>
+            <remarks>A custom feature window (for example, the editor) will have its own log file to use, which enables multiple feature window instances open from the same exe at the same time.</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.FoldersToCleanup">
             <summary>
-            The list of installer folders in the root {WoT} directory to cleanup after an installation
+            The list of installer folders in the root {WoT} directory to cleanup after an installation.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.MD5HashDatabaseXmlFile">
             <summary>
-            The absolute path to the md5 hash zip file download database file
+            The absolute path to the md5 hash zip file download database file.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.FoldersToCheck">
             <summary>
-            Array of all Modpack created folders in the application directory
+            Array of all Modpack created folders in the application directory.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.BigmodsDatabaseRootEscaped">
             <summary>
-            The escaped constant URL of the stable database on the server, escaped with the 'dbVersion' macro
+            The escaped constant URL of the stable database on the server, escaped with the 'dbVersion' macro.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.StartAddressMirrorUsaDefault">
             <summary>
-            The default download mirror, escaped with the 'onlineFolder' macro
+            The default download mirror, escaped with the 'onlineFolder' macro.
             </summary>
             <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.StartAddressMirrorDe">
             <summary>
-            The download mirror located in Germany
+            The download mirror located in Germany.
             </summary>
             <remarks>'onlineFolder' is a 3 digit number representing the major release version of WoT e.g. 1.7.0</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.DownloadMirrors">
             <summary>
-            A read-only list of all download mirrors in this application
+            A read-only list of all download mirrors in this application.
             </summary>
             <remarks>The order of this list matters as the index is used to store the user choice</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.BetaDatabaseV2FolderURLEscaped">
             <summary>
-            The URL of the V2 beta database root folder, escaped with the 'branch' macro
+            The URL of the V2 beta database root folder, escaped with the 'branch' macro.
             </summary>
             <remarks>'branch' is a name of a github branch on the RelhaxModpackDatabase repo</remarks>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.BetaDatabaseBranchesURL">
             <summary>
-            The API URL to return a json format document of the current branches in the repository
+            The API URL to return a json format document of the current branches in the repository.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ManagerInfoURLBigmods">
             <summary>
-            The URL of the V2 manager info zip file
+            The URL of the V2 manager info zip file.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationUpdateURL">
             <summary>
-            The URL to the location of the latest stable version of the application as a zip file
+            The URL to the location of the latest stable version of the application as a zip file.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationBetaUpdateURL">
             <summary>
-            The URL to the location of the latest beta version of the application as a zip file
+            The URL to the location of the latest beta version of the application as a zip file.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.SelectionsRoot">
             <summary>
-            The root URL of the V2 selection files location
+            The root URL of the V2 selection files location.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationNotesStableUrl">
             <summary>
-            The URL path of the latest application stable release notes
+            The URL path of the latest application stable release notes.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationNotesBetaUrl">
             <summary>
-            The URL path of the latest application beta release notes
+            The URL path of the latest application beta release notes.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseNotesUrl">
             <summary>
-            The URL path of the latest V2 database release notes
+            The URL path of the latest V2 database release notes.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseMetadataXpath">
+            <summary>
+            The root of the xpath string used to get metadata information from the database.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseOnlineFolderXpath">
             <summary>
-            The xpath string to get the onlineFolder attribute from the document root
+            The xpath string to get the onlineFolder attribute from the document root.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseClientVersionXpath">
             <summary>
-            The xpath string to get the database version info attribute from the document root
+            The xpath string to get the database version info attribute from the document root.
+            </summary>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseDocumentVersionXpath">
+            <summary>
+            The xpath string used in the database xml for specifying the version of the document.
+            </summary>
+            <remarks>
+            Document versioning allows for structural changes not just for the document (how to load it), but also for how to load it in software.
+            It enables the specification of code for loading and saving of specific versions of the document.
+            </remarks>
+            <seealso cref="F:RelhaxModpack.Common.ApplicationConstants.DatabaseSchemaVersionXpath"/>
+        </member>
+        <member name="F:RelhaxModpack.Common.ApplicationConstants.DatabaseSchemaVersionXpath">
+            <summary>
+            The xpath string used in the database xml for specifying the serialization format of components.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ConfigFileVersion2V0">
             <summary>
-            The old V2 config file version for saving the user's selection preferences
+            The old V2 selection file format for saving the user's selection preferences.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ConfigFileVersion3V0">
             <summary>
-            The latest config file version for saving the user's selection preferences
+            The latest selection file format for saving the user's selection preferences.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.WoTProcessName">
@@ -970,7 +1053,7 @@
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.WoTVersionXmlXpath">
             <summary>
-            The xpath to the version information used by the modpack to determine the WoT client version
+            The xpath to the version information used by the modpack to determine the WoT client version.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.ApplicationVersion">
@@ -981,42 +1064,42 @@
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.LogSpacingLineup">
             <summary>
-            The amount so space characters to line up a continued log entry without the date/time
+            The amount so space characters to line up a continued log entry without the date/time.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.MaximumDisplayScale">
             <summary>
-            The maximum amount that the application will be allowed to scale. 300%
+            The maximum amount that the application will be allowed to scale. 300%.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.MinimumDisplayScale">
             <summary>
-            The default amount that the application will be scaled to. 100%
+            The default amount that the application will be scaled to. 100%.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.NumberUIDCharacters">
             <summary>
-            The number of characters that make up a package UID
+            The number of characters that make up a package UID entry.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.UIDCharacters">
             <summary>
-            The array of character options that are used for generating the UID
+            The array of character options that are used for generating a package UID entry.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.NumLogicalProcesors">
             <summary>
-            The number of logical processors (threads) detected on the system. Used to make n installation threads for faster extraction
+            The number of logical processors (threads) detected on the system. Used to make "n" installation threads for faster extraction.
             </summary>
         </member>
         <member name="F:RelhaxModpack.Common.ApplicationConstants.MinimumDotNetFrameworkVersionRequired">
             <summary>
-            The minimum release value of the user's installed .NET framework to use the modpack
+            The minimum release value of the user's installed .NET framework to use the modpack.
             </summary>
             <remarks>It varies for OS. For example:
-            On Windows 10 May 2019 Update and Windows 10 November 2019 Update: 528040
-            On Windows 10 May 2020 Update: 528372
-            On all other Windows operating systems(including other Windows 10 operating systems): 528049
+            On Windows 10 May 2019 Update and Windows 10 November 2019 Update: 528040.
+            On Windows 10 May 2020 Update: 528372.
+            On all other Windows operating systems(including other Windows 10 operating systems): 528049.
             See: https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed </remarks>
         </member>
         <member name="T:RelhaxModpack.Common.IComponentWithID">
