@@ -195,7 +195,7 @@ namespace RelhaxModpack
                 if (File.Exists(s))
                 {
                     Logging.Debug("{0} found, deleting", s);
-                    File.Delete(s);
+                    FileUtils.FileDelete(s);
                 }
             }
 #pragma warning restore CS0618
