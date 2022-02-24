@@ -11,17 +11,30 @@ using System.Windows.Forms;
 namespace RelhaxModpack.Atlases
 {
     /// <summary>
-    /// A class that serves as a description of an atlas file with processing instructions
+    /// A class that serves as a xml representation of atlas creation instructions.
     /// </summary>
     public class Atlas : PackageExtractInstruction
     {
+        /// <summary>
+        /// For atlas instruction files, the xpath to return a list of all atlas instruction elements.
+        /// </summary>
+        /// <remarks>As of the time of this writing, all instructions are now stored inside the database and are no longer separate xml files in the package zip files.</remarks>
         public const string AtlasXmlSearchPath = "/atlases/atlas";
 
+        /// <summary>
+        /// Create an instance of the Atlas class.
+        /// </summary>
+        /// <seealso cref="PackageExtractInstruction"/>
         public Atlas() : base()
         {
 
         }
 
+        /// <summary>
+        /// Create an instance of the Atlas class, copying values from the given atlas instruction.
+        /// </summary>
+        /// <param name="atlasToCopy">The atlas instruction object to copy.</param>
+        /// <seealso cref="Copy(Atlas)"/>
         public Atlas(Atlas atlasToCopy) : base(atlasToCopy)
         {
             this.AtlasFile = atlasToCopy.AtlasFile;
@@ -38,14 +51,27 @@ namespace RelhaxModpack.Atlases
                 this.ImageFolders.Add(s);
         }
 
+        /// <summary>
+        /// Create an instance of the Atlas class, copying values from the given atlas instruction.
+        /// </summary>
+        /// <param name="atlasToCopy">The atlas instruction object to copy.</param>
+        /// <returns>A new atlas file with all copied values.</returns>
+        /// <seealso cref="Atlas.Atlas(Atlas)"/>
         public static Atlas Copy(Atlas atlasToCopy)
         {
             return new Atlas(atlasToCopy);
         }
 
         #region Xml serialization V1
+        /// <summary>
+        /// Get the xpath used for returning a list of Atlas instruction elements in an instructions document.
+        /// </summary>
         public override string RootObjectPath { get { return AtlasXmlSearchPath; } }
 
+        /// <summary>
+        /// Gets the list of all properties in the class should be serialized to and from xml.
+        /// </summary>
+        /// <returns>A string array of all properties to be serialized.</returns>
         public override string[] PropertiesToSerialize()
         {
             return new string[]
@@ -67,6 +93,12 @@ namespace RelhaxModpack.Atlases
         #endregion
 
         #region Xml serialization V2
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.0 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot0()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
@@ -85,6 +117,12 @@ namespace RelhaxModpack.Atlases
             return base.GetXmlDatabasePropertiesV1Dot0().Concat(xmlDatabaseProperties).ToList();
         }
 
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.1 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot1()
         {
             List<XmlDatabaseProperty> xmlDatabaseProperties = new List<XmlDatabaseProperty>()
@@ -103,6 +141,12 @@ namespace RelhaxModpack.Atlases
             return base.GetXmlDatabasePropertiesV1Dot1().Concat(xmlDatabaseProperties).ToList();
         }
 
+        /// <summary>
+        /// Creates the list of xml components (attributes and elements) to use for xml serialization according to the 1.2 xml schema.
+        /// </summary>
+        /// <returns>The list of xml components, describing the class property name, xml node name, and xml node type</returns>
+        /// <remarks>The order of the properties in the list is used to consider where in the xml document they should be located (it tracks order).</remarks>
+        /// <seealso cref="XmlDatabaseProperty"/>
         protected override List<XmlDatabaseProperty> GetXmlDatabasePropertiesV1Dot2()
         {
             return this.GetXmlDatabasePropertiesV1Dot1();
