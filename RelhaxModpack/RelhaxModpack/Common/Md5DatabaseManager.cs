@@ -10,22 +10,47 @@ using System.Xml.Linq;
 
 namespace RelhaxModpack.Common
 {
+    /// <summary>
+    /// Provides a method to write and read file hash values for files in a folder, and determining if a local copy of a file is up to date based on what the server hash and/or file time is.
+    /// </summary>
     public class Md5DatabaseManager
     {
+        /// <summary>
+        /// The root node in the xml database file.
+        /// </summary>
         public const string DatabaseRootNodeName = "database";
 
+        /// <summary>
+        /// The name of the xml element for each file entry in the database file.
+        /// </summary>
         public const string DatabaseFileNodeName = "file";
 
+        /// <summary>
+        /// The attribute of each file entry xml element to store the name of the file.
+        /// </summary>
         public const string DatabaseFilenameAttributeName = "filename";
 
+        /// <summary>
+        /// The attribute of each file entry xml element to store the time of the file.
+        /// </summary>
         public const string DatabaseFiletimeAttributeName = "filetime";
 
+        /// <summary>
+        /// The attribute of each file entry xml element to store the md5 hash of the file.
+        /// </summary>
         public const string DatabaseFiletimeMd5Name = "md5";
 
+        /// <summary>
+        /// Gets if the xml document has been loaded into the database manager.
+        /// </summary>
         public bool DatabaseLoaded { get; private set; } = false;
 
         private XDocument Md5HashDocument;
 
+        /// <summary>
+        /// Loads the xml document into the database manager.
+        /// </summary>
+        /// <param name="fileLocation">The location of the xml database file to load.</param>
         public void LoadMd5Database(string fileLocation)
         {
             if (string.IsNullOrEmpty(fileLocation))
@@ -52,6 +77,10 @@ namespace RelhaxModpack.Common
             DatabaseLoaded = true;
         }
 
+        /// <summary>
+        /// Saves the xml document to a path on disk.
+        /// </summary>
+        /// <param name="fileLocation">The location to save the xml database to.</param>
         public void SaveMd5Database(string fileLocation)
         {
             if (string.IsNullOrEmpty(fileLocation))
@@ -63,6 +92,12 @@ namespace RelhaxModpack.Common
             Md5HashDocument.Save(fileLocation);
         }
 
+        /// <summary>
+        /// Determines if a file entry in the database is up to date by checking the md5 hash and given file time.
+        /// </summary>
+        /// <param name="packageFilename">The name of the file to look up.</param>
+        /// <param name="fileTime">The last modified time of the file entry to look up.</param>
+        /// <returns>True if the file entry's name, time and md5 match, false otherwise.</returns>
         public bool FileEntryUpToDate(string packageFilename, DateTime fileTime)
         {
             if (string.IsNullOrEmpty(packageFilename))
@@ -71,6 +106,12 @@ namespace RelhaxModpack.Common
             return FileEntryUpToDate(packageFilename, Convert.ToString(fileTime.ToFileTime(), 10));
         }
 
+        /// <summary>
+        /// Determines if a file entry in the database is up to date by checking the md5 hash and given file time.
+        /// </summary>
+        /// <param name="packageFilename">The name of the file to look up.</param>
+        /// <param name="fileTimeString">The last modified time of the file entry to look up.</param>
+        /// <returns>True if the file entry's name, time and md5 match, false otherwise.</returns>
         public bool FileEntryUpToDate(string packageFilename, string fileTimeString)
         {
             if (string.IsNullOrEmpty(packageFilename))
@@ -92,6 +133,12 @@ namespace RelhaxModpack.Common
             return md5EntryTimeValue.Equals(fileTimeString);
         }
 
+        /// <summary>
+        /// Gets an md5 hash entry of a file based on a given file name and time.
+        /// </summary>
+        /// <param name="packageFilename">The name of the file to look up.</param>
+        /// <param name="fileTime">The last modified time of the file entry to look up.</param>
+        /// <returns>The hash of the file if it is found, or null if the entry isn't found.</returns>
         public string GetMd5HashFileEntry(string packageFilename, DateTime fileTime)
         {
             if (string.IsNullOrEmpty(packageFilename))
@@ -100,6 +147,12 @@ namespace RelhaxModpack.Common
             return GetMd5HashFileEntry(packageFilename, Convert.ToString(fileTime.ToFileTime(), 10));
         }
 
+        /// <summary>
+        /// Gets an md5 hash entry of a file based on a given file name and time.
+        /// </summary>
+        /// <param name="packageFilename">The name of the file to look up.</param>
+        /// <param name="fileTimeString">The last modified time of the file entry to look up.</param>
+        /// <returns>The hash of the file if it is found, or null if the entry isn't found.</returns>
         public string GetMd5HashFileEntry(string packageFilename, string fileTimeString)
         {
             if (string.IsNullOrEmpty(packageFilename))
@@ -119,6 +172,12 @@ namespace RelhaxModpack.Common
             return element.Attribute(DatabaseFiletimeMd5Name).Value;
         }
 
+        /// <summary>
+        /// Updates a file entry in the database with the given filename, time and md5 value. If the entry is not found, then it is added.
+        /// </summary>
+        /// <param name="packageFilename">The name of the file to enter.</param>
+        /// <param name="fileTime">The time of the file to enter.</param>
+        /// <param name="md5Value">The md5 hash of the file to enter.</param>
         public void UpdateFileEntry(string packageFilename, DateTime fileTime, string md5Value)
         {
             if (string.IsNullOrEmpty(packageFilename))
@@ -130,6 +189,12 @@ namespace RelhaxModpack.Common
             UpdateFileEntry(packageFilename, Convert.ToString(fileTime.ToFileTime(), 10), md5Value);
         }
 
+        /// <summary>
+        /// Updates a file entry in the database with the given filename, time and md5 value. If the entry is not found, then it is added.
+        /// </summary>
+        /// <param name="packageFilename">The name of the file to enter.</param>
+        /// <param name="fileTimeString">The time of the file to enter.</param>
+        /// <param name="md5Value">The md5 hash of the file to enter.</param>
         public void UpdateFileEntry(string packageFilename, string fileTimeString, string md5Value)
         {
             if (string.IsNullOrEmpty(packageFilename))
@@ -157,6 +222,10 @@ namespace RelhaxModpack.Common
             }
         }
 
+        /// <summary>
+        /// Deletes a file entry for the database by file name, if the entry exists.
+        /// </summary>
+        /// <param name="packageFilename">The name of the file to lookup.</param>
         public void DeleteFileEntry(string packageFilename)
         {
             if (string.IsNullOrEmpty(packageFilename))
@@ -171,6 +240,11 @@ namespace RelhaxModpack.Common
             }
         }
 
+        /// <summary>
+        /// Checks if a file entry exists for a given file name.
+        /// </summary>
+        /// <param name="packageFilename">The name of the file to lookup.</param>
+        /// <returns>true if the file entry exists in the database, false if it does not.</returns>
         public bool FileEntryWithoutTimeExists(string packageFilename)
         {
             return Md5HashDocument.Descendants(DatabaseFileNodeName).FirstOrDefault(arg => arg.Attribute(DatabaseFilenameAttributeName).Value.Equals(packageFilename)) != null;
