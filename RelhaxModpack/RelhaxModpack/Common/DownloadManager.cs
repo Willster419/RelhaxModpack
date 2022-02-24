@@ -60,12 +60,12 @@ namespace RelhaxModpack.Common
 
             if (Progress == null)
             {
-                Logging.Warning("Progress is null, no progress will be reported for this download operation");
+                Logging.Info("Progress is null, no progress will be reported for this download operation");
             }
 
             if (CancellationToken == null)
             {
-                Logging.Warning("CancellationToken is null, no cancellations will be acknowledged for this download operation");
+                Logging.Info("CancellationToken is null, no cancellations will be acknowledged for this download operation");
             }
 
             downloadProgress = new RelhaxDownloadProgress() { ParrentTotal = packagesToDownload.Count };
@@ -102,7 +102,7 @@ namespace RelhaxModpack.Common
             downloadProgress.DatabasePackage = package;
             downloadProgress.ChildCurrent = downloadProgress.ChildTotal = 0;
             downloadProgress.DownloadProgressState = DownloadProgressState.None;
-            Progress.Report(downloadProgress);
+            Progress?.Report(downloadProgress);
 
             //open the stream to the file to download. A fail here means that the file might not exist
             bool retry = true;
@@ -123,7 +123,7 @@ namespace RelhaxModpack.Common
                             int totalBytesToDownload = CommonUtils.ParseInt(webClient.ResponseHeaders[HttpResponseHeader.ContentLength], 1);
                             int totalBytesDownloaded = 0;
                             downloadProgress.ChildTotal = totalBytesToDownload;
-                            Progress.Report(downloadProgress);
+                            Progress?.Report(downloadProgress);
 
                             while (true)
                             {
@@ -138,7 +138,7 @@ namespace RelhaxModpack.Common
 
                                     //report progress
                                     downloadProgress.DownloadProgressState = DownloadProgressState.Download;
-                                    Progress.Report(downloadProgress);
+                                    Progress?.Report(downloadProgress);
 
                                     //output final hash entry and save to Hash property
                                     StringBuilder sBuilder = new StringBuilder();
@@ -185,7 +185,7 @@ namespace RelhaxModpack.Common
                                         //report final progress and check for cancel
                                         downloadProgress.ParrentCurrent++;
                                         downloadProgress.DownloadProgressState = DownloadProgressState.DownloadCompleted;
-                                        Progress.Report(downloadProgress);
+                                        Progress?.Report(downloadProgress);
                                         ThrowIfCancellationRequested();
 
                                         if (ManualResetEvent != null)
@@ -202,7 +202,7 @@ namespace RelhaxModpack.Common
                                     filestream.Write(buffer, 0, readBytes);
                                     ThrowIfCancellationRequested();
                                     downloadProgress.DownloadProgressState = DownloadProgressState.Download;
-                                    Progress.Report(downloadProgress);
+                                    Progress?.Report(downloadProgress);
                                 }
                             }
                         }
@@ -226,7 +226,6 @@ namespace RelhaxModpack.Common
 
                             if (failCount == RetryCount)
                             {
-                                //3 strikes you're out
                                 Logging.Error("Failed to download the file {0}", package.ZipFile);
                                 string message = string.Format("{0} {1} \"{2}\" {3}",
                                     Translations.GetTranslatedString("failedToDownload1"), Environment.NewLine, package.ZipFile, Translations.GetTranslatedString("failedToDownload2"));
